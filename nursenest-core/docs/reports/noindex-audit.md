@@ -1,6 +1,6 @@
 # Noindex Audit
 
-Generated: 2026-05-30T14:13:50.086Z
+Generated: 2026-05-30T17:07:34.223Z
 
 ## Search Console Signal
 

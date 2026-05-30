@@ -48,6 +48,8 @@ const gscReportedCounts = {
   blockedByRobots: 2037,
   crawledNotIndexed: 718,
   noindex: 5611,
+  duplicateWithoutUserSelectedCanonical: 370,
+  duplicateGoogleChoseDifferentCanonical: 23,
 } as const;
 
 const liveSitemapSmokeDate = "2026-05-30";
@@ -374,9 +376,116 @@ function sourceFindings() {
   return { notFoundCalls, noindexFiles, routeErrorFiles };
 }
 
+const phase2AuditRoots = [
+  "src/app",
+  "src/components",
+  "src/lib/seo",
+  "src/lib/blog",
+  "src/lib/educational-graph",
+  "src/lib/exam-pathways",
+  "src/lib/lessons",
+  "src/lib/simulations",
+  "src/content/blog-static-longtail",
+] as const;
+
+function phase2SourceFiles(): string[] {
+  const files = new Set<string>();
+  for (const root of phase2AuditRoots) {
+    for (const file of walkFiles(root)) files.add(file);
+  }
+  return [...files].sort();
+}
+
+function matchingSourceFiles(pattern: RegExp, limit = 120): string[] {
+  const matches: string[] = [];
+  for (const file of phase2SourceFiles()) {
+    const text = readFileSync(file, "utf8");
+    pattern.lastIndex = 0;
+    if (pattern.test(text)) matches.push(relative(packageRoot, file));
+    if (matches.length >= limit) break;
+  }
+  return matches;
+}
+
+function countSourceFiles(pattern: RegExp): number {
+  let count = 0;
+  for (const file of phase2SourceFiles()) {
+    const text = readFileSync(file, "utf8");
+    pattern.lastIndex = 0;
+    if (pattern.test(text)) count += 1;
+  }
+  return count;
+}
+
+function classifyRobotsRuleForIndexability(pattern: string): PatternFinding {
+  if (/^\/(admin|api|account|app|billing|checkout|auth|internal|seo)\//i.test(pattern)) {
+    return {
+      pattern,
+      classification: "Safe to block",
+      recommendation: "Keep blocked; this is private app, admin, billing, checkout, API, internal, or duplicate rewrite infrastructure.",
+    };
+  }
+  if (/lesson|question|blog|glossary|flashcard|pharmacology|ecg|lab|clinical|simulation|canada|us|fr|es/i.test(pattern)) {
+    return {
+      pattern,
+      classification: "Potentially dangerous",
+      recommendation: "Do not block valuable public educational or marketing content. Replace with page-level noindex only if the route is intentionally private or incomplete.",
+    };
+  }
+  return {
+    pattern,
+    classification: "Review",
+    recommendation: "Compare against public URL inventory before keeping blocked.",
+  };
+}
+
+function classifyNoindexSource(source: string): PatternFinding {
+  const route = source.split(" (")[0] ?? source;
+  if (/src\/app\/\((app|admin|preview)\)/i.test(source) || /^\/(app|admin|api|internal)(\/|$)/i.test(route) || /not-found|preview|auth|login|signup|forgot-password|reset-password/i.test(route)) {
+    return {
+      pattern: source,
+      classification: "Intentional",
+      recommendation: "Keep noindex; this is private, utility, preview, auth, or error-state surface.",
+    };
+  }
+  if (/lesson|blog|question|glossary|pharmacology|ecg|clinical|simulation|pricing|nclex|rex-pn|cnple|pre-nursing/i.test(route)) {
+    return {
+      pattern: source,
+      classification: "Dangerous if emitted for published public pages",
+      recommendation: "Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated.",
+    };
+  }
+  if (/locale|localized|fr|es/i.test(route)) {
+    return {
+      pattern: source,
+      classification: "Intentional or legacy depending on locale readiness",
+      recommendation: "Keep noindex for incomplete translations; remove when locale content is complete and canonicals/hreflang are ready.",
+    };
+  }
+  return {
+    pattern: source,
+    classification: "Review",
+    recommendation: "Confirm this source is not attached to indexable educational or marketing content.",
+  };
+}
+
+function sourceLinkSummary(label: string, files: readonly string[]): string {
+  return `### ${label}\n\n${files.length === 0 ? "_No local source files found._" : bullet(files, 80)}`;
+}
+
+function gscIssueExportStatus(issue: GscIssueKind): string {
+  const count = collectGscRows().filter((row) => row.issue === issue).length;
+  if (count > 0) return `${count} local GSC export rows loaded for ${issue}.`;
+  return `No local GSC export rows loaded for ${issue}; affected URL-level findings remain Unable To Verify from this workspace.`;
+}
+
 function table(rows: readonly string[][]): string {
   if (rows.length === 0) return "_None found._";
-  return rows.map((r) => `| ${r.map((c) => c.replace(/\|/g, "\\|")).join(" |")} |`).join("\n");
+  const [header, ...bodyRows] = rows;
+  if (!header) return "_None found._";
+  const render = (r: readonly string[]) => `| ${r.map((c) => c.replace(/\|/g, "\\|")).join(" | ")} |`;
+  const separator = `| ${header.map(() => "---").join(" | ")} |`;
+  return [render(header), separator, ...bodyRows.map(render)].join("\n");
 }
 
 function topTemplatesMarkdown(rows: GscUrlRow[], issue: GscIssueKind): string {
@@ -784,6 +893,354 @@ npm run qa:crawl-health
 Sitemap URL sets must contain zero 404s, zero redirects, zero noindex pages, zero blocked URLs, and zero 5xx routes. The live verifier is the enforcement tool for that contract.
 `);
 
+  const robotsIndexabilityRows = robotsRules.map((rule) => classifyRobotsRuleForIndexability(rule.pattern));
+  const canonicalSources = matchingSourceFiles(/alternates:\s*\{[^}]*canonical|canonicalUrl|rel=["']canonical|canonical:\s*/is);
+  const schemaSources = matchingSourceFiles(/application\/ld\+json|JsonLd|schema\.org|"@type"|BreadcrumbJsonLd|FAQPage|MedicalWebPage|EducationalOccupationalProgram/is);
+  const internalLinkSources = matchingSourceFiles(/<Link\b|href=|Breadcrumb|Related|related[A-Z]|internal link|relatedLessons|relatedQuestions/is);
+  const noindexClassifications = noindexFiles.map((source) => classifyNoindexSource(source));
+  const localNoindexDangerous = noindexClassifications.filter((row) => row.classification.startsWith("Dangerous"));
+  const schemaTypeCoverage = [
+    ["Article", String(countSourceFiles(/Article|BlogPosting/i)), "Blog and article-like authority surfaces."],
+    ["FAQ", String(countSourceFiles(/FAQPage|mainEntity|faq/i)), "FAQ blocks on blogs, exam pages, advanced ECG, and long-tail authority content."],
+    ["Breadcrumb", String(countSourceFiles(/BreadcrumbJsonLd|BreadcrumbList|breadcrumb/i)), "Breadcrumb JSON-LD/components and route hierarchy helpers."],
+    ["Course", String(countSourceFiles(/Course|ExamPrepCourseProgramJsonLd/i)), "Exam preparation and education-program landing pages."],
+    ["MedicalCondition / MedicalWebPage", String(countSourceFiles(/MedicalCondition|MedicalWebPage|medical/i)), "Clinical/medical educational entity helpers and clinical content pages."],
+    ["Organization / WebSite", String(countSourceFiles(/Organization|WebSite/i)), "Sitewide brand and search schema helpers."],
+    ["EducationalOccupationalProgram", String(countSourceFiles(/EducationalOccupationalProgram|occupational/i)), "Program-oriented exam/pathway structured data."],
+  ];
+
+  writeReport("docs/reports/robots-indexability-audit.md", `# Robots Indexability Audit
+
+Generated: ${generatedAt}
+
+## Search Console Signal
+
+- Reported Blocked by robots.txt: ${gscReportedCounts.blockedByRobots.toLocaleString()}
+- URL export status: ${gscIssueExportStatus("blocked")}
+
+## Current Robots.txt
+
+\`\`\`txt
+${robotsBody.trim()}
+\`\`\`
+
+## Rule Classification
+
+${table([
+  ["Pattern", "Classification", "Recommendation"],
+  ...robotsIndexabilityRows.map((row) => [row.pattern, row.classification, row.recommendation]),
+])}
+
+## Valuable Content Block Check
+
+Current source robots rules do **not** directly block lessons, questions, blog, glossary, flashcards, pharmacology, ECG, labs, marketing pages, or localized pages.
+
+Incomplete locale pages should remain crawlable when they emit page-level \`noindex\`; blocking them in \`robots.txt\` prevents Google from seeing that directive.
+
+## Action Items
+
+1. Load the GSC blocked-by-robots URL export into \`data/gsc-indexing/blocked.csv\` and rerun this audit.
+2. If any exported URL contains lesson/blog/question/glossary/pharmacology/ECG/lab/marketing/localized content, remove the robots block and use canonical/noindex policy instead.
+3. Keep a single sitemap directive pointing to \`https://nursenest.ca/sitemap.xml\`.
+`);
+
+  writeReport("docs/reports/noindex-review.md", `# Noindex Review
+
+Generated: ${generatedAt}
+
+## Search Console Signal
+
+- Reported Noindex URLs: ${gscReportedCounts.noindex.toLocaleString()}
+- URL export status: ${gscIssueExportStatus("noindex")}
+
+## Top Templates
+
+${topTemplatesMarkdown(gscRows, "noindex")}
+
+## Local Noindex Source Classification
+
+${table([
+  ["Source", "Classification", "Recommendation"],
+  ...noindexClassifications.slice(0, 120).map((row) => [row.pattern, row.classification, row.recommendation]),
+])}
+
+## Dangerous Or Review-Required Local Sources
+
+${localNoindexDangerous.length === 0 ? "_No local public-content noindex source was automatically classified as dangerous from the static scan._" : table([
+  ["Source", "Recommendation"],
+  ...localNoindexDangerous.map((row) => [row.pattern, row.recommendation]),
+])}
+
+## Intentional Noindex
+
+- Login, signup, forgot/reset password, account/private learner routes.
+- App study sessions, flashcard sessions, practice sessions, billing/checkout/private surfaces.
+- Admin, API, internal, preview, and error/not-found surfaces.
+- Locale or admissions scaffold pages that are intentionally launch-gated.
+
+## Should Generally Be Indexable
+
+- Published lessons.
+- Published blog posts and authority articles.
+- Public glossary/topic/condition pages.
+- Public question-page education resources.
+- Public exam landing pages and pricing/feature pages.
+- Published ECG/pharmacology/lab/simulation marketing or authority pages.
+
+## Live Sitemap Noindex Mismatch
+
+The previous production sitemap smoke found ${liveSitemapNoindexUrls.length} CNPLE URLs present in sitemap output while returning HTML \`noindex\`. Current local metadata did not reproduce that mismatch. Treat these as deployment/config drift until a fresh production run proves otherwise.
+
+${bullet(liveSitemapNoindexUrls, 40)}
+`);
+
+  writeReport("docs/reports/canonical-audit.md", `# Canonical Audit
+
+Generated: ${generatedAt}
+
+## Search Console Signal
+
+- Duplicate without user-selected canonical: ${gscReportedCounts.duplicateWithoutUserSelectedCanonical.toLocaleString()}
+- Duplicate, Google chose different canonical: ${gscReportedCounts.duplicateGoogleChoseDifferentCanonical.toLocaleString()}
+- Duplicate URL export status: Unable To Verify from this workspace; no duplicate/canonical GSC CSV export was present.
+
+## Local Canonical Guardrails Found
+
+- Canonical production origin is expected to be \`https://nursenest.ca\`.
+- Sitemap loc filtering rejects wrong origins, non-HTTPS URLs, private app/admin/API/internal URLs, query/hash variants, and trailing slash variants.
+- Crawl-health tests inspect canonical presence and mismatch on public HTML.
+- Marketing and exam routes use metadata alternates/canonical helpers rather than ad hoc canonical strings in most high-value surfaces.
+
+${sourceLinkSummary("Canonical / alternates / canonicalUrl sources", canonicalSources)}
+
+## Required Canonical Contract
+
+| Page Type | Canonical Requirement |
+| --- | --- |
+| Homepage and global marketing pages | Self-referencing apex canonical. |
+| Regional exam pages | Self-referencing canonical for the selected region/exam, plus correct hreflang alternates where regional equivalents are published. |
+| Localized pages | Self canonical only when locale is publish-ready; otherwise noindex/follow and omitted from sitemap. |
+| Blog posts | Canonical URL from published article metadata, normalized to apex production origin. |
+| Question/topic pages | One canonical per unique educational resource; avoid multiple thin variants targeting the same slug intent. |
+| Auth/app/admin/private pages | No canonical needed for indexing; noindex and sitemap exclusion required. |
+
+## Canonical Risk Areas
+
+| Risk | Evidence | Recommendation |
+| --- | --- | --- |
+| Localized duplicated pages | Locale readiness gates exist; long-tail multilingual content has many canonicalUrl fields. | Keep incomplete locale pages noindexed; publish only when translated and internally linked. |
+| Programmatic question/topic pages | Several generators can create near-duplicate exam/topic templates. | Add unique clinical context and self canonicals; consolidate weak variants. |
+| Legacy redirects | \`next.config.mjs\` contains ${redirectCount} redirect destination declarations. | Ensure redirected URLs are excluded from sitemap and canonical points only at final 200 URL. |
+| Production metadata drift | Prior live CNPLE pages returned noindex despite current local metadata being indexable. | Redeploy current metadata or inspect production-only fallback logs. |
+`);
+
+  writeReport("docs/reports/duplicate-content-audit.md", `# Duplicate Content Audit
+
+Generated: ${generatedAt}
+
+## Search Console Signal
+
+- Duplicate without user-selected canonical: ${gscReportedCounts.duplicateWithoutUserSelectedCanonical.toLocaleString()}
+- Duplicate, Google chose different canonical: ${gscReportedCounts.duplicateGoogleChoseDifferentCanonical.toLocaleString()}
+- URL-level duplicate export: Unable To Verify from this workspace.
+
+## Duplicate-Prone Templates
+
+| Template Family | Risk | Decision |
+| --- | --- | --- |
+| Localized pages | Incomplete translations can resemble canonical English content. | Keep incomplete locale pages noindex/follow and out of sitemap; publish locale pages only when unique translation quality is ready. |
+| Question pages and practice-question templates | Thin question-only pages can duplicate topic/exam phrasing. | Differentiate with rationale, why-correct/why-incorrect, clinical application, exam strategy, related lessons, and schema. |
+| Lesson variants | Multiple pathway versions can share headings/body systems. | Keep one canonical educational topic when content is truly shared; differentiate pathway-specific scope and exam relevance. |
+| Marketing variants and exam landing pages | Regional/exam pages can share product claims. | Use self canonicals per genuinely distinct pathway; add region/exam-specific outcomes, screenshots, FAQ, and internal links. |
+| \`/seo/*\` rewrites | Rewrite infrastructure can duplicate canonical public content. | Keep blocked and omitted from sitemap. |
+
+## Remediation Rules
+
+- **Merge** pages that target the same query and do not add distinct learner value.
+- **Canonicalize** pages that must exist for routing but should not compete in search.
+- **Differentiate** pages that are legitimate exam/pathway variants with unique scope, examples, FAQ, and internal links.
+- **Noindex** private or incomplete surfaces only; do not noindex valuable public content while leaving it in the sitemap.
+`);
+
+  writeReport("docs/reports/sitemap-cleanup-report.md", `# Sitemap Cleanup Report
+
+Generated: ${generatedAt}
+
+## Sitemap Contract
+
+Sitemaps must contain only 200-status, indexable, canonical, published, public content URLs.
+
+They must remove 404s, redirects, noindex URLs, robots-blocked URLs, 5xx/timeouts, and private app/admin/API/internal/auth routes.
+
+## Sitemap Children
+
+${table([
+  ["Child Sitemap", "Policy"],
+  ...SITEMAP_INDEX_CHILD_FILENAMES.map((name) => [name, "200 XML only; indexable public canonical URLs only."]),
+])}
+
+## Source Guards
+
+- \`filterPublicSitemapEntries\` applies URL-level public index eligibility checks.
+- \`isEligiblePublicIndexSitemapLoc\` rejects private, noindex, query/hash, trailing slash, wrong-origin, and non-HTTPS locs.
+- \`/sitemap.xml\` is a sitemap index and avoids DB-heavy generation.
+- Proxy bypass covers \`/sitemap.xml\`, \`/sitemap-*.xml\`, and \`/robots.txt\`.
+
+## Known Production Smoke Issues To Recheck
+
+Timeouts from first 500 production sitemap URLs on ${liveSitemapSmokeDate}:
+
+${bullet(liveSitemapTimeoutUrls, 40)}
+
+Noindex HTML from first 500 production sitemap URLs on ${liveSitemapSmokeDate}:
+
+${bullet(liveSitemapNoindexUrls, 40)}
+
+## Required Cleanup Command
+
+\`\`\`bash
+SITEMAP_VERIFY_MAX_URLS=5000 SITEMAP_VERIFY_CONCURRENCY=4 npm run verify:sitemap
+\`\`\`
+`);
+
+  writeReport("docs/reports/internal-linking-audit.md", `# Internal Linking Audit
+
+Generated: ${generatedAt}
+
+## Scope
+
+This source-level pass checks for the existence of link, breadcrumb, related-content, and hub-connection systems. Exact orphan/depth metrics require a production crawl export or a full crawl-health artifact.
+
+${sourceLinkSummary("Internal link / breadcrumb / related-content sources", internalLinkSources)}
+
+## Priority Surfaces
+
+| Surface | Required Link Support | Risk If Missing |
+| --- | --- | --- |
+| Lessons | Breadcrumbs, related lessons, related questions, flashcards, simulations, pharmacology/skills where applicable. | Thin or orphan-like pages; weaker crawl depth. |
+| Blog | Related lessons/topics, exam hubs, glossary links, FAQ/schema. | Authority pages fail to pass relevance to product and education pages. |
+| Questions | Related topic, lesson, rationale education, practice set, flashcards. | Question pages look thin and isolated. |
+| Glossary / topic pages | Hub links, related concepts, lessons, questions. | Topic pages become sitemap-only and less index-worthy. |
+| Simulation pages | Related conditions, skills, report/remediation links, pathway hubs. | High-value clinical content stays disconnected from authority clusters. |
+
+## Unable To Verify Without Crawl Artifact
+
+- Exact orphan page count.
+- Crawl depth distribution.
+- Weakly linked page list.
+- Backlink/internal-link counts per URL.
+- Broken internal links from production-rendered HTML.
+
+## Measurement Plan
+
+\`\`\`bash
+npm run qa:crawl-health
+PLAYWRIGHT_SKIP_WEB_SERVER=1 BASE_URL=https://nursenest.ca npm run qa:crawl-health:remote
+\`\`\`
+`);
+
+  writeReport("docs/reports/crawled-not-indexed-remediation.md", `# Crawled Not Indexed Remediation
+
+Generated: ${generatedAt}
+
+## Search Console Signal
+
+- Reported Crawled - Currently Not Indexed URLs: ${gscReportedCounts.crawledNotIndexed.toLocaleString()}
+- URL export status: ${gscIssueExportStatus("crawled-not-indexed")}
+
+## Top Templates
+
+${topTemplatesMarkdown(gscRows, "crawled-not-indexed")}
+
+## Required Per-URL Measurements
+
+| Measurement | Why It Matters |
+| --- | --- |
+| Word count | Identifies thin pages. |
+| Unique paragraph count | Detects duplicate or boilerplate pages. |
+| Schema present | Helps Google understand page purpose. |
+| Canonical | Prevents duplicate or conflicting index signals. |
+| Internal links in/out | Determines whether page is contextually important. |
+| Breadcrumbs | Reinforces hierarchy and crawl discovery. |
+| Educational depth | Distinguishes real learning content from generated snippets. |
+
+## Next Step
+
+Place the 718 affected URLs at \`data/gsc-indexing/crawled-not-indexed.csv\` and rerun \`npm run audit:gsc-indexing\`. Until then, URL-level word count, uniqueness, schema, and link density remain Unable To Verify.
+`);
+
+  writeReport("docs/reports/schema-health-report.md", `# Schema Health Report
+
+Generated: ${generatedAt}
+
+## Source-Level Schema Coverage
+
+${table([
+  ["Schema Type", "Local Source File Count", "Notes"],
+  ...schemaTypeCoverage,
+])}
+
+${sourceLinkSummary("Structured data / JSON-LD sources", schemaSources)}
+
+## Validation Findings
+
+| Requirement | Status |
+| --- | --- |
+| Article schema | Present in source, especially blog/authority content. |
+| FAQ schema | Present in source. Validate production snippets for invalid generated FAQ copy. |
+| Breadcrumb schema | Present through breadcrumb helpers/components. |
+| Course schema | Present in exam/program-oriented helpers. |
+| MedicalCondition / MedicalWebPage | Present in clinical/educational entity helpers; production validation still required. |
+| Organization / WebSite | Present in source-level schema helpers. |
+| EducationalOccupationalProgram | Present in program/exam helper surface. |
+
+## Unable To Verify Without Runtime Crawl
+
+- Whether every high-value rendered page emits valid JSON-LD.
+- Whether JSON-LD fields pass Google Rich Results validation.
+- Whether there are conflicting schema blocks on a specific URL.
+`);
+
+  writeReport("docs/reports/search-console-recovery-roadmap.md", `# Search Console Recovery Roadmap
+
+Generated: ${generatedAt}
+
+## Critical
+
+${table([
+  ["Item", "Traffic Impact", "Indexation Impact", "Implementation Effort", "Action"],
+  ["Remove 5xx/timeouts from sitemap URLs", "Very High", "Very High", "Medium", "Run live sitemap verification, fix timeout templates, and keep CI crawl-health blocking regressions."],
+  ["Remove sitemap/noindex mismatches", "High", "Very High", "Low-Medium", "Any noindex page must be removed from XML sitemap or made indexable if public and valuable."],
+  ["Load GSC URL exports for blocked/noindex/duplicates/crawled-not-indexed", "High", "High", "Low", "Place CSVs in data/gsc-indexing/ and rerun audit for exact URL lists."],
+])}
+
+## High
+
+${table([
+  ["Item", "Traffic Impact", "Indexation Impact", "Implementation Effort", "Action"],
+  ["Canonicalize duplicate-prone exam and topic pages", "High", "High", "Medium", "Self-canonical distinct pages; merge or canonicalize thin variants."],
+  ["Strengthen question pages as educational resources", "High", "High", "Medium", "Add rationale, clinical application, exam strategy, related content, and schema."],
+  ["Improve internal links for lessons/questions/glossary/simulations", "High", "Medium-High", "Medium", "Add breadcrumbs, related learning, hub connections, and topic clusters."],
+])}
+
+## Medium
+
+${table([
+  ["Item", "Traffic Impact", "Indexation Impact", "Implementation Effort", "Action"],
+  ["Schema validation by page type", "Medium", "Medium", "Medium", "Extract rendered JSON-LD in crawl-health and validate representative page families."],
+  ["Locale publication policy cleanup", "Medium", "Medium", "Medium", "Keep incomplete locales noindex/follow and out of sitemaps; publish only complete locale clusters."],
+  ["Long-tail blog duplicate/content-depth pass", "Medium", "Medium", "High", "Expand or consolidate thin/boilerplate long-tail articles."],
+])}
+
+## Low
+
+${table([
+  ["Item", "Traffic Impact", "Indexation Impact", "Implementation Effort", "Action"],
+  ["Robots documentation and periodic guard", "Low", "Medium", "Low", "Keep private-only robots rules and validate single sitemap directive."],
+  ["Search Console validation checklist automation", "Low", "Medium", "Low", "Generate validation steps after every SEO recovery audit run."],
+])}
+`);
+
   writeReport("docs/reports/google-search-console-indexing-emergency-audit.md", `# Google Search Console Indexing Emergency Audit
 
 Generated: ${generatedAt}
@@ -821,6 +1278,15 @@ ${csvStatus}
 - \`docs/reports/crawled-not-indexed-audit.md\`
 - \`docs/reports/noindex-audit.md\`
 - \`docs/reports/sitemap-health-report.md\`
+- \`docs/reports/robots-indexability-audit.md\`
+- \`docs/reports/noindex-review.md\`
+- \`docs/reports/canonical-audit.md\`
+- \`docs/reports/duplicate-content-audit.md\`
+- \`docs/reports/sitemap-cleanup-report.md\`
+- \`docs/reports/internal-linking-audit.md\`
+- \`docs/reports/crawled-not-indexed-remediation.md\`
+- \`docs/reports/schema-health-report.md\`
+- \`docs/reports/search-console-recovery-roadmap.md\`
 
 ## P0 Next Steps
 
@@ -876,6 +1342,15 @@ Search Console Server Errors (5xx): ${gscReportedCounts.serverErrors5xx.toLocale
   console.log("[gsc-indexing-audit] wrote docs/reports/crawled-not-indexed-audit.md");
   console.log("[gsc-indexing-audit] wrote docs/reports/noindex-audit.md");
   console.log("[gsc-indexing-audit] wrote docs/reports/sitemap-health-report.md");
+  console.log("[gsc-indexing-audit] wrote docs/reports/robots-indexability-audit.md");
+  console.log("[gsc-indexing-audit] wrote docs/reports/noindex-review.md");
+  console.log("[gsc-indexing-audit] wrote docs/reports/canonical-audit.md");
+  console.log("[gsc-indexing-audit] wrote docs/reports/duplicate-content-audit.md");
+  console.log("[gsc-indexing-audit] wrote docs/reports/sitemap-cleanup-report.md");
+  console.log("[gsc-indexing-audit] wrote docs/reports/internal-linking-audit.md");
+  console.log("[gsc-indexing-audit] wrote docs/reports/crawled-not-indexed-remediation.md");
+  console.log("[gsc-indexing-audit] wrote docs/reports/schema-health-report.md");
+  console.log("[gsc-indexing-audit] wrote docs/reports/search-console-recovery-roadmap.md");
   console.log("[gsc-indexing-audit] wrote docs/reports/search-console-recovery-checklist.md");
 }
 

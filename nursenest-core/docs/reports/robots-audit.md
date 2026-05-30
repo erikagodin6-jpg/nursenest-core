@@ -1,6 +1,6 @@
 # Robots.txt Audit
 
-Generated: 2026-05-30T14:13:50.086Z
+Generated: 2026-05-30T17:07:34.223Z
 
 ## Current Rules
 
@@ -18,12 +18,13 @@ Sitemap: https://nursenest.ca/sitemap.xml
 
 ## Blocked Pattern Classification
 
-| Pattern |Classification |Recommendation |
-| /app/ |Should be blocked |Keep blocked; this is private, internal, API, or duplicate rewrite infrastructure. |
-| /admin/ |Should be blocked |Keep blocked; this is private, internal, API, or duplicate rewrite infrastructure. |
-| /internal/ |Should be blocked |Keep blocked; this is private, internal, API, or duplicate rewrite infrastructure. |
-| /api/ |Should be blocked |Keep blocked; this is private, internal, API, or duplicate rewrite infrastructure. |
-| /seo/ |Should be blocked |Keep blocked; this is private, internal, API, or duplicate rewrite infrastructure. |
+| Pattern | Classification | Recommendation |
+| --- | --- | --- |
+| /app/ | Should be blocked | Keep blocked; this is private, internal, API, or duplicate rewrite infrastructure. |
+| /admin/ | Should be blocked | Keep blocked; this is private, internal, API, or duplicate rewrite infrastructure. |
+| /internal/ | Should be blocked | Keep blocked; this is private, internal, API, or duplicate rewrite infrastructure. |
+| /api/ | Should be blocked | Keep blocked; this is private, internal, API, or duplicate rewrite infrastructure. |
+| /seo/ | Should be blocked | Keep blocked; this is private, internal, API, or duplicate rewrite infrastructure. |
 
 ## Public Content Block Review
 

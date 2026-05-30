@@ -1,6 +1,6 @@
 # Google Search Console Indexing Emergency Audit
 
-Generated: 2026-05-30T14:13:50.086Z
+Generated: 2026-05-30T17:07:34.223Z
 
 ## Executive Summary
 
@@ -35,6 +35,15 @@ No local GSC URL CSV exports found. Reports use the aggregate counts from the pr
 - `docs/reports/crawled-not-indexed-audit.md`
 - `docs/reports/noindex-audit.md`
 - `docs/reports/sitemap-health-report.md`
+- `docs/reports/robots-indexability-audit.md`
+- `docs/reports/noindex-review.md`
+- `docs/reports/canonical-audit.md`
+- `docs/reports/duplicate-content-audit.md`
+- `docs/reports/sitemap-cleanup-report.md`
+- `docs/reports/internal-linking-audit.md`
+- `docs/reports/crawled-not-indexed-remediation.md`
+- `docs/reports/schema-health-report.md`
+- `docs/reports/search-console-recovery-roadmap.md`
 
 ## P0 Next Steps
 

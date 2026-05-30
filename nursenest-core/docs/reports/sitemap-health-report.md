@@ -1,22 +1,23 @@
 # Sitemap Health Report
 
-Generated: 2026-05-30T14:13:50.086Z
+Generated: 2026-05-30T17:07:34.223Z
 
 ## Sitemap Index Children
 
-| Child Sitemap |Expected Policy |
-| sitemap-core.xml |Must return 200 XML, no redirect, only indexable public URLs |
-| sitemap-blog.xml |Must return 200 XML, no redirect, only indexable public URLs |
-| sitemap-fr-blog.xml |Must return 200 XML, no redirect, only indexable public URLs |
-| sitemap-es-blog.xml |Must return 200 XML, no redirect, only indexable public URLs |
-| sitemap-pathways.xml |Must return 200 XML, no redirect, only indexable public URLs |
-| sitemap-lessons.xml |Must return 200 XML, no redirect, only indexable public URLs |
-| sitemap-localized.xml |Must return 200 XML, no redirect, only indexable public URLs |
-| sitemap-clinical-modules.xml |Must return 200 XML, no redirect, only indexable public URLs |
-| sitemap-allied.xml |Must return 200 XML, no redirect, only indexable public URLs |
-| sitemap-new-grad.xml |Must return 200 XML, no redirect, only indexable public URLs |
-| sitemap-cnple.xml |Must return 200 XML, no redirect, only indexable public URLs |
-| sitemap-authority-clusters.xml |Must return 200 XML, no redirect, only indexable public URLs |
+| Child Sitemap | Expected Policy |
+| --- | --- |
+| sitemap-core.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-blog.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-fr-blog.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-es-blog.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-pathways.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-lessons.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-localized.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-clinical-modules.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-allied.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-new-grad.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-cnple.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-authority-clusters.xml | Must return 200 XML, no redirect, only indexable public URLs |
 
 ## Local Sitemap Guards
 
