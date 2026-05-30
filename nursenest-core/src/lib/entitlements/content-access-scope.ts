@@ -1,5 +1,4 @@
 import type { CountryCode, Prisma, TierCode } from "@prisma/client";
-import { ContentStatus, FlashcardDeckVisibility, TierCode as TierCodeEnum } from "@prisma/client";
 import {
   contentItemTierStringsForProfileTier,
   examQuestionTierStringsForProfileTier,
@@ -16,6 +15,9 @@ import {
 /** Production DB uses lowercase status strings on `exam_questions` / `content_items`. */
 export const DB_PUBLISHED = "published" as const;
 const DB_PUBLISHED_VARIANTS = [DB_PUBLISHED, "PUBLISHED"] as const;
+const CONTENT_PUBLISHED = "PUBLISHED" as const;
+const DECK_HIDDEN = "HIDDEN" as const;
+const DECK_PUBLIC_PREVIEW = "PUBLIC_PREVIEW" as const;
 
 export { getAccessibleTiers } from "@/lib/entitlements/accessible-tiers";
 
@@ -159,8 +161,8 @@ export function publicMarketingFlashcardWhere(): Prisma.FlashcardWhereInput {
   return {
     AND: [
       {
-        status: ContentStatus.PUBLISHED,
-        tier: { in: [TierCodeEnum.RPN, TierCodeEnum.LVN_LPN, TierCodeEnum.ALLIED] },
+        status: CONTENT_PUBLISHED,
+        tier: { in: ["RPN", "LVN_LPN", "ALLIED"] },
       },
       standardExamPrepFlashcardScopeWhere(),
     ],
@@ -170,8 +172,8 @@ export function publicMarketingFlashcardWhere(): Prisma.FlashcardWhereInput {
 /** Published decks visible for aggregate marketing counts (exclude hidden). */
 export function publicMarketingFlashcardDeckWhere(): Prisma.FlashcardDeckWhereInput {
   return {
-    status: ContentStatus.PUBLISHED,
-    visibility: { not: FlashcardDeckVisibility.HIDDEN },
+    status: CONTENT_PUBLISHED,
+    visibility: { not: DECK_HIDDEN },
   };
 }
 
@@ -182,9 +184,9 @@ export function publicMarketingFlashcardDeckWhere(): Prisma.FlashcardDeckWhereIn
  */
 export function publicPreNursingMarketingFlashcardHubDeckWhere(): Prisma.FlashcardDeckWhereInput {
   return {
-    status: ContentStatus.PUBLISHED,
-    visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW,
-    tier: TierCodeEnum.PRE_NURSING,
+    status: CONTENT_PUBLISHED,
+    visibility: DECK_PUBLIC_PREVIEW,
+    tier: "PRE_NURSING",
     cardCount: { gt: 0 },
   };
 }
@@ -243,7 +245,7 @@ export function flashcardAccessWhere(
 ): Prisma.FlashcardWhereInput {
   if (!entitlement.hasAccess) return { id: { in: [] } };
   if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
-    const base: Prisma.FlashcardWhereInput = { status: ContentStatus.PUBLISHED };
+    const base: Prisma.FlashcardWhereInput = { status: CONTENT_PUBLISHED };
     if (!pathway?.deckPathwayId && !pathway?.tierIntersectWith?.length && !pathway?.includePreNursingFoundation) {
       return base;
     }
@@ -268,7 +270,7 @@ export function flashcardAccessWhere(
   }
   if (tierIn.length === 0) return { id: { in: [] } };
   const scoped: Prisma.FlashcardWhereInput = {
-    status: ContentStatus.PUBLISHED,
+    status: CONTENT_PUBLISHED,
     country,
     tier: { in: tierIn },
   };
@@ -286,7 +288,7 @@ export function flashcardAccessWhere(
 
 export function flashcardBankWhereForProfile(country: CountryCode, tier: TierCode): Prisma.FlashcardWhereInput {
   return {
-    status: ContentStatus.PUBLISHED,
+    status: CONTENT_PUBLISHED,
     country,
     tier: { in: prismaTierCodesForProfileTier(tier) },
   };
@@ -302,9 +304,9 @@ export function accessibleTiersForUserTier(userTier: TierCode): TierCode[] {
 /** Whether the learner may record an attempt for this exam row (backend paywall). */
 export function userCanAccessExam(
   entitlement: AccessScope,
-  exam: { status: ContentStatus; country: CountryCode; tier: TierCode },
+  exam: { status: "PUBLISHED" | string; country: CountryCode; tier: TierCode },
 ): boolean {
-  if (exam.status !== ContentStatus.PUBLISHED || !entitlement.hasAccess) return false;
+  if (exam.status !== CONTENT_PUBLISHED || !entitlement.hasAccess) return false;
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
   if (!country || !tier) return false;

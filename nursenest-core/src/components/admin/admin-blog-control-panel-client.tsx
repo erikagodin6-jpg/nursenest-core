@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogPostTemplate } from "@prisma/client";
+import type { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import { parseBlogSourcesJson } from "@/lib/blog/blog-citation-safety";
@@ -256,9 +256,9 @@ export function AdminBlogControlPanelClient({
   const [keywords, setKeywords] = useState("");
   const [targetKeyword, setTargetKeyword] = useState("");
   const [keywordCluster, setKeywordCluster] = useState("");
-  const [template, setTemplate] = useState<BlogPostTemplate>(BlogPostTemplate.TOPIC_EXPLAINED);
-  const [intent, setIntent] = useState<BlogPostIntent>(BlogPostIntent.EXAM_PREP);
-  const [funnelStage, setFunnelStage] = useState<BlogFunnelStage>(BlogFunnelStage.CONSIDERATION);
+  const [template, setTemplate] = useState<BlogPostTemplate>("TOPIC_EXPLAINED");
+  const [intent, setIntent] = useState<BlogPostIntent>("EXAM_PREP");
+  const [funnelStage, setFunnelStage] = useState<BlogFunnelStage>("CONSIDERATION");
   const [tone, setTone] = useState<"professional" | "supportive" | "direct">("professional");
   const [includeImage, setIncludeImage] = useState(true);
   const [includeAiImage, setIncludeAiImage] = useState(false);
@@ -1806,9 +1806,9 @@ export function AdminBlogControlPanelClient({
           ) : null}
           {saveErr ? <p className="text-sm text-rose-700 dark:text-rose-300">{saveErr}</p> : null}
           {post &&
-          post.postStatus !== BlogPostStatus.PUBLISHED &&
+          post.postStatus !== "PUBLISHED" &&
           !(
-            post.postStatus === BlogPostStatus.SCHEDULED &&
+            post.postStatus === "SCHEDULED" &&
             post.publishAt &&
             new Date(post.publishAt).getTime() <= Date.now()
           ) ? (

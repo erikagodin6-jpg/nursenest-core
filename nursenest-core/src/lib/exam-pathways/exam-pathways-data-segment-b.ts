@@ -1,4 +1,4 @@
-import { CountryCode, ExamFamily, TierCode } from "@prisma/client";
+import type { CountryCode, ExamFamily, TierCode } from "@prisma/client";
 import type { ExamPathwayDefinition } from "./types";
 
 /** Ordered chunk B of `EXAM_PATHWAYS` (US RN + new grad). */
@@ -7,14 +7,14 @@ export const EXAM_PATHWAYS_SEGMENT_B: ExamPathwayDefinition[] = [
   {
     id: "us-rn-nclex-rn",
     countrySlug: "us",
-    countryCode: CountryCode.US,
+    countryCode: "US" as CountryCode,
     roleTrack: "rn",
     examCode: "nclex-rn",
-    examFamily: ExamFamily.NCLEX_RN,
+    examFamily: "NCLEX_RN" as ExamFamily,
     examKey: "NCLEX_RN",
     displayName: "NCLEX-RN (United States)",
     shortName: "NCLEX-RN",
-    stripeTier: TierCode.RN,
+    stripeTier: "RN" as TierCode,
     contentExamKeys: ["NCLEX-RN", "NCLEX_RN"],
     seoTitle: "NCLEX-RN Exam Prep | United States | NurseNest",
     seoDescription:
@@ -26,14 +26,14 @@ export const EXAM_PATHWAYS_SEGMENT_B: ExamPathwayDefinition[] = [
   {
     id: "us-rn-new-grad-transition",
     countrySlug: "us",
-    countryCode: CountryCode.US,
+    countryCode: "US" as CountryCode,
     roleTrack: "rn",
     examCode: "new-grad-transition",
-    examFamily: ExamFamily.NCLEX_RN,
+    examFamily: "NCLEX_RN" as ExamFamily,
     examKey: "NEW_GRAD_TRANSITION",
     displayName: "New Grad RN: Transition to Practice",
     shortName: "New Grad",
-    stripeTier: TierCode.NEW_GRAD,
+    stripeTier: "NEW_GRAD" as TierCode,
     contentExamKeys: ["NCLEX-RN", "NCLEX_RN"],
     seoTitle: "New Grad RN Transition | First Year on the Floor | NurseNest",
     seoDescription:

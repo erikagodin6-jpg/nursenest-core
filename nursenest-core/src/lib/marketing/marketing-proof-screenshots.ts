@@ -9,9 +9,6 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { FlagshipExperienceId } from "@/lib/discovery/flagship-experiences";
 import { isNewGradTransitionPathway } from "@/lib/marketing/is-new-grad-transition-pathway";
 import { isPracticalNursingMarketingPathway } from "@/lib/marketing/is-practical-nursing-marketing-pathway";
-import {
-  GENERATED_SCREENSHOT_PATHS,
-} from "@/lib/marketing/generated-screenshot-registry";
 
 export type MarketingProofTheme = "ocean" | "blossom" | "midnight";
 
@@ -116,49 +113,19 @@ export function marketingProofFromCoreKey(
   };
 }
 
-export function pathwayHubPrimaryProof(pathway: ExamPathwayDefinition): MarketingProofShot {
-  if (isPracticalNursingMarketingPathway(pathway)) {
-    return {
-      src: GENERATED_SCREENSHOT_PATHS.pnMarketingHub,
-      alt: "RPN and PN exam prep hub with lessons, practice, and CAT readiness on NurseNest",
-      theme: "ocean",
-    };
-  }
-  if (isNewGradTransitionPathway(pathway)) {
-    return {
-      src: GENERATED_SCREENSHOT_PATHS.newGradMarketingHub,
-      alt: "New graduate nursing transition hub with specialty prep and clinical confidence tools",
-      theme: "blossom",
-    };
-  }
-  switch (pathway.roleTrack) {
-    case "rn":
-      return {
-        src: GENERATED_SCREENSHOT_PATHS.rnMarketingHub,
-        alt: "NCLEX-RN study hub with lessons, NGN practice, CAT exams, and readiness analytics",
-        theme: "ocean",
-      };
-    case "np":
-      return {
-        src: GENERATED_SCREENSHOT_PATHS.npMarketingHub,
-        alt: "NP and CNPLE preparation hub with advanced clinical reasoning and LOFT-style assessment",
-        theme: "midnight",
-      };
-    case "allied":
-      return {
-        src: GENERATED_SCREENSHOT_PATHS.alliedMarketingHub,
-        alt: "Allied health profession-specific study hub with competency-focused practice",
-        theme: "ocean",
-      };
-    default:
-      return marketingProofFromCoreKey("learner-dashboard", {
-        alt: "NurseNest learner dashboard with study progress and next steps",
-        theme: "ocean",
-      });
-  }
-}
-
 export function pathwayHubSecondaryProofs(pathway: ExamPathwayDefinition): MarketingProofShot[] {
+  if (isNewGradTransitionPathway(pathway)) {
+    return [
+      marketingProofFromCoreKey("cat-results", {
+        alt: "New grad readiness results with weak-area recommendations",
+        theme: "midnight",
+      }),
+      marketingProofFromCoreKey("smart-review", {
+        alt: "Smart review grouped by confidence for early-career reinforcement",
+        theme: "blossom",
+      }),
+    ];
+  }
   if (pathway.roleTrack === "rn" && !isPracticalNursingMarketingPathway(pathway)) {
     return [
       marketingProofFromCoreKey("practice-rationale", {
@@ -208,18 +175,6 @@ export function pathwayHubSecondaryProofs(pathway: ExamPathwayDefinition): Marke
       marketingProofFromCoreKey("question-bank", {
         alt: "Allied health practice questions scoped to profession competencies",
         theme: "ocean",
-      }),
-    ];
-  }
-  if (isNewGradTransitionPathway(pathway)) {
-    return [
-      marketingProofFromCoreKey("cat-results", {
-        alt: "New grad readiness results with weak-area recommendations",
-        theme: "midnight",
-      }),
-      marketingProofFromCoreKey("smart-review", {
-        alt: "Smart review grouped by confidence for early-career reinforcement",
-        theme: "blossom",
       }),
     ];
   }

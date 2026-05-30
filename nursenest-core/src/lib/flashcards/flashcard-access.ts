@@ -1,6 +1,4 @@
 import {
-  ContentStatus,
-  FlashcardDeckVisibility,
   type CountryCode,
   type FlashcardDeck,
   type Prisma,
@@ -11,7 +9,10 @@ import { prismaTierCodesForProfileTier } from "@/lib/entitlements/accessible-tie
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 
-const PUBLISHED = ContentStatus.PUBLISHED;
+const PUBLISHED = "PUBLISHED" as const;
+const HIDDEN = "HIDDEN" as const;
+const PUBLIC_PREVIEW = "PUBLIC_PREVIEW" as const;
+const SUBSCRIBER = "SUBSCRIBER" as const;
 
 /** Truncate back of card for anonymous preview surfaces. */
 export const FLASHCARD_PREVIEW_BACK_MAX_CHARS = 140;
@@ -49,13 +50,13 @@ export function userCanAccessDeckForStudy(
   entitlement: AccessScope,
 ): boolean {
   if (deck.status !== PUBLISHED) {
-    if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) return deck.visibility !== FlashcardDeckVisibility.HIDDEN;
+    if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) return deck.visibility !== HIDDEN;
     return false;
   }
-  if (deck.visibility === FlashcardDeckVisibility.HIDDEN) {
+  if (deck.visibility === HIDDEN) {
     return accessScopeIsStaffLearnerEntitlementBypass(entitlement);
   }
-  if (deck.visibility === FlashcardDeckVisibility.PUBLIC_PREVIEW) {
+  if (deck.visibility === PUBLIC_PREVIEW) {
     return true;
   }
   if (!entitlement.hasAccess) return false;
@@ -81,7 +82,7 @@ export function userCanAccessDeckForStudy(
 export function userCanListPublicPreviewDeck(
   deck: Pick<FlashcardDeck, "status" | "visibility">,
 ): boolean {
-  return deck.status === PUBLISHED && deck.visibility === FlashcardDeckVisibility.PUBLIC_PREVIEW;
+  return deck.status === PUBLISHED && deck.visibility === PUBLIC_PREVIEW;
 }
 
 export function prismaDeckListWhere(args: {
@@ -92,18 +93,18 @@ export function prismaDeckListWhere(args: {
   const { hasSession, isSubscriber, entitlement } = args;
 
   if (!hasSession) {
-    return { status: PUBLISHED, visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW };
+    return { status: PUBLISHED, visibility: PUBLIC_PREVIEW };
   }
 
   if (!isSubscriber || !entitlement?.hasAccess) {
-    return { status: PUBLISHED, visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW };
+    return { status: PUBLISHED, visibility: PUBLIC_PREVIEW };
   }
 
   if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
     return {
       OR: [
-        { status: PUBLISHED, visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW },
-        { status: PUBLISHED, visibility: { not: FlashcardDeckVisibility.HIDDEN } },
+        { status: PUBLISHED, visibility: PUBLIC_PREVIEW },
+        { status: PUBLISHED, visibility: { not: HIDDEN } },
       ],
     };
   }
@@ -111,14 +112,14 @@ export function prismaDeckListWhere(args: {
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
   if (!country || !tier) {
-    return { status: PUBLISHED, visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW };
+    return { status: PUBLISHED, visibility: PUBLIC_PREVIEW };
   }
 
   const allowedTiers = prismaTierCodesForProfileTier(tier);
 
   const subscriberBranch: Prisma.FlashcardDeckWhereInput = {
     status: PUBLISHED,
-    visibility: FlashcardDeckVisibility.SUBSCRIBER,
+    visibility: SUBSCRIBER,
     country,
     tier: { in: allowedTiers },
   };
@@ -127,7 +128,7 @@ export function prismaDeckListWhere(args: {
   const gatedSubscriber = alliedOccupation ? { AND: [subscriberBranch, alliedOccupation] } : subscriberBranch;
 
   return {
-    OR: [{ status: PUBLISHED, visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW }, gatedSubscriber],
+    OR: [{ status: PUBLISHED, visibility: PUBLIC_PREVIEW }, gatedSubscriber],
   };
 }
 

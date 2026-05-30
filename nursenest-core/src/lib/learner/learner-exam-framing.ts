@@ -1,4 +1,3 @@
-import { CountryCode } from "@prisma/client";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { getTerminology } from "@/lib/exam-context/terminology";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
@@ -38,8 +37,8 @@ export function getLearnerExamFraming(pathwayId: string | null | undefined): Lea
       unlicensedAssistiveLabel: "unlicensed assistive personnel",
     };
   }
-  const isCa = p.countryCode === CountryCode.CA;
-  const isUs = p.countryCode === CountryCode.US;
+  const isCa = p.countryCode === "CA";
+  const isUs = p.countryCode === "US";
   const examShortLabel = ctx ? getTerminology("pn_exam_short", ctx) : p.shortName;
   const unlicensedAssistiveLabel = ctx ? getTerminology("unlicensed_assistive", ctx) : isCa ? "unregulated care provider" : "UAP";
   const delegationHint = ctx ? getTerminology("delegation_hint_short", ctx) : null;

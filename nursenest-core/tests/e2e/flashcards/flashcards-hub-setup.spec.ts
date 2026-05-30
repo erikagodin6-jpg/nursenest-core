@@ -49,7 +49,7 @@ test.describe("Flashcards hub session setup", () => {
     }
   });
 
-  test("selecting a system shows explicit selected state (not all tiles active)", async ({
+  test("system cards are direct, focused study links", async ({
     page,
     baseURL,
   }, testInfo) => {
@@ -61,14 +61,11 @@ test.describe("Flashcards hub session setup", () => {
       const main = learnerAppMainLandmark(page);
       const firstCard = main.locator("[data-nn-e2e-flashcards-system-card]").first();
       test.skip(!(await firstCard.isVisible({ timeout: 30_000 }).catch(() => false)), "No system cards.");
-      const total = await main.locator("[data-nn-e2e-flashcards-system-card]").count();
-      const selectedBefore = await main.locator('[data-nn-e2e-flashcards-system-card][data-selected="true"]').count();
-      expect(selectedBefore, "All systems mode should not mark every tile selected").toBeLessThan(total);
+      await expect(firstCard).toHaveAttribute("href", /\/app\/flashcards\/custom\?/);
+      await expect(firstCard.locator("[data-nn-e2e-flashcards-system-count]")).toHaveText(/^\d[\d,]* Flashcards$/);
 
       await firstCard.click();
-      await expect(main.locator('[data-nn-e2e-flashcards-system-card][data-selected="true"]').first()).toBeVisible({
-        timeout: 10_000,
-      });
+      await page.waitForURL(/\/app\/flashcards\/custom/, { timeout: 120_000 });
     } finally {
       observers.dispose();
       await logObserverDiagnostics(observers, testInfo.title);
@@ -94,7 +91,7 @@ test.describe("Flashcards hub session setup", () => {
     }
   });
 
-  test("launcher stays first, then selected systems and card count start study", async ({ page, baseURL }, testInfo) => {
+  test("launcher stays first, then card count start study opens review", async ({ page, baseURL }, testInfo) => {
     test.setTimeout(180_000);
     const observers = attachPageObservers(page, { profile: "app" });
     try {
@@ -104,9 +101,6 @@ test.describe("Flashcards hub session setup", () => {
       await expect(main.locator("[data-nn-e2e-flashcards-setup-panel]")).toBeVisible({ timeout: 60_000 });
       await expect(page.locator(".nn-premium-flashcard-session-root.nn-flashcard-study-premium")).toHaveCount(0);
 
-      const firstCard = main.locator("[data-nn-e2e-flashcards-system-card]").first();
-      test.skip(!(await firstCard.isVisible({ timeout: 30_000 }).catch(() => false)), "No system cards.");
-      await firstCard.click();
       await main.locator('[data-nn-e2e-session-size-preset="25"]').click();
       await expect(main.locator("[data-nn-e2e-flashcards-cta-subline]")).toContainText("25 cards", {
         timeout: 10_000,

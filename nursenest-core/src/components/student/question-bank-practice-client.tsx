@@ -1,6 +1,5 @@
 "use client";
 
-import { LearnerNoteScope } from "@prisma/client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -1949,7 +1948,7 @@ export function QuestionBankPracticeClient({
       <div id="qbank-question-notes" className="scroll-mt-24">
         <StudyNotesPanel
           userId={userId}
-          scope={LearnerNoteScope.QUESTION_BANK}
+          scope={"QUESTION_BANK"}
           contextId={current.id}
           topic={current.topic}
           sourceLabel={`Question ${current.id.slice(0, 8)}…${current.topic ? " · " + current.topic : ""}`}

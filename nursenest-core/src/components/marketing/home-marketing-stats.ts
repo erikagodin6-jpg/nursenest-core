@@ -11,4 +11,11 @@ export type HomeMarketingStats = {
 
   /** Total lessons available (optional for future use / partial loads) */
   totalLessons?: number | null;
+
+  totalFlashcards?: number | null;
+  scenarioCount?: number | null;
+  clinicalSkillCount?: number | null;
+  medicationMathProblemCount?: number | null;
+  ecgCaseCount?: number | null;
+  labCaseCount?: number | null;
 };

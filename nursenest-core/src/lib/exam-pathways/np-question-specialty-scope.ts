@@ -1,4 +1,4 @@
-import { ExamFamily, type Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
 const US_NP_SPECIALTY_PATHWAY_IDS = new Set([
@@ -36,7 +36,7 @@ function examValuesWhere(values: readonly string[]): Prisma.ExamQuestionWhereInp
 export function isUsNpSpecialtyPathway(pathway: ExamPathwayDefinition | null): pathway is ExamPathwayDefinition {
   return Boolean(
     pathway &&
-      pathway.examFamily === ExamFamily.NP &&
+      pathway.examFamily === "NP" &&
       pathway.countryCode === "US" &&
       US_NP_SPECIALTY_PATHWAY_IDS.has(pathway.id),
   );

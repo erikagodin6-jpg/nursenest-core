@@ -1,6 +1,5 @@
 "use client";
 
-import { LearnerNoteScope } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -2252,7 +2251,7 @@ export function PracticeTestRunnerClient({
         <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
           <StudyNotesPanel
             userId={userId}
-            scope={LearnerNoteScope.PRACTICE_TEST}
+            scope={"PRACTICE_TEST"}
             contextId={testId}
             topic={(results.weakAreas ?? [])[0] ?? null}
             sourceLabel={`Practice test ${testId.slice(0, 8)}…`}

@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { LockKeyhole } from "lucide-react";
-import { LearnerNoteScope } from "@prisma/client";
+import type { LearnerNoteScope } from "@prisma/client";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { LessonNotesDrawer } from "@/components/lessons/lesson-notes-drawer";
@@ -63,7 +63,7 @@ export function PremiumLessonShell({
       <ProtectedPremiumContent
         userLabel={userLabel}
         flags={flags}
-        telemetrySurface={scope === LearnerNoteScope.PATHWAY_LESSON ? "pathway_lesson" : "content_lesson"}
+        telemetrySurface={scope === "PATHWAY_LESSON" ? "pathway_lesson" : "content_lesson"}
       >
         {children}
       </ProtectedPremiumContent>

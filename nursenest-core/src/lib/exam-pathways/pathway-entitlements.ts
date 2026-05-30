@@ -1,4 +1,4 @@
-import { ExamFamily, type CountryCode, type TierCode } from "@prisma/client";
+import type { CountryCode, TierCode } from "@prisma/client";
 import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-scope";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -37,7 +37,7 @@ export function examPathwaysForStudyHubSubscription(
   if (!scope.hasAccess || scope.reason === "no_access") return compatible;
   if (accessScopeIsStaffLearnerEntitlementBypass(scope)) return compatible;
   if (scope.tier !== "NP") return compatible;
-  const npOnly = compatible.filter((p) => p.examFamily === ExamFamily.NP);
+  const npOnly = compatible.filter((p) => p.examFamily === "NP");
   return npOnly.length > 0 ? npOnly : compatible;
 }
 
@@ -66,14 +66,14 @@ export async function defaultPracticeTestPathwayId(
   if (fromLp && compatible.some((p) => p.id === fromLp.id)) {
     return fromLp.id;
   }
-  const onlyNpTracks = compatible.length > 0 && compatible.every((p) => p.examFamily === ExamFamily.NP);
+  const onlyNpTracks = compatible.length > 0 && compatible.every((p) => p.examFamily === "NP");
   if (onlyNpTracks) {
     const sorted = [...compatible].sort((a, b) => a.id.localeCompare(b.id));
     return sorted[0]!.id;
   }
   const nclexRn = compatible.find(
     (p) =>
-      p.examFamily === ExamFamily.NCLEX_RN &&
+      p.examFamily === "NCLEX_RN" &&
       p.roleTrack === "rn" &&
       (countryHint ? p.countryCode === countryHint : true),
   );

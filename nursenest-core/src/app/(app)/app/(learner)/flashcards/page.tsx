@@ -25,6 +25,7 @@ import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-f
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { builderCategoryOptionsForPathway } from "@/lib/flashcards/flashcard-builder-taxonomy";
+import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import {
   pathwayFlashcardsHubH1,
@@ -66,6 +67,8 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
         : `${t("learner.flashcards.page.title")} | NurseNest`;
       return {
         title,
+        openGraph: { title },
+        twitter: { title },
         robots: { index: false, follow: false },
       };
     },
@@ -350,6 +353,47 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     lessonVirtualDiagnostics: null,
     poolDiagnostics: null,
   };
+  let inventorySource: "server_inventory" | "server_inventory_timeout" | "deferred_client_api" =
+    "deferred_client_api";
+
+  if (catalogPathwayForInventory && userId && isDatabaseUrlConfigured()) {
+    try {
+      const timedInventory = await Promise.race([
+        loadFlashcardsExamInventoryForPathway({
+          userId,
+          entitlement,
+          pathway: catalogPathwayForInventory,
+        }),
+        new Promise<null>((resolve) => {
+          setTimeout(() => resolve(null), 100);
+        }),
+      ]);
+
+      if (timedInventory?.ok) {
+        initialHub = {
+          categoryOptions: timedInventory.categoryOptions,
+          matchingTotal: timedInventory.total,
+          lessonVirtualDiagnostics: null,
+          poolDiagnostics: timedInventory.diagnostics,
+        };
+        inventorySource = "server_inventory";
+      } else if (timedInventory === null) {
+        inventorySource = "server_inventory_timeout";
+        safeServerLog("learner_flashcards", "server_inventory_timeout", {
+          loader_name: "flashcards_page",
+          pathway_id: scopedPathwayId,
+          timeout_ms: 100,
+        });
+      }
+    } catch (e) {
+      safeServerLog("learner_flashcards", "server_inventory_failed", {
+        loader_name: "flashcards_page",
+        pathway_id: scopedPathwayId,
+        error_name: e instanceof Error ? e.name : "unknown",
+        error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      });
+    }
+  }
 
   if (initialHub.categoryOptions.length === 0) {
     safeServerLog("learner_flashcards", "category_options_empty", {
@@ -384,8 +428,8 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     pathway_id: scopedPathwayId,
     bootstrap_ms: bootstrapMs,
     category_rows: initialHub.categoryOptions.length,
-    inventory_source: "deferred_client_api",
-    blocking_inventory: "0",
+    inventory_source: inventorySource,
+    blocking_inventory: inventorySource === "server_inventory" ? "1" : "0",
     blocking_adaptive: "0",
   });
 

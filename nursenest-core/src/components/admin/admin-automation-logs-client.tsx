@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { ContentAutomationLogCategory, ContentAutomationLogStatus } from "@prisma/client";
+import type { ContentAutomationLogCategory, ContentAutomationLogStatus } from "@prisma/client";
 import {
   formatDisplayLabel,
   formatPrismaEnumLabel,

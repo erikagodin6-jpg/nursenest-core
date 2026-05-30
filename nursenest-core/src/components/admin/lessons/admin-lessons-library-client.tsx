@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ContentStatus } from "@prisma/client";
+import type { ContentStatus } from "@prisma/client";
 import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesson-stable-edit-href";
 
 type ContentRow = {
@@ -262,10 +262,10 @@ export function AdminLessonsLibraryClient() {
                 }}
               >
                 <option value="">All</option>
-                <option value={ContentStatus.DRAFT}>Draft</option>
-                <option value={ContentStatus.PUBLISHED}>Published</option>
-                <option value={ContentStatus.IN_REVIEW}>In review</option>
-                <option value={ContentStatus.ARCHIVED}>Archived</option>
+                <option value={"DRAFT"}>Draft</option>
+                <option value={"PUBLISHED"}>Published</option>
+                <option value={"IN_REVIEW"}>In review</option>
+                <option value={"ARCHIVED"}>Archived</option>
               </select>
             </div>
             <div className="sm:col-span-2 lg:col-span-4">
@@ -397,7 +397,7 @@ export function AdminLessonsLibraryClient() {
                                 body: JSON.stringify({
                                   action: "set_status",
                                   ids: [r.id],
-                                  status: ContentStatus.ARCHIVED,
+                                  status: "ARCHIVED",
                                 }),
                               });
                               if (res.ok) void loadContent();

@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import type { ReactNode } from "react";
 
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
+import { nursenestAppIcons } from "@/lib/branding/app-icons";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -18,6 +19,12 @@ export const metadata: Metadata = {
   title: {
     default: "NurseNest",
     template: "%s | NurseNest",
+  },
+  icons: {
+    icon: [
+      { url: nursenestAppIcons.favicon, type: "image/png" },
+      { url: nursenestAppIcons.svg, type: "image/svg+xml" },
+    ],
   },
 };
 

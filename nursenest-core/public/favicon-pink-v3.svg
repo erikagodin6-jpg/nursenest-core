@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="NurseNest leaf">
+  <title>NurseNest leaf</title>
+  <rect width="64" height="64" rx="16" fill="#fff5fb" />
+  <path
+    d="M32 10c-11.5 13.5-18 25.4-17.6 34.7C14.7 52 21 58 32 58s17.3-6 17.6-13.3C50 35.4 43.5 23.5 32 10Z"
+    fill="#f72fa8"
+  />
+  <path
+    d="M32 22c6.5 9.1 9.7 16.1 9.4 22.4-.2 4.4-3.6 7.1-9.4 7.1s-9.2-2.7-9.4-7.1C22.3 38.1 25.5 31.1 32 22Z"
+    fill="#fff5fb"
+  />
+</svg>

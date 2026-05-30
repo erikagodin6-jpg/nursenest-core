@@ -1,4 +1,4 @@
-import { ExamFamily, type TierCode } from "@prisma/client";
+import type { TierCode } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -27,7 +27,7 @@ export function resolveNpSubscriberQuestionPathway(args: {
     const id = raw?.trim();
     if (!id) continue;
     const p = getExamPathwayById(id) ?? null;
-    if (!p || p.examFamily !== ExamFamily.NP) continue;
+    if (!p || p.examFamily !== "NP") continue;
     if (!subscriptionCoversPathwayBase(entitlement, p)) continue;
     return p;
   }

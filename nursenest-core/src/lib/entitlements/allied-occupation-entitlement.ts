@@ -6,7 +6,6 @@
  */
 
 import type { Prisma } from "@prisma/client";
-import { TierCode } from "@prisma/client";
 import type { AlliedCareerKey } from "@/lib/pricing/display-catalog";
 import type { AccessScope } from "@/lib/entitlements/user-access-types";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
@@ -38,7 +37,7 @@ export function normalizeCanonicalAlliedProfessionKey(raw: string | null | undef
 
 /** Purchased occupation as canonical profession key, or null if not an Allied subscriber / unresolved. */
 export function subscriberCanonicalAlliedProfessionKey(scope: AccessScope): string | null {
-  if (scope.tier !== TierCode.ALLIED) return null;
+  if (scope.tier !== "ALLIED") return null;
   if (!scope.alliedCareer) return null;
   return canonicalProfessionKeyForAlliedCareer(scope.alliedCareer as AlliedCareerKey);
 }
@@ -46,7 +45,7 @@ export function subscriberCanonicalAlliedProfessionKey(scope: AccessScope): stri
 export function alliedSubscriberNeedsOccupationScopedContent(scope: AccessScope): boolean {
   return (
     scope.hasAccess &&
-    scope.tier === TierCode.ALLIED &&
+    scope.tier === "ALLIED" &&
     !accessScopeIsStaffLearnerEntitlementBypass(scope)
   );
 }
@@ -82,7 +81,7 @@ export function evaluateAlliedOccupationAccess(
     };
   }
 
-  if (scope.tier !== TierCode.ALLIED) {
+  if (scope.tier !== "ALLIED") {
     return {
       allowed: true,
       reason: "not_allied",

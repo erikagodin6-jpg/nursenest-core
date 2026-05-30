@@ -1,4 +1,4 @@
-import { CountryCode, ExamFamily, TierCode } from "@prisma/client";
+import type { CountryCode, ExamFamily, TierCode } from "@prisma/client";
 import type { ExamPathwayDefinition } from "./types";
 
 /** Ordered chunk D of `EXAM_PATHWAYS` (allied). */
@@ -6,14 +6,14 @@ export const EXAM_PATHWAYS_SEGMENT_D: ExamPathwayDefinition[] = [
   {
     id: "ca-allied-core",
     countrySlug: "canada",
-    countryCode: CountryCode.CA,
+    countryCode: "CA" as CountryCode,
     roleTrack: "allied",
     examCode: "allied-health",
-    examFamily: ExamFamily.ALLIED,
+    examFamily: "ALLIED" as ExamFamily,
     examKey: "ALLIED",
     displayName: "Allied Health Certification Prep (Canada)",
     shortName: "Allied Health",
-    stripeTier: TierCode.ALLIED,
+    stripeTier: "ALLIED" as TierCode,
     contentExamKeys: ["ALLIED"],
     seoTitle: "Allied Health Exam Prep | Canada | NurseNest",
     seoDescription:
@@ -24,14 +24,14 @@ export const EXAM_PATHWAYS_SEGMENT_D: ExamPathwayDefinition[] = [
   {
     id: "us-allied-core",
     countrySlug: "us",
-    countryCode: CountryCode.US,
+    countryCode: "US" as CountryCode,
     roleTrack: "allied",
     examCode: "allied-health",
-    examFamily: ExamFamily.ALLIED,
+    examFamily: "ALLIED" as ExamFamily,
     examKey: "ALLIED",
     displayName: "Allied Health Certification Prep (United States)",
     shortName: "Allied Health",
-    stripeTier: TierCode.ALLIED,
+    stripeTier: "ALLIED" as TierCode,
     contentExamKeys: ["ALLIED"],
     seoTitle: "Allied Health Exam Prep | United States | NurseNest",
     seoDescription:

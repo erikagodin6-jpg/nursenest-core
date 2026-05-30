@@ -7,7 +7,6 @@ import {
   FLAGSHIP_PROOF_SCREENSHOTS,
   HOME_FEATURE_DEEP_DIVE_PROOFS,
   marketingProofFromCoreKey,
-  pathwayHubPrimaryProof,
   pathwayHubSecondaryProofs,
 } from "@/lib/marketing/marketing-proof-screenshots";
 import {
@@ -50,7 +49,7 @@ test("Next image optimizer allows local marketing proof screenshots", () => {
 
 test("every pathway hub proof screenshot resolves to an allowed local asset", () => {
   for (const pathway of EXAM_PATHWAYS) {
-    const shots = [pathwayHubPrimaryProof(pathway), ...pathwayHubSecondaryProofs(pathway)];
+    const shots = pathwayHubSecondaryProofs(pathway);
     for (const shot of shots) {
       const abs = path.join(publicDir, shot.src.replace(/^\//, ""));
       assert.ok(fs.existsSync(abs), `${pathway.id} proof asset should exist: ${shot.src}`);
@@ -58,6 +57,26 @@ test("every pathway hub proof screenshot resolves to an allowed local asset", ()
         shot.src,
         /^\/marketing\//,
         `${pathway.id} proof asset should be under allowed /marketing/** image path`,
+      );
+    }
+  }
+});
+
+test("pathway hub proof screenshots do not show the hub page itself", () => {
+  const selfReferentialHubScreenshots = new Set([
+    GENERATED_SCREENSHOT_PATHS.rnMarketingHub,
+    GENERATED_SCREENSHOT_PATHS.pnMarketingHub,
+    GENERATED_SCREENSHOT_PATHS.npMarketingHub,
+    GENERATED_SCREENSHOT_PATHS.alliedMarketingHub,
+    GENERATED_SCREENSHOT_PATHS.newGradMarketingHub,
+  ]);
+
+  for (const pathway of EXAM_PATHWAYS) {
+    for (const shot of pathwayHubSecondaryProofs(pathway)) {
+      assert.equal(
+        selfReferentialHubScreenshots.has(shot.src),
+        false,
+        `${pathway.id} should not render a screenshot of its own hub page`,
       );
     }
   }

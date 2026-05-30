@@ -141,29 +141,56 @@ export function SiteFooter() {
               </div>
 
               <div className="nn-footer-premium-nav-grid grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:col-span-9">
-                {/* COMPANY */}
+                {/* LEARNING */}
                 <FooterPremiumNavColumn
-                  id="nn-footer-col-company"
-                  title={formatTitleCase("Company", locale)}
+                  id="nn-footer-col-learning"
+                  title={formatTitleCase("Learning", locale)}
                 >
                   <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
                     <li>
-                      <FLink href="/about">About</FLink>
+                      <FLink href={explore.lessons}>Lessons</FLink>
                     </li>
                     <li>
-                      <FLink href="/blog">Blog</FLink>
+                      <FLink href={explore.flashcards}>Flashcards</FLink>
                     </li>
                     <li>
-                      <FLink href={footerNav.support.contact}>Contact</FLink>
+                      <FLink href="/nclex-study-plan">Study Plans</FLink>
                     </li>
                     <li>
-                      <FLink href="/careers">Careers</FLink>
+                      <FLink href="/adaptive-nclex-testing">Weak Area Review</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/canada/rn/nclex-rn/report-card">Report Cards</FLink>
                     </li>
                   </ul>
                 </FooterPremiumNavColumn>
 
-                {/* EXAMS */}
-                <FooterPremiumNavColumn id="nn-footer-col-exams" title={formatTitleCase("Exams", locale)}>
+                {/* CLINICAL TOOLS */}
+                <FooterPremiumNavColumn id="nn-footer-col-clinical-tools" title={formatTitleCase("Clinical Tools", locale)}>
+                  <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
+                    <li>
+                      <FLink href="/ecg-telemetry-mastery">ECG & Telemetry</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/labs-interpretation">Clinical Labs</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/clinical-modules">Medication Math</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/cnple-pharmacology">Pharmacology</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/clinical-modules">Clinical Skills</FLink>
+                    </li>
+                  </ul>
+                </FooterPremiumNavColumn>
+
+                {/* EXAM PREP */}
+                <FooterPremiumNavColumn
+                  id="nn-footer-col-exam-prep"
+                  title={formatTitleCase("Exam Prep", locale)}
+                >
                   <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
                     <li>
                       <FLink href={footerNav.exams.rn}>RN</FLink>
@@ -175,74 +202,74 @@ export function SiteFooter() {
                       <FLink href={footerNav.exams.np}>NP</FLink>
                     </li>
                     <li>
+                      <FLink href={footerNav.platform.cat}>CAT Exams</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/nclex-question-bank">NGN Question Types</FLink>
+                    </li>
+                  </ul>
+                </FooterPremiumNavColumn>
+
+                {/* HEALTHCARE CAREERS */}
+                <FooterPremiumNavColumn
+                  id="nn-footer-col-healthcare-careers"
+                  title={formatTitleCase("Healthcare Careers", locale)}
+                >
+                  <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
+                    <li>
                       <FLink href="/new-grad">New Grad</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/pre-nursing">Pre-Nursing</FLink>
                     </li>
                     <li>
                       <FLink href={footerNav.exams.allied}>
                         {formatTitleCase(t("footer.alliedHealth"), locale)}
                       </FLink>
                     </li>
-                  </ul>
-                </FooterPremiumNavColumn>
-
-                {/* STUDY TOOLS */}
-                <FooterPremiumNavColumn
-                  id="nn-footer-col-study-tools"
-                  title={formatTitleCase("Study Tools", locale)}
-                >
-                  <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
                     <li>
-                      <FLink href={explore.flashcards}>Flashcards</FLink>
-                    </li>
-                    <li>
-                      <FLink href={explore.lessons}>Clinical Lessons</FLink>
-                    </li>
-                    <li>
-                      <FLink href={explore.practiceQuestions}>Practice Questions</FLink>
-                    </li>
-                    <li>
-                      <FLink href={footerNav.platform.cat}>CAT Exams</FLink>
+                      <FLink href="/careers">Careers</FLink>
                     </li>
                   </ul>
                 </FooterPremiumNavColumn>
 
-                {/* SUPPORT */}
-                <FooterPremiumNavColumn
-                  id="nn-footer-col-support"
-                  title={formatTitleCase("Support", locale)}
-                >
+                {/* RESOURCES */}
+                <FooterPremiumNavColumn id="nn-footer-col-resources" title={formatTitleCase("Resources", locale)}>
                   <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
+                    <li>
+                      <FLink href="/blog">Blog</FLink>
+                    </li>
                     <li>
                       <FLink href={footerNav.resources.faq}>FAQ</FLink>
                     </li>
                     <li>
-                      <FLink href={footerNav.support.helpCenter}>Help Center</FLink>
+                      <FLink href="/about">About</FLink>
                     </li>
-                    <FooterAccountSupportEmailBlock />
                     <li>
-                      <FLink href="/support#account">Account Support</FLink>
+                      <FLink href={footerNav.support.helpCenter}>Help Center</FLink>
                     </li>
                   </ul>
                 </FooterPremiumNavColumn>
 
-                {/* LEGAL */}
+                {/* INSTITUTIONS */}
                 <FooterPremiumNavColumn
-                  id="nn-footer-col-legal"
-                  title={formatTitleCase("Legal", locale)}
+                  id="nn-footer-col-institutions"
+                  title={formatTitleCase("Institutions", locale)}
                 >
                   <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
                     <li>
-                      <FLink href="/privacy">Privacy</FLink>
+                      <FLink href="/for-institutions">Schools</FLink>
                     </li>
                     <li>
-                      <FLink href="/terms">Terms</FLink>
+                      <FLink href="/for-institutions">Colleges</FLink>
                     </li>
                     <li>
-                      <FLink href="/disclaimer">Disclaimer</FLink>
+                      <FLink href="/for-institutions">Universities</FLink>
                     </li>
                     <li>
-                      <FLink href="/editorial-policy">Editorial Policy</FLink>
+                      <FLink href="/for-institutions">Hospital Programs</FLink>
                     </li>
+                    <FooterAccountSupportEmailBlock />
                   </ul>
                 </FooterPremiumNavColumn>
               </div>

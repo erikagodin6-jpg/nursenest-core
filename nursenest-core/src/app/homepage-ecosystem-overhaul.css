@@ -1,0 +1,442 @@
+.nn-home-ecosystem-overhaul {
+  background: var(--page-bg);
+  color: var(--palette-text);
+}
+
+.nn-home-ecosystem-section {
+  border-bottom: 1px solid var(--border-subtle);
+  padding-block: clamp(3rem, 6vw, 5.75rem);
+}
+
+.nn-home-ecosystem-section--flagship {
+  padding-top: clamp(2.25rem, 4vw, 4rem);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-brand) 8%, var(--page-bg)) 0%,
+      var(--page-bg) 36%,
+      color-mix(in srgb, var(--semantic-panel-cool) 24%, var(--page-bg)) 100%
+    );
+}
+
+.nn-home-ecosystem-heading {
+  max-width: 48rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.nn-home-ecosystem-heading .nn-marketing-body {
+  max-width: 42rem;
+  margin: 0.85rem auto 0;
+  color: var(--palette-text-muted);
+}
+
+.nn-home-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+@media (min-width: 640px) {
+  .nn-home-feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .nn-home-feature-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.nn-home-feature-card,
+.nn-home-pathway-card,
+.nn-home-ngn-card,
+.nn-home-gallery-card,
+.nn-home-counter-grid > div {
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 14%, var(--border-subtle));
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted)),
+      var(--semantic-surface)
+    );
+  box-shadow: 0 0.9rem 2.2rem color-mix(in srgb, var(--palette-heading) 7%, transparent);
+}
+
+.nn-home-feature-card {
+  display: flex;
+  min-width: 0;
+  min-height: 20rem;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  padding: 1rem;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.nn-home-feature-card:hover,
+.nn-home-feature-card:focus-visible,
+.nn-home-pathway-card:hover,
+.nn-home-pathway-card:focus-visible {
+  border-color: color-mix(in srgb, var(--semantic-brand) 36%, var(--border-subtle));
+  box-shadow:
+    0 1rem 2.6rem color-mix(in srgb, var(--palette-heading) 11%, transparent),
+    0 0 0 0.18rem color-mix(in srgb, var(--semantic-brand) 9%, transparent);
+  transform: translateY(-0.16rem);
+}
+
+.nn-home-feature-card:focus-visible,
+.nn-home-pathway-card:focus-visible,
+.nn-home-institutions-cta:focus-visible {
+  outline: 0.18rem solid color-mix(in srgb, var(--semantic-brand) 42%, transparent);
+  outline-offset: 0.18rem;
+}
+
+.nn-home-feature-card__top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.nn-home-feature-card__icon {
+  display: inline-flex;
+  width: 2.4rem;
+  height: 2.4rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 28%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  color: var(--semantic-brand);
+}
+
+.nn-home-feature-card__copy {
+  min-width: 0;
+}
+
+.nn-home-feature-card__title {
+  display: block;
+  color: var(--palette-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.nn-home-feature-card__description {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--palette-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.nn-home-ecosystem-preview {
+  display: block;
+  overflow: hidden;
+  border-radius: 0.95rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 16%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 56%, var(--semantic-surface));
+  aspect-ratio: 16 / 10;
+}
+
+.nn-home-ecosystem-preview img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.nn-home-ngn-grid,
+.nn-home-gallery-grid,
+.nn-home-pathway-grid,
+.nn-home-counter-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.nn-home-ngn-grid,
+.nn-home-pathway-grid {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.nn-home-gallery-grid,
+.nn-home-counter-grid {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 700px) {
+  .nn-home-ngn-grid,
+  .nn-home-pathway-grid,
+  .nn-home-gallery-grid,
+  .nn-home-counter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .nn-home-ngn-grid,
+  .nn-home-pathway-grid,
+  .nn-home-gallery-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .nn-home-counter-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.nn-home-ngn-card,
+.nn-home-gallery-card {
+  overflow: hidden;
+  border-radius: 1.25rem;
+  padding: 0.85rem;
+}
+
+.nn-home-ngn-card h3,
+.nn-home-pathway-card h3,
+.nn-home-gallery-card figcaption {
+  margin-top: 0.9rem;
+  color: var(--palette-heading);
+  font-size: 1rem;
+  font-weight: 750;
+}
+
+.nn-home-ngn-card p,
+.nn-home-pathway-card p {
+  margin-top: 0.45rem;
+  color: var(--palette-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.nn-home-ecosystem-section--map {
+  background: color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--page-bg));
+}
+
+.nn-home-ecosystem-map {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  max-width: 58rem;
+  margin: clamp(1.75rem, 3vw, 2.5rem) auto 0;
+}
+
+.nn-home-ecosystem-map__center,
+.nn-home-ecosystem-map__node {
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--border-subtle));
+  background: var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-home-ecosystem-map__center {
+  grid-column: 1 / -1;
+  display: flex;
+  min-height: 8rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border-radius: 1.5rem;
+  color: var(--semantic-brand);
+}
+
+.nn-home-ecosystem-map__center strong {
+  color: var(--palette-heading);
+  font-size: 1.35rem;
+}
+
+.nn-home-ecosystem-map__center span {
+  color: var(--palette-text-muted);
+  font-size: 0.9rem;
+}
+
+.nn-home-ecosystem-map__node {
+  min-height: 3.5rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  color: var(--palette-heading);
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .nn-home-ecosystem-map {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.nn-home-readiness-split {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .nn-home-readiness-split {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  }
+}
+
+.nn-home-readiness-list {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1.4rem;
+  padding: 0;
+  list-style: none;
+}
+
+.nn-home-readiness-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--palette-heading);
+  font-weight: 650;
+}
+
+.nn-home-readiness-list svg {
+  color: var(--semantic-success);
+}
+
+.nn-home-pathway-card {
+  min-height: 12rem;
+  border-radius: 1.25rem;
+  padding: 1.15rem;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.nn-home-pathway-card svg {
+  color: var(--semantic-brand);
+}
+
+.nn-home-comparison-table {
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.25rem;
+  background: var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-home-comparison-table [role="row"] {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) minmax(8rem, 1fr) minmax(8rem, 1fr);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.nn-home-comparison-table [role="row"]:last-child {
+  border-bottom: 0;
+}
+
+.nn-home-comparison-table span {
+  min-width: 0;
+  padding: 0.85rem 1rem;
+  color: var(--palette-text);
+  font-size: 0.9rem;
+}
+
+.nn-home-comparison-table span + span {
+  border-left: 1px solid var(--border-subtle);
+}
+
+.nn-home-comparison-table__head span {
+  color: var(--palette-heading);
+  font-weight: 800;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 60%, var(--semantic-surface));
+}
+
+.nn-home-comparison-table [role="cell"]:last-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: color-mix(in srgb, var(--semantic-success) 72%, var(--palette-heading));
+  font-weight: 750;
+}
+
+.nn-home-counter-grid > div {
+  border-radius: 1.1rem;
+  padding: 1rem;
+}
+
+.nn-home-counter-grid dt {
+  color: var(--palette-text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.nn-home-counter-grid dd {
+  margin-top: 0.35rem;
+  color: var(--palette-heading);
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.nn-home-institutions-band {
+  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--page-bg));
+}
+
+.nn-home-institutions-panel {
+  display: grid;
+  gap: 1.2rem;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--border-subtle));
+  border-radius: 1.5rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@media (min-width: 900px) {
+  .nn-home-institutions-panel {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+}
+
+.nn-home-institutions-panel > svg {
+  color: var(--semantic-brand);
+}
+
+.nn-home-institutions-cta {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.75rem 1rem;
+  background: var(--semantic-brand);
+  color: var(--semantic-text-on-brand, var(--theme-primary-foreground));
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+@media (max-width: 760px) {
+  .nn-home-comparison-table {
+    overflow-x: auto;
+  }
+
+  .nn-home-comparison-table [role="row"] {
+    min-width: 42rem;
+  }
+}

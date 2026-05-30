@@ -1,4 +1,3 @@
-import { ExamFamily } from "@prisma/client";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { isCnplePathway } from "@/lib/exam-pathways/cnple-pathway";
@@ -148,7 +147,7 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
     slug: pathway.id,
   });
 
-  const isGenericIntl = pathway.examFamily === ExamFamily.GENERIC;
+  const isGenericIntl = pathway.examFamily === "GENERIC";
   const isPnHub = isPracticalNursingMarketingPathway(pathway);
 
   const pnIntro =

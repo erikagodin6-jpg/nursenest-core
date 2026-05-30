@@ -1,4 +1,3 @@
-import { CountryCode, ExamFamily } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildMappingQualityWarnings } from "@/lib/exams/cat-blueprint-mapping-quality";
 import {
@@ -75,13 +74,13 @@ export function examSimulationConfigForPathway(
   pathway: ExamPathwayDefinition | null,
   opts?: { npBoard?: ExamSimulationNpBoard },
 ): ExamConfig {
-  if (pathway?.examFamily === ExamFamily.NP) {
+  if (pathway?.examFamily === "NP") {
     return opts?.npBoard === "ANCC" ? ANCC_NP_US_EXAM_CONFIG : AANP_NP_US_EXAM_CONFIG;
   }
-  if (pathway?.examFamily === ExamFamily.NCLEX_PN) {
+  if (pathway?.examFamily === "NCLEX_PN") {
     return NCLEX_PN_US_EXAM_CONFIG;
   }
-  if (pathway?.countryCode === CountryCode.CA) return NCLEX_RN_CA_EXAM_CONFIG;
+  if (pathway?.countryCode === "CA") return NCLEX_RN_CA_EXAM_CONFIG;
   return NCLEX_RN_US_EXAM_CONFIG;
 }
 
@@ -91,9 +90,9 @@ export function examSimulationConfigForPathway(
 export function pathwaySupportsCatExamSimulation(pathway: ExamPathwayDefinition | null): boolean {
   if (!pathway) return true;
   return (
-    pathway.examFamily === ExamFamily.NCLEX_RN ||
-    pathway.examFamily === ExamFamily.NCLEX_PN ||
-    pathway.examFamily === ExamFamily.NP
+    pathway.examFamily === "NCLEX_RN" ||
+    pathway.examFamily === "NCLEX_PN" ||
+    pathway.examFamily === "NP"
   );
 }
 

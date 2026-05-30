@@ -19,6 +19,7 @@
 import type { EcgRhythmTemplate } from "@/lib/ecg-module/ecg-rhythm-templates";
 import type { EcgStripMediaConfig } from "@/lib/ecg-module/ecg-waveform-generator";
 import type { EcgEscalationLevel } from "@/lib/ecg-module/ecg-clinical-reasoning";
+import { getEcgClinicalReasoningUnit } from "@/lib/ecg-module/ecg-clinical-reasoning-index";
 
 // ─── Step definitions ─────────────────────────────────────────────────────────
 
@@ -537,16 +538,19 @@ function getExpectedAnswer(
   answerKey: Partial<DetectiveAnswerKey> | undefined,
   rhythmKey: string,
 ): string {
-  if (!answerKey) return "";
+  const reasoningUnit = getEcgClinicalReasoningUnit(rhythmKey);
   switch (stepKey) {
-    case "rate": return answerKey.rateBracket ?? "";
-    case "regularity": return answerKey.regularity ?? "";
-    case "p_wave": return answerKey.pWave ?? "";
-    case "qrs_width": return answerKey.qrsWidth ?? "";
-    case "escalation_level": return answerKey.escalationLevel ?? "";
-    case "first_action": return answerKey.firstAction ?? "";
+    case "rate": return answerKey?.rateBracket ?? reasoningUnit?.recognition.rate ?? "";
+    case "regularity": return answerKey?.regularity ?? reasoningUnit?.recognition.regularity ?? "";
+    case "p_wave": return answerKey?.pWave ?? reasoningUnit?.recognition.pWaves ?? "";
+    case "pr_interval": return reasoningUnit?.recognition.prInterval ?? "";
+    case "qrs_width": return answerKey?.qrsWidth ?? reasoningUnit?.recognition.qrsWidth ?? "";
+    case "escalation_level": return answerKey?.escalationLevel ?? reasoningUnit?.escalation.defaultLevel ?? "";
+    case "first_action": return answerKey?.firstAction ?? reasoningUnit?.escalation.immediateAssessments[0] ?? "";
     case "rhythm_id": return rhythmKey;
-    case "medication_safety": return answerKey.medicationDanger ?? "No specific contraindication";
+    case "mechanism": return reasoningUnit?.mechanism ?? "";
+    case "hemodynamic_impact": return reasoningUnit?.hemodynamicImpact.cardiacOutputRationale ?? "";
+    case "medication_safety": return answerKey?.medicationDanger ?? "No specific contraindication";
     default: return "";
   }
 }

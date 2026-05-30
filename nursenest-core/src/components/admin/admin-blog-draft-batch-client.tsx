@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
+import type {
   BlogDraftGenerationBatchItemStatus,
   BlogDraftGenerationBatchStatus,
   BlogFunnelStage,
@@ -32,11 +32,11 @@ async function safeJson<T>(res: Response): Promise<T | null> {
 }
 
 const templates: BlogPostTemplate[] = [
-  BlogPostTemplate.HOW_TO_PASS,
-  BlogPostTemplate.TOPIC_EXPLAINED,
-  BlogPostTemplate.TOP_MISTAKES,
-  BlogPostTemplate.PRACTICE_QUESTIONS,
-  BlogPostTemplate.STUDY_PLAN,
+  "HOW_TO_PASS",
+  "TOPIC_EXPLAINED",
+  "TOP_MISTAKES",
+  "PRACTICE_QUESTIONS",
+  "STUDY_PLAN",
 ];
 
 type BatchRow = {
@@ -255,10 +255,10 @@ export function AdminBlogDraftBatchClient() {
   const [exam, setExam] = useState(ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value);
   const [country, setCountry] = useState<"US" | "CA" | "unspecified">("unspecified");
   const [countryTarget, setCountryTarget] = useState<"" | CountryCode>("");
-  const [template, setTemplate] = useState<BlogPostTemplate>(BlogPostTemplate.TOPIC_EXPLAINED);
+  const [template, setTemplate] = useState<BlogPostTemplate>("TOPIC_EXPLAINED");
   const [tone, setTone] = useState<"professional" | "supportive" | "direct">("professional");
-  const [intent, setIntent] = useState<BlogPostIntent>(BlogPostIntent.EXAM_PREP);
-  const [funnelStage, setFunnelStage] = useState<BlogFunnelStage>(BlogFunnelStage.CONSIDERATION);
+  const [intent, setIntent] = useState<BlogPostIntent>("EXAM_PREP");
+  const [funnelStage, setFunnelStage] = useState<BlogFunnelStage>("CONSIDERATION");
   const [keywords, setKeywords] = useState("");
   const [keywordCluster, setKeywordCluster] = useState("");
   const [includeImage, setIncludeImage] = useState(true);

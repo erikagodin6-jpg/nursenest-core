@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
-import { TierCode } from "@prisma/client";
+import type { TierCode } from "@prisma/client";
 
 type Props = {
   initialPaid: string;
@@ -14,13 +14,13 @@ type Props = {
 };
 
 const TIERS: TierCode[] = [
-  TierCode.RN,
-  TierCode.LVN_LPN,
-  TierCode.NP,
-  TierCode.RPN,
-  TierCode.ALLIED,
-  TierCode.PRE_NURSING,
-  TierCode.NEW_GRAD,
+  "RN",
+  "LVN_LPN",
+  "NP",
+  "RPN",
+  "ALLIED",
+  "PRE_NURSING",
+  "NEW_GRAD",
 ];
 
 export function AdminUserDirectoryFilters({ initialPaid, initialPathway, initialTier, initialInactive, initialWeak }: Props) {

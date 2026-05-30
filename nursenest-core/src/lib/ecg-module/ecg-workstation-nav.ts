@@ -18,6 +18,7 @@ export const ECG_WORKSTATION_NAV: EcgWorkstationNavSection[] = [
       { href: "/modules/ecg", label: "ECG overview", description: "Curriculum map & readiness" },
       { href: "/modules/ecg/basic/lessons", label: "Foundations & rhythms", description: "Animated strips + measurement" },
       { href: "/modules/ecg/basic/quizzes", label: "Rhythm practice", description: "Interpretation checkpoints" },
+      { href: "/modules/ecg/interactive", label: "Interactive reasoning", description: "Detective, shift & readiness" },
       { href: "/modules/ecg/advanced/video-drills", label: "Rapid drills", description: "Bedside recognition speed" },
     ],
   },

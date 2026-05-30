@@ -398,6 +398,62 @@ export const ECG_CLEARANCES: EcgClearance[] = [
     badgeColor: "emerald",
     iconKey: "advanced-ecg-star",
   },
+  {
+    id: "critical-care-ecg-ready",
+    title: "Critical Care ECG Ready",
+    subtitle: "Expert Clearance",
+    description: "Demonstrates critical-care ECG readiness across high-risk rhythm recognition, deterioration prevention, emergency response, telemetry shift judgment, and medication safety.",
+    tier: "expert",
+    domains: [
+      "acls_critical_rhythms",
+      "telemetry_interpretation",
+      "ischemia_stemi",
+      "electrolyte_abnormalities",
+      "conduction_disorders",
+    ],
+    requirements: [
+      {
+        type: "high_stakes_rhythm_mastery",
+        description: "Score ≥ 88% on critical-care rhythms",
+        target: 88,
+        requiredIds: [
+          "ventricular_tachycardia",
+          "ventricular_fibrillation",
+          "torsades_de_pointes",
+          "stemi_pattern",
+          "hyperkalemia_pattern",
+          "second_degree_type_ii_av_block",
+          "third_degree_av_block",
+          "pea",
+          "asystole",
+        ],
+      },
+      {
+        type: "deterioration_prevention",
+        description: "Prevent deterioration in at least 3 pathways",
+        target: 3,
+      },
+      {
+        type: "telemetry_shift_score",
+        description: "Score ≥ 85% on telemetry shift simulation",
+        target: 85,
+      },
+      {
+        type: "medication_safety_score",
+        description: "Medication safety score ≥ 90%",
+        target: 90,
+      },
+    ],
+    readinessFor: [
+      "ICU and CCU rhythm surveillance",
+      "Rapid response escalation support",
+      "Code team ECG role judgment",
+      "Advanced telemetry mentorship",
+    ],
+    prerequisites: ["advanced-telemetry-ready", "emergency-ecg-ready"],
+    badgeColor: "emerald",
+    iconKey: "critical-care-ecg",
+  },
 ];
 
 // ─── Registry ─────────────────────────────────────────────────────────────────
@@ -441,6 +497,8 @@ export type LearnerClearanceMetrics = {
   deteriorationResults: Record<string, { completed: boolean; prevented: boolean; score: number }>;
   /** Compare & contrast pairs completed */
   compareContrastCompletions: string[];
+  /** Telemetry shift simulator scores */
+  telemetryShiftScores?: number[];
   /** Readiness domain scores */
   readinessDomainScores: Record<string, number>;
   /** Overall medication safety average score */
@@ -519,6 +577,12 @@ export function evaluateClearanceEligibility(
         } else {
           currentValue = metrics.compareContrastCompletions.length;
         }
+        met = currentValue >= req.target;
+        break;
+      }
+      case "telemetry_shift_score": {
+        const scores = metrics.telemetryShiftScores ?? [];
+        currentValue = scores.length > 0 ? Math.max(...scores) : 0;
         met = currentValue >= req.target;
         break;
       }

@@ -3,15 +3,15 @@
 import { useCallback, useEffect, useId, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ContentStatus } from "@prisma/client";
+import type { ContentStatus } from "@prisma/client";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
 
 const STATUSES = [
-  ContentStatus.DRAFT,
-  ContentStatus.IN_REVIEW,
-  ContentStatus.PUBLISHED,
-  ContentStatus.ARCHIVED,
+  "DRAFT",
+  "IN_REVIEW",
+  "PUBLISHED",
+  "ARCHIVED",
 ] as const;
 
 const SECTION_KINDS = [
@@ -352,7 +352,7 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
   const [slug, setSlug] = useState("");
   const [seoTitle, setSeoTitle] = useState("");
   const [seoDescription, setSeoDescription] = useState("");
-  const [status, setStatus] = useState<ContentStatus>(ContentStatus.DRAFT);
+  const [status, setStatus] = useState<ContentStatus>("DRAFT");
   const [acknowledgeBelowQualityBar, setAcknowledgeBelowQualityBar] = useState(false);
   const [sections, setSections] = useState<AdminSection[]>([]);
   const [sectionsFromCatalog, setSectionsFromCatalog] = useState(false);
@@ -432,7 +432,7 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
       setSlug(l.slug);
       setSeoTitle(l.seoTitle);
       setSeoDescription(l.seoDescription);
-      setStatus(l.status ?? ContentStatus.DRAFT);
+      setStatus(l.status ?? "DRAFT");
       setSectionsFromCatalog(Boolean((l as Record<string, unknown>)._sectionsFromCatalog));
 
       // Load sections — may come from DB or catalog fallback (flagged by _sectionsFromCatalog)
@@ -486,7 +486,7 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
         acknowledgeBelowQualityBar: acknowledgeBelowQualityBar || undefined,
       };
       const res =
-        nextStatus === ContentStatus.PUBLISHED
+        nextStatus === "PUBLISHED"
           ? await fetch(`/api/admin/pathway-lessons/${pathwayLessonId}`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -502,7 +502,7 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
         setErr(j.error ?? "Save failed.");
         return;
       }
-      setMsg(nextStatus === ContentStatus.PUBLISHED ? "Published." : "Saved as draft.");
+      setMsg(nextStatus === "PUBLISHED" ? "Published." : "Saved as draft.");
       if (j.lesson?.status) setStatus(j.lesson.status);
       router.refresh();
     } finally {
@@ -525,7 +525,7 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
         acknowledgeBelowQualityBar: acknowledgeBelowQualityBar || undefined,
       };
       const res =
-        nextStatus === ContentStatus.PUBLISHED
+        nextStatus === "PUBLISHED"
           ? await fetch(`/api/admin/pathway-lessons/${pathwayLessonId}`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -543,7 +543,7 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
       }
       setSectionMsg((p) => ({
         ...p,
-        [sectionId]: nextStatus === ContentStatus.PUBLISHED ? "Published." : "Saved.",
+        [sectionId]: nextStatus === "PUBLISHED" ? "Published." : "Saved.",
       }));
       if (j.lesson?.status) setStatus(j.lesson.status);
       router.refresh();
@@ -630,7 +630,7 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
         request live route revalidation.
       </div>
 
-      {status === ContentStatus.PUBLISHED && publicLessonHref ? (
+      {status === "PUBLISHED" && publicLessonHref ? (
         <div className="rounded-lg border border-emerald-300/60 bg-emerald-50 px-4 py-3 text-sm text-emerald-950 dark:border-emerald-800/50 dark:bg-emerald-950/25 dark:text-emerald-50">
           <span className="font-medium">Live page</span> —{" "}
           <Link href={publicLessonHref} className="text-primary underline" target="_blank" rel="noreferrer">
@@ -742,7 +742,7 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
                 onMove={(dir) => moveSection(section.id, dir)}
                 saving={saving}
                 onSaveDraft={() => void saveSectionDraft(section.id)}
-                onPublish={() => void saveSectionDraft(section.id, ContentStatus.PUBLISHED)}
+                onPublish={() => void saveSectionDraft(section.id, "PUBLISHED")}
                 sectionSaving={sectionSaving[section.id] ?? false}
                 sectionMsg={sectionMsg[section.id] ?? null}
                 sectionErr={sectionErr[section.id] ?? null}
@@ -766,7 +766,7 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
           type="button"
           disabled={saving}
           className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
-          onClick={() => void saveAll(ContentStatus.PUBLISHED)}
+          onClick={() => void saveAll("PUBLISHED")}
         >
           {saving ? "Publishing…" : "Publish all"}
         </button>

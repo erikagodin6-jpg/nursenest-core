@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import Link from "next/link";
-import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import type { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import {
@@ -76,9 +76,9 @@ export function AdminBlogStudioClient() {
   const [keywords, setKeywords] = useState("");
   const [targetKeyword, setTargetKeyword] = useState("");
   const [keywordCluster, setKeywordCluster] = useState("");
-  const [template, setTemplate] = useState<BlogPostTemplate>(BlogPostTemplate.TOPIC_EXPLAINED);
-  const [intent, setIntent] = useState<BlogPostIntent>(BlogPostIntent.EXAM_PREP);
-  const [funnelStage, setFunnelStage] = useState<BlogFunnelStage>(BlogFunnelStage.CONSIDERATION);
+  const [template, setTemplate] = useState<BlogPostTemplate>("TOPIC_EXPLAINED");
+  const [intent, setIntent] = useState<BlogPostIntent>("EXAM_PREP");
+  const [funnelStage, setFunnelStage] = useState<BlogFunnelStage>("CONSIDERATION");
   const [tone, setTone] = useState<"professional" | "supportive" | "direct">("professional");
   const [includeImage, setIncludeImage] = useState(true);
   const [includeAiImage, setIncludeAiImage] = useState(false);

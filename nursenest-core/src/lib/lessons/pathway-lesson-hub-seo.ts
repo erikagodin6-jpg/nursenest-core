@@ -6,7 +6,6 @@
  * - Rows omit unusable links via `pathwayLessonHasRenderableHubSlug` (pathway-lesson-types).
  * - Public `/lessons` index filters by `pathwayMatchesMarketingRegion` (nursing-tier-public-labels).
  */
-import { ExamFamily } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { resolveLessonContextForPathway } from "@/lib/lessons/lesson-region-exam";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
@@ -29,7 +28,7 @@ export function pathwayCountryLabel(pathway: ExamPathwayDefinition): string {
  * Fallback behavior (missing/unknown region) defaults to NCLEX naming for PN/RN.
  */
 export function pathwayRegionAwareExamName(pathway: ExamPathwayDefinition): string {
-  if (pathway.examFamily === ExamFamily.GENERIC) {
+  if (pathway.examFamily === "GENERIC") {
     return pathway.shortName || pathway.displayName;
   }
   const { exam } = resolveLessonContextForPathway(pathway);
@@ -49,7 +48,7 @@ export function pathwayLessonHubH1(pathway: ExamPathwayDefinition): string {
   const place = pathwayCountryLabel(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
   const country = pathway.countrySlug === "canada" ? "CA" : pathway.countrySlug === "us" ? "US" : "US";
-  if (pathway.examFamily === ExamFamily.GENERIC && pathway.roleTrack === "rn") {
+  if (pathway.examFamily === "GENERIC" && pathway.roleTrack === "rn") {
     return `${examName} clinical reasoning lessons · ${place}`;
   }
   switch (pathway.roleTrack) {

@@ -1,4 +1,4 @@
-import { CountryCode, ExamFamily, TierCode } from "@prisma/client";
+import type { CountryCode, ExamFamily, TierCode } from "@prisma/client";
 import type { ExamPathwayDefinition } from "./types";
 
 /**
@@ -13,14 +13,14 @@ export const EXAM_PATHWAYS_SEGMENT_F_INTERNAL_ADMISSIONS: ExamPathwayDefinition[
   {
     id: "us-allied-hesi-a2",
     countrySlug: "us",
-    countryCode: CountryCode.US,
+    countryCode: "US" as CountryCode,
     roleTrack: "allied",
     examCode: "hesi-a2",
-    examFamily: ExamFamily.GENERIC,
+    examFamily: "GENERIC" as ExamFamily,
     examKey: "HESI_A2",
     displayName: "HESI A2 Admissions Assessment (internal scaffold)",
     shortName: "HESI A2",
-    stripeTier: TierCode.PRE_NURSING,
+    stripeTier: "PRE_NURSING" as TierCode,
     contentExamKeys: [],
     seoTitle: "HESI A2 prep (internal) | NurseNest",
     seoDescription:
@@ -33,14 +33,14 @@ export const EXAM_PATHWAYS_SEGMENT_F_INTERNAL_ADMISSIONS: ExamPathwayDefinition[
   {
     id: "us-allied-hesi-exit",
     countrySlug: "us",
-    countryCode: CountryCode.US,
+    countryCode: "US" as CountryCode,
     roleTrack: "allied",
     examCode: "hesi-exit",
-    examFamily: ExamFamily.GENERIC,
+    examFamily: "GENERIC" as ExamFamily,
     examKey: "HESI_EXIT",
     displayName: "HESI Exit Exam (internal scaffold)",
     shortName: "HESI Exit",
-    stripeTier: TierCode.PRE_NURSING,
+    stripeTier: "PRE_NURSING" as TierCode,
     contentExamKeys: [],
     seoTitle: "HESI Exit prep (internal) | NurseNest",
     seoDescription:
@@ -53,14 +53,14 @@ export const EXAM_PATHWAYS_SEGMENT_F_INTERNAL_ADMISSIONS: ExamPathwayDefinition[
   {
     id: "us-allied-ati-teas",
     countrySlug: "us",
-    countryCode: CountryCode.US,
+    countryCode: "US" as CountryCode,
     roleTrack: "allied",
     examCode: "ati-teas",
-    examFamily: ExamFamily.GENERIC,
+    examFamily: "GENERIC" as ExamFamily,
     examKey: "ATI_TEAS",
     displayName: "ATI TEAS (internal scaffold)",
     shortName: "ATI TEAS",
-    stripeTier: TierCode.PRE_NURSING,
+    stripeTier: "PRE_NURSING" as TierCode,
     contentExamKeys: [],
     seoTitle: "ATI TEAS prep (internal) | NurseNest",
     seoDescription:

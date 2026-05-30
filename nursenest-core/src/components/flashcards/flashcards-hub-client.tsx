@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Check, Layers, Shuffle, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, Layers, Shuffle, SlidersHorizontal } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { LearnerStudyPageShell } from "@/components/learner-study-ui";
 import {
@@ -58,6 +58,7 @@ function buildCustomSessionQuery(args: {
   notStudiedOnly: boolean;
   recentStudiedOnly: boolean;
   includeCards: boolean;
+  forceCategoryFilter?: boolean;
   alliedProfession?: string | null;
   /** Catalog topic slug — forwarded as `topic` (alias for `topicCode` on custom-session). */
   hubTopicSlug?: string | null;
@@ -69,7 +70,7 @@ function buildCustomSessionQuery(args: {
   q.set("cardLimit", cardLimitQueryValue(args.cardLimit));
   if (
     args.selectedBuilderCategoryIds.length > 0 &&
-    args.selectedBuilderCategoryIds.length < args.allBuilderCategoryIds.length
+    (args.forceCategoryFilter || args.selectedBuilderCategoryIds.length < args.allBuilderCategoryIds.length)
   ) {
     q.set("categories", args.selectedBuilderCategoryIds.join(","));
   }
@@ -592,22 +593,6 @@ export function FlashcardsHubClient({
     void refreshCategories();
   }, [refreshCategories]);
 
-  const toggleCanonical = (id: CanonicalBodySystemId) => {
-    const all = CANONICAL_STUDY_CATEGORIES.map((c) => c.id);
-    if (selectedCanonicalIds.length === 0) {
-      setSelectedCanonicalIds([id]);
-      return;
-    }
-    if (selectedCanonicalIds.includes(id)) {
-      const next = selectedCanonicalIds.filter((x) => x !== id);
-      setSelectedCanonicalIds(next.length === 0 ? [] : next);
-    } else {
-      const next = [...selectedCanonicalIds, id];
-      if (next.length >= all.length) setSelectedCanonicalIds([]);
-      else setSelectedCanonicalIds(next);
-    }
-  };
-
   const { ctaSubline } = useMemo(
     () =>
       buildFlashcardsSessionPreview({
@@ -672,6 +657,47 @@ export function FlashcardsHubClient({
   );
 
   const startHref = `/app/flashcards/custom?${startQuery}`;
+  const flashcardCountFormatter = useMemo(() => new Intl.NumberFormat("en-US"), []);
+  const systemStudyHref = useCallback(
+    (systemId: CanonicalBodySystemId) => {
+      const systemBuilderCategoryIds = builderCategoryIdsForCanonicalSelection(
+        scopedPathwayId,
+        builderCategories,
+        new Set([systemId]),
+      );
+      const q = buildCustomSessionQuery({
+        pathwayId: scopedPathwayId,
+        cardLimit,
+        shuffleOn,
+        selectedBuilderCategoryIds: systemBuilderCategoryIds,
+        allBuilderCategoryIds,
+        weakOnly,
+        incorrectOnly,
+        starredOnly,
+        notStudiedOnly,
+        recentStudiedOnly,
+        includeCards: true,
+        forceCategoryFilter: true,
+        alliedProfession: apForQuery || null,
+        hubTopicSlug,
+      });
+      return `/app/flashcards/custom?${q}`;
+    },
+    [
+      scopedPathwayId,
+      builderCategories,
+      cardLimit,
+      shuffleOn,
+      allBuilderCategoryIds,
+      weakOnly,
+      incorrectOnly,
+      starredOnly,
+      notStudiedOnly,
+      recentStudiedOnly,
+      apForQuery,
+      hubTopicSlug,
+    ],
+  );
 
   const starredCount = useMemo(() => countSavedStudyItems().starred, []);
 
@@ -871,7 +897,8 @@ export function FlashcardsHubClient({
 
   return (
     <LearnerStudyPageShell
-      className="nn-flashcards-hub-premium space-y-5 py-4 pb-24 sm:space-y-6 sm:py-6 md:pb-6"
+      className="nn-flashcards-hub-premium nn-flashcards-hub-premium-v2 space-y-5 py-4 pb-24 sm:space-y-6 sm:py-6 md:pb-6"
+      data-nn-flashcards-premium-hub=""
       data-nn-premium-flashcard-convergence
       data-nn-premium-full-platform-convergence=""
       data-nn-premium-platform-family="exam-study"
@@ -880,8 +907,6 @@ export function FlashcardsHubClient({
       data-nn-e2e-flashcards-launcher
     >
       {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
-
-      <h1 className="sr-only">{heroTitle}</h1>
 
       <nav
         aria-label="Flashcards breadcrumb"
@@ -896,6 +921,16 @@ export function FlashcardsHubClient({
           Flashcards
         </span>
       </nav>
+
+      <header className="nn-flashcards-hub-page-header mx-auto w-full max-w-5xl px-1" data-nn-e2e-flashcards-page-header>
+        <p className="nn-premium-home-eyebrow">Flashcards</p>
+        <h1 className="mt-2 max-w-3xl text-3xl font-semibold tracking-tight text-[var(--semantic-text-primary)] sm:text-4xl">
+          {heroTitle}
+        </h1>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--semantic-text-secondary)] sm:text-base">
+          {flashcardsHeroSubtitle?.trim() || "Choose a body system to begin studying."}
+        </p>
+      </header>
 
       {loadError ? (
         builderCategories.length === 0 ? (
@@ -915,7 +950,7 @@ export function FlashcardsHubClient({
       ) : null}
 
       <section
-        className="nn-flashcards-deck-library-surface mx-auto w-full max-w-5xl rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_88%,var(--semantic-panel-muted))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-7 lg:p-8"
+        className="nn-flashcards-deck-library-surface nn-flashcards-deck-library-surface-v2 mx-auto w-full max-w-5xl rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_88%,var(--semantic-panel-muted))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-7 lg:p-8"
         aria-labelledby="flashcards-setup-title"
         data-nn-e2e-flashcards-canonical-grid
         data-nn-e2e-flashcards-setup-panel
@@ -976,39 +1011,50 @@ export function FlashcardsHubClient({
               <p className="text-sm font-medium text-[var(--semantic-text-secondary)]">{selectedSystemLabel}</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="nn-flashcards-system-grid grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
               {CANONICAL_STUDY_CATEGORIES.map((system) => {
                 const active = selectedCanonicalIds.includes(system.id);
                 const count = countsByCanonical[system.id] ?? 0;
+                const href = systemStudyHref(system.id);
+                const accentIndex = CANONICAL_STUDY_CATEGORIES.findIndex((category) => category.id === system.id) % 4;
                 return (
-                  <button
+                  <Link
                     key={system.id}
-                    type="button"
-                    aria-pressed={active}
-                    onClick={() => toggleCanonical(system.id)}
+                    href={href}
                     data-selected={active}
-                    className={`group flex min-h-[92px] flex-col items-center justify-center gap-2 rounded-[1.25rem] border p-4 text-center text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_32%,transparent)] ${
-                      active
-                        ? "border-[color-mix(in_srgb,var(--semantic-brand)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] text-[var(--semantic-text-primary)] shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-text-primary)_7%,transparent)]"
-                        : "border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_82%,var(--semantic-panel-muted))] text-[var(--semantic-text-primary)] shadow-[0_8px_20px_color-mix(in_srgb,var(--semantic-text-primary)_4%,transparent)] hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))]"
-                    }`}
+                    data-accent={accentIndex}
+                    className="nn-flashcards-system-card-v2 group flex min-h-[10rem] flex-col justify-between rounded-[1.25rem] border p-4 text-left text-sm font-semibold transition focus-visible:outline-none"
                     data-nn-e2e-flashcards-system-card={system.id}
+                    onKeyDown={(event) => {
+                      if (event.key === " ") {
+                        event.preventDefault();
+                        event.currentTarget.click();
+                      }
+                    }}
                   >
-                    <span
-                      className={`inline-flex h-8 w-8 items-center justify-center rounded-full border ${
-                        active
-                          ? "border-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] bg-[var(--semantic-brand)] nn-text-on-solid-fill"
-                          : "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-muted)]"
-                      }`}
-                      aria-hidden
-                    >
-                      {active ? <Check className="h-4 w-4" /> : <Layers className="h-4 w-4" />}
+                    <span className="flex items-start justify-between gap-3">
+                      <span className="nn-flashcards-system-card-v2__icon inline-flex h-10 w-10 items-center justify-center rounded-full border" aria-hidden>
+                        <Layers className="h-5 w-5" />
+                      </span>
+                      <span className="nn-flashcards-system-card-v2__arrow inline-flex h-8 w-8 items-center justify-center rounded-full" aria-hidden>
+                        <ArrowRight className="h-4 w-4" />
+                      </span>
                     </span>
-                    <span className="leading-snug">{system.label}</span>
-                    <span className="text-[11px] font-medium leading-none text-[var(--semantic-text-muted)]">
-                      {count > 0 ? `${count} cards` : "Included"}
+                    <span>
+                      <span className="block text-base leading-snug text-[var(--semantic-text-primary)]">
+                        {system.label}
+                      </span>
+                      <span
+                        className="mt-2 block text-sm font-semibold leading-none text-[var(--semantic-text-secondary)]"
+                        data-nn-e2e-flashcards-system-count
+                      >
+                        {flashcardCountFormatter.format(Math.max(0, count))} Flashcards
+                      </span>
                     </span>
-                  </button>
+                    <span className="nn-flashcards-system-card-v2__badge inline-flex min-h-7 w-fit items-center rounded-full px-3 text-xs font-semibold">
+                      Study now
+                    </span>
+                  </Link>
                 );
               })}
             </div>

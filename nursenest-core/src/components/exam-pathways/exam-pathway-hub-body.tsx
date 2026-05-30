@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ExamFamily } from "@prisma/client";
+import type { ExamFamily } from "@prisma/client";
 import { ArrowRight, ClipboardList } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
@@ -65,7 +65,7 @@ export function ExamPathwayHubBody({
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
   const catExamLabel = catPathwayExamCodeLabel(pathway);
   const usNpSiblings =
-    pathway.examFamily === ExamFamily.NP &&
+    pathway.examFamily === "NP" &&
     pathway.countrySlug === "us" &&
     pathway.status === "active" &&
     US_NP_SIBLING_IDS.includes(pathway.id as (typeof US_NP_SIBLING_IDS)[number])

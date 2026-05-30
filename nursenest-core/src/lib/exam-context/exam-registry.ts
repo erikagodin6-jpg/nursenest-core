@@ -1,5 +1,4 @@
 import type { CountryCode } from "@prisma/client";
-import { ExamFamily } from "@prisma/client";
 import { EXAM_PATHWAYS, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { ExamRegistryKey, GlobalExamContext } from "@/lib/exam-context/global-exam-context";
@@ -35,14 +34,14 @@ function assertNever(value: never): never {
 }
 
 function terminologyProfileForPathway(p: ExamPathwayDefinition): TerminologyProfileId {
-  if (p.examFamily === ExamFamily.ALLIED) return "ALLIED";
+  if (p.examFamily === "ALLIED") return "ALLIED";
   if (p.countryCode === "CA") {
-    if (p.examFamily === ExamFamily.REX_PN) return "CANADA_PN";
-    if (p.examFamily === ExamFamily.NP) return "CANADA_NP";
+    if (p.examFamily === "REX_PN") return "CANADA_PN";
+    if (p.examFamily === "NP") return "CANADA_NP";
     return "CANADA_RN";
   }
-  if (p.examFamily === ExamFamily.NCLEX_PN) return "US_PN";
-  if (p.examFamily === ExamFamily.NP) return "US_NP";
+  if (p.examFamily === "NCLEX_PN") return "US_PN";
+  if (p.examFamily === "NP") return "US_NP";
   return "US_RN";
 }
 

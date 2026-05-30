@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AdminMediaPickerDialog } from "@/components/admin/media/admin-media-picker-dialog";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ContentStatus } from "@prisma/client";
+import type { ContentStatus } from "@prisma/client";
 import { pathwayLessonIdFromContentItemTags } from "@/lib/lessons/pathway-lesson-cms-link-tags";
 
 type CategoryOpt = { id: string; name: string; slug: string };
@@ -19,10 +19,10 @@ type LinkMapping = {
 
 const TIERS = ["RPN", "LVN_LPN", "RN", "NP", "ALLIED"] as const;
 const STATUSES = [
-  ContentStatus.DRAFT,
-  ContentStatus.IN_REVIEW,
-  ContentStatus.PUBLISHED,
-  ContentStatus.ARCHIVED,
+  "DRAFT",
+  "IN_REVIEW",
+  "PUBLISHED",
+  "ARCHIVED",
 ] as const;
 
 function escapeAttrHtml(s: string) {
@@ -53,7 +53,7 @@ export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
   const [tier, setTier] = useState<(typeof TIERS)[number]>("RN");
   const [country, setCountry] = useState<"CA" | "US">("US");
   const [categoryId, setCategoryId] = useState("");
-  const [status, setStatus] = useState<ContentStatus>(ContentStatus.DRAFT);
+  const [status, setStatus] = useState<ContentStatus>("DRAFT");
   const [tagsText, setTagsText] = useState("");
   const [bodySystem, setBodySystem] = useState("");
   const [versionKey, setVersionKey] = useState("");
@@ -132,10 +132,10 @@ export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
       setCountry(l.regionScope === "CA_ONLY" ? "CA" : "US");
       const st = (l.status ?? "draft").toLowerCase();
       const map: Record<string, ContentStatus> = {
-        published: ContentStatus.PUBLISHED,
-        draft: ContentStatus.DRAFT,
-        in_review: ContentStatus.IN_REVIEW,
-        archived: ContentStatus.ARCHIVED,
+        published: "PUBLISHED",
+        draft: "DRAFT",
+        in_review: "IN_REVIEW",
+        archived: "ARCHIVED",
       };
       if (map[st]) setStatus(map[st]);
       setTagsText((l.tags ?? []).join(", "));
@@ -221,7 +221,7 @@ export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
             systemTag: bodySystem.trim() || null,
             topicTag: bodySystem.trim() || null,
             versionKey: versionKey.trim() || null,
-            ...(status === ContentStatus.PUBLISHED && acknowledgeBelowQualityBar
+            ...(status === "PUBLISHED" && acknowledgeBelowQualityBar
               ? { acknowledgeBelowQualityBar: true }
               : {}),
           }),
@@ -538,7 +538,7 @@ export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
                 ))}
               </select>
             </label>
-            {status === ContentStatus.PUBLISHED ? (
+            {status === "PUBLISHED" ? (
               <label className="mt-3 flex items-start gap-2 text-xs">
                 <input
                   type="checkbox"

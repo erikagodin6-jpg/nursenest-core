@@ -1,4 +1,4 @@
-import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import type { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { z } from "zod";
 import { ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN } from "@/lib/admin/blog-generate-ai-constants";
 import { GLOBAL_LOCALE_CODES, GLOBAL_REGION_SLUGS } from "@/lib/i18n/global-regions";

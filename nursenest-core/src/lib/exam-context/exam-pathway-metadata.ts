@@ -1,4 +1,3 @@
-import { ExamFamily } from "@prisma/client";
 import type { QuestionDifficultyTier } from "@/lib/questions/difficulty-scope-filter";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { getPathwayInstructionalSystem } from "@/lib/measurements/pathway-measurement-policy";
@@ -54,7 +53,7 @@ function npExamType(pathway: ExamPathwayDefinition): ExamType {
 }
 
 function specialtyForPathway(pathway: ExamPathwayDefinition): string | null {
-  if (pathway.examFamily !== ExamFamily.NP) {
+  if (pathway.examFamily !== "NP") {
     return pathway.examCode === "new-grad-transition" ? "new_grad_transition" : null;
   }
   const code = pathway.examCode.trim().toLowerCase();
@@ -81,7 +80,7 @@ export function buildExamPathwayRuntimeMetadata(pathway: ExamPathwayDefinition):
     };
   }
 
-  if (pathway.examFamily === ExamFamily.NP) {
+  if (pathway.examFamily === "NP") {
     return {
       examType: npExamType(pathway),
       nursingRole: "NP",
@@ -95,7 +94,7 @@ export function buildExamPathwayRuntimeMetadata(pathway: ExamPathwayDefinition):
     };
   }
 
-  if (pathway.examFamily === ExamFamily.REX_PN) {
+  if (pathway.examFamily === "REX_PN") {
     return {
       examType: "REX_PN",
       nursingRole: "RPN",
@@ -109,7 +108,7 @@ export function buildExamPathwayRuntimeMetadata(pathway: ExamPathwayDefinition):
     };
   }
 
-  if (pathway.examFamily === ExamFamily.NCLEX_PN) {
+  if (pathway.examFamily === "NCLEX_PN") {
     return {
       examType: "NCLEX_PN",
       nursingRole: "PN",
@@ -123,7 +122,7 @@ export function buildExamPathwayRuntimeMetadata(pathway: ExamPathwayDefinition):
     };
   }
 
-  if (pathway.examFamily === ExamFamily.NCLEX_RN) {
+  if (pathway.examFamily === "NCLEX_RN") {
     return {
       examType: "NCLEX_RN",
       nursingRole: "RN",
@@ -137,7 +136,7 @@ export function buildExamPathwayRuntimeMetadata(pathway: ExamPathwayDefinition):
     };
   }
 
-  if (pathway.examFamily === ExamFamily.ALLIED) {
+  if (pathway.examFamily === "ALLIED") {
     return {
       examType: "ALLIED_HEALTH",
       nursingRole: "ALLIED",

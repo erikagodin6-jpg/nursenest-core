@@ -126,7 +126,7 @@ export function NursingTierHubPage({
   );
 
   const orderedActions = (
-    ["lessons", "flashcards", "practice_questions", "cat", "exams"] as NursingTierHubActionId[]
+    ["flashcards", "practice_questions", "lessons", "cat", "exams"] as NursingTierHubActionId[]
   )
     .map((id) => actionsById.get(id))
     .filter(Boolean);
@@ -342,8 +342,6 @@ export function NursingTierHubPage({
             />
             </div>
           )}
-
-          <MarketingPathwayHubProductPreview pathway={pathway} className="mt-8" />
 
           {pnHub && !npPremiumConvergence ? (
             <div className="mt-10 space-y-8" data-nn-pn-hub-readiness-band="1">
@@ -570,6 +568,8 @@ export function NursingTierHubPage({
               );
             })}
           </ul>
+
+          <MarketingPathwayHubProductPreview pathway={pathway} className="mx-auto mt-8 w-full max-w-[76rem]" />
         </section>
 
         <ExamPathwayHubPremiumModules

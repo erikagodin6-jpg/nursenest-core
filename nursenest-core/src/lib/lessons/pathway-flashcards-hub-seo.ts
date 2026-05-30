@@ -17,19 +17,19 @@ export function pathwayFlashcardsHubH1(pathway: ExamPathwayDefinition): string {
   const examName = pathwayRegionAwareExamName(pathway);
   const country = pathway.countrySlug === "canada" ? "CA" : pathway.countrySlug === "us" ? "US" : "US";
   if (pathway.examFamily === ExamFamily.GENERIC && pathway.roleTrack === "rn") {
-    return `${examName} flashcards · ${place}`;
+    return `${examName} Flashcards · ${place}`;
   }
   switch (pathway.roleTrack) {
     case "rn":
-      return `${examName} flashcards for ${place}`;
+      return `${examName} Flashcards for ${place}`;
     case "lpn":
-      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) flashcards for ${place}`;
+      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) Flashcards for ${place}`;
     case "rpn":
-      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) flashcards for ${place}`;
+      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) Flashcards for ${place}`;
     case "np":
-      return `${examName} exam prep flashcards for ${place}`;
+      return `${examName} Exam Prep Flashcards for ${place}`;
     case "allied":
-      return `Allied health flashcards for ${place}`;
+      return `Allied Health Flashcards for ${place}`;
     default:
       return `Flashcards for ${pathway.displayName}`;
   }
@@ -41,6 +41,8 @@ export function pathwayFlashcardsHubLead(pathway: ExamPathwayDefinition): string
 }
 
 export function pathwayFlashcardsHubMetaTitle(pathway: ExamPathwayDefinition): string {
+  const examName = pathwayRegionAwareExamName(pathway);
+  if (pathway.roleTrack === "rn") return `${examName} Flashcards | NurseNest`;
   return `${pathwayFlashcardsHubH1(pathway)} | NurseNest`;
 }
 

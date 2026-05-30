@@ -341,9 +341,9 @@ html[data-theme="mint-blossom"]:where(:has([data-nn-flashcard-layout-refinement]
   margin-top: -0.15rem !important;
 }
 
-/* ── Question-dominant column split (≈62 / 38) ───────────────────── */
+/* ── Dual-panel clinical reasoning split (≈60 / 40) ──────────────── */
 [data-nn-flashcard-layout-refinement] .nn-flashcard-learning-grid {
-  grid-template-columns: minmax(0, 1.62fr) minmax(14rem, 1fr) !important;
+  grid-template-columns: minmax(0, 1.45fr) minmax(26rem, 1fr) !important;
   gap: clamp(1.25rem, 2vw, 1.75rem) !important;
   align-items: stretch !important;
   min-height: clamp(17rem, 44vh, 30rem);
@@ -649,7 +649,7 @@ html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-ex
 }
 
 .nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-layout-refinement][data-nn-flashcard-study-session] .nn-flashcard-learning-grid {
-  grid-template-columns: minmax(0, 1.62fr) minmax(14rem, 1fr) !important;
+  grid-template-columns: minmax(0, 1.45fr) minmax(26rem, 1fr) !important;
 }
 
 .nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-layout-refinement][data-nn-flashcard-study-session] {
@@ -902,7 +902,7 @@ html[data-theme="deep-twilight"]:where(:has([data-nn-flashcard-premium-visual-re
 [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-grid,
 .nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-premium-visual-refinement][data-nn-flashcard-study-session] .nn-flashcard-learning-grid {
   display: grid !important;
-  grid-template-columns: minmax(0, 1.42fr) minmax(28rem, 1fr) !important;
+  grid-template-columns: minmax(0, 1.45fr) minmax(28rem, 1fr) !important;
   gap: var(--nn-flashcard-workspace-gap) !important;
   align-items: start !important;
   min-height: auto !important;
@@ -1026,7 +1026,7 @@ html[data-theme="deep-twilight"]:where(:has([data-nn-flashcard-premium-visual-re
 @media (max-width: 1365px) {
   [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-grid,
   .nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-premium-visual-refinement][data-nn-flashcard-study-session] .nn-flashcard-learning-grid {
-    grid-template-columns: minmax(0, 1.38fr) minmax(24rem, 1fr) !important;
+    grid-template-columns: minmax(0, 1.45fr) minmax(26rem, 1fr) !important;
   }
 
   [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-focus-note {
@@ -1208,7 +1208,7 @@ html[data-theme="deep-twilight"]:where(:has([data-nn-flashcard-premium-visual-re
     top: 3.75rem !important;
     display: flex !important;
     flex-direction: column !important;
-    max-height: clamp(22rem, calc(100dvh - 16rem), 34rem) !important;
+    max-height: clamp(28rem, calc(100dvh - 12rem), 46rem) !important;
     overflow: hidden !important;
   }
 
@@ -1224,5 +1224,287 @@ html[data-theme="deep-twilight"]:where(:has([data-nn-flashcard-premium-visual-re
     overflow-y: auto !important;
     overscroll-behavior: contain !important;
     scrollbar-gutter: stable !important;
+  }
+}
+
+/* ── Question / rationale balance: rationale is a primary learning surface ─── */
+@media (min-width: 1100px) {
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-grid,
+  .nn-flashcard-study-premium
+    .nn-active-flashcard-session[data-nn-flashcard-premium-visual-refinement][data-nn-flashcard-study-session]
+    .nn-flashcard-learning-grid {
+    grid-template-columns: minmax(0, 1.45fr) minmax(28rem, 1fr) !important;
+  }
+
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-hero-surface,
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel {
+    border-radius: 1rem !important;
+    box-shadow:
+      0 1px 0 color-mix(in srgb, var(--semantic-surface) 88%, transparent),
+      0 1rem 2.5rem -1.5rem color-mix(in srgb, var(--semantic-text-primary) 18%, transparent) !important;
+  }
+
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel__body,
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-key-concept,
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-section,
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel__incorrect {
+    max-width: 78ch !important;
+  }
+}
+
+/* ── Text baseline alignment recovery ────────────────────────────────────────
+   Alignment-only pass: keep the existing topbar and card layout while ensuring
+   labels, values, chips, and controls in each row sit on a shared visual line. */
+[data-nn-flashcard-layout-refinement] .nn-flashcard-learning-topbar,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar,
+.nn-flashcard-study-premium
+  .nn-active-flashcard-session[data-nn-flashcard-premium-visual-refinement][data-nn-flashcard-study-session]
+  .nn-flashcard-learning-topbar {
+  align-items: center !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-topbar-left,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-left,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-learning-topbar__meta,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar__meta {
+  align-items: center !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-return-link,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-return-link,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-chip,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-chip,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-topbar-focus-note,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-focus-note,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-shell-action,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-shell-action,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-measurement-toggle,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-measurement-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-learning-topbar__meta > div,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar__meta > div {
+  position: relative !important;
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  align-content: center !important;
+  grid-template-rows: none !important;
+  gap: 0.35rem !important;
+  min-height: 2.35rem !important;
+  row-gap: 0 !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-topbar-stat-label,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-stat-label,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-learning-topbar__meta span,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar__meta span,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-learning-topbar__meta strong,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar__meta strong {
+  align-self: baseline !important;
+  line-height: 1 !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-topbar-stat-label,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-stat-label {
+  transform: none !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-topbar-stat-label svg,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-stat-label svg,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-return-link svg,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-return-link svg,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-shell-action svg,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-shell-action svg {
+  flex-shrink: 0;
+  align-self: center;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-topbar-progress,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-progress {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  gap: 0.35rem !important;
+  padding-bottom: 0.45rem !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-topbar-progress .nn-flashcard-topbar-stat-label,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-progress .nn-flashcard-topbar-stat-label,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-topbar-progress strong,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-progress strong {
+  grid-column: auto !important;
+  grid-row: auto !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-topbar-progress-track,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-progress-track {
+  position: absolute !important;
+  inset-inline: clamp(0.5rem, 0.75vw, 0.8rem) !important;
+  bottom: 0.35rem !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  align-self: auto !important;
+  min-width: 0 !important;
+  width: auto !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-card-action-row,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-card-action-row,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-rationale-panel__header,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel__header,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-answer-status,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-answer-status {
+  align-items: center !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-rationale-panel__header > div,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel__header > div,
+[data-nn-flashcard-layout-refinement] .nn-clinical-pearl-label,
+[data-nn-flashcard-premium-visual-refinement] .nn-clinical-pearl-label,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-takeaway-heading,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-takeaway-heading,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-rating-dock button,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rating-dock button {
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-coach-panel__section > span,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-coach-panel__section > span,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-confidence-scale > span,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-confidence-scale > span {
+  line-height: 1 !important;
+}
+
+/* ── Flashcards landing hub premium refinement ────────────────────────────── */
+[data-nn-flashcards-premium-hub] {
+  overflow-x: clip;
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--semantic-brand) 13%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-panel-cool) 36%, var(--semantic-surface)) 42%,
+      var(--semantic-bg-base) 100%
+    );
+}
+
+html[data-theme="midnight"] [data-nn-flashcards-premium-hub] {
+  background:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-bg-base)) 0%,
+      color-mix(in srgb, var(--semantic-panel-cool) 50%, var(--semantic-bg-base)) 46%,
+      var(--semantic-bg-base) 100%
+    );
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-hub-page-header,
+[data-nn-flashcards-premium-hub] [data-nn-e2e-flashcards-breadcrumb] {
+  position: relative;
+  z-index: 1;
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-deck-library-surface-v2 {
+  position: relative;
+  z-index: 1;
+  background: color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+  backdrop-filter: blur(14px);
+}
+
+html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-deck-library-surface-v2 {
+  background: color-mix(in srgb, var(--semantic-surface-elevated) 74%, var(--semantic-panel-cool));
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-grid {
+  align-items: stretch;
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2 {
+  min-width: 0;
+  min-height: 10rem;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-brand));
+  background: color-mix(in srgb, var(--semantic-surface) 95%, var(--semantic-panel-muted));
+  color: var(--semantic-text-primary);
+  box-shadow: 0 0.85rem 2.25rem color-mix(in srgb, var(--semantic-text-primary) 7%, transparent);
+  text-decoration: none;
+  transform: translateY(0);
+}
+
+html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2 {
+  background: color-mix(in srgb, var(--semantic-surface-elevated) 82%, var(--semantic-panel-cool));
+  box-shadow: 0 1rem 2.5rem color-mix(in srgb, var(--semantic-bg-base) 42%, transparent);
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 35%, var(--semantic-border-soft));
+  box-shadow:
+    0 1rem 2.6rem color-mix(in srgb, var(--semantic-text-primary) 10%, transparent),
+    0 0 0 0.2rem color-mix(in srgb, var(--semantic-brand) 10%, transparent);
+  transform: translateY(-0.18rem);
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2:focus-visible {
+  outline: 0.18rem solid color-mix(in srgb, var(--semantic-brand) 42%, transparent);
+  outline-offset: 0.2rem;
+  border-color: color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft));
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2__icon {
+  border-color: color-mix(in srgb, var(--semantic-brand) 25%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  color: var(--semantic-brand);
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2__arrow {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 72%, transparent);
+  color: var(--semantic-text-muted);
+  transition:
+    transform 180ms ease,
+    color 180ms ease,
+    background 180ms ease;
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2:hover .nn-flashcards-system-card-v2__arrow,
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2:focus-visible .nn-flashcards-system-card-v2__arrow {
+  background: color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-surface));
+  color: var(--semantic-brand);
+  transform: translateX(0.12rem);
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2__badge {
+  background: color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-success) 72%, var(--semantic-text-primary));
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2[data-accent="1"] .nn-flashcards-system-card-v2__icon {
+  border-color: color-mix(in srgb, var(--semantic-info) 25%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
+  color: var(--semantic-info);
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2[data-accent="2"] .nn-flashcards-system-card-v2__icon {
+  border-color: color-mix(in srgb, var(--semantic-success) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface));
+  color: var(--semantic-success);
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2[data-accent="3"] .nn-flashcards-system-card-v2__icon {
+  border-color: color-mix(in srgb, var(--semantic-warning) 25%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface));
+  color: var(--semantic-warning);
+}
+
+@media (max-width: 640px) {
+  [data-nn-flashcards-premium-hub] {
+    border-radius: 1rem;
+  }
+
+  [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2 {
+    min-height: 8.75rem;
   }
 }

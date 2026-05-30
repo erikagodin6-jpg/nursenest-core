@@ -1,4 +1,3 @@
-import { ExamFamily } from "@prisma/client";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
 import {
@@ -28,7 +27,7 @@ export function resolveReadinessStartQuestionCount(
   if (input.catPresentationMode !== "exam_simulation") {
     return Math.max(10, Math.min(150, input.configuredMaxQuestions));
   }
-  const cap = input.examFamily === ExamFamily.NP ? 175 : 145;
+  const cap = input.examFamily === "NP" ? 175 : 145;
   return Math.max(10, Math.min(cap, input.configuredMaxQuestions));
 }
 
@@ -62,7 +61,7 @@ export function buildCatExamSimulationCreatePayload(pathwayMeta: PracticeTestPat
   const pathwayFull = getExamPathwayById(pathwayMeta.id);
   const examCfg = examSimulationConfigForPathway(
     pathwayFull ?? null,
-    pathwayFull?.examFamily === ExamFamily.NP ? { npBoard: "AANP" } : undefined,
+    pathwayFull?.examFamily === "NP" ? { npBoard: "AANP" } : undefined,
   );
   const simMax = nclexRnSimulationBoundsFromConfig(examCfg).max;
   const readinessConfig = readinessConfigForPathway(pathwayMeta);

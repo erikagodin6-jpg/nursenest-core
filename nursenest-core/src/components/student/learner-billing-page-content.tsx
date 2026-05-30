@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { CreditCard, FileText, RefreshCw, Settings } from "lucide-react";
-import { SubscriptionStatus } from "@prisma/client";
 import type { BillingPagePayload } from "@/lib/learner/load-billing-page-payload";
 import { formatBillingTierLabel } from "@/lib/learner/load-billing-page-payload";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
@@ -13,7 +12,7 @@ import { LearnerProfileAccountActions } from "@/components/student/learner-profi
 import { LearnerSubscriptionManagementPanel } from "@/components/student/learner-subscription-management-panel";
 
 function subscriptionStatusLabel(
-  status: SubscriptionStatus,
+  status: BillingPagePayload["subscription"]["status"],
   t: LearnerMarketingT,
   opts?: { pastDueGraceAccess: boolean },
 ): string {
@@ -237,7 +236,7 @@ export function LearnerBillingPageContent({
   const pastDueGraceAccess =
     accessOk &&
     entitlement.reason === "past_due_grace" &&
-    subscription?.status === SubscriptionStatus.PAST_DUE;
+    subscription?.status === "PAST_DUE";
   const stripeTrialEnd =
     stripeRenewal?.trialEnd && stripeRenewal.trialEnd.getTime() > Date.now()
       ? stripeRenewal.trialEnd

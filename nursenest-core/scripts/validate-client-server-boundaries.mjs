@@ -6,6 +6,7 @@ import path from "node:path";
 const packageRoot = path.resolve(new URL("..", import.meta.url).pathname);
 const srcRoot = path.join(packageRoot, "src");
 const reportPath = path.join(packageRoot, "reports", "client-server-boundary-report.json");
+const markdownReportPath = path.join(packageRoot, "reports", "server-client-boundary-audit.md");
 const exts = [".ts", ".tsx", ".mts", ".mjs", ".js", ".jsx"];
 const scopeArg = process.argv.find((arg) => arg.startsWith("--scope="))?.split("=")[1] ?? "all";
 const phase11ClientEntrypoints = new Set([
@@ -22,13 +23,28 @@ const phase11ClientPrefixes = [
 ];
 
 const forbiddenImportPatterns = [
-  { label: "server-only", test: (s) => s === "server-only" },
-  { label: "@prisma/client", test: (s) => s === "@prisma/client" },
-  { label: "Prisma client", test: (s) => s.includes("/@prisma/client") },
-  { label: "db.server", test: (s) => s.includes("db.server") },
-  { label: "safe-database", test: (s) => s.includes("/db/safe-database") || s.endsWith("db/safe-database") },
-  { label: "@/lib/db", test: (s) => s === "@/lib/db" || s.endsWith("/lib/db") },
+  { label: "server-only", riskLevel: "Critical", test: (s) => s === "server-only" },
+  { label: "@prisma/client", riskLevel: "Critical", test: (s) => s === "@prisma/client" },
+  { label: "Prisma client", riskLevel: "Critical", test: (s) => s.includes("/@prisma/client") },
+  { label: "posthog-node", riskLevel: "Critical", test: (s) => s === "posthog-node" },
+  { label: "node:fs", riskLevel: "Critical", test: (s) => ["fs", "node:fs", "fs/promises", "node:fs/promises"].includes(s) },
+  { label: "child_process", riskLevel: "Critical", test: (s) => s === "child_process" || s === "node:child_process" },
+  { label: "db.server", riskLevel: "Critical", test: (s) => s.includes("db.server") },
+  { label: "safe-database", riskLevel: "Critical", test: (s) => s.includes("/db/safe-database") || s.endsWith("db/safe-database") },
+  { label: "@/lib/db", riskLevel: "Critical", test: (s) => s === "@/lib/db" || s.endsWith("/lib/db") },
+  { label: "filesystem utility", riskLevel: "Critical", test: (s) => /(^|\/)(file-reader|read-file|file-system|filesystem|lesson-file)/.test(s) },
+  { label: "lesson loader", riskLevel: "High", test: (s) => /(^|\/)(load-|loader-|.*-loader$)/.test(s) && /lesson|content|question/.test(s) },
+  { label: "node:path", riskLevel: "High", test: (s) => s === "path" || s === "node:path" },
+  { label: "node:os", riskLevel: "High", test: (s) => s === "os" || s === "node:os" },
 ];
+const sourceForbiddenPatterns = [
+  { label: "process.cwd()", riskLevel: "High", test: (source) => /\bprocess\.cwd\s*\(/.test(source) },
+];
+
+const transitiveRiskLevels = new Map([
+  ["transitive server-only file", "Critical"],
+  ["server action module", "Critical"],
+]);
 
 function walk(dir, out = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -56,14 +72,25 @@ function isServerActionModule(source) {
 
 function importsFrom(source) {
   const imports = [];
-  const staticImport = /\bimport\s+(type\s+)?(?:[^'"]*?\s+from\s+)?["']([^"']+)["']/g;
+  const staticImport = /^\s*import\s+(type\s+)?([^'"]*?\s+from\s+)?["']([^"']+)["']/gm;
   const dynamicImport = /\bimport\s*\(\s*["']([^"']+)["']\s*\)/g;
   let match;
   while ((match = staticImport.exec(source))) {
-    imports.push({ specifier: match[2], typeOnly: Boolean(match[1]) });
+    imports.push({ specifier: match[3], typeOnly: Boolean(match[1]) || importClauseIsTypeOnly(match[2] ?? "") });
   }
-  while ((match = dynamicImport.exec(source))) imports.push({ specifier: match[1], typeOnly: false });
+  while ((match = dynamicImport.exec(source))) {
+    const nextChar = source[dynamicImport.lastIndex];
+    imports.push({ specifier: match[1], typeOnly: nextChar === "." });
+  }
   return imports;
+}
+
+function importClauseIsTypeOnly(clause) {
+  const trimmed = clause.trim().replace(/\s+from$/, "").trim();
+  if (trimmed.startsWith("type ")) return true;
+  if (!trimmed.startsWith("{") || !trimmed.endsWith("}")) return false;
+  const members = trimmed.slice(1, -1).split(",").map((part) => part.trim()).filter(Boolean);
+  return members.length > 0 && members.every((member) => member.startsWith("type "));
 }
 
 function resolveSpecifier(fromFile, specifier) {
@@ -114,8 +141,10 @@ for (const [file, source] of sourceByFile) {
 
 function forbiddenFor(file, specifier) {
   const matched = forbiddenImportPatterns.find((p) => p.test(specifier));
-  if (matched) return matched.label;
-  if (serverOnlyFiles.has(file)) return "transitive server-only file";
+  if (matched) return { reason: matched.label, riskLevel: matched.riskLevel };
+  if (serverOnlyFiles.has(file)) {
+    return { reason: "transitive server-only file", riskLevel: transitiveRiskLevels.get("transitive server-only file") };
+  }
   return null;
 }
 
@@ -134,6 +163,18 @@ function traceClient(entry) {
     if (seen.has(key)) continue;
     seen.add(key);
 
+    const source = sourceByFile.get(current.file) ?? "";
+    for (const matched of sourceForbiddenPatterns.filter((p) => p.test(source))) {
+      violations.push({
+        clientEntry: relative(entry),
+        file: relative(current.file),
+        reason: matched.label,
+        riskLevel: matched.riskLevel,
+        importSpecifier: matched.label,
+        chain: current.chain.map(relative),
+      });
+    }
+
     const imports = importsByFile.get(current.file) ?? [];
     for (const item of imports) {
       if (item.typeOnly) continue;
@@ -142,7 +183,9 @@ function traceClient(entry) {
       if (directViolation) {
         violations.push({
           clientEntry: relative(entry),
-          reason: directViolation,
+          file: relative(current.file),
+          reason: directViolation.reason,
+          riskLevel: directViolation.riskLevel,
           importSpecifier: specifier,
           chain: current.chain.map(relative),
         });
@@ -155,9 +198,16 @@ function traceClient(entry) {
         ? "transitive server-only file"
         : forbiddenFor(resolved, specifier);
       if (resolvedViolation) {
+        const reason =
+          typeof resolvedViolation === "string" ? resolvedViolation : resolvedViolation.reason;
         violations.push({
           clientEntry: relative(entry),
-          reason: resolvedViolation,
+          file: relative(resolved),
+          reason,
+          riskLevel:
+            typeof resolvedViolation === "string"
+              ? transitiveRiskLevels.get(reason) ?? "High"
+              : resolvedViolation.riskLevel,
           importSpecifier: specifier,
           chain: [...current.chain, resolved].map(relative),
         });
@@ -183,9 +233,16 @@ writeFileSync(
     violations,
   }, null, 2)}\n`,
 );
+writeFileSync(markdownReportPath, renderMarkdownReport({
+  generatedAt: new Date().toISOString(),
+  scope: scopeArg,
+  clientEntrypoints: clientEntrypoints.map(relative).sort(),
+  violations,
+}));
 
 if (violations.length > 0) {
   console.error(`[client-server-boundary] found ${violations.length} violation(s). Report: ${reportPath}`);
+  console.error(`[client-server-boundary] markdown audit: ${markdownReportPath}`);
   for (const v of violations.slice(0, 20)) {
     console.error(`- ${v.reason}: ${v.clientEntry}`);
     console.error(`  chain: ${v.chain.join(" -> ")}`);
@@ -195,3 +252,30 @@ if (violations.length > 0) {
 }
 
 console.log(`[client-server-boundary] OK entries=${clientEntrypoints.length} report=${reportPath}`);
+
+function renderMarkdownReport(report) {
+  const rows = report.violations
+    .map((v) => {
+      const chain = v.chain.join(" -> ");
+      return `| \`${escapeMd(v.file ?? v.clientEntry)}\` | ${escapeMd(v.reason)} | \`${escapeMd(chain)}\` | ${escapeMd(v.riskLevel ?? "High")} |`;
+    })
+    .join("\n");
+  return `# Server/Client Boundary Audit
+
+Generated: ${report.generatedAt}
+
+Scope: \`${report.scope}\`
+
+Client entrypoints audited: ${report.clientEntrypoints.length}
+
+Violations: ${report.violations.length}
+
+| File | Violation | Import Chain | Risk Level |
+| --- | --- | --- | --- |
+${rows || "| None | None | None | None |"}
+`;
+}
+
+function escapeMd(value) {
+  return String(value).replace(/\|/g, "\\|").replace(/\n/g, " ");
+}

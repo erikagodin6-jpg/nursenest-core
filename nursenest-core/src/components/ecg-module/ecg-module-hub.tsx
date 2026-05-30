@@ -101,6 +101,12 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
                 Start Level 1 — Foundations
               </Link>
               <Link
+                href="/modules/ecg/interactive"
+                className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_08%,var(--semantic-surface))] px-5 text-sm font-semibold text-[color-mix(in_srgb,var(--semantic-info)_92%,var(--semantic-text-primary))] shadow-[var(--semantic-shadow-soft)]"
+              >
+                Open Interactive Reasoning
+              </Link>
+              <Link
                 href="/modules/ecg-advanced"
                 className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] px-5 text-sm font-semibold text-[color-mix(in_srgb,var(--semantic-warning)_92%,var(--semantic-text-primary))] shadow-[var(--semantic-shadow-soft)]"
               >

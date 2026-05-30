@@ -1,4 +1,4 @@
-import { CountryCode, ExamFamily, TierCode } from "@prisma/client";
+import type { CountryCode, ExamFamily, TierCode } from "@prisma/client";
 import type { ExamPathwayDefinition } from "./types";
 
 /** Ordered chunk A of `EXAM_PATHWAYS` (CA PN → CA RN → CA NP → US PN). Do not reorder without matching `exam-product-registry`. */
@@ -7,14 +7,14 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
   {
     id: "ca-rpn-rex-pn",
     countrySlug: "canada",
-    countryCode: CountryCode.CA,
+    countryCode: "CA" as CountryCode,
     roleTrack: "rpn",
     examCode: "rex-pn",
-    examFamily: ExamFamily.REX_PN,
+    examFamily: "REX_PN" as ExamFamily,
     examKey: "REX_PN",
     displayName: "REx-PN (Canada RPN)",
     shortName: "REx-PN",
-    stripeTier: TierCode.RPN,
+    stripeTier: "RPN" as TierCode,
     contentExamKeys: ["NCLEX-PN", "REx-PN", "REX-PN"],
     seoTitle: "REx-PN practice questions for Canada | NurseNest",
     seoDescription:
@@ -26,14 +26,14 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
   {
     id: "ca-rn-nclex-rn",
     countrySlug: "canada",
-    countryCode: CountryCode.CA,
+    countryCode: "CA" as CountryCode,
     roleTrack: "rn",
     examCode: "nclex-rn",
-    examFamily: ExamFamily.NCLEX_RN,
+    examFamily: "NCLEX_RN" as ExamFamily,
     examKey: "NCLEX_RN",
     displayName: "NCLEX-RN (Canada)",
     shortName: "NCLEX-RN",
-    stripeTier: TierCode.RN,
+    stripeTier: "RN" as TierCode,
     contentExamKeys: ["NCLEX-RN", "NCLEX_RN"],
     seoTitle: "NCLEX-RN Exam Prep Canada — Practice Questions & CAT",
     seoDescription:
@@ -45,14 +45,14 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
   {
     id: "ca-np-cnple",
     countrySlug: "canada",
-    countryCode: CountryCode.CA,
+    countryCode: "CA" as CountryCode,
     roleTrack: "np",
     examCode: "cnple",
-    examFamily: ExamFamily.NP,
+    examFamily: "NP" as ExamFamily,
     examKey: "CA_NP_LICENSURE",
     displayName: "Canadian Nurse Practitioner Licensure Examination",
     shortName: "CNPLE",
-    stripeTier: TierCode.NP,
+    stripeTier: "NP" as TierCode,
     contentExamKeys: ["NP", "CNPLE", "CAN-NP"],
     boardLabel: "CCRNR / Canadian NP licensure pathway",
     seoTitle: "CNPLE exam prep — Canadian NP | NurseNest",
@@ -67,14 +67,14 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
   {
     id: "us-lpn-nclex-pn",
     countrySlug: "us",
-    countryCode: CountryCode.US,
+    countryCode: "US" as CountryCode,
     roleTrack: "lpn",
     examCode: "nclex-pn",
-    examFamily: ExamFamily.NCLEX_PN,
+    examFamily: "NCLEX_PN" as ExamFamily,
     examKey: "NCLEX_PN",
     displayName: "NCLEX-PN (US LPN / LVN)",
     shortName: "NCLEX-PN",
-    stripeTier: TierCode.LVN_LPN,
+    stripeTier: "LVN_LPN" as TierCode,
     contentExamKeys: ["NCLEX-PN", "NCLEX_PN"],
     seoTitle: "NCLEX-PN Exam Prep | US LPN / LVN | NurseNest",
     seoDescription:

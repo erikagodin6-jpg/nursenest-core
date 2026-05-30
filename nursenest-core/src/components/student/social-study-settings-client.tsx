@@ -1,7 +1,22 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { SocialChallengeType, SocialStatKey, SocialVisibilityScope } from "@prisma/client";
+
+type SocialVisibilityScope = "PRIVATE" | "FRIENDS" | "GROUPS_CLASSROOMS" | "FRIENDS_AND_GROUPS" | "PAUSED";
+type SocialStatKey =
+  | "READINESS_BAND"
+  | "READINESS_RANGE"
+  | "WEEKLY_STREAK"
+  | "PRACTICE_SCORE_RANGE"
+  | "FLASHCARD_PROGRESS"
+  | "WEAK_AREA_OVERLAP"
+  | "CAT_COMPLETION";
+type SocialChallengeType =
+  | "FLASHCARD_SPRINT"
+  | "PRACTICE_QUIZ"
+  | "WEAK_AREA_RECOVERY"
+  | "DAILY_STREAK"
+  | "READINESS_IMPROVEMENT";
 
 type Props = {
   initialSettings: {
@@ -27,7 +42,22 @@ const STAT_LABELS: Record<SocialStatKey, string> = {
   CAT_COMPLETION: "CAT completion status",
 };
 
-const VISIBLE_KEYS = Object.values(SocialStatKey);
+const VISIBLE_KEYS: SocialStatKey[] = [
+  "READINESS_BAND",
+  "READINESS_RANGE",
+  "WEEKLY_STREAK",
+  "PRACTICE_SCORE_RANGE",
+  "FLASHCARD_PROGRESS",
+  "WEAK_AREA_OVERLAP",
+  "CAT_COMPLETION",
+];
+const CHALLENGE_TYPES: SocialChallengeType[] = [
+  "FLASHCARD_SPRINT",
+  "PRACTICE_QUIZ",
+  "WEAK_AREA_RECOVERY",
+  "DAILY_STREAK",
+  "READINESS_IMPROVEMENT",
+];
 
 type FriendRow = {
   id: string;
@@ -109,7 +139,7 @@ export function SocialStudySettingsClient({ initialSettings, initialCode }: Prop
   const [compare, setCompare] = useState<ComparePayload | null>(null);
   const [leaderboard, setLeaderboard] = useState<LeaderboardPayload | null>(null);
   const [selectedFriendId, setSelectedFriendId] = useState("");
-  const [challengeType, setChallengeType] = useState<SocialChallengeType>(SocialChallengeType.FLASHCARD_SPRINT);
+  const [challengeType, setChallengeType] = useState<SocialChallengeType>("FLASHCARD_SPRINT");
   const [groupName, setGroupName] = useState("");
 
   const acceptedFriends = useMemo(() => friends.filter((friend) => friend.status === "ACCEPTED"), [friends]);
@@ -280,11 +310,11 @@ export function SocialStudySettingsClient({ initialSettings, initialCode }: Prop
               onChange={(e) => void save({ visibilityScope: e.target.value as SocialVisibilityScope })}
               className="min-h-11 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3"
             >
-              <option value={SocialVisibilityScope.PRIVATE}>Private</option>
-              <option value={SocialVisibilityScope.FRIENDS}>Visible to friends</option>
-              <option value={SocialVisibilityScope.GROUPS_CLASSROOMS}>Visible to groups/classrooms</option>
-              <option value={SocialVisibilityScope.FRIENDS_AND_GROUPS}>Visible to friends and groups</option>
-              <option value={SocialVisibilityScope.PAUSED}>Paused</option>
+              <option value="PRIVATE">Private</option>
+              <option value="FRIENDS">Visible to friends</option>
+              <option value="GROUPS_CLASSROOMS">Visible to groups/classrooms</option>
+              <option value="FRIENDS_AND_GROUPS">Visible to friends and groups</option>
+              <option value="PAUSED">Paused</option>
             </select>
           </label>
         </div>
@@ -406,7 +436,7 @@ export function SocialStudySettingsClient({ initialSettings, initialCode }: Prop
             {acceptedFriends.map((friend) => <option key={friend.id} value={friend.otherUser.id}>{friend.otherUser.displayName}</option>)}
           </select>
           <select value={challengeType} onChange={(e) => setChallengeType(e.target.value as SocialChallengeType)} className="min-h-11 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm">
-            {Object.values(SocialChallengeType).map((type) => <option key={type} value={type}>{CHALLENGE_LABELS[type]}</option>)}
+            {CHALLENGE_TYPES.map((type) => <option key={type} value={type}>{CHALLENGE_LABELS[type]}</option>)}
           </select>
           <button type="button" onClick={() => void createChallenge()} className="min-h-11 rounded-full bg-[var(--semantic-brand)] px-5 text-sm font-bold text-white">Create</button>
         </div>

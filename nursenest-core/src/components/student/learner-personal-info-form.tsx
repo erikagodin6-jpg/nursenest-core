@@ -3,23 +3,26 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { CountryCode, TierCode } from "@prisma/client";
 import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
 import type { PersonalProfilePayload } from "@/lib/learner/load-personal-profile";
 import type { MeasurementPreference } from "@/lib/measurements/measurement-preference";
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
-const TIERS: TierCode[] = [TierCode.PRE_NURSING, TierCode.NEW_GRAD, TierCode.RPN, TierCode.LVN_LPN, TierCode.RN, TierCode.NP, TierCode.ALLIED];
-const COUNTRIES: CountryCode[] = [CountryCode.CA, CountryCode.US];
+
+type TierCode = PersonalProfilePayload["tier"];
+type CountryCode = PersonalProfilePayload["country"];
+
+const TIERS: TierCode[] = ["PRE_NURSING", "NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP", "ALLIED"];
+const COUNTRIES: CountryCode[] = ["CA", "US"];
 
 const TIER_I18N_KEY: Record<TierCode, string> = {
-  [TierCode.PRE_NURSING]: "learner.personalPage.tierPRE_NURSING",
-  [TierCode.NEW_GRAD]: "learner.personalPage.tierNEW_GRAD",
-  [TierCode.RPN]: "learner.personalPage.tierRPN",
-  [TierCode.LVN_LPN]: "learner.personalPage.tierLVN_LPN",
-  [TierCode.RN]: "learner.personalPage.tierRN",
-  [TierCode.NP]: "learner.personalPage.tierNP",
-  [TierCode.ALLIED]: "learner.personalPage.tierALLIED",
+  PRE_NURSING: "learner.personalPage.tierPRE_NURSING",
+  NEW_GRAD: "learner.personalPage.tierNEW_GRAD",
+  RPN: "learner.personalPage.tierRPN",
+  LVN_LPN: "learner.personalPage.tierLVN_LPN",
+  RN: "learner.personalPage.tierRN",
+  NP: "learner.personalPage.tierNP",
+  ALLIED: "learner.personalPage.tierALLIED",
 };
 
 type ServerRegionSnapshot = Pick<PersonalProfilePayload, "country" | "tier" | "pathwayOptions">;
@@ -266,7 +269,7 @@ export function LearnerPersonalInfoForm({
                 >
                   {COUNTRIES.map((c) => (
                     <option key={c} value={c}>
-                      {c === CountryCode.CA ? t("learner.personalPage.countryCA") : t("learner.personalPage.countryUS")}
+                      {c === "CA" ? t("learner.personalPage.countryCA") : t("learner.personalPage.countryUS")}
                     </option>
                   ))}
                 </select>

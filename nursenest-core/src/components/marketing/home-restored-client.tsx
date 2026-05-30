@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, type PropsWithChildren, type ReactNode, type CSSProperties } from "react";
 
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
-import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 
 // ssr:false for below-fold sections prevents hydration mismatch/CLS. The new
 // LazyWhenVisible wrapper below also prevents every chunk from downloading and
@@ -42,15 +41,6 @@ const PremiumHomepageCta = dynamic(() =>
   { ssr: false, loading: () => <PremiumSectionSkeleton testId="skeleton-cta" short /> },
 );
 
-/** Below-fold carousel — separate chunk; lazy-mounted near viewport for TBT. */
-const HomeHeroScreenshotSectionLazy = dynamic(
-  () =>
-    import("@/components/marketing/home-hero-screenshot-section").then((m) => ({
-      default: m.HomeHeroScreenshotSection,
-    })),
-  { loading: () => <HomeHeroScreenshotSectionSkeleton />, ssr: false },
-);
-
 const FunnelHomepageViewBeaconLazy = dynamic(
   () =>
     import("@/components/marketing/funnel-analytics-beacons").then((m) => ({
@@ -58,27 +48,6 @@ const FunnelHomepageViewBeaconLazy = dynamic(
     })),
   { ssr: false },
 );
-
-function HomeHeroScreenshotSectionSkeleton() {
-  return (
-    <section
-      className="border-b border-[var(--header-nav-border)] nn-home-hero-product-band bg-[var(--page-bg)] pt-[var(--nn-rhythm-mobile-section-y)] md:pt-[var(--nn-rhythm-shell-y)]"
-      aria-hidden
-      data-testid="home-hero-screenshot-section-skeleton"
-    >
-      <div className="nn-section-shell pb-[var(--nn-rhythm-section-y)]">
-        <div className="mx-auto mb-6 max-w-2xl space-y-3 md:mb-8">
-          <div className="mx-auto h-3 w-44 max-w-[min(100%,12rem)] rounded-full bg-[color-mix(in_srgb,var(--semantic-text-muted)_24%,var(--page-bg))]" />
-          <div className="mx-auto h-3 w-full max-w-xl rounded-full bg-[color-mix(in_srgb,var(--semantic-text-muted)_18%,var(--page-bg))]" />
-          <div className="mx-auto h-3 w-[92%] max-w-lg rounded-full bg-[color-mix(in_srgb,var(--semantic-text-muted)_16%,var(--page-bg))]" />
-        </div>
-        <div className="mx-auto w-full max-w-2xl min-h-[min(24rem,calc(100vw*0.72+6rem))]">
-          <div className="aspect-[4/3] w-full rounded-2xl border border-[color-mix(in_srgb,var(--border-subtle)_82%,white)] bg-[color-mix(in_srgb,var(--semantic-text-muted)_12%,var(--page-bg))] shadow-[0_12px_32px_-24px_color-mix(in_srgb,var(--palette-heading)_28%,transparent)]" />
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /**
  * Height-stable placeholder for below-fold premium sections.
@@ -176,10 +145,10 @@ function LazyWhenVisible({ children, fallback, rootMargin = "360px 0px" }: LazyW
 export type HomeRestoredClientProps = PropsWithChildren<{
   homeMarketingStats?: HomeMarketingStats | null;
   publishedGlobalRegionCardIds?: readonly string[] | null;
-  /** Server-built carousel slides — avoids client-side slide assembly on hydration. */
-  homeHeroCarouselSlides?: readonly HomeHeroSlide[] | null;
   /** Server-rendered island for PremiumHomepageHero. */
   heroSlot?: ReactNode;
+  /** Server-rendered flagship feature discovery block immediately after hero. */
+  featureDiscoverySlot?: ReactNode;
   /** Server-rendered island for PremiumClinicalDepth. */
   clinicalDepthSlot?: ReactNode;
   /** Server-rendered island for PremiumHomepageTrust. */
@@ -194,8 +163,8 @@ export type HomeRestoredClientProps = PropsWithChildren<{
 export default function HomeRestoredClient({
   homeMarketingStats: _homeMarketingStats,
   publishedGlobalRegionCardIds: _publishedGlobalRegionCardIds,
-  homeHeroCarouselSlides,
   heroSlot,
+  featureDiscoverySlot,
   clinicalDepthSlot,
   trustSlot,
   children,
@@ -220,9 +189,7 @@ export default function HomeRestoredClient({
       {/* HERO — server island; no above-fold homepage section hydration. */}
       {heroSlot}
 
-      <LazyWhenVisible fallback={<HomeHeroScreenshotSectionSkeleton />} rootMargin="480px 0px">
-        <HomeHeroScreenshotSectionLazy serverPreparedSlides={homeHeroCarouselSlides} />
-      </LazyWhenVisible>
+      {featureDiscoverySlot}
 
       <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-capability-strip" short />}>
         <PremiumPlatformCapabilityStrip />

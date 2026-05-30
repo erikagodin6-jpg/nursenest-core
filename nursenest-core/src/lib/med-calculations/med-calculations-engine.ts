@@ -1,4 +1,3 @@
-import { TierCode } from "@prisma/client";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
@@ -989,11 +988,11 @@ function buildFlashcards(lesson: MedCalcLessonDefinition): MedCalcFlashcard[] {
 
 export function medCalcTrackFromTier(tier: TierCode | null | undefined): MedCalcTrack {
   switch (tier) {
-    case TierCode.NP:
+    case "NP":
       return "np";
-    case TierCode.RPN:
-    case TierCode.LVN_LPN:
-    case TierCode.ALLIED:
+    case "RPN":
+    case "LVN_LPN":
+    case "ALLIED":
       return "pn";
     default:
       return "rn";

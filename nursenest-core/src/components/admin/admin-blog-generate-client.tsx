@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
-import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import type { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN } from "@/lib/admin/blog-generate-ai-constants";
 import {
   buildAdminBlogGenerateAiRequestBody,
@@ -148,11 +148,11 @@ function summarizeGenerateAiResponse(json: GenerateAiJsonBody): string {
 }
 
 const templates: BlogPostTemplate[] = [
-  BlogPostTemplate.HOW_TO_PASS,
-  BlogPostTemplate.TOPIC_EXPLAINED,
-  BlogPostTemplate.TOP_MISTAKES,
-  BlogPostTemplate.PRACTICE_QUESTIONS,
-  BlogPostTemplate.STUDY_PLAN,
+  "HOW_TO_PASS",
+  "TOPIC_EXPLAINED",
+  "TOP_MISTAKES",
+  "PRACTICE_QUESTIONS",
+  "STUDY_PLAN",
 ];
 
 export function AdminBlogGenerateClient() {
@@ -163,10 +163,10 @@ export function AdminBlogGenerateClient() {
   const [publishNow, setPublishNow] = useState(true);
   const [keywords, setKeywords] = useState("");
   const [exam, setExam] = useState(ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value);
-  const [template, setTemplate] = useState<BlogPostTemplate>(BlogPostTemplate.TOPIC_EXPLAINED);
+  const [template, setTemplate] = useState<BlogPostTemplate>("TOPIC_EXPLAINED");
   const [tone, setTone] = useState<"professional" | "supportive" | "direct">("professional");
-  const [intent, setIntent] = useState<BlogPostIntent>(BlogPostIntent.EXAM_PREP);
-  const [funnelStage, setFunnelStage] = useState<BlogFunnelStage>(BlogFunnelStage.CONSIDERATION);
+  const [intent, setIntent] = useState<BlogPostIntent>("EXAM_PREP");
+  const [funnelStage, setFunnelStage] = useState<BlogFunnelStage>("CONSIDERATION");
   const [targetKeyword, setTargetKeyword] = useState("");
   const [keywordCluster, setKeywordCluster] = useState("");
   const [includeImage, setIncludeImage] = useState(true);

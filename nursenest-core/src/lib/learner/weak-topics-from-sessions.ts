@@ -1,4 +1,4 @@
-import { ExamSessionStatus } from "@prisma/client";
+import type { ExamSessionStatus } from "@prisma/client";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
@@ -53,7 +53,7 @@ export async function loadWeakTopicsFromExamSessions(
   if (!entitlement.hasAccess) return [];
 
   const recentSessions = await prisma.examSession.findMany({
-    where: { userId, status: ExamSessionStatus.COMPLETED },
+    where: { userId, status: "COMPLETED" },
     orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
     take: 12,
     select: { questionIds: true, answers: true },

@@ -1,5 +1,4 @@
 import type { Prisma } from "@prisma/client";
-import { TierCode } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import {
   examQuestionTierCaseInsensitiveWhere,
@@ -69,7 +68,7 @@ export function questionAccessWhereWithPathway(
   if (
     !accessScopeIsStaffLearnerEntitlementBypass(entitlement) &&
     entitlement.hasAccess &&
-    entitlement.tier === TierCode.ALLIED &&
+    entitlement.tier === "ALLIED" &&
     isAlliedMarketingCorePathwayId(pathway.id)
   ) {
     const pk = subscriberCanonicalAlliedProfessionKey(entitlement);

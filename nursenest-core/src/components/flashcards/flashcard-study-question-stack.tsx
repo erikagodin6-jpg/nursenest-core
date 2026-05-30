@@ -299,6 +299,7 @@ export function FlashcardStudyQuestionStack({
               data-nn-flashcard-branding-revamp=""
               data-nn-flashcard-question-workspace=""
               data-nn-educational-content-container=""
+              aria-label="Assessment question workspace"
             >
               <div className="nn-flashcard-card-action-row relative z-[1] flex items-start justify-between gap-2">
                 {itemKindCaption ? (
@@ -446,7 +447,7 @@ export function FlashcardStudyQuestionStack({
                 data-nn-flashcard-branding-revamp=""
                 data-nn-flashcard-rationale-workspace=""
                 data-nn-rationale-state={revealed ? "revealed" : "locked"}
-                aria-label={labels?.answerHeading ?? "Answer and rationale"}
+                aria-label={labels?.answerHeading ?? "Learning rationale workspace"}
                 {...(revealed ? { "data-nn-premium-flashcard-reveal": "" } : {})}
               >
                 <div className="nn-flashcard-rationale-panel__header">

@@ -3,13 +3,18 @@ import { BLOSSOM_LEAF_128_WEBP, BLOSSOM_LEAF_LEGACY_CDN_PNG } from "@/lib/brandi
 /** Canonical NurseNest app icon version. Bump this when favicon assets change. */
 export const NURSENEST_APP_ICON_VERSION = "2026-05-22-pink-v3" as const;
 
+function withVersion(url: string): string {
+  const join = url.includes("?") ? "&" : "?";
+  return `${url}${join}v=${NURSENEST_APP_ICON_VERSION}`;
+}
+
 /** Brand primary color for app icons. */
 export const NURSENEST_LEAF_BRAND_COLOR = "#f72fa8" as const;
 
 export const NURSENEST_PINK_FAVICON_URL =
-  "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/pinkfavicon.png" as const;
+  withVersion("https://nursenest-images.tor1.cdn.digitaloceanspaces.com/pinkfavicon.png");
 
-export const NURSENEST_PINK_FAVICON_PATH = "/favicon-pink-v3.png" as const;
+export const NURSENEST_PINK_FAVICON_SVG_PATH = withVersion("/favicon-pink-v3.svg");
 
 export const NURSENEST_BLOSSOM_LEAF_LOGO_URL = BLOSSOM_LEAF_128_WEBP;
 
@@ -29,10 +34,7 @@ export const NURSENEST_CANONICAL_LEAF_SVG_PATH = NURSENEST_OCEAN_LEAF_LOGO_URL;
 export const NURSENEST_NAV_LEAF_SVG_PATH = NURSENEST_OCEAN_LEAF_LOGO_URL;
 
 export const nursenestAppIcons = {
-  favicon: NURSENEST_PINK_FAVICON_PATH,
-  navLeafSvg: `${NURSENEST_NAV_LEAF_SVG_PATH}?v=${NURSENEST_APP_ICON_VERSION}`,
-  ico: "/favicon.ico",
-  apple: "/apple-touch-icon.png",
-  png192: "/icon-192.png",
-  png512: "/icon-512.png",
+  favicon: NURSENEST_PINK_FAVICON_URL,
+  svg: NURSENEST_PINK_FAVICON_SVG_PATH,
+  navLeafSvg: withVersion(NURSENEST_NAV_LEAF_SVG_PATH),
 } as const;

@@ -1,4 +1,3 @@
-import { TierCode } from "@prisma/client";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
@@ -139,7 +138,7 @@ export type PremiumModuleCardModel = {
 
 /** US/CA Pre-Nursing paid tier hubs (`pre-nursing`, `pre-nursing-ca`) — foundations ecosystem + subscriber apps. */
 export function isPreNursingPremiumPathway(pathway: ExamPathwayDefinition): boolean {
-  return pathway.stripeTier === TierCode.PRE_NURSING;
+  return pathway.stripeTier === "PRE_NURSING";
 }
 
 function isNewGradPathway(pathway: ExamPathwayDefinition): boolean {

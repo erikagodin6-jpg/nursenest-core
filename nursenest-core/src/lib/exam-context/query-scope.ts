@@ -1,5 +1,4 @@
 import type { Prisma } from "@prisma/client";
-import { TierCode } from "@prisma/client";
 import type { GlobalExamContext } from "@/lib/exam-context/global-exam-context";
 import { expandedExamKeysForPathwayPool } from "@/lib/content-quality/exam-question-exam-normalization";
 import { examQuestionTierStringsForProfileTier } from "@/lib/entitlements/accessible-tiers";
@@ -28,7 +27,7 @@ export function examQuestionPoolWhereForContext(ctx: GlobalExamContext): {
     return { examIn: [], tierMatches: [] };
   }
   /** `ctx.tier` comes from pathway role label (RN/NP/…); Pre-Nursing rows use `stripeTier` for `exam_questions.tier`. */
-  if (p.stripeTier === TierCode.PRE_NURSING) {
+  if (p.stripeTier === "PRE_NURSING") {
     return {
       examIn: expandedExamKeysForPathwayPool(p.contentExamKeys),
       tierMatches: examQuestionTierStringsForProfileTier("PRE_NURSING"),

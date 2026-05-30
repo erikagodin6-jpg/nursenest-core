@@ -122,7 +122,7 @@ describe("examPathwaysForStudyHubSubscription", () => {
       out.map((p) => p.id).sort(),
       ["us-np-fnp", "us-np-pmhnp"],
     );
-    assert.ok(out.every((p) => p.examFamily === ExamFamily.NP));
+    assert.ok(out.every((p) => p.examFamily === "NP"));
   });
 
   it("does not filter staff bypass lists", () => {

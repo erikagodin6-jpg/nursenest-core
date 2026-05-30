@@ -1,4 +1,3 @@
-import { ExamFamily } from "@prisma/client";
 import { buildExamPathwayPath as buildExamPathwayPathPure } from "./build-exam-pathway-path";
 import { EXAM_PATHWAYS, getExamPathwayById } from "./exam-pathways-catalog";
 import { getNpPracticeTestLandingCopy } from "./np-practice-test-segments";
@@ -15,7 +14,7 @@ export { EXAM_PATHWAYS, getExamPathwayById } from "./exam-pathways-catalog";
 export function npPoolExamColumnValues(): string[] {
   const s = new Set<string>();
   for (const p of EXAM_PATHWAYS) {
-    if (p.examFamily === ExamFamily.NP) {
+    if (p.examFamily === "NP") {
       for (const k of p.contentExamKeys) s.add(k);
     }
   }

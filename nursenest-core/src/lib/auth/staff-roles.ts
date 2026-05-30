@@ -1,4 +1,4 @@
-import { UserRole } from "@prisma/client";
+import type { UserRole } from "@prisma/client";
 
 /** Resolved tier for RBAC (legacy `ADMIN` maps to `super`). */
 export type StaffTier = "super" | "content" | "support";
@@ -33,14 +33,14 @@ export function shouldShowAdminDashboardNav(options: {
 
 export function staffTierFromRole(role: UserRole): StaffTier {
   switch (role) {
-    case UserRole.SUPER_ADMIN:
-    case UserRole.ADMIN:
+    case "SUPER_ADMIN":
+    case "ADMIN":
       return "super";
-    case UserRole.CONTENT_ADMIN:
+    case "CONTENT_ADMIN":
       return "content";
-    case UserRole.SUPPORT_ADMIN:
+    case "SUPPORT_ADMIN":
       return "support";
-    case UserRole.LEARNER:
+    case "LEARNER":
       // Should never be used for staff session — narrowest tier if mis-invoked.
       return "support";
   }

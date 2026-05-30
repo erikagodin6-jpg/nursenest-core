@@ -1,6 +1,6 @@
 "use client";
 
-import { BlogPostStatus } from "@prisma/client";
+import type { BlogPostStatus } from "@prisma/client";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -62,15 +62,15 @@ type ListResponse = {
 
 function statusChipClass(s: BlogPostStatus) {
   switch (s) {
-    case BlogPostStatus.PUBLISHED:
+    case "PUBLISHED":
       return "bg-emerald-500/15 text-emerald-900 dark:text-emerald-100";
-    case BlogPostStatus.SCHEDULED:
+    case "SCHEDULED":
       return "bg-amber-500/15 text-amber-950 dark:text-amber-100";
-    case BlogPostStatus.APPROVED:
+    case "APPROVED":
       return "bg-sky-500/15 text-sky-950 dark:text-sky-100";
-    case BlogPostStatus.NEEDS_REVIEW:
+    case "NEEDS_REVIEW":
       return "bg-orange-500/15 text-orange-950 dark:text-orange-100";
-    case BlogPostStatus.FAILED:
+    case "FAILED":
       return "bg-red-500/15 text-red-950 dark:text-red-100";
     default:
       return "bg-muted text-foreground";
@@ -85,9 +85,9 @@ function formatSource(row: AdminBlogLibraryRow) {
 
 function previewHref(row: AdminBlogLibraryRow) {
   const live =
-    row.postStatus === BlogPostStatus.PUBLISHED ||
-    row.postStatus === BlogPostStatus.APPROVED ||
-    (row.postStatus === BlogPostStatus.SCHEDULED &&
+    row.postStatus === "PUBLISHED" ||
+    row.postStatus === "APPROVED" ||
+    (row.postStatus === "SCHEDULED" &&
       row.publishAt &&
       new Date(row.publishAt).getTime() <= Date.now());
   if (live) return `/blog/${row.slug}`;
@@ -182,7 +182,7 @@ export function AdminBlogLibraryClient() {
   }
 
   async function deletePost(row: AdminBlogLibraryRow) {
-    if (row.postStatus === BlogPostStatus.PUBLISHED) {
+    if (row.postStatus === "PUBLISHED") {
       setErr("Unpublish before deleting.");
       return;
     }
@@ -443,7 +443,7 @@ export function AdminBlogLibraryClient() {
                       >
                         Preview
                       </a>
-                      {row.postStatus !== BlogPostStatus.PUBLISHED ? (
+                      {row.postStatus !== "PUBLISHED" ? (
                         <button
                           type="button"
                           disabled={busyId === row.id}
@@ -470,7 +470,7 @@ export function AdminBlogLibraryClient() {
                       >
                         Duplicate
                       </button>
-                      {row.postStatus !== BlogPostStatus.PUBLISHED ? (
+                      {row.postStatus !== "PUBLISHED" ? (
                         <button
                           type="button"
                           disabled={busyId === row.id}

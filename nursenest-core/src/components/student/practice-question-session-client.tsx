@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FlashcardItemKind } from "@prisma/client";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { QuestionRenderer } from "@/components/questions/question-renderer";
@@ -494,7 +493,7 @@ export function PracticeQuestionSessionClient({
             }),
           }
         : {
-            itemKind: FlashcardItemKind.CLINICAL,
+            itemKind: "CLINICAL",
             questionStem: stemDisplay,
             answerOptions,
             correctLetter: primaryCorrectLetter,

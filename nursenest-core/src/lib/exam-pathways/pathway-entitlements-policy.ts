@@ -1,5 +1,5 @@
 import { type CountryCode, type TierCode } from "@prisma/client";
-import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-scope";
+import { prismaTierCodesForProfileTier } from "@/lib/entitlements/accessible-tiers";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -33,5 +33,5 @@ export function subscriptionCoversPathwayBase(scope: AccessScope, pathway: ExamP
   }
   if (!tier || !country) return false;
   if (country !== pathway.countryCode) return false;
-  return accessibleTiersForUserTier(tier).includes(pathway.stripeTier);
+  return prismaTierCodesForProfileTier(tier).includes(pathway.stripeTier);
 }

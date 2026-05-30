@@ -16,6 +16,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import {
   getDegradedPublicHomeStatsFallback,
+  publicHomeStaticPlatformInventoryCounts,
   type PublicHomeStatsPayload,
 } from "@/lib/marketing/public-home-stats-payload";
 import {
@@ -122,6 +123,7 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
     },
     async () => {
       if (!isDatabaseUrlConfigured() || isRuntimeSafeMode() || isDurabilityDegradedMode()) {
+        const staticCounts = publicHomeStaticPlatformInventoryCounts();
         return {
           totalLessons: 0,
           pathwayLessonsPublished: 0,
@@ -131,6 +133,10 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
           totalDecks: 0,
           storeProductCount: 0,
           registeredLearners: 0,
+          clinicalSkillCount: staticCounts.clinicalSkillCount,
+          medicationMathProblemCount: staticCounts.medicationMathProblemCount,
+          ecgCaseCount: staticCounts.ecgCaseCount,
+          labCaseCount: staticCounts.labCaseCount,
           questionsByTier: {},
           scenarioCount: 0,
           topicCategoryCount: 0,
@@ -374,6 +380,7 @@ async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayloa
   if (proofDisplay === "neutral") {
     recordPaywallProofNeutral("partial_stats");
   }
+  const staticCounts = publicHomeStaticPlatformInventoryCounts();
 
   return {
     totalLessons,
@@ -384,6 +391,10 @@ async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayloa
     totalDecks: decksR.value,
     storeProductCount: 0,
     registeredLearners: learnersR.value,
+    clinicalSkillCount: staticCounts.clinicalSkillCount,
+    medicationMathProblemCount: staticCounts.medicationMathProblemCount,
+    ecgCaseCount: staticCounts.ecgCaseCount,
+    labCaseCount: staticCounts.labCaseCount,
     questionsByTier,
     scenarioCount: scenariosR.value,
     topicCategoryCount,

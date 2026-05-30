@@ -3,6 +3,7 @@ import "server-only";
 import type { PropsWithChildren } from "react";
 
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
+import { HomepageEcosystemDiscovery } from "@/components/marketing/home/homepage-ecosystem-discovery";
 import { PremiumClinicalDepth } from "@/components/marketing/home/premium-clinical-depth";
 import { PremiumHomepageHero } from "@/components/marketing/home/premium-homepage-hero";
 import { PremiumHomepageTrust } from "@/components/marketing/home/premium-homepage-trust";
@@ -13,7 +14,6 @@ import {
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
-import { loadHomeHeroPrimaryCarouselSlidesForLocale } from "@/lib/marketing/load-home-hero-carousel-slides.server";
 
 export type HomeRestoredWithDeferredStatsProps = PropsWithChildren<{
   skipOptionalDbReads: boolean;
@@ -29,6 +29,12 @@ function homeMarketingStatsFromPayload(raw: Partial<PublicHomeStatsPayload> | nu
     questionCount: safeNumber(raw?.questionCount),
     registeredLearners: safeNumber(raw?.registeredLearners),
     totalLessons: safeNumber(raw?.totalLessons),
+    totalFlashcards: safeNumber(raw?.totalFlashcards),
+    scenarioCount: safeNumber(raw?.scenarioCount),
+    clinicalSkillCount: safeNumber(raw?.clinicalSkillCount),
+    medicationMathProblemCount: safeNumber(raw?.medicationMathProblemCount),
+    ecgCaseCount: safeNumber(raw?.ecgCaseCount),
+    labCaseCount: safeNumber(raw?.labCaseCount),
   };
 }
 
@@ -94,9 +100,8 @@ export async function HomeRestoredWithDeferredStats({
 
   // Promise.allSettled: a single rejected promise cannot bring down the entire homepage.
   // All four are already fail-safe, but allSettled adds a final safety net.
-  const [statsResult, slidesResult, messagesResult, regionResult] = await Promise.allSettled([
+  const [statsResult, messagesResult, regionResult] = await Promise.allSettled([
     skipOptionalDbReads ? Promise.resolve(getDegradedPublicHomeStatsFallback("db_skipped")) : getStatsSafe(),
-    loadHomeHeroPrimaryCarouselSlidesForLocale(DEFAULT_MARKETING_LOCALE),
     loadServerIslandMessagesSafe(),
     getMarketingRegionFromCookies(),
   ]);
@@ -104,7 +109,6 @@ export async function HomeRestoredWithDeferredStats({
   const stats = statsResult.status === "fulfilled"
     ? statsResult.value
     : getDegradedPublicHomeStatsFallback("promise_rejected");
-  const homeHeroCarouselSlides = slidesResult.status === "fulfilled" ? slidesResult.value : [];
   const serverIslandMessages = messagesResult.status === "fulfilled" ? messagesResult.value : {};
   const region = regionResult.status === "fulfilled" ? regionResult.value : "CA";
 
@@ -126,6 +130,9 @@ export async function HomeRestoredWithDeferredStats({
   const clinicalDepthSlot = (
     <PremiumClinicalDepth messages={serverIslandMessages} locale={DEFAULT_MARKETING_LOCALE} />
   );
+  const featureDiscoverySlot = (
+    <HomepageEcosystemDiscovery stats={homeMarketingStatsFromPayload(stats)} />
+  );
   const trustSlot = (
     <PremiumHomepageTrust messages={serverIslandMessages} />
   );
@@ -134,8 +141,8 @@ export async function HomeRestoredWithDeferredStats({
     <HomeRestoredClient
       homeMarketingStats={homeMarketingStatsFromPayload(stats)}
       publishedGlobalRegionCardIds={safeCardIds}
-      homeHeroCarouselSlides={homeHeroCarouselSlides}
       heroSlot={heroSlot}
+      featureDiscoverySlot={featureDiscoverySlot}
       clinicalDepthSlot={clinicalDepthSlot}
       trustSlot={trustSlot}
     >

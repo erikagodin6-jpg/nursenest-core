@@ -1,0 +1,54 @@
+{
+  "generatedAt": "2026-05-30T00:00:00.000Z",
+  "route": "/modules/ecg/interactive",
+  "requiredThemes": ["ocean", "midnight", "blossom"],
+  "captureStates": [
+    {
+      "mode": "detective",
+      "route": "/modules/ecg/interactive?mode=detective",
+      "title": "ECG Detective Mode",
+      "activeState": "ventricular_tachycardia strip with investigation steps and scoring visible"
+    },
+    {
+      "mode": "telemetry",
+      "route": "/modules/ecg/interactive?mode=telemetry",
+      "title": "Telemetry Shift",
+      "activeState": "four monitored patients with prioritization actions and active feedback"
+    },
+    {
+      "mode": "compare",
+      "route": "/modules/ecg/interactive?mode=compare",
+      "title": "Compare & Contrast",
+      "activeState": "AFib vs Flutter side-by-side discrimination task"
+    },
+    {
+      "mode": "readiness",
+      "route": "/modules/ecg/interactive?mode=readiness",
+      "title": "Readiness Dashboard",
+      "activeState": "non-empty readiness scores, trend, weak areas, and recommendations"
+    },
+    {
+      "mode": "clearances",
+      "route": "/modules/ecg/interactive?mode=clearances",
+      "title": "Clearance Center",
+      "activeState": "clearance progress and eligibility states"
+    },
+    {
+      "mode": "deterioration",
+      "route": "/modules/ecg/interactive?mode=deterioration",
+      "title": "Rhythm Deterioration",
+      "activeState": "PVC burden pathway with warning signs and decision options"
+    },
+    {
+      "mode": "report-card",
+      "route": "/modules/ecg/interactive?mode=report-card",
+      "title": "Report Cards",
+      "activeState": "mastered rhythms, weak rhythms, safety, escalation, and role judgment"
+    }
+  ],
+  "notes": [
+    "Capture active learning states only; do not use empty dashboards.",
+    "Use the existing NurseNest theme switcher or screenshot harness to set Ocean, Midnight, and Blossom before capture.",
+    "This manifest documents the marketing screenshot set; image files should be generated from the running app once Playwright/browser capture is available in the target environment."
+  ]
+}

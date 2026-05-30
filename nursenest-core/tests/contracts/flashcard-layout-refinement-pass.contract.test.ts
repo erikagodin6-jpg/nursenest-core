@@ -18,11 +18,15 @@ test("flashcard layout refinement pass is wired", () => {
   );
   assert.match(css, /data-nn-flashcard-layout-refinement/);
   assert.match(css, /data-nn-flashcard-premium-visual-refinement/);
-  assert.match(css, /grid-template-columns: minmax\(0, 1\.42fr\) minmax\(28rem, 1fr\)/);
+  assert.match(css, /grid-template-columns: minmax\(0, 1\.45fr\) minmax\(28rem, 1fr\)/);
+  assert.match(css, /Question \/ rationale balance: rationale is a primary learning surface/);
   assert.match(css, /--nn-flashcard-refinement-card: var\(--semantic-surface\)/);
   assert.match(css, /Flashcard viewport fit \+ metric alignment recovery/);
-  assert.match(css, /grid-template-rows: 0\.9rem 1\.1rem/);
-  assert.match(css, /\.nn-flashcard-topbar-progress-track[\s\S]*?grid-row: 2/);
+  assert.match(css, /Text baseline alignment recovery/);
+  assert.match(css, /\.nn-flashcard-learning-topbar__meta > div[\s\S]*?align-items: baseline !important/);
+  assert.match(css, /\.nn-flashcard-topbar-progress[\s\S]*?align-items: baseline !important/);
+  assert.match(css, /\.nn-flashcard-topbar-progress-track[\s\S]*?position: absolute !important/);
+  assert.match(css, /\.nn-flashcard-card-action-row,[\s\S]*?\.nn-flashcard-answer-status[\s\S]*?align-items: center !important/);
   assert.match(css, /\.nn-flashcard-hero-surface,[\s\S]*?\.nn-flashcard-rationale-panel[\s\S]*?background: var\(--semantic-surface\) !important/);
   assert.match(css, /Static rationale reading window/);
   assert.match(css, /\.nn-flashcard-rationale-panel__body[\s\S]*?overflow-y: auto !important/);

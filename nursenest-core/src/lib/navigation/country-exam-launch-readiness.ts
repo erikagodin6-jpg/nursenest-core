@@ -7,7 +7,6 @@
  * @see PATHWAY_LAUNCH_APPROVED — human sign-off for `published`.
  */
 
-import { ExamFamily } from "@prisma/client";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { REGION_CONFIG } from "@/lib/i18n/global-regions";
 import type { CountrySlug } from "@/lib/exam-pathways/types";
@@ -214,7 +213,7 @@ export function evaluatePathwayLaunchReadiness(
 
   // CNPLE waitlist exemption removed 2026-05-13: pathway has 436+ NP lessons and is a full published tier.
   const isIntlFoundation = isIntlRnFoundationPathwayId(pathway.id);
-  const isNpFamily = pathway.examFamily === ExamFamily.NP;
+  const isNpFamily = pathway.examFamily === "NP";
   const minLessonsRequired = isIntlFoundation
     ? 0
     : isNpFamily

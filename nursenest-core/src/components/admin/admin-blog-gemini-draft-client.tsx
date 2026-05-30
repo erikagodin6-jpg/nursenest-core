@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BlogPostTemplate } from "@prisma/client";
+import type { BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 import { formatDisplayLabel } from "@/lib/ui/format-display-label";
@@ -20,7 +20,7 @@ export function AdminBlogGeminiDraftClient() {
   const [topic, setTopic] = useState("");
   const [exam, setExam] = useState(ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value);
   const [country, setCountry] = useState<"US" | "CA" | "unspecified">("US");
-  const [template, setTemplate] = useState<BlogPostTemplate>(BlogPostTemplate.TOPIC_EXPLAINED);
+  const [template, setTemplate] = useState<BlogPostTemplate>("TOPIC_EXPLAINED");
   const [minWordCount, setMinWordCount] = useState(1200);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<ApiResult | null>(null);
@@ -106,10 +106,10 @@ export function AdminBlogGeminiDraftClient() {
             value={template}
             onChange={(e) => setTemplate(e.target.value as BlogPostTemplate)}
           >
-            <option value={BlogPostTemplate.TOPIC_EXPLAINED}>{formatDisplayLabel("TOPIC_EXPLAINED")}</option>
-            <option value={BlogPostTemplate.EXAM_GUIDE}>{formatDisplayLabel("EXAM_GUIDE")}</option>
-            <option value={BlogPostTemplate.STUDY_PLAN}>{formatDisplayLabel("STUDY_PLAN")}</option>
-            <option value={BlogPostTemplate.COMPARISON_ARTICLE}>{formatDisplayLabel("COMPARISON_ARTICLE")}</option>
+            <option value={"TOPIC_EXPLAINED"}>{formatDisplayLabel("TOPIC_EXPLAINED")}</option>
+            <option value={"EXAM_GUIDE"}>{formatDisplayLabel("EXAM_GUIDE")}</option>
+            <option value={"STUDY_PLAN"}>{formatDisplayLabel("STUDY_PLAN")}</option>
+            <option value={"COMPARISON_ARTICLE"}>{formatDisplayLabel("COMPARISON_ARTICLE")}</option>
           </select>
         </label>
 

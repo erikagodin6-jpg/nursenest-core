@@ -1,4 +1,3 @@
-import { ExamDatePlanType } from "@prisma/client";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { computeReadiness, type ReadinessBand, type ReadinessResult } from "@/lib/learner/readiness-score";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
