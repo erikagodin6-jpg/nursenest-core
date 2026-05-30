@@ -24,6 +24,8 @@
     "qa:crawl-health:remote": "PLAYWRIGHT_SKIP_WEB_SERVER=1 npx playwright test -c playwright.crawl-health.config.ts",
     "capture:marketing-screenshots:qa": "node scripts/wait-for-app-ready.mjs && node scripts/capture-marketing-screenshots.mjs",
     "generate:marketing-screenshots": "npx tsx scripts/generate-marketing-screenshots.ts",
+    "generate:homepage-screenshots": "npx tsx scripts/generate-homepage-screenshots.ts",
+    "generate:marketing-homepage-screenshots": "npx tsx scripts/marketing-screenshot-generator.ts",
     "generate:marketing-screenshots:rn": "npx tsx scripts/generate-marketing-screenshots.ts --tier=rn,core",
     "generate:marketing-screenshots:pn": "npx tsx scripts/generate-marketing-screenshots.ts --tier=pn",
     "generate:marketing-screenshots:np": "npx tsx scripts/generate-marketing-screenshots.ts --tier=np",

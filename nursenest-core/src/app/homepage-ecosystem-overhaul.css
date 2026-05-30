@@ -131,6 +131,20 @@
   line-height: 1.2;
 }
 
+.nn-home-feature-card__count,
+.nn-home-pathway-card__count {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 0.45rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 22%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface));
+  color: var(--semantic-success);
+  font-size: 0.72rem;
+  font-weight: 850;
+  padding: 0.2rem 0.5rem;
+}
+
 .nn-home-feature-card__description {
   display: block;
   margin-top: 0.35rem;
@@ -154,6 +168,57 @@
   display: block;
   object-fit: cover;
   object-position: top center;
+}
+
+.nn-home-product-demo-stack {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+}
+
+.nn-home-product-demo {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-items: center;
+  overflow: hidden;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 14%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-surface) 86%, var(--semantic-panel-muted));
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-home-product-demo__copy h3 {
+  margin: 0.45rem 0 0;
+  color: var(--palette-heading);
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  font-weight: 800;
+  line-height: 1.12;
+}
+
+.nn-home-product-demo__copy p:not(.nn-premium-home-eyebrow) {
+  margin: 0.75rem 0 0;
+  color: var(--palette-text-muted);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.nn-home-product-demo__copy a {
+  display: inline-flex;
+  margin-top: 1rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 24%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  color: var(--semantic-brand);
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.6rem 0.85rem;
+  text-decoration: none;
+}
+
+.nn-home-product-demo__image {
+  aspect-ratio: 16 / 9;
+  min-height: 15rem;
 }
 
 .nn-home-ngn-grid,
@@ -181,6 +246,18 @@
   .nn-home-gallery-grid,
   .nn-home-counter-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nn-home-product-demo {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  }
+
+  .nn-home-product-demo:nth-child(even) .nn-home-product-demo__copy {
+    order: 2;
+  }
+
+  .nn-home-product-demo:nth-child(even) .nn-home-product-demo__image {
+    order: 1;
   }
 }
 
@@ -287,9 +364,20 @@
 }
 
 @media (min-width: 900px) {
-  .nn-home-readiness-split {
+  .nn-home-readiness-split,
+  .nn-home-value-preview {
     grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   }
+}
+
+.nn-home-value-preview {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+  border-radius: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 16%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 24%, var(--page-bg));
+  padding: clamp(1.25rem, 3vw, 2rem);
 }
 
 .nn-home-readiness-list {

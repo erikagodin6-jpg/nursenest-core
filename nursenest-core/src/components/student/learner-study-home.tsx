@@ -69,6 +69,7 @@ import { LearnerPremiumNursingAnalyticsSection } from "@/components/student/dash
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { isPracticalNursingMarketingPathway } from "@/lib/marketing/is-practical-nursing-marketing-pathway";
 import { isNpPremiumConvergencePathway } from "@/lib/marketing/np-premium-convergence-pathways";
+import { getNpCertificationPathway } from "@/lib/np/np-certification-pathways";
 function RecentGainsBlock({
   trends,
   strongTopics,
@@ -163,6 +164,8 @@ export type LearnerStudyHomeProps = {
   adaptiveStudyNextRecs?: StudyNextRecommendation[] | null;
   /** Pathway-scoped progress summary (subscriber surfaces only). */
   reportCard?: LearnerReportCardViewModel | null;
+  /** Cookie-backed NP certification context; overrides generic profile pathway for learner launch links. */
+  selectedNpPathwayId?: string | null;
   /** Optional RSC block (e.g. adaptive wire bundle) — parent composes; keeps ordering inside the hub. */
   adaptiveRecommendations?: ReactNode;
 };
@@ -200,6 +203,7 @@ export function LearnerStudyHome({
   entitlement,
   adaptiveStudyNextRecs,
   reportCard,
+  selectedNpPathwayId = null,
   adaptiveRecommendations = null,
 }: LearnerStudyHomeProps) {
   const trends = studySnap?.topicTrends ?? [];
@@ -215,6 +219,7 @@ export function LearnerStudyHome({
         ? false
         : studySettings.enableAdaptivePlan;
   const preferredPathwayId =
+    selectedNpPathwayId ??
     snapshot.pathways.find((p) => p.pathwayId === snapshot.learnerPath)?.pathwayId ??
     snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
     snapshot.pathways[0]?.pathwayId ??
@@ -283,6 +288,7 @@ export function LearnerStudyHome({
     pathwayId: preferredPathwayId,
     commandPlan,
   });
+  const npCertification = selectedNpPathwayId ? getNpCertificationPathway(selectedNpPathwayId) : null;
 
   const content = (
     <div
@@ -300,6 +306,45 @@ export function LearnerStudyHome({
       items={hubNavItems}
     >
       <PostExamDashboardBridgeBanner />
+      {npCertification ? (
+        <section
+          id="np-certification-context"
+          className="nn-dash-band nn-dash-band--stack-tight"
+          data-testid="np-selected-certification-context"
+        >
+          <LearnerSurface tone="primary" padding="md" radius="lg" accentTop>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--semantic-brand)]">
+                  Selected Certification
+                </p>
+                <h2 className="mt-1 text-xl font-bold text-[var(--semantic-text-primary)]">
+                  {npCertification.name} ({npCertification.shortName})
+                </h2>
+                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+                  {npCertification.rationaleScope}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {npCertification.readinessDomains.map((domain) => (
+                    <span
+                      key={domain}
+                      className="rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_06%,var(--semantic-surface))] px-3 py-1 text-xs font-semibold text-[var(--semantic-text-primary)]"
+                    >
+                      {domain}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <Link
+                href="/app/np"
+                className="inline-flex shrink-0 justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_08%,var(--semantic-surface))] px-4 py-2 text-sm font-semibold text-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]"
+              >
+                Change Certification Pathway
+              </Link>
+            </div>
+          </LearnerSurface>
+        </section>
+      ) : null}
       <LearnerCoachingDashboardPanel />
 
       <PersonalizedLearningCommandCenter plan={commandPlan} />

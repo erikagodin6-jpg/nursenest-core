@@ -3,6 +3,12 @@ const PATHWAY_SCOPE_PREFIXES = [
   "/app/lessons",
   "/app/flashcards",
   "/app/practice-tests",
+  "/app/labs",
+  "/app/med-calculations",
+  "/app/clinical-skills",
+  "/app/study-plan",
+  "/modules/ecg",
+  "/modules/ecg-advanced",
 ] as const;
 
 function isPathwayScopablePath(pathname: string): boolean {

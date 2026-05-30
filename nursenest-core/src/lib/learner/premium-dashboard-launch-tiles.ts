@@ -91,7 +91,7 @@ export function buildPremiumDashboardLaunchTiles(args: {
   const practiceTestsHref = withPathwayQuery("/app/practice-tests", pathwayId);
   const catHref = cnple ? "/app/cases/cnple" : catStartHrefFromPremiumSnapshot(snapshot);
   const labsTileHref = labsHref(pathwayId);
-  const ecgHref = "/modules/ecg";
+  const ecgHref = withPathwayQuery("/modules/ecg", pathwayId);
   const medCalcHref = withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.medCalculations, pathwayId);
   const clinicalSkillsHref = withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.clinicalSkills, pathwayId);
 

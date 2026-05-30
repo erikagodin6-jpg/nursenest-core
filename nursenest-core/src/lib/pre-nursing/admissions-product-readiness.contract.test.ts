@@ -17,8 +17,8 @@ function readSource(relativePath: string): string {
   return fs.readFileSync(path.join(rootDir, relativePath), "utf8");
 }
 
-describe("HESI A2 / ATI TEAS / CASPer readiness recovery", () => {
-  it("declares truthful non-launch statuses for every incomplete admissions product", () => {
+describe("HESI A2 / ATI TEAS / CASPER admissions products", () => {
+  it("declares visible first-class admissions products", () => {
     assert.deepEqual(
       ADMISSIONS_PRODUCT_READINESS.map((product) => product.slug),
       ["hesi-a2", "ati-teas", "casper"],
@@ -27,9 +27,9 @@ describe("HESI A2 / ATI TEAS / CASPer readiness recovery", () => {
     for (const product of ADMISSIONS_PRODUCT_READINESS) {
       assert.notEqual(product.canonicalPath, "/pre-nursing");
       assert.match(product.canonicalPath, /^\/pre-nursing\/(hesi-a2|ati-teas|casper)$/);
-      assert.ok(["coming_soon", "beta_in_development"].includes(product.status));
-      assert.ok(getAdmissionsProductCompletionPercent(product) < 100, `${product.slug} must not be marked launch-complete`);
-      assert.ok(getAdmissionsProductLaunchGaps(product).length >= 3, `${product.slug} needs launch gaps for recovery planning`);
+      assert.equal(product.status, "active");
+      assert.ok(getAdmissionsProductCompletionPercent(product) > 0, `${product.slug} needs readiness model coverage`);
+      assert.ok(getAdmissionsProductLaunchGaps(product).length >= 3, `${product.slug} needs ongoing quality controls`);
     }
   });
 
@@ -51,19 +51,23 @@ describe("HESI A2 / ATI TEAS / CASPer readiness recovery", () => {
 
     assert.match(clientHeader, /href:\s*"\/pre-nursing\/hesi-a2"/);
     assert.match(clientHeader, /href:\s*"\/pre-nursing\/ati-teas"/);
+    assert.match(clientHeader, /href:\s*"\/pre-nursing\/casper"/);
     assert.match(serverHeader, /href:\s*"\/pre-nursing\/hesi-a2"/);
     assert.match(serverHeader, /href:\s*"\/pre-nursing\/ati-teas"/);
+    assert.match(serverHeader, /href:\s*"\/pre-nursing\/casper"/);
   });
 
-  it("readiness pages are explicit noindex status pages, not module redirects", () => {
+  it("readiness pages are explicit product pages, not module redirects", () => {
     const pageSource = readSource("src/app/(marketing)/(default)/pre-nursing/[slug]/page.tsx");
 
     assert.match(pageSource, /getAdmissionsProductReadinessBySlug/);
-    assert.match(pageSource, /robots:\s*\{\s*index:\s*false,\s*follow:\s*true\s*\}/);
-    assert.match(pageSource, /This page exists to prevent silent routing into a generic pathway/);
+    assert.match(pageSource, /getAdmissionExamProductBySlug/);
+    assert.match(pageSource, /Exam breakdown/);
+    assert.match(pageSource, /Practice modes/);
+    assert.doesNotMatch(pageSource, /This page exists to prevent silent routing into a generic pathway/);
   });
 
-  it("CASPer renders the dedicated response-training ecosystem", () => {
+  it("CASPER renders the dedicated response-training ecosystem", () => {
     const pageSource = readSource("src/app/(marketing)/(default)/pre-nursing/[slug]/page.tsx");
     const ecosystemSource = readSource("src/components/pre-nursing/casper/casper-premium-ecosystem-page.tsx");
 
@@ -71,5 +75,6 @@ describe("HESI A2 / ATI TEAS / CASPer readiness recovery", () => {
     assert.match(pageSource, /<CasperPremiumEcosystemPage \/>/);
     assert.match(ecosystemSource, /not a memorization bank/);
     assert.match(ecosystemSource, /CasperResponseTrainerClient/);
+    assert.match(ecosystemSource, /product\.practiceModes/);
   });
 });

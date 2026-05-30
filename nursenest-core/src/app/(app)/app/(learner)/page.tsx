@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
@@ -61,6 +62,9 @@ import { loadLearnerAdaptiveWireBundle } from "@/lib/learner/build-learner-adapt
 import { emitLearnerDashboardGraphTelemetry } from "@/lib/educational-cognition/emit-learner-dashboard-graph-telemetry";
 import { LearnerAdaptiveRecommendationsSection } from "@/components/student/learner-adaptive-recommendations-section";
 import { SocialStudyDashboardCard } from "@/components/student/social-study-dashboard-card";
+import { NpCertificationSelector } from "@/components/np/np-certification-selector";
+import { listNpCertificationPathways } from "@/lib/np/np-certification-pathways";
+import { resolveNpCertificationPathwayId } from "@/lib/np/np-certification-selection";
 
 type DashboardSessionLike = {
   user?: {
@@ -141,6 +145,7 @@ async function LearnerDashboardHeavyContent({
   userDisplayName,
   userLearnerPath,
   userAlliedProfessionKey,
+  selectedNpPathwayId,
 }: {
   t: LearnerMarketingT;
   locale: string;
@@ -150,6 +155,7 @@ async function LearnerDashboardHeavyContent({
   userDisplayName: string | null;
   userLearnerPath: string | null;
   userAlliedProfessionKey: string | null;
+  selectedNpPathwayId: string | null;
 }) {
   let snapshot: PremiumDashboardSnapshot | null = null;
   let studySnap: Awaited<ReturnType<typeof buildLearnerStudySnapshot>> = null;
@@ -225,6 +231,7 @@ async function LearnerDashboardHeavyContent({
 
       const dashModel = buildDashboardModel(premiumSnapshot, studySnap, todayGoal, studySettings);
       const preferredPathwayId =
+        selectedNpPathwayId ??
         premiumSnapshot.pathways.find((p) => p.pathwayId === premiumSnapshot.learnerPath)?.pathwayId ??
         premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
         premiumSnapshot.pathways[0]?.pathwayId ??
@@ -365,6 +372,7 @@ async function LearnerDashboardHeavyContent({
             entitlement={entitlement}
             adaptiveStudyNextRecs={adaptiveStudyNextRecs}
             reportCard={reportCard}
+            selectedNpPathwayId={selectedNpPathwayId}
             adaptiveRecommendations={
               adaptiveWireBundle ? (
                 <LearnerAdaptiveRecommendationsSection t={t} bundle={adaptiveWireBundle} />
@@ -436,6 +444,8 @@ async function LearnerDashboardDeferredContent({
   let userDisplayName: string | null = null;
   let userLearnerPath: string | null = null;
   let userAlliedProfessionKey: string | null = null;
+  const isNpLearner = (session?.user?.tier ?? "").toUpperCase() === "NP";
+  const cookieStore = await cookies();
 
   // Redirect to onboarding if user hasn't completed it yet
   try {
@@ -468,7 +478,27 @@ async function LearnerDashboardDeferredContent({
     alliedProfessionKey: userAlliedProfessionKey,
   });
   const heroHeading = userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title");
-  const examsNavLabel = examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier);
+  const selectedNpPathwayId = isNpLearner
+    ? resolveNpCertificationPathwayId({
+        cookieStore,
+        profilePathwayId: userLearnerPath,
+        requireExplicitSelection: true,
+      })
+    : null;
+  const effectiveLearnerPath = selectedNpPathwayId ?? userLearnerPath;
+  const examsNavLabel = examsNavLabelFromLearnerContext(effectiveLearnerPath, session?.user?.tier);
+
+  if (isNpLearner && !selectedNpPathwayId) {
+    return (
+      <LearnerDashboardPageShell t={t} heroHeading="NP Certification Pathway" identity={identity}>
+        <NpCertificationSelector
+          pathways={listNpCertificationPathways()}
+          selectedPathwayId={null}
+          returnTo="/app"
+        />
+      </LearnerDashboardPageShell>
+    );
+  }
 
   if (entitlement === "error") {
     return (
@@ -541,6 +571,7 @@ async function LearnerDashboardDeferredContent({
         userDisplayName={userDisplayName}
         userLearnerPath={userLearnerPath}
         userAlliedProfessionKey={userAlliedProfessionKey}
+        selectedNpPathwayId={selectedNpPathwayId}
       />
     </LearnerDashboardPageShell>
   );

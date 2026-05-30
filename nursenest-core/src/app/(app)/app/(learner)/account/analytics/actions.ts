@@ -5,11 +5,13 @@ import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import {
   loadMoreReadinessTrend,
   loadConfidencePatterns,
+  loadConfidenceAnalyticsReport,
   loadTimeMetrics,
   loadTopicBreakdown,
 } from "@/lib/study/analytics-data";
 import type {
   ConfidencePatternSummary,
+  ConfidenceAnalyticsReport,
   TimeMetrics,
   TopicRow,
   AnalyticsReadinessTrendWindow,
@@ -47,6 +49,12 @@ export async function loadConfidencePatternsAction(): Promise<AnalyticsLoadResul
   const userId = await requireSubscriberUserId();
   if (!userId) return { kind: "error", reason: "unauthorized" };
   return loadConfidencePatterns(userId, 20);
+}
+
+export async function loadConfidenceAnalyticsReportAction(): Promise<AnalyticsLoadResult<ConfidenceAnalyticsReport>> {
+  const userId = await requireSubscriberUserId();
+  if (!userId) return { kind: "error", reason: "unauthorized" };
+  return loadConfidenceAnalyticsReport(userId);
 }
 
 /**

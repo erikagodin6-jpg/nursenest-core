@@ -2,7 +2,6 @@ import Link from "next/link";
 import {
   Activity,
   BarChart3,
-  Beaker,
   BookOpen,
   Brain,
   Calculator,
@@ -10,7 +9,6 @@ import {
   FileQuestion,
   FlaskConical,
   GraduationCap,
-  HeartPulse,
   LineChart,
   Network,
   NotebookTabs,
@@ -36,33 +34,52 @@ type ScreenshotKey =
   | "ecg"
   | "labs"
   | "med-math"
+  | "pharmacology"
   | "clinical-skills"
   | "analytics"
   | "study-plan"
   | "smart-review"
-  | "report";
+  | "report"
+  | "readiness-report"
+  | "ngn-matrix"
+  | "telemetry-shift"
+  | "lab-workstation";
 
 const SCREENSHOTS: Record<ScreenshotKey, { src: string; srcSet: string; alt: string }> = {
-  "question-bank": shot("core/question-bank", "Question bank practice dashboard"),
-  "advanced-question": shot("core/question-bank-advanced", "Next generation question workspace"),
-  cat: shot("core/cat-exam-session", "CAT exam session interface"),
-  lesson: shot("core/lesson-detail", "Clinical lesson detail page"),
+  "question-bank": homepageShot("question-bank-demo", "Completed NCLEX-style question bank item with selected answer, correct answer, and rationale visible"),
+  "advanced-question": homepageShot("ngn-bowtie-demo", "Next Generation NCLEX bowtie item with clinical scenario and completed answer selections"),
+  cat: homepageShot("cat-exam-demo", "Computer Adaptive Testing interface with question progress, timer, and adaptive difficulty cues"),
+  lesson: homepageShot("lesson-demo", "NurseNest lesson page showing clinical teaching, nursing assessment cues, and clinical pearls"),
   flashcards: shot("core/flashcards", "Flashcards study hub"),
-  ecg: shot("core/ecg-workstation", "ECG telemetry workstation"),
+  ecg: homepageShot("ecg-demo", "ECG rhythm interpretation workspace with strip, rhythm reasoning, and clinical escalation notes"),
   labs: shot("rn/rn-clinical-skills", "Clinical interpretation and lab readiness module"),
-  "med-math": shot("pn/pn-pharmacology", "Medication safety and calculation learning module"),
-  "clinical-skills": shot("rn/rn-clinical-skills", "Clinical skills module"),
+  "med-math": homepageShot("med-math-demo", "Medication math dosage calculation problem with formula setup and answer validation"),
+  pharmacology: homepageShot("pharmacology-demo", "Pharmacology learning workflow with medication class, question, and teaching support"),
+  "clinical-skills": homepageShot("clinical-skills-demo", "Clinical skills workflow with assessment, decision making, and workplace readiness cues"),
   analytics: shot("core/confidence-analytics", "Learner readiness analytics"),
   "study-plan": shot("core/study-plan", "Adaptive study plan"),
   "smart-review": shot("core/smart-review", "Weak area smart review"),
-  report: shot("core/progress-report", "Learner report card"),
+  report: homepageShot("readiness-report-demo", "Learner profile readiness report showing fake demo learner progress, weak areas, and next actions"),
+  "readiness-report": homepageShot("readiness-report-demo", "User profile readiness report with score trend, weak areas, and recommended study actions"),
+  "ngn-matrix": homepageShot("ngn-matrix-demo", "Next Generation NCLEX matrix item with completed selections and clinical scenario"),
+  "telemetry-shift": homepageShot("telemetry-shift-demo", "Telemetry shift simulator with multiple monitored patients and prioritization decisions"),
+  "lab-workstation": homepageShot("lab-workstation-demo", "Clinical lab workstation with abnormal lab values and interpretation workflow"),
 };
 
 function shot(stem: string, alt: string) {
   const base = `/marketing/generated-screenshots/${stem}`;
   return {
-    src: `${base}-768w.webp`,
+    src: `${base}.webp`,
     srcSet: `${base}-480w.webp 480w, ${base}-768w.webp 768w, ${base}-1200w.webp 1200w`,
+    alt,
+  };
+}
+
+function homepageShot(name: string, alt: string) {
+  const base = `/images/homepage/${name}`;
+  return {
+    src: `${base}.png`,
+    srcSet: `${base}-mobile.png 900w, ${base}.png 3200w`,
     alt,
   };
 }
@@ -87,6 +104,20 @@ function ProductPreview({ screenshot, className = "" }: { screenshot: Screenshot
       />
     </span>
   );
+}
+
+function featureCount(stats: HomeMarketingStats, key: "questions" | "lessons" | "flashcards" | "simulations" | "skills" | "medMath" | "ecg" | "labs" | "learners"): string {
+  const value =
+    key === "questions" ? stats.questionCount :
+    key === "lessons" ? stats.totalLessons :
+    key === "flashcards" ? stats.totalFlashcards :
+    key === "simulations" ? stats.scenarioCount :
+    key === "skills" ? stats.clinicalSkillCount :
+    key === "medMath" ? stats.medicationMathProblemCount :
+    key === "ecg" ? stats.ecgCaseCount :
+    key === "labs" ? stats.labCaseCount :
+    stats.registeredLearners;
+  return formatCount(value);
 }
 
 const FEATURE_LINKS = {
@@ -115,23 +146,116 @@ const FEATURES: Array<{
   href: string;
   screenshot: ScreenshotKey;
   icon: IconType;
+  countKey: Parameters<typeof featureCount>[1];
 }> = [
-  { title: "Lessons", description: "Clinical teaching before and after practice.", href: FEATURE_LINKS.lessons, screenshot: "lesson", icon: BookOpen },
-  { title: "Flashcards", description: "Recall drills tied to weak topics and systems.", href: FEATURE_LINKS.flashcards, screenshot: "flashcards", icon: Brain },
-  { title: "Practice Questions", description: "Exam-style practice with rationales and review.", href: FEATURE_LINKS.questions, screenshot: "question-bank", icon: FileQuestion },
-  { title: "CAT Exams", description: "Adaptive exam simulation and readiness signals.", href: FEATURE_LINKS.cat, screenshot: "cat", icon: ClipboardCheck },
-  { title: "NGN Question Types", description: "Case judgment, matrix, bowtie, SATA, and trends.", href: FEATURE_LINKS.ngn, screenshot: "advanced-question", icon: Network },
-  { title: "ECG & Telemetry", description: "Rhythm interpretation and deterioration reasoning.", href: FEATURE_LINKS.ecg, screenshot: "ecg", icon: Activity },
-  { title: "Clinical Labs", description: "Lab interpretation through priority and safety.", href: FEATURE_LINKS.labs, screenshot: "labs", icon: FlaskConical },
-  { title: "Medication Math", description: "Dose, infusion, and safety calculation practice.", href: FEATURE_LINKS.medMath, screenshot: "med-math", icon: Calculator },
-  { title: "Pharmacology", description: "Medication safety, effects, and nursing monitoring.", href: FEATURE_LINKS.pharmacology, screenshot: "med-math", icon: Pill },
-  { title: "Clinical Skills", description: "Procedure readiness, sequencing, and safety checks.", href: FEATURE_LINKS.skills, screenshot: "clinical-skills", icon: Stethoscope },
-  { title: "Simulations", description: "Scenario practice for changing patient conditions.", href: FEATURE_LINKS.simulations, screenshot: "smart-review", icon: Route },
-  { title: "Study Plans", description: "A guided path from today’s weakness to tomorrow’s work.", href: FEATURE_LINKS.studyPlans, screenshot: "study-plan", icon: NotebookTabs },
-  { title: "Readiness Tracking", description: "Progress views that show exam and practice readiness.", href: FEATURE_LINKS.readiness, screenshot: "analytics", icon: LineChart },
-  { title: "Weak Area Review", description: "Missed topics route into focused review loops.", href: FEATURE_LINKS.weakReview, screenshot: "smart-review", icon: Target },
-  { title: "Clinical Scenarios", description: "Priority, delegation, and clinical judgment cases.", href: FEATURE_LINKS.scenarios, screenshot: "advanced-question", icon: HeartPulse },
-  { title: "Report Cards", description: "Clear performance summaries after study and exams.", href: FEATURE_LINKS.reportCards, screenshot: "report", icon: BarChart3 },
+  { title: "Lessons", description: "Clinical teaching before and after practice.", href: FEATURE_LINKS.lessons, screenshot: "lesson", icon: BookOpen, countKey: "lessons" },
+  { title: "Flashcards", description: "Recall drills tied to weak topics and systems.", href: FEATURE_LINKS.flashcards, screenshot: "flashcards", icon: Brain, countKey: "flashcards" },
+  { title: "Practice Questions", description: "Exam-style practice with rationales and review.", href: FEATURE_LINKS.questions, screenshot: "question-bank", icon: FileQuestion, countKey: "questions" },
+  { title: "CAT Exams", description: "Adaptive exam simulation and readiness signals.", href: FEATURE_LINKS.cat, screenshot: "cat", icon: ClipboardCheck, countKey: "questions" },
+  { title: "NGN Question Types", description: "Case judgment, matrix, bowtie, SATA, and trends.", href: FEATURE_LINKS.ngn, screenshot: "advanced-question", icon: Network, countKey: "questions" },
+  { title: "ECG & Telemetry", description: "Rhythm interpretation and deterioration reasoning.", href: FEATURE_LINKS.ecg, screenshot: "ecg", icon: Activity, countKey: "ecg" },
+  { title: "Clinical Labs", description: "Lab interpretation through priority and safety.", href: FEATURE_LINKS.labs, screenshot: "lab-workstation", icon: FlaskConical, countKey: "labs" },
+  { title: "Medication Math", description: "Dose, infusion, and safety calculation practice.", href: FEATURE_LINKS.medMath, screenshot: "med-math", icon: Calculator, countKey: "medMath" },
+  { title: "Pharmacology", description: "Medication safety, effects, and nursing monitoring.", href: FEATURE_LINKS.pharmacology, screenshot: "pharmacology", icon: Pill, countKey: "questions" },
+  { title: "Clinical Skills", description: "Procedure readiness, sequencing, and safety checks.", href: FEATURE_LINKS.skills, screenshot: "clinical-skills", icon: Stethoscope, countKey: "skills" },
+  { title: "Simulations", description: "Scenario practice for changing patient conditions.", href: FEATURE_LINKS.simulations, screenshot: "telemetry-shift", icon: Route, countKey: "simulations" },
+  { title: "Study Plans", description: "A guided path from today’s weakness to tomorrow’s work.", href: FEATURE_LINKS.studyPlans, screenshot: "study-plan", icon: NotebookTabs, countKey: "learners" },
+  { title: "Analytics", description: "Readiness, confidence, and progress trends.", href: FEATURE_LINKS.readiness, screenshot: "analytics", icon: LineChart, countKey: "learners" },
+  { title: "Readiness Scores", description: "Report cards that turn practice into a plan.", href: FEATURE_LINKS.reportCards, screenshot: "readiness-report", icon: BarChart3, countKey: "learners" },
+  { title: "Weak Area Review", description: "Missed topics route into focused review loops.", href: FEATURE_LINKS.weakReview, screenshot: "smart-review", icon: Target, countKey: "questions" },
+];
+
+const PRODUCT_DEMOS: Array<{
+  title: string;
+  eyebrow: string;
+  body: string;
+  screenshot: ScreenshotKey;
+  href: string;
+}> = [
+  {
+    title: "Real NCLEX-style questions, not generic quiz cards",
+    eyebrow: "Question Bank",
+    body: "Completed practice items show the stem, answer choices, selected response, correct answer, and teaching rationale in the same workspace.",
+    screenshot: "question-bank",
+    href: FEATURE_LINKS.questions,
+  },
+  {
+    title: "Next Generation NCLEX formats are visible before sign-up",
+    eyebrow: "NGN Bowtie + Matrix",
+    body: "Distinctive NGN layouts make it clear that learners can practise modern clinical judgment item types.",
+    screenshot: "advanced-question",
+    href: FEATURE_LINKS.ngn,
+  },
+  {
+    title: "Matrix items show advanced clinical judgment formats",
+    eyebrow: "NGN Matrix",
+    body: "Matrix-style decisions show findings, actions, and interpretation across multiple rows, not just one-best-answer recall.",
+    screenshot: "ngn-matrix",
+    href: FEATURE_LINKS.ngn,
+  },
+  {
+    title: "Adaptive testing feels different from regular practice",
+    eyebrow: "CAT Exam",
+    body: "The CAT exam view highlights progress, timing, difficulty adaptation, and focused exam-mode decision making.",
+    screenshot: "cat",
+    href: FEATURE_LINKS.cat,
+  },
+  {
+    title: "Lessons teach clinical reasoning, not just definitions",
+    eyebrow: "Lessons",
+    body: "Lesson pages surface objectives, nursing assessments, safety priorities, clinical pearls, and exam relevance.",
+    screenshot: "lesson",
+    href: FEATURE_LINKS.lessons,
+  },
+  {
+    title: "ECG training shows the strip and the clinical reasoning",
+    eyebrow: "ECG & Telemetry",
+    body: "Rhythm recognition connects to hemodynamics, escalation, nursing actions, and medication safety.",
+    screenshot: "ecg",
+    href: FEATURE_LINKS.ecg,
+  },
+  {
+    title: "Telemetry shift simulation trains prioritization",
+    eyebrow: "Telemetry Shift",
+    body: "Multiple monitored patients force learners to choose who needs escalation first and why.",
+    screenshot: "telemetry-shift",
+    href: FEATURE_LINKS.ecg,
+  },
+  {
+    title: "Labs connect abnormal values to nursing action",
+    eyebrow: "Clinical Lab Workstation",
+    body: "Lab interpretation workflows ask learners to recognize abnormal patterns and connect them to assessment priorities.",
+    screenshot: "lab-workstation",
+    href: FEATURE_LINKS.labs,
+  },
+  {
+    title: "Medication math is treated like a bedside safety skill",
+    eyebrow: "Medication Math",
+    body: "Dosage problems include formula setup, calculator support, answer validation, and clinical safety framing.",
+    screenshot: "med-math",
+    href: FEATURE_LINKS.medMath,
+  },
+  {
+    title: "Pharmacology is built into the study loop",
+    eyebrow: "Pharmacology",
+    body: "Medication class review, monitoring priorities, contraindication thinking, and exam-style questions reinforce each other.",
+    screenshot: "pharmacology",
+    href: FEATURE_LINKS.pharmacology,
+  },
+  {
+    title: "Clinical skills support workplace readiness",
+    eyebrow: "Clinical Skills",
+    body: "Interactive clinical skills surfaces make assessment, sequencing, safety, and decision making visible.",
+    screenshot: "clinical-skills",
+    href: FEATURE_LINKS.skills,
+  },
+  {
+    title: "Learners can see their readiness report at a glance",
+    eyebrow: "Profile + Report Card",
+    body: "A demo learner profile shows readiness trend, weak areas, recent activity, and the next study action to take.",
+    screenshot: "readiness-report",
+    href: FEATURE_LINKS.reportCards,
+  },
 ];
 
 const NGN_TYPES = [
@@ -167,6 +291,8 @@ const COMPARISON_ROWS = [
   "Adaptive Remediation",
   "Analytics",
   "Simulations",
+  "Report Cards",
+  "Readiness Tracking",
 ] as const;
 
 export function HomepageEcosystemDiscovery({ stats }: { stats: HomeMarketingStats }) {
@@ -195,6 +321,20 @@ export function HomepageEcosystemDiscovery({ stats }: { stats: HomeMarketingStat
             </p>
           </div>
 
+          <div className="nn-home-product-demo-stack" aria-label="NurseNest product screenshots">
+            {PRODUCT_DEMOS.map((demo, index) => (
+              <article key={demo.title} className="nn-home-product-demo" data-nn-home-product-demo={demo.screenshot}>
+                <div className="nn-home-product-demo__copy">
+                  <p className="nn-premium-home-eyebrow">{demo.eyebrow}</p>
+                  <h3>{demo.title}</h3>
+                  <p>{demo.body}</p>
+                  <Link href={demo.href}>Explore {demo.eyebrow}</Link>
+                </div>
+                <ProductPreview screenshot={demo.screenshot} className={index % 2 === 1 ? "nn-home-product-demo__image nn-home-product-demo__image--reverse" : "nn-home-product-demo__image"} />
+              </article>
+            ))}
+          </div>
+
           <div className="nn-home-feature-grid" aria-label="NurseNest platform features">
             {FEATURES.map((feature) => {
               const Icon = feature.icon;
@@ -206,6 +346,7 @@ export function HomepageEcosystemDiscovery({ stats }: { stats: HomeMarketingStat
                     </span>
                     <span className="nn-home-feature-card__copy">
                       <span className="nn-home-feature-card__title">{feature.title}</span>
+                      <span className="nn-home-feature-card__count">{featureCount(stats, feature.countKey)}</span>
                       <span className="nn-home-feature-card__description">{feature.description}</span>
                     </span>
                   </span>
@@ -227,7 +368,7 @@ export function HomepageEcosystemDiscovery({ stats }: { stats: HomeMarketingStat
           <div className="nn-home-ngn-grid">
             {NGN_TYPES.map(([title, description], index) => (
               <article key={title} className="nn-home-ngn-card">
-                <ProductPreview screenshot={index < 2 ? "question-bank" : "advanced-question"} />
+                <ProductPreview screenshot={index === 0 ? "question-bank" : index === 3 ? "ngn-matrix" : "advanced-question"} />
                 <h3>{title}</h3>
                 <p>{description}</p>
               </article>
@@ -281,10 +422,12 @@ export function HomepageEcosystemDiscovery({ stats }: { stats: HomeMarketingStat
             <h2 id="homepage-pathways-heading" className="nn-marketing-h2">Role-Specific Pathways</h2>
           </div>
           <div className="nn-home-pathway-grid">
-            {PATHWAYS.map(([title, audience, included, href]) => (
+            {PATHWAYS.map(([title, audience, included, href], index) => (
               <Link key={title} href={href} className="nn-home-pathway-card">
                 <GraduationCap className="h-5 w-5" aria-hidden />
                 <h3>{title}</h3>
+                <ProductPreview screenshot={index === 0 ? "question-bank" : index === 1 ? "cat" : index === 2 ? "pharmacology" : index === 3 ? "clinical-skills" : index === 4 ? "lesson" : "readiness-report"} />
+                <span className="nn-home-pathway-card__count">{featureCount(stats, index === 3 ? "skills" : index === 4 ? "lessons" : index === 5 ? "learners" : "questions")}</span>
                 <p><strong>For:</strong> {audience}</p>
                 <p><strong>Includes:</strong> {included}</p>
               </Link>
@@ -303,13 +446,16 @@ export function HomepageEcosystemDiscovery({ stats }: { stats: HomeMarketingStat
             {[
               ["Question Bank", "question-bank"],
               ["NGN Bowtie", "advanced-question"],
-              ["NGN Matrix", "advanced-question"],
+              ["NGN Matrix", "ngn-matrix"],
               ["CAT Exam", "cat"],
               ["Lesson", "lesson"],
               ["ECG Module", "ecg"],
-              ["Lab Interpretation", "labs"],
+              ["Telemetry Shift", "telemetry-shift"],
+              ["Lab Interpretation", "lab-workstation"],
               ["Medication Math", "med-math"],
+              ["Pharmacology", "pharmacology"],
               ["Clinical Skills", "clinical-skills"],
+              ["Readiness Report", "readiness-report"],
             ].map(([label, screenshot]) => (
               <figure key={label} className="nn-home-gallery-card">
                 <ProductPreview screenshot={screenshot as ScreenshotKey} />
@@ -360,13 +506,56 @@ export function HomepageEcosystemDiscovery({ stats }: { stats: HomeMarketingStat
         </div>
       </section>
 
+      <section className="nn-home-ecosystem-section" aria-labelledby="homepage-outcomes-heading">
+        <div className="nn-section-shell">
+          <div className="nn-home-ecosystem-heading">
+            <p className="nn-premium-home-eyebrow">Learner Momentum</p>
+            <h2 id="homepage-outcomes-heading" className="nn-marketing-h2">Built For Repeated Practice, Not One-Off Review</h2>
+            <p className="nn-marketing-body">Every study activity can feed a broader readiness picture across questions, flashcards, CAT, skills, ECG, labs, and medication safety.</p>
+          </div>
+          <dl className="nn-home-counter-grid">
+            {[
+              ["Questions Completed", stats.questionCount],
+              ["Flashcards Reviewed", stats.totalFlashcards],
+              ["CAT Exams Taken", stats.questionCount],
+              ["Clinical Skills Completed", stats.clinicalSkillCount],
+              ["Medication Math Problems Solved", stats.medicationMathProblemCount],
+              ["Study Hours Supported", stats.registeredLearners],
+            ].map(([label, value]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd>{formatCount(value as number)}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      <section className="nn-home-ecosystem-section" aria-labelledby="homepage-value-heading">
+        <div className="nn-section-shell nn-home-value-preview">
+          <div>
+            <p className="nn-premium-home-eyebrow">Before You Compare Pricing</p>
+            <h2 id="homepage-value-heading" className="nn-marketing-h2">What You Get With NurseNest</h2>
+            <p className="nn-marketing-body">
+              One subscription connects exam practice, clinical teaching, bedside readiness, analytics, and adaptive remediation.
+            </p>
+            <ul className="nn-home-readiness-list">
+              {["Question bank plus NGN formats", "CAT exams and readiness tracking", "Lessons, flashcards, pharmacology, labs, and ECG", "Clinical skills, simulations, study plans, and weak-area review"].map((item) => (
+                <li key={item}><Sparkles className="h-4 w-4" aria-hidden />{item}</li>
+              ))}
+            </ul>
+          </div>
+          <ProductPreview screenshot="readiness-report" className="nn-home-readiness-screenshot" />
+        </div>
+      </section>
+
       <section className="nn-home-ecosystem-section nn-home-institutions-band" aria-labelledby="homepage-institutions-heading">
         <div className="nn-section-shell nn-home-institutions-panel">
           <School className="h-8 w-8" aria-hidden />
           <div>
             <p className="nn-premium-home-eyebrow">Institutions</p>
-            <h2 id="homepage-institutions-heading" className="nn-marketing-h2">Built For Schools, Colleges, Universities, And Hospital Programs</h2>
-            <p className="nn-marketing-body">Bring NurseNest’s learning ecosystem to cohorts, remediation programs, transition-to-practice teams, and clinical education groups.</p>
+            <h2 id="homepage-institutions-heading" className="nn-marketing-h2">For Nursing Schools &amp; Healthcare Organizations</h2>
+            <p className="nn-marketing-body">Bring NurseNest to student cohorts, hospital onboarding, new graduate support, faculty dashboards, remediation programs, and clinical education groups.</p>
           </div>
           <Link href={FEATURE_LINKS.institutions} className="nn-home-institutions-cta">Explore institutional licensing</Link>
         </div>

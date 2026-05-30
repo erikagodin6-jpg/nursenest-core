@@ -30,6 +30,13 @@ import {
   analyticsResolvedData,
   type AnalyticsLoadResult,
 } from "@/lib/study/analytics-load-result";
+import {
+  buildConfidenceAnalyticsReport,
+  normalizeConfidenceBand,
+  type ConfidenceAnalyticsEvent,
+  type ConfidenceAnalyticsReport,
+  type ConfidenceBand,
+} from "@/lib/study/confidence-analytics";
 
 // ── Shared types ──────────────────────────────────────────────────────────────
 
@@ -71,6 +78,8 @@ export type ConfidencePatternSummary = {
   /** Count from last N sessions analyzed. */
   sessionsAnalyzed: number;
 };
+
+export type { ConfidenceAnalyticsReport } from "@/lib/study/confidence-analytics";
 
 export type TopicRow = {
   topic: string;
@@ -185,7 +194,7 @@ function parseReadinessScore(results: unknown): number | null {
 export type ParsedAttemptItem = {
   questionId: string;
   isCorrect: boolean;
-  confidence: "high" | "medium" | "low" | null;
+  confidence: ConfidenceBand | null;
   /** Client-reported time on item when present (ms). */
   timeSpentMs: number | null;
 };
@@ -218,9 +227,7 @@ function parseAttemptResults(raw: unknown): ParsedAttemptItem[] {
     const qid = String(r.id ?? r.questionId ?? r.qid ?? "");
     if (!qid) continue;
     const isCorrect = Boolean(r.isCorrect ?? r.correct ?? false);
-    const conf = r.confidence;
-    const confidence: "high" | "medium" | "low" | null =
-      conf === "high" || conf === "medium" || conf === "low" ? conf : null;
+    const confidence = normalizeConfidenceBand(r.confidence ?? r.confidenceRating ?? r.selfReportedConfidence ?? null);
     out.push({ questionId: qid, isCorrect, confidence, timeSpentMs: readItemTimeSpentMs(r) });
   }
   return out;
@@ -746,6 +753,126 @@ export async function loadConfidencePatterns(
   } catch {
     logAnalyticsFailure("confidence_patterns_block_failed", userId);
     return analyticsError("confidence_patterns_load_failed");
+  }
+}
+
+/**
+ * Full confidence analytics from recent question-bank/CAT attempts and flashcard reviews.
+ * Interprets both legacy low/medium/high labels and 1–5 ratings.
+ */
+export async function loadConfidenceAnalyticsReport(
+  userId: string,
+  options: { examSessionLimit?: number; flashcardAttemptLimit?: number } = {},
+): Promise<AnalyticsLoadResult<ConfidenceAnalyticsReport>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) return analyticsError("database_not_configured");
+
+  const examSessionLimit = options.examSessionLimit ?? 80;
+  const flashcardAttemptLimit = options.flashcardAttemptLimit ?? 250;
+
+  try {
+    const [examSessions, flashcardAttempts] = await Promise.all([
+      withRetry(() =>
+        prisma.examAttempt.findMany({
+          where: { userId },
+          orderBy: { createdAt: "desc" },
+          take: examSessionLimit,
+          select: { id: true, createdAt: true, results: true },
+        }),
+      ),
+      withRetry(() =>
+        prisma.flashcardAttempt.findMany({
+          where: { userId, confidence: { not: null }, isCorrect: { not: null } },
+          orderBy: { answeredAt: "desc" },
+          take: flashcardAttemptLimit,
+          select: { id: true, flashcardId: true, isCorrect: true, confidence: true, answeredAt: true },
+        }),
+      ),
+    ]);
+
+    const questionIds = new Set<string>();
+    const examEventsPending: Array<{
+      id: string;
+      questionId: string;
+      isCorrect: boolean;
+      confidence: ConfidenceBand;
+      occurredAt: Date;
+    }> = [];
+
+    for (const session of examSessions) {
+      const items = parseAttemptResults(session.results);
+      for (const item of items) {
+        if (item.confidence == null) continue;
+        questionIds.add(item.questionId);
+        examEventsPending.push({
+          id: `${session.id}:${item.questionId}`,
+          questionId: item.questionId,
+          isCorrect: item.isCorrect,
+          confidence: item.confidence,
+          occurredAt: session.createdAt,
+        });
+      }
+    }
+
+    const flashcardIds = [...new Set(flashcardAttempts.map((attempt) => attempt.flashcardId))];
+    const [questions, flashcards] = await Promise.all([
+      questionIds.size > 0
+        ? withRetry(() =>
+            prisma.examQuestion.findMany({
+              where: { id: { in: [...questionIds] } },
+              select: { id: true, topic: true, subtopic: true, bodySystem: true },
+            }),
+          )
+        : Promise.resolve([]),
+      flashcardIds.length > 0
+        ? withRetry(() =>
+            prisma.flashcard.findMany({
+              where: { id: { in: flashcardIds } },
+              select: {
+                id: true,
+                category: { select: { name: true, topicCode: true } },
+              },
+            }),
+          )
+        : Promise.resolve([]),
+    ]);
+
+    const questionTopic = new Map(
+      questions.map((question) => [
+        question.id,
+        question.topic ?? question.subtopic ?? question.bodySystem ?? null,
+      ]),
+    );
+    const flashcardTopic = new Map(
+      flashcards.map((flashcard) => [
+        flashcard.id,
+        flashcard.category.topicCode ?? flashcard.category.name ?? null,
+      ]),
+    );
+
+    const events: ConfidenceAnalyticsEvent[] = [
+      ...examEventsPending.map((event) => ({
+        id: event.id,
+        isCorrect: event.isCorrect,
+        confidence: event.confidence,
+        topic: questionTopic.get(event.questionId) ?? null,
+        occurredAt: event.occurredAt,
+        source: "questions" as const,
+      })),
+      ...flashcardAttempts.map((attempt) => ({
+        id: attempt.id,
+        isCorrect: Boolean(attempt.isCorrect),
+        confidence: attempt.confidence,
+        topic: flashcardTopic.get(attempt.flashcardId) ?? null,
+        occurredAt: attempt.answeredAt,
+        source: "flashcards" as const,
+      })),
+    ];
+
+    return analyticsOk(buildConfidenceAnalyticsReport(events));
+  } catch {
+    logAnalyticsFailure("confidence_analytics_report_block_failed", userId);
+    return analyticsError("confidence_analytics_report_load_failed");
   }
 }
 

@@ -66,7 +66,9 @@ export async function register() {
         if (isProd) {
           const missing: string[] = [];
           if (!process.env.RESEND_API_KEY?.trim()) missing.push("RESEND_API_KEY");
-          if (!process.env.ADMIN_SUBSCRIPTION_NOTIFY_EMAIL?.trim()) missing.push("ADMIN_SUBSCRIPTION_NOTIFY_EMAIL");
+          if (!(process.env.REVENUE_ALERT_EMAIL?.trim() || process.env.ADMIN_SUBSCRIPTION_NOTIFY_EMAIL?.trim())) {
+            missing.push("REVENUE_ALERT_EMAIL or ADMIN_SUBSCRIPTION_NOTIFY_EMAIL");
+          }
           if (!process.env.STRIPE_WEBHOOK_SECRET?.trim()) missing.push("STRIPE_WEBHOOK_SECRET");
           if (missing.length > 0) {
             console.error(

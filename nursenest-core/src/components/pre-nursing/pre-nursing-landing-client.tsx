@@ -7,6 +7,7 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PRE_NURSING_CATEGORIES } from "@/lib/pre-nursing/pre-nursing-learning-ecosystem";
 
 let preNursingStringsCache: Record<string, string> | null = null;
 
@@ -25,8 +26,18 @@ type PreNursingLandingClientProps = {
 
 const PREMIUM_CATEGORY_GROUPS = [
   "Anatomy & Physiology",
-  "Pharmacology Basics",
   "Medical Terminology",
+  "Pathophysiology Foundations",
+  "Pharmacology Foundations",
+  "Chemistry",
+  "Biology",
+  "Microbiology",
+  "Health Assessment Foundations",
+  "Dosage Calculation Foundations",
+  "Healthcare Ethics",
+  "Communication & Documentation",
+  "Study Skills for Nursing School",
+  "Pharmacology Basics",
   "Dosage Calculations",
   "Study Skills",
   "Time Management",
@@ -90,7 +101,7 @@ export function PreNursingLandingClient({ modulesOnly = false, marketingLocale =
             "Work through free interactive lessons by topic - always free, no subscription required."}
         </p>
         <div className="nn-pre-nursing-category-rail" data-nn-premium-prenursing-categories>
-          {PREMIUM_CATEGORY_GROUPS.map((label) => (
+          {[...new Set([...PRE_NURSING_CATEGORIES.map((category) => category.title), ...PREMIUM_CATEGORY_GROUPS])].map((label) => (
             <span key={label} className="nn-pre-nursing-category-pill">
               {label}
             </span>

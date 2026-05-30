@@ -9,6 +9,7 @@
 import { useEffect, useState } from "react";
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import {
+  loadConfidenceAnalyticsReportAction,
   loadConfidencePatternsAction,
   loadTimeMetricsAction,
   loadTopicBreakdownAction,
@@ -17,9 +18,11 @@ import { TimeAnalysisPanel } from "@/components/study/time-analysis-panel";
 import { AnalyticsNextSteps } from "@/components/study/analytics-next-steps";
 import { QuestionTypePerformancePanel } from "@/components/study/question-type-performance-panel";
 import { ConfidenceVsPerformancePanel } from "@/components/study/confidence-vs-performance-panel";
+import { KnowledgeConfidenceReport } from "@/components/study/knowledge-confidence-report";
 import { CategoryMasterySection } from "@/components/study/category-mastery-section";
 import type {
   ConfidencePatternSummary,
+  ConfidenceAnalyticsReport,
   TimeMetrics,
   TopicRow,
   AnalyticsSummary,
@@ -39,6 +42,7 @@ type Props = {
 
 type DetailState = {
   patterns: AnalyticsLoadResult<ConfidencePatternSummary> | null;
+  confidenceReport: AnalyticsLoadResult<ConfidenceAnalyticsReport> | null;
   timeMetrics: AnalyticsLoadResult<TimeMetrics> | null;
   topics: AnalyticsLoadResult<TopicRow[]>;
 };
@@ -51,6 +55,7 @@ export function AnalyticsDetailClient({
 }: Props) {
   const [detail, setDetail] = useState<DetailState>({
     patterns: null,
+    confidenceReport: null,
     timeMetrics: null,
     topics: initialTopicRows,
   });
@@ -59,14 +64,16 @@ export function AnalyticsDetailClient({
     let cancelled = false;
     void Promise.allSettled([
       loadConfidencePatternsAction(),
+      loadConfidenceAnalyticsReportAction(),
       loadTimeMetricsAction(),
       loadTopicBreakdownAction(),
     ]).then((results) => {
       if (cancelled) return;
       setDetail({
         patterns: settleAnalyticsAction("confidence_patterns", results[0]!),
-        timeMetrics: settleAnalyticsAction("time_metrics", results[1]!),
-        topics: settleAnalyticsAction("topics", results[2]!),
+        confidenceReport: settleAnalyticsAction("confidence_analytics_report", results[1]!),
+        timeMetrics: settleAnalyticsAction("time_metrics", results[2]!),
+        topics: settleAnalyticsAction("topics", results[3]!),
       });
     });
     return () => {
@@ -85,6 +92,8 @@ export function AnalyticsDetailClient({
           scatterPoints={confidenceScatterPoints}
         />
       </div>
+
+      <KnowledgeConfidenceReport report={detail.confidenceReport} />
 
       {detail.timeMetrics == null ? (
         <AnalyticsPanelSkeleton title="Time Analysis" />

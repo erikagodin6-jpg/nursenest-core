@@ -108,7 +108,7 @@ export default async function PreNursingLessonsHubPage({ searchParams }: Props) 
             as="p"
             className="mt-2 max-w-2xl text-sm font-normal leading-relaxed text-[var(--theme-body-text)] sm:text-base"
             contentKey="inline.marketing.preNursing.lessons.intro"
-            defaultText="Review concepts by topic. Open any lesson to study, then move into flashcards, practice questions, and exams."
+            defaultText="Review concepts by topic. Open any lesson to study, then move into flashcards and practice questions."
             preloaded={preNursingLessonsInlinePreloaded}
           />
           <div className="mt-3 flex flex-wrap gap-3 text-sm font-normal">

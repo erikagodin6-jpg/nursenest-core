@@ -140,6 +140,12 @@ export function LearnerStudySettingsHub({
           >
             {t("learner.studySettings.pathwayEdit")}
           </Link>
+          <Link
+            href="/app/np"
+            className="ml-4 inline-flex text-sm font-semibold text-primary underline-offset-2 hover:underline"
+          >
+            Change Certification Pathway
+          </Link>
         </div>
       </section>
 

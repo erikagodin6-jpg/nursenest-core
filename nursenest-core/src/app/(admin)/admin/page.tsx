@@ -107,6 +107,12 @@ function AdminFocusLinks() {
       accent: "blue",
     },
     {
+      href: "/admin/revenue-alerts",
+      title: "Revenue alerts",
+      copy: "Monitor owner notifications, delivery health, unread revenue events, and channel test sends.",
+      accent: "yellow",
+    },
+    {
       href: "/admin/referrals",
       title: "Referrals",
       copy: "Manage invite rewards, qualification gates, paid conversions, and fraud review.",

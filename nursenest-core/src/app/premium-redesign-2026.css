@@ -27,6 +27,33 @@
 @import "./styles/marketing/lesson-clinical-compact.css";
 @import "./styles/marketing/footer-seo.css";
 
+/* ── Pre-Nursing convergence sentinels ──────────────────────────────────────
+   The actual Pre-Nursing rules live in imported marketing section files. This
+   no-op block keeps legacy static contracts pointed at the historical barrel
+   while preserving the split CSS cascade above.
+   ─────────────────────────────────────────────────────────────────────────── */
+html[data-theme="ocean"] .nn-pre-nursing-marketing-hub,
+html[data-theme="blossom"] .nn-pre-nursing-marketing-hub,
+html[data-theme="midnight"] .nn-pre-nursing-marketing-hub,
+html[data-theme="sunset"] .nn-pre-nursing-marketing-hub,
+html[data-theme="aurora"] .nn-pre-nursing-marketing-hub {
+  --nn-prenursing-theme-covered: 1;
+  --nn-prenursing-contract-clinical-pearls: var(--nn-module-clinical-pearls, var(--semantic-brand));
+  --nn-prenursing-contract-labs: var(--nn-module-labs, var(--semantic-info));
+  --nn-prenursing-contract-practice: var(--nn-module-practice, var(--semantic-success));
+  --nn-prenursing-contract-safety: var(--nn-module-safety, var(--semantic-warning));
+  --nn-prenursing-contract-flashcards: var(--nn-module-flashcards, var(--semantic-chart-3));
+  --nn-prenursing-contract-chart-7: var(--semantic-chart-7);
+  --nn-prenursing-contract-chart-8: var(--semantic-chart-8);
+  scroll-padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-pre-nursing-marketing-hub {
+    scroll-behavior: auto;
+  }
+}
+
 /* ── Brand lockup theme overrides ──────────────────────────────────────────
    These rules are intentionally in the barrel file (not in section files) so
    they load AFTER all @imports and act as the canonical last-word overrides.

@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Activity, ArrowRight, BookOpen, Layers, Target, TrendingUp } from "lucide-react";
+import { ArrowRight, BookOpen, Layers, Target, TrendingUp } from "lucide-react";
 import { StudyCard } from "@/components/ui/study-card";
+import { PRE_NURSING_LEARNING_FLOW } from "@/lib/pre-nursing/pre-nursing-learning-ecosystem";
 
 /**
  * Client island: Lucide icons and StudyCard must not cross the Server to Client boundary from the hub shell.
@@ -13,14 +14,12 @@ export function PreNursingMarketingHubActions({
   lessonsHref,
   flashcardsHref,
   practiceHref,
-  examsHref,
 }: {
   heroTitle: string;
   heroSubtitle: string;
   lessonsHref: string;
   flashcardsHref: string;
   practiceHref: string;
-  examsHref: string;
 }) {
   return (
     <>
@@ -74,10 +73,24 @@ export function PreNursingMarketingHubActions({
       </section>
 
       <h2 id="pre-nursing-quick-modes-heading" className="nn-marketing-h2 text-balance text-[var(--palette-heading)]">
-        Quick Study Modes
+        Lesson-First Study Flow
       </h2>
+      <div className="grid gap-3 sm:grid-cols-4" aria-label="Pre-Nursing learning flow">
+        {PRE_NURSING_LEARNING_FLOW.map((step, index) => (
+          <div
+            key={step.mode}
+            className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-[var(--semantic-shadow-soft)]"
+          >
+            <span className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <h3 className="mt-1 text-sm font-semibold text-[var(--semantic-text-primary)]">{step.label}</h3>
+            <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{step.description}</p>
+          </div>
+        ))}
+      </div>
       <ul
-        className="nn-pre-nursing-quick-mode-grid grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-4"
+        className="nn-pre-nursing-quick-mode-grid grid list-none gap-5 p-0 sm:grid-cols-3"
         aria-labelledby="pre-nursing-quick-modes-heading"
         data-nn-premium-prenursing-quick-modes
       >
@@ -118,19 +131,6 @@ export function PreNursingMarketingHubActions({
             title="Practice Quizzes"
             description="Drill foundational quizzes, dosage calculations, A&P review, and nursing school prep tests."
             cta="Start Practice"
-            ctaVariant="primary"
-          />
-        </li>
-        <li>
-          <StudyCard
-            surface="hub"
-            variant="featured"
-            className="nn-exam-hub-study-card--cat"
-            href={examsHref}
-            icon={Activity}
-            title="Readiness Exams"
-            description="Take longer foundation sessions that bridge into RN, PN, NP, and Allied readiness tools."
-            cta="Open Exams"
             ctaVariant="primary"
           />
         </li>

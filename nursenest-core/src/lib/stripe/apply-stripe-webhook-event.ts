@@ -40,6 +40,11 @@ import {
   scheduleOwnerInvoicePaymentFailedNotification,
 } from "@/lib/stripe/subscription-owner-notify";
 import {
+  buildRevenueAlertSubject,
+  sendRevenueAlertOrThrow,
+  type RevenueAlertEventType,
+} from "@/lib/revenue-alerts/revenue-alerts";
+import {
   adminPaidSubscriptionSmsInputFromSubscription,
   sendAdminPaidSubscriptionSms,
 } from "@/lib/notifications/admin-paid-subscription-sms";
@@ -66,6 +71,63 @@ async function resolveStripeCustomerEmail(stripe: Stripe, customerId: string | n
   } catch {
     return null;
   }
+}
+
+function formatAlertMoney(amountCents: number | null | undefined, currency: string | null | undefined): string {
+  if (typeof amountCents !== "number") return "—";
+  const cur = (currency ?? "usd").toUpperCase();
+  try {
+    return new Intl.NumberFormat("en-US", { style: "currency", currency: cur }).format(amountCents / 100);
+  } catch {
+    return `${(amountCents / 100).toFixed(2)} ${cur}`;
+  }
+}
+
+async function notifyRevenueAlert(args: {
+  event: Stripe.Event;
+  eventType: RevenueAlertEventType;
+  sms: string;
+  userId?: string | null;
+  tier?: string | null;
+  planLength?: string | null;
+  country?: string | null;
+  provinceOrState?: string | null;
+  amountCents?: number | null;
+  currency?: string | null;
+  trialOrDirect?: string | null;
+  referralSource?: string | null;
+  marketingAttribution?: string | null;
+  failureReason?: string | null;
+  recoveryStatus?: string | null;
+  cancellationReason?: string | null;
+  timeAsSubscriber?: string | null;
+  totalRevenueCents?: number | null;
+  metadata?: Record<string, unknown>;
+}): Promise<void> {
+  await sendRevenueAlertOrThrow({
+    eventType: args.eventType,
+    subject: buildRevenueAlertSubject(args.eventType),
+    sms: args.sms,
+    occurredAt: new Date(args.event.created * 1000),
+    userId: args.userId,
+    stripeEventId: args.event.id,
+    stripeEventType: args.event.type,
+    tier: args.tier,
+    planLength: args.planLength,
+    country: args.country,
+    provinceOrState: args.provinceOrState,
+    amountCents: args.amountCents,
+    currency: args.currency,
+    trialOrDirect: args.trialOrDirect,
+    referralSource: args.referralSource,
+    marketingAttribution: args.marketingAttribution,
+    failureReason: args.failureReason,
+    recoveryStatus: args.recoveryStatus,
+    cancellationReason: args.cancellationReason,
+    timeAsSubscriber: args.timeAsSubscriber,
+    totalRevenueCents: args.totalRevenueCents,
+    metadata: args.metadata,
+  });
 }
 
 async function notifyAdminPaidSubscriptionSms(args: {
@@ -427,6 +489,31 @@ async function applyCustomerSubscriptionUpsert(
     stripeEventType,
     stripeEventIdPrefix: eventIdPrefix,
   });
+
+  if (sub.status === "trialing" && stripeEventType === "customer.subscription.created") {
+    await notifyRevenueAlert({
+      event: {
+        id: stripeEventId,
+        type: stripeEventType,
+        created: Math.floor(Date.now() / 1000),
+        livemode: true,
+      } as Stripe.Event,
+      eventType: "trial_started",
+      userId: row.userId,
+      tier: updated.planTier != null ? String(updated.planTier) : null,
+      planLength: sub.items?.data?.[0]?.price?.recurring?.interval ?? null,
+      country: updated.planCountry != null ? String(updated.planCountry) : null,
+      amountCents: sub.items?.data?.[0]?.price?.unit_amount ?? null,
+      currency: sub.items?.data?.[0]?.price?.currency ?? null,
+      trialOrDirect: "Trial",
+      sms: `Trial started. ${updated.planTier != null ? String(updated.planTier) : "Unknown tier"} pathway.`,
+      metadata: {
+        stripeSubscriptionId: sub.id,
+        stripeStatus: sub.status,
+        correlation: ctx.correlation ?? "",
+      },
+    });
+  }
 }
 
 export async function applyStripeWebhookEvent(
@@ -538,6 +625,7 @@ export async function applyStripeWebhookEvent(
           status: true,
           updatedAt: true,
           currentPeriodEnd: true,
+          trialEnd: true,
           pastDueSince: true,
           planTier: true,
           planCountry: true,
@@ -679,6 +767,37 @@ export async function applyStripeWebhookEvent(
         correlation,
       });
 
+      await notifyRevenueAlert({
+        event,
+        eventType: stripeSubStatus === "trialing" ? "trial_started" : "new_subscription",
+        userId,
+        tier: plan?.tier != null ? String(plan.tier) : null,
+        planLength: durationMeta ?? stripeSubscription?.items?.data?.[0]?.price?.recurring?.interval ?? null,
+        country: plan?.country != null ? String(plan.country) : billingRegionMeta ?? null,
+        amountCents: typeof session.amount_total === "number" ? session.amount_total : null,
+        currency: session.currency ?? null,
+        trialOrDirect: stripeSubStatus === "trialing" ? "Trial" : "Direct purchase",
+        referralSource: session.metadata?.referralSource ?? session.metadata?.ref ?? null,
+        marketingAttribution:
+          session.metadata?.utm_source ??
+          session.metadata?.utm_campaign ??
+          session.metadata?.marketingAttribution ??
+          null,
+        sms:
+          stripeSubStatus === "trialing"
+            ? `Trial started. ${plan?.tier != null ? String(plan.tier) : "Unknown tier"} pathway.`
+            : `New ${plan?.tier != null ? String(plan.tier) : "NurseNest"} subscription. ${durationMeta ?? "plan"} plan. ${formatAlertMoney(
+                typeof session.amount_total === "number" ? session.amount_total : null,
+                session.currency,
+              )}.`,
+        metadata: {
+          stripeCheckoutSessionId: session.id,
+          stripeSubscriptionStatus: stripeSubStatus,
+          customerId,
+          correlation,
+        },
+      });
+
       const checkoutEmail =
         session.customer_email ??
         (session.customer_details && typeof session.customer_details === "object"
@@ -743,6 +862,32 @@ export async function applyStripeWebhookEvent(
           paymentIntentPrefix: paymentIntentId.slice(0, 14),
           eventIdPrefix,
           correlation,
+        });
+        await notifyRevenueAlert({
+          event,
+          eventType: "high_value_purchase",
+          userId,
+          tier: planCodeMeta,
+          planLength: "one_time",
+          amountCents: typeof session.amount_total === "number" ? session.amount_total : null,
+          currency: session.currency ?? null,
+          trialOrDirect: "Direct purchase",
+          referralSource: session.metadata?.referralSource ?? session.metadata?.ref ?? null,
+          marketingAttribution:
+            session.metadata?.utm_source ??
+            session.metadata?.utm_campaign ??
+            session.metadata?.marketingAttribution ??
+            null,
+          sms: `High-value purchase. ${planCodeMeta}. ${formatAlertMoney(
+            typeof session.amount_total === "number" ? session.amount_total : null,
+            session.currency,
+          )}.`,
+          metadata: {
+            stripeCheckoutSessionId: session.id,
+            paymentIntentId,
+            bundleIncludes,
+            correlation,
+          },
         });
       } else {
         safeServerLog("stripe_webhook", "one_time_payment_missing_plan_code", {
@@ -859,6 +1004,27 @@ export async function applyStripeWebhookEvent(
         source: "webhook",
         stripeEventType: event.type,
         stripeEventIdPrefix: eventIdPrefix,
+      });
+      const createdMs =
+        typeof sub.created === "number" ? sub.created * 1000 : existing.updatedAt.getTime();
+      const daysAsSubscriber = Math.max(0, Math.round((Date.now() - createdMs) / 86400000));
+      await notifyRevenueAlert({
+        event,
+        eventType: "subscription_cancelled",
+        userId: existing.userId,
+        tier: updated.planTier != null ? String(updated.planTier) : null,
+        planLength: sub.items?.data?.[0]?.price?.recurring?.interval ?? null,
+        country: updated.planCountry != null ? String(updated.planCountry) : null,
+        cancellationReason:
+          typeof sub.cancellation_details?.reason === "string" ? sub.cancellation_details.reason : null,
+        timeAsSubscriber: `${daysAsSubscriber} day${daysAsSubscriber === 1 ? "" : "s"}`,
+        sms: `Subscription cancelled. ${updated.planTier != null ? String(updated.planTier) : "Unknown tier"}.`,
+        metadata: {
+          stripeSubscriptionId: sub.id,
+          stripeStatus: sub.status,
+          cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
+          correlation,
+        },
       });
     }
     productEvent("stripe_webhook_ok", { eventType: event.type });
@@ -1085,11 +1251,35 @@ export async function applyStripeWebhookEvent(
           paymentKind: "first_payment",
         });
       } else if (billingReason === "subscription_cycle") {
-        safeServerLog("stripe_owner_subscription_notify", "invoice_notification_skipped", {
-          reason: "renewal_invoice",
-          eventIdPrefix,
-          customerEmail: "unknown",
-          severity: "info",
+        const amountPaid = typeof invoice.amount_paid === "number" ? invoice.amount_paid : null;
+        const eventType: RevenueAlertEventType =
+          row?.trialEnd && row.trialEnd.getTime() <= Date.now() + 7 * 86400000
+            ? "trial_converted"
+            : "subscription_renewal";
+        await notifyRevenueAlert({
+          event,
+          eventType,
+          userId: row?.userId ?? null,
+          tier: row?.planTier != null ? String(row.planTier) : null,
+          planLength: invoiceStripeSubscription?.items?.data?.[0]?.price?.recurring?.interval ?? null,
+          country: row?.planCountry != null ? String(row.planCountry) : null,
+          amountCents: amountPaid,
+          currency: invoice.currency ?? null,
+          trialOrDirect: eventType === "trial_converted" ? "Trial converted" : "Renewal",
+          recoveryStatus: "paid",
+          sms:
+            eventType === "trial_converted"
+              ? `Trial converted. ${row?.planTier != null ? String(row.planTier) : "Unknown tier"}.`
+              : `Subscription renewal. ${row?.planTier != null ? String(row.planTier) : "Unknown tier"}. ${formatAlertMoney(
+                  amountPaid,
+                  invoice.currency,
+                )}.`,
+          metadata: {
+            billingReason,
+            stripeInvoiceId: invoice.id,
+            stripeSubscriptionId: subId,
+            correlation,
+          },
         });
       }
       if (billingReason === "subscription_cycle" && !invoiceSucceededSkippedCancelled && row?.userId) {
@@ -1167,6 +1357,26 @@ export async function applyStripeWebhookEvent(
           correlation,
           customerEmail: (invoice as Stripe.Invoice & { customer_email?: string | null }).customer_email ?? null,
         });
+        await notifyRevenueAlert({
+          event,
+          eventType: "failed_payment",
+          userId: row.userId,
+          tier: row.planTier != null ? String(row.planTier) : null,
+          country: row.planCountry != null ? String(row.planCountry) : null,
+          amountCents: typeof invoice.amount_due === "number" ? invoice.amount_due : null,
+          currency: invoice.currency ?? null,
+          failureReason: failureMsg ?? null,
+          recoveryStatus:
+            typeof (invoice as Stripe.Invoice & { next_payment_attempt?: number | null }).next_payment_attempt === "number"
+              ? "Stripe retry scheduled"
+              : "Follow-up required",
+          sms: `Failed renewal payment. Follow-up required.`,
+          metadata: {
+            stripeInvoiceId: invoice.id,
+            stripeSubscriptionId: subId,
+            correlation,
+          },
+        });
         logBillingTransition({
           kind: "invoice_payment_failed",
           stripeSubscriptionId: subId,
@@ -1226,6 +1436,74 @@ export async function applyStripeWebhookEvent(
       refundChargeIdPrefix: prefixStripeId(chId, 14),
       currency,
       severity: "info",
+    });
+    await notifyRevenueAlert({
+      event,
+      eventType: "refund_issued",
+      amountCents: typeof charge.amount_refunded === "number" ? charge.amount_refunded : charge.amount,
+      currency: charge.currency ?? null,
+      trialOrDirect: "Refund",
+      sms: `Refund issued. ${formatAlertMoney(
+        typeof charge.amount_refunded === "number" ? charge.amount_refunded : charge.amount,
+        charge.currency,
+      )}.`,
+      metadata: {
+        stripeChargeId: charge.id,
+        stripeCustomerId: customerStr ?? null,
+        reason: charge.refunded ? "charge_refunded" : "charge_partial_event",
+        correlation,
+      },
+    });
+    productEvent("stripe_webhook_ok", { eventType: event.type });
+    return;
+  }
+
+  if (event.type === "charge.dispute.created" || event.type === "charge.dispute.closed") {
+    const dispute = event.data.object as Stripe.Dispute;
+    const alertType: RevenueAlertEventType =
+      event.type === "charge.dispute.created"
+        ? "chargeback_initiated"
+        : dispute.status === "won"
+          ? "chargeback_won"
+          : "chargeback_lost";
+    await notifyRevenueAlert({
+      event,
+      eventType: alertType,
+      amountCents: typeof dispute.amount === "number" ? dispute.amount : null,
+      currency: dispute.currency ?? null,
+      sms:
+        alertType === "chargeback_initiated"
+          ? `Chargeback initiated. ${formatAlertMoney(dispute.amount, dispute.currency)}.`
+          : `Chargeback ${alertType === "chargeback_won" ? "won" : "lost"}. ${formatAlertMoney(
+              dispute.amount,
+              dispute.currency,
+            )}.`,
+      metadata: {
+        stripeDisputeId: dispute.id,
+        stripeChargeId: typeof dispute.charge === "string" ? dispute.charge : dispute.charge?.id ?? null,
+        status: dispute.status,
+        reason: dispute.reason,
+        correlation,
+      },
+    });
+    productEvent("stripe_webhook_ok", { eventType: event.type });
+    return;
+  }
+
+  if (event.type === "customer.source.expiring") {
+    const source = event.data.object as { id?: string; customer?: string | null; exp_month?: number; exp_year?: number };
+    await notifyRevenueAlert({
+      event,
+      eventType: "payment_method_expiring",
+      recoveryStatus: "Owner awareness only; Stripe/customer messaging should handle card update.",
+      sms: `Payment method expiring. Follow-up required.`,
+      metadata: {
+        stripeSourceId: source.id ?? null,
+        stripeCustomerId: source.customer ?? null,
+        expMonth: source.exp_month ?? null,
+        expYear: source.exp_year ?? null,
+        correlation,
+      },
     });
     productEvent("stripe_webhook_ok", { eventType: event.type });
     return;

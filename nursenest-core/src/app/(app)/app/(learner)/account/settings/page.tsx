@@ -17,6 +17,11 @@ const SETTING_DESTINATIONS: readonly { href: string; titleKey?: string; title?: 
     bodyKey: "learner.account.settingsPage.cardStudyPrefs",
   },
   {
+    href: "/app/np",
+    title: "Change Certification Pathway",
+    body: "Choose CNPLE, FNP, AGPCNP, PMHNP, WHNP, or PNP-PC so NP learning stays certification-scoped.",
+  },
+  {
     href: "/app/account/personal",
     titleKey: "learner.account.nav.personal",
     bodyKey: "learner.account.settingsPage.cardPersonal",

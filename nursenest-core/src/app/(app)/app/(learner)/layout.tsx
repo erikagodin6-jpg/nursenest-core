@@ -14,6 +14,7 @@ import "@/app/learner-dashboard-performance.css";
 
 import type { ReactNode } from "react";
 import { Suspense } from "react";
+import { cookies } from "next/headers";
 
 import {
   createTraceInfo,
@@ -41,7 +42,10 @@ import { LearnerActivityLifecycleBeacon } from "@/components/observability/learn
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerStudyNextBlock } from "@/lib/learner/load-learner-study-next-block";
-import { learnerPathwayHubChromeHrefForTierFallback } from "@/lib/learner/learner-pathway-hub-chrome-href";
+import {
+  learnerPathwayHubChromeHref,
+  learnerPathwayHubChromeHrefForTierFallback,
+} from "@/lib/learner/learner-pathway-hub-chrome-href";
 import {
   DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
   formatPathwayContextBar,
@@ -88,6 +92,8 @@ import type { CountryCode } from "@/lib/marketing/countries/types";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import { learnerShellFlags } from "@/lib/learner/learner-shell-mode";
+import { resolveNpCertificationPathwayId } from "@/lib/np/np-certification-selection";
+import { getLearnerExamsSurfaceLabel } from "@/lib/testing/testing-model";
 import { getSessionHubLabel } from "@/lib/learner/session-hub-label";
 import { resolveLearnerRequestPathname } from "@/lib/learner/resolve-learner-request-pathname";
 import { LearnerShellDevDiagnostics } from "@/components/dev/learner-shell-dev-diagnostics";
@@ -361,6 +367,24 @@ const LearnerShellLayout = traceLayout(
 
   const { showBaselinePrompt, pathwayId, pathwayShortLabel } = pathwayNav;
   let { pathwayHubHref, examsLabel, pathwayContextBar } = pathwayNav;
+  const selectedNpPathwayId =
+    learnerTier === "NP"
+      ? resolveNpCertificationPathwayId({
+          cookieStore: await cookies(),
+          profilePathwayId: pathwayId,
+          requireExplicitSelection: false,
+        })
+      : null;
+  const effectivePathwayId = selectedNpPathwayId ?? pathwayId;
+  if (selectedNpPathwayId) {
+    const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+    const selected = getExamPathwayById(selectedNpPathwayId);
+    if (pathwayVisibleForLearnerChrome(selected)) {
+      pathwayHubHref = learnerPathwayHubChromeHref(selected);
+      pathwayContextBar = formatPathwayContextBar(selected);
+      examsLabel = getLearnerExamsSurfaceLabel(selected.id);
+    }
+  }
 
   if (!pathwayHubHref) {
     const tierHub = await learnerPathwayHubChromeHrefForTierFallback(learnerTier);
@@ -370,10 +394,10 @@ const LearnerShellLayout = traceLayout(
     }
   }
 
-  if (!pathwayContextBar && (pathwayId || pathwayHubHref)) {
+  if (!pathwayContextBar && (effectivePathwayId || pathwayHubHref)) {
     const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
-    if (pathwayId) {
-      const p = getExamPathwayById(pathwayId);
+    if (effectivePathwayId) {
+      const p = getExamPathwayById(effectivePathwayId);
       if (pathwayVisibleForLearnerChrome(p)) pathwayContextBar = formatPathwayContextBar(p);
     }
     if (!pathwayContextBar && pathwayHubHref) {
@@ -385,7 +409,7 @@ const LearnerShellLayout = traceLayout(
             : learnerTier === "LVN_LPN"
               ? "us-lpn-nclex-pn"
               : learnerTier === "NP"
-                ? "us-np-fnp"
+                ? selectedNpPathwayId ?? "us-np-fnp"
                 : learnerTier === "ALLIED"
                   ? "us-allied-core"
                   : null;
@@ -401,7 +425,7 @@ const LearnerShellLayout = traceLayout(
     entitlement !== "error" &&
     entitlement.hasAccess &&
     isLearnerTutorShellEnabled()
-      ? { pathwayId, pathwayLabel: pathwayShortLabel }
+      ? { pathwayId: effectivePathwayId, pathwayLabel: pathwayShortLabel }
       : null;
 
   const printablesNavVisible = isPrintableStorePublicNavEnabled();
@@ -520,7 +544,7 @@ const LearnerShellLayout = traceLayout(
                       planVariant: qaShell.planVariant ?? null,
                       billingRegionSlug: null,
                       bannerTitle: "Simulated learner view",
-                      pathwayId: pathwayId,
+                      pathwayId: effectivePathwayId,
                     }
                   }
                 />
@@ -560,16 +584,16 @@ const LearnerShellLayout = traceLayout(
                   </div>
                   <div className="nn-learner-shell-nav-row rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-1.5 shadow-[var(--shadow-card)] sm:px-3 sm:py-2 md:px-3.5 md:py-2.5">
                     <LearnerShellDesktopStudyLinks
-                      pathwayId={pathwayId}
+                      pathwayId={effectivePathwayId}
                       examsLabel={examsLabel}
                       printablesNavVisible={printablesNavVisible}
                     />
                   </div>
-                  {!isFocusedStudySurface ? <LearnerStudyPathStrip pathwayId={pathwayId} /> : null}
+                  {!isFocusedStudySurface ? <LearnerStudyPathStrip pathwayId={effectivePathwayId} /> : null}
                 </div>
                 <LearnerShellMobileBottomNav
                   pathwayPillLabel={pathwayShortLabel}
-                  pathwayId={pathwayId}
+                  pathwayId={effectivePathwayId}
                   pathwayHubHref={pathwayHubHref}
                   examsLabel={examsLabel}
                   printablesNavVisible={printablesNavVisible}

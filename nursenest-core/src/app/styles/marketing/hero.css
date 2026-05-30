@@ -434,6 +434,108 @@ html[data-theme="midnight"] .nn-home-marketing-rich-hero {
     color-mix(in srgb, var(--semantic-success, #10b981) 18%, transparent);
 }
 
+.nn-premium-hero-carousel {
+  overflow: hidden;
+  padding: clamp(0.85rem, 1.8vw, 1.15rem);
+}
+
+.nn-premium-hero-carousel__header {
+  margin-bottom: 0.85rem;
+}
+
+.nn-premium-hero-carousel__stage {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 60%, var(--semantic-surface));
+}
+
+.nn-premium-hero-carousel__slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  transform: translateX(1.2rem) scale(0.985);
+  animation: nn-hero-proof-carousel 13.5s infinite;
+  animation-delay: calc(var(--nn-hero-slide-index) * 4.5s);
+}
+
+.nn-premium-hero-carousel__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.nn-premium-hero-carousel__slide figcaption {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-surface) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--border-subtle));
+  color: var(--palette-heading);
+  font-size: 0.74rem;
+  font-weight: 850;
+  padding: 0.45rem 0.7rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-premium-hero-carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.nn-premium-hero-carousel__dots span {
+  width: 2rem;
+  height: 0.28rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-brand) 18%, var(--border-subtle));
+  animation: nn-hero-proof-dot 13.5s infinite;
+  animation-delay: calc(var(--nn-hero-slide-index) * 4.5s);
+}
+
+@keyframes nn-hero-proof-carousel {
+  0%,
+  31% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  36%,
+  100% {
+    opacity: 0;
+    transform: translateX(-1.2rem) scale(0.985);
+  }
+}
+
+@keyframes nn-hero-proof-dot {
+  0%,
+  31% {
+    background: var(--semantic-brand);
+  }
+  36%,
+  100% {
+    background: color-mix(in srgb, var(--semantic-brand) 18%, var(--border-subtle));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-hero-carousel__slide,
+  .nn-premium-hero-carousel__dots span {
+    animation: none;
+  }
+
+  .nn-premium-hero-carousel__slide:first-child {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Shared stat tile classes — single source of truth in styles/shared/premium-stat-tiles.css
    Imported here for marketing routes; also imported by learner-premium-ds.css for learner routes. */
 @import "../shared/premium-stat-tiles.css";

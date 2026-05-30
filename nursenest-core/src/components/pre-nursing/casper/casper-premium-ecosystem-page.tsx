@@ -6,21 +6,23 @@ import {
   formatCasperDimensionLabel,
   getCasperCategoryCoverage,
 } from "@/lib/casper/casper-premium-ecosystem";
+import { getAdmissionExamProductBySlug } from "@/lib/admissions/admissions-entrance-exams";
 import { CasperResponseTrainerClient } from "@/components/pre-nursing/casper/casper-response-trainer-client";
 
 export function CasperPremiumEcosystemPage() {
   const coverage = getCasperCategoryCoverage();
   const featuredScenarios = CASPER_SCENARIOS.slice(0, 4);
+  const product = getAdmissionExamProductBySlug("casper");
 
   return (
     <main className="nn-marketing-surface">
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
         <Link
-          href="/pre-nursing"
+          href="/admissions"
           className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-accent)]"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden />
-          Back to Pre-Nursing
+          Back to Admissions & Entrance Exams
         </Link>
 
         <section className="rounded-3xl border border-[var(--semantic-border)] bg-[var(--semantic-surface)] p-6 shadow-[var(--shadow-card)] sm:p-8">
@@ -28,7 +30,7 @@ export function CasperPremiumEcosystemPage() {
             <div>
               <p className="nn-premium-home-eyebrow">Admissions Preparation</p>
               <h1 className="nn-marketing-h1 mt-2 max-w-3xl text-balance text-[var(--semantic-text-primary)]">
-                CASPer Situational Judgment Prep
+                CASPER Situational Judgment Prep
               </h1>
               <p className="nn-marketing-body mt-4 max-w-3xl text-pretty text-[var(--semantic-text-secondary)]">
                 Practice ethical reasoning, empathy, professionalism, communication, conflict resolution, and reflection
@@ -42,7 +44,7 @@ export function CasperPremiumEcosystemPage() {
             </div>
 
             <div className="rounded-2xl border border-[var(--semantic-border)] bg-[var(--semantic-panel-muted)] p-5">
-              <p className="text-sm font-bold text-[var(--semantic-text-primary)]">What CASPer practice evaluates</p>
+              <p className="text-sm font-bold text-[var(--semantic-text-primary)]">What CASPER practice evaluates</p>
               <div className="mt-4 grid gap-2">
                 {CASPER_ANALYTICS_DIMENSIONS.map((dimension) => (
                   <div key={dimension} className="flex items-center justify-between gap-3 rounded-xl bg-[var(--semantic-surface)] px-3 py-2 text-sm">
@@ -61,6 +63,41 @@ export function CasperPremiumEcosystemPage() {
           <Capability icon={Video} title="Video practice" body="Timed prompts, body-language coaching, pacing guidance, and professional communication frameworks." />
           <Capability icon={ShieldCheck} title="Structured review" body="Dimension-level feedback across empathy, professionalism, stakeholders, communication, and reasoning." />
         </section>
+
+        {product ? (
+          <section className="mt-10 grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]" aria-labelledby="casper-framework-heading">
+            <div className="rounded-3xl border border-[var(--semantic-border)] bg-[var(--semantic-surface)] p-6 shadow-[var(--shadow-card)]">
+              <p className="nn-premium-home-eyebrow">Lesson Framework</p>
+              <h2 id="casper-framework-heading" className="text-2xl font-bold text-[var(--semantic-text-primary)]">
+                Build professional judgment before timed practice.
+              </h2>
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {product.examBreakdown.map((category) => (
+                  <article key={category.title} className="rounded-2xl bg-[var(--semantic-panel-muted)] p-4">
+                    <p className="font-semibold text-[var(--semantic-text-primary)]">{category.title}</p>
+                    <p className="mt-2 text-sm leading-6 text-[var(--semantic-text-secondary)]">
+                      {category.topics.join(", ")}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </div>
+            <aside className="rounded-3xl border border-[var(--semantic-border)] bg-[var(--semantic-surface)] p-6 shadow-[var(--shadow-card)]">
+              <p className="nn-premium-home-eyebrow">Practice Modes</p>
+              <h2 className="text-2xl font-bold text-[var(--semantic-text-primary)]">
+                Written, video, timed, and interview practice.
+              </h2>
+              <ul className="mt-5 grid list-none gap-3 p-0">
+                {product.practiceModes.map((mode) => (
+                  <li key={mode.title} className="rounded-2xl bg-[var(--semantic-panel-muted)] p-4 text-sm leading-6 text-[var(--semantic-text-secondary)]">
+                    <span className="font-semibold text-[var(--semantic-text-primary)]">{mode.title}: </span>
+                    {mode.description}
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          </section>
+        ) : null}
 
         <section className="mt-10 space-y-4" aria-labelledby="casper-scenario-coverage-heading">
           <div>

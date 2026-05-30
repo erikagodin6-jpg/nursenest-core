@@ -111,7 +111,7 @@ function buildPrecomputedNavData(
       },
     ],
     // Class/pathway links → Row 2 tier rail (alongside RN/RPN/NP/New Grad/Allied chips).
-    // HESI and TEAS route to explicit readiness status pages until launch criteria are complete.
+    // Admissions-prep links route to explicit first-class product surfaces.
     pathwayNavLinks: [
       {
         key: "pre-nursing",
@@ -136,6 +136,12 @@ function buildPrecomputedNavData(
         href: "/pre-nursing/ati-teas",
         matchBase: "/pre-nursing/ati-teas",
         label: "ATI TEAS",
+      },
+      {
+        key: "casper",
+        href: "/pre-nursing/casper",
+        matchBase: "/pre-nursing/casper",
+        label: "CASPER",
       },
     ],
   };

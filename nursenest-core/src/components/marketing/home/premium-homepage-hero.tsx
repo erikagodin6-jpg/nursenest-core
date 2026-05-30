@@ -12,7 +12,8 @@
  *   questionCount, lessonCount — stats from the DB, pre-resolved in the RSC.
  */
 
-import { ArrowRight, BookMarked, Flame, ShieldCheck, Target } from "lucide-react";
+import type { CSSProperties } from "react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { safeHomepageMarketingT } from "@/lib/marketing/homepage-marketing-visible-copy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
@@ -96,162 +97,52 @@ function stripMustachePlaceholders(value: string): string {
     .trim();
 }
 
-/**
- * Single-beat path for one RR interval — stylized Lead II–like NSR (upright P, narrow QRS, upright T).
- * Proportions are exaggerated for legibility at marketing scale; not for measurement or diagnosis.
- */
-function singleNsrBeatPath(offset: number, baselineY: number, beatWidth: number): string {
-  const y = baselineY;
-  const o = offset;
-  return [
-    `M${o},${y}`,
-    `L${o + 12},${y}`,
-    `C${o + 16},${y} ${o + 18},${y - 4} ${o + 22},${y - 4.5}`,
-    `C${o + 26},${y - 5} ${o + 30},${y} ${o + 34},${y}`,
-    `L${o + 44},${y}`,
-    `L${o + 46},${y + 2.5}`,
-    `L${o + 48},${y}`,
-    `L${o + 50},${y - 3}`,
-    `L${o + 52},${y - 22}`,
-    `L${o + 54},${y + 8}`,
-    `L${o + 57},${y}`,
-    `L${o + 62},${y}`,
-    `C${o + 68},${y} ${o + 74},${y - 10} ${o + 82},${y - 2}`,
-    `C${o + 90},${y + 4} ${o + 98},${y} ${o + 108},${y}`,
-    `L${o + beatWidth},${y}`,
-  ].join(" ");
-}
-
-function buildSinusRhythmPath(beats: number, beatWidth: number, baselineY: number): string {
-  const parts: string[] = [];
-  for (let b = 0; b < beats; b++) {
-    parts.push(singleNsrBeatPath(b * beatWidth, baselineY, beatWidth));
-  }
-  return parts.join(" ");
-}
-
-/* ──────────────────────────────────────────────────────────────────
-   Inline rhythm strip — educational / illustrative only (not diagnostic).
-   Decorative NSR-style silhouette (Lead II–like): upright P, narrow QRS,
-   upright T; rates/shapes are not calibrated. Not a substitute for
-   clinical ECG interpretation. Static (no animation).
-   ────────────────────────────────────────────────────────────────── */
-
-const _ECG_BEAT_W = 138;
-const _ECG_BEAT_COUNT = 3;
-const _ECG_BASELINE = 46;
-const _ECG_PATH = buildSinusRhythmPath(_ECG_BEAT_COUNT, _ECG_BEAT_W, _ECG_BASELINE);
-const _ECG_VIEWBOX_W = _ECG_BEAT_W * _ECG_BEAT_COUNT;
-
-/** Reusable illustrative NSR-style strip for homepage marketing (not diagnostic). */
-export function MarketingHomepageEcgStripIllustration({ ariaLabel }: { ariaLabel: string }) {
-  return (
-    <svg
-      role="img"
-      aria-label={ariaLabel}
-      viewBox={`0 0 ${_ECG_VIEWBOX_W} 72`}
-      preserveAspectRatio="xMidYMid meet"
-      className="nn-premium-hero-ecg__svg block w-full text-[var(--semantic-success)]"
-      style={{ height: 52 }}
-    >
-      <g className="nn-premium-hero-ecg__trace">
-        <path
-          d={_ECG_PATH}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
-        />
-      </g>
-    </svg>
-  );
-}
-
 /* ──────────────────────────────────────────────────────────────────
    Clinical dashboard panel — uses the `.nn-premium-hero-panel*`
    class vocabulary already shipped in `premium-redesign-2026.css`.
    ────────────────────────────────────────────────────────────────── */
-function HeroClinicalPanel({
-  copy,
-}: {
-  copy: {
-    panelTag: string;
-    panelLive: string;
-    readinessLabel: string;
-    readinessValue: string;
-    streakLabel: string;
-    streakValue: string;
-    masteredLabel: string;
-    masteredValue: string;
-    masteredUnit: string;
-    ecgLabel: string;
-    ecgBpm: string;
-    mini1Title: string;
-    mini1Sub: string;
-    mini2Title: string;
-    mini2Sub: string;
-  };
-}) {
+const HERO_CAROUSEL_SLIDES = [
+  {
+    label: "Answered Question",
+    src: "/images/homepage/question-bank-demo.png",
+    alt: "Answered NCLEX-style question showing selected answer, correct answer, rationale, and clinical pearl.",
+  },
+  {
+    label: "CAT Exam",
+    src: "/images/homepage/cat-exam-demo.png",
+    alt: "Computer adaptive testing screen showing a question in progress with adaptive exam interface.",
+  },
+  {
+    label: "ECG Detective Mode",
+    src: "/images/homepage/ecg-demo.png",
+    alt: "ECG detective mode showing rhythm strip interpretation and clinical reasoning.",
+  },
+] as const;
+
+function HeroClinicalPanel() {
   return (
     <aside
-      className="nn-premium-hero-panel"
-      aria-label="Illustrative readiness preview for marketing (not a live monitor)"
+      className="nn-premium-hero-panel nn-premium-hero-carousel"
+      aria-label="NurseNest product screenshot carousel"
     >
-      <header className="nn-premium-hero-panel__header">
-        <span className="nn-premium-hero-panel__tag">{copy.panelTag}</span>
-        <span className="nn-premium-hero-panel__live">{copy.panelLive}</span>
+      <header className="nn-premium-hero-panel__header nn-premium-hero-carousel__header">
+        <span className="nn-premium-hero-panel__tag">Live Product Preview</span>
+        <span className="nn-premium-hero-panel__live">Real learning workflows</span>
       </header>
 
-      <div className="nn-premium-hero-stats">
-        <div className="nn-premium-hero-stat nn-premium-hero-stat--readiness">
-          <Target className="nn-premium-hero-stat__glyph" aria-hidden />
-          <span className="nn-premium-hero-stat__label">{copy.readinessLabel}</span>
-          <div className="nn-premium-hero-stat__figure">
-            <span className="nn-premium-hero-stat__value">{copy.readinessValue}</span>
-          </div>
-        </div>
-        <div className="nn-premium-hero-stat nn-premium-hero-stat--streak">
-          <Flame className="nn-premium-hero-stat__glyph" aria-hidden />
-          <span className="nn-premium-hero-stat__label">{copy.streakLabel}</span>
-          <div className="nn-premium-hero-stat__figure">
-            <span className="nn-premium-hero-stat__value">{copy.streakValue}</span>
-          </div>
-        </div>
-        <div className="nn-premium-hero-stat nn-premium-hero-stat--mastery">
-          <BookMarked className="nn-premium-hero-stat__glyph" aria-hidden />
-          <span className="nn-premium-hero-stat__label">{copy.masteredLabel}</span>
-          <div className="nn-premium-hero-stat__figure">
-            <span className="nn-premium-hero-stat__value">{copy.masteredValue}</span>
-            <span className="nn-premium-hero-stat__unit">{copy.masteredUnit}</span>
-          </div>
-        </div>
+      <div className="nn-premium-hero-carousel__stage">
+        {HERO_CAROUSEL_SLIDES.map((slide, index) => (
+          <figure key={slide.label} className="nn-premium-hero-carousel__slide" style={{ "--nn-hero-slide-index": index } as CSSProperties}>
+            <img src={slide.src} alt={slide.alt} width={1600} height={936} loading={index === 0 ? "eager" : "lazy"} decoding="async" />
+            <figcaption>{slide.label}</figcaption>
+          </figure>
+        ))}
       </div>
 
-      <div className="nn-premium-hero-ecg" aria-hidden={false}>
-        <div className="nn-premium-hero-ecg__row">
-          <span>{copy.ecgLabel}</span>
-          <span className="nn-premium-hero-ecg__bpm">{copy.ecgBpm}</span>
-        </div>
-        <MarketingHomepageEcgStripIllustration ariaLabel={copy.ecgLabel} />
-      </div>
-
-      <div className="nn-premium-hero-mini">
-        <div className="nn-premium-hero-mini__card" data-nn-hero-mini-topic="cardiovascular">
-          <span className="nn-premium-hero-mini__title">{copy.mini1Title}</span>
-          <span className="nn-premium-hero-mini__sub">{copy.mini1Sub}</span>
-          <div className="nn-premium-hero-mini__bar nn-progress-track-semantic" aria-hidden>
-            <span className="h-full rounded-full nn-progress-fill-semantic-readiness" style={{ width: "79%" }} />
-          </div>
-        </div>
-        <div className="nn-premium-hero-mini__card" data-nn-hero-mini-topic="pharmacology">
-          <span className="nn-premium-hero-mini__title">{copy.mini2Title}</span>
-          <span className="nn-premium-hero-mini__sub">{copy.mini2Sub}</span>
-          <div className="nn-premium-hero-mini__bar nn-progress-track-semantic" aria-hidden>
-            <span className="h-full rounded-full nn-progress-fill-semantic-info" style={{ width: "54%" }} />
-          </div>
-        </div>
+      <div className="nn-premium-hero-carousel__dots" aria-hidden>
+        {HERO_CAROUSEL_SLIDES.map((slide, index) => (
+          <span key={slide.label} style={{ "--nn-hero-slide-index": index } as CSSProperties} />
+        ))}
       </div>
     </aside>
   );
@@ -348,44 +239,6 @@ export function PremiumHomepageHero(props: {
 
   const { lead: heroHeadlineLead, emphasis: heroHeadlineEmphasis } = splitPremiumHeroHeadline(headline);
 
-  const panelCopy = {
-    panelTag: safeHomepageMarketingT(t, "pages.home.hero.panel.tag", "Adaptive Readiness Preview"),
-    panelLive: safeHomepageMarketingT(t, "pages.home.hero.panel.live", "Live Clinical Readiness Preview"),
-    readinessLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessLabel", "Readiness"),
-    readinessValue: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessValue", "78%"),
-    streakLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.streakLabel", "Study streak"),
-    streakValue: safeHomepageMarketingT(t, "pages.home.hero.panel.streakValue", "9 days"),
-    masteredLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredLabel", "Mastered"),
-    masteredValue: formatMarketingInteger(124, locale),
-    masteredUnit: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredUnit", "cards"),
-    ecgLabel: safeHomepageMarketingT(
-      t,
-      "pages.home.hero.panel.ecgLabel",
-      "Lead II · Normal Sinus Rhythm",
-    ),
-    ecgBpm: safeHomepageMarketingT(t, "pages.home.hero.panel.ecgBpm", "72 bpm"),
-    mini1Title: safeHomepageMarketingT(
-      t,
-      "pages.home.hero.panel.mini1.title",
-      "Labs and Clinical Interpretation",
-    ),
-    mini1Sub: safeHomepageMarketingT(
-      t,
-      "pages.home.hero.panel.mini1.sub",
-      "79% readiness · weak areas detected",
-    ),
-    mini2Title: safeHomepageMarketingT(
-      t,
-      "pages.home.hero.panel.mini2.title",
-      "Medication Safety and Med Math",
-    ),
-    mini2Sub: safeHomepageMarketingT(
-      t,
-      "pages.home.hero.panel.mini2.sub",
-      "54% readiness · focused review queued",
-    ),
-  };
-
   return (
     <section
       className="nn-hero-bridge nn-home-marketing-rich-hero border-b border-[color-mix(in_srgb,var(--header-nav-border)_58%,transparent)]"
@@ -471,7 +324,7 @@ export function PremiumHomepageHero(props: {
               and hydrates Lucide icons + ECG SVG above the fold. Desktop shows
               the full two-column clinical dashboard layout. */}
           <div className="hidden lg:block">
-            <HeroClinicalPanel copy={panelCopy} />
+            <HeroClinicalPanel />
           </div>
         </div>
       </div>

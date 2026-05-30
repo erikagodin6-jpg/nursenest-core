@@ -913,9 +913,9 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
     [precomputedNavData?.brandNavLinks, t, locale],
   );
 
-  // Class/pathway links → Row 2 tier rail (Pre-Nursing, ECG, HESI, TEAS).
+  // Class/pathway links → Row 2 tier rail (Pre-Nursing, ECG, HESI, TEAS, CASPER).
   // Rendered alongside RN/RPN/NP/New Grad/Allied tier hub chips.
-  // HESI and TEAS route to explicit readiness status pages until launch criteria are complete.
+  // Admissions-prep links route to explicit first-class product surfaces.
   const pathwayMoreLinks: HeaderNavLink[] = useMemo(
     () =>
       precomputedNavData?.pathwayNavLinks
@@ -925,6 +925,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
             { key: "ecg", href: "/ecg-interpretation", matchBase: "/ecg-interpretation", label: "ECG" },
             { key: "hesi", href: "/pre-nursing/hesi-a2", matchBase: "/pre-nursing/hesi-a2", label: "HESI A2" },
             { key: "teas", href: "/pre-nursing/ati-teas", matchBase: "/pre-nursing/ati-teas", label: "ATI TEAS" },
+            { key: "casper", href: "/pre-nursing/casper", matchBase: "/pre-nursing/casper", label: "CASPER" },
           ],
     [precomputedNavData?.pathwayNavLinks, t, locale],
   );
