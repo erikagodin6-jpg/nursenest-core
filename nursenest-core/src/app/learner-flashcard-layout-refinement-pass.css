@@ -18,19 +18,22 @@ html:has([data-nn-flashcard-layout-refinement]) {
     var(--theme-border, var(--semantic-border-soft))
   );
   --nn-flashcard-refinement-canvas: linear-gradient(
-    168deg,
-    color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-panel-muted)) 0%,
-    color-mix(in srgb, var(--semantic-panel-muted) 38%, var(--semantic-bg-base)) 100%
+    to bottom,
+    color-mix(in srgb, var(--semantic-brand) 5%, var(--semantic-panel-muted)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 2%, var(--semantic-panel-muted)) 42%,
+    color-mix(in srgb, var(--semantic-brand) 1%, var(--nn-flashcard-refinement-card)) 78%,
+    var(--nn-flashcard-refinement-card) 100%
   );
 }
 
 html[data-theme="blossom"]:has([data-nn-flashcard-layout-refinement]),
 html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement]) {
   --nn-flashcard-refinement-canvas: linear-gradient(
-    168deg,
-    color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-accent-peach)) 0%,
-    color-mix(in srgb, var(--semantic-chart-5) 16%, color-mix(in srgb, var(--semantic-accent-peach) 42%, var(--semantic-warning-soft))) 46%,
-    color-mix(in srgb, var(--semantic-brand) 8%, color-mix(in srgb, var(--semantic-chart-8) 22%, var(--semantic-warning-soft))) 100%
+    to bottom,
+    color-mix(in srgb, var(--semantic-brand) 11%, var(--semantic-accent-peach)) 0%,
+    color-mix(in srgb, var(--semantic-chart-5) 6%, color-mix(in srgb, var(--semantic-accent-peach) 18%, var(--semantic-warning-soft))) 38%,
+    color-mix(in srgb, var(--semantic-brand) 3%, var(--nn-flashcard-refinement-card)) 72%,
+    var(--nn-flashcard-refinement-card) 100%
   );
   --nn-flashcard-refinement-card-border: color-mix(
     in srgb,
@@ -46,10 +49,11 @@ html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement]) {
 
 html[data-theme="ocean"]:has([data-nn-flashcard-layout-refinement]) {
   --nn-flashcard-refinement-canvas: linear-gradient(
-    168deg,
-    color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-panel-cool)) 0%,
-    color-mix(in srgb, var(--semantic-info) 9%, var(--semantic-panel-aqua)) 44%,
-    color-mix(in srgb, var(--semantic-panel-muted) 48%, var(--semantic-bg-base)) 100%
+    to bottom,
+    color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-panel-cool)) 0%,
+    color-mix(in srgb, var(--semantic-info) 4%, var(--semantic-panel-aqua)) 40%,
+    color-mix(in srgb, var(--semantic-brand) 2%, var(--nn-flashcard-refinement-card)) 76%,
+    var(--nn-flashcard-refinement-card) 100%
   );
 }
 
@@ -57,25 +61,31 @@ html[data-theme="midnight"]:has([data-nn-flashcard-layout-refinement]),
 html[data-theme="midnight-indigo"]:has([data-nn-flashcard-layout-refinement]),
 html[data-theme="deep-twilight"]:has([data-nn-flashcard-layout-refinement]) {
   --nn-flashcard-refinement-canvas: linear-gradient(
-    168deg,
-    color-mix(in srgb, var(--semantic-panel-cool) 38%, var(--semantic-bg-base)) 0%,
-    color-mix(in srgb, var(--semantic-panel-muted) 62%, var(--semantic-bg-base)) 100%
+    to bottom,
+    color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--semantic-bg-base)) 0%,
+    color-mix(in srgb, var(--semantic-panel-muted) 14%, var(--semantic-bg-base)) 45%,
+    color-mix(in srgb, var(--semantic-brand) 2%, var(--nn-flashcard-refinement-card)) 78%,
+    var(--nn-flashcard-refinement-card) 100%
   );
 }
 
 html[data-theme="aurora"]:has([data-nn-flashcard-layout-refinement]) {
   --nn-flashcard-refinement-canvas: linear-gradient(
-    168deg,
-    color-mix(in srgb, var(--semantic-chart-5) 14%, var(--semantic-panel-warm)) 0%,
-    color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--semantic-bg-base)) 100%
+    to bottom,
+    color-mix(in srgb, var(--semantic-chart-5) 8%, var(--semantic-panel-warm)) 0%,
+    color-mix(in srgb, var(--semantic-panel-cool) 6%, var(--semantic-bg-base)) 42%,
+    color-mix(in srgb, var(--semantic-brand) 2%, var(--nn-flashcard-refinement-card)) 76%,
+    var(--nn-flashcard-refinement-card) 100%
   );
 }
 
 html[data-theme="sunset"]:has([data-nn-flashcard-layout-refinement]) {
   --nn-flashcard-refinement-canvas: linear-gradient(
-    168deg,
-    color-mix(in srgb, var(--semantic-chart-1) 12%, var(--semantic-panel-warm)) 0%,
-    color-mix(in srgb, var(--semantic-panel-peach) 16%, var(--semantic-bg-base)) 100%
+    to bottom,
+    color-mix(in srgb, var(--semantic-chart-1) 7%, var(--semantic-panel-warm)) 0%,
+    color-mix(in srgb, var(--semantic-panel-peach) 6%, var(--semantic-bg-base)) 40%,
+    color-mix(in srgb, var(--semantic-brand) 2%, var(--nn-flashcard-refinement-card)) 76%,
+    var(--nn-flashcard-refinement-card) 100%
   );
 }
 
@@ -606,4 +616,57 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-canvas > .fl
 
 .nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-layout-refinement][data-nn-flashcard-study-session] {
   background: var(--nn-flashcard-refinement-canvas) !important;
+}
+
+/* ── White card surfaces — beat premium unified-workspace overrides ─────────── */
+.nn-active-flashcard-session[data-nn-flashcard-layout-refinement][data-nn-unified-exam-workspace]
+  .nn-flashcard-learning-grid
+  .nn-flashcard-hero-surface,
+.nn-active-flashcard-session[data-nn-flashcard-layout-refinement][data-nn-unified-exam-workspace]
+  .nn-flashcard-rationale-panel,
+.nn-flashcard-study-premium
+  .nn-active-flashcard-session[data-nn-flashcard-layout-refinement][data-nn-unified-exam-workspace]
+  .nn-flashcard-learning-grid
+  .nn-flashcard-hero-surface,
+.nn-flashcard-study-premium
+  .nn-active-flashcard-session[data-nn-flashcard-layout-refinement][data-nn-unified-exam-workspace]
+  .nn-flashcard-rationale-panel,
+.nn-flashcard-study-premium
+  .nn-active-flashcard-session[data-nn-flashcard-layout-refinement]
+  .nn-flashcard-coach-panel,
+.nn-flashcard-study-premium
+  .nn-active-flashcard-session[data-nn-flashcard-layout-refinement]
+  .nn-flashcard-rating-dock,
+.nn-flashcard-study-premium
+  .nn-active-flashcard-session[data-nn-flashcard-layout-refinement]
+  .nn-flashcard-learning-topbar,
+.nn-flashcard-study-premium
+  .nn-active-flashcard-session[data-nn-flashcard-layout-refinement]
+  .nn-flashcard-hero-surface[data-nn-flashcard-branding-revamp],
+.nn-flashcard-study-premium
+  .nn-active-flashcard-session[data-nn-flashcard-layout-refinement]
+  .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp],
+.nn-flashcard-study-premium
+  .nn-active-flashcard-session[data-nn-flashcard-layout-refinement]
+  .nn-flashcard-coach-panel[data-nn-flashcard-branding-revamp] {
+  background: var(--nn-flashcard-refinement-card) !important;
+  background-image: none !important;
+  border-color: var(--nn-flashcard-refinement-card-border) !important;
+}
+
+/* Nested exam shell inside hero — transparent on white card */
+[data-nn-flashcard-layout-refinement] .nn-flashcard-hero-surface .nn-learner-exam-shell,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-hero-surface .nn-exam-session-premium,
+.nn-flashcard-study-premium
+  [data-nn-flashcard-layout-refinement]
+  .nn-flashcard-hero-surface
+  .nn-learner-exam-shell {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-hero-surface .nn-learner-exam-shell::before {
+  opacity: 0 !important;
 }

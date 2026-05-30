@@ -89,7 +89,7 @@ function FlashcardSessionLivePreviewInner({
 }) {
   const sp = useSearchParams();
   const theme = useMemo(
-    () => resolveThemeParam(sp.get("theme") ?? serverTheme),
+    () => resolveThemeParam(sp.get("theme") ?? serverTheme ?? null),
     [sp, serverTheme],
   );
   const auditMode = sp.get("audit") === "1" || Boolean(serverAudit);

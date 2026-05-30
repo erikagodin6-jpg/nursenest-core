@@ -1,220 +1,81 @@
 {
   "baseUrl": "http://127.0.0.1:3000",
-  "capturedAt": "2026-05-30T03:28:16.466Z",
+  "capturedAt": "2026-05-30T03:57:01.028Z",
   "auditRoute": "/preview/flashcard-session-live?audit=1&scenario=…",
   "files": [
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--ocean--1366x768.png",
-      "scenario": "mcq-answered",
-      "theme": "ocean",
-      "viewport": "1366x768",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--ocean--1440x900.png",
-      "scenario": "mcq-answered",
-      "theme": "ocean",
-      "viewport": "1440x900",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--ocean--1512x982.png",
-      "scenario": "mcq-answered",
-      "theme": "ocean",
-      "viewport": "1512x982",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--ocean--1728x1117.png",
-      "scenario": "mcq-answered",
-      "theme": "ocean",
-      "viewport": "1728x1117",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--ocean--1920x1080.png",
-      "scenario": "mcq-answered",
-      "theme": "ocean",
-      "viewport": "1920x1080",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-answered--ocean--ipad-portrait.png",
-      "scenario": "mcq-answered",
-      "theme": "ocean",
-      "viewport": "ipad-portrait",
-      "bucket": "tablet"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-answered--ocean--ipad-landscape.png",
-      "scenario": "mcq-answered",
-      "theme": "ocean",
-      "viewport": "ipad-landscape",
-      "bucket": "tablet"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-answered--ocean--390x844.png",
-      "scenario": "mcq-answered",
-      "theme": "ocean",
-      "viewport": "390x844",
-      "bucket": "mobile"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-answered--ocean--393x852.png",
-      "scenario": "mcq-answered",
-      "theme": "ocean",
-      "viewport": "393x852",
-      "bucket": "mobile"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-answered--ocean--430x932.png",
-      "scenario": "mcq-answered",
-      "theme": "ocean",
-      "viewport": "430x932",
-      "bucket": "mobile"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--blossom--1366x768.png",
-      "scenario": "mcq-answered",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-unanswered--blossom--1366x768.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "1366x768",
       "bucket": "desktop"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--blossom--1440x900.png",
-      "scenario": "mcq-answered",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-unanswered--blossom--1440x900.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "1440x900",
       "bucket": "desktop"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--blossom--1512x982.png",
-      "scenario": "mcq-answered",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-unanswered--blossom--1512x982.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "1512x982",
       "bucket": "desktop"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--blossom--1728x1117.png",
-      "scenario": "mcq-answered",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-unanswered--blossom--1728x1117.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "1728x1117",
       "bucket": "desktop"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--blossom--1920x1080.png",
-      "scenario": "mcq-answered",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-unanswered--blossom--1920x1080.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "1920x1080",
       "bucket": "desktop"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-answered--blossom--ipad-portrait.png",
-      "scenario": "mcq-answered",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-unanswered--blossom--ipad-portrait.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "ipad-portrait",
       "bucket": "tablet"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-answered--blossom--ipad-landscape.png",
-      "scenario": "mcq-answered",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-unanswered--blossom--ipad-landscape.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "ipad-landscape",
       "bucket": "tablet"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-answered--blossom--390x844.png",
-      "scenario": "mcq-answered",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-unanswered--blossom--390x844.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "390x844",
       "bucket": "mobile"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-answered--blossom--393x852.png",
-      "scenario": "mcq-answered",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-unanswered--blossom--393x852.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "393x852",
       "bucket": "mobile"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-answered--blossom--430x932.png",
-      "scenario": "mcq-answered",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-unanswered--blossom--430x932.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
-      "viewport": "430x932",
-      "bucket": "mobile"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--midnight--1366x768.png",
-      "scenario": "mcq-answered",
-      "theme": "midnight",
-      "viewport": "1366x768",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--midnight--1440x900.png",
-      "scenario": "mcq-answered",
-      "theme": "midnight",
-      "viewport": "1440x900",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--midnight--1512x982.png",
-      "scenario": "mcq-answered",
-      "theme": "midnight",
-      "viewport": "1512x982",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--midnight--1728x1117.png",
-      "scenario": "mcq-answered",
-      "theme": "midnight",
-      "viewport": "1728x1117",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-answered--midnight--1920x1080.png",
-      "scenario": "mcq-answered",
-      "theme": "midnight",
-      "viewport": "1920x1080",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-answered--midnight--ipad-portrait.png",
-      "scenario": "mcq-answered",
-      "theme": "midnight",
-      "viewport": "ipad-portrait",
-      "bucket": "tablet"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-answered--midnight--ipad-landscape.png",
-      "scenario": "mcq-answered",
-      "theme": "midnight",
-      "viewport": "ipad-landscape",
-      "bucket": "tablet"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-answered--midnight--390x844.png",
-      "scenario": "mcq-answered",
-      "theme": "midnight",
-      "viewport": "390x844",
-      "bucket": "mobile"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-answered--midnight--393x852.png",
-      "scenario": "mcq-answered",
-      "theme": "midnight",
-      "viewport": "393x852",
-      "bucket": "mobile"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-answered--midnight--430x932.png",
-      "scenario": "mcq-answered",
-      "theme": "midnight",
       "viewport": "430x932",
       "bucket": "mobile"
     }
   ],
   "notes": {
     "bowtieMatrixNgn": "Flashcard study stack renders MCQ + SATA only. Bowtie, Matrix, and NGN Case Study are practice/CAT item types — documented as out-of-scope for this surface."
-  }
+  },
+  "authSkipped": "Login failed — seed demo user first."
 }
