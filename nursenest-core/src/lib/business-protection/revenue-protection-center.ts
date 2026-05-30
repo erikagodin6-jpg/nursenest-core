@@ -136,3 +136,38 @@ export function buildChargebackEvidencePackage(
   };
 }
 
+export function buildChargebackEvidenceTextPackage(pkg: ChargebackEvidencePackage): string {
+  const lines = [
+    "NurseNest Revenue Protection Evidence Package",
+    `Generated: ${pkg.generatedAt}`,
+    `User: ${pkg.userId}`,
+    `Protection score: ${pkg.protectionScore}/100 (${pkg.riskLevel})`,
+    "",
+    "Subscriber",
+    `- Name: ${pkg.subscriber.name ?? "not recorded"}`,
+    `- Email: ${pkg.subscriber.email ?? "not recorded"}`,
+    `- Country: ${pkg.subscriber.country ?? "not recorded"}`,
+    `- Plan: ${pkg.subscriber.planCode ?? "not recorded"}`,
+    `- Subscription status: ${pkg.subscriber.subscriptionStatus ?? "not recorded"}`,
+    `- Renewal date: ${pkg.subscriber.renewalDate ?? "not recorded"}`,
+    "",
+    "Accepted Checkout Wording",
+    ...pkg.acceptedWording.map((line) => `- ${line}`),
+    `- Wording SHA-256: ${pkg.acceptedWordingSha256}`,
+    "",
+    "Evidence Counts",
+    ...Object.entries(pkg.evidenceByKind).map(([kind, count]) => `- ${kind}: ${count}`),
+    "",
+    "Strongest Evidence",
+    ...pkg.strongestEvidence.map(
+      (item) =>
+        `- ${item.occurredAt} [${item.kind}] ${item.summary}${item.immutableHash ? ` · hash ${item.immutableHash}` : ""}`,
+    ),
+    "",
+    "Missing Evidence",
+    ...(pkg.missingEvidence.length > 0
+      ? pkg.missingEvidence.map((item) => `- ${item.label}`)
+      : ["- None"]),
+  ];
+  return `${lines.join("\n")}\n`;
+}

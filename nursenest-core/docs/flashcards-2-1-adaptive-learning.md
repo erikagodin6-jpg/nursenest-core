@@ -9,30 +9,33 @@ Flashcards 2.1 connects the existing flashcard study flow to NurseNest remediati
 ```mermaid
 flowchart TD
   A[Flashcard answer or recall rating] --> B[Session learning signal]
-  B --> C[Weak-topic window detection]
+  B --> C[Weak-topic window detection: 5, 10, 25]
   B --> D[Learning insight engine]
   B --> E[Confidence accuracy gap]
   B --> F[Learner Readiness Index]
-  C --> G[Adaptive remediation panel]
-  G --> H[Lessons]
-  G --> I[Practice Questions]
-  G --> J[Pharmacology]
-  G --> K[ECG]
-  G --> L[Clinical Skills]
-  G --> M[Simulations/CAT]
-  N[Admin flashcard summary] --> O[Question quality engine]
-  O --> P[Flashcard health review queue]
+  A --> G[Related learning engine]
+  G --> H[Adaptive remediation panel]
+  H --> I[Lessons]
+  H --> J[Practice Questions]
+  H --> K[Pharmacology]
+  H --> L[ECG]
+  H --> M[Clinical Skills]
+  H --> N[Simulations/CAT]
+  C --> O[Weak area recovery banner]
+  P[Admin flashcard summary] --> Q[Question quality engine]
+  Q --> R[Flashcard health review queue]
 ```
 
 ## Implemented Components
 
 - `src/components/flashcards/adaptive-remediation-panel.tsx`
-  - Now presents “Strengthen this topic” after incorrect answers.
+  - Presents “Strengthen this topic” after incorrect answers and “Continue learning” when related content exists.
   - Uses concrete links only; no placeholder activities or dead-link shells.
 
 - `src/lib/flashcards/related-learning-engine.ts`
   - Wraps the existing ecosystem resolver.
   - Maps flashcards to lessons, questions, flashcards, pharmacology, ECG, clinical skills, simulations, and CAT links when available.
+  - Does not invent generic fallback links when no concrete topic mapping is available.
 
 - `src/lib/flashcards/learning-insight-engine.ts`
   - Tracks session-local accuracy, confidence, response ratings, weak-topic windows, professional streak summaries, confidence gap, recommended next steps, and Learner Readiness Index.
@@ -45,6 +48,7 @@ flowchart TD
 - `src/components/study/active-study-session.tsx`
   - Records learning signals when learners rate cards.
   - Updates remediation state based on actual answer correctness when available.
+  - Prioritizes recent weak-topic windows before falling back to aggregate session topic performance.
   - Shows subtle learning insights, confidence checks, professional study streak counts, readiness index, and next-step guidance inside the existing coach panel.
 
 - `src/app/api/admin/flashcards/summary/route.ts`
@@ -74,6 +78,8 @@ This preserves existing activity startup behavior and avoids introducing a paral
   - confident but incorrect patterns
   - correct but low-confidence patterns
 - Recommendation copy is supportive and avoids shame language.
+- Related learning recommendations require explicit lesson/practice links or conservative topic-rule matches.
+- Short clinical abbreviations such as `MI` and `PE` match only as standalone terms so unrelated words do not create false simulation links.
 
 ## Learner Journey
 
@@ -88,8 +94,8 @@ After:
 1. Learner answers a flashcard.
 2. Learner sees contextual result feedback.
 3. Learner reviews rationale.
-4. Incorrect answers show topic-specific remediation links.
-5. Coach panel shows learning insight, confidence gap, professional streak counts, and next recommended action as enough signals accumulate.
+4. Incorrect answers show topic-specific remediation links when a real activity exists.
+5. Coach panel shows learning insight, confidence gap, professional streak counts, readiness index, and next recommended action as enough signals accumulate.
 
 ## Admin Journey
 
@@ -103,9 +109,11 @@ Admins can open `/admin/flashcards` and see:
 
 ## Validation
 
-Unit coverage added in:
+Run:
 
-- `src/lib/flashcards/flashcards-2-1-intelligence.test.ts`
+```bash
+node --import tsx --test src/lib/flashcards/flashcards-2-1-intelligence.test.ts
+```
 
 Coverage includes:
 
@@ -115,5 +123,6 @@ Coverage includes:
 - professional streak summaries
 - readiness index bounds and wording safety
 - related-learning link resolution
+- no generic fallback link generation
+- weak-topic flashcard remediation typing
 - question-quality flagging and review queue ordering
-

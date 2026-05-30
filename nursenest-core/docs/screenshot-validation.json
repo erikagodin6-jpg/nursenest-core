@@ -1,61 +1,181 @@
 {
-  "generatedAt": "2026-05-29T02:46:25.944Z",
+  "generatedAt": "2026-05-30T06:11:50.530Z",
   "summary": {
-    "total": 47,
-    "pass": 13,
-    "warn": 15,
-    "fail": 19,
-    "skip": 0
+    "total": 61,
+    "pass": 23,
+    "warn": 12,
+    "fail": 11,
+    "skip": 15
   },
   "cdnSlotsChecked": false,
   "checks": [
+    {
+      "id": "cdn-slot-1",
+      "category": "cdn-slot",
+      "label": "Practice rationale panel",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-2",
+      "category": "cdn-slot",
+      "label": "Flashcard study mode",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot2.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-3",
+      "category": "cdn-slot",
+      "label": "Learner dashboard",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot3.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-4",
+      "category": "cdn-slot",
+      "label": "NGN question types",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot4.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-5",
+      "category": "cdn-slot",
+      "label": "Progress reports",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot5.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-6",
+      "category": "cdn-slot",
+      "label": "CAT exam session",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot6.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-7",
+      "category": "cdn-slot",
+      "label": "CAT results",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot7.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-8",
+      "category": "cdn-slot",
+      "label": "Adaptive study plan",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot8.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-9",
+      "category": "cdn-slot",
+      "label": "Smart review",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot9.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-10",
+      "category": "cdn-slot",
+      "label": "Question bank browse",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot10.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-11",
+      "category": "cdn-slot",
+      "label": "Confidence analytics",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot11.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-12",
+      "category": "cdn-slot",
+      "label": "Lesson detail",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot12.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-13",
+      "category": "cdn-slot",
+      "label": "Lesson library",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot13.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-14",
+      "category": "cdn-slot",
+      "label": "Marketing homepage",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot14.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
+    {
+      "id": "cdn-slot-15",
+      "category": "cdn-slot",
+      "label": "ECG / telemetry workspace",
+      "assetPath": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot15.png",
+      "status": "skip",
+      "detail": "CDN check skipped — use --cdn-check flag"
+    },
     {
       "id": "local-core-learner-dashboard-webp",
       "category": "local-generated",
       "label": "core/learner-dashboard.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/learner-dashboard.webp",
-      "status": "fail",
-      "detail": "File not found — run: npm run generate:marketing-screenshots"
+      "status": "pass",
+      "captureDate": "2026-05-30T06:05:32.423Z"
     },
     {
       "id": "local-core-confidence-analytics-webp",
       "category": "local-generated",
       "label": "core/confidence-analytics.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/confidence-analytics.webp",
-      "status": "fail",
-      "detail": "File not found — run: npm run generate:marketing-screenshots"
+      "status": "pass",
+      "captureDate": "2026-05-30T06:09:43.825Z"
     },
     {
       "id": "local-core-smart-review-webp",
       "category": "local-generated",
       "label": "core/smart-review.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/smart-review.webp",
-      "status": "fail",
-      "detail": "File not found — run: npm run generate:marketing-screenshots"
+      "status": "pass",
+      "captureDate": "2026-05-30T06:07:53.173Z"
     },
     {
       "id": "local-core-cat-exam-session-webp",
       "category": "local-generated",
       "label": "core/cat-exam-session.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/cat-exam-session.webp",
-      "status": "fail",
-      "detail": "File not found — run: npm run generate:marketing-screenshots"
+      "status": "pass",
+      "captureDate": "2026-05-30T05:53:53.386Z"
     },
     {
       "id": "local-core-flashcards-webp",
       "category": "local-generated",
       "label": "core/flashcards.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/flashcards.webp",
-      "status": "fail",
-      "detail": "File not found — run: npm run generate:marketing-screenshots"
+      "status": "pass",
+      "captureDate": "2026-05-30T06:02:44.234Z"
     },
     {
       "id": "local-core-cat-results-webp",
       "category": "local-generated",
       "label": "core/cat-results.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/cat-results.webp",
-      "status": "fail",
-      "detail": "File not found — run: npm run generate:marketing-screenshots"
+      "status": "pass",
+      "captureDate": "2026-05-30T05:54:05.261Z"
     },
     {
       "id": "local-rn-rn-hub-webp",
@@ -142,16 +262,16 @@
       "category": "local-generated",
       "label": "marketing/marketing-home-desktop.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/marketing/marketing-home-desktop.webp",
-      "status": "fail",
-      "detail": "File not found — run: npm run generate:marketing-screenshots"
+      "status": "pass",
+      "captureDate": "2026-05-30T05:48:14.716Z"
     },
     {
       "id": "local-marketing-pricing-webp",
       "category": "local-generated",
       "label": "marketing/pricing.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/marketing/pricing.webp",
-      "status": "fail",
-      "detail": "File not found — run: npm run generate:marketing-screenshots"
+      "status": "pass",
+      "captureDate": "2026-05-30T05:48:57.614Z"
     },
     {
       "id": "local-marketing-faq-webp",
@@ -159,7 +279,7 @@
       "label": "marketing/faq.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/marketing/faq.webp",
       "status": "pass",
-      "captureDate": "2026-05-29T02:39:20.848Z"
+      "captureDate": "2026-05-30T05:32:41.344Z"
     },
     {
       "id": "mobile-mobile-mobile-homepage-webp",
@@ -222,16 +342,14 @@
       "category": "theme-variant",
       "label": "midnight / learner-dashboard.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/themes/midnight/learner-dashboard.webp",
-      "status": "warn",
-      "detail": "Theme variant not generated — run with --theme-variants-only"
+      "status": "pass"
     },
     {
       "id": "theme-midnight-flashcards-webp",
       "category": "theme-variant",
       "label": "midnight / flashcards.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/themes/midnight/flashcards.webp",
-      "status": "warn",
-      "detail": "Theme variant not generated — run with --theme-variants-only"
+      "status": "pass"
     },
     {
       "id": "theme-midnight-marketing-home-desktop-webp",
@@ -245,8 +363,7 @@
       "category": "theme-variant",
       "label": "blossom / learner-dashboard.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/themes/blossom/learner-dashboard.webp",
-      "status": "warn",
-      "detail": "Theme variant not generated — run with --theme-variants-only"
+      "status": "pass"
     },
     {
       "id": "theme-blossom-flashcards-webp",
@@ -310,60 +427,52 @@
       "status": "pass"
     },
     {
-      "id": "fallback-dashboard-redesign-preview-01-dash-desktop-ocean-png",
+      "id": "fallback-marketing-generated-screenshots-core-learner-dashboard-webp",
       "category": "fallback",
-      "label": "dashboard-redesign-preview/01-dash-desktop-ocean.png",
-      "assetPath": "/root/nursenest-core/nursenest-core/public/dashboard-redesign-preview/01-dash-desktop-ocean.png",
+      "label": "marketing/generated-screenshots/core/learner-dashboard.webp",
+      "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/learner-dashboard.webp",
       "status": "pass",
-      "detail": "Legacy fallback in place"
+      "detail": "Generated product fallback in place"
     },
     {
-      "id": "fallback-dashboard-redesign-preview-03-readiness-desktop-png",
+      "id": "fallback-marketing-generated-screenshots-core-confidence-analytics-webp",
       "category": "fallback",
-      "label": "dashboard-redesign-preview/03-readiness-desktop.png",
-      "assetPath": "/root/nursenest-core/nursenest-core/public/dashboard-redesign-preview/03-readiness-desktop.png",
+      "label": "marketing/generated-screenshots/core/confidence-analytics.webp",
+      "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/confidence-analytics.webp",
       "status": "pass",
-      "detail": "Legacy fallback in place"
+      "detail": "Generated product fallback in place"
     },
     {
-      "id": "fallback-dashboard-redesign-preview-07-coaching-panel-png",
+      "id": "fallback-marketing-generated-screenshots-core-smart-review-webp",
       "category": "fallback",
-      "label": "dashboard-redesign-preview/07-coaching-panel.png",
-      "assetPath": "/root/nursenest-core/nursenest-core/public/dashboard-redesign-preview/07-coaching-panel.png",
+      "label": "marketing/generated-screenshots/core/smart-review.webp",
+      "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/smart-review.webp",
       "status": "pass",
-      "detail": "Legacy fallback in place"
+      "detail": "Generated product fallback in place"
     },
     {
-      "id": "fallback-dashboard-redesign-preview-10-cat-trajectory-png",
+      "id": "fallback-marketing-generated-screenshots-core-cat-exam-session-webp",
       "category": "fallback",
-      "label": "dashboard-redesign-preview/10-cat-trajectory.png",
-      "assetPath": "/root/nursenest-core/nursenest-core/public/dashboard-redesign-preview/10-cat-trajectory.png",
+      "label": "marketing/generated-screenshots/core/cat-exam-session.webp",
+      "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/cat-exam-session.webp",
       "status": "pass",
-      "detail": "Legacy fallback in place"
+      "detail": "Generated product fallback in place"
     },
     {
-      "id": "fallback-landing-polish-preview-png-08-flashcards-session-blossom-png",
+      "id": "fallback-marketing-generated-screenshots-core-flashcards-webp",
       "category": "fallback",
-      "label": "landing-polish-preview/png/08-flashcards-session-blossom.png",
-      "assetPath": "/root/nursenest-core/nursenest-core/public/landing-polish-preview/png/08-flashcards-session-blossom.png",
+      "label": "marketing/generated-screenshots/core/flashcards.webp",
+      "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/flashcards.webp",
       "status": "pass",
-      "detail": "Legacy fallback in place"
+      "detail": "Generated product fallback in place"
     },
     {
-      "id": "fallback-landing-polish-preview-png-09-cat-readiness-ocean-png",
+      "id": "fallback-marketing-generated-screenshots-core-cat-results-webp",
       "category": "fallback",
-      "label": "landing-polish-preview/png/09-cat-readiness-ocean.png",
-      "assetPath": "/root/nursenest-core/nursenest-core/public/landing-polish-preview/png/09-cat-readiness-ocean.png",
+      "label": "marketing/generated-screenshots/core/cat-results.webp",
+      "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/cat-results.webp",
       "status": "pass",
-      "detail": "Legacy fallback in place"
-    },
-    {
-      "id": "fallback-dashboard-redesign-preview-05-kpi-components-png",
-      "category": "fallback",
-      "label": "dashboard-redesign-preview/05-kpi-components.png",
-      "assetPath": "/root/nursenest-core/nursenest-core/public/dashboard-redesign-preview/05-kpi-components.png",
-      "status": "pass",
-      "detail": "Legacy fallback in place"
+      "detail": "Generated product fallback in place"
     },
     {
       "id": "quality-manifest-errors",
@@ -371,7 +480,7 @@
       "label": "capture errors",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/manifest.json",
       "status": "fail",
-      "detail": "marketing-home-desktop: screenshot rejected: blocked selector: [data-testid*='skeleton' i] (6); marketing-home-desktop: screenshot rejected: blocked selector: [data-testid*='skeleton' i] (5); marketing-home-desktop: screenshot rejected: blocked selector: [data-testid*='skeleton' i] (6); pricing: screenshot rejected: blocked text: Just a moment; blocked text: Loading"
+      "detail": "flashcards: page.goto: Timeout 90000ms exceeded.\nCall log:\n  - navigating to \"https://nursenest.ca/app/flashcards/custom?pathwayId=ca-rn-nclex-rn&includeCards=1&shuffle=1&cardLimit=20\", waiting until \"networkidle\"\n"
     },
     {
       "id": "quality-manifest-gate-metadata",

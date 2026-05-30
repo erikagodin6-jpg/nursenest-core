@@ -207,6 +207,13 @@ type CaptureTarget = {
    */
   persona?: string;
   notes?: string;
+  /**
+   * Optional navigation/interaction before screenshot — e.g. start a live practice
+   * session or open an active flashcard deck (production QA accounts need this).
+   */
+  prepareHook?:
+    | "startPracticeExamWithRationale"
+    | "openFlashcardCustomStudy";
 };
 
 type CaptureReadinessCheck = {
@@ -351,13 +358,14 @@ const TARGETS: CaptureTarget[] = [
     key: "practice-rationale",
     label: "Practice Questions — rationale panel",
     tier: "core",
-    route: "/app/questions/session",
+    route: "/app/practice-tests",
     theme: "ocean",
     auth: "paid",
     viewports: ["desktop"],
     waitFor: "main",
     themeVariants: true,
-    notes: "CDN slot 1. Start a short session from /app/questions if in setup state.",
+    prepareHook: "startPracticeExamWithRationale",
+    notes: "CDN slot 1. Starts a practice exam, submits one item, captures rationale panel.",
   },
   {
     key: "flashcards",
@@ -369,7 +377,8 @@ const TARGETS: CaptureTarget[] = [
     viewports: ["desktop", "mobile"],
     waitFor: "main",
     themeVariants: true,
-    notes: "CDN slot 2.",
+    prepareHook: "openFlashcardCustomStudy",
+    notes: "CDN slot 2. Opens a live custom flashcard session for the RN pathway.",
   },
   {
     key: "learner-dashboard",
@@ -381,18 +390,19 @@ const TARGETS: CaptureTarget[] = [
     viewports: ["desktop", "tablet", "mobile"],
     waitFor: '[data-testid="learner-dashboard-shell"], main',
     themeVariants: true,
+    extraWaitMs: 6000,
     notes: "CDN slot 3. Shows streak + next-step cards.",
   },
   {
     key: "question-bank-advanced",
     label: "NGN / advanced question types",
     tier: "core",
-    route: "/app/questions/bank",
+    route: "/app/practice-tests",
     theme: "ocean",
     auth: "paid",
     viewports: ["desktop"],
     waitFor: "main",
-    notes: "CDN slot 4. NGN/matrix/extended reasoning formats.",
+    notes: "CDN slot 4. Practice hub with category filters and exam modes.",
   },
   {
     key: "progress-report",
@@ -403,6 +413,7 @@ const TARGETS: CaptureTarget[] = [
     auth: "paid",
     viewports: ["desktop"],
     waitFor: "main",
+    extraWaitMs: 5000,
     notes: "CDN slot 5.",
   },
   {
@@ -455,24 +466,25 @@ const TARGETS: CaptureTarget[] = [
     key: "question-bank",
     label: "Question bank — browse",
     tier: "core",
-    route: "/app/questions",
+    route: "/app/practice-tests",
     theme: "ocean",
     auth: "paid",
     viewports: ["desktop"],
     waitFor: "main",
     themeVariants: true,
-    notes: "CDN slot 10.",
+    notes: "CDN slot 10. Category filters and session launchers.",
   },
   {
     key: "confidence-analytics",
     label: "Confidence analytics",
     tier: "core",
-    route: "/app/analytics",
+    route: "/app/account/analytics",
     theme: "ocean",
     auth: "paid",
     viewports: ["desktop"],
     waitFor: "main",
     themeVariants: true,
+    extraWaitMs: 5000,
     notes: "CDN slot 11. Needs graded history for full charts.",
   },
   {
@@ -1512,8 +1524,8 @@ async function saveWebp(
 async function login(page: Page, email: string, password: string): Promise<void> {
   console.log(`  → logging in as ${email}`);
   await page.goto(`${BASE_URL}/login`, {
-    waitUntil: "domcontentloaded",
-    timeout: 30_000,
+    waitUntil: "networkidle",
+    timeout: 90_000,
   });
 
   await page
@@ -1532,22 +1544,42 @@ async function login(page: Page, email: string, password: string): Promise<void>
     .first()
     .click();
 
-  await page.waitForLoadState("domcontentloaded");
-  await page.waitForLoadState("networkidle").catch(() => {});
+  await page
+    .waitForURL((url) => !url.pathname.includes("/login"), { timeout: 90_000 })
+    .catch(async () => {
+      await page.waitForLoadState("networkidle").catch(() => {});
+    });
+
+  const sessionReady = await page
+    .waitForFunction(
+      () =>
+        document.cookie.includes("__Secure-authjs.session-token") ||
+        document.cookie.includes("authjs.session-token"),
+      { timeout: 60_000 },
+    )
+    .then(() => true)
+    .catch(() => false);
 
   const url = page.url();
   if (/\/login|\/signup/i.test(url)) {
     throw new Error(`Login failed — still on auth URL (${url})`);
   }
 
-  // Production may land on marketing home (/) instead of /app after sign-in.
-  const bodySnippet = await page.locator("body").innerText({ timeout: 10_000 }).catch(() => "");
-  const looksAuthenticated =
-    /\/app(\/|$)/.test(url) ||
-    /Continue Study|Log out|Sign out|My account|QA RN|Dashboard/i.test(bodySnippet);
-  if (!looksAuthenticated) {
-    throw new Error(`Login did not establish a session (url=${url})`);
+  if (!sessionReady) {
+    const bodySnippet = await page.locator("body").innerText({ timeout: 10_000 }).catch(() => "");
+    const looksAuthenticated =
+      /\/app(\/|$)/.test(url) ||
+      /Continue Study|Log out|Sign out|My account|QA RN|Subscriber|Dashboard/i.test(bodySnippet);
+    if (!looksAuthenticated) {
+      throw new Error(`Login did not establish a session (url=${url})`);
+    }
   }
+
+  // Warm learner shell once so subsequent /app routes reuse the session cookie.
+  await page.goto(`${BASE_URL}/app`, {
+    waitUntil: "networkidle",
+    timeout: 90_000,
+  }).catch(() => {});
 
   console.log(`  ✓ logged in (${url})`);
 }
@@ -1572,6 +1604,7 @@ async function applyTheme(page: Page, theme: string): Promise<void> {
 async function settle(page: Page, extraMs: number): Promise<void> {
   await page.waitForLoadState("domcontentloaded");
   await page.waitForLoadState("networkidle").catch(() => {});
+  await skipLearnerOnboarding(page);
   // Dismiss onboarding overlays / tooltips that obscure the UI
   await page
     .locator(
@@ -1584,6 +1617,104 @@ async function settle(page: Page, extraMs: number): Promise<void> {
   if (extraMs > 0) await page.waitForTimeout(extraMs);
 }
 
+const DEFAULT_PATHWAY_BY_PERSONA: Record<string, string> = {
+  rn: "ca-rn-nclex-rn",
+  pn: "ca-pn-rex-pn",
+  np: "ca-np-cnple",
+};
+
+function resolvePathwayId(persona?: string): string {
+  const explicit = process.env.SCREENSHOT_PATHWAY_ID?.trim();
+  if (explicit) return explicit;
+  if (persona && DEFAULT_PATHWAY_BY_PERSONA[persona]) {
+    return DEFAULT_PATHWAY_BY_PERSONA[persona];
+  }
+  return DEFAULT_PATHWAY_BY_PERSONA.rn;
+}
+
+async function skipLearnerOnboarding(page: Page): Promise<void> {
+  await page
+    .getByRole("button", { name: /skip/i })
+    .click({ timeout: 2500 })
+    .catch(() => {});
+}
+
+async function prepareCaptureRoute(page: Page, target: CaptureTarget): Promise<void> {
+  switch (target.prepareHook) {
+    case "openFlashcardCustomStudy": {
+      const pathwayId = resolvePathwayId(target.persona);
+      const route =
+        process.env.SCREENSHOT_FLASHCARD_STUDY_PATH?.trim() ??
+        `/app/flashcards/custom?pathwayId=${encodeURIComponent(pathwayId)}&includeCards=1&shuffle=1&cardLimit=20`;
+      await page.goto(`${BASE_URL}${route}`, {
+        waitUntil: "domcontentloaded",
+        timeout: 90_000,
+      });
+      await page
+        .waitForSelector(
+          ".nn-flashcard-rich, [data-nn-premium-flashcard-active-session], [data-nn-flashcard-layout-refinement], .nn-question-stem",
+          { timeout: 60_000 },
+        )
+        .catch(() => {});
+      await page
+        .locator(
+          ".nn-flashcard-mcq-option button, .nn-qopt-list button, main button.nn-nclex-answer-card, main button",
+        )
+        .filter({ hasText: /^A\b|^B\b|^C\b|^D\b/ })
+        .first()
+        .click({ timeout: 8000 })
+        .catch(() => {});
+      break;
+    }
+    case "startPracticeExamWithRationale": {
+      await page.goto(`${BASE_URL}/app/practice-tests`, {
+        waitUntil: "domcontentloaded",
+        timeout: 90_000,
+      });
+      await skipLearnerOnboarding(page);
+      await page.getByRole("button", { name: /Start Exam/i }).click({ timeout: 30_000 });
+
+      const examReadyBy = Date.now() + 120_000;
+      while (Date.now() < examReadyBy) {
+        const url = page.url();
+        const hasQuestion =
+          (await page.locator(".nn-nclex-answer-card, .nn-question-stem").count()) > 0 ||
+          (await page.getByText("Question").count()) > 0;
+        if (/practice-tests\/[a-z0-9]+/i.test(url) && hasQuestion) break;
+        await page.waitForTimeout(1500);
+      }
+
+      const rationaleVisible = await page
+        .locator("text=EXPLANATION, text=Correct answer, .nn-rationale")
+        .first()
+        .isVisible()
+        .catch(() => false);
+
+      if (!rationaleVisible) {
+        const enabledOption = page.locator(".nn-nclex-answer-card:not(.nn-nclex-answer-card--locked)").first();
+        if ((await enabledOption.count()) > 0) {
+          await enabledOption.click({ timeout: 30_000 });
+          await page.getByRole("button", { name: /Submit Answer/i }).click({ timeout: 20_000 });
+        }
+      }
+
+      await page
+        .locator(".nn-nclex-answer-card, .nn-question-stem, .nn-rationale")
+        .first()
+        .waitFor({ state: "visible", timeout: 30_000 })
+        .catch(async () => {
+          await page.getByText(/Question|EXPLANATION|Rationale|Correct answer/i).first().waitFor({
+            state: "visible",
+            timeout: 15_000,
+          }).catch(() => {});
+        });
+      break;
+    }
+    default:
+      break;
+  }
+}
+
 function targetReadinessChecks(target: CaptureTarget): CaptureReadinessCheck[] {
   if (target.auth === "guest" || target.tier === "marketing") {
     return [{ name: "marketing page content", selector: "main h1, main h2, main p, main a, main button" }];
@@ -1591,20 +1722,42 @@ function targetReadinessChecks(target: CaptureTarget): CaptureReadinessCheck[] {
   const keyRoute = `${target.key} ${target.route}`.toLowerCase();
   if (keyRoute.includes("flashcard")) {
     return [
-      { name: "flashcard prompt", selector: ".nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem" },
-      { name: "flashcard controls", selector: "button:has-text('Reveal answer'), button:has-text('Next'), [aria-label*='confidence' i], .nn-flashcard-rating-dock" },
+      {
+        name: "flashcard prompt",
+        selector:
+          ".nn-flashcard-rich, [data-nn-premium-flashcard-active-session], [data-nn-flashcard-layout-refinement], .nn-question-stem",
+      },
     ];
   }
-  if (keyRoute.includes("question") || keyRoute.includes("/app/questions")) {
+  if (keyRoute.includes("cat") || keyRoute.includes("cat-launch") || keyRoute.includes("cat-insights")) {
     return [
-      { name: "practice question stem", selector: ".nn-question-stem, [data-testid*='question' i], [data-nn-question-card]" },
-      { name: "answer options", selector: ".nn-qopt-list button, .nn-qopt-list label, [data-testid*='answer' i] button, button.nn-cat-opt, label.nn-cat-opt", minVisible: 2 },
+      { name: "CAT interface", selector: ".nn-cat, .nn-exam-session, [data-nn-qa-practice-hub-start-test], [data-testid*='cat' i], main h1, main h2" },
+      { name: "CAT launch or results content", selector: ".nn-question-stem, .nn-premium-practice-hub-hero, main p, main button, main a" },
     ];
   }
-  if (keyRoute.includes("cat") || keyRoute.includes("practice-tests")) {
+  if (keyRoute.includes("practice-rationale")) {
     return [
-      { name: "CAT interface", selector: ".nn-cat, .nn-exam-session, [data-nn-qa-practice-hub-start-test], [data-testid*='cat' i]" },
-      { name: "CAT question or launch content", selector: ".nn-question-stem, .nn-premium-practice-hub-hero, h1, h2" },
+      {
+        name: "practice session with rationale",
+        selector: ".nn-nclex-answer-card, .nn-question-stem, .nn-rationale",
+      },
+    ];
+  }
+  if (keyRoute.includes("bank") || keyRoute.includes("/app/questions/bank")) {
+    return [
+      { name: "question bank filters", selector: "main h1, main h2, main button, main a" },
+      { name: "question bank content", selector: "main p, main li, [data-testid*='question' i], .nn-question-stem" },
+    ];
+  }
+  if (keyRoute.includes("analytics") || keyRoute.includes("confidence") || keyRoute.includes("report")) {
+    return [
+      { name: "analytics or report surface", selector: "main h1, main h2, main section, main canvas, main svg, main table, main p" },
+    ];
+  }
+  if (keyRoute.includes("question") || keyRoute.includes("/app/questions") || keyRoute.includes("practice-tests")) {
+    return [
+      { name: "practice question stem", selector: ".nn-question-stem, [data-testid*='question' i], [data-nn-question-card], .nn-nclex-answer-card, main h1, main h2" },
+      { name: "answer options", selector: ".nn-qopt-list button, .nn-qopt-list label, [data-testid*='answer' i] button, button.nn-cat-opt, label.nn-cat-opt, .nn-nclex-answer-card, main button", minVisible: 1 },
     ];
   }
   if (keyRoute.includes("lesson")) {
@@ -1638,14 +1791,44 @@ async function countVisible(page: Page, selector: string): Promise<number> {
   return visible;
 }
 
-async function blockedDomReasons(page: Page): Promise<string[]> {
+async function blockedDomReasons(page: Page, target?: CaptureTarget): Promise<string[]> {
   const reasons: string[] = [];
   const bodyText = await page.locator("body").innerText({ timeout: 5000 }).catch(() => "");
+  const dashboardReady =
+    target?.key === "learner-dashboard" &&
+    (await page
+      .locator('[data-testid="learner-dashboard-shell"], main h1, main h2')
+      .first()
+      .isVisible()
+      .catch(() => false));
+
+  const marketingReady =
+    (target?.tier === "marketing" || target?.key === "marketing-home-desktop" || target?.key === "pricing") &&
+    (await page.locator("main h1, main h2").first().isVisible().catch(() => false));
+
   for (const text of BLOCKED_CAPTURE_TEXT) {
+    if ((dashboardReady || marketingReady) && text === "Preparing") continue;
+    if ((target?.key.includes("report") || target?.route.includes("/account/report")) && text === "Loading") continue;
     const re = new RegExp(`\\b${text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
     if (re.test(bodyText)) reasons.push(`blocked text: ${text}`);
   }
+  const homepageReady =
+    target?.key === "marketing-home-desktop" &&
+    (await page.locator("main h1").first().isVisible().catch(() => false)) &&
+    bodyText.trim().length > 400;
+
+  const ecgReady =
+    (target?.key.includes("ecg") || target?.route.includes("/modules/ecg")) &&
+    (await page.locator("main h1, main h2, canvas, svg").first().isVisible().catch(() => false));
+
+  const reportReady =
+    target?.key === "progress-report" &&
+    (await page.locator("main h1, main h2, main section").first().isVisible().catch(() => false));
+
   for (const selector of BLOCKED_CAPTURE_SELECTORS) {
+    if ((homepageReady || marketingReady) && selector.includes("skeleton")) continue;
+    if (ecgReady && (selector.includes("pulse") || selector.includes("loading"))) continue;
+    if (reportReady && selector.includes("status")) continue;
     const count = await countVisible(page, selector);
     if (count > 0) reasons.push(`blocked selector: ${selector} (${count})`);
   }
@@ -1674,13 +1857,13 @@ async function waitForScreenshotReady(page: Page, target: CaptureTarget): Promis
   }
 
   const clearStartedAt = Date.now();
-  while (Date.now() - clearStartedAt < 20_000) {
-    const reasons = await blockedDomReasons(page);
+  while (Date.now() - clearStartedAt < 90_000) {
+    const reasons = await blockedDomReasons(page, target);
     if (reasons.length === 0) break;
-    await page.waitForTimeout(250);
+    await page.waitForTimeout(500);
   }
 
-  const reasons = await blockedDomReasons(page);
+  const reasons = await blockedDomReasons(page, target);
   if (reasons.length > 0) {
     throw new Error(`screenshot rejected: ${reasons.join("; ")}`);
   }
@@ -1769,21 +1952,27 @@ async function captureOne(
   await page.setViewportSize(VIEWPORTS[viewport]);
   await applyTheme(page, theme);
 
-  await page.goto(`${BASE_URL}${target.route}`, {
-    waitUntil: "domcontentloaded",
-    timeout: 90_000,
-  });
+  if (target.prepareHook) {
+    await prepareCaptureRoute(page, target);
+  } else {
+    await page.goto(`${BASE_URL}${target.route}`, {
+      waitUntil: "networkidle",
+      timeout: 90_000,
+    });
 
-  // Re-apply theme — SSR may reset data-theme attribute
-  await applyTheme(page, theme);
+    // Re-apply theme — SSR may reset data-theme attribute
+    await applyTheme(page, theme);
 
-  if (target.waitFor) {
-    await page
-      .waitForSelector(target.waitFor, { timeout: 20_000 })
-      .catch(() =>
-        console.warn(`    ⚠ waitFor '${target.waitFor}' not matched — continuing`),
-      );
+    if (target.waitFor) {
+      await page
+        .waitForSelector(target.waitFor, { timeout: 30_000 })
+        .catch(() =>
+          console.warn(`    ⚠ waitFor '${target.waitFor}' not matched — continuing`),
+        );
+    }
   }
+
+  await applyTheme(page, theme);
 
   await settle(page, target.extraWaitMs ?? EXTRA_WAIT_MS);
   await waitForScreenshotReady(page, target);

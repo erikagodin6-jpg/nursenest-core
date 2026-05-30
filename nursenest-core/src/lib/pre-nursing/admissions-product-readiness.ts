@@ -64,7 +64,7 @@ export const ADMISSIONS_PRODUCT_READINESS: readonly AdmissionsProductReadiness[]
     statusLabel: "Beta in development",
     canonicalPath: "/pre-nursing/casper",
     summary:
-      "CASPer is under active product development and is not yet a complete admissions-prep ecosystem. NurseNest is building scenario practice, timed written and video response workflows, rubrics, feedback, and competency analytics before full launch.",
+      "CASPer now has a dedicated response-training ecosystem for situational judgment, timed written practice, video response coaching, rubrics, structured feedback, and competency analytics. Longitudinal trend persistence, governance review, and launch-approved SEO remain before full public launch.",
     domains: [
       "Ethics",
       "Professionalism",

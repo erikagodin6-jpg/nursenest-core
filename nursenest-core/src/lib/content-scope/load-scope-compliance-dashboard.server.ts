@@ -11,10 +11,17 @@ import {
   type ContentScopeSummary,
   type ContentScopeSurface,
 } from "@/lib/content-scope/content-scope-auditor";
+import {
+  buildScopeAlignmentIntelligenceReport,
+  type ScopeAlignmentIntelligenceReport,
+} from "@/lib/content-scope/scope-alignment-intelligence-engine";
+import { listClinicalSkillCategories, listClinicalSkills } from "@/lib/clinical-skills/clinical-skills-catalog";
+import { PHARMACOLOGY_CATEGORIES } from "@/lib/pharmacology/pharmacology-learning-system";
 
 export type ScopeComplianceDashboard = {
   generatedAt: string;
   summary: ContentScopeSummary;
+  alignment: ScopeAlignmentIntelligenceReport;
   findings: ContentScopeFinding[];
   auditedSamples: number;
   queue: ContentScopeFinding[];
@@ -53,7 +60,7 @@ function severityWeight(severity: ContentScopeFinding["severity"]): number {
 }
 
 async function loadAuditItems(limit: number): Promise<ContentScopeAuditItem[]> {
-  const perSurface = Math.max(25, Math.min(250, Math.floor(limit / 5)));
+  const perSurface = Math.max(25, Math.min(250, Math.floor(limit / 7)));
 
   const [questions, flashcards, lessons, scenarios, ecgQuestions] = await Promise.all([
     prisma.examQuestion.findMany({
@@ -227,28 +234,77 @@ async function loadAuditItems(limit: number): Promise<ContentScopeAuditItem[]> {
     tags: q.topicTags,
   }));
 
-  return [...questionItems, ...flashcardItems, ...lessonItems, ...scenarioItems, ...ecgItems];
+  const clinicalSkillCategories = new Map(listClinicalSkillCategories().map((category) => [category.id, category]));
+  const clinicalSkillItems: ContentScopeAuditItem[] = listClinicalSkills()
+    .slice(0, perSurface)
+    .map((skill) => ({
+      id: `clinical-skill:${skill.slug}`,
+      surface: "clinical_skill",
+      title: skill.title,
+      body: [
+        skill.summary,
+        skill.competencyDomain,
+        skill.simulationFocus,
+        clinicalSkillCategories.get(skill.categoryId)?.summary,
+        ...(skill.steps ?? []).flatMap((step) => [step.title, step.detail]),
+      ].join("\n"),
+      tier: skill.roleTracks?.join(", ") ?? null,
+      exam: null,
+      country: null,
+      careerType: "nursing",
+      pathwayId: skill.roleTracks?.join(", ") ?? null,
+      topic: skill.competencyDomain ?? clinicalSkillCategories.get(skill.categoryId)?.title ?? skill.categoryId,
+      tags: [skill.categoryId, ...(skill.relatedSystems ?? [])],
+    }));
+
+  const pharmacologyItems: ContentScopeAuditItem[] = PHARMACOLOGY_CATEGORIES.slice(0, perSurface).map((category) => ({
+    id: `pharmacology:${category.id}`,
+    surface: "pharmacology",
+    title: category.title,
+    body: [
+      category.description,
+      category.safetyFocus,
+      category.lessonTopic,
+      ...category.commonMedications,
+      ...category.highRiskSituations,
+    ].join("\n"),
+    tier: category.tierDepth.join(", "),
+    exam: null,
+    country: null,
+    careerType: "pharmacology",
+    pathwayId: category.tierDepth.join(", "),
+    topic: category.topicSlug,
+    tags: [category.id, category.topicSlug, "pharmacology"],
+  }));
+
+  return [...questionItems, ...flashcardItems, ...lessonItems, ...clinicalSkillItems, ...pharmacologyItems, ...scenarioItems, ...ecgItems];
 }
 
 export async function loadScopeComplianceDashboard({ limit = 750 }: { limit?: number } = {}): Promise<ScopeComplianceDashboard> {
+  const fallbackGeneratedAt = new Date().toISOString();
+
   return withDatabaseFallbackTimeout(
     async () => {
       const items = await loadAuditItems(limit);
       const findings = items.flatMap(auditContentScope);
       const summary = summarizeScopeCompliance(items, findings);
+      const generatedAt = new Date().toISOString();
+      const alignment = buildScopeAlignmentIntelligenceReport(items, generatedAt);
       const queue = [...findings].sort((a, b) => severityWeight(b.severity) - severityWeight(a.severity) || a.surface.localeCompare(b.surface));
 
       return {
-        generatedAt: new Date().toISOString(),
+        generatedAt,
         summary,
+        alignment,
         findings,
         auditedSamples: items.length,
         queue,
       };
     },
     {
-      generatedAt: new Date().toISOString(),
+      generatedAt: fallbackGeneratedAt,
       summary: EMPTY_SUMMARY,
+      alignment: buildScopeAlignmentIntelligenceReport([], fallbackGeneratedAt),
       findings: [],
       auditedSamples: 0,
       queue: [],

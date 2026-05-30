@@ -10,7 +10,7 @@ import {
   summarizeStudyStreak,
   type FlashcardLearningSignal,
 } from "@/lib/flashcards/learning-insight-engine";
-import { buildRelatedLearningPlan } from "@/lib/flashcards/related-learning-engine";
+import { buildRelatedLearningPlan, buildWeakTopicRemediationPlan } from "@/lib/flashcards/related-learning-engine";
 import { buildFlashcardQualityReviewQueue, evaluateFlashcardQuality } from "@/lib/flashcards/question-quality-engine";
 
 const signals: FlashcardLearningSignal[] = [
@@ -77,6 +77,31 @@ test("buildRelatedLearningPlan exposes only concrete links", () => {
   assert.equal(plan.primary?.type, "lesson");
   assert.ok(plan.all.some((link) => link.type === "pharmacology"));
   assert.equal(plan.all.every((link) => link.href.length > 0), true);
+});
+
+test("buildRelatedLearningPlan does not invent generic fallback links", () => {
+  const plan = buildRelatedLearningPlan({
+    cardId: "unmapped-1",
+    topic: "Unmapped concept",
+    subtopic: null,
+    pathwayId: "ca-rn-nclex-rn",
+    isIncorrect: true,
+  });
+  assert.equal(plan.primary, null);
+  assert.deepEqual(plan.secondary, []);
+  assert.deepEqual(plan.all, []);
+});
+
+test("buildWeakTopicRemediationPlan labels topic flashcards as flashcard practice", () => {
+  const plan = buildWeakTopicRemediationPlan({
+    topic: "Hematology",
+    missCount: 4,
+    totalCount: 6,
+    pathwayId: "ca-rn-nclex-rn",
+  });
+  const flashcards = plan.links.find((link) => link.label === "Hematology Flashcards");
+  assert.equal(flashcards?.type, "drill");
+  assert.equal(flashcards?.href, "/app/flashcards?topic=Hematology");
 });
 
 test("evaluateFlashcardQuality flags generic rationales and missing distractor depth", () => {

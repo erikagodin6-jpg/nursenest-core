@@ -26,6 +26,11 @@ import {
   NEW_GRAD_SHIFT_READINESS_MODULES,
 } from "@/lib/new-grad/new-grad-residency-program";
 import { listNewGradWorkAreas } from "@/lib/new-grad/new-grad-work-areas";
+import { MarketingProductProofBand } from "@/components/marketing/marketing-product-proof-band";
+import {
+  GENERATED_SCREENSHOT_FALLBACKS,
+  GENERATED_SCREENSHOT_PATHS,
+} from "@/lib/marketing/generated-screenshot-registry";
 
 export function NewGradMarketingLanding({
   shell,
@@ -60,6 +65,18 @@ export function NewGradMarketingLanding({
       <NewGradHeroFull
         primaryHref={study.hubHref}
         simulationsHref="/clinical-scenarios"
+      />
+
+      <MarketingProductProofBand
+        kicker="Platform preview"
+        title="New Grad study hub inside NurseNest"
+        body="Specialty prep, clinical skills, simulations, and readiness — one connected transition workspace."
+        shot={{
+          src: GENERATED_SCREENSHOT_PATHS.newGradMarketingHub,
+          fallbackSrc: GENERATED_SCREENSHOT_FALLBACKS.newGradMarketingHub,
+          alt: "New graduate nursing transition hub with specialty preparation and clinical confidence tools",
+          theme: "blossom",
+        }}
       />
 
       {/* ── First-Year Success Framework ─────────────────────────────── */}

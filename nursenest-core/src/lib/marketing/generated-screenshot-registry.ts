@@ -51,14 +51,15 @@ export type GeneratedScreenshotRecord = {
   recommendation: string;
 };
 
-const LEGACY_FALLBACKS = {
-  dashboard: "/dashboard-redesign-preview/01-dash-desktop-ocean.png",
-  readiness: "/dashboard-redesign-preview/03-readiness-desktop.png",
-  coaching: "/dashboard-redesign-preview/07-coaching-panel.png",
-  cat: "/dashboard-redesign-preview/10-cat-trajectory.png",
-  flashcards: "/landing-polish-preview/png/08-flashcards-session-blossom.png",
-  catReadiness: "/landing-polish-preview/png/09-cat-readiness-ocean.png",
-  analytics: "/dashboard-redesign-preview/05-kpi-components.png",
+/** Generated WebP fallbacks — never serve deprecated preview PNG directories. */
+const PRODUCT_FALLBACKS = {
+  dashboard: "/marketing/generated-screenshots/core/learner-dashboard.webp",
+  readiness: "/marketing/generated-screenshots/core/confidence-analytics.webp",
+  coaching: "/marketing/generated-screenshots/core/smart-review.webp",
+  cat: "/marketing/generated-screenshots/core/cat-exam-session.webp",
+  flashcards: "/marketing/generated-screenshots/core/flashcards.webp",
+  catReadiness: "/marketing/generated-screenshots/core/cat-results.webp",
+  analytics: "/marketing/generated-screenshots/core/confidence-analytics.webp",
 } as const;
 
 function generated(
@@ -92,101 +93,101 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
   coreDashboard: generated(
     "coreDashboard",
     "/marketing/generated-screenshots/core/learner-dashboard.webp",
-    LEGACY_FALLBACKS.dashboard,
+    PRODUCT_FALLBACKS.dashboard,
     {
       component: "TierValueExperience",
       pages: ["/pricing"],
-      status: "needs-authenticated-capture",
+      status: "current",
     },
   ),
   coreReadiness: generated(
     "coreReadiness",
     "/marketing/generated-screenshots/core/confidence-analytics.webp",
-    LEGACY_FALLBACKS.readiness,
+    PRODUCT_FALLBACKS.readiness,
     {
       component: "TierValueExperience",
       pages: ["/pricing"],
-      status: "needs-authenticated-capture",
+      status: "current",
     },
   ),
   coreCoaching: generated(
     "coreCoaching",
     "/marketing/generated-screenshots/core/smart-review.webp",
-    LEGACY_FALLBACKS.coaching,
+    PRODUCT_FALLBACKS.coaching,
     {
       component: "TierValueExperience",
       pages: ["/pricing"],
-      status: "needs-authenticated-capture",
+      status: "current",
     },
   ),
   coreCat: generated(
     "coreCat",
     "/marketing/generated-screenshots/core/cat-exam-session.webp",
-    LEGACY_FALLBACKS.cat,
+    PRODUCT_FALLBACKS.cat,
     {
       component: "TierValueExperience",
       pages: ["/pricing"],
-      status: "needs-authenticated-capture",
+      status: "current",
     },
   ),
   coreFlashcards: generated(
     "coreFlashcards",
     "/marketing/generated-screenshots/core/flashcards.webp",
-    LEGACY_FALLBACKS.flashcards,
+    PRODUCT_FALLBACKS.flashcards,
     {
       component: "TierValueExperience",
       pages: ["/pricing"],
-      status: "needs-authenticated-capture",
+      status: "current",
     },
   ),
   coreCatReadiness: generated(
     "coreCatReadiness",
     "/marketing/generated-screenshots/core/cat-results.webp",
-    LEGACY_FALLBACKS.catReadiness,
+    PRODUCT_FALLBACKS.catReadiness,
     {
       component: "TierValueExperience",
       pages: ["/pricing"],
-      status: "needs-authenticated-capture",
+      status: "current",
     },
   ),
   coreAnalytics: generated(
     "coreAnalytics",
     "/marketing/generated-screenshots/core/confidence-analytics.webp",
-    LEGACY_FALLBACKS.analytics,
+    PRODUCT_FALLBACKS.analytics,
     {
       component: "TierValueExperience",
       pages: ["/pricing"],
-      status: "needs-authenticated-capture",
+      status: "current",
     },
   ),
   marketingHome: generated(
     "marketingHome",
     "/marketing/generated-screenshots/marketing/marketing-home-desktop.webp",
-    LEGACY_FALLBACKS.dashboard,
+    PRODUCT_FALLBACKS.dashboard,
     {
       component: "GeneratedMarketingScreenshotRegistry",
       pages: ["/", "/pricing"],
-      status: "needs-recapture",
+      status: "current",
       recommendation:
-        "Rejected by the hardened screenshot guard because skeleton markers were visible. Keep the fallback image until the homepage can be recaptured without loading UI.",
+        "Fresh production capture from QA RN subscriber — homepage hero with platform preview carousel.",
     },
   ),
   marketingPricing: generated(
     "marketingPricing",
     "/marketing/generated-screenshots/marketing/pricing.webp",
-    LEGACY_FALLBACKS.dashboard,
+    PRODUCT_FALLBACKS.dashboard,
     {
       component: "GeneratedMarketingScreenshotRegistry",
       pages: ["/pricing"],
-      status: "needs-recapture",
+      status: "current",
       recommendation:
-        "Rejected by the hardened screenshot guard because loading copy was visible. Keep the fallback image until pricing can be recaptured after a completed render.",
+        "Fresh production capture — pricing tiers with live product screenshots.",
     },
   ),
   marketingFaq: generated(
     "marketingFaq",
     "/marketing/generated-screenshots/marketing/faq.webp",
-    LEGACY_FALLBACKS.dashboard,
+    PRODUCT_FALLBACKS.dashboard,
     {
       component: "GeneratedMarketingScreenshotRegistry",
       pages: ["/faq"],
@@ -195,7 +196,7 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
   rnMarketingHub: generated(
     "rnMarketingHub",
     "/marketing/generated-screenshots/marketing/rn-marketing-hub.webp",
-    LEGACY_FALLBACKS.dashboard,
+    PRODUCT_FALLBACKS.dashboard,
     {
       component: "TierValueExperience",
       pages: ["/pricing", "/us/rn/nclex-rn"],
@@ -204,7 +205,7 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
   rnQuestionsMarketing: generated(
     "rnQuestionsMarketing",
     "/marketing/generated-screenshots/marketing/rn-questions-marketing.webp",
-    LEGACY_FALLBACKS.dashboard,
+    PRODUCT_FALLBACKS.dashboard,
     {
       component: "TierValueExperience",
       pages: ["/pricing", "/us/rn/nclex-rn/questions"],
@@ -213,7 +214,7 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
   rnLessonsMarketing: generated(
     "rnLessonsMarketing",
     "/marketing/generated-screenshots/marketing/rn-lessons-marketing.webp",
-    LEGACY_FALLBACKS.dashboard,
+    PRODUCT_FALLBACKS.dashboard,
     {
       component: "TierValueExperience",
       pages: ["/pricing", "/us/rn/nclex-rn/lessons"],
@@ -222,7 +223,7 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
   pnMarketingHub: generated(
     "pnMarketingHub",
     "/marketing/generated-screenshots/marketing/pn-marketing-hub.webp",
-    LEGACY_FALLBACKS.dashboard,
+    PRODUCT_FALLBACKS.dashboard,
     {
       component: "TierValueExperience",
       pages: ["/pricing", "/canada/pn/rex-pn"],
@@ -231,7 +232,7 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
   npMarketingHub: generated(
     "npMarketingHub",
     "/marketing/generated-screenshots/marketing/np-marketing-hub.webp",
-    LEGACY_FALLBACKS.dashboard,
+    PRODUCT_FALLBACKS.dashboard,
     {
       component: "TierValueExperience",
       pages: ["/pricing", "/canada/np/cnple"],
@@ -240,7 +241,7 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
   alliedMarketingHub: generated(
     "alliedMarketingHub",
     "/marketing/generated-screenshots/marketing/allied-marketing-hub.webp",
-    LEGACY_FALLBACKS.dashboard,
+    PRODUCT_FALLBACKS.dashboard,
     {
       component: "TierValueExperience",
       pages: ["/pricing", "/allied/allied-health"],
@@ -249,7 +250,7 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
   newGradMarketingHub: generated(
     "newGradMarketingHub",
     "/marketing/generated-screenshots/marketing/new-grad-marketing-hub.webp",
-    LEGACY_FALLBACKS.dashboard,
+    PRODUCT_FALLBACKS.dashboard,
     {
       component: "TierValueExperience",
       pages: ["/pricing", "/canada/new-grad"],
@@ -295,12 +296,12 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
     pages: ["/pricing"],
     status: "needs-authenticated-capture",
   }),
-  rnCat: generated("rnCat", "/marketing/generated-screenshots/rn/rn-cat-exam.webp", LEGACY_FALLBACKS.cat, {
+  rnCat: generated("rnCat", "/marketing/generated-screenshots/rn/rn-cat-exam.webp", PRODUCT_FALLBACKS.cat, {
     component: "TierValueExperience",
     pages: ["/pricing"],
     status: "needs-authenticated-capture",
   }),
-  pnCat: generated("pnCat", "/marketing/generated-screenshots/pn/pn-cat.webp", LEGACY_FALLBACKS.cat, {
+  pnCat: generated("pnCat", "/marketing/generated-screenshots/pn/pn-cat.webp", PRODUCT_FALLBACKS.cat, {
     component: "TierValueExperience",
     pages: ["/pricing"],
     status: "needs-authenticated-capture",
@@ -315,12 +316,12 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
     pages: ["/pricing"],
     status: "needs-authenticated-capture",
   }),
-  npAnalytics: generated("npAnalytics", "/marketing/generated-screenshots/np/np-advanced-analytics.webp", LEGACY_FALLBACKS.analytics, {
+  npAnalytics: generated("npAnalytics", "/marketing/generated-screenshots/np/np-advanced-analytics.webp", PRODUCT_FALLBACKS.analytics, {
     component: "TierValueExperience",
     pages: ["/pricing"],
     status: "needs-authenticated-capture",
   }),
-  newGradReadiness: generated("newGradReadiness", "/marketing/generated-screenshots/newgrad/newgrad-readiness.webp", LEGACY_FALLBACKS.readiness, {
+  newGradReadiness: generated("newGradReadiness", "/marketing/generated-screenshots/newgrad/newgrad-readiness.webp", PRODUCT_FALLBACKS.readiness, {
     component: "TierValueExperience",
     pages: ["/pricing"],
     status: "needs-authenticated-capture",

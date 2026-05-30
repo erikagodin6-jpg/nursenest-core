@@ -50,6 +50,7 @@ import {
   buildRecommendedNextSteps,
   calculateConfidenceAccuracyGap,
   calculateLearnerReadinessIndex,
+  detectWeakTopicWindows,
   summarizeStudyStreak,
   type FlashcardLearningSignal,
 } from "@/lib/flashcards/learning-insight-engine";
@@ -549,7 +550,14 @@ export function ActiveStudySession({
     isIncorrect: lastAnswerCorrect === false,
   });
 
-  const weakTopics = detectWeakTopics(topicPerf);
+  const windowWeakTopics = detectWeakTopicWindows(learningSignals);
+  const weakTopics = windowWeakTopics.length > 0
+    ? windowWeakTopics.map((w) => ({
+        topic: w.topic,
+        correct: Math.round(w.accuracy * w.attempts),
+        total: w.attempts,
+      }))
+    : detectWeakTopics(topicPerf);
   const activeWeakTopics = weakTopics.filter((w) => !weakAreaDismissed.has(w.topic));
   const weakAreaPlans = new Map<string, WeakAreaPlan>(
     activeWeakTopics.map((w) => [

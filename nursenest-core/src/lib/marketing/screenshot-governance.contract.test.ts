@@ -154,22 +154,21 @@ test("critical CDN slots all have capture routes", () => {
 
 // ─── Local fallback image existence ──────────────────────────────────────────
 
-test("legacy fallback screenshots exist on disk", () => {
-  const legacyPaths = [
-    "dashboard-redesign-preview/01-dash-desktop-ocean.png",
-    "dashboard-redesign-preview/03-readiness-desktop.png",
-    "dashboard-redesign-preview/07-coaching-panel.png",
-    "dashboard-redesign-preview/10-cat-trajectory.png",
-    "landing-polish-preview/png/08-flashcards-session-blossom.png",
-    "landing-polish-preview/png/09-cat-readiness-ocean.png",
-    "dashboard-redesign-preview/05-kpi-components.png",
+test("generated product fallback WebPs exist on disk", () => {
+  const fallbackPaths = [
+    "marketing/generated-screenshots/core/learner-dashboard.webp",
+    "marketing/generated-screenshots/core/confidence-analytics.webp",
+    "marketing/generated-screenshots/core/smart-review.webp",
+    "marketing/generated-screenshots/core/cat-exam-session.webp",
+    "marketing/generated-screenshots/core/flashcards.webp",
+    "marketing/generated-screenshots/core/cat-results.webp",
   ];
 
-  for (const relPath of legacyPaths) {
+  for (const relPath of fallbackPaths) {
     const absPath = path.join(PUBLIC_DIR, relPath);
     assert.ok(
       fs.existsSync(absPath),
-      `Legacy fallback image missing: ${relPath}\n` +
+      `Generated product fallback missing: ${relPath}\n` +
         "This is used as a fallback by tier-value-experience.ts stages and must exist on disk.",
     );
   }

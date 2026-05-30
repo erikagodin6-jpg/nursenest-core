@@ -1,118 +1,77 @@
 {
-  "generatedAt": "2026-05-30T04:58:14.958Z",
+  "generatedAt": "2026-05-30T06:33:36.720Z",
   "baseUrl": "https://nursenest.ca",
   "outputDir": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots",
-  "totalCaptured": 0,
-  "totalErrors": 18,
-  "captures": [],
+  "totalCaptured": 2,
+  "totalErrors": 1,
+  "captures": [
+    {
+      "key": "flashcards",
+      "tier": "core",
+      "label": "Flashcard study mode",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/flashcards",
+      "files": [
+        "public/marketing/generated-screenshots/core/flashcards.webp",
+        "public/marketing/generated-screenshots/core/flashcards-1200w.webp",
+        "public/marketing/generated-screenshots/core/flashcards-768w.webp",
+        "public/marketing/generated-screenshots/core/flashcards-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "flashcard prompt"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:30:58.198Z"
+    },
+    {
+      "key": "flashcards",
+      "tier": "core",
+      "label": "Flashcard study mode",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "route": "/app/flashcards",
+      "files": [
+        "public/marketing/generated-screenshots/themes/blossom/flashcards.webp",
+        "public/marketing/generated-screenshots/themes/blossom/flashcards-1200w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/flashcards-768w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/flashcards-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "flashcard prompt"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:33:36.655Z"
+    }
+  ],
   "errors": [
     {
-      "key": "practice-rationale",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-question-stem, [data-testid*=\\'question\\' i], [data-nn-question-card]') to be visible\n"
-    },
-    {
-      "key": "practice-rationale",
-      "theme": "midnight",
-      "viewport": "desktop",
-      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-question-stem, [data-testid*=\\'question\\' i], [data-nn-question-card]') to be visible\n"
-    },
-    {
-      "key": "practice-rationale",
-      "theme": "blossom",
-      "viewport": "desktop",
-      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-question-stem, [data-testid*=\\'question\\' i], [data-nn-question-card]') to be visible\n"
-    },
-    {
-      "key": "practice-rationale",
-      "theme": "aurora",
-      "viewport": "desktop",
-      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-question-stem, [data-testid*=\\'question\\' i], [data-nn-question-card]') to be visible\n"
-    },
-    {
-      "key": "practice-rationale",
-      "theme": "sage-garden",
-      "viewport": "desktop",
-      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-question-stem, [data-testid*=\\'question\\' i], [data-nn-question-card]') to be visible\n"
-    },
-    {
-      "key": "flashcards",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem') to be visible\n"
-    },
-    {
       "key": "flashcards",
       "theme": "ocean",
       "viewport": "mobile",
-      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem') to be visible\n"
-    },
-    {
-      "key": "flashcards",
-      "theme": "midnight",
-      "viewport": "desktop",
-      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem') to be visible\n"
-    },
-    {
-      "key": "flashcards",
-      "theme": "blossom",
-      "viewport": "desktop",
-      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem') to be visible\n"
-    },
-    {
-      "key": "flashcards",
-      "theme": "aurora",
-      "viewport": "desktop",
-      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem') to be visible\n"
-    },
-    {
-      "key": "flashcards",
-      "theme": "sage-garden",
-      "viewport": "desktop",
-      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem') to be visible\n"
-    },
-    {
-      "key": "learner-dashboard",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "error": "screenshot rejected: blocked text: Preparing"
-    },
-    {
-      "key": "learner-dashboard",
-      "theme": "ocean",
-      "viewport": "tablet",
-      "error": "screenshot rejected: blocked text: Preparing"
-    },
-    {
-      "key": "learner-dashboard",
-      "theme": "ocean",
-      "viewport": "mobile",
-      "error": "screenshot rejected: blocked text: Preparing"
-    },
-    {
-      "key": "learner-dashboard",
-      "theme": "midnight",
-      "viewport": "desktop",
-      "error": "screenshot rejected: blocked text: Preparing"
-    },
-    {
-      "key": "learner-dashboard",
-      "theme": "blossom",
-      "viewport": "desktop",
-      "error": "screenshot rejected: blocked text: Preparing"
-    },
-    {
-      "key": "learner-dashboard",
-      "theme": "aurora",
-      "viewport": "desktop",
-      "error": "screenshot rejected: blocked text: Preparing"
-    },
-    {
-      "key": "learner-dashboard",
-      "theme": "sage-garden",
-      "viewport": "desktop",
-      "error": "screenshot rejected: blocked text: Preparing"
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], [data-nn-flashcard-layout-refinement], .nn-question-stem') to be visible\n"
     }
   ]
 }

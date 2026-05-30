@@ -16,6 +16,9 @@ test("support staff can access /admin root and support-allowlisted routes", () =
   assert.equal(isPathAllowedForStaffTier("support", "/admin"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/admin/operations"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/admin/users"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/curriculum-coverage"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/revenue-protection"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/revenue-protection/users/u1/chargeback-package"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/api/admin/educator/remediation-assignments"), true);
 });
 
@@ -39,6 +42,8 @@ test("super staff can access demo user routes", () => {
 test("content staff cannot access user PII / subscription admin surfaces", () => {
   assert.equal(isPathAllowedForStaffTier("content", "/admin/users"), false);
   assert.equal(isPathAllowedForStaffTier("content", "/admin/subscriptions"), false);
+  assert.equal(isPathAllowedForStaffTier("content", "/admin/revenue-protection"), false);
+  assert.equal(isPathAllowedForStaffTier("content", "/api/admin/revenue-protection/users/u1/chargeback-package"), false);
   assert.equal(isPathAllowedForStaffTier("content", "/admin/analytics/subscriptions"), false);
 });
 

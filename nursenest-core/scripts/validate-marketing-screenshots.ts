@@ -168,17 +168,16 @@ const REQUIRED_THEME_VARIANTS = [
   "themes/ocean/learner-dashboard.webp",
 ] as const;
 
-// ─── Legacy fallback paths (should still exist as fallbacks) ─────────────────
+// ─── Product WebP fallbacks (canonical — no deprecated preview PNGs) ───────────
 
-const LEGACY_FALLBACK_PATHS = [
-  "dashboard-redesign-preview/01-dash-desktop-ocean.png",
-  "dashboard-redesign-preview/03-readiness-desktop.png",
-  "dashboard-redesign-preview/07-coaching-panel.png",
-  "dashboard-redesign-preview/10-cat-trajectory.png",
-  "landing-polish-preview/png/08-flashcards-session-blossom.png",
-  "landing-polish-preview/png/09-cat-readiness-ocean.png",
-  "dashboard-redesign-preview/05-kpi-components.png",
-];
+const PRODUCT_FALLBACK_PATHS = [
+  "marketing/generated-screenshots/core/learner-dashboard.webp",
+  "marketing/generated-screenshots/core/confidence-analytics.webp",
+  "marketing/generated-screenshots/core/smart-review.webp",
+  "marketing/generated-screenshots/core/cat-exam-session.webp",
+  "marketing/generated-screenshots/core/flashcards.webp",
+  "marketing/generated-screenshots/core/cat-results.webp",
+] as const;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -401,10 +400,10 @@ async function checkThemeVariants(checks: ScreenshotCheck[]): Promise<void> {
   }
 }
 
-async function checkLegacyFallbacks(checks: ScreenshotCheck[]): Promise<void> {
-  console.log("\n[FALLBACKS] Verifying legacy fallback images exist …");
+async function checkProductFallbacks(checks: ScreenshotCheck[]): Promise<void> {
+  console.log("\n[FALLBACKS] Verifying generated product fallback WebPs exist …");
 
-  for (const relPath of LEGACY_FALLBACK_PATHS) {
+  for (const relPath of PRODUCT_FALLBACK_PATHS) {
     const absPath = path.join(PUBLIC_DIR, relPath);
     const exists = await fileExists(absPath);
     const id = `fallback-${relPath.replace(/[/\\.]/g, "-")}`;
@@ -417,7 +416,7 @@ async function checkLegacyFallbacks(checks: ScreenshotCheck[]): Promise<void> {
         label: relPath,
         assetPath: absPath,
         status: "pass",
-        detail: "Legacy fallback in place",
+        detail: "Generated product fallback in place",
       });
     } else {
       console.log(`  ✗  ${relPath} — MISSING`);
@@ -427,7 +426,7 @@ async function checkLegacyFallbacks(checks: ScreenshotCheck[]): Promise<void> {
         label: relPath,
         assetPath: absPath,
         status: "fail",
-        detail: "Legacy fallback image is missing — tier-value-experience fallbackScreenshot will break",
+        detail: "Generated product fallback WebP is missing — tier-value-experience fallbackScreenshot will break",
       });
     }
   }
@@ -674,7 +673,7 @@ async function main(): Promise<void> {
   await checkLocalFiles(checks);
   await checkMobileFiles(checks);
   await checkThemeVariants(checks);
-  await checkLegacyFallbacks(checks);
+  await checkProductFallbacks(checks);
   await checkManifestQualityGate(checks);
 
   const report = buildReport(checks, DO_CDN_CHECK && !LOCAL_ONLY);

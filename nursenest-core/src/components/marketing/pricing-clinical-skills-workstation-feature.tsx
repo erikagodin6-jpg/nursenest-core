@@ -2,6 +2,8 @@
 
 import { ClipboardCheck, HeartPulse, ShieldAlert, Stethoscope, Syringe, Timer } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { MarketingProductProofBand } from "@/components/marketing/marketing-product-proof-band";
+import { marketingProofFromCoreKey } from "@/lib/marketing/marketing-proof-screenshots";
 
 const BULLETS = [
   { key: "pages.pricing.clinicalSkillsWorkstation.bullet1", Icon: HeartPulse },
@@ -60,6 +62,15 @@ export function PricingClinicalSkillsWorkstationFeature() {
           );
         })}
       </ul>
+
+      <div className="mx-auto mt-8 max-w-4xl">
+        <MarketingProductProofBand
+          shot={marketingProofFromCoreKey("lesson-detail", {
+            alt: "Clinical skills lesson with competency progression and safety checkpoints",
+            theme: "blossom",
+          })}
+        />
+      </div>
 
       <p className="nn-marketing-body-sm mx-auto mt-8 max-w-2xl text-center text-[var(--semantic-text-muted)]">
         {t("pages.pricing.clinicalSkillsWorkstation.footer")}

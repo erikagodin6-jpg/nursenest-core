@@ -133,9 +133,9 @@ export const SCREENSHOT_REGISTRY: readonly ScreenshotRecord[] = [
   entry(
     4,
     "question-types",
-    "NGN-style questions",
-    "Advanced item types that match modern exam formats — cloze, matrix, and extended reasoning.",
-    "NurseNest showing a Next Generation NCLEX-style question with extended multiple-response options.",
+    "Practice exam hub",
+    "Category filters, Practice Exam, CAT, and weak-area launchers — the full question bank in one workspace.",
+    "NurseNest practice hub showing NCLEX-RN category filters, Practice Exam and CAT entry points, and session launch controls.",
   ),
   entry(
     5,
@@ -176,8 +176,8 @@ export const SCREENSHOT_REGISTRY: readonly ScreenshotRecord[] = [
     10,
     "question-bank",
     "Question bank",
-    "Thousands of practice questions with clinical rationale, topic filters, and pathway-specific content.",
-    "NurseNest question bank view showing a list of practice questions with topic tags, difficulty indicators, and pathway filters.",
+    "Browse thousands of pathway-scoped items by clinical category, then launch Practice Exam or CAT sessions.",
+    "NurseNest question bank showing category chips, question counts, and Practice Exam / CAT session launchers.",
   ),
   entry(
     11,

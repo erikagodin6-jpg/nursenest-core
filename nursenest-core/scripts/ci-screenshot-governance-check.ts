@@ -83,28 +83,27 @@ function checkRegistryIntegrity(): void {
   }
 }
 
-function checkLegacyFallbacks(): void {
-  console.log("\n[2] Legacy fallback images …");
-  const legacyPaths = [
-    "dashboard-redesign-preview/01-dash-desktop-ocean.png",
-    "dashboard-redesign-preview/03-readiness-desktop.png",
-    "dashboard-redesign-preview/07-coaching-panel.png",
-    "dashboard-redesign-preview/10-cat-trajectory.png",
-    "landing-polish-preview/png/08-flashcards-session-blossom.png",
-    "landing-polish-preview/png/09-cat-readiness-ocean.png",
-    "dashboard-redesign-preview/05-kpi-components.png",
+function checkProductFallbacks(): void {
+  console.log("\n[2] Generated product fallback WebPs …");
+  const fallbackPaths = [
+    "marketing/generated-screenshots/core/learner-dashboard.webp",
+    "marketing/generated-screenshots/core/confidence-analytics.webp",
+    "marketing/generated-screenshots/core/smart-review.webp",
+    "marketing/generated-screenshots/core/cat-exam-session.webp",
+    "marketing/generated-screenshots/core/flashcards.webp",
+    "marketing/generated-screenshots/core/cat-results.webp",
   ];
 
   let allPresent = true;
-  for (const relPath of legacyPaths) {
+  for (const relPath of fallbackPaths) {
     const absPath = path.join(PUBLIC_DIR, relPath);
     if (!fs.existsSync(absPath)) {
-      critical("GOV-FALLBACK", `Legacy fallback missing: ${relPath}`);
+      critical("GOV-FALLBACK", `Product fallback missing: ${relPath}`);
       allPresent = false;
     }
   }
   if (allPresent) {
-    pass("GOV-FALLBACK", `All ${legacyPaths.length} legacy fallbacks present`);
+    pass("GOV-FALLBACK", `All ${fallbackPaths.length} generated product fallbacks present`);
   }
 }
 
@@ -247,7 +246,7 @@ function main(): void {
   console.log(`Strict mode: ${STRICT}`);
 
   checkRegistryIntegrity();
-  checkLegacyFallbacks();
+  checkProductFallbacks();
   checkGeneratedScreenshots();
   checkManifestFreshness();
   checkManifestQualityGates();

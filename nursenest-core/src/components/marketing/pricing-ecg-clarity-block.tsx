@@ -3,6 +3,8 @@
 import { Waves } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { FadeUp } from "@/lib/motion";
+import { MarketingProductProofBand } from "@/components/marketing/marketing-product-proof-band";
+import { marketingProofFromCoreKey } from "@/lib/marketing/marketing-proof-screenshots";
 
 /**
  * Distinguishes integrated Core ECG learning from the future Advanced ECG premium line — no entitlement overclaims.
@@ -45,6 +47,17 @@ export function PricingEcgClarityBlock() {
           <h3 className="text-lg font-semibold text-[var(--semantic-text-primary)]">{t("pages.pricing.ecg.advanced.title")}</h3>
           <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("pages.pricing.ecg.advanced.body")}</p>
         </div>
+      </div>
+
+      <div className="mt-8">
+        <MarketingProductProofBand
+          shot={marketingProofFromCoreKey("ecg-workstation", {
+            alt: "NurseNest ECG telemetry workstation with rhythm strip interpretation",
+            theme: "ocean",
+          })}
+          kicker="Product preview"
+          title="Integrated telemetry learning — not a separate app"
+        />
       </div>
     </section>
   );

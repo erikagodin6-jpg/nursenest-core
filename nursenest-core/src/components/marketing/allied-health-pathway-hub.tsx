@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { ClipboardCheck, FileBarChart, HeartHandshake, Sparkles, Stethoscope } from "lucide-react";
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { MarketingPathwayHubHeroBand } from "@/components/marketing/marketing-pathway-hub-hero-band";
+import { MarketingPathwayHubProductPreview } from "@/components/marketing/marketing-pathway-hub-product-preview";
 import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
 import { StudyCard } from "@/components/ui/study-card";
 import { ExamPathwayHubPremiumModules } from "@/components/exam-pathways/exam-pathway-hub-premium-modules";
@@ -226,6 +227,8 @@ export function AlliedHealthPathwayHub({
           ) : null}
         </MarketingPathwayHubHeroBand>
       </header>
+
+      <MarketingPathwayHubProductPreview pathway={pathway} />
 
       {showFullStudySurface ? (
         <MarketingHubGuidedStudyPathStrip

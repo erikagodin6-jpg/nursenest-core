@@ -2,6 +2,8 @@
 
 import { Calculator, Droplets, Gauge, ShieldAlert, Syringe, Timer } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { MarketingProductProofBand } from "@/components/marketing/marketing-product-proof-band";
+import { marketingProofFromCoreKey } from "@/lib/marketing/marketing-proof-screenshots";
 
 const BULLETS = [
   { key: "pages.pricing.medCalcWorkstation.bullet1", Icon: Calculator },
@@ -60,6 +62,15 @@ export function PricingMedCalcWorkstationFeature() {
           );
         })}
       </ul>
+
+      <div className="mx-auto mt-8 max-w-4xl">
+        <MarketingProductProofBand
+          shot={marketingProofFromCoreKey("question-bank", {
+            alt: "Medication calculation and high-alert dosage practice on NurseNest",
+            theme: "ocean",
+          })}
+        />
+      </div>
 
       <p className="nn-marketing-body-sm mx-auto mt-8 max-w-2xl text-center text-[var(--semantic-text-muted)]">
         {t("pages.pricing.medCalcWorkstation.footer")}

@@ -1,0 +1,450 @@
+{
+  "config": {
+    "configFile": "/root/nursenest-core/nursenest-core/playwright.production-screenshot-verification.config.ts",
+    "rootDir": "/root/nursenest-core/nursenest-core/tests/e2e/marketing",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/root/nursenest-core/nursenest-core/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/root/nursenest-core/nursenest-core/tests/e2e/marketing",
+        "testIgnore": [],
+        "testMatch": [
+          "production-screenshot-verification.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reports/production-screenshot-verification/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.60.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "production-screenshot-verification.spec.ts",
+      "file": "production-screenshot-verification.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Production screenshot deployment verification",
+          "file": "production-screenshot-verification.spec.ts",
+          "line": 39,
+          "column": 6,
+          "specs": [
+            {
+              "title": "homepage hero prefers local WebP or matches repo fingerprint — not stale CDN-only",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 30657,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                            "column": 27,
+                            "line": 51
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('main img[alt*=\"NurseNest\"], main img[alt*=\"practice\"], main img[alt*=\"Flashcard\"]').first()\nExpected: visible\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 30000ms\u001b[22m\n\u001b[2m  - waiting for locator('main img[alt*=\"NurseNest\"], main img[alt*=\"practice\"], main img[alt*=\"Flashcard\"]').first()\u001b[22m\n\n\n  49 |\n  50 |     const heroImg = page.locator('main img[alt*=\"NurseNest\"], main img[alt*=\"practice\"], main img[alt*=\"Flashcard\"]').first();\n> 51 |     await expect(heroImg).toBeVisible({ timeout: 30_000 });\n     |                           ^\n  52 |\n  53 |     const currentSrc = await heroImg.evaluate((el) => (el as HTMLImageElement).currentSrc || el.src);\n  54 |     expect(currentSrc, \"Hero must load a real image URL\").toBeTruthy();\n    at /root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts:51:27"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-30T06:26:06.133Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-70aa6-rprint-—-not-stale-CDN-only/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-70aa6-rprint-—-not-stale-CDN-only/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-70aa6-rprint-—-not-stale-CDN-only/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8b589c62a4f4d184f44e-6a9d3376bdc86a6e78ba",
+              "file": "production-screenshot-verification.spec.ts",
+              "line": 42,
+              "column": 7
+            },
+            {
+              "title": "RN hub shows pathway product preview component",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 19099,
+                      "error": {
+                        "message": "Error: RN hub must render MarketingPathwayHubProductPreview after deploy\n\n\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-nn-pathway-hub-proof=\"1\"]')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - RN hub must render MarketingPathwayHubProductPreview after deploy with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-nn-pathway-hub-proof=\"1\"]')\u001b[22m\n",
+                        "stack": "Error: RN hub must render MarketingPathwayHubProductPreview after deploy\n\n\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-nn-pathway-hub-proof=\"1\"]')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - RN hub must render MarketingPathwayHubProductPreview after deploy with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-nn-pathway-hub-proof=\"1\"]')\u001b[22m\n\n    at /root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts:89:94",
+                        "location": {
+                          "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                          "column": 94,
+                          "line": 89
+                        },
+                        "snippet": "  87 |\n  88 |     const proof = page.locator('[data-nn-pathway-hub-proof=\"1\"]');\n> 89 |     await expect(proof, \"RN hub must render MarketingPathwayHubProductPreview after deploy\").toBeVisible({\n     |                                                                                              ^\n  90 |       timeout: 15_000,\n  91 |     });\n  92 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                            "column": 94,
+                            "line": 89
+                          },
+                          "message": "Error: RN hub must render MarketingPathwayHubProductPreview after deploy\n\n\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-nn-pathway-hub-proof=\"1\"]')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - RN hub must render MarketingPathwayHubProductPreview after deploy with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-nn-pathway-hub-proof=\"1\"]')\u001b[22m\n\n\n  87 |\n  88 |     const proof = page.locator('[data-nn-pathway-hub-proof=\"1\"]');\n> 89 |     await expect(proof, \"RN hub must render MarketingPathwayHubProductPreview after deploy\").toBeVisible({\n     |                                                                                              ^\n  90 |       timeout: 15_000,\n  91 |     });\n  92 |\n    at /root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts:89:94"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-30T06:26:38.645Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-ca92e-y-product-preview-component/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-ca92e-y-product-preview-component/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-ca92e-y-product-preview-component/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                        "column": 94,
+                        "line": 89
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8b589c62a4f4d184f44e-670201c63e4f362a8a7e",
+              "file": "production-screenshot-verification.spec.ts",
+              "line": 83,
+              "column": 7
+            },
+            {
+              "title": "pricing tier value uses generated WebP — not dashboard-redesign-preview",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 7031,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/generated-screenshots/\u001b[39m\nReceived string:  \u001b[31m\"https://nursenest.ca/_next/image?url=%2Fdashboard-redesign-preview%2F01-dash-desktop-ocean.png&w=3840&q=75\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/generated-screenshots/\u001b[39m\nReceived string:  \u001b[31m\"https://nursenest.ca/_next/image?url=%2Fdashboard-redesign-preview%2F01-dash-desktop-ocean.png&w=3840&q=75\"\u001b[39m\n    at /root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts:107:17",
+                        "location": {
+                          "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                          "column": 17,
+                          "line": 107
+                        },
+                        "snippet": "  105 |     await expect(tierImg).toBeVisible({ timeout: 20_000 });\n  106 |     const src = await tierImg.getAttribute(\"src\");\n> 107 |     expect(src).toMatch(/generated-screenshots/);\n      |                 ^\n  108 |     expect(src).not.toMatch(/dashboard-redesign-preview|landing-polish-preview/);\n  109 |   });\n  110 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                            "column": 17,
+                            "line": 107
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/generated-screenshots/\u001b[39m\nReceived string:  \u001b[31m\"https://nursenest.ca/_next/image?url=%2Fdashboard-redesign-preview%2F01-dash-desktop-ocean.png&w=3840&q=75\"\u001b[39m\n\n  105 |     await expect(tierImg).toBeVisible({ timeout: 20_000 });\n  106 |     const src = await tierImg.getAttribute(\"src\");\n> 107 |     expect(src).toMatch(/generated-screenshots/);\n      |                 ^\n  108 |     expect(src).not.toMatch(/dashboard-redesign-preview|landing-polish-preview/);\n  109 |   });\n  110 |\n    at /root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts:107:17"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-30T06:26:59.293Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-370f3--dashboard-redesign-preview/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-370f3--dashboard-redesign-preview/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-370f3--dashboard-redesign-preview/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                        "column": 17,
+                        "line": 107
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8b589c62a4f4d184f44e-d946c3dc7d35b019c0a1",
+              "file": "production-screenshot-verification.spec.ts",
+              "line": 99,
+              "column": 7
+            },
+            {
+              "title": "ECG marketing page shows product proof band",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 19074,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-nn-marketing-product-proof=\"1\"]')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-nn-marketing-product-proof=\"1\"]')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-nn-marketing-product-proof=\"1\"]')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-nn-marketing-product-proof=\"1\"]')\u001b[22m\n\n    at /root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts:117:25",
+                        "location": {
+                          "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                          "column": 25,
+                          "line": 117
+                        },
+                        "snippet": "  115 |\n  116 |     const proof = page.locator('[data-nn-marketing-product-proof=\"1\"]');\n> 117 |     await expect(proof).toBeVisible({ timeout: 15_000 });\n      |                         ^\n  118 |     const src = await proof.locator(\"img\").first().getAttribute(\"src\");\n  119 |     expect(src).toMatch(/ecg-workstation/);\n  120 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                            "column": 25,
+                            "line": 117
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-nn-marketing-product-proof=\"1\"]')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-nn-marketing-product-proof=\"1\"]')\u001b[22m\n\n\n  115 |\n  116 |     const proof = page.locator('[data-nn-marketing-product-proof=\"1\"]');\n> 117 |     await expect(proof).toBeVisible({ timeout: 15_000 });\n      |                         ^\n  118 |     const src = await proof.locator(\"img\").first().getAttribute(\"src\");\n  119 |     expect(src).toMatch(/ecg-workstation/);\n  120 |   });\n    at /root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts:117:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-30T06:27:07.844Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-24c86-ge-shows-product-proof-band/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-24c86-ge-shows-product-proof-band/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-24c86-ge-shows-product-proof-band/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                        "column": 25,
+                        "line": 117
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8b589c62a4f4d184f44e-61bf132d4c816a134c2d",
+              "file": "production-screenshot-verification.spec.ts",
+              "line": 111,
+              "column": 7
+            },
+            {
+              "title": "no broken marketing proof images on key pages",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 8151,
+                      "error": {
+                        "message": "Error: Broken images on /pricing: https://nursenest.ca/_next/image?url=%2Fdashboard-redesign-preview%2F01-dash-desktop-ocean.png&w=3840&q=75\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"https://nursenest.ca/_next/image?url=%2Fdashboard-redesign-preview%2F01-dash-desktop-ocean.png&w=3840&q=75\"]\u001b[39m",
+                        "stack": "Error: Broken images on /pricing: https://nursenest.ca/_next/image?url=%2Fdashboard-redesign-preview%2F01-dash-desktop-ocean.png&w=3840&q=75\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"https://nursenest.ca/_next/image?url=%2Fdashboard-redesign-preview%2F01-dash-desktop-ocean.png&w=3840&q=75\"]\u001b[39m\n    at /root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts:133:72",
+                        "location": {
+                          "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                          "column": 72,
+                          "line": 133
+                        },
+                        "snippet": "  131 |           .map((img) => img.src.slice(0, 120)),\n  132 |       );\n> 133 |       expect(broken, `Broken images on ${path}: ${broken.join(\", \")}`).toHaveLength(0);\n      |                                                                        ^\n  134 |     }\n  135 |   });\n  136 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                            "column": 72,
+                            "line": 133
+                          },
+                          "message": "Error: Broken images on /pricing: https://nursenest.ca/_next/image?url=%2Fdashboard-redesign-preview%2F01-dash-desktop-ocean.png&w=3840&q=75\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"https://nursenest.ca/_next/image?url=%2Fdashboard-redesign-preview%2F01-dash-desktop-ocean.png&w=3840&q=75\"]\u001b[39m\n\n  131 |           .map((img) => img.src.slice(0, 120)),\n  132 |       );\n> 133 |       expect(broken, `Broken images on ${path}: ${broken.join(\", \")}`).toHaveLength(0);\n      |                                                                        ^\n  134 |     }\n  135 |   });\n  136 | });\n    at /root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts:133:72"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-30T06:27:28.474Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-a0a38-g-proof-images-on-key-pages/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-a0a38-g-proof-images-on-key-pages/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/root/nursenest-core/nursenest-core/test-results/production-screenshot-veri-a0a38-g-proof-images-on-key-pages/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/root/nursenest-core/nursenest-core/tests/e2e/marketing/production-screenshot-verification.spec.ts",
+                        "column": 72,
+                        "line": 133
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8b589c62a4f4d184f44e-6ee8efc3c512bf60766c",
+              "file": "production-screenshot-verification.spec.ts",
+              "line": 122,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-05-30T06:26:05.001Z",
+    "duration": 92287.635,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 5,
+    "flaky": 0
+  }
+}

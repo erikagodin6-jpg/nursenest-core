@@ -60,6 +60,101 @@ function SurfaceHeatmap({ data }: { data: ScopeComplianceDashboard }) {
   );
 }
 
+function AlignmentSummary({ data }: { data: ScopeComplianceDashboard }) {
+  const pathwayRows = Object.entries(data.alignment.byPathway)
+    .sort((a, b) => a[1].averageScore - b[1].averageScore)
+    .slice(0, 6);
+  const topicRows = Object.entries(data.alignment.byTopic)
+    .sort((a, b) => b[1].flagged - a[1].flagged || a[1].averageScore - b[1].averageScore)
+    .slice(0, 6);
+  const priorityRows = Object.entries(data.alignment.reviewQueues).map(([priority, queue]) => ({ priority, queue }));
+  const topQueueItems = [...data.alignment.reviewQueues.Critical, ...data.alignment.reviewQueues.High].slice(0, 5);
+
+  return (
+    <section className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5 shadow-sm">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Scope alignment intelligence</h2>
+          <p className="text-sm text-muted-foreground">
+            Classification and scoring by pathway, topic, and content type. Lower scores indicate likely profession or specialty leakage.
+          </p>
+        </div>
+        <span className="rounded-full border border-border/70 bg-background px-3 py-1 text-xs font-bold tabular-nums">
+          {data.alignment.overallScore}/100 overall
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+        <div className="rounded-lg border border-border/60 bg-muted/15 p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Lowest pathway scores</p>
+          <div className="mt-3 space-y-2">
+            {pathwayRows.map(([pathway, row]) => (
+              <div key={pathway} className="flex items-center justify-between gap-3 text-sm">
+                <span className="truncate text-[var(--theme-heading-text)]">{pathway}</span>
+                <span className="shrink-0 font-bold tabular-nums">{row.averageScore}/100</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-border/60 bg-muted/15 p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Topics needing review</p>
+          <div className="mt-3 space-y-2">
+            {topicRows.map(([topic, row]) => (
+              <div key={topic} className="flex items-center justify-between gap-3 text-sm">
+                <span className="truncate text-[var(--theme-heading-text)]">{topic}</span>
+                <span className="shrink-0 font-bold tabular-nums">{row.flagged} flagged</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-border/60 bg-muted/15 p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Content type scores</p>
+          <div className="mt-3 space-y-2">
+            {Object.entries(data.alignment.byContentType).map(([surface, row]) => (
+              <div key={surface} className="flex items-center justify-between gap-3 text-sm">
+                <span className="capitalize text-[var(--theme-heading-text)]">{surface.replaceAll("_", " ")}</span>
+                <span className="shrink-0 font-bold tabular-nums">{row.averageScore}/100</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+        <div className="rounded-lg border border-border/60 bg-muted/15 p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Review queues</p>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {priorityRows.map(({ priority, queue }) => (
+              <div key={priority} className="rounded-md border border-border/50 bg-background px-3 py-2">
+                <p className="text-xs text-muted-foreground">{priority}</p>
+                <p className="text-lg font-bold tabular-nums text-[var(--theme-heading-text)]">{queue.length}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-border/60 bg-muted/15 p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Highest priority items</p>
+          <div className="mt-3 space-y-2">
+            {topQueueItems.map((item) => (
+              <div key={`${item.priority}-${item.itemId}-${item.reason}`} className="flex items-start justify-between gap-3 rounded-md bg-background px-3 py-2 text-sm">
+                <div className="min-w-0">
+                  <p className="truncate font-semibold text-[var(--theme-heading-text)]">{item.itemId}</p>
+                  <p className="truncate text-xs text-muted-foreground">{item.pathway} · {item.topic} · {item.reason}</p>
+                </div>
+                <span className="shrink-0 font-bold tabular-nums">{item.score}/100</span>
+              </div>
+            ))}
+            {topQueueItems.length === 0 ? <p className="text-sm text-muted-foreground">No critical or high-priority alignment issues in this audit window.</p> : null}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function FindingRow({ finding }: { finding: ContentScopeFinding }) {
   return (
     <article className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4 shadow-sm">
@@ -138,6 +233,10 @@ export default async function AdminScopeCompliancePage() {
         <SurfaceHeatmap data={data} />
       </div>
 
+      <div className="mt-6">
+        <AlignmentSummary data={data} />
+      </div>
+
       <section className="mt-6 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5 shadow-sm">
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Issue mix</h2>
         <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
@@ -176,4 +275,3 @@ export default async function AdminScopeCompliancePage() {
     </main>
   );
 }
-

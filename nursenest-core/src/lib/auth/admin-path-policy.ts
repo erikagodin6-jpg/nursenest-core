@@ -44,8 +44,10 @@ const CONTENT_FORBIDDEN_PREFIXES = [
   "/admin/institutions",
   "/api/admin/institutions",
   "/admin/subscriptions",
+  "/admin/revenue-protection",
   "/admin/analytics/subscriptions",
   "/api/admin/analytics/subscriptions",
+  "/api/admin/revenue-protection",
 ];
 
 /**
@@ -64,6 +66,7 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/modules",
   "/admin/content-overview",
   "/admin/content-coverage",
+  "/admin/curriculum-coverage",
   "/admin/blueprint-compliance",
   "/admin/scope-compliance",
   "/admin/content/page-copy",
@@ -76,6 +79,7 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/platform-ecosystem",
   "/admin/institutions",
   "/admin/subscriptions",
+  "/admin/revenue-protection",
   "/admin/system-status",
   "/admin/users",
   "/admin/beta",
@@ -96,6 +100,7 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/api/admin/operations-health",
   "/api/admin/institutions",
   "/api/admin/billing/stripe-reconcile",
+  "/api/admin/revenue-protection",
   "/api/admin/stats",
   "/api/admin/system-status",
   "/api/admin/study-published-snapshots",

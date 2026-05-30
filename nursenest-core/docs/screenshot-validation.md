@@ -1,15 +1,15 @@
 # NurseNest Marketing Screenshot Validation Report
 
-**Generated:** 2026-05-29T02:46:25.944Z
+**Generated:** 2026-05-30T06:11:50.530Z
 
 ## Summary
 
 | Status | Count |
 |--------|-------|
-| ✅ Pass | 13 |
-| ⚠️ Warn | 15 |
-| ❌ Fail | 19 |
-| Total | 47 |
+| ✅ Pass | 23 |
+| ⚠️ Warn | 12 |
+| ❌ Fail | 11 |
+| Total | 61 |
 
 ## Recommendations
 
@@ -17,16 +17,36 @@
 - Run: npm run generate:marketing-screenshots -- --tier=mobile
 - Run: npm run generate:marketing-screenshots -- --theme-variants-only
 
+## CDN Slots (screenshot1–15)
+
+| Status | Asset | Detail |
+|--------|-------|--------|
+| ⏭️ | `Practice rationale panel` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `Flashcard study mode` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `Learner dashboard` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `NGN question types` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `Progress reports` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `CAT exam session` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `CAT results` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `Adaptive study plan` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `Smart review` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `Question bank browse` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `Confidence analytics` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `Lesson detail` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `Lesson library` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `Marketing homepage` | CDN check skipped — use --cdn-check flag |
+| ⏭️ | `ECG / telemetry workspace` | CDN check skipped — use --cdn-check flag |
+
 ## Local Generated Files
 
 | Status | Asset | Detail |
 |--------|-------|--------|
-| ❌ | `core/learner-dashboard.webp` | File not found — run: npm run generate:marketing-screenshots |
-| ❌ | `core/confidence-analytics.webp` | File not found — run: npm run generate:marketing-screenshots |
-| ❌ | `core/smart-review.webp` | File not found — run: npm run generate:marketing-screenshots |
-| ❌ | `core/cat-exam-session.webp` | File not found — run: npm run generate:marketing-screenshots |
-| ❌ | `core/flashcards.webp` | File not found — run: npm run generate:marketing-screenshots |
-| ❌ | `core/cat-results.webp` | File not found — run: npm run generate:marketing-screenshots |
+| ✅ | `core/learner-dashboard.webp` |  |
+| ✅ | `core/confidence-analytics.webp` |  |
+| ✅ | `core/smart-review.webp` |  |
+| ✅ | `core/cat-exam-session.webp` |  |
+| ✅ | `core/flashcards.webp` |  |
+| ✅ | `core/cat-results.webp` |  |
 | ❌ | `rn/rn-hub.webp` | File not found — run: npm run generate:marketing-screenshots |
 | ❌ | `rn/rn-flashcards.webp` | File not found — run: npm run generate:marketing-screenshots |
 | ❌ | `rn/rn-cat-exam.webp` | File not found — run: npm run generate:marketing-screenshots |
@@ -37,8 +57,8 @@
 | ❌ | `allied/allied-hub.webp` | File not found — run: npm run generate:marketing-screenshots |
 | ❌ | `newgrad/newgrad-hub.webp` | File not found — run: npm run generate:marketing-screenshots |
 | ❌ | `newgrad/newgrad-readiness.webp` | File not found — run: npm run generate:marketing-screenshots |
-| ❌ | `marketing/marketing-home-desktop.webp` | File not found — run: npm run generate:marketing-screenshots |
-| ❌ | `marketing/pricing.webp` | File not found — run: npm run generate:marketing-screenshots |
+| ✅ | `marketing/marketing-home-desktop.webp` |  |
+| ✅ | `marketing/pricing.webp` |  |
 | ✅ | `marketing/faq.webp` |  |
 
 ## Mobile Screenshots
@@ -57,10 +77,10 @@
 | ⚠️ | `ocean / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `ocean / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `ocean / marketing-home-desktop.webp` | Theme variant not generated — run with --theme-variants-only |
-| ⚠️ | `midnight / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
-| ⚠️ | `midnight / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
+| ✅ | `midnight / learner-dashboard.webp` |  |
+| ✅ | `midnight / flashcards.webp` |  |
 | ✅ | `midnight / marketing-home-desktop.webp` |  |
-| ⚠️ | `blossom / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
+| ✅ | `blossom / learner-dashboard.webp` |  |
 | ⚠️ | `blossom / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
 | ✅ | `blossom / marketing-home-desktop.webp` |  |
 | ⚠️ | `aurora / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
@@ -74,17 +94,19 @@
 
 | Status | Asset | Detail |
 |--------|-------|--------|
-| ✅ | `dashboard-redesign-preview/01-dash-desktop-ocean.png` | Legacy fallback in place |
-| ✅ | `dashboard-redesign-preview/03-readiness-desktop.png` | Legacy fallback in place |
-| ✅ | `dashboard-redesign-preview/07-coaching-panel.png` | Legacy fallback in place |
-| ✅ | `dashboard-redesign-preview/10-cat-trajectory.png` | Legacy fallback in place |
-| ✅ | `landing-polish-preview/png/08-flashcards-session-blossom.png` | Legacy fallback in place |
-| ✅ | `landing-polish-preview/png/09-cat-readiness-ocean.png` | Legacy fallback in place |
-| ✅ | `dashboard-redesign-preview/05-kpi-components.png` | Legacy fallback in place |
+| ✅ | `marketing/generated-screenshots/core/learner-dashboard.webp` | Generated product fallback in place |
+| ✅ | `marketing/generated-screenshots/core/confidence-analytics.webp` | Generated product fallback in place |
+| ✅ | `marketing/generated-screenshots/core/smart-review.webp` | Generated product fallback in place |
+| ✅ | `marketing/generated-screenshots/core/cat-exam-session.webp` | Generated product fallback in place |
+| ✅ | `marketing/generated-screenshots/core/flashcards.webp` | Generated product fallback in place |
+| ✅ | `marketing/generated-screenshots/core/cat-results.webp` | Generated product fallback in place |
 
 ## Screenshot Readiness Quality Gate
 
 | Status | Asset | Detail |
 |--------|-------|--------|
-| ❌ | `capture errors` | marketing-home-desktop: screenshot rejected: blocked selector: [data-testid*='skeleton' i] (6); marketing-home-desktop: screenshot rejected: blocked selector: [data-testid*='skeleton' i] (5); marketing-home-desktop: screenshot rejected: blocked selector: [data-testid*='skeleton' i] (6); pricing: screenshot rejected: blocked text: Just a moment; blocked text: Loading |
+| ❌ | `capture errors` | flashcards: page.goto: Timeout 90000ms exceeded.
+Call log:
+  - navigating to "https://nursenest.ca/app/flashcards/custom?pathwayId=ca-rn-nclex-rn&includeCards=1&shuffle=1&cardLimit=20", waiting until "networkidle"
+ |
 | ✅ | `quality gate metadata` |  |

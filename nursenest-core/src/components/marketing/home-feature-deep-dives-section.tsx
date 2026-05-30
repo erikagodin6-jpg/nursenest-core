@@ -12,6 +12,8 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
+import { HOME_FEATURE_DEEP_DIVE_PROOFS } from "@/lib/marketing/marketing-proof-screenshots";
+import { MarketingProofScreenshot } from "@/components/marketing/marketing-proof-screenshot";
 
 function safe(value: any, fallback: any) {
   return value ?? fallback;
@@ -48,14 +50,17 @@ export function HomeFeatureDeepDivesSection() {
     {
       title: "Personalized Study Plan",
       desc: "Daily tasks built from your weak areas and readiness score.",
+      proof: HOME_FEATURE_DEEP_DIVE_PROOFS[0]!,
     },
     {
       title: "Smart Review System",
       desc: "Focus on exactly what you got wrong and why.",
+      proof: HOME_FEATURE_DEEP_DIVE_PROOFS[1]!,
     },
     {
       title: "CAT Exam Simulation",
       desc: "Adaptive testing with real readiness scoring.",
+      proof: HOME_FEATURE_DEEP_DIVE_PROOFS[2]!,
     },
   ];
 
@@ -70,9 +75,14 @@ export function HomeFeatureDeepDivesSection() {
 
         <div className="mt-8 grid gap-6 md:grid-cols-3">
           {features.map((f) => (
-            <div key={f.title} className="rounded-xl border p-5">
-              <h3 className="font-semibold">{f.title}</h3>
-              <p className="mt-2 text-sm text-muted">{f.desc}</p>
+            <div key={f.title} className="overflow-hidden rounded-xl border bg-[var(--semantic-surface)]">
+              <div className="relative aspect-[16/11] w-full bg-[var(--semantic-panel-muted)]">
+                <MarketingProofScreenshot shot={f.proof} sizes="(min-width: 768px) 30vw, 100vw" />
+              </div>
+              <div className="p-5">
+                <h3 className="font-semibold">{f.title}</h3>
+                <p className="mt-2 text-sm text-muted">{f.desc}</p>
+              </div>
             </div>
           ))}
         </div>

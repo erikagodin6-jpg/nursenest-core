@@ -116,6 +116,20 @@ const TOPIC_RULES: TopicRule[] = [
   },
 ];
 
+function escapeRegex(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function topicMatchesKeyword(source: string, keyword: string): boolean {
+  const normalized = source.trim().toLowerCase();
+  const key = keyword.trim().toLowerCase();
+  if (!normalized || !key) return false;
+  if (/^[a-z0-9]{1,3}$/.test(key)) {
+    return new RegExp(`(^|[^a-z0-9])${escapeRegex(key)}([^a-z0-9]|$)`, "i").test(normalized);
+  }
+  return normalized.includes(key);
+}
+
 /* ── Core resolver ──────────────────────────────────────────────── */
 
 export function resolveEcosystemLinks(input: {
@@ -174,7 +188,7 @@ export function resolveEcosystemLinks(input: {
   const matchedTypes = new Set<EcosystemContentType>();
   for (const rule of TOPIC_RULES) {
     if (matchedTypes.has(rule.type)) continue;
-    const matches = rule.keywords.some((kw) => combined.includes(kw));
+    const matches = rule.keywords.some((kw) => topicMatchesKeyword(combined, kw));
     if (!matches) continue;
     matchedTypes.add(rule.type);
     links.push({
@@ -182,15 +196,6 @@ export function resolveEcosystemLinks(input: {
       href: rule.hrefFn(topic ?? combined, pathwayBase),
       label: rule.labelFn(topic ?? "this concept"),
       reason: rule.reason,
-    });
-  }
-
-  if (links.length === 0) {
-    links.push({
-      type: "questions",
-      href: `${pathwayBase}/practice-tests`,
-      label: "Practice Questions",
-      reason: "Reinforce your learning with practice exam questions.",
     });
   }
 
@@ -239,7 +244,7 @@ export function buildWeakAreaPlan(input: {
 
   // Flashcard deck for this topic
   links.push({
-    type: "lesson",
+    type: "drill",
     href: `/app/flashcards?topic=${encodeURIComponent(topic)}`,
     label: `${topic} Flashcards`,
     reason: "Drill this topic with spaced repetition.",
@@ -248,7 +253,7 @@ export function buildWeakAreaPlan(input: {
   // Topic-specific escalation
   const combined = topicLower;
   for (const rule of TOPIC_RULES) {
-    const matches = rule.keywords.some((kw) => combined.includes(kw));
+    const matches = rule.keywords.some((kw) => topicMatchesKeyword(combined, kw));
     if (!matches) continue;
     links.push({
       type: rule.type,

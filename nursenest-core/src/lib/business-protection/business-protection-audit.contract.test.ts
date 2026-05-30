@@ -43,3 +43,13 @@ test("admin evidence exports are themselves audited", () => {
   assert.match(route, /generatedByUserId:\s*gate\.admin\.userId/);
   assert.match(route, /policyAcceptanceCount/);
 });
+
+test("revenue protection center exposes one-click chargeback packages", () => {
+  const route = read("src/app/api/admin/revenue-protection/users/[userId]/chargeback-package/route.ts");
+  const page = read("src/app/(admin)/admin/revenue-protection/page.tsx");
+  assert.match(route, /loadRevenueProtectionSubscriberSnapshot/);
+  assert.match(route, /recordChargebackEvidenceExport/);
+  assert.match(route, /buildChargebackEvidenceTextPackage/);
+  assert.match(page, /Revenue Protection Center/);
+  assert.match(page, /chargeback-package\?format=txt/);
+});

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { notFound, permanentRedirect } from "next/navigation";
+import { CasperPremiumEcosystemPage } from "@/components/pre-nursing/casper/casper-premium-ecosystem-page";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { getPreNursingModuleComponent } from "@/content/pre-nursing/pre-nursing-module-map";
 import {
@@ -22,6 +23,22 @@ export const revalidate = 86400;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = getAdmissionsProductReadinessBySlug(slug);
+  if (slug === "casper") {
+    return {
+      title: "CASPer Situational Judgment Prep | NurseNest",
+      description:
+        "Practice CASPer ethics, empathy, professionalism, communication, conflict resolution, and reflection through realistic response scenarios.",
+      alternates: { canonical: absoluteUrl("/pre-nursing/casper") },
+      robots: { index: false, follow: true },
+      openGraph: {
+        title: "CASPer Situational Judgment Prep | NurseNest",
+        description:
+          "A dedicated CASPer response-training ecosystem for situational judgment, ethical reasoning, and professional communication.",
+        url: absoluteUrl("/pre-nursing/casper"),
+        type: "website",
+      },
+    };
+  }
   if (!product) return {};
 
   return {
@@ -44,6 +61,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  */
 export default async function PreNursingLegacyModuleRedirect({ params }: Props) {
   const { slug } = await params;
+  if (slug === "casper") return <CasperPremiumEcosystemPage />;
+
   const product = getAdmissionsProductReadinessBySlug(slug);
   if (product) return <AdmissionsProductStatusPage product={product} />;
 

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { FLAGSHIP_EXPERIENCES } from "@/lib/discovery/flagship-experiences";
 import { FeaturePreviewVisual } from "@/components/discovery/feature-preview-visual";
+import { FLAGSHIP_PROOF_SCREENSHOTS } from "@/lib/marketing/marketing-proof-screenshots";
+import { MarketingProofScreenshot } from "@/components/marketing/marketing-proof-screenshot";
 import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 const SHOWCASE_IDS = new Set([
@@ -37,13 +39,21 @@ export function PricingInteractiveShowcase() {
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {experiences.map((experience) => (
+        {experiences.map((experience) => {
+          const proofShot = FLAGSHIP_PROOF_SCREENSHOTS[experience.id];
+          return (
           <article
             key={experience.id}
             className="nn-feature-card"
             style={{ ["--feature-accent" as string]: `var(${experience.accentVar})` }}
           >
-            <FeaturePreviewVisual kind={experience.previewKind} />
+            {proofShot ? (
+              <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)]">
+                <MarketingProofScreenshot shot={proofShot} sizes="(min-width: 1280px) 28vw, 50vw" />
+              </div>
+            ) : (
+              <FeaturePreviewVisual kind={experience.previewKind} />
+            )}
             <p className="mt-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--feature-accent)_78%,var(--semantic-text-secondary))]">
               {experience.eyebrow}
             </p>
@@ -55,7 +65,8 @@ export function PricingInteractiveShowcase() {
               ))}
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

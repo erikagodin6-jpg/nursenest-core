@@ -2,45 +2,74 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   buildChargebackEvidencePackage,
-  scoreRevenueProtectionReadiness,
-  type RevenueProtectionEvidenceRecord,
+  buildChargebackEvidenceTextPackage,
+  type RevenueProtectionSubscriberSnapshot,
 } from "@/lib/business-protection/revenue-protection-center";
+import { CHECKOUT_POLICY_ACCEPTANCE_WORDING } from "@/lib/business-protection/policy-wording";
 
-const evidence: RevenueProtectionEvidenceRecord[] = [
-  { id: "terms", kind: "terms_acceptance", occurredAt: "2026-05-01T00:00:00.000Z", summary: "Accepted checkout terms", immutableHash: "abc" },
-  { id: "refund", kind: "refund_acknowledgement", occurredAt: "2026-05-01T00:00:01.000Z", summary: "Acknowledged digital refund policy", immutableHash: "def" },
-  { id: "checkout", kind: "checkout", occurredAt: "2026-05-01T00:00:02.000Z", summary: "Stripe checkout completed" },
-  { id: "sub", kind: "subscription_lifecycle", occurredAt: "2026-05-01T00:00:03.000Z", summary: "Subscription activated" },
-  { id: "login", kind: "login_history", occurredAt: "2026-05-02T00:00:00.000Z", summary: "Learner logged in" },
-  { id: "duration", kind: "session_duration", occurredAt: "2026-05-02T00:30:00.000Z", summary: "30 minute study session" },
-  { id: "activity", kind: "learning_activity", occurredAt: "2026-05-02T00:35:00.000Z", summary: "Completed flashcards" },
-  { id: "content", kind: "content_consumption", occurredAt: "2026-05-02T00:40:00.000Z", summary: "Viewed rationales" },
-];
+const baseSnapshot: RevenueProtectionSubscriberSnapshot = {
+  userId: "user_123",
+  email: "learner@example.com",
+  name: "Learner Example",
+  country: "US",
+  planCode: "us_rn_monthly",
+  stripeCustomerId: "cus_test",
+  stripeSubscriptionId: "sub_test",
+  subscriptionStatus: "ACTIVE",
+  createdAt: "2026-05-01T00:00:00.000Z",
+  renewalDate: "2026-06-01T00:00:00.000Z",
+  totalPaidCents: null,
+  evidence: [
+    { id: "terms", kind: "terms_acceptance", occurredAt: "2026-05-01T00:00:00.000Z", summary: "Terms accepted." },
+    { id: "refund", kind: "refund_acknowledgement", occurredAt: "2026-05-01T00:00:00.000Z", summary: "Refund acknowledged." },
+    { id: "checkout", kind: "checkout", occurredAt: "2026-05-01T00:00:00.000Z", summary: "Checkout created." },
+    { id: "sub", kind: "subscription_lifecycle", occurredAt: "2026-05-01T00:00:00.000Z", summary: "Subscription active." },
+    { id: "login", kind: "login_history", occurredAt: "2026-05-02T00:00:00.000Z", summary: "Login recorded." },
+    { id: "session", kind: "session_duration", occurredAt: "2026-05-02T00:30:00.000Z", summary: "Study session recorded." },
+    { id: "activity", kind: "learning_activity", occurredAt: "2026-05-02T00:35:00.000Z", summary: "Questions completed." },
+    { id: "content", kind: "content_consumption", occurredAt: "2026-05-02T00:40:00.000Z", summary: "Lesson opened." },
+  ],
+};
 
-test("revenue protection readiness scores evidence completeness", () => {
-  const readiness = scoreRevenueProtectionReadiness(evidence);
-
-  assert.equal(readiness.score, 100);
-  assert.equal(readiness.riskLevel, "healthy");
-  assert.equal(readiness.checklist.every((item) => item.present), true);
+test("checkout acknowledgement wording includes exact digital educational service acknowledgement", () => {
+  assert.equal(
+    CHECKOUT_POLICY_ACCEPTANCE_WORDING.includes("I understand this is a digital educational service."),
+    true,
+  );
 });
 
-test("chargeback evidence package includes digital service acknowledgement and missing evidence", () => {
+test("chargeback evidence package scores complete evidence as healthy", () => {
+  const pkg = buildChargebackEvidencePackage(baseSnapshot, "2026-05-30T00:00:00.000Z");
+
+  assert.equal(pkg.protectionScore, 100);
+  assert.equal(pkg.riskLevel, "healthy");
+  assert.equal(pkg.missingEvidence.length, 0);
+  assert.equal(pkg.evidenceByKind.refund_acknowledgement, 1);
+  assert.equal(pkg.evidenceByKind.learning_activity, 1);
+});
+
+test("chargeback evidence package identifies missing refund and learning proof", () => {
   const pkg = buildChargebackEvidencePackage(
     {
-      userId: "user-1",
-      email: "learner@example.com",
-      planCode: "rn-premium-monthly",
-      stripeCustomerId: "cus_123",
-      stripeSubscriptionId: "sub_123",
-      evidence: evidence.slice(0, 3),
+      ...baseSnapshot,
+      evidence: baseSnapshot.evidence.filter(
+        (row) => row.kind !== "refund_acknowledgement" && row.kind !== "learning_activity",
+      ),
     },
-    "2026-05-29T00:00:00.000Z",
+    "2026-05-30T00:00:00.000Z",
   );
 
-  assert.equal(pkg.acceptedWording.includes("I understand this is a digital educational subscription service."), true);
-  assert.equal(pkg.evidenceByKind.checkout, 1);
-  assert.equal(pkg.protectionScore < 70, true);
-  assert.equal(pkg.riskLevel, "critical");
+  assert.equal(pkg.protectionScore < 100, true);
+  assert.equal(pkg.missingEvidence.some((item) => item.key === "refund_acknowledgement"), true);
   assert.equal(pkg.missingEvidence.some((item) => item.key === "learning_activity"), true);
+});
+
+test("text package is export-ready and includes evidence counts", () => {
+  const pkg = buildChargebackEvidencePackage(baseSnapshot, "2026-05-30T00:00:00.000Z");
+  const text = buildChargebackEvidenceTextPackage(pkg);
+
+  assert.match(text, /NurseNest Revenue Protection Evidence Package/);
+  assert.match(text, /Protection score: 100\/100/);
+  assert.match(text, /refund_acknowledgement: 1/);
+  assert.match(text, /I understand this is a digital educational service\./);
 });

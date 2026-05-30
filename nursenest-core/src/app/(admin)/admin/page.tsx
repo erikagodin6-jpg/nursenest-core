@@ -71,6 +71,12 @@ function AdminFocusLinks() {
       accent: "blue",
     },
     {
+      href: "/admin/curriculum-coverage",
+      title: "Curriculum coverage",
+      copy: "Map questions, flashcards, lessons, simulations, ECG, pharmacology, and clinical skills to exam competencies.",
+      accent: "green",
+    },
+    {
       href: "/admin/hub/publishing",
       title: "Publishing",
       copy: "Manage blog publishing, SEO workflows, and queued content operations.",
@@ -81,6 +87,12 @@ function AdminFocusLinks() {
       title: "Billing",
       copy: "Review subscriptions, trials, revenue health, and cancellation states.",
       accent: "yellow",
+    },
+    {
+      href: "/admin/revenue-protection",
+      title: "Revenue protection",
+      copy: "Generate chargeback evidence packages from acknowledgements, billing, sessions, and learning activity.",
+      accent: "blue",
     },
     {
       href: "/admin/referrals",

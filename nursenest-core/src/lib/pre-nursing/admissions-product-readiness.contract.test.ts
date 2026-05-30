@@ -62,4 +62,14 @@ describe("HESI A2 / ATI TEAS / CASPer readiness recovery", () => {
     assert.match(pageSource, /robots:\s*\{\s*index:\s*false,\s*follow:\s*true\s*\}/);
     assert.match(pageSource, /This page exists to prevent silent routing into a generic pathway/);
   });
+
+  it("CASPer renders the dedicated response-training ecosystem", () => {
+    const pageSource = readSource("src/app/(marketing)/(default)/pre-nursing/[slug]/page.tsx");
+    const ecosystemSource = readSource("src/components/pre-nursing/casper/casper-premium-ecosystem-page.tsx");
+
+    assert.match(pageSource, /slug === "casper"/);
+    assert.match(pageSource, /<CasperPremiumEcosystemPage \/>/);
+    assert.match(ecosystemSource, /not a memorization bank/);
+    assert.match(ecosystemSource, /CasperResponseTrainerClient/);
+  });
 });

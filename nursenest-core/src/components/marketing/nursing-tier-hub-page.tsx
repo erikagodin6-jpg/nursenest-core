@@ -34,6 +34,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { isNpPremiumConvergencePathway } from "@/lib/marketing/np-premium-convergence-pathways";
 import { NpPremiumHubWorkstation } from "@/components/marketing/np-premium-hub-workstation";
+import { MarketingPathwayHubProductPreview } from "@/components/marketing/marketing-pathway-hub-product-preview";
 
 const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
   lessons: BookOpen,
@@ -341,6 +342,8 @@ export function NursingTierHubPage({
             />
             </div>
           )}
+
+          <MarketingPathwayHubProductPreview pathway={pathway} className="mt-8" />
 
           {pnHub && !npPremiumConvergence ? (
             <div className="mt-10 space-y-8" data-nn-pn-hub-readiness-band="1">

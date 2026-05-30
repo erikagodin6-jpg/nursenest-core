@@ -6,6 +6,7 @@ import { Activity, BookOpen, Gauge, Zap } from "lucide-react";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { EcgMarketingProductPreview } from "@/components/marketing/ecg-marketing-product-preview";
 
 export const revalidate = 86400;
 
@@ -254,6 +255,8 @@ export default function EcgInterpretationPage() {
             </Link>
           </div>
         </header>
+
+        <EcgMarketingProductPreview />
 
         <div className="grid gap-4 sm:grid-cols-3 mb-10">
           {[
