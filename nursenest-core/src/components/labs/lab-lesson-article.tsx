@@ -16,6 +16,7 @@ import type { LabFlashcard, LabLessonDefinition, LabTrack } from "@/lib/labs/lab
 import { labTrackFocusLabel } from "@/lib/labs/labs-display";
 import { LabChipList, LabLearningBlock } from "@/components/labs/lab-learning-block";
 import type { LabsStudyLinks } from "@/lib/labs/labs-engine";
+import { formatDisplayTitle } from "@/lib/format/text-case";
 
 function BulletList({ items }: { items: string[] }) {
   return (
@@ -94,17 +95,17 @@ export function LabLessonArticle({
         </div>
         <div className="mt-4 grid gap-4 lg:grid-cols-3">
           <div>
-            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Causes of high</h3>
+            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{formatDisplayTitle("Causes of high")}</h3>
             <BulletList items={lesson.causesHigh} />
           </div>
           {lesson.causesLow.length > 0 ? (
             <div>
-              <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Causes of low</h3>
+              <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{formatDisplayTitle("Causes of low")}</h3>
               <BulletList items={lesson.causesLow} />
             </div>
           ) : null}
           <div>
-            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Signs and symptoms</h3>
+            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{formatDisplayTitle("Signs and symptoms")}</h3>
             <BulletList items={lesson.signsSymptoms} />
           </div>
         </div>
@@ -122,7 +123,7 @@ export function LabLessonArticle({
           ))}
         </div>
         <div className="mt-4">
-          <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Priority decision-making</h3>
+          <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{formatDisplayTitle("Priority decision-making")}</h3>
           <BulletList items={lesson.priorityDecisionMaking} />
         </div>
       </LabLearningBlock>
@@ -139,7 +140,7 @@ export function LabLessonArticle({
           ))}
         </ol>
         <div className="mt-4">
-          <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Nursing interventions</h3>
+          <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{formatDisplayTitle("Nursing interventions")}</h3>
           <BulletList items={lesson.nursingInterventions} />
         </div>
       </LabLearningBlock>
@@ -151,26 +152,26 @@ export function LabLessonArticle({
       <LabLearningBlock title="NCLEX traps and pearls" eyebrow="Exam judgment" tone="warning" icon={Target} id="lab-nclex">
         <div className="grid gap-4 lg:grid-cols-2">
           <div>
-            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">NCLEX traps</h3>
+            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{formatDisplayTitle("NCLEX traps")}</h3>
             <LabChipList items={lesson.nclexTraps} variant="escalation" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Clinical pearls</h3>
+            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{formatDisplayTitle("Clinical pearls")}</h3>
             <BulletList items={lesson.clinicalPearls} />
           </div>
         </div>
         <div className="mt-4 grid gap-4 lg:grid-cols-2">
           <div>
-            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Medications affecting the lab</h3>
+            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{formatDisplayTitle("Medications affecting the lab")}</h3>
             <LabChipList items={lesson.medicationsAffecting} variant="medication" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Lab-condition relationships</h3>
+            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{formatDisplayTitle("Lab-condition relationships")}</h3>
             <BulletList items={lesson.labConditionRelationships} />
           </div>
         </div>
         <div className="mt-4">
-          <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Client education</h3>
+          <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{formatDisplayTitle("Client education")}</h3>
           <BulletList items={lesson.clientEducation} />
         </div>
       </LabLearningBlock>
@@ -184,7 +185,7 @@ export function LabLessonArticle({
               <BulletList items={scenario.findings} />
               <p className="mt-3 text-sm font-medium text-[var(--semantic-text-primary)]">Question: {scenario.question}</p>
               <details className="nn-lab-scenario-reveal mt-2">
-                <summary>Reveal teaching answer</summary>
+                <summary>{formatDisplayTitle("Reveal teaching answer")}</summary>
                 <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{scenario.answer}</p>
                 <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{scenario.rationale}</p>
               </details>
@@ -216,10 +217,10 @@ export function LabLessonArticle({
             Flashcards
           </Link>
           <Link href={studyLinks.questionBankHref} className="nn-lab-study-loop-link">
-            Question bank
+            {formatDisplayTitle("Question bank")}
           </Link>
           <Link href={studyLinks.catLaunchHref} className="nn-lab-study-loop-link">
-            CAT session
+            {formatDisplayTitle("CAT session")}
           </Link>
         </div>
       </LabLearningBlock>

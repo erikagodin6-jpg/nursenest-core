@@ -52,11 +52,11 @@ test("lab lesson article renders full premium structure", () => {
     <LabLessonArticle lesson={lesson!} labTrack="rn" measurementSystem="US" studyLinks={studyLinks} />,
   );
 
-  assert.match(html, /Normal range and physiology/);
-  assert.match(html, /Treatment algorithm/);
-  assert.match(html, /Trend interpretation/);
-  assert.match(html, /Pattern recognition/);
-  assert.match(html, /Case-based scenarios/);
+  assert.match(html, /Normal Range and Physiology/);
+  assert.match(html, /Treatment Algorithm/);
+  assert.match(html, /Trend Interpretation/);
+  assert.match(html, /Pattern Recognition/);
+  assert.match(html, /Case-Based Scenarios/);
   assert.match(html, /0\.5-1\.2 mg\/dL/);
 });
 

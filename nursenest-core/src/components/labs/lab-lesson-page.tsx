@@ -72,7 +72,7 @@ export function LabLessonPreview({
               Difficulty: clinical reasoning
             </span>
             <span className="rounded-full border border-[var(--semantic-border-soft)] px-2.5 py-1">
-              Estimated time: 10-15 min
+              {formatDisplayTitle("Estimated time")}: 10-15 min
             </span>
             <span className="rounded-full border border-[var(--semantic-border-soft)] px-2.5 py-1">
               Includes trends, escalation, and safety checks

@@ -1,0 +1,94 @@
+/**
+ * Shared learning-module workstation contract.
+ * Keeps module sidebars supportive, preserves NurseNest learner chrome, and gives
+ * future modules one layout target instead of cloning shell CSS.
+ */
+
+[data-nn-learning-module-shell] {
+  --nn-learning-module-sidebar-width: clamp(15rem, 18vw, 17rem);
+  --nn-learning-module-gap: clamp(1.5rem, 3vw, 2.5rem);
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  min-height: 0;
+}
+
+[data-nn-learning-module-frame] {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+[data-nn-learning-module-sidebar] {
+  display: none;
+  min-width: 0;
+  min-height: 0;
+}
+
+[data-nn-learning-module-main] {
+  min-width: 0;
+  min-height: 0;
+  padding-bottom: 2rem;
+}
+
+[data-nn-learning-module-mobile-strip] {
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  [data-nn-learning-module-frame] {
+    gap: var(--nn-learning-module-gap);
+  }
+}
+
+@media (min-width: 1200px) {
+  [data-nn-learning-module-frame] {
+    grid-template-columns: var(--nn-learning-module-sidebar-width) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  [data-nn-learning-module-sidebar] {
+    display: block;
+    width: var(--nn-learning-module-sidebar-width);
+    max-width: var(--nn-learning-module-sidebar-width);
+  }
+
+  [data-nn-learning-module-sidebar] > * {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  [data-nn-learning-module-mobile-strip] {
+    display: none;
+  }
+}
+
+[data-nn-learning-module-card] {
+  min-height: 100%;
+  text-decoration: none;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+[data-nn-learning-module-card]:where(:hover, :focus-visible) {
+  transform: translateY(-2px);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+[data-nn-learning-module-card]:focus-visible {
+  outline: 2px solid var(--semantic-brand);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-nn-learning-module-card]:where(:hover, :focus-visible) {
+    transform: none;
+  }
+}
