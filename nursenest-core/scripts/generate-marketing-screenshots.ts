@@ -80,34 +80,50 @@ const SKIP_FRAME = process.env.SCREENSHOT_SKIP_FRAME === "1";
  * Falls back to the default QA account if the tier-specific vars are not set.
  */
 const TIER_CREDENTIALS: Record<string, { email: string; password: string } | null> = {
-  rn:      resolveOptionalCreds("SCREENSHOT_RN_EMAIL",      "SCREENSHOT_RN_PASSWORD"),
-  pn:      resolveOptionalCreds("SCREENSHOT_PN_EMAIL",      "SCREENSHOT_PN_PASSWORD"),
-  np:      resolveOptionalCreds("SCREENSHOT_NP_EMAIL",      "SCREENSHOT_NP_PASSWORD"),
-  allied:  resolveOptionalCreds("SCREENSHOT_ALLIED_EMAIL",  "SCREENSHOT_ALLIED_PASSWORD"),
-  newgrad: resolveOptionalCreds("SCREENSHOT_NEWGRAD_EMAIL", "SCREENSHOT_NEWGRAD_PASSWORD"),
+  rn: resolveOptionalCreds(["SCREENSHOT_RN_EMAIL", "PLAYWRIGHT_RN_EMAIL"], ["SCREENSHOT_RN_PASSWORD", "PLAYWRIGHT_RN_PASSWORD"]),
+  pn: resolveOptionalCreds(["SCREENSHOT_PN_EMAIL", "PLAYWRIGHT_PN_EMAIL"], ["SCREENSHOT_PN_PASSWORD", "PLAYWRIGHT_PN_PASSWORD"]),
+  np: resolveOptionalCreds(["SCREENSHOT_NP_EMAIL", "PLAYWRIGHT_NP_EMAIL"], ["SCREENSHOT_NP_PASSWORD", "PLAYWRIGHT_NP_PASSWORD"]),
+  allied: resolveOptionalCreds(["SCREENSHOT_ALLIED_EMAIL", "PLAYWRIGHT_ALLIED_EMAIL"], ["SCREENSHOT_ALLIED_PASSWORD", "PLAYWRIGHT_ALLIED_PASSWORD"]),
+  newgrad: resolveOptionalCreds(["SCREENSHOT_NEWGRAD_EMAIL", "PLAYWRIGHT_NEWGRAD_EMAIL"], ["SCREENSHOT_NEWGRAD_PASSWORD", "PLAYWRIGHT_NEWGRAD_PASSWORD"]),
 };
 
+function firstEnv(...keys: string[]): string | undefined {
+  for (const key of keys) {
+    const value = process.env[key]?.trim();
+    if (value) return value;
+  }
+  return undefined;
+}
+
 function resolveOptionalCreds(
-  emailVar: string,
-  passwordVar: string,
+  emailVars: string | string[],
+  passwordVars: string | string[],
 ): { email: string; password: string } | null {
-  const email = process.env[emailVar]?.trim();
-  const password = process.env[passwordVar]?.trim();
+  const email = firstEnv(...(Array.isArray(emailVars) ? emailVars : [emailVars]));
+  const password = firstEnv(...(Array.isArray(passwordVars) ? passwordVars : [passwordVars]));
   if (!email || !password) return null;
   return { email, password };
 }
 
 function resolveCredentials(): { email: string; password: string } {
   const email =
-    process.env.QA_PAID_EMAIL ??
-    process.env.E2E_PAID_EMAIL ??
-    process.env.SCREENSHOT_DEMO_EMAIL ??
-    process.env.PLAYWRIGHT_TEST_EMAIL;
+    firstEnv(
+      "QA_PAID_EMAIL",
+      "E2E_PAID_EMAIL",
+      "SCREENSHOT_DEMO_EMAIL",
+      "PLAYWRIGHT_TEST_EMAIL",
+      "PLAYWRIGHT_RN_EMAIL",
+      "SCREENSHOT_RN_EMAIL",
+    );
   const password =
-    process.env.QA_PAID_PASSWORD ??
-    process.env.E2E_PAID_PASSWORD ??
-    process.env.SCREENSHOT_DEMO_PASSWORD ??
-    process.env.PLAYWRIGHT_TEST_PASSWORD;
+    firstEnv(
+      "QA_PAID_PASSWORD",
+      "E2E_PAID_PASSWORD",
+      "SCREENSHOT_DEMO_PASSWORD",
+      "PLAYWRIGHT_TEST_PASSWORD",
+      "PLAYWRIGHT_RN_PASSWORD",
+      "SCREENSHOT_RN_PASSWORD",
+    );
 
   if (!email || !password) {
     throw new Error(
@@ -1509,16 +1525,31 @@ async function login(page: Page, email: string, password: string): Promise<void>
     .first()
     .fill(password);
 
-  await Promise.all([
-    page.waitForURL(/\/app(\/|$)/, { timeout: 60_000 }),
-    page
-      .locator(
-        'button[type="submit"], button:has-text("Log in"), button:has-text("Sign in")',
-      )
-      .first()
-      .click(),
-  ]);
-  console.log("  ✓ logged in");
+  await page
+    .locator(
+      'button[type="submit"], button:has-text("Log in"), button:has-text("Sign in")',
+    )
+    .first()
+    .click();
+
+  await page.waitForLoadState("domcontentloaded");
+  await page.waitForLoadState("networkidle").catch(() => {});
+
+  const url = page.url();
+  if (/\/login|\/signup/i.test(url)) {
+    throw new Error(`Login failed — still on auth URL (${url})`);
+  }
+
+  // Production may land on marketing home (/) instead of /app after sign-in.
+  const bodySnippet = await page.locator("body").innerText({ timeout: 10_000 }).catch(() => "");
+  const looksAuthenticated =
+    /\/app(\/|$)/.test(url) ||
+    /Continue Study|Log out|Sign out|My account|QA RN|Dashboard/i.test(bodySnippet);
+  if (!looksAuthenticated) {
+    throw new Error(`Login did not establish a session (url=${url})`);
+  }
+
+  console.log(`  ✓ logged in (${url})`);
 }
 
 // ─── Theme application ────────────────────────────────────────────────────────

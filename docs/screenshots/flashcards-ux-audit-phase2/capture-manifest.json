@@ -1,220 +1,81 @@
 {
   "baseUrl": "http://127.0.0.1:3000",
-  "capturedAt": "2026-05-30T03:58:37.483Z",
+  "capturedAt": "2026-05-30T04:28:51.308Z",
   "auditRoute": "/preview/flashcard-session-live?audit=1&scenario=…",
   "files": [
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--ocean--1366x768.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "ocean",
-      "viewport": "1366x768",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--ocean--1440x900.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "ocean",
-      "viewport": "1440x900",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--ocean--1512x982.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "ocean",
-      "viewport": "1512x982",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--ocean--1728x1117.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "ocean",
-      "viewport": "1728x1117",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--ocean--1920x1080.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "ocean",
-      "viewport": "1920x1080",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-long-rationale--ocean--ipad-portrait.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "ocean",
-      "viewport": "ipad-portrait",
-      "bucket": "tablet"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-long-rationale--ocean--ipad-landscape.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "ocean",
-      "viewport": "ipad-landscape",
-      "bucket": "tablet"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-long-rationale--ocean--390x844.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "ocean",
-      "viewport": "390x844",
-      "bucket": "mobile"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-long-rationale--ocean--393x852.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "ocean",
-      "viewport": "393x852",
-      "bucket": "mobile"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-long-rationale--ocean--430x932.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "ocean",
-      "viewport": "430x932",
-      "bucket": "mobile"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--blossom--1366x768.png",
-      "scenario": "mcq-long-rationale",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-unanswered--blossom--1366x768.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "1366x768",
       "bucket": "desktop"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--blossom--1440x900.png",
-      "scenario": "mcq-long-rationale",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-unanswered--blossom--1440x900.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "1440x900",
       "bucket": "desktop"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--blossom--1512x982.png",
-      "scenario": "mcq-long-rationale",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-unanswered--blossom--1512x982.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "1512x982",
       "bucket": "desktop"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--blossom--1728x1117.png",
-      "scenario": "mcq-long-rationale",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-unanswered--blossom--1728x1117.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "1728x1117",
       "bucket": "desktop"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--blossom--1920x1080.png",
-      "scenario": "mcq-long-rationale",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-unanswered--blossom--1920x1080.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "1920x1080",
       "bucket": "desktop"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-long-rationale--blossom--ipad-portrait.png",
-      "scenario": "mcq-long-rationale",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-unanswered--blossom--ipad-portrait.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "ipad-portrait",
       "bucket": "tablet"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-long-rationale--blossom--ipad-landscape.png",
-      "scenario": "mcq-long-rationale",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-unanswered--blossom--ipad-landscape.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "ipad-landscape",
       "bucket": "tablet"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-long-rationale--blossom--390x844.png",
-      "scenario": "mcq-long-rationale",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-unanswered--blossom--390x844.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "390x844",
       "bucket": "mobile"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-long-rationale--blossom--393x852.png",
-      "scenario": "mcq-long-rationale",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-unanswered--blossom--393x852.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
       "viewport": "393x852",
       "bucket": "mobile"
     },
     {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-long-rationale--blossom--430x932.png",
-      "scenario": "mcq-long-rationale",
+      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-unanswered--blossom--430x932.png",
+      "scenario": "mcq-unanswered",
       "theme": "blossom",
-      "viewport": "430x932",
-      "bucket": "mobile"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--midnight--1366x768.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "midnight",
-      "viewport": "1366x768",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--midnight--1440x900.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "midnight",
-      "viewport": "1440x900",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--midnight--1512x982.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "midnight",
-      "viewport": "1512x982",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--midnight--1728x1117.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "midnight",
-      "viewport": "1728x1117",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/desktop/mcq-long-rationale--midnight--1920x1080.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "midnight",
-      "viewport": "1920x1080",
-      "bucket": "desktop"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-long-rationale--midnight--ipad-portrait.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "midnight",
-      "viewport": "ipad-portrait",
-      "bucket": "tablet"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/tablet/mcq-long-rationale--midnight--ipad-landscape.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "midnight",
-      "viewport": "ipad-landscape",
-      "bucket": "tablet"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-long-rationale--midnight--390x844.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "midnight",
-      "viewport": "390x844",
-      "bucket": "mobile"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-long-rationale--midnight--393x852.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "midnight",
-      "viewport": "393x852",
-      "bucket": "mobile"
-    },
-    {
-      "path": "/root/nursenest-core/docs/screenshots/flashcards-ux-audit-phase2/mobile/mcq-long-rationale--midnight--430x932.png",
-      "scenario": "mcq-long-rationale",
-      "theme": "midnight",
       "viewport": "430x932",
       "bucket": "mobile"
     }
   ],
   "notes": {
     "bowtieMatrixNgn": "Flashcard study stack renders MCQ + SATA only. Bowtie, Matrix, and NGN Case Study are practice/CAT item types — documented as out-of-scope for this surface."
-  }
+  },
+  "authSkipped": "Login failed — seed demo user first."
 }

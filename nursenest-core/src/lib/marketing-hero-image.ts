@@ -13,7 +13,10 @@ export const HOME_HERO_SCREENSHOT_WEBP_WIDTH_SUFFIXES = [
   "-480w.webp",
 ] as const;
 
-const LOCAL_HOME_HERO_SCREENSHOT_IDS = new Set([1, 3, 7, 9, 10]);
+/** Prefer repo-local WebP when present — avoids stale CDN PNGs between upload cycles. */
+const LOCAL_HOME_HERO_SCREENSHOT_IDS = new Set(
+  Array.from({ length: 15 }, (_, index) => index + 1),
+);
 
 function uniqueStrings(urls: string[]): string[] {
   const seen = new Set<string>();
