@@ -10,7 +10,7 @@ import { HUB } from "@/lib/navigation/canonical-destinations";
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
 
 export type PremiumHomepagePathway = {
-  id: "rn" | "pn" | "np" | "allied" | "pre-nursing";
+  id: "rn" | "pn" | "np" | "pre-nursing" | "new-grad";
   title: string;
   subtitle: string;
   body: string;
@@ -67,7 +67,6 @@ export function usePremiumHomepageRoutes(): PremiumHomepageRoutes {
       rn: marketingExamHubPath(region, "rn"),
       pn: marketingExamHubPath(region, "pn"),
       np: marketingExamHubPath(region, "np"),
-      allied: marketingExamHubPath(region, "allied"),
     };
 
     try {
@@ -141,28 +140,28 @@ export function usePremiumHomepageRoutes(): PremiumHomepageRoutes {
           tone: "success",
         },
         {
-          id: "allied",
-          title: tr("pages.home.premium.pathways.allied.title", "Allied Health"),
-          subtitle: tr("pages.home.premium.pathways.allied.subtitle", "Cross-discipline certification prep"),
-          body: tr(
-            "pages.home.premium.pathways.allied.body",
-            "Occupation-aware study hubs for allied roles with practice modes scoped to each profession.",
-          ),
-          href: loc(hubs.allied),
-          cta: tr("pages.home.premium.pathways.allied.cta", "Explore Allied"),
-          tone: "accent",
-        },
-        {
           id: "pre-nursing",
           title: tr("pages.home.premium.pathways.preNursing.title", "Pre-Nursing"),
-          subtitle: tr("pages.home.premium.pathways.preNursing.subtitle", "Public foundations and study planning"),
+          subtitle: tr("pages.home.premium.pathways.preNursing.subtitle", "ATI TEAS · HESI A2 · CASPer"),
           body: tr(
             "pages.home.premium.pathways.preNursing.body",
-            "Start with open foundations, prerequisite science support, and study planning before role-specific licensure prep.",
+            "ATI TEAS, HESI A2, and CASPer prep plus foundational sciences, prerequisite review, and nursing school admissions support.",
           ),
           href: loc("/pre-nursing"),
           cta: tr("pages.home.premium.pathways.preNursing.cta", "Explore Pre-Nursing"),
           tone: "warning",
+        },
+        {
+          id: "new-grad",
+          title: tr("pages.home.premium.pathways.newGrad.title", "New Graduate"),
+          subtitle: tr("pages.home.premium.pathways.newGrad.subtitle", "Transition to practice"),
+          body: tr(
+            "pages.home.premium.pathways.newGrad.body",
+            "Bridge from licensure to bedside confidence with specialty tracks, ECG, pharmacology, clinical skills, and new-graduate readiness framing.",
+          ),
+          href: loc("/canada/new-grad"),
+          cta: tr("pages.home.premium.pathways.newGrad.cta", "Explore New Grad"),
+          tone: "accent",
         },
       ],
     };

@@ -263,7 +263,11 @@ export function LearnerBillingPageContent({
         t={t}
       />
 
-      <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm">
+      <section
+        className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm"
+        data-nn-subscription-summary-card
+        data-nn-subscription-summary-surface="billing"
+      >
         <div className="border-b border-[var(--semantic-border-soft)] bg-gradient-to-r from-primary/[0.06] to-transparent px-5 py-4">
           <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.billingPage.planTitle")}</h2>
           <p className="mt-1 text-xs text-muted-foreground">{t("learner.billingPage.planSub")}</p>
@@ -410,7 +414,7 @@ export function LearnerBillingPageContent({
             <p className="mt-1 text-xs text-muted-foreground">{t("learner.billingPage.paymentMethodSub")}</p>
           </div>
           <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Next invoice</dt>
+            <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Next Charge</dt>
             <dd className="mt-1 text-sm font-medium text-foreground">
               {billingMoney(stripeRenewal?.nextInvoiceAmountDue, stripeRenewal?.nextInvoiceCurrency)}
             </dd>

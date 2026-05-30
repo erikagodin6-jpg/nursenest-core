@@ -8,6 +8,7 @@ import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcru
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { formatBillingTierLabel, loadBillingPagePayload } from "@/lib/learner/load-billing-page-payload";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 const SETTING_DESTINATIONS: readonly { href: string; titleKey?: string; title?: string; bodyKey?: string; body?: string }[] = [
@@ -62,6 +63,15 @@ export default async function AccountSettingsHubPage() {
   const userId = (session?.user as { id?: string })?.id ?? "";
   const userEmail = (session?.user as { email?: string | null })?.email ?? "";
   const crumbs = appAccountBreadcrumbs(t("learner.account.nav.settings"));
+  const billing = userId ? await loadBillingPagePayload(userId).catch(() => null) : null;
+  const renewalDate = billing?.stripeRenewal?.currentPeriodEnd ?? billing?.billingPeriodEndDisplay ?? null;
+  const nextAmount =
+    billing?.stripeRenewal?.nextInvoiceAmountDue != null
+      ? new Intl.NumberFormat("en", {
+          style: "currency",
+          currency: (billing.stripeRenewal.nextInvoiceCurrency ?? "usd").toUpperCase(),
+        }).format(billing.stripeRenewal.nextInvoiceAmountDue / 100)
+      : "Managed In Stripe";
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
@@ -88,6 +98,48 @@ export default async function AccountSettingsHubPage() {
         title={t("learner.account.settingsPage.title")}
         description={t("learner.account.settingsPage.intro")}
       />
+      {billing ? (
+        <section
+          className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-sm"
+          data-nn-subscription-summary-card
+          data-nn-subscription-summary-surface="settings"
+        >
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Subscription Summary</p>
+              <h2 className="mt-2 text-lg font-bold text-[var(--semantic-text-primary)]">
+                {formatBillingTierLabel(billing.effectiveTier, billing.effectiveCountry)}
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Status: {billing.subscription?.status?.replaceAll("_", " ") ?? "No Active Subscription"}
+              </p>
+            </div>
+            <dl className="grid min-w-0 gap-3 text-sm sm:grid-cols-3 lg:min-w-[520px]">
+              <div>
+                <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Renewal Date</dt>
+                <dd className="mt-1 font-semibold text-foreground">
+                  {renewalDate ? renewalDate.toLocaleDateString("en", { year: "numeric", month: "short", day: "numeric" }) : "Not Available"}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Next Charge</dt>
+                <dd className="mt-1 font-semibold text-foreground">{nextAmount}</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Payment Method</dt>
+                <dd className="mt-1 font-semibold text-foreground">
+                  {billing.stripeRenewal?.paymentMethodSummary?.last4
+                    ? `${billing.stripeRenewal.paymentMethodSummary.brand?.toUpperCase() ?? "CARD"} ${billing.stripeRenewal.paymentMethodSummary.last4}`
+                    : "Managed In Stripe"}
+                </dd>
+              </div>
+            </dl>
+          </div>
+          <Link href="/app/account/billing" className="mt-4 inline-flex rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground">
+            Manage Billing
+          </Link>
+        </section>
+      ) : null}
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {SETTING_DESTINATIONS.map((item) => (
           <li key={item.href}>

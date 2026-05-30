@@ -9,6 +9,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { expireStaleTrialForUser } from "@/lib/trial/expire-stale-trial";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
 import { recordPremiumProtectionAbuseFromLog } from "@/lib/premium-protection/telemetry-db";
+import { assessTrialEligibility } from "@/lib/trial/trial-eligibility";
 
 export type StartTrialResult =
   | { ok: true; trialEndsAt: string }
@@ -74,17 +75,6 @@ export async function attemptStartTrial(args: {
     where: { fingerprintHash: fpHash },
     select: { userId: true },
   });
-  if (existingBinding && existingBinding.userId !== userId) {
-    captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "device_already_trialed" }).catch(() => {});
-    captureServerEvent(analyticsDistinctId(userId), "duplicate_account_detected", { signal: "device_fingerprint" }).catch(() => {});
-    recordTrialBlock(userId, "device_already_trialed");
-    return {
-      ok: false,
-      code: "device_already_trialed",
-      message: "This device already used a free trial. You can still subscribe below.",
-      status: 403,
-    };
-  }
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -114,34 +104,6 @@ export async function attemptStartTrial(args: {
     };
   }
 
-  if (!user.emailVerified) {
-    captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "email_not_verified" }).catch(() => {});
-    recordTrialBlock(userId, "email_not_verified");
-    return {
-      ok: false,
-      code: "email_not_verified",
-      message: "Verify your email before starting a free trial. Check your inbox for a verification link.",
-      status: 403,
-    };
-  }
-
-  if (user._count.subscriptions > 0) {
-    captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "has_subscription_history" }).catch(() => {});
-    recordTrialBlock(userId, "has_subscription_history");
-    return {
-      ok: false,
-      code: "has_subscription_history",
-      message: "Trial is for new members only. Use checkout to subscribe.",
-      status: 403,
-    };
-  }
-
-  if (user.trialUsedAt != null || user.trialStatus === TrialStatus.EXHAUSTED) {
-    captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "trial_already_used" }).catch(() => {});
-    recordTrialBlock(userId, "trial_already_used");
-    return { ok: false, code: "trial_already_used", message: "You already used your free trial.", status: 403 };
-  }
-
   if (user.trialStatus === TrialStatus.ACTIVE && user.trialEndsAt && user.trialEndsAt > new Date()) {
     return {
       ok: true,
@@ -149,17 +111,42 @@ export async function attemptStartTrial(args: {
     };
   }
 
-  if (user.trialUsedAt != null) {
-    recordTrialBlock(userId, "trial_already_used");
-    return { ok: false, code: "trial_already_used", message: "You already used your free trial.", status: 403 };
-  }
+  const stripeHasHistory = await stripeEmailHasSubscriptionHistory(user.email);
+  const accountCreationCountForIp =
+    ip && ip !== "unknown"
+      ? await prisma.user.count({
+          where: {
+            signupIp: ip.slice(0, 64),
+            createdAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
+          },
+        })
+      : 0;
+  const eligibility = assessTrialEligibility({
+    email: user.email,
+    emailVerified: user.emailVerified,
+    deviceAlreadyTrialed: Boolean(existingBinding && existingBinding.userId !== userId),
+    trialAlreadyUsed: user.trialUsedAt != null || user.trialStatus === TrialStatus.EXHAUSTED,
+    hasSubscriptionHistory: user._count.subscriptions > 0,
+    stripeEmailHasSubscriptionHistory: stripeHasHistory,
+    accountCreationCountForIp,
+    noPaymentHistory: user._count.subscriptions === 0 && !stripeHasHistory,
+  });
 
-  if (await stripeEmailHasSubscriptionHistory(user.email)) {
-    recordTrialBlock(userId, "stripe_email_in_use");
+  if (!eligibility.eligible) {
+    captureServerEvent(analyticsDistinctId(userId), "trial_blocked", {
+      reason: eligibility.code,
+      risk_level: eligibility.riskLevel,
+      score: eligibility.score,
+      signals: eligibility.reasons,
+    }).catch(() => {});
+    if (eligibility.code === "device_already_trialed") {
+      captureServerEvent(analyticsDistinctId(userId), "duplicate_account_detected", { signal: "device_fingerprint" }).catch(() => {});
+    }
+    recordTrialBlock(userId, eligibility.code);
     return {
       ok: false,
-      code: "stripe_email_in_use",
-      message: "This email has billing history. Use checkout to subscribe.",
+      code: eligibility.code,
+      message: eligibility.userMessage,
       status: 403,
     };
   }

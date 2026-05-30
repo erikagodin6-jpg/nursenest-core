@@ -159,6 +159,7 @@ const FEATURES: Array<{
   { title: "Pharmacology", description: "Medication safety, effects, and nursing monitoring.", href: FEATURE_LINKS.pharmacology, screenshot: "pharmacology", icon: Pill, countKey: "questions" },
   { title: "Clinical Skills", description: "Procedure readiness, sequencing, and safety checks.", href: FEATURE_LINKS.skills, screenshot: "clinical-skills", icon: Stethoscope, countKey: "skills" },
   { title: "Simulations", description: "Scenario practice for changing patient conditions.", href: FEATURE_LINKS.simulations, screenshot: "telemetry-shift", icon: Route, countKey: "simulations" },
+  { title: "Clinical Scenarios", description: "Unfolding cases for prioritization and clinical judgment.", href: FEATURE_LINKS.scenarios, screenshot: "telemetry-shift", icon: UserRoundCheck, countKey: "simulations" },
   { title: "Study Plans", description: "A guided path from today’s weakness to tomorrow’s work.", href: FEATURE_LINKS.studyPlans, screenshot: "study-plan", icon: NotebookTabs, countKey: "learners" },
   { title: "Analytics", description: "Readiness, confidence, and progress trends.", href: FEATURE_LINKS.readiness, screenshot: "analytics", icon: LineChart, countKey: "learners" },
   { title: "Readiness Scores", description: "Report cards that turn practice into a plan.", href: FEATURE_LINKS.reportCards, screenshot: "readiness-report", icon: BarChart3, countKey: "learners" },
@@ -270,10 +271,10 @@ const NGN_TYPES = [
 const PATHWAYS = [
   ["RN", "NCLEX-RN candidates", "Lessons, NGN questions, CAT, ECG, labs, skills, flashcards.", "/canada/rn/nclex-rn"],
   ["RPN", "Canadian practical nursing learners", "REx-PN practice, lessons, flashcards, readiness, clinical skills.", "/canada/pn/rex-pn"],
-  ["NP", "Nurse practitioner exam candidates", "Advanced clinical reasoning, pharmacology, cases, and practice.", "/np"],
-  ["Allied Health", "Healthcare certification learners", "Occupation-aware lessons, questions, skills, and scenarios.", "/allied-health"],
-  ["Pre-Nursing", "Future nursing students", "Foundations, prerequisite review, mini practice, and study planning.", "/pre-nursing"],
-  ["New Graduate", "Early-career nurses", "Practice readiness, specialty tracks, ECG, pharmacology, and skills.", "/canada/new-grad"],
+  ["NP", "CNPLE, FNP, AGPCNP, PMHNP & WHNP candidates", "Advanced clinical reasoning, pharmacology, specialty cases, and CAT practice.", "/np"],
+  ["Pre-Nursing", "Future nursing students", "ATI TEAS, HESI A2, CASPer prep, foundational sciences, and nursing school admissions support.", "/pre-nursing"],
+  ["New Graduate", "Early-career nurses", "Transition-to-practice readiness, specialty tracks, ECG, pharmacology, and clinical skills.", "/canada/new-grad"],
+  ["Allied Health", "22+ allied health professions", "Occupation-specific lessons, questions, skills, and certification prep — separate from nursing.", "/allied-health"],
 ] as const;
 
 const COMPARISON_ROWS = [
@@ -551,12 +552,14 @@ export function HomepageEcosystemDiscovery({ stats }: { stats: HomeMarketingStat
 
       <section className="nn-home-ecosystem-section nn-home-institutions-band" aria-labelledby="homepage-institutions-heading">
         <div className="nn-section-shell nn-home-institutions-panel">
-          <School className="h-8 w-8" aria-hidden />
-          <div>
-            <p className="nn-premium-home-eyebrow">Institutions</p>
-            <h2 id="homepage-institutions-heading" className="nn-marketing-h2">For Nursing Schools &amp; Healthcare Organizations</h2>
-            <p className="nn-marketing-body">Bring NurseNest to student cohorts, hospital onboarding, new graduate support, faculty dashboards, remediation programs, and clinical education groups.</p>
-          </div>
+              <School className="h-8 w-8" aria-hidden />
+              <div>
+                <p className="nn-premium-home-eyebrow">Institutions</p>
+                <h2 id="homepage-institutions-heading" className="nn-marketing-h2">
+                  Built For Schools, Colleges, Universities, And Hospital Programs
+                </h2>
+                <p className="nn-marketing-body">For Nursing Schools and healthcare organizations, NurseNest supports student cohorts, hospital onboarding, new graduate support, faculty dashboards, remediation programs, and clinical education groups.</p>
+              </div>
           <Link href={FEATURE_LINKS.institutions} className="nn-home-institutions-cta">Explore institutional licensing</Link>
         </div>
       </section>

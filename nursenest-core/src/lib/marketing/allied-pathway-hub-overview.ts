@@ -19,26 +19,39 @@ export type AlliedHubModuleCard = {
 
 export type AlliedPathwayHubOverview = {
   lessonCount: number;
+  flashcardCount: number | null;
   flashcardDeckCount: number | null;
   questionSnapshot: PathwayQuestionBankSnapshot;
   practiceExamReady: boolean;
   moduleCards: AlliedHubModuleCard[];
+  contentCounts: {
+    questions: number | null;
+    flashcards: number | null;
+    lessons: number;
+    simulations: number | null;
+    clinicalSkills: number | null;
+  };
 };
 
-async function countPublishedFlashcardDecks(pathwayIds: string[]): Promise<number | null> {
+async function countPublishedFlashcards(pathwayIds: string[]): Promise<{ decks: number; cards: number } | null> {
   if (!isDatabaseUrlConfigured()) return null;
   try {
-    return await prisma.flashcardDeck.count({
+    const rows = await prisma.flashcardDeck.findMany({
       where: {
         pathwayId: { in: pathwayIds },
         status: ContentStatus.PUBLISHED,
       },
+      select: { cardCount: true },
     });
+    return {
+      decks: rows.length,
+      cards: rows.reduce((sum, row) => sum + Math.max(0, row.cardCount), 0),
+    };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
         event: "hub_data_load_failed",
-        dependency_name: "allied_flashcard_deck_count",
+        dependency_name: "allied_flashcard_count",
         pathway_id: pathwayIds.join(","),
         error_message: message.slice(0, 500),
       });
@@ -65,10 +78,12 @@ function buildAlliedModuleCards(): AlliedHubModuleCard[] {
 export function fallbackAlliedPathwayHubOverview(): AlliedPathwayHubOverview {
   return {
     lessonCount: 0,
+    flashcardCount: null,
     flashcardDeckCount: null,
     questionSnapshot: { status: "unavailable" },
     practiceExamReady: false,
     moduleCards: buildAlliedModuleCards(),
+    contentCounts: { questions: null, flashcards: null, lessons: 0, simulations: null, clinicalSkills: null },
   };
 }
 
@@ -83,10 +98,10 @@ export async function loadAlliedPathwayHubOverview(
 ): Promise<AlliedPathwayHubOverview> {
   const pathwayIds = isAlliedGlobalPathwayId(pathway.id) ? [...ALLIED_GLOBAL_PATHWAY_IDS] : [pathway.id];
 
-  const [questionSnapshots, lessonCounts, flashcardDeckCount] = await Promise.all([
+  const [questionSnapshots, lessonCounts, flashcards] = await Promise.all([
     Promise.all(pathwayIds.map((pathwayId) => loadPathwayQuestionBankSnapshot(pathwayId))),
     Promise.all(pathwayIds.map((pathwayId) => countPathwayLessonsPublic(pathwayId))),
-    countPublishedFlashcardDecks(pathwayIds),
+    countPublishedFlashcards(pathwayIds),
   ]);
 
   const questionSnapshot = combineQuestionSnapshots(questionSnapshots);
@@ -94,9 +109,17 @@ export async function loadAlliedPathwayHubOverview(
 
   return {
     lessonCount: pathwayLessonCount,
-    flashcardDeckCount,
+    flashcardCount: flashcards?.cards ?? null,
+    flashcardDeckCount: flashcards?.decks ?? null,
     questionSnapshot,
     practiceExamReady: marketingCatCompletePoolUsable(questionSnapshot, pathway.id),
     moduleCards: buildAlliedModuleCards(),
+    contentCounts: {
+      questions: questionSnapshot.status === "ok" ? questionSnapshot.pathwayScopedCount : null,
+      flashcards: flashcards?.cards ?? null,
+      lessons: pathwayLessonCount,
+      simulations: null,
+      clinicalSkills: null,
+    },
   };
 }

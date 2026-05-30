@@ -170,14 +170,14 @@ export function PremiumHomepageHero(props: {
   const lessons = props.lessonCount ?? 0;
 
   const eyebrow = formatTitleCase(
-    safeHomepageMarketingT(t, "pages.home.hero.eyebrowAdaptive", "Adaptive Clinical Readiness"),
+    safeHomepageMarketingT(t, "pages.home.hero.eyebrowAdaptive", "For RN, RPN, NP, Pre-Nursing & New Graduate Learners"),
     locale,
   );
   const headline = formatTitleCase(
     safeHomepageMarketingT(
       t,
       "pages.home.hero.headlineAdaptive",
-      "Master Nursing. Think Like a Clinician.",
+      "The Most Comprehensive Nursing Education Ecosystem.",
     ),
     locale,
   );
@@ -185,7 +185,7 @@ export function PremiumHomepageHero(props: {
     safeHomepageMarketingT(
       t,
       "pages.home.hero.subheadingAdaptive",
-      "Study with lessons, NGN practice, simulations, ECG, telemetry, labs, competency tracking, and CAT readiness—built for RN, PN or RPN, NP, allied health, and pre-nursing learners.",
+      "Lessons, NGN practice, CAT exams, ECG, labs, medication math, clinical skills, and simulations—built for NCLEX-RN, REx-PN, CNPLE, and pre-nursing in one connected ecosystem.",
     ),
     locale,
   );
@@ -289,7 +289,7 @@ export function PremiumHomepageHero(props: {
               </MarketingTrackedLink>
 
               <MarketingTrackedLink
-                href={safePath(locale, HUB.examLessons)}
+                href={safePath(locale, HUB.pricing)}
                 event={PH.marketingHomeHeroSecondaryCta}
                 eventProps={{ region }}
                 className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-full`}

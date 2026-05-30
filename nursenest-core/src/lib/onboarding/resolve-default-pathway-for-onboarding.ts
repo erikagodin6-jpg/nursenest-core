@@ -2,7 +2,7 @@ import { CountryCode, ExamFamily } from "@prisma/client";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 
 /** Exam goal from {@link TrialOnboardingFlow} step 0. */
-export type OnboardingExamGoalSlug = "rn" | "rpn" | "np" | "allied";
+export type OnboardingExamGoalSlug = "rn" | "rpn" | "np" | "pre_nursing" | "allied";
 
 /** Pathway ids we may assign to `User.learnerPath` (active / legacy / beta — not waitlist-only). */
 function assignablePathwayId(id: string): string | null {
@@ -31,6 +31,9 @@ export function resolveDefaultPathwayIdForOnboarding(
   if (g === "np") {
     if (us) return assignablePathwayId("us-np-fnp");
     return assignablePathwayId("ca-np-cnple") ?? assignablePathwayId("ca-rn-nclex-rn");
+  }
+  if (g === "pre_nursing") {
+    return assignablePathwayId(us ? "pre-nursing" : "pre-nursing-ca");
   }
   if (g === "allied") {
     return assignablePathwayId(us ? "us-allied-core" : "ca-allied-core");

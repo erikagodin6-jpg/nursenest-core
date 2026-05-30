@@ -181,3 +181,58 @@ export function newContentRoundupEmailHtml(ctx: LearnerEngagementEmailContext): 
   const text = `See new ${ctx.trackLabel} prep content on NurseNest: ${appOriginForEmail()}/app/lessons — ${ctx.educationalDisclaimer}`;
   return { subject, html, text };
 }
+
+export function renewalReminderEmailHtml(args: {
+  planLabel: string;
+  amountLabel: string;
+  renewalDateLabel: string;
+  daysBefore: 7 | 3 | 0;
+  ctx: LearnerEngagementEmailContext;
+}): { subject: string; html: string; text: string } {
+  const subject =
+    args.daysBefore === 0
+      ? "Your NurseNest subscription renews today"
+      : `Your NurseNest subscription renews in ${args.daysBefore} days`;
+  const inner = `
+    <p>Your NurseNest subscription renewal is coming up.</p>
+    <p><strong>Plan:</strong> ${esc(args.planLabel)}<br>
+    <strong>Amount:</strong> ${esc(args.amountLabel)}<br>
+    <strong>Renewal date:</strong> ${esc(args.renewalDateLabel)}</p>
+    <p>You can update payment details, review invoices, or cancel from Billing. We keep renewal details visible so there are no surprises.</p>
+    ${cta("/app/account/billing", "Review billing")}
+    ${cta("/contact", "Contact support")}
+  `;
+  const html = htmlEmailShell(subject, wrapEngagementBody(args.ctx, inner));
+  const text = `${subject}. Plan: ${args.planLabel}. Amount: ${args.amountLabel}. Renewal date: ${args.renewalDateLabel}. Manage: ${appOriginForEmail()}/app/account/billing Support: ${appOriginForEmail()}/contact`;
+  return { subject, html, text };
+}
+
+export function featureDiscoveryEmailHtml(args: {
+  featureName: string;
+  benefit: string;
+  href: string;
+  ctx: LearnerEngagementEmailContext;
+}): { subject: string; html: string; text: string } {
+  const subject = `Try ${args.featureName} in NurseNest`;
+  const inner = `
+    <p>You have access to ${esc(args.featureName)}, but may not have used it yet.</p>
+    <p>${esc(args.benefit)}</p>
+    ${cta(args.href, `Open ${args.featureName}`)}
+  `;
+  const html = htmlEmailShell(subject, wrapEngagementBody(args.ctx, inner));
+  const text = `Try ${args.featureName}: ${args.benefit} ${appOriginForEmail()}${args.href}`;
+  return { subject, html, text };
+}
+
+export function winBackNewFeaturesEmailHtml(ctx: LearnerEngagementEmailContext): { subject: string; html: string; text: string } {
+  const subject = "New NurseNest learning tools are ready";
+  const inner = `
+    <p>NurseNest keeps expanding beyond the question bank: ECG practice, lab interpretation, clinical skills, pharmacology, medication math, and readiness reporting.</p>
+    <p>If your exam prep is active again, return to see what changed.</p>
+    ${cta("/pricing", "See plans")}
+    ${cta("/app", "Open NurseNest")}
+  `;
+  const html = htmlEmailShell(subject, wrapEngagementBody(ctx, inner));
+  const text = `New NurseNest tools are ready: ECG, labs, clinical skills, pharmacology, medication math, and readiness reporting. ${appOriginForEmail()}/pricing`;
+  return { subject, html, text };
+}

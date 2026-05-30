@@ -102,7 +102,7 @@ export function PremiumPlatformCapabilityStrip() {
             {formatTitleCase(
               tr(
                 "pages.home.premium.platformCapabilities.heading",
-                "More than flashcards and question banks.",
+                "NurseNest Integrates What Other Platforms Keep Separate.",
               ),
               locale,
             )}

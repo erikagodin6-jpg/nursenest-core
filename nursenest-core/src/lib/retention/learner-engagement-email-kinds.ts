@@ -14,6 +14,14 @@ export const LEARNER_ENGAGEMENT_EMAIL_KINDS = [
   "study_plan_nudge",
   "milestone_lessons",
   "new_content_roundup",
+  "renewal_reminder_7d",
+  "renewal_reminder_3d",
+  "renewal_reminder_day_of",
+  "feature_discovery_ecg",
+  "feature_discovery_labs",
+  "feature_discovery_medication_math",
+  "feature_discovery_clinical_skills",
+  "win_back_new_features",
 ] as const;
 
 export type LearnerEngagementEmailKind = (typeof LEARNER_ENGAGEMENT_EMAIL_KINDS)[number];

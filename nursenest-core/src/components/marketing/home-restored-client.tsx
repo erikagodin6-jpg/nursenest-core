@@ -40,6 +40,10 @@ const PremiumHomepageCta = dynamic(() =>
   import("@/components/marketing/home/premium-homepage-cta").then((m) => m.PremiumHomepageCta),
   { ssr: false, loading: () => <PremiumSectionSkeleton testId="skeleton-cta" short /> },
 );
+const HomepageAlliedHealthSection = dynamic(() =>
+  import("@/components/marketing/home/homepage-allied-health-section").then((m) => m.HomepageAlliedHealthSection),
+  { ssr: false, loading: () => <PremiumSectionSkeleton testId="skeleton-allied-health" /> },
+);
 
 const FunnelHomepageViewBeaconLazy = dynamic(
   () =>
@@ -217,6 +221,10 @@ export default function HomeRestoredClient({
 
       {/* Server island — keep as static server HTML when supplied. */}
       {trustSlot}
+
+      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-allied-health" />}>
+        <HomepageAlliedHealthSection />
+      </LazyWhenVisible>
 
       {/* Global hub strip — after pathway cards (supporting marketing, not above hero). */}
       {children}

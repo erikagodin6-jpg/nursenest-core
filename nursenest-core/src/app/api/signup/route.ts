@@ -30,6 +30,7 @@ import {
 import { captureServerMessageIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { triggerWelcomeEmailRequested } from "@/lib/server/inngest";
+import { isDisposableEmailDomain } from "@/lib/trial/trial-email-controls";
 
 function signupStructuredFailed(req: Request, errorClass: string, severity: "warn" | "error" = "warn"): void {
   emitStructuredLog("signup_failed", severity, {
@@ -122,6 +123,15 @@ export async function POST(req: Request) {
   }
 
   const signupEmail = parsed.data.email.toLowerCase();
+  if (isDisposableEmailDomain(signupEmail)) {
+    signupStructuredFailed(req, "disposable_email_domain");
+    productEvent("signup_disposable_email_blocked", {});
+    return NextResponse.json(
+      { error: "Use a permanent email address to create your NurseNest account.", code: "disposable_email" },
+      { status: 400 },
+    );
+  }
+
   if (signupEmail.endsWith(`@${DEMO_USER_EMAIL_DOMAIN}`)) {
     signupStructuredFailed(req, "reserved_email");
     return NextResponse.json(

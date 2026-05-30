@@ -621,7 +621,7 @@ export function PracticeTestsHubClient({
                     {category.label}
                   </span>
                   <span className="text-xs font-medium text-[var(--semantic-text-secondary)]">
-                    {count > 0 ? `${count} questions` : "Included"}
+                    {`${count.toLocaleString()} Questions`}
                   </span>
                 </button>
               );

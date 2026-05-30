@@ -176,6 +176,13 @@ export function SignupForm({
       referralCode: referralCode || undefined,
       ...(captchaToken ? { captchaToken } : {}),
     };
+    const passwordConfirm = String(formData.get("passwordConfirm") ?? "");
+
+    if (payload.password !== passwordConfirm) {
+      setError("Passwords do not match.");
+      setErrorHelp(null);
+      return;
+    }
 
     if (turnstileGateActive && !captchaToken?.trim()) {
       setError(t("pages.signup.errorCaptcha"));
@@ -296,6 +303,16 @@ export function SignupForm({
         name="password"
         placeholder={t("pages.signup.placeholderPassword")}
         required
+        autoComplete="new-password"
+      />
+      <input
+        className="nn-premium-auth-input nn-premium-auth-input--block"
+        type="password"
+        name="passwordConfirm"
+        placeholder="Confirm password"
+        aria-label="Confirm password"
+        required
+        autoComplete="new-password"
       />
       <div className="grid gap-3 sm:grid-cols-2">
         <select

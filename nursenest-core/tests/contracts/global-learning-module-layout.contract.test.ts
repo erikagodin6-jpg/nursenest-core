@@ -105,6 +105,13 @@ describe("global learning-module layout contract", () => {
     }
   });
 
+  it("keeps practice-test discovery cards on dynamic counts instead of vague included labels", () => {
+    const practiceHub = read("src/components/student/practice-tests-hub-client.tsx");
+
+    assert.match(practiceHub, /count\.toLocaleString\(\).*Questions/, "practice-test category cards must render the discovered question count");
+    assert.doesNotMatch(practiceHub, /:\s*"Included"/, "practice-test cards must not fall back to vague Included labels");
+  });
+
   it("rethrows Next navigation control flow from authenticated module layouts", () => {
     for (const layout of [
       "src/app/(app)/app/(learner)/labs/layout.tsx",

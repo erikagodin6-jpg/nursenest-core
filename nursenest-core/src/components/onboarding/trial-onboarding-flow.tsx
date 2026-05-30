@@ -25,7 +25,7 @@ import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
 import { examGoalRowsForCountry, normalizeOnboardingCountry } from "@/lib/onboarding/exam-goal-rows-for-country";
 
-type ExamGoal = "rn" | "rpn" | "np" | "allied" | null;
+type ExamGoal = "rn" | "rpn" | "np" | "pre_nursing" | "allied" | null;
 type StudyStyle = "structured" | "questions" | "weak_areas" | null;
 type LearnerStage = "early_student" | "senior_student" | "new_grad" | "experienced" | null;
 type WeakArea = "telemetry" | "prioritization" | "pharmacology" | "labs" | "skills" | "med_math";
@@ -83,6 +83,7 @@ const ROLE_FOCUS: Record<Exclude<ExamGoal, null>, string[]> = {
   rn: ["Telemetry and ECG reasoning", "Prioritization and delegation", "Unstable patient recognition", "Rapid-response judgment"],
   rpn: ["Foundational bedside safety", "Reassessment and escalation", "Medication safety", "Therapeutic communication"],
   np: ["Diagnostic reasoning", "Treatment planning", "Advanced interpretation", "Systems-level follow-up"],
+  pre_nursing: ["Anatomy and physiology foundations", "Medical terminology", "Study confidence", "Entrance-exam readiness"],
   allied: ["Foundational healthcare reasoning", "ECG and lab awareness", "Skill confidence", "Patient-safety workflows"],
 };
 
@@ -464,6 +465,8 @@ function StepEcosystem({ selectedRole, features }: { selectedRole: ExamGoal; fea
   const roleCopy =
     selectedRole === "np"
       ? "Your pathway will surface advanced interpretation, diagnostics, treatment planning, and longitudinal follow-up."
+      : selectedRole === "pre_nursing"
+        ? "Your pathway will emphasize foundational science, terminology, study confidence, and readiness for nursing coursework."
       : selectedRole === "rpn"
         ? "Your pathway will emphasize foundational bedside care, reassessment, escalation recognition, communication, and medication safety."
         : "Your pathway will emphasize telemetry, prioritization, delegation, unstable patient recognition, and bedside judgment.";

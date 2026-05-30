@@ -35,11 +35,37 @@ export function LearnerBillingCancelSubscription(props: { t: LearnerMarketingT; 
   }
 
   return (
-    <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-panel-warm)] px-4 py-4">
+    <div
+      className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-panel-warm)] px-4 py-4"
+      data-nn-cancellation-save-flow
+    >
       <p className="text-sm font-semibold text-[var(--semantic-warning-contrast)]">
         {t("learner.billingPage.cancelSubscriptionTitle")}
       </p>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("learner.billingPage.cancelSubscriptionBody")}</p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        {[
+          ["Pause Instead", "Contact support if you need time away but want to preserve your study history."],
+          ["Switch Plan", "Monthly and longer plans can be reviewed before you make a final decision."],
+          ["Review Progress", "Check completed lessons, readiness, and weak-area progress before cancelling."],
+        ].map(([title, body]) => (
+          <div key={title} className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-3">
+            <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-text-primary)]">{title}</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{body}</p>
+          </div>
+        ))}
+      </div>
+      <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+        <a href="/app/account/progress" className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--semantic-text-primary)]">
+          View Progress
+        </a>
+        <a href="/pricing" className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--semantic-text-primary)]">
+          Compare Plans
+        </a>
+        <a href="/contact" className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--semantic-text-primary)]">
+          Ask Support
+        </a>
+      </div>
       <button
         type="button"
         disabled={busy}

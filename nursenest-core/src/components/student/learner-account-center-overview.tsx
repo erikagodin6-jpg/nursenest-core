@@ -109,7 +109,7 @@ export async function LearnerAccountCenterOverview({
         </dl>
       </section>
 
-      <section className="space-y-4">
+      <section className="space-y-4" data-nn-subscription-summary-card data-nn-subscription-summary-surface="account-overview">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.account.center.sectionPlan")}</h2>
         {billing ? (
           <>

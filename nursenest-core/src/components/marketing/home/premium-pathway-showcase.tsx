@@ -14,8 +14,8 @@ const PATHWAY_ICON_ABBR: Record<string, string> = {
   rn: "RN",
   pn: "PN",
   np: "NP",
-  allied: "AH",
   "pre-nursing": "PRE",
+  "new-grad": "NG",
 };
 
 export function PremiumPathwayShowcase() {
@@ -38,7 +38,7 @@ export function PremiumPathwayShowcase() {
               safeHomepageMarketingT(
                 t,
                 "pages.home.premium.pathways.heading",
-                "Every Path Has Its Own Clinical Scaffold.",
+                "Choose Your Pathway. Everything Else Adapts.",
               ),
               locale,
             )}
@@ -48,7 +48,7 @@ export function PremiumPathwayShowcase() {
               safeHomepageMarketingT(
                 t,
                 "pages.home.premium.pathways.body",
-                "Choose the lane that matches your role. RN, PN or RPN, NP, allied health, and pre-nursing each keep their own public entry points and readiness framing.",
+                "RN, RPN, NP, pre-nursing, and new graduate — each pathway keeps its own clinical scope, readiness framing, and adaptive study loop.",
               ),
               locale,
             )}

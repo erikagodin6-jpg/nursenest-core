@@ -119,12 +119,12 @@ export function defaultFlashcardsMetaDescription(region: MarketingRegionToggle):
 
 export function defaultHomeMetaTitle(region: MarketingRegionToggle): string {
   return region === "US"
-    ? "NurseNest | US NCLEX-RN, NCLEX-PN (LPN/LVN), NP & allied exam prep"
-    : "NurseNest | Global Nursing Exam Prep — Canada-First Depth for RN, RPN, NP & Allied Health";
+    ? "NurseNest | NCLEX-RN, NCLEX-PN & NP Exam Prep with ECG, Labs, NGN & Clinical Skills"
+    : "NurseNest | Complete Nursing Exam Prep — NCLEX-RN, REx-PN & CNPLE for RN, RPN & NP";
 }
 
 export function defaultHomeMetaDescription(region: MarketingRegionToggle): string {
   return region === "US"
-    ? "NurseNest US hub: NCLEX-RN, NCLEX-PN (LPN/LVN), NP, and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams—scoped to United States registration language and scope."
-    : "NurseNest offers Canada-first, globally relevant nursing and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams for RN, RPN, NP, NCLEX, and more.";
+    ? "NurseNest: the most comprehensive nursing education platform for NCLEX-RN, NCLEX-PN, and NP candidates. Practice questions, lessons, ECG, labs, NGN formats, CAT exams, clinical skills, and simulations—all in one connected ecosystem."
+    : "NurseNest: Canada-first nursing education for NCLEX-RN, REx-PN, and CNPLE candidates. Practice questions, lessons, ECG, labs, NGN formats, CAT exams, clinical skills, and simulations for RN, RPN, and NP learners.";
 }

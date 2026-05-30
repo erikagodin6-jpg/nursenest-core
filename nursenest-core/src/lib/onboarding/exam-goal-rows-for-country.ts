@@ -1,4 +1,4 @@
-export type OnboardingExamGoalSlug = "rn" | "rpn" | "np" | "allied";
+export type OnboardingExamGoalSlug = "rn" | "rpn" | "np" | "pre_nursing" | "allied";
 
 export type OnboardingExamGoalRow = {
   id: OnboardingExamGoalSlug;
@@ -41,6 +41,7 @@ export function examGoalRowsForCountry(country: OnboardingAccountCountry): Onboa
     { id: "rn", label: "RN", description: "NCLEX-RN or REx-RN" },
     rpn,
     { id: "np", label: "NP", description: "Nurse Practitioner certification" },
+    { id: "pre_nursing", label: "Pre-Nursing", description: "Foundational anatomy, terminology, and entrance prep" },
     { id: "allied", label: "Allied Health", description: "Allied health profession exams" },
   ];
 }

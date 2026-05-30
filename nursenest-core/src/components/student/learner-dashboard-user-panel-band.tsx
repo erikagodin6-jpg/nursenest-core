@@ -71,8 +71,11 @@ export function LearnerDashboardUserPanelBand({
       surfacePadding="md"
       className="nn-dash-band nn-dash-band--user-panel"
     >
-      <div className="space-y-4">
+      <div className="space-y-4" data-nn-subscription-summary-card data-nn-subscription-summary-surface="dashboard">
         <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{summary}</p>
+        <p className="text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+          Subscription summary: review your current plan, renewal date, next charge, subscription status, and payment method from Billing.
+        </p>
 
         <nav aria-label={t("learner.account.nav.aria")} className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           {hasSubscriberUi ? (
