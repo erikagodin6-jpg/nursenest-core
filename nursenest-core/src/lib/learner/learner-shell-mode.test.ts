@@ -22,6 +22,10 @@ test("learner shell mode focuses only active sessions, not review or hub pages",
   assert.equal(resolveLearnerShellMode("/app/practice-tests/session_123"), "exam-focused");
   assert.equal(resolveLearnerShellMode("/app/flashcards/my-deck"), "flashcards-study");
   assert.equal(resolveLearnerShellMode("/app/study-tools/flashcards/decks/deck_1/session/session_1"), "flashcards-study");
+  assert.equal(learnerShellFlags("/app/practice-tests/session_123").suppressFullChrome, true);
+  assert.equal(learnerShellFlags("/app/flashcards/my-deck").suppressFullChrome, false);
+  assert.equal(learnerShellFlags("/app/study-tools/flashcards/decks/deck_1/session/session_1").suppressFullChrome, false);
+  assert.equal(learnerShellFlags("/app/flashcards/my-deck").suppressStudyWidgets, true);
 
   for (const path of [
     "/app/practice-tests/session_123/results",

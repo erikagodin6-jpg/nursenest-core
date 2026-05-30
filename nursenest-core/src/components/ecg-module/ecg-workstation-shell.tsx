@@ -2,17 +2,18 @@
 
 import type { ReactNode } from "react";
 import { EcgWorkstationMobileStrip, EcgWorkstationSidebar } from "@/components/ecg-module/ecg-workstation-sidebar";
+import { LearningModuleShell } from "@/components/learner-modules/learning-module-shell";
 
 export function EcgWorkstationShell({ children }: { children: ReactNode }) {
   return (
-    <div className="nn-ecg-workstation" data-nn-ecg-workstation="">
-      <div className="nn-ecg-workstation__frame">
-        <EcgWorkstationSidebar />
-        <div className="nn-ecg-workstation__main">
-          <EcgWorkstationMobileStrip />
-          {children}
-        </div>
-      </div>
-    </div>
+    <LearningModuleShell
+      className="nn-ecg-workstation"
+      legacyRootDataAttribute="data-nn-ecg-workstation"
+      moduleKey="ecg"
+      sidebar={<EcgWorkstationSidebar />}
+      mobileStrip={<EcgWorkstationMobileStrip />}
+    >
+      {children}
+    </LearningModuleShell>
   );
 }

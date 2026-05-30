@@ -71,7 +71,7 @@ export function MedCalculationsHubPage({
               Medication calculations
             </p>
             <h1 className="text-balance text-3xl font-semibold tracking-tight text-[var(--semantic-text-primary)] sm:text-[2rem]">
-              High-stakes medication safety training
+              High-Stakes Medication Safety Training
             </h1>
             <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
               Built for {trackLabel}. Interactive drills for dimensional analysis, ratio-proportion, formula setup, conversions,
@@ -161,8 +161,10 @@ export function MedCalculationsHubPage({
             </div>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {category.lessons.map((lesson, li) => (
-                <article
+                <Link
                   key={lesson.slug}
+                  href={`/app/med-calculations/${lesson.category}/${lesson.slug}`}
+                  data-nn-learning-module-card=""
                   className={`group flex min-h-full min-w-0 flex-col rounded-2xl border p-4 shadow-[var(--semantic-shadow-soft)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-md motion-reduce:transform-none sm:p-5 ${
                     li % 3 === 0
                       ? "border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))]"
@@ -183,13 +185,13 @@ export function MedCalculationsHubPage({
                     <li className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-0.5">Strict mode</li>
                     <li className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-0.5">Timed drills</li>
                   </ul>
-                  <Link
-                    href={`/app/med-calculations/${lesson.category}/${lesson.slug}`}
+                  <span
                     className="mt-4 inline-flex min-h-11 w-fit touch-manipulation items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_08%,var(--semantic-surface))] px-4 text-sm font-semibold text-[color-mix(in_srgb,var(--semantic-brand)_92%,var(--semantic-text-primary))] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))]"
+                    aria-hidden="true"
                   >
-                    Open lesson
-                  </Link>
-                </article>
+                    Open Lesson
+                  </span>
+                </Link>
               ))}
             </div>
           </section>

@@ -37,6 +37,7 @@ export function LabsCategoryPage({ heading, description, categorySlug, lessons, 
                 key={lesson.slug}
                 href={href}
                 className="group flex min-h-full flex-col rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 text-left no-underline shadow-[var(--semantic-shadow-soft)] transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--semantic-brand)_38%,var(--semantic-border-soft))] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--semantic-brand)] motion-reduce:transform-none sm:p-5"
+                data-nn-learning-module-card=""
                 data-nn-labs-category-card={lesson.slug}
                 data-nn-labs-card-access={hasAccess ? "subscribed" : "locked"}
                 aria-label={`${hasAccess ? "Start" : "Upgrade to access"} ${lesson.shortTitle}`}

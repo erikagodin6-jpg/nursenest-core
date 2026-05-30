@@ -29,7 +29,7 @@ test("production: hub renders for paid and free (same layout, entitlement copy d
   );
 
   assert.match(paidHtml, /data-nn-med-calc-hub/);
-  assert.match(paidHtml, /High-stakes med calculations training/);
+  assert.match(paidHtml, /High-Stakes Medication Safety Training/);
   assert.match(paidHtml, />Tablets</);
   assert.match(freeHtml, /Free access includes lesson previews/);
   assert.doesNotMatch(paidHtml, /Free access includes lesson previews/);

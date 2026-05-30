@@ -12,12 +12,14 @@ import {
   findLatestMedCalcProgressTouch,
   loadMedCalcLessonProgressMap,
 } from "@/lib/med-calculations/med-calc-lesson-progress";
+import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 
 export default async function MedCalcWorkstationLayout({ children }: { children: ReactNode }) {
   let context;
   try {
     context = await loadMedCalculationsRouteContext("(student).app.(learner).med-calculations.layout");
-  } catch {
+  } catch (error) {
+    rethrowNextNavigationControlFlow(error);
     return <div className="px-4 py-8 text-sm text-[var(--semantic-text-secondary)]">{children}</div>;
   }
 

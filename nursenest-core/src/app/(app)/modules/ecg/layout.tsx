@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import "@/app/ecg-workstation.css";
+import "@/app/learning-module-shell.css";
 import { EcgModuleWorkstationLayout } from "@/components/ecg-module/ecg-module-workstation-layout";
 import { EcgModulePublicationNotice } from "@/components/ecg-module/ecg-module-publication-notice";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";

@@ -7,6 +7,7 @@ import {
   MedCalcWorkstationSidebar,
   type MedCalcWorkstationNavCategory,
 } from "@/components/med-calculations/med-calc-workstation-sidebar";
+import { LearningModuleShell } from "@/components/learner-modules/learning-module-shell";
 
 export type MedCalcWorkstationShellProps = {
   children: ReactNode;
@@ -26,8 +27,11 @@ export function MedCalcWorkstationShell({
   progressMap = {},
 }: MedCalcWorkstationShellProps) {
   return (
-    <div className="nn-med-calc-workstation" data-nn-med-calc-workstation="">
-      <div className="nn-med-calc-workstation__frame">
+    <LearningModuleShell
+      className="nn-med-calc-workstation"
+      legacyRootDataAttribute="data-nn-med-calc-workstation"
+      moduleKey="med-calculations"
+      sidebar={
         <MedCalcWorkstationSidebar
           categories={categories}
           hasAccess={hasAccess}
@@ -35,11 +39,10 @@ export function MedCalcWorkstationShell({
           continueTitle={continueTitle}
           progressMap={progressMap}
         />
-        <div className="nn-med-calc-workstation__main">
-          <MedCalcWorkstationMobileStrip categories={categories} />
-          {children}
-        </div>
-      </div>
-    </div>
+      }
+      mobileStrip={<MedCalcWorkstationMobileStrip categories={categories} />}
+    >
+      {children}
+    </LearningModuleShell>
   );
 }

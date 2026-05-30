@@ -7,6 +7,7 @@ import {
   ClinicalSkillsWorkstationSidebar,
   type ClinicalSkillsWorkstationNavCategory,
 } from "@/components/clinical-skills/clinical-skills-workstation-sidebar";
+import { LearningModuleShell } from "@/components/learner-modules/learning-module-shell";
 
 export function ClinicalSkillsWorkstationShell({
   children,
@@ -24,8 +25,11 @@ export function ClinicalSkillsWorkstationShell({
   pathwayQuery?: string;
 }) {
   return (
-    <div className="nn-clinical-skills-workstation" data-nn-clinical-skills-workstation="">
-      <div className="nn-clinical-skills-workstation__frame">
+    <LearningModuleShell
+      className="nn-clinical-skills-workstation"
+      legacyRootDataAttribute="data-nn-clinical-skills-workstation"
+      moduleKey="clinical-skills"
+      sidebar={
         <ClinicalSkillsWorkstationSidebar
           categories={categories}
           continueHref={continueHref}
@@ -33,11 +37,10 @@ export function ClinicalSkillsWorkstationShell({
           progressMap={progressMap}
           pathwayQuery={pathwayQuery}
         />
-        <div className="nn-clinical-skills-workstation__main">
-          <ClinicalSkillsWorkstationMobileStrip categories={categories} pathwayQuery={pathwayQuery} />
-          {children}
-        </div>
-      </div>
-    </div>
+      }
+      mobileStrip={<ClinicalSkillsWorkstationMobileStrip categories={categories} pathwayQuery={pathwayQuery} />}
+    >
+      {children}
+    </LearningModuleShell>
   );
 }

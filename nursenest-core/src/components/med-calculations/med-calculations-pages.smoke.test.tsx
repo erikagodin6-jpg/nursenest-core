@@ -24,7 +24,7 @@ test("med calculations hub renders all core sections", () => {
     />,
   );
 
-  assert.match(html, /High-stakes medication safety training/);
+  assert.match(html, /High-Stakes Medication Safety Training/);
   assert.match(html, />Tablets</);
   assert.match(html, />Heparin protocols</);
   assert.match(html, /Strict mode/);

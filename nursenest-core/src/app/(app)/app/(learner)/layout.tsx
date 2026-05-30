@@ -11,6 +11,7 @@ import "@/app/learner-premium-ds.css";
 // coach, study queue, question/option rendering, confidence controls from globals.css.
 import "@/app/styles/learner/learner-global.css";
 import "@/app/learner-dashboard-performance.css";
+import "@/app/learning-module-shell.css";
 
 import type { ReactNode } from "react";
 import { Suspense } from "react";

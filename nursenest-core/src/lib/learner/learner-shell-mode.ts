@@ -16,7 +16,7 @@ import { isPracticeTestsHubLandingPath } from "./practice-tests-hub-focused-shel
  * Coarse-grained mode describing which UI tier a learner route belongs to.
  *
  * exam-focused     — active practice-test / CAT session: minimal chrome only
- * flashcards-study — active flashcard study session: no study-next widgets
+ * flashcards-study — active flashcard study session: keep global chrome, hide study-next widgets
  * study-hub        — flashcards or practice-tests hub landing: no study-next widgets
  * dashboard        — the root `/app` dashboard
  * standard         — all other learner routes
@@ -30,7 +30,7 @@ export type LearnerShellMode =
 
 export type LearnerShellFlags = {
   readonly mode: LearnerShellMode;
-  /** Replace full learner nav with the minimal exam-only exit strip. */
+  /** Replace full learner nav with the minimal exam-only exit strip. CAT/exam sessions only. */
   readonly suppressFullChrome: boolean;
   /** Hide study-next block, learner-path strip, paywall stats fetch, etc. */
   readonly suppressStudyWidgets: boolean;
@@ -57,7 +57,7 @@ export function learnerShellFlags(pathname: string | null | undefined): LearnerS
   const mode = resolveLearnerShellMode(pathname);
   return {
     mode,
-    suppressFullChrome: mode === "exam-focused" || mode === "flashcards-study",
+    suppressFullChrome: mode === "exam-focused",
     suppressStudyWidgets: mode === "exam-focused" || mode === "flashcards-study" || mode === "study-hub",
     isDashboard: mode === "dashboard",
   };

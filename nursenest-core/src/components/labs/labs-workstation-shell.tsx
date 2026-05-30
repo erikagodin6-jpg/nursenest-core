@@ -7,6 +7,7 @@ import {
   LabsWorkstationSidebar,
   type LabsWorkstationNavCategory,
 } from "@/components/labs/labs-workstation-sidebar";
+import { LearningModuleShell } from "@/components/learner-modules/learning-module-shell";
 
 export type LabsWorkstationShellProps = {
   children: ReactNode;
@@ -26,8 +27,11 @@ export function LabsWorkstationShell({
   progressMap = {},
 }: LabsWorkstationShellProps) {
   return (
-    <div className="nn-labs-workstation" data-nn-labs-workstation="">
-      <div className="nn-labs-workstation__frame">
+    <LearningModuleShell
+      className="nn-labs-workstation"
+      legacyRootDataAttribute="data-nn-labs-workstation"
+      moduleKey="labs"
+      sidebar={
         <LabsWorkstationSidebar
           categories={categories}
           hasAccess={hasAccess}
@@ -35,11 +39,10 @@ export function LabsWorkstationShell({
           continueTitle={continueTitle}
           progressMap={progressMap}
         />
-        <div className="nn-labs-workstation__main">
-          <LabsWorkstationMobileStrip categories={categories} />
-          {children}
-        </div>
-      </div>
-    </div>
+      }
+      mobileStrip={<LabsWorkstationMobileStrip categories={categories} />}
+    >
+      {children}
+    </LearningModuleShell>
   );
 }

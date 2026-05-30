@@ -47,6 +47,7 @@ function SkillModuleCard({
   return (
     <Link
       href={href}
+      data-nn-learning-module-card=""
       className={cn(
         "group flex min-h-full min-w-0 flex-col justify-between rounded-2xl border p-4 shadow-[var(--semantic-shadow-soft)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-md motion-reduce:transform-none sm:p-5",
         wrap,
@@ -110,8 +111,8 @@ export function ClinicalSkillsHubClient({
   ] as const;
 
   return (
-    <div className="min-w-0 space-y-8" data-nn-clinical-skills-hub="">
-      <header className="relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-1)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_14%,var(--semantic-surface))] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8">
+    <div className="min-w-0 space-y-10" data-nn-clinical-skills-hub="">
+      <header className="relative overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-8 shadow-[0_2px_20px_-6px_color-mix(in_srgb,var(--semantic-text-primary)_10%,transparent),var(--semantic-shadow-soft)] sm:p-10">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--semantic-chart-1)_55%,transparent),color-mix(in_srgb,var(--semantic-brand)_45%,transparent),color-mix(in_srgb,var(--semantic-chart-3)_40%,transparent))]"
           aria-hidden
@@ -141,16 +142,16 @@ export function ClinicalSkillsHubClient({
               ))}
             </ul>
           </div>
-          <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:max-w-xs">
-            <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_08%,var(--semantic-surface))] px-3 py-2.5 shadow-[var(--semantic-shadow-soft)]">
-              <div className="text-[0.65rem] font-medium tracking-wide text-[var(--semantic-text-muted)]">Completed</div>
-              <div className="mt-1 text-xl font-semibold tabular-nums text-[var(--semantic-text-primary)]">
+          <div className="grid w-full min-w-0 grid-cols-2 gap-3 sm:max-w-xs">
+            <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 shadow-[var(--semantic-shadow-soft)]">
+              <div className="text-[0.65rem] font-semibold uppercase tracking-widest text-[var(--semantic-text-muted)]">Completed</div>
+              <div className="mt-1.5 text-2xl font-bold tabular-nums text-[var(--semantic-success)]">
                 {progressSummary?.completed ?? state.completedSlugs.length}
               </div>
             </div>
-            <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-4)_08%,var(--semantic-surface))] px-3 py-2.5 shadow-[var(--semantic-shadow-soft)]">
-              <div className="text-[0.65rem] font-medium tracking-wide text-[var(--semantic-text-muted)]">Procedures</div>
-              <div className="mt-1 text-xl font-semibold tabular-nums text-[var(--semantic-text-primary)]">
+            <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 shadow-[var(--semantic-shadow-soft)]">
+              <div className="text-[0.65rem] font-semibold uppercase tracking-widest text-[var(--semantic-text-muted)]">Procedures</div>
+              <div className="mt-1.5 text-2xl font-bold tabular-nums text-[var(--semantic-text-primary)]">
                 {progressSummary?.total ?? categories.reduce((n, c) => n + clinicalSkillsForCategory(c.id).length, 0)}
               </div>
             </div>
@@ -158,11 +159,11 @@ export function ClinicalSkillsHubClient({
         </div>
 
         {resolvedContinue && continueTitle ? (
-          <div className="relative mt-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_06%,var(--semantic-surface))] px-4 py-3">
+          <div className="relative mt-7 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface-muted)_55%,var(--semantic-surface))] px-5 py-4">
             <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Continue where you left off</p>
             <Link
               href={resolvedContinue}
-              className="inline-flex min-h-10 items-center rounded-full bg-[var(--role-cta)] px-4 text-sm font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_12px_var(--role-cta-shadow)]"
+              className="inline-flex min-h-10 items-center rounded-full bg-[var(--role-cta)] px-5 text-sm font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_14px_var(--role-cta-shadow)]"
             >
               {continueTitle}
             </Link>
@@ -177,12 +178,12 @@ export function ClinicalSkillsHubClient({
       {categories.map((cat: ClinicalSkillCategory) => (
         <section
           key={cat.id}
-          className="scroll-mt-24 space-y-4 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] bg-[color-mix(in_srgb,var(--semantic-surface)_96%,var(--semantic-panel-muted))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6"
+          className="scroll-mt-24 space-y-5 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-7 shadow-[var(--semantic-shadow-soft)] sm:p-8"
           id={`clinical-skill-cat-${cat.id}`}
         >
-          <div className="max-w-3xl">
-            <h2 className="text-lg font-semibold text-[var(--semantic-text-primary)]">{cat.title}</h2>
-            <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{cat.summary}</p>
+          <div className="max-w-3xl space-y-1">
+            <h2 className="text-xl font-semibold tracking-tight text-[var(--semantic-text-primary)]">{cat.title}</h2>
+            <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{cat.summary}</p>
           </div>
           <ul className="grid list-none grid-cols-1 gap-4 p-0 min-[560px]:grid-cols-2">
             {clinicalSkillsForCategory(cat.id).map((skill, li) => (

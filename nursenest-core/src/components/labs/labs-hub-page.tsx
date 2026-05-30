@@ -103,6 +103,7 @@ function TopicCard({
       style={{
         borderColor: `color-mix(in srgb, var(${accent}) 30%, var(--semantic-border-soft))`,
       }}
+      data-nn-learning-module-card=""
       data-nn-labs-topic-card={lesson.slug}
       data-nn-labs-card-access={hasAccess ? "subscribed" : "locked"}
       aria-label={`${hasAccess ? "Start" : "Upgrade to access"} ${lesson.shortTitle}`}

@@ -6,6 +6,8 @@
 [data-nn-clinical-skills-workstation] {
   --nn-clinical-skills-sidebar-width: 17.5rem;
   --nn-clinical-skills-rail-width: 18rem;
+  /* Override shared shell gap for wider sidebar/content separation on this surface */
+  --nn-learning-module-gap: clamp(2rem, 4vw, 3rem);
   position: relative;
   isolation: isolate;
   min-width: 0;
@@ -65,9 +67,11 @@
     overflow: auto;
     overscroll-behavior: contain;
     border-radius: 1.25rem;
-    border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-brand) 10%);
-    background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-cool));
-    box-shadow: var(--semantic-shadow-soft);
+    border: 1px solid var(--semantic-border-soft);
+    background: var(--semantic-surface);
+    box-shadow:
+      var(--semantic-shadow-soft),
+      0 2px 16px -6px color-mix(in srgb, var(--semantic-text-primary) 7%, transparent);
   }
 }
 
@@ -94,12 +98,13 @@
 
 .nn-clinical-skills-workstation__continue {
   display: block;
-  margin: 0.75rem 0.75rem 0;
-  padding: 0.75rem 0.85rem;
-  border-radius: 0.85rem;
+  margin: 1rem 0.875rem 0;
+  padding: 0.875rem 1rem;
+  border-radius: 0.875rem;
   border: 1px solid color-mix(in srgb, var(--semantic-success) 28%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-panel-positive) 45%, var(--semantic-surface));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 35%, var(--semantic-surface));
   text-decoration: none;
+  box-shadow: 0 1px 4px -1px color-mix(in srgb, var(--semantic-success) 10%, transparent);
 }
 
 .nn-clinical-skills-workstation__continue-label {
@@ -119,7 +124,7 @@
 }
 
 .nn-clinical-skills-workstation__nav-head {
-  padding: 1rem 0.85rem 0.5rem;
+  padding: 1.25rem 1rem 0.75rem;
   border-bottom: 1px solid var(--semantic-border-soft);
 }
 
@@ -151,7 +156,7 @@
 .nn-clinical-skills-workstation__category summary {
   list-style: none;
   cursor: pointer;
-  padding: 0.65rem 0.85rem;
+  padding: 0.75rem 1rem;
   font-size: 0.8125rem;
   font-weight: 700;
   color: var(--semantic-text-primary);
@@ -167,10 +172,10 @@
 }
 
 .nn-clinical-skills-workstation__lesson-list {
-  padding: 0 0.5rem 0.65rem;
+  padding: 0.25rem 0.625rem 0.875rem;
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.2rem;
 }
 
 .nn-clinical-skills-workstation__lesson-link {
@@ -178,12 +183,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.45rem 0.55rem;
+  padding: 0.55rem 0.65rem;
   border-radius: 0.65rem;
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--semantic-text-secondary);
   text-decoration: none;
+  min-height: 2.25rem;
 }
 
 .nn-clinical-skills-workstation__lesson-link:hover {

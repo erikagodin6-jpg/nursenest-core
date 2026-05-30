@@ -12,12 +12,14 @@ import {
   pickClinicalSkillsContinueTarget,
 } from "@/lib/clinical-skills/clinical-skills-workstation-nav";
 import { loadClinicalSkillsRouteContext } from "@/lib/clinical-skills/clinical-skills-route-context.server";
+import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 
 export default async function ClinicalSkillsWorkstationLayout({ children }: { children: ReactNode }) {
   let ctx;
   try {
     ctx = await loadClinicalSkillsRouteContext("(student).app.(learner).clinical-skills.layout");
-  } catch {
+  } catch (error) {
+    rethrowNextNavigationControlFlow(error);
     return <div className="px-4 py-8 text-sm text-[var(--semantic-text-secondary)]">{children}</div>;
   }
 
