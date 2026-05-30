@@ -157,14 +157,13 @@ export function StudyNotesPanel({
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
       >
-        My notes
+        Save to Notebook
         <span className="text-xs font-normal text-muted">{open ? "Hide" : "Open"}</span>
       </button>
       {open ? (
         <div className="mt-3 space-y-2">
           <p className="text-xs text-muted">
-            Your notes save to your account. They are yours to copy, print, and export. Protected premium text stays in the
-            app.
+            Your notes save to My Study Notebook across devices. They are yours to copy, print, and export. Protected premium text stays in the app.
           </p>
           <input
             type="text"

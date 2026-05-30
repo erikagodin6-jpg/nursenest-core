@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { hrefForLearnerNote, labelForLearnerNoteScope } from "@/lib/learner/learner-note-href";
+import { decodeNotebookBody, notebookCategoryLabel, notebookSourceLabel } from "@/lib/learner/personal-study-notebook";
 import type { LearnerNoteScope } from "@prisma/client";
 import type { NoteRow, NotesPagePayload } from "@/lib/learner/notes-index-types";
 
@@ -30,19 +31,29 @@ function toNoteRow(r: {
   topic: string | null;
   updatedAt: Date;
 }): NoteRow {
+  const decoded = decodeNotebookBody(r.body, { contextId: r.contextId, scope: r.scope, topic: r.topic });
+  const bodySnippet = decoded.content.replace(/\s+/g, " ").trim().slice(0, 220);
   return {
     id: r.id,
     scope: r.scope,
     contextId: r.contextId,
-    title: r.title,
-    bodySnippet: r.body.slice(0, 220),
-    topic: r.topic,
+    title: r.title ?? decoded.sourceTitle,
+    bodySnippet,
+    topic: decoded.topic ?? r.topic,
     updatedAt: r.updatedAt.toISOString(),
-    href: hrefForLearnerNote(r.scope, r.contextId),
+    href: hrefForLearnerNote(r.scope, r.contextId, r.body),
     scopeLabel: labelForLearnerNoteScope(r.scope),
     isBookmark: r.contextId.startsWith("bk:"),
     isSavedRationale: r.contextId.startsWith("rationale:"),
     isSectionNote: r.contextId.startsWith("sn:"),
+    notebookCategory: decoded.category,
+    notebookCategoryLabel: notebookCategoryLabel(decoded.category),
+    notebookSourceType: decoded.sourceType,
+    notebookSourceLabel: notebookSourceLabel(decoded.sourceType),
+    notebookSystem: decoded.system,
+    notebookTags: decoded.tags,
+    isNotebookEntry: decoded.isNotebookEntry || r.contextId.startsWith("rationale:") || r.contextId.startsWith("sn:"),
+    isFavorite: decoded.favorite,
   };
 }
 
@@ -50,12 +61,12 @@ function toNoteRow(r: {
 
 export async function loadNotesPagePayload(userId: string): Promise<NotesPagePayload> {
   if (!isDatabaseUrlConfigured()) {
-    return { notes: [], hasMore: false, cursor: null, total: 0, bookmarkCount: 0, rationaleCount: 0, sectionNoteCount: 0 };
+    return { notes: [], hasMore: false, cursor: null, total: 0, bookmarkCount: 0, rationaleCount: 0, sectionNoteCount: 0, notebookCount: 0 };
   }
 
   const PAGE_SIZE = 10;
 
-  const [rows, total, bookmarkCount, rationaleCount, sectionNoteCount] = await Promise.all([
+  const [rows, total, bookmarkCount, rationaleCount, sectionNoteCount, notebookCount] = await Promise.all([
     prisma.learnerNote.findMany({
       where: { userId },
       orderBy: { updatedAt: "desc" },
@@ -66,6 +77,12 @@ export async function loadNotesPagePayload(userId: string): Promise<NotesPagePay
     prisma.learnerNote.count({ where: { userId, contextId: { startsWith: "bk:" } } }),
     prisma.learnerNote.count({ where: { userId, contextId: { startsWith: "rationale:" } } }),
     prisma.learnerNote.count({ where: { userId, contextId: { startsWith: "sn:" } } }),
+    prisma.learnerNote.count({
+      where: {
+        userId,
+        OR: [{ contextId: { startsWith: "nb:" } }, { contextId: { startsWith: "rationale:" } }, { contextId: { startsWith: "sn:" } }],
+      },
+    }),
   ]);
 
   const hasMore = rows.length > PAGE_SIZE;
@@ -79,6 +96,7 @@ export async function loadNotesPagePayload(userId: string): Promise<NotesPagePay
     bookmarkCount,
     rationaleCount,
     sectionNoteCount,
+    notebookCount,
   };
 }
 

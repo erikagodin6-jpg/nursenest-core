@@ -3,7 +3,7 @@
 /**
  * SavedRationaleCard
  *
- * A "Save this rationale" action that persists the rationale text into
+ * A "Save to Notebook" action that persists the rationale text into
  * the learner's notes account using scope=QUESTION_BANK and a
  * prefixed contextId: "rationale:<questionId>".
  *
@@ -136,7 +136,7 @@ export function SavedRationaleCard({
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
           </svg>
-          {pending ? "Saving…" : "Save this rationale"}
+          {pending ? "Saving…" : "Save to Notebook"}
         </button>
         {error && (
           <span className="text-[10px]" style={{ color: "var(--semantic-danger)" }}>
@@ -176,7 +176,7 @@ export function SavedRationaleCard({
             </svg>
           </span>
           <span className="text-xs font-semibold" style={{ color: "var(--semantic-success)" }}>
-            Saved to your notes
+            Saved to Notebook
           </span>
           {topic && (
             <span
@@ -219,11 +219,11 @@ export function SavedRationaleCard({
         style={{ borderTop: "1px solid color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-border-soft))" }}
       >
         <Link
-          href="/app/account/notes"
+          href="/app/account/notebook"
           className="text-[10px] font-medium transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 rounded"
           style={{ color: "var(--semantic-brand)" }}
         >
-          View all saved notes →
+          Open Study Notebook →
         </Link>
         {error && (
           <span className="text-[10px]" style={{ color: "var(--semantic-danger)" }}>

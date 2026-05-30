@@ -19,6 +19,15 @@ export type NoteRow = {
   isSavedRationale: boolean;
   /** true when contextId starts with "sn:" (per-section inline note) */
   isSectionNote: boolean;
+  /** Personal Study Notebook metadata, derived from saved JSON or legacy note shape. */
+  notebookCategory?: string;
+  notebookCategoryLabel?: string;
+  notebookSourceType?: string | null;
+  notebookSourceLabel?: string;
+  notebookSystem?: string | null;
+  notebookTags?: string[];
+  isNotebookEntry?: boolean;
+  isFavorite?: boolean;
 };
 
 export type NotesPagePayload = {
@@ -31,4 +40,5 @@ export type NotesPagePayload = {
   bookmarkCount: number;
   rationaleCount: number;
   sectionNoteCount: number;
+  notebookCount?: number;
 };

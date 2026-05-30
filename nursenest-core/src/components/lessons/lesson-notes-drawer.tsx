@@ -567,7 +567,7 @@ export function LessonNotesDrawer({
                 placeholder={
                   hasContent
                     ? undefined
-                    : "Write your own summary, mnemonics, connections, or questions… Notes save automatically."
+            : "Write your own summary, mnemonics, connections, or questions… Notebook notes save automatically."
                 }
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
@@ -657,11 +657,11 @@ export function LessonNotesDrawer({
             </p>
           ) : null}
           <a
-            href="/app/account/notes"
+            href="/app/account/notebook"
             className="block text-center text-[11px] font-medium transition-opacity hover:opacity-70"
             style={{ color: "var(--semantic-brand)" }}
           >
-            View all your notes →
+            Open My Study Notebook →
           </a>
         </div>
       </DrawerShell>

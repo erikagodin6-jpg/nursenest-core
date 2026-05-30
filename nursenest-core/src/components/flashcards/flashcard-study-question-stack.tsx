@@ -8,6 +8,7 @@ import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-ex
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
 import { FlashcardStudyRevealPanels } from "@/components/flashcards/flashcard-study-reveal-panels";
 import { AdaptiveCaseSimulationPanel } from "@/components/questions/adaptive-case-simulation-panel";
+import { SaveToNotebookButton } from "@/components/notebook/save-to-notebook-button";
 import {
   buildSimpleCorrectRationale,
   buildSimpleDistractorRationale,
@@ -276,6 +277,18 @@ export function FlashcardStudyQuestionStack({
         rationale: explanation,
         pathwayLabel: examPathwayLabel,
       };
+  const clinicalPearlText = buildFlashcardClinicalPearl(supportBlockContext, pearl);
+  const nclexTakeawayText = buildFlashcardNclexTakeaway(supportBlockContext);
+  const memoryHookText = buildFlashcardMemoryHook(supportBlockContext);
+  const notebookTopic = topicLine?.split("·")[0]?.trim() || topicLine || null;
+  const notebookSourceId = exam?.questionStem || sata?.questionStem || promptBody || answer;
+  const notebookRationaleContent = [
+    clinicalPearlText ? `Clinical Pearl: ${clinicalPearlText}` : null,
+    exam ? `Correct Answer: ${correctAnswerSummary(exam)}` : answer ? `Answer: ${answer}` : null,
+    resolvedCorrectRationale ? `Why This Is Correct: ${resolvedCorrectRationale}` : explanation ? `Rationale: ${explanation}` : null,
+    nclexTakeawayText ? `${examPathwayLabel} Takeaway: ${nclexTakeawayText}` : null,
+    memoryHookText ? `Memory Hook: ${memoryHookText}` : null,
+  ].filter(Boolean).join("\n\n");
 
   const showUnsupportedCardAlert = !exam && !sata;
   return (
@@ -455,15 +468,41 @@ export function FlashcardStudyQuestionStack({
                     <Lightbulb className="h-4 w-4" aria-hidden />
                     <span>Rationale</span>
                   </div>
+                  {revealed ? (
+                    <SaveToNotebookButton
+                      compact
+                      category="saved_rationales"
+                      sourceType="flashcard"
+                      sourceId={notebookSourceId}
+                      title={notebookTopic ? `${notebookTopic} flashcard rationale` : "Flashcard rationale"}
+                      content={notebookRationaleContent}
+                      topic={notebookTopic}
+                      system={notebookTopic}
+                      tags={["flashcards", "rationale"]}
+                    />
+                  ) : null}
                 </div>
                 {revealed ? (
                   <div className="nn-flashcard-rationale-panel__body" data-nn-educational-content-container="">
                     <section className="nn-flashcard-rationale-key-concept" aria-label="Clinical Pearl" data-nn-clinical-pearl="" data-nn-educational-content-container="">
-                      <span className="nn-clinical-pearl-label">
-                        <Gem className="h-3.5 w-3.5" aria-hidden />
-                        Clinical Pearl
-                      </span>
-                      <p>{buildFlashcardClinicalPearl(supportBlockContext, pearl)}</p>
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="nn-clinical-pearl-label">
+                          <Gem className="h-3.5 w-3.5" aria-hidden />
+                          Clinical Pearl
+                        </span>
+                        <SaveToNotebookButton
+                          compact
+                          category="saved_pearls"
+                          sourceType="flashcard"
+                          sourceId={`pearl:${notebookSourceId}`}
+                          title={notebookTopic ? `${notebookTopic} clinical pearl` : "Clinical pearl"}
+                          content={clinicalPearlText}
+                          topic={notebookTopic}
+                          system={notebookTopic}
+                          tags={["clinical pearl", "flashcards"]}
+                        />
+                      </div>
+                      <p>{clinicalPearlText}</p>
                     </section>
                     <section className="nn-flashcard-rationale-section" data-nn-educational-content-container="">
                       <h3>Correct Answer</h3>
@@ -495,7 +534,7 @@ export function FlashcardStudyQuestionStack({
                       </section>
                     ) : null}
                     {(() => {
-                      const tip = buildFlashcardNclexTakeaway(supportBlockContext);
+                      const tip = nclexTakeawayText;
                       return tip ? (
                         <section className="nn-flashcard-rationale-section nn-flashcard-rationale-section--exam-tip" data-nn-educational-content-container="">
                           <h3 className="nn-flashcard-takeaway-heading">
@@ -507,10 +546,23 @@ export function FlashcardStudyQuestionStack({
                       ) : null;
                     })()}
                     {(() => {
-                      const hook = buildFlashcardMemoryHook(supportBlockContext);
+                      const hook = memoryHookText;
                       return (
                         <details className="nn-flashcard-rationale-section nn-flashcard-rationale-section--memory-hook" data-nn-educational-content-container="">
                           <summary>Memory Hook</summary>
+                          <div className="mt-2">
+                            <SaveToNotebookButton
+                              compact
+                              category="saved_memory_hooks"
+                              sourceType="flashcard"
+                              sourceId={`memory_hook:${notebookSourceId}`}
+                              title={notebookTopic ? `${notebookTopic} memory hook` : "Memory hook"}
+                              content={hook}
+                              topic={notebookTopic}
+                              system={notebookTopic}
+                              tags={["memory hook", "flashcards"]}
+                            />
+                          </div>
                           <p className="nn-flashcard-inline-rationale__body text-sm italic leading-relaxed">
                             &ldquo;{hook}&rdquo;
                           </p>

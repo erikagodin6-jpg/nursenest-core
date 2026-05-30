@@ -209,6 +209,7 @@ function buildAccountMenuSections(): AccountMenuSection[] {
         { label: "Progress Report Card", href: "/app/account/report-card", icon: LineChart },
         { label: "Study History", href: "/app/account/study-history", icon: History },
         { label: "Saved Flashcards", href: "/app/account/review-queue", icon: BookOpenCheck },
+        { label: "My Study Notebook", href: "/app/account/notebook", icon: Bookmark },
         { label: "Bookmarks", href: "/app/account/notes", icon: Bookmark },
       ],
     },
