@@ -397,13 +397,27 @@ export function FlashcardCustomStudyClient() {
   }, [summary, searchParamString]);
 
   const header: ActiveStudyHeader = useMemo(
-    () => ({
-      sessionTitle: t("learner.flashcards.hub.title"),
-      modeLabel: "Study",
-      categoriesLabel,
-      exitHref,
-    }),
-    [exitHref, t, categoriesLabel],
+    () => {
+      const q = new URLSearchParams(searchParamString);
+      const pathwayId = q.get("pathwayId")?.trim() ?? "";
+      const raw = pathwayId.toLowerCase();
+      const hubLabel =
+        raw.includes("np") || raw.includes("cnple")
+          ? "NP Hub"
+          : raw.includes("pn") || raw.includes("rpn") || raw.includes("lpn") || raw.includes("rex")
+            ? "PN Hub"
+            : raw.includes("allied")
+              ? "Allied Hub"
+              : "RN Hub";
+      return {
+        sessionTitle: t("learner.flashcards.hub.title"),
+        modeLabel: "Study",
+        categoriesLabel,
+        exitHref,
+        hubLabel,
+      };
+    },
+    [exitHref, t, categoriesLabel, searchParamString],
   );
 
   const sessionMeta = useMemo(() => {
@@ -547,7 +561,7 @@ export function FlashcardCustomStudyClient() {
   }
 
   return (
-    <div className="nn-flashcard-study-canvas mx-auto max-w-6xl px-4 py-6">
+    <div className="nn-flashcard-study-canvas mx-auto max-w-6xl px-4 py-2 sm:py-2">
       <div className="mb-4 flex justify-between">
         <Link href={exitHref} className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline">
           ← {t("flashcards.backToMyCards")}

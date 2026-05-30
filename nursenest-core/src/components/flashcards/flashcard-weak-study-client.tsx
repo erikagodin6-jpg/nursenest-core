@@ -280,6 +280,7 @@ export function FlashcardWeakStudyClient({
             modeLabel: "Active Recall",
             categoriesLabel: weakTopics.join(", ") || "Focus",
             exitHref: flashcardsHubHref,
+            hubLabel: "Flashcards Hub",
           }}
           onRate={onRate}
         />

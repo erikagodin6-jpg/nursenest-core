@@ -1,6 +1,7 @@
 import "@/app/learner-exam-session-premium.css";
 import "@/app/learner-flashcard-premium.css";
 import "@/app/learner-flashcard-branding-revamp.css";
+import "@/app/learner-flashcard-layout-refinement-pass.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

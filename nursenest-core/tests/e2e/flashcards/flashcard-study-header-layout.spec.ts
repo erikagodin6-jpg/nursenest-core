@@ -61,8 +61,8 @@ test.describe("Flashcards study header layout", () => {
         };
       });
 
-      expect(metrics.topbarHeight, `topbar height ${metrics.topbarHeight}`).toBeLessThanOrEqual(84);
-      expect(metrics.topbarHeight, `topbar height ${metrics.topbarHeight}`).toBeGreaterThanOrEqual(76);
+      expect(metrics.topbarHeight, `topbar height ${metrics.topbarHeight}`).toBeLessThanOrEqual(64);
+      expect(metrics.topbarHeight, `topbar height ${metrics.topbarHeight}`).toBeGreaterThanOrEqual(44);
       expect(metrics.wrappedLabels, `wrapped labels at ${width}: ${metrics.wrappedLabels.join(", ")}`).toEqual([]);
       expect(metrics.footerOverflow, `learning footer overflow at ${width}`).toBeLessThanOrEqual(2);
       expect(metrics.documentOverflow, `document horizontal overflow at ${width}`).toBeLessThanOrEqual(2);

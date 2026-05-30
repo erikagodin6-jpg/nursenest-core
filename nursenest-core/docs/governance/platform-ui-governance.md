@@ -85,7 +85,7 @@ Every migrated surface must validate:
 - `aria-live` for async feedback
 - prefers-reduced-motion support
 - screen-reader semantics
-- touch target sizing
+- minimum touch target sizing
 
 Auth-level accessibility is the target quality bar.
 

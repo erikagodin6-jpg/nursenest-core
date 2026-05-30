@@ -83,6 +83,8 @@ export type ActiveStudyHeader = {
   modeLabel: string;
   categoriesLabel: string;
   exitHref: string;
+  /** Tier hub label for merged topbar return link, e.g. "RN Hub". */
+  hubLabel?: string;
 };
 
 type Props = {
@@ -573,6 +575,7 @@ export function ActiveStudySession({
       className="nn-active-flashcard-session nn-unified-exam-workspace relative space-y-3"
       data-nn-premium-flashcard-active-session
       data-nn-flashcard-branding-revamp=""
+      data-nn-flashcard-layout-refinement=""
       data-nn-flashcard-study-session=""
       data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
       data-nn-pedagogy-tier={tierPedagogyProfile.tier}
@@ -671,15 +674,15 @@ export function ActiveStudySession({
         className="hidden md:block"
       />
       <div className="nn-flashcard-learning-topbar" aria-label="Flashcard session">
-        {/* Left section: return link + mode chip + title */}
         <div className="nn-flashcard-topbar-left min-w-0 flex-1">
           <Link href={header.exitHref} className="nn-flashcard-return-link" onClick={onExit}>
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
-            Return to Hub
+            Return to {header.hubLabel ?? "Hub"}
           </Link>
+          <span className="nn-flashcard-topbar-sep" aria-hidden />
           <span className="nn-flashcard-chip nn-flashcard-chip--mode">{header.modeLabel}</span>
-          <span className="nn-flashcard-topbar-title max-w-[min(100%,14rem)] truncate">
-            Distractions reduced
+          <span className="nn-flashcard-topbar-focus-note max-w-[min(100%,12rem)] truncate">
+            Focused study · distractions reduced
           </span>
         </div>
 
@@ -690,7 +693,14 @@ export function ActiveStudySession({
               Progress
             </span>
             <strong>{index + 1} <span className="font-normal opacity-60">of</span> {sessionCards.length}</strong>
-            <div className="nn-flashcard-topbar-progress-track" role="progressbar" aria-valuenow={index + 1} aria-valuemin={1} aria-valuemax={sessionCards.length}>
+            <div
+              className="nn-flashcard-topbar-progress-track"
+              role="progressbar"
+              aria-valuenow={index + 1}
+              aria-valuemin={1}
+              aria-valuemax={sessionCards.length}
+              aria-label={`Card ${index + 1} of ${sessionCards.length}`}
+            >
               <div
                 className="nn-flashcard-topbar-progress-fill"
                 style={{ width: `${((index + 1) / Math.max(1, sessionCards.length)) * 100}%` }}

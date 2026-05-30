@@ -494,7 +494,7 @@ export function FlashcardStudyClient({
   }
 
   return (
-    <div className="nn-flashcard-study-canvas mx-auto px-4 py-6">
+    <div className="nn-flashcard-study-canvas mx-auto px-4 py-3 sm:px-4 sm:py-2">
       <ExamSessionShell
         examMode="practice"
         className="nn-premium-flashcard-session-root nn-flashcard-study-premium"
@@ -507,6 +507,7 @@ export function FlashcardStudyClient({
             modeLabel: studyMode === "test" ? "Test Mode" : "Focused Study Mode",
             categoriesLabel: selectedTopic === "all" ? "All systems" : launcherTitle,
             exitHref: programHub.href,
+            hubLabel: `${programHub.label} Hub`,
           } satisfies ActiveStudyHeader}
           layout="split"
           sessionMode={studyMode}
