@@ -23,8 +23,9 @@ export default async function AdminSubLayout({ children }: { children: React.Rea
 
   return (
     <div
+      data-nn-admin-happy
       data-nn-admin-responsive
-      className="min-h-[70vh] min-w-0 bg-[var(--theme-bg)] lg:min-h-screen"
+      className="min-h-[70vh] min-w-0 lg:min-h-screen"
     >
       <AdminRenderedI18nKeyDevGuard />
       <AdminNavClient staffTier={tier} />

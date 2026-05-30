@@ -6,6 +6,17 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
 };
 
-export default function FlashcardSessionLivePreviewPage() {
-  return <FlashcardSessionLivePreview />;
+type PageProps = {
+  searchParams: Promise<{ audit?: string; scenario?: string; theme?: string }>;
+};
+
+export default async function FlashcardSessionLivePreviewPage({ searchParams }: PageProps) {
+  const sp = await searchParams;
+  return (
+    <FlashcardSessionLivePreview
+      serverAudit={sp.audit === "1"}
+      serverScenario={sp.scenario ?? null}
+      serverTheme={sp.theme ?? null}
+    />
+  );
 }

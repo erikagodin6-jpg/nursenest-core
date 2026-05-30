@@ -21,7 +21,7 @@ function fmt(n: number | null | undefined): string {
 
 function StatRow({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="flex items-center justify-between gap-4 py-2.5 border-b border-[var(--semantic-border-soft)] last:border-0">
+    <div className="flex items-center justify-between gap-4 border-b border-[var(--admin-happy-border)] py-3 last:border-0">
       <span className="text-sm text-[var(--semantic-text-secondary)]">{label}</span>
       <span
         className={`text-sm font-semibold tabular-nums ${highlight ? "text-[var(--semantic-brand)]" : "text-[var(--semantic-text-primary)]"}`}
@@ -67,11 +67,12 @@ export function AdminUserStatsPanel() {
 
   return (
     <section
-      className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-sm"
+      className="nn-admin-happy-card"
       aria-label="User metrics"
       data-testid="admin-user-stats-panel"
     >
-      <div className="flex items-center justify-between gap-2 mb-4">
+      <span className="nn-admin-happy-card-accent nn-admin-happy-card-accent--blush" aria-hidden />
+      <div className="mb-5 flex items-center justify-between gap-2">
         <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">User metrics</h2>
         {ts ? (
           <span className="text-[10px] text-[var(--semantic-text-muted)] tabular-nums">

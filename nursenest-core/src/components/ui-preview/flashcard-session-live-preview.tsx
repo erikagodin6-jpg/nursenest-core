@@ -5,6 +5,10 @@ import { useSearchParams } from "next/navigation";
 import { ExamSessionShell } from "@/components/exam/exam-session-shell";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
 import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import {
+  resolveFlashcardUxAuditScenario,
+  type FlashcardUxAuditScenarioId,
+} from "@/components/ui-preview/flashcard-ux-audit-scenarios";
 
 const THEME_IDS = new Set(THEME_OPTIONS.map((o) => o.id));
 
@@ -74,9 +78,30 @@ const MOCK_CARDS: ActiveStudyCard[] = [
   },
 ];
 
-function FlashcardSessionLivePreviewInner() {
+function FlashcardSessionLivePreviewInner({
+  serverAudit,
+  serverScenario,
+  serverTheme,
+}: {
+  serverAudit?: boolean;
+  serverScenario?: string | null;
+  serverTheme?: string | null;
+}) {
   const sp = useSearchParams();
-  const theme = useMemo(() => resolveThemeParam(sp.get("theme")), [sp]);
+  const theme = useMemo(
+    () => resolveThemeParam(sp.get("theme") ?? serverTheme),
+    [sp, serverTheme],
+  );
+  const auditMode = sp.get("audit") === "1" || Boolean(serverAudit);
+  const scenario = useMemo(
+    () =>
+      resolveFlashcardUxAuditScenario(
+        (sp.get("scenario") ?? serverScenario) as FlashcardUxAuditScenarioId | null,
+      ),
+    [sp, serverScenario],
+  );
+  const cards = auditMode ? scenario.cards : MOCK_CARDS;
+  const initialRevealed = auditMode ? scenario.initialRevealed : false;
 
   useEffect(() => {
     const prev = document.documentElement.getAttribute("data-theme");
@@ -88,38 +113,57 @@ function FlashcardSessionLivePreviewInner() {
   }, [theme]);
 
   return (
-    <div className="nn-flashcard-session-page mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <p className="mb-4 text-center text-xs font-medium text-[var(--semantic-text-muted)]">
-        QA preview · mock cards · theme <span className="tabular-nums">{theme}</span>
-      </p>
+    <div
+      className={`nn-flashcard-study-canvas mx-auto px-4 py-2 sm:px-4 sm:py-2${auditMode ? " nn-flashcard-ux-audit-capture" : ""}`}
+      data-nn-flashcard-ux-audit={auditMode ? "1" : undefined}
+    >
+      {!auditMode ? (
+        <p className="mb-4 text-center text-xs font-medium text-[var(--semantic-text-muted)]">
+          QA preview · mock cards · theme <span className="tabular-nums">{theme}</span>
+        </p>
+      ) : null}
       <ExamSessionShell
         immersive
         examMode="practice"
         className="nn-premium-flashcard-session-root nn-flashcard-study-premium"
       >
         <ActiveStudySession
-          cards={MOCK_CARDS}
+          cards={cards}
           header={{
-            sessionTitle: "Clinical judgement · Preview deck",
-            modeLabel: "Learn",
-            categoriesLabel: "Multisystem · Safety · Labs",
+            sessionTitle: auditMode ? `Flashcards · ${scenario.label}` : "Clinical judgement · Preview deck",
+            modeLabel: "Focused Study Mode",
+            categoriesLabel: auditMode ? cards[0]?.topic ?? "All systems" : "Multisystem · Safety · Labs",
             exitHref: "/preview/flashcard-session-live",
+            hubLabel: "Hub",
           }}
           layout="split"
+          initialRevealed={initialRevealed}
         />
       </ExamSessionShell>
     </div>
   );
 }
 
-export function FlashcardSessionLivePreview() {
+export function FlashcardSessionLivePreview({
+  serverAudit,
+  serverScenario,
+  serverTheme,
+}: {
+  serverAudit?: boolean;
+  serverScenario?: string | null;
+  serverTheme?: string | null;
+} = {}) {
   return (
     <Suspense
       fallback={
         <div className="px-6 py-16 text-center text-sm text-[var(--semantic-text-muted)]">Loading preview…</div>
       }
     >
-      <FlashcardSessionLivePreviewInner />
+      <FlashcardSessionLivePreviewInner
+        serverAudit={serverAudit}
+        serverScenario={serverScenario}
+        serverTheme={serverTheme}
+      />
     </Suspense>
   );
 }

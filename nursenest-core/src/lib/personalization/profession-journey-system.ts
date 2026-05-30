@@ -307,12 +307,14 @@ function optionById<T extends { id: string }>(items: readonly T[], id: string): 
 function signalFor(definition: CompetencyDefinition, input: ProfessionJourneyInput): CompetencySignal {
   const explicit = input.activitySignals?.find((signal) => signal.competencyId === definition.id);
   if (explicit) return explicit;
+  const performance = input.performanceByCompetency?.[definition.id] ?? null;
+  const confidence = input.confidenceByCompetency?.[definition.id] ?? null;
   const weakMatch = input.weakAreas.some((area) => area.toLowerCase().includes(definition.label.toLowerCase()) || definition.label.toLowerCase().includes(area.toLowerCase()));
   return {
     competencyId: definition.id,
-    performanceScore: input.performanceByCompetency?.[definition.id] ?? (weakMatch ? 48 : null),
-    confidenceScore: input.confidenceByCompetency?.[definition.id] ?? null,
-    attempts: weakMatch ? 1 : 0,
+    performanceScore: performance ?? (weakMatch ? 48 : null),
+    confidenceScore: confidence,
+    attempts: weakMatch || performance != null || confidence != null ? 1 : 0,
     lastActivityDaysAgo: null,
   };
 }
@@ -433,7 +435,7 @@ export function buildJourneyRecommendations(input: ProfessionJourneyInput, heatM
 
   const recommendations: JourneyRecommendation[] = [];
   for (const cell of priorityCells.slice(0, 5)) {
-    const activity = [...goalBias, ...cell.recommendedActivities].find((kind) => cell.recommendedActivities.includes(kind)) ?? cell.recommendedActivities[0];
+    const activity = cell.recommendedActivities.find((kind) => goalBias.includes(kind)) ?? cell.recommendedActivities[0];
     recommendations.push({
       kind: activity,
       title: recommendationTitle(activity, cell.label),

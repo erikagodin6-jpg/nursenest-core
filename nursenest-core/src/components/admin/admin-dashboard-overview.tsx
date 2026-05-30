@@ -11,29 +11,34 @@ function CardShell({
   title,
   children,
   footer,
+  accent = "blue",
 }: {
   title: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
+  accent?: "blue" | "yellow" | "green" | "blush";
 }) {
   return (
-    <section
-      className="flex flex-col rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-sm"
-      style={{ boxShadow: "var(--semantic-shadow-soft, 0 1px 3px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent))" }}
-    >
+    <section className="nn-admin-happy-card flex flex-col">
+      <span className={`nn-admin-happy-card-accent nn-admin-happy-card-accent--${accent}`} aria-hidden />
       <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">{title}</h2>
-      <div className="mt-4 flex-1 space-y-3 text-sm text-[var(--semantic-text-secondary)]">{children}</div>
-      {footer ? <div className="mt-5 border-t border-[var(--semantic-border-soft)] pt-4">{footer}</div> : null}
+      <div className="mt-5 flex-1 space-y-3 text-sm leading-6 text-[var(--semantic-text-secondary)]">{children}</div>
+      {footer ? <div className="mt-6 border-t border-[var(--admin-happy-border)] pt-5">{footer}</div> : null}
     </section>
   );
 }
 
 function PrimaryLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link
-      href={href}
-      className="nn-btn-primary inline-flex min-h-[2.5rem] w-full items-center justify-center rounded-xl px-4 text-sm font-semibold"
-    >
+    <Link href={href} className="nn-admin-happy-btn nn-admin-happy-btn--primary w-full">
+      {children}
+    </Link>
+  );
+}
+
+function SecondaryLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link href={href} className="nn-admin-happy-btn nn-admin-happy-btn--blue w-full">
       {children}
     </Link>
   );
@@ -47,17 +52,18 @@ export function AdminDashboardOverview({
   showHeader?: boolean;
 }) {
   const tier = data.exams.byTier;
+  const dbHealthy = data.health.dbOk === true;
   return (
     <div
-      className="space-y-8"
+      className="space-y-10"
       data-nn-premium-full-platform-convergence=""
       data-nn-premium-platform-family="admin-preview"
       data-nn-premium-platform-module="admin-dashboard"
     >
       {showHeader ? (
-        <header className="space-y-2">
+        <header className="space-y-3">
           <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] md:text-3xl">Admin Dashboard</h1>
-          <p className="max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+          <p className="max-w-2xl text-sm leading-6 text-[var(--semantic-text-secondary)]">
             Manage NurseNest content and system
           </p>
           <p className="text-xs text-[var(--semantic-text-muted)]">
@@ -71,6 +77,25 @@ export function AdminDashboardOverview({
           {data.env.vercelEnv ? `${data.env.nodeEnv} (${data.env.vercelEnv})` : data.env.nodeEnv}
         </p>
       )}
+
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {[
+          { label: "Total users", value: fmt(data.users.total), bar: "blush" as const },
+          { label: "Active subscribers", value: fmt(data.users.activeSubscribers), bar: "yellow" as const },
+          { label: "Lessons live", value: fmt(data.content.lessons), bar: "blue" as const },
+          {
+            label: "System health",
+            value: dbHealthy ? "All good" : data.health.dbOk === false ? "Check DB" : "Unknown",
+            bar: "green" as const,
+          },
+        ].map((stat) => (
+          <div key={stat.label} className="nn-admin-happy-stat">
+            <p className="text-xs font-medium text-[var(--semantic-text-muted)]">{stat.label}</p>
+            <p className="mt-2 text-2xl font-bold tabular-nums text-[var(--semantic-text-primary)]">{stat.value}</p>
+            <span className={`nn-admin-happy-stat-bar nn-admin-happy-stat-bar--${stat.bar} mt-3 block`} aria-hidden />
+          </div>
+        ))}
+      </div>
 
       {data.billingIntegrity && data.billingIntegrity.severity !== "ok" ? (
         <div
@@ -93,9 +118,10 @@ export function AdminDashboardOverview({
         </div>
       ) : null}
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         <CardShell
           title="Content Management"
+          accent="blue"
           footer={<PrimaryLink href="/admin/content">Manage Content</PrimaryLink>}
         >
           <ul className="space-y-2">
@@ -128,6 +154,7 @@ export function AdminDashboardOverview({
 
         <CardShell
           title="Users & Subscriptions"
+          accent="yellow"
           footer={<PrimaryLink href="/admin/users">View Users</PrimaryLink>}
         >
           <ul className="space-y-2">
@@ -149,14 +176,8 @@ export function AdminDashboardOverview({
 
         <CardShell
           title="Billing integrity"
-          footer={
-            <Link
-              href="/admin/subscriptions"
-              className="nn-btn-secondary inline-flex min-h-[2.5rem] w-full items-center justify-center rounded-xl px-4 text-sm font-semibold"
-            >
-              Subscriptions &amp; billing
-            </Link>
-          }
+          accent="blush"
+          footer={<SecondaryLink href="/admin/subscriptions">Subscriptions &amp; billing</SecondaryLink>}
         >
           {data.billingIntegrity ? (
             <ul className="space-y-2 text-[var(--semantic-text-secondary)]">
@@ -207,6 +228,7 @@ export function AdminDashboardOverview({
 
         <CardShell
           title="Exams / Question Bank"
+          accent="green"
           footer={<PrimaryLink href="/admin/questions">Manage Question Bank</PrimaryLink>}
         >
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
@@ -228,7 +250,7 @@ export function AdminDashboardOverview({
           )}
         </CardShell>
 
-        <CardShell title="System Health">
+        <CardShell title="System Health" accent="green">
           <ul className="space-y-2">
             <li className="flex justify-between gap-3">
               <span>Database</span>
@@ -260,24 +282,15 @@ export function AdminDashboardOverview({
               )}
             </li>
           </ul>
-          <Link
-            href="/admin/system-status"
-            className="nn-btn-secondary inline-flex min-h-[2.5rem] w-full items-center justify-center rounded-xl px-4 text-sm font-semibold"
-          >
+          <Link href="/admin/system-status" className="nn-admin-happy-btn nn-admin-happy-btn--blue mt-4 w-full">
             Full system status
           </Link>
         </CardShell>
 
         <CardShell
           title="Quick Actions"
-          footer={
-            <Link
-              href="/admin/operations"
-              className="nn-btn-secondary inline-flex min-h-[2.5rem] w-full items-center justify-center rounded-xl px-4 text-sm font-semibold"
-            >
-              Operations center
-            </Link>
-          }
+          accent="blue"
+          footer={<SecondaryLink href="/admin/operations">Operations center</SecondaryLink>}
         >
           <ul className="space-y-2">
             <li>
