@@ -1016,6 +1016,7 @@ function AppRoutes() {
         <Route path="/lectures/:slug" component={LectureViewer} />
         <Route path="/lessons/:id">{() => <PremiumFeatureErrorBoundary featureName="lessons" fallbackPath="/en/lessons"><ProtectedRoute contentType="lesson" killSwitchKey="lessons" safeModeRenderer={() => <SafeLessonFallback onBack={() => window.location.href = "/en/lessons"} />}><LessonDetail /></ProtectedRoute></PremiumFeatureErrorBoundary>}</Route>
         <Route path="/flashcards/deck/:slug">{() => <PremiumFeatureErrorBoundary featureName="flashcards" fallbackPath="/en/flashcards"><ProtectedRoute contentType="flashcard" killSwitchKey="flashcards" safeModeRenderer={() => <SafeFlashcardFallback onBack={() => window.location.href = "/en/flashcards"} />}><DeckPage /></ProtectedRoute></PremiumFeatureErrorBoundary>}</Route>
+        <Route path="/flashcard-study">{() => <Redirect to="/flashcards" />}</Route>
         <Route path="/flashcards">{() => <PremiumFeatureErrorBoundary featureName="flashcards" fallbackPath="/en/dashboard"><ProtectedRoute contentType="flashcard" killSwitchKey="flashcards" safeModeRenderer={() => <SafeFlashcardFallback onBack={() => window.location.href = "/en/dashboard"} />}><PublicFlashcards /></ProtectedRoute></PremiumFeatureErrorBoundary>}</Route>
 
         {/* Specialty Preview Pages (public) */}

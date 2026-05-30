@@ -218,16 +218,22 @@ function QuizSession({ tier, systemSlug }: { tier: string; systemSlug: string })
   const TIER_LABELS = getTierLabels(region);
   const [, setLocation] = useLocation();
   const systemName = deslugify(systemSlug);
+  const [started, setStarted] = useState(false);
   const [questions, setQuestions] = useState<PooledQuestion[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  const handleStartQuiz = () => {
+    setStarted(true);
     setLoading(true);
     getExamQuestions(tier, 5, [deslugify(systemSlug)]).then((qs) => {
       setQuestions(qs.length > 0 ? qs : []);
       setLoading(false);
     }).catch(() => setLoading(false));
-  }, [tier, systemSlug]);
+  };
+
+  useEffect(() => {
+    // No longer auto-loads on mount. User must click "Start" first.
+  }, []);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -335,7 +341,39 @@ function QuizSession({ tier, systemSlug }: { tier: string; systemSlug: string })
               { name: systemName, url: `https://www.nursenest.ca/practice-questions/${tier}/${systemSlug}` },
             ]} />
 
-            {!completed ? (
+            {!started && !completed ? (
+              <div className="mt-4">
+                <Card className="max-w-lg mx-auto border-0 shadow-md" data-testid="card-launch-setup">
+                  <CardContent className="p-8 sm:p-10 text-center">
+                    <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
+                      <Icon className="w-8 h-8 text-primary" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-slate-800 mb-3">Ready to Practice?</h2>
+                    <p className="text-slate-500 text-sm mb-4 max-w-md mx-auto leading-relaxed">
+                      You're about to start <strong>5 free questions</strong> for <strong>{tierLabel} — {systemName}</strong>. Each question includes a detailed rationale, clinical pearls, and exam strategies. No account needed.
+                    </p>
+                    <div className="flex items-center justify-center gap-2 text-xs text-slate-400 mb-6">
+                      <Badge variant="outline" className="gap-1"><CheckCircle2 className="w-3 h-3 text-emerald-500" /> 5 questions</Badge>
+                      <Badge variant="outline" className="gap-1"><BookOpen className="w-3 h-3 text-primary" /> Full rationales</Badge>
+                      <Badge variant="outline" className="gap-1"><Target className="w-3 h-3 text-amber-500" /> No signup</Badge>
+                    </div>
+                    <Button
+                      size="lg"
+                      onClick={handleStartQuiz}
+                      disabled={loading}
+                      className="rounded-2xl bg-primary hover:bg-primary/90 text-white font-semibold px-10 py-6 text-base shadow-lg shadow-primary/20 gap-2"
+                      data-testid="button-start-quiz"
+                    >
+                      {loading ? (
+                        <>Loading...</>
+                      ) : (
+                        <><Target className="w-5 h-5" /> Start Practice Quiz</>
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : !completed ? (
               <div className="mt-4">
                 <div className="flex items-center justify-between mb-5">
                   <div className="flex items-center gap-3">

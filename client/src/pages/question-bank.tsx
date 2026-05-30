@@ -136,13 +136,14 @@ export default function QuestionBank() {
   const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
   const [topicFilter, setTopicFilter] = useState<string>("all");
 
+  const [phase, setPhase] = useState<"setup" | "active">("setup");
   const [mode, setMode] = useState<QBankMode>("study");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [stats, setStats] = useState({ correct: 0, total: 0 });
   const [allQuestions, setAllQuestions] = useState<PooledQuestion[]>([]);
-  const [loadingQuestions, setLoadingQuestions] = useState(true);
+  const [loadingQuestions, setLoadingQuestions] = useState(false);
   const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
 
   const [examSession, setExamSession] = useState<ExamSessionState | null>(null);
@@ -160,7 +161,12 @@ export default function QuestionBank() {
     return canAccessTier(effectiveTier, questionTier, user?.testerAccess, user?.testerExpiry);
   };
 
+  const handleBeginStudying = () => {
+    setPhase("active");
+  };
+
   useEffect(() => {
+    if (phase !== "active") return;
     let tier = tierFilter;
     if (tier === "all") {
       tier = allowedQBankTiers.length > 0 ? allowedQBankTiers[0] : (effectiveTier || "rpn");
@@ -830,7 +836,43 @@ export default function QuestionBank() {
             </Card>
           )}
 
-          {isStudyOrLearning && (
+          {phase === "setup" && isStudyOrLearning && (
+            <Card className="premium-card border-0 shadow-md mb-6" data-testid="card-launch-setup">
+              <CardContent className="p-8 sm:p-10 text-center">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
+                  <BookOpen className="w-8 h-8 text-primary" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-3">Ready to Practice?</h2>
+                <p className="text-gray-500 text-sm mb-6 max-w-lg mx-auto leading-relaxed">
+                  Configure your filters above, then click the button below to start studying. Select your preferred body system, difficulty level, and other options to tailor your practice session.
+                </p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+                  <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 rounded-xl px-4 py-2.5">
+                    <Filter className="w-4 h-4 text-primary" /> Choose your filters
+                  </div>
+                  <div className="text-gray-300">→</div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 rounded-xl px-4 py-2.5">
+                    <Target className="w-4 h-4 text-emerald-500" /> Select mode above
+                  </div>
+                  <div className="text-gray-300">→</div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 rounded-xl px-4 py-2.5">
+                    <Sparkles className="w-4 h-4 text-amber-500" /> Start studying
+                  </div>
+                </div>
+                <Button
+                  size="lg"
+                  onClick={handleBeginStudying}
+                  className="rounded-2xl bg-primary hover:bg-primary/90 text-white font-semibold px-10 py-6 text-base shadow-lg shadow-primary/20 gap-2"
+                  data-testid="button-begin-studying"
+                >
+                  <Sparkles className="w-5 h-5" />
+                  Begin Studying
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {isStudyOrLearning && phase === "active" && (
             <>
               {loadingQuestions ? (
                 <Card className="premium-card border-0 shadow-md bg-white">
