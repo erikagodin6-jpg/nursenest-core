@@ -17,8 +17,10 @@ import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
 import type { PublicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 import { newGradMarketingHubBase, type NewGradMarketingShell } from "@/lib/navigation/new-grad-marketing-hub-paths";
 import {
+  NEW_GRAD_CONTENT_LAUNCH_TARGETS,
   NEW_GRAD_COMPETENCY_DOMAINS,
   NEW_GRAD_READINESS_DIMENSIONS,
+  NEW_GRAD_RESIDENCY_PILLARS,
   NEW_GRAD_RESIDENCY_TRACKS,
   NEW_GRAD_ROADMAP_MILESTONES,
   NEW_GRAD_SHIFT_READINESS_MODULES,
@@ -123,6 +125,37 @@ export function NewGradMarketingLanding({
           </div>
         </div>
 
+        <div className="mt-5 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 sm:p-5">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">Six residency pillars</h3>
+              <p className="mt-1 max-w-3xl text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+                Phase 1 organizes New Grad around first-year survival, high-risk scenarios, medication confidence,
+                clinical skills, telemetry/ECG, and shift-based simulation.
+              </p>
+            </div>
+            <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-chart-4)]">
+              First-year nurse residency program
+            </p>
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {NEW_GRAD_RESIDENCY_PILLARS.map((pillar) => (
+              <article
+                key={pillar.id}
+                className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3"
+              >
+                <p className="text-xs font-bold text-[var(--theme-heading-text)]">{pillar.title}</p>
+                <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+                  {pillar.positioning}
+                </p>
+                <p className="mt-2 text-[0.68rem] font-semibold uppercase tracking-wide text-[var(--semantic-chart-4)]">
+                  {pillar.topics.length} focus areas
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+
         <div className="mt-5 grid gap-4 lg:grid-cols-3">
           <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
             <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">Specialty tracks</h3>
@@ -159,6 +192,24 @@ export function NewGradMarketingLanding({
             <p className="mt-3 text-xs font-bold uppercase tracking-wide text-[var(--semantic-warning)]">
               {NEW_GRAD_SHIFT_READINESS_MODULES.length} readiness modules
             </p>
+          </div>
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_20%,var(--semantic-border-soft))] bg-[var(--semantic-panel-muted)] p-4">
+          <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">Launch content targets</h3>
+          <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+            Targets keep New Grad positioned as a dedicated transition-to-practice product, not a repackaged NCLEX bank.
+          </p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-5">
+            {NEW_GRAD_CONTENT_LAUNCH_TARGETS.slice(0, 5).map((target) => (
+              <div
+                key={target.id}
+                className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3"
+              >
+                <p className="text-lg font-bold text-[var(--semantic-success)]">{target.minimum.toLocaleString()}+</p>
+                <p className="text-xs font-semibold text-[var(--semantic-text-secondary)]">{target.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

@@ -38,34 +38,33 @@ describe("Practice exam — premium convergence hooks", () => {
   });
 
   it("keeps the original launcher setup flow active before practice/CAT sessions", () => {
-    assert.equal(
-      hubSrc.includes('const restoreOriginalLauncherFlow = true;'),
-      true,
-      "practice hub must keep the restored setup flow active",
-    );
-    assert.equal(
-      hubSrc.includes('if (!restoreOriginalLauncherFlow && examMode !== "cat")'),
-      true,
-      "simplified practice one-button landing must remain gated off",
-    );
-    assert.equal(
-      hubSrc.includes('if (!restoreOriginalLauncherFlow && examMode === "cat")'),
-      true,
-      "simplified CAT one-button landing must remain gated off",
-    );
+    assert.equal(hubSrc.includes("LearnerStudyPageShell"), true);
+    assert.equal(hubSrc.includes("ClipboardList"), true);
+    assert.equal(hubSrc.includes("Practice Exam"), true);
+    assert.equal(hubSrc.includes("data-nn-e2e-practice-exams-builder"), true);
     assert.equal(hubSrc.includes("data-nn-e2e-practice-canonical-grid"), true);
     assert.equal(hubSrc.includes("data-nn-e2e-practice-setup-panel"), true);
-    assert.equal(hubSrc.includes("Configure session"), true);
-    assert.equal(hubSrc.includes("Select categories"), true);
-    assert.equal(hubSrc.includes("Exam mode"), true);
-    assert.equal(hubSrc.includes("Question count"), true);
+    assert.equal(hubSrc.includes("Exam Mode"), true);
+    assert.equal(hubSrc.includes("Study Focus"), true);
+    assert.equal(hubSrc.includes("Question Count"), true);
     assert.equal(hubSrc.includes("data-nn-e2e-question-count"), true);
     assert.equal(hubSrc.includes("data-nn-e2e-practice-resume-session"), true);
-    assert.equal(hubSrc.includes('mode={examMode === "cat" ? "cat" : "practice-exam"}'), true);
+    assert.equal(hubSrc.includes("data-nn-e2e-practice-session-size"), true);
+    assert.equal(hubSrc.includes("Start Exam"), true);
+    assert.equal(
+      hubSrc.includes("data-nn-e2e-practice-single-landing"),
+      false,
+      "restored practice hub must not use the simplified single-landing shell",
+    );
     assert.equal(
       hubSrc.includes("data-nn-e2e-practice-sticky-cta"),
       false,
       "restored setup flow should not be replaced by a separate sticky-only CTA launcher",
+    );
+    assert.equal(
+      hubSrc.includes("SharedStudySetupLayout"),
+      false,
+      "restored practice hub must not use the converged shared setup shell",
     );
   });
 

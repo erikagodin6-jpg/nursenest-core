@@ -199,6 +199,8 @@ export interface MonitorWorkstationProps {
   /** Show educational overlay by default. */
   defaultOverlay?: boolean;
   className?: string;
+  /** Called immediately after engine is initialised — allows parent to hold a reference. */
+  onEngineReady?: (engine: MonitorEngine) => void;
 }
 
 export function MonitorWorkstation({
@@ -209,6 +211,7 @@ export function MonitorWorkstation({
   hideInterventions = false,
   defaultOverlay = false,
   className = "",
+  onEngineReady,
 }: MonitorWorkstationProps) {
   const engineRef = useRef<MonitorEngine | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -224,6 +227,7 @@ export function MonitorWorkstation({
   // Initialise engine
   useEffect(() => {
     engineRef.current = new MonitorEngine(condition);
+    onEngineReady?.(engineRef.current);
     const s = engineRef.current.getState();
     setState({ ...s });
     setHistory(engineRef.current.getHistory());

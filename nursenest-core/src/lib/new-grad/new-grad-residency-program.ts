@@ -29,7 +29,28 @@ export type NewGradLearningActivity =
   | "pharmacology"
   | "ecg"
   | "simulations"
-  | "case-studies";
+  | "case-studies"
+  | "reflection-exercises"
+  | "dosage-calculations"
+  | "rhythm-drills"
+  | "clinical-judgment-exercises";
+
+export type NewGradResidencyPillarId =
+  | "surviving-first-year"
+  | "high-risk-clinical-scenarios"
+  | "medication-confidence"
+  | "clinical-skills-mastery"
+  | "telemetry-ecg-essentials"
+  | "simulation-center";
+
+export type NewGradResidencyPillar = {
+  readonly id: NewGradResidencyPillarId;
+  readonly title: string;
+  readonly positioning: string;
+  readonly topics: readonly string[];
+  readonly requiredActivities: readonly NewGradLearningActivity[];
+  readonly dashboardSignal: (typeof NEW_GRAD_READINESS_DIMENSIONS)[number]["id"];
+};
 
 export type NewGradResidencyTrack = {
   readonly id: NewGradResidencyTrackId;
@@ -101,6 +122,37 @@ export type NewGradCommercialPackage = {
   readonly entitlementHint: string;
 };
 
+export type NewGradContentLaunchTarget = {
+  readonly id: string;
+  readonly label: string;
+  readonly minimum: number;
+  readonly rationale: string;
+};
+
+export type NewGradAdaptiveCompetencyId =
+  | "clinical-judgment"
+  | "pharmacology"
+  | "prioritization"
+  | "delegation"
+  | "communication"
+  | "documentation"
+  | "ecg"
+  | "skills";
+
+export type NewGradAdaptiveCompetencyProfile = {
+  readonly id: NewGradAdaptiveCompetencyId;
+  readonly label: string;
+  readonly weakAreaEvidence: readonly string[];
+  readonly remediationActivities: readonly NewGradLearningActivity[];
+};
+
+export type NewGradDashboardMetric = {
+  readonly id: (typeof NEW_GRAD_READINESS_DIMENSIONS)[number]["id"] | "competency-heat-map";
+  readonly label: string;
+  readonly score: number;
+  readonly status: "not-started" | "needs-support" | "developing" | "ready";
+};
+
 const ALL_ACTIVITIES: readonly NewGradLearningActivity[] = [
   "lessons",
   "flashcards",
@@ -111,6 +163,183 @@ const ALL_ACTIVITIES: readonly NewGradLearningActivity[] = [
   "simulations",
   "case-studies",
 ];
+
+export const NEW_GRAD_RESIDENCY_PILLARS: readonly NewGradResidencyPillar[] = [
+  {
+    id: "surviving-first-year",
+    title: "Surviving Your First Year",
+    positioning: "Practical orientation and first-year professional practice support for real shifts, preceptorship, and consolidation.",
+    topics: [
+      "Time management",
+      "Prioritization",
+      "Organization",
+      "Shift preparation",
+      "Giving report",
+      "Receiving report",
+      "Calling physicians",
+      "Escalation pathways",
+      "Documentation",
+      "Delegation",
+      "Conflict management",
+      "Difficult conversations",
+      "Managing stress",
+    ],
+    requiredActivities: ["lessons", "flashcards", "simulations", "reflection-exercises"],
+    dashboardSignal: "orientation-progress",
+  },
+  {
+    id: "high-risk-clinical-scenarios",
+    title: "High-Risk Clinical Scenarios",
+    positioning: "Scenario-based practice for the deterioration patterns new graduates are most likely to miss early.",
+    topics: [
+      "Sepsis",
+      "Respiratory distress",
+      "Chest pain",
+      "Stroke",
+      "Hypoglycemia",
+      "Hyperglycemia",
+      "GI bleed",
+      "Shock",
+      "Falls",
+      "Delirium",
+      "Deteriorating patient",
+      "End-of-life care",
+    ],
+    requiredActivities: ["lessons", "flashcards", "questions", "simulations", "clinical-judgment-exercises"],
+    dashboardSignal: "clinical-confidence",
+  },
+  {
+    id: "medication-confidence",
+    title: "Medication Confidence Program",
+    positioning: "Medication safety curriculum focused on high-frequency and high-alert decisions during transition to practice.",
+    topics: [
+      "Common medications",
+      "High-alert medications",
+      "IV medications",
+      "Insulin",
+      "Anticoagulants",
+      "Opioids",
+      "Antibiotics",
+      "Cardiac medications",
+    ],
+    requiredActivities: ["pharmacology", "flashcards", "questions", "dosage-calculations", "case-studies"],
+    dashboardSignal: "medication-readiness",
+  },
+  {
+    id: "clinical-skills-mastery",
+    title: "Clinical Skills Mastery",
+    positioning: "Skill readiness with common mistakes, escalation criteria, and procedure-linked remediation.",
+    topics: [
+      "IV starts",
+      "Blood administration",
+      "Central line care",
+      "NG tubes",
+      "Foley insertion",
+      "Wound care",
+      "Tracheostomy care",
+      "Chest tubes",
+      "Telemetry interpretation",
+      "Oxygen therapy",
+      "PCA pumps",
+    ],
+    requiredActivities: ["clinical-skills", "lessons", "flashcards", "questions", "simulations"],
+    dashboardSignal: "skill-readiness",
+  },
+  {
+    id: "telemetry-ecg-essentials",
+    title: "Telemetry & ECG Essentials",
+    positioning: "Core rhythm recognition, clinical implications, and nursing actions integrated with the ECG ecosystem.",
+    topics: [
+      "Sinus rhythms",
+      "Atrial fibrillation",
+      "Atrial flutter",
+      "SVT",
+      "Bradycardias",
+      "Heart blocks",
+      "Ventricular rhythms",
+      "STEMI recognition",
+    ],
+    requiredActivities: ["ecg", "lessons", "rhythm-drills", "questions", "simulations"],
+    dashboardSignal: "telemetry-readiness",
+  },
+  {
+    id: "simulation-center",
+    title: "New Grad Simulation Center",
+    positioning: "Flagship shift-based simulations built around patient assignments, competing priorities, interruptions, deterioration, and handoff.",
+    topics: [
+      "Full patient assignments",
+      "Prioritization",
+      "Interruptions",
+      "Multiple competing tasks",
+      "Deterioration events",
+      "Shift management",
+      "Four-patient medical assignment",
+      "Busy surgical unit",
+      "New admission during medication pass",
+      "Rapid response activation",
+      "End-of-shift handoff",
+    ],
+    requiredActivities: ["simulations", "case-studies", "clinical-judgment-exercises", "questions", "reflection-exercises"],
+    dashboardSignal: "simulation-readiness",
+  },
+] as const;
+
+export const NEW_GRAD_CONTENT_LAUNCH_TARGETS: readonly NewGradContentLaunchTarget[] = [
+  {
+    id: "lessons",
+    label: "Lessons",
+    minimum: 500,
+    rationale: "Enough structured teaching to support orientation, consolidation, specialty transition, and first-year practice.",
+  },
+  {
+    id: "flashcards",
+    label: "Flashcards",
+    minimum: 3000,
+    rationale: "Retention practice for safety cues, medications, ECG, skills, communication, and specialty patterns.",
+  },
+  {
+    id: "questions",
+    label: "Questions",
+    minimum: 5000,
+    rationale: "Clinical application practice across common, high-risk, and specialty transition decisions.",
+  },
+  {
+    id: "clinical-skills",
+    label: "Clinical Skills",
+    minimum: 100,
+    rationale: "Procedure readiness with common mistakes, escalation criteria, documentation, and linked remediation.",
+  },
+  {
+    id: "simulations",
+    label: "Simulations",
+    minimum: 100,
+    rationale: "Shift-based practice that feels like nursing work rather than static exam review.",
+  },
+  {
+    id: "medication-lessons",
+    label: "Medication Lessons",
+    minimum: 250,
+    rationale: "Medication confidence curriculum spanning common, high-alert, IV, insulin, anticoagulant, opioid, antibiotic, and cardiac medications.",
+  },
+  {
+    id: "ecg-lessons",
+    label: "ECG Lessons",
+    minimum: 100,
+    rationale: "Telemetry and ECG essentials aligned to first-year nursing actions and escalation criteria.",
+  },
+  {
+    id: "telemetry-cases",
+    label: "Telemetry Cases",
+    minimum: 250,
+    rationale: "Rhythm recognition, alarm response, artifact troubleshooting, and deterioration decisions.",
+  },
+  {
+    id: "new-grad-medication-questions",
+    label: "New Grad Medication Questions",
+    minimum: 500,
+    rationale: "Dedicated medication decision practice across hold/administer/clarify, monitoring, adverse effects, and patient teaching.",
+  },
+] as const;
 
 export const NEW_GRAD_RESIDENCY_TRACKS: readonly NewGradResidencyTrack[] = [
   {
@@ -562,6 +791,57 @@ export const NEW_GRAD_READINESS_DIMENSIONS: readonly NewGradReadinessDimension[]
   },
 ] as const;
 
+export const NEW_GRAD_ADAPTIVE_COMPETENCY_PROFILE: readonly NewGradAdaptiveCompetencyProfile[] = [
+  {
+    id: "clinical-judgment",
+    label: "Clinical Judgment",
+    weakAreaEvidence: ["missed deterioration cues", "incorrect prioritization", "low simulation outcome score"],
+    remediationActivities: ["questions", "case-studies", "simulations", "lessons"],
+  },
+  {
+    id: "pharmacology",
+    label: "Pharmacology",
+    weakAreaEvidence: ["medication safety errors", "low high-alert medication confidence", "missed monitoring parameters"],
+    remediationActivities: ["pharmacology", "flashcards", "questions", "dosage-calculations"],
+  },
+  {
+    id: "prioritization",
+    label: "Prioritization",
+    weakAreaEvidence: ["unstable patient selected late", "assignment sequencing errors", "difficulty recovering from interruptions"],
+    remediationActivities: ["simulations", "questions", "case-studies", "reflection-exercises"],
+  },
+  {
+    id: "delegation",
+    label: "Delegation",
+    weakAreaEvidence: ["scope mismatch", "missing follow-up", "unclear accountability after task assignment"],
+    remediationActivities: ["lessons", "questions", "simulations", "case-studies"],
+  },
+  {
+    id: "communication",
+    label: "Communication",
+    weakAreaEvidence: ["incomplete SBAR", "missed closed-loop communication", "unclear provider escalation"],
+    remediationActivities: ["simulations", "reflection-exercises", "lessons", "case-studies"],
+  },
+  {
+    id: "documentation",
+    label: "Documentation",
+    weakAreaEvidence: ["missing reassessment", "unclear escalation trail", "late or incomplete handoff note"],
+    remediationActivities: ["lessons", "case-studies", "reflection-exercises"],
+  },
+  {
+    id: "ecg",
+    label: "ECG",
+    weakAreaEvidence: ["missed rhythm change", "artifact confusion", "incorrect STEMI escalation"],
+    remediationActivities: ["ecg", "rhythm-drills", "questions", "simulations"],
+  },
+  {
+    id: "skills",
+    label: "Skills",
+    weakAreaEvidence: ["procedure sequencing error", "missed common mistake", "unclear complication response"],
+    remediationActivities: ["clinical-skills", "lessons", "flashcards", "questions", "simulations"],
+  },
+] as const;
+
 export const NEW_GRAD_COMMERCIAL_PACKAGES: readonly NewGradCommercialPackage[] = [
   {
     key: "new-grad-base",
@@ -658,4 +938,47 @@ export function calculateNewGradSpecialtyReadinessScore(
     return sum + score * dimension.weight;
   }, 0);
   return Math.round(weighted / totalWeight);
+}
+
+export function listNewGradResidencyPillars(): readonly NewGradResidencyPillar[] {
+  return NEW_GRAD_RESIDENCY_PILLARS;
+}
+
+export function listNewGradAdaptiveRemediationActivities(
+  competencyId: NewGradAdaptiveCompetencyId,
+): readonly NewGradLearningActivity[] {
+  return NEW_GRAD_ADAPTIVE_COMPETENCY_PROFILE.find((profile) => profile.id === competencyId)?.remediationActivities ?? [];
+}
+
+export function buildNewGradDashboardMetrics(
+  dimensionScores: Partial<Record<(typeof NEW_GRAD_READINESS_DIMENSIONS)[number]["id"], number>>,
+): readonly NewGradDashboardMetric[] {
+  const metrics = NEW_GRAD_READINESS_DIMENSIONS.map((dimension) => {
+    const raw = dimensionScores[dimension.id];
+    const score = typeof raw === "number" && Number.isFinite(raw) ? Math.max(0, Math.min(100, raw)) : 0;
+    return {
+      id: dimension.id,
+      label: dimension.label,
+      score,
+      status: newGradDashboardStatus(score),
+    } satisfies NewGradDashboardMetric;
+  });
+
+  const heatMapScore = calculateNewGradSpecialtyReadinessScore(dimensionScores);
+  return [
+    ...metrics,
+    {
+      id: "competency-heat-map",
+      label: "Competency Heat Map",
+      score: heatMapScore,
+      status: newGradDashboardStatus(heatMapScore),
+    },
+  ];
+}
+
+function newGradDashboardStatus(score: number): NewGradDashboardMetric["status"] {
+  if (score <= 0) return "not-started";
+  if (score < 50) return "needs-support";
+  if (score < 80) return "developing";
+  return "ready";
 }

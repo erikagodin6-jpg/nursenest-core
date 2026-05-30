@@ -120,9 +120,10 @@ export function computeHarmIndex(
     }
 
     // VT/VF/Asystole without defibrillation/CPR
+    const arrestKeys = HARM_THRESHOLDS.ARREST_RHYTHM_KEYS as readonly string[];
     if (
-      HARM_THRESHOLDS.ARREST_RHYTHM_KEYS.includes(s.ecgRhythmKey) &&
-      !HARM_THRESHOLDS.ARREST_RHYTHM_KEYS.includes(prevS.ecgRhythmKey)
+      arrestKeys.includes(s.ecgRhythmKey) &&
+      !arrestKeys.includes(prevS.ecgRhythmKey)
     ) {
       const defibOrCpr = interventionEvents.some(
         (e) => e.tick <= snap.tick + 2 && (e.detail.includes("Defibrillation") || e.detail.includes("CPR"))

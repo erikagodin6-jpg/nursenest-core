@@ -47,9 +47,10 @@ describe("RPN premium exam shell rollout", () => {
     assert.match(hubSrc, /pathwayId=\$\{encodeURIComponent\(trimmedPathwayId\)\}/);
   });
 
-  it("hub uses premium practice-exam convergence shell (pathway-agnostic)", () => {
-    assert.match(hubSrc, /SharedStudySetupLayout/);
-    assert.match(hubSrc, /mode=\{examMode === "cat" \? "cat" : "practice-exam"\}/);
-    assert.match(hubSrc, /sessionMode: "exam"/);
+  it("hub uses restored original practice-exam launcher shell (pathway-agnostic)", () => {
+    assert.match(hubSrc, /LearnerStudyPageShell/);
+    assert.match(hubSrc, /data-nn-e2e-practice-exams-builder/);
+    assert.match(hubSrc, /sessionMode: "tutor"/);
+    assert.match(hubSrc, /Start Exam/);
   });
 });

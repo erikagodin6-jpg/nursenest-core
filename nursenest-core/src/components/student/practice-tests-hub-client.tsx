@@ -2,14 +2,9 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { LineChart, PlayCircle } from "lucide-react";
+import { Check, ClipboardList, LineChart, PlayCircle } from "lucide-react";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
-import {
-  LearnerCategorySelector,
-  LearnerFilterBar,
-  SharedStudySetupLayout,
-  SharedStudySetupSurface,
-} from "@/components/learner-study-ui";
+import { LearnerStudyPageShell } from "@/components/learner-study-ui";
 import {
   discoveryTopicsForCanonicalFilters,
   getQuestionCountsByBodySystem,
@@ -45,13 +40,20 @@ type PracticeTestsHubClientProps = {
   initialCatMode?: boolean;
 };
 
-const PRACTICE_COUNTS = [10, 25, 50, 75, 100] as const;
-const CAT_COUNTS = [25, 50, 75] as const;
+const PRACTICE_RESUME_STORAGE_KEY = "nursenest.practiceTests.resume.v1";
 const PRACTICE_COUNT_MIN = 5;
 const PRACTICE_COUNT_MAX = 100;
 const CAT_COUNT_MIN = 25;
 const CAT_COUNT_MAX = 75;
-const PRACTICE_RESUME_STORAGE_KEY = "nursenest.practiceTests.resume.v1";
+
+const CATEGORY_CARD_CLASS =
+  "group relative flex min-h-[104px] w-full flex-col items-center justify-center gap-2 rounded-[1.25rem] border p-4 text-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_42%,transparent)]";
+
+const SURFACE_CLASS =
+  "rounded-[1.25rem] border border-[rgba(15,23,42,0.06)] bg-[rgba(255,255,255,0.85)] shadow-[0_16px_40px_rgba(15,23,42,0.06)]";
+
+const PRACTICE_COUNTS = [25, 50, 75, 100] as const;
+const CAT_COUNTS = [25, 50, 75] as const;
 
 function focusToSelectionMode(focusMode: FocusMode): Exclude<PracticeTestSelectionMode, "cat" | "targeted" | "starred"> {
   if (focusMode === "weak") return "weak";
@@ -64,6 +66,12 @@ function focusToCatBasis(focusMode: FocusMode): CatSelectionBasis {
   if (focusMode === "weak") return "weak";
   if (focusMode === "missed") return "missed";
   return "random";
+}
+
+function formatPathwayLabel(option: PracticeTestPathwayOption | undefined, fallback: string): string {
+  if (!option) return fallback.trim() || "Practice Exam";
+  if (option.examCodeLabel?.trim()) return option.examCodeLabel.trim();
+  return option.label.trim() || fallback.trim() || "Practice Exam";
 }
 
 function clampQuestionCount(raw: string | null, mode: ExamMode): number | null {
@@ -85,12 +93,6 @@ function focusModeFromQuery(qp: URLSearchParams): FocusMode | null {
   return null;
 }
 
-function formatPathwayLabel(option: PracticeTestPathwayOption | undefined, fallback: string): string {
-  if (!option) return fallback.trim() || "Practice Exam";
-  if (option.examCodeLabel?.trim()) return option.examCodeLabel.trim();
-  return option.label.trim() || fallback.trim() || "Practice Exam";
-}
-
 function inferRuntimeNursingTier(pathwayId: string): string {
   if (pathwayId.includes("-rn-")) return "rn";
   if (pathwayId.includes("-lpn-") || pathwayId.includes("-rpn-")) return "pn";
@@ -100,6 +102,7 @@ function inferRuntimeNursingTier(pathwayId: string): string {
 }
 
 export function PracticeTestsHubClient({
+  examSimulationEnabled = false,
   pathwayOptions = [],
   defaultPathwayId = null,
   pathwayDisplayName = "",
@@ -114,21 +117,19 @@ export function PracticeTestsHubClient({
 
   const fallbackPathwayId = defaultPathwayId ?? pathwayOptions[0]?.id ?? "";
 
-  // Prefetch flashcard and lesson hubs during idle (Phase 6 — hub prefetch).
   useHubPrefetch({
     pathwayId: defaultPathwayId,
     prefetch: ["questions", "flashcards", "lessons", "clinical-skills", "pharmacology", "ecg", "analytics", "readiness"],
   });
+
   const [pathwayId, setPathwayId] = useState(fallbackPathwayId);
   const [examMode, setExamMode] = useState<ExamMode>(() => (initialCatMode ? "cat" : "practice"));
   const [focusMode, setFocusMode] = useState<FocusMode>("all");
   const [questionCount, setQuestionCount] = useState(() => (initialCatMode ? CAT_COUNTS[0] : 50));
   const [selectedCanonicalIds, setSelectedCanonicalIds] = useState<CanonicalBodySystemId[]>([]);
-  const [categorySearch, setCategorySearch] = useState("");
   const [topics, setTopics] = useState<TopicBucket[]>(() => initialDiscovery?.buckets ?? []);
   const [discoveryTotal, setDiscoveryTotal] = useState<number | null>(() => initialDiscovery?.total ?? null);
   const [discoveryReady, setDiscoveryReady] = useState(() => initialDiscovery != null);
-  const [discoveryLoading, setDiscoveryLoading] = useState(false);
   const skipInitialDiscoveryFetchRef = useRef(initialDiscovery != null);
   const [creating, setCreating] = useState(false);
   const [launchingHref, setLaunchingHref] = useState<string | null>(null);
@@ -173,13 +174,19 @@ export function PracticeTestsHubClient({
     const catLaunch = qp.get("catLaunch")?.trim().toLowerCase();
     if (catLaunch === "1" || catLaunch === "true") {
       setExamMode("cat");
-      setQuestionCount((current) => (CAT_COUNTS as readonly number[]).includes(current) ? current : CAT_COUNTS[0]);
+      setQuestionCount((current) => ((CAT_COUNTS as readonly number[]).includes(current) ? current : CAT_COUNTS[0]));
     }
     const urlPathwayId = qp.get("pathwayId")?.trim();
     if (urlPathwayId && pathwayOptions.some((option) => option.id === urlPathwayId)) {
       setPathwayId(urlPathwayId);
     }
-    const incomingCount = clampQuestionCount(qp.get("count"), catLaunch === "1" || catLaunch === "true" ? "cat" : "practice");
+    if (qp.get("startMode") === "practice_exam") {
+      setExamMode("practice");
+    }
+    const incomingCount = clampQuestionCount(
+      qp.get("count"),
+      catLaunch === "1" || catLaunch === "true" ? "cat" : "practice",
+    );
     if (incomingCount != null) {
       setQuestionCount(incomingCount);
     }
@@ -214,7 +221,6 @@ export function PracticeTestsHubClient({
       setTopics([]);
       setDiscoveryTotal(null);
       setDiscoveryReady(true);
-      setDiscoveryLoading(false);
       return;
     }
 
@@ -223,7 +229,9 @@ export function PracticeTestsHubClient({
       return;
     }
 
-    setDiscoveryLoading(true);
+    setDiscoveryReady(false);
+    setTopics([]);
+    setDiscoveryTotal(null);
 
     (async () => {
       try {
@@ -235,7 +243,6 @@ export function PracticeTestsHubClient({
         if (!res.ok) {
           if (!cancelled) {
             setDiscoveryReady(true);
-            setDiscoveryLoading(false);
           }
           return;
         }
@@ -244,13 +251,9 @@ export function PracticeTestsHubClient({
           setTopics(Array.isArray(data.buckets) ? data.buckets : []);
           setDiscoveryTotal(typeof data.total === "number" ? data.total : null);
           setDiscoveryReady(true);
-          setDiscoveryLoading(false);
         }
       } catch {
-        if (!cancelled) {
-          setDiscoveryReady(true);
-          setDiscoveryLoading(false);
-        }
+        if (!cancelled) setDiscoveryReady(true);
       }
     })();
 
@@ -286,18 +289,6 @@ export function PracticeTestsHubClient({
     return `${selectedCanonicalIds.length} categories`;
   }, [selectedCanonicalIds]);
 
-  const metaBySystem = useMemo(
-    () =>
-      Object.fromEntries(
-        CANONICAL_STUDY_CATEGORIES.map((category) => {
-          const id = category.id as CanonicalBodySystemId;
-          const count = countsByCanonical[id] ?? 0;
-          return [id, count > 0 ? `${count} ${count === 1 ? "question" : "questions"} in pool` : "Syncing question pool"];
-        }),
-      ) as Partial<Record<CanonicalBodySystemId, string>>,
-    [countsByCanonical],
-  );
-
   const toggleCategory = useCallback((id: CanonicalBodySystemId) => {
     setSelectedCanonicalIds((current) => {
       if (current.length === 0) return [id];
@@ -309,6 +300,23 @@ export function PracticeTestsHubClient({
   const resetCategorySelection = useCallback(() => {
     setSelectedCanonicalIds([]);
   }, []);
+
+  const resumeSession = useCallback(() => {
+    if (!resumeHref) return;
+    setCreating(true);
+    setLaunchingHref(resumeHref);
+    setError(null);
+    setErrorCode(null);
+    setSessionExpired(false);
+    safeRouterReplace(router, resumeHref, {
+      fallbackDelayMs: 800,
+      hardFallbackDelayMs: 5000,
+      context: {
+        feature: "practice_tests_resume",
+        pathwayId,
+      },
+    });
+  }, [pathwayId, resumeHref, router]);
 
   const createTest = useCallback(async () => {
     if (creating || createInFlightRef.current) return;
@@ -327,24 +335,26 @@ export function PracticeTestsHubClient({
       if (!trimmedPathwayId) {
         throw new Error("Choose an exam pathway before starting.");
       }
+      if (examMode === "cat" && !catEligiblePathwayIds.includes(trimmedPathwayId)) {
+        throw new Error("CAT is not available for this pathway yet. Choose Practice Exam or another pathway.");
+      }
 
       const selectedCategories =
-        selectedCanonicalIds.length === 0 ||
-        selectedCanonicalIds.length >= allCanonicalIds.length
+        selectedCanonicalIds.length === 0 || selectedCanonicalIds.length >= allCanonicalIds.length
           ? []
           : selectedCanonicalIds;
       const filterLabel =
         examMode === "cat"
           ? "all"
           : focusMode === "weak"
-          ? "weak"
-          : focusMode === "missed"
-            ? "incorrect"
-            : focusMode === "unseen"
-              ? "unseen"
-              : selectedCategories.length > 0
-                ? "targeted"
-                : "all";
+            ? "weak"
+            : focusMode === "missed"
+              ? "incorrect"
+              : focusMode === "unseen"
+                ? "unseen"
+                : selectedCategories.length > 0
+                  ? "targeted"
+                  : "all";
 
       const studyLaunchPayload: StudyLaunchPayload = {
         pathwayId: trimmedPathwayId,
@@ -440,7 +450,7 @@ export function PracticeTestsHubClient({
           JSON.stringify({
             href: destination,
             pathwayId: trimmedPathwayId,
-            mode: "practice",
+            mode: examMode,
             focusMode,
             questionCount,
             categoryIds: selectedCanonicalIds,
@@ -477,6 +487,7 @@ export function PracticeTestsHubClient({
     }
   }, [
     allCanonicalIds.length,
+    catEligiblePathwayIds,
     creating,
     examMode,
     focusMode,
@@ -490,272 +501,13 @@ export function PracticeTestsHubClient({
   const showCatPoolWarning =
     errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid ||
     errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pick_failed;
-  const poolLikelyEmpty = discoveryReady && !discoveryLoading && (discoveryTotal ?? 0) === 0 && topics.length === 0;
-
+  const poolLikelyEmpty = discoveryReady && (discoveryTotal ?? 0) === 0 && topics.length === 0;
   const isLaunching = Boolean(launchingHref);
   const startDisabled = creating || isLaunching || !pathwayId.trim() || (examMode === "cat" && !catAvailableForPathway);
-  const modeLabel = examMode === "cat" ? "CAT" : "Practice Exam";
-  const setupSummary =
-    discoveryReady && discoveryTotal !== null
-      ? `${questionCount} questions · ${categorySummary} · ${discoveryTotal} available`
-      : `${questionCount} questions · ${categorySummary}`;
-  const heroEyebrow = formatPathwayLabel(selectedPathway, pathwayDisplayName);
-  const heroTitle = `${modeLabel} study`;
-  const heroSubtitle =
-    "Build a focused exam session from the same pathway and body-system setup used across NurseNest study tools.";
-  const sessionPreviewCopy =
-    examMode === "cat"
-      ? `${questionCount} adaptive questions tuned to your selected systems.`
-      : `${questionCount} practice questions with review-ready scoring and rationales.`;
-  const ctaSubline =
-    discoveryReady && discoveryTotal !== null
-      ? `${categorySummary} · ${discoveryTotal} available questions`
-      : `${categorySummary} · pathway pool syncing`;
-  const resumeSession = useCallback(() => {
-    if (!resumeHref) return;
-    setCreating(true);
-    setLaunchingHref(resumeHref);
-    setError(null);
-    setErrorCode(null);
-    setSessionExpired(false);
-    safeRouterReplace(router, resumeHref, {
-      fallbackDelayMs: 800,
-      hardFallbackDelayMs: 5000,
-      context: {
-        feature: "practice_tests_resume",
-        pathwayId,
-      },
-    });
-  }, [pathwayId, resumeHref, router]);
-  const restoreOriginalLauncherFlow = true;
-
-  if (!restoreOriginalLauncherFlow && examMode !== "cat") return (
-    <SharedStudySetupLayout
-      mode="practice-exam"
-      className="nn-practice-tests-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
-      data-nn-e2e-practice-tests-hub
-      data-nn-practice-exam-hub-convergence=""
-      data-nn-e2e-practice-single-landing
-      data-nn-learner-area="practice-tests"
-      data-nn-premium-full-platform-convergence=""
-      data-nn-premium-platform-family="exam-study"
-      data-nn-premium-platform-module="practice-tests"
-    >
-      {hubBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
-
-      <h1 className="sr-only">Practice Questions</h1>
-
-      <header
-        className="nn-flashcards-hub-workspace nn-flashcards-hub-hero relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[linear-gradient(160deg,color-mix(in_srgb,var(--semantic-panel-positive)_14%,var(--semantic-surface))_0%,var(--semantic-surface)_48%,color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--semantic-surface))_100%)] px-5 py-6 sm:px-8 sm:py-8"
-        data-nn-e2e-practice-compact-header
-      >
-        <div
-          className="pointer-events-none absolute -right-24 -top-28 h-64 w-64 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-1)_12%,transparent)] blur-3xl"
-          aria-hidden
-        />
-        <div className="relative space-y-6 sm:space-y-7">
-          <div className="space-y-4">
-            <div className="max-w-3xl">
-              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--semantic-chart-3)_85%,var(--semantic-text-secondary))]">
-                {heroEyebrow}
-              </p>
-              <h2 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.85rem]">
-                Practice Questions
-              </h2>
-              <p className="mt-2 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:text-[0.9375rem]">
-                Start a focused NCLEX-style practice run with the modern exam workspace, answer locking, and rationales after each item.
-              </p>
-            </div>
-          </div>
-
-          <div
-            className="nn-flashcards-hero-action-row border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_65%,transparent)] pt-5"
-            data-nn-e2e-practice-exam-band
-          >
-            <p
-              className="max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]"
-              data-nn-e2e-practice-session-preview
-            >
-              {questionCount} NCLEX-style questions · immediate rationales · {heroEyebrow}
-            </p>
-            <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-              <div className="min-w-0 flex-1">
-                <button
-                  type="button"
-                  onClick={createTest}
-                  disabled={startDisabled}
-                  className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-3.5 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
-                  data-nn-qa-practice-hub-start-test
-                >
-                  {isLaunching ? (
-                    <>
-                      <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                      Opening…
-                    </>
-                  ) : creating ? (
-                    <>
-                      <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                      Starting…
-                    </>
-                  ) : (
-                    <>
-                      <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
-                      Start
-                    </>
-                  )}
-                </button>
-                <p
-                  className="mt-2 text-center text-xs text-[var(--semantic-text-muted)] sm:text-left"
-                  data-nn-e2e-practice-cta-subline
-                >
-                  {ctaSubline}
-                </p>
-              </div>
-              <div className="nn-flashcards-deck-match-inline flex items-center gap-3 text-xs text-[var(--semantic-text-secondary)] lg:shrink-0">
-                <span>
-                  <span className="font-semibold text-[var(--semantic-text-primary)]">Question pool </span>
-                  <span className="tabular-nums text-base font-bold text-[var(--semantic-text-primary)]">
-                    {discoveryTotal != null ? discoveryTotal : "—"}
-                  </span>
-                </span>
-                <span className="hidden h-4 w-px bg-[var(--semantic-border-soft)] sm:inline" aria-hidden />
-                <span className="hidden sm:inline">{setupSummary}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {error ? (
-        <div
-          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)]"
-          role="alert"
-        >
-          {error}
-        </div>
-      ) : null}
-    </SharedStudySetupLayout>
-  );
-
-  if (!restoreOriginalLauncherFlow && examMode === "cat") {
-    return (
-      <SharedStudySetupLayout
-        mode="cat"
-        className="nn-practice-tests-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
-        data-nn-e2e-practice-tests-hub
-        data-nn-practice-exam-hub-convergence=""
-        data-nn-e2e-cat-simple-landing
-        data-nn-learner-area="practice-tests"
-        data-nn-premium-full-platform-convergence=""
-        data-nn-premium-platform-family="exam-study"
-        data-nn-premium-platform-module="practice-tests"
-      >
-        {hubBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
-
-        <h1 className="sr-only">CAT Exam</h1>
-
-        <header
-          className="nn-flashcards-hub-workspace nn-flashcards-hub-hero relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[linear-gradient(160deg,color-mix(in_srgb,var(--semantic-panel-positive)_14%,var(--semantic-surface))_0%,var(--semantic-surface)_48%,color-mix(in_srgb,var(--semantic-panel-lavender)_12%,var(--semantic-surface))_100%)] px-5 py-6 sm:px-8 sm:py-8"
-          data-nn-e2e-practice-compact-header
-        >
-          <div
-            className="pointer-events-none absolute -right-24 -top-28 h-64 w-64 rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_12%,transparent)] blur-3xl"
-            aria-hidden
-          />
-          <div className="relative space-y-6 sm:space-y-7">
-            <div className="max-w-3xl">
-              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--semantic-brand)_82%,var(--semantic-text-secondary))]">
-                {heroEyebrow}
-              </p>
-              <h2 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.85rem]">
-                CAT Exam
-              </h2>
-              <p className="mt-2 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:text-[0.9375rem]">
-                Start an adaptive exam session in the same focused NurseNest study workspace.
-              </p>
-            </div>
-
-            <div
-              className="nn-flashcards-hero-action-row border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_65%,transparent)] pt-5"
-              data-nn-e2e-practice-exam-band
-            >
-              <p
-                className="max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]"
-                data-nn-e2e-practice-session-preview
-              >
-                {questionCount} adaptive questions · {heroEyebrow}
-              </p>
-              <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                <div className="min-w-0 flex-1">
-                  <button
-                    type="button"
-                    onClick={createTest}
-                    disabled={startDisabled}
-                    className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-3.5 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
-                    data-nn-e2e-cat-start-exam
-                  >
-                    {isLaunching ? (
-                      <>
-                        <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                        Opening…
-                      </>
-                    ) : creating ? (
-                      <>
-                        <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                        Starting…
-                      </>
-                    ) : (
-                      <>
-                        <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
-                        Start
-                      </>
-                    )}
-                  </button>
-                  <p
-                    className="mt-2 text-center text-xs text-[var(--semantic-text-muted)] sm:text-left"
-                    data-nn-e2e-practice-cta-subline
-                  >
-                    {ctaSubline}
-                  </p>
-                  {!catAvailableForPathway ? (
-                    <p className="mt-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
-                      CAT is not available for this pathway yet.
-                    </p>
-                  ) : null}
-                </div>
-                <div className="nn-flashcards-deck-match-inline flex items-center gap-3 text-xs text-[var(--semantic-text-secondary)] lg:shrink-0">
-                  <span>
-                    <span className="font-semibold text-[var(--semantic-text-primary)]">Question pool </span>
-                    <span className="tabular-nums text-base font-bold text-[var(--semantic-text-primary)]">
-                      {discoveryTotal != null ? discoveryTotal : "—"}
-                    </span>
-                  </span>
-                  <span className="hidden h-4 w-px bg-[var(--semantic-border-soft)] sm:inline" aria-hidden />
-                  <span className="hidden sm:inline">{setupSummary}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {error ? (
-          <div
-            className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)]"
-            role="alert"
-          >
-            {showCatPoolWarning
-              ? "This CAT pool is not ready yet. Try again shortly."
-              : error}
-          </div>
-        ) : null}
-      </SharedStudySetupLayout>
-    );
-  }
 
   return (
-    <SharedStudySetupLayout
-      mode={examMode === "cat" ? "cat" : "practice-exam"}
-      className="nn-practice-tests-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
+    <LearnerStudyPageShell
+      className="nn-practice-tests-hub-premium py-4 sm:py-6"
       data-nn-e2e-practice-tests-hub
       data-nn-practice-exam-hub-convergence=""
       data-nn-learner-area="practice-tests"
@@ -764,133 +516,116 @@ export function PracticeTestsHubClient({
       data-nn-premium-platform-module="practice-tests"
     >
       {hubBootstrapSource === "secondary" ? (
-        <div data-nn-practice-hub-bootstrap-source="secondary">
+        <div className="mx-auto max-w-4xl" data-nn-practice-hub-bootstrap-source="secondary">
           <LearnerStudyLiveSyncBanner />
         </div>
       ) : null}
 
-      <h1 className="sr-only">Practice Exam</h1>
-
-      <header
-        className="nn-flashcards-hub-workspace nn-flashcards-hub-hero relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[linear-gradient(160deg,color-mix(in_srgb,var(--semantic-panel-positive)_14%,var(--semantic-surface))_0%,var(--semantic-surface)_48%,color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--semantic-surface))_100%)] px-5 py-6 sm:px-8 sm:py-8"
-        data-nn-e2e-practice-compact-header
-      >
-        <div
-          className="pointer-events-none absolute -right-24 -top-28 h-64 w-64 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-1)_12%,transparent)] blur-3xl"
-          aria-hidden
-        />
-        <div className="relative space-y-6 sm:space-y-7">
-          <div className="space-y-4">
-            <div className="max-w-3xl">
-              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--semantic-chart-3)_85%,var(--semantic-text-secondary))]">
-                {heroEyebrow}
-              </p>
-              <h2 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.85rem]">
-                {heroTitle}
-              </h2>
-              <p className="mt-2 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:text-[0.9375rem]">
-                {heroSubtitle}
-              </p>
-            </div>
-          </div>
-
-          {resumeHref ? (
-            <div
-              className="nn-flashcards-resume-spotlight flex flex-col gap-4 border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] pt-5 sm:flex-row sm:items-center sm:justify-between"
-              data-nn-e2e-practice-resume
-            >
-              <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--semantic-info)]">
-                  Active session
-                </p>
-                <p className="mt-1 text-lg font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl">
-                  Continue where you left off
-                </p>
-                <p className="mt-1.5 text-sm text-[var(--semantic-text-secondary)]">
-                  {modeLabel}
-                  {" · "}
-                  {questionCount} question{questionCount === 1 ? "" : "s"}
-                  {selectedCanonicalIds.length > 0
-                    ? ` · ${selectedCanonicalIds.length} system${selectedCanonicalIds.length > 1 ? "s" : ""}`
-                    : ""}
-                </p>
-              </div>
-              <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[12rem]">
-                <button
-                  type="button"
-                  onClick={resumeSession}
-                  data-nn-e2e-practice-resume-session
-                  className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-info)_88%,var(--semantic-text-primary))] px-8 text-sm font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-info)_24%,transparent)] transition hover:brightness-[1.03] sm:w-auto"
-                >
-                  Resume session
-                </button>
-              </div>
-            </div>
-          ) : null}
+      <header className="mx-auto max-w-4xl text-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-[rgba(15,23,42,0.06)] bg-white/85 text-[var(--semantic-brand)] shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
+          <ClipboardList className="h-6 w-6" aria-hidden strokeWidth={2} />
         </div>
+        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">
+          {formatPathwayLabel(selectedPathway, pathwayDisplayName)}
+        </p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-normal text-[var(--semantic-text-primary)] sm:text-4xl">
+          Practice Exam
+        </h1>
+        <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[var(--semantic-text-secondary)] sm:text-base">
+          Select your categories, choose the exam type, and start a focused session.
+        </p>
       </header>
 
-      <SharedStudySetupSurface
-        className="nn-flashcards-deck-library-surface"
-        aria-labelledby="nn-practice-categories-heading"
-        data-nn-e2e-practice-exams-builder
-        data-nn-e2e-practice-canonical-grid
-      >
-        {!discoveryReady ? (
-          <div className="space-y-4" aria-label="Loading categories" aria-busy="true">
-            <div className="h-7 w-64 animate-pulse rounded-lg bg-[rgba(15,23,42,0.06)]" />
-            <div className="h-10 w-full animate-pulse rounded-xl bg-[rgba(15,23,42,0.045)]" />
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-              {Array.from({ length: 8 }).map((_, index) => (
-                <div key={index} className="min-h-[122px] animate-pulse rounded-2xl bg-[rgba(15,23,42,0.045)]" />
-              ))}
+      {resumeHref ? (
+        <div
+          className={`${SURFACE_CLASS} mx-auto max-w-5xl p-5 sm:p-6`}
+          data-nn-e2e-practice-resume
+        >
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--semantic-info)]">
+                Active session
+              </p>
+              <p className="mt-1 text-lg font-semibold text-[var(--semantic-text-primary)]">
+                Continue where you left off
+              </p>
+              <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
+                {examMode === "cat" ? "CAT" : "Practice Exam"} · {questionCount} questions
+              </p>
             </div>
+            <button
+              type="button"
+              onClick={resumeSession}
+              data-nn-e2e-practice-resume-session
+              className="inline-flex h-12 min-w-[160px] items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-info)_88%,var(--semantic-text-primary))] px-7 text-sm font-semibold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-info)_24%,transparent)] transition hover:brightness-[1.03]"
+            >
+              Resume session
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      <section className={`${SURFACE_CLASS} mx-auto max-w-5xl p-5 sm:p-6`} data-nn-e2e-practice-exams-builder>
+        <div className="flex flex-col gap-4 border-b border-[rgba(15,23,42,0.06)] pb-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-[var(--semantic-text-primary)]">Categories</h2>
+            <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
+              {categorySummary}
+              {discoveryReady && discoveryTotal !== null ? ` · ${discoveryTotal} available questions` : ""}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={resetCategorySelection}
+            className="inline-flex h-10 items-center justify-center rounded-full border border-[rgba(15,23,42,0.08)] bg-white/80 px-4 text-sm font-medium text-[var(--semantic-text-secondary)] transition hover:bg-white"
+          >
+            All Categories
+          </button>
+        </div>
+
+        {!discoveryReady ? (
+          <div className="mt-5 grid gap-3 sm:grid-cols-3 lg:grid-cols-4" aria-label="Loading categories">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div key={index} className="min-h-[104px] animate-pulse rounded-[1.25rem] bg-[rgba(15,23,42,0.045)]" />
+            ))}
           </div>
         ) : (
-          <div
-            className={
-              discoveryLoading
-                ? "pointer-events-none opacity-50 transition-opacity duration-200"
-                : "transition-opacity duration-200"
-            }
-            aria-busy={discoveryLoading}
-          >
-            <LearnerCategorySelector
-              countsBySystem={countsByCanonical}
-              selectedCanonicalIds={selectedCanonicalIds}
-              onToggleCanonical={toggleCategory}
-              search={categorySearch}
-              onSearchChange={setCategorySearch}
-              heading="Select categories"
-              headingId="nn-practice-categories-heading"
-              searchPlaceholder="Search systems…"
-              intro="Systems adapt to your performance — weak areas, suggested focus, and question depth appear on each tile."
-              metaBySystem={metaBySystem}
-            />
-
-            <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] pt-4">
-              <button
-                type="button"
-                onClick={resetCategorySelection}
-                data-active={selectedCanonicalIds.length === 0}
-                aria-pressed={selectedCanonicalIds.length === 0}
-                className="nn-flashcards-all-systems-btn inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-surface))] sm:min-h-9 sm:text-xs"
-              >
-                All systems
-                {selectedCanonicalIds.length === 0 ? (
-                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] text-[10px]" aria-hidden>
-                    ✓
+          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4" data-nn-e2e-practice-canonical-grid>
+            {CANONICAL_STUDY_CATEGORIES.map((category) => {
+              const id = category.id as CanonicalBodySystemId;
+              const active = selectedCanonicalIds.length === 0 || selectedCanonicalIds.includes(id);
+              const count = countsByCanonical[id] ?? 0;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => toggleCategory(id)}
+                  className={`${CATEGORY_CARD_CLASS} ${
+                    active
+                      ? "border-[color-mix(in_srgb,var(--semantic-brand)_28%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,white)] shadow-[0_12px_30px_rgba(15,23,42,0.07)]"
+                      : "border-[rgba(15,23,42,0.06)] bg-white/80 hover:bg-white"
+                  }`}
+                >
+                  <span
+                    className={`absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full border ${
+                      active
+                        ? "border-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] bg-[var(--semantic-brand)] text-white"
+                        : "border-[rgba(15,23,42,0.12)] bg-white"
+                    }`}
+                    aria-hidden
+                  >
+                    {active ? <Check className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
                   </span>
-                ) : null}
-              </button>
-              {selectedCanonicalIds.length > 0 ? (
-                <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_40%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)]">
-                  {selectedCanonicalIds.length} system{selectedCanonicalIds.length === 1 ? "" : "s"} selected
-                </span>
-              ) : (
-                <span className="text-xs text-[var(--semantic-text-muted)]">Tap systems below to focus your exam</span>
-              )}
-            </div>
+                  <span className="max-w-[11rem] text-sm font-semibold leading-5 text-[var(--semantic-text-primary)]">
+                    {category.label}
+                  </span>
+                  <span className="text-xs font-medium text-[var(--semantic-text-secondary)]">
+                    {count > 0 ? `${count} questions` : "Included"}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         )}
 
@@ -899,29 +634,37 @@ export function PracticeTestsHubClient({
             This pathway is still syncing question discovery. You can start an exam, and the server will validate the available pool.
           </div>
         ) : null}
-      </SharedStudySetupSurface>
+      </section>
 
-      <SharedStudySetupSurface
-        className="nn-premium-practice-hub-builder"
-        aria-labelledby="nn-practice-session-heading"
+      <section
+        className={`${SURFACE_CLASS} mx-auto max-w-5xl p-5 sm:p-6`}
         data-nn-e2e-practice-setup-panel
       >
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-          <h2
-            id="nn-practice-session-heading"
-            className="text-lg font-semibold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl"
-          >
-            Configure session
-          </h2>
-          <span className="text-xs font-medium text-[var(--semantic-text-muted)]">{setupSummary}</span>
-        </div>
-        <div className="space-y-5">
-          <div className="grid gap-4 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)]">
-            <LearnerFilterBar
-              title="Exam mode"
-              className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5"
-            >
-              <div className="flex flex-wrap gap-2">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(220px,280px)] lg:items-start">
+          <div className="space-y-5">
+            {pathwayOptions.length > 1 ? (
+              <div>
+                <label htmlFor="practice-exam-pathway" className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+                  Exam Pathway
+                </label>
+                <select
+                  id="practice-exam-pathway"
+                  value={pathwayId}
+                  onChange={(event) => setPathwayId(event.target.value)}
+                  className="mt-2 h-12 w-full rounded-2xl border border-[rgba(15,23,42,0.08)] bg-white px-4 text-sm font-medium text-[var(--semantic-text-primary)] shadow-sm outline-none focus:border-[color-mix(in_srgb,var(--semantic-brand)_40%,rgba(15,23,42,0.08))]"
+                >
+                  {pathwayOptions.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
+
+            <div>
+              <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Exam Mode</p>
+              <div className="mt-2 grid gap-2 sm:grid-cols-2">
                 {(["practice", "cat"] as const).map((mode) => {
                   const active = examMode === mode;
                   return (
@@ -930,151 +673,111 @@ export function PracticeTestsHubClient({
                       type="button"
                       onClick={() => setExamMode(mode)}
                       disabled={mode === "cat" && catEligibleOptions.length === 0}
-                      data-active={active}
-                      aria-pressed={active}
-                      className="nn-flashcards-study-chip inline-flex min-h-10 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-medium text-[var(--semantic-text-secondary)] disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9"
+                      className={`flex h-12 items-center justify-center rounded-full border px-5 text-sm font-semibold transition ${
+                        active
+                          ? "border-[color-mix(in_srgb,var(--semantic-brand)_32%,rgba(15,23,42,0.06))] bg-[var(--semantic-brand)] text-white shadow-[0_12px_28px_rgba(15,23,42,0.12)]"
+                          : "border-[rgba(15,23,42,0.08)] bg-white/80 text-[var(--semantic-text-primary)] hover:bg-white disabled:cursor-not-allowed disabled:opacity-45"
+                      }`}
                     >
-                      {mode === "cat" ? "CAT Adaptive" : "Practice Exam"}
+                      {mode === "cat" ? "CAT" : "Practice Exam"}
                     </button>
                   );
                 })}
               </div>
-            </LearnerFilterBar>
+            </div>
 
-            <LearnerFilterBar
-              title="Focus"
-              className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5"
-            >
-              <div className="flex flex-wrap gap-2">
-                {(
-                  [
-                    ["all", "All questions"],
-                    ["weak", "Weak areas"],
-                    ["missed", "Incorrect"],
-                    ...(examMode === "practice" ? ([["unseen", "Unstudied"]] as const) : []),
-                  ] as const
-                ).map(([value, label]) => {
+            <div>
+              <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Study Focus</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {[
+                  ["all", "All Questions"],
+                  ["weak", "Weak Areas"],
+                  ["missed", "Incorrect"],
+                  ...(examMode === "practice" ? ([["unseen", "Unstudied"]] as const) : []),
+                ].map(([value, label]) => {
                   const active = focusMode === value;
                   return (
                     <button
                       key={value}
                       type="button"
                       onClick={() => setFocusMode(value as FocusMode)}
-                      data-active={active}
-                      aria-pressed={active}
-                      className="nn-flashcards-study-chip inline-flex min-h-10 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-medium text-[var(--semantic-text-secondary)] sm:min-h-9"
+                      className={`h-10 rounded-full border px-4 text-sm font-medium transition ${
+                        active
+                          ? "border-[color-mix(in_srgb,var(--semantic-brand)_32%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,white)] text-[var(--semantic-text-primary)]"
+                          : "border-[rgba(15,23,42,0.08)] bg-white/80 text-[var(--semantic-text-secondary)] hover:bg-white"
+                      }`}
                     >
                       {label}
                     </button>
                   );
                 })}
               </div>
-            </LearnerFilterBar>
+            </div>
           </div>
 
           <div
-            className="space-y-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5"
+            className="rounded-[1.25rem] border border-[rgba(15,23,42,0.06)] bg-white/70 p-4"
             data-nn-e2e-practice-session-size
           >
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Question count</p>
-              <span className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)]">
-                {questionCount} questions
-              </span>
+            <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Question Count</p>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {availableCounts.map((count) => (
+                <button
+                  key={count}
+                  type="button"
+                  onClick={() => setQuestionCount(count)}
+                  className={`h-11 rounded-full border text-sm font-semibold transition ${
+                    questionCount === count
+                      ? "border-[color-mix(in_srgb,var(--semantic-brand)_32%,rgba(15,23,42,0.06))] bg-[var(--semantic-brand)] text-white"
+                      : "border-[rgba(15,23,42,0.08)] bg-white text-[var(--semantic-text-primary)] hover:bg-[rgba(255,255,255,0.92)]"
+                  }`}
+                >
+                  {count}
+                </button>
+              ))}
             </div>
-            <div
-              className="nn-flashcards-session-segmented flex flex-col gap-2 sm:flex-row sm:flex-wrap"
-              role="group"
-              aria-label="Question count"
-            >
-              {availableCounts.map((count) => {
-                const active = questionCount === count;
-                return (
-                  <button
-                    key={count}
-                    type="button"
-                    data-active={active}
-                    aria-pressed={active}
-                    onClick={() => setQuestionCount(count)}
-                    className="nn-flashcards-session-segment min-h-10 flex-1 rounded-xl border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-w-[4.5rem] sm:flex-none"
-                  >
-                    {count}
-                  </button>
-                );
-              })}
-            </div>
-            <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--semantic-text-muted)]">
-              <label className="font-medium" htmlFor="practice-exam-count">
-                Custom
-              </label>
-              <input
-                id="practice-exam-count"
-                data-nn-e2e-question-count
-                type="number"
-                min={examMode === "cat" ? CAT_COUNT_MIN : PRACTICE_COUNT_MIN}
-                max={examMode === "cat" ? CAT_COUNT_MAX : PRACTICE_COUNT_MAX}
-                value={questionCount}
-                onChange={(event) =>
-                  setQuestionCount(
-                    Math.max(
-                      examMode === "cat" ? CAT_COUNT_MIN : PRACTICE_COUNT_MIN,
-                      Math.min(examMode === "cat" ? CAT_COUNT_MAX : PRACTICE_COUNT_MAX, Number(event.target.value) || 50),
+            <label htmlFor="practice-exam-count" className="sr-only">
+              Question count
+            </label>
+            <input
+              id="practice-exam-count"
+              data-nn-e2e-question-count
+              type="number"
+              min={examMode === "cat" ? CAT_COUNT_MIN : PRACTICE_COUNT_MIN}
+              max={examMode === "cat" ? CAT_COUNT_MAX : PRACTICE_COUNT_MAX}
+              value={questionCount}
+              onChange={(event) =>
+                setQuestionCount(
+                  Math.max(
+                    examMode === "cat" ? CAT_COUNT_MIN : PRACTICE_COUNT_MIN,
+                    Math.min(
+                      examMode === "cat" ? CAT_COUNT_MAX : PRACTICE_COUNT_MAX,
+                      Number(event.target.value) || 50,
                     ),
-                  )
-                }
-                className="nn-flashcards-custom-limit-input h-9 w-24 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm font-semibold text-[var(--semantic-text-primary)]"
-              />
-              <span>
-                {examMode === "cat" ? `${CAT_COUNT_MIN}-${CAT_COUNT_MAX}` : `${PRACTICE_COUNT_MIN}-${PRACTICE_COUNT_MAX}`} allowed
-              </span>
-            </div>
-          </div>
-          {examMode === "cat" && !catAvailableForPathway ? (
-            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,white)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
-              CAT requires an eligible pathway. Choose an eligible pathway or switch to Practice Exam.
-            </div>
-          ) : null}
-          <div className="flex flex-col gap-3 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] pt-5 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-[var(--semantic-text-secondary)]">{setupSummary}</p>
-            <button
-              type="button"
-              onClick={createTest}
-              disabled={startDisabled}
-              className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 text-sm font-bold text-white shadow-[0_10px_22px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
-              data-nn-qa-practice-hub-start-test
-            >
-              {isLaunching ? (
-                <>
-                  <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                  Opening {modeLabel}…
-                </>
-              ) : creating ? (
-                <>
-                  <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                  Starting…
-                </>
-              ) : (
-                <>
-                  <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
-                  Start {modeLabel}
-                </>
-              )}
-            </button>
+                  ),
+                )
+              }
+              className="mt-3 h-11 w-full rounded-full border border-[rgba(15,23,42,0.08)] bg-white px-4 text-center text-sm font-semibold text-[var(--semantic-text-primary)]"
+            />
+            <p className="mt-3 text-center text-xs text-[var(--semantic-text-secondary)]">
+              {questionCount} questions · {categorySummary}
+            </p>
           </div>
         </div>
-      </SharedStudySetupSurface>
 
-      {/* Error display */}
+        {examMode === "cat" && !catAvailableForPathway ? (
+          <div className="mt-5 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,white)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+            CAT requires an eligible pathway. Choose an eligible pathway or switch to Practice Exam.
+          </div>
+        ) : null}
+      </section>
+
       {error ? (
         <div
-          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)]"
+          className="mx-auto max-w-3xl rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-danger)_28%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,white)] px-5 py-4 text-center text-sm text-[var(--semantic-text-primary)]"
           role="alert"
         >
-          <p>
-            {showCatPoolWarning
-              ? "This CAT pool is not ready for that setup yet. Try Practice Exam or broaden the categories."
-              : error}
-          </p>
+          <p>{showCatPoolWarning ? "This CAT pool is not ready for that setup yet. Try Practice Exam or broaden the categories." : error}</p>
           {sessionExpired ? (
             <button
               type="button"
@@ -1087,37 +790,32 @@ export function PracticeTestsHubClient({
         </div>
       ) : null}
 
-      {pathwayOptions.length > 1 ? (
-        <details
-          className="nn-flashcards-recovery-filters nn-flashcards-collapsed-panel rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] bg-transparent px-1 py-1"
-          data-nn-e2e-practice-advanced-options
+      <div className="mx-auto flex max-w-5xl justify-center pb-3">
+        <button
+          type="button"
+          onClick={createTest}
+          disabled={startDisabled}
+          className="inline-flex h-12 min-w-[160px] items-center justify-center whitespace-nowrap rounded-full bg-[var(--semantic-brand)] px-7 text-center text-sm font-semibold text-white shadow-[0_14px_34px_rgba(15,23,42,0.16)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55"
+          data-nn-qa-practice-hub-start-test
         >
-          <summary className="cursor-pointer list-none rounded-lg px-3 py-2 text-sm font-medium text-[var(--semantic-text-muted)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,transparent)]">
-            Advanced options
-          </summary>
-          <div className="space-y-5 border-t border-[var(--semantic-border-soft)] px-3 pb-4 pt-4">
-            {pathwayOptions.length > 1 ? (
-              <div>
-                <label htmlFor="practice-exam-pathway" className="text-sm font-semibold text-[var(--semantic-text-primary)]">
-                  Exam pathway
-                </label>
-                <select
-                  id="practice-exam-pathway"
-                  value={pathwayId}
-                  onChange={(event) => setPathwayId(event.target.value)}
-                  className="mt-2 h-12 w-full rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-medium text-[var(--semantic-text-primary)] shadow-sm outline-none focus:border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))]"
-                >
-                  {pathwayOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ) : null}
-          </div>
-        </details>
-      ) : null}
-    </SharedStudySetupLayout>
+          {isLaunching ? (
+            <>
+              <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+              Opening…
+            </>
+          ) : creating ? (
+            <>
+              <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+              Starting
+            </>
+          ) : (
+            <>
+              <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
+              Start Exam
+            </>
+          )}
+        </button>
+      </div>
+    </LearnerStudyPageShell>
   );
 }

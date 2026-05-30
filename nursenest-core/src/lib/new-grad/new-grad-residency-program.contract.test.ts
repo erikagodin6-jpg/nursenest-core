@@ -6,15 +6,20 @@ import { fileURLToPath } from "node:url";
 
 import {
   NEW_GRAD_COMMERCIAL_PACKAGES,
+  NEW_GRAD_ADAPTIVE_COMPETENCY_PROFILE,
   NEW_GRAD_COMPETENCY_DOMAINS,
+  NEW_GRAD_CONTENT_LAUNCH_TARGETS,
   NEW_GRAD_READINESS_DIMENSIONS,
+  NEW_GRAD_RESIDENCY_PILLARS,
   NEW_GRAD_RESIDENCY_TRACKS,
   NEW_GRAD_ROADMAP_MILESTONES,
   NEW_GRAD_SHIFT_READINESS_MODULES,
   NEW_GRAD_SIMULATION_CASES,
   NEW_GRAD_SURVIVAL_GUIDES,
+  buildNewGradDashboardMetrics,
   calculateNewGradCompetencyCompletion,
   calculateNewGradSpecialtyReadinessScore,
+  listNewGradAdaptiveRemediationActivities,
   listNewGradResidencyTracksForPackage,
   listNewGradResidencyTracksMissingWorkAreaHubs,
 } from "./new-grad-residency-program";
@@ -26,6 +31,28 @@ const landingSource = readFileSync(
 );
 
 describe("New Grad residency program foundation", () => {
+  it("defines the six required residency pillars with real transition-to-practice activities", () => {
+    assert.deepEqual(
+      NEW_GRAD_RESIDENCY_PILLARS.map((pillar) => pillar.id),
+      [
+        "surviving-first-year",
+        "high-risk-clinical-scenarios",
+        "medication-confidence",
+        "clinical-skills-mastery",
+        "telemetry-ecg-essentials",
+        "simulation-center",
+      ],
+    );
+    for (const pillar of NEW_GRAD_RESIDENCY_PILLARS) {
+      assert.ok(pillar.positioning.length > 50);
+      assert.ok(pillar.topics.length >= 8);
+      assert.ok(pillar.requiredActivities.length >= 4);
+    }
+    assert.ok(NEW_GRAD_RESIDENCY_PILLARS.find((pillar) => pillar.id === "medication-confidence")?.topics.includes("Insulin"));
+    assert.ok(NEW_GRAD_RESIDENCY_PILLARS.find((pillar) => pillar.id === "telemetry-ecg-essentials")?.topics.includes("STEMI recognition"));
+    assert.ok(NEW_GRAD_RESIDENCY_PILLARS.find((pillar) => pillar.id === "simulation-center")?.topics.includes("End-of-shift handoff"));
+  });
+
   it("defines every requested specialty transition track with a matching work-area hub slug", () => {
     const ids = NEW_GRAD_RESIDENCY_TRACKS.map((track) => track.id);
     assert.deepEqual(ids, [
@@ -48,6 +75,22 @@ describe("New Grad residency program foundation", () => {
       "oncology",
     ]);
     assert.deepEqual(listNewGradResidencyTracksMissingWorkAreaHubs(), []);
+  });
+
+  it("locks the Phase 1 launch content minimums without lowering the product target", () => {
+    const minimums = Object.fromEntries(NEW_GRAD_CONTENT_LAUNCH_TARGETS.map((target) => [target.id, target.minimum]));
+    assert.equal(minimums.lessons, 500);
+    assert.equal(minimums.flashcards, 3000);
+    assert.equal(minimums.questions, 5000);
+    assert.equal(minimums["clinical-skills"], 100);
+    assert.equal(minimums.simulations, 100);
+    assert.equal(minimums["medication-lessons"], 250);
+    assert.equal(minimums["ecg-lessons"], 100);
+    assert.equal(minimums["telemetry-cases"], 250);
+    assert.equal(minimums["new-grad-medication-questions"], 500);
+    for (const target of NEW_GRAD_CONTENT_LAUNCH_TARGETS) {
+      assert.ok(target.rationale.length > 50);
+    }
   });
 
   it("locks the 30/60/90/180/365-day roadmap windows", () => {
@@ -139,6 +182,43 @@ describe("New Grad residency program foundation", () => {
       }),
       64,
     );
+    assert.deepEqual(
+      buildNewGradDashboardMetrics({
+        "clinical-confidence": 80,
+        "skill-readiness": 70,
+        "medication-readiness": 60,
+        "telemetry-readiness": 50,
+        "simulation-readiness": 40,
+        "orientation-progress": 90,
+      }).map((metric) => metric.label),
+      [
+        "Clinical Confidence",
+        "Skill Readiness",
+        "Medication Readiness",
+        "Telemetry Readiness",
+        "Simulation Readiness",
+        "Orientation Progress",
+        "Competency Heat Map",
+      ],
+    );
+  });
+
+  it("defines a dedicated adaptive competency profile that routes weak areas to ecosystem activities", () => {
+    assert.deepEqual(
+      NEW_GRAD_ADAPTIVE_COMPETENCY_PROFILE.map((profile) => profile.id),
+      ["clinical-judgment", "pharmacology", "prioritization", "delegation", "communication", "documentation", "ecg", "skills"],
+    );
+    assert.deepEqual(listNewGradAdaptiveRemediationActivities("pharmacology"), [
+      "pharmacology",
+      "flashcards",
+      "questions",
+      "dosage-calculations",
+    ]);
+    assert.ok(listNewGradAdaptiveRemediationActivities("ecg").includes("rhythm-drills"));
+    for (const profile of NEW_GRAD_ADAPTIVE_COMPETENCY_PROFILE) {
+      assert.ok(profile.weakAreaEvidence.length >= 3);
+      assert.ok(profile.remediationActivities.length >= 3);
+    }
   });
 
   it("maps specialty tracks to commercial packages without replacing the existing NEW_GRAD tier", () => {
@@ -166,6 +246,8 @@ describe("New Grad residency program foundation", () => {
   it("surfaces the residency program foundation on the New Grad marketing landing", () => {
     assert.ok(landingSource.includes("data-nn-new-grad-residency-program"));
     assert.ok(landingSource.includes("NEW_GRAD_ROADMAP_MILESTONES"));
+    assert.ok(landingSource.includes("NEW_GRAD_RESIDENCY_PILLARS"));
+    assert.ok(landingSource.includes("NEW_GRAD_CONTENT_LAUNCH_TARGETS"));
     assert.ok(landingSource.includes("NEW_GRAD_RESIDENCY_TRACKS"));
     assert.ok(landingSource.includes("NEW_GRAD_COMPETENCY_DOMAINS"));
     assert.ok(landingSource.includes("NEW_GRAD_SHIFT_READINESS_MODULES"));
