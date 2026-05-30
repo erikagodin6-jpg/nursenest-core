@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { trackSimulationEventClient } from "@/lib/physiology-monitor/simulation-conversion-events";
 import { MonitorWorkstation } from "@/components/physiology-monitor/monitor-workstation";
 import { MonitorSessionReport } from "@/components/physiology-monitor/monitor-session-report";
 import { MonitorEngine } from "@/lib/physiology-monitor/monitor-engine";
@@ -143,7 +144,8 @@ export function PhysiologyMonitorClient() {
 
   const handleStart = useCallback(() => {
     setPhase("session");
-  }, []);
+    trackSimulationEventClient("simulation_started", { conditionKey: condition, mode });
+  }, [condition, mode]);
 
   const handleFinishSession = useCallback(() => {
     if (!engineRef.current) return;
@@ -160,6 +162,12 @@ export function PhysiologyMonitorClient() {
     });
     setReport(built);
     setPhase("report");
+    trackSimulationEventClient("simulation_completed", {
+      conditionKey: condition,
+      compositeScore: built.scores.composite,
+      harmColor: built.harmIndex.color,
+      mode,
+    });
 
     // Persist report to API (fire-and-forget)
     void fetch("/api/learner/monitor-session-reports", {

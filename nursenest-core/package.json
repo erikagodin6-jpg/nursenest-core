@@ -200,6 +200,8 @@
     "visual-qa:baseline": "node scripts/visual-qa-copy-baseline.mjs",
     "ui-preview:capture": "node scripts/capture-ui-previews.mjs",
     "capture:marketing-screenshots": "node scripts/capture-marketing-screenshots.mjs",
+    "capture:simulation-screenshots": "node scripts/qa/wait-for-app-ready.mjs && node scripts/capture-simulation-marketing-screenshots.mjs",
+    "capture:flashcard-layout-screenshots": "node scripts/qa/wait-for-app-ready.mjs && node scripts/capture-flashcard-layout-screenshots.mjs",
     "qa:predeploy": "npm run qa:release-gate",
     "deploy:validate": "npx tsx scripts/deploy-validate.mts",
     "qa:predeploy:low-memory": "npm run typecheck:critical && npm run test:unit:flashcards && npm run test:unit:practice && npm run test:unit:stripe && npm run test:unit:onboarding && npm run qa:release-gate:list",

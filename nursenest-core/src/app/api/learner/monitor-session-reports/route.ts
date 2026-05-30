@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { buildStudyPlanItemsFromSimulation, buildSimulationRemediationRows } from "@/lib/physiology-monitor/simulation-study-plan-bridge";
 
 export const dynamic = "force-dynamic";
 
@@ -83,6 +84,42 @@ export async function POST(req: Request) {
         compositeScore,
         harmColor,
       });
+
+      // Write simulation-driven remediation items to UserRemediationQueue (fire-and-forget)
+      void (async () => {
+        try {
+          const studyItems = buildStudyPlanItemsFromSimulation({
+            conditionKey: conditionKey!,
+            compositeScore: compositeScore ?? 0,
+            clinicalJudgmentScore: clinicalJudgmentScore ?? 0,
+            harmColor: (harmColor as "green" | "yellow" | "red") ?? "green",
+            escalationTimely: false, // default — full report would have this
+            missedOpportunityCount: 0,
+            sessionId: run.id,
+            mode: mode ?? "general",
+          });
+          const rows = buildSimulationRemediationRows(gate.userId, mode ?? "general", studyItems);
+          for (const row of rows.slice(0, 3)) {
+            await prisma.userRemediationQueue.upsert({
+              where: {
+                userId_pathwayKey_topicKey_bodySystemKey: {
+                  userId: row.userId,
+                  pathwayKey: row.pathwayKey,
+                  topicKey: row.topicKey,
+                  bodySystemKey: row.bodySystemKey,
+                },
+              },
+              create: { ...row, mistakeCount: 1 },
+              update: {
+                priorityScore: row.priorityScore,
+                nextReviewAt: row.nextReviewAt,
+                resolved: false,
+                mistakeCount: { increment: 1 },
+              },
+            });
+          }
+        } catch { /* non-critical — remediation queue write failure is tolerable */ }
+      })();
 
       return NextResponse.json({ ok: true, persisted: true, id: run.id });
     } catch (e) {
