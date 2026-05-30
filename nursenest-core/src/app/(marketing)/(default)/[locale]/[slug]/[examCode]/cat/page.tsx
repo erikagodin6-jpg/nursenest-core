@@ -26,7 +26,6 @@ import { pathwayCatPracticeBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { MarketingPathwayCatViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 import { getAuthSessionWithJwtCookieFallback } from "@/lib/auth/server-session-jwt-fallback";
-export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 export const revalidate = 86400;
 

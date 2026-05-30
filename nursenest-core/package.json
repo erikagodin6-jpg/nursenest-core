@@ -71,6 +71,7 @@
     "readiness:verify": "node --import tsx --test src/lib/exam-pathways/cnple-hub-readiness.contract.test.ts src/lib/exam-pathways/cnple-product-readiness.contract.test.ts",
     "audit:exam-bank": "npx tsx scripts/audit-exam-question-bank.ts",
     "audit:content-completeness": "npx tsx scripts/audit-platform-content-completeness.mts",
+    "audit:educational-readiness": "npx tsx scripts/audit-educational-readiness.mts",
     "audit:simulation-content": "npx tsx scripts/audit-simulation-content.ts",
     "audit:rationale-quality": "npx tsx scripts/audit-question-flashcard-rationales.mts",
     "audit:exam-remediation-queue": "npx tsx scripts/build-clinical-question-remediation-queue.ts",

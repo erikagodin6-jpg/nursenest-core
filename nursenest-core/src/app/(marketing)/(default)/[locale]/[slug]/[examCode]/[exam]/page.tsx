@@ -10,7 +10,6 @@ import { buildPathwayTopicProgrammaticBreadcrumbResolution } from "@/lib/seo/pat
 import { buildPathwayTopicProgrammaticMetadata } from "@/lib/seo/pathway-topic-programmatic-metadata";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
-export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 /** Must be a numeric literal for Next static route config (keep aligned with `PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS`). */
 export const revalidate = 86400;

@@ -264,6 +264,40 @@ const nextConfig = {
         destination: "/canada/rn/nclex-rn/guide/:topic",
         permanent: true,
       },
+
+      // ── SEO Remediation 2026-05-30: Legacy lesson/practice URL patterns (5xx audit fix) ──
+      // Old route patterns that existed before the dynamic [locale]/[slug]/[examCode] migration.
+      // Redirecting to hub pages to recover link equity and eliminate 8,400+ 404s.
+      { source: "/canada/rn/nclex-rn/lessons/:slug", destination: "/canada/rn/nclex-rn/lessons", permanent: true },
+      { source: "/canada/rn/nclex-rn/practice-exams/:path*", destination: "/canada/rn/nclex-rn/cat", permanent: true },
+      { source: "/canada/rpn/rex-pn/lessons/:slug", destination: "/canada/pn/rex-pn/lessons", permanent: true },
+      { source: "/canada/rpn/rex-pn/practice-exams/:path*", destination: "/canada/pn/rex-pn/cat", permanent: true },
+      { source: "/canada/np/cnple/lessons/:slug", destination: "/canada/np/cnple/lessons", permanent: true },
+      { source: "/canada/np/cnple/practice-exams/:path*", destination: "/canada/np/cnple/cat", permanent: true },
+      { source: "/us/lpn/nclex-pn/lessons/:slug", destination: "/us/lpn/nclex-pn/lessons", permanent: true },
+      { source: "/us/lpn/nclex-pn/practice-exams/:path*", destination: "/us/lpn/nclex-pn/cat", permanent: true },
+      { source: "/us/rn/nclex-rn/lessons/:slug", destination: "/us/rn/nclex-rn/lessons", permanent: true },
+      { source: "/us/rn/nclex-rn/practice-exams/:path*", destination: "/us/rn/nclex-rn/cat", permanent: true },
+
+      // ── SEO Remediation: Unsupported locale sub-paths → English equivalent (2,800+ 404s) ──
+      // Non-hosted marketing locales call notFound() for all sub-paths. Redirect to English path
+      // so link equity flows to indexed English content. Does not affect full-tier or core-hosted locales.
+      // Full-tier: en, es, tl, hi, pt — never match this redirect.
+      // Core-hosted (partial): fr — excluded below.
+      {
+        source: "/:locale(ko|tr|it|de|ar|zh-tw|zh|ja|fa|hu|ru|id|th|ur|ht|vi|ta|te|bn|mr|gu|pa)/:path*",
+        destination: "/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:locale(ko|tr|it|de|ar|zh-tw|zh|ja|fa|hu|ru|id|th|ur|ht|vi|ta|te|bn|mr|gu|pa)",
+        destination: "/",
+        permanent: true,
+      },
+
+      // ── SEO Remediation: /sign-up → /signup canonical (duplicate auth route) ──
+      { source: "/sign-up", destination: "/signup", permanent: true },
+      { source: "/:locale/sign-up", destination: "/:locale/signup", permanent: true },
     ];
   },
 

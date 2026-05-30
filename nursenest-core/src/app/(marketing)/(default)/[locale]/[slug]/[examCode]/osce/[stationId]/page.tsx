@@ -11,7 +11,6 @@ import { osceScenariosRobotsMetadata } from "@/lib/scenarios/scenario-seo-metada
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
-export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 export const revalidate = 86400;
 

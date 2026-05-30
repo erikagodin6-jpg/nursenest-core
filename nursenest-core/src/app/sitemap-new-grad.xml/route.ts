@@ -14,7 +14,7 @@ import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
  * Never 503 — if filtering removes everything, falls back to `/new-grad` alone.
  */
 export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+export const revalidate = 86400;
 
 export async function GET(request: Request): Promise<Response> {
   const origin = normalizeOrigin(resolveCanonicalSiteOrigin());

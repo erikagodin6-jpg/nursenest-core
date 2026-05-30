@@ -9,7 +9,6 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
 
-export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 export const revalidate = 86400;
 
