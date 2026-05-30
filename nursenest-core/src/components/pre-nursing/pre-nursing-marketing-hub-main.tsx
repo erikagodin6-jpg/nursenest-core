@@ -1,4 +1,5 @@
 import { ExamPathwayHubPremiumModules } from "@/components/exam-pathways/exam-pathway-hub-premium-modules";
+import { AdmissionsProductReadinessGrid } from "@/components/pre-nursing/admissions-product-readiness-grid";
 import { PreNursingLandingClient } from "@/components/pre-nursing/pre-nursing-landing-client";
 import { PreNursingMarketingHubActions } from "@/components/pre-nursing/pre-nursing-marketing-hub-actions";
 import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
@@ -68,6 +69,8 @@ export async function PreNursingMarketingHubMain({
           practiceHref={practicePublicHref}
           examsHref={examsPublicHref}
         />
+
+        <AdmissionsProductReadinessGrid />
 
         <div className="space-y-6 pt-2">
           <PreNursingLandingClient modulesOnly marketingLocale={marketingLocale} />

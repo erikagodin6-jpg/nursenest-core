@@ -111,7 +111,7 @@ function buildPrecomputedNavData(
       },
     ],
     // Class/pathway links → Row 2 tier rail (alongside RN/RPN/NP/New Grad/Allied chips).
-    // HESI and TEAS have no dedicated routes; they map to the pre-nursing hub.
+    // HESI and TEAS route to explicit readiness status pages until launch criteria are complete.
     pathwayNavLinks: [
       {
         key: "pre-nursing",
@@ -127,15 +127,15 @@ function buildPrecomputedNavData(
       },
       {
         key: "hesi",
-        href: localizeHref(locale, "/pre-nursing"),
-        matchBase: "/hesi",
-        label: "HESI",
+        href: "/pre-nursing/hesi-a2",
+        matchBase: "/pre-nursing/hesi-a2",
+        label: "HESI A2",
       },
       {
         key: "teas",
-        href: localizeHref(locale, "/pre-nursing"),
-        matchBase: "/teas",
-        label: "TEAS",
+        href: "/pre-nursing/ati-teas",
+        matchBase: "/pre-nursing/ati-teas",
+        label: "ATI TEAS",
       },
     ],
   };

@@ -23,6 +23,9 @@ export function withMarketingLocale(locale: string, href: string): string {
    * Prefixing breaks routes: `/app/…`, `/modules/…`, `/admin/…`.
    */
   if (path.startsWith("/app") || path.startsWith("/admin") || path.startsWith("/modules")) return path;
+  if (path === "/pre-nursing/hesi-a2" || path === "/pre-nursing/ati-teas" || path === "/pre-nursing/casper") {
+    return path;
+  }
   if (isExamHubMarketingPath(path) || isExpansionExamMarketingPath(path)) return path;
   if (isMarketingCountryEntryPath(path)) return path;
   if (path === "/") return `/${locale}`;

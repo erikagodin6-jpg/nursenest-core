@@ -914,7 +914,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
 
   // Class/pathway links → Row 2 tier rail (Pre-Nursing, ECG, HESI, TEAS).
   // Rendered alongside RN/RPN/NP/New Grad/Allied tier hub chips.
-  // HESI and TEAS have no dedicated routes — both map to /pre-nursing.
+  // HESI and TEAS route to explicit readiness status pages until launch criteria are complete.
   const pathwayMoreLinks: HeaderNavLink[] = useMemo(
     () =>
       precomputedNavData?.pathwayNavLinks
@@ -922,8 +922,8 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
         : [
             { key: "pre-nursing", href: "/pre-nursing", matchBase: "/pre-nursing", label: formatTitleCase(t("nav.preNursing"), locale) },
             { key: "ecg", href: "/ecg-interpretation", matchBase: "/ecg-interpretation", label: "ECG" },
-            { key: "hesi", href: "/pre-nursing", matchBase: "/hesi", label: "HESI" },
-            { key: "teas", href: "/pre-nursing", matchBase: "/teas", label: "TEAS" },
+            { key: "hesi", href: "/pre-nursing/hesi-a2", matchBase: "/pre-nursing/hesi-a2", label: "HESI A2" },
+            { key: "teas", href: "/pre-nursing/ati-teas", matchBase: "/pre-nursing/ati-teas", label: "ATI TEAS" },
           ],
     [precomputedNavData?.pathwayNavLinks, t, locale],
   );
