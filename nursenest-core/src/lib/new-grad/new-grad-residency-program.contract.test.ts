@@ -9,7 +9,10 @@ import {
   NEW_GRAD_ADAPTIVE_COMPETENCY_PROFILE,
   NEW_GRAD_COMPETENCY_DOMAINS,
   NEW_GRAD_CONTENT_LAUNCH_TARGETS,
+  NEW_GRAD_PRACTICE_READINESS_DOMAINS,
   NEW_GRAD_READINESS_DIMENSIONS,
+  NEW_GRAD_RESIDENCY_CORE_MODULES,
+  NEW_GRAD_RESIDENCY_MARKETING_POSITIONING,
   NEW_GRAD_RESIDENCY_PILLARS,
   NEW_GRAD_RESIDENCY_TRACKS,
   NEW_GRAD_ROADMAP_MILESTONES,
@@ -31,6 +34,52 @@ const landingSource = readFileSync(
 );
 
 describe("New Grad residency program foundation", () => {
+  it("defines the New Graduate Nurse Residency Academy modules, activities, and positioning", () => {
+    assert.equal(NEW_GRAD_RESIDENCY_MARKETING_POSITIONING.headline, "Pass The Exam. Thrive In Practice.");
+    assert.deepEqual(NEW_GRAD_RESIDENCY_MARKETING_POSITIONING.audience, [
+      "New grads",
+      "Nurse residency programs",
+      "Hospitals",
+      "Academic institutions",
+    ]);
+    assert.deepEqual(
+      NEW_GRAD_RESIDENCY_CORE_MODULES.map((module) => module.title),
+      [
+        "Professional Transition",
+        "Time Management",
+        "Prioritization",
+        "Delegation",
+        "Documentation",
+        "Clinical Judgment",
+        "Communication",
+        "Shift Organization",
+        "Patient Safety",
+        "Code Blue Readiness",
+        "Medication Safety",
+        "Interprofessional Collaboration",
+        "Workplace Resilience",
+      ],
+    );
+    for (const module of NEW_GRAD_RESIDENCY_CORE_MODULES) {
+      assert.ok(module.learnerOutcome.length > 50);
+      assert.ok(module.requiredActivities.length >= 4);
+    }
+    assert.ok(
+      NEW_GRAD_RESIDENCY_CORE_MODULES.some((module) =>
+        module.requiredActivities.includes("shift-management-simulators"),
+      ),
+    );
+    assert.ok(
+      NEW_GRAD_RESIDENCY_CORE_MODULES.some((module) => module.requiredActivities.includes("documentation-exercises")),
+    );
+    assert.ok(
+      NEW_GRAD_RESIDENCY_CORE_MODULES.some((module) => module.requiredActivities.includes("ngn-style-scenarios")),
+    );
+    assert.ok(
+      NEW_GRAD_RESIDENCY_CORE_MODULES.some((module) => module.requiredActivities.includes("prioritization-challenges")),
+    );
+  });
+
   it("defines the six required residency pillars with real transition-to-practice activities", () => {
     assert.deepEqual(
       NEW_GRAD_RESIDENCY_PILLARS.map((pillar) => pillar.id),
@@ -203,6 +252,26 @@ describe("New Grad residency program foundation", () => {
     );
   });
 
+  it("defines the requested practice-readiness domains for first-year nursing support", () => {
+    assert.deepEqual(
+      NEW_GRAD_PRACTICE_READINESS_DOMAINS.map((domain) => domain.label),
+      [
+        "Patient Safety",
+        "Delegation",
+        "Communication",
+        "Clinical Judgment",
+        "Documentation",
+        "Professional Development",
+        "Medication Administration",
+        "Emergency Response",
+      ],
+    );
+    for (const domain of NEW_GRAD_PRACTICE_READINESS_DOMAINS) {
+      assert.ok(domain.description.length > 50);
+      assert.ok(domain.evidenceSources.length >= 3);
+    }
+  });
+
   it("defines a dedicated adaptive competency profile that routes weak areas to ecosystem activities", () => {
     assert.deepEqual(
       NEW_GRAD_ADAPTIVE_COMPETENCY_PROFILE.map((profile) => profile.id),
@@ -247,6 +316,9 @@ describe("New Grad residency program foundation", () => {
     assert.ok(landingSource.includes("data-nn-new-grad-residency-program"));
     assert.ok(landingSource.includes("NEW_GRAD_ROADMAP_MILESTONES"));
     assert.ok(landingSource.includes("NEW_GRAD_RESIDENCY_PILLARS"));
+    assert.ok(landingSource.includes("NEW_GRAD_RESIDENCY_CORE_MODULES"));
+    assert.ok(landingSource.includes("NEW_GRAD_PRACTICE_READINESS_DOMAINS"));
+    assert.ok(landingSource.includes("NEW_GRAD_RESIDENCY_MARKETING_POSITIONING"));
     assert.ok(landingSource.includes("NEW_GRAD_CONTENT_LAUNCH_TARGETS"));
     assert.ok(landingSource.includes("NEW_GRAD_RESIDENCY_TRACKS"));
     assert.ok(landingSource.includes("NEW_GRAD_COMPETENCY_DOMAINS"));

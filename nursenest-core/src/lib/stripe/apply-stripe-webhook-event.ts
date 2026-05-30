@@ -513,6 +513,12 @@ async function applyCustomerSubscriptionUpsert(
         correlation: ctx.correlation ?? "",
       },
     });
+    void captureServerEvent(analyticsDistinctId(row.userId), PH.trialStarted, {
+      tier: updated.planTier != null ? String(updated.planTier) : undefined,
+      plan_interval: sub.items?.data?.[0]?.price?.recurring?.interval ?? undefined,
+      country: updated.planCountry != null ? String(updated.planCountry) : undefined,
+      region: sub.metadata?.region ?? undefined,
+    }).catch(() => {});
   }
 }
 
@@ -1026,6 +1032,14 @@ export async function applyStripeWebhookEvent(
           correlation,
         },
       });
+      void captureServerEvent(analyticsDistinctId(existing.userId), PH.subscriptionCancelled, {
+        tier: updated.planTier != null ? String(updated.planTier) : undefined,
+        country: updated.planCountry != null ? String(updated.planCountry) : undefined,
+        days_subscribed: daysAsSubscriber,
+        cancellation_reason: typeof sub.cancellation_details?.reason === "string"
+          ? sub.cancellation_details.reason
+          : undefined,
+      }).catch(() => {});
     }
     productEvent("stripe_webhook_ok", { eventType: event.type });
     return;
@@ -1282,12 +1296,22 @@ export async function applyStripeWebhookEvent(
             correlation,
           },
         });
-      }
-      if (billingReason === "subscription_cycle" && !invoiceSucceededSkippedCancelled && row?.userId) {
-        void captureServerEvent(analyticsDistinctId(row.userId), PH.funnelSubscriptionRenewed, {
-          source: "stripe_invoice_payment_succeeded",
-          billing_reason: billingReason,
-        });
+        if (!invoiceSucceededSkippedCancelled && row?.userId) {
+          if (eventType === "trial_converted") {
+            void captureServerEvent(analyticsDistinctId(row.userId), PH.trialConverted, {
+              tier: row?.planTier != null ? String(row.planTier) : undefined,
+              country: row?.planCountry != null ? String(row.planCountry) : undefined,
+              region: row?.billingRegionSlug ?? undefined,
+              amount_cents: amountPaid ?? undefined,
+              currency: invoice.currency ?? undefined,
+            }).catch(() => {});
+          } else {
+            void captureServerEvent(analyticsDistinctId(row.userId), PH.funnelSubscriptionRenewed, {
+              source: "stripe_invoice_payment_succeeded",
+              billing_reason: billingReason,
+            });
+          }
+        }
       }
     }
     productEvent("stripe_webhook_ok", { eventType: event.type });

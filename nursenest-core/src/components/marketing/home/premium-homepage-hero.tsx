@@ -148,6 +148,66 @@ function HeroClinicalPanel() {
   );
 }
 
+export function MarketingHomepageEcgStripIllustration({ ariaLabel }: { ariaLabel: string }) {
+  return (
+    <svg
+      className="nn-premium-hero-ecg__wave"
+      viewBox="0 0 560 96"
+      role="img"
+      aria-label={ariaLabel}
+      focusable="false"
+    >
+      <defs>
+        <linearGradient id="nn-home-ecg-wave" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0%" stopColor="var(--semantic-info)" />
+          <stop offset="48%" stopColor="var(--theme-primary)" />
+          <stop offset="100%" stopColor="var(--semantic-success)" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="560" height="96" rx="16" fill="var(--semantic-surface)" />
+      {Array.from({ length: 13 }).map((_, i) => (
+        <line
+          key={`v-${i}`}
+          x1={i * 48}
+          x2={i * 48}
+          y1="0"
+          y2="96"
+          stroke="var(--semantic-border-soft)"
+          strokeWidth="1"
+          opacity="0.42"
+        />
+      ))}
+      {Array.from({ length: 5 }).map((_, i) => (
+        <line
+          key={`h-${i}`}
+          x1="0"
+          x2="560"
+          y1={16 + i * 16}
+          y2={16 + i * 16}
+          stroke="var(--semantic-border-soft)"
+          strokeWidth="1"
+          opacity="0.34"
+        />
+      ))}
+      <path
+        d="M0 52 H32 L40 50 L47 54 L55 52 H84 L92 50 L99 54 L107 52 H134 L142 50 L149 54 L157 52 H184 L192 50 L199 54 L207 52 H232 L240 50 L247 54 L255 52 H280 L287 50 L294 54 L302 52 H330 L338 50 L345 54 L353 52 H380 L388 50 L395 54 L403 52 H430 L438 50 L445 54 L453 52 H480 L488 50 L495 54 L503 52 H560"
+        fill="none"
+        stroke="color-mix(in srgb, var(--semantic-text-muted) 34%, transparent)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M18 52 h18 l5 -11 l5 26 l8 -58 l8 79 l7 -33 h22 m14 -3 h18 l5 -11 l5 26 l8 -58 l8 79 l7 -33 h22 m14 -3 h18 l5 -11 l5 26 l8 -58 l8 79 l7 -33 h22 m14 -3 h18 l5 -11 l5 26 l8 -58 l8 79 l7 -33 h22 m14 -3 h18 l5 -11 l5 26 l8 -58 l8 79 l7 -33 h22"
+        fill="none"
+        stroke="url(#nn-home-ecg-wave)"
+        strokeWidth="4"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 /* ──────────────────────────────────────────────────────────────────
    Premium homepage hero — server component.
    Props replace the removed i18n and region hooks (see file header).

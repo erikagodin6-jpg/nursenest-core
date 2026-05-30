@@ -37,10 +37,17 @@ export const PATHWAY_IDS_REQUIRED_FOR_COUNTRY_PUBLISH: Record<CountrySlug, reado
   /** UK / Australia / Philippines / India / Nigeria / Saudi Arabia use expansion-region + dedicated readiness rules, not this rollup. */
   uk: [],
   australia: [],
+  "new-zealand": [],
+  ireland: [],
   philippines: [],
   india: [],
   nigeria: [],
+  "south-africa": [],
   "saudi-arabia": [],
+  uae: [],
+  qatar: [],
+  kuwait: [],
+  singapore: [],
 };
 
 /** Marketing foundation hubs for international RN regulators (not NCLEX-primary). */
@@ -69,14 +76,27 @@ function globalRegionSlugFromCountrySlug(country: CountrySlug): GlobalRegionSlug
       return "uk";
     case "australia":
       return "aus";
+    case "new-zealand":
+      return "new-zealand";
+    case "ireland":
+      return "ireland";
     case "philippines":
       return "philippines";
     case "india":
       return "india";
     case "nigeria":
       return "nigeria";
+    case "south-africa":
+      return "south-africa";
     case "saudi-arabia":
       return "saudi-arabia";
+    case "uae":
+      return "uae";
+    case "qatar":
+    case "kuwait":
+      return "saudi-arabia";
+    case "singapore":
+      return "singapore";
   }
 }
 

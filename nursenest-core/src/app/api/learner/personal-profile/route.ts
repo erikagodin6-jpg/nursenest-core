@@ -162,7 +162,10 @@ export async function PATCH(req: Request) {
     if (body.displayName !== undefined) data.displayName = body.displayName === null ? null : body.displayName.trim() || null;
     if (body.country !== undefined) data.country = body.country;
     if (body.tier !== undefined) data.tier = body.tier;
-    if (nextLearnerPath !== undefined) data.learnerPath = nextLearnerPath;
+    if (nextLearnerPath !== undefined) {
+      data.learnerPath = nextLearnerPath;
+      data.targetExamPathwayId = nextLearnerPath;
+    }
     if (body.studyGoal !== undefined) data.studyGoal = body.studyGoal === null ? null : body.studyGoal.trim() || null;
     if (body.examFocus !== undefined) data.examFocus = body.examFocus === null ? null : body.examFocus.trim() || null;
     if (body.dailyQuestionGoal !== undefined) {

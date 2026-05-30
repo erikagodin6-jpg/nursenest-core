@@ -1,38 +1,47 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import {
+  getExamPathwayByRoute,
+  resolveExamPathwayFromMarketingHubSegment,
+} from "@/lib/exam-pathways/exam-product-registry";
 import {
   isIntlRnFoundationPathwayId,
   isPathwayPublishedForPublicSite,
 } from "@/lib/navigation/country-exam-launch-readiness";
 import { examPathwayRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
-import { intlRnRegulatorDisclaimerText, resolveIntlRnHubSectionCopy } from "@/lib/marketing/intl-rn-pathway-hub-copy";
 
-test("resolves international RN foundation marketing hubs", () => {
-  const uk = resolveExamPathwayFromMarketingHubSegment("uk", "rn", "nmc-test-of-competence");
+test("international RN foundation hubs remain hidden from public marketing resolution", () => {
+  const uk = getExamPathwayByRoute("uk", "rn", "nmc-test-of-competence");
   assert.equal(uk?.id, "uk-rn-nmc-test-of-competence");
   assert.equal(uk?.countrySlug, "uk");
+  assert.equal(uk?.status, "hidden");
+  assert.equal(resolveExamPathwayFromMarketingHubSegment("uk", "rn", "nmc-test-of-competence"), undefined);
 
-  const au = resolveExamPathwayFromMarketingHubSegment("australia", "rn", "iqnm-pathway");
+  const au = getExamPathwayByRoute("australia", "rn", "iqnm-pathway");
   assert.equal(au?.id, "au-rn-iqnm-pathway");
   assert.equal(au?.countrySlug, "australia");
+  assert.equal(resolveExamPathwayFromMarketingHubSegment("australia", "rn", "iqnm-pathway"), undefined);
 
-  const ph = resolveExamPathwayFromMarketingHubSegment("philippines", "rn", "prc-pnle");
+  const ph = getExamPathwayByRoute("philippines", "rn", "prc-pnle");
   assert.equal(ph?.id, "ph-rn-prc-pnle");
   assert.equal(ph?.countrySlug, "philippines");
+  assert.equal(resolveExamPathwayFromMarketingHubSegment("philippines", "rn", "prc-pnle"), undefined);
 
-  const ind = resolveExamPathwayFromMarketingHubSegment("india", "rn", "state-nursing-council-registration");
+  const ind = getExamPathwayByRoute("india", "rn", "state-nursing-council-registration");
   assert.equal(ind?.id, "in-rn-state-nursing-council-registration");
   assert.equal(ind?.countrySlug, "india");
+  assert.equal(resolveExamPathwayFromMarketingHubSegment("india", "rn", "state-nursing-council-registration"), undefined);
 
-  const ng = resolveExamPathwayFromMarketingHubSegment("nigeria", "rn", "nmcn-licensure");
+  const ng = getExamPathwayByRoute("nigeria", "rn", "nmcn-licensure");
   assert.equal(ng?.id, "ng-rn-nmcn-licensure");
   assert.equal(ng?.countrySlug, "nigeria");
+  assert.equal(resolveExamPathwayFromMarketingHubSegment("nigeria", "rn", "nmcn-licensure"), undefined);
 
-  const sa = resolveExamPathwayFromMarketingHubSegment("saudi-arabia", "rn", "scfhs-licensure");
+  const sa = getExamPathwayByRoute("saudi-arabia", "rn", "scfhs-licensure");
   assert.equal(sa?.id, "sa-rn-scfhs-licensure");
   assert.equal(sa?.countrySlug, "saudi-arabia");
+  assert.equal(resolveExamPathwayFromMarketingHubSegment("saudi-arabia", "rn", "scfhs-licensure"), undefined);
 });
 
 test("international RN foundation pathways are not sitemap-published without explicit approval", () => {
@@ -50,23 +59,23 @@ test("Canada and US RN hubs remain published", () => {
 });
 
 test("hreflang for international RN hubs uses regional locale codes", () => {
-  const uk = resolveExamPathwayFromMarketingHubSegment("uk", "rn", "nmc-test-of-competence");
+  const uk = getExamPathwayByRoute("uk", "rn", "nmc-test-of-competence");
   assert.ok(uk);
   const ukH = examPathwayRegionalHreflang(uk!);
   assert.ok(ukH["en-GB"]);
   assert.ok(ukH["x-default"]);
 
-  const ind = resolveExamPathwayFromMarketingHubSegment("india", "rn", "state-nursing-council-registration");
+  const ind = getExamPathwayByRoute("india", "rn", "state-nursing-council-registration");
   assert.ok(ind);
   const indH = examPathwayRegionalHreflang(ind!);
   assert.ok(indH["en-IN"]);
 
-  const ng = resolveExamPathwayFromMarketingHubSegment("nigeria", "rn", "nmcn-licensure");
+  const ng = getExamPathwayByRoute("nigeria", "rn", "nmcn-licensure");
   assert.ok(ng);
   const ngH = examPathwayRegionalHreflang(ng!);
   assert.ok(ngH["en-NG"]);
 
-  const sa = resolveExamPathwayFromMarketingHubSegment("saudi-arabia", "rn", "scfhs-licensure");
+  const sa = getExamPathwayByRoute("saudi-arabia", "rn", "scfhs-licensure");
   assert.ok(sa);
   const saH = examPathwayRegionalHreflang(sa!);
   assert.ok(saH["ar-SA"]);
@@ -90,26 +99,4 @@ test("international RN foundation pathways use distinct SEO titles", () => {
   const titles = EXAM_PATHWAYS.filter((p) => ids.has(p.id)).map((p) => p.seoTitle);
   assert.equal(titles.length, 6);
   assert.equal(new Set(titles).size, 6);
-});
-
-test("intl RN hub section copy resolves with English marketing keys (loaded from shard)", async () => {
-  const { readFileSync } = await import("node:fs");
-  const { join } = await import("node:path");
-  const { fileURLToPath } = await import("node:url");
-  const here = fileURLToPath(new URL(".", import.meta.url));
-  const marketingPath = join(here, "../../../public/i18n/en/marketing.json");
-  const messages = JSON.parse(readFileSync(marketingPath, "utf8")) as Record<string, string>;
-  const uk = resolveExamPathwayFromMarketingHubSegment("uk", "rn", "nmc-test-of-competence");
-  assert.ok(uk);
-  const copy = resolveIntlRnHubSectionCopy(uk!, messages);
-  assert.ok(copy);
-  assert.match(copy!.overview, /NMC|Nursing and Midwifery Council/i);
-  const ind = resolveExamPathwayFromMarketingHubSegment("india", "rn", "state-nursing-council-registration");
-  assert.ok(ind);
-  const indCopy = resolveIntlRnHubSectionCopy(ind!, messages);
-  assert.ok(indCopy);
-  assert.match(indCopy!.overview, /Indian Nursing Council|INC/i);
-  const disclaimer = intlRnRegulatorDisclaimerText(messages);
-  assert.match(disclaimer, /not affiliated/i);
-  assert.match(disclaimer, /INC|Indian Nursing Council/i);
 });

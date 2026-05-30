@@ -19,7 +19,10 @@ import { newGradMarketingHubBase, type NewGradMarketingShell } from "@/lib/navig
 import {
   NEW_GRAD_CONTENT_LAUNCH_TARGETS,
   NEW_GRAD_COMPETENCY_DOMAINS,
+  NEW_GRAD_PRACTICE_READINESS_DOMAINS,
   NEW_GRAD_READINESS_DIMENSIONS,
+  NEW_GRAD_RESIDENCY_CORE_MODULES,
+  NEW_GRAD_RESIDENCY_MARKETING_POSITIONING,
   NEW_GRAD_RESIDENCY_PILLARS,
   NEW_GRAD_RESIDENCY_TRACKS,
   NEW_GRAD_ROADMAP_MILESTONES,
@@ -166,6 +169,46 @@ export function NewGradMarketingLanding({
                 </p>
               </article>
             ))}
+          </div>
+        </div>
+
+        <div className="mt-5 grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[var(--semantic-panel-muted)] p-4 sm:p-5">
+            <p className="text-[0.68rem] font-bold uppercase tracking-[0.14em] text-[var(--semantic-brand)]">
+              {NEW_GRAD_RESIDENCY_MARKETING_POSITIONING.headline}
+            </p>
+            <h3 className="mt-2 text-sm font-bold text-[var(--theme-heading-text)]">Residency Academy Core Modules</h3>
+            <p className="mt-2 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+              {NEW_GRAD_RESIDENCY_MARKETING_POSITIONING.productPromise}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {NEW_GRAD_RESIDENCY_CORE_MODULES.map((module) => (
+                <span
+                  key={module.id}
+                  className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2.5 py-1 text-xs font-semibold text-[var(--semantic-text-secondary)]"
+                >
+                  {module.title}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-4 sm:p-5">
+            <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">Practice Readiness Domains</h3>
+            <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+              Readiness is evidence-based: activities must show safe clinical judgment, communication, documentation,
+              medication administration, and emergency response in realistic first-year conditions.
+            </p>
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              {NEW_GRAD_PRACTICE_READINESS_DOMAINS.map((domain) => (
+                <div key={domain.id} className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3">
+                  <p className="text-xs font-bold text-[var(--theme-heading-text)]">{domain.label}</p>
+                  <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+                    {domain.description}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

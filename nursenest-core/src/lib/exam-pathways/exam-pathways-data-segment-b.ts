@@ -16,9 +16,9 @@ export const EXAM_PATHWAYS_SEGMENT_B: ExamPathwayDefinition[] = [
     shortName: "NCLEX-RN",
     stripeTier: "RN" as TierCode,
     contentExamKeys: ["NCLEX-RN", "NCLEX_RN"],
-    seoTitle: "NCLEX-RN Exam Prep | United States | NurseNest",
+    seoTitle: "NCLEX-RN Practice Questions, Lessons & CAT Exam Prep | NurseNest",
     seoDescription:
-      "US RN prep: clinical judgment practice, NGN-style items where available, and full-length mocks filtered for US candidates.",
+      "200 lessons and 480+ NCLEX-RN practice questions with rationales, Next Generation NCLEX (NGN) clinical judgment, and adaptive CAT simulation. Study smarter for your RN exam.",
     status: "active",
     acquisitionMode: "subscribe",
   },

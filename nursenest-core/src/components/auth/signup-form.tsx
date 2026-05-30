@@ -23,6 +23,7 @@ import { AuthFormLayout } from "@/components/auth/auth-experience/auth-form-layo
 import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
 import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
 import { isPlaceholderAuthCopy } from "@/lib/ui/is-placeholder-auth-copy";
+import { readMarketingRegionFromDocument } from "@/lib/observability/learner-analytics-context.client";
 
 const TIER_LABEL: Record<SignupTierValue, string> = {
   RN: "RN",
@@ -90,6 +91,12 @@ export function SignupForm({
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [country, setCountry] = useState<"CA" | "US">("CA");
   const [examFocus, setExamFocus] = useState<SignupExamFocusValue>("nclex_rn");
+  // Auto-detect country from marketing region cookie on first mount.
+  useEffect(() => {
+    const detected = readMarketingRegionFromDocument();
+    if (detected === "US") setCountry("US");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const referralCode = searchParams?.get("ref")?.trim() || searchParams?.get("friendCode")?.trim() || "";
   const onCaptcha = useCallback((tok: string | null) => setCaptchaToken(tok), []);
   /** When the widget is shown, `/api/signup` may require a token (see `isTurnstileEnforced`). */

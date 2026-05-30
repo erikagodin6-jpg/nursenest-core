@@ -4,6 +4,7 @@ import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/s
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import { currentPathwayLabelForPathway } from "@/lib/exam-pathways/account-exam-preference";
 
 export type PathwayPickOption = { id: string; label: string };
 
@@ -57,16 +58,16 @@ export async function listPathwayPicksForProfile(
     const rows = await listPathwaysCompatibleWithSubscription(scope);
     return rows.map((p) => ({
       id: p.id,
-      label: p.shortName || p.displayName,
+      label: currentPathwayLabelForPathway(p),
     }));
   }
   const allowedTiers = new Set(accessibleTiersForUserTier(profileTier));
   return listPublishedExamPathwaysForPublicSite()
     .filter((p) => p.countryCode === profileCountry && allowedTiers.has(p.stripeTier))
     .map((p) => ({
-    id: p.id,
-    label: p.shortName || p.displayName,
-  }));
+      id: p.id,
+      label: currentPathwayLabelForPathway(p),
+    }));
 }
 
 export function learnerPathIsAllowed(

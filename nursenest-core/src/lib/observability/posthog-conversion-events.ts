@@ -203,6 +203,7 @@ export const PH = {
   // ── Trial funnel ─────────────────────────────────────────────────────────
   trialStarted: "trial_started",
   trialConverted: "trial_converted",
+  subscriptionCancelled: "subscription_cancelled",
 
   // ── Dashboard engagement ─────────────────────────────────────────────────
   continueStudyClicked: "continue_study_clicked",

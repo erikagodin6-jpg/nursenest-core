@@ -31,6 +31,7 @@ import { captureServerMessageIfEnabled } from "@/lib/observability/sentry-if-ena
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { triggerWelcomeEmailRequested } from "@/lib/server/inngest";
 import { isDisposableEmailDomain } from "@/lib/trial/trial-email-controls";
+import { resolvePrimaryExamPathwayId } from "@/lib/exam-pathways/account-exam-preference";
 
 function signupStructuredFailed(req: Request, errorClass: string, severity: "warn" | "error" = "warn"): void {
   emitStructuredLog("signup_failed", severity, {
@@ -201,6 +202,7 @@ export async function POST(req: Request) {
 
   const { email, name, firstName, lastName, password, country, tier, examFocus, studyGoal, dailyStudyMinutes, learnerPath } = parsed.data;
   const passwordHash = await hash(password, 12);
+  const primaryExamPathwayId = resolvePrimaryExamPathwayId({ country, tier, examFocus });
 
   let createdId: string;
   try {
@@ -221,9 +223,10 @@ export async function POST(req: Request) {
         examFocus: examFocus ?? null,
         studyGoal: studyGoal ?? null,
         dailyStudyMinutes: dailyStudyMinutes ?? null,
-        learnerPath: learnerPath ?? null,
+        learnerPath: primaryExamPathwayId,
+        targetExamPathwayId: primaryExamPathwayId,
         onboardingCompletedAt:
-          examFocus && studyGoal && dailyStudyMinutes && learnerPath ? new Date() : null,
+          examFocus && studyGoal && dailyStudyMinutes && learnerPath && primaryExamPathwayId ? new Date() : null,
       },
       select: { id: true },
     });

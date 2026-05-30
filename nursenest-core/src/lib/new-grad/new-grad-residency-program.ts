@@ -30,10 +30,36 @@ export type NewGradLearningActivity =
   | "ecg"
   | "simulations"
   | "case-studies"
+  | "ngn-style-scenarios"
+  | "documentation-exercises"
+  | "shift-management-simulators"
+  | "prioritization-challenges"
   | "reflection-exercises"
   | "dosage-calculations"
   | "rhythm-drills"
   | "clinical-judgment-exercises";
+
+export type NewGradResidencyCoreModuleId =
+  | "professional-transition"
+  | "time-management"
+  | "prioritization"
+  | "delegation"
+  | "documentation"
+  | "clinical-judgment"
+  | "communication"
+  | "shift-organization"
+  | "patient-safety"
+  | "code-blue-readiness"
+  | "medication-safety"
+  | "interprofessional-collaboration"
+  | "workplace-resilience";
+
+export type NewGradResidencyCoreModule = {
+  readonly id: NewGradResidencyCoreModuleId;
+  readonly title: string;
+  readonly learnerOutcome: string;
+  readonly requiredActivities: readonly NewGradLearningActivity[];
+};
 
 export type NewGradResidencyPillarId =
   | "surviving-first-year"
@@ -106,6 +132,23 @@ export type NewGradReadinessDimension = {
   readonly evidenceSources: readonly NewGradLearningActivity[];
 };
 
+export type NewGradPracticeReadinessDomainId =
+  | "patient-safety"
+  | "delegation"
+  | "communication"
+  | "clinical-judgment"
+  | "documentation"
+  | "professional-development"
+  | "medication-administration"
+  | "emergency-response";
+
+export type NewGradPracticeReadinessDomain = {
+  readonly id: NewGradPracticeReadinessDomainId;
+  readonly label: string;
+  readonly description: string;
+  readonly evidenceSources: readonly NewGradLearningActivity[];
+};
+
 export type NewGradCommercialPackageKey =
   | "new-grad-base"
   | "icu-specialty"
@@ -162,7 +205,99 @@ const ALL_ACTIVITIES: readonly NewGradLearningActivity[] = [
   "ecg",
   "simulations",
   "case-studies",
+  "ngn-style-scenarios",
+  "documentation-exercises",
+  "shift-management-simulators",
+  "prioritization-challenges",
 ];
+
+export const NEW_GRAD_RESIDENCY_MARKETING_POSITIONING = {
+  headline: "Pass The Exam. Thrive In Practice.",
+  audience: ["New grads", "Nurse residency programs", "Hospitals", "Academic institutions"],
+  productPromise:
+    "A first-year-of-practice support ecosystem that connects transition lessons, bedside scenarios, documentation practice, shift simulation, and readiness evidence.",
+} as const;
+
+export const NEW_GRAD_RESIDENCY_CORE_MODULES: readonly NewGradResidencyCoreModule[] = [
+  {
+    id: "professional-transition",
+    title: "Professional Transition",
+    learnerOutcome: "Build role clarity, safe independence, scope awareness, and confidence using preceptor feedback.",
+    requiredActivities: ["lessons", "reflection-exercises", "case-studies", "questions"],
+  },
+  {
+    id: "time-management",
+    title: "Time Management",
+    learnerOutcome: "Cluster care, recover from interruptions, protect reassessment time, and keep the shift moving safely.",
+    requiredActivities: ["lessons", "shift-management-simulators", "prioritization-challenges", "questions"],
+  },
+  {
+    id: "prioritization",
+    title: "Prioritization",
+    learnerOutcome: "Sort unstable findings, time-sensitive tasks, and competing patient needs without losing safety checks.",
+    requiredActivities: ["questions", "ngn-style-scenarios", "simulations", "prioritization-challenges"],
+  },
+  {
+    id: "delegation",
+    title: "Delegation",
+    learnerOutcome: "Delegate within role boundaries, communicate expectations, and follow up without abandoning accountability.",
+    requiredActivities: ["lessons", "questions", "case-studies", "simulations"],
+  },
+  {
+    id: "documentation",
+    title: "Documentation",
+    learnerOutcome: "Chart defensible assessments, reassessments, escalation, patient response, and end-of-shift handoff details.",
+    requiredActivities: ["lessons", "documentation-exercises", "case-studies", "simulations"],
+  },
+  {
+    id: "clinical-judgment",
+    title: "Clinical Judgment",
+    learnerOutcome: "Recognize cues, analyze trends, decide what matters now, take action, and evaluate response.",
+    requiredActivities: ["lessons", "questions", "ngn-style-scenarios", "clinical-judgment-exercises", "simulations"],
+  },
+  {
+    id: "communication",
+    title: "Communication",
+    learnerOutcome: "Use SBAR, closed-loop communication, patient teaching, family updates, and respectful escalation.",
+    requiredActivities: ["lessons", "case-studies", "simulations", "reflection-exercises"],
+  },
+  {
+    id: "shift-organization",
+    title: "Shift Organization",
+    learnerOutcome: "Plan the first hour, medication pass, documentation windows, discharge tasks, and handoff preparation.",
+    requiredActivities: ["shift-management-simulators", "lessons", "questions", "documentation-exercises"],
+  },
+  {
+    id: "patient-safety",
+    title: "Patient Safety",
+    learnerOutcome: "Protect high-risk moments: falls, infection control, alarms, handoff gaps, medication checks, and deterioration.",
+    requiredActivities: ["lessons", "questions", "case-studies", "simulations"],
+  },
+  {
+    id: "code-blue-readiness",
+    title: "Code Blue Readiness",
+    learnerOutcome: "Know the first actions, role expectations, communication script, and post-event documentation for emergencies.",
+    requiredActivities: ["simulations", "clinical-skills", "questions", "reflection-exercises"],
+  },
+  {
+    id: "medication-safety",
+    title: "Medication Safety",
+    learnerOutcome: "Clarify unsafe orders, monitor high-alert medications, recognize adverse effects, and prevent administration errors.",
+    requiredActivities: ["pharmacology", "dosage-calculations", "questions", "case-studies"],
+  },
+  {
+    id: "interprofessional-collaboration",
+    title: "Interprofessional Collaboration",
+    learnerOutcome: "Coordinate with providers, pharmacists, respiratory therapy, allied health, charge nurses, and preceptors.",
+    requiredActivities: ["lessons", "case-studies", "simulations", "reflection-exercises"],
+  },
+  {
+    id: "workplace-resilience",
+    title: "Workplace Resilience",
+    learnerOutcome: "Manage stress, moral distress, feedback, difficult shifts, and recovery after near misses without normalizing unsafe practice.",
+    requiredActivities: ["lessons", "reflection-exercises", "case-studies", "simulations"],
+  },
+] as const;
 
 export const NEW_GRAD_RESIDENCY_PILLARS: readonly NewGradResidencyPillar[] = [
   {
@@ -788,6 +923,57 @@ export const NEW_GRAD_READINESS_DIMENSIONS: readonly NewGradReadinessDimension[]
     label: "Orientation Progress",
     weight: 12,
     evidenceSources: ["lessons", "clinical-skills", "case-studies"],
+  },
+] as const;
+
+export const NEW_GRAD_PRACTICE_READINESS_DOMAINS: readonly NewGradPracticeReadinessDomain[] = [
+  {
+    id: "patient-safety",
+    label: "Patient Safety",
+    description: "Recognizes risks early, protects safety checks, and escalates changes before harm occurs.",
+    evidenceSources: ["questions", "simulations", "case-studies", "clinical-skills"],
+  },
+  {
+    id: "delegation",
+    label: "Delegation",
+    description: "Delegates scope-appropriate tasks, confirms expectations, and follows up on completion and findings.",
+    evidenceSources: ["questions", "simulations", "case-studies"],
+  },
+  {
+    id: "communication",
+    label: "Communication",
+    description: "Uses clear SBAR, closed-loop team communication, therapeutic language, and timely provider escalation.",
+    evidenceSources: ["simulations", "case-studies", "reflection-exercises"],
+  },
+  {
+    id: "clinical-judgment",
+    label: "Clinical Judgment",
+    description: "Connects cues, trends, priorities, actions, and evaluation in realistic shift conditions.",
+    evidenceSources: ["questions", "ngn-style-scenarios", "clinical-judgment-exercises", "simulations"],
+  },
+  {
+    id: "documentation",
+    label: "Documentation",
+    description: "Documents assessment, intervention, reassessment, escalation, response, and handoff defensibly.",
+    evidenceSources: ["documentation-exercises", "case-studies", "simulations"],
+  },
+  {
+    id: "professional-development",
+    label: "Professional Development",
+    description: "Uses feedback, reflection, resilience habits, and unit learning goals to grow safely through the first year.",
+    evidenceSources: ["lessons", "reflection-exercises", "case-studies"],
+  },
+  {
+    id: "medication-administration",
+    label: "Medication Administration",
+    description: "Applies high-alert medication checks, monitoring, contraindication awareness, and clarification behaviors.",
+    evidenceSources: ["pharmacology", "dosage-calculations", "questions", "case-studies"],
+  },
+  {
+    id: "emergency-response",
+    label: "Emergency Response",
+    description: "Recognizes deterioration, activates rapid response/code resources, stays with the patient, and communicates clearly.",
+    evidenceSources: ["simulations", "clinical-skills", "questions", "ecg"],
   },
 ] as const;
 

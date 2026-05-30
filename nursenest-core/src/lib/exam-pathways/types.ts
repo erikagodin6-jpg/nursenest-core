@@ -6,10 +6,17 @@ export type CountrySlug =
   | "us"
   | "uk"
   | "australia"
+  | "new-zealand"
+  | "ireland"
   | "philippines"
   | "india"
   | "nigeria"
-  | "saudi-arabia";
+  | "south-africa"
+  | "saudi-arabia"
+  | "uae"
+  | "qatar"
+  | "kuwait"
+  | "singapore";
 
 /** License / role track in URLs — kept separate from Prisma `TierCode`. */
 export type RoleTrackSlug = "rpn" | "lpn" | "rn" | "np" | "allied";

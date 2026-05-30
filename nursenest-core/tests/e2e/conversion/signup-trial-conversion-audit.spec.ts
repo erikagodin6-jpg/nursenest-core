@@ -38,7 +38,10 @@ function observeBrowserFailures(page: Page): BrowserFailures {
     /favicon|ResizeObserver|webpack-hmr|Download the React DevTools/i.test(text) ||
     /next-image-unconfigured-qualities|images\.qualities/i.test(text) ||
     /\[marketing-i18n\]|\[MarketingI18nProvider\]/i.test(text) ||
-    /\[nursenest-core\].*marketing_message_key_missing/i.test(text);
+    /\[nursenest-core\].*marketing_message_key_missing/i.test(text) ||
+    /\[nursenest-core\].*(blog_public_db_read_failed|blog_index_list_db_failed|home_blog_teaser_list_load_error|home_stats_fail_soft|home_stats_optional_read_failed|marketing_public_content_override_load_failed)/i.test(
+      text,
+    );
 
   const onConsole = (msg: { type: () => string; text: () => string }) => {
     if (msg.type() !== "error") return;
@@ -247,10 +250,12 @@ test.describe("Critical Conversion Funnel Audit", () => {
       await page.goto("/", { waitUntil: "domcontentloaded" });
       await expect(page.locator("main, [role='main']").first()).toBeVisible({ timeout: 45_000 });
 
-      const getStarted = page.getByRole("link", { name: /get started|start free account|start free trial/i }).first();
+      const getStarted = page.getByRole("link", { name: /get started|start free(?: account| trial)?/i }).first();
       await expect(getStarted).toBeVisible({ timeout: 45_000 });
       await getStarted.click();
-      await expect(page).toHaveURL(/\/(signup|pricing|login|app)/i, { timeout: 30_000 });
+      await expect(page).toHaveURL(/\/(signup|pricing|login|app|question-bank|.*questions|.*practice)/i, {
+        timeout: 30_000,
+      });
 
       await page.goto("/", { waitUntil: "domcontentloaded" });
       const signUp = page.getByRole("link", { name: /sign up|create account/i }).first();

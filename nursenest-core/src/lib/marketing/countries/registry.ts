@@ -170,22 +170,23 @@ export const CANADA_HOMEPAGE: CountryHomepageContent = {
 };
 
 export const US_HOMEPAGE: CountryHomepageContent = {
-  headline: "US nursing exam prep built around NCLEX",
-  subheadline: "Study for NCLEX-RN and NCLEX-PN with structured lessons, flashcards, question banks, and CAT exams.",
-  brandLine: "Country-specific nursing exam prep, with exclusive REx-PN support in Canada.",
-  primaryCta: { label: "Start NCLEX-RN", href: "/lessons" },
-  secondaryCta: { label: "Explore US Pathways", href: "/us/rn" },
+  headline: "NCLEX-RN & NCLEX-PN exam prep for US nurses",
+  subheadline:
+    "200 lessons, 480+ practice questions, adaptive CAT exams, and clinical judgment simulation — built for NCLEX candidates.",
+  brandLine: "Country-specific nursing exam prep with NGN-ready questions and CAT simulation.",
+  primaryCta: { label: "Start NCLEX-RN Prep", href: "/us/rn/nclex-rn" },
+  secondaryCta: { label: "View all US pathways", href: "/us/rn" },
   pathwayCards: [
-    { title: "NCLEX-RN", href: "/lessons", description: "Clinical judgment, lessons, and timed practice for RN candidates." },
+    { title: "NCLEX-RN", href: "/us/rn/nclex-rn", description: "200 lessons and 480+ questions with CAT simulation for RN candidates." },
     { title: "NCLEX-PN", href: "/us/pn/nclex-pn", description: "PN-focused prep with questions, flashcards, and CAT-style exams." },
-    { title: "RN", href: "/us/rn", description: "RN hub: browse lessons, banks, and tools for US RN tracks." },
-    { title: "PN", href: "/us/pn", description: "PN hub: structured study paths for US practical nursing exams." },
+    { title: "NP Exam Prep", href: "/np-exam-prep", description: "FNP, AGPCNP, PMHNP, WHNP, and PNP-PC tracks with NP-level questions." },
+    { title: "Clinical Skills", href: "/us/rn/nclex-rn", description: "221 procedures with simulation-style walkthroughs and checkpoints." },
   ],
-  proofStrip: ["Built for NCLEX depth", "Lessons + question banks", "CAT-style readiness checks"],
+  proofStrip: ["Next Generation NCLEX ready", "480+ practice questions", "CAT adaptive exam simulator"],
   crossBorderCta: {
-    title: "Also targeting Canadian registration?",
+    title: "Studying for Canadian registration?",
     href: "/canada",
-    label: "Explore Canada-First Pathways",
+    label: "Explore Canada-First Pathways (REx-PN, CNPLE)",
   },
 };
 
