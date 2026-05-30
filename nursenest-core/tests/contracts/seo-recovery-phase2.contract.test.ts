@@ -11,6 +11,9 @@ import { describe, it } from "node:test";
 
 const ROOT = process.cwd();
 const auditScript = fs.readFileSync(path.join(ROOT, "scripts/seo/google-indexing-emergency-audit.ts"), "utf8");
+const packageJson = JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8")) as {
+  scripts: Record<string, string>;
+};
 
 const phase2Reports = [
   "docs/reports/robots-indexability-audit.md",
@@ -49,5 +52,10 @@ describe("SEO Recovery Phase 2 audit outputs", () => {
     assert.match(auditScript, /Unable To Verify/);
     assert.match(auditScript, /data\/gsc-indexing\/blocked\.csv/);
     assert.match(auditScript, /data\/gsc-indexing\/crawled-not-indexed\.csv/);
+  });
+
+  it("keeps the sitemap SEO gate deterministic", () => {
+    assert.match(packageJson.scripts["test:seo-sitemap"] ?? "", /--test-concurrency=1/);
+    assert.match(packageJson.scripts["test:seo-sitemap"] ?? "", /--test-reporter=spec/);
   });
 });
