@@ -31,6 +31,7 @@ import { PostTestStudyNextCard } from "@/components/student/post-test-study-next
 import { SessionFeedbackStrip } from "@/components/student/session-feedback-strip";
 import { generateClientSessionFeedback } from "@/lib/learner/session-feedback-client";
 import type { StudySettings } from "@/lib/learner/study-settings";
+import { learnerExamLayoutRefinementProps } from "@/lib/exam-workspace/unified-exam-workspace";
 
 type ExamQuestion = {
   id: string;
@@ -663,6 +664,7 @@ export function ExamPracticeClient({
 
   if (phase === "ready" && sessionPhase === "review") {
     return (
+      <div {...learnerExamLayoutRefinementProps()}>
       <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette immersive examMode="review">
         <ExamSessionTopBar
           left={<span className="font-medium text-foreground">Review before scoring</span>}
@@ -745,11 +747,13 @@ export function ExamPracticeClient({
           </p>
         </div>
       </ExamSessionShell>
+      </div>
     );
   }
 
   if (!q && (qLoading || !qid)) {
     return (
+      <div {...learnerExamLayoutRefinementProps()}>
       <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette immersive examMode="cat">
         <ExamSessionTopBar
           left={examTitle ? <span className="font-medium text-foreground">{examTitle}</span> : null}
@@ -766,6 +770,7 @@ export function ExamPracticeClient({
           <p className="text-sm text-muted-foreground">Loading question…</p>
         </div>
       </ExamSessionShell>
+      </div>
     );
   }
 
@@ -781,6 +786,7 @@ export function ExamPracticeClient({
   const raw = answers[q.id];
 
   return (
+      <div {...learnerExamLayoutRefinementProps()}>
       <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette immersive examMode="cat">
         <ExamSessionTopBar
           left={
@@ -918,5 +924,6 @@ export function ExamPracticeClient({
           </div>
         </div>
       </ExamSessionShell>
+      </div>
   );
 }

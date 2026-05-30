@@ -28,6 +28,7 @@ import { NclexNotesDrawer } from "@/components/exam/nclex-notes-drawer";
 import { NclexLabReference } from "@/components/exam/nclex-lab-reference";
 import {
   CANONICAL_LEARNER_SURFACE_VERSION,
+  learnerExamLayoutRefinementProps,
   type UnifiedExamWorkspaceMode,
 } from "@/lib/exam-workspace/unified-exam-workspace";
 
@@ -114,6 +115,7 @@ export function NclexCatExamLayout({
       data-nn-exam-workspace-mode={"cat" satisfies UnifiedExamWorkspaceMode}
       data-cat-exam-root=""
       data-nn-cat-premium-convergence=""
+      {...learnerExamLayoutRefinementProps()}
     >
 
       {/* ── Fixed top bar ─────────────────────────────────────────────── */}
@@ -350,6 +352,7 @@ export function NclexPracticeExamLayout({
       data-nn-cat-premium-convergence={loftPresentation ? undefined : ""}
       data-nclex-practice-rationale={rationaleActive ? "active" : "idle"}
       {...(loftPresentation ? { "data-nn-loft-simulation-shell": "" } : {})}
+      {...learnerExamLayoutRefinementProps()}
     >
 
       {/* ── Fixed top bar ─────────────────────────────────────────────── */}

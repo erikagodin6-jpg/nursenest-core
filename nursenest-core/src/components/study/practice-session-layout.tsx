@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { learnerExamLayoutRefinementProps } from "@/lib/exam-workspace/unified-exam-workspace";
 
 /**
  * PracticeSessionLayout — outer viewport-height container for the practice session.
@@ -23,6 +24,7 @@ export function PracticeSessionLayout({
       data-nn-premium-platform-module="practice-session"
       data-nn-premium-platform-sticky-controls=""
       {...rest}
+      {...learnerExamLayoutRefinementProps()}
     >
       {children}
     </div>

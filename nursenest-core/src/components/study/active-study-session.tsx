@@ -34,6 +34,7 @@ import { useFlashcardStudyTelemetry, deriveCardFlags } from "@/lib/flashcards/us
 import type { CardEventMeta } from "@/lib/flashcards/use-flashcard-study-telemetry";
 import {
   CANONICAL_LEARNER_SURFACE_VERSION,
+  learnerExamLayoutRefinementProps,
   type UnifiedExamWorkspaceMode,
 } from "@/lib/exam-workspace/unified-exam-workspace";
 import { resolveTierPedagogyProfile } from "@/lib/nursing-tiers/tier-pedagogy-profile";
@@ -576,6 +577,7 @@ export function ActiveStudySession({
       data-nn-premium-flashcard-active-session
       data-nn-flashcard-branding-revamp=""
       data-nn-flashcard-layout-refinement=""
+      {...learnerExamLayoutRefinementProps()}
       data-nn-flashcard-study-session=""
       data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
       data-nn-pedagogy-tier={tierPedagogyProfile.tier}

@@ -35,6 +35,7 @@ import { QuestionBankPeerPerformancePanel } from "@/components/student/question-
 import { QuestionSessionStudyLoopPanel } from "@/components/student/question-session-study-loop-panel";
 import { ExamProgressBar, ExamSessionShell, ExamSessionStickyChrome, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
+import { learnerExamLayoutRefinementProps } from "@/lib/exam-workspace/unified-exam-workspace";
 import type {
   QuestionBankDifficultyBand,
   QuestionBankDiscoveryResponse,
@@ -1429,6 +1430,7 @@ export function QuestionBankPracticeClient({
       </details>
 
       <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="question_bank">
+        <div {...learnerExamLayoutRefinementProps()} className="min-h-0">
         <ExamSessionShell neutralPalette immersive className="overflow-hidden shadow-md">
           <ExamSessionStickyChrome>
             <ExamSessionTopBar
@@ -1942,6 +1944,7 @@ export function QuestionBankPracticeClient({
             </div>
           ) : null}
         </ExamSessionShell>
+        </div>
       </ProtectedPremiumContent>
       <div id="qbank-question-notes" className="scroll-mt-24">
         <StudyNotesPanel

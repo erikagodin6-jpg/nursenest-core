@@ -337,6 +337,7 @@
     "verify:sitemap": "npx tsx scripts/seo/verify-sitemap-urls.ts",
     "sitemap:validate": "npx tsx scripts/sitemap-segmentation-validate.mts",
     "sitemap:report": "npx tsx scripts/sitemap-segmentation-report.mts",
+    "audit:gsc-indexing": "npx tsx scripts/seo/google-indexing-emergency-audit.ts",
     "seo:coverage:ingest": "node --import tsx scripts/seo/ingest-nursenest-coverage-xlsx.mts",
     "seo:guardrails": "node scripts/seo-guardrails.mjs",
     "verify:robots": "npx tsx scripts/seo/verify-robots.ts",

@@ -4,7 +4,7 @@
  */
 
 /* Warm canvas + white card tokens — page gradient, cards always white */
-html:has([data-nn-flashcard-layout-refinement]) {
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) {
   /* Learner study cards: intentional white surface (question + rationale panels). */
   --nn-flashcard-refinement-card: #ffffff;
   --nn-flashcard-refinement-card-border: color-mix(
@@ -26,8 +26,8 @@ html:has([data-nn-flashcard-layout-refinement]) {
   );
 }
 
-html[data-theme="blossom"]:has([data-nn-flashcard-layout-refinement]),
-html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement]) {
+html[data-theme="blossom"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])),
+html[data-theme="mint-blossom"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) {
   --nn-flashcard-refinement-canvas: linear-gradient(
     to bottom,
     color-mix(in srgb, var(--semantic-brand) 11%, var(--semantic-accent-peach)) 0%,
@@ -47,7 +47,7 @@ html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement]) {
   );
 }
 
-html[data-theme="ocean"]:has([data-nn-flashcard-layout-refinement]) {
+html[data-theme="ocean"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) {
   --nn-flashcard-refinement-canvas: linear-gradient(
     to bottom,
     color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-panel-cool)) 0%,
@@ -57,9 +57,9 @@ html[data-theme="ocean"]:has([data-nn-flashcard-layout-refinement]) {
   );
 }
 
-html[data-theme="midnight"]:has([data-nn-flashcard-layout-refinement]),
-html[data-theme="midnight-indigo"]:has([data-nn-flashcard-layout-refinement]),
-html[data-theme="deep-twilight"]:has([data-nn-flashcard-layout-refinement]) {
+html[data-theme="midnight"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])),
+html[data-theme="midnight-indigo"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])),
+html[data-theme="deep-twilight"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) {
   --nn-flashcard-refinement-canvas: linear-gradient(
     to bottom,
     color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--semantic-bg-base)) 0%,
@@ -69,7 +69,7 @@ html[data-theme="deep-twilight"]:has([data-nn-flashcard-layout-refinement]) {
   );
 }
 
-html[data-theme="aurora"]:has([data-nn-flashcard-layout-refinement]) {
+html[data-theme="aurora"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) {
   --nn-flashcard-refinement-canvas: linear-gradient(
     to bottom,
     color-mix(in srgb, var(--semantic-chart-5) 8%, var(--semantic-panel-warm)) 0%,
@@ -79,7 +79,7 @@ html[data-theme="aurora"]:has([data-nn-flashcard-layout-refinement]) {
   );
 }
 
-html[data-theme="sunset"]:has([data-nn-flashcard-layout-refinement]) {
+html[data-theme="sunset"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) {
   --nn-flashcard-refinement-canvas: linear-gradient(
     to bottom,
     color-mix(in srgb, var(--semantic-chart-1) 7%, var(--semantic-panel-warm)) 0%,
@@ -90,37 +90,37 @@ html[data-theme="sunset"]:has([data-nn-flashcard-layout-refinement]) {
 }
 
 /* ── Hide duplicate exam chrome bar (merged into study topbar) ─────── */
-html:has([data-nn-flashcard-layout-refinement]) .nn-exam-minimal-nav {
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) .nn-exam-minimal-nav {
   display: none !important;
 }
 
-html:has([data-nn-flashcard-layout-refinement]) .nn-learner-exam-focus-column {
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) .nn-learner-exam-focus-column {
   min-height: auto !important;
 }
 
-html:has([data-nn-flashcard-layout-refinement]) .nn-learner-exam-focus-body {
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) .nn-learner-exam-focus-body {
   min-height: auto !important;
 }
 
 /* ── White page canvas ───────────────────────────────────────────── */
-html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-canvas:not(.nn-flashcard-study-canvas--launcher) {
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) .nn-flashcard-study-canvas:not(.nn-flashcard-study-canvas--launcher) {
   background: var(--nn-flashcard-refinement-canvas) !important;
   padding-block: 0 !important;
 }
 
-html[data-theme="blossom"]:has([data-nn-flashcard-layout-refinement])
+html[data-theme="blossom"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-study-canvas:not(.nn-flashcard-study-canvas--launcher),
-html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement])
+html[data-theme="mint-blossom"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-study-canvas:not(.nn-flashcard-study-canvas--launcher) {
   background: var(--nn-flashcard-refinement-canvas) !important;
 }
 
 /* Exam shell: no blue/cool ambient wash on flashcard study */
-html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-premium.nn-exam-session-premium.nn-learner-exam-shell,
-html:has([data-nn-flashcard-layout-refinement])
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) .nn-flashcard-study-premium.nn-exam-session-premium.nn-learner-exam-shell,
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-study-premium.nn-exam-session-premium.nn-learner-exam-shell[data-nn-exam-mode="practice"],
-html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-premium .nn-exam-session-premium.nn-learner-exam-shell,
-html:has([data-nn-flashcard-layout-refinement])
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) .nn-flashcard-study-premium .nn-exam-session-premium.nn-learner-exam-shell,
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-study-premium
   .nn-exam-session-premium.nn-learner-exam-shell[data-nn-exam-mode="practice"] {
   background: var(--nn-flashcard-refinement-canvas) !important;
@@ -128,26 +128,28 @@ html:has([data-nn-flashcard-layout-refinement])
   box-shadow: none !important;
 }
 
-html:has([data-nn-flashcard-layout-refinement])
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-study-premium
   .nn-exam-session-premium.nn-learner-exam-shell::before {
   opacity: 0 !important;
 }
 
-html:has([data-nn-flashcard-layout-refinement])
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp] {
   background: var(--nn-flashcard-refinement-canvas) !important;
 }
 
-html[data-theme="blossom"]:has([data-nn-flashcard-layout-refinement])
+html[data-theme="blossom"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp],
-html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement])
+html[data-theme="mint-blossom"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp] {
   background: var(--nn-flashcard-refinement-canvas) !important;
 }
 
-.nn-flashcard-study-premium:has([data-nn-flashcard-layout-refinement]) .nn-premium-flashcard-session-root,
-.nn-flashcard-study-premium [data-nn-flashcard-layout-refinement].nn-active-flashcard-session {
+.nn-flashcard-study-premium:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) .nn-premium-flashcard-session-root,
+.nn-flashcard-study-premium :is([data-nn-flashcard-layout-refinement], [data-nn-learner-exam-layout-refinement]).nn-active-flashcard-session,
+.nn-practice-session[data-nn-learner-exam-layout-refinement],
+.nn-nclex-exam-page[data-nn-learner-exam-layout-refinement] {
   background: var(--nn-flashcard-refinement-canvas) !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -371,35 +373,35 @@ html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement])
   background: var(--nn-flashcard-refinement-card) !important;
 }
 
-html:has([data-nn-flashcard-layout-refinement])
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
   li:nth-child(1)
   button,
-html:has([data-nn-flashcard-layout-refinement])
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
   li:nth-child(1)
   .flex.w-full,
-html:has([data-nn-flashcard-layout-refinement])
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
   li:nth-child(2)
   button,
-html:has([data-nn-flashcard-layout-refinement])
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
   li:nth-child(2)
   .flex.w-full,
-html:has([data-nn-flashcard-layout-refinement])
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
   li:nth-child(3)
   button,
-html:has([data-nn-flashcard-layout-refinement])
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
   li:nth-child(3)
   .flex.w-full,
-html:has([data-nn-flashcard-layout-refinement])
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
   li:nth-child(4)
   button,
-html:has([data-nn-flashcard-layout-refinement])
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
   .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
   li:nth-child(4)
   .flex.w-full {
@@ -438,6 +440,42 @@ html:has([data-nn-flashcard-layout-refinement])
 [data-nn-flashcard-layout-refinement] .nn-flashcard-card-action-row {
   margin-bottom: 0.85rem !important;
   margin-top: 0.25rem !important;
+}
+
+/* ── MCQ: all four options visible (override premium viewport budget) ─ */
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
+  .nn-flashcard-study-canvas:not(.nn-flashcard-study-canvas--launcher) {
+  height: auto !important;
+  max-height: none !important;
+}
+
+.nn-flashcard-study-premium:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement]))
+  .nn-premium-flashcard-session-root {
+  height: auto !important;
+  max-height: none !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-learning-grid,
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-layout-refinement] .nn-flashcard-learning-grid {
+  overflow: visible !important;
+  min-height: auto !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-learning-grid .nn-flashcard-hero-surface,
+.nn-flashcard-study-premium
+  .nn-active-flashcard-session[data-nn-flashcard-layout-refinement]
+  .nn-flashcard-learning-grid
+  .nn-flashcard-hero-surface {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-premium-flashcard-stack-outer,
+[data-nn-flashcard-layout-refinement] .nn-premium-flashcard-prompt-panel {
+  overflow: visible !important;
 }
 
 /* ── Footer flow: coach → SM-2, no clipping ─────────────────────── */
@@ -563,11 +601,11 @@ html:has([data-nn-flashcard-layout-refinement])
   }
 }
 
-html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-canvas > .mb-4:first-child {
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) .nn-flashcard-study-canvas > .mb-4:first-child {
   display: none !important;
 }
 
-html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-canvas > .flex.justify-between:first-child {
+html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) .nn-flashcard-study-canvas > .flex.justify-between:first-child {
   display: none !important;
 }
 
@@ -669,4 +707,81 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-canvas > .fl
 
 [data-nn-flashcard-layout-refinement] .nn-flashcard-hero-surface .nn-learner-exam-shell::before {
   opacity: 0 !important;
+}
+
+/* ── Practice / CAT / NCLEX / qbank — same canvas + white cards ─────────── */
+[data-nn-learner-exam-layout-refinement] .nn-exam-session-premium.nn-learner-exam-shell,
+[data-nn-learner-exam-layout-refinement] .nn-practice-exam-convergence.nn-cat-exam-chrome::before,
+[data-nn-learner-exam-layout-refinement] .nn-cat-exam-chrome.nn-cat-premium-convergence::before {
+  background: transparent !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  box-shadow: none !important;
+}
+
+[data-nn-learner-exam-layout-refinement] .nn-cat-exam-board-frame,
+[data-nn-learner-exam-layout-refinement] .nn-nclex-exam-body,
+[data-nn-learner-exam-layout-refinement] .nn-practice-exam-convergence .nn-cat-session {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+[data-nn-learner-exam-layout-refinement] .nn-practice-exam-split--premium {
+  gap: clamp(1.25rem, 2vw, 1.75rem) !important;
+  padding: clamp(0.85rem, 1.35vw, 1.25rem) clamp(1rem, 1.85vw, 1.65rem) clamp(1rem, 1.5vw, 1.35rem) !important;
+  max-width: min(96vw, 100rem);
+  width: 100%;
+}
+
+[data-nn-learner-exam-layout-refinement] .nn-cat-question-card,
+[data-nn-learner-exam-layout-refinement] .nn-practice-exam-rationale-panel__card,
+[data-nn-learner-exam-layout-refinement] .nn-nclex-practice-rationale-band,
+[data-nn-learner-exam-layout-refinement] .nn-question-session-rationale {
+  background: var(--nn-flashcard-refinement-card) !important;
+  background-image: none !important;
+  border: 1px solid var(--nn-flashcard-refinement-card-border) !important;
+  border-radius: 1rem !important;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--nn-flashcard-refinement-card) 88%, transparent),
+    0 0.65rem 1.75rem -1rem color-mix(in srgb, var(--semantic-text-primary) 12%, transparent) !important;
+}
+
+[data-nn-learner-exam-layout-refinement] .nn-cat-question-card:not(.nn-cat-question-card--exam-stack) {
+  padding: clamp(1.35rem, 2vw, 1.85rem) !important;
+}
+
+[data-nn-learner-exam-layout-refinement] .nn-cat-exam-board-top,
+[data-nn-learner-exam-layout-refinement] .nn-practice-exam-progress-premium,
+[data-nn-learner-exam-layout-refinement] .nn-nclex-top-bar,
+[data-nn-learner-exam-layout-refinement] .nn-exam-session-topbar {
+  background: var(--nn-flashcard-refinement-card) !important;
+  background-image: none !important;
+  border-color: var(--nn-flashcard-refinement-card-border) !important;
+}
+
+[data-nn-learner-exam-layout-refinement] .nn-cat-opt,
+[data-nn-learner-exam-layout-refinement] .nn-nclex-answer-card,
+[data-nn-learner-exam-layout-refinement] .nn-practice-exam-convergence .nn-cat-opt {
+  background: var(--nn-flashcard-refinement-card) !important;
+  border-color: var(--nn-flashcard-refinement-option-border) !important;
+}
+
+[data-nn-learner-exam-layout-refinement] .nn-cat-opt-list,
+[data-nn-learner-exam-layout-refinement] .nn-nclex-answer-list {
+  gap: 0.85rem !important;
+}
+
+[data-nn-learner-exam-layout-refinement][data-nn-practice-question-layout="flashcard-split-study"] .nn-cat-exam-board-frame {
+  background: transparent !important;
+}
+
+[data-nn-learner-exam-layout-refinement] .nn-premium-practice-exam-footer,
+[data-nn-learner-exam-layout-refinement] .nn-nclex-bottom-bar {
+  background: var(--nn-flashcard-refinement-card) !important;
+  border-color: var(--nn-flashcard-refinement-card-border) !important;
+}
+
+html:where(:has([data-nn-learner-exam-layout-refinement])) .nn-learner-exam-focus-column,
+html:where(:has([data-nn-learner-exam-layout-refinement])) .nn-learner-exam-focus-body {
+  background: var(--nn-flashcard-refinement-canvas) !important;
 }

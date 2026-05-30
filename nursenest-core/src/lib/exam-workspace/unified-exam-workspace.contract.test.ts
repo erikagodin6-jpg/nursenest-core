@@ -115,13 +115,24 @@ test("CAT, practice, and flashcards declare the unified fixed-viewport workspace
   const globalExamCss = readRepoFile("src/app/styles/exam/nclex-exam.css");
   const flashcardCss = readRepoFile("src/app/learner-flashcard-premium.css");
 
+  const practiceSessionLayout = readRepoFile("src/components/study/practice-session-layout.tsx");
+  const layoutRefinementCss = readRepoFile("src/app/learner-flashcard-layout-refinement-pass.css");
+  const practiceTestsLayout = readRepoFile("src/app/(app)/app/(learner)/practice-tests/layout.tsx");
+
   assert.match(examLayout, /data-nn-unified-exam-workspace/);
+  assert.match(examLayout, /learnerExamLayoutRefinementProps/);
   assert.match(examLayout, /data-nn-canonical-learner-surface=\{CANONICAL_LEARNER_SURFACE_VERSION\}/);
   assert.match(examLayout, /data-nn-exam-workspace-mode=\{"cat"/);
   assert.match(examLayout, /data-nn-exam-workspace-mode=\{"practice"/);
   assert.match(activeStudySession, /data-nn-unified-exam-workspace/);
+  assert.match(activeStudySession, /learnerExamLayoutRefinementProps/);
   assert.match(activeStudySession, /data-nn-canonical-learner-surface=\{CANONICAL_LEARNER_SURFACE_VERSION\}/);
   assert.match(activeStudySession, /data-nn-exam-workspace-mode=\{"flashcards"/);
+  assert.match(practiceSessionLayout, /learnerExamLayoutRefinementProps/);
+  assert.match(practiceExamRunner, /learnerExamLayoutRefinementProps/);
+  assert.match(practiceQuestionSession, /learnerExamLayoutRefinementProps/);
+  assert.match(layoutRefinementCss, /\[data-nn-learner-exam-layout-refinement\]/);
+  assert.match(practiceTestsLayout, /learner-flashcard-layout-refinement-pass\.css/);
   assert.match(flashcardSessionPlayer, /data-nn-canonical-learner-surface=\{CANONICAL_LEARNER_SURFACE_VERSION\}/);
   assert.match(practiceQuestionSession, /<QuestionRenderer/);
   assert.match(practiceQuestionSession, /data-nn-canonical-learner-surface=\{CANONICAL_LEARNER_SURFACE_VERSION\}/);

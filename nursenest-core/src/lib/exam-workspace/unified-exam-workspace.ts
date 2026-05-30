@@ -1,5 +1,14 @@
 export const UNIFIED_EXAM_WORKSPACE_ATTR = "data-nn-unified-exam-workspace" as const;
 export const UNIFIED_EXAM_WORKSPACE_MODE_ATTR = "data-nn-exam-workspace-mode" as const;
+/** Soft gradient canvas + white card surfaces (flashcards, practice, CAT, qbank). */
+export const LEARNER_EXAM_LAYOUT_REFINEMENT_ATTR = "data-nn-learner-exam-layout-refinement" as const;
+
+export function learnerExamLayoutRefinementProps(): Record<
+  typeof LEARNER_EXAM_LAYOUT_REFINEMENT_ATTR,
+  ""
+> {
+  return { [LEARNER_EXAM_LAYOUT_REFINEMENT_ATTR]: "" };
+}
 export const CANONICAL_LEARNER_SURFACE_ATTR = "data-nn-canonical-learner-surface" as const;
 export const CANONICAL_LEARNER_SURFACE_VERSION = "flashcards-v1" as const;
 

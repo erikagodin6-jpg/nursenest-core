@@ -9,6 +9,7 @@ import { ProtectedPremiumContent } from "@/components/student/protected-premium-
 import { QuestionRenderer } from "@/components/questions/question-renderer";
 import {
   CANONICAL_LEARNER_SURFACE_VERSION,
+  learnerExamLayoutRefinementProps,
   type UnifiedExamWorkspaceMode,
 } from "@/lib/exam-workspace/unified-exam-workspace";
 import type { ExamMicroQuestionPayload, SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
@@ -585,6 +586,8 @@ export function PracticeQuestionSessionClient({
       <div
         className="nn-flashcard-study-premium nn-active-flashcard-session nn-unified-exam-workspace"
         data-nn-premium-flashcard-active-session
+        data-nn-flashcard-layout-refinement=""
+        {...learnerExamLayoutRefinementProps()}
         data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
         data-nn-unified-exam-workspace=""
         data-nn-exam-workspace-mode={"practice" satisfies UnifiedExamWorkspaceMode}

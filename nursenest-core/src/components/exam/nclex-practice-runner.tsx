@@ -31,6 +31,7 @@ import { useMeasurementPreference } from "@/lib/measurements/use-measurement-pre
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 import {
   CANONICAL_LEARNER_SURFACE_VERSION,
+  learnerExamLayoutRefinementProps,
   type UnifiedExamWorkspaceMode,
 } from "@/lib/exam-workspace/unified-exam-workspace";
 
@@ -491,6 +492,7 @@ export function NclexPracticeRunner({
         data-nclex-shell="practice"
         data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
         data-nn-unified-exam-workspace=""
+      {...learnerExamLayoutRefinementProps()}
         data-nn-exam-workspace-mode={"practice-exam" satisfies UnifiedExamWorkspaceMode}
       >
         <div className="nn-nclex-spinner" />
@@ -505,6 +507,7 @@ export function NclexPracticeRunner({
         data-nclex-shell="practice"
         data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
         data-nn-unified-exam-workspace=""
+      {...learnerExamLayoutRefinementProps()}
         data-nn-exam-workspace-mode={"practice-exam" satisfies UnifiedExamWorkspaceMode}
         style={{ padding: "2rem", textAlign: "center" }}
       >
@@ -523,6 +526,7 @@ export function NclexPracticeRunner({
         data-nclex-shell="practice"
         data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
         data-nn-unified-exam-workspace=""
+      {...learnerExamLayoutRefinementProps()}
         data-nn-exam-workspace-mode={"review" satisfies UnifiedExamWorkspaceMode}
         style={{ maxWidth: "52rem", margin: "0 auto", padding: "2rem 1.5rem" }}
       >
@@ -582,6 +586,7 @@ export function NclexPracticeRunner({
         data-nclex-shell="practice"
         data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
         data-nn-unified-exam-workspace=""
+      {...learnerExamLayoutRefinementProps()}
         data-nn-exam-workspace-mode={"practice-exam" satisfies UnifiedExamWorkspaceMode}
         style={{ padding: "2rem", textAlign: "center" }}
       >
@@ -707,6 +712,7 @@ export function NclexPracticeRunner({
       data-nclex-shell="practice"
       data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
       data-nn-unified-exam-workspace=""
+      {...learnerExamLayoutRefinementProps()}
       data-nn-exam-workspace-mode={"practice-exam" satisfies UnifiedExamWorkspaceMode}
     >
       {/* ── Top bar ─────────────────────────────────────────────────────────── */}
