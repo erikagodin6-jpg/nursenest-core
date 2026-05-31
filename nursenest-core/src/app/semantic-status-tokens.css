@@ -381,29 +381,30 @@ html[data-theme="soft-sage"] {
   --semantic-chart-5: #8b5cf6;
 }
 
-/* Aurora — clinical pink / violet / blue / mint / orange (token-driven multi-hue) */
+/* Aurora — borealis purple with mint success, aqua study-time, and soft pink streak accents. */
 html[data-theme="aurora"] {
-  --semantic-brand-soft: color-mix(in srgb, #9b72ff 13%, var(--bg-card));
-  --semantic-chart-1: #9b72ff;
-  --semantic-success: #2ecc71;
-  --semantic-success-soft: color-mix(in srgb, #2ecc71 11%, var(--bg-card));
-  --semantic-success-contrast: #0f5132;
-  --semantic-info: #4a90e2;
-  --semantic-info-soft: color-mix(in srgb, #4a90e2 11%, var(--bg-card));
-  --semantic-info-contrast: #1e3a8a;
-  --semantic-warning: #f39c12;
-  --semantic-warning-soft: color-mix(in srgb, #f39c12 12%, var(--bg-card));
-  --semantic-warning-contrast: #92400e;
-  --semantic-danger: #e14d8f;
-  --semantic-danger-soft: color-mix(in srgb, #e14d8f 10%, var(--bg-card));
-  --semantic-chart-2: #2ecc71;
-  --semantic-chart-3: #4a90e2;
-  --semantic-chart-4: #f39c12;
-  --semantic-chart-5: #e14d8f;
-  --semantic-panel-muted: color-mix(in srgb, #9b72ff 5%, var(--bg-section-alt, var(--bg-card)));
-  --semantic-panel-warm: color-mix(in srgb, #e14d8f 10%, var(--bg-card));
-  --semantic-panel-cool: color-mix(in srgb, #4a90e2 11%, var(--bg-card));
-  --semantic-panel-positive: color-mix(in srgb, #2ecc71 11%, var(--bg-card));
+  --semantic-brand-soft: color-mix(in srgb, #8b5cf6 12%, var(--bg-card));
+  --semantic-brand: #8b5cf6;
+  --semantic-chart-1: #8b5cf6;
+  --semantic-success: #24b889;
+  --semantic-success-soft: color-mix(in srgb, #6ee7b7 13%, var(--bg-card));
+  --semantic-success-contrast: #0f6b52;
+  --semantic-info: #0891b2;
+  --semantic-info-soft: color-mix(in srgb, #67e8f9 12%, var(--bg-card));
+  --semantic-info-contrast: #155e75;
+  --semantic-warning: #0891b2;
+  --semantic-warning-soft: color-mix(in srgb, #67e8f9 10%, var(--bg-card));
+  --semantic-warning-contrast: #155e75;
+  --semantic-danger: #d9468f;
+  --semantic-danger-soft: color-mix(in srgb, #f9a8d4 10%, var(--bg-card));
+  --semantic-chart-2: #24b889;
+  --semantic-chart-3: #67e8f9;
+  --semantic-chart-4: #6ee7b7;
+  --semantic-chart-5: #f9a8d4;
+  --semantic-panel-muted: color-mix(in srgb, #8b5cf6 5%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #f9a8d4 9%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #67e8f9 10%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #6ee7b7 12%, var(--bg-card));
 }
 
 /* Sunset — warm coral + sky + mint + golden accents (multi-hue; readable on cream) */
@@ -559,123 +560,132 @@ html[data-theme="ocean"] {
 }
 
 html[data-theme="blossom"] {
-  --semantic-brand-soft: color-mix(in srgb, #ffb7d5 14%, var(--bg-card));
-  --semantic-brand: #ffa9cc;
-  --semantic-success: #6dd4a8;
-  --semantic-success-soft: color-mix(in srgb, #b7efd1 18%, var(--bg-card));
-  --semantic-success-contrast: #1f6b52;
-  --semantic-info: #5eb8f0;
-  --semantic-info-soft: color-mix(in srgb, #bfe7ff 20%, var(--bg-card));
-  --semantic-info-contrast: #1e5f8a;
-  --semantic-warning: #f5d76e;
-  --semantic-warning-soft: color-mix(in srgb, #fff2b8 22%, var(--bg-card));
-  --semantic-warning-contrast: #7a5a12;
-  --semantic-danger: #f08bb8;
-  --semantic-danger-soft: color-mix(in srgb, #ffc7de 16%, var(--bg-card));
-  --semantic-danger-contrast: #8f3d62;
-  /* Nine distinct hues — pink / sky / mint / butter / rose (no violet-heavy chart slots). */
-  --semantic-chart-1: #ffa9cc;
-  --semantic-chart-2: #bfe7ff;
-  --semantic-chart-3: #7ec8ff;
-  --semantic-chart-4: #b7efd1;
-  --semantic-chart-5: #ffc7de;
-  --semantic-chart-6: #d9f8e7;
-  --semantic-chart-7: #d6f0ff;
-  --semantic-chart-8: #fff2b8;
-  --semantic-chart-9: #a9d8ff;
-  --semantic-accent-turquoise: #d9f8e7;
-  --semantic-accent-seafoam: #c8f2dc;
-  --semantic-accent-mint: #b7efd1;
-  --semantic-accent-periwinkle: #d6f0ff;
-  --semantic-accent-peach: #ffd4e8;
-  --semantic-accent-gold: #fff2b8;
-  --semantic-accent-plum: #ff8fb8;
-  --semantic-accent-indigo: #7ec8ff;
-  --semantic-accent-lavender: #ffc7de;
-  --semantic-panel-muted: color-mix(in srgb, #fff9fb 48%, var(--bg-section-alt, var(--bg-card)));
-  --semantic-panel-warm: color-mix(in srgb, #fff2b8 18%, var(--bg-card));
-  --semantic-panel-cool: color-mix(in srgb, #bfe7ff 16%, var(--bg-card));
-  --semantic-panel-positive: color-mix(in srgb, #d9f8e7 18%, var(--bg-card));
-  --semantic-panel-aqua: color-mix(in srgb, #d6f0ff 16%, var(--bg-card));
-  --semantic-panel-mint: color-mix(in srgb, #c8f2dc 18%, var(--bg-card));
-  --semantic-panel-lavender: color-mix(in srgb, #ffc7de 14%, var(--bg-card));
-  --semantic-panel-peach: color-mix(in srgb, #ffb7d5 12%, var(--bg-card));
-  --semantic-panel-gold: color-mix(in srgb, #fff6cc 16%, var(--bg-card));
+  --semantic-brand-soft: color-mix(in srgb, #9ec5fe 14%, var(--bg-card));
+  --semantic-brand: #1d7ed8;
+  --semantic-success: #2fbf92;
+  --semantic-success-soft: color-mix(in srgb, #a7f3d0 18%, var(--bg-card));
+  --semantic-success-contrast: #0f6b52;
+  --semantic-info: #2f93dd;
+  --semantic-info-soft: color-mix(in srgb, #9ec5fe 18%, var(--bg-card));
+  --semantic-info-contrast: #155b8e;
+  --semantic-warning: #d6a514;
+  --semantic-warning-soft: color-mix(in srgb, #fde68a 16%, var(--bg-card));
+  --semantic-warning-contrast: #6f4f00;
+  --semantic-danger: #d85d8e;
+  --semantic-danger-soft: color-mix(in srgb, #f8c8dc 12%, var(--bg-card));
+  --semantic-danger-contrast: #8f315b;
+  --semantic-chart-1: #1d7ed8;
+  --semantic-chart-2: #2fbf92;
+  --semantic-chart-3: #9ec5fe;
+  --semantic-chart-4: #a7f3d0;
+  --semantic-chart-5: #f8c8dc;
+  --semantic-chart-6: #dbeafe;
+  --semantic-chart-7: #7ddfc0;
+  --semantic-chart-8: #fde68a;
+  --semantic-chart-9: #67aae9;
+  --semantic-accent-turquoise: #a7f3d0;
+  --semantic-accent-seafoam: #7ddfc0;
+  --semantic-accent-mint: #a7f3d0;
+  --semantic-accent-periwinkle: #9ec5fe;
+  --semantic-accent-peach: #f8c8dc;
+  --semantic-accent-gold: #fde68a;
+  --semantic-accent-plum: #d85d8e;
+  --semantic-accent-indigo: #1d7ed8;
+  --semantic-accent-lavender: #dbeafe;
+  --semantic-panel-muted: color-mix(in srgb, #f8fafc 56%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #fde68a 10%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #9ec5fe 13%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #a7f3d0 16%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #a7f3d0 14%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #a7f3d0 16%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #9ec5fe 10%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #f8c8dc 8%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #fde68a 10%, var(--bg-card));
+  --semantic-violet: #67aae9;
+  --semantic-violet-soft: color-mix(in srgb, #9ec5fe 10%, var(--bg-card));
+  --semantic-violet-contrast: #155b8e;
 }
 
 html[data-theme="mint-blossom"] {
-  --semantic-brand-soft: color-mix(in srgb, #b7efd1 16%, var(--bg-card));
-  --semantic-brand: #ffb7d5;
-  --semantic-success: #6dd4a8;
-  --semantic-success-soft: color-mix(in srgb, #d9f8e7 20%, var(--bg-card));
-  --semantic-success-contrast: #1f6b52;
-  --semantic-info: #5eb8f0;
-  --semantic-info-soft: color-mix(in srgb, #d6f0ff 18%, var(--bg-card));
-  --semantic-info-contrast: #1e5f8a;
-  --semantic-warning: #f5d76e;
-  --semantic-warning-soft: color-mix(in srgb, #fff6cc 20%, var(--bg-card));
-  --semantic-warning-contrast: #7a5a12;
-  --semantic-danger: #f08bb8;
-  --semantic-danger-soft: color-mix(in srgb, #ffc7de 14%, var(--bg-card));
-  --semantic-danger-contrast: #8f3d62;
-  --semantic-chart-1: #ffb7d5;
-  --semantic-chart-2: #bfe7ff;
-  --semantic-chart-3: #7ec8ff;
-  --semantic-chart-4: #b7efd1;
-  --semantic-chart-5: #ffc7de;
-  --semantic-chart-6: #d9f8e7;
-  --semantic-chart-7: #d6f0ff;
-  --semantic-chart-8: #fff2b8;
-  --semantic-chart-9: #c8f2dc;
-  --semantic-accent-turquoise: #d9f8e7;
-  --semantic-accent-seafoam: #c8f2dc;
-  --semantic-accent-mint: #b7efd1;
-  --semantic-accent-periwinkle: #d6f0ff;
-  --semantic-accent-peach: #ffd4e8;
-  --semantic-accent-gold: #fff6cc;
-  --semantic-accent-plum: #ff8fb8;
-  --semantic-accent-indigo: #7ec8ff;
-  --semantic-accent-lavender: #ffc7de;
-  --semantic-panel-muted: color-mix(in srgb, #fafdfc 52%, var(--bg-section-alt, var(--bg-card)));
-  --semantic-panel-warm: color-mix(in srgb, #fff6cc 16%, var(--bg-card));
-  --semantic-panel-cool: color-mix(in srgb, #d6f0ff 14%, var(--bg-card));
-  --semantic-panel-positive: color-mix(in srgb, #d9f8e7 20%, var(--bg-card));
-  --semantic-panel-aqua: color-mix(in srgb, #d6f0ff 14%, var(--bg-card));
-  --semantic-panel-mint: color-mix(in srgb, #c8f2dc 20%, var(--bg-card));
-  --semantic-panel-lavender: color-mix(in srgb, #ffc7de 12%, var(--bg-card));
-  --semantic-panel-peach: color-mix(in srgb, #ffb7d5 10%, var(--bg-card));
-  --semantic-panel-gold: color-mix(in srgb, #fff6cc 14%, var(--bg-card));
+  --semantic-brand-soft: color-mix(in srgb, #a7f3d0 16%, var(--bg-card));
+  --semantic-brand: #1d7ed8;
+  --semantic-success: #2fbf92;
+  --semantic-success-soft: color-mix(in srgb, #a7f3d0 20%, var(--bg-card));
+  --semantic-success-contrast: #0f6b52;
+  --semantic-info: #2f93dd;
+  --semantic-info-soft: color-mix(in srgb, #9ec5fe 16%, var(--bg-card));
+  --semantic-info-contrast: #155b8e;
+  --semantic-warning: #d6a514;
+  --semantic-warning-soft: color-mix(in srgb, #fde68a 12%, var(--bg-card));
+  --semantic-warning-contrast: #6f4f00;
+  --semantic-danger: #d85d8e;
+  --semantic-danger-soft: color-mix(in srgb, #f8c8dc 10%, var(--bg-card));
+  --semantic-danger-contrast: #8f315b;
+  --semantic-chart-1: #1d7ed8;
+  --semantic-chart-2: #2fbf92;
+  --semantic-chart-3: #9ec5fe;
+  --semantic-chart-4: #a7f3d0;
+  --semantic-chart-5: #f8c8dc;
+  --semantic-chart-6: #dbeafe;
+  --semantic-chart-7: #7ddfc0;
+  --semantic-chart-8: #fde68a;
+  --semantic-chart-9: #67aae9;
+  --semantic-accent-turquoise: #a7f3d0;
+  --semantic-accent-seafoam: #7ddfc0;
+  --semantic-accent-mint: #a7f3d0;
+  --semantic-accent-periwinkle: #9ec5fe;
+  --semantic-accent-peach: #f8c8dc;
+  --semantic-accent-gold: #fde68a;
+  --semantic-accent-plum: #d85d8e;
+  --semantic-accent-indigo: #1d7ed8;
+  --semantic-accent-lavender: #dbeafe;
+  --semantic-panel-muted: color-mix(in srgb, #f8fafc 54%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #fde68a 9%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #9ec5fe 12%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #a7f3d0 18%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #a7f3d0 16%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #a7f3d0 18%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #9ec5fe 9%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #f8c8dc 7%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #fde68a 9%, var(--bg-card));
+  --semantic-violet: #67aae9;
+  --semantic-violet-soft: color-mix(in srgb, #9ec5fe 9%, var(--bg-card));
+  --semantic-violet-contrast: #155b8e;
 }
 
 html[data-theme="aurora"] {
-  --semantic-brand-soft: color-mix(in srgb, #756dff 13%, var(--bg-card));
-  --semantic-chart-1: #756dff;
-  --semantic-chart-2: #34c9d4;
-  --semantic-chart-3: #64d8a6;
-  --semantic-chart-4: #b8e986;
-  --semantic-chart-5: #b09bff;
-  --semantic-chart-6: #9ac7ff;
-  --semantic-chart-7: #45bfb1;
-  --semantic-chart-8: #d57ad4;
-  --semantic-chart-9: #2c3e7e;
-  --semantic-accent-turquoise: #34c9d4;
-  --semantic-accent-seafoam: #64d8a6;
-  --semantic-accent-mint: #b8e986;
-  --semantic-accent-periwinkle: #9ac7ff;
-  --semantic-accent-peach: #d8b777;
-  --semantic-accent-gold: #b8e986;
-  --semantic-accent-plum: #d57ad4;
-  --semantic-accent-indigo: #2c3e7e;
-  --semantic-accent-lavender: #b09bff;
-  --semantic-panel-muted: color-mix(in srgb, #756dff 6%, var(--bg-section-alt, var(--bg-card)));
-  --semantic-panel-warm: color-mix(in srgb, #d57ad4 10%, var(--bg-card));
-  --semantic-panel-cool: color-mix(in srgb, #34c9d4 13%, var(--bg-card));
-  --semantic-panel-positive: color-mix(in srgb, #64d8a6 13%, var(--bg-card));
-  --semantic-panel-aqua: color-mix(in srgb, #34c9d4 15%, var(--bg-card));
-  --semantic-panel-mint: color-mix(in srgb, #64d8a6 15%, var(--bg-card));
-  --semantic-panel-lavender: color-mix(in srgb, #b09bff 15%, var(--bg-card));
-  --semantic-panel-peach: color-mix(in srgb, #d57ad4 9%, var(--bg-card));
-  --semantic-panel-gold: color-mix(in srgb, #b8e986 12%, var(--bg-card));
+  --semantic-brand-soft: color-mix(in srgb, #8b5cf6 12%, var(--bg-card));
+  --semantic-brand: #8b5cf6;
+  --semantic-chart-1: #8b5cf6;
+  --semantic-chart-2: #24b889;
+  --semantic-chart-3: #67e8f9;
+  --semantic-chart-4: #6ee7b7;
+  --semantic-chart-5: #f9a8d4;
+  --semantic-chart-6: #c4b5fd;
+  --semantic-chart-7: #2dd4bf;
+  --semantic-chart-8: #a78bfa;
+  --semantic-chart-9: #155e75;
+  --semantic-accent-turquoise: #67e8f9;
+  --semantic-accent-seafoam: #6ee7b7;
+  --semantic-accent-mint: #6ee7b7;
+  --semantic-accent-periwinkle: #c4b5fd;
+  --semantic-accent-peach: #f9a8d4;
+  --semantic-accent-gold: #67e8f9;
+  --semantic-accent-plum: #d9468f;
+  --semantic-accent-indigo: #8b5cf6;
+  --semantic-accent-lavender: #c4b5fd;
+  --semantic-panel-muted: color-mix(in srgb, #8b5cf6 5%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #f9a8d4 8%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #67e8f9 11%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #6ee7b7 13%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #67e8f9 13%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #6ee7b7 13%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #8b5cf6 10%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #f9a8d4 8%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #67e8f9 9%, var(--bg-card));
+  --semantic-violet: #8b5cf6;
+  --semantic-violet-soft: color-mix(in srgb, #8b5cf6 10%, var(--bg-card));
+  --semantic-violet-contrast: #5b21b6;
 }
 
 /* Marketing homepage layered surfaces (semantic aliases — color-only; no layout). */
@@ -699,7 +709,12 @@ html[data-theme="ocean"] {
 html[data-theme="blossom"],
 html[data-theme="mint-blossom"] {
   --nn-marketing-surface-secondary: var(--semantic-panel-mint);
-  --nn-marketing-surface-tertiary: var(--semantic-panel-lavender);
+  --nn-marketing-surface-tertiary: var(--semantic-panel-cool);
+  --nn-premium-meter-brand: linear-gradient(90deg, #9ec5fe, #a7f3d0);
+  --nn-premium-meter-info: linear-gradient(90deg, #9ec5fe, #a7f3d0);
+  --nn-premium-meter-success: linear-gradient(90deg, #a7f3d0, #9ec5fe);
+  --nn-premium-meter-warning: linear-gradient(90deg, #fde68a, #9ec5fe);
+  --nn-premium-meter-danger: linear-gradient(90deg, #f8c8dc, #9ec5fe);
   --nn-marketing-gradient-hero: linear-gradient(
     92deg,
     color-mix(in srgb, var(--semantic-chart-1) 96%, transparent) 0%,
@@ -719,10 +734,15 @@ html[data-theme="aurora"] {
   --nn-marketing-surface-tertiary: var(--semantic-panel-warm);
   --nn-marketing-gradient-hero: linear-gradient(
     94deg,
-    color-mix(in srgb, var(--semantic-chart-5) 92%, var(--semantic-border-soft)) 0%,
-    color-mix(in srgb, var(--semantic-chart-2) 90%, var(--semantic-border-soft)) 46%,
-    color-mix(in srgb, var(--semantic-brand) 91%, var(--semantic-border-soft)) 100%
+    color-mix(in srgb, #8b5cf6 90%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, #67e8f9 84%, var(--semantic-border-soft)) 48%,
+    color-mix(in srgb, #6ee7b7 86%, var(--semantic-border-soft)) 100%
   );
+  --nn-premium-meter-brand: linear-gradient(90deg, #8b5cf6, #6ee7b7);
+  --nn-premium-meter-info: linear-gradient(90deg, #67e8f9, #6ee7b7);
+  --nn-premium-meter-success: linear-gradient(90deg, #6ee7b7, #67e8f9);
+  --nn-premium-meter-warning: linear-gradient(90deg, #67e8f9, #f9a8d4);
+  --nn-premium-meter-danger: linear-gradient(90deg, #f9a8d4, #8b5cf6);
 }
 
 html[data-theme="sunset"] {

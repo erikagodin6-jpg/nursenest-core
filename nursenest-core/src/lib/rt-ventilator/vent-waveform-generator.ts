@@ -363,6 +363,8 @@ export function generateVentWaveform(
   const isAPRV = config.mode === "aprv";
 
   const includePlateau = options.includePlateau ?? isVC;
+  // FIX 3: Plateau must be ≥ 350 ms — fraction alone gives too short a plateau at normal Ti.
+  // Clinical standard: end-inspiratory pause ≥ 0.3 s is required for a valid Pplat measurement.
   const plateauFraction = options.plateauFraction ?? 0.15;
 
   // ── Derived physiology ──────────────────────────────────────────────────────
@@ -370,14 +372,21 @@ export function generateVentWaveform(
   const raw = config.resistance; // cmH₂O·s/L
   const tau = raw * cstL; // time constant (s)
   const peep = config.peep;
+  // FIX 1: autoPeep does NOT inflate the pressure baseline (effectivePeep = peep only).
+  // Auto-PEEP is handled by the volume floor in the expiratory phase: at the floor
+  // the pressure is correctly set to peep + autoPeep, not peep + 2×autoPeep.
   const autoPeep = config.autoPeep ?? 0;
-  const effectivePeep = peep + autoPeep;
+  const effectivePeep = peep; // was peep + autoPeep — that double-counted the intrinsic PEEP
 
   const cycleDuration = 60 / config.rr;
-  // Ti with plateau carved out of it (if plateau, actual flow-delivery phase is shorter)
   const tiActual = config.ti;
-  const tiFlow = includePlateau ? tiActual * (1 - plateauFraction) : tiActual;
-  const tiPlateau = includePlateau ? tiActual * plateauFraction : 0;
+  // FIX 3: Guarantee ≥ 0.35 s plateau when plateau is enabled.
+  const plateauSecondsMin = 0.35;
+  const plateauSeconds = includePlateau
+    ? Math.min(Math.max(tiActual * plateauFraction, plateauSecondsMin), tiActual * 0.45)
+    : 0;
+  const tiFlow = tiActual - plateauSeconds;
+  const tiPlateau = plateauSeconds;
   const te = cycleDuration - tiActual;
 
   // ── APRV cycle parameters ────────────────────────────────────────────────────
@@ -391,12 +400,12 @@ export function generateVentWaveform(
   const flowPattern: VentFlowPattern = config.flowPattern ?? "square";
 
   // ── PC/PS parameters ─────────────────────────────────────────────────────────
-  const pip = config.pip ?? effectivePeep + 15;
-  const drivingPressure = pip - effectivePeep;
+  const pip = config.pip ?? peep + 15;
+  const drivingPressure = pip - peep; // driving pressure = PIP - set PEEP
   const ps = config.pressureSupport ?? 10;
 
   // ── Derived values (from first breath) ───────────────────────────────────────
-  let peakPressureSeen = peep;
+  let peakPressureSeen = 0;
   let plateauPressureSeen: number | null = null;
   let vtMeasured = 0;
   let sumPressure = 0;
@@ -438,10 +447,14 @@ export function generateVentWaveform(
       if (isAPRV) {
         if (tInCycle < aprvTHigh) {
           result = aprvInspiration(tInCycle, aprvPHigh, aprvPLow, cstL, raw);
-          // Spontaneous breaths superimposed during T_High
-          const spontPhase = Math.sin(2 * Math.PI * tInCycle / aprvTHigh);
-          result.pressure += spontPhase * 1.5;
-          result.flow += spontPhase * 0.08;
+          // FIX 2: Spontaneous breaths during T_High are DOWNWARD pressure dips only.
+          // The patient inhales against the high CPAP-like pressure, momentarily pulling
+          // airway pressure below P_High. The waveform dips down then recovers.
+          // Previous code added a full sinusoid (+/-) which incorrectly showed pressure
+          // rising ABOVE P_High — physiologically impossible in a passive circuit.
+          const spontPhase = Math.abs(Math.sin(2.8 * Math.PI * tInCycle / aprvTHigh));
+          result.pressure -= spontPhase * 2.0;  // only downward deflections
+          result.flow += spontPhase * 0.12;     // slight inspiratory flow during effort
         } else {
           const tLow = tInCycle - aprvTHigh;
           const releaseVol = cstL * (aprvPHigh - aprvPLow) * 1000;
@@ -458,22 +471,22 @@ export function generateVentWaveform(
         if (isAutoTrigger) {
           // Auto-trigger: inspiration fires without patient effort (artifact/circuit)
           result = isVC
-            ? vcInspiration(tInCycle, tiFlow, vtL * 0.9, raw, cstL, effectivePeep, flowPattern)
+            ? vcInspiration(tInCycle, tiFlow, vtL * 0.9, raw, cstL, peep, flowPattern)
             : pcInspiration(tInCycle, tau, drivingPressure * 0.8, raw, cstL, pip - 2);
         } else if (isSimvSpontaneous) {
           // SIMV spontaneous breath uses pressure support
-          result = psInspiration(tInCycle, tau, ps, raw, cstL, effectivePeep);
+          result = psInspiration(tInCycle, tau, ps, raw, cstL, peep);
         } else if (isVC) {
-          result = vcInspiration(tInCycle, tiFlow, vtL, raw, cstL, effectivePeep, flowPattern);
+          result = vcInspiration(tInCycle, tiFlow, vtL, raw, cstL, peep, flowPattern);
         } else if (isPC) {
           result = pcInspiration(tInCycle, tau, drivingPressure, raw, cstL, pip);
         } else if (isPS) {
-          result = psInspiration(tInCycle, tau, ps, raw, cstL, effectivePeep);
+          result = psInspiration(tInCycle, tau, ps, raw, cstL, peep);
         } else if (isCPAP) {
           const cpapVt = (config.tidalVolume ?? 400) / 1000;
           result = cpapSpontaneous(tInCycle, tiFlow, cpapVt, raw, cstL, peep);
         } else {
-          result = { pressure: effectivePeep, flow: 0, volume: 0 };
+          result = { pressure: peep, flow: 0, volume: 0 };
         }
 
         // Asynchrony: flow starvation
@@ -498,7 +511,7 @@ export function generateVentWaveform(
       } else if (tInCycle < tiActual && includePlateau) {
         // Flow = 0, pressure = Pplat = PEEP + Vt/Cst
         const vtNow = isVC ? vtL * 1000 : vtMeasured;
-        const pplat = effectivePeep + vtNow / (config.compliance);
+        const pplat = peep + vtNow / (config.compliance);
         result = { pressure: pplat, flow: 0, volume: vtNow };
         if (n === 0) plateauPressureSeen = pplat;
         if (n === 0) {
@@ -515,8 +528,8 @@ export function generateVentWaveform(
         const t2 = tInCycle - tiActual;
         const vtL2 = vtL * 0.7;
         result = isVC
-          ? vcInspiration(t2, tiFlow * 0.9, vtL2, raw, cstL, effectivePeep, flowPattern)
-          : pcInspiration(t2, tau, drivingPressure * 0.7, raw, cstL, effectivePeep + drivingPressure * 0.7);
+          ? vcInspiration(t2, tiFlow * 0.9, vtL2, raw, cstL, peep, flowPattern)
+          : pcInspiration(t2, tau, drivingPressure * 0.7, raw, cstL, peep + drivingPressure * 0.7);
         if (n === 0) {
           annotations.push({
             t: breathStart + tiActual,
@@ -534,15 +547,18 @@ export function generateVentWaveform(
         // Volume remaining at start of expiration
         const vtExp = isVC ? vtL : (isPS ? cstL * ps * (1 - Math.exp(-tiFlow / tau)) : cstL * drivingPressure * (1 - Math.exp(-tiFlow / tau)));
 
-        result = passiveExpiration(tExp, tau, vtExp, effectivePeep, cstL, raw);
+        result = passiveExpiration(tExp, tau, vtExp, peep, cstL, raw);
 
-        // Auto-PEEP: volume and pressure floor at residual level
+        // FIX 1 (continued): Auto-PEEP floor — volume doesn't empty below residual.
+        // vResidual = autoPeep × Cst: volume of trapped air above true FRC.
+        // Pressure at this floor = peep + autoPeep (= total effective PEEP).
+        // This correctly represents incomplete expiration without double-counting.
         if (autoPeep > 0) {
           const vResidual = autoPeep * config.compliance; // mL
           if (result.volume < vResidual) {
             result.volume = vResidual;
-            result.flow = Math.min(result.flow, -0.02);
-            result.pressure = Math.max(effectivePeep, result.pressure);
+            result.flow = Math.min(result.flow, -0.025); // still slightly negative — not at zero
+            result.pressure = peep + autoPeep;           // correct total effective PEEP
           }
         }
 

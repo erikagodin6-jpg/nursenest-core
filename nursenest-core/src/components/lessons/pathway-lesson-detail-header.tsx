@@ -160,9 +160,13 @@ export function PathwayLessonDetailHeader({
                 .join(" ")}
               data-nn-premium-individual-lesson-header-meta
             >
-              {studyMetaChips.map((label) => (
-                <span key={label}>{label}</span>
-              ))}
+              {studyMetaChips.map((label) => {
+                const compactLabel = label
+                  .replace(/^Premium Clinical Depth$/i, "Premium Content")
+                  .replace(/^Core Clinical Review$/i, "Core Review")
+                  .replace(/^Clinically Reviewed/i, "Reviewed");
+                return <span key={label}>✓ {compactLabel}</span>;
+              })}
             </div>
           ) : null}
           {metaChips ? (

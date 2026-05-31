@@ -2,6 +2,8 @@
 
 Rules for static UI/marketing translations (`tools/i18n/*` → merged JSON). This complements [i18n-architecture.md](./i18n-architecture.md).
 
+For global nursing exam pathways, translation coverage and publication readiness are governed by [global-nursing-exam-multilingual-expansion-framework.md](./global-nursing-exam-multilingual-expansion-framework.md). Static UI parity is necessary, but it is not sufficient to launch a translated pathway.
+
 ## File size and structure
 
 - **No giant bundles**: Each shard under `nursenest-core/public/i18n/{locale}/{name}.json` must stay under **850 KB** (enforced by `npm run i18n:validate:production`). Split domains or move long-form text out of flat maps.

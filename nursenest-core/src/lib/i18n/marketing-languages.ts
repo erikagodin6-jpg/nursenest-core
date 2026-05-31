@@ -21,7 +21,7 @@ export type MarketingLanguage = {
 export const MARKETING_LANGUAGES: MarketingLanguage[] = [
   { code: "en", name: "English", flag: "\uD83C\uDDEC\uD83C\uDDE7", tier: "full" },
   { code: "fr", name: "Fran\u00e7ais", flag: "\uD83C\uDDEB\uD83C\uDDF7", tier: "partial" },
-  { code: "es", name: "Espa\u00f1ol", flag: "\uD83C\uDDEA\uD83C\uDDF8", tier: "full" },
+  { code: "es", name: "Espa\u00f1ol", flag: "\uD83C\uDDEA\uD83C\uDDF8", tier: "partial" },
   { code: "tl", name: "Tagalog", flag: "\uD83C\uDDF5\uD83C\uDDED", tier: "full" },
   { code: "hi", name: "\u0939\u093f\u0928\u094d\u0926\u0940", flag: "\uD83C\uDDEE\uD83C\uDDF3", tier: "full" },
   /** India regional locales — routable; promote tier when navigation + core pages are translated. */
@@ -60,8 +60,9 @@ export const MARKETING_LANGUAGE_PARTIAL_SWITCHER_SUFFIX = " (partial)";
 const SWITCHER_CODES_ORDER: readonly string[] = ["en", "fr", "es", "tl", "hi", "pt"];
 
 export function getMarketingLanguagesForSwitcher(): MarketingLanguage[] {
+  const enabledCodes = new Set(getEnabledLanguageSwitcherCodes());
   return SWITCHER_CODES_ORDER.map((code) => MARKETING_LANGUAGES.find((l) => l.code === code)).filter(
-    (l): l is MarketingLanguage => l != null && (l.tier === "full" || l.tier === "partial"),
+    (l): l is MarketingLanguage => l != null && enabledCodes.has(l.code) && (l.tier === "full" || l.tier === "partial"),
   );
 }
 
@@ -70,4 +71,8 @@ export function marketingLanguageDisplayNameForSwitcher(lang: MarketingLanguage)
     return `${lang.name}${MARKETING_LANGUAGE_PARTIAL_SWITCHER_SUFFIX}`;
   }
   return lang.name;
+}
+
+function getEnabledLanguageSwitcherCodes(): readonly string[] {
+  return ["en"];
 }

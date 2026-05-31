@@ -1664,18 +1664,18 @@ html[data-theme="midnight-indigo"] .nn-flashcard-study-premium {
 
 /* ── Hub setup: blossom / mint selection + session chips ───────────────────── */
 .nn-flashcards-hub-premium .nn-lesson-system-card[data-selected="true"] {
-  border-color: #ffa9cc;
-  background: #ffc7de;
+  border-color: color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
   box-shadow:
-    0 0 0 1px color-mix(in srgb, #ffa9cc 55%, transparent),
-    0 10px 28px -18px color-mix(in srgb, #ff8fbf 28%, transparent);
+    0 0 0 1px color-mix(in srgb, var(--semantic-brand) 34%, transparent),
+    0 10px 28px -18px color-mix(in srgb, var(--semantic-brand) 28%, transparent);
   transform: translateY(-1px);
 }
 
 html[data-theme="blossom"] .nn-flashcards-hub-premium .nn-lesson-system-card[data-selected="true"],
 html[data-theme="garden"] .nn-flashcards-hub-premium .nn-lesson-system-card[data-selected="true"] {
-  border-color: #ffa9cc;
-  background: #ffc7de;
+  border-color: color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
 }
 
 html[data-theme="ocean"] .nn-flashcards-hub-premium .nn-lesson-system-card[data-selected="true"],
@@ -1690,10 +1690,10 @@ html[data-theme="mint-blossom"] .nn-flashcards-hub-premium .nn-lesson-system-car
 .nn-flashcards-hub-premium .nn-flashcards-all-systems-btn[data-active="true"],
 .nn-flashcards-hub-premium .nn-flashcards-session-chip[data-active="true"],
 .nn-flashcards-hub-premium .nn-flashcards-study-chip[data-active="true"] {
-  border-color: #ffa9cc;
-  background: #ffc7de;
+  border-color: color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
   color: var(--semantic-text-primary);
-  box-shadow: 0 0 0 1px color-mix(in srgb, #ffa9cc 40%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--semantic-brand) 28%, transparent);
   transform: translateY(-1px);
 }
 
@@ -1736,24 +1736,24 @@ html[data-theme="mint-blossom"] .nn-flashcards-hub-premium .nn-flashcards-hub-se
 }
 
 .nn-flashcards-hub-setup-panel {
-  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, #ffc7de 22%);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, var(--semantic-brand) 14%);
   background:
     radial-gradient(
       480px 160px at 0% 0%,
-      color-mix(in srgb, #d9f8e7 35%, transparent),
+      color-mix(in srgb, var(--semantic-success) 14%, transparent),
       transparent 68%
     ),
-    color-mix(in srgb, var(--semantic-surface) 96%, #fff8fc);
+    color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-cool));
   padding: clamp(1.1rem, 2.5vw, 1.5rem);
 }
 
 .nn-flashcards-hub-premium .nn-flashcards-quick-review-cta {
-  border-color: color-mix(in srgb, #ffa9cc 45%, var(--semantic-border-soft));
-  background: color-mix(in srgb, #ffc7de 72%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
 }
 
 .nn-flashcards-hub-premium .nn-flashcards-quick-review-cta:hover {
-  box-shadow: 0 12px 32px -22px color-mix(in srgb, #ff8fbf 35%, transparent);
+  box-shadow: 0 12px 32px -22px color-mix(in srgb, var(--semantic-brand) 35%, transparent);
   transform: translateY(-1px);
 }
 
@@ -1786,10 +1786,10 @@ html[data-theme="mint-blossom"] .nn-flashcards-hub-premium .nn-flashcards-hub-se
 }
 
 .nn-flashcards-session-segment[data-active="true"] {
-  border-color: #ffa9cc;
-  background: #ffc7de;
+  border-color: color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
   color: var(--semantic-text-primary);
-  box-shadow: 0 8px 24px -16px color-mix(in srgb, #ff8fbf 35%, transparent);
+  box-shadow: 0 8px 24px -16px color-mix(in srgb, var(--semantic-brand) 35%, transparent);
   transform: translateY(-1px);
 }
 
@@ -1799,11 +1799,11 @@ html[data-theme="ocean"] .nn-flashcards-session-segment[data-active="true"] {
 }
 
 .nn-flashcards-session-segment--full[data-active="true"] {
-  border-color: color-mix(in srgb, var(--semantic-chart-4) 45%, #ffa9cc);
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 45%, var(--semantic-brand));
   background: linear-gradient(
     135deg,
-    color-mix(in srgb, #ffc7de 70%, var(--semantic-surface)),
-    color-mix(in srgb, var(--semantic-panel-lavender) 40%, var(--semantic-surface))
+    color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-success) 12%, var(--semantic-surface))
   );
 }
 
@@ -5634,7 +5634,7 @@ html:has([data-nn-flashcard-study-session]) .nn-learner-app main {
 /* Theme-specific progress fill colours */
 html[data-theme="blossom"] .nn-flashcard-topbar-progress-fill,
 html[data-theme="mint-blossom"] .nn-flashcard-topbar-progress-fill {
-  background: linear-gradient(90deg, #FFA9CC, #B7EFD1);
+  background: linear-gradient(90deg, #9ec5fe, #a7f3d0);
 }
 
 html[data-theme="ocean"] .nn-flashcard-topbar-progress-fill {
@@ -5642,7 +5642,7 @@ html[data-theme="ocean"] .nn-flashcard-topbar-progress-fill {
 }
 
 html[data-theme="aurora"] .nn-flashcard-topbar-progress-fill {
-  background: linear-gradient(90deg, #9B72FF, #4A90E2, #E14D8F);
+  background: linear-gradient(90deg, #6ee7b7, #67e8f9);
 }
 
 html[data-theme="sunset"] .nn-flashcard-topbar-progress-fill {
@@ -5883,12 +5883,12 @@ html[data-theme="midnight"] .nn-flashcard-topbar-progress-fill {
 
 /* ── Theme-aware activity atmosphere ───────────────────────────────────────── */
 
-/* Blossom: pink/mint warmth */
+/* Blossom: spring sky and fresh-air aqua */
 html[data-theme="blossom"] .nn-active-flashcard-session[data-nn-unified-exam-workspace],
 html[data-theme="mint-blossom"] .nn-active-flashcard-session[data-nn-unified-exam-workspace] {
   background:
-    radial-gradient(ellipse 80% 50% at 5% 0%, color-mix(in srgb, #FFA9CC 10%, transparent), transparent 55%),
-    radial-gradient(ellipse 70% 45% at 95% 5%, color-mix(in srgb, #B7EFD1 9%, transparent), transparent 52%),
+    radial-gradient(ellipse 80% 50% at 5% 0%, color-mix(in srgb, #9ec5fe 11%, transparent), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 95% 5%, color-mix(in srgb, #a7f3d0 9%, transparent), transparent 52%),
     color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
 }
 
@@ -5903,9 +5903,9 @@ html[data-theme="ocean"] .nn-active-flashcard-session[data-nn-unified-exam-works
 /* Aurora: multi-colour glow */
 html[data-theme="aurora"] .nn-active-flashcard-session[data-nn-unified-exam-workspace] {
   background:
-    radial-gradient(ellipse 80% 55% at 0% 0%, color-mix(in srgb, #9B72FF 9%, transparent), transparent 55%),
-    radial-gradient(ellipse 70% 45% at 100% 0%, color-mix(in srgb, #E14D8F 8%, transparent), transparent 52%),
-    radial-gradient(ellipse 60% 40% at 50% 100%, color-mix(in srgb, #4A90E2 7%, transparent), transparent 55%),
+    radial-gradient(ellipse 80% 55% at 0% 0%, color-mix(in srgb, #8b5cf6 9%, transparent), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 100% 0%, color-mix(in srgb, #6ee7b7 8%, transparent), transparent 52%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, color-mix(in srgb, #f9a8d4 6%, transparent), transparent 55%),
     color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-cool));
 }
 
@@ -5928,9 +5928,9 @@ html[data-theme="midnight"] .nn-active-flashcard-session[data-nn-unified-exam-wo
 /* ── Theme-aware chip accents ──────────────────────────────────────────────── */
 html[data-theme="blossom"] .nn-flashcard-hero-surface .nn-flashcard-chip--mode,
 html[data-theme="mint-blossom"] .nn-flashcard-hero-surface .nn-flashcard-chip--mode {
-  background: color-mix(in srgb, #FFC7DE 65%, var(--semantic-surface));
-  border-color: #FFA9CC;
-  color: #c0426c;
+  background: color-mix(in srgb, #9ec5fe 18%, var(--semantic-surface));
+  border-color: #9ec5fe;
+  color: #155b8e;
 }
 
 html[data-theme="ocean"] .nn-flashcard-hero-surface .nn-flashcard-chip--mode {
@@ -5940,9 +5940,9 @@ html[data-theme="ocean"] .nn-flashcard-hero-surface .nn-flashcard-chip--mode {
 }
 
 html[data-theme="aurora"] .nn-flashcard-hero-surface .nn-flashcard-chip--mode {
-  background: color-mix(in srgb, var(--semantic-panel-lavender) 70%, var(--semantic-surface));
-  border-color: #9B72FF;
-  color: #6e42c9;
+  background: color-mix(in srgb, #6ee7b7 18%, var(--semantic-surface));
+  border-color: #6ee7b7;
+  color: #0f6b52;
 }
 
 html[data-theme="sunset"] .nn-flashcard-hero-surface .nn-flashcard-chip--mode {
@@ -5995,7 +5995,7 @@ html[data-theme="midnight"] .nn-flashcard-hero-surface .nn-flashcard-chip--mode 
 /* ── Topbar topbar border theme awareness ──────────────────────────────────── */
 html[data-theme="blossom"] .nn-flashcard-learning-topbar,
 html[data-theme="mint-blossom"] .nn-flashcard-learning-topbar {
-  border-color: color-mix(in srgb, #FFA9CC 25%, var(--semantic-border-soft));
+  border-color: color-mix(in srgb, #9ec5fe 25%, var(--semantic-border-soft));
 }
 
 html[data-theme="ocean"] .nn-flashcard-learning-topbar {
@@ -6003,7 +6003,7 @@ html[data-theme="ocean"] .nn-flashcard-learning-topbar {
 }
 
 html[data-theme="aurora"] .nn-flashcard-learning-topbar {
-  border-color: color-mix(in srgb, #9B72FF 20%, var(--semantic-border-soft));
+  border-color: color-mix(in srgb, #6ee7b7 24%, var(--semantic-border-soft));
 }
 
 html[data-theme="sunset"] .nn-flashcard-learning-topbar {
@@ -6394,7 +6394,7 @@ html[data-theme="midnight"] .nn-flashcard-learning-topbar {
 /* ── Theme-aware mobile backgrounds ────────────────────────────────────────── */
 html[data-theme="blossom"] .nn-mobile-fc-screen--question,
 html[data-theme="mint-blossom"] .nn-mobile-fc-screen--question {
-  background: color-mix(in srgb, #FFF8FC 88%, var(--semantic-surface));
+  background: color-mix(in srgb, #f8fafc 88%, var(--semantic-surface));
 }
 
 html[data-theme="ocean"] .nn-mobile-fc-screen--question {
@@ -6418,9 +6418,9 @@ html[data-theme="midnight"] .nn-mobile-fc-screen--rating {
 /* ── Theme-aware CTA button ─────────────────────────────────────────────────── */
 html[data-theme="blossom"] .nn-mobile-fc-cta-btn,
 html[data-theme="mint-blossom"] .nn-mobile-fc-cta-btn {
-  background: linear-gradient(135deg, #FFA9CC, #B7EFD1);
-  color: #2d1a24;
-  box-shadow: 0 8px 24px -12px rgba(255, 120, 160, 0.45);
+  background: linear-gradient(135deg, #1d7ed8, #2fbf92);
+  color: #ffffff;
+  box-shadow: 0 8px 24px -12px rgba(29, 126, 216, 0.42);
 }
 
 html[data-theme="ocean"] .nn-mobile-fc-cta-btn {
@@ -6429,8 +6429,10 @@ html[data-theme="ocean"] .nn-mobile-fc-cta-btn {
 }
 
 html[data-theme="aurora"] .nn-mobile-fc-cta-btn {
-  background: linear-gradient(135deg, #9B72FF, #4A90E2);
-  box-shadow: 0 8px 24px -12px rgba(155, 114, 255, 0.4);
+  background: linear-gradient(135deg, #8b5cf6, #6ee7b7);
+  box-shadow:
+    0 8px 24px -12px rgba(139, 92, 246, 0.38),
+    0 4px 18px -10px rgba(249, 168, 212, 0.28);
 }
 
 html[data-theme="sunset"] .nn-mobile-fc-cta-btn {
@@ -8066,13 +8068,13 @@ html[data-theme="sunset"] .nn-flashcard-study-premium .nn-flashcard-rationale-ke
 /* Theme-specific progress fill colours (re-declare for compact header) */
 html[data-theme="blossom"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill,
 html[data-theme="mint-blossom"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
-  background: linear-gradient(90deg, #FFA9CC, #B7EFD1);
+  background: linear-gradient(90deg, #9ec5fe, #a7f3d0);
 }
 html[data-theme="ocean"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
   background: linear-gradient(90deg, #1D9BD7, #14B8A6);
 }
 html[data-theme="aurora"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
-  background: linear-gradient(90deg, #9B72FF, #4A90E2);
+  background: linear-gradient(90deg, #6ee7b7, #67e8f9);
 }
 html[data-theme="sunset"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
   background: linear-gradient(90deg, #E07862, #E8B44F);

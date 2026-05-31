@@ -1,4 +1,4 @@
-import { getLanguageStatus, isLocaleSeoIndexable } from "@/lib/i18n/language-readiness";
+import { getLanguageStatus, isLocaleSeoIndexable, localeRobotsOverride, type LocaleRobotsOverride } from "@/lib/i18n/language-readiness";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getTranslationSurfaceForPath, type TranslationSurfaceType } from "@/lib/i18n/translation-readiness-registry";
 
@@ -22,7 +22,7 @@ export type LocaleIndexabilityDecision = {
   shouldNoindex: boolean;
   sitemapEligible: boolean;
   hreflangEligible: boolean;
-  robots: { index: false; follow: true } | null;
+  robots: LocaleRobotsOverride | null;
   reason: string;
 };
 
@@ -51,7 +51,7 @@ export function decideLocaleIndexability(input: TranslationReadinessDecisionInpu
       shouldNoindex: !surface.indexable,
       sitemapEligible: surface.indexable,
       hreflangEligible: surface.indexable,
-      robots: surface.indexable ? null : { index: false, follow: true },
+      robots: surface.indexable ? null : localeRobotsOverride(input.locale) ?? { index: false, follow: true },
       reason: surface.indexable ? "english-canonical-complete-by-policy" : "non-indexable-surface",
     };
   }
@@ -75,7 +75,7 @@ export function decideLocaleIndexability(input: TranslationReadinessDecisionInpu
     shouldNoindex: !indexable,
     sitemapEligible: indexable,
     hreflangEligible: indexable,
-    robots: indexable ? null : { index: false, follow: true },
+    robots: indexable ? null : localeRobotsOverride(input.locale) ?? { index: false, follow: true },
     reason,
   };
 }
@@ -84,6 +84,6 @@ export function isLocalePathIndexable(input: TranslationReadinessDecisionInput):
   return decideLocaleIndexability(input).indexable;
 }
 
-export function localeIndexabilityRobots(input: TranslationReadinessDecisionInput): { index: false; follow: true } | null {
+export function localeIndexabilityRobots(input: TranslationReadinessDecisionInput): LocaleRobotsOverride | null {
   return decideLocaleIndexability(input).robots;
 }

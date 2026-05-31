@@ -12,9 +12,10 @@
  * | preview     | partial  | partial    | ✗       | ✗        | ✗       | crawlable + noindex | yes, "(partial)"|
  * | preview     | disabled | incomplete | ✗       | ✗        | ✗       | crawlable + noindex | hidden          |
  *
- * Routes for every locale remain accessible (no 404). Both `partial` and `disabled` use
- * `<meta name="robots" content="noindex,follow">` to keep pages out of the index while
- * remaining **crawlable** — Google must be able to fetch the page to honor `noindex`.
+ * Routes for every locale remain accessible (no 404). Preview locales use page-level
+ * noindex robots metadata to keep pages out of the index while remaining crawlable
+ * enough for engines to read the directive. French and Spanish use noindex,nofollow
+ * during the subdomain architecture phase until publication toggles are ready.
  *
  * **Why robots.txt does NOT Disallow incomplete locales:** previously, `disabled` locales emitted
  * `Disallow: /{locale}/`. Google Search Console reported these as
@@ -22,7 +23,7 @@
  * sitemaps, or external links could be queued for indexing but Googlebot was prevented from
  * fetching them to read the `noindex` meta. Per Google's own guidance, blocking via robots.txt
  * is **the wrong tool** for de-indexing: it suppresses crawling, not indexing. The correct fix
- * is to let Googlebot fetch and read `noindex,follow` — implemented in `safeGenerateMetadata`
+ * is to let Googlebot fetch and read page-level noindex metadata — implemented in `safeGenerateMetadata`
  * via {@link localeRobotsOverride}. See `docs/reports/locale-seo-leakage-remediation.md`.
  *
  * The third tier — `blocked` — is reserved for locales we intentionally hard-404 or redirect
@@ -44,6 +45,7 @@
  */
 
 import { MARKETING_LANGUAGES, type MarketingLanguageTier } from "./marketing-languages";
+import { getIsolatedLanguageConfig, isIsolatedLanguageIndexable } from "./language-isolation-registry";
 import {
   CORE_HOSTED_MARKETING_LOCALES,
   DEFAULT_MARKETING_LOCALE,
@@ -92,6 +94,17 @@ const BLOCKED_LOCALE_OVERRIDES = new Set<string>(SEO_BLOCKED_LOCALES);
 
 function policyForLocale(localeCode: string): LocaleSeoPolicy {
   if (localeCode === DEFAULT_MARKETING_LOCALE) return ACTIVE_LOCALE_POLICY;
+  const isolatedLanguage = getIsolatedLanguageConfig(localeCode);
+  if (isolatedLanguage) {
+    return isIsolatedLanguageIndexable(localeCode)
+      ? ACTIVE_LOCALE_POLICY
+      : {
+          status: isolatedLanguage.publicationStatus === "preview" ? "partial" : "disabled",
+          seoIndexable: false,
+          hreflangEligible: false,
+          sitemapIncluded: false,
+        };
+  }
   if (BLOCKED_LOCALE_OVERRIDES.has(localeCode)) return DISABLED_LOCALE_POLICY;
   const lang = MARKETING_LANGUAGES.find((l) => l.code === localeCode);
   return lang ? TIER_POLICY[lang.tier] : DISABLED_LOCALE_POLICY;
@@ -158,15 +171,18 @@ export function getIndexableLocales(): readonly string[] {
  *
  * Returns `null` for active (fully-indexed) locales — no override needed.
  */
-export function localeRobotsOverride(localeCode: string): { index: false; follow: true } | null {
+export type LocaleRobotsOverride = { index: false; follow: boolean };
+
+export function localeRobotsOverride(localeCode: string): LocaleRobotsOverride | null {
   if (isLocaleSeoIndexable(localeCode)) return null;
+  if (getIsolatedLanguageConfig(localeCode)) return { index: false, follow: false };
   return { index: false, follow: true };
 }
 
 /**
  * Always returns `false` — robots.txt **never** Disallows a marketing locale path.
  *
- * Locale readiness is controlled by `<meta name="robots" content="noindex,follow">`
+ * Locale readiness is controlled by page-level noindex robots metadata
  * via {@link localeRobotsOverride}, **not** by robots.txt. Blocking via robots.txt prevented
  * Googlebot from fetching pages to read `noindex`, producing
  * "Indexed, though blocked by robots.txt" warnings in Google Search Console — see
@@ -189,7 +205,7 @@ export function isLocaleRobotsPathDisallowed(_localeCode: string): boolean {
  *
  * - `production` — fully indexable. Pages appear in sitemap, hreflang clusters, and canonical
  *   alternate clusters. Bots may crawl and index.
- * - `preview` — pages must remain crawlable (so Googlebot can read `noindex,follow`) but must
+ * - `preview` — pages must remain crawlable (so Googlebot can read page-level noindex) but must
  *   not appear in sitemap, hreflang, or canonical alternate clusters. Partial + incomplete
  *   marketing tiers and explicit `SEO_BLOCKED_LOCALES` overrides all map here.
  * - `blocked` — reserved for locales we intentionally hard-404 or redirect at the request layer.

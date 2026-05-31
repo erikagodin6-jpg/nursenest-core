@@ -100,6 +100,91 @@
   gap: var(--nn-footer-panel-gap);
 }
 
+[data-nn-footer-layout="marketing"] .nn-footer-newsletter {
+  border-radius: var(--nn-footer-panel-radius);
+  border: 1px solid color-mix(in srgb, var(--footer-border) 72%, var(--semantic-border-soft));
+  background:
+    radial-gradient(620px 240px at 0% 0%, color-mix(in srgb, var(--semantic-brand) 12%, transparent), transparent 64%),
+    radial-gradient(560px 220px at 100% 12%, color-mix(in srgb, var(--semantic-success) 10%, transparent), transparent 62%),
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--semantic-surface) 14%, var(--footer-bg)),
+      color-mix(in srgb, var(--semantic-panel-cool) 12%, var(--footer-bg))
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--footer-fg) 7%, transparent),
+    0 18px 42px -36px color-mix(in srgb, var(--semantic-brand) 26%, transparent);
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-kicker {
+  font-size: 0.75rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--semantic-brand) 64%, var(--footer-fg));
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-newsletter-form {
+  display: flex;
+  width: min(100%, 30rem);
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+@media (min-width: 640px) {
+  [data-nn-footer-layout="marketing"] .nn-footer-newsletter-form {
+    flex-direction: row;
+  }
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-newsletter-input {
+  min-height: 3rem;
+  min-width: 0;
+  flex: 1 1 auto;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--footer-border) 80%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-surface) 88%, var(--footer-bg));
+  padding: 0.75rem 1rem;
+  color: var(--footer-fg);
+  font-size: 0.875rem;
+  outline: none;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-newsletter-input::placeholder {
+  color: color-mix(in srgb, var(--footer-muted) 74%, transparent);
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-newsletter-input:focus-visible {
+  border-color: color-mix(in srgb, var(--semantic-brand) 52%, var(--semantic-border-soft));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--semantic-brand) 20%, transparent);
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-newsletter-button {
+  min-height: 3rem;
+  border-radius: 9999px;
+  border: 0;
+  background: var(--role-cta, var(--semantic-brand));
+  color: var(--role-cta-foreground, #ffffff);
+  cursor: pointer;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 750;
+  white-space: nowrap;
+  box-shadow: 0 10px 28px -16px color-mix(in srgb, var(--semantic-brand) 38%, transparent);
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-newsletter-button:hover {
+  background: var(--role-cta-hover, var(--semantic-brand));
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-newsletter-button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--semantic-brand) 22%, transparent),
+    0 10px 28px -16px color-mix(in srgb, var(--semantic-brand) 38%, transparent);
+}
+
 [data-nn-footer-layout="marketing"] .nn-footer-panel + .nn-footer-panel {
   margin-top: 0;
 }
@@ -128,11 +213,11 @@
     );
 }
 
-/* Blossom: footer uses --theme-brand-strong (soft pink). Warm plum ink — not cold grey nav-fg. */
+/* Blossom: footer stays spring-sky light with readable ink. */
 [data-theme="blossom"] [data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface {
-  --footer-fg: #3a3142;
-  --footer-muted: #554d5e;
-  --footer-border: color-mix(in srgb, #ffb7d5 24%, var(--footer-bg));
+  --footer-fg: #0f172a;
+  --footer-muted: #475569;
+  --footer-border: color-mix(in srgb, #9ec5fe 24%, var(--footer-bg));
 }
 
 [data-theme="blossom"] [data-nn-footer-root][data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface {
@@ -141,20 +226,20 @@
     radial-gradient(720px 300px at 100% 12%, color-mix(in srgb, var(--semantic-chart-3) 7%, transparent), transparent 60%),
     linear-gradient(
       175deg,
-      color-mix(in srgb, var(--semantic-panel-lavender) 8%, var(--footer-bg)),
-      color-mix(in srgb, var(--semantic-panel-warm) 7%, var(--footer-bg)),
+      color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--footer-bg)),
+      color-mix(in srgb, var(--semantic-panel-aqua) 7%, var(--footer-bg)),
       color-mix(in srgb, var(--semantic-panel-positive) 5%, var(--footer-bg))
     );
-  background-color: color-mix(in srgb, var(--semantic-panel-lavender) 6%, var(--footer-bg));
+  background-color: color-mix(in srgb, var(--semantic-panel-cool) 6%, var(--footer-bg));
 }
 
 [data-theme="blossom"] [data-nn-footer-layout="marketing"] .nn-footer-panel {
-  border-color: color-mix(in srgb, var(--semantic-chart-5) 18%, var(--semantic-border-soft));
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 18%, var(--semantic-border-soft));
   background:
     linear-gradient(
       168deg,
-      color-mix(in srgb, var(--semantic-panel-lavender) 7%, var(--footer-bg)),
-      color-mix(in srgb, var(--semantic-panel-warm) 6%, var(--footer-bg))
+      color-mix(in srgb, var(--semantic-panel-cool) 7%, var(--footer-bg)),
+      color-mix(in srgb, var(--semantic-panel-aqua) 6%, var(--footer-bg))
     );
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--footer-fg) 6%, transparent),
@@ -165,7 +250,7 @@
 [data-theme="blossom"] [data-nn-footer-layout="marketing"] .nn-footer-panel--bottom-meta {
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--semantic-panel-lavender) 5%, var(--footer-bg)),
+    color-mix(in srgb, var(--semantic-panel-cool) 5%, var(--footer-bg)),
     color-mix(in srgb, var(--footer-fg) 3%, var(--footer-bg))
   );
 }
@@ -206,6 +291,35 @@
   display: flex;
   flex-direction: column;
   gap: 0.72rem;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-trust-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  max-width: 20rem;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-trust-stack span,
+[data-nn-footer-layout="marketing"] .nn-footer-social-link {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--footer-border) 72%, transparent);
+  background: color-mix(in srgb, var(--footer-bg) 80%, var(--semantic-panel-cool));
+  padding: 0.35rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1.2;
+  color: color-mix(in srgb, var(--footer-muted) 18%, var(--footer-fg));
+  text-decoration: none;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-social-link:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 36%, var(--footer-border));
+  color: var(--footer-fg);
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--footer-bg));
 }
 
 [data-nn-footer-layout="marketing"] .nn-footer-panel--email {

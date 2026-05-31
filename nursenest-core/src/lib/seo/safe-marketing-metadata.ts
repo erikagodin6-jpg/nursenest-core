@@ -117,7 +117,7 @@ function logNonfatalMetadataValidationFailure(
  * Page metadata HTTP validation is observe-only in request rendering: validation failures are logged and converted
  * into fallback metadata instead of taking down the route.
  *
- * Automatically injects `robots: { index: false, follow: true }` for locales that are
+ * Automatically injects noindex robots metadata for locales that are
  * not yet fully indexed (tier=partial or tier=incomplete). This prevents thin-content
  * or mostly-English pages from being indexed before a language is fully translated.
  * Full-tier (active) locales are unaffected.
@@ -172,13 +172,13 @@ export async function safeGenerateMetadata(
     const isExamPathwayRoute = ctx.routeGroup?.startsWith("marketing.exam_hub") ?? false;
     let result: Metadata = normalized;
     // Enforce noindex for non-indexable **marketing i18n** locales only — not pathway country segments.
+    const robotsOverride = ctx.locale ? localeRobotsOverride(ctx.locale) : null;
     if (ctx.locale && !isExamPathwayRoute) {
-      const robotsOverride = localeRobotsOverride(ctx.locale);
       if (robotsOverride) {
         result = { ...normalized, robots: robotsOverride };
       }
     }
-    if (ctx.routeGroup && BLOG_ROUTE_GROUPS_FORCE_INDEX_FOLLOW.has(ctx.routeGroup)) {
+    if (ctx.routeGroup && BLOG_ROUTE_GROUPS_FORCE_INDEX_FOLLOW.has(ctx.routeGroup) && !robotsOverride) {
       const r = result.robots;
       const explicitNoIndex =
         typeof r === "object" &&

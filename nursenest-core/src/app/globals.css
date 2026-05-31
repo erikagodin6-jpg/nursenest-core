@@ -3691,6 +3691,30 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   background: linear-gradient(90deg, var(--semantic-info), var(--semantic-success));
 }
 
+.nn-lesson-phase-strip--compact {
+  padding: 0.42rem 0.55rem;
+  border-radius: 0.65rem;
+  box-shadow: none;
+}
+
+.nn-lesson-phase-strip--compact .nn-lesson-phase-strip__top {
+  gap: 0.5rem;
+}
+
+.nn-lesson-phase-strip--compact .nn-lesson-phase-strip__label,
+.nn-lesson-phase-strip--compact .nn-lesson-phase-strip__percent {
+  font-size: 0.68rem;
+}
+
+.nn-lesson-phase-strip--compact .nn-lesson-phase-strip__bar {
+  height: 0.375rem;
+  margin: 0.28rem 0 0;
+}
+
+.nn-lesson-phase-strip--compact .nn-lesson-phase-strip__steps {
+  display: none;
+}
+
 .nn-lesson-phase-strip__steps {
   list-style: none;
   padding: 0;

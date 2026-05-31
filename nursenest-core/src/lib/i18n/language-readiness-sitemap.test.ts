@@ -14,7 +14,9 @@ describe("isLocalePrefixedPathnameExcludedFromSitemap", () => {
 
   it("excludes partial-tier marketing locale prefixes", () => {
     assert.equal(isLocaleSitemapIncluded("fr"), false);
+    assert.equal(isLocaleSitemapIncluded("es"), false);
     assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/fr/pricing"), true);
+    assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/es/pricing"), true);
   });
 
   it("allows full-tier marketing locale prefixes", () => {

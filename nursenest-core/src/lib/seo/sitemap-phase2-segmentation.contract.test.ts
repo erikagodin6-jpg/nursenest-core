@@ -21,6 +21,7 @@ test("localized segment only emits tier-full locale prefixes from getSitemapIncl
     assert.ok(loc && allowed.has(loc), `unexpected localized segment prefix: ${loc} in ${u}`);
   }
   assert.ok(!urls.some((u) => u.includes("/fr/")), "partial-tier fr must not appear in localized urlset");
+  assert.ok(!urls.some((u) => u.includes("/es/")), "partial-tier es must not appear in localized urlset");
 });
 
 test("sitemap-core route passes phase-2 omit flags for disjoint segments", () => {
@@ -36,6 +37,9 @@ test("no segment uses hreflang in XML (policy: hreflang stays in page metadata o
   const appSeo = join(here, "..", "..", "app");
   for (const name of [
     "sitemap.xml/route.ts",
+    "sitemap-en.xml/route.ts",
+    "sitemap-fr.xml/route.ts",
+    "sitemap-es.xml/route.ts",
     "sitemap-core.xml/route.ts",
     "sitemap-pathways.xml/route.ts",
     "sitemap-lessons.xml/route.ts",
@@ -44,7 +48,7 @@ test("no segment uses hreflang in XML (policy: hreflang stays in page metadata o
     "sitemap-blog.xml/route.ts",
   ]) {
     const src = readFileSync(join(appSeo, name), "utf8");
-    assert.match(src, /buildSitemapIndexXml|buildSitemapUrlsetFromAbsoluteUrls/);
+    assert.match(src, /buildSitemapIndexXml|buildSitemapUrlsetFromAbsoluteUrls|buildLanguageSitemapXml/);
     assert.ok(!src.includes("xhtml:link"), `${name} must not embed hreflang in sitemap XML`);
   }
 });

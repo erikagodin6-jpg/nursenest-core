@@ -4,6 +4,7 @@ import {
   isExpansionExamMarketingPath,
 } from "@/lib/i18n/exam-hub-path";
 import { getHreflangEligibleLocales } from "@/lib/i18n/language-readiness";
+import { absoluteLanguageUrl, LANGUAGE_SUBDOMAIN_CONFIG } from "@/lib/i18n/language-subdomains";
 import { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-path";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { filterPublicHreflangRecord, isValidPublicUrl } from "@/lib/seo/public-url-validator";
@@ -51,6 +52,9 @@ export function marketingCanonicalPathForLocale(locale: string, enPath: string):
 
 /** Absolute canonical URL for the active marketing locale. */
 export function absoluteMarketingCanonical(locale: string, enPath: string): string {
+  if (locale in LANGUAGE_SUBDOMAIN_CONFIG && locale !== DEFAULT_MARKETING_LOCALE) {
+    return absoluteLanguageUrl(locale, defaultShellMarketingPath(enPath));
+  }
   return absoluteUrl(marketingCanonicalPathForLocale(locale, enPath));
 }
 
@@ -83,8 +87,11 @@ export function marketingHreflangLanguagesForEnPath(enPath: string): Record<stri
     "en-CA": enUrl,
   };
   for (const code of getHreflangEligibleLocales()) {
-    const localized = path === "/" ? `/${code}` : `/${code}${path}`;
-    out[code === "fr" ? "fr-CA" : code === "pt" ? "pt-BR" : code] = absoluteUrl(localized);
+    const hreflang = LANGUAGE_SUBDOMAIN_CONFIG[code as keyof typeof LANGUAGE_SUBDOMAIN_CONFIG]?.hreflang ?? code;
+    out[hreflang] =
+      code in LANGUAGE_SUBDOMAIN_CONFIG
+        ? absoluteLanguageUrl(code, path)
+        : absoluteUrl(path === "/" ? `/${code}` : `/${code}${path}`);
   }
   return filterPublicHreflangRecord(out, "seo", "marketing_hreflang_rejected");
 }

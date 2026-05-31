@@ -1309,6 +1309,161 @@ body:has(.nn-nclex-exam-page) {
   overflow-y: hidden;
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+ * DESKTOP DUAL-PANEL WORKSPACE  (≥ 1024 px, rationale active)
+ *
+ * Switches the practice layout from the mobile-first stacked column to a
+ * 59 / 41 side-by-side grid:
+ *
+ *   ┌───────────────────────────────┬────────────────────────────┐
+ *   │  Question (59%)               │  Rationale (41%)           │
+ *   │  stem + answer cards          │  pearl · correct · why ·   │
+ *   │  full-height card             │  distractors · takeaway    │
+ *   └───────────────────────────────┴────────────────────────────┘
+ *
+ * Target reading width for rationale: ≈ 65–72 chars/line (ideal 60–80).
+ * At 1440px viewport, 41 % ≈ 590 px minus 2 × 1.25rem padding ≈ 550 px
+ * usable ÷ 7.8 px per char (15 px Lato) ≈ 70 chars.
+ *
+ * Both panels share identical card design language:
+ *   border-radius 1.25rem · semantic-border-soft · semantic-surface bg
+ *   semantic-shadow-soft — visually equal weight, dual-panel workspace feel.
+ *
+ * Mobile (< 1024 px): stacked layout unchanged; nn-nclex-question-col is a
+ * transparent flex pass-through.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+/* Mobile base: question col is a flex pass-through (no visual difference). */
+.nn-nclex-question-col {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  gap: clamp(0.35rem, 0.9vh, 0.625rem);
+}
+
+@media (min-width: 1024px) {
+  /* ── 1. Container → two-column grid ──────────────────────────────────── */
+  .nn-nclex-exam-page--rationale-active .nn-nclex-question-inner--practice {
+    display: grid;
+    grid-template-columns: minmax(0, 59fr) minmax(0, 41fr);
+    grid-template-rows: 1fr;
+    align-items: stretch;
+    gap: clamp(0.75rem, 1.5vw, 1.125rem);
+    overflow: hidden;
+  }
+
+  /* ── 2. Left panel: question column ─────────────────────────────────── */
+  .nn-nclex-exam-page--rationale-active .nn-nclex-question-col {
+    /* Card treatment — identical design language to the rationale panel */
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    border-radius: 1.25rem;
+    border: 1px solid var(--semantic-border-soft);
+    background: var(--semantic-surface);
+    box-shadow: var(--semantic-shadow-soft,
+      0 1px 3px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent));
+    padding: clamp(1rem, 2vh, 1.375rem) clamp(1.125rem, 2vw, 1.5rem);
+    gap: clamp(0.625rem, 1.5vh, 1rem);
+  }
+
+  /* ── 3. Right panel: rationale band → full-height card ──────────────── */
+  .nn-nclex-exam-page--rationale-active .nn-nclex-practice-rationale-band {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: none;
+    overflow: hidden;
+    border-top: none;
+    /* Same card as question col */
+    border-radius: 1.25rem;
+    border: 1px solid var(--semantic-border-soft);
+    background: var(--semantic-surface);
+    box-shadow: var(--semantic-shadow-soft,
+      0 1px 3px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent));
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Override the tiny fixed-height the --active modifier normally enforces */
+  .nn-nclex-exam-page--rationale-active .nn-nclex-practice-rationale-band--active {
+    flex: 1 1 0;
+  }
+
+  /* Let nn-practice-rationale-full fill its column rather than having its own
+     card chrome — the band IS the card in dual-panel mode. */
+  .nn-nclex-exam-page--rationale-active
+    .nn-nclex-practice-rationale-band
+    .nn-practice-rationale-full {
+    min-height: 0;
+    max-height: none;
+    flex: 1 1 auto;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .nn-nclex-exam-page--rationale-active
+    .nn-nclex-practice-rationale-band
+    .nn-practice-rationale-full__scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: clamp(0.875rem, 1.75vh, 1.25rem) clamp(1rem, 2vw, 1.375rem);
+  }
+
+  /* ── 4. Un-compress the question stem ───────────────────────────────── */
+  /* The stacked layout truncates the stem to 3 lines to make room for the
+     band below. In the 59/41 grid the stem has its full column width. */
+  .nn-nclex-exam-page--rationale-active .nn-nclex-question-stem {
+    max-height: none;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    -webkit-box-orient: unset;
+    display: block;
+    overflow: visible;
+    font-size: clamp(0.9375rem, 1.8vh, 1.0625rem);
+    line-height: 1.6;
+  }
+
+  /* ── 5. Un-compress the answer cards ────────────────────────────────── */
+  .nn-nclex-exam-page--rationale-active .nn-nclex-answer-list {
+    flex: 0 0 auto; /* let cards take natural height; don't stretch to fill */
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .nn-nclex-exam-page--rationale-active .nn-nclex-answer-card {
+    max-height: none;
+    min-height: 2.5rem;
+    padding-block: 0.5rem;
+  }
+
+  .nn-nclex-exam-page--rationale-active .nn-nclex-answer-card__text {
+    font-size: clamp(0.875rem, 1.45vh, 1rem);
+    line-height: 1.45;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    -webkit-box-orient: unset;
+    display: block;
+    overflow: visible;
+  }
+
+  /* ── 6. Full platform convergence override (premium theme) ──────────── */
+  /* The convergence layer sets a border-radius on the band; ensure it
+     matches the card system in dual-panel mode. */
+  .nn-nclex-exam-page--rationale-active .nn-nclex-practice-rationale-band {
+    border-radius: 1.25rem;
+  }
+}
+
 /* ── Compact rationale (viewport-fit, no scroll) ─────────────────────── */
 .nn-nclex-rationale-compact {
   display: flex;

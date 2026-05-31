@@ -44,11 +44,13 @@ describe("marketing pathway lesson detail layout convergence", () => {
     );
   });
 
-  it("detail body wires unified study chrome and bottom nav", () => {
+  it("detail body keeps activities out of the top chrome and moves them below the lesson", () => {
     const src = fs.readFileSync(detailBodyPath, "utf8");
-    assert.match(src, /MarketingPathwayLessonHubStudyChrome/, "must render hub study chrome");
     assert.match(src, /buildMarketingLessonHubSurfaceChips/, "must build shared surface chips");
-    assert.match(src, /<StudyBottomNav[\s\S]*compact/, "must render compact StudyBottomNav");
+    assert.doesNotMatch(src, /MarketingPathwayLessonHubStudyChrome/, "lesson detail must not render top activity chrome");
+    assert.doesNotMatch(src, /<StudyBottomNav[\s\S]*compact/, "lesson detail must not render duplicate activity bottom nav");
+    assert.match(src, /ContinueLearningSection/, "lesson activities must render in Continue Your Learning section");
+    assert.match(src, /data-nn-lesson-continue-learning/, "Continue Your Learning section must expose a stable hook");
     assert.match(src, /BreadcrumbsFromResolution/, "must keep breadcrumb resolution + JSON-LD path");
   });
 

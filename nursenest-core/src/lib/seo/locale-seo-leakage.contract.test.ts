@@ -37,11 +37,11 @@ import { localeRobotsOverride } from "@/lib/i18n/language-readiness";
  *
  * The single source of truth is {@link getLocaleSeoTier}:
  *   - production  → indexable, in sitemap, in hreflang, no per-page robots override
- *   - preview     → crawlable, NOT in sitemap, NOT in hreflang, page emits noindex,follow
+ *   - preview     → crawlable, NOT in sitemap, NOT in hreflang, page emits noindex robots metadata
  *   - blocked     → reserved (no locale uses today)
  *
  * Auth/utility surfaces (`/login`, `/signup`, `/forgot-password`, `/reset-password`) are
- * always noindex,follow regardless of locale tier and never participate in hreflang clusters
+ * always noindex regardless of locale tier and never participate in hreflang clusters
  * or sitemap urlsets.
  *
  * Background: see `docs/reports/locale-seo-leakage-remediation.md`.
@@ -203,14 +203,11 @@ describe("Contract 4: robots rules do not conflict with indexing rules", () => {
     }
   });
 
-  it("every preview-tier locale emits page-level noindex,follow via localeRobotsOverride", () => {
+  it("every preview-tier locale emits page-level noindex robots via localeRobotsOverride", () => {
     for (const code of getPreviewSeoLocales()) {
       const override = localeRobotsOverride(code);
-      assert.deepEqual(
-        override,
-        { index: false, follow: true },
-        `preview locale ${code} must emit noindex,follow`,
-      );
+      assert.equal(override?.index, false, `preview locale ${code} must emit noindex`);
+      assert.equal(override?.follow, code === "fr" || code === "es" ? false : true);
     }
   });
 

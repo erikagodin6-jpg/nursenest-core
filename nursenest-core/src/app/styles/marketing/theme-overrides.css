@@ -89,8 +89,8 @@
 }
 
 /* ---------------------------------------------------------------------
-   Aurora / Blossom — full-page pastel canvas + folded sections (Figma homepage mockups).
-   Rose / violet / sky / mint blobs via semantic tokens — no neon magenta slabs.
+   Aurora / Blossom — full-page clinical canvas + folded sections.
+   Blossom resolves to spring-sky blues/aqua with blush/yellow micro accents.
    --------------------------------------------------------------------- */
 
 :is(html[data-theme="blossom"], html[data-theme="aurora"])
@@ -178,6 +178,41 @@
     var(--page-bg, var(--theme-page-bg));
 }
 
+html[data-theme="aurora"] .nn-home-marketing-rich-hero {
+  --hero-accent-start: #8b5cf6;
+  --hero-accent-middle: #67e8f9;
+  --hero-accent-end: #24b889;
+  --hero-accent-solid-fallback: #7c3aed;
+  --hero-headline-gradient: linear-gradient(
+    94deg,
+    var(--hero-accent-start) 0%,
+    var(--hero-accent-middle) 48%,
+    var(--hero-accent-end) 100%
+  );
+  --hero-ambient-radial:
+    radial-gradient(
+      120% 90% at 8% 26%,
+      color-mix(in srgb, #8b5cf6 17%, transparent) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      102% 76% at 100% 12%,
+      color-mix(in srgb, #6ee7b7 15%, transparent) 0%,
+      transparent 56%
+    ),
+    radial-gradient(
+      92% 70% at 40% 100%,
+      color-mix(in srgb, #f9a8d4 10%, transparent) 0%,
+      transparent 60%
+    );
+  background:
+    radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, #8b5cf6 18%, transparent), transparent 58%),
+    radial-gradient(780px 420px at 94% 8%, color-mix(in srgb, #6ee7b7 14%, transparent), transparent 56%),
+    radial-gradient(740px 400px at 52% 108%, color-mix(in srgb, #67e8f9 13%, transparent), transparent 56%),
+    radial-gradient(700px 360px at 0% 72%, color-mix(in srgb, #f9a8d4 9%, transparent), transparent 56%),
+    var(--page-bg, var(--theme-page-bg));
+}
+
 :is(html[data-theme="blossom"], html[data-theme="aurora"])
   .nn-home-marketing-rich-hero.nn-hero-bridge {
   background-color: transparent;
@@ -240,61 +275,60 @@ html[data-theme="blossom"] .nn-home-marketing-root {
   background-image:
     radial-gradient(
       ellipse 128% 88% at -8% -18%,
-      color-mix(in srgb, var(--semantic-chart-1) 20%, transparent),
+      color-mix(in srgb, #9ec5fe 16%, transparent),
       transparent 56%
     ),
     radial-gradient(
       ellipse 118% 82% at 108% 2%,
-      color-mix(in srgb, var(--semantic-chart-2) 18%, transparent),
+      color-mix(in srgb, #a7f3d0 12%, transparent),
       transparent 56%
     ),
     radial-gradient(
       ellipse 105% 76% at 48% 112%,
-      color-mix(in srgb, var(--semantic-chart-4) 14%, transparent),
+      color-mix(in srgb, #f8c8dc 7%, transparent),
       transparent 60%
     ),
     radial-gradient(
       ellipse 95% 68% at 90% 96%,
-      color-mix(in srgb, var(--semantic-chart-8) 12%, transparent),
+      color-mix(in srgb, #fde68a 6%, transparent),
       transparent 60%
     ),
-    linear-gradient(180deg, #fff9fb 0%, #fffdf8 45%, #e8fff3 100%);
+    linear-gradient(180deg, #f8fafc 0%, #ffffff 42%, color-mix(in srgb, #9ec5fe 7%, #ffffff) 100%);
 }
 
 html[data-theme="mint-blossom"] .nn-home-marketing-root {
   background-image:
     radial-gradient(
       ellipse 128% 88% at -8% -18%,
-      color-mix(in srgb, var(--semantic-chart-1) 16%, transparent),
+      color-mix(in srgb, #9ec5fe 14%, transparent),
       transparent 56%
     ),
     radial-gradient(
       ellipse 118% 82% at 108% 2%,
-      color-mix(in srgb, var(--semantic-chart-7) 16%, transparent),
+      color-mix(in srgb, #a7f3d0 14%, transparent),
       transparent 56%
     ),
     radial-gradient(
       ellipse 105% 76% at 48% 112%,
-      color-mix(in srgb, var(--semantic-chart-4) 18%, transparent),
+      color-mix(in srgb, #f8c8dc 6%, transparent),
       transparent 60%
     ),
     radial-gradient(
       ellipse 95% 68% at 90% 96%,
-      color-mix(in srgb, var(--semantic-chart-8) 10%, transparent),
+      color-mix(in srgb, #fde68a 5%, transparent),
       transparent 60%
     ),
-    linear-gradient(180deg, #fafdfc 0%, #fff9fb 42%, #d6f0ff 100%);
+    linear-gradient(180deg, #f8fafc 0%, #ffffff 44%, color-mix(in srgb, #a7f3d0 7%, #ffffff) 100%);
 }
 
 html[data-theme="blossom"] .nn-home-marketing-rich-hero {
-  --blossom-hero-accent-pink: #cf2f78;
-  --blossom-hero-accent-lavender: #8157cf;
-  --blossom-hero-accent-sky: #1f76b0;
-  --blossom-hero-accent-solid: #b82c69;
-  --hero-accent-start: var(--blossom-hero-accent-pink);
-  --hero-accent-middle: var(--blossom-hero-accent-lavender);
-  --hero-accent-end: var(--blossom-hero-accent-sky);
-  --hero-accent-solid-fallback: var(--blossom-hero-accent-solid);
+  --blossom-hero-accent-sky: #1d7ed8;
+  --blossom-hero-accent-aqua: #24b98d;
+  --blossom-hero-accent-soft-sky: #67aae9;
+  --hero-accent-start: var(--blossom-hero-accent-sky);
+  --hero-accent-middle: var(--blossom-hero-accent-soft-sky);
+  --hero-accent-end: var(--blossom-hero-accent-aqua);
+  --hero-accent-solid-fallback: var(--blossom-hero-accent-sky);
   --hero-headline-gradient: linear-gradient(
     92deg,
     var(--hero-accent-start) 0%,
@@ -411,7 +445,7 @@ html[data-theme="blossom"]
    ===================================================================== */
 /* Blossom / Aurora: marketing-row4 geometry matches Ocean — token-only nav pill colors below. */
 
-/* Aurora nav pills — rose/violet/sky/mint wash vs sky-only chips (still token-driven) */
+/* Aurora / Blossom nav pills — token-driven active and hover color only. */
 :is(html[data-theme="blossom"], html[data-theme="aurora"])
   [data-nn-header-layout="marketing-row4"]
   .nn-header-desktop-grid

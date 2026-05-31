@@ -19,29 +19,33 @@
   --nn-blossom-prose-max: 42rem;
 
   /* Luminous surfaces */
-  --nn-blossom-page-wash: linear-gradient(
-    135deg,
-    color-mix(in srgb, #fff9fb 92%, #ffffff) 0%,
-    color-mix(in srgb, #e8fff3 38%, #ffffff) 45%,
-    color-mix(in srgb, #d6f0ff 32%, #ffffff) 100%
-  );
+  --nn-blossom-page-wash:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, #9ec5fe 11%, #f8fafc) 0%,
+      #ffffff 34%,
+      color-mix(in srgb, #f8c8dc 6%, #ffffff) 58%,
+      #ffffff 100%
+    );
   --nn-blossom-card-shadow:
-    0 1px 0 color-mix(in srgb, #ffb7d5 8%, transparent),
-    0 14px 40px -22px color-mix(in srgb, #bfe7ff 22%, transparent);
-  --nn-blossom-card-border: color-mix(in srgb, #ffb7d5 12%, #ffffff);
+    0 1px 0 color-mix(in srgb, #9ec5fe 10%, transparent),
+    0 14px 40px -22px color-mix(in srgb, #1d7ed8 20%, transparent);
+  --nn-blossom-card-border: color-mix(in srgb, #9ec5fe 13%, #ffffff);
 }
 
 html[data-theme="mint-blossom"] {
-  --nn-blossom-page-wash: linear-gradient(
-    135deg,
-    color-mix(in srgb, #fafdfc 92%, #ffffff) 0%,
-    color-mix(in srgb, #d9f8e7 42%, #ffffff) 48%,
-    color-mix(in srgb, #d6f0ff 30%, #ffffff) 100%
-  );
+  --nn-blossom-page-wash:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, #9ec5fe 9%, #f8fafc) 0%,
+      #ffffff 36%,
+      color-mix(in srgb, #a7f3d0 8%, #ffffff) 64%,
+      #ffffff 100%
+    );
   --nn-blossom-card-shadow:
-    0 1px 0 color-mix(in srgb, #b7efd1 10%, transparent),
-    0 16px 42px -22px color-mix(in srgb, #d6f0ff 18%, transparent);
-  --nn-blossom-card-border: color-mix(in srgb, #b7efd1 14%, #ffffff);
+    0 1px 0 color-mix(in srgb, #a7f3d0 10%, transparent),
+    0 16px 42px -22px color-mix(in srgb, #1d7ed8 16%, transparent);
+  --nn-blossom-card-border: color-mix(in srgb, #a7f3d0 14%, #ffffff);
 }
 
 /* Page atmosphere */
@@ -113,7 +117,7 @@ html[data-theme="mint-blossom"] {
   padding: var(--nn-blossom-space-card);
 }
 
-/* Buttons — soft blossom primary, mint secondary */
+/* Buttons — sky primary, white secondary with spring-sky borders */
 :is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .btn-primary,
 :is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) [data-slot="button"].bg-primary,
 :is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-faq-redesign-cta,
@@ -137,8 +141,8 @@ html[data-theme="mint-blossom"] .nn-premium-auth-primary-button {
 
 html[data-theme="mint-blossom"] .btn-secondary,
 html[data-theme="mint-blossom"] [data-variant="secondary"] {
-  background: color-mix(in srgb, #d9f8e7 72%, var(--semantic-surface));
-  border-color: color-mix(in srgb, #b7efd1 32%, var(--semantic-border-soft));
+  background: var(--semantic-surface);
+  border-color: color-mix(in srgb, #9ec5fe 32%, var(--semantic-border-soft));
   color: var(--theme-heading-text);
 }
 

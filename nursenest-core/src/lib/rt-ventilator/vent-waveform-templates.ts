@@ -652,15 +652,20 @@ const autoPeepCondition = tpl(
   "Auto-PEEP (Intrinsic PEEP / Air Trapping)",
   "condition",
   {
+    // COPD-realistic parameters that naturally produce auto-PEEP:
+    //   τ = Raw × Cst = 20 × 0.075 = 1.50 s
+    //   Te = 60/20 − 1.0 = 2.0 s  →  Te/τ = 1.33  →  residual frac = exp(−1.33) ≈ 26%
+    //   V_residual ≈ 500 × 0.26 = 130 mL  →  auto-PEEP ≈ 130/75 ≈ 1.7 cmH₂O (natural)
+    //   autoPeep: 5 forces a larger, teachable display value for educational clarity.
     mode: "volume_control",
     flowPattern: "square",
     peep: 5,
     tidalVolume: 500,
-    rr: 18,
+    rr: 20,
     ti: 1.0,
-    compliance: 60,
-    resistance: 15,
-    autoPeep: 6,
+    compliance: 75,
+    resistance: 20,
+    autoPeep: 5,
     condition: "auto_peep",
     asynchrony: "none",
   },

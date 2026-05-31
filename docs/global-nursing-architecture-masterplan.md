@@ -52,6 +52,9 @@ The current platform already has many of the right primitives:
 | Pathway definitions | `src/lib/exam-pathways/exam-pathways-data-segment-e.ts` | International RN pathways exist as hidden, waitlist, generic exam-family shells with empty `contentExamKeys`. |
 | Launch gates | `src/lib/navigation/country-exam-launch-readiness.ts` | International RN foundation pathway IDs are explicitly treated as not public. `GLOBAL_REGION_EXPANSION_PUBLISHED` is empty. |
 | Inventory snapshot | `src/config/pathway-readiness-snapshot.json` | UK, Australia, Philippines, India, Nigeria, Saudi Arabia each show `0` lessons and `0` questions. |
+| Inventory maturity standard | `docs/content-inventory-maturity-standard.md` | Defines launch minimums, mature targets, question-type distribution, practice exam, CAT, flashcard, clinical judgment, and publication-readiness gates. |
+| International expansion roadmap | `docs/international-expansion-roadmap.md` | Defines tiered country launch order, stricter international inventory thresholds, localization rules, and 95% publication-readiness gates. |
+| Global multilingual expansion framework | `docs/global-nursing-exam-multilingual-expansion-framework.md` | Defines language tiers, no-partial-translation rules, country-specific SEO/blog requirements, and ready-for-global-publication gates. |
 | Market readiness | `src/lib/navigation/market-readiness-data.ts` | Philippines and India are `partial`; UK, Australia, Nigeria, Saudi Arabia are marketing-only; none have full conversion funnel readiness. |
 | Country/locale config | `src/lib/i18n/global-regions.ts` | Supports Philippines, India, Nigeria, Saudi Arabia, UK, Australia, Canada, US and many future regions. |
 | Currency display | `src/lib/pricing/regional-pricing-map.ts` | Local currency display prices exist for target markets, but comments state this is read-only and does not replace billing. |
@@ -141,6 +144,9 @@ Current config supports:
 The architecture can handle language expansion, but actual launch should require:
 
 - content translation readiness score,
+- pathway inventory score against `docs/content-inventory-maturity-standard.md`,
+- international tier readiness score against `docs/international-expansion-roadmap.md`,
+- global language and SEO readiness score against `docs/global-nursing-exam-multilingual-expansion-framework.md`,
 - clinical terminology review,
 - English leakage audit,
 - localized metadata,
@@ -633,6 +639,7 @@ Required before reaching 50:
 | `aus` vs `australia` naming | Region slug is `aus`, country slug is `australia` | Add explicit alias map and prefer canonical URL slug `australia`. |
 | International product paths too short | Registry public paths like `/uk/rn`, `/ph/rn` | Use canonical exam paths like `/uk/rn/nmc-test-of-competence`. |
 | Paid product claims before inventory | Snapshot shows 0 lessons/questions for international pathways | Keep waitlist/noindex until content and regulator review pass. |
+| Mature-pathway claims without competitive inventory | Long-term targets require thousands of questions, CAT-eligible items, flashcards, clinical judgment cases, and 100+ practice exams | Treat `docs/content-inventory-maturity-standard.md` as the pathway launch and maturity gate. |
 | Pricing display without checkout | Regional pricing map is read-only; Stripe map is CA/US | Add billing status lifecycle and DB-backed price catalog. |
 | Localized routes inconsistent | `[locale]/exams` exists for some regions but not UK/Philippines | Generate localized shells from registry only when translation-ready. |
 | Hand-authored country pages | Many `/exams/*/page.tsx` files | Move to registry-driven page template with country-specific content blocks. |
@@ -651,7 +658,7 @@ Priorities:
 5. Launch one low-rebuild market: UK or Australia for English SEO, or Philippines for migration funnel.
 6. Add billing lifecycle statuses.
 7. Build global content inheritance metadata.
-8. Add international pathway readiness dashboard.
+8. Add international pathway readiness dashboard tied to `docs/content-inventory-maturity-standard.md`.
 
 Best first architecture launch:
 

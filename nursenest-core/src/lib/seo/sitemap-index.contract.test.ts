@@ -19,6 +19,9 @@ test("sitemap index XML declares sitemapindex schema", () => {
 
 test("canonical child filenames cover phase-3 segments", () => {
   assert.deepEqual(SITEMAP_INDEX_CHILD_FILENAMES, [
+    "sitemap-en.xml",
+    "sitemap-fr.xml",
+    "sitemap-es.xml",
     "sitemap-core.xml",
     "sitemap-blog.xml",
     "sitemap-fr-blog.xml",
@@ -38,7 +41,7 @@ test("absoluteUrlsForSitemapIndexChildren matches canonical origin prefix", () =
   const urls = absoluteUrlsForSitemapIndexChildren(CANONICAL_PRODUCTION_ORIGIN);
   assert.equal(urls.length, SITEMAP_INDEX_CHILD_FILENAMES.length);
   assert.ok(urls.every((u) => u.startsWith(`${CANONICAL_PRODUCTION_ORIGIN}/`)));
-  assert.ok(urls[0]?.endsWith("/sitemap-core.xml"));
+  assert.ok(urls[0]?.endsWith("/sitemap-en.xml"));
 });
 
 test("buildSitemapIndexXmlForOrigin produces one child loc per configured sitemap segment", () => {

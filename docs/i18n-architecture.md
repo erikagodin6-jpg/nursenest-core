@@ -56,6 +56,17 @@ This runs `script/compile-i18n.ts`, which:
 
 `en`, `fr`, `tl`, `hi`, `es`, `zh`, `zh-tw`, `ar`, `ko`, `pt`, `pa`, `vi`, `ht`, `ur`, `ja`, `fa`, `de`, `th`, `tr`, `id` — keep lists in `script/compile-i18n.ts`, `script/merge-marketing-i18n.ts`, and nursenest-core API allowlists in sync.
 
+## Global nursing exam language roadmap
+
+The long-term language and pathway publication standard is governed by [global-nursing-exam-multilingual-expansion-framework.md](./global-nursing-exam-multilingual-expansion-framework.md).
+
+Important distinction:
+
+- Supported locale infrastructure means the platform can load and validate a language.
+- Global pathway publication readiness means lessons, flashcards, question banks, practice exams, CAT exams, study plans, reports, analytics labels, dashboards, marketing pages, pricing pages, blog content, and email sequences are translated and clinically reviewed for that pathway.
+
+Do not mark a translated nursing pathway complete solely because static UI keys exist for that locale.
+
 ## Missing-key policy (no silent English on non-English UI)
 
 - **Non-English UI strings:** If a key is missing for the active locale, the UI shows a visible placeholder like `[missing:key]` and the miss is logged / reported — **not** English copy from another locale.

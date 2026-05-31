@@ -390,7 +390,10 @@ export function NclexPracticeExamLayout({
               !transitioning ? "nn-nclex-question-transition" : "",
             ].filter(Boolean).join(" ")}
           >
-            {children}
+            {/* Question column — becomes left panel of the 59/41 desktop grid */}
+            <div className="nn-nclex-question-col">
+              {children}
+            </div>
             {rationaleSlot ? (
               <div
                 className={[

@@ -1224,10 +1224,11 @@ async function LessonDetailPageInner({ params }: Props) {
             assessmentHint={assessmentHint}
           />
           {!usesReadingV2Layout ? (
-            <div className="mt-4">
+            <div className="mt-2">
               <LessonStudyPhaseProgress
                 progress={initialProgress}
                 persisted={Boolean(userId) && entitlement.hasAccess}
+                compact
               />
             </div>
           ) : null}
@@ -1246,7 +1247,7 @@ async function LessonDetailPageInner({ params }: Props) {
           ) : null}
         </div>
 
-        <div className="mt-4 flex justify-end">
+        <div className="mt-2 flex justify-end">
           <LessonMeasurementUnitsBar
             fallbackSystem={lessonMeasurementSystem ?? "US"}
             initialPreference={measurementPreference}

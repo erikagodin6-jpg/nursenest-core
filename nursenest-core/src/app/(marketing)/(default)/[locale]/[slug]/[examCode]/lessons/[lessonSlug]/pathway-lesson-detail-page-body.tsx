@@ -36,12 +36,17 @@ import { EeatContentAttribution } from "@/components/seo/eeat-content-attributio
 import { PathwayLessonMedicalEducationJsonLd } from "@/components/seo/seo-json-ld";
 import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
 import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
-import { MarketingPathwayLessonHubStudyChrome } from "@/components/pathway-lessons/marketing-pathway-lesson-hub-study-chrome";
-import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
-import { buildMarketingLessonHubSurfaceChips } from "@/lib/marketing/marketing-lesson-hub-surface-chips";
+import {
+  buildMarketingLessonHubSurfaceChips,
+  type MarketingLessonHubSurfaceChip,
+} from "@/lib/marketing/marketing-lesson-hub-surface-chips";
+import {
+  buildLessonHubPremiumModuleStripLinks,
+  type LessonHubPremiumStripLink,
+} from "@/lib/marketing/lesson-hub-premium-module-strip";
 import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
 import { getPathwayLessonContentDates } from "@/lib/seo/pathway-lesson-content-dates";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
@@ -139,6 +144,7 @@ import { AutomaticRelatedContentForPublic } from "@/components/linking/automatic
 import { PathwayLessonTopicSiblingsStrip } from "@/components/lessons/pathway-lesson-topic-siblings-strip";
 import { PathwayLessonRemediationChain } from "@/components/lessons/pathway-lesson-remediation-chain";
 import { buildLessonDetailAutomaticRelatedExcludeHrefs } from "@/lib/linking/lesson-detail-automatic-related-excludes";
+import { resolveMarketingHubEcgModulePublic } from "@/lib/ecg-module/ecg-marketing-hub-surface.server";
 
 /**
  * Paywall: full `PathwayLessonRecord` / `sections[]` stay in this server component. Gate with
@@ -153,6 +159,148 @@ export type PathwayLessonDetailPageBodyProps = {
   lessonSlug: string;
   lessonContentLocale: string;
 };
+
+type ContinueLearningCard = {
+  label: string;
+  href: string;
+  count?: number | null;
+  note: string;
+};
+
+function continueLearningLabel(label: string): string {
+  const normalized = label.trim().toLowerCase();
+  if (normalized.includes("adaptive cat")) return "CAT Readiness";
+  if (normalized.includes("practice exam")) return "Practice Exams";
+  if (normalized.includes("question")) return "Practice Questions";
+  if (normalized.includes("flashcard")) return "Flashcards";
+  if (normalized.includes("lab")) return "Lab Interpretation";
+  if (normalized.includes("medication") || normalized.includes("med calc")) return "Medication Math";
+  if (normalized.includes("ecg")) return "ECG Practice";
+  if (normalized.includes("prioritization") || normalized.includes("delegation")) return "Prioritization & Delegation";
+  if (normalized.includes("clinical skills")) return "Skills Refreshers";
+  if (normalized.includes("pharmacology")) return "Pharmacology Practice";
+  if (normalized.includes("case") || normalized.includes("scenario")) return "Case Studies";
+  return label;
+}
+
+function continueLearningNote(label: string): string {
+  switch (label) {
+    case "Practice Questions":
+      return "Apply this topic with board-style rationales.";
+    case "Flashcards":
+      return "Review recall prompts tied to the same study pool.";
+    case "Case Studies":
+      return "Practice clinical judgment with unfolding scenarios.";
+    case "CAT Readiness":
+      return "Check adaptive readiness when you are ready to test.";
+    case "Medication Math":
+      return "Reinforce dosage, infusion, and safety calculations.";
+    case "ECG Practice":
+      return "Move from concepts into rhythm recognition.";
+    case "Lab Interpretation":
+      return "Connect abnormal values to nursing actions.";
+    case "Prioritization & Delegation":
+      return "Practice who to see first and what to escalate.";
+    case "Practice Exams":
+      return "Build stamina with exam-mode practice.";
+    case "Skills Refreshers":
+      return "Review safety sequences and competency steps.";
+    case "Pharmacology Practice":
+      return "Connect drug classes to monitoring priorities.";
+    default:
+      return "Continue with a related study activity.";
+  }
+}
+
+function buildContinueLearningCards({
+  surfaceChips,
+  moduleLinks,
+  questionCount,
+  catCount,
+}: {
+  surfaceChips: MarketingLessonHubSurfaceChip[];
+  moduleLinks: LessonHubPremiumStripLink[];
+  questionCount: number | null;
+  catCount: number | null;
+}): ContinueLearningCard[] {
+  const cards: ContinueLearningCard[] = [];
+  const seen = new Set<string>();
+  const add = (label: string, href: string, count?: number | null) => {
+    const cleanLabel = continueLearningLabel(label);
+    const key = `${cleanLabel}::${href}`;
+    if (!href.trim() || seen.has(key)) return;
+    seen.add(key);
+    cards.push({
+      label: cleanLabel,
+      href,
+      count: typeof count === "number" && Number.isFinite(count) ? count : null,
+      note: continueLearningNote(cleanLabel),
+    });
+  };
+
+  for (const chip of surfaceChips) {
+    const normalized = chip.label.toLowerCase();
+    add(
+      chip.label,
+      chip.href,
+      normalized.includes("question")
+        ? questionCount
+        : normalized.includes("adaptive cat")
+          ? catCount
+          : null,
+    );
+  }
+  for (const link of moduleLinks) add(link.label, link.href, null);
+  return cards;
+}
+
+function ContinueLearningSection({ cards }: { cards: ContinueLearningCard[] }) {
+  if (!cards.length) return null;
+  const numberFormatter = new Intl.NumberFormat("en");
+  return (
+    <section
+      className="mt-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_12%)] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-cool)_8%)] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-5"
+      aria-labelledby="lesson-continue-learning-heading"
+      data-testid="pathway-lesson-continue-learning"
+      data-nn-lesson-continue-learning
+    >
+      <div className="max-w-2xl">
+        <p className="nn-lesson-module-eyebrow">Next study step</p>
+        <h2 id="lesson-continue-learning-heading" className="mt-1 text-xl font-semibold tracking-[-0.02em] text-[var(--theme-heading-text)] sm:text-2xl">
+          Continue Your Learning
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+          Finish the lesson first, then choose a focused activity to apply what you just reviewed.
+        </p>
+      </div>
+      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {cards.map((card) => (
+          <Link
+            key={`${card.label}-${card.href}`}
+            href={card.href}
+            className="group flex min-h-32 flex-col justify-between rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_86%,transparent)] bg-[var(--semantic-surface)] p-4 text-left shadow-[var(--semantic-shadow-soft)] transition hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--semantic-brand)_34%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-positive)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_32%,transparent)]"
+            data-nn-pathway-lesson-continue-learning-card
+          >
+            <span>
+              <span className="block text-sm font-semibold text-[var(--theme-heading-text)]">
+                {card.label}
+                {card.count != null ? (
+                  <span className="text-[var(--semantic-text-secondary)]"> ({numberFormatter.format(card.count)})</span>
+                ) : null}
+              </span>
+              <span className="mt-2 block text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+                {card.note}
+              </span>
+            </span>
+            <span className="mt-4 text-xs font-semibold text-[var(--semantic-brand)] group-hover:underline">
+              Open activity
+            </span>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export async function PathwayLessonDetailPageBody({
   pathway,
@@ -381,6 +529,21 @@ export async function PathwayLessonDetailPageBody({
     formatMarketingMessage(marketingMessages, key, params, marketingMessages, {
       locale: DEFAULT_MARKETING_LOCALE,
     });
+  const ecgModulePublic = await resolveMarketingHubEcgModulePublic().catch(
+    () => false,
+  );
+  const continueLearningCards = buildContinueLearningCards({
+    surfaceChips: lessonHubSurfaceChips,
+    moduleLinks: buildLessonHubPremiumModuleStripLinks(pathway, {
+      ecgModulePublic,
+      messages: marketingMessages,
+      signedIn: Boolean(userId),
+    }),
+    questionCount:
+      questionSnapshot.status === "ok" ? questionSnapshot.pathwayScopedCount : null,
+    catCount:
+      questionSnapshot.status === "ok" ? questionSnapshot.adaptiveEligibleCount : null,
+  });
   const showLocaleFallbackNotice = Boolean(
     lesson.localeMeta &&
     (lesson.localeMeta.usedLocaleFallback ||
@@ -489,16 +652,9 @@ export async function PathwayLessonDetailPageBody({
             pathname={pathname}
             navClassName="nn-marketing-caption text-[var(--theme-muted-text)]"
           />
-          <MarketingPathwayLessonHubStudyChrome
-            pathway={pathway}
-            marketingLocale={lessonContentLocale}
-            viewerSignedIn={Boolean(userId)}
-            surfaceChips={lessonHubSurfaceChips}
-          />
-          <LessonReadingScrollProgress />
           <PathwayLessonSequenceNavBar
             adjacent={lessonAdjacentHrefs}
-            className="mb-4 hidden md:grid"
+            className="mb-4"
           />
           <PathwayLessonProgressTracker
             pathwayId={pathway.id}
@@ -529,11 +685,13 @@ export async function PathwayLessonDetailPageBody({
               ) : null
             }
           />
+          <LessonReadingScrollProgress />
           {!usesReadingV2Layout ? (
-            <div className="mt-4">
+            <div className="mt-2">
               <LessonStudyPhaseProgress
                 progress={lessonProgress}
                 persisted={Boolean(userId) && fullAccess}
+                compact
               />
             </div>
           ) : null}
@@ -614,7 +772,7 @@ export async function PathwayLessonDetailPageBody({
             )
           ) : null}
 
-          <div className="mt-4 flex justify-end">
+          <div className="mt-2 flex justify-end">
             <LessonMeasurementUnitsBar
               fallbackSystem={lessonMeasurementSystem}
               initialPreference={measurementPreference}
@@ -895,6 +1053,8 @@ export async function PathwayLessonDetailPageBody({
                   />
                 </section>
 
+                <ContinueLearningSection cards={continueLearningCards} />
+
                 <PathwayLessonTopicSiblingsStrip
                   pathway={pathway}
                   topicSlug={lesson.topicSlug}
@@ -1048,7 +1208,6 @@ export async function PathwayLessonDetailPageBody({
             <PathwayLessonStickySequenceNav adjacent={lessonAdjacentHrefs} />
           ) : null}
         </div>
-        <StudyBottomNav compact relatedLinks={lessonHubSurfaceChips} />
       </LessonsPageShell>
     </PathwayLessonDetailMarketingI18nLayer>
   );

@@ -11,7 +11,6 @@ import { publicMarketingExploreDestinations } from "@/lib/navigation/canonical-d
 import { footerMarketingNav } from "@/lib/navigation/footer-marketing-nav";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { SUPPORT_RESPONSE_TIME_COPY, supportMailtoHref } from "@/lib/support/support-policy";
-import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
@@ -104,9 +103,66 @@ export function SiteFooter() {
   const { region } = useNursenestRegion();
   const footerNav = footerMarketingNav(region);
   const explore = publicMarketingExploreDestinations(region);
-  const pnRoleLabel = getNursingRoleLabel({ country: region, role: "PN" });
   const regionLabel = region === "US" ? "United States" : "Canada";
   const showThemePicker = publicMarketingThemeChoiceCount() > 1;
+  const newsletterAction = withMarketingLocale(locale, "/sign-up");
+  const nursingExamLinks =
+    region === "US"
+      ? [
+          { href: "/us/rn/nclex-rn", label: "United States RN NCLEX-RN" },
+          { href: "/lvn-nclex-prep", label: "LVN / LPN NCLEX-PN" },
+          { href: "/nclex-question-bank", label: "NCLEX Question Bank" },
+          { href: "/cat-nclex-simulator", label: "NCLEX CAT Simulator" },
+          { href: "/practice-exams", label: "Practice Exams" },
+          { href: "/canada/rpn/rex-pn", label: "REx-PN Canada" },
+          { href: "/canada/np/cnple", label: "Canadian NP CNPLE" },
+        ]
+      : [
+          { href: "/canada/rn/nclex-rn", label: "Canadian NCLEX-RN" },
+          { href: "/canada/rpn/rex-pn", label: "REx-PN for RPN" },
+          { href: "/canada/np/cnple", label: "CNPLE for NP" },
+          { href: "/nclex-question-bank", label: "NCLEX Question Bank" },
+          { href: "/cat-nclex-simulator", label: "NCLEX CAT Simulator" },
+          { href: "/practice-exams", label: "Practice Exams" },
+          { href: "/us/rn/nclex-rn", label: "United States RN NCLEX-RN" },
+        ];
+  const studyResourceLinks = [
+    { href: explore.lessons, label: "Lessons" },
+    { href: explore.flashcards, label: "Flashcards" },
+    { href: "/question-bank", label: "Question Bank" },
+    { href: "/nclex-study-plan", label: "Study Plans" },
+    { href: "/adaptive-nclex-testing", label: "Adaptive CAT" },
+    { href: "/case-studies", label: "NGN Case Studies" },
+    { href: "/labs-interpretation", label: "Lab Interpretation" },
+    { href: "/ecg-telemetry-mastery", label: "ECG & Telemetry" },
+  ];
+  const alliedHealthLinks = [
+    { href: footerNav.exams.allied, label: "Allied Health Programs" },
+    { href: "/allied-health/respiratory-therapy", label: "Respiratory Therapy" },
+    { href: "/medical-laboratory-technology/specialty-modules", label: "Medical Laboratory Technology" },
+    { href: "/pre-nursing", label: "Pre-Nursing" },
+    { href: "/pre-nursing", label: "ATI TEAS + HESI A2" },
+  ];
+  const studentResourceLinks = [
+    { href: "/new-grad", label: "New Graduate Support" },
+    { href: "/nclex-study-plan", label: "NCLEX Study Plan" },
+    { href: "/blog", label: "Nursing Blog" },
+    { href: "/nursing-glossary", label: "Nursing Glossary" },
+    { href: "/faq", label: "FAQ" },
+    { href: "/support", label: "Support" },
+  ];
+  const institutionLinks = [
+    { href: "/for-institutions", label: "For Institutions" },
+    { href: "/enterprise-solutions", label: "Enterprise Solutions" },
+    { href: "/for-institutions", label: "Cohort Reporting" },
+    { href: "/for-institutions", label: "Faculty Tools" },
+    { href: "/pricing", label: "Pricing" },
+  ];
+  const socialLinks = [
+    { href: "https://www.linkedin.com/company/nursenest", label: "LinkedIn" },
+    { href: "https://www.instagram.com/nursenest", label: "Instagram" },
+    { href: "https://www.youtube.com/@nursenest", label: "YouTube" },
+  ];
 
   return (
     <footer
@@ -116,15 +172,45 @@ export function SiteFooter() {
       className="nn-footer-premium-root nn-footer-marketing-chrome nn-footer-marketing-chrome--surface nn-footer-landing mt-auto border-t border-[var(--footer-border)] shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--footer-fg)_6%,transparent)]"
     >
       <div className="nn-section-shell nn-footer-marketing-shell">
-        <div className="nn-footer-panel nn-footer-panel--main relative overflow-hidden px-5 py-7 sm:px-6 sm:py-8">
+        <section className="nn-footer-newsletter relative overflow-hidden px-5 py-7 sm:px-8 sm:py-8" aria-labelledby="nn-footer-newsletter-heading">
+          <div className="relative z-[1] grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+            <div className="max-w-2xl">
+              <p className="nn-footer-kicker">Clinical study notes</p>
+              <h2 id="nn-footer-newsletter-heading" className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-[var(--footer-fg)] sm:text-3xl">
+                Build smarter study habits before your next exam window.
+              </h2>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-[var(--footer-muted)]">
+                Get concise nursing study updates, exam pathway notes, and new clinical resources from NurseNest.
+              </p>
+            </div>
+            <form action={newsletterAction} method="get" className="nn-footer-newsletter-form" aria-label="Join the NurseNest study newsletter">
+              <label htmlFor="nn-footer-newsletter-email" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="nn-footer-newsletter-email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                className="nn-footer-newsletter-input"
+              />
+              <button type="submit" className="nn-footer-newsletter-button">
+                Start free
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <div className="nn-footer-panel nn-footer-panel--main relative overflow-hidden px-5 py-8 sm:px-8 sm:py-10">
           <LeafWatermark
             className="inset-0 flex items-center justify-center"
             imageClassName="max-h-[min(48vw,18rem)] opacity-[0.055] sm:max-h-[min(40vw,20rem)] sm:opacity-[0.065]"
           />
 
-          <div className="relative z-[1] space-y-8 md:space-y-9">
-            <div className="nn-footer-premium-top nn-footer-columns grid grid-cols-1 gap-x-10 gap-y-10 xl:grid-cols-12">
-              <div className="space-y-3 xl:col-span-3" data-nn-footer-brand>
+          <div className="relative z-[1] space-y-10">
+            <div className="nn-footer-premium-top grid grid-cols-1 gap-10 xl:grid-cols-[minmax(15rem,0.8fr)_minmax(0,2.4fr)]">
+              <div className="space-y-5" data-nn-footer-brand>
                 <FooterBrandLockup brandName={formatTitleCase(t("brand.nurseNest"), locale)} />
                 <p className="max-w-md text-sm font-semibold leading-relaxed text-[var(--footer-fg)]">
                   {formatSentenceCase(
@@ -138,137 +224,68 @@ export function SiteFooter() {
                 <p className="max-w-xs text-xs leading-relaxed text-[var(--footer-muted)]">
                   {formatSentenceCase(t("footer.supportingNursesGlobally"), locale)}
                 </p>
+                <div className="nn-footer-trust-stack">
+                  <span>{regionLabel} learners</span>
+                  <span>NCLEX + REx-PN aligned</span>
+                  <span>Clinical reasoning first</span>
+                </div>
+                <div className="flex flex-wrap gap-2" aria-label="NurseNest social links">
+                  {socialLinks.map((link) => (
+                    <FLink key={link.label} href={link.href} className="nn-footer-social-link">
+                      {link.label}
+                    </FLink>
+                  ))}
+                </div>
               </div>
 
-              <div className="nn-footer-premium-nav-grid grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:col-span-9">
-                {/* LEARNING */}
-                <FooterPremiumNavColumn
-                  id="nn-footer-col-learning"
-                  title={formatTitleCase("Learning", locale)}
-                >
+              <div className="nn-footer-premium-nav-grid grid grid-cols-1 gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                <FooterPremiumNavColumn id="nn-footer-col-nursing-exams" title={formatTitleCase("Nursing Exams", locale)}>
                   <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
-                    <li>
-                      <FLink href={explore.lessons}>Lessons</FLink>
-                    </li>
-                    <li>
-                      <FLink href={explore.flashcards}>Flashcards</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/nclex-study-plan">Study Plans</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/adaptive-nclex-testing">Weak Area Review</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/canada/rn/nclex-rn/report-card">Report Cards</FLink>
-                    </li>
+                    {nursingExamLinks.map((link) => (
+                      <li key={link.href}>
+                        <FLink href={link.href}>{link.label}</FLink>
+                      </li>
+                    ))}
                   </ul>
                 </FooterPremiumNavColumn>
 
-                {/* CLINICAL TOOLS */}
-                <FooterPremiumNavColumn id="nn-footer-col-clinical-tools" title={formatTitleCase("Clinical Tools", locale)}>
+                <FooterPremiumNavColumn id="nn-footer-col-study-resources" title={formatTitleCase("Study Resources", locale)}>
                   <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
-                    <li>
-                      <FLink href="/ecg-telemetry-mastery">ECG & Telemetry</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/labs-interpretation">Clinical Labs</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/clinical-modules">Medication Math</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/cnple-pharmacology">Pharmacology</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/clinical-modules">Clinical Skills</FLink>
-                    </li>
+                    {studyResourceLinks.map((link) => (
+                      <li key={link.href}>
+                        <FLink href={link.href}>{link.label}</FLink>
+                      </li>
+                    ))}
                   </ul>
                 </FooterPremiumNavColumn>
 
-                {/* EXAM PREP */}
-                <FooterPremiumNavColumn
-                  id="nn-footer-col-exam-prep"
-                  title={formatTitleCase("Exam Prep", locale)}
-                >
+                <FooterPremiumNavColumn id="nn-footer-col-allied-health" title={formatTitleCase("Allied Health", locale)}>
                   <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
-                    <li>
-                      <FLink href={footerNav.exams.rn}>RN</FLink>
-                    </li>
-                    <li>
-                      <FLink href={footerNav.exams.pn}>{pnRoleLabel}</FLink>
-                    </li>
-                    <li>
-                      <FLink href={footerNav.exams.np}>NP</FLink>
-                    </li>
-                    <li>
-                      <FLink href={footerNav.platform.cat}>CAT Exams</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/nclex-question-bank">NGN Question Types</FLink>
-                    </li>
+                    {alliedHealthLinks.map((link) => (
+                      <li key={link.href}>
+                        <FLink href={link.href}>{link.label}</FLink>
+                      </li>
+                    ))}
                   </ul>
                 </FooterPremiumNavColumn>
 
-                {/* HEALTHCARE CAREERS */}
-                <FooterPremiumNavColumn
-                  id="nn-footer-col-healthcare-careers"
-                  title={formatTitleCase("Healthcare Careers", locale)}
-                >
+                <FooterPremiumNavColumn id="nn-footer-col-student-resources" title={formatTitleCase("Student Resources", locale)}>
                   <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
-                    <li>
-                      <FLink href="/new-grad">New Grad</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/pre-nursing">Pre-Nursing</FLink>
-                    </li>
-                    <li>
-                      <FLink href={footerNav.exams.allied}>
-                        {formatTitleCase(t("footer.alliedHealth"), locale)}
-                      </FLink>
-                    </li>
-                    <li>
-                      <FLink href="/careers">Careers</FLink>
-                    </li>
+                    {studentResourceLinks.map((link) => (
+                      <li key={link.href}>
+                        <FLink href={link.href}>{link.label}</FLink>
+                      </li>
+                    ))}
                   </ul>
                 </FooterPremiumNavColumn>
 
-                {/* RESOURCES */}
-                <FooterPremiumNavColumn id="nn-footer-col-resources" title={formatTitleCase("Resources", locale)}>
+                <FooterPremiumNavColumn id="nn-footer-col-institutions" title={formatTitleCase("Institutions", locale)}>
                   <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
-                    <li>
-                      <FLink href="/blog">Blog</FLink>
-                    </li>
-                    <li>
-                      <FLink href={footerNav.resources.faq}>FAQ</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/about">About</FLink>
-                    </li>
-                    <li>
-                      <FLink href={footerNav.support.helpCenter}>Help Center</FLink>
-                    </li>
-                  </ul>
-                </FooterPremiumNavColumn>
-
-                {/* INSTITUTIONS */}
-                <FooterPremiumNavColumn
-                  id="nn-footer-col-institutions"
-                  title={formatTitleCase("Institutions", locale)}
-                >
-                  <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
-                    <li>
-                      <FLink href="/for-institutions">Schools</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/for-institutions">Colleges</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/for-institutions">Universities</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/for-institutions">Hospital Programs</FLink>
-                    </li>
+                    {institutionLinks.map((link) => (
+                      <li key={link.label}>
+                        <FLink href={link.href}>{link.label}</FLink>
+                      </li>
+                    ))}
                     <FooterAccountSupportEmailBlock />
                   </ul>
                 </FooterPremiumNavColumn>

@@ -59,15 +59,17 @@ test("localized SEO audit locales follow the supported marketing language regist
 test("shared localized marketing pages get localized canonical and hreflang policy", () => {
   const item = buildLocalizedSeoAuditItem("es", surface("pricing"));
   assert.equal(item.localizedPath, "/es/pricing");
-  assert.match(item.canonical, /\/es\/pricing$/);
-  assert.equal(item.sitemapExpected, true);
-  assert.equal(item.hreflangLanguages["es"], item.canonical);
-  assert.equal(item.issues.length, 0);
+  assert.equal(item.canonical, "https://es.nursenest.ca/pricing");
+  assert.equal(item.sitemapExpected, false);
+  assert.equal(item.hreflangExpected, false);
+  assert.ok(!("es" in item.hreflangLanguages));
+  assert.ok(item.issues.some((issue) => issue.includes("not SEO-indexable")));
 });
 
 test("French remains blocked from indexing until translation readiness is complete", () => {
   const item = buildLocalizedSeoAuditItem("fr", surface("pricing"));
   assert.equal(item.localizedPath, "/fr/pricing");
+  assert.equal(item.canonical, "https://fr.nursenest.ca/pricing");
   assert.equal(item.sitemapExpected, false);
   assert.ok(item.issues.some((issue) => issue.includes("not SEO-indexable")));
 });
@@ -118,12 +120,9 @@ test("JSON-LD breadcrumb localization contract includes localized labels", () =>
   assert.ok(item.jsonLdFields.includes("BreadcrumbList.itemListElement.name"));
 });
 
-test("sitemap safe URL collector includes indexable Spanish localized hubs", () => {
+test("sitemap safe URL collector excludes Spanish localized hubs until publication readiness is complete", () => {
   const urls = collectLocaleMarketingSitemapSafeUrls("https://nursenest.ca", "es");
-  assert.ok(urls.includes("https://nursenest.ca/es"));
-  assert.ok(urls.includes("https://nursenest.ca/es/pricing"));
-  assert.ok(urls.includes("https://nursenest.ca/es/lessons"));
-  assert.ok(urls.includes("https://nursenest.ca/es/question-bank"));
+  assert.deepEqual(urls, []);
 });
 
 test("sitemap safe URL collector includes indexable Tagalog localized hubs", () => {

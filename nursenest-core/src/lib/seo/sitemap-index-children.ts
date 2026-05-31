@@ -6,6 +6,9 @@ import { buildSitemapIndexXml } from "@/lib/seo/sitemap-urlset-build";
  * Robots.txt lists only the index URL (engines follow child `loc`s).
  */
 export const SITEMAP_INDEX_CHILD_FILENAMES = [
+  "sitemap-en.xml",
+  "sitemap-fr.xml",
+  "sitemap-es.xml",
   "sitemap-core.xml",
   "sitemap-blog.xml",
   "sitemap-fr-blog.xml",

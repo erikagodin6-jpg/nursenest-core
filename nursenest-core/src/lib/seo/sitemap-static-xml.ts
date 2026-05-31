@@ -265,6 +265,7 @@ export function collectPreNursingSitemapHubUrlsOnly(origin: string): string[] {
  * Locale marketing URLs for sitemap without DB: no localized pre-nursing lesson slugs, no `/{locale}/{programmatic}` fan-out.
  */
 export function collectLocaleMarketingSitemapSafeUrls(origin: string, locale: string): string[] {
+  if (!getSitemapIncludedLocales().includes(locale)) return [];
   const o = normalizeOrigin(origin);
   const add = (path: string) => {
     const p = path.startsWith("/") ? path : `/${path}`;

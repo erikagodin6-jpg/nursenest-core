@@ -149,29 +149,47 @@ html[data-theme="multi-pastel"] {
   --role-cta-on-soft: color-mix(in srgb, #3a6e9e 78%, var(--theme-heading-text));
 }
 
-/* Blossom CTA: soft pink fill + warm ink (readable on pastel; no magenta/violet press states). */
+/* Blossom CTA: sky-blue foundation with aqua support; blush/yellow stay reserved for accents. */
 html[data-theme="blossom"] {
-  --role-cta: #ffa9cc;
-  --role-cta-foreground: #3a3142;
-  --role-cta-hover: #ff9fc8;
-  --role-cta-pressed: #f08bb8;
+  --role-cta: #1d7ed8;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: #268ce8;
+  --role-cta-pressed: #1767b4;
   --role-cta-shadow:
-    0 8px 24px -8px rgba(255, 183, 213, 0.35),
-    0 4px 14px -6px rgba(191, 231, 255, 0.22);
-  --role-cta-soft: color-mix(in srgb, #ffb7d5 16%, var(--bg-card, var(--theme-card-bg)));
-  --role-cta-on-soft: color-mix(in srgb, #ff8fb8 72%, var(--theme-heading-text));
+    0 8px 24px -8px rgba(29, 126, 216, 0.32),
+    0 4px 14px -6px rgba(167, 243, 208, 0.2);
+  --role-cta-soft: color-mix(in srgb, #9ec5fe 16%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #1d7ed8 74%, var(--theme-heading-text));
+  --semantic-progress-fill: linear-gradient(90deg, #9ec5fe, #a7f3d0);
+  --semantic-progress-fill-accent: linear-gradient(90deg, #9ec5fe, #a7f3d0);
 }
 
 html[data-theme="mint-blossom"] {
-  --role-cta: #ffb7d5;
-  --role-cta-foreground: #3a3142;
-  --role-cta-hover: #ffa9cc;
-  --role-cta-pressed: #f08bb8;
+  --role-cta: #1d7ed8;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: #268ce8;
+  --role-cta-pressed: #1767b4;
   --role-cta-shadow:
-    0 8px 24px -8px rgba(183, 239, 209, 0.32),
-    0 4px 14px -6px rgba(191, 231, 255, 0.2);
-  --role-cta-soft: color-mix(in srgb, #d9f8e7 18%, var(--bg-card, var(--theme-card-bg)));
-  --role-cta-on-soft: color-mix(in srgb, #ff8fb8 68%, var(--theme-heading-text));
+    0 8px 24px -8px rgba(29, 126, 216, 0.3),
+    0 4px 14px -6px rgba(167, 243, 208, 0.22);
+  --role-cta-soft: color-mix(in srgb, #a7f3d0 18%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #1d7ed8 72%, var(--theme-heading-text));
+  --semantic-progress-fill: linear-gradient(90deg, #9ec5fe, #a7f3d0);
+  --semantic-progress-fill-accent: linear-gradient(90deg, #9ec5fe, #a7f3d0);
+}
+
+html[data-theme="aurora"] {
+  --role-cta: #8b5cf6;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: color-mix(in srgb, #8b5cf6 88%, #f9a8d4);
+  --role-cta-pressed: color-mix(in srgb, #8b5cf6 78%, #1a202c);
+  --role-cta-shadow:
+    0 8px 24px -8px rgba(139, 92, 246, 0.34),
+    0 4px 18px -8px rgba(249, 168, 212, 0.28);
+  --role-cta-soft: color-mix(in srgb, #8b5cf6 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #8b5cf6 76%, var(--theme-heading-text));
+  --semantic-progress-fill: linear-gradient(90deg, #6ee7b7, #67e8f9);
+  --semantic-progress-fill-accent: linear-gradient(90deg, #6ee7b7, #67e8f9);
 }
 
 html[data-theme="dark-clinical"],

@@ -35,8 +35,40 @@ export function MeasurementSystemToggle({
     void onPreferenceCommitted?.(next);
   }
 
+  if (compact) {
+    return (
+      <div
+        className="inline-flex items-center gap-2 rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-muted)_8%)] px-2 py-1 shadow-[var(--semantic-shadow-soft)]"
+        title={description}
+        aria-label={`${title}. ${description}. Showing ${measurementSystem === "US" ? "conventional" : "SI"} values.`}
+      >
+        <span className="text-[0.7rem] font-semibold text-[var(--semantic-text-secondary)]">Units:</span>
+        <div className="inline-flex rounded-full bg-[var(--semantic-surface-muted)] p-0.5">
+          <button
+            type="button"
+            onClick={() => update("metric")}
+            className={`rounded-full px-2.5 py-1 text-[0.68rem] font-semibold leading-none transition ${preference === "metric" ? "bg-[var(--semantic-brand)] text-white shadow-sm" : "text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-text-primary)]"}`}
+            aria-pressed={preference === "metric"}
+            title="Show SI metric values"
+          >
+            SI
+          </button>
+          <button
+            type="button"
+            onClick={() => update("imperial")}
+            className={`rounded-full px-2.5 py-1 text-[0.68rem] font-semibold leading-none transition ${preference === "imperial" ? "bg-[var(--semantic-brand)] text-white shadow-sm" : "text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-text-primary)]"}`}
+            aria-pressed={preference === "imperial"}
+            title="Show conventional US customary values"
+          >
+            Conventional
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={compact ? "space-y-2" : "rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 space-y-2"}>
+    <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 space-y-2">
       <div>
         <h2 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{title}</h2>
         <p className="text-xs text-[var(--semantic-text-secondary)]">{description}</p>
