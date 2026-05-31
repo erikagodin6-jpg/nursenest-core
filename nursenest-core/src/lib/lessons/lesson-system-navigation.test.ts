@@ -51,6 +51,20 @@ test("marketing lessons hub defines topic slug candidates inside metadata and pa
   );
 });
 
+test("next config does not redirect canonical lesson category/detail routes back to the hub", () => {
+  const src = readFileSync("next.config.mjs", "utf8");
+  assert.doesNotMatch(
+    src,
+    /source:\s*["']\/(?:canada|us)\/[^"']+\/lessons\/:slug["'][\s\S]{0,140}?destination:\s*["']\/(?:canada|us)\/[^"']+\/lessons["']/,
+    "lesson category/detail routes must reach the dynamic route, not a hub redirect",
+  );
+  assert.match(
+    src,
+    /Do not redirect `\/lessons\/:slug`/,
+    "next.config should document why lesson dynamic routes are protected",
+  );
+});
+
 test("legacy taxonomy aliases still resolve when a hub emits category ids", () => {
   assert.equal(resolveLessonSystemNavigationTarget("renal_urinary")?.primaryTopicSlug, "renal");
   assert.equal(resolveLessonSystemNavigationTarget("reproductive_maternal_newborn")?.primaryTopicSlug, "maternity");

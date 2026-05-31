@@ -4,7 +4,41 @@
 
 Cardiovascular, Respiratory, Renal, GI, Mental Health, and Maternity lesson system filters did not load after the previous alias fix.
 
-## Exact Stop Point
+## Exact Stop Point For Clicked Category Cards
+
+Execution stopped before the App Router lesson route mounted.
+
+Failing file:
+
+`next.config.mjs`
+
+Failing redirect:
+
+```js
+{ source: "/canada/rn/nclex-rn/lessons/:slug", destination: "/canada/rn/nclex-rn/lessons", permanent: true }
+```
+
+Root cause:
+
+An overbroad SEO remediation redirect treated every canonical lesson/category URL under
+`/canada/rn/nclex-rn/lessons/:slug` as a legacy broken URL and permanently redirected it back to the
+base lesson hub. Because the redirect happened in Next's redirect layer, the dynamic route
+`src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/[lessonSlug]/page.tsx` never executed.
+
+Observed effect:
+
+1. Learner clicks Cardiovascular.
+2. Browser requests `/canada/rn/nclex-rn/lessons/cardiovascular`.
+3. `next.config.mjs` redirects to `/canada/rn/nclex-rn/lessons`.
+4. The base hub renders again.
+5. No category rows appear, and route-level lesson logs never fire.
+
+Fix:
+
+The overbroad `/lessons/:slug` redirects were removed for canonical lesson pathways. Practice-exam legacy
+redirects remain.
+
+## Exact Stop Point For Query-Param Topic Filters
 
 Execution stopped inside:
 
@@ -67,6 +101,14 @@ For `/canada/rn/nclex-rn/lessons?topicSlug=cardiovascular`:
 5. Rows are returned.
 6. Lesson library renders.
 7. Client trace confirms render.
+
+For `/canada/rn/nclex-rn/lessons/cardiovascular`:
+
+1. No redirect occurs.
+2. Dynamic route mounts.
+3. `resolveMarketingLessonsHubDynamicSegment` resolves the segment as the Cardiovascular category.
+4. Category surface renders.
+5. Lesson rows render.
 
 ## Debug Route
 

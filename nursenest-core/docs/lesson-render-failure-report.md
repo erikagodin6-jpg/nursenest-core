@@ -1,8 +1,24 @@
 # Lesson Render Failure Report
 
-## Finding
+## Primary Finding
 
-The lesson system route could fail before render because `PathwayLessonsHubPage` referenced `topicSlugsForList` without defining it in the same function scope.
+The learner-facing category click did not reach render at all. `next.config.mjs` redirected
+`/canada/rn/nclex-rn/lessons/cardiovascular` and sibling lesson/category routes back to
+`/canada/rn/nclex-rn/lessons` before the dynamic route mounted.
+
+The removed redirect was:
+
+```js
+{ source: "/canada/rn/nclex-rn/lessons/:slug", destination: "/canada/rn/nclex-rn/lessons", permanent: true }
+```
+
+This explains why the user saw the hub again with no category lesson list and no route-level network/render
+evidence for the category page.
+
+## Secondary Finding
+
+The query-param lesson system route could also fail before render because `PathwayLessonsHubPage` referenced
+`topicSlugsForList` without defining it in the same function scope.
 
 ## Failure Type
 
@@ -12,7 +28,7 @@ Likely runtime exception:
 ReferenceError: topicSlugsForList is not defined
 ```
 
-## Affected Flow
+## Affected Query-Param Flow
 
 System cards generate URLs such as:
 

@@ -43,13 +43,17 @@ await prisma.pathwayLesson.findMany({
 });
 ```
 
-## Local Result
+## Local Direct Prisma Result
 
-Local database verification could not be completed because `DATABASE_URL` is not configured in this workspace:
+Direct shell database verification could not be completed because the configured remote database is not reachable
+from this workspace:
 
 ```text
-PrismaClientInitializationError: Environment variable not found: DATABASE_URL.
+PrismaClientInitializationError: Can't reach database server at HOST:5432.
 ```
+
+The running Playwright app did receive a configured `DATABASE_URL`, but the failing category-card request did not
+reach any lesson query before the redirect fix because `next.config.mjs` redirected `/lessons/:slug` to the base hub.
 
 ## Runtime Coverage Added
 
@@ -70,4 +74,5 @@ This means the next production trace will distinguish:
 
 ## Current Finding
 
-The discovered root cause happened before the query could reliably start. The failure was not caused by the database returning zero rows.
+The primary clicked-card root cause happened before the query could start. The failure was not caused by the
+database returning zero rows.

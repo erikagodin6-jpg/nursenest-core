@@ -265,18 +265,13 @@ const nextConfig = {
         permanent: true,
       },
 
-      // ── SEO Remediation 2026-05-30: Legacy lesson/practice URL patterns (5xx audit fix) ──
+      // ── SEO Remediation 2026-05-30: Legacy practice URL patterns (5xx audit fix) ──
       // Old route patterns that existed before the dynamic [locale]/[slug]/[examCode] migration.
-      // Redirecting to hub pages to recover link equity and eliminate 8,400+ 404s.
-      { source: "/canada/rn/nclex-rn/lessons/:slug", destination: "/canada/rn/nclex-rn/lessons", permanent: true },
+      // Do not redirect `/lessons/:slug`: that path is the canonical lesson detail/category route.
       { source: "/canada/rn/nclex-rn/practice-exams/:path*", destination: "/canada/rn/nclex-rn/cat", permanent: true },
-      { source: "/canada/rpn/rex-pn/lessons/:slug", destination: "/canada/pn/rex-pn/lessons", permanent: true },
       { source: "/canada/rpn/rex-pn/practice-exams/:path*", destination: "/canada/pn/rex-pn/cat", permanent: true },
-      { source: "/canada/np/cnple/lessons/:slug", destination: "/canada/np/cnple/lessons", permanent: true },
       { source: "/canada/np/cnple/practice-exams/:path*", destination: "/canada/np/cnple/cat", permanent: true },
-      { source: "/us/lpn/nclex-pn/lessons/:slug", destination: "/us/lpn/nclex-pn/lessons", permanent: true },
       { source: "/us/lpn/nclex-pn/practice-exams/:path*", destination: "/us/lpn/nclex-pn/cat", permanent: true },
-      { source: "/us/rn/nclex-rn/lessons/:slug", destination: "/us/rn/nclex-rn/lessons", permanent: true },
       { source: "/us/rn/nclex-rn/practice-exams/:path*", destination: "/us/rn/nclex-rn/cat", permanent: true },
 
       // ── SEO Remediation: Unsupported locale sub-paths → English equivalent (2,800+ 404s) ──

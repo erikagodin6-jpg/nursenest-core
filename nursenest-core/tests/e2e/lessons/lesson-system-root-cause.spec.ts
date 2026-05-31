@@ -13,7 +13,7 @@ const SYSTEMS = [
   { label: "Respiratory", slug: "respiratory" },
   { label: "Neurological", slug: "neurological" },
   { label: "Endocrine", slug: "endocrine" },
-  { label: "Renal", slug: "renal" },
+  { label: "Renal", slug: "renal-and-urinary" },
   { label: "GI", slug: "gastrointestinal" },
 ] as const;
 
@@ -22,17 +22,19 @@ test.describe("Lesson System Card Root Cause", () => {
     test(`${system.label} card exposes a real system route and renders lessons`, async ({ page }) => {
       await page.goto(HUB, { waitUntil: "domcontentloaded" });
 
-      const card = page.locator(`[data-lesson-system-card]`).filter({ hasText: system.label }).first();
+      const card = page
+        .locator(`.nn-hub-category-card[href$="/lessons/${system.slug}"]`)
+        .filter({ hasText: system.label })
+        .first();
       await expect(card, `${system.label} system card should render`).toBeVisible({ timeout: 10_000 });
 
-      const href = await card.getAttribute("data-lesson-system-href");
-      expect(href, `${system.label} should expose a category destination`).toContain("/lessons?topicSlug=");
-      expect(href, `${system.label} should not point to the same-page library hash`).not.toContain("#pathway-lesson-library");
+      const href = await card.getAttribute("href");
+      expect(href, `${system.label} should expose a category destination`).toContain(`/lessons/${system.slug}`);
 
-      const routeResponse = await page.goto(href!, { waitUntil: "domcontentloaded" });
-      expect(routeResponse?.status(), `${system.label} route should not 404`).not.toBe(404);
-      await expect(page.locator("[data-nn-qa-pathway-lessons-hub='true']")).toBeVisible({ timeout: 10_000 });
-      await expect(page.getByText(/lesson library/i).first()).toBeVisible();
+      await card.click();
+      await expect(page).toHaveURL(new RegExp(`/lessons/${system.slug}(?:\\?.*)?$`), { timeout: 10_000 });
+      await expect(page.locator("[data-nn-qa-pathway-lessons-category='true']")).toBeVisible({ timeout: 10_000 });
+      await expect(page.locator(".nn-lessons-hub-lesson-row").first()).toBeVisible({ timeout: 10_000 });
       await expect(page.getByText(/No lessons match this topic filter yet/i)).toHaveCount(0);
     });
   }
