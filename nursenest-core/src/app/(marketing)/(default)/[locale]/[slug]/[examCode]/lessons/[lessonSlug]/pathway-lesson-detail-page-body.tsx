@@ -1,6 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import {
+  Activity,
+  BookOpenCheck,
+  Brain,
+  Calculator,
+  ClipboardCheck,
+  FileQuestion,
+  FlaskConical,
+  HeartPulse,
+  Layers,
+  Stethoscope,
+} from "lucide-react";
 import { ExamFamily, type TierCode } from "@prisma/client";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
 import { LessonSectionCard } from "@/components/lessons/lesson-section-card";
@@ -167,6 +179,19 @@ type ContinueLearningCard = {
   note: string;
 };
 
+const CONTINUE_LEARNING_ICONS = {
+  activity: Activity,
+  book: BookOpenCheck,
+  brain: Brain,
+  calculator: Calculator,
+  check: ClipboardCheck,
+  flask: FlaskConical,
+  heart: HeartPulse,
+  layers: Layers,
+  question: FileQuestion,
+  stethoscope: Stethoscope,
+} as const;
+
 function continueLearningLabel(label: string): string {
   const normalized = label.trim().toLowerCase();
   if (normalized.includes("adaptive cat")) return "CAT Readiness";
@@ -209,6 +234,35 @@ function continueLearningNote(label: string): string {
       return "Connect drug classes to monitoring priorities.";
     default:
       return "Continue with a related study activity.";
+  }
+}
+
+function continueLearningIcon(label: string): keyof typeof CONTINUE_LEARNING_ICONS {
+  switch (label) {
+    case "Practice Questions":
+      return "question";
+    case "Flashcards":
+      return "layers";
+    case "Case Studies":
+      return "book";
+    case "CAT Readiness":
+      return "brain";
+    case "Medication Math":
+      return "calculator";
+    case "ECG Practice":
+      return "heart";
+    case "Lab Interpretation":
+      return "flask";
+    case "Prioritization & Delegation":
+      return "activity";
+    case "Practice Exams":
+      return "check";
+    case "Skills Refreshers":
+      return "stethoscope";
+    case "Pharmacology Practice":
+      return "stethoscope";
+    default:
+      return "book";
   }
 }
 
@@ -275,27 +329,35 @@ function ContinueLearningSection({ cards }: { cards: ContinueLearningCard[] }) {
       </div>
       <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => (
-          <Link
-            key={`${card.label}-${card.href}`}
-            href={card.href}
-            className="group flex min-h-32 flex-col justify-between rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_86%,transparent)] bg-[var(--semantic-surface)] p-4 text-left shadow-[var(--semantic-shadow-soft)] transition hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--semantic-brand)_34%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-positive)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_32%,transparent)]"
-            data-nn-pathway-lesson-continue-learning-card
-          >
-            <span>
-              <span className="block text-sm font-semibold text-[var(--theme-heading-text)]">
-                {card.label}
-                {card.count != null ? (
-                  <span className="text-[var(--semantic-text-secondary)]"> ({numberFormatter.format(card.count)})</span>
-                ) : null}
-              </span>
-              <span className="mt-2 block text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
-                {card.note}
-              </span>
-            </span>
-            <span className="mt-4 text-xs font-semibold text-[var(--semantic-brand)] group-hover:underline">
-              Open activity
-            </span>
-          </Link>
+          (() => {
+            const Icon = CONTINUE_LEARNING_ICONS[continueLearningIcon(card.label)];
+            return (
+              <Link
+                key={`${card.label}-${card.href}`}
+                href={card.href}
+                className="group flex min-h-28 flex-col justify-between rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_86%,transparent)] bg-[var(--semantic-surface)] p-3.5 text-left shadow-[var(--semantic-shadow-soft)] transition hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--semantic-brand)_34%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-surface)_94%,var(--semantic-panel-positive)_6%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_32%,transparent)] sm:p-4"
+                data-nn-pathway-lesson-continue-learning-card
+              >
+                <span>
+                  <span className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] text-[var(--semantic-brand)]">
+                    <Icon className="h-4 w-4" aria-hidden />
+                  </span>
+                  <span className="block text-sm font-semibold text-[var(--theme-heading-text)]">
+                    {card.label}
+                    {card.count != null ? (
+                      <span className="text-[var(--semantic-text-secondary)]"> ({numberFormatter.format(card.count)})</span>
+                    ) : null}
+                  </span>
+                  <span className="mt-1.5 block text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+                    {card.note}
+                  </span>
+                </span>
+                <span className="mt-3 text-xs font-semibold text-[var(--semantic-brand)] group-hover:underline">
+                  Open activity
+                </span>
+              </Link>
+            );
+          })()
         ))}
       </div>
     </section>
@@ -581,6 +643,11 @@ export async function PathwayLessonDetailPageBody({
         typeof clinicalPearlsSection?.body === "string"
           ? clinicalPearlsSection.body
           : "",
+        {
+          pathwayId: pathway.id,
+          lessonSlug: lesson.slug,
+          source: "marketing-pathway-lesson-detail",
+        },
       )
     : [];
 
@@ -654,7 +721,7 @@ export async function PathwayLessonDetailPageBody({
           />
           <PathwayLessonSequenceNavBar
             adjacent={lessonAdjacentHrefs}
-            className="mb-4"
+            className="mb-2"
           />
           <PathwayLessonProgressTracker
             pathwayId={pathway.id}

@@ -1,79 +1,151 @@
-# Australia RN Blueprint Map
+# Australia RN Blueprint Expansion and Readiness Framework
 
 Date: 2026-05-31
 
-Status: hidden draft foundation. Do not publish. Do not expose in navigation, sitemap, public pathway selectors, or learner routes.
+Status: Hidden Draft Foundation
+
+Do not publish. Do not expose in navigation, sitemap, search, learner dashboards, pricing pages, or public pathway selectors.
 
 ## Pathway
 
 | Field | Value |
 | --- | --- |
 | Country | Australia |
-| Regulator | Nursing and Midwifery Board of Australia |
-| Exam / Pathway | NMBA RN / IQNM Pathway |
-| Profession | RN |
-| Draft Admin Hub | `/admin/global-expansion/hubs/au/rn` |
-| Public Reservation | `/au/rn` |
-| Visibility | Admin Only / Noindex / Hidden |
+| Regulator | Nursing and Midwifery Board of Australia (NMBA) |
+| Registration Authority | Ahpra |
+| Pathway | Australian RN / IQNM |
+| Profession | Registered Nurse |
+| Internal Hub | `/admin/global-expansion/hubs/au/rn` |
+| Reserved Public Route | `/au/rn` |
+| Visibility | Hidden |
+| Publication Status | Draft |
+| Indexing | Noindex |
 
-## Content Targets
+## Mature Inventory Targets
 
-| Content Type | Target |
+| Asset Type | Mature Target |
 | --- | ---: |
-| Lessons | 400 |
-| Flashcards | 4,000 |
-| Questions | 2,500 |
-| Simulations | 75 |
+| Lessons | 600 |
+| Flashcards | 8,000 |
+| Questions | 5,000 |
+| Simulations | 150 |
+| NGN-Style Cases | 250 |
+| Bowties | 150 |
+| Matrix Cases | 150 |
 
-## Blueprint Domains
+## Core Blueprint Domains
 
-| Domain | Lesson Target | Question Target | Flashcard Target | Simulation Target |
+| Domain | Lessons | Questions | Flashcards | Simulations |
 | --- | ---: | ---: | ---: | ---: |
-| NMBA Standards | 45 | 250 | 400 | 6 |
-| Professional Practice | 45 | 250 | 400 | 6 |
-| Medication Regulations | 50 | 350 | 600 | 10 |
-| Adult Health | 80 | 550 | 850 | 15 |
-| Rural Healthcare | 35 | 200 | 300 | 8 |
-| Aboriginal and Torres Strait Islander Health | 45 | 300 | 450 | 10 |
-| Mental Health | 35 | 200 | 350 | 6 |
-| Maternity and Child Health | 30 | 175 | 300 | 5 |
-| Clinical Assessment | 35 | 225 | 350 | 6 |
-| Leadership and Escalation | 40 | 200 | 400 | 3 |
+| NMBA Standards for Practice | 50 | 300 | 500 | 8 |
+| Professional Practice | 50 | 300 | 500 | 8 |
+| Ahpra Registration and Conduct | 20 | 125 | 200 | 4 |
+| Medication Safety and Governance | 80 | 600 | 1,000 | 18 |
+| Clinical Assessment and Deterioration | 70 | 500 | 800 | 18 |
+| Adult Health | 150 | 1,100 | 1,700 | 35 |
+| Mental Health | 60 | 400 | 700 | 12 |
+| Maternal and Child Health | 50 | 350 | 600 | 10 |
+| Rural and Remote Healthcare | 45 | 275 | 450 | 12 |
+| Aboriginal and Torres Strait Islander Health | 60 | 400 | 700 | 12 |
+| Leadership and Escalation | 55 | 350 | 600 | 8 |
+| Documentation and Communication | 30 | 200 | 350 | 5 |
+| **Allocated Total** | **720** | **4,900** | **8,100** | **150** |
+| **Remaining Expansion Reserve** | **-120** | **100** | **-100** | **0** |
 
-## NMBA Competency Mapping
+The supplied blueprint domain rows allocate 720 lessons against a mature lesson target of 600 and 8,100 flashcards against a mature flashcard target of 8,000. These overages are preserved for review visibility instead of silently changing domain targets. The remaining question reserve is preserved for final blueprint balancing after NMBA/Ahpra review.
 
-- Thinks critically and analyses nursing practice.
-- Engages in therapeutic and professional relationships.
-- Maintains capability for practice.
-- Comprehensively conducts assessments.
-- Develops a plan for nursing practice.
-- Provides safe, appropriate, and responsive quality nursing practice.
-- Evaluates outcomes to inform nursing practice.
+## NMBA Standards Mapping
 
-## Readiness Domains
+Every content item should map to one or more:
 
-- NMBA Professional Standards.
-- Clinical Assessment.
-- Medication Safety.
-- Rural and Remote Care.
-- Aboriginal and Torres Strait Islander Health.
-- Escalation and Deterioration.
-- Adult Health.
-- Mental Health.
-- Leadership and Professional Accountability.
+1. Thinks critically and analyses nursing practice.
+2. Engages in therapeutic and professional relationships.
+3. Maintains capability for practice.
+4. Comprehensively conducts assessments.
+5. Develops plans for nursing practice.
+6. Provides safe, appropriate, responsive practice.
+7. Evaluates outcomes to inform practice.
 
-## Country-Specific Requirements
+## Australia-Specific Clinical Requirements
 
-- NMBA registered nurse standards for practice.
-- Ahpra registration and professional conduct expectations.
-- Australian medication governance and documentation language.
-- Aboriginal and Torres Strait Islander health, cultural safety, and equity.
-- Rural and remote healthcare access issues.
-- Escalation systems and interprofessional communication in Australian care settings.
+All content should incorporate:
 
-## Draft Generation Notes
+- Australian healthcare terminology.
+- Ahpra professional expectations.
+- NMBA standards.
+- Medication governance.
+- Rural health realities.
+- Escalation pathways.
+- Cultural safety principles.
 
-All generated Australia RN content must include:
+Avoid:
+
+- Excessive American terminology.
+
+## Aboriginal and Torres Strait Islander Health Requirements
+
+Dedicated content must include:
+
+- Cultural safety.
+- Health inequities.
+- Community engagement.
+- Communication approaches.
+- Historical context affecting healthcare.
+- Rural and remote service delivery.
+
+This should not be treated as a small subtopic. It should be integrated throughout the curriculum.
+
+## Rural and Remote Healthcare Requirements
+
+Dedicated coverage must include:
+
+- Limited-resource environments.
+- Retrieval services.
+- Telehealth.
+- Geographic barriers.
+- Emergency stabilization.
+- Community nursing.
+
+## Medication Governance Requirements
+
+Must include:
+
+- Schedule classifications.
+- High-risk medications.
+- Medication reconciliation.
+- Documentation requirements.
+- Medication incident reporting.
+- Safe administration practices.
+
+## Clinical Judgment Requirements
+
+Minimum: 250 Australian-specific clinical judgment cases.
+
+Required case categories:
+
+- Deterioration recognition.
+- Escalation.
+- Medication safety.
+- Rural scenarios.
+- Mental health presentations.
+- Cultural safety situations.
+- Documentation concerns.
+
+## Internationally Qualified Nurse Stream
+
+Create a dedicated content inventory for:
+
+- Registration pathways.
+- Professional expectations.
+- Australian documentation.
+- Communication standards.
+- Clinical adaptation.
+
+This becomes a major SEO and conversion opportunity.
+
+## Publication Locks
+
+Every generated asset must contain:
 
 - `status=draft`
 - `published=false`
@@ -82,5 +154,33 @@ All generated Australia RN content must include:
 - `launchReady=false`
 - `adminOnly=true`
 - `noindex=true`
+- `country=au`
+- `exam=nmba-rn`
+- `READY_FOR_PUBLICATION=false`
+- `defaultState=DRAFT_ONLY`
 
-No content may publish without regulator-source review and clinical/editorial approval.
+## Governance Requirements
+
+No content may be published until all review gates are complete:
+
+- NMBA standards review completed.
+- Ahpra review completed.
+- Australian terminology review completed.
+- Clinical review completed.
+- Editorial review completed.
+- SEO localization review completed.
+
+## Success Criteria
+
+The Australia RN ecosystem should eventually support:
+
+- Australian RN preparation.
+- IQNM adaptation.
+- Clinical communication.
+- Medication safety.
+- Cultural safety.
+- Rural and remote practice.
+- NMBA standards mastery.
+- Professional accountability.
+
+Until publication readiness exceeds 95% and all review gates clear, this pathway remains hidden, admin-only, noindex, and unavailable to learners or search engines.

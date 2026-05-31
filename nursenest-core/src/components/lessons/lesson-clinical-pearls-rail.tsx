@@ -1,4 +1,7 @@
-import type { ClinicalPearlLine } from "@/lib/lessons/extract-clinical-pearl-lines";
+import {
+  normalizeClinicalPearlLines,
+  type ClinicalPearlLine,
+} from "@/lib/lessons/extract-clinical-pearl-lines";
 
 export function LessonClinicalPearlsRail({
   pearls,
@@ -7,12 +10,9 @@ export function LessonClinicalPearlsRail({
   pearls: ClinicalPearlLine[];
   collapsed?: boolean;
 }) {
-  const safePearls = pearls
-    .map((pearl) => ({
-      label: pearl.label.trim() || "Pearl",
-      text: pearl.text.trim(),
-    }))
-    .filter((pearl) => pearl.text.length > 0);
+  const safePearls = normalizeClinicalPearlLines(pearls, {
+    source: "LessonClinicalPearlsRail",
+  });
 
   if (collapsed || safePearls.length === 0) return null;
 

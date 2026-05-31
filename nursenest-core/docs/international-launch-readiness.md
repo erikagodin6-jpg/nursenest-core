@@ -10,8 +10,8 @@ Status: internal planning dashboard. Hidden international pathways are draft-onl
 | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
 | U.S. RN NCLEX-RN Expansion | 0 / 300 | 0 / 2,500 | 0 / 5,000 | 0 / 100 | Planned | Existing public U.S. hub, new assets pending | Draft Expansion |
 | UK RN NMC CBT + OSCE | 0 / 750 | 0 / 5,000 | 0 / 10,000 | 0 / 200 | Planned; also requires 250 OSCE stations, 250 NGN-style cases, 150 bowties, and 150 matrix cases | Hidden screenshot plan only | Not Launch Ready |
-| Australia RN NMBA | 0 / 400 | 0 / 2,500 | 0 / 4,000 | 0 / 75 | Planned | Hidden screenshot plan only | Not Launch Ready |
-| New Zealand RN NCNZ | 0 / 300 | 0 / 2,000 | 0 / 3,000 | 0 / 50 | Planned | Hidden screenshot plan only | Not Launch Ready |
+| Australia RN NMBA / IQNM | 0 / 600 | 0 / 5,000 | 0 / 8,000 | 0 / 150 | Planned; also requires 250 NGN-style cases, 150 bowties, and 150 matrix cases | Hidden screenshot plan only | Not Launch Ready |
+| New Zealand RN NCNZ Registration | 0 / 500 | 0 / 4,000 | 0 / 7,000 | 0 / 120 | Planned; also requires 200 NGN-style cases, 125 bowties, and 125 matrix cases | Hidden screenshot plan only | Not Launch Ready |
 
 ## Visibility Controls
 
@@ -49,8 +49,8 @@ A pathway cannot move from hidden draft to launch review until it has:
 | ---: | --- | --- |
 | 1 | U.S. RN expansion | Existing market and live pathway; highest near-term revenue impact. |
 | 2 | UK RN NMC CBT + OSCE blueprint | Large English-speaking market with clear regulator pathway; must remain hidden until NMC blueprint, UK terminology, clinical, editorial, SEO localization, and future translation reviews clear. |
-| 3 | Australia RN NMBA blueprint | High-value English-speaking market and migration demand. |
-| 4 | New Zealand RN NCNZ blueprint | Smaller market, but strong fit for shared global nursing content. |
+| 3 | Australia RN NMBA / IQNM blueprint | High-value English-speaking market and migration demand; must remain hidden until NMBA standards, Ahpra, Australian terminology, clinical, editorial, and SEO localization reviews clear. |
+| 4 | New Zealand RN NCNZ Registration blueprint | Smaller market, but strong fit for shared global nursing content; must remain hidden until NCNZ competency, cultural safety, Te Tiriti, clinical, editorial, and SEO localization reviews clear. |
 | 5 | Shared global nursing library | Reduces duplication and accelerates future countries. |
 
 ## Risk Register

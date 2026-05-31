@@ -19,7 +19,7 @@ type Props = {
 };
 
 const topPill =
-  "inline-flex min-h-9 min-w-0 max-w-full flex-1 flex-col justify-center gap-0.5 rounded-lg border px-2.5 py-1.5 text-center text-xs font-semibold transition-colors sm:text-sm";
+  "inline-flex min-h-9 min-w-0 max-w-full flex-1 flex-col justify-center gap-0.5 rounded-lg border px-2.5 py-1 text-center text-xs font-semibold transition-colors";
 
 const topLink =
   `${topPill} border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_12%)] bg-[color-mix(in_srgb,var(--bg-card)_94%,var(--semantic-panel-muted)_6%)] text-[var(--theme-heading-text)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))]`;
@@ -27,14 +27,14 @@ const topLink =
 const topDisabled = `${topPill} cursor-not-allowed border-[var(--semantic-border-soft)] text-[var(--theme-muted-text)] opacity-55`;
 
 const bottomBtn =
-  "inline-flex min-h-11 min-w-0 max-w-full flex-1 flex-col items-stretch justify-center gap-0.5 rounded-xl border px-3 py-2 text-sm font-semibold sm:px-4";
+  "inline-flex min-h-10 min-w-0 max-w-full flex-1 flex-col items-stretch justify-center gap-0.5 rounded-lg border px-3 py-1.5 text-sm font-semibold";
 
 const bottomLink =
   `${bottomBtn} border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_12%)] bg-[color-mix(in_srgb,var(--bg-card)_94%,var(--semantic-panel-muted)_6%)] text-[var(--theme-heading-text)] transition-colors hover:border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--bg-card)_88%,var(--semantic-panel-positive)_12%)]`;
 
 const bottomDisabled = `${bottomBtn} cursor-not-allowed border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-muted-surface)_50%,var(--bg-card))] text-[var(--theme-muted-text)] opacity-55`;
 
-const subTitle = "block max-w-full truncate text-xs font-normal text-[var(--theme-muted-text)]";
+const subTitle = "block max-w-full truncate text-[0.68rem] font-normal leading-tight text-[var(--theme-muted-text)]";
 
 /**
  * Previous / next pathway lessons plus back to list. `prevLesson` / `nextLesson` use hub order from
@@ -71,8 +71,8 @@ export function LessonNavButtons({
       );
     }
     return (
-      <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-stretch">
-        <div className="grid grid-cols-2 gap-2 sm:flex-1 sm:max-w-md">
+      <div className="mb-2 flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:items-stretch">
+        <div className="grid grid-cols-2 gap-1.5 sm:flex-1 sm:max-w-md">
           {prevLesson ? (
             <Link href={prevLesson.href} className={`group ${topLink}`} title={prevLesson.title}>
               <span className="inline-flex items-center justify-center gap-1">
@@ -147,11 +147,11 @@ export function LessonNavButtons({
 
   return (
     <nav
-      className="mt-12 flex flex-col gap-3 border-t pt-7 sm:flex-row sm:flex-wrap sm:items-stretch sm:justify-between"
+      className="mt-10 flex flex-col gap-2.5 border-t pt-5 sm:flex-row sm:flex-wrap sm:items-stretch sm:justify-between"
       style={{ borderColor: "color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle))" }}
       aria-label="Lesson navigation"
     >
-      <div className="order-2 grid w-full grid-cols-1 gap-2 sm:order-1 sm:max-w-xl sm:grid-cols-2">
+      <div className="order-2 grid w-full grid-cols-1 gap-1.5 sm:order-1 sm:max-w-xl sm:grid-cols-2">
         {prevLesson ? (
           <Link href={prevLesson.href} className={`group ${bottomLink} text-left`} title={prevLesson.title}>
             <span className="inline-flex items-center gap-2">

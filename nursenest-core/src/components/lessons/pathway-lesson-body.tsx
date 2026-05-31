@@ -58,6 +58,13 @@ export function lessonCalloutFromParagraph(
   return null;
 }
 
+function hasRenderableParagraphText(raw: string): boolean {
+  const trimmed = raw.trim();
+  if (!trimmed) return false;
+  const callout = lessonCalloutFromParagraph(trimmed);
+  return !callout || callout.body.length > 0;
+}
+
 function inlineBold(text: string): ReactNode {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
@@ -136,7 +143,7 @@ export function pathwayLessonResolvedParagraphs(
       dual: opts.measurementDual === true,
     });
   }
-  return safe.split(/\n\n/).filter((p) => p.trim().length > 0);
+  return safe.split(/\n\n/).filter(hasRenderableParagraphText);
 }
 
 /** Exported for lesson-detail empty-section guards (matches PathwayLessonSectionContent). */

@@ -661,7 +661,11 @@ async function LessonDetailPageInner({ params }: Props) {
           ? clinicalPearlsSection.body
           : ""
       : "";
-    const clinicalPearlLines = extractClinicalPearlLines(clinicalPearlsBody);
+    const clinicalPearlLines = extractClinicalPearlLines(clinicalPearlsBody, {
+      pathwayId,
+      lessonSlug: record.slug,
+      source: "app-pathway-lesson-detail",
+    });
     const editorialRhythmIndexBySectionId = new Map<string, number>();
     {
       let editorialRhythmCounter = 0;

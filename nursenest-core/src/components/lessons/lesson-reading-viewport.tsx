@@ -6,7 +6,10 @@ import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
 import { LessonCompactProgressRail } from "@/components/lessons/lesson-compact-progress-rail";
 import { LessonClinicalPearlsRail } from "@/components/lessons/lesson-clinical-pearls-rail";
 import { LessonReadingProgressStrip } from "@/components/lessons/lesson-reading-progress-strip";
-import type { ClinicalPearlLine } from "@/lib/lessons/extract-clinical-pearl-lines";
+import {
+  normalizeClinicalPearlLines,
+  type ClinicalPearlLine,
+} from "@/lib/lessons/extract-clinical-pearl-lines";
 import type { PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -42,6 +45,9 @@ export function LessonReadingViewport({
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const safeClinicalPearls = normalizeClinicalPearlLines(clinicalPearls, {
+    source: "LessonReadingViewport",
+  });
 
   const closeMobileDrawer = useCallback(() => setMobileDrawerOpen(false), []);
 
@@ -82,8 +88,8 @@ export function LessonReadingViewport({
           <ListTree className="h-5 w-5 shrink-0" aria-hidden />
           <span>{t("learner.lessons.nav.contentsLabel")}</span>
         </button>
-        {clinicalPearls.length > 0 ? (
-          <LessonClinicalPearlsRail pearls={clinicalPearls} />
+        {safeClinicalPearls.length > 0 ? (
+          <LessonClinicalPearlsRail pearls={safeClinicalPearls} />
         ) : null}
       </div>
 
@@ -116,9 +122,9 @@ export function LessonReadingViewport({
             progress={progress}
             progressVisible={progressVisible}
           />
-          {clinicalPearls.length > 0 ? (
+          {safeClinicalPearls.length > 0 ? (
             <LessonClinicalPearlsRail
-              pearls={clinicalPearls}
+              pearls={safeClinicalPearls}
               collapsed={leftCollapsed}
             />
           ) : null}
@@ -179,8 +185,8 @@ export function LessonReadingViewport({
               progressVisible={progressVisible}
               onNavigate={closeMobileDrawer}
             />
-            {clinicalPearls.length > 0 ? (
-              <LessonClinicalPearlsRail pearls={clinicalPearls} />
+            {safeClinicalPearls.length > 0 ? (
+              <LessonClinicalPearlsRail pearls={safeClinicalPearls} />
             ) : null}
           </div>
         </div>

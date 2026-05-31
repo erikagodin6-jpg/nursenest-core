@@ -7,18 +7,18 @@ export type PathwayLessonAdjacentHrefs = {
 };
 
 const navLinkClass =
-  "inline-flex min-h-[2.75rem] w-full flex-col items-stretch justify-center gap-0.5 rounded-xl border px-3 py-2 text-left text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] sm:min-h-11 sm:px-4 border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_12%)] bg-[color-mix(in_srgb,var(--bg-card)_94%,var(--semantic-panel-muted)_6%)] text-[var(--theme-heading-text)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--bg-card)_88%,var(--semantic-panel-positive)_12%)]";
+  "inline-flex min-h-10 w-full flex-col items-stretch justify-center gap-0.5 rounded-lg border px-2.5 py-1.5 text-left text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] sm:min-h-[2.35rem] sm:px-3 border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_12%)] bg-[color-mix(in_srgb,var(--bg-card)_96%,var(--semantic-panel-muted)_4%)] text-[var(--theme-heading-text)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--bg-card)_90%,var(--semantic-panel-positive)_10%)]";
 
 const navLinkClassEnd =
-  "inline-flex min-h-[2.75rem] w-full flex-col items-stretch justify-center gap-0.5 rounded-xl border px-3 py-2 text-right text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] sm:min-h-11 sm:px-4 border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_12%)] bg-[color-mix(in_srgb,var(--bg-card)_94%,var(--semantic-panel-muted)_6%)] text-[var(--theme-heading-text)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--bg-card)_88%,var(--semantic-panel-positive)_12%)]";
+  "inline-flex min-h-10 w-full flex-col items-stretch justify-center gap-0.5 rounded-lg border px-2.5 py-1.5 text-right text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] sm:min-h-[2.35rem] sm:px-3 border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_12%)] bg-[color-mix(in_srgb,var(--bg-card)_96%,var(--semantic-panel-muted)_4%)] text-[var(--theme-heading-text)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--bg-card)_90%,var(--semantic-panel-positive)_10%)]";
 
 const navDisabledClass =
-  "inline-flex min-h-[2.75rem] w-full cursor-not-allowed flex-col justify-center rounded-xl border px-3 py-2 text-left text-sm font-semibold opacity-60 sm:min-h-11 sm:px-4 border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-muted-surface)_55%,var(--bg-card))] text-[var(--theme-muted-text)]";
+  "inline-flex min-h-10 w-full cursor-not-allowed flex-col justify-center rounded-lg border px-2.5 py-1.5 text-left text-xs font-semibold opacity-60 sm:min-h-[2.35rem] sm:px-3 border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-muted-surface)_45%,var(--bg-card))] text-[var(--theme-muted-text)]";
 
 const navDisabledClassEnd =
-  "inline-flex min-h-[2.75rem] w-full cursor-not-allowed flex-col justify-center rounded-xl border px-3 py-2 text-right text-sm font-semibold opacity-60 sm:min-h-11 sm:px-4 border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-muted-surface)_55%,var(--bg-card))] text-[var(--theme-muted-text)]";
+  "inline-flex min-h-10 w-full cursor-not-allowed flex-col justify-center rounded-lg border px-2.5 py-1.5 text-right text-xs font-semibold opacity-60 sm:min-h-[2.35rem] sm:px-3 border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-muted-surface)_45%,var(--bg-card))] text-[var(--theme-muted-text)]";
 
-const titleLineClass = "block max-w-full truncate text-xs font-normal text-[var(--theme-muted-text)]";
+const titleLineClass = "block max-w-full truncate text-[0.68rem] font-normal leading-tight text-[var(--theme-muted-text)]";
 
 /**
  * Pathway lesson sequence: previous / next in hub order (`sort_order`, then slug).
@@ -40,7 +40,7 @@ export function PathwayLessonSequenceNavBar({
 
   return (
     <nav
-      className={`grid grid-cols-1 gap-2 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-brand)_8%)] pb-3 sm:grid-cols-2 ${className}`.trim()}
+      className={`grid grid-cols-1 gap-1.5 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-brand)_8%)] pb-2 sm:grid-cols-2 ${className}`.trim()}
       aria-label="Previous and next lesson in this pathway"
     >
       <div className="min-w-0">

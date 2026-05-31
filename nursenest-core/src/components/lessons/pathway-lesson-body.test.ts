@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   parseParagraphBlock,
   lessonCalloutFromParagraph,
+  pathwayLessonResolvedParagraphs,
 } from "@/components/lessons/pathway-lesson-body";
 import { lessonBodyPresentationClass } from "@/lib/ui/lesson-body-presentation";
 
@@ -84,6 +85,14 @@ test("lessonCalloutFromParagraph: clinical pearl variants", () => {
     variant: "pearl",
     body: "short one",
   });
+});
+
+test("pathwayLessonResolvedParagraphs drops empty callout-only pearl labels", () => {
+  assert.deepEqual(pathwayLessonResolvedParagraphs("Pearl:"), []);
+  assert.deepEqual(pathwayLessonResolvedParagraphs("**Clinical Pearl:**"), []);
+  assert.deepEqual(pathwayLessonResolvedParagraphs("Pearl: assess pain before mobility"), [
+    "Pearl: assess pain before mobility",
+  ]);
 });
 
 test("lessonCalloutFromParagraph: nursing priority variants", () => {
