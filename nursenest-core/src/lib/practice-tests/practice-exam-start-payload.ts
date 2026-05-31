@@ -45,7 +45,7 @@ function normalizeTopicNames(topicNames: string[] | undefined): string[] {
 }
 
 export function buildPracticeExamStartPayload(input: BuildPracticeExamStartPayloadInput) {
-  const questionCount = Math.max(5, Math.min(100, Math.floor(input.questionCount)));
+  const questionCount = Math.max(3, Math.min(100, Math.floor(input.questionCount)));
   const topicNames = normalizeTopicNames(input.topicNames);
   const linearDeliveryMode = toLinearDeliveryMode(input.sessionMode, input.rationaleVisibilityMode);
   const linearAllowReviewNavigation =

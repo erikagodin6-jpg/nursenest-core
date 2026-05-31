@@ -99,7 +99,7 @@ describe("buildPracticeExamStartPayload", () => {
       rationaleVisibilityMode: "review",
     });
 
-    assert.equal(low.questionCount, 5);
+    assert.equal(low.questionCount, 3);
     assert.equal(high.questionCount, 100);
   });
 });

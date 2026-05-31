@@ -81,7 +81,7 @@ export function buildSimilarQuestionsHref(context: SimilarQuestionContext, count
     qs.set("mode", "drills");
     qs.set("similarRhythm", basis.topicName);
     if (count !== "all") qs.set("count", String(count));
-    return `/app/modules/ecg-interpretation/practice?${qs.toString()}`;
+    return `/modules/ecg-interpretation/practice?${qs.toString()}`;
   }
 
   const qs = new URLSearchParams();

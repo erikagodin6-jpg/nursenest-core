@@ -28,7 +28,7 @@ export function ShowSimilarQuestions({
   return (
     <section
       className={[
-        "rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))]",
+        "mt-3 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] first:mt-0",
         compact ? "p-3" : "p-4 sm:p-5",
       ].join(" ")}
       data-nn-show-similar-questions

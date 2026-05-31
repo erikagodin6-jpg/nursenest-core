@@ -116,6 +116,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { captureClientException } from "@/lib/runtime/client-observability";
 import { PracticeTestRunPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { QuestionBookmarkButton } from "@/components/bookmarks/question-bookmark-button";
+import { ShowSimilarQuestions } from "@/components/questions/show-similar-questions";
 import {
   PracticeAdaptivePostMissPanel,
   type PracticeAdaptivePostMissPayload,
@@ -3643,6 +3644,23 @@ export function PracticeTestRunnerClient({
           />
         </div>
       ) : null}
+      {showLinearPerItemRationale && currentCommitted && linearFeedback ? (
+        <ShowSimilarQuestions
+          context={{
+            sourceType: catMode ? "cat_exam" : "practice_question",
+            sourceId: current.id,
+            topic: linearFeedback.topic ?? current.topic ?? null,
+            subtopic: current.subtopic ?? null,
+            clinicalConcept: current.subtopic ?? linearFeedback.topic ?? current.topic ?? null,
+            pathwayId: testConfig?.pathwayId ?? pathwaySurface?.id ?? null,
+            currentCorrect: linearFeedback.isCorrect,
+            previouslyMissed: !linearFeedback.isCorrect,
+            weakArea: !linearFeedback.isCorrect,
+            lowConfidence: confidenceTrackingEnabled ? confidence[current.id] === "low" : null,
+          }}
+          compact
+        />
+      ) : null}
       {confidenceTrackingEnabled ? (
         <div className="mt-4">
           <ConfidenceSelector
@@ -3938,6 +3956,27 @@ export function PracticeTestRunnerClient({
                         visible={Boolean(currentCommitted && linearFeedback)}
                         copy={linearRemediationCopy}
                       />
+                      {currentCommitted && linearFeedback ? (
+                        <div className="mt-3">
+                          <ShowSimilarQuestions
+                            context={{
+                              sourceType: catMode ? "cat_exam" : "practice_question",
+                              sourceId: current.id,
+                              topic: linearFeedback.topic ?? current.topic ?? null,
+                              subtopic: current.subtopic ?? null,
+                              clinicalConcept: current.subtopic ?? linearFeedback.topic ?? current.topic ?? null,
+                              pathwayId: testConfig?.pathwayId ?? pathwaySurface?.id ?? null,
+                              currentCorrect: linearFeedback.isCorrect,
+                              previouslyMissed: !linearFeedback.isCorrect,
+                              weakArea: !linearFeedback.isCorrect,
+                              lowConfidence: confidenceTrackingEnabled
+                                ? confidence[current.id] === "low"
+                                : null,
+                            }}
+                            compact
+                          />
+                        </div>
+                      ) : null}
                       {practiceAdaptivePostMiss?.questionId === current.id ? (
                         <PracticeAdaptivePostMissPanel
                           payload={practiceAdaptivePostMiss.payload}
