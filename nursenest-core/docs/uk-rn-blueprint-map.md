@@ -1,71 +1,153 @@
-# UK RN Blueprint Map
+# UK RN Blueprint Expansion and Readiness Framework
 
 Date: 2026-05-31
 
-Status: hidden draft foundation. Do not publish. Do not expose in navigation, sitemap, public pathway selectors, or learner routes.
+Status: Hidden Draft Foundation
+
+Do not publish. Do not expose in navigation, sitemap, search, learner dashboards, pricing pages, or pathway selectors.
 
 ## Pathway
 
 | Field | Value |
 | --- | --- |
 | Country | United Kingdom |
-| Regulator | Nursing and Midwifery Council |
-| Exam | NMC CBT / OSCE |
-| Profession | RN |
-| Draft Admin Hub | `/admin/global-expansion/hubs/uk/rn` |
-| Public Reservation | `/uk/rn` |
-| Visibility | Admin Only / Noindex / Hidden |
+| Regulator | Nursing and Midwifery Council (NMC) |
+| Examination | CBT + OSCE |
+| Profession | Registered Nurse |
+| Internal Hub | `/admin/global-expansion/hubs/uk/rn` |
+| Reserved Public Route | `/uk/rn` |
+| Visibility | Hidden |
+| Publication Status | Draft |
+| Indexing | Noindex |
 
-## Content Targets
+## Mature Inventory Targets
 
-| Content Type | Target |
+| Asset Type | Mature Target |
 | --- | ---: |
-| Priority Lessons | 500 |
-| Flashcards | 5,000 |
-| Questions | 3,000 |
-| Simulations | 100 |
+| Lessons | 750 |
+| Flashcards | 10,000 |
+| Questions | 5,000 |
+| Simulations | 200 |
+| OSCE Stations | 250 |
+| NGN-Style Cases | 250 |
+| Bowties | 150 |
+| Matrix Cases | 150 |
 
-## Blueprint Domains
+## Core Blueprint Domains
 
-| Domain | Lesson Target | Question Target | Flashcard Target | Simulation Target |
+| Domain | Lessons | Questions | Flashcards | Simulations |
 | --- | ---: | ---: | ---: | ---: |
-| NHS Structure | 35 | 150 | 250 | 6 |
-| Duty of Candour | 25 | 125 | 200 | 6 |
-| NEWS2 | 35 | 225 | 350 | 12 |
-| SBAR | 25 | 125 | 200 | 8 |
-| Safeguarding | 45 | 275 | 450 | 12 |
-| Medication Safety | 65 | 450 | 800 | 14 |
-| Adult Nursing | 110 | 750 | 1,200 | 20 |
-| Mental Health | 55 | 325 | 600 | 8 |
-| Children's Nursing | 45 | 250 | 450 | 8 |
-| Leadership | 60 | 325 | 600 | 6 |
+| NHS Structure and Pathways | 40 | 200 | 300 | 8 |
+| NMC Code and Professional Practice | 40 | 200 | 300 | 8 |
+| Duty of Candour | 30 | 150 | 250 | 6 |
+| NEWS2 and Deterioration | 60 | 400 | 700 | 18 |
+| SBAR Communication | 30 | 175 | 300 | 10 |
+| Safeguarding Adults | 35 | 200 | 350 | 8 |
+| Safeguarding Children | 35 | 200 | 350 | 8 |
+| Medicines Management | 80 | 600 | 1,000 | 18 |
+| Infection Prevention and Control | 40 | 250 | 400 | 8 |
+| Adult Nursing | 150 | 1,000 | 1,600 | 35 |
+| Mental Health Nursing | 70 | 450 | 800 | 12 |
+| Children's Nursing | 60 | 400 | 700 | 12 |
+| Leadership and Delegation | 60 | 350 | 600 | 10 |
+| Documentation and Record Keeping | 20 | 125 | 250 | 6 |
+| End-of-Life Care | 20 | 125 | 250 | 6 |
+| **Allocated Total** | **770** | **4,825** | **8,150** | **173** |
+| **Remaining Expansion Reserve** | **-20** | **175** | **1,850** | **27** |
 
-## Readiness Domains
+The supplied blueprint domain rows allocate 770 lessons against a mature lesson target of 750. This 20-lesson overage is preserved for blueprint-review visibility instead of silently changing domain targets. Remaining question, flashcard, and simulation reserves are intentionally preserved for OSCE-specific remediation, mixed-domain safety cases, and final blueprint balancing after NMC blueprint review.
 
-- Safe and effective practice.
-- Prioritization and escalation.
-- NEWS2 deterioration recognition.
+## OSCE Blueprint Domains
+
+Every OSCE station must map to one or more of these station domains.
+
+### Assessment
+
+- Vital signs.
+- Focused assessments.
+- Escalation.
+
+### Communication
+
+- Patient interactions.
+- Family interactions.
+- Difficult conversations.
+- Capacity and consent.
+
+### Medication Administration
+
+- Rights of medication administration.
+- Safety checks.
+- Documentation.
+
+### Clinical Skills
+
+- Wound care.
+- Catheters.
+- Injections.
+- Oxygen therapy.
+- Specimen collection.
+
+### Documentation
+
+- Nursing notes.
+- Escalation records.
+- Safety reporting.
+
+## UK-Specific Clinical Expectations
+
+All content must use UK practice terminology where appropriate.
+
+Use:
+
+- A&E.
+- NEWS2.
+- SBAR.
+- Duty of Candour.
+- Registered Nurse Associate references when applicable.
+- NHS pathways.
+
+Avoid:
+
+- Excessive American terminology.
+- US-only medication, documentation, or escalation framing unless explicitly used for comparison.
+
+## Medication Governance Requirements
+
+UK RN content must include:
+
+- Controlled Drugs.
+- Patient Group Directions.
+- Medicines Reconciliation.
+- Double-Checking Processes.
+- Medication Error Reporting.
+
+## Safeguarding Requirements
+
+UK RN content must include:
+
+- Adults at Risk.
+- Child Protection.
+- Domestic Abuse.
+- Modern Slavery Awareness.
+- Mental Capacity Considerations.
+
+## Clinical Judgment Requirements
+
+Minimum: 250 UK-specific case studies.
+
+Required case categories:
+
+- Deterioration recognition.
+- Escalation.
 - Medication safety.
 - Safeguarding.
-- Communication and SBAR.
-- Professional accountability.
-- Adult health.
-- Mental health.
-- Children's nursing.
+- Communication failures.
+- Documentation failures.
 
-## Country-Specific Requirements
+## Publication Locks
 
-- NHS structure and care pathways.
-- Duty of Candour.
-- NMC Code language.
-- Safeguarding adults and children.
-- NEWS2 scoring and escalation.
-- UK medication terminology and governance.
-- OSCE communication expectations.
-
-## Draft Generation Notes
-
-All generated UK RN content must include:
+Every generated asset must contain:
 
 - `status=draft`
 - `published=false`
@@ -74,5 +156,33 @@ All generated UK RN content must include:
 - `launchReady=false`
 - `adminOnly=true`
 - `noindex=true`
+- `country=uk`
+- `exam=nmc-cbt-osce`
+- `READY_FOR_PUBLICATION=false`
+- `defaultState=DRAFT_ONLY`
 
-No content may publish without regulator-source review and clinical/editorial approval.
+## Additional Governance Requirements
+
+No content may be published until all review gates are complete:
+
+- NMC blueprint review completed.
+- UK terminology audit completed.
+- Clinical review completed.
+- Editorial review completed.
+- SEO localization review completed.
+- Translation review completed, when translations are introduced.
+
+## Success Criteria
+
+The UK RN ecosystem should eventually support:
+
+- CBT preparation.
+- OSCE preparation.
+- International nurse adaptation.
+- NHS onboarding.
+- Clinical communication training.
+- Medication safety competency.
+- Deterioration recognition.
+- Safeguarding competency.
+
+Until every publication gate clears, this pathway remains hidden, admin-only, noindex, and unavailable to learners or search engines.

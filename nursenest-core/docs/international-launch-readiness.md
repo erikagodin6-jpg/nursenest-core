@@ -9,7 +9,7 @@ Status: internal planning dashboard. Hidden international pathways are draft-onl
 | Pathway | Lessons | Questions | Flashcards | Simulations | Readiness | Marketing | Launch Status |
 | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
 | U.S. RN NCLEX-RN Expansion | 0 / 300 | 0 / 2,500 | 0 / 5,000 | 0 / 100 | Planned | Existing public U.S. hub, new assets pending | Draft Expansion |
-| UK RN NMC CBT | 0 / 500 | 0 / 3,000 | 0 / 5,000 | 0 / 100 | Planned | Hidden screenshot plan only | Not Launch Ready |
+| UK RN NMC CBT + OSCE | 0 / 750 | 0 / 5,000 | 0 / 10,000 | 0 / 200 | Planned; also requires 250 OSCE stations, 250 NGN-style cases, 150 bowties, and 150 matrix cases | Hidden screenshot plan only | Not Launch Ready |
 | Australia RN NMBA | 0 / 400 | 0 / 2,500 | 0 / 4,000 | 0 / 75 | Planned | Hidden screenshot plan only | Not Launch Ready |
 | New Zealand RN NCNZ | 0 / 300 | 0 / 2,000 | 0 / 3,000 | 0 / 50 | Planned | Hidden screenshot plan only | Not Launch Ready |
 
@@ -48,7 +48,7 @@ A pathway cannot move from hidden draft to launch review until it has:
 | Priority | Workstream | Rationale |
 | ---: | --- | --- |
 | 1 | U.S. RN expansion | Existing market and live pathway; highest near-term revenue impact. |
-| 2 | UK RN NMC CBT blueprint | Large English-speaking market with clear regulator pathway. |
+| 2 | UK RN NMC CBT + OSCE blueprint | Large English-speaking market with clear regulator pathway; must remain hidden until NMC blueprint, UK terminology, clinical, editorial, SEO localization, and future translation reviews clear. |
 | 3 | Australia RN NMBA blueprint | High-value English-speaking market and migration demand. |
 | 4 | New Zealand RN NCNZ blueprint | Smaller market, but strong fit for shared global nursing content. |
 | 5 | Shared global nursing library | Reduces duplication and accelerates future countries. |

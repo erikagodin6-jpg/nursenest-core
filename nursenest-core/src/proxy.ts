@@ -14,6 +14,10 @@ import {
   isProtectedLearnerApiPath,
   isProtectedLearnerAuthPath,
 } from "@/lib/auth/protected-learner-surfaces";
+import {
+  internalPathForLanguageSubdomain,
+  localeFromLanguageSubdomainHost,
+} from "@/lib/i18n/language-subdomains";
 
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
 import {
@@ -219,6 +223,36 @@ export function isPublicProbeOrCrawlerBypassPath(pathname: string): boolean {
   return false;
 }
 
+function shouldBypassLanguageSubdomainRewrite(pathname: string): boolean {
+  return (
+    pathname.startsWith("/api/") ||
+    pathname.startsWith("/_next/") ||
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/app") ||
+    pathname.startsWith("/internal") ||
+    pathname.startsWith("/preview") ||
+    isStaticAssetBypassPath(pathname)
+  );
+}
+
+function rewriteLanguageSubdomainRequest(request: NextRequest): NextResponse | null {
+  const locale = localeFromLanguageSubdomainHost(request.headers.get("host"));
+  if (!locale || locale === "en") return null;
+
+  const { pathname } = request.nextUrl;
+  if (shouldBypassLanguageSubdomainRewrite(pathname)) return null;
+
+  const internalPathname = internalPathForLanguageSubdomain(locale, pathname);
+  if (internalPathname === pathname) return null;
+
+  const url = request.nextUrl.clone();
+  url.pathname = internalPathname;
+  const response = NextResponse.rewrite(url);
+  response.headers.set("x-nn-language-subdomain-locale", locale);
+  response.headers.set("x-nn-language-subdomain-internal-path", internalPathname);
+  return attachReferralAttributionCookies(request, response);
+}
+
 async function enforceAdmin(request: NextRequest): Promise<NextResponse | null> {
   try {
     const pathname = request.nextUrl.pathname;
@@ -252,6 +286,9 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   try {
     const req = ensureCorrelationId(request);
     const pathname = req.nextUrl.pathname;
+
+    const languageRewrite = rewriteLanguageSubdomainRequest(req);
+    if (languageRewrite) return languageRewrite;
 
     if (isStaticAssetBypassPath(pathname)) {
       return NextResponse.next();

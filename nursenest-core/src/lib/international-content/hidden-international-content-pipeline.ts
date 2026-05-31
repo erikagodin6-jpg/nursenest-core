@@ -2,6 +2,11 @@ export type HiddenInternationalContentKind =
   | "lesson"
   | "flashcard"
   | "practice_question"
+  | "simulation"
+  | "osce_station"
+  | "ngn_case"
+  | "bowtie"
+  | "matrix_case"
   | "clinical_pearl"
   | "hint"
   | "rationale"
@@ -43,10 +48,15 @@ export const HIDDEN_INTERNATIONAL_PIPELINE_TARGETS: readonly HiddenInternational
   { pathwayId: "us-rn-nclex-rn", countryCode: "US", profession: "rn", exam: "NCLEX-RN", kind: "flashcard", targetCount: 5000 },
   { pathwayId: "us-rn-nclex-rn", countryCode: "US", profession: "rn", exam: "NCLEX-RN", kind: "practice_question", targetCount: 2500 },
   { pathwayId: "us-rn-nclex-rn", countryCode: "US", profession: "rn", exam: "NCLEX-RN", kind: "readiness_domain", targetCount: 12 },
-  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT", kind: "lesson", targetCount: 500 },
-  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT", kind: "flashcard", targetCount: 5000 },
-  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT", kind: "practice_question", targetCount: 3000 },
-  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT", kind: "study_plan", targetCount: 8 },
+  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT + OSCE", kind: "lesson", targetCount: 750 },
+  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT + OSCE", kind: "flashcard", targetCount: 10000 },
+  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT + OSCE", kind: "practice_question", targetCount: 5000 },
+  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT + OSCE", kind: "simulation", targetCount: 200 },
+  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT + OSCE", kind: "osce_station", targetCount: 250 },
+  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT + OSCE", kind: "ngn_case", targetCount: 250 },
+  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT + OSCE", kind: "bowtie", targetCount: 150 },
+  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT + OSCE", kind: "matrix_case", targetCount: 150 },
+  { pathwayId: "uk-rn-nmc-test-of-competence", countryCode: "GB", profession: "rn", exam: "NMC CBT + OSCE", kind: "study_plan", targetCount: 8 },
   { pathwayId: "au-rn-iqnm-pathway", countryCode: "AU", profession: "rn", exam: "NMBA RN", kind: "lesson", targetCount: 400 },
   { pathwayId: "au-rn-iqnm-pathway", countryCode: "AU", profession: "rn", exam: "NMBA RN", kind: "flashcard", targetCount: 4000 },
   { pathwayId: "au-rn-iqnm-pathway", countryCode: "AU", profession: "rn", exam: "NMBA RN", kind: "practice_question", targetCount: 2500 },
