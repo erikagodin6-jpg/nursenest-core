@@ -1,6 +1,6 @@
 # Google Search Console Indexing Emergency Audit
 
-Generated: 2026-05-30T17:07:34.223Z
+Generated: 2026-05-31T22:26:52.433Z
 
 ## Executive Summary
 
@@ -17,7 +17,7 @@ No local GSC URL CSV exports found. Reports use the aggregate counts from the pr
 ## Current Local Findings
 
 - Robots.txt blocks only private/internal/duplicate infrastructure paths.
-- Sitemap index uses 12 child urlsets and is DB-free.
+- Sitemap index uses 25 child urlsets and is DB-free.
 - Public crawl bypass exists in `src/proxy.ts` for all sitemap children and robots.
 - Existing sitemap guards exclude app/admin/api/internal/auth-noindex/SEO-rewrite surfaces.
 - Frequency-accurate 404/5xx/noindex attribution requires GSC URL exports; aggregate counts alone are not enough to identify every failing URL.

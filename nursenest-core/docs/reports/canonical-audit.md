@@ -1,6 +1,6 @@
 # Canonical Audit
 
-Generated: 2026-05-30T17:07:34.223Z
+Generated: 2026-05-31T22:26:52.433Z
 
 ## Search Console Signal
 
@@ -33,6 +33,7 @@ Generated: 2026-05-30T17:07:34.223Z
 - src/app/(marketing)/(default)/about/page.tsx
 - src/app/(marketing)/(default)/acceptable-use/page.tsx
 - src/app/(marketing)/(default)/acls-rhythms/page.tsx
+- src/app/(marketing)/(default)/admissions/page.tsx
 - src/app/(marketing)/(default)/advanced-ecg-nursing/12-lead-stemi/page.tsx
 - src/app/(marketing)/(default)/advanced-ecg-nursing/acls-rhythms/page.tsx
 - src/app/(marketing)/(default)/advanced-ecg-nursing/critical-care-ecg/page.tsx
@@ -45,7 +46,12 @@ Generated: 2026-05-30T17:07:34.223Z
 - src/app/(marketing)/(default)/advanced-ecg-nursing/telemetry-monitoring/page.tsx
 - src/app/(marketing)/(default)/allied-health/[slug]/blog/[postSlug]/page.tsx
 - src/app/(marketing)/(default)/allied-health/[slug]/blog/page.tsx
+- src/app/(marketing)/(default)/allied-health/[slug]/career/page.tsx
+- src/app/(marketing)/(default)/allied-health/[slug]/interview-questions/page.tsx
 - src/app/(marketing)/(default)/allied-health/[slug]/page.tsx
+- src/app/(marketing)/(default)/allied-health/[slug]/placement-guide/page.tsx
+- src/app/(marketing)/(default)/allied-health/[slug]/skills/[skillSlug]/page.tsx
+- src/app/(marketing)/(default)/allied-health/[slug]/study-guide/page.tsx
 - src/app/(marketing)/(default)/allied-health/page.tsx
 - src/app/(marketing)/(default)/allied-health/respiratory-therapy/[topic]/page.tsx
 - src/app/(marketing)/(default)/allied-health/respiratory-therapy/page.tsx
@@ -91,12 +97,6 @@ Generated: 2026-05-30T17:07:34.223Z
 - src/app/(marketing)/(default)/cnple-study-guide/page.tsx
 - src/app/(marketing)/(default)/cnple-vs-cnpe/page.tsx
 - src/app/(marketing)/(default)/cnple-womens-health/page.tsx
-- src/app/(marketing)/(default)/cnple/page.tsx
-- src/app/(marketing)/(default)/compare/[slug]/page.tsx
-- src/app/(marketing)/(default)/contact/page.tsx
-- src/app/(marketing)/(default)/content-review-policy/page.tsx
-- src/app/(marketing)/(default)/disclaimer/page.tsx
-- src/app/(marketing)/(default)/ecg-interpretation/page.tsx
 - ... 40 more
 
 ## Required Canonical Contract
@@ -116,5 +116,5 @@ Generated: 2026-05-30T17:07:34.223Z
 | --- | --- | --- |
 | Localized duplicated pages | Locale readiness gates exist; long-tail multilingual content has many canonicalUrl fields. | Keep incomplete locale pages noindexed; publish only when translated and internally linked. |
 | Programmatic question/topic pages | Several generators can create near-duplicate exam/topic templates. | Add unique clinical context and self canonicals; consolidate weak variants. |
-| Legacy redirects | `next.config.mjs` contains 42 redirect destination declarations. | Ensure redirected URLs are excluded from sitemap and canonical points only at final 200 URL. |
+| Legacy redirects | `next.config.mjs` contains 37 redirect destination declarations. | Ensure redirected URLs are excluded from sitemap and canonical points only at final 200 URL. |
 | Production metadata drift | Prior live CNPLE pages returned noindex despite current local metadata being indexable. | Redeploy current metadata or inspect production-only fallback logs. |

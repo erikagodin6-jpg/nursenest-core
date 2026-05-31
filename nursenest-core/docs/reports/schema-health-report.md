@@ -1,18 +1,18 @@
 # Schema Health Report
 
-Generated: 2026-05-30T17:07:34.223Z
+Generated: 2026-05-31T22:26:52.433Z
 
 ## Source-Level Schema Coverage
 
 | Schema Type | Local Source File Count | Notes |
 | --- | --- | --- |
-| Article | 3890 | Blog and article-like authority surfaces. |
-| FAQ | 4791 | FAQ blocks on blogs, exam pages, advanced ECG, and long-tail authority content. |
-| Breadcrumb | 313 | Breadcrumb JSON-LD/components and route hierarchy helpers. |
-| Course | 655 | Exam preparation and education-program landing pages. |
-| MedicalCondition / MedicalWebPage | 4717 | Clinical/medical educational entity helpers and clinical content pages. |
-| Organization / WebSite | 2810 | Sitewide brand and search schema helpers. |
-| EducationalOccupationalProgram | 705 | Program-oriented exam/pathway structured data. |
+| Article | 3925 | Blog and article-like authority surfaces. |
+| FAQ | 4814 | FAQ blocks on blogs, exam pages, advanced ECG, and long-tail authority content. |
+| Breadcrumb | 336 | Breadcrumb JSON-LD/components and route hierarchy helpers. |
+| Course | 662 | Exam preparation and education-program landing pages. |
+| MedicalCondition / MedicalWebPage | 4741 | Clinical/medical educational entity helpers and clinical content pages. |
+| Organization / WebSite | 2822 | Sitewide brand and search schema helpers. |
+| EducationalOccupationalProgram | 719 | Program-oriented exam/pathway structured data. |
 
 ### Structured data / JSON-LD sources
 
@@ -38,7 +38,12 @@ Generated: 2026-05-30T17:07:34.223Z
 - src/app/(marketing)/(default)/advanced-labs-interpretation/page.tsx
 - src/app/(marketing)/(default)/allied-health/[slug]/blog/[postSlug]/page.tsx
 - src/app/(marketing)/(default)/allied-health/[slug]/blog/page.tsx
+- src/app/(marketing)/(default)/allied-health/[slug]/career/page.tsx
+- src/app/(marketing)/(default)/allied-health/[slug]/interview-questions/page.tsx
 - src/app/(marketing)/(default)/allied-health/[slug]/page.tsx
+- src/app/(marketing)/(default)/allied-health/[slug]/placement-guide/page.tsx
+- src/app/(marketing)/(default)/allied-health/[slug]/skills/[skillSlug]/page.tsx
+- src/app/(marketing)/(default)/allied-health/[slug]/study-guide/page.tsx
 - src/app/(marketing)/(default)/allied-health/page.tsx
 - src/app/(marketing)/(default)/allied/[career]/page.tsx
 - src/app/(marketing)/(default)/allied/allied-health/page.tsx
@@ -67,6 +72,8 @@ Generated: 2026-05-30T17:07:34.223Z
 - src/app/(marketing)/(default)/exams/uk/page.tsx
 - src/app/(marketing)/(default)/faq/page.tsx
 - src/app/(marketing)/(default)/flashcards/[slug]/page.tsx
+- src/app/(marketing)/(default)/healthcare/[category]/[slug]/page.tsx
+- src/app/(marketing)/(default)/healthcare/page.tsx
 - src/app/(marketing)/(default)/hemodynamic-monitoring/page.tsx
 - src/app/(marketing)/(default)/hemodynamics-monitoring/page.tsx
 - src/app/(marketing)/(default)/how-it-works/page.tsx
@@ -89,13 +96,6 @@ Generated: 2026-05-30T17:07:34.223Z
 - src/app/(marketing)/(default)/pre-nursing/study-plan/page.tsx
 - src/app/(marketing)/(default)/pricing/page.tsx
 - src/app/(marketing)/(default)/pulmonary-artery-catheter/page.tsx
-- src/app/(marketing)/(default)/question-bank/page.tsx
-- src/app/(marketing)/(default)/questions/[slug]/page.tsx
-- src/app/(marketing)/(default)/shock-and-perfusion/page.tsx
-- src/app/(marketing)/(default)/telemetry-nursing/page.tsx
-- src/app/(marketing)/(default)/us/new-grad/[workArea]/page.tsx
-- src/app/(marketing)/(default)/us/new-grad/page.tsx
-- src/app/(marketing)/(default)/what-is-the-cnple/page.tsx
 - ... 40 more
 
 ## Validation Findings

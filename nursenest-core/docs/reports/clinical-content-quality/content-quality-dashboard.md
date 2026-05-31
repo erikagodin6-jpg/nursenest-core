@@ -1,6 +1,6 @@
 # Content Quality Dashboard
 
-- Generated: 2026-05-30T19:59:55.496Z
+- Generated: 2026-05-31T22:46:38.860Z
 - Total items: 1009
 - Average lesson score: 2.2
 - Average question score: 0

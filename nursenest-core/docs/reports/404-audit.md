@@ -1,12 +1,12 @@
 # 404 Audit
 
-Generated: 2026-05-30T17:07:34.223Z
+Generated: 2026-05-31T22:26:52.433Z
 
 ## Search Console Signal
 
 - Reported 404s: 18,985
 - URL export status: No local GSC URL CSV exports found. Reports use the aggregate counts from the prompt plus source/sitemap/robots analysis. Export affected URLs from GSC into data/gsc-indexing/ for frequency-accurate grouping.
-- Existing redirect declarations in `next.config.mjs`: 42
+- Existing redirect declarations in `next.config.mjs`: 37
 
 ## Top Templates
 
@@ -22,6 +22,7 @@ These route files call `notFound()` and should be checked against sitemap/intern
 
 - next.config.mjs (next.config.mjs)
 - /admin/clinical-scenarios/[scenarioId] (src/app/(admin)/admin/clinical-scenarios/[scenarioId]/page.tsx)
+- /admin/global-expansion/hubs/[countrySlug]/[profession] (src/app/(admin)/admin/global-expansion/hubs/[countrySlug]/[profession]/page.tsx)
 - /admin/osce-stations/[id] (src/app/(admin)/admin/osce-stations/[id]/page.tsx)
 - /admin/printables/[id]/analytics (src/app/(admin)/admin/printables/[id]/analytics/page.tsx)
 - /admin/printables/[id] (src/app/(admin)/admin/printables/[id]/page.tsx)
@@ -65,9 +66,14 @@ These route files call `notFound()` and should be checked against sitemap/intern
 - /[locale]/[slug]/[examCode]/test-bank (src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/test-bank/page.tsx)
 - /allied-health/[slug]/blog/[postSlug] (src/app/(marketing)/(default)/allied-health/[slug]/blog/[postSlug]/page.tsx)
 - /allied-health/[slug]/blog (src/app/(marketing)/(default)/allied-health/[slug]/blog/page.tsx)
+- /allied-health/[slug]/career (src/app/(marketing)/(default)/allied-health/[slug]/career/page.tsx)
+- /allied-health/[slug]/interview-questions (src/app/(marketing)/(default)/allied-health/[slug]/interview-questions/page.tsx)
 - /allied-health/[slug]/lessons/[lessonSlug] (src/app/(marketing)/(default)/allied-health/[slug]/lessons/[lessonSlug]/page.tsx)
 - /allied-health/[slug]/lessons (src/app/(marketing)/(default)/allied-health/[slug]/lessons/page.tsx)
 - /allied-health/[slug] (src/app/(marketing)/(default)/allied-health/[slug]/page.tsx)
+- /allied-health/[slug]/placement-guide (src/app/(marketing)/(default)/allied-health/[slug]/placement-guide/page.tsx)
+- /allied-health/[slug]/skills/[skillSlug] (src/app/(marketing)/(default)/allied-health/[slug]/skills/[skillSlug]/page.tsx)
+- /allied-health/[slug]/study-guide (src/app/(marketing)/(default)/allied-health/[slug]/study-guide/page.tsx)
 - /allied-health (src/app/(marketing)/(default)/allied-health/page.tsx)
 - /allied-health/respiratory-therapy/[topic] (src/app/(marketing)/(default)/allied-health/respiratory-therapy/[topic]/page.tsx)
 - /allied-health/respiratory-therapy (src/app/(marketing)/(default)/allied-health/respiratory-therapy/page.tsx)
@@ -92,10 +98,12 @@ These route files call `notFound()` and should be checked against sitemap/intern
 - /china/[topic] (src/app/(marketing)/(default)/china/[topic]/page.tsx)
 - /clinical-interpretation/[slug] (src/app/(marketing)/(default)/clinical-interpretation/[slug]/page.tsx)
 - /compare/[slug] (src/app/(marketing)/(default)/compare/[slug]/page.tsx)
+- /debug/lessons (src/app/(marketing)/(default)/debug/lessons/page.tsx)
 - /ecg/[topic] (src/app/(marketing)/(default)/ecg/[topic]/page.tsx)
 - /flashcards/[slug] (src/app/(marketing)/(default)/flashcards/[slug]/page.tsx)
 - /france/[topic] (src/app/(marketing)/(default)/france/[topic]/page.tsx)
 - /germany/[topic] (src/app/(marketing)/(default)/germany/[topic]/page.tsx)
+- /healthcare/[category]/[slug] (src/app/(marketing)/(default)/healthcare/[category]/[slug]/page.tsx)
 - /hungary/[topic] (src/app/(marketing)/(default)/hungary/[topic]/page.tsx)
 - /india/[topic] (src/app/(marketing)/(default)/india/[topic]/page.tsx)
 - /italy/[topic] (src/app/(marketing)/(default)/italy/[topic]/page.tsx)
@@ -112,15 +120,7 @@ These route files call `notFound()` and should be checked against sitemap/intern
 - /portugal/[topic] (src/app/(marketing)/(default)/portugal/[topic]/page.tsx)
 - /pre-nursing/[slug] (src/app/(marketing)/(default)/pre-nursing/[slug]/page.tsx)
 - /pre-nursing/lessons/[slug] (src/app/(marketing)/(default)/pre-nursing/lessons/[slug]/page.tsx)
-- /pre-nursing/practice/[slug] (src/app/(marketing)/(default)/pre-nursing/practice/[slug]/page.tsx)
-- /questions/[slug] (src/app/(marketing)/(default)/questions/[slug]/page.tsx)
-- /resources/[slug] (src/app/(marketing)/(default)/resources/[slug]/page.tsx)
-- /respiratory-therapy/ventilator-training (src/app/(marketing)/(default)/respiratory-therapy/ventilator-training/page.tsx)
-- /seo/[slug] (src/app/(marketing)/(default)/seo/[slug]/page.tsx)
-- /tools/[slug] (src/app/(marketing)/(default)/tools/[slug]/page.tsx)
-- /us/new-grad/[workArea] (src/app/(marketing)/(default)/us/new-grad/[workArea]/page.tsx)
-- /[locale]/[slug]/[examCode]/[exam]/blog/[postSlug] (src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/[postSlug]/page.tsx)
-- ... 40 more
+- ... 49 more
 
 ## Remediation Rules
 

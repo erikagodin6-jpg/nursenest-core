@@ -63,6 +63,45 @@ const BLOG_PUBLIC_QUERY_TIMEOUT_MS = 12_000;
 const BLOG_INDEX_EMPTY_RETRY_TIMEOUT_MS = 24_000;
 /** Batched slug walk for sitemap — one outer budget for many small `findMany` pages. */
 const BLOG_SITEMAP_SLUG_LIST_TIMEOUT_MS = 35_000;
+const BLOG_PUBLIC_DB_CONCURRENCY = Math.min(
+  8,
+  Math.max(1, Number(process.env.BLOG_PUBLIC_DB_CONCURRENCY ?? "4") || 4),
+);
+
+type BlogDbQueueItem<T> = {
+  run: () => Promise<T>;
+  resolve: (value: T) => void;
+  reject: (error: unknown) => void;
+};
+
+let activeBlogDbReads = 0;
+const blogDbReadQueue: BlogDbQueueItem<unknown>[] = [];
+
+function drainBlogDbReadQueue(): void {
+  while (activeBlogDbReads < BLOG_PUBLIC_DB_CONCURRENCY) {
+    const next = blogDbReadQueue.shift();
+    if (!next) return;
+    activeBlogDbReads += 1;
+    void next
+      .run()
+      .then(next.resolve, next.reject)
+      .finally(() => {
+        activeBlogDbReads -= 1;
+        drainBlogDbReadQueue();
+      });
+  }
+}
+
+function runBlogDbRead<T>(run: () => Promise<T>): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    blogDbReadQueue.push({
+      run,
+      resolve: resolve as (value: unknown) => void,
+      reject,
+    });
+    drainBlogDbReadQueue();
+  });
+}
 
 async function withBlogTimeoutFallback<T>(
   run: () => Promise<T>,
@@ -70,7 +109,7 @@ async function withBlogTimeoutFallback<T>(
   label: string,
   timeoutMs: number = BLOG_PUBLIC_QUERY_TIMEOUT_MS,
 ): Promise<T> {
-  return withDatabaseFallbackTimeout(run, fallback, timeoutMs, {
+  return withDatabaseFallbackTimeout(() => runBlogDbRead(run), fallback, timeoutMs, {
     scope: "blog",
     label,
   });
@@ -1031,6 +1070,42 @@ function blogMetaFromLongtailRecord(lt: BlogStaticLongtailRecord): BlogPostMeta 
   };
 }
 
+function getStaticBlogMetaFallback(slug: string): BlogPostMeta | null {
+  const s = getStaticBlogPost(slug);
+  if (s && !isBlogPublicE2eTestArtifact(s.slug, s.title)) {
+    return {
+      title: s.title,
+      excerpt: s.excerpt,
+      postStatus: BlogPostStatus.PUBLISHED,
+      workflowStatus: BlogWorkflowStatus.PUBLISHED,
+      publishAt: null,
+      scheduledAt: null,
+      seoTitle: null,
+      seoDescription: null,
+      createdAt: new Date(`${s.createdAt}T12:00:00Z`),
+      internalLinkPlan: null,
+      tags: s.tags ?? [],
+      category: s.category ?? null,
+      exam: null,
+      countryTarget: null,
+      coverImage: null,
+    };
+  }
+  const lt = getBlogStaticLongtailRecord(slug);
+  return lt && !isBlogPublicE2eTestArtifact(lt.slug, lt.title) ? blogMetaFromLongtailRecord(lt) : null;
+}
+
+function getStaticBlogPostFallback(slug: string): BlogPost | null {
+  const s = getStaticBlogPost(slug);
+  if (s && !isBlogPublicE2eTestArtifact(s.slug, s.title)) return publishedBlogPostFromStaticRecord(s);
+  const lt = getBlogStaticLongtailRecord(slug);
+  return lt && !isBlogPublicE2eTestArtifact(lt.slug, lt.title) ? publishedBlogPostFromLongtailRecord(lt) : null;
+}
+
+function shouldPreferStaticBlogDetailFallback(): boolean {
+  return process.env.BLOG_DETAIL_STATIC_FIRST?.trim() !== "0";
+}
+
 async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPost | null> {
   const db = await withBlogTimeoutFallback(() => prisma.blogPost.findUnique({ where: { slug } }), null, "blog_post.by_slug");
   if (db) {
@@ -1115,52 +1190,14 @@ async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope)
 
 export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPostMeta | null> {
   if (shouldSkipBlogDbForProductionBuild()) {
-    const s = getStaticBlogPost(slug);
-    if (s && !isBlogPublicE2eTestArtifact(s.slug, s.title)) {
-      return {
-        title: s.title,
-        excerpt: s.excerpt,
-        postStatus: BlogPostStatus.PUBLISHED,
-        workflowStatus: BlogWorkflowStatus.PUBLISHED,
-        publishAt: null,
-        scheduledAt: null,
-        seoTitle: null,
-        seoDescription: null,
-        createdAt: new Date(`${s.createdAt}T12:00:00Z`),
-        internalLinkPlan: null,
-        tags: s.tags ?? [],
-        category: s.category ?? null,
-        exam: null,
-        countryTarget: null,
-        coverImage: null,
-      };
-    }
-    const lt = getBlogStaticLongtailRecord(slug);
-    return lt && !isBlogPublicE2eTestArtifact(lt.slug, lt.title) ? blogMetaFromLongtailRecord(lt) : null;
+    return getStaticBlogMetaFallback(slug);
   }
   if (!isDatabaseUrlConfigured()) {
-    const s = getStaticBlogPost(slug);
-    if (s && !isBlogPublicE2eTestArtifact(s.slug, s.title)) {
-      return {
-        title: s.title,
-        excerpt: s.excerpt,
-        postStatus: BlogPostStatus.PUBLISHED,
-        workflowStatus: BlogWorkflowStatus.PUBLISHED,
-        publishAt: null,
-        scheduledAt: null,
-        seoTitle: null,
-        seoDescription: null,
-        createdAt: new Date(`${s.createdAt}T12:00:00Z`),
-        internalLinkPlan: null,
-        tags: s.tags ?? [],
-        category: s.category ?? null,
-        exam: null,
-        countryTarget: null,
-        coverImage: null,
-      };
-    }
-    const lt = getBlogStaticLongtailRecord(slug);
-    return lt && !isBlogPublicE2eTestArtifact(lt.slug, lt.title) ? blogMetaFromLongtailRecord(lt) : null;
+    return getStaticBlogMetaFallback(slug);
+  }
+  if (shouldPreferStaticBlogDetailFallback()) {
+    const staticMeta = getStaticBlogMetaFallback(slug);
+    if (staticMeta) return staticMeta;
   }
   const db = await resolveScopedBlogPostBySlug(slug, scope);
   if (db && !isBlogPublicE2eTestArtifact(db.slug, db.title)) {
@@ -1182,28 +1219,7 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
       coverImage: db.coverImage,
     };
   }
-  const s = getStaticBlogPost(slug);
-  if (s && !isBlogPublicE2eTestArtifact(s.slug, s.title)) {
-    return {
-      title: s.title,
-      excerpt: s.excerpt,
-      postStatus: BlogPostStatus.PUBLISHED,
-      workflowStatus: BlogWorkflowStatus.PUBLISHED,
-      publishAt: null,
-      scheduledAt: null,
-      seoTitle: null,
-      seoDescription: null,
-      createdAt: new Date(s.createdAt + "T12:00:00Z"),
-      internalLinkPlan: null,
-      tags: s.tags ?? [],
-      category: s.category ?? null,
-      exam: null,
-      countryTarget: null,
-      coverImage: null,
-    };
-  }
-  const lt = getBlogStaticLongtailRecord(slug);
-  return lt && !isBlogPublicE2eTestArtifact(lt.slug, lt.title) ? blogMetaFromLongtailRecord(lt) : null;
+  return getStaticBlogMetaFallback(slug);
 }
 
 /** True when slug should receive public metadata (SEO) and indexing. */
@@ -1221,18 +1237,14 @@ export async function isBlogPostMetaVisible(slug: string, scope?: BlogQueryScope
 export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPost | null> {
   const now = new Date();
   if (shouldSkipBlogDbForProductionBuild()) {
-    const s = getStaticBlogPost(slug);
-    if (s && !isBlogPublicE2eTestArtifact(s.slug, s.title)) return publishedBlogPostFromStaticRecord(s);
-    const lt = getBlogStaticLongtailRecord(slug);
-    if (lt && !isBlogPublicE2eTestArtifact(lt.slug, lt.title)) return publishedBlogPostFromLongtailRecord(lt);
-    return null;
+    return getStaticBlogPostFallback(slug);
   }
   if (!isDatabaseUrlConfigured()) {
-    const s = getStaticBlogPost(slug);
-    if (s && !isBlogPublicE2eTestArtifact(s.slug, s.title)) return publishedBlogPostFromStaticRecord(s);
-    const lt = getBlogStaticLongtailRecord(slug);
-    if (lt && !isBlogPublicE2eTestArtifact(lt.slug, lt.title)) return publishedBlogPostFromLongtailRecord(lt);
-    return null;
+    return getStaticBlogPostFallback(slug);
+  }
+  if (shouldPreferStaticBlogDetailFallback()) {
+    const staticPost = getStaticBlogPostFallback(slug);
+    if (staticPost) return staticPost;
   }
   const rawRow = await resolveScopedBlogPostBySlug(slug, scope);
   const row = rawRow && !isBlogPublicE2eTestArtifact(rawRow.slug, rawRow.title) ? rawRow : null;
@@ -1285,11 +1297,7 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
         reason: "e2e_test_artifact_excluded_from_public",
       });
     }
-    const s = getStaticBlogPost(slug);
-    if (s && !isBlogPublicE2eTestArtifact(s.slug, s.title)) return publishedBlogPostFromStaticRecord(s);
-    const lt = getBlogStaticLongtailRecord(slug);
-    if (lt && !isBlogPublicE2eTestArtifact(lt.slug, lt.title)) return publishedBlogPostFromLongtailRecord(lt);
-    return null;
+    return getStaticBlogPostFallback(slug);
   }
   if (
     scope?.careerSlug &&
@@ -1331,11 +1339,7 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
         scheduledAt: row.scheduledAt?.toISOString() ?? "",
       });
     }
-    const s = getStaticBlogPost(slug);
-    if (s && !isBlogPublicE2eTestArtifact(s.slug, s.title)) return publishedBlogPostFromStaticRecord(s);
-    const lt = getBlogStaticLongtailRecord(slug);
-    if (lt && !isBlogPublicE2eTestArtifact(lt.slug, lt.title)) return publishedBlogPostFromLongtailRecord(lt);
-    return null;
+    return getStaticBlogPostFallback(slug);
   }
   return row;
 }

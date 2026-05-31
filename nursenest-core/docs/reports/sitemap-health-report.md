@@ -1,11 +1,24 @@
 # Sitemap Health Report
 
-Generated: 2026-05-30T17:07:34.223Z
+Generated: 2026-05-31T22:26:52.433Z
 
 ## Sitemap Index Children
 
 | Child Sitemap | Expected Policy |
 | --- | --- |
+| sitemap-en.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-fr.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-es.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-hi.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-pt.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-ar.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-de.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-jp.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-ko.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-zh.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-zh-tw.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-it.xml | Must return 200 XML, no redirect, only indexable public URLs |
+| sitemap-tl.xml | Must return 200 XML, no redirect, only indexable public URLs |
 | sitemap-core.xml | Must return 200 XML, no redirect, only indexable public URLs |
 | sitemap-blog.xml | Must return 200 XML, no redirect, only indexable public URLs |
 | sitemap-fr-blog.xml | Must return 200 XML, no redirect, only indexable public URLs |

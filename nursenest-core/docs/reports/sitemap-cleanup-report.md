@@ -1,6 +1,6 @@
 # Sitemap Cleanup Report
 
-Generated: 2026-05-30T17:07:34.223Z
+Generated: 2026-05-31T22:26:52.433Z
 
 ## Sitemap Contract
 
@@ -12,6 +12,19 @@ They must remove 404s, redirects, noindex URLs, robots-blocked URLs, 5xx/timeout
 
 | Child Sitemap | Policy |
 | --- | --- |
+| sitemap-en.xml | 200 XML only; indexable public canonical URLs only. |
+| sitemap-fr.xml | 200 XML only; indexable public canonical URLs only. |
+| sitemap-es.xml | 200 XML only; indexable public canonical URLs only. |
+| sitemap-hi.xml | 200 XML only; indexable public canonical URLs only. |
+| sitemap-pt.xml | 200 XML only; indexable public canonical URLs only. |
+| sitemap-ar.xml | 200 XML only; indexable public canonical URLs only. |
+| sitemap-de.xml | 200 XML only; indexable public canonical URLs only. |
+| sitemap-jp.xml | 200 XML only; indexable public canonical URLs only. |
+| sitemap-ko.xml | 200 XML only; indexable public canonical URLs only. |
+| sitemap-zh.xml | 200 XML only; indexable public canonical URLs only. |
+| sitemap-zh-tw.xml | 200 XML only; indexable public canonical URLs only. |
+| sitemap-it.xml | 200 XML only; indexable public canonical URLs only. |
+| sitemap-tl.xml | 200 XML only; indexable public canonical URLs only. |
 | sitemap-core.xml | 200 XML only; indexable public canonical URLs only. |
 | sitemap-blog.xml | 200 XML only; indexable public canonical URLs only. |
 | sitemap-fr-blog.xml | 200 XML only; indexable public canonical URLs only. |

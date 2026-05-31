@@ -1,6 +1,6 @@
 # Noindex Review
 
-Generated: 2026-05-30T17:07:34.223Z
+Generated: 2026-05-31T22:26:52.433Z
 
 ## Search Console Signal
 
@@ -18,6 +18,7 @@ _No Search Console URL export rows were available for this issue._
 | next.config.mjs (next.config.mjs) | Review | Confirm this source is not attached to indexable educational or marketing content. |
 | /admin/beta (src/app/(admin)/admin/beta/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /admin/fraud (src/app/(admin)/admin/fraud/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
+| /admin/global-expansion/hubs/[countrySlug]/[profession] (src/app/(admin)/admin/global-expansion/hubs/[countrySlug]/[profession]/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /admin/i18n (src/app/(admin)/admin/i18n/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /admin/referrals (src/app/(admin)/admin/referrals/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /admin/users/[userId]/view-as (src/app/(admin)/admin/users/[userId]/view-as/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
@@ -26,11 +27,14 @@ _No Search Console URL export rows were available for this issue._
 | /app/account/analytics (src/app/(app)/app/(learner)/account/analytics/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/account/beta (src/app/(app)/app/(learner)/account/beta/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/account/billing (src/app/(app)/app/(learner)/account/billing/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
+| /app/account/bookmarks (src/app/(app)/app/(learner)/account/bookmarks/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/account/cat-history (src/app/(app)/app/(learner)/account/cat-history/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
+| /app/account/competency-passport (src/app/(app)/app/(learner)/account/competency-passport/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/account/focus-areas/[topic] (src/app/(app)/app/(learner)/account/focus-areas/[topic]/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/account/focus-areas (src/app/(app)/app/(learner)/account/focus-areas/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/account/mistakes (src/app/(app)/app/(learner)/account/mistakes/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/account/motivation (src/app/(app)/app/(learner)/account/motivation/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
+| /app/account/notebook (src/app/(app)/app/(learner)/account/notebook/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/account/notes (src/app/(app)/app/(learner)/account/notes/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/account/overview (src/app/(app)/app/(learner)/account/overview/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/account (src/app/(app)/app/(learner)/account/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
@@ -48,9 +52,14 @@ _No Search Console URL export rows were available for this issue._
 | /app/account/support (src/app/(app)/app/(learner)/account/support/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/baseline-assessment (src/app/(app)/app/(learner)/baseline-assessment/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/cases/cnple (src/app/(app)/app/(learner)/cases/cnple/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
+| /app/clinical-assignments (src/app/(app)/app/(learner)/clinical-assignments/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
+| /app/clinical-day-survival (src/app/(app)/app/(learner)/clinical-day-survival/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
+| /app/clinical-image-library (src/app/(app)/app/(learner)/clinical-image-library/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
+| /app/clinical-reasoning (src/app/(app)/app/(learner)/clinical-reasoning/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/clinical-skills/[slug] (src/app/(app)/app/(learner)/clinical-skills/[slug]/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/clinical-skills (src/app/(app)/app/(learner)/clinical-skills/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/coach (src/app/(app)/app/(learner)/coach/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
+| /app/exam-day (src/app/(app)/app/(learner)/exam-day/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/exam-plan (src/app/(app)/app/(learner)/exam-plan/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/explore (src/app/(app)/app/(learner)/explore/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/flashcards (src/app/(app)/app/(learner)/flashcards/layout.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
@@ -58,9 +67,11 @@ _No Search Console URL export rows were available for this issue._
 | /app/guided (src/app/(app)/app/(learner)/guided/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/labs/[category]/[slug] (src/app/(app)/app/(learner)/labs/[category]/[slug]/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/labs (src/app/(app)/app/(learner)/labs/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
+| /app/learning-ecosystem (src/app/(app)/app/(learner)/learning-ecosystem/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/lessons (src/app/(app)/app/(learner)/lessons/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/med-calculations/[category]/[slug] (src/app/(app)/app/(learner)/med-calculations/[category]/[slug]/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/med-calculations (src/app/(app)/app/(learner)/med-calculations/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
+| /app/np (src/app/(app)/app/(learner)/np/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/onboarding (src/app/(app)/app/(learner)/onboarding/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app (src/app/(app)/app/(learner)/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /app/pharmacology (src/app/(app)/app/(learner)/pharmacology/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
@@ -78,6 +89,7 @@ _No Search Console URL export rows were available for this issue._
 | / (src/app/(app)/layout.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /modules/ecg-advanced (src/app/(app)/modules/ecg-advanced/layout.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /modules/ecg-interpretation (src/app/(app)/modules/ecg-interpretation/layout.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
+| /modules/ecg/interactive (src/app/(app)/modules/ecg/interactive/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /modules/ecg (src/app/(app)/modules/ecg/layout.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /modules/ecg (src/app/(app)/modules/ecg/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /modules/ecg/pediatric/cases (src/app/(app)/modules/ecg/pediatric/cases/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
@@ -108,13 +120,13 @@ _No Search Console URL export rows were available for this issue._
 | /blog/tag/[tag] (src/app/(marketing)/(default)/blog/tag/[tag]/page.tsx) | Dangerous if emitted for published public pages | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /clinical-interpretation/[slug] (src/app/(marketing)/(default)/clinical-interpretation/[slug]/page.tsx) | Dangerous if emitted for published public pages | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /clinical-interpretation (src/app/(marketing)/(default)/clinical-interpretation/page.tsx) | Dangerous if emitted for published public pages | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
+| /debug/lessons (src/app/(marketing)/(default)/debug/lessons/page.tsx) | Dangerous if emitted for published public pages | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /forgot-password (src/app/(marketing)/(default)/forgot-password/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /login (src/app/(marketing)/(default)/login/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /nursing-glossary/[term] (src/app/(marketing)/(default)/nursing-glossary/[term]/page.tsx) | Dangerous if emitted for published public pages | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /nursing-mechanisms/[slug] (src/app/(marketing)/(default)/nursing-mechanisms/[slug]/page.tsx) | Review | Confirm this source is not attached to indexable educational or marketing content. |
 | /nursing-mechanisms (src/app/(marketing)/(default)/nursing-mechanisms/page.tsx) | Review | Confirm this source is not attached to indexable educational or marketing content. |
 | /nursing/[careerSlug]/blog/[postSlug] (src/app/(marketing)/(default)/nursing/[careerSlug]/blog/[postSlug]/page.tsx) | Dangerous if emitted for published public pages | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
-| /pre-nursing/[slug] (src/app/(marketing)/(default)/pre-nursing/[slug]/page.tsx) | Dangerous if emitted for published public pages | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /pre-nursing/lessons (src/app/(marketing)/(default)/pre-nursing/lessons/page.tsx) | Dangerous if emitted for published public pages | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /questions/[slug] (src/app/(marketing)/(default)/questions/[slug]/page.tsx) | Dangerous if emitted for published public pages | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /reset-password (src/app/(marketing)/(default)/reset-password/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
@@ -123,18 +135,6 @@ _No Search Console URL export rows were available for this issue._
 | /[locale]/forgot-password (src/app/(marketing)/[locale]/forgot-password/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /[locale]/login (src/app/(marketing)/[locale]/login/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 | /[locale]/pre-nursing/lessons/[slug] (src/app/(marketing)/[locale]/pre-nursing/lessons/[slug]/page.tsx) | Dangerous if emitted for published public pages | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
-| /[locale]/reset-password (src/app/(marketing)/[locale]/reset-password/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
-| /[locale]/signup (src/app/(marketing)/[locale]/signup/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
-| /[locale]/verify-email (src/app/(marketing)/[locale]/verify-email/page.tsx) | Intentional or legacy depending on locale readiness | Keep noindex for incomplete translations; remove when locale content is complete and canonicals/hreflang are ready. |
-| /preview/[surface] (src/app/(preview)/preview/[surface]/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
-| /preview/auth-login-live (src/app/(preview)/preview/auth-login-live/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
-| /preview/auth-signup-live (src/app/(preview)/preview/auth-signup-live/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
-| /preview/figma-navigation/a (src/app/(preview)/preview/figma-navigation/a/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
-| /preview/figma-navigation/b (src/app/(preview)/preview/figma-navigation/b/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
-| /preview/figma-navigation/c (src/app/(preview)/preview/figma-navigation/c/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
-| /preview/figma-navigation (src/app/(preview)/preview/figma-navigation/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
-| /preview/flashcard-session-live (src/app/(preview)/preview/flashcard-session-live/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
-| /preview/homepage-live (src/app/(preview)/preview/homepage-live/page.tsx) | Intentional | Keep noindex; this is private, utility, preview, auth, or error-state surface. |
 
 ## Dangerous Or Review-Required Local Sources
 
@@ -149,9 +149,9 @@ _No Search Console URL export rows were available for this issue._
 | /blog/tag/[tag] (src/app/(marketing)/(default)/blog/tag/[tag]/page.tsx) | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /clinical-interpretation/[slug] (src/app/(marketing)/(default)/clinical-interpretation/[slug]/page.tsx) | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /clinical-interpretation (src/app/(marketing)/(default)/clinical-interpretation/page.tsx) | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
+| /debug/lessons (src/app/(marketing)/(default)/debug/lessons/page.tsx) | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /nursing-glossary/[term] (src/app/(marketing)/(default)/nursing-glossary/[term]/page.tsx) | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /nursing/[careerSlug]/blog/[postSlug] (src/app/(marketing)/(default)/nursing/[careerSlug]/blog/[postSlug]/page.tsx) | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
-| /pre-nursing/[slug] (src/app/(marketing)/(default)/pre-nursing/[slug]/page.tsx) | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /pre-nursing/lessons (src/app/(marketing)/(default)/pre-nursing/lessons/page.tsx) | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /questions/[slug] (src/app/(marketing)/(default)/questions/[slug]/page.tsx) | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |
 | /[locale]/pre-nursing/lessons/[slug] (src/app/(marketing)/[locale]/pre-nursing/lessons/[slug]/page.tsx) | Verify with live HTML and GSC export. Published public education and exam landing pages should be indexable unless intentionally launch-gated. |

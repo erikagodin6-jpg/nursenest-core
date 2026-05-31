@@ -171,7 +171,8 @@ function escapeHtmlLite(s: string): string {
 
 /**
  * Minimal `BlogPost` for repo-backed long-tail markdown (`src/content/blog-static-longtail/`).
- * Same public `/blog/[slug]` contract as {@link publishedBlogPostFromStaticRecord}; DB live rows win on slug overlap.
+ * Same public `/blog/[slug]` contract as {@link publishedBlogPostFromStaticRecord}; public read policy decides
+ * whether repo-backed or DB-backed rows win on slug overlap.
  */
 export function publishedBlogPostFromLongtailRecord(r: BlogStaticLongtailRecord): BlogPost {
   const createdAt = new Date(`${r.createdAt}T12:00:00Z`);

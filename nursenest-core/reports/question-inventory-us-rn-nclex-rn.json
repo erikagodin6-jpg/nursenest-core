@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-10T20:43:27.469Z",
+  "generatedAt": "2026-05-31T22:49:31.312Z",
   "pathwayId": "us-rn-nclex-rn",
   "policy": {
     "contentExamKeys": [
@@ -151,6 +151,2526 @@
                     "med-calculations-only"
                   ]
                 }
+              }
+            }
+          ]
+        },
+        {
+          "NOT": {
+            "tags": {
+              "has": "module:rt-ventilator"
+            }
+          }
+        },
+        {
+          "AND": [
+            {
+              "NOT": {
+                "OR": [
+                  {
+                    "tags": {
+                      "hasSome": [
+                        "advanced",
+                        "advanced-review",
+                        "advanced_review",
+                        "tier3",
+                        "tier-3",
+                        "icu",
+                        "critical-care",
+                        "critical_care",
+                        "specialty",
+                        "new-grad",
+                        "new_grad",
+                        "ventilator",
+                        "mechanical-ventilation",
+                        "mechanical_ventilation",
+                        "ventilator-management",
+                        "ventilator_management",
+                        "vasopressor",
+                        "vasopressor-titration",
+                        "vasopressor_titration",
+                        "hemodynamics",
+                        "invasive-hemodynamics",
+                        "invasive_hemodynamics",
+                        "ecmo",
+                        "crrt"
+                      ]
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "intensive care",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "intensive care",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "intensive care",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "intensive care",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "intensive care",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "critical care",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "critical care",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "critical care",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "critical care",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "critical care",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "icu",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "icu",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "icu",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "icu",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "icu",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "mechanically ventilated",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "mechanically ventilated",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "mechanically ventilated",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "mechanically ventilated",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "mechanically ventilated",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "ventilated patient",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "ventilated patient",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "ventilated patient",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "ventilated patient",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "ventilated patient",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "mechanical ventilation",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "mechanical ventilation",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "mechanical ventilation",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "mechanical ventilation",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "mechanical ventilation",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "adjust ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "adjust ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "adjust ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "adjust ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "adjust ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "change ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "change ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "change ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "change ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "change ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "titrate ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "titrate ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "titrate ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "titrate ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "titrate ventilator",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "ventilator mode",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "ventilator mode",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "ventilator mode",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "ventilator mode",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "ventilator mode",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "ventilator modes",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "ventilator modes",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "ventilator modes",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "ventilator modes",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "ventilator modes",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "vent setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "vent setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "vent setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "vent setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "vent setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "vent settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "vent settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "vent settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "vent settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "vent settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "ventilator setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "ventilator setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "ventilator setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "ventilator setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "ventilator setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "ventilator settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "ventilator settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "ventilator settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "ventilator settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "ventilator settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "bipap setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "bipap setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "bipap setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "bipap setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "bipap setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "bipap settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "bipap settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "bipap settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "bipap settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "bipap settings",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "bipap pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "bipap pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "bipap pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "bipap pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "bipap pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "bipap pressures",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "bipap pressures",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "bipap pressures",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "bipap pressures",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "bipap pressures",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "cpap pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "cpap pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "cpap pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "cpap pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "cpap pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "cpap pressures",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "cpap pressures",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "cpap pressures",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "cpap pressures",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "cpap pressures",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "ipap",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "ipap",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "ipap",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "ipap",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "ipap",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "epap",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "epap",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "epap",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "epap",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "epap",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "pressure support",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "pressure support",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "pressure support",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "pressure support",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "pressure support",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "tidal volume",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "tidal volume",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "tidal volume",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "tidal volume",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "tidal volume",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "tidal volume setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "tidal volume setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "tidal volume setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "tidal volume setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "tidal volume setting",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "peep",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "peep",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "peep",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "peep",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "peep",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "peep adjustment",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "peep adjustment",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "peep adjustment",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "peep adjustment",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "peep adjustment",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "adjust peep",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "adjust peep",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "adjust peep",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "adjust peep",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "adjust peep",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "plateau pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "plateau pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "plateau pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "plateau pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "plateau pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "peak pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "peak pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "peak pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "peak pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "peak pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "peak inspiratory pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "peak inspiratory pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "peak inspiratory pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "peak inspiratory pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "peak inspiratory pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "pip",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "pip",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "pip",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "pip",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "pip",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "lung compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "lung compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "lung compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "lung compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "lung compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "airway resistance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "airway resistance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "airway resistance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "airway resistance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "airway resistance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "static compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "static compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "static compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "static compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "static compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "dynamic compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "dynamic compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "dynamic compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "dynamic compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "dynamic compliance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "ventilator waveform",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "ventilator waveform",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "ventilator waveform",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "ventilator waveform",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "ventilator waveform",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "ventilator waveforms",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "ventilator waveforms",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "ventilator waveforms",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "ventilator waveforms",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "ventilator waveforms",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "waveform interpretation",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "waveform interpretation",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "waveform interpretation",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "waveform interpretation",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "waveform interpretation",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "arterial line",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "arterial line",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "arterial line",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "arterial line",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "arterial line",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "art line",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "art line",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "art line",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "art line",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "art line",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "central venous pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "central venous pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "central venous pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "central venous pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "central venous pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "cvp",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "cvp",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "cvp",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "cvp",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "cvp",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "swan-ganz",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "swan-ganz",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "swan-ganz",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "swan-ganz",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "swan-ganz",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "pulmonary artery catheter",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "pulmonary artery catheter",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "pulmonary artery catheter",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "pulmonary artery catheter",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "pulmonary artery catheter",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "pulmonary artery wedge",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "pulmonary artery wedge",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "pulmonary artery wedge",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "pulmonary artery wedge",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "pulmonary artery wedge",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "wedge pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "wedge pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "wedge pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "wedge pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "wedge pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "cardiac index",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "cardiac index",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "cardiac index",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "cardiac index",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "cardiac index",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "systemic vascular resistance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "systemic vascular resistance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "systemic vascular resistance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "systemic vascular resistance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "systemic vascular resistance",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "svr",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "svr",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "svr",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "svr",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "svr",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "vasopressor",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "vasopressor",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "vasopressor",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "vasopressor",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "vasopressor",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "norepinephrine",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "norepinephrine",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "norepinephrine",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "norepinephrine",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "norepinephrine",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "epinephrine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "epinephrine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "epinephrine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "epinephrine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "epinephrine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "dopamine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "dopamine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "dopamine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "dopamine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "dopamine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "phenylephrine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "phenylephrine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "phenylephrine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "phenylephrine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "phenylephrine infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "titrated infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "titrated infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "titrated infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "titrated infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "titrated infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "titrated vasopressor",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "titrated vasopressor",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "titrated vasopressor",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "titrated vasopressor",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "titrated vasopressor",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "vasopressor titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "vasopressor titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "vasopressor titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "vasopressor titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "vasopressor titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "titrate norepinephrine",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "titrate norepinephrine",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "titrate norepinephrine",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "titrate norepinephrine",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "titrate norepinephrine",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "norepinephrine titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "norepinephrine titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "norepinephrine titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "norepinephrine titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "norepinephrine titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "propofol infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "propofol infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "propofol infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "propofol infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "propofol infusion",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "sedation protocol",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "sedation protocol",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "sedation protocol",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "sedation protocol",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "sedation protocol",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "sedation titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "sedation titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "sedation titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "sedation titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "sedation titration",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "invasive hemodynamic",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "invasive hemodynamic",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "invasive hemodynamic",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "invasive hemodynamic",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "invasive hemodynamic",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "intracranial pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "intracranial pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "intracranial pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "intracranial pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "intracranial pressure",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "icp monitoring",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "icp monitoring",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "icp monitoring",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "icp monitoring",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "icp monitoring",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "intra-aortic balloon",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "intra-aortic balloon",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "intra-aortic balloon",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "intra-aortic balloon",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "intra-aortic balloon",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "iabp",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "iabp",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "iabp",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "iabp",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "iabp",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "ecmo",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "ecmo",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "ecmo",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "ecmo",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "ecmo",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "continuous renal replacement",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "continuous renal replacement",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "continuous renal replacement",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "continuous renal replacement",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "continuous renal replacement",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "crrt",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "crrt",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "crrt",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "crrt",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "crrt",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "tags": {
+                      "hasSome": [
+                        "provider-level",
+                        "provider_level",
+                        "diagnosis",
+                        "differential-diagnosis",
+                        "differential_diagnosis",
+                        "prescribing",
+                        "np"
+                      ]
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "specialist referral decision",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "specialist referral decision",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "specialist referral decision",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "specialist referral decision",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "specialist referral decision",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "independent medical diagnosis",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "independent medical diagnosis",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "independent medical diagnosis",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "independent medical diagnosis",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "independent medical diagnosis",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "differential diagnosis",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "differential diagnosis",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "differential diagnosis",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "differential diagnosis",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "differential diagnosis",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "prescribe",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "prescribe",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "prescribe",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "prescribe",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "prescribe",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "prescribing",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "prescribing",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "prescribing",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "prescribing",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "prescribing",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "initiate antibiotic therapy",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "initiate antibiotic therapy",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "initiate antibiotic therapy",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "initiate antibiotic therapy",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "initiate antibiotic therapy",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "order ct",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "order ct",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "order ct",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "order ct",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "order ct",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "order imaging",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "order imaging",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "order imaging",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "order imaging",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "order imaging",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "topic": {
+                      "contains": "diagnostic workup",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "subtopic": {
+                      "contains": "diagnostic workup",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "bodySystem": {
+                      "contains": "diagnostic workup",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "questionType": {
+                      "contains": "diagnostic workup",
+                      "mode": "insensitive"
+                    }
+                  },
+                  {
+                    "stem": {
+                      "contains": "diagnostic workup",
+                      "mode": "insensitive"
+                    }
+                  }
+                ]
               }
             }
           ]

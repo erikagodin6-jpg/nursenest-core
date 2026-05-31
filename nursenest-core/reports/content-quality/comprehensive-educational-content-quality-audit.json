@@ -1,0 +1,632 @@
+{
+  "generatedAt": "2026-05-31T22:59:16.431Z",
+  "bySurface": {
+    "questions": {
+      "count": 72828,
+      "gradeCounts": {
+        "A+": 375,
+        "A": 2217,
+        "B": 42608,
+        "C": 27626,
+        "D": 2
+      },
+      "revisionRequired": 27628,
+      "placeholder": 4,
+      "generic": 0,
+      "duplicate": 62834,
+      "missingReferences": 72828,
+      "weakEvidence": 53705,
+      "weakDistractors": 72453,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 74.5,
+        "clinicalAccuracy": 74.6,
+        "duplication": 52.5,
+        "examReadiness": 78
+      }
+    },
+    "flashcards": {
+      "count": 6216,
+      "gradeCounts": {
+        "A+": 96,
+        "A": 2981,
+        "B": 3139,
+        "C": 0,
+        "D": 0
+      },
+      "revisionRequired": 0,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 6,
+      "missingReferences": 5414,
+      "weakEvidence": 5414,
+      "weakDistractors": 0,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 85.9,
+        "clinicalAccuracy": 75.6,
+        "duplication": 99.9,
+        "examReadiness": 86.5
+      }
+    },
+    "pathwayLessons": {
+      "count": 13040,
+      "gradeCounts": {
+        "A+": 1203,
+        "A": 9822,
+        "B": 2015,
+        "C": 0,
+        "D": 0
+      },
+      "revisionRequired": 0,
+      "placeholder": 1,
+      "generic": 0,
+      "duplicate": 11337,
+      "missingReferences": 2595,
+      "weakEvidence": 2595,
+      "weakDistractors": 0,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 86.5,
+        "clinicalAccuracy": 94.4,
+        "duplication": 52.2,
+        "examReadiness": 90.8
+      }
+    },
+    "blogArticles": {
+      "count": 4366,
+      "gradeCounts": {
+        "A+": 4334,
+        "A": 32,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "revisionRequired": 0,
+      "placeholder": 2,
+      "generic": 1,
+      "duplicate": 12,
+      "missingReferences": 0,
+      "weakEvidence": 19,
+      "weakDistractors": 0,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 99.6,
+        "clinicalAccuracy": 99.9,
+        "duplication": 99.8,
+        "examReadiness": 99.3
+      }
+    },
+    "localizedBlogArticles": {
+      "count": 2,
+      "gradeCounts": {
+        "A+": 0,
+        "A": 2,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "revisionRequired": 0,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 0,
+      "missingReferences": 0,
+      "weakEvidence": 2,
+      "weakDistractors": 0,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 85.8,
+        "clinicalAccuracy": 90,
+        "duplication": 100,
+        "examReadiness": 81.7
+      }
+    },
+    "contentItems": {
+      "count": 52,
+      "gradeCounts": {
+        "A+": 51,
+        "A": 1,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "revisionRequired": 0,
+      "placeholder": 0,
+      "generic": 1,
+      "duplicate": 0,
+      "missingReferences": 0,
+      "weakEvidence": 0,
+      "weakDistractors": 0,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 99.8,
+        "clinicalAccuracy": 100,
+        "duplication": 100,
+        "examReadiness": 99.8
+      }
+    },
+    "caseStudies": {
+      "count": 0,
+      "gradeCounts": {
+        "A+": 0,
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "revisionRequired": 0,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 0,
+      "missingReferences": 0,
+      "weakEvidence": 0,
+      "weakDistractors": 0,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 0,
+        "clinicalAccuracy": 0,
+        "duplication": 0,
+        "examReadiness": 0
+      }
+    },
+    "all": {
+      "count": 96504,
+      "gradeCounts": {
+        "A+": 6059,
+        "A": 15055,
+        "B": 47762,
+        "C": 27626,
+        "D": 2
+      },
+      "revisionRequired": 27628,
+      "placeholder": 7,
+      "generic": 2,
+      "duplicate": 74189,
+      "missingReferences": 80837,
+      "weakEvidence": 61735,
+      "weakDistractors": 72453,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 78,
+        "clinicalAccuracy": 78.5,
+        "duplication": 57.7,
+        "examReadiness": 81.3
+      }
+    }
+  },
+  "byPathway": {
+    "ALLIED": {
+      "count": 1013,
+      "gradeCounts": {
+        "A+": 0,
+        "A": 791,
+        "B": 222,
+        "C": 0,
+        "D": 0
+      },
+      "revisionRequired": 0,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 0,
+      "missingReferences": 633,
+      "weakEvidence": 633,
+      "weakDistractors": 0,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 87.8,
+        "clinicalAccuracy": 82.5,
+        "duplication": 100,
+        "examReadiness": 88.2
+      }
+    },
+    "Allied Unclassified": {
+      "count": 31704,
+      "gradeCounts": {
+        "A+": 375,
+        "A": 90,
+        "B": 17085,
+        "C": 14152,
+        "D": 2
+      },
+      "revisionRequired": 14154,
+      "placeholder": 4,
+      "generic": 0,
+      "duplicate": 29996,
+      "missingReferences": 31704,
+      "weakEvidence": 22852,
+      "weakDistractors": 31329,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 73.4,
+        "clinicalAccuracy": 74.8,
+        "duplication": 48,
+        "examReadiness": 78.4
+      }
+    },
+    "Medical Laboratory Technology": {
+      "count": 3281,
+      "gradeCounts": {
+        "A+": 63,
+        "A": 31,
+        "B": 1797,
+        "C": 1390,
+        "D": 0
+      },
+      "revisionRequired": 1390,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 3116,
+      "missingReferences": 3202,
+      "weakEvidence": 2802,
+      "weakDistractors": 3186,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 73.9,
+        "clinicalAccuracy": 73.9,
+        "duplication": 47.8,
+        "examReadiness": 79.5
+      }
+    },
+    "NP": {
+      "count": 16857,
+      "gradeCounts": {
+        "A+": 883,
+        "A": 8910,
+        "B": 6285,
+        "C": 779,
+        "D": 0
+      },
+      "revisionRequired": 779,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 13773,
+      "missingReferences": 8614,
+      "weakEvidence": 7470,
+      "weakDistractors": 5619,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 83.6,
+        "clinicalAccuracy": 86.4,
+        "duplication": 55.1,
+        "examReadiness": 87.8
+      }
+    },
+    "Occupational Therapy": {
+      "count": 44,
+      "gradeCounts": {
+        "A+": 44,
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "revisionRequired": 0,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 0,
+      "missingReferences": 0,
+      "weakEvidence": 0,
+      "weakDistractors": 0,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 100,
+        "clinicalAccuracy": 100,
+        "duplication": 100,
+        "examReadiness": 100
+      }
+    },
+    "PN": {
+      "count": 6457,
+      "gradeCounts": {
+        "A+": 305,
+        "A": 1210,
+        "B": 2439,
+        "C": 2503,
+        "D": 0
+      },
+      "revisionRequired": 2503,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 5437,
+      "missingReferences": 5457,
+      "weakEvidence": 4845,
+      "weakDistractors": 5186,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 76.6,
+        "clinicalAccuracy": 77.3,
+        "duplication": 53.7,
+        "examReadiness": 79.1
+      }
+    },
+    "PSW": {
+      "count": 0,
+      "gradeCounts": {
+        "A+": 0,
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "revisionRequired": 0,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 0,
+      "missingReferences": 0,
+      "weakEvidence": 0,
+      "weakDistractors": 0,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 0,
+        "clinicalAccuracy": 0,
+        "duplication": 0,
+        "examReadiness": 0
+      }
+    },
+    "Paramedic": {
+      "count": 2269,
+      "gradeCounts": {
+        "A+": 188,
+        "A": 19,
+        "B": 1106,
+        "C": 956,
+        "D": 0
+      },
+      "revisionRequired": 956,
+      "placeholder": 2,
+      "generic": 0,
+      "duplicate": 2058,
+      "missingReferences": 2071,
+      "weakEvidence": 1137,
+      "weakDistractors": 2060,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 75.9,
+        "clinicalAccuracy": 78.5,
+        "duplication": 50.1,
+        "examReadiness": 80.5
+      }
+    },
+    "Physiotherapy": {
+      "count": 598,
+      "gradeCounts": {
+        "A+": 12,
+        "A": 2,
+        "B": 353,
+        "C": 231,
+        "D": 0
+      },
+      "revisionRequired": 231,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 576,
+      "missingReferences": 585,
+      "weakEvidence": 515,
+      "weakDistractors": 584,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 73.8,
+        "clinicalAccuracy": 73.8,
+        "duplication": 47,
+        "examReadiness": 79.2
+      }
+    },
+    "Psychotherapy": {
+      "count": 207,
+      "gradeCounts": {
+        "A+": 69,
+        "A": 4,
+        "B": 74,
+        "C": 60,
+        "D": 0
+      },
+      "revisionRequired": 60,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 131,
+      "missingReferences": 136,
+      "weakEvidence": 108,
+      "weakDistractors": 134,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 84.2,
+        "clinicalAccuracy": 83,
+        "duplication": 65.2,
+        "examReadiness": 88.3
+      }
+    },
+    "RN": {
+      "count": 17104,
+      "gradeCounts": {
+        "A+": 1029,
+        "A": 2521,
+        "B": 9651,
+        "C": 3903,
+        "D": 0
+      },
+      "revisionRequired": 3903,
+      "placeholder": 1,
+      "generic": 1,
+      "duplicate": 8392,
+      "missingReferences": 15364,
+      "weakEvidence": 9986,
+      "weakDistractors": 12859,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 79.1,
+        "clinicalAccuracy": 78,
+        "duplication": 73,
+        "examReadiness": 79
+      }
+    },
+    "RPN": {
+      "count": 6148,
+      "gradeCounts": {
+        "A+": 929,
+        "A": 1347,
+        "B": 2713,
+        "C": 1159,
+        "D": 0
+      },
+      "revisionRequired": 1159,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 3731,
+      "missingReferences": 4441,
+      "weakEvidence": 4113,
+      "weakDistractors": 2926,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 82.2,
+        "clinicalAccuracy": 80.3,
+        "duplication": 66.6,
+        "examReadiness": 85
+      }
+    },
+    "Respiratory Therapy": {
+      "count": 7155,
+      "gradeCounts": {
+        "A+": 416,
+        "A": 83,
+        "B": 4356,
+        "C": 2300,
+        "D": 0
+      },
+      "revisionRequired": 2300,
+      "placeholder": 0,
+      "generic": 1,
+      "duplicate": 6637,
+      "missingReferences": 6711,
+      "weakEvidence": 5709,
+      "weakDistractors": 6653,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 75.8,
+        "clinicalAccuracy": 75.1,
+        "duplication": 49,
+        "examReadiness": 80.7
+      }
+    },
+    "Social Work": {
+      "count": 393,
+      "gradeCounts": {
+        "A+": 88,
+        "A": 4,
+        "B": 149,
+        "C": 152,
+        "D": 0
+      },
+      "revisionRequired": 152,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 301,
+      "missingReferences": 303,
+      "weakEvidence": 138,
+      "weakDistractors": 301,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 78.9,
+        "clinicalAccuracy": 82.6,
+        "duplication": 57.9,
+        "examReadiness": 82.1
+      }
+    },
+    "Unclassified": {
+      "count": 3270,
+      "gradeCounts": {
+        "A+": 1654,
+        "A": 43,
+        "B": 1532,
+        "C": 41,
+        "D": 0
+      },
+      "revisionRequired": 41,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 41,
+      "missingReferences": 1616,
+      "weakEvidence": 1427,
+      "weakDistractors": 1616,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 89.1,
+        "clinicalAccuracy": 86.7,
+        "duplication": 99.3,
+        "examReadiness": 86
+      }
+    },
+    "free": {
+      "count": 1,
+      "gradeCounts": {
+        "A+": 1,
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "revisionRequired": 0,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 0,
+      "missingReferences": 0,
+      "weakEvidence": 0,
+      "weakDistractors": 0,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 100,
+        "clinicalAccuracy": 100,
+        "duplication": 100,
+        "examReadiness": 100
+      }
+    },
+    "imaging": {
+      "count": 3,
+      "gradeCounts": {
+        "A+": 3,
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "revisionRequired": 0,
+      "placeholder": 0,
+      "generic": 0,
+      "duplicate": 0,
+      "missingReferences": 0,
+      "weakEvidence": 0,
+      "weakDistractors": 0,
+      "ambiguousOrMissingAnswer": 0,
+      "answerKeyRisk": 0,
+      "averageScores": {
+        "contentQuality": 96.7,
+        "clinicalAccuracy": 100,
+        "duplication": 100,
+        "examReadiness": 93.3
+      }
+    }
+  }
+}

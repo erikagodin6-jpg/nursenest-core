@@ -1,6 +1,6 @@
 # Internal Linking Audit
 
-Generated: 2026-05-30T17:07:34.223Z
+Generated: 2026-05-31T22:26:52.433Z
 
 ## Scope
 
@@ -59,6 +59,8 @@ This source-level pass checks for the existence of link, breadcrumb, related-con
 - src/app/(admin)/admin/flashcards/page.tsx
 - src/app/(admin)/admin/fraud/page.tsx
 - src/app/(admin)/admin/generation/page.tsx
+- src/app/(admin)/admin/growth-revenue-command-center/page.tsx
+- src/app/(admin)/admin/hotspots/page.tsx
 - src/app/(admin)/admin/hub/ai/page.tsx
 - src/app/(admin)/admin/hub/publishing/page.tsx
 - src/app/(admin)/admin/i18n/page.tsx
@@ -82,12 +84,10 @@ This source-level pass checks for the existence of link, breadcrumb, related-con
 - src/app/(admin)/admin/pathway-launch-workflow/page.tsx
 - src/app/(admin)/admin/pathway-lessons/page.tsx
 - src/app/(admin)/admin/platform-ecosystem/page.tsx
+- src/app/(admin)/admin/platform-governance/page.tsx
 - src/app/(admin)/admin/premium-protection/page.tsx
 - src/app/(admin)/admin/printables/[id]/analytics/page.tsx
 - src/app/(admin)/admin/printables/[id]/page.tsx
-- src/app/(admin)/admin/printables/new/page.tsx
-- src/app/(admin)/admin/printables/page.tsx
-- src/app/(admin)/admin/product-availability/page.tsx
 - ... 40 more
 
 ## Priority Surfaces

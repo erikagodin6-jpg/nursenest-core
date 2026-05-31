@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-03T02:31:07.014Z",
+  "generatedAt": "2026-05-31T22:45:15.997Z",
   "gateNew": {
     "minSections": 4,
     "minTotalWords": 800,
@@ -13,48 +13,48 @@
   "totals": {
     "pathwayCount": 5,
     "lessons": 2797,
-    "meaningfulNew": 2273,
-    "meaningfulLegacy": 2448,
-    "meaningfulNewPct": "81.27",
-    "meaningfulLegacyPct": "87.52",
-    "deltaMeaningfulCount": -175,
-    "deltaMeaningfulPctPoints": "-6.26"
+    "meaningfulNew": 2570,
+    "meaningfulLegacy": 2795,
+    "meaningfulNewPct": "91.88",
+    "meaningfulLegacyPct": "99.93",
+    "deltaMeaningfulCount": -225,
+    "deltaMeaningfulPctPoints": "-8.04"
   },
   "perPathway": [
     {
       "pathwayId": "ca-rn-nclex-rn",
       "lessons": 797,
-      "meaningfulNew": 680,
-      "meaningfulLegacy": 717,
-      "deltaVsLegacy": -37
+      "meaningfulNew": 794,
+      "meaningfulLegacy": 797,
+      "deltaVsLegacy": -3
     },
     {
       "pathwayId": "ca-rpn-rex-pn",
       "lessons": 478,
-      "meaningfulNew": 377,
-      "meaningfulLegacy": 386,
-      "deltaVsLegacy": -9
+      "meaningfulNew": 407,
+      "meaningfulLegacy": 478,
+      "deltaVsLegacy": -71
     },
     {
       "pathwayId": "us-lpn-nclex-pn",
       "lessons": 150,
-      "meaningfulNew": 49,
-      "meaningfulLegacy": 53,
-      "deltaVsLegacy": -4
+      "meaningfulNew": 83,
+      "meaningfulLegacy": 149,
+      "deltaVsLegacy": -66
     },
     {
       "pathwayId": "us-np-fnp",
       "lessons": 576,
-      "meaningfulNew": 486,
-      "meaningfulLegacy": 576,
-      "deltaVsLegacy": -90
+      "meaningfulNew": 493,
+      "meaningfulLegacy": 575,
+      "deltaVsLegacy": -82
     },
     {
       "pathwayId": "us-rn-nclex-rn",
       "lessons": 796,
-      "meaningfulNew": 681,
-      "meaningfulLegacy": 716,
-      "deltaVsLegacy": -35
+      "meaningfulNew": 793,
+      "meaningfulLegacy": 796,
+      "deltaVsLegacy": -3
     }
   ]
 }

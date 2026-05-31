@@ -6,11 +6,11 @@ Audits hidden allied mastery module draft questions for modality-correct inputs,
 
 ## Summary
 
-- Modules audited: 20
-- Questions audited: 419
-- Ready modules: 19
+- Modules audited: 22
+- Questions audited: 571
+- Ready modules: 21
 - Invalid modules: 1
-- Average modality compliance: 95%
+- Average modality compliance: 95.5%
 - Missing audio: 48
 - Missing image: 0
 - Missing video: 0
@@ -256,6 +256,32 @@ Audits hidden allied mastery module draft questions for modality-correct inputs,
 
 - Module: ota-neuro-stroke-recognition
 - Question count: 41
+- Modality compliance: 100%
+- Missing audio/image/video: 0/0/0
+- Accuracy issues: 0
+- Rationale issues: 0
+- Decision layer issues: 0
+- Rapid recognition issues: 0
+- Readiness status: ready
+- Issues: None
+
+### Physiotherapy - Movement + Injury Mechanics
+
+- Module: pta-movement-injury-mechanics
+- Question count: 73
+- Modality compliance: 100%
+- Missing audio/image/video: 0/0/0
+- Accuracy issues: 0
+- Rationale issues: 0
+- Decision layer issues: 0
+- Rapid recognition issues: 0
+- Readiness status: ready
+- Issues: None
+
+### Occupational Therapy - Functional Assessment + ADL Safety
+
+- Module: ota-functional-assessment-adl-safety
+- Question count: 79
 - Modality compliance: 100%
 - Missing audio/image/video: 0/0/0
 - Accuracy issues: 0
