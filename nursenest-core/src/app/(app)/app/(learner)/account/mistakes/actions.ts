@@ -11,10 +11,12 @@ export async function loadMistakeNotebookAction(userId: string): Promise<Mistake
       entries: [],
       totalMisses: 0,
       taggedCount: 0,
+      mostCommonErrorType: null,
       topTopics: [],
       topBodySystems: [],
       patterns: [],
       reasonCounts: {},
+      improvementOverTime: [],
       hasHistoricalData: false,
     };
   }

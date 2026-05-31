@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { Check, Loader2, X } from "lucide-react";
 import {
-  MISTAKE_REASONS,
+  MISSED_QUESTION_JOURNAL_REASONS,
   MISTAKE_REASON_LABELS,
   MISTAKE_REASON_DESCRIPTIONS,
   MISTAKE_REASON_ROLE,
@@ -28,6 +28,12 @@ type Props = {
   initialReason: MistakeReason | null;
   initialNote: string;
   topic?: string | null;
+  sourceType?: string | null;
+  stemPreview?: string | null;
+  bodySystem?: string | null;
+  questionType?: string | null;
+  sourceHref?: string | null;
+  pathwayId?: string | null;
   onSaved?: (reason: MistakeReason | null, note: string) => void;
   compact?: boolean;
 };
@@ -36,7 +42,20 @@ type Props = {
  * Inline mistake reason picker + note textarea.
  * Saves via POST /api/learner/mistakes.
  */
-export function MistakeTagPicker({ questionId, initialReason, initialNote, topic, onSaved, compact = false }: Props) {
+export function MistakeTagPicker({
+  questionId,
+  initialReason,
+  initialNote,
+  topic,
+  sourceType,
+  stemPreview,
+  bodySystem,
+  questionType,
+  sourceHref,
+  pathwayId,
+  onSaved,
+  compact = false,
+}: Props) {
   const [reason, setReason] = useState<MistakeReason | null>(initialReason);
   const [note, setNote] = useState(initialNote);
   const [saved, setSaved] = useState(false);
@@ -55,7 +74,18 @@ export function MistakeTagPicker({ questionId, initialReason, initialNote, topic
         const res = await fetch("/api/learner/mistakes", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ questionId, reason, note, topic }),
+          body: JSON.stringify({
+            questionId,
+            reason,
+            note,
+            topic,
+            sourceType,
+            stemPreview,
+            bodySystem,
+            questionType,
+            sourceHref,
+            pathwayId,
+          }),
         });
         if (!res.ok) throw new Error("save failed");
         setSaved(true);
@@ -91,7 +121,7 @@ export function MistakeTagPicker({ questionId, initialReason, initialNote, topic
           Why did you miss this?
         </p>
         <div className="flex flex-wrap gap-2">
-          {MISTAKE_REASONS.map((r) => {
+          {MISSED_QUESTION_JOURNAL_REASONS.map((r) => {
             const role = MISTAKE_REASON_ROLE[r];
             const colors = getRoleColor(role);
             const isSelected = reason === r;

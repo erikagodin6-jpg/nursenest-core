@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import test from "node:test";
 import {
   buildAppLessonsSystemHref,
@@ -25,6 +26,15 @@ test("required lesson system labels resolve to stable app lesson topic URLs", ()
     const href = buildAppLessonsSystemHref({ pathwayId: "ca-rn-nclex-rn", system: label, limit: 24 });
     assert.equal(href, `/app/lessons?topicSlug=${encodeURIComponent(slug)}&pathwayId=ca-rn-nclex-rn&limit=24`);
   }
+});
+
+test("lesson system route files exist for app and marketing topic navigation", () => {
+  assert.equal(existsSync("src/app/(app)/app/(learner)/lessons/page.tsx"), true);
+  assert.equal(existsSync("src/app/(app)/app/(learner)/lessons/loading.tsx"), true);
+  assert.equal(existsSync("src/app/(app)/app/(learner)/lessons/layout.tsx"), true);
+  assert.equal(existsSync("src/app/api/learner/pathway-lessons/route.ts"), true);
+  assert.equal(existsSync("src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/page.tsx"), true);
+  assert.equal(existsSync("src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/topics/[topicSlug]/page.tsx"), true);
 });
 
 test("legacy taxonomy aliases still resolve when a hub emits category ids", () => {

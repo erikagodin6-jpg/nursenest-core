@@ -1,4 +1,5 @@
 import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
+import { listAuthorityContentPaths } from "@/lib/authority/healthcare-authority-content-engine";
 import { listAuthorityComparisonPaths } from "@/lib/seo/authority-comparison-pages";
 import { listAuthorityClusterPaths } from "@/lib/seo/authority-cluster-pages";
 import { listAuthorityResourcePaths } from "@/lib/seo/authority-resource-pages";
@@ -37,6 +38,7 @@ const LEGACY_AUTHORITY_PATH_PREFIXES = ["/canada-nclex-rn"] as const;
 export async function GET(request: Request): Promise<Response> {
   const origin = normalizeOrigin(resolveCanonicalSiteOrigin());
   const authorityPaths = [
+    ...listAuthorityContentPaths(),
     ...listAuthorityClusterPaths(),
     ...listAuthorityComparisonPaths(),
     ...listAuthorityResourcePaths(),

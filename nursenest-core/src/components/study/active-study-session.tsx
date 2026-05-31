@@ -847,6 +847,7 @@ export function ActiveStudySession({
           title: current.topic?.trim() ? `${current.topic} flashcard` : "Flashcard question",
           topic: current.topic ?? current.subtopic ?? null,
           difficulty: null,
+          sourceHref: current.lessonHref ?? null,
           pathwayId: current.pathwayId ?? sessionPathwayId ?? null,
         }}
         similarQuestionContext={{

@@ -1,6 +1,16 @@
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
-export type AuthorityContentCategory = "conditions" | "medications" | "clinical-skills" | "labs" | "care-plans";
+export type AuthorityContentCategory =
+  | "conditions"
+  | "medications"
+  | "clinical-skills"
+  | "labs"
+  | "care-plans"
+  | "allied-careers"
+  | "allied-study"
+  | "interview-prep"
+  | "placements"
+  | "certifications";
 
 export type ClinicalReviewStatus = "clinically_reviewed" | "under_review" | "updated";
 
@@ -52,6 +62,54 @@ export type AuthorityPage = {
   references: AuthorityReference[];
 };
 
+export type AuthorityContentTarget = {
+  category: AuthorityContentCategory;
+  phaseOneTarget: number;
+  longTermTarget: number;
+  primaryIntent: "clinical" | "career" | "study" | "conversion";
+  monetizationPath: string;
+};
+
+export type AuthorityDashboardRow = AuthorityContentTarget & {
+  title: string;
+  publishedPages: number;
+  draftGap: number;
+  pagesAwaitingReview: number;
+  internalLinkAverage: number;
+  eeatCoverage: number;
+  schemaCoverage: number;
+  clinicalAuthorityCoverage: number;
+  averageClinicalAuthorityScore: number;
+  monetizationReadiness: "foundation" | "developing" | "strong";
+};
+
+export type ClinicalAuthorityStandardProfile = {
+  wordTarget: { min: number; max: number };
+  requiredElements: string[];
+};
+
+export type ClinicalAuthorityAudit = {
+  score: number;
+  minimumPublicationScore: number;
+  publishReady: boolean;
+  wordCount: number;
+  targetWordRange: string;
+  missingElements: string[];
+  issues: string[];
+  dimensionScores: {
+    clinicalDepth: number;
+    educationalValue: number;
+    practicalUtility: number;
+    examRelevance: number;
+    clinicalAccuracy: number;
+    internalLinking: number;
+    eeatReadiness: number;
+    contentCompleteness: number;
+  };
+};
+
+export const CLINICAL_AUTHORITY_MINIMUM_PUBLICATION_SCORE = 90;
+
 export const AUTHORITY_CATEGORY_META: Record<
   AuthorityContentCategory,
   { title: string; singular: string; description: string; futureTarget: string }
@@ -86,6 +144,265 @@ export const AUTHORITY_CATEGORY_META: Record<
     description: "Priority-ranked care plans with SMART goals, interventions, rationales, and clinical reasoning.",
     futureTarget: "1,000+ future care plans",
   },
+  "allied-careers": {
+    title: "Allied Health Career Library",
+    singular: "Career Guide",
+    description: "Career, salary, licensing, and profession-entry guides for allied health learners.",
+    futureTarget: "100+ future career pages",
+  },
+  "allied-study": {
+    title: "Allied Health Study Library",
+    singular: "Study Guide",
+    description: "Profession-specific study guides, clinical reasoning explainers, and quick review pages.",
+    futureTarget: "300+ future allied study pages",
+  },
+  "interview-prep": {
+    title: "Interview Preparation Library",
+    singular: "Interview Guide",
+    description: "Healthcare interview questions with model answers, common mistakes, and expert preparation tips.",
+    futureTarget: "100+ future interview pages",
+  },
+  placements: {
+    title: "Placement Success Library",
+    singular: "Placement Guide",
+    description: "Clinical placement survival guides covering preparation, expectations, skills, and professional habits.",
+    futureTarget: "100+ future placement pages",
+  },
+  certifications: {
+    title: "Certification & Licensing Library",
+    singular: "Certification Guide",
+    description: "Exam, certification, and licensing guides for nursing, NP, and allied health pathways.",
+    futureTarget: "100+ future certification pages",
+  },
+};
+
+export const AUTHORITY_CONTENT_PHASE_TARGETS: Record<AuthorityContentCategory, AuthorityContentTarget> = {
+  conditions: {
+    category: "conditions",
+    phaseOneTarget: 200,
+    longTermTarget: 1000,
+    primaryIntent: "clinical",
+    monetizationPath: "Related lessons, questions, care plans, labs, medications, and simulations.",
+  },
+  medications: {
+    category: "medications",
+    phaseOneTarget: 250,
+    longTermTarget: 5000,
+    primaryIntent: "clinical",
+    monetizationPath: "Related pharmacology lessons, flashcards, medication questions, and safety practice.",
+  },
+  "care-plans": {
+    category: "care-plans",
+    phaseOneTarget: 500,
+    longTermTarget: 1000,
+    primaryIntent: "conversion",
+    monetizationPath: "Care plan generator, related questions, lessons, flashcards, and clinical reasoning tools.",
+  },
+  labs: {
+    category: "labs",
+    phaseOneTarget: 500,
+    longTermTarget: 1000,
+    primaryIntent: "clinical",
+    monetizationPath: "Lab interpretation activities, related conditions, questions, and clinical cases.",
+  },
+  "clinical-skills": {
+    category: "clinical-skills",
+    phaseOneTarget: 500,
+    longTermTarget: 2000,
+    primaryIntent: "clinical",
+    monetizationPath: "Clinical skills activities, simulations, placement guides, and competency passports.",
+  },
+  "allied-careers": {
+    category: "allied-careers",
+    phaseOneTarget: 100,
+    longTermTarget: 250,
+    primaryIntent: "career",
+    monetizationPath: "Allied health pathway hubs, placement resources, study guides, and interview prep.",
+  },
+  "allied-study": {
+    category: "allied-study",
+    phaseOneTarget: 300,
+    longTermTarget: 1000,
+    primaryIntent: "study",
+    monetizationPath: "Allied health lessons, practice activities, flashcards, and clinical skills.",
+  },
+  "interview-prep": {
+    category: "interview-prep",
+    phaseOneTarget: 100,
+    longTermTarget: 250,
+    primaryIntent: "career",
+    monetizationPath: "Career pathway pages, placement guides, new graduate resources, and coaching funnels.",
+  },
+  placements: {
+    category: "placements",
+    phaseOneTarget: 100,
+    longTermTarget: 250,
+    primaryIntent: "career",
+    monetizationPath: "Placement readiness tools, skills checklists, simulations, and clinical readiness pathways.",
+  },
+  certifications: {
+    category: "certifications",
+    phaseOneTarget: 100,
+    longTermTarget: 300,
+    primaryIntent: "conversion",
+    monetizationPath: "Exam pathway hubs, pricing, trial CTAs, practice questions, CAT exams, and readiness dashboards.",
+  },
+};
+
+const DISEASE_REQUIRED_ELEMENTS = [
+  "Definition",
+  "Why This Matters Clinically",
+  "Pathophysiology",
+  "Disease Progression",
+  "Risk Factors",
+  "Causes",
+  "Assessment Findings",
+  "Signs And Symptoms",
+  "Differential Diagnoses",
+  "Diagnostics",
+  "Laboratory Findings",
+  "Imaging Findings",
+  "Medical Management",
+  "Pharmacology",
+  "Nursing Management",
+  "RT Considerations",
+  "OT Considerations",
+  "PT Considerations",
+  "MLT Considerations",
+  "Patient Education",
+  "Complications",
+  "Clinical Pearls",
+  "Common Student Mistakes",
+  "Common New Graduate Mistakes",
+  "NCLEX Considerations",
+  "REx-PN Considerations",
+  "NP Considerations",
+  "Case Study",
+  "Practice Questions",
+  "Related Conditions",
+  "References",
+];
+
+const MEDICATION_REQUIRED_ELEMENTS = [
+  "Why Patients Receive This Medication",
+  "Mechanism Of Action",
+  "How The Drug Works Physiologically",
+  "Indications",
+  "Contraindications",
+  "Side Effects",
+  "Serious Adverse Effects",
+  "Monitoring",
+  "Laboratory Monitoring",
+  "Administration Considerations",
+  "Patient Teaching",
+  "Nursing Considerations",
+  "Safety Alerts",
+  "Medication Errors",
+  "Clinical Pearls",
+  "Case Example",
+  "Exam Considerations",
+  "Related Medications",
+  "References",
+];
+
+const CARE_PLAN_REQUIRED_ELEMENTS = [
+  "Patient Scenario",
+  "Priority Diagnoses",
+  "Clinical Reasoning",
+  "Goals",
+  "Interventions",
+  "Rationales",
+  "Evaluation",
+  "Patient Education",
+  "Complication Monitoring",
+  "Escalation Triggers",
+  "Clinical Pearls",
+  "Exam Tips",
+  "Case Progression",
+  "Documentation Examples",
+];
+
+const CLINICAL_SKILL_REQUIRED_ELEMENTS = [
+  "Purpose",
+  "Indications",
+  "Contraindications",
+  "Preparation",
+  "Equipment",
+  "Procedure",
+  "Safety Checks",
+  "Clinical Decision Points",
+  "Common Errors",
+  "Complications",
+  "Documentation",
+  "Patient Teaching",
+  "Case Examples",
+  "Clinical Pearls",
+  "Knowledge Check Questions",
+];
+
+const LAB_REQUIRED_ELEMENTS = [
+  "Normal Values",
+  "Function",
+  "Causes Of High Values",
+  "Causes Of Low Values",
+  "Clinical Significance",
+  "Nursing Actions",
+  "Patient Implications",
+  "Related Conditions",
+  "FAQs",
+  "References",
+];
+
+const CAREER_REQUIRED_ELEMENTS = [
+  "Role Overview",
+  "Why This Matters Clinically",
+  "Education Pathway",
+  "Licensing Or Registration",
+  "Clinical Placement",
+  "Core Competencies",
+  "Common Mistakes",
+  "Practical Tips",
+  "Related Study Resources",
+  "References",
+];
+
+const STUDY_REQUIRED_ELEMENTS = [
+  "Learning Objectives",
+  "Clinical Context",
+  "Core Concepts",
+  "Decision-Making Examples",
+  "Common Errors",
+  "Practice Questions",
+  "Clinical Pearls",
+  "Related Lessons",
+  "Related Skills",
+  "References",
+];
+
+const CERTIFICATION_REQUIRED_ELEMENTS = [
+  "Exam Overview",
+  "Blueprint",
+  "Study Plan",
+  "Readiness",
+  "Clinical Judgment",
+  "Common Exam Traps",
+  "Practice Questions",
+  "Related Lessons",
+  "Related Flashcards",
+  "References",
+];
+
+export const CLINICAL_AUTHORITY_STANDARD: Record<AuthorityContentCategory, ClinicalAuthorityStandardProfile> = {
+  conditions: { wordTarget: { min: 3000, max: 5000 }, requiredElements: DISEASE_REQUIRED_ELEMENTS },
+  medications: { wordTarget: { min: 2500, max: 4000 }, requiredElements: MEDICATION_REQUIRED_ELEMENTS },
+  "care-plans": { wordTarget: { min: 2000, max: 3500 }, requiredElements: CARE_PLAN_REQUIRED_ELEMENTS },
+  labs: { wordTarget: { min: 2000, max: 3000 }, requiredElements: LAB_REQUIRED_ELEMENTS },
+  "clinical-skills": { wordTarget: { min: 2500, max: 4000 }, requiredElements: CLINICAL_SKILL_REQUIRED_ELEMENTS },
+  "allied-careers": { wordTarget: { min: 3000, max: 5000 }, requiredElements: CAREER_REQUIRED_ELEMENTS },
+  "allied-study": { wordTarget: { min: 2500, max: 4000 }, requiredElements: STUDY_REQUIRED_ELEMENTS },
+  "interview-prep": { wordTarget: { min: 3000, max: 5000 }, requiredElements: CAREER_REQUIRED_ELEMENTS },
+  placements: { wordTarget: { min: 3000, max: 5000 }, requiredElements: CAREER_REQUIRED_ELEMENTS },
+  certifications: { wordTarget: { min: 4000, max: 8000 }, requiredElements: CERTIFICATION_REQUIRED_ELEMENTS },
 };
 
 export const AUTHORITY_CONTENT_PAGES: AuthorityPage[] = [
@@ -511,6 +828,389 @@ export const AUTHORITY_CONTENT_PAGES: AuthorityPage[] = [
       { title: "Heart Failure Guidelines", source: "American Heart Association", url: "https://www.heart.org/" },
     ],
   },
+  {
+    category: "allied-careers",
+    slug: "respiratory-therapist-canada",
+    title: "How To Become A Respiratory Therapist In Canada",
+    deck: "A career guide for learners comparing respiratory therapy education, clinical placement expectations, registration, and practice settings.",
+    summary:
+      "Respiratory therapists support patients with acute and chronic breathing problems through assessment, oxygen therapy, airway management, mechanical ventilation, patient education, and interprofessional decision-making. This guide explains the pathway into respiratory therapy in Canada and connects career planning to clinical readiness.",
+    synonyms: ["RT career", "respiratory therapist Canada", "respiratory therapy school", "respiratory therapist licensing"],
+    clinicalReviewStatus: "under_review",
+    reviewer: {
+      name: "NurseNest Clinical Editorial Team",
+      credentials: "RN, RT Education Review",
+      specialty: "Respiratory Therapy Education",
+      reviewedAt: "2026-05-31",
+    },
+    governance: {
+      publishedAt: "2026-05-31",
+      updatedAt: "2026-05-31",
+      reviewCycleDue: "2026-11-30",
+      changeHistory: ["Initial allied health career authority seed page created."],
+    },
+    sections: [
+      {
+        id: "role",
+        title: "Role Overview",
+        body: [
+          "Respiratory therapists assess breathing, oxygenation, ventilation, airway safety, and response to respiratory treatments. Their work may include oxygen delivery, aerosol therapy, airway clearance, ventilator support, arterial blood gas interpretation, emergency response, and patient teaching.",
+          "The role is clinically demanding because small changes in respiratory status can signal deterioration. Learners should expect to connect physiology, equipment knowledge, patient assessment, and rapid communication with the healthcare team.",
+        ],
+      },
+      {
+        id: "education",
+        title: "Education And Registration Pathway",
+        body: [
+          "Most learners complete an accredited respiratory therapy program, supervised clinical placements, and the required registration or certification steps for their province or jurisdiction. Exact requirements vary, so applicants should verify details with the school, provincial regulator, and national credentialing body.",
+          "Strong applicants usually prepare in anatomy, physiology, cardiopulmonary science, patient communication, math for clinical calculations, and professional practice expectations before placement begins.",
+        ],
+      },
+      {
+        id: "readiness",
+        title: "Clinical Readiness Skills",
+        body: [
+          "High-value readiness areas include respiratory assessment, oxygen delivery devices, ventilator terminology, ABG interpretation, airway equipment, infection prevention, documentation, handoff communication, and recognition of unstable patients.",
+          "A student who can explain why oxygen saturation, work of breathing, CO2 retention, mental status, and breath sounds matter together is better prepared than a student who only memorizes device names.",
+        ],
+      },
+    ],
+    clinicalPearls: [
+      "Respiratory therapy readiness depends on linking oxygenation, ventilation, work of breathing, and patient trajectory.",
+      "Clinical placement success often comes from preparation, safe escalation, and clear communication more than perfect recall.",
+    ],
+    commonMistakes: [
+      "Choosing a program without confirming provincial registration requirements and placement expectations.",
+      "Studying respiratory equipment names without practicing the assessment cues that determine when equipment is needed.",
+    ],
+    faqs: [
+      {
+        question: "Is respiratory therapy only about ventilators?",
+        answer:
+          "No. Respiratory therapists support assessment, oxygen therapy, airway care, ABG interpretation, education, emergency response, and ventilator management when indicated.",
+      },
+      {
+        question: "What should I study before respiratory therapy placement?",
+        answer:
+          "Focus on respiratory assessment, oxygen delivery, ABGs, infection prevention, documentation, patient communication, and escalation of deterioration.",
+      },
+    ],
+    related: [
+      { label: "ABG Interpretation Guide", href: "/healthcare/allied-study/abg-interpretation-guide", category: "allied-study" },
+      { label: "Oxygen Administration", href: "/healthcare/clinical-skills/oxygen-administration", category: "clinical-skills" },
+      { label: "Potassium Interpretation", href: "/healthcare/labs/potassium", category: "labs" },
+    ],
+    references: [
+      { title: "National Competency Framework", source: "Canadian Society of Respiratory Therapists", url: "https://www.csrt.com/" },
+      { title: "Respiratory Therapy Profession", source: "Government of Canada Job Bank", url: "https://www.jobbank.gc.ca/" },
+    ],
+  },
+  {
+    category: "allied-study",
+    slug: "abg-interpretation-guide",
+    title: "ABG Interpretation Guide",
+    deck: "A respiratory and nursing study guide for interpreting pH, PaCO2, bicarbonate, oxygenation, compensation, and clinical context.",
+    summary:
+      "Arterial blood gas interpretation helps clinicians evaluate oxygenation, ventilation, acid-base status, and compensation. This guide teaches learners to reason through ABGs instead of memorizing isolated normal values.",
+    synonyms: ["ABG", "arterial blood gas", "acid base", "PaCO2", "HCO3"],
+    clinicalReviewStatus: "under_review",
+    reviewer: {
+      name: "NurseNest Clinical Editorial Team",
+      credentials: "RN, RT, Lab Interpretation Review",
+      specialty: "Respiratory And Laboratory Interpretation",
+      reviewedAt: "2026-05-31",
+    },
+    governance: {
+      publishedAt: "2026-05-31",
+      updatedAt: "2026-05-31",
+      reviewCycleDue: "2026-11-30",
+      changeHistory: ["Initial allied health study authority seed page created."],
+    },
+    sections: [
+      {
+        id: "framework",
+        title: "Interpretation Framework",
+        body: [
+          "Begin with pH to determine acidemia or alkalemia, then interpret PaCO2 for ventilation and bicarbonate for metabolic contribution. Finally, assess oxygenation and decide whether the patient picture matches the numbers.",
+          "ABGs are safest when interpreted with respiratory rate, work of breathing, oxygen delivery, mental status, lung sounds, perfusion, renal function, and current therapies.",
+        ],
+      },
+      {
+        id: "clinical-meaning",
+        title: "Clinical Meaning",
+        body: [
+          "A rising PaCO2 can signal hypoventilation, fatigue, severe obstructive disease, oversedation, or respiratory failure risk. A low bicarbonate may reflect metabolic acidosis from causes such as sepsis, renal failure, DKA, or severe diarrhea.",
+          "The priority is not naming the imbalance alone. The learner should ask whether the patient is compensating, deteriorating, requiring oxygen or ventilation support, or needing escalation.",
+        ],
+      },
+      {
+        id: "study-tips",
+        title: "Study And Exam Tips",
+        body: [
+          "Practice ABGs with a consistent sequence: pH, PaCO2, HCO3, compensation, oxygenation, patient context, priority action. This prevents jumping to an answer based on one value.",
+          "Exam questions often hide the priority in the assessment data: confusion, severe dyspnea, low oxygen saturation, hypotension, or worsening work of breathing can matter more than a mild abnormality.",
+        ],
+      },
+    ],
+    clinicalPearls: [
+      "ABG interpretation is a patient assessment skill, not a worksheet exercise.",
+      "CO2 retention with decreasing alertness is an escalation cue because ventilation may be failing.",
+    ],
+    commonMistakes: [
+      "Labeling respiratory acidosis without assessing whether the patient is tiring or needs ventilatory support.",
+      "Ignoring oxygenation because the acid-base label seems obvious.",
+    ],
+    faqs: [
+      {
+        question: "What is the first step in ABG interpretation?",
+        answer: "Start with pH to identify acidemia or alkalemia, then compare PaCO2 and bicarbonate to determine the primary process.",
+      },
+      {
+        question: "Why does patient context matter with ABGs?",
+        answer: "The same pattern can require different actions depending on oxygenation, mental status, respiratory effort, diagnosis, and trajectory.",
+      },
+    ],
+    related: [
+      { label: "Oxygen Administration", href: "/healthcare/clinical-skills/oxygen-administration", category: "clinical-skills" },
+      { label: "Respiratory Therapist Career Guide", href: "/healthcare/allied-careers/respiratory-therapist-canada", category: "allied-careers" },
+      { label: "Potassium Interpretation", href: "/healthcare/labs/potassium", category: "labs" },
+    ],
+    references: [
+      { title: "Arterial Blood Gas Analysis", source: "NCBI Bookshelf", url: "https://www.ncbi.nlm.nih.gov/books/" },
+      { title: "Oxygen Therapy Guidelines", source: "British Thoracic Society", url: "https://www.brit-thoracic.org.uk/" },
+    ],
+  },
+  {
+    category: "interview-prep",
+    slug: "nursing-interview-questions",
+    title: "50 Nursing Interview Questions",
+    deck: "A practical interview guide with model-answer structure, safety-focused examples, and mistakes to avoid.",
+    summary:
+      "Nursing interviews evaluate clinical judgment, communication, accountability, patient safety, teamwork, and readiness for the role. Strong answers use real examples, explain reasoning, and show how the nurse protects patients while learning.",
+    synonyms: ["nursing interview", "RN interview questions", "new grad nursing interview", "nurse interview answers"],
+    clinicalReviewStatus: "under_review",
+    reviewer: {
+      name: "NurseNest Clinical Editorial Team",
+      credentials: "RN, Clinical Education Review",
+      specialty: "Professional Practice",
+      reviewedAt: "2026-05-31",
+    },
+    governance: {
+      publishedAt: "2026-05-31",
+      updatedAt: "2026-05-31",
+      reviewCycleDue: "2026-11-30",
+      changeHistory: ["Initial interview preparation authority seed page created."],
+    },
+    sections: [
+      {
+        id: "question-types",
+        title: "Common Interview Question Types",
+        body: [
+          "Nursing interviews commonly include behavioral questions, patient-safety scenarios, conflict questions, prioritization prompts, communication examples, and questions about professional growth.",
+          "A strong answer names the situation, explains the nursing concern, describes the action taken, and reflects on what was learned or how patient safety was protected.",
+        ],
+      },
+      {
+        id: "model-answers",
+        title: "Model Answer Structure",
+        body: [
+          "Use a clear structure such as situation, task, action, result, and reflection. For clinical scenarios, add what you assessed first, how you escalated, who you communicated with, and how you evaluated the outcome.",
+          "For example, a question about a deteriorating patient should show assessment, ABC thinking, timely communication, documentation, and willingness to ask for help.",
+        ],
+      },
+      {
+        id: "preparation",
+        title: "Preparation Strategy",
+        body: [
+          "Prepare examples for teamwork, conflict, medication safety, patient education, time management, delegation, and handling a mistake. Each example should be honest and specific rather than scripted.",
+          "New graduates should emphasize safe practice, teachability, prioritization, and escalation. Experienced nurses should also demonstrate pattern recognition, leadership, and professional accountability.",
+        ],
+      },
+    ],
+    clinicalPearls: [
+      "Interview answers are stronger when they show how the nurse thinks, not just what the nurse did.",
+      "Patient safety examples should include assessment, communication, escalation, and follow-up.",
+    ],
+    commonMistakes: [
+      "Giving vague answers such as 'I am a team player' without a specific clinical example.",
+      "Describing a medication or safety mistake without explaining the corrective action and learning.",
+    ],
+    faqs: [
+      {
+        question: "How should a new nurse answer clinical scenario questions?",
+        answer:
+          "Use assessment-first reasoning, explain the priority concern, communicate early, ask for support when needed, and describe how you would evaluate the patient response.",
+      },
+      {
+        question: "Should interview answers include mistakes?",
+        answer:
+          "Yes, when framed professionally. Explain what happened, how patient safety was protected, what you learned, and how your practice changed.",
+      },
+    ],
+    related: [
+      { label: "Nursing Placement Survival Guide", href: "/healthcare/placements/nursing-placement-survival-guide", category: "placements" },
+      { label: "NCLEX-RN Study Guide", href: "/healthcare/certifications/nclex-rn-study-guide", category: "certifications" },
+      { label: "Heart Failure Care Plan", href: "/healthcare/care-plans/heart-failure-care-plan", category: "care-plans" },
+    ],
+    references: [
+      { title: "Professional Practice Guidance", source: "College of Nurses of Ontario", url: "https://www.cno.org/" },
+      { title: "Nursing Career Resources", source: "Government of Canada Job Bank", url: "https://www.jobbank.gc.ca/" },
+    ],
+  },
+  {
+    category: "placements",
+    slug: "nursing-placement-survival-guide",
+    title: "Nursing Placement Survival Guide",
+    deck: "A clinical placement guide for preparation, patient safety, communication, skill development, and reflective practice.",
+    summary:
+      "Nursing placement success depends on preparation, safe assessment habits, communication, accountability, and steady growth. This guide helps students understand what instructors and preceptors are looking for in real clinical environments.",
+    synonyms: ["clinical placement", "nursing placement", "clinical practicum", "student nurse placement"],
+    clinicalReviewStatus: "under_review",
+    reviewer: {
+      name: "NurseNest Clinical Editorial Team",
+      credentials: "RN, Clinical Education Review",
+      specialty: "Clinical Placement Readiness",
+      reviewedAt: "2026-05-31",
+    },
+    governance: {
+      publishedAt: "2026-05-31",
+      updatedAt: "2026-05-31",
+      reviewCycleDue: "2026-11-30",
+      changeHistory: ["Initial placement success authority seed page created."],
+    },
+    sections: [
+      {
+        id: "preparation",
+        title: "Before Placement",
+        body: [
+          "Review the unit population, common medications, infection prevention expectations, documentation system, scope limits, and escalation process. Preparation should focus on safe participation rather than trying to know everything.",
+          "Bring a plan for assessment, notes, questions, and post-shift reflection. Know which skills require direct supervision and clarify expectations before attempting anything unfamiliar.",
+        ],
+      },
+      {
+        id: "clinical-day",
+        title: "During The Clinical Day",
+        body: [
+          "Start with patient safety: identity checks, allergies, fall risk, vital signs, pain, respiratory status, lines and tubes, medication timing, and changes from baseline.",
+          "Communicate early when findings are concerning. Instructors and preceptors do not expect perfection, but they do expect honesty, safe boundaries, and timely escalation.",
+        ],
+      },
+      {
+        id: "growth",
+        title: "Reflection And Skill Growth",
+        body: [
+          "After each shift, identify one clinical judgment lesson, one communication lesson, and one skill to practice. This turns placement into deliberate learning instead of passive exposure.",
+          "The strongest students connect assessment findings to priorities, document clearly, ask focused questions, and show improvement from feedback.",
+        ],
+      },
+    ],
+    clinicalPearls: [
+      "Placement readiness is measured by safety, preparation, communication, and growth, not by pretending to know everything.",
+      "A focused assessment and timely escalation can matter more than completing a long task list.",
+    ],
+    commonMistakes: [
+      "Waiting until the end of shift to report a change in patient condition.",
+      "Treating feedback as criticism instead of using it to guide the next clinical day.",
+    ],
+    faqs: [
+      {
+        question: "What should I review before my first nursing placement?",
+        answer:
+          "Review unit basics, common diagnoses, medication safety, infection prevention, documentation expectations, communication tools, and when to ask for help.",
+      },
+      {
+        question: "What do preceptors expect from students?",
+        answer:
+          "They expect safe practice, preparation, honest communication, respect for scope, willingness to learn, and steady improvement.",
+      },
+    ],
+    related: [
+      { label: "50 Nursing Interview Questions", href: "/healthcare/interview-prep/nursing-interview-questions", category: "interview-prep" },
+      { label: "Oxygen Administration", href: "/healthcare/clinical-skills/oxygen-administration", category: "clinical-skills" },
+      { label: "Heart Failure", href: "/healthcare/conditions/heart-failure", category: "conditions" },
+    ],
+    references: [
+      { title: "Entry-To-Practice Competencies", source: "College of Nurses of Ontario", url: "https://www.cno.org/" },
+      { title: "Professional Standards", source: "Canadian Nurses Association", url: "https://www.cna-aiic.ca/" },
+    ],
+  },
+  {
+    category: "certifications",
+    slug: "nclex-rn-study-guide",
+    title: "NCLEX-RN Study Guide",
+    deck: "A certification guide for planning NCLEX-RN preparation around clinical judgment, safety, prioritization, and adaptive practice.",
+    summary:
+      "The NCLEX-RN evaluates whether a candidate can provide safe entry-level nursing care. A strong study plan combines content review, clinical judgment practice, rationales, NGN item types, readiness tracking, and remediation of weak areas.",
+    synonyms: ["NCLEX", "NCLEX-RN", "RN exam", "nursing board exam", "Next Generation NCLEX"],
+    clinicalReviewStatus: "under_review",
+    reviewer: {
+      name: "NurseNest Clinical Editorial Team",
+      credentials: "RN, NCLEX Education Review",
+      specialty: "Exam Preparation",
+      reviewedAt: "2026-05-31",
+    },
+    governance: {
+      publishedAt: "2026-05-31",
+      updatedAt: "2026-05-31",
+      reviewCycleDue: "2026-11-30",
+      changeHistory: ["Initial certification authority seed page created."],
+    },
+    sections: [
+      {
+        id: "exam-focus",
+        title: "What The Exam Measures",
+        body: [
+          "The NCLEX-RN is not just a recall exam. It evaluates safe nursing judgment, prioritization, assessment, intervention, teaching, delegation, and evaluation across client needs and clinical contexts.",
+          "Next Generation NCLEX items require learners to recognize cues, analyze data, prioritize hypotheses, generate solutions, take action, and evaluate outcomes.",
+        ],
+      },
+      {
+        id: "study-plan",
+        title: "Study Plan Framework",
+        body: [
+          "Begin with a baseline readiness check, then combine targeted lessons, flashcards, practice questions, NGN cases, CAT-style practice, and review of missed rationales. Weak areas should drive the plan rather than raw question volume alone.",
+          "High-yield content includes safety, infection control, pharmacology, maternal-child nursing, mental health, pediatrics, prioritization, delegation, labs, ECG basics, and clinical deterioration.",
+        ],
+      },
+      {
+        id: "readiness",
+        title: "Readiness And Remediation",
+        body: [
+          "Readiness should be judged by consistency, rationale understanding, confidence accuracy, performance by topic, and ability to explain why an answer is safest.",
+          "When practice reveals a weak area, remediation should connect the missed question to a lesson, flashcards, related conditions, medications, labs, and similar questions.",
+        ],
+      },
+    ],
+    clinicalPearls: [
+      "A missed question becomes useful only when the learner understands the cue they missed and the priority they should have recognized.",
+      "Strong NCLEX preparation balances content knowledge with clinical judgment and test-taking discipline.",
+    ],
+    commonMistakes: [
+      "Doing large numbers of questions without reviewing rationales deeply.",
+      "Studying only body systems while neglecting delegation, safety, prioritization, and communication.",
+    ],
+    faqs: [
+      {
+        question: "How should I start studying for the NCLEX-RN?",
+        answer:
+          "Start with a readiness baseline, identify weak areas, build a structured plan, practice NGN item types, and review rationales until you can explain the reasoning.",
+      },
+      {
+        question: "Are flashcards enough for NCLEX-RN preparation?",
+        answer:
+          "Flashcards help retention, but they should be combined with practice questions, rationales, lessons, and clinical judgment activities.",
+      },
+    ],
+    related: [
+      { label: "Heart Failure", href: "/healthcare/conditions/heart-failure", category: "conditions" },
+      { label: "50 Nursing Interview Questions", href: "/healthcare/interview-prep/nursing-interview-questions", category: "interview-prep" },
+      { label: "Nursing Placement Survival Guide", href: "/healthcare/placements/nursing-placement-survival-guide", category: "placements" },
+    ],
+    references: [
+      { title: "NCLEX-RN Examination", source: "National Council of State Boards of Nursing", url: "https://www.ncsbn.org/" },
+      { title: "Entry-Level RN Competencies", source: "Canadian Council of Registered Nurse Regulators", url: "https://www.ccrnr.ca/" },
+    ],
+  },
 ];
 
 export function getAuthorityPages(): AuthorityPage[] {
@@ -523,6 +1223,150 @@ export function getAuthorityPagesByCategory(category: AuthorityContentCategory):
 
 export function getAuthorityPage(category: string, slug: string): AuthorityPage | null {
   return AUTHORITY_CONTENT_PAGES.find((page) => page.category === category && page.slug === slug) ?? null;
+}
+
+export function authorityContentPath(page: Pick<AuthorityPage, "category" | "slug">): string {
+  return `/healthcare/${page.category}/${page.slug}`;
+}
+
+export function listAuthorityContentPaths(): string[] {
+  return ["/healthcare", ...getAuthorityPages().map((page) => authorityContentPath(page))];
+}
+
+function countWords(text: string): number {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function authorityPageText(page: AuthorityPage): string {
+  return [
+    page.title,
+    page.deck,
+    page.summary,
+    ...page.synonyms,
+    ...page.sections.flatMap((section) => [section.id, section.title, ...section.body]),
+    ...page.clinicalPearls,
+    ...page.commonMistakes,
+    ...page.faqs.flatMap((faq) => [faq.question, faq.answer]),
+    ...page.related.map((link) => link.label),
+    ...page.references.flatMap((reference) => [reference.title, reference.source]),
+  ].join(" ");
+}
+
+function normalizedIncludes(text: string, needle: string): boolean {
+  const normalizedText = text.toLowerCase().replace(/[^a-z0-9]+/g, " ");
+  const normalizedNeedle = needle.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  return normalizedText.includes(normalizedNeedle);
+}
+
+function clampScore(value: number): number {
+  return Math.max(0, Math.min(100, Math.round(value)));
+}
+
+export function validateClinicalAuthorityStandard(page: AuthorityPage): ClinicalAuthorityAudit {
+  const profile = CLINICAL_AUTHORITY_STANDARD[page.category];
+  const text = authorityPageText(page);
+  const wordCount = countWords(text);
+  const missingElements = profile.requiredElements.filter((element) => !normalizedIncludes(text, element));
+  const requiredCoverage = ((profile.requiredElements.length - missingElements.length) / Math.max(1, profile.requiredElements.length)) * 100;
+  const relatedCategories = new Set(page.related.map((link) => link.category).filter(Boolean));
+  const productLinks = page.related.filter((link) => !link.href.startsWith("/healthcare"));
+  const issues: string[] = [];
+
+  if (wordCount < profile.wordTarget.min) issues.push("below_minimum_depth_target");
+  if (missingElements.length > 0) issues.push("missing_required_clinical_elements");
+  if (page.references.length < 3) issues.push("needs_stronger_reference_set");
+  if (page.related.length < 8) issues.push("needs_deeper_internal_linking");
+  if (productLinks.length < 2) issues.push("needs_product_learning_links");
+  if (page.clinicalReviewStatus !== "clinically_reviewed") issues.push("requires_clinical_review");
+
+  const dimensionScores = {
+    clinicalDepth: clampScore((wordCount / profile.wordTarget.min) * 100),
+    educationalValue: clampScore(requiredCoverage),
+    practicalUtility: clampScore(((page.clinicalPearls.length + page.commonMistakes.length + page.faqs.length) / 10) * 100),
+    examRelevance: clampScore(
+      ["nclex", "rex pn", "exam", "practice question", "knowledge check"].some((term) => normalizedIncludes(text, term)) ? 100 : 35,
+    ),
+    clinicalAccuracy: clampScore((Math.min(page.references.length, 5) / 5) * 70 + (page.reviewer.credentials ? 30 : 0)),
+    internalLinking: clampScore((Math.min(page.related.length, 8) / 8) * 65 + (Math.min(relatedCategories.size, 5) / 5) * 20 + (Math.min(productLinks.length, 2) / 2) * 15),
+    eeatReadiness: clampScore(
+      (page.reviewer.name ? 20 : 0) +
+        (page.reviewer.credentials ? 20 : 0) +
+        (page.reviewer.specialty ? 15 : 0) +
+        (page.reviewer.reviewedAt ? 15 : 0) +
+        (page.governance.updatedAt ? 15 : 0) +
+        (page.governance.reviewCycleDue ? 15 : 0),
+    ),
+    contentCompleteness: clampScore(requiredCoverage * 0.7 + (wordCount >= profile.wordTarget.min ? 30 : 0)),
+  };
+  const score = clampScore(
+    Object.values(dimensionScores).reduce((sum, value) => sum + value, 0) / Object.values(dimensionScores).length,
+  );
+
+  return {
+    score,
+    minimumPublicationScore: CLINICAL_AUTHORITY_MINIMUM_PUBLICATION_SCORE,
+    publishReady:
+      score >= CLINICAL_AUTHORITY_MINIMUM_PUBLICATION_SCORE &&
+      issues.length === 0 &&
+      missingElements.length === 0 &&
+      wordCount >= profile.wordTarget.min,
+    wordCount,
+    targetWordRange: `${profile.wordTarget.min}-${profile.wordTarget.max}`,
+    missingElements,
+    issues,
+    dimensionScores,
+  };
+}
+
+export function buildAuthorityContentDashboard(): {
+  generatedAt: string;
+  totalPublishedPages: number;
+  totalPhaseOneTarget: number;
+  totalLongTermTarget: number;
+  rows: AuthorityDashboardRow[];
+} {
+  const rows = (Object.keys(AUTHORITY_CONTENT_PHASE_TARGETS) as AuthorityContentCategory[]).map((category) => {
+    const target = AUTHORITY_CONTENT_PHASE_TARGETS[category];
+    const pages = getAuthorityPagesByCategory(category);
+    const qualityResults = pages.map((page) => validateAuthorityPage(page));
+    const clinicalAuthorityAudits = pages.map((page) => validateClinicalAuthorityStandard(page));
+    const eeatReady = qualityResults.filter((result) => result.publishReady).length;
+    const clinicalAuthorityReady = clinicalAuthorityAudits.filter((result) => result.publishReady).length;
+    const internalLinkAverage =
+      Math.round((pages.reduce((sum, page) => sum + page.related.length, 0) / Math.max(1, pages.length)) * 10) / 10;
+    const eeatCoverage = Math.round((eeatReady / Math.max(1, pages.length)) * 100);
+    const schemaCoverage = pages.length > 0 ? 100 : 0;
+    const clinicalAuthorityCoverage = Math.round((clinicalAuthorityReady / Math.max(1, pages.length)) * 100);
+    const averageClinicalAuthorityScore = Math.round(
+      clinicalAuthorityAudits.reduce((sum, audit) => sum + audit.score, 0) / Math.max(1, clinicalAuthorityAudits.length),
+    );
+    const linkedToMonetization = pages.filter((page) =>
+      page.related.some((link) => !link.href.startsWith("/healthcare") || link.category === "question" || link.category === "flashcard"),
+    ).length;
+    const monetizationCoverage = Math.round((linkedToMonetization / Math.max(1, pages.length)) * 100);
+
+    return {
+      ...target,
+      title: AUTHORITY_CATEGORY_META[category].title,
+      publishedPages: pages.length,
+      draftGap: Math.max(0, target.phaseOneTarget - pages.length),
+      pagesAwaitingReview: pages.filter((page) => page.clinicalReviewStatus === "under_review").length,
+      internalLinkAverage,
+      eeatCoverage,
+      schemaCoverage,
+      clinicalAuthorityCoverage,
+      averageClinicalAuthorityScore,
+      monetizationReadiness: monetizationCoverage >= 80 ? "strong" : monetizationCoverage >= 40 ? "developing" : "foundation",
+    };
+  });
+
+  return {
+    generatedAt: new Date().toISOString(),
+    totalPublishedPages: rows.reduce((sum, row) => sum + row.publishedPages, 0),
+    totalPhaseOneTarget: rows.reduce((sum, row) => sum + row.phaseOneTarget, 0),
+    totalLongTermTarget: rows.reduce((sum, row) => sum + row.longTermTarget, 0),
+    rows,
+  };
 }
 
 export function searchAuthorityContent(query: string, limit = 8): AuthorityPage[] {
@@ -570,6 +1414,7 @@ export function buildAuthorityBreadcrumbs(page?: AuthorityPage) {
 export function buildAuthorityJsonLd(page: AuthorityPage) {
   const path = `/healthcare/${page.category}/${page.slug}`;
   const url = absoluteUrl(path);
+  const organizationId = `${absoluteUrl("/")}#organization`;
   return [
     {
       "@context": "https://schema.org",
@@ -587,9 +1432,7 @@ export function buildAuthorityJsonLd(page: AuthorityPage) {
         knowsAbout: page.reviewer.specialty,
       },
       publisher: {
-        "@type": "Organization",
-        name: "NurseNest",
-        url: absoluteUrl("/"),
+        "@id": organizationId,
       },
       about: page.synonyms.map((name) => ({ "@type": "MedicalCondition", name })),
       citation: page.references.map((reference) => reference.url),
@@ -608,6 +1451,39 @@ export function buildAuthorityJsonLd(page: AuthorityPage) {
         name: faq.question,
         acceptedAnswer: { "@type": "Answer", text: faq.answer },
       })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "@id": `${url}#article`,
+      headline: page.title,
+      description: page.summary,
+      datePublished: page.governance.publishedAt,
+      dateModified: page.governance.updatedAt,
+      author: {
+        "@type": "Organization",
+        name: "NurseNest Clinical Editorial Team",
+      },
+      reviewedBy: {
+        "@type": "Person",
+        name: page.reviewer.name,
+        honorificSuffix: page.reviewer.credentials,
+        knowsAbout: page.reviewer.specialty,
+      },
+      publisher: {
+        "@id": organizationId,
+      },
+      mainEntityOfPage: {
+        "@id": `${url}#webpage`,
+      },
+      citation: page.references.map((reference) => reference.url),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": organizationId,
+      name: "NurseNest",
+      url: absoluteUrl("/"),
     },
   ];
 }

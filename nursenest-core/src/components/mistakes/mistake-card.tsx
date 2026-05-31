@@ -10,6 +10,7 @@ import {
   type MistakeEntry,
   type MistakeReason,
 } from "@/lib/mistakes/mistake-types";
+import type { MissedQuestionRecommendation } from "@/lib/mistakes/missed-question-recommendations";
 
 const ROLE_DOT_COLOR: Record<string, string> = {
   info:        "var(--semantic-info)",
@@ -66,6 +67,7 @@ function MissCountBadge({ count }: { count: number }) {
 type Props = {
   entry: MistakeEntry;
   drillHref?: string | null;
+  recommendations?: MissedQuestionRecommendation[];
   onTagSaved?: (questionId: string, reason: MistakeReason | null, note: string) => void;
 };
 
@@ -73,7 +75,7 @@ type Props = {
  * Premium mistake entry card.
  * Shows stem preview, badges, expandable rationale, and inline tag picker.
  */
-export function MistakeCard({ entry, drillHref, onTagSaved }: Props) {
+export function MistakeCard({ entry, drillHref, recommendations = [], onTagSaved }: Props) {
   const [expanded, setExpanded] = useState(false);
   const [showTagger, setShowTagger] = useState(false);
   const [localReason, setLocalReason] = useState<MistakeReason | null>(entry.reason);
@@ -191,6 +193,12 @@ export function MistakeCard({ entry, drillHref, onTagSaved }: Props) {
             initialReason={localReason}
             initialNote={localNote}
             topic={entry.topic}
+            sourceType={entry.sourceType}
+            stemPreview={entry.stemPreview}
+            bodySystem={entry.bodySystem}
+            questionType={entry.questionType}
+            sourceHref={entry.sourceHref}
+            pathwayId={entry.pathwayId}
             onSaved={handleTagSaved}
           />
         </div>
@@ -302,6 +310,20 @@ export function MistakeCard({ entry, drillHref, onTagSaved }: Props) {
             Study topic
           </Link>
         )}
+        {recommendations.map((item) => (
+          <Link
+            key={`${entry.questionId}-${item.kind}`}
+            href={item.href}
+            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-opacity hover:opacity-80"
+            style={{
+              background: "var(--semantic-surface)",
+              color: "var(--semantic-text-secondary)",
+              border: "1px solid var(--semantic-border-soft)",
+            }}
+          >
+            {item.label}
+          </Link>
+        ))}
       </div>
     </article>
   );

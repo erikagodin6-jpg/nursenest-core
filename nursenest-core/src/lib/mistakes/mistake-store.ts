@@ -7,7 +7,7 @@
 
 import { prisma } from "@/lib/db";
 import { LearnerNoteScope } from "@prisma/client";
-import type { MistakeEntry, MistakeReason, MistakeTagBody } from "./mistake-types";
+import { MISTAKE_REASONS, type MistakeEntry, type MistakeReason, type MistakeTagBody } from "./mistake-types";
 import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
 const MISTAKE_PREFIX = "mistake:";
@@ -24,7 +24,14 @@ export async function loadMistakeNotebook(userId: string): Promise<MistakeEntry[
     take: MAX_RECENT_TESTS,
   });
 
-  if (tests.length === 0) return [];
+  const tagRows = await prisma.learnerNote.findMany({
+    where: {
+      userId,
+      scope: LearnerNoteScope.QUESTION_BANK,
+      contextId: { startsWith: MISTAKE_PREFIX },
+    },
+    select: { contextId: true, body: true, topic: true, createdAt: true, updatedAt: true },
+  });
 
   // 2. Aggregate missed question IDs across all tests
   const questionMissMap = new Map<string, { missCount: number; lastMissedAt: string; sourceIds: string[] }>();
@@ -45,13 +52,17 @@ export async function loadMistakeNotebook(userId: string): Promise<MistakeEntry[
     }
   }
 
-  if (questionMissMap.size === 0) return [];
-
   // Cap to most-frequently-missed questions
-  const sortedIds = [...questionMissMap.entries()]
+  const taggedQuestionIds = tagRows.map((row) => row.contextId.slice(MISTAKE_PREFIX.length)).filter(Boolean);
+  const sortedIds = [...new Set([
+    ...[...questionMissMap.entries()]
     .sort((a, b) => b[1].missCount - a[1].missCount)
     .slice(0, MAX_UNIQUE_QUESTIONS)
-    .map(([id]) => id);
+      .map(([id]) => id),
+    ...taggedQuestionIds,
+  ])].slice(0, MAX_UNIQUE_QUESTIONS);
+
+  if (sortedIds.length === 0) return [];
 
   // 3. Load question details in one query
   const questions = await prisma.examQuestion.findMany({
@@ -68,49 +79,54 @@ export async function loadMistakeNotebook(userId: string): Promise<MistakeEntry[
     },
   });
 
-  if (questions.length === 0) return [];
-
-  // 4. Load user reason tags from LearnerNote
-  const tagContextIds = sortedIds.map((id) => `${MISTAKE_PREFIX}${id}`);
-  const tagRows = await prisma.learnerNote.findMany({
-    where: {
-      userId,
-      scope: LearnerNoteScope.QUESTION_BANK,
-      contextId: { in: tagContextIds },
-    },
-    select: { contextId: true, body: true },
-  });
-
   const tagMap = new Map<string, MistakeTagBody>();
   for (const row of tagRows) {
     const qId = row.contextId.slice(MISTAKE_PREFIX.length);
     try {
       const parsed = JSON.parse(row.body) as MistakeTagBody;
-      tagMap.set(qId, { reason: parsed.reason ?? null, note: parsed.note ?? "" });
+      const reason = MISTAKE_REASONS.includes(parsed.reason as MistakeReason) ? parsed.reason : null;
+      tagMap.set(qId, {
+        reason,
+        note: parsed.note ?? "",
+        sourceType: parsed.sourceType ?? null,
+        stemPreview: parsed.stemPreview ?? null,
+        topic: parsed.topic ?? row.topic ?? null,
+        bodySystem: parsed.bodySystem ?? null,
+        questionType: parsed.questionType ?? null,
+        sourceHref: parsed.sourceHref ?? null,
+        pathwayId: parsed.pathwayId ?? null,
+        createdAt: parsed.createdAt ?? row.createdAt.toISOString(),
+      });
     } catch {
       tagMap.set(qId, { reason: null, note: "" });
     }
   }
 
   // 5. Merge into MistakeEntry[]
-  const entries: MistakeEntry[] = questions.map((q) => {
-    const missData = questionMissMap.get(q.id) ?? { missCount: 1, lastMissedAt: new Date().toISOString(), sourceIds: [] };
-    const tag = tagMap.get(q.id);
+  const questionById = new Map(questions.map((q) => [q.id, q]));
+  const entries: MistakeEntry[] = sortedIds.map((questionId) => {
+    const q = questionById.get(questionId);
+    const tag = tagMap.get(questionId);
+    const fallbackMissedAt = tag?.createdAt ?? new Date().toISOString();
+    const effectiveMissData = questionMissMap.get(questionId) ?? { missCount: 1, lastMissedAt: fallbackMissedAt, sourceIds: [] };
     return {
-      questionId: q.id,
-      stemPreview: (typeof q.stem === "string" ? q.stem : "").slice(0, 300),
-      topic: q.topic ?? null,
-      bodySystem: (q.bodySystem as string | null) ?? null,
-      questionType: (q.questionType as string | null) ?? null,
-      rationale: q.rationale ?? null,
-      options: q.options,
-      correctAnswer: q.correctAnswer,
-      missCount: missData.missCount,
-      lastMissedAt: missData.lastMissedAt,
+      questionId,
+      stemPreview: (typeof q?.stem === "string" ? q.stem : tag?.stemPreview ?? "Missed study item").slice(0, 300),
+      topic: q?.topic ?? tag?.topic ?? null,
+      bodySystem: (q?.bodySystem as string | null) ?? tag?.bodySystem ?? null,
+      questionType: (q?.questionType as string | null) ?? tag?.questionType ?? null,
+      rationale: q?.rationale ?? null,
+      options: q?.options ?? null,
+      correctAnswer: q?.correctAnswer ?? null,
+      missCount: effectiveMissData.missCount,
+      lastMissedAt: effectiveMissData.lastMissedAt,
       reason: tag?.reason ?? null,
       note: tag?.note ?? "",
-      tagged: tagMap.has(q.id),
-      sourceIds: missData.sourceIds,
+      tagged: tagMap.has(questionId),
+      sourceIds: effectiveMissData.sourceIds,
+      sourceType: tag?.sourceType ?? null,
+      sourceHref: tag?.sourceHref ?? null,
+      pathwayId: tag?.pathwayId ?? null,
     };
   });
 
@@ -131,17 +147,28 @@ export async function upsertMistakeTag(
   topic?: string | null,
 ): Promise<void> {
   const contextId = `${MISTAKE_PREFIX}${questionId}`;
-  const body = JSON.stringify({ reason: tag.reason, note: tag.note });
+  const body = JSON.stringify({
+    reason: tag.reason,
+    note: tag.note,
+    sourceType: tag.sourceType ?? null,
+    stemPreview: tag.stemPreview ?? null,
+    topic: tag.topic ?? topic ?? null,
+    bodySystem: tag.bodySystem ?? null,
+    questionType: tag.questionType ?? null,
+    sourceHref: tag.sourceHref ?? null,
+    pathwayId: tag.pathwayId ?? null,
+    createdAt: tag.createdAt ?? new Date().toISOString(),
+  });
   await prisma.learnerNote.upsert({
     where: { userId_scope_contextId: { userId, scope: LearnerNoteScope.QUESTION_BANK, contextId } },
     create: {
       userId,
       scope: LearnerNoteScope.QUESTION_BANK,
       contextId,
-      topic: topic ?? null,
+      topic: tag.topic ?? topic ?? null,
       body,
     },
-    update: { body, topic: topic ?? undefined },
+    update: { body, topic: tag.topic ?? topic ?? undefined },
   });
 }
 

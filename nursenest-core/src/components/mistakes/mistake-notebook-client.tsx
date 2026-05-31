@@ -12,6 +12,7 @@ import {
   type MistakeNotebookData,
   type MistakeReason,
 } from "@/lib/mistakes/mistake-types";
+import { buildMissedQuestionRecommendations } from "@/lib/mistakes/missed-question-recommendations";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -169,11 +170,11 @@ function EmptyState() {
         aria-hidden="true"
       />
       <h3 className="mt-4 text-base font-bold" style={{ color: "var(--semantic-text-primary)" }}>
-        No mistakes yet
+        No missed questions yet
       </h3>
       <p className="mt-2 max-w-xs text-sm" style={{ color: "var(--semantic-text-muted)" }}>
-        Complete a practice test or CAT session to populate your Mistake Notebook automatically.
-        Missed questions will appear here for review and tagging.
+        Incorrect answers from flashcards, practice questions, and CAT sessions will appear here
+        once you tag why you missed them.
       </p>
     </div>
   );
@@ -251,6 +252,18 @@ export function MistakeNotebookClient({ initialData, drillHrefForTopic }: Props)
         <StatPill label="Untagged" value={untaggedCount} color="var(--semantic-warning)" />
         <StatPill label="Recurring (×3+)" value={entries.filter((e) => e.missCount >= 3).length} color="var(--semantic-danger)" />
       </div>
+
+      {data.mostCommonErrorType ? (
+        <section className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 sm:p-5">
+          <p className="text-xs font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">Most common error type</p>
+          <h2 className="mt-1 text-lg font-bold text-[var(--semantic-text-primary)]">
+            {MISTAKE_REASON_LABELS[data.mostCommonErrorType.reason]}
+          </h2>
+          <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
+            {data.mostCommonErrorType.count} tagged miss{data.mostCommonErrorType.count !== 1 ? "es" : ""}. Use this pattern to choose whether you need content review, slower reading, calculation practice, or shorter focused sets.
+          </p>
+        </section>
+      ) : null}
 
       {/* Pattern card */}
       <MistakePatternCard data={data} onFilterReason={handleFilterReason} />
@@ -350,6 +363,10 @@ export function MistakeNotebookClient({ initialData, drillHrefForTopic }: Props)
                       key={entry.questionId}
                       entry={entry}
                       drillHref={entry.topic ? drillHrefForTopic(entry.topic) : null}
+                      recommendations={buildMissedQuestionRecommendations({
+                        topic: entry.topic,
+                        pathwayId: entry.pathwayId,
+                      })}
                       onTagSaved={handleTagSaved}
                     />
                   ))}

@@ -11,6 +11,12 @@ const tagSchema = z.object({
   reason: z.enum(MISTAKE_REASONS as [string, ...string[]]).nullable(),
   note: z.string().max(2000).default(""),
   topic: z.string().max(200).optional().nullable(),
+  sourceType: z.string().max(80).optional().nullable(),
+  stemPreview: z.string().max(500).optional().nullable(),
+  bodySystem: z.string().max(120).optional().nullable(),
+  questionType: z.string().max(120).optional().nullable(),
+  sourceHref: z.string().max(500).optional().nullable(),
+  pathwayId: z.string().max(120).optional().nullable(),
 });
 
 /** POST /api/learner/mistakes — upsert a reason tag + note for a missed question */
@@ -31,7 +37,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "validation failed", issues: parsed.error.issues }, { status: 422 });
   }
 
-  const { questionId, reason, note, topic } = parsed.data;
+  const { questionId, reason, note, topic, sourceType, stemPreview, bodySystem, questionType, sourceHref, pathwayId } = parsed.data;
 
   // If reason is null and note is empty, remove the tag entirely
   if (reason === null && note.trim() === "") {
@@ -42,7 +48,17 @@ export async function POST(req: NextRequest) {
   await upsertMistakeTag(
     gate.userId,
     questionId,
-    { reason: (reason as MistakeReason | null), note },
+    {
+      reason: (reason as MistakeReason | null),
+      note,
+      sourceType,
+      stemPreview,
+      topic,
+      bodySystem,
+      questionType,
+      sourceHref,
+      pathwayId,
+    },
     topic,
   );
 

@@ -9,7 +9,7 @@ export const ALLIED_HEALTH_FAQ_JSONLD: FaqJsonLdItem[] = [
   {
     question: "How are Allied Health pathways different from Nursing pathways on NurseNest?",
     answer:
-      "Allied Health pathways use occupation-specific questions, lessons, clinical scenarios, rationales, and competency domains scoped to your profession's scope of practice. Content is not shared with or adapted from nursing hubs — a Respiratory Therapist sees ventilator management and ABG content, not NCLEX-RN pharmacology.",
+      "Allied Health pathways use a separate entitlement layer from nursing hubs, with profession-specific questions, lessons, and rationales. Core professions like Respiratory Therapy, MLT, Physiotherapy, Occupational Therapy, Social Work, and Psychotherapy have dedicated lesson catalogs. Content depth and separation varies by profession — check your pathway page for current coverage.",
   },
   {
     question: "Are clinical simulations available for allied health learners?",
@@ -19,7 +19,7 @@ export const ALLIED_HEALTH_FAQ_JSONLD: FaqJsonLdItem[] = [
   {
     question: "How does readiness scoring work for allied health?",
     answer:
-      "Readiness signals combine domain mastery bands, question accuracy trends, competency progression, and study momentum across your specific profession's competency areas. For RT learners this means ventilation, oxygenation, and ABG domains; for paramedics it covers trauma, cardiac, and medical emergencies.",
+      "Readiness signals combine domain accuracy trends, question performance, weak-area patterns, and study momentum. Signals are scoped to your allied pathway and build toward profession-specific competency framing as content depth grows for each discipline.",
   },
   {
     question: "Are profession-specific rationales included with practice questions?",

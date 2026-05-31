@@ -10,7 +10,10 @@ import {
 } from "@/components/pathway-lessons/lesson-board-metadata";
 import { LessonRow } from "@/components/pathway-lessons/lesson-row";
 import { marketingLessonsTopicClusterPath } from "@/lib/lessons/lesson-routes";
-import { primaryLessonSystemTopicSlug } from "@/lib/lessons/lesson-system-navigation";
+import {
+  primaryLessonSystemTopicSlug,
+  resolveLessonSystemNavigationTarget,
+} from "@/lib/lessons/lesson-system-navigation";
 import { pathwayLessonYieldLabel } from "@/lib/lessons/pathway-lesson-yield";
 import type {
   PathwayLessonSystemSection,
@@ -48,9 +51,11 @@ export function LessonSystemCard({
     : { completedCount: 0, inProgressCount: 0, percentComplete: 0 };
   const previewLessons = linkableLessons.slice(0, LESSON_SYSTEM_PREVIEW);
   const hiddenLessonCount = Math.max(0, linkableLessons.length - previewLessons.length);
-  const systemTopicSlug =
-    linkableLessons.find((lesson) => lesson.topicSlug?.trim())?.topicSlug?.trim() ??
-    primaryLessonSystemTopicSlug(section.systemLabel);
+  const mappedSystemTopicSlug = resolveLessonSystemNavigationTarget(section.systemLabel)?.primaryTopicSlug ?? null;
+  const systemTopicSlug = mappedSystemTopicSlug
+    ?? linkableLessons.find((lesson) => lesson.topicSlug?.trim())?.topicSlug?.trim()
+    ?? primaryLessonSystemTopicSlug(section.systemLabel)
+    ?? null;
   const systemHref = systemTopicSlug ? marketingLessonsTopicClusterPath(lessonsBasePath, systemTopicSlug) : lessonsBasePath;
 
   return (
@@ -59,6 +64,9 @@ export function LessonSystemCard({
       style={systemStyle}
       className="nn-qa-pathway-lessons-group nn-lesson-system-card rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]"
       aria-labelledby={`lesson-system-card-${section.id}`}
+      data-lesson-system-card={section.systemLabel}
+      data-lesson-system-href={systemHref}
+      data-lesson-system-slug={systemTopicSlug ?? ""}
     >
       {/* Accent stripe across the top — 3px, inner radius matches card (xl=12px minus 1px border). */}
       <div className="h-[3px] w-full rounded-t-[11px] bg-[var(--nn-system-accent)] opacity-60" aria-hidden />
@@ -131,8 +139,9 @@ export function LessonSystemCard({
         {hiddenLessonCount > 0 ? (
           <div className="mt-2 flex items-center justify-between border-t border-[var(--semantic-border-soft)] pt-2">
             <Link
-              href={`${lessonsBasePath}#pathway-lesson-library`}
+              href={systemHref}
               className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
+              data-testid={`lesson-system-view-all-${section.systemLabel}`}
             >
               <span>+{hiddenLessonCount} more</span>
               <ChevronRight className="h-3 w-3" aria-hidden />

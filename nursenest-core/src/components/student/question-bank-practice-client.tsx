@@ -33,6 +33,8 @@ import { QuestionChoiceLetter } from "@/components/student/question-choice-lette
 import { QuestionBankPeerPerformancePanel } from "@/components/student/question-bank-peer-performance-panel";
 import { QuestionSessionStudyLoopPanel } from "@/components/student/question-session-study-loop-panel";
 import { ShowSimilarQuestions } from "@/components/questions/show-similar-questions";
+import { MissedQuestionReflection } from "@/components/mistakes/missed-question-reflection";
+import { TeachMeThisPanel } from "@/components/teach-me-this/teach-me-this-panel";
 import { ExamProgressBar, ExamSessionShell, ExamSessionStickyChrome, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import { learnerExamLayoutRefinementProps } from "@/lib/exam-workspace/unified-exam-workspace";
@@ -1899,6 +1901,23 @@ export function QuestionBankPracticeClient({
                             }}
                             compact
                           />
+                          {!g.correct ? (
+                            <div className="mt-3">
+                              <MissedQuestionReflection
+                                questionId={current.id}
+                                questionText={current.stem}
+                                topic={current.topic ?? current.subtopic ?? null}
+                                pathwayId={pathwayIdFilter ?? defaultPathwayId ?? null}
+                                sourceType={/pharm/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)
+                                  ? "pharmacology_question"
+                                  : /clinical skill|procedure|competenc/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)
+                                    ? "clinical_skills_question"
+                                    : "practice_question"}
+                                questionType={current.questionType ?? current.questionFormat ?? null}
+                                compact
+                              />
+                            </div>
+                          ) : null}
                         </>
                       }
                     />

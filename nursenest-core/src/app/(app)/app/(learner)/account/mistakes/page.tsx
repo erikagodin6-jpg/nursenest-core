@@ -25,7 +25,7 @@ import { OPEN_STUDY_HUB_CTA } from "@/lib/copy/cta-copy";
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => ({
-      title: "Mistake Notebook — NurseNest",
+      title: "Missed Question Journal — NurseNest",
       robots: { index: false, follow: false },
     }),
     { pathname: "/app/account/mistakes", routeGroup: "student.learner.account_mistakes" },
@@ -35,15 +35,15 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MistakeNotebookPage() {
   const session = await getProtectedRouteSession("(student).app.(learner).account.mistakes");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs("Mistake Notebook");
+  const crumbs = appAccountBreadcrumbs("Missed Question Journal");
 
   // ── Auth guard ──────────────────────────────────────────────────────────────
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Mistake Notebook" pathname="/app/account" />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Missed Question Journal" pathname="/app/account" />
         <PremiumEmptyState
-          headline="Mistake Notebook"
+          headline="Missed Question Journal"
           body="We are checking your learner session. Return to the study hub and try again if this does not refresh."
           primaryCta={{
             label: OPEN_STUDY_HUB_CTA,
@@ -63,7 +63,7 @@ export default async function MistakeNotebookPage() {
   if (entitlement === "error" || !entitlement.hasAccess) {
     const gate = (
       <div className="space-y-6">
-        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Mistake Notebook" pathname="/app/account" />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Missed Question Journal" pathname="/app/account" />
         <SubscriptionPaywall context="lessons" />
       </div>
     );
@@ -89,7 +89,7 @@ export default async function MistakeNotebookPage() {
 
   return (
     <div className="space-y-8">
-      <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Mistake Notebook" pathname="/app/account" />
+      <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Missed Question Journal" pathname="/app/account" />
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <header
@@ -117,18 +117,18 @@ export default async function MistakeNotebookPage() {
               className="text-xs font-bold uppercase tracking-widest"
               style={{ color: "var(--semantic-danger)" }}
             >
-              Mistake Notebook
+              Missed Question Journal
             </span>
           </div>
           <h1
             className="mt-2 text-2xl font-black sm:text-3xl"
             style={{ color: "var(--semantic-text-primary)" }}
           >
-            Learn from your errors
+            Learn from every missed question
           </h1>
           <p className="mt-2 max-w-lg text-sm" style={{ color: "var(--semantic-text-secondary)" }}>
-            Every missed question is data. Tag your mistakes, spot your patterns, and target exactly
-            what&apos;s holding you back — the way UWorld doesn&apos;t.
+            Tag why you missed an item, spot recurring patterns, and get targeted lessons,
+            flashcards, and practice sets for the concepts that need attention.
           </p>
 
           {data.hasHistoricalData && data.totalMisses > 0 ? (

@@ -37,6 +37,11 @@ const CATEGORY_ICONS: Record<AuthorityContentCategory, typeof HeartPulse> = {
   "clinical-skills": Stethoscope,
   labs: FlaskConical,
   "care-plans": ClipboardCheck,
+  "allied-careers": Stethoscope,
+  "allied-study": BookOpenCheck,
+  "interview-prep": Search,
+  placements: ClipboardCheck,
+  certifications: ShieldCheck,
 };
 
 export default async function HealthcareAuthorityIndexPage({

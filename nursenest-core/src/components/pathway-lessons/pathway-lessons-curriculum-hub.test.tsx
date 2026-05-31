@@ -44,6 +44,9 @@ describe("PathwayLessonsCurriculumHub", () => {
     );
     assert.match(html, /id="cardiovascular"/);
     assert.match(html, /id="respiratory"/);
+    assert.match(html, /data-lesson-system-card="cardiovascular"/);
+    assert.match(html, /data-lesson-system-href="\/us\/rn\/nclex-rn\/lessons\?topicSlug=cardiovascular"/);
+    assert.match(html, /aria-label="Open Cardiovascular lessons"/);
     assert.match(html, /grid grid-cols-1 gap-4/);
   });
 
@@ -187,6 +190,8 @@ describe("PathwayLessonsCurriculumHub", () => {
     assert.match(html, /data-testid="lesson-card-link"/);
     assert.match(html, /nn-qa-pathway-lesson-card/);
     assert.match(html, /Clinical Topic 1/);
+    assert.match(html, /data-testid="lesson-system-view-all-cardiovascular"/);
+    assert.match(html, /href="\/canada\/rn\/nclex-rn\/lessons\?topicSlug=cardiovascular"/);
     assert.match(html, /text-\[var\(--theme-body-text\)\]/);
   });
 

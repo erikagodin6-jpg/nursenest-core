@@ -12,6 +12,8 @@ import { AdaptiveCaseSimulationPanel } from "@/components/questions/adaptive-cas
 import { ShowSimilarQuestions } from "@/components/questions/show-similar-questions";
 import { SaveToNotebookButton } from "@/components/notebook/save-to-notebook-button";
 import { QuestionBookmarkButton } from "@/components/bookmarks/question-bookmark-button";
+import { MissedQuestionReflection } from "@/components/mistakes/missed-question-reflection";
+import { TeachMeThisPanel } from "@/components/teach-me-this/teach-me-this-panel";
 import {
   buildSimpleCorrectRationale,
   buildSimpleDistractorRationale,
@@ -445,39 +447,54 @@ export function FlashcardStudyQuestionStack({
               ) : null}
 
               {revealed && (exam || sata) ? (
-                <div className="nn-flashcard-answer-status">
-                  <div className="min-w-0">
-                    <div className={`inline-flex items-center gap-2 font-semibold ${
-                      exam && submittedLetter && submittedLetter !== exam.correctLetter
-                        ? "text-[var(--semantic-danger)]"
-                        : "text-[var(--semantic-success)]"
-                    }`}>
-                      {exam && submittedLetter && submittedLetter !== exam.correctLetter ? (
-                        <XCircle className="h-5 w-5" aria-hidden />
-                      ) : (
-                        <CheckCircle2 className="h-5 w-5" aria-hidden />
-                      )}
-                      <span>
-                        {exam && submittedLetter
-                          ? submittedLetter === exam.correctLetter
-                            ? "Correct"
-                            : "Incorrect"
-                          : "Answer submitted"}
-                      </span>
+                <>
+                  <div className="nn-flashcard-answer-status">
+                    <div className="min-w-0">
+                      <div className={`inline-flex items-center gap-2 font-semibold ${
+                        exam && submittedLetter && submittedLetter !== exam.correctLetter
+                          ? "text-[var(--semantic-danger)]"
+                          : "text-[var(--semantic-success)]"
+                      }`}>
+                        {exam && submittedLetter && submittedLetter !== exam.correctLetter ? (
+                          <XCircle className="h-5 w-5" aria-hidden />
+                        ) : (
+                          <CheckCircle2 className="h-5 w-5" aria-hidden />
+                        )}
+                        <span>
+                          {exam && submittedLetter
+                            ? submittedLetter === exam.correctLetter
+                              ? "Correct"
+                              : "Incorrect"
+                            : "Answer submitted"}
+                        </span>
+                      </div>
+                      <p>
+                        {exam
+                          ? buildResultFeedback({ exam, submittedLetter, topicLine, correctRationale: resolvedCorrectRationale })
+                          : "Review the rationale, then choose how this card should return."}
+                      </p>
                     </div>
-                    <p>
-                      {exam
-                        ? buildResultFeedback({ exam, submittedLetter, topicLine, correctRationale: resolvedCorrectRationale })
-                        : "Review the rationale, then choose how this card should return."}
-                    </p>
+                    {onAdvance ? (
+                      <button type="button" className="nn-flashcard-next-inline" onClick={onAdvance}>
+                        Next
+                        <ChevronRight className="h-4 w-4" aria-hidden />
+                      </button>
+                    ) : null}
                   </div>
-                  {onAdvance ? (
-                    <button type="button" className="nn-flashcard-next-inline" onClick={onAdvance}>
-                      Next
-                      <ChevronRight className="h-4 w-4" aria-hidden />
-                    </button>
+                  {exam && submittedLetter && submittedLetter !== exam.correctLetter ? (
+                    <div className="mt-4">
+                      <MissedQuestionReflection
+                        questionId={questionBookmark?.sourceId ?? `flashcard:${exam.questionStem.slice(0, 96)}`}
+                        questionText={exam.questionStem}
+                        topic={questionBookmark?.topic ?? topicLine ?? null}
+                        pathwayId={questionBookmark?.pathwayId ?? null}
+                        sourceType="flashcard"
+                        questionType="flashcard_mcq"
+                        compact
+                      />
+                    </div>
                   ) : null}
-                </div>
+                </>
               ) : null}
             </article>
 
@@ -668,6 +685,24 @@ export function FlashcardStudyQuestionStack({
                       examPathwayLabel={examPathwayLabel}
                       onRationaleOpened={onRationaleOpened}
                     />
+                    <div className="mt-3">
+                      <TeachMeThisPanel
+                        topic={notebookTopic}
+                        questionStem={exam?.questionStem ?? sata?.questionStem ?? promptBody}
+                        correctAnswer={exam ? correctAnswerSummary(exam) : answer}
+                        rationale={resolvedCorrectRationale || explanation}
+                        clinicalPearl={clinicalPearlText}
+                        examTip={nclexTakeawayText}
+                        memoryHook={memoryHookText}
+                        lessonHref={questionBookmark?.sourceHref ?? null}
+                        triggerReason={
+                          exam && submittedLetter && submittedLetter !== exam.correctLetter
+                            ? "incorrect"
+                            : "request"
+                        }
+                        compact
+                      />
+                    </div>
                     {revealLinksSection ? (
                       <div className="mt-3" data-testid="flashcard-reveal-links">
                         {revealLinksSection}

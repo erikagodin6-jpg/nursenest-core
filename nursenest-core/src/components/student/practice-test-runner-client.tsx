@@ -117,6 +117,8 @@ import { captureClientException } from "@/lib/runtime/client-observability";
 import { PracticeTestRunPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { QuestionBookmarkButton } from "@/components/bookmarks/question-bookmark-button";
 import { ShowSimilarQuestions } from "@/components/questions/show-similar-questions";
+import { MissedQuestionReflection } from "@/components/mistakes/missed-question-reflection";
+import { TeachMeThisPanel } from "@/components/teach-me-this/teach-me-this-panel";
 import {
   PracticeAdaptivePostMissPanel,
   type PracticeAdaptivePostMissPayload,
@@ -3975,6 +3977,40 @@ export function PracticeTestRunnerClient({
                             }}
                             compact
                           />
+                          <div className="mt-3">
+                            <TeachMeThisPanel
+                              topic={linearFeedback.topic ?? current.topic ?? null}
+                              subtopic={current.subtopic ?? null}
+                              questionStem={current.stem}
+                              correctAnswer={linearFeedback.correctKeys
+                                ?.map((key) => optionDisplayMap[key] ?? key)
+                                .join(", ")}
+                              rationale={linearFeedback.correctAnswerExplanation ?? linearFeedback.rationale ?? null}
+                              clinicalPearl={linearFeedback.clinicalPearlDisplay ?? null}
+                              examTip={linearFeedback.keyTakeaway ?? null}
+                              lessonHref={linearFeedback.relatedLessons?.[0]?.href ?? null}
+                              lessonTitle={linearFeedback.relatedLessons?.[0]?.title ?? null}
+                              triggerReason={!linearFeedback.isCorrect
+                                ? "incorrect"
+                                : confidenceTrackingEnabled && confidence[current.id] === "low"
+                                  ? "low_confidence"
+                                  : "request"}
+                              compact
+                            />
+                          </div>
+                          {!linearFeedback.isCorrect ? (
+                            <div className="mt-3">
+                              <MissedQuestionReflection
+                                questionId={current.id}
+                                questionText={current.stem}
+                                topic={linearFeedback.topic ?? current.topic ?? null}
+                                pathwayId={testConfig?.pathwayId ?? pathwaySurface?.id ?? null}
+                                sourceType={catMode ? "cat_exam" : "practice_question"}
+                                questionType={current.questionType ?? null}
+                                compact
+                              />
+                            </div>
+                          ) : null}
                         </div>
                       ) : null}
                       {practiceAdaptivePostMiss?.questionId === current.id ? (

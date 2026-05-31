@@ -624,8 +624,8 @@ const DIFFERENTIATORS = [
     tone: "--semantic-chart-1",
   },
   {
-    title: "Competency-Mapped Questions",
-    body: "Every question is mapped to your profession's certification blueprint domains — readiness scores reflect actual exam readiness, not just overall accuracy.",
+    title: "Domain-Categorized Questions",
+    body: "Questions are categorized by clinical domain within your allied pathway — so weak-area routing and readiness signals stay relevant to your scope of practice.",
     icon: Target,
     tone: "--semantic-warning",
   },
@@ -989,7 +989,7 @@ const ALLIED_FAQ_ITEMS = [
   },
   {
     q: "How does readiness scoring work for allied health?",
-    a: "Readiness signals combine domain mastery bands, question accuracy trends, competency progression, and study momentum — all mapped to your specific profession's certification blueprint domains.",
+    a: "Readiness signals combine domain accuracy trends, question performance, weak-area patterns, and study momentum. Signals are scoped to your allied pathway and build toward profession-specific competency framing as content depth grows for each discipline.",
   },
   {
     q: "Are profession-specific rationales included with questions?",

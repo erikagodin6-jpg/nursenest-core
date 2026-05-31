@@ -40,7 +40,7 @@ export const LEARNER_ACCOUNT_NAV_GROUPS: readonly LearnerAccountNavGroup[] = [
       { href: "/app/account/cat-history", key: "learner.account.nav.catHistory" },
       { href: "/app/review", key: "learner.account.nav.smartReview" },
       { href: "/app/account/review-queue", key: "learner.account.nav.reviewQueue" },
-      { href: "/app/account/mistakes", key: "learner.account.nav.mistakeNotebook" },
+      { href: "/app/account/missed-question-journal", key: "learner.account.nav.mistakeNotebook" },
       { href: "/app/account/notes", key: "learner.account.nav.notesHighlights" },
     ],
   },

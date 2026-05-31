@@ -98,6 +98,7 @@ import {
   ALLIED_PROFESSION_QUERY_PARAM,
   isAlliedMarketingCorePathwayId,
 } from "@/lib/lessons/canonical-lessons-hubs";
+import { lessonSystemTopicSlugCandidates } from "@/lib/lessons/lesson-system-navigation";
 import {
   ALLIED_TAXONOMY_QUERY_PARAM,
   alliedProfessionTaxonomyMetaDescription,
@@ -220,6 +221,12 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const topicSlugNorm = normalizeMarketingLessonsHubTopicSlug(
     typeof sp.topicSlug === "string" ? sp.topicSlug : undefined,
   );
+  const topicSlugCandidates = topicSlugNorm ? lessonSystemTopicSlugCandidates(topicSlugNorm) : [];
+  const topicSlugsForList = topicSlugNorm
+    ? topicSlugCandidates.length > 0
+      ? topicSlugCandidates
+      : [topicSlugNorm]
+    : undefined;
   const page = Math.max(1, Number(sp.page ?? "1") || 1);
   return safeGenerateMetadata(
     async () => {
@@ -407,31 +414,31 @@ export default async function PathwayLessonsHubPage({
     const exclusive = exclusiveTopicSlugsForAlliedProfession(pathway.id, alliedProfessionResolved.professionKey);
     const drill =
       !alliedTaxonomyNorm &&
-      topicSlugNorm &&
-      exclusive.includes(topicSlugNorm.trim().toLowerCase())
-        ? [topicSlugNorm.trim().toLowerCase()]
+      topicSlugNorm && topicSlugsForList
+        ? topicSlugsForList.filter((slug) => exclusive.includes(slug.trim().toLowerCase()))
         : undefined;
+    const scopedDrill = drill && drill.length > 0 ? drill : undefined;
     const tax = alliedTaxonomyNorm ? [alliedTaxonomyNorm] : undefined;
     listOpts = qEffective
       ? {
           q: qEffective,
           alliedProfessionKey: alliedProfessionResolved.professionKey,
-          ...(drill ? { topicSlugsIn: drill } : {}),
+          ...(scopedDrill ? { topicSlugsIn: scopedDrill } : {}),
           ...(tax ? { taxonomySlugsIn: tax } : {}),
         }
       : {
           alliedProfessionKey: alliedProfessionResolved.professionKey,
-          ...(drill ? { topicSlugsIn: drill } : {}),
+          ...(scopedDrill ? { topicSlugsIn: scopedDrill } : {}),
           ...(tax ? { taxonomySlugsIn: tax } : {}),
         };
   } else {
     listOpts =
       qEffective && topicSlugNorm
-        ? { q: qEffective, topicSlugsIn: [topicSlugNorm] }
+        ? { q: qEffective, topicSlugsIn: topicSlugsForList ?? [topicSlugNorm] }
         : qEffective
           ? { q: qEffective }
           : topicSlugNorm
-            ? { topicSlugsIn: [topicSlugNorm] }
+            ? { topicSlugsIn: topicSlugsForList ?? [topicSlugNorm] }
             : undefined;
   }
 
