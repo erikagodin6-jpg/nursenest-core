@@ -613,6 +613,24 @@ export function FlashcardStudyQuestionStack({
                         </details>
                       );
                     })()}
+                    <div className="mt-3">
+                      <TeachMeThisPanel
+                        topic={notebookTopic}
+                        questionStem={exam.questionStem}
+                        correctAnswer={correctAnswerSummary(exam)}
+                        rationale={resolvedCorrectRationale || explanation}
+                        clinicalPearl={clinicalPearlText}
+                        examTip={nclexTakeawayText}
+                        memoryHook={memoryHookText}
+                        lessonHref={questionBookmark?.sourceHref ?? null}
+                        triggerReason={
+                          submittedLetter && submittedLetter !== exam.correctLetter
+                            ? "incorrect"
+                            : "request"
+                        }
+                        compact
+                      />
+                    </div>
                     {revealLinksSection ? (
                       <div className="mt-3" data-testid="flashcard-reveal-links">
                         {revealLinksSection}
@@ -688,18 +706,14 @@ export function FlashcardStudyQuestionStack({
                     <div className="mt-3">
                       <TeachMeThisPanel
                         topic={notebookTopic}
-                        questionStem={exam?.questionStem ?? sata?.questionStem ?? promptBody}
-                        correctAnswer={exam ? correctAnswerSummary(exam) : answer}
-                        rationale={resolvedCorrectRationale || explanation}
+                        questionStem={promptBody}
+                        correctAnswer={answer}
+                        rationale={explanation}
                         clinicalPearl={clinicalPearlText}
                         examTip={nclexTakeawayText}
                         memoryHook={memoryHookText}
                         lessonHref={questionBookmark?.sourceHref ?? null}
-                        triggerReason={
-                          exam && submittedLetter && submittedLetter !== exam.correctLetter
-                            ? "incorrect"
-                            : "request"
-                        }
+                        triggerReason="request"
                         compact
                       />
                     </div>

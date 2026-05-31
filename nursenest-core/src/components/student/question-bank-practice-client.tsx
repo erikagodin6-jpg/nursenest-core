@@ -1880,6 +1880,24 @@ export function QuestionBankPracticeClient({
                       recommendationsSlot={
                         <>
                           {learningLoopRecommendations}
+                          <TeachMeThisPanel
+                            topic={current.topic ?? current.subtopic ?? null}
+                            subtopic={current.subtopic ?? null}
+                            questionStem={current.stem}
+                            correctAnswer={g.correctKeys
+                              ?.map((key) => optsDisplayClinical[optsCanonical.indexOf(key)] ?? key)
+                              .join(", ")}
+                            rationale={gradedRationaleForPanel?.rationale ?? g.rationale}
+                            clinicalPearl={g.clinicalPearl ?? null}
+                            lessonHref={rationaleLessonLinksMerged[0]?.href ?? g.learningLoop?.lessonHref ?? null}
+                            lessonTitle={rationaleLessonLinksMerged[0]?.title ?? null}
+                            triggerReason={!g.correct
+                              ? "incorrect"
+                              : confidence[current.id] === "low"
+                                ? "low_confidence"
+                                : "request"}
+                            compact
+                          />
                           <ShowSimilarQuestions
                             context={{
                               sourceType: /pharm/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)

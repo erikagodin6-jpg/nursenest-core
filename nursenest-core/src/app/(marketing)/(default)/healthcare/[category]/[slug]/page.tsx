@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CalendarClock, CheckCircle2, ExternalLink, Link2, ShieldCheck } from "lucide-react";
+import { ArrowRight, CalendarClock, CheckCircle2, ExternalLink, Link2, Lock, ShieldCheck } from "lucide-react";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import {
   AUTHORITY_CATEGORY_META,
+  buildAuthorityPremiumFunnel,
   buildAuthorityBreadcrumbs,
   buildAuthorityJsonLd,
   getAuthorityPage,
@@ -53,6 +54,7 @@ export default async function HealthcareAuthorityDetailPage({ params }: Props) {
   const quality = validateAuthorityPage(page);
   const breadcrumbs = buildAuthorityBreadcrumbs(page);
   const jsonLd = buildAuthorityJsonLd(page);
+  const premiumFunnel = buildAuthorityPremiumFunnel(page);
 
   return (
     <main className="bg-[var(--theme-page-bg)] text-[var(--theme-body-text)]">
@@ -133,6 +135,43 @@ export default async function HealthcareAuthorityDetailPage({ params }: Props) {
                     <summary className="cursor-pointer font-bold text-[var(--theme-heading-text)]">{faq.question}</summary>
                     <p className="mt-3 text-sm leading-6 text-[var(--theme-body-text)]">{faq.answer}</p>
                   </details>
+                ))}
+              </div>
+            </section>
+
+            <section className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <h2 className="text-2xl font-bold text-[var(--theme-heading-text)]">Train This Topic In NurseNest</h2>
+                  <p className="mt-2 text-sm leading-6 text-[var(--theme-muted-text)]">
+                    Public guides explain the topic. Premium activities help learners practice, apply, and measure readiness.
+                  </p>
+                </div>
+                <span className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-1 text-xs font-bold text-[var(--theme-muted-text)]">
+                  Subscription Required
+                </span>
+              </div>
+              <div className="mt-5 grid gap-3 md:grid-cols-2">
+                {premiumFunnel.map((item) => (
+                  <Link
+                    key={item.type}
+                    href={item.href}
+                    className="group rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] p-4 transition hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--semantic-brand)_32%,var(--semantic-border-soft))] hover:shadow-[var(--shadow-elevated)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] p-2 text-[var(--semantic-brand)]">
+                        <Lock className="h-4 w-4" aria-hidden />
+                      </span>
+                      <div>
+                        <h3 className="font-bold text-[var(--theme-heading-text)] group-hover:text-[var(--semantic-brand)]">{item.title}</h3>
+                        <p className="mt-1 text-sm leading-6 text-[var(--theme-muted-text)]">{item.description}</p>
+                        <p className="mt-3 inline-flex items-center gap-2 text-xs font-bold text-[var(--semantic-brand)]">
+                          {item.previewLabel}
+                          <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
                 ))}
               </div>
             </section>

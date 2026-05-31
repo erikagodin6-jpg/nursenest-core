@@ -70,9 +70,210 @@ export type AuthorityContentTarget = {
   monetizationPath: string;
 };
 
+export type AuthorityTrafficOpportunity = "high" | "medium" | "low";
+
+export type AuthorityPremiumContentType =
+  | "lesson"
+  | "flashcards"
+  | "questions"
+  | "cat-exam"
+  | "study-plan"
+  | "simulation"
+  | "care-plan-builder"
+  | "clinical-skill";
+
+export type AuthorityPremiumFunnelCard = {
+  type: AuthorityPremiumContentType;
+  title: string;
+  description: string;
+  href: string;
+  previewLabel: string;
+  access: "subscription_required";
+};
+
+export type AuthorityRoadmapEntry = {
+  category: AuthorityContentCategory;
+  slug: string;
+  title: string;
+  topicCluster: string;
+  profession: "nursing" | "rt" | "paramedic" | "mlt" | "ot" | "pt" | "np" | "allied";
+  trafficOpportunity: AuthorityTrafficOpportunity;
+  monetizationIntent: "exam-prep" | "clinical-readiness" | "career-discovery" | "tool-conversion";
+};
+
+export type AuthorityTopicClusterPriority = 1 | 2;
+
+export type AuthorityClusterSupportingPage = {
+  slug: string;
+  title: string;
+  pageType:
+    | "pathophysiology"
+    | "symptoms"
+    | "assessment"
+    | "diagnostics"
+    | "labs"
+    | "imaging"
+    | "pharmacology"
+    | "patient-education"
+    | "complications"
+    | "clinical-skills"
+    | "care-plan"
+    | "case-study"
+    | "exam-prep"
+    | "simulation"
+    | "clinical-reasoning"
+    | "common-mistakes"
+    | "professional-practice"
+    | "career"
+    | "certification"
+    | "placement"
+    | "interview";
+  monetizationIntent: "exam-prep" | "clinical-readiness" | "career-discovery" | "tool-conversion";
+};
+
+export type AuthorityTopicCluster = {
+  id: string;
+  pillarTitle: string;
+  pillarSlug: string;
+  profession: AuthorityRoadmapEntry["profession"];
+  priority: AuthorityTopicClusterPriority;
+  pillarWordTarget: { min: number; max: number };
+  supportingWordTarget: { min: number; max: number };
+  targetSupportingPages: { min: number; max: number };
+  trafficPotential: AuthorityTrafficOpportunity;
+  revenuePotential: AuthorityTrafficOpportunity;
+  supportingPages: AuthorityClusterSupportingPage[];
+  relatedClusterIds: string[];
+};
+
+export type AuthorityClusterDashboardRow = {
+  id: string;
+  pillarTitle: string;
+  profession: AuthorityRoadmapEntry["profession"];
+  priority: AuthorityTopicClusterPriority;
+  targetSupportingPages: string;
+  plannedSupportingPages: number;
+  publishedPages: number;
+  clusterCompletion: number;
+  internalLinkingScore: number;
+  keywordCoverage: number;
+  trafficPotential: AuthorityTrafficOpportunity;
+  revenuePotential: AuthorityTrafficOpportunity;
+  eeatScore: number;
+  monetizationReadiness: "foundation" | "developing" | "strong";
+  publicationReadiness: number;
+};
+
+export type ContentProductionWorkflowStage =
+  | "keyword_opportunity"
+  | "cluster_assignment"
+  | "content_brief"
+  | "outline_creation"
+  | "draft_creation"
+  | "clinical_expansion"
+  | "internal_linking"
+  | "qa_review"
+  | "clinical_review"
+  | "eeat_review"
+  | "publication"
+  | "performance_monitoring";
+
+export type ContentBrief = {
+  primaryKeyword: string;
+  secondaryKeywords: string[];
+  relatedQuestions: string[];
+  searchIntent: "informational" | "commercial" | "clinical-learning" | "career";
+  targetAudience: string[];
+  clusterAssignment: string;
+  internalLinkTargets: string[];
+  eeatRequirements: string[];
+  conversionOpportunities: AuthorityPremiumContentType[];
+  suggestedWordCount: { min: number; max: number };
+  suggestedMedia: string[];
+  difficultyLevel: "foundational" | "intermediate" | "advanced";
+  commercialIntent: "low" | "medium" | "high";
+  trafficOpportunityScore: number;
+  revenueOpportunityScore: number;
+};
+
+export type ContentOutline = {
+  title: string;
+  slug: string;
+  clusterAssignment: string;
+  sections: string[];
+  scenarioRequirements: string[];
+  internalLinkRequirements: string[];
+  mediaRequirements: string[];
+};
+
+export type ContentQualityScore = {
+  score: number;
+  threshold: number;
+  publishReady: boolean;
+  revisionReasons: string[];
+  dimensions: {
+    clinicalAccuracy: number;
+    educationalValue: number;
+    readability: number;
+    practicalUtility: number;
+    examRelevance: number;
+    alliedHealthRelevance: number;
+    internalLinking: number;
+    conversionPotential: number;
+    eeatStrength: number;
+    publicationReadiness: number;
+  };
+};
+
+export type ContentCalendarItem = {
+  window: "30-day" | "90-day" | "180-day" | "365-day";
+  title: string;
+  category: AuthorityContentCategory;
+  clusterAssignment: string;
+  priorityReason: string;
+  trafficOpportunityScore: number;
+  revenueOpportunityScore: number;
+};
+
+export type AlliedHealthProductionQueue = {
+  profession: AuthorityRoadmapEntry["profession"];
+  pagesPlanned: number;
+  pagesDrafted: number;
+  pagesReviewed: number;
+  pagesPublished: number;
+  trafficPotential: AuthorityTrafficOpportunity;
+  clusterCompletion: number;
+};
+
+export type SeoPerformanceSnapshot = {
+  impressions: number;
+  clicks: number;
+  ctr: number;
+  averagePosition: number | null;
+  indexedPages: number;
+  keywordCoverage: number;
+  clusterCoverage: number;
+  internalLinkCoverage: number;
+  organicTraffic: number;
+  trafficGrowth: number;
+  conversionRate: number;
+  revenueAttribution: number;
+};
+
+export type ContentProductionDashboard = {
+  workflowStages: ContentProductionWorkflowStage[];
+  briefsReady: number;
+  outlinesReady: number;
+  calendarItems: number;
+  alliedQueues: AlliedHealthProductionQueue[];
+  performanceSnapshot: SeoPerformanceSnapshot;
+  topicalAuthorityScores: Array<{ cluster: string; score: number; target: number }>;
+};
+
 export type AuthorityDashboardRow = AuthorityContentTarget & {
   title: string;
   publishedPages: number;
+  plannedPages: number;
   draftGap: number;
   pagesAwaitingReview: number;
   internalLinkAverage: number;
@@ -80,6 +281,10 @@ export type AuthorityDashboardRow = AuthorityContentTarget & {
   schemaCoverage: number;
   clinicalAuthorityCoverage: number;
   averageClinicalAuthorityScore: number;
+  keywordCoverage: number;
+  professionCoverage: number;
+  topicCoverage: number;
+  estimatedTrafficOpportunity: AuthorityTrafficOpportunity;
   monetizationReadiness: "foundation" | "developing" | "strong";
 };
 
@@ -108,7 +313,224 @@ export type ClinicalAuthorityAudit = {
   };
 };
 
+export type AuthorityLayerProfession =
+  | "nursing"
+  | "rpn-lpn"
+  | "np"
+  | "rt"
+  | "paramedic"
+  | "ot"
+  | "pt"
+  | "mlt"
+  | "psw";
+
+export type AuthorityBodySystem =
+  | "cardiovascular"
+  | "respiratory"
+  | "neurology"
+  | "endocrine"
+  | "renal"
+  | "gi"
+  | "hematology"
+  | "oncology"
+  | "mental-health"
+  | "pediatrics"
+  | "maternal-child";
+
+export type AuthorityLearningAssetType =
+  | "lessons"
+  | "flashcards"
+  | "questions"
+  | "cat"
+  | "ngn"
+  | "simulations"
+  | "clinical-skills"
+  | "labs"
+  | "pharmacology"
+  | "care-plans"
+  | "concept-maps"
+  | "clinical-reasoning-pathways";
+
+export type AuthorityNetworkNodeType =
+  | "profession"
+  | "system"
+  | "condition"
+  | "asset"
+  | "content-page"
+  | "topic-cluster"
+  | "specialty-hub"
+  | "allied-hub"
+  | "certification-hub"
+  | "concept";
+
+export type AuthorityKnowledgeNode = {
+  id: string;
+  label: string;
+  type: AuthorityNetworkNodeType;
+  href?: string;
+  metadata?: Record<string, string | number | boolean>;
+};
+
+export type AuthorityKnowledgeEdge = {
+  sourceId: string;
+  targetId: string;
+  relationship:
+    | "belongs_to"
+    | "covers"
+    | "supports"
+    | "links_to"
+    | "remediates_with"
+    | "trains_with"
+    | "assesses_with"
+    | "requires_review";
+  strength: "core" | "strong" | "supporting";
+};
+
+export type AuthoritySpecialtyHub = {
+  id: string;
+  title: string;
+  canonicalPath: string;
+  systemIds: AuthorityBodySystem[];
+  clusterIds: string[];
+  assetTypes: AuthorityLearningAssetType[];
+  priorityTopics: string[];
+};
+
+export type AuthorityAlliedHub = {
+  profession: Extract<AuthorityLayerProfession, "rt" | "paramedic" | "ot" | "pt" | "mlt" | "psw">;
+  title: string;
+  canonicalPath: string;
+  sections: string[];
+  clusterIds: string[];
+  assetTypes: AuthorityLearningAssetType[];
+};
+
+export type AuthorityCertificationHub = {
+  id: string;
+  title: string;
+  profession: AuthorityLayerProfession;
+  market: "Canada" | "United States" | "Future Allied";
+  canonicalPath: string;
+  clusterIds: string[];
+  assetTypes: AuthorityLearningAssetType[];
+};
+
+export type CanadianAdvantageNetworkEntry = {
+  id: string;
+  title: string;
+  profession: AuthorityLayerProfession;
+  opportunity: string;
+  priority: "highest" | "high" | "medium";
+  relatedHubIds: string[];
+};
+
+export type AuthorityScoreSnapshot = {
+  id: string;
+  label: string;
+  scope: "topic" | "system" | "profession" | "certification" | "specialty";
+  score: number;
+  target: number;
+  drivers: string[];
+};
+
+export type AuthorityGapReport = {
+  missingTopics: string[];
+  missingRelationships: string[];
+  weakClusters: string[];
+  weakHubs: string[];
+  weakInternalLinking: string[];
+  underservedProfessions: string[];
+  underservedCertifications: string[];
+};
+
+export type AuthorityJourneyStep = {
+  title: string;
+  href: string;
+  type: AuthorityNetworkNodeType | AuthorityLearningAssetType;
+  access: "public" | "subscription_required";
+};
+
 export const CLINICAL_AUTHORITY_MINIMUM_PUBLICATION_SCORE = 90;
+
+export const SEO_MONETIZATION_GUARDRAILS = {
+  freeContent: [
+    "Disease pages",
+    "Medication pages",
+    "Lab interpretation pages",
+    "Career guides",
+    "Certification guides",
+    "Placement guides",
+    "Interview guides",
+    "Clinical skill overviews",
+    "Basic care plan examples",
+    "Educational articles",
+  ],
+  premiumContent: [
+    "Question Banks",
+    "CAT Exams",
+    "NGN Questions",
+    "Bowtie Questions",
+    "Matrix Questions",
+    "Case Studies",
+    "Simulations",
+    "ECG Modules",
+    "Telemetry Modules",
+    "Advanced Labs",
+    "Advanced Pharmacology",
+    "Study Plans",
+    "Readiness Analytics",
+    "Adaptive Learning",
+    "Personalized Recommendations",
+    "Clinical Reasoning Pathways",
+    "Care Plan Builder",
+    "Concept Map Builder",
+    "Assignment Hub",
+    "Clinical Placement Tracking",
+    "Advanced Clinical Skills",
+  ],
+  previewAllowed: ["Counts", "Screenshots", "Learning objectives", "Sample content"],
+  conversionPrinciple:
+    "Public content answers what this is. Premium content answers whether the learner can actually perform it.",
+} as const;
+
+export const CONTENT_PRODUCTION_WORKFLOW: ContentProductionWorkflowStage[] = [
+  "keyword_opportunity",
+  "cluster_assignment",
+  "content_brief",
+  "outline_creation",
+  "draft_creation",
+  "clinical_expansion",
+  "internal_linking",
+  "qa_review",
+  "clinical_review",
+  "eeat_review",
+  "publication",
+  "performance_monitoring",
+];
+
+export const CONTENT_PRODUCTION_MINIMUM_SCORE = 90;
+
+export const CONTENT_MEDIA_REQUIREMENTS = [
+  "Illustrations",
+  "Diagrams",
+  "Tables",
+  "Algorithms",
+  "Clinical Flowcharts",
+  "Decision Trees",
+  "Infographics",
+  "Assessment Frameworks",
+];
+
+export const CONTENT_SCENARIO_REQUIREMENTS = [
+  "Patient Cases",
+  "Clinical Scenarios",
+  "Decision-Making Examples",
+  "Professional Practice Examples",
+  "Common Mistakes",
+  "Escalation Situations",
+  "Documentation Examples",
+  "Clinical Pearls",
+];
 
 export const AUTHORITY_CATEGORY_META: Record<
   AuthorityContentCategory,
@@ -248,6 +670,422 @@ export const AUTHORITY_CONTENT_PHASE_TARGETS: Record<AuthorityContentCategory, A
     monetizationPath: "Exam pathway hubs, pricing, trial CTAs, practice questions, CAT exams, and readiness dashboards.",
   },
 };
+
+export const AUTHORITY_CONTENT_ROADMAP: AuthorityRoadmapEntry[] = [
+  { category: "conditions", slug: "copd", title: "COPD", topicCluster: "Respiratory", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "conditions", slug: "asthma", title: "Asthma", topicCluster: "Respiratory", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "conditions", slug: "pneumonia", title: "Pneumonia", topicCluster: "Respiratory", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "conditions", slug: "pulmonary-embolism", title: "Pulmonary Embolism", topicCluster: "Respiratory", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "conditions", slug: "ards", title: "ARDS", topicCluster: "Critical Care", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "conditions", slug: "sepsis", title: "Sepsis", topicCluster: "Emergency", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "conditions", slug: "septic-shock", title: "Septic Shock", topicCluster: "Critical Care", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "conditions", slug: "stroke", title: "Stroke", topicCluster: "Neurological", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "conditions", slug: "transient-ischemic-attack", title: "TIA", topicCluster: "Neurological", profession: "nursing", trafficOpportunity: "medium", monetizationIntent: "exam-prep" },
+  { category: "conditions", slug: "atrial-fibrillation", title: "Atrial Fibrillation", topicCluster: "Cardiovascular", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "conditions", slug: "myocardial-infarction", title: "Myocardial Infarction", topicCluster: "Cardiovascular", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "conditions", slug: "acute-kidney-injury", title: "AKI", topicCluster: "Renal", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "conditions", slug: "chronic-kidney-disease", title: "CKD", topicCluster: "Renal", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "conditions", slug: "cirrhosis", title: "Cirrhosis", topicCluster: "Gastrointestinal", profession: "nursing", trafficOpportunity: "medium", monetizationIntent: "exam-prep" },
+  { category: "conditions", slug: "pancreatitis", title: "Pancreatitis", topicCluster: "Gastrointestinal", profession: "nursing", trafficOpportunity: "medium", monetizationIntent: "exam-prep" },
+  { category: "conditions", slug: "gi-bleed", title: "GI Bleed", topicCluster: "Gastrointestinal", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "conditions", slug: "diabetic-ketoacidosis", title: "DKA", topicCluster: "Endocrine", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "conditions", slug: "hyperosmolar-hyperglycemic-state", title: "HHS", topicCluster: "Endocrine", profession: "nursing", trafficOpportunity: "medium", monetizationIntent: "exam-prep" },
+  { category: "conditions", slug: "hyperkalemia", title: "Hyperkalemia", topicCluster: "Electrolytes", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "conditions", slug: "hyponatremia", title: "Hyponatremia", topicCluster: "Electrolytes", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "medications", slug: "metoprolol", title: "Metoprolol", topicCluster: "Cardiovascular Pharmacology", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "medications", slug: "digoxin", title: "Digoxin", topicCluster: "Cardiovascular Pharmacology", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "medications", slug: "heparin", title: "Heparin", topicCluster: "Anticoagulants", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "medications", slug: "warfarin", title: "Warfarin", topicCluster: "Anticoagulants", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "medications", slug: "apixaban", title: "Apixaban", topicCluster: "Anticoagulants", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "medications", slug: "insulin", title: "Insulin", topicCluster: "Endocrine Pharmacology", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "medications", slug: "vancomycin", title: "Vancomycin", topicCluster: "Antibiotics", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "medications", slug: "piperacillin-tazobactam", title: "Piperacillin-Tazobactam", topicCluster: "Antibiotics", profession: "nursing", trafficOpportunity: "medium", monetizationIntent: "clinical-readiness" },
+  { category: "medications", slug: "ceftriaxone", title: "Ceftriaxone", topicCluster: "Antibiotics", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "medications", slug: "metformin", title: "Metformin", topicCluster: "Endocrine Pharmacology", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "medications", slug: "lisinopril", title: "Lisinopril", topicCluster: "Cardiovascular Pharmacology", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "medications", slug: "losartan", title: "Losartan", topicCluster: "Cardiovascular Pharmacology", profession: "nursing", trafficOpportunity: "medium", monetizationIntent: "exam-prep" },
+  { category: "medications", slug: "amlodipine", title: "Amlodipine", topicCluster: "Cardiovascular Pharmacology", profession: "nursing", trafficOpportunity: "medium", monetizationIntent: "exam-prep" },
+  { category: "medications", slug: "atorvastatin", title: "Atorvastatin", topicCluster: "Cardiovascular Pharmacology", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "care-plans", slug: "copd-nursing-care-plan", title: "COPD Nursing Care Plan", topicCluster: "Respiratory Care Plans", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "tool-conversion" },
+  { category: "care-plans", slug: "pneumonia-nursing-care-plan", title: "Pneumonia Nursing Care Plan", topicCluster: "Respiratory Care Plans", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "tool-conversion" },
+  { category: "care-plans", slug: "stroke-nursing-care-plan", title: "Stroke Nursing Care Plan", topicCluster: "Neurological Care Plans", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "tool-conversion" },
+  { category: "care-plans", slug: "sepsis-nursing-care-plan", title: "Sepsis Nursing Care Plan", topicCluster: "Emergency Care Plans", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "tool-conversion" },
+  { category: "care-plans", slug: "diabetes-nursing-care-plan", title: "Diabetes Nursing Care Plan", topicCluster: "Endocrine Care Plans", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "tool-conversion" },
+  { category: "care-plans", slug: "dka-nursing-care-plan", title: "DKA Nursing Care Plan", topicCluster: "Endocrine Care Plans", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "tool-conversion" },
+  { category: "care-plans", slug: "postoperative-nursing-care-plan", title: "Postoperative Care Plan", topicCluster: "Surgical Care Plans", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "tool-conversion" },
+  { category: "labs", slug: "sodium", title: "Sodium Interpretation", topicCluster: "Electrolytes", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "labs", slug: "troponin", title: "Troponin Interpretation", topicCluster: "Cardiac Markers", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "labs", slug: "bnp", title: "BNP Interpretation", topicCluster: "Cardiac Markers", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "labs", slug: "lactate", title: "Lactate Interpretation", topicCluster: "Sepsis Labs", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "labs", slug: "hemoglobin", title: "Hemoglobin Interpretation", topicCluster: "CBC", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "labs", slug: "platelets", title: "Platelet Interpretation", topicCluster: "CBC", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "labs", slug: "creatinine", title: "Creatinine Interpretation", topicCluster: "Renal Labs", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "clinical-skills", slug: "foley-catheter-insertion", title: "Foley Catheter Insertion", topicCluster: "Elimination Skills", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "clinical-skills", slug: "nasogastric-tube-care", title: "Nasogastric Tube Care", topicCluster: "GI Skills", profession: "nursing", trafficOpportunity: "medium", monetizationIntent: "clinical-readiness" },
+  { category: "clinical-skills", slug: "tracheostomy-care", title: "Tracheostomy Care", topicCluster: "Airway Skills", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "clinical-skills", slug: "chest-tube-management", title: "Chest Tube Management", topicCluster: "Respiratory Skills", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "clinical-skills", slug: "central-line-care", title: "Central Line Care", topicCluster: "IV Skills", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "clinical-skills", slug: "wound-care", title: "Wound Care", topicCluster: "Skin And Wound Skills", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "clinical-skills", slug: "blood-glucose-monitoring", title: "Blood Glucose Monitoring", topicCluster: "Endocrine Skills", profession: "nursing", trafficOpportunity: "medium", monetizationIntent: "clinical-readiness" },
+  { category: "clinical-skills", slug: "medication-administration", title: "Medication Administration", topicCluster: "Medication Safety", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "allied-study", slug: "ventilator-settings-guide", title: "Ventilator Settings Guide", topicCluster: "Respiratory Therapy", profession: "rt", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "allied-study", slug: "mechanical-ventilation-basics", title: "Mechanical Ventilation Basics", topicCluster: "Respiratory Therapy", profession: "rt", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "allied-study", slug: "primary-survey-guide", title: "Primary Survey Guide", topicCluster: "Paramedicine", profession: "paramedic", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "allied-study", slug: "trauma-assessment-guide", title: "Trauma Assessment Guide", topicCluster: "Paramedicine", profession: "paramedic", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "allied-study", slug: "cbc-interpretation-guide", title: "CBC Interpretation Guide", topicCluster: "Medical Laboratory Technology", profession: "mlt", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "allied-study", slug: "adl-assessment-guide", title: "ADL Assessment Guide", topicCluster: "Occupational Therapy", profession: "ot", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "allied-study", slug: "mobility-assessment-guide", title: "Mobility Assessment Guide", topicCluster: "Physiotherapy", profession: "pt", trafficOpportunity: "high", monetizationIntent: "clinical-readiness" },
+  { category: "allied-careers", slug: "paramedic-canada", title: "How To Become A Paramedic In Canada", topicCluster: "Paramedicine Careers", profession: "paramedic", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "allied-careers", slug: "medical-laboratory-technologist-canada", title: "How To Become An MLT In Canada", topicCluster: "MLT Careers", profession: "mlt", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "allied-careers", slug: "occupational-therapist-canada", title: "How To Become An Occupational Therapist In Canada", topicCluster: "OT Careers", profession: "ot", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "allied-careers", slug: "physiotherapist-canada", title: "How To Become A Physiotherapist In Canada", topicCluster: "PT Careers", profession: "pt", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "interview-prep", slug: "respiratory-therapy-interview-questions", title: "50 RT Interview Questions", topicCluster: "RT Interviews", profession: "rt", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "interview-prep", slug: "paramedic-interview-questions", title: "50 Paramedic Interview Questions", topicCluster: "Paramedic Interviews", profession: "paramedic", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "interview-prep", slug: "occupational-therapy-interview-questions", title: "50 OT Interview Questions", topicCluster: "OT Interviews", profession: "ot", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "interview-prep", slug: "physiotherapy-interview-questions", title: "50 PT Interview Questions", topicCluster: "PT Interviews", profession: "pt", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "interview-prep", slug: "mlt-interview-questions", title: "50 MLT Interview Questions", topicCluster: "MLT Interviews", profession: "mlt", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "placements", slug: "rt-clinical-placement-guide", title: "RT Clinical Placement Guide", topicCluster: "RT Placements", profession: "rt", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "placements", slug: "paramedic-clinical-placement-guide", title: "Paramedic Clinical Placement Guide", topicCluster: "Paramedic Placements", profession: "paramedic", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "placements", slug: "ot-placement-guide", title: "OT Placement Guide", topicCluster: "OT Placements", profession: "ot", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "placements", slug: "pt-placement-guide", title: "PT Placement Guide", topicCluster: "PT Placements", profession: "pt", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "placements", slug: "mlt-placement-guide", title: "MLT Placement Guide", topicCluster: "MLT Placements", profession: "mlt", trafficOpportunity: "high", monetizationIntent: "career-discovery" },
+  { category: "certifications", slug: "rex-pn-study-guide", title: "REx-PN Study Guide", topicCluster: "PN Certification", profession: "nursing", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "certifications", slug: "cnple-study-guide", title: "CNPLE Study Guide", topicCluster: "NP Certification", profession: "np", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "certifications", slug: "fnp-certification-guide", title: "FNP Certification Guide", topicCluster: "NP Certification", profession: "np", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "certifications", slug: "pmhnp-certification-guide", title: "PMHNP Certification Guide", topicCluster: "NP Certification", profession: "np", trafficOpportunity: "high", monetizationIntent: "exam-prep" },
+  { category: "certifications", slug: "agpcnp-certification-guide", title: "AGPCNP Certification Guide", topicCluster: "NP Certification", profession: "np", trafficOpportunity: "medium", monetizationIntent: "exam-prep" },
+  { category: "certifications", slug: "whnp-certification-guide", title: "WHNP Certification Guide", topicCluster: "NP Certification", profession: "np", trafficOpportunity: "medium", monetizationIntent: "exam-prep" },
+  { category: "certifications", slug: "pnp-pc-certification-guide", title: "PNP-PC Certification Guide", topicCluster: "NP Certification", profession: "np", trafficOpportunity: "medium", monetizationIntent: "exam-prep" },
+];
+
+function supportingPage(title: string, pageType: AuthorityClusterSupportingPage["pageType"], monetizationIntent: AuthorityClusterSupportingPage["monetizationIntent"] = "clinical-readiness"): AuthorityClusterSupportingPage {
+  return {
+    title,
+    slug: title.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+    pageType,
+    monetizationIntent,
+  };
+}
+
+function nursingCluster(
+  id: string,
+  pillarTitle: string,
+  priority: AuthorityTopicClusterPriority,
+  targetSupportingPages: { min: number; max: number },
+  supportingTitles: Array<[string, AuthorityClusterSupportingPage["pageType"], AuthorityClusterSupportingPage["monetizationIntent"]?]>,
+  relatedClusterIds: string[],
+): AuthorityTopicCluster {
+  return {
+    id,
+    pillarTitle,
+    pillarSlug: pillarTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+    profession: "nursing",
+    priority,
+    pillarWordTarget: { min: 4000, max: 8000 },
+    supportingWordTarget: { min: 2000, max: 4000 },
+    targetSupportingPages,
+    trafficPotential: "high",
+    revenuePotential: "high",
+    supportingPages: supportingTitles.map(([title, pageType, monetizationIntent]) => supportingPage(title, pageType, monetizationIntent)),
+    relatedClusterIds,
+  };
+}
+
+function alliedCluster(
+  id: string,
+  pillarTitle: string,
+  profession: AuthorityRoadmapEntry["profession"],
+  supportingTitles: Array<[string, AuthorityClusterSupportingPage["pageType"], AuthorityClusterSupportingPage["monetizationIntent"]?]>,
+  relatedClusterIds: string[] = [],
+): AuthorityTopicCluster {
+  return {
+    id,
+    pillarTitle,
+    pillarSlug: pillarTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+    profession,
+    priority: 2,
+    pillarWordTarget: { min: 3000, max: 5000 },
+    supportingWordTarget: { min: 2000, max: 4000 },
+    targetSupportingPages: { min: 20, max: 40 },
+    trafficPotential: "high",
+    revenuePotential: "medium",
+    supportingPages: supportingTitles.map(([title, pageType, monetizationIntent]) => supportingPage(title, pageType, monetizationIntent)),
+    relatedClusterIds,
+  };
+}
+
+export const AUTHORITY_TOPIC_CLUSTERS: AuthorityTopicCluster[] = [
+  nursingCluster(
+    "heart-failure",
+    "Heart Failure",
+    1,
+    { min: 30, max: 50 },
+    [
+      ["Heart Failure Pathophysiology", "pathophysiology"],
+      ["Heart Failure Signs And Symptoms", "symptoms"],
+      ["Heart Failure Assessment", "assessment"],
+      ["Heart Failure Laboratory Findings", "labs"],
+      ["Heart Failure BNP Interpretation", "labs"],
+      ["Heart Failure Chest X-Ray Findings", "imaging"],
+      ["Heart Failure ECG Findings", "diagnostics"],
+      ["Heart Failure Pharmacology", "pharmacology"],
+      ["Heart Failure Nursing Care Plan", "care-plan", "tool-conversion"],
+      ["Heart Failure Patient Education", "patient-education"],
+      ["Heart Failure NCLEX Questions", "exam-prep", "exam-prep"],
+      ["Heart Failure REx-PN Questions", "exam-prep", "exam-prep"],
+      ["Heart Failure Clinical Skills", "clinical-skills"],
+      ["Heart Failure Simulation", "simulation"],
+      ["Heart Failure Clinical Reasoning", "clinical-reasoning"],
+      ["Heart Failure Case Study", "case-study"],
+      ["Heart Failure Complications", "complications"],
+      ["Heart Failure Differential Diagnosis", "diagnostics"],
+      ["Heart Failure Readiness Guide", "exam-prep", "exam-prep"],
+      ["Heart Failure New Graduate Guide", "professional-practice"],
+      ["Heart Failure Clinical Placement Guide", "placement", "career-discovery"],
+      ["Heart Failure Medication Safety", "pharmacology"],
+      ["Heart Failure Fluid Balance", "assessment"],
+      ["Heart Failure Daily Weights", "clinical-skills"],
+      ["Heart Failure Oxygen Therapy", "clinical-skills"],
+      ["Heart Failure Discharge Teaching", "patient-education"],
+      ["Heart Failure Common Mistakes", "common-mistakes"],
+      ["Heart Failure NP Considerations", "professional-practice"],
+      ["Heart Failure RT Considerations", "professional-practice"],
+      ["Heart Failure OT And PT Considerations", "professional-practice"],
+      ["Heart Failure MLT Considerations", "professional-practice"],
+      ["Heart Failure Clinical Reasoning Pathway", "clinical-reasoning"],
+    ],
+    ["atrial-fibrillation", "myocardial-infarction", "ckd"],
+  ),
+  nursingCluster(
+    "copd",
+    "COPD",
+    1,
+    { min: 30, max: 50 },
+    [
+      ["COPD Pathophysiology", "pathophysiology"],
+      ["COPD Assessment", "assessment"],
+      ["COPD Exacerbation", "complications"],
+      ["COPD Pharmacology", "pharmacology"],
+      ["COPD Oxygen Therapy", "clinical-skills"],
+      ["COPD Patient Education", "patient-education"],
+      ["COPD Care Plan", "care-plan", "tool-conversion"],
+      ["COPD ABGs", "labs"],
+      ["COPD Clinical Skills", "clinical-skills"],
+      ["COPD Simulation", "simulation"],
+      ["COPD Clinical Reasoning", "clinical-reasoning"],
+      ["COPD Case Study", "case-study"],
+      ["COPD NCLEX Questions", "exam-prep", "exam-prep"],
+      ["COPD REx-PN Questions", "exam-prep", "exam-prep"],
+      ["COPD RT Considerations", "professional-practice"],
+      ["COPD Differential Diagnosis", "diagnostics"],
+      ["COPD Imaging Findings", "imaging"],
+      ["COPD Complications", "complications"],
+      ["COPD Inhaler Teaching", "patient-education"],
+      ["COPD New Graduate Guide", "professional-practice"],
+      ["COPD Clinical Placement Guide", "placement", "career-discovery"],
+      ["COPD Common Mistakes", "common-mistakes"],
+      ["COPD Readiness Guide", "exam-prep", "exam-prep"],
+      ["COPD Clinical Reasoning Pathway", "clinical-reasoning"],
+      ["COPD Medication Safety", "pharmacology"],
+      ["COPD Airway Clearance", "clinical-skills"],
+      ["COPD Activity Tolerance", "clinical-skills"],
+      ["COPD Discharge Planning", "patient-education"],
+      ["COPD NP Considerations", "professional-practice"],
+      ["COPD OT And PT Considerations", "professional-practice"],
+    ],
+    ["pneumonia", "sepsis"],
+  ),
+  nursingCluster(
+    "diabetes",
+    "Diabetes",
+    1,
+    { min: 50, max: 75 },
+    [
+      ["Type 1 Diabetes", "pathophysiology"],
+      ["Type 2 Diabetes", "pathophysiology"],
+      ["DKA", "complications"],
+      ["HHS", "complications"],
+      ["Insulin Therapy", "pharmacology"],
+      ["Blood Glucose Monitoring", "clinical-skills"],
+      ["Diabetes Patient Education", "patient-education"],
+      ["Diabetes Foot Care", "clinical-skills"],
+      ["Diabetes Pharmacology", "pharmacology"],
+      ["Diabetes Care Plan", "care-plan", "tool-conversion"],
+      ["Diabetes Simulation", "simulation"],
+      ["Diabetes NCLEX Questions", "exam-prep", "exam-prep"],
+      ["Diabetes REx-PN Questions", "exam-prep", "exam-prep"],
+      ["Diabetes Clinical Skills", "clinical-skills"],
+      ["Diabetes Lab Interpretation", "labs"],
+      ["Diabetes Case Studies", "case-study"],
+      ["Diabetes Clinical Reasoning", "clinical-reasoning"],
+      ["Diabetes Complications", "complications"],
+      ["Hypoglycemia Recognition", "assessment"],
+      ["Hyperglycemia Recognition", "assessment"],
+      ["Diabetes Medication Safety", "pharmacology"],
+      ["Diabetes Sick Day Teaching", "patient-education"],
+      ["Diabetes Nutrition Teaching", "patient-education"],
+      ["Diabetes New Graduate Guide", "professional-practice"],
+      ["Diabetes Clinical Placement Guide", "placement", "career-discovery"],
+      ["Diabetes Common Mistakes", "common-mistakes"],
+      ["Diabetes Readiness Guide", "exam-prep", "exam-prep"],
+      ["Diabetes NP Considerations", "professional-practice"],
+      ["Diabetes OT And PT Considerations", "professional-practice"],
+      ["Diabetes MLT Considerations", "professional-practice"],
+      ["Diabetes Clinical Reasoning Pathway", "clinical-reasoning"],
+    ],
+    ["aki", "ckd", "sepsis"],
+  ),
+  ...[
+    ["sepsis", "Sepsis"],
+    ["pneumonia", "Pneumonia"],
+    ["stroke", "Stroke"],
+    ["aki", "AKI"],
+    ["ckd", "CKD"],
+    ["atrial-fibrillation", "Atrial Fibrillation"],
+    ["myocardial-infarction", "Myocardial Infarction"],
+  ].map(([id, title]) =>
+    nursingCluster(
+      id,
+      title,
+      1,
+      { min: 30, max: 50 },
+      [
+        [`${title} Pathophysiology`, "pathophysiology"],
+        [`${title} Signs And Symptoms`, "symptoms"],
+        [`${title} Assessment`, "assessment"],
+        [`${title} Diagnostics`, "diagnostics"],
+        [`${title} Laboratory Interpretation`, "labs"],
+        [`${title} Imaging Findings`, "imaging"],
+        [`${title} Pharmacology`, "pharmacology"],
+        [`${title} Patient Education`, "patient-education"],
+        [`${title} Complications`, "complications"],
+        [`${title} Nursing Care Plan`, "care-plan", "tool-conversion"],
+        [`${title} Clinical Skills`, "clinical-skills"],
+        [`${title} Case Study`, "case-study"],
+        [`${title} NCLEX Questions`, "exam-prep", "exam-prep"],
+        [`${title} REx-PN Questions`, "exam-prep", "exam-prep"],
+        [`${title} NP Considerations`, "professional-practice"],
+        [`${title} Simulation`, "simulation"],
+        [`${title} Clinical Reasoning`, "clinical-reasoning"],
+        [`${title} Common Mistakes`, "common-mistakes"],
+        [`${title} Professional Practice`, "professional-practice"],
+        [`${title} Clinical Placement Guide`, "placement", "career-discovery"],
+        [`${title} Readiness Guide`, "exam-prep", "exam-prep"],
+      ],
+      ["heart-failure", "diabetes"],
+    ),
+  ),
+  alliedCluster("respiratory-therapy", "Respiratory Therapy", "rt", [
+    ["Ventilator Management", "clinical-skills"],
+    ["ABG Interpretation", "labs"],
+    ["Airway Management", "clinical-skills"],
+    ["Oxygen Therapy", "clinical-skills"],
+    ["Mechanical Ventilation", "clinical-skills"],
+    ["Respiratory Assessment", "assessment"],
+    ["RT Clinical Placement", "placement", "career-discovery"],
+    ["RT Interview Preparation", "interview", "career-discovery"],
+    ["RT Certification", "certification", "exam-prep"],
+    ["RT Clinical Skills", "clinical-skills"],
+    ["Ventilator Settings Guide", "clinical-skills"],
+    ["Respiratory Therapy Case Studies", "case-study"],
+    ["Respiratory Therapy Simulations", "simulation"],
+    ["RT Common Mistakes", "common-mistakes"],
+    ["RT Clinical Reasoning", "clinical-reasoning"],
+    ["Respiratory Therapist Career Guide", "career", "career-discovery"],
+    ["Respiratory Therapist Salary Canada", "career", "career-discovery"],
+    ["Respiratory Therapist Study Guide", "exam-prep", "exam-prep"],
+    ["RT Patient Education", "patient-education"],
+    ["RT Professional Practice", "professional-practice"],
+  ], ["copd", "pneumonia"]),
+  alliedCluster("paramedicine", "Paramedicine", "paramedic", [
+    ["Trauma Assessment", "assessment"],
+    ["Cardiac Emergencies", "complications"],
+    ["Primary Survey", "assessment"],
+    ["Secondary Survey", "assessment"],
+    ["Emergency Airway Management", "clinical-skills"],
+    ["Paramedic Clinical Placement", "placement", "career-discovery"],
+    ["Paramedic Interview Preparation", "interview", "career-discovery"],
+    ["Paramedic ECG Interpretation", "diagnostics"],
+    ["Emergency Pharmacology Basics", "pharmacology"],
+    ["Medical Emergency Assessment", "assessment"],
+    ["Paramedic Simulation", "simulation"],
+    ["Paramedic Case Studies", "case-study"],
+    ["Paramedic Common Mistakes", "common-mistakes"],
+    ["Paramedic Clinical Reasoning", "clinical-reasoning"],
+    ["How To Become A Paramedic In Canada", "career", "career-discovery"],
+    ["Paramedic Salary Guide", "career", "career-discovery"],
+    ["Paramedic Certification Guide", "certification", "exam-prep"],
+    ["Paramedic Patient Handoff", "professional-practice"],
+    ["Paramedic Scene Safety", "clinical-skills"],
+    ["Paramedic Professional Practice", "professional-practice"],
+  ], ["sepsis", "stroke", "myocardial-infarction"]),
+  alliedCluster("occupational-therapy", "Occupational Therapy", "ot", [
+    ["ADL Assessment", "assessment"],
+    ["Home Safety", "clinical-skills"],
+    ["Functional Assessment", "assessment"],
+    ["Rehabilitation Planning", "professional-practice"],
+    ["OT Placement Success", "placement", "career-discovery"],
+    ["OT Interview Preparation", "interview", "career-discovery"],
+    ["OT Clinical Reasoning", "clinical-reasoning"],
+    ["OT Case Studies", "case-study"],
+    ["OT Common Mistakes", "common-mistakes"],
+    ["How To Become An Occupational Therapist In Canada", "career", "career-discovery"],
+    ["OT Salary Guide", "career", "career-discovery"],
+    ["OT Patient Education", "patient-education"],
+    ["OT Documentation", "professional-practice"],
+    ["OT Professional Practice", "professional-practice"],
+    ["OT Clinical Skills", "clinical-skills"],
+    ["OT Simulation", "simulation"],
+    ["Cognitive Assessment", "assessment"],
+    ["Adaptive Equipment", "clinical-skills"],
+    ["Functional Independence", "clinical-reasoning"],
+    ["OT Certification Guide", "certification", "exam-prep"],
+  ], ["stroke", "diabetes"]),
+  alliedCluster("physiotherapy", "Physiotherapy", "pt", [
+    ["Mobility Assessment", "assessment"],
+    ["Gait Assessment", "assessment"],
+    ["Musculoskeletal Evaluation", "assessment"],
+    ["Rehabilitation Planning", "professional-practice"],
+    ["PT Placement Success", "placement", "career-discovery"],
+    ["PT Interview Preparation", "interview", "career-discovery"],
+    ["PT Clinical Reasoning", "clinical-reasoning"],
+    ["PT Case Studies", "case-study"],
+    ["PT Common Mistakes", "common-mistakes"],
+    ["How To Become A Physiotherapist In Canada", "career", "career-discovery"],
+    ["PT Salary Guide", "career", "career-discovery"],
+    ["Transfer Training", "clinical-skills"],
+    ["Range Of Motion Assessment", "assessment"],
+    ["Fall Prevention", "clinical-skills"],
+    ["PT Documentation", "professional-practice"],
+    ["PT Professional Practice", "professional-practice"],
+    ["PT Simulation", "simulation"],
+    ["Stroke Rehabilitation", "clinical-skills"],
+    ["Cardiac Rehabilitation", "clinical-skills"],
+    ["PT Certification Guide", "certification", "exam-prep"],
+  ], ["stroke", "heart-failure"]),
+  alliedCluster("medical-laboratory-technology", "Medical Laboratory Technology", "mlt", [
+    ["CBC Interpretation", "labs"],
+    ["Specimen Collection", "clinical-skills"],
+    ["Quality Assurance", "professional-practice"],
+    ["Laboratory Safety", "clinical-skills"],
+    ["Diagnostic Testing", "diagnostics"],
+    ["MLT Clinical Placement", "placement", "career-discovery"],
+    ["MLT Interview Preparation", "interview", "career-discovery"],
+    ["MLT Certification", "certification", "exam-prep"],
+    ["Critical Value Reporting", "professional-practice"],
+    ["Specimen Rejection", "clinical-skills"],
+    ["MLT Case Studies", "case-study"],
+    ["MLT Common Mistakes", "common-mistakes"],
+    ["MLT Clinical Reasoning", "clinical-reasoning"],
+    ["How To Become An MLT In Canada", "career", "career-discovery"],
+    ["MLT Salary Guide", "career", "career-discovery"],
+    ["Coagulation Testing", "labs"],
+    ["Chemistry Panel Interpretation", "labs"],
+    ["Microbiology Basics", "labs"],
+    ["Laboratory Documentation", "professional-practice"],
+    ["MLT Professional Practice", "professional-practice"],
+  ], ["sepsis", "diabetes", "ckd"]),
+];
 
 const DISEASE_REQUIRED_ELEMENTS = [
   "Definition",
@@ -1233,6 +2071,397 @@ export function listAuthorityContentPaths(): string[] {
   return ["/healthcare", ...getAuthorityPages().map((page) => authorityContentPath(page))];
 }
 
+export function getAuthorityRoadmapByCategory(category: AuthorityContentCategory): AuthorityRoadmapEntry[] {
+  return AUTHORITY_CONTENT_ROADMAP.filter((entry) => entry.category === category).sort((a, b) => {
+    const opportunityRank: Record<AuthorityTrafficOpportunity, number> = { high: 0, medium: 1, low: 2 };
+    return opportunityRank[a.trafficOpportunity] - opportunityRank[b.trafficOpportunity] || a.title.localeCompare(b.title);
+  });
+}
+
+export function getAuthorityTopicCluster(id: string): AuthorityTopicCluster | null {
+  return AUTHORITY_TOPIC_CLUSTERS.find((cluster) => cluster.id === id) ?? null;
+}
+
+export function buildAuthorityClusterDashboard(): {
+  generatedAt: string;
+  totalClusters: number;
+  phaseOneClusters: number;
+  averageClusterCompletion: number;
+  averagePublicationReadiness: number;
+  rows: AuthorityClusterDashboardRow[];
+} {
+  const publishedSlugs = new Set(getAuthorityPages().map((page) => page.slug));
+  const rows = AUTHORITY_TOPIC_CLUSTERS.map((cluster) => {
+    const publishedPages =
+      (publishedSlugs.has(cluster.pillarSlug) ? 1 : 0) + cluster.supportingPages.filter((page) => publishedSlugs.has(page.slug)).length;
+    const plannedSupportingPages = cluster.supportingPages.length;
+    const clusterCompletion = Math.min(100, Math.round((plannedSupportingPages / cluster.targetSupportingPages.min) * 100));
+    const pageTypeCoverage = new Set(cluster.supportingPages.map((page) => page.pageType)).size;
+    const monetizedPages = cluster.supportingPages.filter((page) => page.monetizationIntent !== "career-discovery").length;
+    const internalLinkingScore = Math.min(
+      100,
+      Math.round(((cluster.relatedClusterIds.length >= 2 ? 35 : cluster.relatedClusterIds.length * 15) + Math.min(pageTypeCoverage * 5, 40) + 25)),
+    );
+    const keywordCoverage = Math.min(100, Math.round((plannedSupportingPages / cluster.targetSupportingPages.max) * 100));
+    const eeatScore = publishedPages > 0 ? 25 : 0;
+    const monetizationReadiness =
+      monetizedPages / Math.max(1, plannedSupportingPages) >= 0.7
+        ? "strong"
+        : monetizedPages / Math.max(1, plannedSupportingPages) >= 0.45
+          ? "developing"
+          : "foundation";
+    const publicationReadiness = Math.round((clusterCompletion * 0.35 + internalLinkingScore * 0.25 + keywordCoverage * 0.25 + eeatScore * 0.15));
+
+    return {
+      id: cluster.id,
+      pillarTitle: cluster.pillarTitle,
+      profession: cluster.profession,
+      priority: cluster.priority,
+      targetSupportingPages: `${cluster.targetSupportingPages.min}-${cluster.targetSupportingPages.max}`,
+      plannedSupportingPages,
+      publishedPages,
+      clusterCompletion,
+      internalLinkingScore,
+      keywordCoverage,
+      trafficPotential: cluster.trafficPotential,
+      revenuePotential: cluster.revenuePotential,
+      eeatScore,
+      monetizationReadiness,
+      publicationReadiness,
+    };
+  });
+
+  return {
+    generatedAt: new Date().toISOString(),
+    totalClusters: rows.length,
+    phaseOneClusters: rows.filter((row) => row.priority === 1).length,
+    averageClusterCompletion: Math.round(rows.reduce((sum, row) => sum + row.clusterCompletion, 0) / Math.max(1, rows.length)),
+    averagePublicationReadiness: Math.round(rows.reduce((sum, row) => sum + row.publicationReadiness, 0) / Math.max(1, rows.length)),
+    rows,
+  };
+}
+
+function opportunityScore(opportunity: AuthorityTrafficOpportunity): number {
+  if (opportunity === "high") return 90;
+  if (opportunity === "medium") return 65;
+  return 35;
+}
+
+function revenueScore(intent: AuthorityRoadmapEntry["monetizationIntent"]): number {
+  if (intent === "exam-prep") return 90;
+  if (intent === "tool-conversion") return 86;
+  if (intent === "clinical-readiness") return 78;
+  return 58;
+}
+
+function roadmapWordTarget(entry: AuthorityRoadmapEntry): { min: number; max: number } {
+  if (entry.category === "certifications") return { min: 4000, max: 8000 };
+  if (entry.category === "allied-careers" || entry.category === "interview-prep" || entry.category === "placements") {
+    return { min: 3000, max: 5000 };
+  }
+  return CLINICAL_AUTHORITY_STANDARD[entry.category].wordTarget;
+}
+
+function roadmapSearchIntent(entry: AuthorityRoadmapEntry): ContentBrief["searchIntent"] {
+  if (entry.monetizationIntent === "career-discovery") return "career";
+  if (entry.monetizationIntent === "exam-prep") return "commercial";
+  if (entry.monetizationIntent === "clinical-readiness") return "clinical-learning";
+  return "informational";
+}
+
+function roadmapAudience(entry: AuthorityRoadmapEntry): string[] {
+  const base = ["Nursing Students", "New Graduates", "Exam Candidates"];
+  if (entry.profession === "np") return ["NP Students", "NP Certification Candidates", "Advanced Practice Learners"];
+  if (entry.profession === "rt") return ["Respiratory Therapy Students", "RT Placement Learners", "Respiratory Care Candidates"];
+  if (entry.profession === "paramedic") return ["Paramedic Students", "EMS Placement Learners", "Emergency Care Candidates"];
+  if (entry.profession === "mlt") return ["MLT Students", "Laboratory Placement Learners", "Diagnostic Testing Learners"];
+  if (entry.profession === "ot") return ["OT Students", "Placement Learners", "Functional Assessment Learners"];
+  if (entry.profession === "pt") return ["PT Students", "Placement Learners", "Mobility Assessment Learners"];
+  return base;
+}
+
+export function generateContentBrief(entry: AuthorityRoadmapEntry): ContentBrief {
+  const wordTarget = roadmapWordTarget(entry);
+  return {
+    primaryKeyword: entry.title,
+    secondaryKeywords: [
+      `${entry.title} study guide`,
+      `${entry.title} nursing considerations`,
+      `${entry.title} clinical reasoning`,
+      `${entry.title} practice questions`,
+    ],
+    relatedQuestions: [
+      `What should learners know about ${entry.title}?`,
+      `What are the most important clinical cues for ${entry.title}?`,
+      `What mistakes do learners commonly make with ${entry.title}?`,
+      `How does ${entry.title} appear on exams or placement?`,
+    ],
+    searchIntent: roadmapSearchIntent(entry),
+    targetAudience: roadmapAudience(entry),
+    clusterAssignment: entry.topicCluster,
+    internalLinkTargets: [
+      "Related Diseases",
+      "Related Medications",
+      "Related Skills",
+      "Related Labs",
+      "Related Care Plans",
+      "Related Lessons",
+      "Related Flashcards",
+      "Related Simulations",
+      "Related Questions",
+    ],
+    eeatRequirements: [
+      "Author Assigned",
+      "Reviewer Assigned",
+      "Credentials Displayed",
+      "Review Date",
+      "Update Schedule",
+      "Reference Quality",
+      "Clinical Accuracy",
+      "Internal Linking",
+      "Schema Coverage",
+      "Publication Score >= 90",
+    ],
+    conversionOpportunities: ["lesson", "flashcards", "questions", "study-plan", "simulation", "clinical-skill"],
+    suggestedWordCount: wordTarget,
+    suggestedMedia: CONTENT_MEDIA_REQUIREMENTS,
+    difficultyLevel: entry.monetizationIntent === "clinical-readiness" ? "advanced" : entry.monetizationIntent === "career-discovery" ? "foundational" : "intermediate",
+    commercialIntent: revenueScore(entry.monetizationIntent) >= 85 ? "high" : revenueScore(entry.monetizationIntent) >= 70 ? "medium" : "low",
+    trafficOpportunityScore: opportunityScore(entry.trafficOpportunity),
+    revenueOpportunityScore: revenueScore(entry.monetizationIntent),
+  };
+}
+
+export function generateContentOutline(entry: AuthorityRoadmapEntry): ContentOutline {
+  const categorySections: Record<AuthorityContentCategory, string[]> = {
+    conditions: [
+      "Introduction",
+      "Definition",
+      "Why This Matters Clinically",
+      "Pathophysiology",
+      "Assessment Findings",
+      "Diagnostics",
+      "Laboratory Interpretation",
+      "Treatment And Pharmacology",
+      "Nursing And Allied Health Considerations",
+      "Patient Education",
+      "Complications",
+      "Case Study",
+      "Exam Tips",
+      "Related Resources",
+      "References",
+    ],
+    medications: [
+      "Introduction",
+      "Why Patients Receive This Medication",
+      "Mechanism Of Action",
+      "Indications And Contraindications",
+      "Monitoring",
+      "Administration",
+      "Nursing Considerations",
+      "Patient Teaching",
+      "Safety Alerts",
+      "Case Example",
+      "Exam Considerations",
+      "Related Medications",
+      "References",
+    ],
+    "care-plans": [
+      "Introduction",
+      "Patient Scenario",
+      "Pathophysiology",
+      "Assessment Findings",
+      "Priority Nursing Diagnoses",
+      "Goals",
+      "Interventions",
+      "Rationales",
+      "Complications",
+      "Patient Education",
+      "Clinical Pearls",
+      "Common Mistakes",
+      "NCLEX Tips",
+      "Related Resources",
+      "References",
+    ],
+    labs: ["Introduction", "Normal Values", "Function", "High Values", "Low Values", "Clinical Significance", "Nursing Actions", "Case Example", "Related Conditions", "FAQs", "References"],
+    "clinical-skills": ["Introduction", "Purpose", "Indications", "Contraindications", "Preparation", "Equipment", "Procedure", "Safety Checks", "Clinical Decision Points", "Documentation", "Complications", "Knowledge Check Questions", "References"],
+    "allied-careers": ["Introduction", "Role Overview", "Education Pathway", "Licensing Or Registration", "Clinical Placement", "Core Competencies", "Career Outlook", "Study Resources", "FAQs", "References"],
+    "allied-study": ["Introduction", "Learning Objectives", "Clinical Context", "Core Concepts", "Decision-Making Examples", "Common Errors", "Practice Questions", "Clinical Pearls", "Related Resources", "References"],
+    "interview-prep": ["Introduction", "Question Categories", "Model Answers", "Common Mistakes", "Expert Tips", "Professional Examples", "Preparation Plan", "Related Resources"],
+    placements: ["Introduction", "Preparation", "Instructor Expectations", "Required Skills", "Common Mistakes", "Success Tips", "Documentation Examples", "Related Resources"],
+    certifications: ["Introduction", "Exam Overview", "Blueprint", "Study Plan", "Readiness", "Clinical Judgment", "Common Exam Traps", "Practice Questions", "Related Lessons", "Related Flashcards", "References"],
+  };
+  return {
+    title: entry.title,
+    slug: entry.slug,
+    clusterAssignment: entry.topicCluster,
+    sections: categorySections[entry.category],
+    scenarioRequirements: CONTENT_SCENARIO_REQUIREMENTS,
+    internalLinkRequirements: generateContentBrief(entry).internalLinkTargets,
+    mediaRequirements: CONTENT_MEDIA_REQUIREMENTS,
+  };
+}
+
+export function scoreContentProductionCandidate(input: {
+  clinicalAccuracy: number;
+  educationalValue: number;
+  readability: number;
+  practicalUtility: number;
+  examRelevance: number;
+  alliedHealthRelevance: number;
+  internalLinking: number;
+  conversionPotential: number;
+  eeatStrength: number;
+  publicationReadiness: number;
+}): ContentQualityScore {
+  const dimensions = { ...input };
+  const score = clampScore(Object.values(dimensions).reduce((sum, value) => sum + value, 0) / Object.values(dimensions).length);
+  const revisionReasons = Object.entries(dimensions)
+    .filter(([, value]) => value < CONTENT_PRODUCTION_MINIMUM_SCORE)
+    .map(([key]) => key);
+  return {
+    score,
+    threshold: CONTENT_PRODUCTION_MINIMUM_SCORE,
+    publishReady: score >= CONTENT_PRODUCTION_MINIMUM_SCORE && revisionReasons.length === 0,
+    revisionReasons,
+    dimensions,
+  };
+}
+
+export function buildContentProductionCalendar(): ContentCalendarItem[] {
+  const ordered = [...AUTHORITY_CONTENT_ROADMAP].sort((a, b) => {
+    const delta = opportunityScore(b.trafficOpportunity) + revenueScore(b.monetizationIntent) - (opportunityScore(a.trafficOpportunity) + revenueScore(a.monetizationIntent));
+    return delta || a.title.localeCompare(b.title);
+  });
+  return ordered.slice(0, 120).map((entry, index) => ({
+    window: index < 15 ? "30-day" : index < 45 ? "90-day" : index < 80 ? "180-day" : "365-day",
+    title: entry.title,
+    category: entry.category,
+    clusterAssignment: entry.topicCluster,
+    priorityReason: `${entry.trafficOpportunity} traffic / ${entry.monetizationIntent}`,
+    trafficOpportunityScore: opportunityScore(entry.trafficOpportunity),
+    revenueOpportunityScore: revenueScore(entry.monetizationIntent),
+  }));
+}
+
+export function buildAlliedHealthProductionQueues(): AlliedHealthProductionQueue[] {
+  const professions: AuthorityRoadmapEntry["profession"][] = ["rt", "paramedic", "ot", "pt", "mlt", "allied"];
+  return professions.map((profession) => {
+    const roadmap = AUTHORITY_CONTENT_ROADMAP.filter((entry) => entry.profession === profession);
+    const clusters = AUTHORITY_TOPIC_CLUSTERS.filter((cluster) => cluster.profession === profession);
+    return {
+      profession,
+      pagesPlanned: roadmap.length + clusters.reduce((sum, cluster) => sum + cluster.supportingPages.length, 0),
+      pagesDrafted: 0,
+      pagesReviewed: 0,
+      pagesPublished: 0,
+      trafficPotential: roadmap.some((entry) => entry.trafficOpportunity === "high") || clusters.some((cluster) => cluster.trafficPotential === "high") ? "high" : "medium",
+      clusterCompletion: clusters.length ? Math.round(clusters.reduce((sum, cluster) => sum + Math.min(100, (cluster.supportingPages.length / cluster.targetSupportingPages.min) * 100), 0) / clusters.length) : 0,
+    };
+  });
+}
+
+export function buildContentProductionDashboard(): ContentProductionDashboard {
+  const clusterDashboard = buildAuthorityClusterDashboard();
+  return {
+    workflowStages: CONTENT_PRODUCTION_WORKFLOW,
+    briefsReady: AUTHORITY_CONTENT_ROADMAP.length,
+    outlinesReady: AUTHORITY_CONTENT_ROADMAP.length,
+    calendarItems: buildContentProductionCalendar().length,
+    alliedQueues: buildAlliedHealthProductionQueues(),
+    performanceSnapshot: {
+      impressions: 0,
+      clicks: 0,
+      ctr: 0,
+      averagePosition: null,
+      indexedPages: getAuthorityPages().length,
+      keywordCoverage: Math.round(buildAuthorityContentDashboard().rows.reduce((sum, row) => sum + row.keywordCoverage, 0) / buildAuthorityContentDashboard().rows.length),
+      clusterCoverage: clusterDashboard.averageClusterCompletion,
+      internalLinkCoverage: Math.round(clusterDashboard.rows.reduce((sum, row) => sum + row.internalLinkingScore, 0) / clusterDashboard.rows.length),
+      organicTraffic: 0,
+      trafficGrowth: 0,
+      conversionRate: 0,
+      revenueAttribution: 0,
+    },
+    topicalAuthorityScores: clusterDashboard.rows.map((row) => ({
+      cluster: row.pillarTitle,
+      score: row.publicationReadiness,
+      target: 90,
+    })),
+  };
+}
+
+export function buildAuthorityPremiumFunnel(page: AuthorityPage): AuthorityPremiumFunnelCard[] {
+  const topic = encodeURIComponent(page.slug);
+  const label = page.title;
+  return [
+    {
+      type: "lesson",
+      title: `Related Lessons For ${label}`,
+      description: "Structured lessons turn the public overview into guided clinical learning with objectives and checks.",
+      href: `/pricing?feature=lessons&topic=${topic}`,
+      previewLabel: "Preview lesson objectives",
+      access: "subscription_required",
+    },
+    {
+      type: "flashcards",
+      title: `${label} Flashcards`,
+      description: "Retention cards reinforce definitions, cues, safety points, and exam-relevant clinical recognition.",
+      href: `/pricing?feature=flashcards&topic=${topic}`,
+      previewLabel: "View deck count preview",
+      access: "subscription_required",
+    },
+    {
+      type: "questions",
+      title: `${label} Practice Questions`,
+      description: "Application questions test prioritization, safety, patient teaching, and clinical judgment.",
+      href: `/pricing?feature=questions&topic=${topic}`,
+      previewLabel: "Preview question types",
+      access: "subscription_required",
+    },
+    {
+      type: "cat-exam",
+      title: "Related CAT Exam Practice",
+      description: "Adaptive exam practice measures readiness without exposing the protected CAT experience publicly.",
+      href: `/pricing?feature=cat&topic=${topic}`,
+      previewLabel: "See CAT readiness benefits",
+      access: "subscription_required",
+    },
+    {
+      type: "study-plan",
+      title: `${label} Study Plan`,
+      description: "Personalized study plans connect weak areas to lessons, review, questions, and remediation.",
+      href: `/pricing?feature=study-plans&topic=${topic}`,
+      previewLabel: "Preview study plan structure",
+      access: "subscription_required",
+    },
+    {
+      type: "simulation",
+      title: `${label} Simulations`,
+      description: "Interactive cases train decisions, escalation, reassessment, and consequences.",
+      href: `/pricing?feature=simulations&topic=${topic}`,
+      previewLabel: "Preview simulation objectives",
+      access: "subscription_required",
+    },
+    {
+      type: "care-plan-builder",
+      title: "Care Plan Builder",
+      description: "Build a patient-specific plan with diagnoses, goals, interventions, rationales, and SBAR support.",
+      href: `/pricing?feature=care-plan-builder&topic=${topic}`,
+      previewLabel: "Preview builder output",
+      access: "subscription_required",
+    },
+    {
+      type: "clinical-skill",
+      title: "Related Clinical Skills",
+      description: "Skills activities connect public knowledge to safe clinical performance and documentation.",
+      href: `/pricing?feature=clinical-skills&topic=${topic}`,
+      previewLabel: "Preview skill checklist",
+      access: "subscription_required",
+    },
+  ];
+}
+
 function countWords(text: string): number {
   return text.trim().split(/\s+/).filter(Boolean).length;
 }
@@ -1328,10 +2557,14 @@ export function buildAuthorityContentDashboard(): {
   const rows = (Object.keys(AUTHORITY_CONTENT_PHASE_TARGETS) as AuthorityContentCategory[]).map((category) => {
     const target = AUTHORITY_CONTENT_PHASE_TARGETS[category];
     const pages = getAuthorityPagesByCategory(category);
+    const roadmap = getAuthorityRoadmapByCategory(category);
     const qualityResults = pages.map((page) => validateAuthorityPage(page));
     const clinicalAuthorityAudits = pages.map((page) => validateClinicalAuthorityStandard(page));
     const eeatReady = qualityResults.filter((result) => result.publishReady).length;
     const clinicalAuthorityReady = clinicalAuthorityAudits.filter((result) => result.publishReady).length;
+    const topicClusters = new Set([...pages.map((page) => page.category), ...roadmap.map((entry) => entry.topicCluster)]);
+    const professions = new Set(roadmap.map((entry) => entry.profession));
+    const highOpportunityCount = roadmap.filter((entry) => entry.trafficOpportunity === "high").length;
     const internalLinkAverage =
       Math.round((pages.reduce((sum, page) => sum + page.related.length, 0) / Math.max(1, pages.length)) * 10) / 10;
     const eeatCoverage = Math.round((eeatReady / Math.max(1, pages.length)) * 100);
@@ -1349,6 +2582,7 @@ export function buildAuthorityContentDashboard(): {
       ...target,
       title: AUTHORITY_CATEGORY_META[category].title,
       publishedPages: pages.length,
+      plannedPages: roadmap.length,
       draftGap: Math.max(0, target.phaseOneTarget - pages.length),
       pagesAwaitingReview: pages.filter((page) => page.clinicalReviewStatus === "under_review").length,
       internalLinkAverage,
@@ -1356,6 +2590,10 @@ export function buildAuthorityContentDashboard(): {
       schemaCoverage,
       clinicalAuthorityCoverage,
       averageClinicalAuthorityScore,
+      keywordCoverage: Math.min(100, Math.round(((pages.length + roadmap.length) / target.phaseOneTarget) * 100)),
+      professionCoverage: Math.min(100, Math.round((professions.size / 6) * 100)),
+      topicCoverage: Math.min(100, Math.round((topicClusters.size / 10) * 100)),
+      estimatedTrafficOpportunity: highOpportunityCount > 0 ? "high" : roadmap.some((entry) => entry.trafficOpportunity === "medium") ? "medium" : "low",
       monetizationReadiness: monetizationCoverage >= 80 ? "strong" : monetizationCoverage >= 40 ? "developing" : "foundation",
     };
   });

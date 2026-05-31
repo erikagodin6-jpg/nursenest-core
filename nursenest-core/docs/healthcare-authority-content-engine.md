@@ -115,6 +115,40 @@ Each page should connect to related:
 
 The goal is topical authority, not isolated articles.
 
+## SEO Monetization Guardrails
+
+Public authority pages may educate through disease pages, medication pages, lab interpretation pages, career guides,
+certification guides, placement guides, interview guides, clinical skill overviews, basic care plan examples, and articles.
+
+Premium experiences remain protected:
+
+- Question banks
+- CAT exams
+- NGN questions
+- Bowtie questions
+- Matrix questions
+- Case studies
+- Simulations
+- ECG modules
+- Telemetry modules
+- Advanced labs
+- Advanced pharmacology
+- Study plans
+- Readiness analytics
+- Adaptive learning
+- Personalized recommendations
+- Clinical reasoning pathways
+- Care plan builder
+- Concept map builder
+- Assignment hub
+- Clinical placement tracking
+- Advanced clinical skills
+
+Every authority page should include premium preview cards for related lessons, flashcards, questions, simulations, CAT
+exams, study plans, care plans, and clinical skills. Preview cards may show counts, screenshots, learning objectives, and
+sample content, but the CTA must route through subscription-aware upgrade or pricing paths. Public pages answer "What is
+this?" Premium activities answer "Can I actually do this?"
+
 ## SEO Infrastructure
 
 Authority pages emit:

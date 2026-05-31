@@ -48,6 +48,66 @@ The first seed pages establish route, schema, search, quality-gate, and internal
 
 These pages are foundations for the content model, not final volume targets.
 
+## Priority Roadmap Registry
+
+The executable backlog lives in `AUTHORITY_CONTENT_ROADMAP` inside
+`src/lib/authority/healthcare-authority-content-engine.ts`.
+
+The roadmap currently captures the first high-priority topic queue across:
+
+- Disease pages such as COPD, asthma, pneumonia, pulmonary embolism, ARDS, sepsis, stroke, atrial fibrillation, AKI,
+  CKD, DKA, hyperkalemia, and hyponatremia
+- Medication pages such as metoprolol, digoxin, heparin, warfarin, apixaban, insulin, vancomycin, ceftriaxone,
+  metformin, lisinopril, amlodipine, and atorvastatin
+- Care plans such as COPD, pneumonia, stroke, sepsis, diabetes, DKA, and postoperative care
+- Lab interpretation pages such as sodium, troponin, BNP, lactate, hemoglobin, platelets, and creatinine
+- Clinical skills such as Foley catheter insertion, tracheostomy care, chest tube management, central line care, wound
+  care, glucose monitoring, and medication administration
+- Allied health study pages for respiratory therapy, paramedicine, MLT, OT, and PT
+- Interview, placement, and certification pages for nursing, RT, paramedicine, MLT, OT, PT, RN, PN, and NP pathways
+
+This roadmap is not published content. It is the controlled queue for future clinician-reviewed page production.
+
+## Topic Cluster Domination
+
+The topic ownership system is documented in `docs/topic-cluster-domination-system.md` and implemented through
+`AUTHORITY_TOPIC_CLUSTERS`.
+
+Phase-one nursing cluster priority:
+
+1. Heart Failure
+2. COPD
+3. Diabetes
+4. Sepsis
+5. Pneumonia
+6. Stroke
+7. AKI
+8. CKD
+9. Atrial Fibrillation
+10. Myocardial Infarction
+
+Second-wave allied clusters:
+
+- Respiratory Therapy
+- Paramedicine
+- Occupational Therapy
+- Physiotherapy
+- Medical Laboratory Technology
+
+Cluster pages must be internally linked to their parent pillar, sibling resources, related clusters, and premium
+NurseNest training surfaces.
+
+## Programmatic Content Production Pipeline
+
+The manufacturing and QA system is documented in `docs/programmatic-content-production-pipeline.md`.
+
+Every page must move through:
+
+Keyword Opportunity -> Cluster Assignment -> Content Brief -> Outline Creation -> Draft Creation -> Clinical Expansion ->
+Internal Linking -> QA Review -> Clinical Review -> EEAT Review -> Publication -> Performance Monitoring.
+
+No direct publication is allowed. Anything below the `90/100` quality threshold returns for revision.
+
 ## EEAT Standard
 
 Every authority page requires:
@@ -92,6 +152,18 @@ Every page should connect to related:
 
 No orphan pages should be added.
 
+## Monetization Guardrails
+
+Organic content must act as acquisition, not replacement for subscription value.
+
+Public pages may explain diseases, medications, labs, skills, careers, placements, interviews, certifications, and basic
+care plan examples. Premium training remains protected: question banks, CAT exams, NGN item types, simulations, ECG,
+telemetry, advanced labs, advanced pharmacology, study plans, readiness analytics, adaptive learning, recommendations,
+clinical reasoning pathways, care plan builder, concept map builder, assignment hub, placement tracking, and advanced
+clinical skills.
+
+The implementation is documented in `docs/seo-monetization-guardrails.md`.
+
 ## SEO Standard
 
 Authority pages support:
@@ -105,6 +177,25 @@ Authority pages support:
 - Article schema
 - Organization schema
 - XML sitemap inclusion
+
+## Dashboard Coverage
+
+The authority dashboard tracks:
+
+- Published pages
+- Planned pages
+- Draft gaps
+- Pages awaiting review
+- EEAT coverage
+- Clinical authority coverage
+- Average clinical authority score
+- Keyword coverage
+- Profession coverage
+- Topic coverage
+- Estimated traffic opportunity
+- Schema coverage
+- Internal links per page
+- Monetization readiness
 
 ## Content Expansion Rule
 
