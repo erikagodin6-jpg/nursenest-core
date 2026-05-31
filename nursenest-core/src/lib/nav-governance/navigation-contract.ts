@@ -88,6 +88,7 @@ export const LEARNER_ROUTE_REGISTRY: ReadonlyArray<{
   { label: "Flashcards Hub",    prefix: "/app/flashcards",       mode: SHELL_MODES.FULL,         registered: true },
   { label: "Practice Tests Hub",prefix: "/app/practice-tests",   mode: SHELL_MODES.FULL,         registered: true },
   { label: "Questions",         prefix: "/app/questions",        mode: SHELL_MODES.FULL,         registered: true },
+  { label: "Question Bank Alias",prefix: "/app/question-bank",    mode: SHELL_MODES.FULL,         registered: true },
   { label: "Study Tools",       prefix: "/app/study-tools",      mode: SHELL_MODES.FULL,         registered: true },
 
   // ── Exam sessions (suppressed chrome — approved exception) ─────────────
@@ -98,11 +99,13 @@ export const LEARNER_ROUTE_REGISTRY: ReadonlyArray<{
   // ── Clinical module workstations (within learner shell) ────────────────
   { label: "Labs",              prefix: "/app/labs",             mode: SHELL_MODES.WORKSTATION,  registered: true },
   { label: "Med Calculations",  prefix: "/app/med-calculations", mode: SHELL_MODES.WORKSTATION,  registered: true },
+  { label: "Medication Math Alias",prefix: "/app/medication-math", mode: SHELL_MODES.WORKSTATION, registered: true },
   { label: "Clinical Skills",   prefix: "/app/clinical-skills",  mode: SHELL_MODES.WORKSTATION,  registered: true },
   { label: "Pharmacology",      prefix: "/app/pharmacology",     mode: SHELL_MODES.FULL,         registered: true },
 
   // ── ECG / telemetry (within learner shell) ─────────────────────────────
   { label: "ECG Video Quiz",    prefix: "/app/ecg-video-quiz",   mode: SHELL_MODES.WORKSTATION,  registered: true },
+  { label: "ECG Alias",         prefix: "/app/ecg",              mode: SHELL_MODES.WORKSTATION,  registered: true },
 
   // ── Simulation surfaces ────────────────────────────────────────────────
   { label: "Physiology Monitor",   prefix: "/app/physiology-monitor",   mode: SHELL_MODES.FULL, registered: true },
@@ -122,6 +125,7 @@ export const LEARNER_ROUTE_REGISTRY: ReadonlyArray<{
   { label: "Guided",            prefix: "/app/guided",           mode: SHELL_MODES.FULL,         registered: true },
   { label: "Exam Plan",         prefix: "/app/exam-plan",        mode: SHELL_MODES.FULL,         registered: true },
   { label: "Study Plan",        prefix: "/app/study-plan",       mode: SHELL_MODES.FULL,         registered: true },
+  { label: "Readiness Alias",    prefix: "/app/readiness",        mode: SHELL_MODES.FULL,         registered: true },
 
   // ── Content pathways ───────────────────────────────────────────────────
   { label: "NP Pathway",        prefix: "/app/np",               mode: SHELL_MODES.FULL,         registered: true },
