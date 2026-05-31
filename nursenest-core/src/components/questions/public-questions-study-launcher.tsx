@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Check, ClipboardList, Layers, SlidersHorizontal } from "lucide-react";
 import type { PracticeBodySystemHubAggregate } from "@/lib/questions/pathway-practice-body-system-aggregates";
 import type { PracticeBodySystemHubId } from "@/lib/questions/normalize-question-body-system";
+import type { QuestionBankLauncherDecision } from "@/lib/questions/question-bank-empty-state-decision";
 import type { PracticeSessionStudyFilter } from "@/lib/practice-question-session/constants";
 
 const FILTER_OPTIONS: Array<{ id: PracticeSessionStudyFilter; label: string }> = [
@@ -24,7 +25,7 @@ type Props = {
   loginBaseHref: string;
   callbackParam: string;
   alliedProfessionKey?: string;
-  linearPracticePoolUsable: boolean;
+  launcherDecision: QuestionBankLauncherDecision;
 };
 
 export function PublicQuestionsStudyLauncher({
@@ -34,7 +35,7 @@ export function PublicQuestionsStudyLauncher({
   loginBaseHref,
   callbackParam,
   alliedProfessionKey = "",
-  linearPracticePoolUsable,
+  launcherDecision,
 }: Props) {
   const visibleAggregates = aggregates.filter((row) => row.id !== "uncategorized");
   const defaultHub = visibleAggregates.find((row) => row.questionCount > 0)?.id ?? visibleAggregates[0]?.id;
@@ -242,17 +243,22 @@ export function PublicQuestionsStudyLauncher({
         </section>
 
         <section className="text-center" aria-label="Start practice questions">
-          {linearPracticePoolUsable ? (
+          {launcherDecision.status === "ready" ? (
             <Link
               href={startHref}
               className="inline-flex h-12 min-w-[190px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-7 text-sm font-semibold nn-text-on-solid-fill shadow-[0_16px_34px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_28%,transparent)]"
             >
               Start Questions
             </Link>
-          ) : (
+          ) : launcherDecision.status === "publishing" ? (
             <p className="mx-auto flex max-w-xl items-center justify-center gap-2 rounded-[1.25rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] px-4 py-3 text-sm font-medium text-[var(--theme-muted-text)]">
               <ClipboardList className="h-4 w-4 shrink-0 text-[var(--semantic-brand)]" aria-hidden />
               This question bank is still filling in. Lessons and flashcards remain available while publishing continues.
+            </p>
+          ) : (
+            <p className="mx-auto flex max-w-xl items-center justify-center gap-2 rounded-[1.25rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] px-4 py-3 text-sm font-medium text-[var(--theme-muted-text)]">
+              <ClipboardList className="h-4 w-4 shrink-0 text-[var(--semantic-brand)]" aria-hidden />
+              Unable to load questions. Refresh the page or open the full question bank from your dashboard.
             </p>
           )}
         </section>

@@ -75,12 +75,19 @@ export function pathwayExamQuestionMarketingHubInventoryWhere(
 async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition): Promise<PathwayQuestionBankSnapshot> {
   return withDatabaseFallbackTimeout<PathwayQuestionBankSnapshot>(
     async (): Promise<PathwayQuestionBankSnapshot> => {
+      const publishedWhere = pathwayExamQuestionMarketingWhere(pathway);
       const inventoryWhere = pathwayExamQuestionMarketingHubInventoryWhere(pathway);
       const minCatReady = catReadinessMinCompletePoolRows(pathway.id);
       const counts = await Promise.allSettled([
         withDatabaseFallbackTimeout(
+          () => prisma.examQuestion.count({ where: publishedWhere }),
+          null as number | null,
+          SNAPSHOT_TIMEOUT_MS,
+          { scope: "exam_pathway_hub", label: `question_snapshot_published_count:${pathway.id}` },
+        ),
+        withDatabaseFallbackTimeout(
           () => prisma.examQuestion.count({ where: inventoryWhere }),
-          0,
+          null as number | null,
           SNAPSHOT_TIMEOUT_MS,
           { scope: "exam_pathway_hub", label: `question_snapshot_count:${pathway.id}` },
         ),
@@ -130,11 +137,28 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
           return pool.length;
         }, 0, SNAPSHOT_TIMEOUT_MS, { scope: "exam_pathway_hub", label: `question_snapshot_adaptive:${pathway.id}` }),
       ]);
-      const pathwayScopedCount =
-        counts[0]?.status === "fulfilled" && typeof counts[0].value === "number" ? counts[0].value : 0;
+      const publishedQuestionCount =
+        counts[0]?.status === "fulfilled" && typeof counts[0].value === "number" ? counts[0].value : null;
+      const visibleQuestionCount =
+        counts[1]?.status === "fulfilled" && typeof counts[1].value === "number" ? counts[1].value : null;
       const adaptiveEligibleCount =
-        counts[1]?.status === "fulfilled" && typeof counts[1].value === "number" ? counts[1].value : 0;
-      if (counts[0]?.status === "rejected" || counts[1]?.status === "rejected") {
+        counts[2]?.status === "fulfilled" && typeof counts[2].value === "number" ? counts[2].value : 0;
+      if (publishedQuestionCount === null || visibleQuestionCount === null) {
+        const reason = publishedQuestionCount === null ? "published_count_unavailable" : "visible_count_unavailable";
+        safeServerLog("exam_pathway_hub", "question_snapshot_count_unavailable", {
+          event: "question_snapshot_count_unavailable",
+          dependency_name: "question_snapshot_prisma_count",
+          pathway_id: pathway.id,
+          reason,
+        });
+        recordRouteRenderFallback({
+          fallbackType: "hub_data_load_failed",
+          pathwayId: pathway.id,
+          dependencyName: "question_snapshot_prisma_count",
+        });
+        return { status: "unavailable", reason };
+      }
+      if (counts.some((count) => count.status === "rejected")) {
         safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
           event: "hub_data_load_failed",
           dependency_name: "question_snapshot_prisma_count",
@@ -144,7 +168,9 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
               ? counts[0].reason
               : counts[1]?.status === "rejected"
                 ? counts[1].reason
-                : "",
+                : counts[2]?.status === "rejected"
+                  ? counts[2].reason
+                  : "",
           ).slice(0, 500),
         });
         recordRouteRenderFallback({
@@ -155,12 +181,15 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
       }
       return {
         status: "ok",
-        pathwayScopedCount,
+        publishedQuestionCount,
+        visibleQuestionCount,
+        activeQuestionCount: visibleQuestionCount,
+        pathwayScopedCount: visibleQuestionCount,
         adaptiveEligibleCount,
         examKeys: [...new Set(pathway.contentExamKeys)],
       };
     },
-    { status: "unavailable" },
+    { status: "unavailable", reason: "snapshot_unavailable" },
     SNAPSHOT_TIMEOUT_MS,
   );
 }
@@ -173,7 +202,7 @@ export async function loadPathwayQuestionBankSnapshot(pathwayId: string): Promis
     return await unstable_cache(
       async (): Promise<PathwayQuestionBankSnapshot> => {
         const pathway = getExamPathwayById(pathwayId);
-        if (!pathway) return { status: "unavailable" };
+        if (!pathway) return { status: "unavailable", reason: "missing_pathway" };
         return computePathwayQuestionBankSnapshot(pathway);
       },
       ["pathway-question-bank-snapshot", pathwayId],
@@ -192,6 +221,6 @@ export async function loadPathwayQuestionBankSnapshot(pathwayId: string): Promis
       pathwayId,
       dependencyName: "pathway_question_bank_snapshot_cache",
     });
-    return { status: "unavailable" };
+    return { status: "unavailable", reason: "snapshot_unavailable" };
   }
 }

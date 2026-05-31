@@ -62,9 +62,13 @@ async function countPublishedFlashcards(pathwayIds: string[]): Promise<{ decks: 
 function combineQuestionSnapshots(rows: PathwayQuestionBankSnapshot[]): PathwayQuestionBankSnapshot {
   const okRows = rows.filter((row): row is Extract<PathwayQuestionBankSnapshot, { status: "ok" }> => row.status === "ok");
   if (okRows.length === 0) return { status: "unavailable" };
+  const visibleQuestionCount = okRows.reduce((sum, row) => sum + row.visibleQuestionCount, 0);
   return {
     status: "ok",
-    pathwayScopedCount: okRows.reduce((sum, row) => sum + row.pathwayScopedCount, 0),
+    publishedQuestionCount: okRows.reduce((sum, row) => sum + row.publishedQuestionCount, 0),
+    visibleQuestionCount,
+    activeQuestionCount: okRows.reduce((sum, row) => sum + row.activeQuestionCount, 0),
+    pathwayScopedCount: visibleQuestionCount,
     adaptiveEligibleCount: okRows.reduce((sum, row) => sum + row.adaptiveEligibleCount, 0),
     examKeys: [...new Set(okRows.flatMap((row) => row.examKeys))],
   };

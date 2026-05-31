@@ -41,6 +41,7 @@ import { loadPathwayPracticeBodySystemHubAggregates } from "@/lib/questions/path
 import {
   marketingLinearPracticeBankUsable,
 } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
+import { resolveQuestionBankLauncherDecision } from "@/lib/questions/question-bank-empty-state-decision";
 import { AUTH_CALLBACK_PARAM } from "@/lib/auth/auth-flow-governance";
 
 // 🧊 ISR: revalidate: 86400 already set below
@@ -219,6 +220,21 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   }
 
   const linearPracticeUsable = marketingLinearPracticeBankUsable(questionSnapshot);
+  const launcherDecision = resolveQuestionBankLauncherDecision(questionSnapshot, linearPracticeUsable);
+  const visibleFilterCount = hubAggregates.filter((row) => row.id !== "uncategorized" && row.questionCount > 0).length;
+  safeServerLog("practice_questions_hub", "question_bank_launcher_decision", {
+    event: "question_bank_launcher_decision",
+    pathway_slug: pathway.id,
+    pathname: `${pathname}/questions`,
+    published_count: launcherDecision.publishedQuestionCount,
+    visible_count: launcherDecision.visibleQuestionCount,
+    filter_count: visibleFilterCount,
+    banner_rendered: launcherDecision.status === "publishing",
+    reason_banner_rendered:
+      launcherDecision.status === "publishing" ? launcherDecision.reason : "banner_not_rendered",
+    launcher_state: launcherDecision.status,
+    launcher_reason: launcherDecision.reason,
+  });
   const marketingLoginHref = withMarketingLocale(lessonContentLocale, "/login");
   const focusedPracticeStartParams = new URLSearchParams();
   focusedPracticeStartParams.set("pathwayId", pathway.id);
@@ -248,7 +264,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
             loginBaseHref={marketingLoginHref}
             callbackParam={AUTH_CALLBACK_PARAM}
             alliedProfessionKey={alliedProfessionKey || undefined}
-            linearPracticePoolUsable={linearPracticeUsable}
+            launcherDecision={launcherDecision}
           />
         ) : (
           <section

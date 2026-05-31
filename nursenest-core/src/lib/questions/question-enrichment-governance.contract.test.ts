@@ -22,9 +22,9 @@ const completeQuestion = {
   correctAnswerExplanation:
     "Oxygen and focused reassessment directly address the immediate breathing problem and help determine whether rapid escalation is required.",
   distractorRationales: {
-    B: "Oral fluids may seem supportive, but in heart failure they can worsen fluid overload and do not address the immediate oxygenation risk. Learners choose it when they focus on comfort rather than the unstable cue.",
-    C: "Documentation is required after assessment and intervention, but documenting first delays treatment of hypoxemia and confusion. Avoid this mistake by asking what could harm the client now.",
-    D: "Sodium teaching matters for long-term heart failure management, but education can wait during acute respiratory compromise. The priority is stabilization before teaching.",
+    B: "Oral fluids may seem supportive, but in heart failure they can worsen fluid overload and do not address the immediate oxygenation risk. Learners choose it when they focus on comfort rather than the unstable cue. Avoid the error by matching the intervention to the respiratory finding.",
+    C: "Documentation is required after assessment and intervention, but documenting first delays treatment of hypoxemia and confusion. Learners choose it when they focus on legal completion before stabilization. Avoid this mistake by asking what could harm the client now.",
+    D: "Sodium teaching matters for long-term heart failure management, but education can wait during acute respiratory compromise. The priority is stabilization before teaching. Learners choose it when they confuse chronic discharge priorities with immediate deterioration priorities.",
   },
   clinicalReasoning:
     "The cue cluster indicates acute breathing compromise, so the nurse prioritizes oxygenation, reassessment, and escalation over routine teaching or documentation.",

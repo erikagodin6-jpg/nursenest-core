@@ -32,6 +32,9 @@ const labsModuleOverview = {
   practiceExamReady: true,
   questionSnapshot: {
     status: "ok" as const,
+    publishedQuestionCount: 50,
+    visibleQuestionCount: 50,
+    activeQuestionCount: 50,
     pathwayScopedCount: 50,
     adaptiveEligibleCount: 10,
     examKeys: ["ALLIED"],
@@ -70,6 +73,9 @@ describe("allied health pathway hub route smoke", () => {
           practiceExamReady: true,
           questionSnapshot: {
             status: "ok",
+            publishedQuestionCount: 120,
+            visibleQuestionCount: 120,
+            activeQuestionCount: 120,
             pathwayScopedCount: 120,
             adaptiveEligibleCount: 55,
             examKeys: ["ALLIED"],

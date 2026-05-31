@@ -120,6 +120,42 @@ function writeReadinessReport(outDir: string, fileName: string, title: string, r
   );
 }
 
+function writeDatabaseUnavailableReports(outDir: string, reason: string): void {
+  const generatedAt = new Date().toISOString();
+  const base = [
+    "Generated: " + generatedAt,
+    "",
+    "The live `exam_questions` inventory was not audited because the database was unavailable in this environment.",
+    "",
+    `Reason: ${reason.replace(/\s+/g, " ").slice(0, 500)}`,
+    "",
+    "Run against a reachable read-only staging or production database:",
+    "",
+    "`npx tsx scripts/audit-rn-rpn-np-question-enrichment.mts`",
+    "",
+    "The audit engine and contract tests remain available without database access.",
+    "",
+  ].join("\n");
+
+  const files: Array<[string, string]> = [
+    ["rn-audit-report.md", "RN Question Enrichment Audit Report"],
+    ["rpn-audit-report.md", "RPN / PN Question Enrichment Audit Report"],
+    ["np-audit-report.md", "NP Question Enrichment Audit Report"],
+    ["blueprint-coverage-report.md", "Blueprint Coverage Report"],
+    ["question-quality-report.md", "Question Quality Report"],
+    ["flashcard-readiness-report.md", "Flashcard Readiness Report"],
+    ["practice-exam-readiness-report.md", "Practice Exam Readiness Report"],
+    ["cat-readiness-report.md", "CAT Readiness Report"],
+    ["publication-readiness-report.md", "Publication Readiness Report"],
+    ["monetization-readiness-report.md", "Monetization Readiness Report"],
+    ["estimated-remediation-work-remaining.md", "Estimated Remediation Work Remaining"],
+  ];
+
+  for (const [file, title] of files) {
+    writeFileSync(resolve(outDir, file), [`# ${title}`, "", base].join("\n"));
+  }
+}
+
 async function main(): Promise<void> {
   loadEnv();
   const outDir = resolve(process.cwd(), "docs/reports/question-enrichment");
@@ -286,6 +322,9 @@ async function main(): Promise<void> {
     console.log(`Audited ${results.length.toLocaleString()} RN/RPN/NP questions.`);
     console.log(`Publication-ready: ${results.filter((r) => r.publicationReady).length.toLocaleString()}`);
     console.log(`Reports written to ${outDir}`);
+  } catch (error) {
+    writeDatabaseUnavailableReports(outDir, error instanceof Error ? error.message : String(error));
+    console.log("Database unavailable; wrote audit deliverable stubs with the failure reason.");
   } finally {
     await prisma.$disconnect();
   }

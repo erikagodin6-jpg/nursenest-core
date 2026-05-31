@@ -13,6 +13,9 @@ import {
 function snapOk(partial: Partial<Extract<PathwayQuestionBankSnapshot, { status: "ok" }>>): PathwayQuestionBankSnapshot {
   return {
     status: "ok",
+    publishedQuestionCount: 0,
+    visibleQuestionCount: 0,
+    activeQuestionCount: 0,
     pathwayScopedCount: 0,
     adaptiveEligibleCount: 0,
     examKeys: [],
