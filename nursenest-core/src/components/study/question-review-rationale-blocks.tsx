@@ -3,6 +3,8 @@
 import type { ReactNode } from "react";
 import { Bookmark, CheckCircle2, ClipboardList, Lightbulb, ListX, Sparkles, Target } from "lucide-react";
 import type { RationaleReviewBuckets } from "@/lib/learner/rationale-review-structure";
+import { QuestionBookmarkButton } from "@/components/bookmarks/question-bookmark-button";
+import type { QuestionBookmarkPayload } from "@/lib/bookmarks/question-bookmarks";
 
 type SectionTone = "success" | "info" | "warning" | "brand" | "muted";
 
@@ -181,6 +183,7 @@ export function QuestionReviewRationaleBlocks({
 export type QuestionReviewActionStripProps = {
   bookmarked: boolean;
   onToggleBookmark: () => void;
+  bookmarkPayload?: QuestionBookmarkPayload | null;
   /** When false, mistake CTA is hidden (e.g. after a correct answer). */
   showMistakeCta: boolean;
   onAddToMistakeNotebook?: () => void | Promise<void>;
@@ -195,6 +198,7 @@ export type QuestionReviewActionStripProps = {
 export function QuestionReviewActionStrip({
   bookmarked,
   onToggleBookmark,
+  bookmarkPayload,
   showMistakeCta,
   onAddToMistakeNotebook,
   mistakeAdded,
@@ -207,19 +211,29 @@ export function QuestionReviewActionStrip({
       role="toolbar"
       aria-label="Question review actions"
     >
-      <button
-        type="button"
-        aria-pressed={bookmarked}
-        onClick={onToggleBookmark}
-        className={`inline-flex min-h-[2.75rem] flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-[13px] font-semibold transition-colors sm:flex-none sm:px-4 ${
-          bookmarked
-            ? "border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-            : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-panel-muted)]"
-        }`}
-      >
-        <Bookmark className={`h-4 w-4 shrink-0 ${bookmarked ? "fill-current" : ""}`} aria-hidden />
-        {bookmarked ? "Bookmarked" : "Bookmark"}
-      </button>
+      {bookmarkPayload ? (
+        <QuestionBookmarkButton
+          {...bookmarkPayload}
+          defaultBookmarked={bookmarked}
+          onSaved={() => {
+            if (!bookmarked) onToggleBookmark();
+          }}
+        />
+      ) : (
+        <button
+          type="button"
+          aria-pressed={bookmarked}
+          onClick={onToggleBookmark}
+          className={`inline-flex min-h-[2.75rem] flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-[13px] font-semibold transition-colors sm:flex-none sm:px-4 ${
+            bookmarked
+              ? "border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+              : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-panel-muted)]"
+          }`}
+        >
+          <Bookmark className={`h-4 w-4 shrink-0 ${bookmarked ? "fill-current" : ""}`} aria-hidden />
+          {bookmarked ? "Bookmarked" : "Bookmark"}
+        </button>
+      )}
 
       {showMistakeCta && onAddToMistakeNotebook ? (
         <button

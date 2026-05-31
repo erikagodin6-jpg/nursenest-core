@@ -115,6 +115,7 @@ import {
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { captureClientException } from "@/lib/runtime/client-observability";
 import { PracticeTestRunPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
+import { QuestionBookmarkButton } from "@/components/bookmarks/question-bookmark-button";
 import {
   PracticeAdaptivePostMissPanel,
   type PracticeAdaptivePostMissPayload,
@@ -2785,15 +2786,27 @@ export function PracticeTestRunnerClient({
                         examStemScrollPartition
                         examCategoryLabel={catExamCategoryLine}
                         examHeaderRightSlot={
-                          <PracticeTestFlagForReviewButton
-                            flagged={Boolean(flagged[current.id])}
-                            disabled={examPrimaryBusy}
-                            titleFlagged={tx("learner.practiceTests.run.unflagForReview", "Remove flag")}
-                            titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
-                            srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
-                            srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
-                            onToggle={() => toggleFlagForQuestion(current.id)}
-                          />
+                          <div className="flex items-center gap-2">
+                            <QuestionBookmarkButton
+                              compact
+                              defaultBookmarked={Boolean(flagged[current.id])}
+                              sourceType="cat_exam"
+                              sourceId={current.id}
+                              title={current.topic?.trim() ? `${current.topic} CAT question` : "CAT exam question"}
+                              topic={current.topic ?? current.subtopic ?? null}
+                              difficulty={current.difficulty != null ? difficultyBandLabel(current.difficulty) : null}
+                              pathwayId={activePathwayId}
+                            />
+                            <PracticeTestFlagForReviewButton
+                              flagged={Boolean(flagged[current.id])}
+                              disabled={examPrimaryBusy}
+                              titleFlagged={tx("learner.practiceTests.run.unflagForReview", "Remove flag")}
+                              titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
+                              srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
+                              srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
+                              onToggle={() => toggleFlagForQuestion(current.id)}
+                            />
+                          </div>
                         }
                         examLayoutMeasureKey={`${current.id}:${optsOrderCanonical.join("|")}`}
                       >
@@ -3195,15 +3208,27 @@ export function PracticeTestRunnerClient({
       (qTags.find((t) => typeof t === "string" && t.trim().length > 0) as string | undefined)?.trim() ??
       null;
     const legacyExamFlagSlot = (
-      <PracticeTestFlagForReviewButton
-        flagged={Boolean(flagged[current.id])}
-        disabled={controlsBusy}
-        titleFlagged={tx("learner.practiceTests.run.unflagForReview", "Remove flag")}
-        titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
-        srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
-        srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
-        onToggle={() => toggleFlagForQuestion(current.id)}
-      />
+      <div className="flex items-center gap-2">
+        <QuestionBookmarkButton
+          compact
+          defaultBookmarked={Boolean(flagged[current.id])}
+          sourceType={catMode ? "cat_exam" : "practice_question"}
+          sourceId={current.id}
+          title={current.topic?.trim() ? `${current.topic} question` : "Practice exam question"}
+          topic={current.topic ?? current.subtopic ?? null}
+          difficulty={current.difficulty != null ? difficultyBandLabel(current.difficulty) : null}
+          pathwayId={activePathwayId}
+        />
+        <PracticeTestFlagForReviewButton
+          flagged={Boolean(flagged[current.id])}
+          disabled={controlsBusy}
+          titleFlagged={tx("learner.practiceTests.run.unflagForReview", "Remove flag")}
+          titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
+          srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
+          srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
+          onToggle={() => toggleFlagForQuestion(current.id)}
+        />
+      </div>
     );
     const legacyQuestionCardInner = (
       <>
@@ -3657,15 +3682,27 @@ export function PracticeTestRunnerClient({
   );
 
   const linearExamFlagSlot = (
-    <PracticeTestFlagForReviewButton
-      flagged={Boolean(flagged[current.id])}
-      disabled={controlsBusy}
-      titleFlagged={tx("learner.practiceTests.run.unflagForReview", "Remove flag")}
-      titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
-      srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
-      srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
-      onToggle={() => toggleFlagForQuestion(current.id)}
-    />
+    <div className="flex items-center gap-2">
+      <QuestionBookmarkButton
+        compact
+        defaultBookmarked={Boolean(flagged[current.id])}
+        sourceType={catMode ? "cat_exam" : "practice_question"}
+        sourceId={current.id}
+        title={current.topic?.trim() ? `${current.topic} question` : "Practice exam question"}
+        topic={current.topic ?? current.subtopic ?? null}
+        difficulty={current.difficulty != null ? difficultyBandLabel(current.difficulty) : null}
+        pathwayId={activePathwayId}
+      />
+      <PracticeTestFlagForReviewButton
+        flagged={Boolean(flagged[current.id])}
+        disabled={controlsBusy}
+        titleFlagged={tx("learner.practiceTests.run.unflagForReview", "Remove flag")}
+        titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
+        srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
+        srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
+        onToggle={() => toggleFlagForQuestion(current.id)}
+      />
+    </div>
   );
 
   const linearPrimaryTutorLayout = Boolean(linearPracticeSplitReview);

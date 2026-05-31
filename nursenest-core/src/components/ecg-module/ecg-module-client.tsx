@@ -7,6 +7,8 @@ import { EcgLiveStrip } from "@/components/study/ecg-live-strip";
 import { isEcgLiveStripMediaConfig } from "@/lib/ecg-module/ecg-strip-clinical-validation";
 import { ECG_LIVE_STRIP_MEDIA_TYPE } from "@/lib/ecg-video-quiz/ecg-video-question";
 import { EcgInterpretationScaffold } from "@/components/ecg-module/ecg-interpretation-scaffold";
+import { QuestionBookmarkButton } from "@/components/bookmarks/question-bookmark-button";
+import { ShowSimilarQuestions } from "@/components/questions/show-similar-questions";
 import {
   getEcgCurriculumUnitByRhythmTag,
   type EcgCurriculumUnit,
@@ -490,15 +492,27 @@ function EcgQuestionCard({
         data-testid="ecg-result-live-region"
       />
 
-      {item.clinicalPriority ? (
-        <p className="mb-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-warning)_92%,var(--semantic-text-primary))]">
-          Clinical priority: {governEcgDrillCopy(item.clinicalPriority)}
-        </p>
-      ) : null}
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          {item.clinicalPriority ? (
+            <p className="mb-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-warning)_92%,var(--semantic-text-primary))]">
+              Clinical priority: {governEcgDrillCopy(item.clinicalPriority)}
+            </p>
+          ) : null}
 
-      <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-        {item.rhythmTag}
-      </p>
+          <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+            {item.rhythmTag}
+          </p>
+        </div>
+        <QuestionBookmarkButton
+          compact
+          sourceType="ecg_question"
+          sourceId={item.id}
+          title={`${item.rhythmTag} ECG question`}
+          topic={item.rhythmTag}
+          difficulty={level}
+        />
+      </div>
 
       {/* ECG media */}
       <VideoPreview
@@ -689,6 +703,19 @@ function EcgQuestionCard({
               isCorrect={isCorrect}
             />
           ) : null}
+
+          <ShowSimilarQuestions
+            context={{
+              sourceType: "ecg_question",
+              sourceId: item.id,
+              topic: item.rhythmTag,
+              clinicalConcept: item.rhythmTag,
+              ecgRhythmCategory: item.rhythmTag,
+              currentCorrect: isCorrect,
+              previouslyMissed: !isCorrect,
+              weakArea: !isCorrect,
+            }}
+          />
 
           {/* Scaffold review (guided lesson mode only) — fixed condition: phase === "submitted" */}
           {isGuidedLessonMode && phase === "submitted" ? (

@@ -8,7 +8,9 @@ import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-ex
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
 import { FlashcardStudyRevealPanels } from "@/components/flashcards/flashcard-study-reveal-panels";
 import { AdaptiveCaseSimulationPanel } from "@/components/questions/adaptive-case-simulation-panel";
+import { ShowSimilarQuestions } from "@/components/questions/show-similar-questions";
 import { SaveToNotebookButton } from "@/components/notebook/save-to-notebook-button";
+import { QuestionBookmarkButton } from "@/components/bookmarks/question-bookmark-button";
 import {
   buildSimpleCorrectRationale,
   buildSimpleDistractorRationale,
@@ -23,6 +25,8 @@ import {
 import type { ExamMicroQuestionPayload, SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
 import type { AdaptiveCaseSimulation } from "@/lib/questions/adaptive-case-simulation";
+import type { QuestionBookmarkPayload } from "@/lib/bookmarks/question-bookmarks";
+import type { SimilarQuestionContext } from "@/lib/questions/similar-question-links";
 
 type PromptImageSplit = {
   imageHtml: string | null;
@@ -169,6 +173,8 @@ export function FlashcardStudyQuestionStack({
   questionLabel,
   marked = false,
   onToggleMark,
+  questionBookmark,
+  similarQuestionContext,
   onAdvance,
   examPathwayLabel = "NCLEX",
 }: {
@@ -197,6 +203,8 @@ export function FlashcardStudyQuestionStack({
   questionLabel?: string;
   marked?: boolean;
   onToggleMark?: () => void;
+  questionBookmark?: QuestionBookmarkPayload | null;
+  similarQuestionContext?: SimilarQuestionContext | null;
   onAdvance?: () => void;
   /** "NCLEX" | "REx-PN" | "CNPLE" — drives Exam Tip badge. */
   examPathwayLabel?: string;
@@ -320,7 +328,16 @@ export function FlashcardStudyQuestionStack({
                 ) : (
                   <span aria-hidden />
                 )}
-                {onToggleMark ? (
+                {questionBookmark ? (
+                  <QuestionBookmarkButton
+                    compact
+                    defaultBookmarked={marked}
+                    {...questionBookmark}
+                    onSaved={() => {
+                      if (!marked) onToggleMark?.();
+                    }}
+                  />
+                ) : onToggleMark ? (
                   <button
                     type="button"
                     className="nn-flashcard-mark-button shrink-0"
@@ -574,6 +591,7 @@ export function FlashcardStudyQuestionStack({
                         {revealLinksSection}
                       </div>
                     ) : null}
+                    <ShowSimilarQuestions context={similarQuestionContext} />
                   </div>
                 ) : (
                   <div className="nn-flashcard-rationale-panel__body nn-flashcard-rationale-panel__body--reserved" data-nn-educational-content-container="">
@@ -638,6 +656,7 @@ export function FlashcardStudyQuestionStack({
                         {revealLinksSection}
                       </div>
                     ) : null}
+                    <ShowSimilarQuestions context={similarQuestionContext} />
                   </div>
                 ) : (
                   <div className="nn-flashcard-rationale-panel__empty">

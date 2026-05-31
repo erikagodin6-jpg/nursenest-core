@@ -32,6 +32,7 @@ import { emitClientStructuredLog } from "@/lib/observability/structured-client-l
 import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
 import { QuestionBankPeerPerformancePanel } from "@/components/student/question-bank-peer-performance-panel";
 import { QuestionSessionStudyLoopPanel } from "@/components/student/question-session-study-loop-panel";
+import { ShowSimilarQuestions } from "@/components/questions/show-similar-questions";
 import { ExamProgressBar, ExamSessionShell, ExamSessionStickyChrome, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import { learnerExamLayoutRefinementProps } from "@/lib/exam-workspace/unified-exam-workspace";
@@ -1855,6 +1856,18 @@ export function QuestionBankPracticeClient({
                           onToggleBookmark={() =>
                             setMarkedForReview((f) => ({ ...f, [current.id]: !f[current.id] }))
                           }
+                          bookmarkPayload={{
+                            sourceType: /pharm/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)
+                              ? "pharmacology_question"
+                              : /clinical skill|procedure|competenc/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)
+                                ? "clinical_skills_question"
+                                : "practice_question",
+                            sourceId: current.id,
+                            title: current.topic?.trim() ? `${current.topic} practice question` : "Practice question",
+                            topic: current.topic ?? current.subtopic ?? null,
+                            difficulty: current.questionType ?? current.questionFormat ?? null,
+                            pathwayId: pathwayIdFilter ?? defaultPathwayId ?? null,
+                          }}
                           showMistakeCta={!g.correct}
                           onAddToMistakeNotebook={addCurrentToMistakeNotebook}
                           mistakeAdded={Boolean(mistakeNotebookByQuestion[current.id])}
@@ -1862,7 +1875,32 @@ export function QuestionBankPracticeClient({
                           onJumpToNotes={scrollToQuestionNotes}
                         />
                       }
-                      recommendationsSlot={learningLoopRecommendations}
+                      recommendationsSlot={
+                        <>
+                          {learningLoopRecommendations}
+                          <ShowSimilarQuestions
+                            context={{
+                              sourceType: /pharm/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)
+                                ? "pharmacology_question"
+                                : /clinical skill|procedure|competenc/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)
+                                  ? "clinical_skills_question"
+                                  : "practice_question",
+                              sourceId: current.id,
+                              topic: current.topic ?? null,
+                              subtopic: current.subtopic ?? null,
+                              clinicalConcept: current.subtopic ?? current.topic ?? null,
+                              medicationClass: /pharm/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)
+                                ? current.subtopic ?? current.topic ?? null
+                                : null,
+                              pathwayId: pathwayIdFilter ?? defaultPathwayId ?? null,
+                              currentCorrect: g.correct,
+                              previouslyMissed: !g.correct,
+                              weakArea: !g.correct,
+                            }}
+                            compact
+                          />
+                        </>
+                      }
                     />
                   )}
                   {rationaleVisible && g.clinicalPearl ? (

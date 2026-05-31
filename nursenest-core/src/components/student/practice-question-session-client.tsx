@@ -654,6 +654,36 @@ export function PracticeQuestionSessionClient({
             answerChoicesHeading: isSata ? "Select all that apply" : "Answer choices",
           }}
           questionLabel={`Question ${idx + 1} of ${total}`}
+          questionBookmark={{
+            sourceType: /pharm/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)
+              ? "pharmacology_question"
+              : /clinical skill|procedure|competenc/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)
+                ? "clinical_skills_question"
+                : "practice_question",
+            sourceId: current.id,
+            title: current.topic?.trim() ? `${current.topic} practice question` : `Practice question ${idx + 1}`,
+            topic: current.topic ?? current.subtopic ?? null,
+            difficulty: current.questionType ?? null,
+            pathwayId,
+          }}
+          similarQuestionContext={{
+            sourceType: /pharm/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)
+              ? "pharmacology_question"
+              : /clinical skill|procedure|competenc/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)
+                ? "clinical_skills_question"
+                : "practice_question",
+            sourceId: current.id,
+            topic: current.topic ?? null,
+            subtopic: current.subtopic ?? null,
+            clinicalConcept: current.subtopic ?? current.topic ?? null,
+            medicationClass: /pharm/i.test(`${current.topic ?? ""} ${current.subtopic ?? ""}`)
+              ? current.subtopic ?? current.topic ?? null
+              : null,
+            pathwayId,
+            currentCorrect: g?.correct ?? null,
+            previouslyMissed: g?.correct === false,
+            weakArea: mode === "weak_area" || g?.correct === false,
+          }}
           onAdvance={g ? () => setItemStep("confidence") : undefined}
           mainFooter={practiceFooter}
         />

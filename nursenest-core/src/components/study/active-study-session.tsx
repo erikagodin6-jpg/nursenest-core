@@ -841,6 +841,24 @@ export function ActiveStudySession({
         questionLabel={undefined}
         marked={Boolean(pinState.starred)}
         onToggleMark={toggleMarked}
+        questionBookmark={{
+          sourceType: "flashcard",
+          sourceId: current.id,
+          title: current.topic?.trim() ? `${current.topic} flashcard` : "Flashcard question",
+          topic: current.topic ?? current.subtopic ?? null,
+          difficulty: null,
+          pathwayId: current.pathwayId ?? sessionPathwayId ?? null,
+        }}
+        similarQuestionContext={{
+          sourceType: "flashcard",
+          sourceId: current.id,
+          topic: current.topic ?? null,
+          subtopic: current.subtopic ?? null,
+          clinicalConcept: current.subtopic ?? current.topic ?? null,
+          pathwayId: current.pathwayId ?? sessionPathwayId ?? null,
+          currentCorrect: lastAnswerCorrect,
+          weakArea: lastAnswerCorrect === false,
+        }}
         onAdvance={goNext}
         revealLinksSection={revealed ? (
           <div className="space-y-3" data-testid="flashcard-ecosystem-links">

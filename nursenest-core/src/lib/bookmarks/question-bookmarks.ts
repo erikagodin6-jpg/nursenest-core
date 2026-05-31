@@ -197,7 +197,7 @@ function inferQuestionBookmarkSourceType(
 }
 
 function extractQuestionBookmarkSourceId(contextId: string, sourceType: QuestionBookmarkSourceType): string {
-  const needle = `${sourceType}-`;
+  const needle = `${sourceType}:`;
   const index = contextId.indexOf(needle);
   if (index < 0) return contextId;
   return contextId.slice(index + needle.length);

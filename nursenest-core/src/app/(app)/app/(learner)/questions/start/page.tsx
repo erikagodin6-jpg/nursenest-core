@@ -12,7 +12,7 @@ function firstParam(value: string | string[] | undefined): string {
 function parseQuestionCount(raw: string): number {
   const n = Number(raw);
   if (!Number.isInteger(n)) return 20;
-  return Math.max(5, Math.min(100, n));
+  return Math.max(3, Math.min(100, n));
 }
 
 function parseSelectionMode(raw: string): Exclude<PracticeTestSelectionMode, "cat" | "targeted"> {
