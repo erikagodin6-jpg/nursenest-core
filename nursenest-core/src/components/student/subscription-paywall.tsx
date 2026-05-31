@@ -117,8 +117,11 @@ export function SubscriptionPaywall({
     });
   }, [context, freemiumRemainingQuestions, freemiumRemainingLessons]);
 
+  const mobilePrimaryCtaClass = `${MARKETING_PRIMARY_CTA_CLASS} nn-mobile-critical-cta w-full justify-center sm:w-auto`;
+  const mobileSecondaryCtaClass = `${MARKETING_SECONDARY_CTA_CLASS} nn-mobile-critical-cta w-full justify-center sm:w-auto`;
+
   return (
-    <section className="nn-paywall-premium space-y-5 rounded-2xl border p-6">
+    <section className="nn-paywall-premium space-y-5 rounded-2xl border p-4 sm:p-6" data-nn-mobile-paywall-surface>
       {/* Direct answer to “Will this help me pass?” — before subscription ask */}
       <div
         className="rounded-xl border p-4"
@@ -136,6 +139,20 @@ export function SubscriptionPaywall({
         <p className="mt-3 text-sm font-medium leading-relaxed text-[var(--semantic-success)]" data-testid="paywall-safe-to-try-line">
           {formatSentenceCase(t("paywall.safeToTryLine"), locale)}
         </p>
+        <div className="nn-paywall-mobile-quick-cta mt-4 flex flex-col gap-2 md:hidden" data-nn-mobile-conversion-cta>
+          <Link
+            href="/pricing"
+            className={mobilePrimaryCtaClass}
+          >
+            {t("cta.continuePlan")}
+          </Link>
+          <Link
+            href="/app"
+            className={mobileSecondaryCtaClass}
+          >
+            {t("paywall.cta.openStudyHub")}
+          </Link>
+        </div>
       </div>
 
       {/*
@@ -384,16 +401,16 @@ export function SubscriptionPaywall({
         <p className="mt-1.5 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{t("paywall.preCta.microLine3")}</p>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap" data-nn-mobile-conversion-cta>
         <Link
           href="/pricing"
-          className={MARKETING_PRIMARY_CTA_CLASS}
+          className={mobilePrimaryCtaClass}
         >
           {t("cta.continuePlan")}
         </Link>
         <Link
           href="/app"
-          className={MARKETING_SECONDARY_CTA_CLASS}
+          className={mobileSecondaryCtaClass}
         >
           {t("paywall.cta.openStudyHub")}
         </Link>

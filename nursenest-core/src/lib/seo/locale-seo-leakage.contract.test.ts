@@ -14,6 +14,7 @@ import {
   isLocaleSitemapIncluded,
   SEO_BLOCKED_LOCALES,
 } from "@/lib/i18n/language-readiness";
+import { getIsolatedLanguageConfig } from "@/lib/i18n/language-isolation-registry";
 import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
 import {
   DEFAULT_MARKETING_LOCALE,
@@ -207,7 +208,7 @@ describe("Contract 4: robots rules do not conflict with indexing rules", () => {
     for (const code of getPreviewSeoLocales()) {
       const override = localeRobotsOverride(code);
       assert.equal(override?.index, false, `preview locale ${code} must emit noindex`);
-      assert.equal(override?.follow, code === "fr" || code === "es" ? false : true);
+      assert.equal(override?.follow, getIsolatedLanguageConfig(code) ? false : true);
     }
   });
 

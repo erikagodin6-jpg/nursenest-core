@@ -174,6 +174,7 @@ export function LessonSectionNav({
     <div
       className="nn-lesson-section-nav-shell"
       data-nn-premium-horizontal-lesson-nav
+      data-nn-premium-lessons-mobile-nav
     >
       <nav
         className="nn-lesson-section-nav nn-lesson-section-nav--horizontal"

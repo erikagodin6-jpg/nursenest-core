@@ -58,6 +58,7 @@ html[data-theme="aurora"] .nn-learner-app {
     .nn-premium-auth-system,
     .nn-premium-lessons-system,
     .nn-premium-lesson-detail-shell,
+    .nn-paywall-premium,
     .nn-flashcards-hub-premium,
     .nn-flashcard-study-stack-premium,
     .nn-premium-practice-hub,
@@ -83,6 +84,7 @@ html[data-theme="aurora"] .nn-learner-app {
     .nn-premium-auth-system,
     .nn-premium-lessons-system,
     .nn-premium-lesson-detail-shell,
+    .nn-paywall-premium,
     .nn-flashcards-hub-premium,
     .nn-premium-practice-hub,
     .nn-dash--learner-home,
@@ -168,6 +170,33 @@ html[data-theme="aurora"] .nn-learner-app {
     touch-action: manipulation;
   }
 
+  :is(
+    .nn-paywall-premium [data-nn-mobile-conversion-cta],
+    .nn-premium-auth-signup-cta,
+    .nn-trial-blocked[data-nn-premium-auth-subscription-required],
+    .nn-paywall-mobile-quick-cta
+  ) {
+    min-width: 0;
+  }
+
+  :is(
+    .nn-paywall-premium [data-nn-mobile-conversion-cta] a,
+    .nn-paywall-premium .nn-mobile-critical-cta,
+    .nn-premium-auth-signup-cta button,
+    .nn-trial-blocked[data-nn-premium-auth-subscription-required] a,
+    .nn-trial-blocked[data-nn-premium-auth-subscription-required] button
+  ) {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .nn-paywall-mobile-quick-cta {
+    border-top: 1px solid color-mix(in srgb, var(--semantic-success) 18%, var(--semantic-border-soft));
+    padding-top: 0.85rem;
+  }
+
   :is(.nn-brand-header-logo-slot, .nn-brand-learner-logo-slot, .nn-brand-auth-logo-slot, .nn-header-logo-link) {
     flex-shrink: 0;
     max-width: min(62vw, 14rem);
@@ -227,6 +256,34 @@ html[data-theme="aurora"] .nn-learner-app {
     overscroll-behavior: contain;
   }
 
+  :is(
+    .nn-question-session-rationale,
+    .nn-question-session-rationale > *,
+    .nn-practice-exam-rationale-panel,
+    .nn-practice-exam-rationale-panel__card,
+    .nn-practice-rationale-full,
+    .nn-practice-rationale-full__scroll,
+    .nn-flashcard-rationale-panel,
+    .nn-flashcard-rationale-panel__body,
+    .nn-flashcard-rationale-panel__body--reserved
+  ) {
+    min-height: 0;
+    overflow-wrap: anywhere;
+  }
+
+  :is(
+    .nn-question-session-rationale,
+    .nn-practice-exam-rationale-panel,
+    .nn-practice-exam-rationale-panel__card,
+    .nn-practice-rationale-full,
+    .nn-flashcard-rationale-panel
+  ) {
+    max-height: min(72dvh, 38rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
   :is(input, textarea, select) {
     min-height: var(--nn-mobile-study-tap-target);
     font-size: max(1rem, 16px);
@@ -239,6 +296,51 @@ html[data-theme="aurora"] .nn-learner-app {
   :is(.recharts-wrapper, .recharts-surface, canvas) {
     max-width: 100%;
     overflow: visible;
+  }
+}
+
+@media (max-width: 390px) {
+  :root {
+    --nn-mobile-study-gutter: clamp(0.82rem, 4.8vw, 1rem);
+    --nn-mobile-study-stack-gap: clamp(0.72rem, 3.8vw, 0.95rem);
+    --nn-mobile-study-card-gap: clamp(0.65rem, 3.6vw, 0.85rem);
+  }
+
+  .nn-paywall-premium {
+    border-radius: 1rem;
+    gap: var(--nn-mobile-study-stack-gap);
+  }
+
+  .nn-paywall-premium :is(h2, h3, p, li, dt, dd, span) {
+    overflow-wrap: anywhere;
+  }
+
+  .nn-premium-auth-card {
+    padding: 1rem;
+  }
+
+  .nn-premium-auth-header h1 {
+    font-size: clamp(1.55rem, 7vw, 2rem);
+    line-height: 1.04;
+  }
+
+  .nn-premium-auth-form {
+    margin-top: 1.15rem;
+    gap: 0.85rem;
+  }
+
+  .nn-premium-auth-signup-fine-tune {
+    padding: 0.75rem;
+  }
+
+  :is(
+    .nn-question-session-rationale,
+    .nn-practice-exam-rationale-panel,
+    .nn-practice-exam-rationale-panel__card,
+    .nn-practice-rationale-full,
+    .nn-flashcard-rationale-panel
+  ) {
+    max-height: min(68dvh, 34rem);
   }
 }
 

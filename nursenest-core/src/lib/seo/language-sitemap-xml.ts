@@ -10,7 +10,7 @@ export function buildEmptySitemapUrlsetXml(): string {
 `;
 }
 
-export async function buildLanguageSitemapXml(locale: "en" | "fr" | "es"): Promise<string> {
+export async function buildLanguageSitemapXml(locale: string): Promise<string> {
   if (locale !== "en" && !isLocaleSitemapIncluded(locale)) {
     return buildEmptySitemapUrlsetXml();
   }

@@ -19,7 +19,7 @@ Flashcards must reinforce high-yield clinical recognition and retention. Definit
 | Score | Band | Publication meaning |
 | ---: | --- | --- |
 | 90-100 | Excellent | Strong candidate after normal review |
-| 80-89 | Good | May still require remediation; must reach 85+ to publish |
+| 80-89 | Good | May still require remediation; must reach 90+ to publish |
 | 70-79 | Needs Review | Do not publish |
 | < 70 | Do Not Publish | Quarantine or rewrite |
 
@@ -27,7 +27,7 @@ Flashcards must reinforce high-yield clinical recognition and retention. Definit
 
 Content may be marked `published=true` only when all are true:
 
-- Quality Score >= 85
+- Quality Score >= 90
 - Clinical Accuracy Pass
 - No placeholder content
 - No duplicate content

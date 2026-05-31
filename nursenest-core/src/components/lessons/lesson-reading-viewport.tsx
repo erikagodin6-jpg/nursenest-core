@@ -71,7 +71,7 @@ export function LessonReadingViewport({
         <LessonReadingProgressStrip sections={sections} />
       ) : null}
 
-      <div className="nn-lesson-reading-viewport__mobile-bar">
+      <div className="nn-lesson-reading-viewport__mobile-bar" data-nn-premium-lessons-mobile-nav>
         <button
           type="button"
           className="nn-lesson-reading-viewport__mobile-toc"

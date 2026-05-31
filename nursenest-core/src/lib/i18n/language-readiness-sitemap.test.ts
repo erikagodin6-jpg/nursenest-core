@@ -19,11 +19,11 @@ describe("isLocalePrefixedPathnameExcludedFromSitemap", () => {
     assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/es/pricing"), true);
   });
 
-  it("allows full-tier marketing locale prefixes", () => {
-    assert.equal(isLocaleSitemapIncluded("tl"), true);
-    assert.equal(isLocaleSitemapIncluded("hi"), true);
-    assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/tl/pricing"), false);
-    assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/hi/faq"), false);
+  it("excludes previously full-tier non-English locale prefixes until isolation registry approval", () => {
+    assert.equal(isLocaleSitemapIncluded("tl"), false);
+    assert.equal(isLocaleSitemapIncluded("hi"), false);
+    assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/tl/pricing"), true);
+    assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/hi/faq"), true);
   });
 
   it("excludes incomplete-tier marketing locale prefixes", () => {

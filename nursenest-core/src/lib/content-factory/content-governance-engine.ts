@@ -1,4 +1,5 @@
 import { auditContentRelationshipNode, type ContentRelationshipNode } from "./content-relationship-engine";
+import { GLOBAL_CONTENT_QUALITY_MINIMUM_SCORE } from "@/lib/content-quality/global-content-quality-governance";
 
 export type ContentGovernanceInput = {
   readonly id: string;
@@ -37,5 +38,5 @@ export function runContentGovernanceEngine(input: ContentGovernanceInput): Conte
     issues.push("missing_related_content");
   }
   const score = Math.max(0, 100 - issues.length * 15 - Math.round(input.duplicateScore * 10));
-  return { pass: issues.length === 0 && score >= 85, score, issues };
+  return { pass: issues.length === 0 && score >= GLOBAL_CONTENT_QUALITY_MINIMUM_SCORE, score, issues };
 }

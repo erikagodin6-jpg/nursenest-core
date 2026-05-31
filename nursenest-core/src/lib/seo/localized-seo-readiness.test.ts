@@ -74,23 +74,24 @@ test("French remains blocked from indexing until translation readiness is comple
   assert.ok(item.issues.some((issue) => issue.includes("not SEO-indexable")));
 });
 
-test("Tagalog has localized SEO breadcrumbs and slug mappings for shared pages", () => {
+test("Tagalog has localized SEO breadcrumbs and slug mappings but remains noindex until isolation approval", () => {
   const item = buildLocalizedSeoAuditItem("tl", surface("practice-questions-hub"));
   assert.equal(item.localizedPath, "/tl/question-bank");
   assert.equal(item.localizedSlug, "mga-practice-questions");
   assert.equal(item.breadcrumbs[0]?.label, "Home");
   assert.equal(item.breadcrumbs[1]?.label, "Mga practice questions");
-  assert.equal(item.sitemapExpected, true);
-  assert.equal(item.hreflangExpected, true);
+  assert.equal(item.sitemapExpected, false);
+  assert.equal(item.hreflangExpected, false);
 });
 
-test("Hindi has localized SEO breadcrumbs and slug mappings for shared pages", () => {
+test("Hindi has localized SEO breadcrumbs and slug mappings but remains noindex until isolation approval", () => {
   const item = buildLocalizedSeoAuditItem("hi", surface("practice-questions-hub"));
   assert.equal(item.localizedPath, "/hi/question-bank");
   assert.equal(item.localizedSlug, "practice-prashn");
   assert.equal(item.breadcrumbs[0]?.label, "होम");
   assert.equal(item.breadcrumbs[1]?.label, "प्रैक्टिस प्रश्न");
-  assert.equal(item.sitemapExpected, true);
+  assert.equal(item.sitemapExpected, false);
+  assert.equal(item.hreflangExpected, false);
 });
 
 test("Portuguese remains blocked from indexing until production readiness is explicitly restored", () => {
@@ -125,12 +126,9 @@ test("sitemap safe URL collector excludes Spanish localized hubs until publicati
   assert.deepEqual(urls, []);
 });
 
-test("sitemap safe URL collector includes indexable Tagalog localized hubs", () => {
+test("sitemap safe URL collector excludes Tagalog localized hubs until isolation approval", () => {
   const urls = collectLocaleMarketingSitemapSafeUrls("https://nursenest.ca", "tl");
-  assert.ok(urls.includes("https://nursenest.ca/tl"));
-  assert.ok(urls.includes("https://nursenest.ca/tl/pricing"));
-  assert.ok(urls.includes("https://nursenest.ca/tl/lessons"));
-  assert.ok(urls.includes("https://nursenest.ca/tl/question-bank"));
+  assert.deepEqual(urls, []);
 });
 
 test("country exam readiness snapshot helper stays free of node:module and createRequire", () => {
