@@ -58,14 +58,14 @@
 }
 
 [data-theme="ocean"] {
-  --theme-primary: #1aaee0;
+  --theme-primary: #007bff;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #d9f3fa;
-  --theme-secondary-foreground: #0d7aaa;
-  --theme-accent: #e6f7fd;
-  --theme-accent-foreground: #1aaee0;
-  --theme-border: #72d4f5;
-  --theme-ring: #1aaee0;
+  --theme-secondary: #e8f7ff;
+  --theme-secondary-foreground: #063f8f;
+  --theme-accent: #e5f8fc;
+  --theme-accent-foreground: #06b6d4;
+  --theme-border: #b8dcff;
+  --theme-ring: #007bff;
 }
 
 [data-theme="forest"] {
@@ -1982,18 +1982,18 @@ html[data-theme="sunset"] {
 }
 
 html[data-theme="ocean"] {
-  --theme-primary: #1d9bd7;
+  --theme-primary: #007bff;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #14b8a6;
-  --theme-secondary-foreground: #0f766e;
-  --theme-accent: #7dd3fc;
-  --theme-accent-foreground: #075985;
-  --theme-border: #cfe8f4;
-  --theme-ring: #0284c7;
-  --theme-page-bg: #f6fbff;
-  --theme-heading-text: #0f172a;
-  --theme-body-text: #334155;
-  --theme-muted-text: #64748b;
+  --theme-secondary: #06b6d4;
+  --theme-secondary-foreground: #063f8f;
+  --theme-accent: #e5f8fc;
+  --theme-accent-foreground: #06b6d4;
+  --theme-border: #b8dcff;
+  --theme-ring: #007bff;
+  --theme-page-bg: #f8fcff;
+  --theme-heading-text: #061a48;
+  --theme-body-text: #29456f;
+  --theme-muted-text: #5b7397;
 
   --lesson-summary: #e7f5ff;
   --lesson-key-concepts: #e9edff;
@@ -2013,20 +2013,20 @@ html[data-theme="ocean"] {
   --state-info: #e7f5ff;
   --state-danger-soft: #ffe3e7;
 
-  --logo-primary: #1d9bd7;
-  --logo-accent: #14b8a6;
-  --logo-text: #0f172a;
-  --theme-brand-accent: #1d9bd7;
-  --theme-brand-strong: #0369a1;
-  --theme-nav-background: #0369a1;
+  --logo-primary: #007bff;
+  --logo-accent: #06b6d4;
+  --logo-text: #061a48;
+  --theme-brand-accent: #007bff;
+  --theme-brand-strong: #063f8f;
+  --theme-nav-background: #063f8f;
   --theme-nav-foreground: #ffffff;
   --theme-nav-hover: rgba(255, 255, 255, 0.16);
   --theme-nav-hover-foreground: #ffffff;
-  --theme-header-top-bg: #0369a1;
-  --theme-header-main-bg: #0369a1;
+  --theme-header-top-bg: #063f8f;
+  --theme-header-main-bg: #063f8f;
   --theme-header-secondary-bg: #ffffff;
-  --theme-header-secondary-fg: #0f172a;
-  --theme-header-divider: rgba(3, 105, 161, 0.24);
+  --theme-header-secondary-fg: #061a48;
+  --theme-header-divider: rgba(0, 123, 255, 0.22);
 }
 
 [data-theme="meadow"] {

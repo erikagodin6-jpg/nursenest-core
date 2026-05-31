@@ -14,7 +14,7 @@ export type NavChromeTheme = {
 export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
   /* ── Clinical / Default ── */
   ocean: {
-    chrome: "#0EA5E9",
+    chrome: "#007BFF",
     foreground: "#FFFFFF",
     border: "rgba(255,255,255,0.22)",
     hoverBg: "rgba(255,255,255,0.16)",

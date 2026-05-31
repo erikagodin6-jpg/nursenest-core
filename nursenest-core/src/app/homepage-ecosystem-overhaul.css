@@ -3,6 +3,266 @@
   color: var(--palette-text);
 }
 
+.nn-home-marketing-root .nn-premium-home-section {
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-home-section {
+  padding-block: clamp(5.25rem, 9vw, 8rem);
+  background: var(--page-bg);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-section-shell {
+  max-width: 72rem;
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-home-section::before {
+  opacity: 0.36;
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  :where(
+    .nn-premium-home-section--pathways,
+    .nn-premium-home-section--ecosystem,
+    .nn-premium-home-section--beyond-qbank,
+    .nn-premium-home-section--readiness,
+    .nn-premium-home-section--trust,
+    .nn-premium-home-section--cta
+  ) {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-panel-muted) 26%, var(--page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--page-bg)) 100%
+    );
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  :where(
+    .nn-premium-pathway-card,
+    .nn-adaptive-lesson-card,
+    .nn-premium-flow-card,
+    .nn-beyond-qbank-card,
+    .nn-premium-readiness-panel,
+    .nn-home-readiness-intelligence,
+    .nn-home-readiness-intelligence__item,
+    .nn-premium-readiness-flow-card,
+    .nn-premium-trust-card,
+    .nn-premium-final-cta,
+    .nn-premium-cta-tile,
+    .nn-premium-hero-panel,
+    .nn-premium-hero-clinical-brief__card
+  ) {
+  background: color-mix(in srgb, var(--semantic-surface) 98%, var(--theme-card-bg));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 82%, transparent),
+    0 18px 42px -34px color-mix(in srgb, var(--palette-heading) 18%, transparent);
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  :where(
+    .nn-premium-home-section--pathways,
+    .nn-premium-home-section--ecosystem,
+    .nn-premium-home-section--beyond-qbank,
+    .nn-premium-home-section--readiness,
+    .nn-premium-home-section--trust,
+    .nn-premium-home-section--cta
+  ) {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-surface) 86%, var(--page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-panel-muted) 18%, var(--page-bg)) 100%
+    );
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-home-marketing-rich-hero {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-surface) 88%, var(--page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-panel-muted) 18%, var(--page-bg)) 100%
+    );
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-home-section::before {
+  opacity: 0.18;
+}
+
+@media (max-width: 640px) {
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+    .nn-premium-home-section {
+    padding-block: clamp(4rem, 13vw, 5.5rem);
+  }
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish] {
+  --nn-ocean-brand: #007bff;
+  --nn-ocean-brand-deep: #063f8f;
+  --nn-ocean-cyan: #06b6d4;
+  --nn-ocean-green: #16a34a;
+  --nn-ocean-orange: #f59e0b;
+  --nn-ocean-ink: #061a48;
+  --nn-ocean-muted: #29456f;
+  --nn-ocean-line: #b8dcff;
+  --nn-ocean-surface: #ffffff;
+  --nn-ocean-canvas: #f8fcff;
+  --nn-ocean-band: #edf8ff;
+  --nn-premium-tone-brand: var(--nn-ocean-brand);
+  --nn-premium-tone-info: var(--nn-ocean-cyan);
+  --nn-premium-tone-success: var(--nn-ocean-green);
+  --nn-premium-tone-warning: var(--nn-ocean-orange);
+  --nn-premium-tone-accent: var(--nn-ocean-brand-deep);
+  color: var(--nn-ocean-ink);
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  :where(.nn-marketing-h1, .nn-marketing-h2, .nn-marketing-h3, .nn-marketing-h4, .nn-premium-pathway-card span.mt-2) {
+  color: var(--nn-ocean-ink);
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  :where(.nn-marketing-body, .nn-marketing-body-sm, .nn-marketing-lead) {
+  color: var(--nn-ocean-muted);
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-hero-headline-emphasis {
+  background: linear-gradient(92deg, var(--nn-ocean-brand) 0%, var(--nn-ocean-cyan) 100%);
+  background-clip: text;
+  color: var(--nn-ocean-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-home-marketing-rich-hero {
+  background:
+    radial-gradient(circle at 92% 20%, color-mix(in srgb, var(--nn-ocean-brand) 12%, transparent), transparent 18rem),
+    radial-gradient(circle at 10% 24%, color-mix(in srgb, var(--nn-ocean-cyan) 10%, transparent), transparent 22rem),
+    linear-gradient(180deg, var(--nn-ocean-canvas) 0%, var(--nn-ocean-band) 100%);
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-home-marketing-rich-hero::after {
+  opacity: 0.16;
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  :where(
+    .nn-premium-home-section--pathways,
+    .nn-premium-home-section--ecosystem,
+    .nn-premium-home-section--beyond-qbank,
+    .nn-premium-home-section--readiness,
+    .nn-premium-home-section--trust,
+    .nn-premium-home-section--cta
+  ) {
+  background:
+    linear-gradient(180deg, var(--nn-ocean-canvas) 0%, color-mix(in srgb, var(--nn-ocean-band) 62%, #ffffff) 100%);
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  :where(
+    .nn-premium-pathway-card,
+    .nn-adaptive-lesson-card,
+    .nn-premium-flow-card,
+    .nn-beyond-qbank-card,
+    .nn-premium-readiness-panel,
+    .nn-home-readiness-intelligence,
+    .nn-home-readiness-intelligence__item,
+    .nn-premium-readiness-flow-card,
+    .nn-premium-trust-card,
+    .nn-premium-final-cta,
+    .nn-premium-cta-tile,
+    .nn-premium-hero-panel,
+    .nn-premium-hero-clinical-brief__card
+  ) {
+  border-color: color-mix(in srgb, var(--nn-ocean-brand) 24%, var(--nn-ocean-line));
+  background: var(--nn-ocean-surface);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #ffffff 86%, transparent),
+    0 24px 60px -42px color-mix(in srgb, var(--nn-ocean-brand) 36%, transparent);
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-pathway-card {
+  border-color: color-mix(in srgb, var(--premium-card-accent) 34%, var(--nn-ocean-line));
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--premium-card-accent) 18%, #ffffff) 0%,
+      color-mix(in srgb, var(--premium-card-accent) 10%, #ffffff) 18%,
+      #ffffff 18%,
+      #ffffff 100%
+    );
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-pathway-card__icon {
+  border-color: color-mix(in srgb, var(--premium-card-accent) 62%, #ffffff);
+  background: #ffffff;
+  color: var(--premium-card-accent);
+  box-shadow:
+    0 0 0 0.45rem color-mix(in srgb, var(--premium-card-accent) 10%, transparent),
+    0 18px 34px -22px color-mix(in srgb, var(--premium-card-accent) 58%, transparent);
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  :where(.nn-premium-home-eyebrow, .nn-premium-hero-eyebrow) {
+  border-color: color-mix(in srgb, var(--nn-ocean-brand) 34%, var(--nn-ocean-line));
+  background: #ffffff;
+  color: var(--nn-ocean-brand);
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  :where(.nn-btn-primary, .nn-marketing-cta-primary) {
+  background: var(--nn-ocean-brand);
+  color: #ffffff;
+  box-shadow: 0 18px 36px -22px color-mix(in srgb, var(--nn-ocean-brand) 72%, transparent);
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  :where(.nn-btn-secondary, .nn-marketing-cta-secondary) {
+  border-color: color-mix(in srgb, var(--nn-ocean-brand) 42%, var(--nn-ocean-line));
+  background: #ffffff;
+  color: var(--nn-ocean-ink);
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-hero-ecg {
+  background: var(--nn-ocean-ink);
+  box-shadow: 0 18px 40px -26px color-mix(in srgb, var(--nn-ocean-ink) 70%, transparent);
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-hero-ecg__wave {
+  border-radius: 0.8rem;
+}
+
 .nn-home-ecosystem-section {
   border-bottom: 1px solid var(--border-subtle);
   padding-block: clamp(3rem, 6vw, 5.75rem);
@@ -17,6 +277,54 @@
       var(--page-bg) 36%,
       color-mix(in srgb, var(--semantic-panel-cool) 24%, var(--page-bg)) 100%
     );
+}
+
+.nn-premium-hero-panel__status {
+  margin-left: auto;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 22%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-success) 82%, var(--palette-heading));
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.55rem;
+  text-transform: uppercase;
+}
+
+.nn-premium-hero-clinical-brief {
+  overflow: hidden;
+}
+
+.nn-premium-hero-clinical-brief__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.nn-premium-hero-clinical-brief__card {
+  min-width: 0;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 12%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-surface) 90%, var(--semantic-panel-muted));
+  padding: 0.85rem;
+}
+
+.nn-premium-hero-clinical-brief__card span {
+  display: block;
+  color: var(--palette-text-muted);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.nn-premium-hero-clinical-brief__card strong {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--palette-heading);
+  font-size: 0.9rem;
+  line-height: 1.3;
 }
 
 .nn-home-ecosystem-heading {
@@ -299,6 +607,77 @@
 
 .nn-home-ecosystem-section--map {
   background: color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--page-bg));
+}
+
+.nn-premium-home-section--beyond-qbank {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--page-bg)) 0%,
+      var(--page-bg) 100%
+    );
+}
+
+.nn-beyond-qbank-card {
+  border-color: color-mix(in srgb, var(--beyond-qbank-tone) 18%, var(--border-subtle));
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted)),
+      var(--semantic-surface)
+    );
+  box-shadow: 0 0.75rem 1.8rem color-mix(in srgb, var(--palette-heading) 6%, transparent);
+}
+
+.nn-beyond-qbank-card__icon {
+  border-color: color-mix(in srgb, var(--beyond-qbank-tone) 28%, var(--border-subtle));
+  background: color-mix(in srgb, var(--beyond-qbank-tone) 10%, var(--semantic-surface));
+  color: var(--beyond-qbank-tone);
+}
+
+.nn-beyond-qbank-card li {
+  margin-top: 0;
+  border-color: color-mix(in srgb, var(--beyond-qbank-tone) 16%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 42%, transparent);
+}
+
+.nn-premium-home-section--adaptive-lessons {
+  background: var(--page-bg);
+}
+
+.nn-adaptive-lesson-card {
+  border-color: color-mix(in srgb, var(--adaptive-lesson-tone) 16%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted));
+  box-shadow: 0 0.75rem 1.6rem color-mix(in srgb, var(--palette-heading) 5%, transparent);
+}
+
+.nn-adaptive-lesson-card__tag {
+  display: inline-flex;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--adaptive-lesson-tone) 12%, var(--semantic-surface));
+  color: var(--adaptive-lesson-tone);
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.55rem;
+  text-transform: uppercase;
+}
+
+.nn-premium-readiness-signal {
+  border-color: color-mix(in srgb, var(--semantic-success) 24%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-success) 86%, var(--palette-heading));
+}
+
+.nn-premium-readiness-flow-card {
+  border-color: color-mix(in srgb, var(--readiness-flow-tone) 18%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-panel-muted));
+}
+
+.nn-premium-readiness-flow-card span {
+  border-color: color-mix(in srgb, var(--readiness-flow-tone) 24%, var(--border-subtle));
+  background: color-mix(in srgb, var(--readiness-flow-tone) 9%, var(--semantic-surface));
+  color: var(--readiness-flow-tone);
 }
 
 .nn-home-ecosystem-map {

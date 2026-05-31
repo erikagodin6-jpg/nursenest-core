@@ -50,6 +50,7 @@ import {
   orderFlashcardsForAdaptiveSession,
   type AdaptiveProgressLite,
 } from "@/lib/flashcards/study-queue";
+import { loadPublishedPathwayLessonsForStudyFromDb } from "@/lib/learner-study-hub/load-published-pathway-lessons-for-study-from-db";
 
 export type CustomSessionStudyMode = "term_to_definition" | "definition_to_term" | "mixed";
 
@@ -231,9 +232,74 @@ export async function buildFlashcardCustomSession(
         });
         if (inv.ok) {
           const examInventoryCounts = inv.countsByBuilderId;
-          const examTotal = inv.total;
+          let lessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics | null = null;
+          let lessonVirtualTotal = 0;
+          const pathwayLessonsForVirtuals = await loadPublishedPathwayLessonsForStudyFromDb(pathwayScopeId);
+          const { virtuals: mergedLessonVirtuals, diagnostics: lessonInv } =
+            collectMergedLessonVirtualFlashcardsForPathway(
+              pathwayScopeId,
+              pathwayLessonsForVirtuals.length > 0 ? pathwayLessonsForVirtuals : undefined,
+            );
+          const mergedCounts: Record<string, number> = { ...examInventoryCounts };
+          const dedicatedRows = await prisma.flashcard.findMany({
+            where: { status: ContentStatus.PUBLISHED, deck: { pathwayId: pathwayScopeId } },
+            select: {
+              front: true,
+              back: true,
+              category: { select: { name: true, topicCode: true } },
+              deck: { select: { pathwayId: true, title: true } },
+            },
+            take: 5000,
+          });
+          for (const row of dedicatedRows) {
+            const categoryId = resolveBuilderCategoryId({
+              label: row.category.name,
+              topicCode: row.category.topicCode,
+              pathwayId: row.deck?.pathwayId ?? pathwayScopeId,
+              deckTitle: row.deck?.title ?? null,
+              front: row.front,
+              back: row.back,
+            });
+            mergedCounts[categoryId] = (mergedCounts[categoryId] ?? 0) + 1;
+          }
+          for (const v of mergedLessonVirtuals) {
+            if (
+              v.sourceSectionKind === "padding" ||
+              (v.row.rationaleCorrect ?? "").includes(FLASHCARD_PADDING_CARD_RATIONALE_MARKER)
+            ) continue;
+            const categoryId = resolveBuilderCategoryId({
+              label: v.row.category.name,
+              topicCode: v.row.category.topicCode,
+              pathwayId: pathwayScopeId,
+              deckTitle: null,
+              front: v.row.front,
+              back: v.row.back,
+            });
+            mergedCounts[categoryId] = (mergedCounts[categoryId] ?? 0) + 1;
+            lessonVirtualTotal += 1;
+          }
+          lessonVirtualDiagnostics = {
+            pathwayId: lessonInv.pathwayId,
+            catalogLessonCount: lessonInv.catalogLessonCount,
+            lessonsWithDerivedCards: lessonInv.lessonsWithVirtualCards,
+            totalGeneratedVirtualCards: lessonVirtualTotal,
+            recallVirtualCount: lessonInv.recallVirtualCount,
+            sectionDerivedVirtualCount: lessonInv.sectionDerivedVirtualCount,
+            genericFillerSectionCardHits: lessonInv.genericFillerSourcedSectionCards,
+            selectedCategoryIds: [...selectedCategories],
+            filterModeLabel: describeCustomSessionFilterMode({
+              weakOnly,
+              incorrectOnly,
+              starredOnly,
+              notStudiedOnly,
+              savedOnly,
+              notesOnly,
+              revisitOnly,
+            }),
+          };
+          const examTotal = inv.total + lessonVirtualTotal;
           const selectedCategorySum = selectedCategories.reduce(
-            (s, id) => s + (examInventoryCounts[id] ?? 0),
+            (s, id) => s + (mergedCounts[id] ?? 0),
             0,
           );
           const matchingCardsForSummary =
@@ -241,7 +307,7 @@ export async function buildFlashcardCustomSession(
               ? examTotal
               : selectedCategorySum > 0
                 ? selectedCategorySum
-                : examTotal;
+                : 0;
           const sessionShuffleSalt = sessionSeed?.trim() || randomUUID();
           const summary: FlashcardCustomSessionSummary = {
             pathwayId: pathwayScopeId,
@@ -265,14 +331,14 @@ export async function buildFlashcardCustomSession(
             cardLimit: cardLimitRaw ?? "20",
             queryRelaxation,
             sessionShuffleSalt,
-            lessonVirtualDiagnostics: null,
+            lessonVirtualDiagnostics,
             poolInventoryDiagnostics: inv.diagnostics,
           };
           return {
             ok: true,
             queryRelaxation,
             summary,
-            categoryOptions: inv.categoryOptions,
+            categoryOptions: applyCountsToBuilderCategories(pathwayScopeId, mergedCounts),
             cards: [],
           };
         }
@@ -477,10 +543,14 @@ export async function buildFlashcardCustomSession(
     }
 
     let lessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics | null = null;
-    if (pathwayScopeId && allowLessonQuestionVirtuals && !includeCards) {
+    if (pathwayScopeId && allowLessonQuestionVirtuals) {
       const pid = pathwayScopeId;
+      const pathwayLessonsForVirtuals = await loadPublishedPathwayLessonsForStudyFromDb(pid);
       const { virtuals: mergedLessonVirtuals, diagnostics: lessonInv } =
-        collectMergedLessonVirtualFlashcardsForPathway(pid);
+        collectMergedLessonVirtualFlashcardsForPathway(
+          pid,
+          pathwayLessonsForVirtuals.length > 0 ? pathwayLessonsForVirtuals : undefined,
+        );
       const existingIds = new Set(cardWithCategory.map((c) => c.id));
       for (const v of mergedLessonVirtuals) {
         if (existingIds.has(v.id)) continue;
@@ -683,7 +753,7 @@ export async function buildFlashcardCustomSession(
           ? examTotal
           : selectedCategorySum > 0
             ? selectedCategorySum
-            : examTotal
+            : 0
         : scoped.length;
 
     const sessionShuffleSalt = sessionSeed?.trim() || randomUUID();

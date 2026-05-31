@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, CalendarCheck, Flame, Target } from "lucide-react";
+import { ArrowRight, BrainCircuit, Compass, Route, ShieldCheck } from "lucide-react";
 
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
@@ -12,20 +12,35 @@ import {
 
 import { usePremiumHomepageRoutes } from "./premium-homepage-routes";
 
-const DOMAINS = [
-  { labelKey: "pharmacology", label: "Pharmacology", pct: 86, tone: "success" },
-  { labelKey: "medSurg", label: "Medical–surgical", pct: 74, tone: "info" },
-  { labelKey: "maternity", label: "Maternity", pct: 62, tone: "warning" },
-  { labelKey: "pediatrics", label: "Pediatrics", pct: 48, tone: "danger" },
-  { labelKey: "psych", label: "Psychiatric mental health", pct: 81, tone: "brand" },
-  { labelKey: "fundamentals", label: "Fundamentals", pct: 90, tone: "success" },
-] as const;
-
 const READINESS_INTELLIGENCE = [
   { key: "sessionReports", label: "Session report cards", desc: "Summaries you can revisit and share with instructors" },
   { key: "harmIndex", label: "Harm Index signals", desc: "Safety-weighted weak areas—not just accuracy percentages" },
   { key: "replay", label: "Replay & timeline review", desc: "Walk back through decisions and rationales" },
   { key: "longitudinal", label: "Longitudinal learner intelligence", desc: "Trends across weeks, domains, and study modes" },
+] as const;
+
+const READINESS_FLOW = [
+  {
+    key: "detect",
+    title: "Detect the weak area",
+    body: "Recent answers, confidence, and clinical risk signals identify where study time should move next.",
+    icon: BrainCircuit,
+    tone: "brand",
+  },
+  {
+    key: "route",
+    title: "Route into remediation",
+    body: "The system connects missed concepts to lessons, flashcards, clinical skills, ECG, labs, and targeted practice.",
+    icon: Route,
+    tone: "info",
+  },
+  {
+    key: "forecast",
+    title: "Forecast readiness",
+    body: "Learners see whether momentum is improving and which domains still need work before full-length practice.",
+    icon: Compass,
+    tone: "warning",
+  },
 ] as const;
 
 export function PremiumReadinessPreview() {
@@ -51,7 +66,7 @@ export function PremiumReadinessPreview() {
             <p className="nn-marketing-body mt-3 max-w-xl text-pretty text-[var(--palette-text-muted)]">
               {tr(
                 "pages.home.premium.readiness.body",
-                "Readiness signals combine domain mastery, NCJMM-aligned judgment cues, competency bands, and study momentum. The preview uses sample data only and avoids outcome guarantees.",
+                "Readiness signals combine domain mastery, NCJMM-aligned judgment cues, competency bands, and study momentum without pretending a single score can guarantee an outcome.",
               )}
             </p>
 
@@ -99,74 +114,51 @@ export function PremiumReadinessPreview() {
           </div>
 
           <div className="nn-premium-readiness-panel rounded-3xl border p-5 sm:p-6">
-            <div className="grid gap-4 sm:grid-cols-[auto_1fr] sm:items-center">
-              <div className="nn-premium-readiness-gauge" aria-label="Sample readiness score 75 percent">
-                <span>75%</span>
-              </div>
-              <div>
+            <div className="flex items-start gap-4">
+              <span className="nn-premium-readiness-signal flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border" aria-hidden>
+                <ShieldCheck className="h-6 w-6" />
+              </span>
+              <div className="min-w-0">
                 <p className="nn-marketing-caption font-bold uppercase tracking-wide text-[var(--palette-text-muted)]">
-                  {tr("pages.home.premium.readiness.previewLabel", "Sample readiness")}
+                  {tr("pages.home.premium.readiness.previewLabel", "Readiness intelligence")}
                 </p>
                 <h3 className="mt-1 text-2xl font-black text-[var(--palette-heading)]">
-                  {tr("pages.home.premium.readiness.previewHeading", "On track with focused review")}
+                  {tr("pages.home.premium.readiness.previewHeading", "Know what to fix before the next exam block.")}
                 </h3>
                 <p className="nn-marketing-body-sm mt-2 text-[var(--palette-text-muted)]">
                   {tr(
                     "pages.home.premium.readiness.previewBody",
-                    "Next priority: pediatric respiratory assessment and bronchodilator safety.",
+                    "NurseNest turns practice results into a study decision: what is weak, why it matters clinically, and where to go next.",
                   )}
                 </p>
               </div>
             </div>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              <div className="nn-premium-mini-metric rounded-2xl border p-4">
-                <Target className="h-5 w-5 text-[var(--semantic-brand)]" aria-hidden />
-                <p className="mt-3 text-sm font-black text-[var(--palette-heading)]">
-                  {tr("pages.home.premium.readiness.metricNext.label", "Next 30 min")}
-                </p>
-                <p className="text-xs text-[var(--palette-text-muted)]">
-                  {tr("pages.home.premium.readiness.metricNext.value", "Pediatric asthma set")}
-                </p>
-              </div>
-              <div className="nn-premium-mini-metric rounded-2xl border p-4">
-                <Flame className="h-5 w-5 text-[var(--semantic-warning)]" aria-hidden />
-                <p className="mt-3 text-sm font-black text-[var(--palette-heading)]">
-                  {tr("pages.home.premium.readiness.metricStreak.label", "Study streak")}
-                </p>
-                <p className="text-xs text-[var(--palette-text-muted)]">
-                  {tr("pages.home.premium.readiness.metricStreak.value", "5 active days")}
-                </p>
-              </div>
-              <div className="nn-premium-mini-metric rounded-2xl border p-4">
-                <CalendarCheck className="h-5 w-5 text-[var(--semantic-success)]" aria-hidden />
-                <p className="mt-3 text-sm font-black text-[var(--palette-heading)]">
-                  {tr("pages.home.premium.readiness.metricProgress.label", "Progress")}
-                </p>
-                <p className="text-xs text-[var(--palette-text-muted)]">
-                  {tr("pages.home.premium.readiness.metricProgress.value", "42 items this week")}
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-5 space-y-3">
-              {DOMAINS.map((domain) => (
-                <div key={domain.labelKey}>
-                  <div className="flex justify-between gap-4 text-xs font-bold text-[var(--palette-text-muted)]">
-                    <span>
-                      {tr(`pages.home.premium.readiness.domains.${domain.labelKey}`, domain.label)}
-                    </span>
-                    <span className="text-[var(--palette-heading)]">{domain.pct}%</span>
-                  </div>
-                  <div className="nn-premium-progress mt-1.5">
-                    <span
-                      data-nn-progress-fill
-                      data-nn-progress-tone={domain.tone}
-                      style={{ width: `${domain.pct}%`, ["--progress-tone" as string]: `var(--nn-premium-meter-${domain.tone})` }}
-                    />
-                  </div>
-                </div>
-              ))}
+            <div className="mt-5 grid gap-3">
+              {READINESS_FLOW.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <article
+                    key={item.key}
+                    className="nn-premium-readiness-flow-card rounded-2xl border p-4"
+                    style={{ ["--readiness-flow-tone" as string]: `var(--nn-premium-tone-${item.tone})` }}
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border">
+                        <Icon className="h-5 w-5" aria-hidden />
+                      </span>
+                      <div className="min-w-0">
+                        <h4 className="text-sm font-black text-[var(--palette-heading)]">
+                          {tr(`pages.home.premium.readiness.flow.${item.key}.title`, item.title)}
+                        </h4>
+                        <p className="nn-marketing-body-sm mt-1 text-[var(--palette-text-muted)]">
+                          {tr(`pages.home.premium.readiness.flow.${item.key}.body`, item.body)}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </div>

@@ -457,17 +457,17 @@ html[data-theme="clinical-light"] {
   --semantic-success: #16a34a;
   --semantic-success-soft: color-mix(in srgb, #16a34a 11%, var(--bg-card));
   --semantic-success-contrast: #14532d;
-  --semantic-info: #5ab8d4;
-  --semantic-info-soft: color-mix(in srgb, #5ab8d4 10%, var(--bg-card));
-  --semantic-info-contrast: #064273;
+  --semantic-info: #06b6d4;
+  --semantic-info-soft: color-mix(in srgb, #06b6d4 10%, var(--bg-card));
+  --semantic-info-contrast: #063f8f;
   --semantic-warning: #f59e0b;
   --semantic-warning-soft: color-mix(in srgb, #f59e0b 11%, var(--bg-card));
   --semantic-danger: #f87171;
   --semantic-danger-soft: color-mix(in srgb, #f87171 10%, var(--bg-card));
   --semantic-chart-2: #16a34a;
-  --semantic-chart-3: #5ab8d4;
+  --semantic-chart-3: #06b6d4;
   --semantic-chart-4: #f59e0b;
-  --semantic-chart-5: #0ea5e9;
+  --semantic-chart-5: #007bff;
 }
 
 /* Multi-pastel — balanced across all hues; chart colors are deeper than background accents */

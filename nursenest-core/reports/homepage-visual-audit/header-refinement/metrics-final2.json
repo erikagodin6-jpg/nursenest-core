@@ -1,0 +1,370 @@
+[
+  {
+    "name": "desktop-1440-final2",
+    "width": 1440,
+    "shell": {
+      "left": 0,
+      "right": 1440,
+      "width": 1440,
+      "height": 120.8,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "48.96px",
+      "paddingRight": "48.96px",
+      "maxWidth": "none"
+    },
+    "grid": {
+      "left": 49,
+      "right": 1391,
+      "width": 1342.1,
+      "height": 82.8,
+      "display": "grid",
+      "gridTemplateColumns": "432.641px 361.625px 432.641px",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "logo": {
+      "left": 49,
+      "right": 207.4,
+      "width": 158.4,
+      "height": 54,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "min(100%, 352px)"
+    },
+    "nav": {
+      "left": 539.2,
+      "right": 900.8,
+      "width": 361.6,
+      "height": 30.4,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "100%"
+    },
+    "actions": {
+      "left": 1228,
+      "right": 1391,
+      "width": 163,
+      "height": 38,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "min(100%, 608px)"
+    },
+    "mobileBar": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "none",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "links": [
+      {
+        "text": "Tools",
+        "left": 539.1875,
+        "right": 581.5625,
+        "width": 42.375
+      },
+      {
+        "text": "Pricing",
+        "left": 619,
+        "right": 670.375,
+        "width": 51.375
+      },
+      {
+        "text": "About",
+        "left": 707.8125,
+        "right": 755.1875,
+        "width": 47.375
+      },
+      {
+        "text": "Blog",
+        "left": 792.625,
+        "right": 829,
+        "width": 36.375
+      },
+      {
+        "text": "FAQ",
+        "left": 866.4375,
+        "right": 900.8125,
+        "width": 34.375
+      }
+    ],
+    "gaps": [
+      37.4,
+      37.4,
+      37.4,
+      37.4
+    ],
+    "hasHorizontalOverflow": false,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "laptop-1280-final2",
+    "width": 1280,
+    "shell": {
+      "left": 0,
+      "right": 1280,
+      "width": 1280,
+      "height": 117.6,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "43.52px",
+      "paddingRight": "43.52px",
+      "maxWidth": "none"
+    },
+    "grid": {
+      "left": 43.5,
+      "right": 1236.5,
+      "width": 1193,
+      "height": 79.6,
+      "display": "grid",
+      "gridTemplateColumns": "369.297px 352px 369.297px",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "logo": {
+      "left": 43.5,
+      "right": 201.9,
+      "width": 158.4,
+      "height": 54,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "min(100%, 352px)"
+    },
+    "nav": {
+      "left": 467.5,
+      "right": 812.5,
+      "width": 344.9,
+      "height": 30.4,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "100%"
+    },
+    "actions": {
+      "left": 1073.5,
+      "right": 1236.5,
+      "width": 163,
+      "height": 38,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "min(100%, 608px)"
+    },
+    "mobileBar": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "none",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "links": [
+      {
+        "text": "Tools",
+        "left": 467.53125,
+        "right": 509.90625,
+        "width": 42.375
+      },
+      {
+        "text": "Pricing",
+        "left": 543.171875,
+        "right": 594.546875,
+        "width": 51.375
+      },
+      {
+        "text": "About",
+        "left": 627.8125,
+        "right": 675.1875,
+        "width": 47.375
+      },
+      {
+        "text": "Blog",
+        "left": 708.453125,
+        "right": 744.828125,
+        "width": 36.375
+      },
+      {
+        "text": "FAQ",
+        "left": 778.09375,
+        "right": 812.46875,
+        "width": 34.375
+      }
+    ],
+    "gaps": [
+      33.3,
+      33.3,
+      33.3,
+      33.3
+    ],
+    "hasHorizontalOverflow": false,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "tablet-768-final2",
+    "width": 768,
+    "shell": {
+      "left": 146.7,
+      "right": 621.3,
+      "width": 474.5,
+      "height": 60,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "26.88px",
+      "paddingRight": "26.88px",
+      "maxWidth": "1600px"
+    },
+    "grid": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "none",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "16px",
+      "paddingRight": "16px",
+      "maxWidth": "none"
+    },
+    "logo": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "nav": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "100%"
+    },
+    "actions": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "100%"
+    },
+    "mobileBar": {
+      "left": 173.6,
+      "right": 594.4,
+      "width": 420.8,
+      "height": 60,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "links": [],
+    "gaps": [],
+    "hasHorizontalOverflow": false,
+    "scrollWidth": 768
+  },
+  {
+    "name": "mobile-390-final2",
+    "width": 390,
+    "shell": {
+      "left": 0,
+      "right": 439,
+      "width": 439,
+      "height": 61.6,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "20px",
+      "paddingRight": "20px",
+      "maxWidth": "1600px"
+    },
+    "grid": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "none",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "16px",
+      "paddingRight": "16px",
+      "maxWidth": "none"
+    },
+    "logo": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "nav": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "100%"
+    },
+    "actions": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "100%"
+    },
+    "mobileBar": {
+      "left": 20,
+      "right": 419,
+      "width": 399,
+      "height": 61.6,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "links": [],
+    "gaps": [],
+    "hasHorizontalOverflow": false,
+    "scrollWidth": 390
+  }
+]

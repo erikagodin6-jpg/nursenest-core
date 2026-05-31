@@ -1,0 +1,38 @@
+[
+  {
+    "name": "ocean-final2-desktop-1440x900",
+    "cardBgImage": null,
+    "cardBorder": null,
+    "primary": "#007bff",
+    "cta": "#2D7FD3",
+    "info": "#06b6d4",
+    "hasBeyond": false
+  },
+  {
+    "name": "ocean-final2-pathways-1440x900",
+    "cardBgImage": null,
+    "cardBorder": null,
+    "primary": "#007bff",
+    "cta": "#2D7FD3",
+    "info": "#06b6d4",
+    "hasBeyond": false
+  },
+  {
+    "name": "ocean-final2-beyond-1440x900",
+    "cardBgImage": null,
+    "cardBorder": null,
+    "primary": "#007bff",
+    "cta": "#2D7FD3",
+    "info": "#06b6d4",
+    "hasBeyond": false
+  },
+  {
+    "name": "ocean-final2-mobile-390x844",
+    "cardBgImage": "linear-gradient(color(srgb 0.82 0.906824 1) 0%, color(srgb 0.9 0.948235 1) 18%, rgb(255, 255, 255) 18%, rgb(255, 255, 255) 100%)",
+    "cardBorder": "color(srgb 0.476235 0.733412 1)",
+    "primary": "#007bff",
+    "cta": "#2D7FD3",
+    "info": "#06b6d4",
+    "hasBeyond": true
+  }
+]

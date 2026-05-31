@@ -30,6 +30,21 @@ test("flashcard launch budget: client inventory fetch has 2 second timeout and k
   assert.match(client, /Retry Counts/);
 });
 
+test("flashcard hub: count failures stay studyable instead of rendering false zero-card labels", () => {
+  const client = read(flashcardsHubClientPath);
+  assert.match(client, /type InventoryStatus = "loading" \| "ready" \| "degraded"/);
+  assert.match(client, /const countsReliable = inventoryStatus === "ready"/);
+  assert.match(client, /if \(!countsReliable\) return "Available"/);
+  assert.match(client, /return count > 0 \? `\$\{flashcardCountFormatter\.format\(count\)\} Flashcards` : "Ready to study"/);
+});
+
+test("flashcard hub: exposes explicit all-systems control while preserving additive system selection", () => {
+  const client = read(flashcardsHubClientPath);
+  assert.match(client, /data-nn-e2e-flashcards-system-actions/);
+  assert.match(client, /All Systems/);
+  assert.match(client, /toggleFlashcardsHubSystemSelection\(current, system\.id\)/);
+});
+
 test("flashcard launch budget: hub does not block startup on analytics or readiness components", () => {
   const client = read(flashcardsHubClientPath);
   const hubReturnStart = client.indexOf("return (");

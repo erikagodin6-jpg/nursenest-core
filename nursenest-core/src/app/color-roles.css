@@ -116,13 +116,13 @@ html[data-theme="strawberry-cream"] {
 
 /* Ocean CTA: deeper clinical blue so white text passes AA (the auto-mix is medium teal, ~3.5:1) */
 html[data-theme="ocean"] {
-  --role-cta: #0d7aaa;
+  --role-cta: #007bff;
   --role-cta-foreground: #ffffff;
-  --role-cta-hover: #0a6890;
-  --role-cta-pressed: #085776;
-  --role-cta-shadow: color-mix(in srgb, #0d7aaa 38%, transparent);
-  --role-cta-soft: color-mix(in srgb, #0d7aaa 11%, var(--bg-card, var(--theme-card-bg)));
-  --role-cta-on-soft: color-mix(in srgb, #0d7aaa 78%, var(--theme-heading-text));
+  --role-cta-hover: #006fe6;
+  --role-cta-pressed: #005dc2;
+  --role-cta-shadow: color-mix(in srgb, #007bff 38%, transparent);
+  --role-cta-soft: color-mix(in srgb, #007bff 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #007bff 78%, var(--theme-heading-text));
 }
 
 /* Mint CTA: use the deep teal topbar tone — clean healthcare action color */

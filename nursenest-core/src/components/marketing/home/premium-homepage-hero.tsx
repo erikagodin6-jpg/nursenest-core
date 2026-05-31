@@ -12,7 +12,6 @@
  *   questionCount, lessonCount — stats from the DB, pre-resolved in the RSC.
  */
 
-import type { CSSProperties } from "react";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { safeHomepageMarketingT } from "@/lib/marketing/homepage-marketing-visible-copy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -97,51 +96,38 @@ function stripMustachePlaceholders(value: string): string {
     .trim();
 }
 
-/* ──────────────────────────────────────────────────────────────────
-   Clinical dashboard panel — uses the `.nn-premium-hero-panel*`
-   class vocabulary already shipped in `premium-redesign-2026.css`.
-   ────────────────────────────────────────────────────────────────── */
-const HERO_CAROUSEL_SLIDES = [
-  {
-    label: "Answered Question",
-    src: "/images/homepage/question-bank-demo.png",
-    alt: "Answered NCLEX-style question showing selected answer, correct answer, rationale, and clinical pearl.",
-  },
-  {
-    label: "CAT Exam",
-    src: "/images/homepage/cat-exam-demo.png",
-    alt: "Computer adaptive testing screen showing a question in progress with adaptive exam interface.",
-  },
-  {
-    label: "ECG Detective Mode",
-    src: "/images/homepage/ecg-demo.png",
-    alt: "ECG detective mode showing rhythm strip interpretation and clinical reasoning.",
-  },
-] as const;
-
 function HeroClinicalPanel() {
+  const decisionCards = [
+    ["Rhythm", "Normal Sinus Rhythm"],
+    ["Lead", "Lead II strip"],
+    ["Clinical cue", "Stable baseline; continue assessment"],
+    ["Next step", "Escalate if rhythm or perfusion changes"],
+  ] as const;
+
   return (
     <aside
-      className="nn-premium-hero-panel nn-premium-hero-carousel"
-      aria-label="NurseNest product screenshot carousel"
+      className="nn-premium-hero-panel nn-premium-hero-clinical-brief"
+      aria-label="NurseNest clinical learning brief"
     >
-      <header className="nn-premium-hero-panel__header nn-premium-hero-carousel__header">
-        <span className="nn-premium-hero-panel__tag">Live Product Preview</span>
-        <span className="nn-premium-hero-panel__live">Real learning workflows</span>
+      <header className="nn-premium-hero-panel__header">
+        <span className="nn-premium-hero-panel__tag">Today · Clinical Brief</span>
+        <span className="nn-premium-hero-panel__status">Study-ready</span>
       </header>
 
-      <div className="nn-premium-hero-carousel__stage">
-        {HERO_CAROUSEL_SLIDES.map((slide, index) => (
-          <figure key={slide.label} className="nn-premium-hero-carousel__slide" style={{ "--nn-hero-slide-index": index } as CSSProperties}>
-            <img src={slide.src} alt={slide.alt} width={1600} height={936} loading={index === 0 ? "eager" : "lazy"} decoding="async" />
-            <figcaption>{slide.label}</figcaption>
-          </figure>
-        ))}
+      <div className="nn-premium-hero-ecg" aria-label="Lead II normal sinus rhythm at approximately 72 beats per minute">
+        <div className="nn-premium-hero-ecg__row">
+          <span>Lead II · Normal Sinus Rhythm</span>
+          <span className="nn-premium-hero-ecg__bpm">72 BPM</span>
+        </div>
+        <MarketingHomepageEcgStripIllustration ariaLabel="Clinically accurate Lead II normal sinus rhythm strip with visible P waves, narrow QRS complexes, normal T waves, and consistent PR intervals" />
       </div>
 
-      <div className="nn-premium-hero-carousel__dots" aria-hidden>
-        {HERO_CAROUSEL_SLIDES.map((slide, index) => (
-          <span key={slide.label} style={{ "--nn-hero-slide-index": index } as CSSProperties} />
+      <div className="nn-premium-hero-clinical-brief__grid">
+        {decisionCards.map(([label, value]) => (
+          <div key={label} className="nn-premium-hero-clinical-brief__card">
+            <span>{label}</span>
+            <strong>{value}</strong>
+          </div>
         ))}
       </div>
     </aside>
@@ -190,17 +176,69 @@ export function MarketingHomepageEcgStripIllustration({ ariaLabel }: { ariaLabel
         />
       ))}
       <path
-        d="M0 52 H32 L40 50 L47 54 L55 52 H84 L92 50 L99 54 L107 52 H134 L142 50 L149 54 L157 52 H184 L192 50 L199 54 L207 52 H232 L240 50 L247 54 L255 52 H280 L287 50 L294 54 L302 52 H330 L338 50 L345 54 L353 52 H380 L388 50 L395 54 L403 52 H430 L438 50 L445 54 L453 52 H480 L488 50 L495 54 L503 52 H560"
+        d="M0 52 H36
+           C42 52 45 51 49 49
+           C53 47 57 47 61 49
+           C65 51 68 52 74 52
+           H92
+           L98 28 L104 78 L111 52
+           H126
+           C136 52 142 47 148 43
+           C156 38 166 39 174 45
+           C181 50 188 52 198 52
+           H246
+           C252 52 255 51 259 49
+           C263 47 267 47 271 49
+           C275 51 278 52 284 52
+           H302
+           L308 28 L314 78 L321 52
+           H336
+           C346 52 352 47 358 43
+           C366 38 376 39 384 45
+           C391 50 398 52 408 52
+           H456
+           C462 52 465 51 469 49
+           C473 47 477 47 481 49
+           C485 51 488 52 494 52
+           H512
+           L518 28 L524 78 L531 52
+           H560"
         fill="none"
-        stroke="color-mix(in srgb, var(--semantic-text-muted) 34%, transparent)"
+        stroke="color-mix(in srgb, var(--semantic-text-muted) 48%, transparent)"
         strokeWidth="2"
         strokeLinecap="round"
       />
       <path
-        d="M18 52 h18 l5 -11 l5 26 l8 -58 l8 79 l7 -33 h22 m14 -3 h18 l5 -11 l5 26 l8 -58 l8 79 l7 -33 h22 m14 -3 h18 l5 -11 l5 26 l8 -58 l8 79 l7 -33 h22 m14 -3 h18 l5 -11 l5 26 l8 -58 l8 79 l7 -33 h22 m14 -3 h18 l5 -11 l5 26 l8 -58 l8 79 l7 -33 h22"
+        d="M0 52 H36
+           C42 52 45 51 49 49
+           C53 47 57 47 61 49
+           C65 51 68 52 74 52
+           H92
+           L98 28 L104 78 L111 52
+           H126
+           C136 52 142 47 148 43
+           C156 38 166 39 174 45
+           C181 50 188 52 198 52
+           H246
+           C252 52 255 51 259 49
+           C263 47 267 47 271 49
+           C275 51 278 52 284 52
+           H302
+           L308 28 L314 78 L321 52
+           H336
+           C346 52 352 47 358 43
+           C366 38 376 39 384 45
+           C391 50 398 52 408 52
+           H456
+           C462 52 465 51 469 49
+           C473 47 477 47 481 49
+           C485 51 488 52 494 52
+           H512
+           L518 28 L524 78 L531 52
+           H560"
         fill="none"
         stroke="url(#nn-home-ecg-wave)"
-        strokeWidth="4"
+        strokeWidth="3"
         strokeLinejoin="round"
         strokeLinecap="round"
       />
@@ -237,7 +275,7 @@ export function PremiumHomepageHero(props: {
     safeHomepageMarketingT(
       t,
       "pages.home.hero.headlineAdaptive",
-      "The Most Comprehensive Nursing Education Ecosystem.",
+      "Master Nursing. Pass With Confidence.",
     ),
     locale,
   );

@@ -10,7 +10,7 @@ import { HUB } from "@/lib/navigation/canonical-destinations";
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
 
 export type PremiumHomepagePathway = {
-  id: "rn" | "pn" | "np" | "pre-nursing" | "new-grad";
+  id: "rn" | "pn" | "np" | "allied" | "pre-nursing" | "new-grad";
   title: string;
   subtitle: string;
   body: string;
@@ -140,6 +140,18 @@ export function usePremiumHomepageRoutes(): PremiumHomepageRoutes {
           tone: "success",
         },
         {
+          id: "allied",
+          title: tr("pages.home.premium.pathways.allied.title", "Allied Health"),
+          subtitle: tr("pages.home.premium.pathways.allied.subtitle", "RT · MLT · Paramedic · Imaging"),
+          body: tr(
+            "pages.home.premium.pathways.allied.body",
+            "Clinical readiness and exam preparation pathways for select allied health programs and licensing tracks.",
+          ),
+          href: loc("/allied-health"),
+          cta: tr("pages.home.premium.pathways.allied.cta", "Explore Allied Health"),
+          tone: "accent",
+        },
+        {
           id: "pre-nursing",
           title: tr("pages.home.premium.pathways.preNursing.title", "Pre-Nursing"),
           subtitle: tr("pages.home.premium.pathways.preNursing.subtitle", "ATI TEAS · HESI A2 · CASPer"),
@@ -161,7 +173,7 @@ export function usePremiumHomepageRoutes(): PremiumHomepageRoutes {
           ),
           href: loc("/canada/new-grad"),
           cta: tr("pages.home.premium.pathways.newGrad.cta", "Explore New Grad"),
-          tone: "accent",
+          tone: "brand",
         },
       ],
     };

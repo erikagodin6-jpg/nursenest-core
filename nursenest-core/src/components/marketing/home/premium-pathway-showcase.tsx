@@ -14,6 +14,7 @@ const PATHWAY_ICON_ABBR: Record<string, string> = {
   rn: "RN",
   pn: "PN",
   np: "NP",
+  allied: "AH",
   "pre-nursing": "PRE",
   "new-grad": "NG",
 };
@@ -55,7 +56,7 @@ export function PremiumPathwayShowcase() {
           </p>
         </div>
 
-        <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {pathwayCards.map((card) => (
             <MarketingTrackedLink
               key={card.id}
@@ -101,7 +102,7 @@ export function PremiumPathwayShowcase() {
                   safeHomepageMarketingT(
                     t,
                     "pages.home.premium.pathways.international.heading",
-                    "Live Hubs and Foundation Coverage Vary by Region.",
+                    "Country Hubs and Foundation Coverage Vary by Region.",
                   ),
                   locale,
                 )}
@@ -111,7 +112,7 @@ export function PremiumPathwayShowcase() {
                   safeHomepageMarketingT(
                     t,
                     "pages.home.premium.pathways.international.body",
-                    "Launched country hubs are live, but not every international route carries the same readiness system or CAT depth yet. Keep regional expectations explicit.",
+                    "Launched country hubs are available, but not every international route carries the same readiness system or CAT depth yet. Keep regional expectations explicit.",
                   ),
                   locale,
                 )}
@@ -120,7 +121,7 @@ export function PremiumPathwayShowcase() {
             <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
               <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_42%,var(--theme-card-bg))] px-4 py-3 text-sm font-semibold text-[var(--palette-heading)]">
                 {formatTitleCase(
-                  safeHomepageMarketingT(t, "pages.home.premium.pathways.international.live", "Live Now: Launched Country Hubs"),
+                  safeHomepageMarketingT(t, "pages.home.premium.pathways.international.live", "Available Now: Launched Country Hubs"),
                   locale,
                 )}
               </div>
@@ -132,7 +133,7 @@ export function PremiumPathwayShowcase() {
                 data-testid="premium-pathway-international-status-link"
               >
                 {formatTitleCase(
-                  safeHomepageMarketingT(t, "pages.home.premium.pathways.international.cta", "View a Live International Hub"),
+                  safeHomepageMarketingT(t, "pages.home.premium.pathways.international.cta", "View an International Hub"),
                   locale,
                 )}
                 <ArrowRight className="ml-1.5 h-4 w-4 shrink-0" aria-hidden />

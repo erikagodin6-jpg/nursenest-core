@@ -3,8 +3,6 @@ import "server-only";
 import type { PropsWithChildren } from "react";
 
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
-import { HomepageFeatureShowcase } from "@/components/marketing/home/homepage-feature-showcase";
-import { PremiumClinicalDepth } from "@/components/marketing/home/premium-clinical-depth";
 import { PremiumHomepageHero } from "@/components/marketing/home/premium-homepage-hero";
 import { PremiumHomepageTrust } from "@/components/marketing/home/premium-homepage-trust";
 import {
@@ -87,7 +85,7 @@ async function loadServerIslandMessagesSafe(): Promise<Record<string, string>> {
  * Single server await for homepage stats — no Suspense swap on `/` so the first
  * paint is one consistent HomeRestoredClient tree (degraded stats on failure).
  *
- * Server islands: PremiumClinicalDepth and PremiumHomepageTrust are rendered here
+ * Server islands: PremiumHomepageHero and PremiumHomepageTrust are rendered here
  * as React Server Components and passed as named slots to the client wrapper.
  * React does not hydrate these subtrees — they become static HTML.
  */
@@ -127,22 +125,6 @@ export async function HomeRestoredWithDeferredStats({
       messages={serverIslandMessages}
     />
   );
-  const clinicalDepthSlot = (
-    <PremiumClinicalDepth messages={serverIslandMessages} locale={DEFAULT_MARKETING_LOCALE} />
-  );
-  const featureDiscoverySlot = (
-    <HomepageFeatureShowcase
-      stats={{
-        questionCount: safeNumber(stats?.questionCount),
-        lessonCount: safeNumber(stats?.totalLessons),
-        flashcardCount: safeNumber(stats?.totalFlashcards),
-        clinicalSkillCount: safeNumber(stats?.clinicalSkillCount),
-        ecgCaseCount: safeNumber(stats?.ecgCaseCount),
-        labCaseCount: safeNumber(stats?.labCaseCount),
-        medicationMathCount: safeNumber(stats?.medicationMathProblemCount),
-      }}
-    />
-  );
   const trustSlot = (
     <PremiumHomepageTrust messages={serverIslandMessages} />
   );
@@ -152,8 +134,6 @@ export async function HomeRestoredWithDeferredStats({
       homeMarketingStats={homeMarketingStatsFromPayload(stats)}
       publishedGlobalRegionCardIds={safeCardIds}
       heroSlot={heroSlot}
-      featureDiscoverySlot={featureDiscoverySlot}
-      clinicalDepthSlot={clinicalDepthSlot}
       trustSlot={trustSlot}
     >
       {children}

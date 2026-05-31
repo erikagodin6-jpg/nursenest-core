@@ -47,6 +47,7 @@ import { parseHubMode, parseHubSystemsFromSearchParams } from "@/lib/flashcards/
 import { toggleFlashcardsHubSystemSelection } from "@/lib/flashcards/flashcards-hub-system-selection";
 
 const FLASHCARDS_HUB_CLIENT_FETCH_TIMEOUT_MS = 2000;
+type InventoryStatus = "loading" | "ready" | "degraded";
 
 async function fetchFlashcardsHubJson(url: string): Promise<{ res: Response; json: unknown }> {
   const controller = new AbortController();
@@ -176,8 +177,12 @@ export function FlashcardsHubClient({
   const [poolDiagnostics, setPoolDiagnostics] = useState<FlashcardsPoolInventoryDiagnostics | null>(
     () => initialPoolDiagnostics ?? initialHub?.poolDiagnostics ?? null,
   );
+  const [inventoryStatus, setInventoryStatus] = useState<InventoryStatus>(() =>
+    initialPoolDiagnostics ?? initialHub?.poolDiagnostics ? "ready" : "loading",
+  );
   useEffect(() => {
     setPoolDiagnostics(initialPoolDiagnostics ?? initialHub?.poolDiagnostics ?? null);
+    setInventoryStatus(initialPoolDiagnostics ?? initialHub?.poolDiagnostics ? "ready" : "loading");
   }, [initialPoolDiagnostics, initialHub?.poolDiagnostics]);
   const [selectedCanonicalIds, setSelectedCanonicalIds] = useState<string[]>([]);
   const [cardLimit, setCardLimit] = useState<FlashcardsHubCardLimit>(25);
@@ -355,6 +360,7 @@ export function FlashcardsHubClient({
 
   const refreshCategories = useCallback(async () => {
     setLoadError(null);
+    setInventoryStatus((current) => (builderCategoriesRef.current.length > 0 ? current : "loading"));
 
     try {
       const progressFiltersActive =
@@ -400,6 +406,7 @@ export function FlashcardsHubClient({
               timeoutMs: FLASHCARDS_HUB_CLIENT_FETCH_TIMEOUT_MS,
             });
             setLoadError("Flashcard counts are taking longer than expected. You can keep studying with the deck categories shown below or retry counts.");
+            setInventoryStatus("degraded");
             return;
           }
           const base = "Flashcard inventory took too long to load. Try again or continue with available deck categories.";
@@ -412,6 +419,7 @@ export function FlashcardsHubClient({
           setMatchingCards(null);
           setLessonVirtualDiagnostics(null);
           setPoolDiagnostics(null);
+          setInventoryStatus("degraded");
           return;
         }
         const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
@@ -422,6 +430,7 @@ export function FlashcardsHubClient({
               httpStatus: res.status,
             });
             setLoadError(null);
+            setInventoryStatus("degraded");
             return;
           }
           const base = parsed.message.trim() ? parsed.message : "Could not load flashcard topics.";
@@ -433,12 +442,14 @@ export function FlashcardsHubClient({
           setBuilderCategories([]);
           setMatchingCards(null);
           setPoolDiagnostics(null);
+          setInventoryStatus("degraded");
           return;
         }
         setBuilderCategories(parsed.categoryOptions);
         setMatchingCards(parsed.summary?.matchingCards ?? 0);
         setLessonVirtualDiagnostics(parsed.summary?.lessonVirtualDiagnostics ?? null);
         setPoolDiagnostics(parsed.summary?.poolInventoryDiagnostics ?? null);
+        setInventoryStatus("ready");
         return;
       }
 
@@ -460,6 +471,7 @@ export function FlashcardsHubClient({
             timeoutMs: FLASHCARDS_HUB_CLIENT_FETCH_TIMEOUT_MS,
           });
           setLoadError("Flashcard counts are taking longer than expected. You can keep studying with the deck categories shown below or retry counts.");
+          setInventoryStatus("degraded");
           return;
         }
         const base = "Flashcard inventory took too long to load. Try again or continue with available deck categories.";
@@ -471,6 +483,7 @@ export function FlashcardsHubClient({
         setBuilderCategories([]);
         setMatchingCards(null);
         setPoolDiagnostics(null);
+        setInventoryStatus("degraded");
         return;
       }
       const parsed = parseFlashcardInventoryResponse(res.ok, json);
@@ -486,6 +499,7 @@ export function FlashcardsHubClient({
             httpStatus: res.status,
           });
           setLoadError(null);
+          setInventoryStatus("degraded");
           return;
         }
         if (res.ok) {
@@ -509,6 +523,7 @@ export function FlashcardsHubClient({
         setBuilderCategories([]);
         setMatchingCards(null);
         setPoolDiagnostics(null);
+        setInventoryStatus("degraded");
         return;
       }
       const opts = parsed.categoryOptions;
@@ -532,6 +547,7 @@ export function FlashcardsHubClient({
             pathwayId: scopedPathwayId,
           });
           setLoadError(null);
+          setInventoryStatus("degraded");
           return;
         }
         const base =
@@ -546,6 +562,7 @@ export function FlashcardsHubClient({
         setBuilderCategories([]);
         setMatchingCards(null);
         setPoolDiagnostics(null);
+        setInventoryStatus("degraded");
         return;
       }
       const allCanon = CANONICAL_STUDY_CATEGORIES.length;
@@ -564,6 +581,7 @@ export function FlashcardsHubClient({
             })();
       setMatchingCards(match);
       setPoolDiagnostics(invSummary?.poolInventoryDiagnostics ?? null);
+      setInventoryStatus("ready");
       if (process.env.NODE_ENV === "development") {
         const totalCards = opts.reduce((n, c) => n + (typeof c.count === "number" ? c.count : 0), 0);
         console.debug("[flashcards-hub] inventory", {
@@ -583,6 +601,7 @@ export function FlashcardsHubClient({
           pathwayId: scopedPathwayId,
         });
         setLoadError(null);
+        setInventoryStatus("degraded");
         return;
       }
       const base = "Network error while loading flashcards. Check your connection and try again.";
@@ -593,6 +612,7 @@ export function FlashcardsHubClient({
       setMatchingCards(null);
       setLessonVirtualDiagnostics(null);
       setPoolDiagnostics(null);
+      setInventoryStatus("degraded");
     }
   }, [
     scopedPathwayId,
@@ -697,6 +717,12 @@ export function FlashcardsHubClient({
     selectedCanonicalIds.length === 0 || selectedCanonicalIds.length >= CANONICAL_STUDY_CATEGORIES.length
       ? "All systems"
       : `${selectedCanonicalIds.length} ${selectedCanonicalIds.length === 1 ? "system" : "systems"}`;
+
+  const countsReliable = inventoryStatus === "ready";
+  const systemCountLabel = (count: number): string => {
+    if (!countsReliable) return "Available";
+    return count > 0 ? `${flashcardCountFormatter.format(count)} Flashcards` : "Ready to study";
+  };
 
   const visibleCardCountLabel = cardLimit === "all" ? "All matched cards" : `${effectiveCardCount} cards selected`;
 
@@ -996,6 +1022,28 @@ export function FlashcardsHubClient({
               <p className="text-sm font-medium text-[var(--semantic-text-secondary)]">{selectedSystemLabel}</p>
             </div>
 
+            <div className="mb-4 flex flex-wrap justify-center gap-2 sm:justify-start" data-nn-e2e-flashcards-system-actions>
+              <button
+                type="button"
+                aria-pressed={selectedCanonicalIds.length === 0}
+                data-active={selectedCanonicalIds.length === 0}
+                className="nn-flashcards-study-chip inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-bold text-[var(--semantic-text-primary)] hover:border-[var(--semantic-brand)]"
+                onClick={() => setSelectedCanonicalIds([])}
+              >
+                <Check className="h-3.5 w-3.5 text-[var(--semantic-brand)]" aria-hidden />
+                All Systems
+              </button>
+              {selectedCanonicalIds.length > 0 ? (
+                <button
+                  type="button"
+                  className="nn-flashcards-study-chip inline-flex min-h-10 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_82%,var(--semantic-panel-muted))] px-4 text-xs font-bold text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-text-primary)]"
+                  onClick={() => setSelectedCanonicalIds([])}
+                >
+                  Clear system picks
+                </button>
+              ) : null}
+            </div>
+
             <div className="nn-flashcards-system-grid grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
               {CANONICAL_STUDY_CATEGORIES.map((system) => {
                 const active = selectedCanonicalIds.includes(system.id);
@@ -1032,7 +1080,7 @@ export function FlashcardsHubClient({
                         className="mt-2 block text-sm font-semibold leading-none text-[var(--semantic-text-secondary)]"
                         data-nn-e2e-flashcards-system-count
                       >
-                        {flashcardCountFormatter.format(Math.max(0, count))} Flashcards
+                        {systemCountLabel(Math.max(0, count))}
                       </span>
                     </span>
                     <span className="nn-flashcards-system-card-v2__badge inline-flex min-h-7 w-fit items-center rounded-full px-3 text-xs font-semibold">

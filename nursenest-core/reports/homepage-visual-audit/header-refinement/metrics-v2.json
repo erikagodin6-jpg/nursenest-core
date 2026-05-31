@@ -1,0 +1,370 @@
+[
+  {
+    "name": "desktop-1440-v2",
+    "width": 1440,
+    "shell": {
+      "left": 282.578125,
+      "right": 1157.421875,
+      "width": 874.84375,
+      "height": 120.78125,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "57.6px",
+      "paddingRight": "57.6px",
+      "maxWidth": "1792px"
+    },
+    "grid": {
+      "left": 340.171875,
+      "right": 1099.828125,
+      "width": 759.65625,
+      "height": 82.78125,
+      "display": "grid",
+      "gridTemplateColumns": "158.406px 327.062px 159px",
+      "paddingLeft": "28.8px",
+      "paddingRight": "28.8px",
+      "maxWidth": "none"
+    },
+    "logo": {
+      "left": 368.96875,
+      "right": 527.375,
+      "width": 158.40625,
+      "height": 54,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "min(100%, 352px)"
+    },
+    "nav": {
+      "left": 556.171875,
+      "right": 883.234375,
+      "width": 327.0625,
+      "height": 30.390625,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "100%"
+    },
+    "actions": {
+      "left": 912.03125,
+      "right": 1071.03125,
+      "width": 159,
+      "height": 42,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "min(100%, 608px)"
+    },
+    "mobileBar": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "none",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "links": [
+      {
+        "text": "Tools",
+        "left": 556.171875,
+        "right": 598.546875,
+        "width": 42.375
+      },
+      {
+        "text": "Pricing",
+        "left": 627.34375,
+        "right": 678.71875,
+        "width": 51.375
+      },
+      {
+        "text": "About",
+        "left": 707.515625,
+        "right": 754.890625,
+        "width": 47.375
+      },
+      {
+        "text": "Blog",
+        "left": 783.6875,
+        "right": 820.0625,
+        "width": 36.375
+      },
+      {
+        "text": "FAQ",
+        "left": 848.859375,
+        "right": 883.234375,
+        "width": 34.375
+      }
+    ],
+    "gaps": [
+      28.8,
+      28.8,
+      28.8,
+      28.8
+    ],
+    "hasHorizontalOverflow": false,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "laptop-1280-v2",
+    "width": 1280,
+    "shell": {
+      "left": 221.796875,
+      "right": 1058.203125,
+      "width": 836.40625,
+      "height": 117.59375,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "51.2px",
+      "paddingRight": "51.2px",
+      "maxWidth": "1792px"
+    },
+    "grid": {
+      "left": 272.984375,
+      "right": 1007.015625,
+      "width": 734.03125,
+      "height": 79.59375,
+      "display": "grid",
+      "gridTemplateColumns": "158.406px 314.25px 159px",
+      "paddingLeft": "25.6px",
+      "paddingRight": "25.6px",
+      "maxWidth": "none"
+    },
+    "logo": {
+      "left": 298.578125,
+      "right": 456.984375,
+      "width": 158.40625,
+      "height": 54,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "min(100%, 352px)"
+    },
+    "nav": {
+      "left": 482.578125,
+      "right": 796.828125,
+      "width": 314.25,
+      "height": 30.390625,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "100%"
+    },
+    "actions": {
+      "left": 822.421875,
+      "right": 981.421875,
+      "width": 159,
+      "height": 42,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "min(100%, 608px)"
+    },
+    "mobileBar": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "none",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "links": [
+      {
+        "text": "Tools",
+        "left": 482.578125,
+        "right": 524.953125,
+        "width": 42.375
+      },
+      {
+        "text": "Pricing",
+        "left": 550.546875,
+        "right": 601.921875,
+        "width": 51.375
+      },
+      {
+        "text": "About",
+        "left": 627.515625,
+        "right": 674.890625,
+        "width": 47.375
+      },
+      {
+        "text": "Blog",
+        "left": 700.484375,
+        "right": 736.859375,
+        "width": 36.375
+      },
+      {
+        "text": "FAQ",
+        "left": 762.453125,
+        "right": 796.828125,
+        "width": 34.375
+      }
+    ],
+    "gaps": [
+      25.6,
+      25.6,
+      25.6,
+      25.6
+    ],
+    "hasHorizontalOverflow": false,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "tablet-768-v2",
+    "width": 768,
+    "shell": {
+      "left": 146.734375,
+      "right": 621.25,
+      "width": 474.515625,
+      "height": 60,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "26.88px",
+      "paddingRight": "26.88px",
+      "maxWidth": "1600px"
+    },
+    "grid": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "none",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "16px",
+      "paddingRight": "16px",
+      "maxWidth": "none"
+    },
+    "logo": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "nav": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "100%"
+    },
+    "actions": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "100%"
+    },
+    "mobileBar": {
+      "left": 173.609375,
+      "right": 594.375,
+      "width": 420.765625,
+      "height": 60,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "links": [],
+    "gaps": [],
+    "hasHorizontalOverflow": false,
+    "scrollWidth": 768
+  },
+  {
+    "name": "mobile-390-v2",
+    "width": 390,
+    "shell": {
+      "left": 0,
+      "right": 438.96875,
+      "width": 438.96875,
+      "height": 61.59375,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "20px",
+      "paddingRight": "20px",
+      "maxWidth": "1600px"
+    },
+    "grid": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "none",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "16px",
+      "paddingRight": "16px",
+      "maxWidth": "none"
+    },
+    "logo": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "nav": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "100%"
+    },
+    "actions": {
+      "left": 0,
+      "right": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "100%"
+    },
+    "mobileBar": {
+      "left": 20,
+      "right": 418.96875,
+      "width": 398.96875,
+      "height": 61.59375,
+      "display": "flex",
+      "gridTemplateColumns": "none",
+      "paddingLeft": "0px",
+      "paddingRight": "0px",
+      "maxWidth": "none"
+    },
+    "links": [],
+    "gaps": [],
+    "hasHorizontalOverflow": false,
+    "scrollWidth": 390
+  }
+]

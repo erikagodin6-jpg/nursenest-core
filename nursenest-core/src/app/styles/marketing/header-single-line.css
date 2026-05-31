@@ -53,6 +53,73 @@
   }
 }
 
+@media (max-width: 1023.98px) {
+  [data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"] > .nn-header-primary-inner-shell.nn-section-shell,
+  [data-nn-header-layout="marketing-unified-dark"] [data-nn-header-band="primary"] > .nn-header-primary-inner-shell.nn-section-shell {
+    width: 100% !important;
+    max-width: none !important;
+    margin-inline: 0 !important;
+    padding-inline: clamp(1rem, 3vw, 1.5rem) !important;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .top-bar,
+  [data-nn-header-layout="marketing-unified-dark"] .top-bar {
+    width: 100% !important;
+    min-width: 0;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .top-bar .nn-ui-btn[aria-label="Open menu"],
+  [data-nn-header-layout="marketing-unified-dark"] .top-bar .nn-ui-btn[aria-label="Open menu"] {
+    background: transparent !important;
+    border-color: var(--nn-nav-border) !important;
+    color: var(--nn-nav-fg) !important;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .top-bar .nn-ui-btn[aria-label="Open menu"] svg,
+  [data-nn-header-layout="marketing-unified-dark"] .top-bar .nn-ui-btn[aria-label="Open menu"] svg {
+    height: 1.25rem !important;
+    min-width: 1.25rem !important;
+    width: 1.25rem !important;
+    stroke: currentColor;
+  }
+}
+
+@media (max-width: 430px) {
+  [data-nn-header-layout="marketing-row4"] .nn-header-mobile-brand-auth-cluster,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-mobile-brand-auth-cluster {
+    gap: 0.5rem;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-header-mobile-public-ctas,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-mobile-public-ctas {
+    flex: 0 0 auto;
+    gap: 0.5rem;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-header-mobile-public-ctas a[aria-label="Log in to your NurseNest account"],
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-mobile-public-ctas a[aria-label="Log in to your NurseNest account"] {
+    display: none;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-header-mobile-public-ctas a[aria-label="Sign up for a NurseNest account"],
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-mobile-public-ctas a[aria-label="Sign up for a NurseNest account"] {
+    flex: 0 0 auto;
+    min-width: 4.75rem;
+    padding-inline: 0.75rem;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .top-bar > .nn-header-mobile-only-flex,
+  [data-nn-header-layout="marketing-unified-dark"] .top-bar > .nn-header-mobile-only-flex {
+    gap: 0.5rem;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .top-bar > .nn-header-mobile-only-flex :is(button, .nn-ui-btn),
+  [data-nn-header-layout="marketing-unified-dark"] .top-bar > .nn-header-mobile-only-flex :is(button, .nn-ui-btn) {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+}
+
 @media (min-width: 1024px) and (max-width: 1279.98px) {
   [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid {
@@ -125,17 +192,18 @@
 @media (min-width: 1024px) {
   [data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"] > .nn-header-primary-inner-shell.nn-section-shell,
   [data-nn-header-layout="marketing-unified-dark"] [data-nn-header-band="primary"] > .nn-header-primary-inner-shell.nn-section-shell {
-    width: 100%;
-    max-width: none;
-    margin-inline: 0;
-    padding-inline: clamp(0.85rem, 1.4vw, 1.5rem);
+    width: 100% !important;
+    max-width: none !important;
+    margin-inline: 0 !important;
+    padding-inline: clamp(1.25rem, 3vw, 3rem) !important;
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid {
-    grid-template-columns: max-content minmax(0, 1fr) max-content;
-    width: 100%;
-    padding-inline: 0;
+    grid-template-columns: minmax(10.5rem, 1fr) minmax(19rem, auto) minmax(13rem, 1fr);
+    width: 100% !important;
+    padding-inline: 0 !important;
+    column-gap: clamp(1.25rem, 3vw, 3.75rem);
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > .nn-header-brand-cluster,
@@ -145,6 +213,46 @@
 
   [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav {
+    width: auto;
+    justify-self: center;
     justify-content: center;
+    gap: clamp(1.25rem, 2.25vw, 2.5rem);
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-header-desktop-auth-cluster,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-auth-cluster {
+    justify-self: end;
+    gap: clamp(0.65rem, 1vw, 0.9rem);
+  }
+}
+
+@media (min-width: 1280px) {
+  [data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"] > .nn-header-primary-inner-shell.nn-section-shell,
+  [data-nn-header-layout="marketing-unified-dark"] [data-nn-header-band="primary"] > .nn-header-primary-inner-shell.nn-section-shell {
+    max-width: none !important;
+    padding-inline: clamp(1.75rem, 3.4vw, 4rem) !important;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid {
+    grid-template-columns: minmax(14rem, 1fr) minmax(22rem, auto) minmax(16rem, 1fr);
+    column-gap: clamp(2rem, 4vw, 5rem);
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav {
+    gap: clamp(1.5rem, 2.6vw, 2.75rem);
+  }
+}
+
+@media (min-width: 1536px) {
+  [data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"] > .nn-header-primary-inner-shell.nn-section-shell,
+  [data-nn-header-layout="marketing-unified-dark"] [data-nn-header-band="primary"] > .nn-header-primary-inner-shell.nn-section-shell {
+    max-width: none !important;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid {
+    grid-template-columns: minmax(16rem, 1fr) minmax(24rem, auto) minmax(18rem, 1fr);
   }
 }

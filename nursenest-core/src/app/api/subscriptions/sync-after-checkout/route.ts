@@ -1,14 +1,7 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { maybeRecoverUserAccessFromStripe } from "@/lib/entitlements/recover-user-access-from-stripe.server";
-import { accessScopeFromUserAccess, getUserAccessFresh } from "@/lib/entitlements/get-user-access";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import {
-  getAuthSessionWithJwtCookieFallback,
-  sessionHasUserIdentity,
-} from "@/lib/auth/server-session-jwt-fallback";
 
 export const runtime = "nodejs";
 
@@ -20,10 +13,37 @@ function sessionUserId(session: unknown): string | undefined {
   return undefined;
 }
 
+function sessionHasUserIdentityLocal(session: unknown): boolean {
+  const u = (session as { user?: unknown } | null)?.user;
+  if (!u || typeof u !== "object") return false;
+  const maybe = u as { id?: unknown; email?: unknown };
+  return Boolean(
+    (typeof maybe.id === "string" && maybe.id.trim()) ||
+      (typeof maybe.email === "string" && maybe.email.trim()),
+  );
+}
+
+function hasConfiguredAuthSecret(): boolean {
+  return Boolean(
+    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
+      (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
+  );
+}
+
 async function loadSessionWithFallback(): Promise<unknown> {
-  const primary = await auth().catch(() => null);
-  if (sessionHasUserIdentity(primary as never)) return primary;
-  return getAuthSessionWithJwtCookieFallback().catch(() => primary);
+  if (!hasConfiguredAuthSecret()) {
+    safeServerLog("stripe_checkout", "checkout_success_sync_auth_skipped_missing_secret", {
+      route: "/api/subscriptions/sync-after-checkout",
+    });
+    return null;
+  }
+  const primary = await import("@/lib/auth")
+    .then((m) => m.auth())
+    .catch(() => null);
+  if (sessionHasUserIdentityLocal(primary)) return primary;
+  return import("@/lib/auth/server-session-jwt-fallback")
+    .then((m) => m.getAuthSessionWithJwtCookieFallback())
+    .catch(() => primary);
 }
 
 export async function POST(req: Request) {
@@ -34,6 +54,12 @@ export async function POST(req: Request) {
     if (!userId) {
       return NextResponse.json({ ok: false, code: "UNAUTHORIZED", error: "Unauthorized" }, { status: 401 });
     }
+
+    const [{ maybeRecoverUserAccessFromStripe }, { accessScopeFromUserAccess, getUserAccessFresh }] =
+      await Promise.all([
+        import("@/lib/entitlements/recover-user-access-from-stripe.server"),
+        import("@/lib/entitlements/get-user-access"),
+      ]);
 
     const recovery = await maybeRecoverUserAccessFromStripe({
       userId,

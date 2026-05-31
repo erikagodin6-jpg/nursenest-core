@@ -56,10 +56,10 @@ export const CLINICAL_THEME_META: Record<LaunchClinicalThemeId, ClinicalThemeMet
     mood: "Clean, professional, clinical",
     group: "light",
     swatches: {
-      primary: "#1D9BD7",
-      secondary: "#14B8A6",
-      accent: "#7DD3FC",
-      surface: "#F6FBFF",
+      primary: "#007BFF",
+      secondary: "#06B6D4",
+      accent: "#16A34A",
+      surface: "#F8FCFF",
     },
   },
   midnight: {

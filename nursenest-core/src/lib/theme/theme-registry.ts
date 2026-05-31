@@ -46,9 +46,9 @@ export const THEME_OPTIONS: ThemeOption[] = [
   {
     id: "ocean",
     label: "Ocean",
-    color: "#1D9BD7",
-    swatchSecondary: "#14B8A6",
-    swatchAccent: "#7DD3FC",
+    color: "#007BFF",
+    swatchSecondary: "#06B6D4",
+    swatchAccent: "#16A34A",
     group: "light",
     logoVariant: "blue",
     named: true,

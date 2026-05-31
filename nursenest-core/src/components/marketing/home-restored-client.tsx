@@ -4,6 +4,12 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, type PropsWithChildren, type ReactNode, type CSSProperties } from "react";
 
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
+import { PremiumAdaptiveLessons as PremiumAdaptiveLessonsStatic } from "@/components/marketing/home/premium-adaptive-lessons";
+import { PremiumBeyondQuestionBank as PremiumBeyondQuestionBankStatic } from "@/components/marketing/home/premium-beyond-question-bank";
+import { PremiumHomepageCta as PremiumHomepageCtaStatic } from "@/components/marketing/home/premium-homepage-cta";
+import { PremiumPathwayShowcase as PremiumPathwayShowcaseStatic } from "@/components/marketing/home/premium-pathway-showcase";
+import { PremiumReadinessPreview as PremiumReadinessPreviewStatic } from "@/components/marketing/home/premium-readiness-preview";
+import { PremiumStudyEcosystem as PremiumStudyEcosystemStatic } from "@/components/marketing/home/premium-study-ecosystem";
 
 // ssr:false for below-fold sections prevents hydration mismatch/CLS. The new
 // LazyWhenVisible wrapper below also prevents every chunk from downloading and
@@ -17,6 +23,14 @@ const PremiumPathwayShowcase = dynamic(() =>
 const PremiumStudyEcosystem = dynamic(() =>
   import("@/components/marketing/home/premium-study-ecosystem").then((m) => m.PremiumStudyEcosystem),
   { ssr: false, loading: () => <PremiumSectionSkeleton testId="skeleton-ecosystem" /> },
+);
+const PremiumAdaptiveLessons = dynamic(() =>
+  import("@/components/marketing/home/premium-adaptive-lessons").then((m) => m.PremiumAdaptiveLessons),
+  { ssr: false, loading: () => <PremiumSectionSkeleton testId="skeleton-adaptive-lessons" /> },
+);
+const PremiumBeyondQuestionBank = dynamic(() =>
+  import("@/components/marketing/home/premium-beyond-question-bank").then((m) => m.PremiumBeyondQuestionBank),
+  { ssr: false, loading: () => <PremiumSectionSkeleton testId="skeleton-beyond-question-bank" /> },
 );
 const PremiumSocialStudy = dynamic(() =>
   import("@/components/marketing/home/premium-social-study").then((m) => m.PremiumSocialStudy),
@@ -193,45 +207,21 @@ export default function HomeRestoredClient({
       {/* HERO — server island; no above-fold homepage section hydration. */}
       {heroSlot}
 
-      {featureDiscoverySlot}
+      <PremiumPathwayShowcaseStatic />
 
-      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-capability-strip" short />}>
-        <PremiumPlatformCapabilityStrip />
-      </LazyWhenVisible>
+      <PremiumAdaptiveLessonsStatic />
 
-      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-ecg" />}>
-        <PremiumHomepageEcg />
-      </LazyWhenVisible>
-      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-pathways" />}>
-        <PremiumPathwayShowcase />
-      </LazyWhenVisible>
-
-      {/* Server island — keep as static server HTML when supplied. */}
-      {clinicalDepthSlot}
-
-      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-ecosystem" />}>
-        <PremiumStudyEcosystem />
-      </LazyWhenVisible>
-      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-social-study" />}>
-        <PremiumSocialStudy />
-      </LazyWhenVisible>
-      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-readiness" />}>
-        <PremiumReadinessPreview />
-      </LazyWhenVisible>
+      <PremiumStudyEcosystemStatic />
+      <PremiumBeyondQuestionBankStatic />
+      <PremiumReadinessPreviewStatic />
 
       {/* Server island — keep as static server HTML when supplied. */}
       {trustSlot}
 
-      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-allied-health" />}>
-        <HomepageAlliedHealthSection />
-      </LazyWhenVisible>
-
       {/* Global hub strip — after pathway cards (supporting marketing, not above hero). */}
       {children}
 
-      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-cta" short />}>
-        <PremiumHomepageCta />
-      </LazyWhenVisible>
+      <PremiumHomepageCtaStatic />
     </div>
   );
 }

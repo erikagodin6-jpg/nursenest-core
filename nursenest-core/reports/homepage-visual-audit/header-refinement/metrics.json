@@ -1,0 +1,350 @@
+[
+  {
+    "name": "desktop-1440",
+    "width": 1440,
+    "header": {
+      "left": 0,
+      "right": 1440,
+      "top": 0,
+      "width": 1440,
+      "height": 168.78125,
+      "display": "block"
+    },
+    "grid": {
+      "left": 340.171875,
+      "right": 1099.828125,
+      "top": 38,
+      "width": 759.65625,
+      "height": 82.78125,
+      "display": "grid"
+    },
+    "logo": {
+      "left": 368.96875,
+      "right": 527.375,
+      "top": 52.390625,
+      "width": 158.40625,
+      "height": 54,
+      "display": "flex"
+    },
+    "nav": {
+      "left": 556.171875,
+      "right": 883.234375,
+      "top": 64.1875,
+      "width": 327.0625,
+      "height": 30.390625,
+      "display": "flex"
+    },
+    "actions": {
+      "left": 912.03125,
+      "right": 1071.03125,
+      "top": 58.390625,
+      "width": 159,
+      "height": 42,
+      "display": "flex"
+    },
+    "mobileBar": {
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "width": 0,
+      "height": 0,
+      "display": "none"
+    },
+    "links": [
+      {
+        "text": "Tools",
+        "left": 556.171875,
+        "right": 598.546875,
+        "width": 42.375
+      },
+      {
+        "text": "Pricing",
+        "left": 627.34375,
+        "right": 678.71875,
+        "width": 51.375
+      },
+      {
+        "text": "About",
+        "left": 707.515625,
+        "right": 754.890625,
+        "width": 47.375
+      },
+      {
+        "text": "Blog",
+        "left": 783.6875,
+        "right": 820.0625,
+        "width": 36.375
+      },
+      {
+        "text": "FAQ",
+        "left": 848.859375,
+        "right": 883.234375,
+        "width": 34.375
+      }
+    ],
+    "hasHorizontalOverflow": false,
+    "scrollWidth": 1440,
+    "bodyText": "Select Country\n🇨🇦\nCanada\nLanguage\nNurseNest\nTools\nPricing\nAbout\nBlog\nFAQ\nLog In\nSign Up\nRN\nRPN\nNP\nNew Grad\nAllied\nPre-Nursing\nECG\nHESI A2\nATI TEAS\nCASPER\nNurs"
+  },
+  {
+    "name": "laptop-1280",
+    "width": 1280,
+    "header": {
+      "left": 0,
+      "right": 1280,
+      "top": 0,
+      "width": 1280,
+      "height": 165.59375,
+      "display": "block"
+    },
+    "grid": {
+      "left": 272.984375,
+      "right": 1007.015625,
+      "top": 38,
+      "width": 734.03125,
+      "height": 79.59375,
+      "display": "grid"
+    },
+    "logo": {
+      "left": 298.578125,
+      "right": 456.984375,
+      "top": 50.796875,
+      "width": 158.40625,
+      "height": 54,
+      "display": "flex"
+    },
+    "nav": {
+      "left": 482.578125,
+      "right": 796.828125,
+      "top": 62.59375,
+      "width": 314.25,
+      "height": 30.390625,
+      "display": "flex"
+    },
+    "actions": {
+      "left": 822.421875,
+      "right": 981.421875,
+      "top": 56.796875,
+      "width": 159,
+      "height": 42,
+      "display": "flex"
+    },
+    "mobileBar": {
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "width": 0,
+      "height": 0,
+      "display": "none"
+    },
+    "links": [
+      {
+        "text": "Tools",
+        "left": 482.578125,
+        "right": 524.953125,
+        "width": 42.375
+      },
+      {
+        "text": "Pricing",
+        "left": 550.546875,
+        "right": 601.921875,
+        "width": 51.375
+      },
+      {
+        "text": "About",
+        "left": 627.515625,
+        "right": 674.890625,
+        "width": 47.375
+      },
+      {
+        "text": "Blog",
+        "left": 700.484375,
+        "right": 736.859375,
+        "width": 36.375
+      },
+      {
+        "text": "FAQ",
+        "left": 762.453125,
+        "right": 796.828125,
+        "width": 34.375
+      }
+    ],
+    "hasHorizontalOverflow": false,
+    "scrollWidth": 1280,
+    "bodyText": "Select Country\n🇨🇦\nCanada\nLanguage\nTheme\n▾\nNurseNest\nTools\nPricing\nAbout\nBlog\nFAQ\nLog In\nSign Up\nRN\nRPN\nNP\nNew Grad\nAllied\nPre-Nursing\nECG\nHESI A2\nATI TEAS\nCAS"
+  },
+  {
+    "name": "tablet-768",
+    "width": 768,
+    "header": {
+      "left": 0,
+      "right": 768,
+      "top": 0,
+      "width": 768,
+      "height": 72,
+      "display": "block"
+    },
+    "grid": {
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "width": 0,
+      "height": 0,
+      "display": "none"
+    },
+    "logo": {
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex"
+    },
+    "nav": {
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex"
+    },
+    "actions": {
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex"
+    },
+    "mobileBar": {
+      "left": 173.609375,
+      "right": 594.375,
+      "top": 0,
+      "width": 420.765625,
+      "height": 60,
+      "display": "flex"
+    },
+    "links": [
+      {
+        "text": "Tools",
+        "left": 0,
+        "right": 0,
+        "width": 0
+      },
+      {
+        "text": "Pricing",
+        "left": 0,
+        "right": 0,
+        "width": 0
+      },
+      {
+        "text": "About",
+        "left": 0,
+        "right": 0,
+        "width": 0
+      },
+      {
+        "text": "Blog",
+        "left": 0,
+        "right": 0,
+        "width": 0
+      },
+      {
+        "text": "FAQ",
+        "left": 0,
+        "right": 0,
+        "width": 0
+      }
+    ],
+    "hasHorizontalOverflow": false,
+    "scrollWidth": 768,
+    "bodyText": "NurseNest\nLog In\nSign Up\nADAPTIVE CLINICAL READINESS\nMaster Nursing.Think Like a Clinician.\n\nStudy with lessons, NGN practice, simulations, ECG, telemetry, labs"
+  },
+  {
+    "name": "mobile-390",
+    "width": 390,
+    "header": {
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "width": 390,
+      "height": 61.59375,
+      "display": "block"
+    },
+    "grid": {
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "width": 0,
+      "height": 0,
+      "display": "none"
+    },
+    "logo": {
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex"
+    },
+    "nav": {
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex"
+    },
+    "actions": {
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "width": 0,
+      "height": 0,
+      "display": "flex"
+    },
+    "mobileBar": {
+      "left": 20,
+      "right": 418.96875,
+      "top": 0,
+      "width": 398.96875,
+      "height": 61.59375,
+      "display": "flex"
+    },
+    "links": [
+      {
+        "text": "Tools",
+        "left": 0,
+        "right": 0,
+        "width": 0
+      },
+      {
+        "text": "Pricing",
+        "left": 0,
+        "right": 0,
+        "width": 0
+      },
+      {
+        "text": "About",
+        "left": 0,
+        "right": 0,
+        "width": 0
+      },
+      {
+        "text": "Blog",
+        "left": 0,
+        "right": 0,
+        "width": 0
+      },
+      {
+        "text": "FAQ",
+        "left": 0,
+        "right": 0,
+        "width": 0
+      }
+    ],
+    "hasHorizontalOverflow": false,
+    "scrollWidth": 390,
+    "bodyText": "NurseNest\nLog In\nSign Up\nADAPTIVE CLINICAL READINESS\nMaster Nursing.Think Like a Clinician.\n\nStudy with lessons, NGN practice, simulations, ECG, telemetry, labs"
+  }
+]
