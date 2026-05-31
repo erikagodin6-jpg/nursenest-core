@@ -58,6 +58,13 @@ type SessionSummary = {
   selectedCategories: string[];
 };
 
+type SessionErrorState = {
+  title: string;
+  detail: string;
+  message: string;
+  code?: string;
+};
+
 function isPlaceholderFlashcardStem(stem: string): boolean {
   const normalized = stem.trim().toLowerCase();
   return (
@@ -84,11 +91,54 @@ function hasRenderableFlashcard(card: ApiCard): boolean {
   );
 }
 
+function flashcardSessionFailureCopy(code: string | undefined, message: string, isResume: boolean): SessionErrorState {
+  const normalizedCode = (code ?? "").trim().toLowerCase();
+  const normalizedMessage = message.trim() || "The session request failed.";
+  if (normalizedCode.includes("empty") || /no flashcards|empty pool|no cards/i.test(normalizedMessage)) {
+    return {
+      title: "Flashcard pool is empty.",
+      detail: "No flashcards were found for the selected systems and filters.",
+      message: normalizedMessage,
+      code,
+    };
+  }
+  if (normalizedCode.includes("invalid")) {
+    return {
+      title: "Session data is invalid.",
+      detail: "The session response did not match the flashcard player contract.",
+      message: normalizedMessage,
+      code,
+    };
+  }
+  if (normalizedCode.includes("timeout") || normalizedCode.includes("service_unavailable")) {
+    return {
+      title: isResume ? "Unable to resume previous session." : "Your study session could not be created.",
+      detail: "The flashcard service did not respond in time.",
+      message: normalizedMessage,
+      code,
+    };
+  }
+  if (normalizedCode.includes("database")) {
+    return {
+      title: "Your study session could not be created.",
+      detail: "The flashcard pool could not be read from the content database.",
+      message: normalizedMessage,
+      code,
+    };
+  }
+  return {
+    title: isResume ? "Unable to resume previous session." : "Your study session could not be created.",
+    detail: "The flashcard player received a precise failure from the session API.",
+    message: normalizedMessage,
+    code,
+  };
+}
+
 export function FlashcardCustomStudyClient() {
   const sp = useSearchParams();
   const { t } = useMarketingI18n();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<SessionErrorState | null>(null);
   const [cards, setCards] = useState<ApiCard[]>([]);
   const [summary, setSummary] = useState<SessionSummary | null>(null);
   const [retryNonce, setRetryNonce] = useState(0);
@@ -115,11 +165,13 @@ export function FlashcardCustomStudyClient() {
 
   const queryString = useMemo(() => {
     const q = new URLSearchParams(searchParamString);
+    const rawLimit = Number(q.get("cardLimit") || "20");
+    const requestedLimit = Number.isFinite(rawLimit) ? Math.max(1, Math.floor(rawLimit)) : 20;
     q.set("includeCards", "1");
     if (!q.get("shuffle")) q.set("shuffle", "1");
     q.set("sessionSeed", sessionSeedRef.current);
     q.set("offset", "0");
-    q.set("cardLimit", "1");
+    q.set("cardLimit", String(Math.min(requestedLimit, 8)));
     return q.toString();
   }, [searchParamString]);
 
@@ -200,23 +252,33 @@ export function FlashcardCustomStudyClient() {
             httpStatus: res.status,
             message: jsonErr instanceof Error ? jsonErr.message : "unknown",
           });
-          if (!cancelled) setError("Session returned invalid data. Please retry.");
+          if (!cancelled) {
+            setError({
+              title: "Session data is invalid.",
+              detail: "The study API returned data the flashcard player could not safely use.",
+              message: "Refresh this session or return to the launcher and start a new one.",
+              code: "invalid_json",
+            });
+          }
           return;
         }
         const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
         if (!parsed.ok) {
+          const failureCopy = flashcardSessionFailureCopy(parsed.code, parsed.message, initialCardIndex > 0);
           emitRuntimeEvent("activity_bootstrap_failure", {
             activity: "flashcards",
             pathwayId,
             status: res.status,
-            errorCode: "flashcard_custom_session_payload_invalid",
+            errorCode: parsed.code ?? "flashcard_custom_session_payload_invalid",
           });
           logDedupedClientDiagnostic("flashcard_custom_session", "payload_parse_failed", `${pathwayId}:${res.status}`, {
             pathwayId,
             httpStatus: res.status,
+            errorCode: parsed.code ?? "unknown",
+            finalCount: parsed.integrity?.finalCount,
             message: parsed.message,
           });
-          if (!cancelled) setError(parsed.message);
+          if (!cancelled) setError(failureCopy);
           return;
         }
         const rawCards =
@@ -260,7 +322,14 @@ export function FlashcardCustomStudyClient() {
           pathwayId,
           message: err instanceof Error ? err.message : "unknown",
         });
-        if (!cancelled) setError("Could not load this session. Check your connection and try again.");
+        if (!cancelled) {
+          setError({
+            title: initialCardIndex > 0 ? "Unable to resume previous session." : "Your study session could not be created.",
+            detail: "The request did not complete before the flashcard player could hydrate.",
+            message: "Retry the session. If it repeats, go back to the launcher and start from the same systems.",
+            code: "network_error",
+          });
+        }
       } finally {
         stageTimers.forEach(window.clearTimeout);
         if (!cancelled) setLoading(false);
@@ -271,7 +340,7 @@ export function FlashcardCustomStudyClient() {
       stageTimers.forEach(window.clearTimeout);
       controller.abort();
     };
-  }, [queryString, pathwayId, retryNonce]);
+  }, [queryString, pathwayId, retryNonce, initialCardIndex]);
 
   const prefetchMore = useCallback(
     async (loadedCount: number) => {
@@ -486,9 +555,12 @@ export function FlashcardCustomStudyClient() {
             <AlertCircle className="h-5 w-5" />
           </div>
           <div className="space-y-2 text-center">
-            <h1 id="flashcard-session-error-title">Session could not load</h1>
-            <p>Please check your connection or try again.</p>
-            <p className="nn-flashcard-session-error-detail">{error}</p>
+            <h1 id="flashcard-session-error-title">{error.title}</h1>
+            <p>{error.detail}</p>
+            <p className="nn-flashcard-session-error-detail">
+              {error.message}
+              {error.code ? <span className="sr-only"> Error code: {error.code}.</span> : null}
+            </p>
           </div>
           <div className="nn-flashcard-session-error-actions">
             <button

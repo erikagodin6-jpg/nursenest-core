@@ -123,6 +123,30 @@ test("parseFlashcardCustomSessionResponse: HTTP error uses error string", () => 
   assert.equal(r.message, "Subscription required");
 });
 
+test("parseFlashcardCustomSessionResponse: preserves precise failure code and integrity", () => {
+  const r = parseFlashcardCustomSessionResponse(false, {
+    ok: false,
+    code: "session_timeout",
+    error: "Flashcard session creation timed out. Please retry.",
+    retryable: true,
+    integrity: {
+      querySucceeded: false,
+      source: "route_error",
+      rawCount: null,
+      filteredCount: null,
+      finalCount: 0,
+      reasonFailed: "Timeout after 5000ms",
+    },
+  });
+  assert.equal(r.ok, false);
+  if (r.ok) return;
+  assert.equal(r.code, "session_timeout");
+  assert.equal(r.retryable, true);
+  assert.equal(r.integrity?.querySucceeded, false);
+  assert.equal(r.integrity?.finalCount, 0);
+  assert.match(r.integrity?.reasonFailed ?? "", /Timeout/);
+});
+
 test("parseFlashcardCustomSessionResponse: non-array categoryOptions is shape error", () => {
   const r = parseFlashcardCustomSessionResponse(true, { ok: true, categoryOptions: {} });
   assert.equal(r.ok, false);

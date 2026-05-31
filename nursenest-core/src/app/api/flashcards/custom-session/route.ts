@@ -14,7 +14,7 @@ import {
 import { parseCustomSessionSourceKind } from "@/lib/flashcards/custom-session-card-filters";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
-import { withTimeout } from "@/lib/server/with-timeout";
+import { TimeoutError, withTimeout } from "@/lib/server/with-timeout";
 
 export const dynamic = "force-dynamic";
 
@@ -93,6 +93,7 @@ export async function GET(req: NextRequest) {
       const offset = parseCustomSessionOffset(sp.get("offset"));
       // NOTE: includeCards is read above for cache gating.
       const sourceKind = parseCustomSessionSourceKind(sp.get("sourceKind"));
+      const sessionSeed = sp.get("sessionSeed")?.trim() || null;
 
       const topicIdsForLog =
         selectedCategories.length > 0
@@ -116,6 +117,37 @@ export async function GET(req: NextRequest) {
         weakOnly: weakOnly ? "1" : "0",
         incorrectOnly: incorrectOnly ? "1" : "0",
         selectedCategoryCount: selectedCategories.length,
+      });
+      safeServerLog("flashcards", "FLASHCARD_SESSION_CREATE", {
+        stage: "attempt",
+        userId: userId.slice(0, 8),
+        pathway: pathwayId ?? "",
+        pathwayRaw: pathwayIdRaw ?? "",
+        country: String(entitlement.country ?? ""),
+        tier: String(entitlement.tier ?? ""),
+        systems: selectedCategories.slice(0, 24).join(","),
+        selectedTopics: topicCode ?? "",
+        selectedFilters: [
+          weakOnly ? "weak" : "",
+          incorrectOnly ? "incorrect" : "",
+          starredOnly ? "starred" : "",
+          savedOnly ? "saved" : "",
+          notesOnly ? "notes" : "",
+          revisitOnly ? "revisit" : "",
+          notStudiedOnly ? "not_studied" : "",
+          recentStudiedOnly ? "recent" : "",
+        ].filter(Boolean).join(","),
+        selectedDeckIds: lessonId ? `lesson:${lessonId.slice(0, 12)}` : "",
+        candidateFlashcards: null,
+        publishedFlashcards: null,
+        eligibleFlashcards: null,
+        finalSessionPoolSize: null,
+        sessionId: sessionSeed ? sessionSeed.slice(0, 12) : "",
+        failureReason: "",
+        includeCards: includeCards ? "1" : "0",
+        mode,
+        cardLimit: String(limit),
+        offset: String(offset),
       });
 
       const built = await withTimeout(
@@ -142,7 +174,7 @@ export async function GET(req: NextRequest) {
           includeCards,
           sourceKind,
           offset,
-          sessionSeed: sp.get("sessionSeed")?.trim() || null,
+          sessionSeed,
           cardLimitRaw: sp.get("cardLimit"),
         }),
         includeCards ? 5_000 : 2_000,
@@ -160,6 +192,37 @@ export async function GET(req: NextRequest) {
           pathwayIdRaw: pathwayIdRaw ?? "",
           tier: String(entitlement.tier ?? ""),
           country: String(entitlement.country ?? ""),
+        });
+        safeServerLog("flashcards", "FLASHCARD_SESSION_CREATE", {
+          stage: "failed",
+          userId: userId.slice(0, 8),
+          pathway: pathwayId ?? "",
+          pathwayRaw: pathwayIdRaw ?? "",
+          country: String(entitlement.country ?? ""),
+          tier: String(entitlement.tier ?? ""),
+          systems: selectedCategories.slice(0, 24).join(","),
+          selectedTopics: topicCode ?? "",
+          selectedFilters: [
+            weakOnly ? "weak" : "",
+            incorrectOnly ? "incorrect" : "",
+            starredOnly ? "starred" : "",
+            savedOnly ? "saved" : "",
+            notesOnly ? "notes" : "",
+            revisitOnly ? "revisit" : "",
+            notStudiedOnly ? "not_studied" : "",
+            recentStudiedOnly ? "recent" : "",
+          ].filter(Boolean).join(","),
+          selectedDeckIds: lessonId ? `lesson:${lessonId.slice(0, 12)}` : "",
+          candidateFlashcards: null,
+          publishedFlashcards: null,
+          eligibleFlashcards: null,
+          finalSessionPoolSize: 0,
+          sessionId: sessionSeed ? sessionSeed.slice(0, 12) : "",
+          failureReason: `${built.code}:${kind}`.slice(0, 120),
+          includeCards: includeCards ? "1" : "0",
+          mode,
+          cardLimit: String(limit),
+          offset: String(offset),
         });
         const h = new Headers(headers);
         h.set("Retry-After", "3");
@@ -194,6 +257,42 @@ export async function GET(req: NextRequest) {
         returnedCount: String(built.summary.returnedCards),
         relaxation: built.queryRelaxation,
         includeCards: includeCards ? "1" : "0",
+      });
+      safeServerLog("flashcards", "FLASHCARD_SESSION_CREATE", {
+        stage: built.summary.returnedCards > 0 || !includeCards ? "success" : "empty",
+        userId: userId.slice(0, 8),
+        pathway: built.summary.pathwayId ?? pathwayId ?? "",
+        pathwayRaw: pathwayIdRaw ?? "",
+        country: String(entitlement.country ?? ""),
+        tier: String(entitlement.tier ?? ""),
+        systems: built.summary.selectedCategories.slice(0, 24).join(","),
+        selectedTopics: built.summary.topicCode ?? "",
+        selectedFilters: [
+          built.summary.weakOnly ? "weak" : "",
+          built.summary.incorrectOnly ? "incorrect" : "",
+          built.summary.starredOnly ? "starred" : "",
+          built.summary.savedOnly ? "saved" : "",
+          built.summary.notesOnly ? "notes" : "",
+          built.summary.revisitOnly ? "revisit" : "",
+          built.summary.notStudiedOnly ? "not_studied" : "",
+          built.summary.recentStudiedOnly ? "recent" : "",
+        ].filter(Boolean).join(","),
+        selectedDeckIds: built.summary.lessonId ? `lesson:${built.summary.lessonId.slice(0, 12)}` : "",
+        candidateFlashcards: built.summary.poolInventoryDiagnostics?.examQuestionSqlPoolCount ?? built.summary.matchingCards,
+        publishedFlashcards: built.summary.poolInventoryDiagnostics?.dedicatedFlashcardRowCount ?? null,
+        eligibleFlashcards: built.summary.matchingCards,
+        finalSessionPoolSize: built.summary.returnedCards,
+        sessionId: built.summary.sessionShuffleSalt?.slice(0, 12) ?? "",
+        failureReason:
+          built.summary.matchingCards === 0
+            ? "empty_pool_after_filters"
+            : includeCards && built.summary.returnedCards === 0
+              ? "no_serialized_cards_in_first_window"
+              : "",
+        includeCards: includeCards ? "1" : "0",
+        mode: built.summary.mode,
+        cardLimit: built.summary.cardLimit,
+        offset: String(built.summary.offset ?? 0),
       });
       logCoreApiStudyDiagnostic({
         endpoint: "GET /api/flashcards/custom-session",
@@ -232,12 +331,23 @@ export async function GET(req: NextRequest) {
       safeServerLogCritical("flashcards", "custom_session_route_error", {}, error);
       const h = mergeSubscriberPrivateCacheHeaders();
       h.set("Retry-After", "3");
+      const isTimeout = error instanceof TimeoutError || (error instanceof Error && /timeout/i.test(error.message));
       return NextResponse.json(
         {
           ok: false,
-          code: "service_unavailable",
-          error: "Flashcard session is temporarily unavailable. Please retry.",
+          code: isTimeout ? "session_timeout" : "service_unavailable",
+          error: isTimeout
+            ? "Flashcard session creation timed out. Please retry."
+            : "Flashcard session is temporarily unavailable. Please retry.",
           retryable: true,
+          integrity: {
+            querySucceeded: false,
+            source: "route_error",
+            rawCount: null,
+            filteredCount: null,
+            finalCount: 0,
+            reasonFailed: error instanceof Error ? error.message.slice(0, 500) : "unknown",
+          },
         },
         { status: 503, headers: h },
       );

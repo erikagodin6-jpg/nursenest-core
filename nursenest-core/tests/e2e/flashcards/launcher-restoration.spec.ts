@@ -69,6 +69,75 @@ test.describe("Launcher restoration — flashcards hub", () => {
     }
   });
 
+  test("system selection does not shift the launcher grid", async ({ page, baseURL }, testInfo) => {
+    test.setTimeout(180_000);
+    await page.addInitScript(() => {
+      const w = window as typeof window & { __nnLayoutShifts?: number[] };
+      w.__nnLayoutShifts = [];
+      try {
+        const observer = new PerformanceObserver((list) => {
+          for (const entry of list.getEntries()) {
+            const layoutShift = entry as PerformanceEntry & { value?: number; hadRecentInput?: boolean };
+            if (!layoutShift.hadRecentInput && typeof layoutShift.value === "number") {
+              w.__nnLayoutShifts?.push(layoutShift.value);
+            }
+          }
+        });
+        observer.observe({ type: "layout-shift", buffered: true });
+      } catch {
+        // Chromium supports layout-shift; other browsers will still use geometric assertions below.
+      }
+    });
+    const observers = attachPageObservers(page, { profile: "app" });
+    try {
+      const ok = await gotoFlashcardsHub(page, baseURL);
+      test.skip(!ok, "Hub not accessible.");
+      const main = learnerAppMainLandmark(page);
+      const setupPanel = main.locator("[data-nn-e2e-flashcards-setup-panel]");
+      const grid = main.locator("[data-nn-e2e-flashcards-system-grid]");
+      const cards = main.locator("[data-nn-e2e-flashcards-system-card]");
+      await expect(setupPanel).toBeVisible({ timeout: 60_000 });
+      await expect(grid).toBeVisible({ timeout: 60_000 });
+      await expect(cards.first()).toBeVisible({ timeout: 60_000 });
+      await page.waitForTimeout(250);
+
+      const beforePanel = await setupPanel.boundingBox();
+      const beforeGrid = await grid.boundingBox();
+      const beforeTop = await page.evaluate(() => window.scrollY);
+      expect(beforePanel, "setup panel box before selection").not.toBeNull();
+      expect(beforeGrid, "system grid box before selection").not.toBeNull();
+      await page.screenshot({ path: testInfo.outputPath("flashcard-launcher-before-selection.png"), fullPage: true });
+
+      await cards.nth(0).click();
+      await cards.nth(1).click();
+      await cards.nth(0).click();
+      await main.locator("[data-nn-e2e-flashcards-shuffle]").click();
+      await main.locator('[data-nn-e2e-session-size-preset="25"]').click();
+      await page.waitForTimeout(250);
+
+      const afterPanel = await setupPanel.boundingBox();
+      const afterGrid = await grid.boundingBox();
+      const afterTop = await page.evaluate(() => window.scrollY);
+      expect(afterPanel, "setup panel box after selection").not.toBeNull();
+      expect(afterGrid, "system grid box after selection").not.toBeNull();
+      expect(afterTop, "viewport should not jump").toBe(beforeTop);
+      expect(Math.abs((afterPanel?.y ?? 0) - (beforePanel?.y ?? 0)), "launcher top shift").toBeLessThan(1);
+      expect(Math.abs((afterPanel?.width ?? 0) - (beforePanel?.width ?? 0)), "launcher width shift").toBeLessThan(1);
+      expect(Math.abs((afterGrid?.y ?? 0) - (beforeGrid?.y ?? 0)), "grid top shift").toBeLessThan(1);
+      expect(Math.abs((afterGrid?.height ?? 0) - (beforeGrid?.height ?? 0)), "grid height shift").toBeLessThan(1);
+
+      const cls = await page.evaluate(() => {
+        const w = window as typeof window & { __nnLayoutShifts?: number[] };
+        return (w.__nnLayoutShifts ?? []).reduce((sum, value) => sum + value, 0);
+      });
+      expect(cls, "launcher CLS").toBeLessThan(0.01);
+      await page.screenshot({ path: testInfo.outputPath("flashcard-launcher-after-selection.png"), fullPage: true });
+    } finally {
+      observers.dispose();
+      await logObserverDiagnostics(observers, testInfo.title);
+    }
+  });
+
   test("session size preset updates start href", async ({ page, baseURL }, testInfo) => {
     test.setTimeout(180_000);
     const observers = attachPageObservers(page, { profile: "app" });

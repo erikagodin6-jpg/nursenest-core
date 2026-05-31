@@ -58,6 +58,16 @@ export type ParsedCustomSessionSuccess = {
 export type ParsedCustomSessionFailure = {
   ok: false;
   message: string;
+  code?: string;
+  retryable?: boolean;
+  integrity?: {
+    querySucceeded?: boolean;
+    source?: string;
+    rawCount?: number | null;
+    filteredCount?: number | null;
+    finalCount?: number | null;
+    reasonFailed?: string;
+  };
 };
 
 export type FlashcardBodySystemsUiOutcome = "populated" | "empty" | "error";
@@ -149,11 +159,33 @@ export function parseFlashcardCustomSessionResponse(
   json: unknown,
 ): ParsedCustomSessionSuccess | ParsedCustomSessionFailure {
   if (!resOk) {
-    const msg =
-      json && typeof json === "object" && "error" in json && typeof (json as { error?: unknown }).error === "string"
-        ? (json as { error: string }).error
-        : "Request failed";
-    return { ok: false, message: msg };
+    const body = json && typeof json === "object" ? (json as Record<string, unknown>) : null;
+    const msg = body && typeof body.error === "string" ? body.error : "Request failed";
+    const integrityRaw = body && typeof body.integrity === "object" && body.integrity != null
+      ? (body.integrity as Record<string, unknown>)
+      : null;
+    const numericOrNull = (value: unknown): number | null | undefined => {
+      if (value === null) return null;
+      if (typeof value === "number" && Number.isFinite(value)) return Math.max(0, Math.floor(value));
+      return undefined;
+    };
+    const integrity = integrityRaw
+      ? {
+          querySucceeded: typeof integrityRaw.querySucceeded === "boolean" ? integrityRaw.querySucceeded : undefined,
+          source: typeof integrityRaw.source === "string" ? integrityRaw.source : undefined,
+          rawCount: numericOrNull(integrityRaw.rawCount),
+          filteredCount: numericOrNull(integrityRaw.filteredCount),
+          finalCount: numericOrNull(integrityRaw.finalCount),
+          reasonFailed: typeof integrityRaw.reasonFailed === "string" ? integrityRaw.reasonFailed.slice(0, 500) : undefined,
+        }
+      : undefined;
+    return {
+      ok: false,
+      message: msg,
+      code: body && typeof body.code === "string" ? body.code : undefined,
+      retryable: body && typeof body.retryable === "boolean" ? body.retryable : undefined,
+      ...(integrity ? { integrity } : {}),
+    };
   }
 
   if (json == null || typeof json !== "object") {

@@ -809,6 +809,41 @@ export async function buildFlashcardCustomSession(
     }
 
     const plannedCount = includeCards ? cardsForSession.length : limited.length;
+    safeServerLog("flashcards", "FLASHCARD_SESSION_POOL", {
+      loader_name: "build_flashcard_custom_session",
+      userId: userId.slice(0, 8),
+      pathway: pathwayScopeId ?? pathwayId ?? "",
+      country: String(entitlement.country ?? ""),
+      tier: String(entitlement.tier ?? ""),
+      systems: selectedCategories.slice(0, 24).join(","),
+      selectedTopics: topicCode ?? "",
+      selectedFilters: describeCustomSessionFilterMode({
+        weakOnly,
+        incorrectOnly,
+        starredOnly,
+        notStudiedOnly,
+        savedOnly,
+        notesOnly,
+        revisitOnly,
+      }),
+      selectedDeckIds: lessonId ? `lesson:${lessonId.slice(0, 12)}` : "",
+      candidateFlashcards: cardWithCategory.length,
+      publishedFlashcards: cards.length,
+      eligibleFlashcards: scoped.length,
+      serializedCandidates: limited.length,
+      finalSessionPoolSize: plannedCount,
+      sessionId: (sessionSeed?.trim() || sessionShuffleSalt).slice(0, 12),
+      failureReason:
+        scoped.length === 0
+          ? "empty_pool_after_filters"
+          : includeCards && plannedCount === 0
+            ? "all_selected_cards_failed_serialization"
+            : "",
+      includeCards: includeCards ? "1" : "0",
+      sourceKind,
+      offset: String(boundedOffset),
+      cardLimit: cardLimitRaw ?? "20",
+    });
 
     const summary: FlashcardCustomSessionSummary = {
       pathwayId: pathwayScopeId ?? pathwayId,

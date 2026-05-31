@@ -1044,7 +1044,10 @@ export function FlashcardsHubClient({
               ) : null}
             </div>
 
-            <div className="nn-flashcards-system-grid grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+            <div
+              className="nn-flashcards-system-grid grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5"
+              data-nn-e2e-flashcards-system-grid
+            >
               {CANONICAL_STUDY_CATEGORIES.map((system) => {
                 const active = selectedCanonicalIds.includes(system.id);
                 const count = countsByCanonical[system.id] ?? 0;
@@ -1056,7 +1059,7 @@ export function FlashcardsHubClient({
                     aria-pressed={active}
                     data-selected={active}
                     data-accent={accentIndex}
-                    className="nn-flashcards-system-card-v2 group flex min-h-[10rem] flex-col justify-between rounded-[1.25rem] border p-4 text-left text-sm font-semibold transition focus-visible:outline-none"
+                    className="nn-flashcards-system-card-v2 group flex h-[10.75rem] min-h-[10.75rem] flex-col justify-between rounded-[1.25rem] border-2 p-4 text-left text-sm font-semibold transition focus-visible:outline-none"
                     data-nn-e2e-flashcards-system-card={system.id}
                     onClick={() => {
                       setSelectedCanonicalIds((current) => {
@@ -1072,18 +1075,18 @@ export function FlashcardsHubClient({
                         {active ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                       </span>
                     </span>
-                    <span>
+                    <span className="block min-h-[3.25rem]">
                       <span className="block text-base leading-snug text-[var(--semantic-text-primary)]">
                         {system.label}
                       </span>
                       <span
-                        className="mt-2 block text-sm font-semibold leading-none text-[var(--semantic-text-secondary)]"
+                        className="mt-2 block min-h-[1rem] text-sm font-semibold leading-none text-[var(--semantic-text-secondary)]"
                         data-nn-e2e-flashcards-system-count
                       >
                         {systemCountLabel(Math.max(0, count))}
                       </span>
                     </span>
-                    <span className="nn-flashcards-system-card-v2__badge inline-flex min-h-7 w-fit items-center rounded-full px-3 text-xs font-semibold">
+                    <span className="nn-flashcards-system-card-v2__badge inline-flex min-h-7 min-w-[6.75rem] items-center justify-center rounded-full px-3 text-xs font-semibold">
                       {active ? "Selected" : "Add system"}
                     </span>
                   </button>

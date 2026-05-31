@@ -1426,13 +1426,15 @@ html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-deck
 
 [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2 {
   min-width: 0;
-  min-height: 10rem;
+  height: 10.75rem;
+  min-height: 10.75rem;
   border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-brand));
   background: color-mix(in srgb, var(--semantic-surface) 95%, var(--semantic-panel-muted));
   color: var(--semantic-text-primary);
   box-shadow: 0 0.85rem 2.25rem color-mix(in srgb, var(--semantic-text-primary) 7%, transparent);
   text-decoration: none;
   transform: translateY(0);
+  contain: layout paint;
 }
 
 html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2 {
@@ -1445,7 +1447,7 @@ html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-syst
   box-shadow:
     0 1rem 2.6rem color-mix(in srgb, var(--semantic-text-primary) 10%, transparent),
     0 0 0 0.2rem color-mix(in srgb, var(--semantic-brand) 10%, transparent);
-  transform: translateY(-0.18rem);
+  transform: none;
 }
 
 [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2:focus-visible {
@@ -1473,7 +1475,7 @@ html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-syst
 [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2:focus-visible .nn-flashcards-system-card-v2__arrow {
   background: color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-surface));
   color: var(--semantic-brand);
-  transform: translateX(0.12rem);
+  transform: none;
 }
 
 [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2__badge {
@@ -1505,6 +1507,7 @@ html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-syst
   }
 
   [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2 {
-    min-height: 8.75rem;
+    height: 9.5rem;
+    min-height: 9.5rem;
   }
 }
