@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-31T22:02:53.261Z",
+  "generatedAt": "2026-05-31T22:11:11.601Z",
   "scope": "all",
   "clientEntrypoints": [
     "src/app/(admin)/admin/modules/ecg/publish-button.tsx",
@@ -180,6 +180,7 @@
     "src/components/cases/cnple-case-completion.tsx",
     "src/components/cases/cnple-longitudinal-case-shell.tsx",
     "src/components/clinical-assignments/clinical-assignment-hub-client.tsx",
+    "src/components/clinical-day-survival/clinical-day-survival-hub-client.tsx",
     "src/components/clinical-images/clinical-image-library-client.tsx",
     "src/components/clinical-images/clinical-image-viewer.tsx",
     "src/components/clinical-interpretation/clinical-interpretation-guide-card.tsx",
