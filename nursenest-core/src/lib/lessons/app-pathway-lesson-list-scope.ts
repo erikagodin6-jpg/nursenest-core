@@ -12,6 +12,7 @@ import {
   pathwayLessonAlliedProfessionWhere,
 } from "@/lib/entitlements/allied-occupation-entitlement";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
+import { lessonSystemTopicSlugCandidates } from "@/lib/lessons/lesson-system-navigation";
 
 /** Pathway IDs the learner may see in `/app/lessons` by tier, country, and specialty. */
 export async function visiblePathwayIdsForAppLessons(
@@ -88,6 +89,7 @@ export async function pathwayLessonsAppListWhereWithTopicFilter(
   const base = await pathwayLessonsAppListWhere(scope, learnerPath);
 
   const topicSlug = normalizeSlug(filter.topicSlug);
+  const topicSlugCandidates = topicSlug ? lessonSystemTopicSlugCandidates(topicSlug) : [];
   const topic = normalizeText(filter.topic);
   const pathwayId = normalizeText(filter.pathwayId);
   const allied = filter.alliedProfessionKey?.trim().toLowerCase() ?? "";
@@ -112,16 +114,17 @@ export async function pathwayLessonsAppListWhereWithTopicFilter(
       return mergeAndWhere(base, [{ id: { in: [] } }]);
     }
     if (topicSlug) {
-      if (!owned.includes(topicSlug)) {
+      const ownedCandidates = topicSlugCandidates.filter((candidate) => owned.includes(candidate));
+      if (ownedCandidates.length === 0) {
         return mergeAndWhere(base, [{ id: { in: [] } }]);
       }
-      extraClauses.push({ topicSlug });
+      extraClauses.push({ topicSlug: { in: ownedCandidates } });
     } else {
       extraClauses.push({ topicSlug: { in: owned } });
     }
   } else {
     if (topicSlug) {
-      extraClauses.push({ topicSlug });
+      extraClauses.push({ topicSlug: { in: topicSlugCandidates.length ? topicSlugCandidates : [topicSlug] } });
     } else if (topic) {
       extraClauses.push({ topic: { equals: topic, mode: "insensitive" } });
     }

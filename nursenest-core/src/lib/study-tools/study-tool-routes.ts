@@ -1,5 +1,6 @@
 export const STUDY_TOOL_ROUTES = {
   hub: "/app/study-tools",
+  formulaSheet: "/app/study-tools/formula-sheet",
   decks: "/app/study-tools/decks",
   createDeck: "/app/study-tools/create",
   sharedDecks: "/app/study-tools/shared",

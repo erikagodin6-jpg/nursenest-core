@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { SmartFormulaSheetLauncher } from "@/components/formula-sheet/smart-formula-sheet";
 import { isStudyToolsPubliclyEnabled } from "@/lib/study-tools/study-tools-feature-flag";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
 
 const NAV_DEF: { key: keyof typeof STUDY_TOOL_ROUTES; label: string }[] = [
   { key: "hub", label: "Study hub" },
+  { key: "formulaSheet", label: "Formula sheet" },
   { key: "flashcardsHub", label: "Flashcards" },
   { key: "decks", label: "Verified decks" },
   { key: "createDeck", label: "New deck" },
@@ -44,17 +46,22 @@ export function StudyToolsActivityShell({
         </div>
       ) : null}
 
-      <header className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">Study tools</p>
-        <h1 className="text-2xl font-semibold text-[var(--semantic-text-primary)]">{title}</h1>
-        <p className="text-sm leading-relaxed text-[var(--theme-body-text)]">{description}</p>
-        {pathwayId ? (
-          <p className="text-xs text-[var(--theme-body-text)]">
-            Pathway: <span className="font-mono text-[var(--semantic-text-primary)]">{pathwayId}</span>
-          </p>
-        ) : (
-          <p className="text-xs text-[var(--semantic-warning)]">Optional query: add pathwayId to scope this session.</p>
-        )}
+      <header className="space-y-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">Study tools</p>
+            <h1 className="text-2xl font-semibold text-[var(--semantic-text-primary)]">{title}</h1>
+            <p className="text-sm leading-relaxed text-[var(--theme-body-text)]">{description}</p>
+            {pathwayId ? (
+              <p className="text-xs text-[var(--theme-body-text)]">
+                Pathway: <span className="font-mono text-[var(--semantic-text-primary)]">{pathwayId}</span>
+              </p>
+            ) : (
+              <p className="text-xs text-[var(--semantic-warning)]">Optional query: add pathwayId to scope this session.</p>
+            )}
+          </div>
+          <SmartFormulaSheetLauncher />
+        </div>
       </header>
 
       <nav aria-label="Study tool activities" className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] p-4">

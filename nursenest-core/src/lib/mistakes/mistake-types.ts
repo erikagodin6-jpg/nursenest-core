@@ -9,37 +9,50 @@
 export type MistakeReason =
   | "knowledge_gap"
   | "misread_question"
-  | "rushed"
   | "second_guessed"
+  | "calculation_error"
+  | "rushed"
+  | "fatigue_distraction"
+  /** Legacy tags remain readable for existing learner notes. */
   | "prioritization_issue"
   | "sata_strategy"
   | "case_study_reasoning";
 
-export const MISTAKE_REASONS: MistakeReason[] = [
+export const MISSED_QUESTION_JOURNAL_REASONS = [
   "knowledge_gap",
   "misread_question",
-  "rushed",
   "second_guessed",
+  "calculation_error",
+  "rushed",
+  "fatigue_distraction",
+] as const satisfies readonly MistakeReason[];
+
+export const MISTAKE_REASONS: MistakeReason[] = [
+  ...MISSED_QUESTION_JOURNAL_REASONS,
   "prioritization_issue",
   "sata_strategy",
   "case_study_reasoning",
 ];
 
 export const MISTAKE_REASON_LABELS: Record<MistakeReason, string> = {
-  knowledge_gap: "Knowledge Gap",
+  knowledge_gap: "Didn't Know Content",
   misread_question: "Misread Question",
-  rushed: "Rushed",
   second_guessed: "Second-Guessed",
+  calculation_error: "Calculation Error",
+  rushed: "Rushed",
+  fatigue_distraction: "Fatigue / Distraction",
   prioritization_issue: "Prioritization",
   sata_strategy: "SATA Strategy",
   case_study_reasoning: "Case Study Reasoning",
 };
 
 export const MISTAKE_REASON_DESCRIPTIONS: Record<MistakeReason, string> = {
-  knowledge_gap: "I didn't know the concept",
+  knowledge_gap: "I didn't know the content",
   misread_question: "I misread or misunderstood the question",
-  rushed: "I moved too fast and didn't read carefully",
   second_guessed: "My first instinct was right but I changed it",
+  calculation_error: "I made a math, unit, or formula error",
+  rushed: "I moved too fast and didn't read carefully",
+  fatigue_distraction: "Fatigue or distraction affected my focus",
   prioritization_issue: "I struggled to rank nursing priorities",
   sata_strategy: "I had trouble with Select-All-That-Apply",
   case_study_reasoning: "I lost track of the clinical reasoning chain",
@@ -49,8 +62,10 @@ export const MISTAKE_REASON_DESCRIPTIONS: Record<MistakeReason, string> = {
 export const MISTAKE_REASON_ROLE: Record<MistakeReason, string> = {
   knowledge_gap: "info",
   misread_question: "warning",
-  rushed: "warning",
   second_guessed: "concept",
+  calculation_error: "diagnostic",
+  rushed: "warning",
+  fatigue_distraction: "application",
   prioritization_issue: "action",
   sata_strategy: "diagnostic",
   case_study_reasoning: "application",
@@ -62,10 +77,14 @@ export const MISTAKE_REASON_STUDY_TIPS: Record<MistakeReason, string> = {
     "Focus on lesson sections for these topics. Use spaced repetition flashcards to anchor the concept.",
   misread_question:
     "Slow down on the stem. Underline the key phrase and restate it before reading options.",
-  rushed:
-    "Practice 1-question-per-minute pacing. Flag and come back rather than guessing under pressure.",
   second_guessed:
     "Trust your initial read. Only change an answer if you find a concrete reason — not just anxiety.",
+  calculation_error:
+    "Work the formula line by line, include units, and compare the final answer against a realistic clinical range.",
+  rushed:
+    "Practice 1-question-per-minute pacing. Flag and come back rather than guessing under pressure.",
+  fatigue_distraction:
+    "Use shorter focused sets and pause when attention drops. Accuracy patterns matter more than forcing volume.",
   prioritization_issue:
     "Apply ABC then Maslow. When in doubt, choose the patient who is least stable.",
   sata_strategy:
@@ -78,6 +97,14 @@ export const MISTAKE_REASON_STUDY_TIPS: Record<MistakeReason, string> = {
 export type MistakeTagBody = {
   reason: MistakeReason | null;
   note: string;
+  sourceType?: string | null;
+  stemPreview?: string | null;
+  topic?: string | null;
+  bodySystem?: string | null;
+  questionType?: string | null;
+  sourceHref?: string | null;
+  pathwayId?: string | null;
+  createdAt?: string | null;
 };
 
 /** A single missed question with optional user tag */
@@ -103,6 +130,9 @@ export type MistakeEntry = {
   tagged: boolean;
   /** Source session IDs (practice test IDs where this was missed) */
   sourceIds: string[];
+  sourceType?: string | null;
+  sourceHref?: string | null;
+  pathwayId?: string | null;
 };
 
 export type MistakePattern = {
@@ -123,9 +153,11 @@ export type MistakeNotebookData = {
   entries: MistakeEntry[];
   totalMisses: number;
   taggedCount: number;
+  mostCommonErrorType: { reason: MistakeReason; count: number } | null;
   topTopics: MistakeTopicSummary[];
   topBodySystems: { bodySystem: string; count: number }[];
   patterns: MistakePattern[];
   reasonCounts: Partial<Record<MistakeReason, number>>;
+  improvementOverTime: { label: string; misses: number; tagged: number }[];
   hasHistoricalData: boolean;
 };

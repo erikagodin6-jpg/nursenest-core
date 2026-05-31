@@ -39,6 +39,8 @@ import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub
 
 const DEFAULT_FLASHCARDS_PATHWAY_ID = "ca-rn-nclex-rn";
 const FLASHCARDS_PAGE_TIMING_LABEL = "flashcards_hub_server_bootstrap";
+const FLASHCARDS_PROFILE_BOOTSTRAP_TIMEOUT_MS = 1200;
+const FLASHCARDS_INVENTORY_BOOTSTRAP_TIMEOUT_MS = 100;
 
 type PageProps = {
   searchParams: Promise<{
@@ -48,6 +50,12 @@ type PageProps = {
     weakOnly?: string | string[];
   }>;
 };
+
+function timeoutAfter<T>(ms: number): Promise<T | null> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(null), ms);
+  });
+}
 
 export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -217,14 +225,20 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
   let pathwayBootstrapSource: "primary" | "secondary" = "primary";
   let learnerPath: string | null = null;
 
+  const compatible = await listPathwaysCompatibleWithSubscription(entitlement);
+  pathwayOptions = compatible.map((p) => ({
+    id: p.id,
+    label: p.displayName ?? p.shortName,
+  }));
+
   if (userId && isDatabaseUrlConfigured()) {
     try {
-      const [compatible, u] = await Promise.all([
-        listPathwaysCompatibleWithSubscription(entitlement),
+      const u = await Promise.race([
         prisma.user.findUnique({
           where: { id: userId },
           select: { learnerPath: true },
         }),
+        timeoutAfter<{ learnerPath: string | null }>(FLASHCARDS_PROFILE_BOOTSTRAP_TIMEOUT_MS),
       ]);
 
       const lp = u?.learnerPath?.trim() ?? null;
@@ -237,10 +251,15 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
         requireExplicitRequestedPathwayId: true,
       });
 
-      pathwayOptions = compatible.map((p) => ({
-        id: p.id,
-        label: p.displayName ?? p.shortName,
-      }));
+      if (u === null) {
+        safeServerLog("learner_flashcards", "pathway_profile_lookup_timeout", {
+          loader_name: "flashcards_page",
+          user_id_prefix: userId.slice(0, 8),
+          requested_pathway_id: requestedPathwayId ?? "",
+          timeout_ms: FLASHCARDS_PROFILE_BOOTSTRAP_TIMEOUT_MS,
+          outcome: "rendering_without_profile_pathway",
+        });
+      }
       safeServerLog("learner_flashcards", "pathway_bootstrap_resolved", {
         loader_name: "flashcards_page",
         user_id_prefix: userId.slice(0, 8),
@@ -283,17 +302,25 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
           learnerPath: null,
           requireExplicitRequestedPathwayId: true,
         });
-      } else {
-        return (
-          <ContentEmptyState
-            variant="generic"
-            headline="Could not load flashcard tracks"
-            body="We hit an error while loading your subscription pathways."
-            primaryCta={{ label: "Retry", href: "/app/flashcards" }}
-          />
-        );
+      } else if (compatible.length > 0) {
+        pathwayBootstrapSource = "secondary";
+        pathwayResolution = resolveSubscribedQuestionBankPathways({
+          requestedPathwayId,
+          compatible: compatible.map((p) => ({ id: p.id, shortName: p.shortName })),
+          learnerPath: null,
+          requireExplicitRequestedPathwayId: true,
+        });
       }
     }
+  }
+
+  if (!pathwayResolution) {
+    pathwayResolution = resolveSubscribedQuestionBankPathways({
+      requestedPathwayId,
+      compatible: compatible.map((p) => ({ id: p.id, shortName: p.shortName })),
+      learnerPath,
+      requireExplicitRequestedPathwayId: true,
+    });
   }
 
   if (pathwayResolution?.state === "invalid_requested") {
@@ -365,7 +392,7 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
           pathway: catalogPathwayForInventory,
         }),
         new Promise<null>((resolve) => {
-          setTimeout(() => resolve(null), 100);
+          setTimeout(() => resolve(null), FLASHCARDS_INVENTORY_BOOTSTRAP_TIMEOUT_MS);
         }),
       ]);
 
@@ -382,7 +409,7 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
         safeServerLog("learner_flashcards", "server_inventory_timeout", {
           loader_name: "flashcards_page",
           pathway_id: scopedPathwayId,
-          timeout_ms: 100,
+          timeout_ms: FLASHCARDS_INVENTORY_BOOTSTRAP_TIMEOUT_MS,
         });
       }
     } catch (e) {

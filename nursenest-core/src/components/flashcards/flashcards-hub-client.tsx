@@ -45,6 +45,24 @@ import {
 import { buildFlashcardsSessionPreview } from "@/lib/flashcards/flashcards-hub-session-copy";
 import { parseHubMode, parseHubSystemsFromSearchParams } from "@/lib/flashcards/flashcards-hub-url";
 
+const FLASHCARDS_HUB_CLIENT_FETCH_TIMEOUT_MS = 2000;
+
+async function fetchFlashcardsHubJson(url: string): Promise<{ res: Response; json: unknown }> {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), FLASHCARDS_HUB_CLIENT_FETCH_TIMEOUT_MS);
+  try {
+    const res = await fetch(url, {
+      credentials: "include",
+      cache: "no-store",
+      signal: controller.signal,
+    });
+    const json = await res.json();
+    return { res, json };
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+}
+
 function buildCustomSessionQuery(args: {
   pathwayId: string;
   cardLimit: FlashcardsHubCardLimit;
@@ -172,6 +190,7 @@ export function FlashcardsHubClient({
   const [starredOnly, setStarredOnly] = useState(false);
   const [notStudiedOnly, setNotStudiedOnly] = useState(false);
   const [recentStudiedOnly, setRecentStudiedOnly] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
   const [resumeCk, setResumeCk] = useState(() =>
     typeof window !== "undefined" ? readFlashcardsCustomSessionCheckpoint(scopedPathwayId) : null,
   );
@@ -367,25 +386,25 @@ export function FlashcardsHubClient({
           alliedProfession: apForQuery || null,
           hubTopicSlug,
         });
-        const res = await fetch(`/api/flashcards/custom-session?${qs}`, {
-          credentials: "include",
-          cache: "no-store",
-        });
+        let res: Response;
         let json: unknown;
         try {
-          json = await res.json();
+          const fetched = await fetchFlashcardsHubJson(`/api/flashcards/custom-session?${qs}`);
+          res = fetched.res;
+          json = fetched.json;
         } catch {
           if (builderCategoriesRef.current.length > 0) {
-            logDedupedClientDiagnostic("flashcards_hub", "custom_session_json_kept_stale", scopedPathwayId, {
+            logDedupedClientDiagnostic("flashcards_hub", "custom_session_timeout_kept_stale", scopedPathwayId, {
               pathwayId: scopedPathwayId,
+              timeoutMs: FLASHCARDS_HUB_CLIENT_FETCH_TIMEOUT_MS,
             });
-            setLoadError(null);
+            setLoadError("Flashcard counts are taking longer than expected. You can keep studying with the deck categories shown below or retry counts.");
             return;
           }
-          const base = "Flashcard inventory returned invalid JSON. Try again or contact support.";
+          const base = "Flashcard inventory took too long to load. Try again or continue with available deck categories.";
           setLoadError(
             process.env.NODE_ENV === "development"
-              ? `${base} (pathwayId=${scopedPathwayId}, url=/api/flashcards/custom-session)`
+              ? `${base} (pathwayId=${scopedPathwayId}, timeoutMs=${FLASHCARDS_HUB_CLIENT_FETCH_TIMEOUT_MS})`
               : base,
           );
           setBuilderCategories([]);
@@ -423,26 +442,29 @@ export function FlashcardsHubClient({
       }
 
       const invUrl = `/api/flashcards/inventory?pathwayId=${encodeURIComponent(scopedPathwayId)}`;
-      const res = await fetch(invUrl, { credentials: "include", cache: "no-store" });
+      let res: Response;
       let json: unknown;
       try {
-        json = await res.json();
+        const fetched = await fetchFlashcardsHubJson(invUrl);
+        res = fetched.res;
+        json = fetched.json;
       } catch {
-        logDedupedClientDiagnostic("flashcards_hub", "inventory_json_parse_failed", scopedPathwayId, {
+        logDedupedClientDiagnostic("flashcards_hub", "inventory_timeout_or_json_parse_failed", scopedPathwayId, {
           pathwayId: scopedPathwayId,
-          httpStatus: res.status,
+          timeoutMs: FLASHCARDS_HUB_CLIENT_FETCH_TIMEOUT_MS,
         });
         if (builderCategoriesRef.current.length > 0) {
-          logDedupedClientDiagnostic("flashcards_hub", "inventory_json_kept_stale", scopedPathwayId, {
+          logDedupedClientDiagnostic("flashcards_hub", "inventory_timeout_kept_stale", scopedPathwayId, {
             pathwayId: scopedPathwayId,
+            timeoutMs: FLASHCARDS_HUB_CLIENT_FETCH_TIMEOUT_MS,
           });
-          setLoadError(null);
+          setLoadError("Flashcard counts are taking longer than expected. You can keep studying with the deck categories shown below or retry counts.");
           return;
         }
-        const base = "Flashcard inventory returned invalid JSON. Try again or contact support.";
+        const base = "Flashcard inventory took too long to load. Try again or continue with available deck categories.";
         setLoadError(
           process.env.NODE_ENV === "development"
-            ? `${base} (pathwayId=${scopedPathwayId}, url=/api/flashcards/inventory)`
+            ? `${base} (pathwayId=${scopedPathwayId}, timeoutMs=${FLASHCARDS_HUB_CLIENT_FETCH_TIMEOUT_MS})`
             : base,
         );
         setBuilderCategories([]);
@@ -937,14 +959,17 @@ export function FlashcardsHubClient({
           <FlashcardErrorBoundary error={new Error(loadError)} onRetry={refreshCategories} />
         ) : (
           <div
-            className="rounded-lg border px-3 py-2 text-sm"
-            style={{
-              background: "var(--surface-secondary, var(--semantic-panel-muted))",
-              borderColor: "var(--border-subtle, var(--semantic-border-soft))",
-              color: "var(--foreground, var(--semantic-text-primary))",
-            }}
+            className="mx-auto flex w-full max-w-5xl flex-col gap-3 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 text-sm text-[var(--semantic-text-primary)] sm:flex-row sm:items-center sm:justify-between"
+            data-nn-e2e-flashcards-retry-counts
           >
-            {loadError}
+            <span>{loadError}</span>
+            <button
+              type="button"
+              onClick={() => void refreshCategories()}
+              className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-bold text-[var(--semantic-text-primary)] hover:border-[var(--semantic-brand)]"
+            >
+              Retry Counts
+            </button>
           </div>
         )
       ) : null}
@@ -1195,9 +1220,8 @@ export function FlashcardsHubClient({
       </section>
 
       <div
-        className="nn-flashcards-sticky-start hidden fixed inset-x-0 bottom-0 z-20 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,transparent)] px-4 py-3 shadow-[0_-8px_24px_color-mix(in_srgb,var(--semantic-text-primary)_6%,transparent)] backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--semantic-surface)_85%,transparent)] sm:px-6 md:hidden"
+        className="nn-flashcards-sticky-start hidden fixed inset-x-0 bottom-0 z-20 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,transparent)] px-4 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] pt-3 shadow-[0_-8px_24px_color-mix(in_srgb,var(--semantic-text-primary)_6%,transparent)] backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--semantic-surface)_85%,transparent)] sm:px-6 md:hidden"
         data-nn-e2e-flashcards-sticky-cta
-        style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom, 0px))" }}
       >
         <p className="mb-2 line-clamp-2 text-center text-[11px] text-[var(--semantic-text-muted)]">{ctaSubline}</p>
         {resumeHref ? (
@@ -1322,12 +1346,17 @@ export function FlashcardsHubClient({
         </div>
       </details>
 
-      <details className="nn-flashcards-collapsed-panel rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] px-1 py-1">
+      <details
+        className="nn-flashcards-collapsed-panel rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] px-1 py-1"
+        onToggle={(event) => {
+          if (event.currentTarget.open) setShowAnalytics(true);
+        }}
+      >
         <summary className="cursor-pointer list-none rounded-lg px-3 py-2 text-sm font-medium text-[var(--semantic-text-muted)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,transparent)]">
           Performance insights
         </summary>
         <div className="pt-3">
-          <FlashcardsHubAnalytics pathwayId={scopedPathwayId} />
+          {showAnalytics ? <FlashcardsHubAnalytics pathwayId={scopedPathwayId} /> : null}
         </div>
       </details>
     </LearnerStudyPageShell>

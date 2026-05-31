@@ -34,7 +34,6 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { isNpPremiumConvergencePathway } from "@/lib/marketing/np-premium-convergence-pathways";
 import { NpPremiumHubWorkstation } from "@/components/marketing/np-premium-hub-workstation";
-import { MarketingPathwayHubProductPreview } from "@/components/marketing/marketing-pathway-hub-product-preview";
 
 const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
   lessons: BookOpen,
@@ -569,7 +568,6 @@ export function NursingTierHubPage({
             })}
           </ul>
 
-          <MarketingPathwayHubProductPreview pathway={pathway} className="mx-auto mt-8 w-full max-w-[76rem]" />
         </section>
 
         <ExamPathwayHubPremiumModules

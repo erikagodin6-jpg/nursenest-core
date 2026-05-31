@@ -89,6 +89,7 @@ import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded
 import { MarketingCountryChromeProvider } from "@/components/marketing/marketing-country-chrome-context";
 import { LearnerAppFooter } from "@/components/student/learner-app-footer";
 import { NclexTargetDateModal } from "@/components/student/nclex-target-date-modal";
+import { SmartFormulaSheetLauncher } from "@/components/formula-sheet/smart-formula-sheet";
 import type { CountryCode } from "@/lib/marketing/countries/types";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
@@ -575,6 +576,7 @@ const LearnerShellLayout = traceLayout(
                         />
                         <SignOutButton className="inline-flex min-h-10 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_72%,var(--semantic-surface))] hover:text-[var(--semantic-text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]" />
                         {!coreOnlyEmergency ? <SupportEmailHeaderLink /> : null}
+                        <SmartFormulaSheetLauncher compact />
                         <LearnerShellLanguageControl />
                         <LearnerThemeControl />
                       </div>

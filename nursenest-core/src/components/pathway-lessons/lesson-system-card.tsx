@@ -9,6 +9,8 @@ import {
   lessonEstimatedDurationLabel,
 } from "@/components/pathway-lessons/lesson-board-metadata";
 import { LessonRow } from "@/components/pathway-lessons/lesson-row";
+import { marketingLessonsTopicClusterPath } from "@/lib/lessons/lesson-routes";
+import { primaryLessonSystemTopicSlug } from "@/lib/lessons/lesson-system-navigation";
 import { pathwayLessonYieldLabel } from "@/lib/lessons/pathway-lesson-yield";
 import type {
   PathwayLessonSystemSection,
@@ -46,6 +48,10 @@ export function LessonSystemCard({
     : { completedCount: 0, inProgressCount: 0, percentComplete: 0 };
   const previewLessons = linkableLessons.slice(0, LESSON_SYSTEM_PREVIEW);
   const hiddenLessonCount = Math.max(0, linkableLessons.length - previewLessons.length);
+  const systemTopicSlug =
+    linkableLessons.find((lesson) => lesson.topicSlug?.trim())?.topicSlug?.trim() ??
+    primaryLessonSystemTopicSlug(section.systemLabel);
+  const systemHref = systemTopicSlug ? marketingLessonsTopicClusterPath(lessonsBasePath, systemTopicSlug) : lessonsBasePath;
 
   return (
     <section
@@ -59,7 +65,12 @@ export function LessonSystemCard({
 
       <div className="px-3 pb-3 pt-2.5 sm:px-3.5 sm:pb-3.5">
         {/* Section header: icon + label + count */}
-        <div className="flex items-center gap-2 border-b border-[var(--semantic-border-soft)] pb-2">
+        <Link
+          href={systemHref}
+          className="flex items-center gap-2 border-b border-[var(--semantic-border-soft)] pb-2 rounded-lg -m-1 p-1 transition-colors hover:bg-[color-mix(in_srgb,var(--nn-system-accent)_7%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--nn-system-accent)_28%,transparent)]"
+          aria-label={`Open ${section.label} lessons`}
+          data-testid={`lesson-system-link-${section.systemLabel}`}
+        >
           <span
             className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[color-mix(in_srgb,var(--nn-system-accent)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_9%,var(--semantic-panel-muted))] text-[var(--nn-system-accent)]"
             aria-hidden
@@ -83,7 +94,7 @@ export function LessonSystemCard({
               <>{displayCount}</>
             )}
           </span>
-        </div>
+        </Link>
 
         {/* Progress bar (subscribers only) */}
         {showProgress ? (

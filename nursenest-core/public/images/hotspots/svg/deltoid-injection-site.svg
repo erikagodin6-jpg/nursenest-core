@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Deltoid injection site teaching diagram</title>
+  <desc id="desc">A simplified professional SVG teaching diagram showing shoulder landmarks and the deltoid muscle region.</desc>
+  <rect width="1200" height="900" fill="#f8fafc"/>
+  <g fill="none" stroke="#334155" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M512 140c64-34 150-23 211 28 50 42 80 107 78 172"/>
+    <path d="M520 145c-50 25-88 72-103 128-15 56-5 118 26 166"/>
+    <path d="M445 445c-32 95-39 197-22 295"/>
+    <path d="M795 339c45 91 50 213 14 359"/>
+  </g>
+  <path d="M508 248c76-45 178-21 226 52 49 74 41 189-18 269-56 75-153 102-230 62-73-38-109-126-93-218 12-70 50-130 115-165Z" fill="#bfdbfe" stroke="#2563eb" stroke-width="8"/>
+  <path d="M470 215c62-45 160-55 239-4" fill="none" stroke="#0f172a" stroke-width="7"/>
+  <circle cx="494" cy="214" r="18" fill="#0f172a"/>
+  <text x="505" y="205" font-family="Arial, sans-serif" font-size="30" fill="#0f172a">Acromion landmark</text>
+  <path d="M474 326h255" stroke="#64748b" stroke-width="5" stroke-dasharray="12 12"/>
+  <text x="735" y="335" font-family="Arial, sans-serif" font-size="28" fill="#334155">Avoid upper shoulder</text>
+  <path d="M488 600h210" stroke="#64748b" stroke-width="5" stroke-dasharray="12 12"/>
+  <text x="704" y="610" font-family="Arial, sans-serif" font-size="28" fill="#334155">Avoid lower arm</text>
+  <path d="M525 332 690 405 635 595 488 570 450 408Z" fill="#22c55e" fill-opacity=".22" stroke="#16a34a" stroke-width="8"/>
+  <text x="474" y="475" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#14532d">Deltoid</text>
+  <text x="469" y="518" font-family="Arial, sans-serif" font-size="26" fill="#14532d">safe teaching zone</text>
+  <g font-family="Arial, sans-serif" fill="#0f172a">
+    <text x="80" y="90" font-size="42" font-weight="700">Deltoid IM Injection Site</text>
+    <text x="80" y="140" font-size="28">Educational SVG diagram. Coordinates are stored separately from the image asset.</text>
+    <text x="80" y="815" font-size="24">Not a substitute for clinical policy, instructor guidance, or patient-specific assessment.</text>
+  </g>
+</svg>

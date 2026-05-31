@@ -749,7 +749,12 @@ export default async function LessonsPage({ searchParams }: Props) {
       ) : null}
     </div>
   );
-  } catch {
+  } catch (error) {
+    safeServerLog("page_lessons", "lesson_system_server_render_failed", {
+      user_id: userId || undefined,
+      error_message: error instanceof Error ? error.message.slice(0, 500) : String(error).slice(0, 500),
+      stack: error instanceof Error ? error.stack?.slice(0, 1200) : undefined,
+    });
     return (
       <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
         <ContentEmptyState

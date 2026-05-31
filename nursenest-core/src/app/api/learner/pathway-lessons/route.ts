@@ -248,6 +248,13 @@ export async function GET(req: Request) {
     if (!paginated) {
       const fallback = catalogFallback();
       if (!fallback) {
+        safeServerLog("api_pathway_lessons", "lesson_system_query_failed", {
+          user_id: gate.userId,
+          pathway_id: pathwayIdFilter ?? undefined,
+          topic_slug: topicSlugFilter ?? undefined,
+          topic: topicFilter ?? undefined,
+          reason: "pathway_paginated_timeout_no_fallback",
+        });
         return NextResponse.json({ error: "Lesson list temporarily unavailable", code: "lesson_list_timeout" }, { status: 503 });
       }
       return NextResponse.json({
@@ -342,5 +349,14 @@ export async function GET(req: Request) {
       },
       visiblePathwayIds,
     });
+  }).catch((error) => {
+    safeServerLog("api_pathway_lessons", "lesson_system_api_unhandled_failure", {
+      error_message: error instanceof Error ? error.message.slice(0, 500) : String(error).slice(0, 500),
+      stack: error instanceof Error ? error.stack?.slice(0, 1200) : undefined,
+    });
+    return NextResponse.json(
+      { error: "Unable to load lessons.", code: "lesson_system_api_failure" },
+      { status: 500 },
+    );
   });
 }

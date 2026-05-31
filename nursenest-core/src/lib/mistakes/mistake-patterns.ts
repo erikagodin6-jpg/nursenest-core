@@ -55,6 +55,27 @@ export function analyzeMistakePatterns(entries: MistakeEntry[]): MistakeNotebook
     if (!e.reason) continue;
     reasonCounts[e.reason] = (reasonCounts[e.reason] ?? 0) + 1;
   }
+  const mostCommonErrorType = Object.entries(reasonCounts)
+    .map(([reason, count]) => ({ reason: reason as MistakeReason, count: count ?? 0 }))
+    .sort((a, b) => b.count - a.count)[0] ?? null;
+
+  const weekBuckets = new Map<string, { misses: number; tagged: number }>();
+  for (const e of entries) {
+    const parsed = new Date(e.lastMissedAt);
+    const safeDate = Number.isNaN(parsed.getTime()) ? new Date() : parsed;
+    const weekStart = new Date(safeDate);
+    weekStart.setUTCHours(0, 0, 0, 0);
+    weekStart.setUTCDate(weekStart.getUTCDate() - weekStart.getUTCDay());
+    const label = weekStart.toISOString().slice(0, 10);
+    const bucket = weekBuckets.get(label) ?? { misses: 0, tagged: 0 };
+    bucket.misses += e.missCount;
+    if (e.tagged) bucket.tagged += 1;
+    weekBuckets.set(label, bucket);
+  }
+  const improvementOverTime = [...weekBuckets.entries()]
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .slice(-8)
+    .map(([label, bucket]) => ({ label, ...bucket }));
 
   // ── Patterns (only for reasons with at least 1 instance) ────────────────
   const taggedEntries = entries.filter((e) => e.tagged && e.reason);
@@ -90,10 +111,12 @@ export function analyzeMistakePatterns(entries: MistakeEntry[]): MistakeNotebook
     entries,
     totalMisses,
     taggedCount,
+    mostCommonErrorType,
     topTopics,
     topBodySystems,
     patterns,
     reasonCounts,
+    improvementOverTime,
     hasHistoricalData,
   };
 }

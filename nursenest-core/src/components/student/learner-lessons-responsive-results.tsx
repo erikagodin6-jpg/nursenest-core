@@ -64,6 +64,44 @@ function progressByRowIdFromApi(rows: LearnerLessonVirtualRow[], raw: Record<str
   return next;
 }
 
+function reportLessonLoadingError(args: {
+  route: string;
+  filters: FilterState;
+  error: unknown;
+}) {
+  const message = args.error instanceof Error ? args.error.message : String(args.error);
+  const payload = JSON.stringify({
+    event: "lesson_system_client_load_failed",
+    route: args.route,
+    topic: args.filters.topic,
+    topicSlug: args.filters.topicSlug,
+    pathwayId: args.filters.pathwayId,
+    page: args.filters.page,
+    error: message.slice(0, 500),
+    stack: args.error instanceof Error ? args.error.stack?.slice(0, 1200) : undefined,
+  });
+
+  if (process.env.NODE_ENV !== "production") {
+    console.error("lesson_system_client_load_failed", payload);
+  }
+
+  try {
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon("/api/learner/lesson-loading-errors", new Blob([payload], { type: "application/json" }));
+      return;
+    }
+  } catch {
+    // Best-effort diagnostics only.
+  }
+
+  void fetch("/api/learner/lesson-loading-errors", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: payload,
+    keepalive: true,
+  }).catch(() => undefined);
+}
+
 function visiblePageNumbers(current: number, pageCount: number): (number | "ellipsis")[] {
   if (pageCount <= 10) return Array.from({ length: pageCount }, (_, index) => index + 1);
   const set = new Set<number>([1, pageCount]);
@@ -172,6 +210,7 @@ export function LearnerLessonsResponsiveResults({
       latestKeyRef.current = key;
       setFilters(nextFilters);
       setError(null);
+      setLoading(true);
       if (opts.pushUrl !== false) {
         window.history.pushState(null, "", urlForFilters(nextFilters));
       }
@@ -186,7 +225,6 @@ export function LearnerLessonsResponsiveResults({
       abortRef.current?.abort();
       const controller = new AbortController();
       abortRef.current = controller;
-      setLoading(true);
 
       try {
         const res = await fetch(apiUrlForFilters(nextFilters, { includeProgress: true }), {
@@ -222,7 +260,12 @@ export function LearnerLessonsResponsiveResults({
         if (cause instanceof DOMException && cause.name === "AbortError") return;
         if (latestKeyRef.current === key) {
           setLoading(false);
-          setError(cause instanceof Error ? cause.message : "Lessons could not load. Try again.");
+          setError(cause instanceof Error ? cause.message : "Unable to load lessons.");
+          reportLessonLoadingError({
+            route: urlForFilters(nextFilters),
+            filters: nextFilters,
+            error: cause,
+          });
         }
       }
     },
@@ -272,13 +315,15 @@ export function LearnerLessonsResponsiveResults({
   );
 
   useEffect(() => {
+    const prefetchControllers = prefetchControllersRef.current;
+    const prefetchingKeys = prefetchingKeysRef.current;
     return () => {
       abortRef.current?.abort();
-      for (const controller of prefetchControllersRef.current) {
+      for (const controller of prefetchControllers) {
         controller.abort();
       }
-      prefetchControllersRef.current.clear();
-      prefetchingKeysRef.current.clear();
+      prefetchControllers.clear();
+      prefetchingKeys.clear();
     };
   }, []);
 
@@ -318,6 +363,9 @@ export function LearnerLessonsResponsiveResults({
     [filters, prefetchFilters],
   );
   const pages = useMemo(() => visiblePageNumbers(payload.page, payload.pageCount), [payload.page, payload.pageCount]);
+  const retryCurrentFilters = useCallback(() => {
+    void loadFilters(filters, { pushUrl: false });
+  }, [filters, loadFilters]);
 
   return (
     <section className="space-y-6" aria-busy={loading}>
@@ -345,6 +393,48 @@ export function LearnerLessonsResponsiveResults({
       <div className="nn-premium-lessons-app-list" data-nn-premium-lessons-hub-body="">
         {loading && payload.rows.length === 0 ? (
           <LessonsListSkeleton count={initialPageSize} />
+        ) : error ? (
+          <div
+            className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-danger)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_18%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)]"
+            role="alert"
+            data-testid="lessons-system-error-state"
+          >
+            <p className="text-base font-bold text-[var(--semantic-text-primary)]">Unable to load lessons.</p>
+            <p className="mt-2 max-w-prose text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+              The lesson list did not load for this system. This is a loading failure, not an empty lesson category.
+            </p>
+            <button
+              type="button"
+              onClick={retryCurrentFilters}
+              className="nn-btn-primary mt-4 inline-flex min-h-11 items-center justify-center rounded-xl px-4 text-sm font-semibold"
+            >
+              Retry
+            </button>
+          </div>
+        ) : payload.rows.length === 0 ? (
+          <div
+            className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_24%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)]"
+            data-testid="lessons-system-empty-state"
+          >
+            <p className="text-base font-bold text-[var(--semantic-text-primary)]">No lessons matched this system yet.</p>
+            <p className="mt-2 max-w-prose text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+              Try another system or reset the lesson filters.
+            </p>
+            <button
+              type="button"
+              onClick={() =>
+                void loadFilters({
+                  ...filters,
+                  topic: null,
+                  topicSlug: null,
+                  page: 1,
+                })
+              }
+              className="nn-study-pill-secondary mt-4 inline-flex min-h-11 items-center justify-center px-4 py-2 text-sm font-semibold"
+            >
+              Reset Filters
+            </button>
+          </div>
         ) : (
           <div
             className={

@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { type AlliedHealthHubCopy, AlliedHealthTrustStrip, AlliedHubProfessionSections } from "@/components/marketing/allied-health-hub-content";
-import { AlliedHealthHomepage } from "@/components/marketing/allied-health-homepage";
+import { AlliedHealthHomepage, type AlliedPlatformStats } from "@/components/marketing/allied-health-homepage";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { alliedProfessionsGroupedForHub } from "@/lib/allied/allied-professions-registry";
 import { ALLIED_GLOBAL_HUB_PATH, getCanonicalAlliedPathway } from "@/lib/allied/allied-global-pathway";
@@ -20,6 +21,7 @@ import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-me
 import { alliedHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { ALLIED_HEALTH_FAQ_JSONLD } from "@/lib/seo/allied-health-faq-schema";
 
 // 🧊 ISR: revalidate: 86400 already set below
 export const revalidate = 86400;
@@ -35,24 +37,29 @@ export async function generateMetadata(): Promise<Metadata> {
         DEFAULT_MARKETING_LOCALE,
         MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
       );
-      const title = getRequiredPublicMetadataLine(
+      const titleFromI18n = getRequiredPublicMetadataLine(
         m,
         "pages.alliedHealthHub.metaTitle",
         en,
         MARKETING_ALLIED_HUB_META_TITLE_FALLBACK,
       );
-      const description = getRequiredPublicMetadataLine(
+      const descFromI18n = getRequiredPublicMetadataLine(
         m,
         "pages.alliedHealthHub.metaDescription",
         en,
         MARKETING_ALLIED_HUB_META_DESCRIPTION_FALLBACK,
       );
+      const title = titleFromI18n.length > 5 ? titleFromI18n
+        : "NurseNest Allied Health | RT, Paramedic, MLT, PT, OT & More — Complete Exam Prep";
+      const description = descFromI18n.length > 10 ? descFromI18n
+        : "The most comprehensive allied health education platform. Profession-specific lessons, practice questions, CAT exams, clinical simulations, and competency tracking for 22+ allied health professions including Respiratory Therapy, Paramedicine, Medical Lab, Physiotherapy, Occupational Therapy, and more.";
       const alt = marketingAlternatesSharedPage(locale, BASE);
       return {
         title,
         description,
         alternates: { canonical: alt.canonical, languages: alt.languages },
         openGraph: { title, description, url: alt.canonical, type: "website" },
+        twitter: { card: "summary_large_image", title, description },
       };
     },
     { pathname: BASE, routeGroup: "marketing.default.allied_health" },
@@ -95,13 +102,32 @@ function buildHubCopy(t: (key: string) => string): AlliedHealthHubCopy {
   };
 }
 
+async function loadAlliedStats(): Promise<AlliedPlatformStats> {
+  try {
+    const { getHomepagePublicHomeStats } = await import("@/lib/marketing/public-home-stats");
+    const raw = await getHomepagePublicHomeStats();
+    return {
+      questionCount: raw.questionCount ?? 0,
+      lessonCount: raw.totalLessons ?? 0,
+      flashcardCount: raw.totalFlashcards ?? 0,
+      simulationCount: raw.scenarioCount ?? 0,
+      skillCount: raw.clinicalSkillCount ?? 0,
+    };
+  } catch {
+    return {};
+  }
+}
+
 export default async function AlliedHealthHubPage() {
   const alliedPathway = getCanonicalAlliedPathway();
   if (!alliedPathway) {
     notFound();
   }
 
-  const locale = await getMarketingLocaleForDefaultRoute();
+  const [locale, alliedStats] = await Promise.all([
+    getMarketingLocaleForDefaultRoute(),
+    loadAlliedStats(),
+  ]);
   const m = await loadMarketingMessageShards(locale, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS);
   const en = await loadMarketingMessageShards(
     DEFAULT_MARKETING_LOCALE,
@@ -116,14 +142,16 @@ export default async function AlliedHealthHubPage() {
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-10 sm:gap-12 lg:gap-14 nn-marketing-x nn-rhythm-page">
       <BreadcrumbJsonLd items={schemaItems} />
+      <FaqJsonLd items={ALLIED_HEALTH_FAQ_JSONLD} />
       <div>
         <BreadcrumbTrail items={crumbs} />
       </div>
 
-      {/* ── Redesigned Allied Health Homepage ─────────────────────────── */}
+      {/* ── Premium Allied Health Homepage ────────────────────────────── */}
       <AlliedHealthHomepage
         professionExplorerHref="#allied-professions-explorer"
         pricingHref="/pricing"
+        stats={alliedStats}
       />
 
       {/* ── Global pathway note ────────────────────────────────────────── */}

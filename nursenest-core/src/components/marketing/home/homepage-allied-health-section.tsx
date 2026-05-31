@@ -8,7 +8,7 @@ const FEATURED_PROFESSIONS = [
     key: "respiratory",
     label: "Respiratory Therapy",
     description: "ABG interpretation, ventilator management, oxygen delivery, and airway pharmacology.",
-    href: "/allied-health/respiratory-therapy-exam-prep",
+    href: "/allied-health/rrt-exam-prep",
     icon: Activity,
     certifications: "CRT · RRT · NBRC",
   },

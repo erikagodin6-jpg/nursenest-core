@@ -2,6 +2,7 @@ import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { getEffectiveCatalogLessonsForPathwaySync, getLessonBySlug } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { exclusiveTopicSlugsForAlliedProfession } from "@/lib/allied/allied-profession-lesson-exclusive-scope";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import { lessonSystemTopicSlugCandidates } from "@/lib/lessons/lesson-system-navigation";
 
 export const APP_LESSON_CATALOG_FALLBACK_ID_PREFIX = "catalog";
 
@@ -62,7 +63,13 @@ function lessonMatchesFilters(
   },
 ): boolean {
   const topicSlug = args.topicSlugFilter?.trim().toLowerCase();
-  if (topicSlug && lesson.topicSlug?.trim().toLowerCase() !== topicSlug) return false;
+  if (topicSlug) {
+    const candidates = new Set(lessonSystemTopicSlugCandidates(topicSlug));
+    if (candidates.size === 0) candidates.add(topicSlug);
+    const lessonTopicSlug = lesson.topicSlug?.trim().toLowerCase() ?? "";
+    const lessonBodySystem = lesson.bodySystem?.trim().toLowerCase() ?? "";
+    if (!candidates.has(lessonTopicSlug) && !candidates.has(lessonBodySystem)) return false;
+  }
 
   const topic = args.topicFilter?.trim().toLowerCase();
   if (topic && lesson.topic?.trim().toLowerCase() !== topic) return false;
