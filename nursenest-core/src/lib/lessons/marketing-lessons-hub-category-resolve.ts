@@ -8,8 +8,8 @@ import {
 } from "@/lib/lessons/marketing-lessons-hub-category";
 
 /**
- * When `…/lessons/{segment}` matches a display-category slug, route to the category hub **unless**
- * a published lesson uses the same slug (lesson wins).
+ * When `…/lessons/{segment}` matches a canonical display-category slug, route to the category hub.
+ * Legacy aliases such as `fundamentals` still allow a published lesson with the same slug to win.
  */
 export async function resolveMarketingLessonsHubDynamicSegment(
   pathwayId: string,
@@ -19,6 +19,10 @@ export async function resolveMarketingLessonsHubDynamicSegment(
   const slugLower = slug.toLowerCase();
   const cat = pathwayMarketingHubCategoryFromSegment(pathwayId, slug);
   if (!cat) return "lesson";
+
+  if (cat.slug === slugLower) {
+    return { category: cat };
+  }
 
   if (getMarketingHubEffectiveCatalogSlugSet(pathwayId).has(slugLower)) {
     return "lesson";

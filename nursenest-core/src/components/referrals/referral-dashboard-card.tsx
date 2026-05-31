@@ -1,7 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Copy, Gift, Link2, ShieldCheck, Sparkles, UsersRound } from "lucide-react";
+import { Copy, Gift, Link2, QrCode, ShieldCheck, Sparkles, Trophy, UsersRound } from "lucide-react";
+import type {
+  CampusChallengeTemplate,
+  ReferralGrowthSummary,
+  ReferralRewardMilestone,
+  ReferralShareAssets,
+  ShareableMilestoneTemplate,
+  SuccessStoryPrompt,
+} from "@/lib/referrals/student-ambassador-ecosystem";
 
 type ReferralDashboardCardProps = {
   dashboard: {
@@ -37,6 +45,16 @@ type ReferralDashboardCardProps = {
       firstSubscribedAt: string | Date | null;
       referred: { name: string | null };
     }>;
+    growth?: ReferralGrowthSummary;
+    shareAssets?: ReferralShareAssets;
+    rewardMilestones?: readonly ReferralRewardMilestone[];
+    ambassadorProgram?: {
+      professions: readonly string[];
+      status: string;
+    };
+    shareableMilestones?: readonly ShareableMilestoneTemplate[];
+    campusChallenges?: readonly CampusChallengeTemplate[];
+    successStoryPrompts?: readonly SuccessStoryPrompt[];
   };
 };
 
@@ -115,6 +133,40 @@ export function ReferralDashboardCard({ dashboard }: ReferralDashboardCardProps)
           </div>
         </div>
 
+        {dashboard.shareAssets ? (
+          <div className="grid gap-4 lg:grid-cols-[220px_1fr]">
+            <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+              <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <QrCode className="h-4 w-4" aria-hidden />
+                Referral QR
+              </p>
+              <img
+                src={dashboard.shareAssets.qrCodeUrl}
+                alt={`QR code for referral code ${dashboard.shareAssets.referralCode}`}
+                width={180}
+                height={180}
+                className="mt-3 rounded-xl border border-[var(--semantic-border-soft)] bg-white p-2"
+                loading="lazy"
+              />
+            </div>
+            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Shareable referral card</p>
+              <h3 className="mt-2 text-lg font-bold text-[var(--semantic-text-primary)]">{dashboard.shareAssets.shareCardTitle}</h3>
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{dashboard.shareAssets.shareCardBody}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button type="button" onClick={() => copy(dashboard.shareAssets!.shareText, "Share text")} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[var(--semantic-border-soft)] px-3 text-sm font-semibold">
+                  <Copy className="h-4 w-4" aria-hidden />
+                  Copy share text
+                </button>
+                <button type="button" onClick={() => copy(dashboard.shareAssets!.referralLink, "Referral link")} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[var(--semantic-brand)] px-3 text-sm font-bold text-white">
+                  <Link2 className="h-4 w-4" aria-hidden />
+                  Copy invite link
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         <div className="grid gap-3 sm:grid-cols-4">
           {[
             ["Accounts created", dashboard.stats.accountsCreated],
@@ -139,6 +191,42 @@ export function ReferralDashboardCard({ dashboard }: ReferralDashboardCardProps)
               {dashboard.ambassador.paidReferralCount} paid referrals · early feature access
               {dashboard.ambassador.prioritySupport ? " · priority support" : ""}
             </p>
+          </div>
+        ) : null}
+
+        {dashboard.growth?.nextMilestone ? (
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] p-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <Trophy className="h-4 w-4 text-[var(--semantic-warning-contrast)]" aria-hidden />
+                  Next reward
+                </p>
+                <h3 className="mt-1 text-lg font-bold text-[var(--semantic-text-primary)]">{dashboard.growth.nextMilestone.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{dashboard.growth.nextMilestone.rewardSummary}</p>
+              </div>
+              <p className="text-sm font-bold text-[var(--semantic-text-primary)]">
+                {dashboard.growth.paidReferrals}/{dashboard.growth.nextMilestone.referralsRequired} paid referrals
+              </p>
+            </div>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--semantic-panel-muted)]">
+              <div className="h-full rounded-full bg-[var(--semantic-warning)]" style={{ width: `${dashboard.growth.nextMilestoneProgressPct}%` }} />
+            </div>
+          </div>
+        ) : null}
+
+        {dashboard.rewardMilestones?.length ? (
+          <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+            <h3 className="text-sm font-bold text-[var(--semantic-text-primary)]">Referral reward ladder</h3>
+            <div className="mt-3 grid gap-2 md:grid-cols-5">
+              {dashboard.rewardMilestones.map((milestone) => (
+                <div key={milestone.referralsRequired} className="rounded-xl bg-[var(--semantic-panel-cool)] p-3">
+                  <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">{milestone.referralsRequired} referrals</p>
+                  <p className="mt-1 text-sm font-bold text-[var(--semantic-text-primary)]">{milestone.title}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{milestone.rewardSummary}</p>
+                </div>
+              ))}
+            </div>
           </div>
         ) : null}
 
@@ -173,6 +261,47 @@ export function ReferralDashboardCard({ dashboard }: ReferralDashboardCardProps)
               )) : (
                 <p className="text-sm text-muted-foreground">Rewards appear here after qualified referral milestones are reached.</p>
               )}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-4 lg:grid-cols-3">
+          <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+            <h3 className="text-sm font-bold text-[var(--semantic-text-primary)]">Shareable milestones</h3>
+            <div className="mt-3 space-y-2">
+              {(dashboard.shareableMilestones ?? []).slice(0, 4).map((milestone) => (
+                <button
+                  key={milestone.kind}
+                  type="button"
+                  onClick={() => copy(`${milestone.shareText} ${referralLink}`, milestone.title)}
+                  className="block w-full rounded-xl bg-[var(--semantic-panel-cool)] px-3 py-2 text-left text-sm"
+                >
+                  <span className="font-semibold text-[var(--semantic-text-primary)]">{milestone.graphicHeadline}</span>
+                  <span className="mt-0.5 block text-xs text-muted-foreground">{milestone.graphicSubline}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+            <h3 className="text-sm font-bold text-[var(--semantic-text-primary)]">Campus challenges</h3>
+            <div className="mt-3 space-y-2">
+              {(dashboard.campusChallenges ?? []).slice(0, 4).map((challenge) => (
+                <div key={challenge.id} className="rounded-xl bg-[var(--semantic-panel-cool)] px-3 py-2 text-sm">
+                  <p className="font-semibold text-[var(--semantic-text-primary)]">{challenge.title}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{challenge.prompt}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+            <h3 className="text-sm font-bold text-[var(--semantic-text-primary)]">Success stories</h3>
+            <div className="mt-3 space-y-2">
+              {(dashboard.successStoryPrompts ?? []).slice(0, 4).map((story) => (
+                <div key={story.id} className="rounded-xl bg-[var(--semantic-panel-positive)] px-3 py-2 text-sm">
+                  <p className="font-semibold text-[var(--semantic-text-primary)]">{story.title}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{story.prompt}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>

@@ -2,6 +2,15 @@ import { createHash, randomBytes } from "node:crypto";
 import { prisma } from "@/lib/db";
 import { htmlEmailShell, sendTransactionalEmailHtml } from "@/lib/email/resend-transactional";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  CAMPUS_CHALLENGE_TEMPLATES,
+  REFERRAL_REWARD_MILESTONES,
+  SHAREABLE_MILESTONE_TEMPLATES,
+  STUDENT_AMBASSADOR_PROFESSIONS,
+  SUCCESS_STORY_PROMPTS,
+  buildReferralGrowthSummary,
+  buildReferralShareAssets,
+} from "@/lib/referrals/student-ambassador-ecosystem";
 
 type ReferralStatus =
   | "ACCOUNT_CREATED"
@@ -396,7 +405,7 @@ async function refreshAmbassadorProfile(userId: string): Promise<void> {
 
 export async function loadReferralDashboard(userId: string, origin?: string) {
   const code = await getOrCreateReferralCode(userId, origin);
-  const [summaryRows, rewards, recentReferrals, ambassador] = await Promise.all([
+  const [summaryRows, rewards, recentReferrals, ambassador, user] = await Promise.all([
     referralDb.referralAttribution.groupBy({
       by: ["status"],
       where: { referrerUserId: userId },
@@ -425,19 +434,43 @@ export async function loadReferralDashboard(userId: string, origin?: string) {
       },
     }),
     referralDb.referralAmbassadorProfile.findUnique({ where: { userId } }).catch(() => null),
+    prisma.user.findUnique({ where: { id: userId }, select: { name: true, firstName: true, displayName: true } }).catch(() => null),
   ]);
   const counts = Object.fromEntries(summaryRows.map((row: { status: string; _count: { _all: number } }) => [row.status, row._count._all]));
+  const accountsCreated = Object.values(counts).reduce((total: number, value) => total + Number(value), 0);
+  const qualifiedReferrals = Number(counts.QUALIFIED ?? 0) + Number(counts.SUBSCRIBED ?? 0);
+  const subscribedReferrals = Number(counts.SUBSCRIBED ?? 0);
+  const referralLink = code.referralLink ?? (origin ? `${origin.replace(/\/$/, "")}/signup?ref=${encodeURIComponent(code.displayCode)}` : `/signup?ref=${encodeURIComponent(code.displayCode)}`);
+  const learnerName = user?.displayName ?? user?.firstName ?? user?.name ?? null;
   return {
     code,
     stats: {
-      accountsCreated: Object.values(counts).reduce((total: number, value) => total + Number(value), 0),
-      qualifiedReferrals: Number(counts.QUALIFIED ?? 0) + Number(counts.SUBSCRIBED ?? 0),
-      subscribedReferrals: Number(counts.SUBSCRIBED ?? 0),
+      accountsCreated,
+      qualifiedReferrals,
+      subscribedReferrals,
       rewardsEarned: rewards.filter((reward: { status: string }) => reward.status === "GRANTED").length,
     },
     rewards,
     recentReferrals,
     ambassador,
+    growth: buildReferralGrowthSummary({
+      paidReferrals: subscribedReferrals,
+      qualifiedReferrals,
+      accountsCreated,
+    }),
+    shareAssets: buildReferralShareAssets({
+      referralLink,
+      referralCode: code.displayCode,
+      learnerName,
+    }),
+    rewardMilestones: REFERRAL_REWARD_MILESTONES,
+    ambassadorProgram: {
+      professions: STUDENT_AMBASSADOR_PROFESSIONS,
+      status: ambassador?.status ?? "NONE",
+    },
+    shareableMilestones: SHAREABLE_MILESTONE_TEMPLATES,
+    campusChallenges: CAMPUS_CHALLENGE_TEMPLATES,
+    successStoryPrompts: SUCCESS_STORY_PROMPTS,
   };
 }
 

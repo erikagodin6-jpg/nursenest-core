@@ -7,6 +7,7 @@ import {
   primaryLessonSystemTopicSlug,
   resolveLessonSystemNavigationTarget,
 } from "@/lib/lessons/lesson-system-navigation";
+import { resolveMarketingLessonsHubDynamicSegment } from "@/lib/lessons/marketing-lessons-hub-category-resolve";
 
 const REQUIRED_SYSTEMS = [
   ["Cardiovascular", "cardiovascular"],
@@ -63,6 +64,15 @@ test("next config does not redirect canonical lesson category/detail routes back
     /Do not redirect `\/lessons\/:slug`/,
     "next.config should document why lesson dynamic routes are protected",
   );
+});
+
+test("canonical marketing lesson category slugs resolve before any lesson DB lookup", async () => {
+  const resolved = await resolveMarketingLessonsHubDynamicSegment("ca-rn-nclex-rn", "cardiovascular");
+  assert.notEqual(resolved, "lesson");
+  if (resolved !== "lesson") {
+    assert.equal(resolved.category.slug, "cardiovascular");
+    assert.equal(resolved.category.label, "Cardiovascular");
+  }
 });
 
 test("legacy taxonomy aliases still resolve when a hub emits category ids", () => {

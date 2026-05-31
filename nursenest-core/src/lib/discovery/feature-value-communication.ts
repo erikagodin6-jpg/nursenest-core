@@ -12,16 +12,27 @@ export type FeatureDiscoveryKey =
   | "questions"
   | "flashcards"
   | "lessons"
+  | "ngn"
   | "clinical_skills"
   | "pharmacology"
   | "ecg_core"
   | "advanced_ecg"
+  | "labs"
+  | "medication_math"
+  | "simulations"
   | "cat"
   | "loft"
   | "readiness"
   | "study_plans"
   | "analytics"
-  | "progress_reports";
+  | "progress_reports"
+  | "notebook"
+  | "confidence_analytics"
+  | "hesi"
+  | "teas"
+  | "casper"
+  | "np_specialty_tools"
+  | "allied_health_resources";
 
 export type FeatureAvailability = "included" | "upgrade" | "not_available";
 
@@ -179,12 +190,44 @@ export const FEATURE_DISCOVERY_CATALOG: readonly FeatureDiscoveryItem[] = [
     availability: ALL_INCLUDED,
   },
   {
+    key: "ngn",
+    label: "NGN Question Types",
+    shortLabel: "NGN",
+    description: "Bowtie, matrix, SATA, case study, and trend-style clinical judgment practice.",
+    href: "/app/practice-tests?questionType=ngn",
+    availability: NURSING_BASE_INCLUDED,
+  },
+  {
     key: "pharmacology",
     label: "Pharmacology Review",
     shortLabel: "Pharmacology",
     description: "Medication safety, monitoring, teaching, and mechanism-focused review.",
     href: "/app/pharmacology",
     availability: NURSING_BASE_INCLUDED,
+  },
+  {
+    key: "labs",
+    label: "Clinical Labs",
+    shortLabel: "Labs",
+    description: "Abnormal values, trends, medication implications, and escalation decisions.",
+    href: "/app/labs",
+    availability: ALL_INCLUDED,
+  },
+  {
+    key: "medication_math",
+    label: "Medication Math",
+    shortLabel: "Med Math",
+    description: "Dose, rate, safe-range, and high-alert medication calculation practice.",
+    href: "/app/med-calculations",
+    availability: ALL_INCLUDED,
+  },
+  {
+    key: "simulations",
+    label: "Clinical Simulations",
+    shortLabel: "Simulations",
+    description: "Patient deterioration, branching decisions, and consequence-based feedback.",
+    href: "/app/simulation-center",
+    availability: ALL_INCLUDED,
   },
   {
     key: "ecg_core",
@@ -250,6 +293,80 @@ export const FEATURE_DISCOVERY_CATALOG: readonly FeatureDiscoveryItem[] = [
     description: "Completion history, category progress, activity history, and report cards.",
     href: "/app/account/progress",
     availability: ALL_INCLUDED,
+  },
+  {
+    key: "notebook",
+    label: "Study Notebook",
+    shortLabel: "Notebook",
+    description: "Capture rationales, weak-area notes, clinical pearls, and review plans.",
+    href: "/app/account/notebook",
+    availability: ALL_INCLUDED,
+  },
+  {
+    key: "confidence_analytics",
+    label: "Confidence Analytics",
+    shortLabel: "Confidence",
+    description: "Compare confidence with accuracy to find overconfidence and uncertain knowledge.",
+    href: "/app/account/analytics#confidence",
+    availability: ALL_INCLUDED,
+  },
+  {
+    key: "hesi",
+    label: "HESI A2 Prep",
+    shortLabel: "HESI",
+    description: "Admissions prep for HESI A2 science, math, reading, and study planning.",
+    href: "/admissions#hesi-a2",
+    availability: ALL_INCLUDED,
+  },
+  {
+    key: "teas",
+    label: "ATI TEAS Prep",
+    shortLabel: "TEAS",
+    description: "Admissions prep for TEAS science, math, English, and reading readiness.",
+    href: "/admissions#ati-teas",
+    availability: ALL_INCLUDED,
+  },
+  {
+    key: "casper",
+    label: "CASPER Prep",
+    shortLabel: "CASPER",
+    description: "Professional judgment, scenario reasoning, and admissions interview practice.",
+    href: "/admissions#casper",
+    availability: ALL_INCLUDED,
+  },
+  {
+    key: "np_specialty_tools",
+    label: "NP Specialty Tools",
+    shortLabel: "NP Tools",
+    description: "Certification-specific NP readiness, diagnostics, pharmacology, and case tools.",
+    href: "/app/np",
+    availability: {
+      rn: "upgrade",
+      rpn: "upgrade",
+      np: "included",
+      rt: "not_available",
+      allied: "not_available",
+      new_grad: "upgrade",
+      ecg: "not_available",
+      advanced_ecg: "not_available",
+    },
+  },
+  {
+    key: "allied_health_resources",
+    label: "Allied Health Resources",
+    shortLabel: "Allied",
+    description: "RT, paramedic, OT, PT, MLT, PSW, placement, interview, and skills resources.",
+    href: "/allied-health",
+    availability: {
+      rn: "upgrade",
+      rpn: "upgrade",
+      np: "upgrade",
+      rt: "included",
+      allied: "included",
+      new_grad: "upgrade",
+      ecg: "not_available",
+      advanced_ecg: "not_available",
+    },
   },
 ] as const;
 
@@ -438,6 +555,12 @@ function buildDiscoveryPrompts(input: {
   if (notUsed.has("pharmacology") && /pharm|med|drug|insulin|anticoagulant|cardiac/.test(weak)) {
     prompts.push(promptFor("pharmacology", "Your weak areas include medication-linked topics.", "Open pharmacology review to connect mechanisms, monitoring, and patient teaching.", "Open Pharmacology Review", "weak_area"));
   }
+  if (notUsed.has("labs") && /lab|electrolyte|renal|sepsis|heart failure|cardiac|dka|kidney/.test(weak)) {
+    prompts.push(promptFor("labs", "Your weak areas connect to lab interpretation.", "Use the labs workstation to practice trends, urgency, and escalation decisions.", "Open Clinical Labs", "weak_area"));
+  }
+  if (notUsed.has("simulations") && /deteriorat|priority|unstable|safety|respiratory|sepsis|shock/.test(weak)) {
+    prompts.push(promptFor("simulations", "Turn weak areas into bedside decisions.", "Simulations help you practice what to do next when a patient changes.", "Try A Simulation", "weak_area"));
+  }
   if (notUsed.has("flashcards") && input.used.some((item) => item.key === "questions")) {
     prompts.push(promptFor("flashcards", "Turn practice into retention.", "You have used questions. Add flashcards to reinforce the concepts you are seeing in rationales.", "Try Flashcards", "try_next"));
   }
@@ -459,11 +582,14 @@ function buildDiscoveryPrompts(input: {
   if (notUsed.has("clinical_skills")) {
     prompts.push(promptFor("clinical_skills", "Clinical Skills are included in your membership.", "Practice procedures, safety checkpoints, documentation, and escalation criteria.", "Open Clinical Skills", "try_next"));
   }
+  if (notUsed.has("ngn") && input.used.some((item) => item.key === "questions")) {
+    prompts.push(promptFor("ngn", "You have used questions. Try NGN formats next.", "Bowtie and matrix questions make clinical judgment visible.", "Try NGN Questions", "try_next"));
+  }
   if (notUsed.has("study_plans")) {
     prompts.push(promptFor("study_plans", "Let NurseNest organize the next study block.", "A study plan reduces decision fatigue and connects weak areas to activities.", "Build a Study Plan", "try_next"));
   }
 
-  return prompts.slice(0, 4);
+  return prompts.slice(0, 6);
 }
 
 function promptFor(

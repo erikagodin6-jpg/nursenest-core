@@ -95,6 +95,12 @@ export function ClinicalReadinessHub({ pathwayId }: { pathwayId?: string | null 
           Discover telemetry simulation, branching scenarios, prioritization rounds, labs reasoning, medication-safety drills,
           adaptive remediation, readiness analytics, and retention flashcards.
         </p>
+        <Link
+          href="/app/learning-ecosystem"
+          className="mt-5 inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
+        >
+          Open My Learning Ecosystem
+        </Link>
       </header>
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">

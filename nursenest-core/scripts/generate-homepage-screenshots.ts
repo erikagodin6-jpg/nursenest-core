@@ -22,6 +22,11 @@ import {
   type MarketingScreenshotCaptureSurface,
   type MarketingScreenshotDepthLevel,
 } from "./lib/marketing-screenshot-depth";
+import {
+  getTopMarketingShowcaseItem,
+  type MarketingShowcaseItem,
+  type MarketingShowcaseKind,
+} from "@/lib/marketing/marketing-showcase-content";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,18 +47,28 @@ type Target = {
   demonstrates: readonly string[];
   preparationRequired: true;
   reviewGate: readonly string[];
+  showcaseKind?: MarketingShowcaseKind;
+  showcaseItem?: MarketingShowcaseItem;
   prepare: (page: Page) => Promise<void>;
 };
 
 const REVIEW_GATE = marketingScreenshotReviewGate();
 
+function withShowcase(target: Omit<Target, "showcaseItem">): Target {
+  return {
+    ...target,
+    showcaseItem: target.showcaseKind ? getTopMarketingShowcaseItem(target.showcaseKind) : undefined,
+  };
+}
+
 const TARGETS: Target[] = [
-  {
+  withShowcase({
     name: "question-bank-demo",
     route: "/app/practice-tests",
     title: "Question Bank",
     waitFor: "main",
     theme: "ocean",
+    showcaseKind: "question-bank-item",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "answered NCLEX-style question with selected answer, correct answer, rationale, and clinical pearl visible",
@@ -61,13 +76,14 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureAnsweredQuestion,
-  },
-  {
+  }),
+  withShowcase({
     name: "ngn-bowtie-demo",
     route: "/app/practice-tests",
     title: "Next Generation NCLEX",
     waitFor: "main",
     theme: "ocean",
+    showcaseKind: "bowtie-question",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "completed bowtie item with condition, actions, monitoring priorities, and rationale visible",
@@ -75,13 +91,14 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureBowtieQuestion,
-  },
-  {
+  }),
+  withShowcase({
     name: "ngn-matrix-demo",
     route: "/app/practice-tests",
     title: "NGN Matrix",
     waitFor: "main",
     theme: "ocean",
+    showcaseKind: "matrix-question",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "completed matrix item with selections and explanation visible",
@@ -89,13 +106,14 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureMatrixQuestion,
-  },
-  {
+  }),
+  withShowcase({
     name: "cat-exam-demo",
     route: "/app/practice-tests/cat-launch?pathwayId=ca-rn-nclex-rn",
     title: "CAT Exam",
     waitFor: "main",
     theme: "midnight",
+    showcaseKind: "cat-question",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "CAT question in progress with timer, progress, and adaptation indicators visible",
@@ -103,13 +121,14 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureCatQuestionInProgress,
-  },
-  {
+  }),
+  withShowcase({
     name: "lesson-demo",
     route: "/app/lessons",
     title: "Lessons",
     waitFor: "main",
     theme: "blossom",
+    showcaseKind: "lesson",
     depthLevel: 2,
     captureSurface: "educational-content",
     educationalState: "opened lesson with clinical pearl, educational content, and knowledge check visible",
@@ -117,13 +136,14 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureLessonLearningState,
-  },
-  {
+  }),
+  withShowcase({
     name: "ecg-demo",
     route: "/modules/ecg/interactive",
     title: "ECG Module",
     waitFor: "main",
     theme: "midnight",
+    showcaseKind: "ecg-case",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "ECG Detective Mode with rhythm strip, interpretation workflow, and clinical reasoning visible",
@@ -131,13 +151,14 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureEcgDetectiveMode,
-  },
-  {
+  }),
+  withShowcase({
     name: "telemetry-shift-demo",
     route: "/modules/ecg/advanced/scenarios",
     title: "Telemetry Shift Simulator",
     waitFor: "main",
     theme: "midnight",
+    showcaseKind: "ecg-case",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "telemetry shift scenario with monitored patients, prioritization, escalation, and decisions visible",
@@ -145,13 +166,14 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureTelemetryShift,
-  },
-  {
+  }),
+  withShowcase({
     name: "lab-workstation-demo",
     route: "/app/labs",
     title: "Clinical Lab Workstation",
     waitFor: "main",
     theme: "ocean",
+    showcaseKind: "lab-activity",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "abnormal lab interpretation activity with clinical analysis and nursing priorities visible",
@@ -159,13 +181,14 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureLabInterpretation,
-  },
-  {
+  }),
+  withShowcase({
     name: "med-math-demo",
     route: "/app/med-calculations",
     title: "Medication Math",
     waitFor: "main",
     theme: "ocean",
+    showcaseKind: "medication-math-activity",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "medication calculation activity with formula setup, calculator, and answer validation visible",
@@ -173,13 +196,14 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureMedicationMathActivity,
-  },
-  {
+  }),
+  withShowcase({
     name: "pharmacology-demo",
     route: "/app/pharmacology",
     title: "Pharmacology",
     waitFor: "main",
     theme: "ocean",
+    showcaseKind: "pharmacology-activity",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "pharmacology learning workflow with nursing considerations, monitoring, and rationale visible",
@@ -187,13 +211,14 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: capturePharmacologyWorkflow,
-  },
-  {
+  }),
+  withShowcase({
     name: "clinical-skills-demo",
     route: "/app/clinical-skills",
     title: "Clinical Skills",
     waitFor: "main",
     theme: "ocean",
+    showcaseKind: "clinical-skill",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "interactive clinical skills scenario with assessment and decision-making visible",
@@ -201,13 +226,14 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureClinicalSkillsScenario,
-  },
-  {
+  }),
+  withShowcase({
     name: "readiness-report-demo",
     route: "/app/account/readiness",
     title: "Readiness Report",
     waitFor: "main",
     theme: "ocean",
+    showcaseKind: "readiness-report",
     depthLevel: 3,
     captureSurface: "analytics-report",
     educationalState: "readiness report with trends, strengths, weak areas, and recommendations populated",
@@ -215,7 +241,7 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureReadinessReport,
-  },
+  }),
 ];
 
 const VIEWPORTS = [
@@ -247,6 +273,24 @@ async function main() {
           },
           { theme: target.theme },
         );
+        if (target.showcaseItem) {
+          await page.addInitScript(
+            ({ showcase }) => {
+              localStorage.setItem("nursenest-marketing-showcase-candidate", JSON.stringify(showcase));
+            },
+            {
+              showcase: {
+                id: target.showcaseItem.id,
+                kind: target.showcaseItem.kind,
+                title: target.showcaseItem.title,
+                activitySlug: target.showcaseItem.activitySlug,
+                marketingPriority: target.showcaseItem.flags.marketingPriority,
+                marketingShowcase: target.showcaseItem.flags.marketingShowcase,
+                featuredScreenshotCandidate: target.showcaseItem.flags.featuredScreenshotCandidate,
+              },
+            },
+          );
+        }
         await page.goto(`${BASE_URL}${target.route}`, { waitUntil: "networkidle" });
         await page.locator(target.waitFor).first().waitFor({ state: "visible", timeout: 45_000 });
         await target.prepare(page);

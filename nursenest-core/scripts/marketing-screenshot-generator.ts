@@ -22,6 +22,11 @@ import {
   type MarketingScreenshotCaptureSurface,
   type MarketingScreenshotDepthLevel,
 } from "./lib/marketing-screenshot-depth";
+import {
+  getTopMarketingShowcaseItem,
+  type MarketingShowcaseItem,
+  type MarketingShowcaseKind,
+} from "@/lib/marketing/marketing-showcase-content";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,16 +46,26 @@ type Target = {
   demonstrates: readonly string[];
   preparationRequired: true;
   reviewGate: readonly string[];
+  showcaseKind?: MarketingShowcaseKind;
+  showcaseItem?: MarketingShowcaseItem;
   prepare: (page: Page) => Promise<void>;
 };
 
 const REVIEW_GATE = marketingScreenshotReviewGate();
 
+function withShowcase(target: Omit<Target, "showcaseItem">): Target {
+  return {
+    ...target,
+    showcaseItem: target.showcaseKind ? getTopMarketingShowcaseItem(target.showcaseKind) : undefined,
+  };
+}
+
 const TARGETS: Target[] = [
-  {
+  withShowcase({
     key: "answered-nclex-question",
     route: "/app/practice-tests",
     theme: "ocean",
+    showcaseKind: "question-bank-item",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "answered NCLEX question with rationale and clinical pearl visible",
@@ -58,11 +73,12 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureAnsweredQuestion,
-  },
-  {
+  }),
+  withShowcase({
     key: "ngn-bowtie",
     route: "/app/practice-tests",
     theme: "ocean",
+    showcaseKind: "bowtie-question",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "completed bowtie question with selections and rationale visible",
@@ -70,11 +86,12 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureBowtieQuestion,
-  },
-  {
+  }),
+  withShowcase({
     key: "ngn-matrix",
     route: "/app/practice-tests",
     theme: "ocean",
+    showcaseKind: "matrix-question",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "completed matrix question with selections and rationale visible",
@@ -82,11 +99,12 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureMatrixQuestion,
-  },
-  {
+  }),
+  withShowcase({
     key: "cat-exam",
     route: "/app/practice-tests/cat-launch?pathwayId=ca-rn-nclex-rn",
     theme: "midnight",
+    showcaseKind: "cat-question",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "CAT question in progress with timer, progress, and adaptation indicators visible",
@@ -94,11 +112,12 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureCatQuestionInProgress,
-  },
-  {
+  }),
+  withShowcase({
     key: "lesson-page",
     route: "/app/lessons",
     theme: "blossom",
+    showcaseKind: "lesson",
     depthLevel: 2,
     captureSurface: "educational-content",
     educationalState: "opened lesson with educational content, clinical pearl, and knowledge check visible",
@@ -106,11 +125,12 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureLessonLearningState,
-  },
-  {
+  }),
+  withShowcase({
     key: "ecg-detective-mode",
     route: "/modules/ecg/interactive",
     theme: "midnight",
+    showcaseKind: "ecg-case",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "ECG Detective Mode with strip, interpretation workflow, and reasoning visible",
@@ -118,11 +138,12 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureEcgDetectiveMode,
-  },
-  {
+  }),
+  withShowcase({
     key: "telemetry-shift-simulator",
     route: "/modules/ecg/advanced/scenarios",
     theme: "midnight",
+    showcaseKind: "ecg-case",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "telemetry shift scenario with monitored patients and prioritization decisions visible",
@@ -130,11 +151,12 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureTelemetryShift,
-  },
-  {
+  }),
+  withShowcase({
     key: "clinical-lab-workstation",
     route: "/app/labs",
     theme: "ocean",
+    showcaseKind: "lab-activity",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "abnormal lab interpretation activity with clinical analysis visible",
@@ -142,11 +164,12 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureLabInterpretation,
-  },
-  {
+  }),
+  withShowcase({
     key: "medication-math",
     route: "/app/med-calculations",
     theme: "ocean",
+    showcaseKind: "medication-math-activity",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "medication calculation activity with formula setup and answer validation visible",
@@ -154,11 +177,12 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureMedicationMathActivity,
-  },
-  {
+  }),
+  withShowcase({
     key: "pharmacology",
     route: "/app/pharmacology",
     theme: "ocean",
+    showcaseKind: "pharmacology-activity",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "pharmacology workflow with nursing considerations and monitoring visible",
@@ -166,11 +190,12 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: capturePharmacologyWorkflow,
-  },
-  {
+  }),
+  withShowcase({
     key: "clinical-skills",
     route: "/app/clinical-skills",
     theme: "ocean",
+    showcaseKind: "clinical-skill",
     depthLevel: 1,
     captureSurface: "learning-activity",
     educationalState: "clinical skills scenario with assessment and decision-making visible",
@@ -178,11 +203,12 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureClinicalSkillsScenario,
-  },
-  {
+  }),
+  withShowcase({
     key: "readiness-dashboard",
     route: "/app/account/readiness",
     theme: "ocean",
+    showcaseKind: "readiness-report",
     depthLevel: 3,
     captureSurface: "analytics-report",
     educationalState: "readiness report with real trends, weak areas, strengths, and recommendations visible",
@@ -190,7 +216,7 @@ const TARGETS: Target[] = [
     preparationRequired: true,
     reviewGate: REVIEW_GATE,
     prepare: captureReadinessReport,
-  },
+  }),
 ];
 
 const VIEWPORTS = [
@@ -224,6 +250,24 @@ async function main() {
           },
           { theme: target.theme },
         );
+        if (target.showcaseItem) {
+          await page.addInitScript(
+            ({ showcase }) => {
+              localStorage.setItem("nursenest-marketing-showcase-candidate", JSON.stringify(showcase));
+            },
+            {
+              showcase: {
+                id: target.showcaseItem.id,
+                kind: target.showcaseItem.kind,
+                title: target.showcaseItem.title,
+                activitySlug: target.showcaseItem.activitySlug,
+                marketingPriority: target.showcaseItem.flags.marketingPriority,
+                marketingShowcase: target.showcaseItem.flags.marketingShowcase,
+                featuredScreenshotCandidate: target.showcaseItem.flags.featuredScreenshotCandidate,
+              },
+            },
+          );
+        }
         await page.goto(`${BASE_URL}${target.route}`, { waitUntil: "networkidle" });
         await page.locator(target.waitFor ?? "main").first().waitFor({ state: "visible", timeout: 45_000 });
         await target.prepare(page);

@@ -38,6 +38,11 @@ Fix:
 The overbroad `/lessons/:slug` redirects were removed for canonical lesson pathways. Practice-exam legacy
 redirects remain.
 
+Additional hardening:
+
+- `resolveMarketingLessonsHubDynamicSegment` now resolves canonical category slugs before any lesson DB lookup.
+- `[lessonSlug]/loading.tsx` now renders a visible loading shell instead of leaving an empty main while the route streams.
+
 ## Exact Stop Point For Query-Param Topic Filters
 
 Execution stopped inside:
