@@ -6,6 +6,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { SuccessLeaf } from "@/components/ui/success-leaf";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { readMarketingRegionFromDocument } from "@/lib/observability/learner-analytics-context.client";
 
 type SyncOutcome = "pending" | "ok" | "issue";
 
@@ -19,6 +21,9 @@ function Inner() {
   useEffect(() => {
     if (sp.get("checkout") !== "success") return;
     setOpen(true);
+    trackClientEvent("checkout_success_landing", {
+      country: readMarketingRegionFromDocument(),
+    });
     let cancelled = false;
     setSyncOutcome("pending");
     (async () => {

@@ -24,6 +24,7 @@ import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-messag
 import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
 import { isPlaceholderAuthCopy } from "@/lib/ui/is-placeholder-auth-copy";
 import { readMarketingRegionFromDocument } from "@/lib/observability/learner-analytics-context.client";
+import { GLOBAL_REGION_COOKIE } from "@/lib/region/global-region-cookie";
 
 const TIER_LABEL: Record<SignupTierValue, string> = {
   RN: "RN",
@@ -91,10 +92,15 @@ export function SignupForm({
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [country, setCountry] = useState<"CA" | "US">("CA");
   const [examFocus, setExamFocus] = useState<SignupExamFocusValue>("nclex_rn");
-  // Auto-detect country from marketing region cookie on first mount.
+  // Auto-detect country on first mount: check marketing region toggle first,
+  // then fall back to the global region cookie (set from URL path or country selector).
   useEffect(() => {
-    const detected = readMarketingRegionFromDocument();
-    if (detected === "US") setCountry("US");
+    const toggle = readMarketingRegionFromDocument();
+    if (toggle === "US") { setCountry("US"); return; }
+    // Check nn_global_region for US-navigated visitors who haven't set the toggle
+    const needle = `; ${document.cookie}`.split(`; ${GLOBAL_REGION_COOKIE}=`);
+    const raw = needle.length === 2 ? needle.pop()?.split(";").shift() ?? "" : "";
+    if (raw === "us") setCountry("US");
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const referralCode = searchParams?.get("ref")?.trim() || searchParams?.get("friendCode")?.trim() || "";
