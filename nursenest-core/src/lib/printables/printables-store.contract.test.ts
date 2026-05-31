@@ -23,10 +23,10 @@ describe("printable store (contract)", () => {
     assert.match(src, /notFound/);
   });
 
-  it("learner shell nav includes optional printouts when layout passes visibility", () => {
-    const src = read("components/layout/learner-shell-primary-nav.tsx");
-    assert.match(src, /buildOptionalPrintablesShellNavItem/);
-    assert.match(src, /printablesNavVisible/);
+  it("legacy learner shell nav file is removed from the runtime navigation contract", () => {
+    const src = read("lib/nav-governance/navigation-contract.ts");
+    assert.match(src, /site-header-server\.tsx/);
+    assert.doesNotMatch(src, /learner-shell-primary-nav\.tsx/);
   });
 
   it("learner download records privacy hashes and uses entitlement helpers", () => {

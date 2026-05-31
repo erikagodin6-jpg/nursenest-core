@@ -745,13 +745,15 @@ export async function applyStripeWebhookEvent(
       }
 
       if (activeBefore === 0 && statusForDb === SubscriptionStatus.ACTIVE) {
-        void captureServerEvent(analyticsDistinctId(userId), PH.learnerConversionSubscribed, {
+        const subscriptionPurchasedProps = {
           actor: "authenticated",
           funnel_step: "paid_subscription_active",
           country: plan?.country != null ? String(plan.country) : undefined,
           tier: plan?.tier ? String(plan.tier) : undefined,
           source: "stripe_checkout_session_completed",
-        });
+        };
+        void captureServerEvent(analyticsDistinctId(userId), PH.learnerConversionSubscribed, subscriptionPurchasedProps);
+        void captureServerEvent(analyticsDistinctId(userId), PH.subscriptionPurchased, subscriptionPurchasedProps);
         void markReferralSubscribed(userId);
       }
       await syncUserFromCheckoutSessionMetadata(userId, session.metadata ?? undefined);

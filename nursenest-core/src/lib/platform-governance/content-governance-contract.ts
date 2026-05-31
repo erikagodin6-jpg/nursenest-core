@@ -13,7 +13,7 @@ export const CONTENT_LIFECYCLE_STATES = [
 
 export type ContentGovernanceViolation = {
   featureId: string;
-  rule: "missing_lifecycle" | "missing_source";
+  rule: "missing_source";
   detail: string;
 };
 
@@ -22,13 +22,6 @@ export function validateContentGovernanceContract(): ContentGovernanceViolation[
 
   for (const feature of listPlatformFeatures()) {
     if (feature.contentLifecycle === "not-applicable") continue;
-    if (feature.contentLifecycle === "not-applicable" && feature.productionReadiness === "ready") {
-      violations.push({
-        featureId: feature.id,
-        rule: "missing_lifecycle",
-        detail: `${feature.label} is marked ready but does not declare an applicable content lifecycle policy.`,
-      });
-    }
     if (feature.canonicalSourceFiles.length === 0) {
       violations.push({
         featureId: feature.id,

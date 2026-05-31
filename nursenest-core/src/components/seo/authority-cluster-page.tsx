@@ -14,6 +14,7 @@ const clusterLabels: Record<AuthorityClusterPage["cluster"], string> = {
   "rex-pn": "REx-PN",
   "respiratory-therapy": "Respiratory therapy",
   "ca-rn": "NCLEX-RN (Canada)",
+  "us-rn": "NCLEX-RN (United States)",
   "np-fnp": "FNP",
   "np-agpcnp": "AGPCNP",
   "np-pmhnp": "PMHNP",
@@ -25,6 +26,7 @@ function clusterBasePath(page: AuthorityClusterPage): string {
   if (page.cluster === "cnple") return "/canada/np/cnple";
   if (page.cluster === "rex-pn") return "/canada/pn/rex-pn";
   if (page.cluster === "ca-rn") return "/canada/rn/nclex-rn";
+  if (page.cluster === "us-rn") return "/us/rn/nclex-rn";
   if (page.cluster === "np-fnp") return "/np-specialty/fnp";
   if (page.cluster === "np-agpcnp") return "/np-specialty/agpcnp";
   if (page.cluster === "np-pmhnp") return "/np-specialty/pmhnp";

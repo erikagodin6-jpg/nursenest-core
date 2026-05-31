@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 /**
  * LessonClinicalImageCard — dedicated presentation component for matched lesson images.
@@ -140,83 +141,84 @@ export function LessonClinicalImageCard({
   className = "",
 }: LessonClinicalImageCardProps) {
   const [hidden, setHidden] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const onHidden = useCallback(() => setHidden(true), []);
 
   if (!url || !hasRenderableLessonImageUrl(url) || hidden) return null;
 
-  const label = resolveLabel(labelProp, source);
+  const label = resolveLabel(labelProp, source) ?? "Clinical illustration";
   const caption = resolveCaption(captionProp, lessonTitle, source);
 
   return (
     <aside
-      aria-label={label ?? "Clinical image for this lesson"}
+      aria-label={label}
       className={`nn-lesson-clinical-image-card mx-auto mt-8 mb-2 w-full max-w-[min(44rem,100%)] overflow-hidden rounded-2xl${className ? ` ${className}` : ""}`}
       style={{
         background: "var(--lesson-media-surface)",
         border: "1px solid var(--lesson-media-border)",
-        /* Shadow depth: calm, not dramatic */
-        boxShadow:
-          "0 10px 36px -28px color-mix(in srgb, var(--semantic-brand) 18%, transparent)",
+        boxShadow: "0 10px 36px -28px color-mix(in srgb, var(--semantic-brand) 18%, transparent)",
       }}
     >
-      {/* ── Inner padding wrapper ─────────────────────────────────────────── */}
-      <div className="p-4 sm:p-6">
-        {/* ── Eyebrow label ──────────────────────────────────────────────── */}
-        {label ? (
-          <p
-            className="mb-3 text-[10px] font-bold uppercase leading-none tracking-[0.12em]"
-            style={{ color: "var(--lesson-media-label-text)" }}
-            aria-hidden="true"
-          >
-            {label}
-          </p>
-        ) : null}
-
-        {/* ── Inner image frame ──────────────────────────────────────────── */}
-        {/*
-         * The inner frame creates a distinct visual layer between the outer card
-         * surface and the image, preventing the image from feeling "painted" directly
-         * onto the lesson background. The subtle inner border adds just enough
-         * definition without harsh framing.
-         */}
-        <div
-          className="overflow-hidden rounded-xl"
-          style={{
-            background: "var(--lesson-media-frame)",
-            border: "1px solid color-mix(in srgb, var(--lesson-media-border) 55%, transparent)",
-          }}
+      {/* ── Collapsible header ────────────────────────────────────────────── */}
+      <div className="flex items-center justify-between px-4 py-2.5 sm:px-6">
+        <p
+          className="text-[10px] font-bold uppercase leading-none tracking-[0.12em]"
+          style={{ color: "var(--lesson-media-label-text)" }}
         >
-          <SafeLessonRemoteImage
-            src={url}
-            alt={alt}
-            className="block h-auto max-h-[min(70vh,520px)] w-full max-w-full object-contain object-center"
-            onHidden={onHidden}
-          />
-        </div>
+          {label}
+        </p>
+        <button
+          type="button"
+          onClick={() => setCollapsed((c) => !c)}
+          className="flex items-center gap-1 rounded-md px-2 py-1 text-[0.65rem] font-semibold transition hover:bg-[color-mix(in_srgb,var(--lesson-media-border)_40%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--semantic-brand)]"
+          style={{ color: "var(--lesson-media-label-text)" }}
+          aria-expanded={!collapsed}
+          aria-controls="lesson-clinical-image-content"
+        >
+          {collapsed ? (
+            <>Show <ChevronDown className="h-3.5 w-3.5" aria-hidden /></>
+          ) : (
+            <>Hide <ChevronUp className="h-3.5 w-3.5" aria-hidden /></>
+          )}
+        </button>
+      </div>
 
-        {/* ── Caption area ───────────────────────────────────────────────── */}
-        {/*
-         * Only rendered when a caption string exists.
-         * Caption is always a single short factual line derived from lesson metadata.
-         * Visually separated from the image frame by its own surface + top spacing.
-         */}
-        {caption ? (
+      {/* ── Expandable content ────────────────────────────────────────────── */}
+      {!collapsed && (
+        <div id="lesson-clinical-image-content" className="px-4 pb-4 sm:px-6 sm:pb-6">
           <div
-            className="mt-3 overflow-hidden rounded-xl px-4 py-3"
+            className="overflow-hidden rounded-xl"
             style={{
-              background: "var(--lesson-media-caption-surface)",
-              border: "1px solid var(--lesson-media-border)",
+              background: "var(--lesson-media-frame)",
+              border: "1px solid color-mix(in srgb, var(--lesson-media-border) 55%, transparent)",
             }}
           >
-            <p
-              className="text-[11px] leading-relaxed sm:text-xs"
-              style={{ color: "var(--lesson-media-caption-text)" }}
-            >
-              {caption}
-            </p>
+            <SafeLessonRemoteImage
+              src={url}
+              alt={alt}
+              className="block h-auto max-h-[min(70vh,520px)] w-full max-w-full object-contain object-center"
+              onHidden={onHidden}
+            />
           </div>
-        ) : null}
-      </div>
+
+          {caption ? (
+            <div
+              className="mt-3 overflow-hidden rounded-xl px-4 py-3"
+              style={{
+                background: "var(--lesson-media-caption-surface)",
+                border: "1px solid var(--lesson-media-border)",
+              }}
+            >
+              <p
+                className="text-[11px] leading-relaxed sm:text-xs"
+                style={{ color: "var(--lesson-media-caption-text)" }}
+              >
+                {caption}
+              </p>
+            </div>
+          ) : null}
+        </div>
+      )}
     </aside>
   );
 }

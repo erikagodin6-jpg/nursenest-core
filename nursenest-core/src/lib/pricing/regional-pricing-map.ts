@@ -18,6 +18,7 @@
 import type { BillingDuration } from "@/lib/pricing/billing-types";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { REGION_CONFIG } from "@/lib/i18n/global-regions";
+import type { TierCode } from "@prisma/client";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -259,6 +260,55 @@ function lookupStripePriceId(
   const durKey = durationToEnvSuffix(duration);
   const envKey = `STRIPE_PRICE_${regionKey}_${profKey}_${durKey}`;
   return process.env[envKey] ?? null;
+}
+
+function usTierStripePriceEnvKey(tier: TierCode, duration: BillingDuration): string | null {
+  const durKey = durationToEnvSuffix(duration);
+  switch (tier) {
+    case "RN":
+      return `STRIPE_PRICE_US_RN_${durKey}`;
+    case "LVN_LPN":
+    case "RPN":
+      return `STRIPE_PRICE_US_LPN_${durKey}`;
+    case "NP":
+      return `STRIPE_PRICE_US_NP_${durKey}`;
+    case "NEW_GRAD":
+      return `STRIPE_PRICE_US_NEW_GRAD_${durKey}`;
+    default:
+      return null;
+  }
+}
+
+export function regionalStripePriceEnvKeyForPlan(
+  region: GlobalRegionSlug,
+  profession: "nursing" | "allied",
+  duration: BillingDuration,
+  tier?: TierCode,
+): string {
+  if (region === "us" && profession === "nursing" && tier) {
+    return usTierStripePriceEnvKey(tier, duration) ?? `STRIPE_PRICE_US_NURSING_${durationToEnvSuffix(duration)}`;
+  }
+  const regionKey = region.toUpperCase().replace(/-/g, "_");
+  const profKey = profession.toUpperCase();
+  return `STRIPE_PRICE_${regionKey}_${profKey}_${durationToEnvSuffix(duration)}`;
+}
+
+export function lookupRegionalStripePriceIdForPlan(args: {
+  region: GlobalRegionSlug;
+  profession: "nursing" | "allied";
+  duration: BillingDuration;
+  tier?: TierCode;
+}): string | null {
+  const primary = regionalStripePriceEnvKeyForPlan(args.region, args.profession, args.duration, args.tier);
+  const primaryValue = process.env[primary]?.trim();
+  if (primaryValue) return primaryValue;
+
+  if (args.region === "us" && args.profession === "nursing") {
+    const legacyGeneric = `STRIPE_PRICE_US_NURSING_${durationToEnvSuffix(args.duration)}`;
+    return process.env[legacyGeneric]?.trim() || null;
+  }
+
+  return null;
 }
 
 function durationToEnvSuffix(d: BillingDuration): string {

@@ -49,10 +49,10 @@ function AssessmentToggle({
   onChange: (next: boolean) => void;
 }) {
   const label = hasPre && hasPost
-    ? "Pre + post quizzes"
+    ? "Pre & Post-Lesson Assessments"
     : hasPre
-    ? "Pre-lesson diagnostic"
-    : "Post-lesson retention";
+    ? "Pre-Lesson Assessment"
+    : "Post-Lesson Assessment";
 
   return (
     <div
@@ -261,12 +261,20 @@ export function LessonAssessmentFlow({
     return () => window.removeEventListener(PATHWAY_LESSON_PROGRESS_EVENT, onEvt);
   }, [hasPost, lessonSlug, pathwayId]);
 
-  // ── Toggle handler ─────────────────────────────────────────────────────────
+  // ── Toggle handler — writes localStorage immediately, persists to server if signed in ──
   const handleToggle = useCallback((next: boolean) => {
     const current = readLearnerStudyDefaults(effectiveUserId);
     writeLearnerStudyDefaults(effectiveUserId, { ...current, lessonAssessments: { enabled: next } });
     setEnabled(next);
-  }, [effectiveUserId]);
+    // Persist to user profile when signed in (non-"public" userId)
+    if (userId.trim() && userId !== "public") {
+      fetch("/api/learner/study-settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enablePrePostQuizzes: next }),
+      }).catch(() => {/* non-critical */});
+    }
+  }, [effectiveUserId, userId]);
 
   // ── Score record handlers ──────────────────────────────────────────────────
   const handlePreComplete = useCallback(async (score: number, total: number) => {
@@ -330,7 +338,6 @@ export function LessonAssessmentFlow({
           <LessonPreAssessmentCard
             items={preTest!}
             priorScore={priorScores?.pre ?? null}
-            autoStart
             onScoreRecorded={handlePreComplete}
             onSkip={() => setPreCleared(true)}
             onDismiss={() => setPreCleared(true)}

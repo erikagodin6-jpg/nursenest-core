@@ -112,7 +112,7 @@ describe("admin learner QA — API + proxy contracts (static)", () => {
 
   it("learner shell hides staff chrome during QA and mounts PostHog suppressor", () => {
     const layout = readFileSync(
-      join(nursenestCoreRoot, "src", "app", "(student)", "app", "(learner)", "layout.tsx"),
+      join(nursenestCoreRoot, "src", "app", "(app)", "app", "(learner)", "layout.tsx"),
       "utf8",
     );
     assert.match(layout, /AdminLearnerQaPosthogSuppressor/);
@@ -155,13 +155,13 @@ describe("admin learner QA — API + proxy contracts (static)", () => {
 
   it("dashboard home prefers entitlement tier for nav chrome (QA parity)", () => {
     const dash = readFileSync(
-      join(nursenestCoreRoot, "src", "app", "(student)", "app", "(learner)", "page.tsx"),
+      join(nursenestCoreRoot, "src", "app", "(app)", "app", "(learner)", "page.tsx"),
       "utf8",
     );
-    assert.match(dash, /tierForDashboardCopy/);
+    assert.match(dash, /examsNavLabelFromLearnerContext/);
     assert.match(
       dash,
-      /examsNavLabelFromLearnerContext\(getExamPathwayById, userLearnerPath, tierForDashboardCopy\)/,
+      /examsNavLabelFromLearnerContext\(userLearnerPath, session\?\.user\?\.tier\)/,
     );
   });
 });

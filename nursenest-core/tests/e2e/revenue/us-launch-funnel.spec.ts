@@ -18,7 +18,7 @@
  * - Trial expiration and conversion
  *
  * ## Architecture note
- * USD price env vars (`STRIPE_PRICE_US_NURSING_MONTHLY` etc.) must be set for the checkout
+ * USD price env vars (`STRIPE_PRICE_US_RN_MONTHLY` etc.) must be set for the checkout
  * request test to pass. If unset, the server returns STRIPE_PRICE_NOT_CONFIGURED (400).
  */
 
@@ -32,6 +32,7 @@ import {
 import { loginWithCredentials } from "../helpers/learner-login";
 import { isLearnerShell } from "../helpers/learner-shell";
 import { learnerShellStudyNavigation } from "../helpers/learner-shell-locators";
+import { CHECKOUT_UNAUTHORIZED_CODE } from "../../../src/lib/stripe/checkout-api-diagnostics";
 
 // ── Test configuration ──────────────────────────────────────────────────────
 
@@ -226,7 +227,8 @@ test.describe("US revenue funnel — pricing page currency", () => {
 
     // Must show USD pricing — either "$" symbol with USD or explicit USD label
     // Critical: must NOT show CAD-only pricing to US visitors
-    expect(pricingContent).toMatch(/\$39\.99|\$29\.99|USD|\$39|RN/i);
+    expect(pricingContent).toMatch(/\$39\.99 USD|\$39\.99|USD/i);
+    expect(pricingContent).not.toMatch(/\$29\.99 CAD/);
 
     // Must show trial / get started CTA
     const ctaButton = page.getByRole("link", { name: /start|trial|get started|sign up/i }).first();
@@ -259,10 +261,10 @@ test.describe("US revenue funnel — checkout API", () => {
     baseURL,
   }) => {
     const domain = process.env.QA_SIGNUP_EMAIL_DOMAIN?.trim();
-    const stripeConfigured = Boolean(process.env.STRIPE_PRICE_US_NURSING_MONTHLY?.trim());
+    const stripeConfigured = Boolean(process.env.STRIPE_PRICE_US_RN_MONTHLY?.trim());
     test.skip(
       !domain || !stripeConfigured,
-      "Requires QA_SIGNUP_EMAIL_DOMAIN + STRIPE_PRICE_US_NURSING_MONTHLY",
+      "Requires QA_SIGNUP_EMAIL_DOMAIN + STRIPE_PRICE_US_RN_MONTHLY",
     );
 
     // This test assumes a pre-existing authenticated test user session
@@ -291,7 +293,7 @@ test.describe("US revenue funnel — checkout API", () => {
     if (response.status() === 400 && body.code === "STRIPE_PRICE_NOT_CONFIGURED") {
       // This is the most common failure — USD env vars not set
       throw new Error(
-        `CRITICAL: USD Stripe price not configured. Set env var: ${body.envKey ?? "STRIPE_PRICE_US_NURSING_MONTHLY"}. ` +
+          `CRITICAL: USD Stripe price not configured. Set env var: ${body.envKey ?? "STRIPE_PRICE_US_RN_MONTHLY"}. ` +
           "Create a USD recurring price in Stripe Dashboard and set the env var before US launch.",
       );
     }
@@ -316,7 +318,7 @@ test.describe("US revenue funnel — checkout API", () => {
     });
     expect(response.status()).toBe(401);
     const body = await response.json();
-    expect(body.code).toBe("CHECKOUT_UNAUTHORIZED");
+    expect(body.code).toBe(CHECKOUT_UNAUTHORIZED_CODE);
   });
 
   test("checkout API rejects invalid tier with 400", async ({ request, baseURL }) => {

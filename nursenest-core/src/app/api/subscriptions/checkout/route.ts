@@ -44,7 +44,11 @@ import {
 import { naBillingScopeAckRequiredForCheckout } from "@/lib/stripe/checkout-na-billing-scope-gate";
 import { findPriceEntry, findAlliedPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
 import { JSON_BODY_CHECKOUT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
-import { getRegionalPricing } from "@/lib/pricing/regional-pricing-map";
+import {
+  getRegionalPricing,
+  lookupRegionalStripePriceIdForPlan,
+  regionalStripePriceEnvKeyForPlan,
+} from "@/lib/pricing/regional-pricing-map";
 import { isGlobalRegionSlug, type GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { GLOBAL_REGION_COOKIE, parseGlobalRegionCookie } from "@/lib/region/global-region-cookie";
 import {
@@ -333,8 +337,14 @@ export async function POST(req: Request) {
       const regionalConfig = getRegionalPricing(resolvedRegion);
       const profKey = tierCode === "ALLIED" ? "allied" : "nursing";
       const entry = regionalConfig[profKey][durationCode];
-      if (entry.stripePriceId) {
-        priceId = entry.stripePriceId;
+      const regionalPriceId = lookupRegionalStripePriceIdForPlan({
+        region: resolvedRegion,
+        profession: profKey,
+        duration: durationCode,
+        tier: tierCode,
+      });
+      if (regionalPriceId) {
+        priceId = regionalPriceId;
         planCode = `${resolvedRegion}_${profKey}_${durationCode}`;
         resolvedCurrency = entry.currency;
       }
@@ -354,7 +364,14 @@ export async function POST(req: Request) {
     // Resolve diagnostic key: canonical preferred; per-career fallback for allied when shared not set.
     // Always surfaces canonical key so operators know what to set.
     const missingEnvKey =
-      tierCode === "ALLIED" && careerKey
+      resolvedRegion
+        ? regionalStripePriceEnvKeyForPlan(
+            resolvedRegion,
+            tierCode === "ALLIED" ? "allied" : "nursing",
+            durationCode,
+            tierCode,
+          )
+        : tierCode === "ALLIED" && careerKey
         ? process.env[canonicalSharedAlliedStripePriceEnvKey(durationCode)]?.trim() ||
           process.env[sharedAlliedStripePriceEnvKey(durationCode)]?.trim()
           ? canonicalSharedAlliedStripePriceEnvKey(durationCode)
@@ -501,18 +518,38 @@ export async function POST(req: Request) {
             metadata: subscriptionMetadata,
           };
 
-    const checkoutSession = await stripe.checkout.sessions.create({
-      mode: "subscription",
+    const checkoutParams = {
+      mode: "subscription" as const,
       line_items: [{ price: priceId, quantity: 1 }],
       ...(subscriptionData ? { subscription_data: subscriptionData } : {}),
       ...(trialDays > 0 ? { payment_method_collection: "always" as const } : {}),
       ...(existingCustomerId ? { customer: existingCustomerId } : { customer_email: userForCheckout.email }),
       allow_promotion_codes: true,
+      automatic_tax: { enabled: true },
       success_url: `${appUrl}/app?checkout=success`,
       cancel_url: `${appUrl}/pricing?checkout=cancelled`,
       client_reference_id: userId,
       metadata,
-    });
+    };
+    // Idempotency key: scoped to user + plan + hour-window so form re-submissions within 1hr
+    // don't create duplicate sessions. Stripe honours idempotency for 24h.
+    const idempotencyKey = `checkout-${userId}-${planCode}-${Math.floor(Date.now() / 3_600_000)}`;
+    let checkoutSession: Awaited<ReturnType<typeof stripe.checkout.sessions.create>>;
+    try {
+      checkoutSession = await stripe.checkout.sessions.create(checkoutParams, { idempotencyKey });
+    } catch (firstErr) {
+      // Single retry after 600ms for transient Stripe 5xx/network errors only.
+      const isRetryable =
+        firstErr instanceof Error &&
+        (firstErr.message.includes("ECONNRESET") ||
+          firstErr.message.includes("ETIMEDOUT") ||
+          (firstErr as { statusCode?: number }).statusCode != null &&
+            (firstErr as { statusCode?: number }).statusCode! >= 500);
+      if (!isRetryable) throw firstErr;
+      safeServerLog("stripe_checkout", "checkout_session_retry", { planCode, reason: firstErr.message.slice(0, 120) });
+      await new Promise((r) => setTimeout(r, 600));
+      checkoutSession = await stripe.checkout.sessions.create(checkoutParams, { idempotencyKey });
+    }
     safeServerLog("stripe_checkout", "checkout_session_created_stripe_payload", {
       stripeSessionId: checkoutSession.id,
       mode: checkoutSession.mode,

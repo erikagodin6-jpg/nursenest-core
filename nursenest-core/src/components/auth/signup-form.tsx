@@ -169,6 +169,13 @@ export function SignupForm({
       signup_country: country,
       exam_focus: examFocus,
     });
+    trackProductEvent(PH.signupStarted, {
+      actor: "anonymous",
+      funnel_step: "signup_started",
+      marketing_locale: locale,
+      signup_country: country,
+      exam_focus: examFocus,
+    });
     const rawFirst = String(formData.get("firstName") ?? "").trim();
     const rawLast = String(formData.get("lastName") ?? "").trim();
     const fullName = rawLast ? `${rawFirst} ${rawLast}` : rawFirst;
@@ -239,6 +246,13 @@ export function SignupForm({
       trackProductEvent(PH.signupSuccessClient, {
         actor: "anonymous",
         funnel_step: "account_created",
+        marketing_locale: locale,
+        signup_country: country,
+        exam_focus: examFocus,
+      });
+      trackProductEvent(PH.signupCompleted, {
+        actor: "anonymous",
+        funnel_step: "signup_completed",
         marketing_locale: locale,
         signup_country: country,
         exam_focus: examFocus,

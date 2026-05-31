@@ -23,7 +23,7 @@
  *   2. The canonical nav component exists at the expected path
  *   3. No layout.tsx outside (learner)/ renders nav without approval
  *   4. Every approved exception is still present (no phantom registrations)
- *   5. The learner shell layout imports the canonical nav component
+ *   5. The learner shell layout imports the canonical global SiteHeaderServer
  *   6. No prohibited navigation patterns appear in new routes
  *   7. CAT exam focused mode is the only approved full-chrome suppression
  *   8. Contract version matches what the tests expect
@@ -103,27 +103,22 @@ describe("navigation shell contract", () => {
 
   // ── 2. Shell imports nav component ───────────────────────────────────────
 
-  it("canonical learner shell imports the primary nav component", () => {
+  it("canonical learner shell imports the global site header component", () => {
     const shellSource = read(contract.CANONICAL_LEARNER_SHELL_PATH);
-    const navComponentName = path.basename(contract.CANONICAL_NAV_COMPONENT_PATH, ".tsx").replace(/-/g, "").toLowerCase();
-    // Check for import of learner-shell-primary-nav
-    const hasNavImport = shellSource.includes("learner-shell-primary-nav");
+    const hasNavImport = shellSource.includes("site-header-server") && shellSource.includes("SiteHeaderServer");
     assert.ok(
       hasNavImport,
-      `Canonical learner shell does not import the primary nav component.\n` +
+      `Canonical learner shell does not import the global site header component.\n` +
       `Expected import from: ${contract.CANONICAL_NAV_COMPONENT_PATH}\n` +
       `Shell: ${contract.CANONICAL_LEARNER_SHELL_PATH}`,
     );
   });
 
-  it("canonical learner shell renders the global nav row", () => {
+  it("canonical learner shell renders the global site header and not the legacy learner nav row", () => {
     const shellSource = read(contract.CANONICAL_LEARNER_SHELL_PATH);
-    const hasDesktopNav = shellSource.includes("LearnerShellDesktopStudyLinks");
-    assert.ok(
-      hasDesktopNav,
-      `Canonical learner shell does not render LearnerShellDesktopStudyLinks.\n` +
-      `This component is the primary desktop navigation. It must not be removed from the shell.`,
-    );
+    assert.match(shellSource, /<SiteHeaderServer/);
+    assert.doesNotMatch(shellSource, /LearnerShellDesktopStudyLinks/);
+    assert.doesNotMatch(shellSource, /LearnerShellMobileBottomNav/);
   });
 
   // ── 3. No unauthorised navigation outside learner shell ──────────────────
@@ -283,27 +278,16 @@ describe("navigation shell contract", () => {
   it("navigation contract version matches test expectations", () => {
     assert.strictEqual(
       contract.NAVIGATION_CONTRACT_VERSION,
-      "1.0.0",
+      "2.0.0",
       "Navigation contract version changed. Update this test to pin the new version, and document what changed.",
     );
   });
 
   // ── 9. Nav component exports required named exports ──────────────────────
 
-  it("primary nav component exports all required named navigation components", () => {
+  it("canonical nav component exports the global server header", () => {
     const navSource = read(contract.CANONICAL_NAV_COMPONENT_PATH);
-    const REQUIRED_EXPORTS = [
-      "LearnerShellDesktopStudyLinks",
-      "LearnerShellMobileBottomNav",
-      "LearnerShellPathwayPill",
-    ];
-    const missing = REQUIRED_EXPORTS.filter((name) => !navSource.includes(`export function ${name}`) && !navSource.includes(`export const ${name}`));
-    assert.deepEqual(
-      missing,
-      [],
-      `Primary nav component is missing required exports:\n${missing.join(", ")}\n` +
-      "These exports are part of the navigation contract. Do not rename or remove them.",
-    );
+    assert.match(navSource, /export async function SiteHeaderServer/);
   });
 
   // ── 10. New physiology/simulation routes inherit learner shell ────────────

@@ -87,6 +87,54 @@ export function AdminLearnerQaAppToolbar(props: {
     }
   }
 
+  async function applyPreset(preset: {
+    track: Track;
+    lifecycle: (typeof LIFECYCLES)[number];
+    country: "US" | "CA";
+    npSpecialty?: NpSpec;
+    alliedCareer?: Allied;
+  }) {
+    setTrack(preset.track);
+    setLifecycle(preset.lifecycle);
+    setCountry(preset.country);
+    if (preset.npSpecialty) setNpSpecialty(preset.npSpecialty);
+    if (preset.alliedCareer) setAlliedCareer(preset.alliedCareer);
+    setErr(null);
+    setBusy(true);
+    try {
+      const body: Record<string, unknown> = {
+        track: preset.track,
+        lifecycle: preset.lifecycle,
+        country: preset.country,
+      };
+      if (preset.track === "NP" && preset.npSpecialty) body.npSpecialty = preset.npSpecialty;
+      if (preset.track === "ALLIED" && preset.alliedCareer) body.alliedCareer = preset.alliedCareer;
+      const res = await fetch("/api/admin/learner-qa/simulate", {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...body, confirm: true }),
+      });
+      const j = (await res.json()) as {
+        ok?: boolean;
+        state?: AdminLearnerQaPublicState;
+        error?: string;
+        hint?: string;
+      };
+      if (!res.ok) {
+        setErr(j.hint ? `${j.error ?? "Failed"} - ${j.hint}` : (j.error ?? `HTTP ${res.status}`));
+        return;
+      }
+      if (j.state) setState(j.state);
+      router.refresh();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function exit() {
     setErr(null);
     setBusy(true);
@@ -113,6 +161,8 @@ export function AdminLearnerQaAppToolbar(props: {
 
   const learnerPath = pathname.startsWith("/app") ? pathname : "/app";
   const mobileHref = adminLearnerQaMobilePreviewHref(learnerPath, MOBILE_W);
+  const presetClass =
+    "rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2.5 py-1.5 text-xs font-semibold hover:bg-[var(--surface-interactive-hover)] disabled:opacity-50";
 
   return (
     <div
@@ -138,6 +188,26 @@ export function AdminLearnerQaAppToolbar(props: {
           className="shrink-0 rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 text-xs font-semibold hover:bg-[var(--surface-interactive-hover)] disabled:opacity-50"
         >
           {busy ? "…" : "Exit simulation"}
+        </button>
+      </div>
+      <div className="flex flex-wrap gap-1.5 border-t border-[color-mix(in_srgb,var(--semantic-warning)_22%,transparent)] pt-2">
+        <button type="button" disabled={busy} onClick={() => void applyPreset({ track: "RN", lifecycle: "none", country: "US" })} className={presetClass}>
+          View As RN Free User
+        </button>
+        <button type="button" disabled={busy} onClick={() => void applyPreset({ track: "RN", lifecycle: "paid_active", country: "US" })} className={presetClass}>
+          View As RN Subscriber
+        </button>
+        <button type="button" disabled={busy} onClick={() => void applyPreset({ track: "RPN", lifecycle: "paid_active", country: "CA" })} className={presetClass}>
+          View As RPN Subscriber
+        </button>
+        <button type="button" disabled={busy} onClick={() => void applyPreset({ track: "NP", lifecycle: "paid_active", country: "US", npSpecialty: "FNP" })} className={presetClass}>
+          View As NP Subscriber
+        </button>
+        <button type="button" disabled={busy} onClick={() => void applyPreset({ track: "ALLIED", lifecycle: "paid_active", country: "US", alliedCareer: "paramedic" })} className={presetClass}>
+          View As Allied Subscriber
+        </button>
+        <button type="button" disabled={busy} onClick={() => void exit()} className={presetClass}>
+          View As Guest Visitor
         </button>
       </div>
       <div className="flex flex-wrap items-end gap-2 border-t border-[color-mix(in_srgb,var(--semantic-warning)_22%,transparent)] pt-2">

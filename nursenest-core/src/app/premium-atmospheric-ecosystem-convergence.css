@@ -180,7 +180,7 @@ html[data-theme="aurora"] [data-nn-premium-full-platform-convergence] {
     0 12px 34px -26px color-mix(in srgb, var(--semantic-brand) 42%, transparent);
 }
 
-:is(.nn-learner-shell-primary-nav, .nn-mobile-nav, .nn-header-marketing-row4, .nn-premium-shell-nav) {
+:is(.nn-mobile-nav, .nn-header-marketing-row4, .nn-premium-shell-nav) {
   background:
     linear-gradient(
       135deg,
@@ -191,7 +191,7 @@ html[data-theme="aurora"] [data-nn-premium-full-platform-convergence] {
   box-shadow: var(--nn-atmosphere-tactile);
 }
 
-:is(.nn-learner-shell-primary-nav a, .nn-mobile-nav a, .nn-header-marketing-row4 a, .nn-premium-shell-nav a):hover {
+:is(.nn-mobile-nav a, .nn-header-marketing-row4 a, .nn-premium-shell-nav a):hover {
   background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
   box-shadow: 0 8px 18px -16px color-mix(in srgb, var(--semantic-brand) 34%, transparent);
 }
@@ -310,7 +310,7 @@ html[data-theme="aurora"] [data-nn-premium-full-platform-convergence] {
     opacity: 0.28;
   }
 
-  :is(.nn-learner-shell-primary-nav, .nn-mobile-nav, .nn-header-marketing-row4, .nn-premium-shell-nav) {
+  :is(.nn-mobile-nav, .nn-header-marketing-row4, .nn-premium-shell-nav) {
     box-shadow:
       0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 58%, transparent) inset,
       0 12px 28px -24px color-mix(in srgb, var(--semantic-brand) 24%, transparent);

@@ -22,6 +22,7 @@ import { formatTitleCase } from "@/lib/format/text-case";
 import { buildMarketingTierHubStrip } from "@/lib/navigation/marketing-tier-hub-strip";
 import { SiteHeader, type SiteHeaderProps, type SiteHeaderPrecomputedNav } from "@/components/layout/site-header";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import { readOptionalMarketingRegionToggleForCountry } from "@/lib/marketing/read-optional-marketing-region-cookie.server";
 
 /** Resolve a key from a flat messages record with a safe English fallback. */
 function pick(messages: Record<string, string>, key: string, fallback: string): string {
@@ -150,9 +151,6 @@ function buildPrecomputedNavData(
 /** Resolve marketing region safely -- defaults to CA (Canada-first) on failure. */
 async function resolveMarketingRegionSafe(): Promise<MarketingRegionToggle> {
   try {
-    const { readOptionalMarketingRegionToggleForCountry } = await import(
-      "@/lib/marketing/read-optional-marketing-region-cookie.server"
-    );
     return (await readOptionalMarketingRegionToggleForCountry()) ?? "CA";
   } catch {
     return "CA";

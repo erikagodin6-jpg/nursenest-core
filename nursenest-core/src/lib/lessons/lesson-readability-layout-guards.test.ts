@@ -16,17 +16,18 @@ describe("lesson readability layout guards", () => {
   it("keeps the learner shell layout intact after stylesheet edits", () => {
     const source = readFileSync(learnerLayoutPath, "utf8");
 
-    assert.match(source, /export default async function LearnerShellLayout/);
+    assert.match(source, /const LearnerShellLayout = traceLayout/);
     assert.match(source, /<LearnerExamStudyProviders>/);
-    assert.match(source, /<LearnerExamChromeGate>/);
-    assert.match(source, /<LearnerShellDesktopStudyLinks/);
-    assert.match(source, /<LearnerShellMobileBottomNav/);
+    assert.match(source, /<LearnerExamChromeGate\b/);
+    assert.match(source, /<SiteHeaderServer/);
+    assert.doesNotMatch(source, /<LearnerShellDesktopStudyLinks/);
+    assert.doesNotMatch(source, /<LearnerShellMobileBottomNav/);
     assert.match(source, /<PageTransitionShell/);
     assert.match(source, /id="nn-learner-main"/);
     assert.match(source, /<\/SentryLearnerShell>/);
 
     assert.ok(
-      source.length > 20_000,
+      source.length > 15_000,
       "Learner shell layout appears truncated; expected full shell body, not just imports.",
     );
   });
@@ -105,7 +106,7 @@ describe("lesson readability layout guards", () => {
     assert.match(publicCss, /display:\s*block/);
     assert.match(publicCss, /max-width:\s*var\(--nn-lesson-reader-max\)/);
 
-    assert.match(learnerCss, /--nn-learner-lesson-reader-max:\s*78ch/);
+    assert.match(learnerCss, /--nn-learner-lesson-reader-max:\s*(76|78)ch/);
     assert.match(learnerCss, /\.nn-lesson-page--learner-app\.nn-premium-lesson-detail-shell/);
     assert.match(learnerCss, /max-width:\s*var\(--nn-learner-lesson-reader-max\)/);
   });

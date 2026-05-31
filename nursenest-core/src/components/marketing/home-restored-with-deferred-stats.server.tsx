@@ -3,7 +3,7 @@ import "server-only";
 import type { PropsWithChildren } from "react";
 
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
-import { HomepageEcosystemDiscovery } from "@/components/marketing/home/homepage-ecosystem-discovery";
+import { HomepageFeatureShowcase } from "@/components/marketing/home/homepage-feature-showcase";
 import { PremiumClinicalDepth } from "@/components/marketing/home/premium-clinical-depth";
 import { PremiumHomepageHero } from "@/components/marketing/home/premium-homepage-hero";
 import { PremiumHomepageTrust } from "@/components/marketing/home/premium-homepage-trust";
@@ -131,7 +131,17 @@ export async function HomeRestoredWithDeferredStats({
     <PremiumClinicalDepth messages={serverIslandMessages} locale={DEFAULT_MARKETING_LOCALE} />
   );
   const featureDiscoverySlot = (
-    <HomepageEcosystemDiscovery stats={homeMarketingStatsFromPayload(stats)} />
+    <HomepageFeatureShowcase
+      stats={{
+        questionCount: safeNumber(stats?.questionCount),
+        lessonCount: safeNumber(stats?.totalLessons),
+        flashcardCount: safeNumber(stats?.totalFlashcards),
+        clinicalSkillCount: safeNumber(stats?.clinicalSkillCount),
+        ecgCaseCount: safeNumber(stats?.ecgCaseCount),
+        labCaseCount: safeNumber(stats?.labCaseCount),
+        medicationMathCount: safeNumber(stats?.medicationMathProblemCount),
+      }}
+    />
   );
   const trustSlot = (
     <PremiumHomepageTrust messages={serverIslandMessages} />

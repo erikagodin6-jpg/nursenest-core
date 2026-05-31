@@ -78,7 +78,7 @@ describe("premium atmospheric ecosystem convergence", () => {
       /nn-brand-header-logo-slot/,
       /nn-brand-learner-logo-slot/,
       /nn-header-logo-link/,
-      /nn-learner-shell-primary-nav/,
+      /nn-header-marketing-row4/,
       /nn-mobile-nav/,
     ]) {
       assert.match(css, pattern, `missing ecosystem target: ${pattern}`);

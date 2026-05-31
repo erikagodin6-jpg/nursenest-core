@@ -340,100 +340,20 @@ describe("Clinical Modules nav architecture", () => {
   });
 });
 
-// ─── Clinical Modules Flyout Implementation Contracts ─────────────────────
+// ─── Global Navigation Unification Contracts ───────────────────────────────
 
-describe("Clinical Modules flyout implementation", () => {
-  test("flyout uses portal (createPortal) not relative positioning", () => {
-    const { readFileSync } = require("node:fs");
+describe("Clinical modules navigation governance", () => {
+  test("legacy learner-shell primary nav file has been removed", () => {
+    const { existsSync } = require("node:fs");
     const { join } = require("node:path");
-    const source = readFileSync(join(process.cwd(), "src/components/layout/learner-shell-primary-nav.tsx"), "utf8");
-    assert.match(source, /createPortal/);
+    assert.equal(existsSync(join(process.cwd(), "src/components/layout/learner-shell-primary-nav.tsx")), false);
   });
 
-  test("flyout uses aria-haspopup='menu' not 'true'", () => {
-    const { readFileSync } = require("node:fs");
-    const { join } = require("node:path");
-    const source = readFileSync(join(process.cwd(), "src/components/layout/learner-shell-primary-nav.tsx"), "utf8");
-    assert.match(source, /aria-haspopup="menu"/);
-    assert.doesNotMatch(source, /aria-haspopup="true"/);
-  });
-
-  test("flyout uses pointerdown for outside-click (not onBlur/relatedTarget in runtime code)", () => {
-    const { readFileSync } = require("node:fs");
-    const { join } = require("node:path");
-    const source = readFileSync(join(process.cwd(), "src/components/layout/learner-shell-primary-nav.tsx"), "utf8");
-    // Confirm pointerdown handler is present
-    assert.match(source, /pointerdown/);
-    // Confirm relatedTarget is NOT used in runtime code (comments may reference it as historical context)
-    // Strip JSDoc/inline comments before checking, targeting actual code lines
-    const codeLines = source
-      .split("\n")
-      .filter((line) => !line.trim().startsWith("//") && !line.trim().startsWith("*"))
-      .join("\n");
-    assert.doesNotMatch(
-      codeLines,
-      /relatedTarget/,
-      "Runtime code must not use relatedTarget (only acceptable in code comments as context)",
-    );
-  });
-
-  test("disabled items do not use href='#' in runtime JSX", () => {
-    const { readFileSync } = require("node:fs");
-    const { join } = require("node:path");
-    const source = readFileSync(join(process.cwd(), "src/components/layout/learner-shell-primary-nav.tsx"), "utf8");
-    // Strip comments before checking — the architectural comment mentions '#' as a description of what NOT to do
-    const codeLines = source
-      .split("\n")
-      .filter((line) => !line.trim().startsWith("//") && !line.trim().startsWith("*"))
-      .join("\n");
-    assert.doesNotMatch(
-      codeLines,
-      /href="#"/,
-      "Runtime JSX must not use href='#' — causes page-top scroll on click",
-    );
-  });
-
-  test("flyout handles ArrowDown, ArrowUp, Home, End, Escape", () => {
-    const { readFileSync } = require("node:fs");
-    const { join } = require("node:path");
-    const source = readFileSync(join(process.cwd(), "src/components/layout/learner-shell-primary-nav.tsx"), "utf8");
-    assert.match(source, /ArrowDown/);
-    assert.match(source, /ArrowUp/);
-    assert.ok(source.includes("Home") && source.includes("End"), "Must handle Home and End");
-    assert.match(source, /Escape/);
-  });
-
-  test("flyout restores focus to trigger on close", () => {
-    const { readFileSync } = require("node:fs");
-    const { join } = require("node:path");
-    const source = readFileSync(join(process.cwd(), "src/components/layout/learner-shell-primary-nav.tsx"), "utf8");
-    assert.match(source, /triggerRef/);
-    assert.match(source, /\.focus\(\)/);
-  });
-
-  test("flyout uses motion-safe class for reduced-motion compliance", () => {
-    const { readFileSync } = require("node:fs");
-    const { join } = require("node:path");
-    const source = readFileSync(join(process.cwd(), "src/components/layout/learner-shell-primary-nav.tsx"), "utf8");
-    assert.match(source, /motion-safe/);
-  });
-
-  test("View all link uses a learner-scoped destination", () => {
-    const { readFileSync } = require("node:fs");
-    const { join } = require("node:path");
-    const source = readFileSync(join(process.cwd(), "src/components/layout/learner-shell-primary-nav.tsx"), "utf8");
-    assert.doesNotMatch(source, /href="\/clinical-modules"/);
-  });
-
-  test("ClinicalModulesFlyout has no pathwayId prop (dead prop removed)", () => {
-    const { readFileSync } = require("node:fs");
-    const { join } = require("node:path");
-    const source = readFileSync(join(process.cwd(), "src/components/layout/learner-shell-primary-nav.tsx"), "utf8");
-    // The function signature should not include pathwayId
-    const flyoutFnStart = source.indexOf("function ClinicalModulesFlyout(");
-    const flyoutFnEnd = source.indexOf("{", flyoutFnStart);
-    const signature = source.slice(flyoutFnStart, flyoutFnEnd);
-    assert.doesNotMatch(signature, /pathwayId/, "Dead pathwayId prop must be removed from ClinicalModulesFlyout");
+  test("ECG module nav inventory remains in the shared learner-primary-nav data layer", () => {
+    const { buildClinicalModulesNavLinks } = require("../../lib/navigation/learner-primary-nav");
+    const links = buildClinicalModulesNavLinks(null);
+    assert.ok(links.some((l: { key: string }) => l.key === "ecg-fundamentals"));
+    assert.ok(links.some((l: { key: string }) => l.key === "advanced-ecg"));
   });
 });
 

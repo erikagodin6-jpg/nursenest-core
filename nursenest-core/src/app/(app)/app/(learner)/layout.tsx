@@ -14,7 +14,6 @@ import "@/app/learner-dashboard-performance.css";
 import "@/app/learning-module-shell.css";
 
 import type { ReactNode } from "react";
-import { Suspense } from "react";
 import { cookies } from "next/headers";
 
 import {
@@ -32,24 +31,18 @@ import {
 } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { LearnerShellUserBar } from "@/components/auth/learner-shell-user-bar";
-import { SignOutButton } from "@/components/auth/sign-out-button";
-import { LearnerShellLanguageControl } from "@/components/student/learner-shell-language-control";
 import { CheckoutSuccessBanner } from "@/components/student/checkout-success-banner";
 import { LearnerExamChromeGate } from "@/components/exam/learner-exam-chrome";
-import { LearnerThemeControl } from "@/components/student/learner-theme-control";
 import { LearnerAppSectionAnalytics } from "@/components/observability/learner-app-section-analytics";
 import { LearnerActivityLifecycleBeacon } from "@/components/observability/learner-activity-lifecycle-beacon";
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { loadLearnerStudyNextBlock } from "@/lib/learner/load-learner-study-next-block";
 import {
   learnerPathwayHubChromeHref,
   learnerPathwayHubChromeHrefForTierFallback,
 } from "@/lib/learner/learner-pathway-hub-chrome-href";
 import {
   DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
-  formatPathwayContextBar,
   isLearnerPathwayNavMetadata,
   loadLearnerPathwayNavMetadata,
   pathwayVisibleForLearnerChrome,
@@ -59,23 +52,13 @@ import { getLearnerFallback, setLearnerFallback } from "@/lib/server/fallback-ca
 import { isDegradedMode } from "@/lib/config/degraded-mode";
 import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathway-lesson-progress-refresh-listener";
 import { BaselineAssessmentPrompt } from "@/components/student/baseline-assessment-prompt";
-import {
-  LearnerShellDesktopStudyLinks,
-  LearnerShellMobileBottomNav,
-  LearnerShellPathwayPill,
-} from "@/components/layout/learner-shell-primary-nav";
-import { isPrintableStorePublicNavEnabled } from "@/lib/printables/printable-store-flags";
 import { classifyActivityRoute } from "@/lib/performance/activity-route-classification";
-import { LearnerStudyPathStrip } from "@/components/student/learner-study-path-strip";
-import { LearnerPathwayContextBar } from "@/components/student/learner-pathway-context-bar";
-import { LearnerShellBrandHomeLink } from "@/components/student/learner-shell-brand-home-link";
 import { LearnerUnauthenticatedGate } from "@/components/student/learner-unauthenticated-gate";
 import {
   PageTransitionShell,
   learnerShellShouldDisablePageTransition,
 } from "@/lib/motion/page-transition-shell";
 import { isLearnerTutorShellEnabled } from "@/lib/learner/tutor/learner-tutor-policy";
-import { SupportEmailHeaderLink } from "@/components/support/support-email-header-link";
 import { LearnerExamStudyProviders } from "@/components/exam/learner-exam-study-providers";
 import { isCoreOnlyEmergencyMode, shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
@@ -89,13 +72,12 @@ import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded
 import { MarketingCountryChromeProvider } from "@/components/marketing/marketing-country-chrome-context";
 import { LearnerAppFooter } from "@/components/student/learner-app-footer";
 import { NclexTargetDateModal } from "@/components/student/nclex-target-date-modal";
-import { SmartFormulaSheetLauncher } from "@/components/formula-sheet/smart-formula-sheet";
 import type { CountryCode } from "@/lib/marketing/countries/types";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
+import { SiteHeaderServer } from "@/components/layout/site-header-server";
 import { learnerShellFlags } from "@/lib/learner/learner-shell-mode";
 import { resolveNpCertificationPathwayId } from "@/lib/np/np-certification-selection";
-import { getLearnerExamsSurfaceLabel } from "@/lib/testing/testing-model";
 import { getSessionHubLabel } from "@/lib/learner/session-hub-label";
 import { resolveLearnerRequestPathname } from "@/lib/learner/resolve-learner-request-pathname";
 import { LearnerShellDevDiagnostics } from "@/components/dev/learner-shell-dev-diagnostics";
@@ -132,12 +114,6 @@ const paywallStatsTrace = createTraceInfo(import.meta, {
 const learnerPathwayNavTrace = createTraceInfo(import.meta, {
   kind: "provider",
   name: "loadLearnerPathwayNavMetadata",
-  phase: "layout",
-});
-
-const learnerStudyNextTrace = createTraceInfo(import.meta, {
-  kind: "provider",
-  name: "loadLearnerStudyNextBlock",
   phase: "layout",
 });
 
@@ -222,7 +198,7 @@ const LearnerShellLayout = traceLayout(
   const isPerformanceSensitiveActivityRoute = activityRoute !== null;
   const isFocusedExamShell = shellFlags.suppressFullChrome;
   const isFocusedStudySurface = shellFlags.suppressStudyWidgets;
-  const isLearnerDashboardRoute = shellFlags.isDashboard;
+  const shouldRenderGlobalSiteHeader = !isFocusedExamShell && shellFlags.mode !== "flashcards-study";
   const normalizedLearnerPathname = (requestPathname?.split("?")[0] ?? "").replace(/\/+$/, "") || "/app";
   /** Tier 0 — session + entitlement (no safeOptional; resolveEntitlementForPage is internally fail-closed). */
   const session = await withBuildTrace(protectedSessionTrace, async () =>
@@ -273,7 +249,7 @@ const LearnerShellLayout = traceLayout(
 
   if (skipNonCritical && entitlement !== "error" && entitlement.hasAccess) {
     layoutStderrTrace("learner_shell", "optional_shell_work_skipped", {
-      surface: "study_next_strip_analytics",
+      surface: "analytics",
       reason: "durability_degraded_or_core_only",
     });
   }
@@ -282,23 +258,17 @@ const LearnerShellLayout = traceLayout(
     entitlement !== "error" ? getLearnerFallback(userId, entitlement, isLearnerPathwayNavMetadata) : null;
 
   // ── Tier 2 parallel load ─────────────────────────────────────────────────────
-  // paywallStats, pathwayNav, studyNextBlock, and nclexTargetDate all have
+  // paywallStats, pathwayNav, and nclexTargetDate all have
   // no inter-dependencies — run them concurrently to cap layout latency at
   // max(individual timeout) instead of sum(individual timeouts).
-  // Previously sequential worst-case: 900 + 2500 + 2500 + 900 = 6800 ms.
+  // Previously sequential worst-case: 900 + 2500 + 900 = 4300 ms.
   // Parallel worst-case: max(2500, 900) = 2500 ms.
   const nclexTargetDateEnabled =
     entitlement !== "error" &&
     entitlement.hasAccess &&
     !isFocusedExamShell &&
     !isPerformanceSensitiveActivityRoute;
-  const shouldLoadStudyNext =
-    !skipNonCritical &&
-    entitlement !== "error" &&
-    entitlement.hasAccess &&
-    !isPerformanceSensitiveActivityRoute;
-
-  const [paywallHomeStats, pathwayNav, studyNextBlock, nclexTargetDateState] = await Promise.all([
+  const [paywallHomeStats, pathwayNav, nclexTargetDateState] = await Promise.all([
     // Paywall stats — only needed when not subscribed; fast fallback otherwise.
     isFocusedStudySurface
       ? Promise.resolve(shellFallbackStats)
@@ -347,16 +317,6 @@ const LearnerShellLayout = traceLayout(
           },
         ),
 
-    // Study next block — personalised recommendation strip (non-critical).
-    shouldLoadStudyNext
-      ? safeOptional(
-          async () =>
-            await withBuildTrace(learnerStudyNextTrace, () => loadLearnerStudyNextBlock(userId, entitlement)),
-          null,
-          { label: "learner_study_next_block" },
-        )
-      : Promise.resolve(null),
-
     // NCLEX target date — exam countdown modal data (non-critical).
     nclexTargetDateEnabled
       ? safeOptional(() => loadLearnerExamDateState(userId), null, {
@@ -368,7 +328,7 @@ const LearnerShellLayout = traceLayout(
   // ── End parallel load ────────────────────────────────────────────────────────
 
   const { showBaselinePrompt, pathwayId, pathwayShortLabel } = pathwayNav;
-  let { pathwayHubHref, examsLabel, pathwayContextBar } = pathwayNav;
+  let { pathwayHubHref } = pathwayNav;
   const selectedNpPathwayId =
     learnerTier === "NP"
       ? resolveNpCertificationPathwayId({
@@ -383,8 +343,6 @@ const LearnerShellLayout = traceLayout(
     const selected = getExamPathwayById(selectedNpPathwayId);
     if (pathwayVisibleForLearnerChrome(selected)) {
       pathwayHubHref = learnerPathwayHubChromeHref(selected);
-      pathwayContextBar = formatPathwayContextBar(selected);
-      examsLabel = getLearnerExamsSurfaceLabel(selected.id);
     }
   }
 
@@ -392,33 +350,6 @@ const LearnerShellLayout = traceLayout(
     const tierHub = await learnerPathwayHubChromeHrefForTierFallback(learnerTier);
     if (tierHub) {
       pathwayHubHref = tierHub;
-      if (learnerTier === "RN" || learnerTier === "RPN" || learnerTier === "LVN_LPN" || learnerTier === "NP") examsLabel = "CAT Exams";
-    }
-  }
-
-  if (!pathwayContextBar && (effectivePathwayId || pathwayHubHref)) {
-    const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
-    if (effectivePathwayId) {
-      const p = getExamPathwayById(effectivePathwayId);
-      if (pathwayVisibleForLearnerChrome(p)) pathwayContextBar = formatPathwayContextBar(p);
-    }
-    if (!pathwayContextBar && pathwayHubHref) {
-      const fallbackPathwayId =
-        learnerTier === "RN"
-          ? "us-rn-nclex-rn"
-          : learnerTier === "RPN"
-            ? "ca-rpn-rex-pn"
-            : learnerTier === "LVN_LPN"
-              ? "us-lpn-nclex-pn"
-              : learnerTier === "NP"
-                ? selectedNpPathwayId ?? "us-np-fnp"
-                : learnerTier === "ALLIED"
-                  ? "us-allied-core"
-                  : null;
-      if (fallbackPathwayId) {
-        const p = getExamPathwayById(fallbackPathwayId);
-        if (pathwayVisibleForLearnerChrome(p)) pathwayContextBar = formatPathwayContextBar(p);
-      }
     }
   }
 
@@ -429,8 +360,6 @@ const LearnerShellLayout = traceLayout(
     isLearnerTutorShellEnabled()
       ? { pathwayId: effectivePathwayId, pathwayLabel: pathwayShortLabel }
       : null;
-
-  const printablesNavVisible = isPrintableStorePublicNavEnabled();
 
   let paywalledRouteBody: ReactNode = (
     <LearnerSilentSectionBoundary name="route_body">{children}</LearnerSilentSectionBoundary>
@@ -458,9 +387,6 @@ const LearnerShellLayout = traceLayout(
   }
 
   // Keep optional shell features out of the shared learner layout graph unless the current request needs them.
-  const LearnerStudyNextBlockComponent = studyNextBlock
-    ? (await import("@/components/student/learner-study-next-block")).LearnerStudyNextBlock
-    : null;
   const LearnerTutorShellComponent = tutorContext
     ? (await import("@/components/learner-tutor")).LearnerTutorShell
     : null;
@@ -473,7 +399,7 @@ const LearnerShellLayout = traceLayout(
       route: normalizedLearnerPathname.slice(0, 120),
       shellServerMs,
       targetBudgetMs: activityRoute.targetBudgetMs,
-      optionalStudyNextSkipped: shouldLoadStudyNext ? "0" : "1",
+      optionalStudyNextSkipped: "1",
       optionalExamDateSkipped: nclexTargetDateEnabled ? "0" : "1",
     });
   }
@@ -487,8 +413,11 @@ const LearnerShellLayout = traceLayout(
         <LearnerExamStudyProviders>
           <LearnerExamChromeGate hubLabel={sessionHubLabel} hubHref={pathwayHubHref || "/app"}>
             <LearnerShellDevDiagnostics />
+            {shouldRenderGlobalSiteHeader ? (
+              <SiteHeaderServer serverHasStaffSession={staffSession != null && !qaShell} />
+            ) : null}
             <div
-              className="nn-learner-app nn-learner-ds-ambient nn-brand-learner-atmosphere relative isolate mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+var(--nn-learner-bottom-nav-reserve))] sm:px-5 md:px-6 md:pb-[var(--nn-rhythm-shell-y)]"
+              className="nn-learner-app nn-learner-ds-ambient nn-brand-learner-atmosphere relative isolate mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[var(--nn-rhythm-shell-y)] sm:px-5 md:px-6"
               data-nn-learner-ds
               data-nn-learner-workspace=""
               data-learner-exam-chrome={isFocusedExamShell ? "hidden" : undefined}
@@ -557,72 +486,46 @@ const LearnerShellLayout = traceLayout(
                   <LearnerActivityLifecycleBeacon />
                 </>
               ) : null}
-              <div className="nn-learner-exam-chrome-target nn-learner-shell-sticky sticky top-0 z-50 mb-[var(--nn-rhythm-tight-y)] overflow-x-clip bg-[var(--semantic-bg-base)] pt-0.5 md:pt-1">
-                <div className="flex min-h-0 flex-col gap-2 md:gap-2.5">
-                  <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-2.5 md:px-4 md:py-2">
-                    <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-2 sm:gap-x-3 md:gap-x-3 md:gap-y-2.5">
-                      <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                        <LearnerShellBrandHomeLink />
-                        <LearnerShellPathwayPill pathwayPillLabel={pathwayShortLabel} pathwayHubHref={pathwayHubHref} />
-                      </div>
-                      <div className="flex min-w-0 flex-shrink-0 flex-wrap items-center justify-end gap-1.5 sm:gap-2.5">
-                        <LearnerShellUserBar
-                          pathwayShortLabel={pathwayShortLabel}
-                          learnerQaOverlay={
-                            qaShell && adminQaSimulationHelpers
-                              ? adminQaSimulationHelpers.learnerQaUserBarOverlayFromPayload(qaShell)
-                              : null
-                          }
-                        />
-                        <SignOutButton className="inline-flex min-h-10 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_72%,var(--semantic-surface))] hover:text-[var(--semantic-text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]" />
-                        {!coreOnlyEmergency ? <SupportEmailHeaderLink /> : null}
-                        <SmartFormulaSheetLauncher compact />
-                        <LearnerShellLanguageControl />
-                        <LearnerThemeControl />
-                      </div>
-                    </div>
-                    {pathwayContextBar && pathwayHubHref ? (
-                      <LearnerPathwayContextBar label={pathwayContextBar} hubHref={pathwayHubHref} />
-                    ) : null}
-                  </div>
-                  <div className="nn-learner-shell-nav-row rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-1.5 shadow-[var(--shadow-card)] sm:px-3 sm:py-2 md:px-3.5 md:py-2.5">
-                    <LearnerShellDesktopStudyLinks
-                      pathwayId={effectivePathwayId}
-                      examsLabel={examsLabel}
-                      printablesNavVisible={printablesNavVisible}
-                    />
-                  </div>
-                  {!isFocusedStudySurface ? <LearnerStudyPathStrip pathwayId={effectivePathwayId} /> : null}
-                </div>
-                <LearnerShellMobileBottomNav
-                  pathwayPillLabel={pathwayShortLabel}
-                  pathwayId={effectivePathwayId}
-                  pathwayHubHref={pathwayHubHref}
-                  examsLabel={examsLabel}
-                  printablesNavVisible={printablesNavVisible}
-                />
-              </div>
-              {studyNextBlock && !isLearnerDashboardRoute && !isFocusedStudySurface ? (
-                <LearnerSilentSectionBoundary name="study_next">
-                  <div className="nn-learner-exam-chrome-dim mb-[var(--nn-rhythm-tight-y)]">
-                    <Suspense
-                      fallback={
-                        <div
-                          className="min-h-[10rem] rounded-xl border border-[var(--nn-presentation-divider)] bg-[var(--nn-presentation-wash)]"
-                          aria-hidden
-                        />
-                      }
-                    >
-                      {LearnerStudyNextBlockComponent ? (
-                        <LearnerStudyNextBlockComponent model={studyNextBlock} variant="pulse" />
-                      ) : null}
-                    </Suspense>
-                  </div>
-                </LearnerSilentSectionBoundary>
-              ) : null}
               <div className="nn-learner-exam-chrome-dim">
                 <CheckoutSuccessBanner />
               </div>
+              {entitlement === "error" ? (
+                <div
+                  role="alert"
+                  className="mb-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_55%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)] shadow-sm"
+                >
+                  <span className="font-semibold">Having trouble verifying your subscription.</span>{" "}
+                  Your access may be temporarily unavailable.{" "}
+                  <a href="/app" className="font-semibold underline hover:no-underline">
+                    Refresh to try again
+                  </a>{" "}
+                  or contact{" "}
+                  <a href="mailto:support@nursenest.io" className="font-semibold underline hover:no-underline">
+                    support
+                  </a>
+                  {" "}if this persists.
+                </div>
+              ) : null}
+              {entitlement !== "error" &&
+              entitlement.hasAccess &&
+              entitlement.reason === "active_trial" &&
+              !isFocusedExamShell &&
+              !isFocusedStudySurface ? (
+                <div
+                  className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_05%,var(--semantic-surface))] px-4 py-2.5 text-sm text-[var(--semantic-text-primary)] shadow-sm"
+                >
+                  <span>
+                    <span className="font-semibold">Free trial active.</span>{" "}
+                    Upgrade anytime to keep your progress after the trial ends.
+                  </span>
+                  <a
+                    href="/pricing"
+                    className="inline-flex min-h-8 items-center rounded-full bg-[var(--role-cta)] px-4 text-xs font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_10px_var(--role-cta-shadow)]"
+                  >
+                    View plans
+                  </a>
+                </div>
+              ) : null}
               <BaselineAssessmentPrompt show={showBaselinePrompt} />
               <PageTransitionShell shouldDisableTransition={learnerShellShouldDisablePageTransition}>
                 {/**

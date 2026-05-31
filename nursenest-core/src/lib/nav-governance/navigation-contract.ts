@@ -283,6 +283,6 @@ export function getApprovedExceptionForRoute(routePath: string) {
  * Increment this when the contract changes.
  * Contract tests pin to this version — a mismatch means the tests need updating.
  */
-export const NAVIGATION_CONTRACT_VERSION = "1.0.0" as const;
+export const NAVIGATION_CONTRACT_VERSION = "2.0.0" as const;
 export const CANONICAL_LEARNER_SHELL_PATH = "src/app/(app)/app/(learner)/layout.tsx" as const;
-export const CANONICAL_NAV_COMPONENT_PATH = "src/components/layout/learner-shell-primary-nav.tsx" as const;
+export const CANONICAL_NAV_COMPONENT_PATH = "src/components/layout/site-header-server.tsx" as const;

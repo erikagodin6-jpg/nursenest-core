@@ -527,6 +527,14 @@ export function QuestionBankPracticeClient({
             topic_set: Boolean(topicForApi),
             ...examContextAnalyticsProps(selectedExamContext),
           });
+          trackClientEvent(PH.practiceStarted, {
+            actor: "authenticated",
+            country: readMarketingRegionFromDocument(),
+            pathway_id: pathwayIdFilter ?? undefined,
+            mode: "question_bank",
+            preset,
+            session_size: sessionSize,
+          });
         }
 
         setPhase("ready");

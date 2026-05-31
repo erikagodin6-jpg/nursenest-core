@@ -114,22 +114,19 @@ describe("canonical learner practice hub — /app/practice-tests", () => {
 
 // ── Learner shell isolation ───────────────────────────────────────────────────
 
-describe("learner shell — single shell, no nested marketing layout", () => {
-  it("(learner)/layout.tsx is the single learner shell and renders children once", () => {
+describe("learner shell — global navigation unification", () => {
+  it("(learner)/layout.tsx mounts the canonical SiteHeaderServer and removes legacy learner nav chrome", () => {
     const layoutPath = "src/app/(app)/app/(learner)/layout.tsx";
     assert.ok(exists(layoutPath), `missing learner shell layout: ${layoutPath}`);
     const src = read(layoutPath);
-    // Must not import or mount a second marketing shell wrapper
-    assert.equal(
-      src.includes("MarketingLayout") || src.includes("SiteHeader"),
-      false,
-      "learner shell must not mount marketing layout or SiteHeader",
-    );
-    // Must have the canonical learner shell structure
-    assert.ok(
-      src.includes("nn-learner-app") || src.includes("LearnerExamChromeGate"),
-      "learner layout must render the nn-learner-app shell",
-    );
+    assert.match(src, /SiteHeaderServer/);
+    assert.match(src, /shouldRenderGlobalSiteHeader/);
+    assert.doesNotMatch(src, /LearnerShellDesktopStudyLinks/);
+    assert.doesNotMatch(src, /LearnerShellMobileBottomNav/);
+    assert.doesNotMatch(src, /LearnerShellUserBar/);
+    assert.doesNotMatch(src, /LearnerShellLanguageControl/);
+    assert.doesNotMatch(src, /LearnerThemeControl/);
+    assert.ok(src.includes("nn-learner-app") || src.includes("LearnerExamChromeGate"));
   });
 
   it("(learner)/layout.tsx renders children in a single <main> landmark", () => {
@@ -209,21 +206,20 @@ describe("learner hub pages — no marketing CTA blocks", () => {
 
 // ── Marketing / learner shell structural isolation ───────────────────────────
 
-describe("marketing vs learner shell — structural isolation", () => {
-  it("learner layout does not import SiteHeader, SiteFooter, or marketing layout components", () => {
+describe("marketing vs learner shell — shared global navigation", () => {
+  it("learner layout imports only the canonical SiteHeaderServer, not a marketing layout wrapper", () => {
     const src = read("src/app/(app)/app/(learner)/layout.tsx");
-    const MARKETING_SHELL_EXPORTS = [
-      "SiteHeader",
+    assert.match(src, /SiteHeaderServer/);
+    const FORBIDDEN_MARKETING_WRAPPERS = [
       "SiteFooter",
-      "site-header",
       "MarketingDefaultLayout",
       "marketing-default-layout",
     ];
-    for (const token of MARKETING_SHELL_EXPORTS) {
+    for (const token of FORBIDDEN_MARKETING_WRAPPERS) {
       assert.equal(
         src.includes(token),
         false,
-        `learner layout must not reference ${token} — marketing and learner shells are separate`,
+        `learner layout must not reference ${token}; global nav is shared through SiteHeaderServer only`,
       );
     }
   });

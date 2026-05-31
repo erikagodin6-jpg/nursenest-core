@@ -11,7 +11,7 @@ const CORE_KEYS = new Set<LearnerPrimaryNavItem["key"]>(["lessons", "practice", 
 
 /**
  * Legacy `dashboard.tsx` "quick links" / study surfaces row: Lessons → Practice → Flashcards → CAT.
- * Uses the same routes as {@link LearnerShellDesktopStudyLinks} (canonical learner nav).
+ * Uses the shared learner primary-nav route data while global navigation comes from SiteHeader.
  */
 export function LearnerCoreStudyShortcuts({
   pathwayId,

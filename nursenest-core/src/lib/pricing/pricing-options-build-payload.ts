@@ -22,8 +22,7 @@ import { validatePricingOptionsPayload } from "@/lib/pricing/pricing-options-pay
 import { findPriceEntry, findAlliedPriceEntry } from "@/lib/stripe/pricing-map";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-/** Display catalog is CA-only today; keep explicit so future US rows never share a cache line. */
-const PRICING_OPTIONS_COUNTRY = "CA" as const;
+const PRICING_OPTIONS_COUNTRIES = ["CA", "US"] as const;
 
 /**
  * Synchronous marketing + API pricing catalog (list prices + checkout flags).
@@ -31,54 +30,54 @@ const PRICING_OPTIONS_COUNTRY = "CA" as const;
  */
 export function buildPricingOptionsPayload(): PricingOptionsPayload {
   const nursingPlans: NursingPlanRowPayload[] = [];
-  for (const combo of eachNursingPricedCombination()) {
-    const { tier, duration, planCode } = combo;
-    const total = getDisplayTotalMajorUnits(PRICING_OPTIONS_COUNTRY, tier, duration);
+  for (const combo of eachNursingPricedCombination(PRICING_OPTIONS_COUNTRIES)) {
+    const { country, tier, duration, planCode } = combo;
+    const total = getDisplayTotalMajorUnits(country, tier, duration);
     if (total === undefined) continue;
 
     const months = durationMonths(duration);
     const monthlyEquiv = Number((total / months).toFixed(2));
-    const monthlyPlan = getDisplayTotalMajorUnits(PRICING_OPTIONS_COUNTRY, tier, "monthly");
+    const monthlyPlan = getDisplayTotalMajorUnits(country, tier, "monthly");
     const baselineMonthly =
       monthlyPlan !== undefined && months > 1 ? Number((monthlyPlan * months).toFixed(2)) : 0;
     const savingsVsMonthly =
       months > 1 && baselineMonthly > 0 ? Math.max(0, Math.round((1 - total / baselineMonthly) * 100)) : 0;
 
-    const priceEntry = findPriceEntry(PRICING_OPTIONS_COUNTRY, tier, duration);
-    const hasYearly = Boolean(findPriceEntry(PRICING_OPTIONS_COUNTRY, tier, "yearly"));
+    const priceEntry = findPriceEntry(country, tier, duration);
+    const hasYearly = Boolean(findPriceEntry(country, tier, "yearly"));
     const isBestValue = duration === "yearly" || (!hasYearly && duration === "6-month");
     const isMostPopular = duration === "3-month";
 
-    const anchorPrice = getAnchorPriceMajorUnits(PRICING_OPTIONS_COUNTRY, tier, duration);
+    const anchorPrice = getAnchorPriceMajorUnits(country, tier, duration);
 
     nursingPlans.push({
       tier,
-      country: "CA",
+      country,
       duration,
       checkoutAvailable: Boolean(priceEntry),
-      totalLabel: formatCurrencyLabel(total),
-      monthlyEquivalentLabel: formatPerMonthLabel(monthlyEquiv),
+      totalLabel: formatCurrencyLabel(total, country),
+      monthlyEquivalentLabel: formatPerMonthLabel(monthlyEquiv, country),
       savingsVsMonthlyPercent: savingsVsMonthly,
       isBestValue: Boolean(isBestValue && months > 1),
       isMostPopular,
-      anchorPriceLabel: anchorPrice ? formatCurrencyLabel(anchorPrice) : null,
+      anchorPriceLabel: anchorPrice ? formatCurrencyLabel(anchorPrice, country) : null,
       planCode,
     });
   }
 
   const alliedPlans: AlliedPlanRowPayload[] = [];
-  for (const combo of eachAlliedPricedCombination()) {
-    const { duration, alliedCareer, planCode } = combo;
+  for (const combo of eachAlliedPricedCombination(PRICING_OPTIONS_COUNTRIES)) {
+    const { country, duration, alliedCareer, planCode } = combo;
     if (!alliedCareer) continue;
-    const total = getAlliedDisplayPrice(PRICING_OPTIONS_COUNTRY, duration);
+    const total = getAlliedDisplayPrice(country, duration);
     const months = durationMonths(duration);
     const monthlyEquiv = Number((total / months).toFixed(2));
-    const monthlyBase = getAlliedDisplayPrice(PRICING_OPTIONS_COUNTRY, "monthly");
+    const monthlyBase = getAlliedDisplayPrice(country, "monthly");
     const baselineMonthly = months > 1 ? Number((monthlyBase * months).toFixed(2)) : 0;
     const savingsVsMonthly =
       months > 1 && baselineMonthly > 0 ? Math.max(0, Math.round((1 - total / baselineMonthly) * 100)) : 0;
 
-    const priceEntry = findAlliedPriceEntry(PRICING_OPTIONS_COUNTRY, alliedCareer, duration);
+    const priceEntry = findAlliedPriceEntry(country, alliedCareer, duration);
     const isBestValue = duration === "yearly";
     const isMostPopular = duration === "3-month";
 
@@ -86,11 +85,11 @@ export function buildPricingOptionsPayload(): PricingOptionsPayload {
       tier: "ALLIED",
       alliedCareer,
       alliedCareerLabel: ALLIED_CAREER_DISPLAY_NAMES[alliedCareer],
-      country: "CA",
+      country,
       duration,
       checkoutAvailable: Boolean(priceEntry),
-      totalLabel: formatCurrencyLabel(total),
-      monthlyEquivalentLabel: formatPerMonthLabel(monthlyEquiv),
+      totalLabel: formatCurrencyLabel(total, country),
+      monthlyEquivalentLabel: formatPerMonthLabel(monthlyEquiv, country),
       savingsVsMonthlyPercent: savingsVsMonthly,
       isBestValue: Boolean(isBestValue && months > 1),
       isMostPopular,

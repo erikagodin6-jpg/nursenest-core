@@ -136,6 +136,8 @@
     "test:observability-platform-2": "node --import tsx --test src/lib/observability/observability-platform-2.contract.test.ts",
     "test:observability-all": "node --import tsx --test src/lib/observability/learner-observability-platform.contract.test.ts src/lib/observability/observability-platform-2.contract.test.ts",
     "test:platform-governance": "node --import tsx --test src/lib/platform-governance/platform-governance.contract.test.ts",
+    "test:us-launch": "node --import tsx --test src/lib/us-launch/us-launch-readiness.contract.test.ts",
+    "test:e2e:us-launch": "npx playwright test -c playwright.config.ts tests/e2e/revenue/us-launch-funnel.spec.ts --project=chromium",
     "ci:observability": "npx tsx scripts/ci-performance-regression-check.ts",
     "ops:center:snapshot": "npx tsx -e \"import('./src/lib/observability/ops-center.ts').then(m => m.buildOpsCenterSnapshot()).then(s => console.log(JSON.stringify(s, null, 2)))\"",
     "verify:cache": "node scripts/verify-cloudflare-cache.mjs",

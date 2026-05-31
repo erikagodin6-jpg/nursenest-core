@@ -1,6 +1,6 @@
 import { CNPLE_INVENTORY } from "@/lib/marketing/cnple-inventory-metrics";
 
-export type AuthorityClusterKey = "cnple" | "rex-pn" | "respiratory-therapy" | "ca-rn" | "np-fnp" | "np-agpcnp" | "np-pmhnp" | "np-whnp" | "np-pnp-pc";
+export type AuthorityClusterKey = "cnple" | "rex-pn" | "respiratory-therapy" | "ca-rn" | "us-rn" | "np-fnp" | "np-agpcnp" | "np-pmhnp" | "np-whnp" | "np-pnp-pc";
 
 export type AuthorityClusterPage = {
   cluster: AuthorityClusterKey;
@@ -1206,6 +1206,173 @@ export const AUTHORITY_CLUSTER_PAGES: readonly AuthorityClusterPage[] = [
     ["Acute case", "Febrile child, respiratory distress, dehydration, or skin lesion triage.", "Lessons"],
     ["Chronic case", "Asthma action plan, ADHD medication adjustment, or obesity counselling.", "Pharmacology"],
   ], "PNP-PC clinical cases test the integration of developmental stage, clinical findings, and family-centered decision-making."),
+
+  // ── US RN — NCLEX-RN authority cluster ──────────────────────────────────────
+
+  ...([
+    {
+      slug: "study-guide",
+      topic: "NCLEX-RN Exam Prep Study Guide",
+      angle: "NCLEX-RN clinical judgment, prioritization, and Next Generation NCLEX formats",
+      tableRows: [
+        ["Clinical judgment", "Recognizing cues, prioritizing hypotheses, generating solutions, taking action.", "Questions"],
+        ["Prioritization / delegation", "Which patient to see first, what can be delegated within RN scope.", "Lessons"],
+        ["Pharmacology safety", "High-alert medications, rights of medication administration, adverse effects.", "Flashcards"],
+        ["Infection control", "Standard precautions, isolation types, PPE selection, hand hygiene audits.", "Questions"],
+        ["Next Gen NCLEX (NGN)", "Bow-tie, extended drag-and-drop, highlight, enhanced hot-spot formats.", "Questions"],
+        ["CAT pacing", "Adaptive difficulty strategy, stamina practice, mixed-topic sessions.", "Questions"],
+      ] as const,
+      extra: "US NCLEX-RN candidates benefit from deliberate CAT pacing practice. Build topic-specific accuracy first, then use timed mixed sets and adaptive sessions to simulate exam-day conditions.",
+    },
+    {
+      slug: "clinical-judgment",
+      topic: "NCLEX-RN Clinical Judgment",
+      angle: "clinical judgment measurement model (CJMM) and Next Generation NCLEX item types",
+      tableRows: [
+        ["Recognize cues", "Identifying relevant vs irrelevant clinical data in the scenario.", "Questions"],
+        ["Analyze cues", "Connecting findings to potential nursing concerns.", "Lessons"],
+        ["Prioritize hypotheses", "Ranking conditions from urgent to non-urgent.", "Questions"],
+        ["Generate solutions", "Selecting nursing interventions matched to the priority concern.", "Questions"],
+        ["Take action", "Implementing the highest-priority safe nursing response.", "Flashcards"],
+        ["Evaluate outcomes", "Reassessing whether the action achieved the expected outcome.", "Questions"],
+      ] as const,
+      extra: "Next Generation NCLEX items require completing the full CJMM loop. Practise all six steps before focusing on answer-choice mechanics to avoid pattern-matching without reasoning.",
+    },
+    {
+      slug: "pharmacology",
+      topic: "NCLEX-RN Pharmacology",
+      angle: "pharmacology safety, high-alert medications, and adverse-effect recognition for US RN candidates",
+      tableRows: [
+        ["High-alert medications", "Anticoagulants, insulin, concentrated electrolytes, opioids.", "Flashcards"],
+        ["Adverse effects", "Recognizing drug toxicity cues and nursing interventions.", "Questions"],
+        ["Drug interactions", "Serotonin syndrome, hypertensive crisis, bleeding risk.", "Lessons"],
+        ["Rights of administration", "Patient, drug, dose, route, time, documentation, reason.", "Questions"],
+        ["Patient education", "Anticoagulant monitoring, dietary restrictions, follow-up instructions.", "Lessons"],
+      ] as const,
+      extra: "NCLEX-RN pharmacology questions most commonly test who should NOT receive a medication and what to do when a client develops an adverse effect — not memorized dosing charts.",
+    },
+    {
+      slug: "prioritization",
+      topic: "NCLEX-RN Prioritization and Delegation",
+      angle: "who to see first and what can be safely delegated within RN scope",
+      tableRows: [
+        ["Airway / breathing", "ABCs: airway and breathing crises always take first priority.", "Questions"],
+        ["Unstable vs stable", "Change in neuro, vital sign deterioration, unexpected finding vs expected finding.", "Lessons"],
+        ["Delegation scope", "Tasks appropriate for UAP, LPN/LVN, and other RN vs RN-only assessments.", "Questions"],
+        ["Multiple patients", "Combining acuity, stability, and time-sensitivity across a 4-6 patient set.", "Questions"],
+        ["SBAR communication", "Structuring safe hand-off and physician notification.", "Flashcards"],
+      ] as const,
+      extra: "Prioritization questions require a tiered filter: ABC first, then unexpected over expected, then scope-appropriate delegation. Practise stating the filter explicitly before selecting an answer.",
+    },
+    {
+      slug: "questions",
+      topic: "NCLEX-RN Practice Questions",
+      angle: "board-style NCLEX-RN practice with rationales, clinical judgment frames, and weak-area remediation",
+      tableRows: [
+        ["Safe care environment", "Infection control, safety, emergency response, error prevention.", "Questions"],
+        ["Health promotion", "Risk factors, wellness screenings, immunizations, patient teaching.", "Lessons"],
+        ["Psychosocial integrity", "Mental health, therapeutic communication, coping, crisis.", "Questions"],
+        ["Physiological integrity", "Basic care, pharmacology, reduction of risk, physiological adaptation.", "Flashcards"],
+      ] as const,
+      extra: "When reviewing rationales, write a one-sentence rule for each missed question: the clinical cue, the client need, and the safe nursing action. That rule transfers to new stems faster than reviewing scenarios alone.",
+    },
+  ] as const).map(({ slug, topic, angle, tableRows, extra }) => ({
+    cluster: "us-rn" as const,
+    slug,
+    path: `/us/rn/nclex-rn/guide/${slug}`,
+    title: slug === "study-guide"
+      ? "NCLEX-RN Study Guide — US RN Exam Prep (2026)"
+      : `${topic} (2026) — NCLEX-RN US Study Guide`,
+    description: slug === "study-guide"
+      ? "Prepare for the NCLEX-RN in the United States with CAT-adaptive practice, Next Generation NCLEX clinical judgment items, pharmacology safety, prioritization, and delegation."
+      : `${topic} for NCLEX-RN — US nursing licensure context, clinical judgment framing, NGN item types, and rationale-first practice questions.`,
+    h1: slug === "study-guide" ? "NCLEX-RN study guide for US nursing candidates (2026)" : `${topic} for NCLEX-RN preparation`,
+    eyebrow: "NCLEX-RN entry-to-practice exam — 2026 authority guide",
+    lead: `Use this NCLEX-RN guide to connect ${angle} with safe nursing decisions. NCLEX-RN success depends on clinical judgment, client needs reasoning, safety priorities, pharmacology, and Next Generation NCLEX item mastery.`,
+    examTerms: ["NCLEX-RN", "CAT", "clinical judgment", "client needs", "NGN", "Next Gen NCLEX", "CJMM"],
+    ctas: [
+      { label: "NCLEX-RN practice questions", href: "/us/rn/nclex-rn/questions" },
+      { label: "NCLEX-RN CAT practice", href: "/us/rn/nclex-rn/cat" },
+      { label: "NCLEX-RN lessons", href: "/us/rn/nclex-rn/lessons" },
+      { label: "NCLEX-RN flashcards", href: "/us/rn/nclex-rn/flashcards" },
+      { label: "NCLEX-RN test bank", href: "/us/rn/nclex-rn/test-bank" },
+    ],
+    table: {
+      caption: `${topic}: what to practise`,
+      columns: ["Topic area", "What the item is testing", "Best NurseNest follow-up"],
+      rows: tableRows,
+    },
+    sections: [
+      {
+        heading: `How this topic shows up on NCLEX-RN items`,
+        body: [
+          `NCLEX-RN questions test safe registered nursing practice across all client needs categories. For ${topic.toLowerCase()}, practise identifying whether the stem is asking about physiological integrity, safe care environment, health promotion, or psychosocial integrity — the client need frames the correct answer priority.`,
+          "Next Generation NCLEX items use the Clinical Judgment Measurement Model (CJMM): recognizing cues, analyzing cues, prioritizing hypotheses, generating solutions, taking action, and evaluating outcomes. Build this six-step loop before concentrating on answer-choice mechanics.",
+        ],
+      },
+      {
+        heading: "Case-based example",
+        body: [
+          `When a client reports an unexpected finding during routine care, the correct NCLEX response follows acuity, scope, and expected versus unexpected findings — not convenience or task sequence.`,
+          "After reviewing a rationale, write a single rule: the cue, the client need, and the safe nursing action. Transferring that rule to new stems is faster than memorizing individual scenarios.",
+        ],
+      },
+      {
+        heading: "CAT and NGN practice strategy",
+        body: [
+          "NCLEX-RN uses computerized adaptive testing (CAT). Build targeted practice by client needs category first, then add timed mixed CAT-style sessions. Include NGN item practice — bow-tie, highlight, extended formats — before your final preparation week.",
+          extra,
+        ],
+      },
+    ],
+    mistakes: [
+      "Reading answer choices before identifying which client need the question is targeting.",
+      "Skipping NGN item practice until the last week — clinical judgment formats require a different reasoning loop.",
+      "Reviewing only the correct answer rather than explaining why each distractor is unsafe or out of scope.",
+      "Practising only easy recall sets without timed adaptive sessions that train pacing.",
+    ],
+    examDay: [
+      "Identify the client need before reading answer choices.",
+      "Use ABCs, safety, expected versus unexpected, and scope as your priority filter — in that order.",
+      "For NGN items, complete the full CJMM loop before selecting each response.",
+      "Trust the CAT algorithm — difficulty changes reflect the scoring model, not whether you are failing.",
+    ],
+    faq: [
+      {
+        question: "What is the best way to prepare for the NCLEX-RN?",
+        answer: "Focus on clinical judgment first: practise identifying client needs, prioritizing safe actions, and reading rationales that explain why distractors are unsafe. Add timed CAT sessions once you have topic-level accuracy.",
+      },
+      {
+        question: "How many questions are on the NCLEX-RN?",
+        answer: "The 2026 NCLEX-RN uses computerized adaptive testing. Candidates receive a minimum of 85 and a maximum of 150 items. The exam ends when the algorithm has sufficient confidence in your performance level.",
+      },
+      {
+        question: "What are Next Generation NCLEX (NGN) question types?",
+        answer: "NGN item types include bow-tie, extended drag-and-drop, highlight (text and table), enhanced hot-spot, and matrix/grid formats. They require completing the six-step Clinical Judgment Measurement Model (CJMM) rather than choosing a single best answer.",
+      },
+    ],
+    whatYoullLearn: [
+      "Clinical judgment using the six-step CJMM (recognize, analyze, prioritize, generate, act, evaluate)",
+      "Prioritization and delegation within RN scope",
+      "Pharmacology safety for high-alert medications",
+      "Next Generation NCLEX item formats (bow-tie, highlight, extended)",
+      "CAT adaptive pacing strategy for exam day",
+    ],
+    whoThisIsFor: "US nursing graduates and internationally educated nurses preparing for NCLEX-RN licensure in the United States.",
+    studyOrder: [
+      "Complete topic-based lessons by client needs category",
+      "Practice targeted question sets for each category",
+      "Add NGN item type practice (bow-tie, highlight, extended)",
+      "Use timed CAT-style sessions for pacing",
+      "Review flashcards for pharmacology and high-yield recall",
+    ],
+    nextSteps: [
+      { label: "NCLEX-RN practice questions", href: "/us/rn/nclex-rn/questions" },
+      { label: "NCLEX-RN CAT exam practice", href: "/us/rn/nclex-rn/cat" },
+      { label: "NCLEX-RN test bank", href: "/us/rn/nclex-rn/test-bank" },
+      { label: "NCLEX-RN lessons", href: "/us/rn/nclex-rn/lessons" },
+    ],
+  })),
 
 ] as const;
 

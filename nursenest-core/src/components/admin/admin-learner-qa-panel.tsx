@@ -141,6 +141,11 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
     }
   }
 
+  async function viewGuestVisitor() {
+    await clear();
+    router.push("/");
+  }
+
   async function applyPreset(p: {
     track: Track;
     lifecycle: (typeof LIFECYCLES)[number];
@@ -217,12 +222,12 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Quick presets</h2>
         <p className="mt-1 text-xs text-muted-foreground">One click sets the cookie and refreshes this page so you can chain scenarios quickly.</p>
         <div className="mt-3 flex flex-wrap gap-2">
-          <PresetBtn busy={busy} label="US RN · no sub" onClick={() => void applyPreset({ track: "RN", lifecycle: "none", country: "US" })} />
-          <PresetBtn busy={busy} label="CA RN · trial" onClick={() => void applyPreset({ track: "RN", lifecycle: "trial", country: "CA" })} />
-          <PresetBtn busy={busy} label="US RN · paid" onClick={() => void applyPreset({ track: "RN", lifecycle: "paid_active", country: "US", planVariant: "yearly" })} />
-          <PresetBtn busy={busy} label="US RN · expired" onClick={() => void applyPreset({ track: "RN", lifecycle: "expired", country: "US" })} />
-          <PresetBtn busy={busy} label="NP WHNP · paid" onClick={() => void applyPreset({ track: "NP", lifecycle: "paid_active", country: "US", npSpecialty: "WHNP", planVariant: "6-month" })} />
-          <PresetBtn busy={busy} label="Allied RRT · CA" onClick={() => void applyPreset({ track: "ALLIED", lifecycle: "paid_active", country: "CA", alliedCareer: "rrt" })} />
+          <PresetBtn busy={busy} label="View As RN Free User" onClick={() => void applyPreset({ track: "RN", lifecycle: "none", country: "US" })} />
+          <PresetBtn busy={busy} label="View As RN Subscriber" onClick={() => void applyPreset({ track: "RN", lifecycle: "paid_active", country: "US", planVariant: "yearly" })} />
+          <PresetBtn busy={busy} label="View As RPN Subscriber" onClick={() => void applyPreset({ track: "RPN", lifecycle: "paid_active", country: "CA", planVariant: "yearly" })} />
+          <PresetBtn busy={busy} label="View As NP Subscriber" onClick={() => void applyPreset({ track: "NP", lifecycle: "paid_active", country: "US", npSpecialty: "FNP", planVariant: "yearly" })} />
+          <PresetBtn busy={busy} label="View As Allied Subscriber" onClick={() => void applyPreset({ track: "ALLIED", lifecycle: "paid_active", country: "US", alliedCareer: "paramedic", planVariant: "yearly" })} />
+          <PresetBtn busy={busy} label="View As Guest Visitor" onClick={() => void viewGuestVisitor()} />
           <PresetBtn
             busy={busy}
             label="Pre-Nursing · free"

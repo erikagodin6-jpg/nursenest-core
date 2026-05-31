@@ -11,6 +11,7 @@ import {
   type PricedCombination,
 } from "@/lib/pricing/display-catalog";
 import type { BillingDuration } from "@/lib/pricing/billing-types";
+import { regionalStripePriceEnvKeyForPlan } from "@/lib/pricing/regional-pricing-map";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 export type { BillingDuration } from "@/lib/pricing/billing-types";
@@ -52,6 +53,19 @@ function resolvePrice(
   return { priceId: null, source: "missing" };
 }
 
+function usLegacyNursingRegionalEnvKey(tier: TierCode, duration: BillingDuration): string | null {
+  switch (tier) {
+    case "RN":
+    case "RPN":
+    case "LVN_LPN":
+    case "NP":
+    case "NEW_GRAD":
+      return `STRIPE_PRICE_US_NURSING_${duration === "monthly" ? "MONTHLY" : duration === "3-month" ? "3MONTH" : duration === "6-month" ? "6MONTH" : "YEARLY"}`;
+    default:
+      return null;
+  }
+}
+
 export function eachStripePriceMatrixRow(): StripePriceMatrixRow[] {
   const rows: StripePriceMatrixRow[] = [];
   for (const combo of eachPricedCombination()) {
@@ -59,7 +73,11 @@ export function eachStripePriceMatrixRow(): StripePriceMatrixRow[] {
     let legacyKey: string;
     let resolved: { priceId: string | null; source: PriceSource };
 
-    if (combo.alliedCareer) {
+    if (combo.alliedCareer && combo.country === "US") {
+      canonicalKey = regionalStripePriceEnvKeyForPlan("us", "allied", combo.duration);
+      legacyKey = canonicalSharedAlliedStripePriceEnvKey(combo.duration);
+      resolved = resolvePrice(canonicalKey, legacyKey);
+    } else if (combo.alliedCareer) {
       const cShared = canonicalSharedAlliedStripePriceEnvKey(combo.duration);
       const lShared = sharedAlliedStripePriceEnvKey(combo.duration);
       const cCareer = canonicalAlliedStripePriceEnvKey(combo.alliedCareer, combo.duration);
@@ -76,6 +94,10 @@ export function eachStripePriceMatrixRow(): StripePriceMatrixRow[] {
         legacyKey = lCareer;
         resolved = resolvePrice(cCareer, lCareer);
       }
+    } else if (combo.country === "US") {
+      canonicalKey = regionalStripePriceEnvKeyForPlan("us", "nursing", combo.duration, combo.tier);
+      legacyKey = usLegacyNursingRegionalEnvKey(combo.tier, combo.duration) ?? stripePriceEnvKey(combo.country, combo.tier, combo.duration);
+      resolved = resolvePrice(canonicalKey, legacyKey);
     } else {
       canonicalKey = canonicalNursingStripePriceEnvKey(combo.tier, combo.duration);
       legacyKey = stripePriceEnvKey(combo.country, combo.tier, combo.duration);

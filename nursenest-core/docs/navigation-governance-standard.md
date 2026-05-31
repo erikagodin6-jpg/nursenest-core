@@ -1,8 +1,8 @@
 # NurseNest Navigation Governance Standard
 
 **Status:** ENFORCED — CI fails on violation  
-**Contract version:** 1.0.0  
-**Last updated:** 2026-05-30  
+**Contract version:** 2.0.0  
+**Last updated:** 2026-05-31  
 **Owner:** Platform Team
 
 ---
@@ -23,13 +23,13 @@ Every learner-facing page MUST inherit from the canonical learner shell:
 src/app/(app)/app/(learner)/layout.tsx
 ```
 
-This layout renders the global navigation via:
+This layout renders the global navigation via the homepage header:
 
 ```
-src/components/layout/learner-shell-primary-nav.tsx
+src/components/layout/site-header-server.tsx
 ```
 
-**There is one approved exception to full-chrome suppression:** Active CAT/practice exam sessions, managed by `LearnerExamChromeGate` + `isFocusedPracticeTestSessionPath()`.
+**Approved exceptions to global header rendering:** active CAT/practice exam sessions and active flashcard study sessions, managed by `LearnerExamChromeGate` + `learnerShellFlags()`.
 
 No other module, feature, or developer may suppress, replace, fork, or duplicate this navigation system.
 
@@ -45,12 +45,7 @@ src/app/(app)/layout.tsx           ← Provider layer (AuthSessionProvider, regi
         └── src/app/(app)/app/(learner)/layout.tsx  ← CANONICAL LEARNER SHELL
               ├── SentryLearnerShell
               ├── LearnerExamChromeGate  ← Only place chrome is suppressed
-              │   ├── Sticky header
-              │   │   ├── LearnerShellBrandHomeLink
-              │   │   ├── LearnerShellPathwayPill
-              │   │   ├── LearnerShellDesktopStudyLinks  ← PRIMARY NAV
-              │   │   ├── LearnerShellMobileBottomNav
-              │   │   └── LearnerShellUserBar
+              │   ├── SiteHeaderServer  ← CANONICAL GLOBAL NAV
               │   └── <main id="nn-learner-main">
               │         └── [route page.tsx content]
               └── LearnerAppFooter
@@ -179,8 +174,8 @@ node --import tsx --test tests/contracts/learner-shell-navigation.contract.test.
 **What the tests check:**
 1. Canonical shell exists at registered path
 2. Canonical nav component exists at registered path
-3. Shell imports primary nav component
-4. Shell renders `LearnerShellDesktopStudyLinks`
+3. Shell imports `SiteHeaderServer`
+4. Shell does not render legacy learner shell nav components
 5. No layout.tsx outside `(learner)/` renders nav without approval
 6. Every approved exception still has a layout file on disk (no phantom registrations)
 7. Exam focused mode is the only approved full-chrome suppression

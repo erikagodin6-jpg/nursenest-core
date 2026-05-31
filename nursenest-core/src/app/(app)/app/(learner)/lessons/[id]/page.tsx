@@ -63,14 +63,11 @@ import {
 import { resolveLessonMeasurementSystem } from "@/lib/measurements/resolve-lesson-measurement-system";
 import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
-import { LessonTopicPracticeSection } from "@/components/lessons/lesson-topic-practice-section";
 import { loadLessonTopicLinkedQuizItems } from "@/lib/lessons/load-lesson-topic-linked-quiz-items";
 import {
   pathwayHubAppFlashcardsHref,
   pathwayHubAppQuestionsHref,
 } from "@/lib/marketing/pathway-hub-app-questions-href";
-import { resolveQuizEmbedQuestionsForLessonSlug } from "@/lib/lessons/lesson-quiz-embeds";
-import { PathwayLessonQuizEmbedSection } from "@/components/lessons/pathway-lesson-quiz-embed-section";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
@@ -817,10 +814,6 @@ async function LessonDetailPageInner({ params }: Props) {
         }
       : null;
 
-    const pathwayLessonQuizEmbed = pathway
-      ? resolveQuizEmbedQuestionsForLessonSlug(record.slug)
-      : null;
-
     const examFramingLabel =
       examFraming.region !== "unknown" ? examFraming.examIdentityLabel : null;
 
@@ -1061,25 +1054,6 @@ async function LessonDetailPageInner({ params }: Props) {
                   })
                 : null}
             </article>
-            {pathway && pathwayLessonQuizEmbed?.length ? (
-              <div className="mt-8 w-full max-w-none">
-                <PathwayLessonQuizEmbedSection
-                  lessonSlug={record.slug}
-                  links={{
-                    practiceExamsHref: "/app/practice-tests",
-                    flashcardsHref: pathwayHubAppFlashcardsHref(
-                      pathway.id,
-                      record.topicSlug,
-                    ),
-                    practiceQuestionsHref: pathwayHubAppQuestionsHref(
-                      pathway.id,
-                      record.topic,
-                    ),
-                    relatedLessonsHref: `/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`,
-                  }}
-                />
-              </div>
-            ) : null}
             {pathway && pathwayInteractiveModules.length > 0 ? (
               <div className="mt-6 w-full max-w-none">
                 <PathwayLessonInteractiveModules

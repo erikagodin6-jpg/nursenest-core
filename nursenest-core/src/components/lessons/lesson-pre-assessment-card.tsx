@@ -84,14 +84,14 @@ function DiagnosticIdleCard({
           className="inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-semibold nn-text-on-solid-fill shadow-sm transition hover:opacity-92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--semantic-info)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] active:scale-[0.99]"
           style={{ background: "var(--semantic-info)" }}
         >
-          Start readiness check
+          Start Assessment
         </button>
         <button
           type="button"
           onClick={onSkip}
           className="inline-flex min-h-10 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] bg-transparent px-4 py-2 text-sm font-medium text-[var(--semantic-text-secondary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--semantic-border-soft)] focus-visible:ring-offset-2"
         >
-          Skip to lesson
+          Skip And Begin Lesson
         </button>
       </div>
     </div>

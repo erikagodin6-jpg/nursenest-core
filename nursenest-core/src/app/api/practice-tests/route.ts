@@ -705,6 +705,12 @@ export async function POST(req: Request) {
           timed: enforcedTimedMode,
           ...examContextAnalyticsProps(buildGlobalExamContext(pathwayIdForCat, "en")),
         });
+        captureLearnerProductEvent(gate.userId, gate.entitlement, PH.catStarted, {
+          pathway_id: pathwayIdForCat,
+          exam_simulation: d.catPresentationMode === "exam_simulation",
+          question_cap: enforcedQuestionCount,
+          timed: enforcedTimedMode,
+        });
         return true;
       },
       false,
@@ -874,6 +880,12 @@ export async function POST(req: Request) {
         question_count: d.questionCount,
         timed: d.timedMode,
         ...examContextAnalyticsProps(buildGlobalExamContext(d.pathwayId?.trim() || null, "en")),
+      });
+      captureLearnerProductEvent(gate.userId, gate.entitlement, PH.practiceStarted, {
+        pathway_id: d.pathwayId?.trim() || undefined,
+        selection_mode: d.selectionMode,
+        question_count: d.questionCount,
+        timed: d.timedMode,
       });
       return true;
     },

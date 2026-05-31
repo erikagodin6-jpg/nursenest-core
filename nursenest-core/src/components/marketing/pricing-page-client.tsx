@@ -735,13 +735,13 @@ export function PricingPageClient({
     !isAllied && isFreeStripeBillingNursingTier(tier);
 
   const filteredNursingPlans = useMemo(
-    () => nursingPlans.filter((p) => p.tier === tier),
-    [nursingPlans, tier],
+    () => nursingPlans.filter((p) => p.tier === tier && p.country === examLabelCountry),
+    [nursingPlans, tier, examLabelCountry],
   );
 
   const filteredAlliedPlans = useMemo(
-    () => alliedPlans.filter((p) => p.alliedCareer === selectedAlliedCareer),
-    [alliedPlans, selectedAlliedCareer],
+    () => alliedPlans.filter((p) => p.alliedCareer === selectedAlliedCareer && p.country === examLabelCountry),
+    [alliedPlans, selectedAlliedCareer, examLabelCountry],
   );
 
   const displayPlans = isAllied ? filteredAlliedPlans : filteredNursingPlans;

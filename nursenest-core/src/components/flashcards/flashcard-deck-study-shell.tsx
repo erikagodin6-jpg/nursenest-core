@@ -5,6 +5,8 @@ import { FlashcardStudyClient } from "@/components/flashcards/flashcard-study-cl
 import { FlashcardDeckStudyGate } from "@/components/flashcards/flashcard-deck-study-gate";
 import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 
 export function FlashcardDeckStudyShell({
@@ -32,6 +34,15 @@ export function FlashcardDeckStudyShell({
     const t = setTimeout(() => setReady(true), 80);
     return () => clearTimeout(t);
   }, []);
+
+  useEffect(() => {
+    if (!startImmediately) return;
+    trackClientEvent(PH.flashcardsStarted, {
+      deck_ref: deckRef,
+      study_mode: studyMode,
+      shuffle: shuffleInitially,
+    });
+  }, [deckRef, shuffleInitially, startImmediately, studyMode]);
 
   // 🧠 Gate screen (entry UX)
   if (!startImmediately) {

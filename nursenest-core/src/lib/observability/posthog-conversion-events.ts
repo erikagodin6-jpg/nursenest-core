@@ -7,6 +7,7 @@ export const PH = {
   checkoutStarted: "checkout_started",
   /** Signup form submit (before API response). */
   signupSubmitAttempt: "signup_submit_attempt",
+  signupStarted: "signup_started",
   /** User chose Google or Apple on marketing auth. */
   authOAuthProviderSelected: "auth_oauth_provider_selected",
   /** OAuth redirect / callback failure surfaced on login. */
@@ -29,6 +30,7 @@ export const PH = {
   authOAuthFirstStudyAction: "auth_oauth_first_study_action",
   /** Client-side success after signup API returns ok (before redirect to login). */
   signupSuccessClient: "signup_success_client",
+  signupCompleted: "signup_completed",
   /**
    * Learner app area viewed (dashboard, lessons, questions, exams, flashcards, study-plan).
    * Complements $pageview with a single dimension for breakdowns.
@@ -142,8 +144,10 @@ export const PH = {
   pathwayExplorerFilterApplied: "pathway_explorer_filter_applied",
   /** Question bank: first batch loaded for a new session (not append). */
   learnerQuestionBankSessionStarted: "learner_question_bank_session_started",
+  practiceStarted: "practice_started",
   /** Practice test API: adaptive (CAT) session created. */
   learnerCatExamStarted: "learner_cat_exam_started",
+  catStarted: "cat_started",
   /** Question bank adaptive practice setup: learner started a session from the hub. */
   learnerAdaptivePracticeSetupStarted: "learner_adaptive_practice_setup_started",
   /** Practice test API: non-CAT linear/random session created. */
@@ -178,6 +182,7 @@ export const PH = {
   learnerExamMockSessionCompleted: "learner_exam_mock_session_completed",
   /** Stripe: first active subscription for user after checkout (free/trial → paid proxy). */
   learnerConversionSubscribed: "learner_conversion_subscribed",
+  subscriptionPurchased: "subscription_purchased",
   /**
    * CAT pathway ambiguity picker shown — subscription has 2+ eligible CAT tracks and
    * no `pathwayId` was supplied to the API. Use to measure how often this disambiguation
@@ -204,6 +209,7 @@ export const PH = {
   trialStarted: "trial_started",
   trialConverted: "trial_converted",
   subscriptionCancelled: "subscription_cancelled",
+  flashcardsStarted: "flashcards_started",
 
   // ── Dashboard engagement ─────────────────────────────────────────────────
   continueStudyClicked: "continue_study_clicked",

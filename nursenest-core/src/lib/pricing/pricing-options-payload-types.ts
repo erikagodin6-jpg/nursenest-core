@@ -4,7 +4,7 @@ import type { AlliedCareerKey } from "@/lib/pricing/display-catalog";
 
 export type NursingPlanRowPayload = {
   tier: TierCode;
-  country: "CA";
+  country: "CA" | "US";
   duration: BillingDuration;
   checkoutAvailable: boolean;
   totalLabel: string;
@@ -20,7 +20,7 @@ export type AlliedPlanRowPayload = {
   tier: "ALLIED";
   alliedCareer: AlliedCareerKey;
   alliedCareerLabel: string;
-  country: "CA";
+  country: "CA" | "US";
   duration: BillingDuration;
   checkoutAvailable: boolean;
   totalLabel: string;

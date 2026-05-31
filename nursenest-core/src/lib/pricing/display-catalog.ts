@@ -2,10 +2,10 @@ import type { TierCode } from "@prisma/client";
 import type { BillingDuration } from "@/lib/pricing/billing-types";
 
 /**
- * Single source of truth for list prices (CAD major units).
+ * Single source of truth for public list prices.
  *
- * All plans are billed in Canadian dollars. Stripe charge amounts must match
- * Prices configured in Stripe for the env `STRIPE_PRICE_*` IDs.
+ * Canada remains on CAD billing. US launch uses USD list prices and USD Stripe
+ * price IDs through the regional/multi-currency checkout path.
  *
  * Allied Health pricing is per-career; each career has its own Stripe price
  * IDs and entitlement scope.
@@ -99,6 +99,14 @@ const LIST_PRICE_MAJOR: Partial<Record<TierCode, Partial<Record<BillingDuration,
   NP: { monthly: 39.99, "3-month": 99.99, "6-month": 159.99, yearly: 239.99 },
 };
 
+const US_LIST_PRICE_MAJOR: Partial<Record<TierCode, Partial<Record<BillingDuration, number>>>> = {
+  NEW_GRAD: { monthly: 9.99, "6-month": 39.99, yearly: 59.99 },
+  RPN: { monthly: 24.99, "3-month": 59.99, "6-month": 99.99, yearly: 149.99 },
+  LVN_LPN: { monthly: 24.99, "3-month": 59.99, "6-month": 99.99, yearly: 149.99 },
+  RN: { monthly: 39.99, "3-month": 89.99, "6-month": 139.99, yearly: 199.99 },
+  NP: { monthly: 39.99, "3-month": 99.99, "6-month": 159.99, yearly: 239.99 },
+};
+
 // ── Allied Health prices (CAD, same for every career) ────────────────────────
 //
 // All 7 allied careers share the same 4 Stripe prices (price_1TAxCe…, price_1TAxDb…,
@@ -109,6 +117,13 @@ const ALLIED_PRICE: Record<BillingDuration, number> = {
   "3-month": 34.99,
   "6-month": 59.99,
   yearly: 99.99,
+};
+
+const US_ALLIED_PRICE: Record<BillingDuration, number> = {
+  monthly: 24.99,
+  "3-month": 59.99,
+  "6-month": 99.99,
+  yearly: 149.99,
 };
 
 // ── Anchor prices (strikethrough "was" values for conversion UI) ─────────────
@@ -145,18 +160,18 @@ export const TRIAL_REQUIRES_PAYMENT_METHOD = true;
 // ── Price lookups ───────────────────────────────────────────────────────────
 
 export function getDisplayTotalMajorUnits(
-  _country: "CA" | "US",
+  country: "CA" | "US",
   tier: TierCode,
   duration: BillingDuration,
 ): number | undefined {
-  return LIST_PRICE_MAJOR[tier]?.[duration];
+  return (country === "US" ? US_LIST_PRICE_MAJOR : LIST_PRICE_MAJOR)[tier]?.[duration];
 }
 
 export function getAlliedDisplayPrice(
-  _country: "CA" | "US",
+  country: "CA" | "US",
   duration: BillingDuration,
 ): number {
-  return ALLIED_PRICE[duration];
+  return (country === "US" ? US_ALLIED_PRICE : ALLIED_PRICE)[duration];
 }
 
 export function getAnchorPriceMajorUnits(
@@ -355,26 +370,26 @@ export function* eachAlliedPricedCombination(_markets?: readonly ("CA" | "US")[]
 
 /** Yields every priced plan (nursing + allied). */
 export function* eachPricedCombination(_markets?: readonly ("CA" | "US")[]): Generator<PricedCombination> {
-  yield* eachNursingPricedCombination();
-  yield* eachAlliedPricedCombination();
+  yield* eachNursingPricedCombination(_markets);
+  yield* eachAlliedPricedCombination(_markets);
 }
 
 // ── Formatting ──────────────────────────────────────────────────────────────
 
-export function currencyCode(_country?: "CA" | "US"): "CAD" {
-  return "CAD";
+export function currencyCode(country?: "CA" | "US"): "CAD" | "USD" {
+  return country === "US" ? "USD" : "CAD";
 }
 
-export function formatCurrencyLabel(amount: number, _country?: "CA" | "US"): string {
-  return `$${amount.toFixed(2)} CAD`;
+export function formatCurrencyLabel(amount: number, country?: "CA" | "US"): string {
+  return `$${amount.toFixed(2)} ${currencyCode(country)}`;
 }
 
-export function formatPerMonthLabel(amount: number, _country?: "CA" | "US"): string {
-  return `$${amount.toFixed(2)} CAD/mo`;
+export function formatPerMonthLabel(amount: number, country?: "CA" | "US"): string {
+  return `$${amount.toFixed(2)} ${currencyCode(country)}/mo`;
 }
 
-export function getMonthlyListLabel(_country: "CA" | "US", tier: TierCode): string {
-  const m = getDisplayTotalMajorUnits("CA", tier, "monthly");
+export function getMonthlyListLabel(country: "CA" | "US", tier: TierCode): string {
+  const m = getDisplayTotalMajorUnits(country, tier, "monthly");
   if (m === undefined) return "—";
-  return `$${m.toFixed(2)} CAD/mo`;
+  return `$${m.toFixed(2)} ${currencyCode(country)}/mo`;
 }
