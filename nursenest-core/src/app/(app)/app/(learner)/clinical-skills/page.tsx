@@ -10,8 +10,10 @@ import { pickClinicalSkillsContinueTarget } from "@/lib/clinical-skills/clinical
 import { loadClinicalSkillsRouteContext } from "@/lib/clinical-skills/clinical-skills-route-context.server";
 import { listClinicalSkills } from "@/lib/clinical-skills/clinical-skills-catalog";
 import { auth } from "@/lib/auth";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 
 export const metadata: Metadata = {
   title: "Clinical skills | NurseNest",
@@ -61,6 +63,32 @@ export default async function ClinicalSkillsHubRoute({
   const qp = pathwayId?.trim() ? `?pathwayId=${encodeURIComponent(pathwayId.trim())}` : "";
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id ?? ctx.userId;
+  const entitlement = userId ? await resolveEntitlementForPage(userId) : "error";
+
+  if (entitlement === "error") {
+    return (
+      <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm text-[var(--semantic-text-secondary)]">
+        Clinical skills are temporarily unavailable while we verify your access. Please refresh or try again shortly.
+      </div>
+    );
+  }
+
+  if (!entitlement.hasAccess) {
+    return (
+      <div className="space-y-6">
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
+            Clinical skills
+          </h1>
+          <p className="mt-2.5 max-w-prose text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            Bedside competency walkthroughs are part of the premium NurseNest study experience.
+          </p>
+        </div>
+        <SubscriptionPaywall context="dashboard" />
+      </div>
+    );
+  }
+
   const defaultProgressMap = defaultClinicalSkillsProgressMap();
   const progressMap = userId
     ? await withStartupBudget(loadClinicalSkillProgressMap(userId), defaultProgressMap, "progress_map")
