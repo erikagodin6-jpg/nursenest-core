@@ -12,7 +12,7 @@ import {
   GraduationCap,
   HeartPulse,
   LineChart,
-  MonitorHeart,
+  Monitor,
   ShieldCheck,
   Siren,
   Stethoscope,
@@ -86,7 +86,7 @@ type ModeKey =
 const MODES: Array<{ key: ModeKey; label: string; icon: typeof Activity }> = [
   { key: "detective", label: "Detective", icon: Stethoscope },
   { key: "compare", label: "Compare", icon: GitCompare },
-  { key: "telemetry", label: "Telemetry Shift", icon: MonitorHeart },
+  { key: "telemetry", label: "Telemetry Shift", icon: Monitor },
   { key: "deterioration", label: "Deterioration", icon: Siren },
   { key: "readiness", label: "Readiness", icon: BarChart3 },
   { key: "clearances", label: "Clearances", icon: ShieldCheck },

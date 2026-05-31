@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "30d5fa4dc0bb0634c8a266672806b2b45076b0baf24fa2a09b6973556896e43c",
-  "generatedAt": "2026-05-30T03:55:56.291Z",
+  "fingerprint": "d6dba1dea9066a5848b618edb3a4cf76070ca6524a1bb62374e759fffdf94618",
+  "generatedAt": "2026-05-31T07:36:39.825Z",
   "inputs": [
     {
       "type": "file",
@@ -154,7 +154,15 @@
     },
     {
       "type": "file",
+      "path": "src/app/(admin)/admin/competency-framework/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(admin)/admin/content-bulk/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/content-command-center/page.tsx"
     },
     {
       "type": "file",
@@ -182,11 +190,19 @@
     },
     {
       "type": "file",
+      "path": "src/app/(admin)/admin/conversion-intelligence/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(admin)/admin/country-exam-readiness/page.tsx"
     },
     {
       "type": "file",
       "path": "src/app/(admin)/admin/courses/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/curriculum-coverage/page.tsx"
     },
     {
       "type": "file",
@@ -235,6 +251,18 @@
     {
       "type": "file",
       "path": "src/app/(admin)/admin/generation/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/global-expansion/hubs/[countrySlug]/[profession]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/growth-revenue-command-center/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/hotspots/page.tsx"
     },
     {
       "type": "file",
@@ -323,6 +351,10 @@
     {
       "type": "file",
       "path": "src/app/(admin)/admin/modules/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/navigation-compliance/page.tsx"
     },
     {
       "type": "file",
@@ -426,6 +458,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/(admin)/admin/revenue-alerts/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/revenue-protection/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(admin)/admin/scope-compliance/page.tsx"
     },
     {
@@ -522,6 +562,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/formula-sheet/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/page.tsx"
     },
     {
@@ -570,7 +614,23 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/bookmarks/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/bookmarks/my-question-bookmarks-client.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/bookmarks/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/account/cat-history/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/competency-passport/page.tsx"
     },
     {
       "type": "file",
@@ -583,6 +643,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/account/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/missed-question-journal/page.tsx"
     },
     {
       "type": "file",
@@ -599,6 +663,18 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/account/motivation/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/notebook/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/notebook/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/notebook/personal-study-notebook-client.tsx"
     },
     {
       "type": "file",
@@ -698,6 +774,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-image-library/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-reasoning/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/clinical-scenarios/layout.tsx"
     },
     {
@@ -747,6 +831,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/error.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/exam-day/page.tsx"
     },
     {
       "type": "file",
@@ -866,6 +954,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/learning-ecosystem/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/lessons/[id]/error.tsx"
     },
     {
@@ -911,6 +1003,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/med-calculations/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/np/page.tsx"
     },
     {
       "type": "file",
@@ -1126,6 +1222,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/topics/[topicKey]/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/error.tsx"
     },
     {
@@ -1207,6 +1307,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/modules/ecg/basic/worksheets/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/interactive/page.tsx"
     },
     {
       "type": "file",
@@ -1326,6 +1430,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/[lessonSlug]/loading.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/[lessonSlug]/page.tsx"
     },
     {
@@ -1438,6 +1546,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/admissions/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/advanced-ecg-nursing/12-lead-stemi/page.tsx"
     },
     {
@@ -1502,6 +1614,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/allied-health/[slug]/career/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/allied-health/[slug]/interview-questions/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/allied-health/[slug]/lessons/[lessonSlug]/page.tsx"
     },
     {
@@ -1523,6 +1643,18 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/allied-health/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/allied-health/[slug]/placement-guide/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/allied-health/[slug]/skills/[skillSlug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/allied-health/[slug]/study-guide/page.tsx"
     },
     {
       "type": "file",
@@ -1910,6 +2042,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/debug/lessons/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/disclaimer/page.tsx"
     },
     {
@@ -2055,6 +2191,14 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/germany/[topic]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/healthcare/[category]/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/healthcare/page.tsx"
     },
     {
       "type": "file",
@@ -3450,6 +3594,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/revenue-alerts/test/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/revenue-protection/users/[userId]/chargeback-package/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/scalability-report/route.ts"
     },
     {
@@ -3958,6 +4110,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/learner/lesson-loading-errors/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/learner/lesson-topic-quiz/route.ts"
     },
     {
@@ -3970,11 +4126,19 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/learner/notebook/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/learner/notes/recent/route.ts"
     },
     {
       "type": "file",
       "path": "src/app/api/learner/notes/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/learner/np-certification/route.ts"
     },
     {
       "type": "file",
@@ -4019,6 +4183,10 @@
     {
       "type": "file",
       "path": "src/app/api/learner/protection-telemetry/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/learner/question-bookmarks/route.ts"
     },
     {
       "type": "file",
@@ -5418,6 +5586,14 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/app-lessons-catalog-fallback.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-lessons-catalog-fallback.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/app-lessons-hub-list-source.test.ts"
     },
     {
@@ -5831,6 +6007,26 @@
     {
       "type": "file",
       "path": "src/lib/lessons/lesson-sound-waveform-synth.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-system-inventory-audit.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-system-inventory-audit.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-system-marketing-filter.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-system-navigation.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-system-navigation.ts"
     },
     {
       "type": "file",
@@ -6798,7 +6994,27 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/ai-search-llm-citation-optimization-engine.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/ai-search-llm-citation-optimization-engine.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/allied-breadcrumbs.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/allied-health-authority-program.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/allied-health-authority-program.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/allied-health-faq-schema.ts"
     },
     {
       "type": "file",
@@ -6862,6 +7078,14 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/clinical-placement-survival-center.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/clinical-placement-survival-center.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/clinical-serp-patterns.contract.test.ts"
     },
     {
@@ -6886,7 +7110,23 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/content-freshness-evergreen-authority-engine.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/content-freshness-evergreen-authority-engine.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/conversion-blog-posts.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/eeat-entity-authority-architecture.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/eeat-entity-authority-architecture.ts"
     },
     {
       "type": "file",
@@ -6938,11 +7178,75 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/healthcare-authority-command-center.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-authority-command-center.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-employer-workplace-intelligence.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-employer-workplace-intelligence.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/healthcare-exam-authority-architecture.contract.test.ts"
     },
     {
       "type": "file",
       "path": "src/lib/seo/healthcare-exam-authority-architecture.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-glossary-authority-engine.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-glossary-authority-engine.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-interview-authority-engine.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-interview-authority-engine.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-knowledge-graph-entity-network.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-knowledge-graph-entity-network.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-salary-workforce-authority-engine.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-salary-workforce-authority-engine.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-school-directory-authority-engine.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-school-directory-authority-engine.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-search-intent-domination-engine.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-search-intent-domination-engine.ts"
     },
     {
       "type": "file",
@@ -7370,6 +7674,14 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/search-console-optimization-engine.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/search-console-optimization-engine.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/seo-authority-clusters.contract.test.ts"
     },
     {
@@ -7530,13 +7842,29 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/thin-content-eradication-engine.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/thin-content-eradication-engine.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/topic-hub-educational-intros.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/visitor-growth-acquisition-engine.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/visitor-growth-acquisition-engine.ts"
     }
   ],
   "outputs": [
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 23280
+    "durationMs": 23159
   }
 }

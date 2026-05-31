@@ -3,6 +3,41 @@ import { z } from "zod";
 import { ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN } from "@/lib/admin/blog-generate-ai-constants";
 import { GLOBAL_LOCALE_CODES, GLOBAL_REGION_SLUGS } from "@/lib/i18n/global-regions";
 
+const BLOG_POST_TEMPLATE_ENUM = {
+  HOW_TO_PASS: "HOW_TO_PASS",
+  TOPIC_EXPLAINED: "TOPIC_EXPLAINED",
+  TOP_MISTAKES: "TOP_MISTAKES",
+  PRACTICE_QUESTIONS: "PRACTICE_QUESTIONS",
+  STUDY_PLAN: "STUDY_PLAN",
+  EXAM_GUIDE: "EXAM_GUIDE",
+  MEDICATION_REVIEW: "MEDICATION_REVIEW",
+  LAB_VALUES_GUIDE: "LAB_VALUES_GUIDE",
+  DISEASE_PROCESS_EXPLAINER: "DISEASE_PROCESS_EXPLAINER",
+  PRIORITIZATION_ARTICLE: "PRIORITIZATION_ARTICLE",
+  COMPARISON_ARTICLE: "COMPARISON_ARTICLE",
+  CHECKLIST_ARTICLE: "CHECKLIST_ARTICLE",
+  FAQ_STYLE: "FAQ_STYLE",
+  GLOSSARY: "GLOSSARY",
+} as const satisfies Record<BlogPostTemplate, BlogPostTemplate>;
+
+const BLOG_POST_INTENT_ENUM = {
+  INFORMATIONAL: "INFORMATIONAL",
+  EXAM_PREP: "EXAM_PREP",
+  STUDY_STRATEGY: "STUDY_STRATEGY",
+  COMPARISON: "COMPARISON",
+  CONVERSION: "CONVERSION",
+  PRACTICE_QUESTIONS: "PRACTICE_QUESTIONS",
+  CHECKLIST: "CHECKLIST",
+  CONCEPT_EXPLAINER: "CONCEPT_EXPLAINER",
+} as const satisfies Record<BlogPostIntent, BlogPostIntent>;
+
+const BLOG_FUNNEL_STAGE_ENUM = {
+  AWARENESS: "AWARENESS",
+  CONSIDERATION: "CONSIDERATION",
+  CONVERSION: "CONVERSION",
+  RETENTION: "RETENTION",
+} as const satisfies Record<BlogFunnelStage, BlogFunnelStage>;
+
 const adminBlogTopicSchema = z.preprocess(
   (v) => (typeof v === "string" ? v.replace(/\s+/g, " ").trim() : v),
   z.string().min(3, "Topic must be at least 3 non-whitespace characters.").max(500),
@@ -14,9 +49,9 @@ export const blogSimpleAiDraftBodySchema = z.object({
   keywords: z.string().max(400).optional(),
   exam: z.string().min(2).max(80),
   country: z.enum(["US", "CA", "unspecified"]).optional(),
-  template: z.nativeEnum(BlogPostTemplate),
-  intent: z.nativeEnum(BlogPostIntent).optional(),
-  funnelStage: z.nativeEnum(BlogFunnelStage).optional(),
+  template: z.nativeEnum(BLOG_POST_TEMPLATE_ENUM),
+  intent: z.nativeEnum(BLOG_POST_INTENT_ENUM).optional(),
+  funnelStage: z.nativeEnum(BLOG_FUNNEL_STAGE_ENUM).optional(),
   tone: z.enum(["professional", "supportive", "direct"]).optional(),
   includeImage: z.boolean().optional(),
   includeAiImage: z.boolean().optional(),

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "lesson_indexes",
-  "fingerprint": "335df5e6e9f71df06e342372f864ab63f57817645d5ad38a8e50a757c87c8ef0",
-  "generatedAt": "2026-05-28T19:51:55.689Z",
+  "fingerprint": "26771308b6de277d3bef134d0f056d3dbd6debac722e5216a44ca15ef197abcc",
+  "generatedAt": "2026-05-31T07:36:16.370Z",
   "inputs": [
     {
       "type": "file",
@@ -258,6 +258,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/allied/allied-learning-parity-framework.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/allied/allied-lesson-access.ts"
     },
     {
@@ -411,6 +415,14 @@
     {
       "type": "file",
       "path": "src/lib/lessons/allied-pathway-lesson-structural-normalization.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-lessons-catalog-fallback.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-lessons-catalog-fallback.ts"
     },
     {
       "type": "file",
@@ -827,6 +839,26 @@
     {
       "type": "file",
       "path": "src/lib/lessons/lesson-sound-waveform-synth.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-system-inventory-audit.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-system-inventory-audit.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-system-marketing-filter.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-system-navigation.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-system-navigation.ts"
     },
     {
       "type": "file",
@@ -1799,7 +1831,7 @@
   ],
   "metadata": {
     "verifyMode": "deep",
-    "buildLessonIndexesMs": 136674,
-    "verifyLessonIndexesMs": 136278
+    "buildLessonIndexesMs": 80750,
+    "verifyLessonIndexesMs": 91555
   }
 }
