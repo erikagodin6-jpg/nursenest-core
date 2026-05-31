@@ -84,18 +84,18 @@ const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta nn-text-on-solid-fill";
 
 /** v4 primary links: text-first with soft state chrome, not a bordered pill wall. */
 const NAV_LINK_CLASS =
-  "nn-marketing-nav-link inline-flex h-[30px] shrink-0 items-center justify-center whitespace-nowrap rounded-full px-2.5 text-center text-[0.875rem] font-medium leading-none tracking-normal xl:px-3";
+  "nn-marketing-nav-link inline-flex h-[34px] shrink-0 items-center justify-center whitespace-nowrap border-b-2 border-transparent px-1.5 text-center text-[0.875rem] font-medium leading-none tracking-normal xl:px-2";
 /** Muted Learn / Track in the public “Learn → Practice → Track” row. */
 const NAV_FLOW_SECONDARY_CLASS = `${NAV_LINK_CLASS} text-[var(--nav-muted)]`;
 /** Core marketing destinations (Pricing, Blog, …) — keep on `nav-fg` for dark-mode contrast. */
 const NAV_MARKETING_MORE_CLASS = `${NAV_LINK_CLASS} nn-marketing-nav-link--primary-text text-[var(--nav-fg)]`;
 const NAV_TIER_LINK_CLASS =
-  "nn-marketing-nav-link inline-flex min-h-[28px] items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-center text-[0.8125rem] font-medium leading-[1.2] tracking-normal transition-colors";
+  "nn-marketing-nav-link inline-flex min-h-[32px] items-center justify-center whitespace-nowrap border-b-2 border-transparent px-1.5 text-center text-[0.8125rem] font-medium leading-[1.2] tracking-normal transition-colors";
 const HEADER_SECONDARY_ACTION_CLASS =
-  "nav-item inline-flex min-h-[38px] items-center justify-center rounded-full border border-[var(--nav-border)] px-3.5 py-1.5 text-[0.875rem] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]";
+  "nav-item inline-flex min-h-[38px] items-center justify-center rounded-lg border border-transparent px-2.5 py-1.5 text-[0.875rem] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]";
 /** Desktop guest Log In — secondary outline; same min-height, radius, and padding rhythm as Start Free. */
 const HEADER_DESKTOP_LOGIN_OUTLINE_CLASS =
-  "nav-item nn-header-login-receded inline-flex min-h-[38px] shrink-0 items-center justify-center whitespace-nowrap rounded-full border border-[var(--nav-border)] bg-transparent px-3.5 py-1.5 text-[0.875rem] font-medium text-[var(--nav-fg)] shadow-none transition-colors hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]";
+  "nav-item nn-header-login-receded inline-flex min-h-[38px] shrink-0 items-center justify-center whitespace-nowrap rounded-lg border border-transparent bg-transparent px-2.5 py-1.5 text-[0.875rem] font-medium text-[var(--nav-fg)] shadow-none transition-colors hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type HeaderResumeCta = { href: string; label: string } | null;
 type HeaderNavLink = { key: string; href: string; label: string; matchBase: string };
@@ -1278,7 +1278,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   </HeaderNavAnchor>
                   <HeaderNavAnchor
                     href={guestMarketingSignupHref}
-                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-[42px] shrink-0 items-center justify-center whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-[42px] shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Sign up for a NurseNest account"
                     title="Sign up — no credit card required"
@@ -1291,7 +1291,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   <Link
                     href={ADMIN_DASHBOARD_HREF}
                     prefetch={false}
-                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={(e) => { closeMegaBeforeAuthNav(); navigateAdminDashboardHard(e); }}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
@@ -1317,7 +1317,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                 <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
                   <Link
                     href={resumeStudyingCta?.href ?? "/app"}
-                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium sm:px-4`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium sm:px-4`}
                   >
                     {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
@@ -1339,7 +1339,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
                     href={localizeHref(HUB.pricing)}
-                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.pricing"), locale)}

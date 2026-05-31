@@ -118,7 +118,7 @@
     );
 }
 
-/* Tier hub chips — RN / PN / NP / New Grad / Allied each get pink, violet, blue, mint, or rose. */
+/* Tier hub tabs — no decorative pill fills; subtle per-item underline hover only. */
 :is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-nav-v31-tier-inner
@@ -129,8 +129,8 @@
   .nn-marketing-nav-v31-tier-inner
   nav
   a.nn-marketing-tier-chip:nth-child(5n + 1) {
-  border-color: color-mix(in srgb, var(--semantic-chart-1) 30%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-chart-1) 14%, var(--nn-header-primary-bg));
+  border-color: transparent;
+  background: transparent;
 }
 
 :is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
@@ -143,8 +143,8 @@
   .nn-marketing-nav-v31-tier-inner
   nav
   a.nn-marketing-tier-chip:nth-child(5n + 2) {
-  border-color: color-mix(in srgb, var(--semantic-chart-2) 30%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-chart-2) 14%, var(--nn-header-primary-bg));
+  border-color: transparent;
+  background: transparent;
 }
 
 :is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
@@ -157,8 +157,8 @@
   .nn-marketing-nav-v31-tier-inner
   nav
   a.nn-marketing-tier-chip:nth-child(5n + 3) {
-  border-color: color-mix(in srgb, var(--semantic-chart-3) 30%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-chart-3) 14%, var(--nn-header-primary-bg));
+  border-color: transparent;
+  background: transparent;
 }
 
 :is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
@@ -171,8 +171,8 @@
   .nn-marketing-nav-v31-tier-inner
   nav
   a.nn-marketing-tier-chip:nth-child(5n + 4) {
-  border-color: color-mix(in srgb, var(--semantic-chart-4) 30%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-chart-4) 14%, var(--nn-header-primary-bg));
+  border-color: transparent;
+  background: transparent;
 }
 
 :is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
@@ -185,8 +185,8 @@
   .nn-marketing-nav-v31-tier-inner
   nav
   a.nn-marketing-tier-chip:nth-child(5n + 5) {
-  border-color: color-mix(in srgb, var(--semantic-chart-5) 30%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-chart-5) 14%, var(--nn-header-primary-bg));
+  border-color: transparent;
+  background: transparent;
 }
 
 /* Lesson detail shell — hero wash uses three chart hues (matches lesson section bands). */

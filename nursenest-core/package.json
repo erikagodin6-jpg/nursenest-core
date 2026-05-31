@@ -291,6 +291,7 @@
     "build:next:timed": "node scripts/report-build-timing.mjs",
     "audit:build-stability": "node scripts/audit-build-stability.mjs",
     "audit:question-inventory": "npx tsx scripts/audit-question-inventory.mts",
+    "audit:nursing-exam-ecosystem": "npx tsx scripts/audit-nursing-exam-ecosystem.mts",
     "audit:runtime-payloads": "node scripts/audit-runtime-payloads.mjs",
     "audit:runtime-boundaries": "node scripts/audit-runtime-boundaries.mjs",
     "audit:runtime-boundaries:strict": "node scripts/audit-runtime-boundaries.mjs --strict",

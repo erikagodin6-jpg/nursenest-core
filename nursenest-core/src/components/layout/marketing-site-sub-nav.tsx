@@ -23,12 +23,12 @@ function isSubNavActive(strippedPath: string, href: string): boolean {
   return false;
 }
 
-/** Allow wrapping for long German/French/Spanish labels; cap width so pills scroll horizontally instead of stretching. */
+/** Allow wrapping for long German/French/Spanish labels; render as low-noise tabs. */
 const LINK_BASE =
-  "flex min-h-[2.25rem] w-max max-w-[min(100%,13rem)] items-center justify-center whitespace-normal text-balance break-words rounded-full px-2.5 py-1.5 text-[13px] font-medium leading-snug tracking-tight transition-[background,color,box-shadow] duration-200 md:max-w-[15rem] md:px-3.5 md:py-2 md:text-sm";
+  "flex min-h-[2.25rem] w-max max-w-[min(100%,13rem)] items-center justify-center whitespace-normal text-balance break-words border-b-2 border-transparent px-1.5 py-1.5 text-[13px] font-medium leading-snug tracking-tight transition-[border-color,color] duration-200 md:max-w-[15rem] md:px-2 md:py-2 md:text-sm";
 
 /**
- * Pathway sub-navigation — soft editorial tint; pill active state (no harsh tabs).
+ * Pathway sub-navigation — text-first tabs with a single active underline.
  */
 export function MarketingSiteSubNav() {
   const pathname = usePathname() ?? "/";
@@ -71,8 +71,8 @@ export function MarketingSiteSubNav() {
                   href={href}
                   className={`${LINK_BASE} ${
                     active
-                      ? "bg-[color:var(--nn-nav-hover-bg)] text-[color:var(--nn-nav-fg)] shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
-                      : "text-[color:var(--nn-nav-fg)] opacity-75 hover:bg-[color:var(--nn-nav-hover-bg)] hover:opacity-100"
+                      ? "border-[color:var(--nn-nav-fg)] text-[color:var(--nn-nav-fg)]"
+                      : "text-[color:var(--nn-nav-fg)] opacity-75 hover:border-[color:var(--nn-nav-border)] hover:opacity-100"
                   } `}
                   onClick={() =>
                     trackClientEvent(PH.marketingSubNavClick, {

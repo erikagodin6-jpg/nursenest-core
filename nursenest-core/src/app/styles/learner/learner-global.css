@@ -4440,9 +4440,9 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session:has(.nn-cat-exam-ch
   cursor: pointer;
   user-select: none;
   margin-bottom: 0.5rem;
-  border-radius: 0.85rem;
-  border: 1px solid color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--semantic-surface));
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 78%, transparent);
+  background: var(--semantic-surface);
   padding: 0.65rem 0.85rem;
   font-size: 0.72rem;
   font-weight: 750;
@@ -4472,17 +4472,17 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session:has(.nn-cat-exam-ch
   transform: rotate(-135deg);
 }
 .nn-dash-hub-nav-details__summary:hover {
-  border-color: color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+  background: var(--semantic-surface);
 }
 .nn-dash-hub-nav {
   position: relative;
   z-index: 1;
-  border-radius: 1rem;
-  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-info));
-  background: color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface));
-  padding: 0.85rem 0.9rem;
-  box-shadow: var(--semantic-shadow-soft);
+  border-radius: 0;
+  border: 0;
+  background: transparent;
+  padding: 0.25rem 0;
+  box-shadow: none;
 }
 .nn-dash-hub-nav__heading {
   margin: 0 0 0.55rem;
@@ -4498,21 +4498,22 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session:has(.nn-cat-exam-ch
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.75rem;
 }
 .nn-dash-hub-nav__item {
   margin: 0;
 }
 .nn-dash-hub-nav__link {
   display: block;
-  border-radius: 0.65rem;
-  padding: 0.45rem 0.55rem;
+  border-radius: 0;
+  padding: 0.45rem 0 0.4rem;
   font-size: 0.78rem;
   font-weight: 650;
   line-height: 1.35;
   color: var(--semantic-text-secondary);
   text-decoration: none;
-  border: 1px solid transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,
@@ -4520,8 +4521,8 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session:has(.nn-cat-exam-ch
 }
 .nn-dash-hub-nav__link:hover {
   color: var(--semantic-text-primary);
-  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface));
-  border-color: color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-border-soft));
+  background: transparent;
+  border-bottom-color: color-mix(in srgb, var(--semantic-brand) 30%, transparent);
 }
 .nn-dash-hub-nav__link:focus-visible {
   outline: 2px solid color-mix(in srgb, var(--semantic-brand) 42%, transparent);

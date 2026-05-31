@@ -547,16 +547,9 @@ html[data-theme="blossom"]
 :is(html[data-theme="blossom"], html[data-theme="aurora"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-tier-chip {
-  border-color: color-mix(
-    in srgb,
-    var(--semantic-chart-5) 18%,
-    color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft))
-  );
-  background: color-mix(
-    in srgb,
-    var(--semantic-chart-2) 9%,
-    color-mix(in srgb, var(--semantic-chart-5) 7%, var(--nn-header-primary-bg))
-  );
+  border-color: transparent;
+  border-bottom-color: transparent;
+  background: transparent;
 }
 
 :is(html[data-theme="blossom"], html[data-theme="aurora"])
@@ -567,16 +560,9 @@ html[data-theme="blossom"]
 :is(html[data-theme="blossom"], html[data-theme="aurora"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-tier-chip[data-active] {
-  border-color: color-mix(
-    in srgb,
-    var(--semantic-brand) 36%,
-    var(--semantic-info)
-  );
-  background: color-mix(
-    in srgb,
-    var(--semantic-brand) 12%,
-    color-mix(in srgb, var(--semantic-info) 14%, var(--nn-header-primary-bg))
-  );
+  border-color: transparent;
+  border-bottom-color: var(--semantic-brand);
+  background: transparent;
 }
 
 html[data-theme="blossom"] .nn-header-brand-lockup {
@@ -612,16 +598,9 @@ html[data-theme="blossom"]
 html[data-theme="blossom"]
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-tier-chip {
-  border-color: color-mix(
-    in srgb,
-    var(--semantic-chart-1) 20%,
-    color-mix(in srgb, var(--semantic-chart-3) 18%, var(--semantic-border-soft))
-  );
-  background: color-mix(
-    in srgb,
-    var(--semantic-chart-3) 10%,
-    color-mix(in srgb, var(--semantic-chart-1) 8%, var(--nn-header-primary-bg))
-  );
+  border-color: transparent;
+  border-bottom-color: transparent;
+  background: transparent;
 }
 
 html[data-theme="blossom"]
@@ -632,16 +611,9 @@ html[data-theme="blossom"]
 html[data-theme="blossom"]
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-tier-chip:hover {
-  border-color: color-mix(
-    in srgb,
-    var(--semantic-chart-1) 28%,
-    var(--semantic-chart-3)
-  );
-  background: color-mix(
-    in srgb,
-    var(--semantic-chart-1) 12%,
-    color-mix(in srgb, var(--semantic-chart-3) 14%, var(--nn-header-primary-bg))
-  );
+  border-color: transparent;
+  border-bottom-color: color-mix(in srgb, var(--semantic-brand) 34%, transparent);
+  background: transparent;
 }
 
 html[data-theme="blossom"]
@@ -652,16 +624,9 @@ html[data-theme="blossom"]
 html[data-theme="blossom"]
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-tier-chip[data-active] {
-  border-color: color-mix(
-    in srgb,
-    var(--semantic-brand) 40%,
-    var(--semantic-chart-3)
-  );
-  background: color-mix(
-    in srgb,
-    var(--semantic-brand) 14%,
-    color-mix(in srgb, var(--semantic-chart-3) 16%, var(--nn-header-primary-bg))
-  );
+  border-color: transparent;
+  border-bottom-color: var(--semantic-brand);
+  background: transparent;
 }
 
 html[data-theme="blossom"]
