@@ -14,6 +14,7 @@ over raw page count.
 - XML sitemap inclusion: `sitemap-authority-clusters.xml`
 - Dashboard generator: `scripts/generate-authority-content-dashboard.mts`
 - Dashboard output: `docs/content-authority-dashboard.md`
+- Healthcare topical authority network: `docs/healthcare-topical-authority-network.md`
 - Contract tests: `src/lib/authority/healthcare-authority-content-engine.test.ts`
 
 ## Authority Libraries
@@ -96,6 +97,27 @@ Second-wave allied clusters:
 
 Cluster pages must be internally linked to their parent pillar, sibling resources, related clusters, and premium
 NurseNest training surfaces.
+
+## Healthcare Topical Authority Network
+
+Phase 3 extends clusters into a multi-layer knowledge network across:
+
+- Professions
+- Body systems
+- Conditions
+- Learning assets
+- Specialty hubs
+- Allied health hubs
+- Certification hubs
+- Canadian advantage tracks
+
+The executable implementation lives in `buildHealthcareKnowledgeGraph()`, `buildAuthorityScoreEngine()`,
+`detectAuthorityContentGaps()`, and `buildAuthorityUserJourneyNetwork()` inside
+`src/lib/authority/healthcare-authority-content-engine.ts`.
+
+This network connects public authority pages to related lessons, flashcards, questions, simulations, labs, clinical
+skills, care plans, study plans, and clinical reasoning pathways while preserving subscription gating for premium
+training experiences.
 
 ## Programmatic Content Production Pipeline
 

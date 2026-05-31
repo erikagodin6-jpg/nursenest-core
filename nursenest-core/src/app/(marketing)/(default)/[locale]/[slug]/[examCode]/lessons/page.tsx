@@ -77,6 +77,7 @@ import { MarketingLessonsHubStickyStudyChrome } from "@/components/pathway-lesso
 import { MarketingPublicLessonsHubAnonymousUpgradeStrip } from "@/components/pathway-lessons/marketing-public-lessons-hub-anonymous-upgrade-strip";
 import { MarketingLessonsHubRetryableErrorShell } from "@/components/pathway-lessons/marketing-lessons-hub-retryable-error-shell";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
+import { LessonRuntimeTraceClient } from "@/components/pathway-lessons/lesson-runtime-trace-client";
 import { LessonHubFullLessonLinkNav } from "@/components/pathway-lessons/lesson-hub-full-lesson-link-nav";
 import { MarketingLessonsHubCategoryFirstIndex } from "@/components/pathway-lessons/marketing-lessons-hub-category-first-index";
 import {
@@ -384,6 +385,12 @@ export default async function PathwayLessonsHubPage({
   const topicSlugNorm = normalizeMarketingLessonsHubTopicSlug(
     typeof sp.topicSlug === "string" ? sp.topicSlug : undefined,
   );
+  const topicSlugCandidates = topicSlugNorm ? lessonSystemTopicSlugCandidates(topicSlugNorm) : [];
+  const topicSlugsForList = topicSlugNorm
+    ? topicSlugCandidates.length > 0
+      ? topicSlugCandidates
+      : [topicSlugNorm]
+    : undefined;
   const rawAlliedProf =
     typeof sp.alliedProfession === "string" ? sp.alliedProfession.trim().toLowerCase() : "";
   const alliedProfessionResolved =
@@ -408,6 +415,17 @@ export default async function PathwayLessonsHubPage({
   const routePathLessons = `${pathname}/lessons`;
   const isDefaultUnfilteredMarketingLessonsHub =
     !qEffective && !topicSlugNorm && !alliedProfessionKey;
+
+  if (topicSlugNorm) {
+    safeServerLog("pathway_lessons", "lesson_system_runtime_trace", {
+      step: "route_mounted",
+      pathway_id: pathway.id,
+      route_pathname: routePathLessons,
+      topic_slug: topicSlugNorm,
+      topic_slug_candidates: topicSlugsForList?.join(",") ?? "",
+      timestamp_ms: Date.now(),
+    });
+  }
 
   let listOpts: MarketingHubLessonsListOptions | undefined;
   if (alliedProfessionResolved && isAlliedMarketingCorePathwayId(pathway.id)) {
@@ -461,6 +479,15 @@ export default async function PathwayLessonsHubPage({
   console.error(`[lessons-perf] marketing_hub_render_start pathway=${pathway.id} locale=${lessonContentLocale} page=${pageRequested}`);
 
   const hubLoadT0 = performance.now();
+  if (topicSlugNorm) {
+    safeServerLog("pathway_lessons", "lesson_system_runtime_trace", {
+      step: "loader_executed",
+      pathway_id: pathway.id,
+      route_pathname: routePathLessons,
+      topic_slug: topicSlugNorm,
+      timestamp_ms: Date.now(),
+    });
+  }
   const taxonomyClustersPromise =
     alliedProfessionResolved && isAlliedMarketingCorePathwayId(pathway.id)
       ? listAlliedProfessionTaxonomyClustersForPublicHub(
@@ -495,6 +522,20 @@ export default async function PathwayLessonsHubPage({
       },
     ),
   ]);
+  if (topicSlugNorm) {
+    safeServerLog("pathway_lessons", "lesson_system_runtime_trace", {
+      step: "query_completed",
+      pathway_id: pathway.id,
+      route_pathname: routePathLessons,
+      topic_slug: topicSlugNorm,
+      rows_returned: hubAggregatesBundle.pageResult.total,
+      lesson_ids_returned: hubAggregatesBundle.pageResult.items
+        .slice(0, 20)
+        .map((lesson) => lesson.id)
+        .join(","),
+      timestamp_ms: Date.now(),
+    });
+  }
 
   const {
     pageResult,
@@ -700,6 +741,12 @@ export default async function PathwayLessonsHubPage({
     const errRenderable = pageResult.renderableAll ?? pageResult.items;
     return (
       <>
+        <LessonRuntimeTraceClient
+          pathwayId={pathway.id}
+          routePathname={routePathLessons}
+          topicSlug={topicSlugNorm}
+          rowsReturned={pageResult.total}
+        />
         <MarketingHubSmokeDiagnosticsJson
           payload={{
             surface: "marketing_pathway_lessons",
@@ -1418,15 +1465,22 @@ export default async function PathwayLessonsHubPage({
   }
 
   return (
-    <LessonsPageShell
-      title={heroTitle}
-      subtitle={heroSubtitle}
-      eyebrow={pathway.shortName.trim() || pathway.displayName}
-      pathwayTrack={pathway.roleTrack}
-      toolbar={toolbar}
-      heroPrimaryCta={subscriberHeroCta ?? anonymousHeroCta}
-      backLink={{ label: `${examName} Overview`, href: overviewHref }}
-    >
+    <>
+      <LessonRuntimeTraceClient
+        pathwayId={pathway.id}
+        routePathname={routePathLessons}
+        topicSlug={topicSlugNorm}
+        rowsReturned={pageResult.total}
+      />
+      <LessonsPageShell
+        title={heroTitle}
+        subtitle={heroSubtitle}
+        eyebrow={pathway.shortName.trim() || pathway.displayName}
+        pathwayTrack={pathway.roleTrack}
+        toolbar={toolbar}
+        heroPrimaryCta={subscriberHeroCta ?? anonymousHeroCta}
+        backLink={{ label: `${examName} Overview`, href: overviewHref }}
+      >
       <MarketingHubSmokeDiagnosticsJson
         payload={{
           surface: "marketing_pathway_lessons",
@@ -1599,7 +1653,8 @@ export default async function PathwayLessonsHubPage({
           { label: "Exam Overview", href: overviewHref },
         ]}
       />
-    </LessonsPageShell>
+      </LessonsPageShell>
+    </>
   );
   } finally {
     lessonsPerfMark("route_end", {

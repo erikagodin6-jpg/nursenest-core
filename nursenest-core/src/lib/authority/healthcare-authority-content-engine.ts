@@ -349,6 +349,7 @@ export type AuthorityLearningAssetType =
   | "pharmacology"
   | "care-plans"
   | "concept-maps"
+  | "study-plans"
   | "clinical-reasoning-pathways";
 
 export type AuthorityNetworkNodeType =
@@ -492,6 +493,61 @@ export const SEO_MONETIZATION_GUARDRAILS = {
   conversionPrinciple:
     "Public content answers what this is. Premium content answers whether the learner can actually perform it.",
 } as const;
+
+export const AUTHORITY_LAYER_PROFESSIONS: Array<{ id: AuthorityLayerProfession; label: string }> = [
+  { id: "nursing", label: "Nursing" },
+  { id: "rpn-lpn", label: "RPN/LPN" },
+  { id: "np", label: "NP" },
+  { id: "rt", label: "RT" },
+  { id: "paramedic", label: "Paramedic" },
+  { id: "ot", label: "OT" },
+  { id: "pt", label: "PT" },
+  { id: "mlt", label: "MLT" },
+  { id: "psw", label: "PSW" },
+];
+
+export const AUTHORITY_BODY_SYSTEMS: Array<{ id: AuthorityBodySystem; label: string }> = [
+  { id: "cardiovascular", label: "Cardiovascular" },
+  { id: "respiratory", label: "Respiratory" },
+  { id: "neurology", label: "Neurology" },
+  { id: "endocrine", label: "Endocrine" },
+  { id: "renal", label: "Renal" },
+  { id: "gi", label: "GI" },
+  { id: "hematology", label: "Hematology" },
+  { id: "oncology", label: "Oncology" },
+  { id: "mental-health", label: "Mental Health" },
+  { id: "pediatrics", label: "Pediatrics" },
+  { id: "maternal-child", label: "Maternal Child" },
+];
+
+export const AUTHORITY_CONDITION_PILLARS = [
+  "Heart Failure",
+  "COPD",
+  "Stroke",
+  "Diabetes",
+  "Sepsis",
+  "AKI",
+  "CKD",
+  "AFib",
+  "Pneumonia",
+  "MI",
+] as const;
+
+export const AUTHORITY_LEARNING_ASSET_TYPES: Array<{ id: AuthorityLearningAssetType; label: string }> = [
+  { id: "lessons", label: "Lessons" },
+  { id: "flashcards", label: "Flashcards" },
+  { id: "questions", label: "Questions" },
+  { id: "cat", label: "CAT" },
+  { id: "ngn", label: "NGN" },
+  { id: "simulations", label: "Simulations" },
+  { id: "clinical-skills", label: "Clinical Skills" },
+  { id: "labs", label: "Labs" },
+  { id: "pharmacology", label: "Pharmacology" },
+  { id: "care-plans", label: "Care Plans" },
+  { id: "concept-maps", label: "Concept Maps" },
+  { id: "study-plans", label: "Study Plans" },
+  { id: "clinical-reasoning-pathways", label: "Clinical Reasoning Pathways" },
+];
 
 export const CONTENT_PRODUCTION_WORKFLOW: ContentProductionWorkflowStage[] = [
   "keyword_opportunity",
@@ -1086,6 +1142,290 @@ export const AUTHORITY_TOPIC_CLUSTERS: AuthorityTopicCluster[] = [
     ["MLT Professional Practice", "professional-practice"],
   ], ["sepsis", "diabetes", "ckd"]),
 ];
+
+export const SPECIALTY_AUTHORITY_HUBS: AuthoritySpecialtyHub[] = [
+  {
+    id: "cardiology",
+    title: "Cardiology Hub",
+    canonicalPath: "/healthcare/hubs/cardiology",
+    systemIds: ["cardiovascular"],
+    clusterIds: ["heart-failure", "atrial-fibrillation", "myocardial-infarction"],
+    assetTypes: ["lessons", "flashcards", "questions", "cat", "ngn", "simulations", "clinical-skills", "labs", "pharmacology", "care-plans", "clinical-reasoning-pathways"],
+    priorityTopics: ["Heart Failure", "AFib", "MI", "BNP", "Troponin", "Furosemide"],
+  },
+  {
+    id: "respiratory",
+    title: "Respiratory Hub",
+    canonicalPath: "/healthcare/hubs/respiratory",
+    systemIds: ["respiratory"],
+    clusterIds: ["copd", "pneumonia", "respiratory-therapy"],
+    assetTypes: ["lessons", "flashcards", "questions", "ngn", "simulations", "clinical-skills", "labs", "pharmacology", "care-plans", "clinical-reasoning-pathways"],
+    priorityTopics: ["COPD", "Pneumonia", "ABGs", "Oxygen Therapy", "Ventilator Settings"],
+  },
+  {
+    id: "critical-care",
+    title: "Critical Care Hub",
+    canonicalPath: "/healthcare/hubs/critical-care",
+    systemIds: ["cardiovascular", "respiratory", "renal"],
+    clusterIds: ["sepsis", "aki", "heart-failure", "respiratory-therapy"],
+    assetTypes: ["lessons", "questions", "ngn", "simulations", "clinical-skills", "labs", "pharmacology", "clinical-reasoning-pathways"],
+    priorityTopics: ["Sepsis", "AKI", "ARDS", "Shock", "Mechanical Ventilation"],
+  },
+  {
+    id: "emergency",
+    title: "Emergency Hub",
+    canonicalPath: "/healthcare/hubs/emergency",
+    systemIds: ["cardiovascular", "respiratory", "neurology"],
+    clusterIds: ["sepsis", "myocardial-infarction", "stroke", "paramedicine"],
+    assetTypes: ["lessons", "questions", "ngn", "simulations", "clinical-skills", "labs", "pharmacology", "clinical-reasoning-pathways"],
+    priorityTopics: ["Primary Survey", "Sepsis", "Stroke", "MI", "Trauma Assessment"],
+  },
+  {
+    id: "mental-health",
+    title: "Mental Health Hub",
+    canonicalPath: "/healthcare/hubs/mental-health",
+    systemIds: ["mental-health"],
+    clusterIds: [],
+    assetTypes: ["lessons", "flashcards", "questions", "ngn", "simulations", "care-plans", "clinical-reasoning-pathways"],
+    priorityTopics: ["Therapeutic Communication", "Safety", "Crisis Assessment", "Psychopharmacology"],
+  },
+  {
+    id: "maternal-child",
+    title: "Maternal Child Hub",
+    canonicalPath: "/healthcare/hubs/maternal-child",
+    systemIds: ["maternal-child", "pediatrics"],
+    clusterIds: [],
+    assetTypes: ["lessons", "flashcards", "questions", "ngn", "simulations", "clinical-skills", "care-plans", "clinical-reasoning-pathways"],
+    priorityTopics: ["Prenatal Care", "Postpartum Safety", "Newborn Assessment", "Pediatric Emergencies"],
+  },
+  {
+    id: "pediatrics",
+    title: "Pediatrics Hub",
+    canonicalPath: "/healthcare/hubs/pediatrics",
+    systemIds: ["pediatrics"],
+    clusterIds: [],
+    assetTypes: ["lessons", "flashcards", "questions", "ngn", "simulations", "clinical-skills", "care-plans", "clinical-reasoning-pathways"],
+    priorityTopics: ["Growth And Development", "Pediatric Assessment", "Medication Safety", "Family Education"],
+  },
+  {
+    id: "community-care",
+    title: "Community Care Hub",
+    canonicalPath: "/healthcare/hubs/community-care",
+    systemIds: ["cardiovascular", "respiratory", "endocrine", "mental-health"],
+    clusterIds: ["heart-failure", "copd", "diabetes"],
+    assetTypes: ["lessons", "flashcards", "questions", "clinical-skills", "care-plans", "concept-maps", "clinical-reasoning-pathways"],
+    priorityTopics: ["Patient Education", "Chronic Disease Management", "Home Safety", "Health Promotion"],
+  },
+];
+
+const ALLIED_HUB_SECTIONS = [
+  "Career Guides",
+  "Skills",
+  "Certification",
+  "Clinical Placement",
+  "Interview Preparation",
+  "Case Studies",
+  "Clinical Reasoning",
+  "Professional Practice",
+];
+
+export const ALLIED_HEALTH_AUTHORITY_HUBS: AuthorityAlliedHub[] = [
+  {
+    profession: "rt",
+    title: "Respiratory Therapy Hub",
+    canonicalPath: "/healthcare/allied/respiratory-therapy",
+    sections: ALLIED_HUB_SECTIONS,
+    clusterIds: ["respiratory-therapy"],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "clinical-skills", "labs", "clinical-reasoning-pathways"],
+  },
+  {
+    profession: "paramedic",
+    title: "Paramedic Hub",
+    canonicalPath: "/healthcare/allied/paramedicine",
+    sections: ALLIED_HUB_SECTIONS,
+    clusterIds: ["paramedicine"],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "clinical-skills", "pharmacology", "clinical-reasoning-pathways"],
+  },
+  {
+    profession: "ot",
+    title: "Occupational Therapy Hub",
+    canonicalPath: "/healthcare/allied/occupational-therapy",
+    sections: ALLIED_HUB_SECTIONS,
+    clusterIds: ["occupational-therapy"],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "clinical-skills", "concept-maps", "clinical-reasoning-pathways"],
+  },
+  {
+    profession: "pt",
+    title: "Physiotherapy Hub",
+    canonicalPath: "/healthcare/allied/physiotherapy",
+    sections: ALLIED_HUB_SECTIONS,
+    clusterIds: ["physiotherapy"],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "clinical-skills", "concept-maps", "clinical-reasoning-pathways"],
+  },
+  {
+    profession: "mlt",
+    title: "Medical Laboratory Technology Hub",
+    canonicalPath: "/healthcare/allied/medical-laboratory-technology",
+    sections: ALLIED_HUB_SECTIONS,
+    clusterIds: ["medical-laboratory-technology"],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "labs", "clinical-reasoning-pathways"],
+  },
+  {
+    profession: "psw",
+    title: "PSW Hub",
+    canonicalPath: "/healthcare/allied/psw",
+    sections: ALLIED_HUB_SECTIONS,
+    clusterIds: [],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "clinical-skills", "care-plans"],
+  },
+];
+
+export const CERTIFICATION_AUTHORITY_HUBS: AuthorityCertificationHub[] = [
+  {
+    id: "nclex-rn",
+    title: "NCLEX-RN Hub",
+    profession: "nursing",
+    market: "Canada",
+    canonicalPath: "/healthcare/certifications/nclex-rn",
+    clusterIds: ["heart-failure", "copd", "diabetes", "sepsis", "stroke"],
+    assetTypes: ["lessons", "flashcards", "questions", "cat", "ngn", "simulations", "clinical-reasoning-pathways"],
+  },
+  {
+    id: "rex-pn",
+    title: "REx-PN Hub",
+    profession: "rpn-lpn",
+    market: "Canada",
+    canonicalPath: "/healthcare/certifications/rex-pn",
+    clusterIds: ["heart-failure", "copd", "diabetes", "pneumonia"],
+    assetTypes: ["lessons", "flashcards", "questions", "ngn", "simulations", "clinical-reasoning-pathways"],
+  },
+  {
+    id: "cnple",
+    title: "CNPLE Hub",
+    profession: "np",
+    market: "Canada",
+    canonicalPath: "/healthcare/certifications/cnple",
+    clusterIds: ["heart-failure", "diabetes", "ckd"],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "pharmacology", "care-plans", "clinical-reasoning-pathways"],
+  },
+  {
+    id: "fnp",
+    title: "FNP Hub",
+    profession: "np",
+    market: "United States",
+    canonicalPath: "/healthcare/certifications/fnp",
+    clusterIds: ["heart-failure", "copd", "diabetes", "pneumonia"],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "pharmacology", "care-plans", "clinical-reasoning-pathways"],
+  },
+  {
+    id: "pmhnp",
+    title: "PMHNP Hub",
+    profession: "np",
+    market: "United States",
+    canonicalPath: "/healthcare/certifications/pmhnp",
+    clusterIds: [],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "pharmacology", "care-plans", "clinical-reasoning-pathways"],
+  },
+  {
+    id: "agpcnp",
+    title: "AGPCNP Hub",
+    profession: "np",
+    market: "United States",
+    canonicalPath: "/healthcare/certifications/agpcnp",
+    clusterIds: ["heart-failure", "copd", "ckd", "atrial-fibrillation"],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "pharmacology", "care-plans", "clinical-reasoning-pathways"],
+  },
+  {
+    id: "whnp",
+    title: "WHNP Hub",
+    profession: "np",
+    market: "United States",
+    canonicalPath: "/healthcare/certifications/whnp",
+    clusterIds: [],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "pharmacology", "care-plans", "clinical-reasoning-pathways"],
+  },
+  {
+    id: "pnp-pc",
+    title: "PNP-PC Hub",
+    profession: "np",
+    market: "United States",
+    canonicalPath: "/healthcare/certifications/pnp-pc",
+    clusterIds: [],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "pharmacology", "care-plans", "clinical-reasoning-pathways"],
+  },
+  {
+    id: "future-allied-certifications",
+    title: "Future Allied Certification Hubs",
+    profession: "rt",
+    market: "Future Allied",
+    canonicalPath: "/healthcare/certifications/allied",
+    clusterIds: ["respiratory-therapy", "paramedicine", "medical-laboratory-technology"],
+    assetTypes: ["lessons", "flashcards", "questions", "simulations", "clinical-skills", "labs", "clinical-reasoning-pathways"],
+  },
+];
+
+export const CANADIAN_ADVANTAGE_NETWORK: CanadianAdvantageNetworkEntry[] = [
+  {
+    id: "canadian-nursing",
+    title: "Canadian Nursing",
+    profession: "nursing",
+    opportunity: "Own Canadian NCLEX-RN, REx-PN, clinical placement, and provincial practice content that global competitors under-serve.",
+    priority: "highest",
+    relatedHubIds: ["nclex-rn", "rex-pn", "community-care"],
+  },
+  {
+    id: "canadian-np",
+    title: "Canadian NP",
+    profession: "np",
+    opportunity: "Build CNPLE and Canadian advanced practice authority with leadership, prescribing, health promotion, and population-health coverage.",
+    priority: "highest",
+    relatedHubIds: ["cnple"],
+  },
+  {
+    id: "canadian-rt",
+    title: "Canadian RT",
+    profession: "rt",
+    opportunity: "Create respiratory therapy career, placement, ABG, ventilation, and airway authority for Canadian learners.",
+    priority: "high",
+    relatedHubIds: ["respiratory", "respiratory-therapy"],
+  },
+  {
+    id: "canadian-paramedic",
+    title: "Canadian Paramedic",
+    profession: "paramedic",
+    opportunity: "Own Canadian EMS career, placement, interview, trauma, and emergency assessment discovery traffic.",
+    priority: "high",
+    relatedHubIds: ["emergency", "paramedic"],
+  },
+  {
+    id: "canadian-allied-health",
+    title: "Canadian Allied Health",
+    profession: "mlt",
+    opportunity: "Connect MLT, OT, PT, PSW, and placement success content into allied health conversion journeys.",
+    priority: "high",
+    relatedHubIds: ["medical-laboratory-technology", "occupational-therapy", "physiotherapy", "psw"],
+  },
+];
+
+const AUTHORITY_RELATIONSHIP_SEEDS: Record<string, string[]> = {
+  "heart-failure": [
+    "BNP",
+    "Furosemide",
+    "Digoxin",
+    "Pulmonary Edema",
+    "Fluid Overload",
+    "Cardiac Output",
+    "AFib",
+    "Echocardiography",
+    "Heart Failure Care Plans",
+    "Heart Failure Simulations",
+    "Heart Failure NCLEX Questions",
+  ],
+  copd: ["ABGs", "Oxygen Therapy", "Inhalers", "Respiratory Assessment", "COPD Simulation", "COPD Care Plan"],
+  diabetes: ["Insulin", "Blood Glucose Monitoring", "DKA", "HHS", "Diabetes Foot Care", "Diabetes Care Plans"],
+  sepsis: ["Lactate", "Blood Cultures", "Septic Shock", "Fluid Resuscitation", "Antibiotics", "Sepsis Simulation"],
+  stroke: ["FAST Assessment", "Dysphagia Screening", "CT Imaging", "Stroke Rehabilitation", "Stroke Care Plan"],
+};
 
 const DISEASE_REQUIRED_ELEMENTS = [
   "Definition",
@@ -2050,6 +2390,360 @@ export const AUTHORITY_CONTENT_PAGES: AuthorityPage[] = [
     ],
   },
 ];
+
+function authoritySlug(value: string): string {
+  return value.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function addKnowledgeNode(nodes: Map<string, AuthorityKnowledgeNode>, node: AuthorityKnowledgeNode): void {
+  if (!nodes.has(node.id)) nodes.set(node.id, node);
+}
+
+function addKnowledgeEdge(edges: Map<string, AuthorityKnowledgeEdge>, edge: AuthorityKnowledgeEdge): void {
+  edges.set(`${edge.sourceId}->${edge.targetId}:${edge.relationship}`, edge);
+}
+
+export function buildHealthcareKnowledgeGraph(): { nodes: AuthorityKnowledgeNode[]; edges: AuthorityKnowledgeEdge[] } {
+  const nodes = new Map<string, AuthorityKnowledgeNode>();
+  const edges = new Map<string, AuthorityKnowledgeEdge>();
+
+  for (const profession of AUTHORITY_LAYER_PROFESSIONS) {
+    addKnowledgeNode(nodes, {
+      id: `profession:${profession.id}`,
+      label: profession.label,
+      type: "profession",
+      metadata: { layer: 1 },
+    });
+  }
+
+  for (const system of AUTHORITY_BODY_SYSTEMS) {
+    addKnowledgeNode(nodes, {
+      id: `system:${system.id}`,
+      label: system.label,
+      type: "system",
+      metadata: { layer: 2 },
+    });
+    addKnowledgeEdge(edges, {
+      sourceId: "profession:nursing",
+      targetId: `system:${system.id}`,
+      relationship: "covers",
+      strength: "supporting",
+    });
+  }
+
+  for (const condition of AUTHORITY_CONDITION_PILLARS) {
+    const slug = authoritySlug(condition);
+    addKnowledgeNode(nodes, {
+      id: `condition:${slug}`,
+      label: condition,
+      type: "condition",
+      href: `/healthcare/conditions/${slug}`,
+      metadata: { layer: 3 },
+    });
+  }
+
+  for (const asset of AUTHORITY_LEARNING_ASSET_TYPES) {
+    addKnowledgeNode(nodes, {
+      id: `asset:${asset.id}`,
+      label: asset.label,
+      type: "asset",
+      metadata: { layer: 4 },
+    });
+  }
+
+  for (const cluster of AUTHORITY_TOPIC_CLUSTERS) {
+    const clusterId = `cluster:${cluster.id}`;
+    addKnowledgeNode(nodes, {
+      id: clusterId,
+      label: cluster.pillarTitle,
+      type: "topic-cluster",
+      href: `/healthcare/clusters/${cluster.id}`,
+      metadata: { priority: cluster.priority, profession: cluster.profession },
+    });
+    addKnowledgeEdge(edges, {
+      sourceId: `profession:${cluster.profession === "allied" ? "nursing" : cluster.profession}`,
+      targetId: clusterId,
+      relationship: "covers",
+      strength: "strong",
+    });
+    const conditionId = `condition:${cluster.id}`;
+    if (nodes.has(conditionId)) {
+      addKnowledgeEdge(edges, { sourceId: conditionId, targetId: clusterId, relationship: "belongs_to", strength: "core" });
+    }
+    for (const page of cluster.supportingPages) {
+      const pageId = `cluster-page:${page.slug}`;
+      addKnowledgeNode(nodes, {
+        id: pageId,
+        label: page.title,
+        type: "content-page",
+        href: `/healthcare/${page.pageType}/${page.slug}`,
+        metadata: { pageType: page.pageType, monetizationIntent: page.monetizationIntent },
+      });
+      addKnowledgeEdge(edges, { sourceId: clusterId, targetId: pageId, relationship: "supports", strength: "strong" });
+    }
+    for (const relatedClusterId of cluster.relatedClusterIds) {
+      addKnowledgeEdge(edges, {
+        sourceId: clusterId,
+        targetId: `cluster:${relatedClusterId}`,
+        relationship: "links_to",
+        strength: "supporting",
+      });
+    }
+  }
+
+  for (const page of AUTHORITY_CONTENT_PAGES) {
+    const pageId = `page:${page.category}:${page.slug}`;
+    addKnowledgeNode(nodes, {
+      id: pageId,
+      label: page.title,
+      type: "content-page",
+      href: authorityContentPath(page),
+      metadata: { category: page.category, reviewStatus: page.clinicalReviewStatus },
+    });
+    for (const link of page.related) {
+      const relatedId = `related:${authoritySlug(link.label)}`;
+      addKnowledgeNode(nodes, {
+        id: relatedId,
+        label: link.label,
+        type: link.href.startsWith("/healthcare") ? "content-page" : "asset",
+        href: link.href,
+      });
+      addKnowledgeEdge(edges, { sourceId: pageId, targetId: relatedId, relationship: "links_to", strength: "supporting" });
+    }
+  }
+
+  for (const hub of SPECIALTY_AUTHORITY_HUBS) {
+    const hubId = `specialty:${hub.id}`;
+    addKnowledgeNode(nodes, {
+      id: hubId,
+      label: hub.title,
+      type: "specialty-hub",
+      href: hub.canonicalPath,
+      metadata: { systems: hub.systemIds.length, clusters: hub.clusterIds.length },
+    });
+    for (const systemId of hub.systemIds) {
+      addKnowledgeEdge(edges, { sourceId: hubId, targetId: `system:${systemId}`, relationship: "covers", strength: "strong" });
+    }
+    for (const clusterId of hub.clusterIds) {
+      addKnowledgeEdge(edges, { sourceId: hubId, targetId: `cluster:${clusterId}`, relationship: "covers", strength: "core" });
+    }
+    for (const assetType of hub.assetTypes) {
+      addKnowledgeEdge(edges, { sourceId: hubId, targetId: `asset:${assetType}`, relationship: "trains_with", strength: "strong" });
+    }
+  }
+
+  for (const hub of ALLIED_HEALTH_AUTHORITY_HUBS) {
+    const hubId = `allied:${hub.profession}`;
+    addKnowledgeNode(nodes, {
+      id: hubId,
+      label: hub.title,
+      type: "allied-hub",
+      href: hub.canonicalPath,
+      metadata: { sections: hub.sections.length },
+    });
+    addKnowledgeEdge(edges, { sourceId: `profession:${hub.profession}`, targetId: hubId, relationship: "belongs_to", strength: "core" });
+    for (const clusterId of hub.clusterIds) {
+      addKnowledgeEdge(edges, { sourceId: hubId, targetId: `cluster:${clusterId}`, relationship: "covers", strength: "core" });
+    }
+    for (const assetType of hub.assetTypes) {
+      addKnowledgeEdge(edges, { sourceId: hubId, targetId: `asset:${assetType}`, relationship: "trains_with", strength: "strong" });
+    }
+  }
+
+  for (const hub of CERTIFICATION_AUTHORITY_HUBS) {
+    const hubId = `certification:${hub.id}`;
+    addKnowledgeNode(nodes, {
+      id: hubId,
+      label: hub.title,
+      type: "certification-hub",
+      href: hub.canonicalPath,
+      metadata: { market: hub.market, profession: hub.profession },
+    });
+    addKnowledgeEdge(edges, { sourceId: `profession:${hub.profession}`, targetId: hubId, relationship: "assesses_with", strength: "core" });
+    for (const clusterId of hub.clusterIds) {
+      addKnowledgeEdge(edges, { sourceId: hubId, targetId: `cluster:${clusterId}`, relationship: "covers", strength: "strong" });
+    }
+    for (const assetType of hub.assetTypes) {
+      addKnowledgeEdge(edges, { sourceId: hubId, targetId: `asset:${assetType}`, relationship: "assesses_with", strength: "strong" });
+    }
+  }
+
+  for (const [slug, labels] of Object.entries(AUTHORITY_RELATIONSHIP_SEEDS)) {
+    const sourceId = `cluster:${slug}`;
+    for (const label of labels) {
+      const targetId = `concept:${authoritySlug(label)}`;
+      addKnowledgeNode(nodes, { id: targetId, label, type: "concept" });
+      addKnowledgeEdge(edges, { sourceId, targetId, relationship: "links_to", strength: "core" });
+    }
+  }
+
+  return { nodes: [...nodes.values()], edges: [...edges.values()] };
+}
+
+export function getHealthcareKnowledgeGraphNode(id: string): AuthorityKnowledgeNode | null {
+  return buildHealthcareKnowledgeGraph().nodes.find((node) => node.id === id) ?? null;
+}
+
+export function getHealthcareKnowledgeGraphEdgesForNode(id: string): AuthorityKnowledgeEdge[] {
+  return buildHealthcareKnowledgeGraph().edges.filter((edge) => edge.sourceId === id || edge.targetId === id);
+}
+
+export function buildAuthorityScoreEngine(): AuthorityScoreSnapshot[] {
+  const clusterDashboard = buildAuthorityClusterDashboard();
+  const clusterScores = clusterDashboard.rows.map<AuthorityScoreSnapshot>((row) => ({
+    id: `topic:${row.id}`,
+    label: `${row.pillarTitle} Authority Score`,
+    scope: "topic",
+    score: row.publicationReadiness,
+    target: 90,
+    drivers: ["Cluster completion", "Internal linking", "Keyword coverage", "EEAT coverage"],
+  }));
+  const systemScores = SPECIALTY_AUTHORITY_HUBS.map<AuthorityScoreSnapshot>((hub) => {
+    const clusterRows = clusterDashboard.rows.filter((row) => hub.clusterIds.includes(row.id));
+    const clusterScore = clusterRows.length
+      ? Math.round(clusterRows.reduce((sum, row) => sum + row.publicationReadiness, 0) / clusterRows.length)
+      : 35;
+    return {
+      id: `system:${hub.id}`,
+      label: `${hub.title.replace(/ Hub$/, "")} Authority Score`,
+      scope: "system",
+      score: clampScore(clusterScore * 0.75 + Math.min(hub.assetTypes.length * 3, 25)),
+      target: 90,
+      drivers: ["Specialty hub coverage", "Connected clusters", "Learning asset coverage"],
+    };
+  });
+  const professionScores = ALLIED_HEALTH_AUTHORITY_HUBS.map<AuthorityScoreSnapshot>((hub) => {
+    const clusterRows = clusterDashboard.rows.filter((row) => hub.clusterIds.includes(row.id));
+    const clusterScore = clusterRows.length
+      ? Math.round(clusterRows.reduce((sum, row) => sum + row.publicationReadiness, 0) / clusterRows.length)
+      : 25;
+    return {
+      id: `profession:${hub.profession}`,
+      label: `${hub.title.replace(/ Hub$/, "")} Authority Score`,
+      scope: "profession",
+      score: clampScore(clusterScore * 0.7 + Math.min(hub.sections.length * 3, 24)),
+      target: 90,
+      drivers: ["Career coverage", "Placement coverage", "Clinical skills coverage", "Profession-specific clusters"],
+    };
+  });
+  const certificationScores = CERTIFICATION_AUTHORITY_HUBS.map<AuthorityScoreSnapshot>((hub) => {
+    const clusterRows = clusterDashboard.rows.filter((row) => hub.clusterIds.includes(row.id));
+    const clusterScore = clusterRows.length
+      ? Math.round(clusterRows.reduce((sum, row) => sum + row.publicationReadiness, 0) / clusterRows.length)
+      : 28;
+    return {
+      id: `certification:${hub.id}`,
+      label: `${hub.title.replace(/ Hub$/, "")} Authority Score`,
+      scope: "certification",
+      score: clampScore(clusterScore * 0.75 + Math.min(hub.assetTypes.length * 3, 25)),
+      target: 90,
+      drivers: ["Exam hub coverage", "Related topic clusters", "Practice asset coverage"],
+    };
+  });
+
+  return [...clusterScores, ...systemScores, ...professionScores, ...certificationScores].sort((a, b) => a.label.localeCompare(b.label));
+}
+
+export function detectAuthorityContentGaps(): AuthorityGapReport {
+  const graph = buildHealthcareKnowledgeGraph();
+  const clusterDashboard = buildAuthorityClusterDashboard();
+  const pageSlugs = new Set(AUTHORITY_CONTENT_PAGES.map((page) => page.slug));
+  const edgeCounts = new Map<string, number>();
+  for (const edge of graph.edges) {
+    edgeCounts.set(edge.sourceId, (edgeCounts.get(edge.sourceId) ?? 0) + 1);
+    edgeCounts.set(edge.targetId, (edgeCounts.get(edge.targetId) ?? 0) + 1);
+  }
+
+  return {
+    missingTopics: AUTHORITY_CONDITION_PILLARS.map((condition) => authoritySlug(condition)).filter((slug) => !pageSlugs.has(slug)),
+    missingRelationships: graph.nodes.filter((node) => (edgeCounts.get(node.id) ?? 0) < 2).map((node) => node.label).slice(0, 40),
+    weakClusters: clusterDashboard.rows.filter((row) => row.publicationReadiness < 70).map((row) => row.pillarTitle),
+    weakHubs: [
+      ...SPECIALTY_AUTHORITY_HUBS.filter((hub) => hub.clusterIds.length === 0).map((hub) => hub.title),
+      ...ALLIED_HEALTH_AUTHORITY_HUBS.filter((hub) => hub.clusterIds.length === 0).map((hub) => hub.title),
+      ...CERTIFICATION_AUTHORITY_HUBS.filter((hub) => hub.clusterIds.length === 0).map((hub) => hub.title),
+    ],
+    weakInternalLinking: clusterDashboard.rows.filter((row) => row.internalLinkingScore < 80).map((row) => row.pillarTitle),
+    underservedProfessions: ALLIED_HEALTH_AUTHORITY_HUBS.filter((hub) => hub.clusterIds.length === 0 || hub.assetTypes.length < 5).map((hub) => hub.title),
+    underservedCertifications: CERTIFICATION_AUTHORITY_HUBS.filter((hub) => hub.clusterIds.length === 0 || hub.assetTypes.length < 5).map((hub) => hub.title),
+  };
+}
+
+export function buildAuthorityUserJourneyNetwork(slug: string): AuthorityJourneyStep[] {
+  const normalizedSlug = authoritySlug(slug);
+  if (normalizedSlug.includes("heart-failure")) {
+    return [
+      { title: "Heart Failure", href: "/healthcare/conditions/heart-failure", type: "content-page", access: "public" },
+      { title: "Heart Failure Medications", href: "/healthcare/clusters/heart-failure#pharmacology", type: "pharmacology", access: "public" },
+      { title: "Heart Failure Labs", href: "/healthcare/clusters/heart-failure#labs", type: "labs", access: "public" },
+      { title: "Heart Failure Clinical Skills", href: "/pricing?feature=clinical-skills&topic=heart-failure", type: "clinical-skills", access: "subscription_required" },
+      { title: "Heart Failure Simulation", href: "/pricing?feature=simulations&topic=heart-failure", type: "simulations", access: "subscription_required" },
+      { title: "Heart Failure Flashcards", href: "/pricing?feature=flashcards&topic=heart-failure", type: "flashcards", access: "subscription_required" },
+      { title: "Heart Failure Questions", href: "/pricing?feature=questions&topic=heart-failure", type: "questions", access: "subscription_required" },
+      { title: "Heart Failure Study Plan", href: "/pricing?feature=study-plans&topic=heart-failure", type: "study-plans", access: "subscription_required" },
+    ];
+  }
+  const page = AUTHORITY_CONTENT_PAGES.find((item) => item.slug === normalizedSlug);
+  if (!page) return [];
+  return [
+    { title: page.title, href: authorityContentPath(page), type: "content-page", access: "public" },
+    ...buildAuthorityPremiumFunnel(page).map<AuthorityJourneyStep>((item) => ({
+      title: item.title,
+      href: item.href,
+      type:
+        item.type === "lesson"
+          ? "lessons"
+          : item.type === "cat-exam"
+            ? "cat"
+            : item.type === "study-plan"
+              ? "study-plans"
+              : item.type === "simulation"
+                ? "simulations"
+                : item.type === "clinical-skill"
+                  ? "clinical-skills"
+                  : item.type === "care-plan-builder"
+                    ? "care-plans"
+                    : item.type,
+      access: "subscription_required",
+    })),
+  ];
+}
+
+export function buildHealthcareTopicalAuthorityDashboard(): {
+  generatedAt: string;
+  layerCounts: { professions: number; systems: number; conditionPillars: number; learningAssetTypes: number };
+  graph: { nodes: number; edges: number };
+  hubs: { specialty: number; allied: number; certification: number; canadianAdvantage: number };
+  scoreSummary: { averageScore: number; scoresAtOrAboveTarget: number; totalScores: number };
+  topScores: AuthorityScoreSnapshot[];
+  gapReport: AuthorityGapReport;
+} {
+  const graph = buildHealthcareKnowledgeGraph();
+  const scores = buildAuthorityScoreEngine();
+  return {
+    generatedAt: new Date().toISOString(),
+    layerCounts: {
+      professions: AUTHORITY_LAYER_PROFESSIONS.length,
+      systems: AUTHORITY_BODY_SYSTEMS.length,
+      conditionPillars: AUTHORITY_CONDITION_PILLARS.length,
+      learningAssetTypes: AUTHORITY_LEARNING_ASSET_TYPES.length,
+    },
+    graph: { nodes: graph.nodes.length, edges: graph.edges.length },
+    hubs: {
+      specialty: SPECIALTY_AUTHORITY_HUBS.length,
+      allied: ALLIED_HEALTH_AUTHORITY_HUBS.length,
+      certification: CERTIFICATION_AUTHORITY_HUBS.length,
+      canadianAdvantage: CANADIAN_ADVANTAGE_NETWORK.length,
+    },
+    scoreSummary: {
+      averageScore: Math.round(scores.reduce((sum, score) => sum + score.score, 0) / Math.max(1, scores.length)),
+      scoresAtOrAboveTarget: scores.filter((score) => score.score >= score.target).length,
+      totalScores: scores.length,
+    },
+    topScores: [...scores].sort((a, b) => b.score - a.score || a.label.localeCompare(b.label)).slice(0, 15),
+    gapReport: detectAuthorityContentGaps(),
+  };
+}
 
 export function getAuthorityPages(): AuthorityPage[] {
   return [...AUTHORITY_CONTENT_PAGES].sort((a, b) => a.title.localeCompare(b.title));

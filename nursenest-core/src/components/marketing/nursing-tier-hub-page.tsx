@@ -69,6 +69,75 @@ const ACTION_GUIDED_TONE: Record<NursingTierHubActionId, MarketingHubGuidedPathT
   exams: "warning",
 };
 
+// ── Hub product screenshots ──────────────────────────────────────────────────
+// Sharp PNG screenshots from /images/homepage/ — placed below the action buttons.
+// These replace the old generated-WebP pathway-hub-product-preview which was blurry.
+
+type HubShot = { src: string; alt: string; label: string };
+
+function hubShotsForPathway(roleTrack: string, isNewGrad: boolean, isPn: boolean): [HubShot, HubShot, HubShot] {
+  if (isNewGrad) {
+    return [
+      { src: "/images/homepage/question-bank-demo.png", alt: "Practice question with rationale for new graduate nurses.", label: "Practice Questions" },
+      { src: "/images/homepage/readiness-report-demo.png", alt: "Readiness report showing domain progress and next study actions.", label: "Readiness Report" },
+      { src: "/images/homepage/cat-exam-demo.png", alt: "CAT adaptive exam session with clinical question and progress indicator.", label: "CAT Exam" },
+    ];
+  }
+  if (isPn) {
+    return [
+      { src: "/images/homepage/question-bank-demo.png", alt: "PN practice question with rationale, clinical teaching, and safety framing.", label: "Practice Questions" },
+      { src: "/images/homepage/cat-exam-demo.png", alt: "PN adaptive CAT exam with question, timing, and difficulty indication.", label: "CAT Exam" },
+      { src: "/images/homepage/readiness-report-demo.png", alt: "PN readiness report with weak-area breakdown and study recommendations.", label: "Readiness Report" },
+    ];
+  }
+  if (roleTrack === "np") {
+    return [
+      { src: "/images/homepage/pharmacology-demo.png", alt: "NP pharmacology practice with medication class, monitoring, and case reasoning.", label: "Pharmacology" },
+      { src: "/images/homepage/cat-exam-demo.png", alt: "NP adaptive CAT exam with graduate-level clinical case and adaptive scoring.", label: "CAT Exam" },
+      { src: "/images/homepage/readiness-report-demo.png", alt: "NP readiness report with competency domain progress and next focus areas.", label: "Readiness Report" },
+    ];
+  }
+  // RN default
+  return [
+    { src: "/images/homepage/question-bank-demo.png", alt: "Completed NCLEX-RN practice question showing selected answer, correct answer, and clinical teaching rationale.", label: "Practice Question" },
+    { src: "/images/homepage/cat-exam-demo.png", alt: "NCLEX-RN computer adaptive exam session with question, progress bar, and adaptive difficulty interface.", label: "CAT Exam" },
+    { src: "/images/homepage/readiness-report-demo.png", alt: "NCLEX-RN readiness report showing domain mastery, weak areas, and recommended next study actions.", label: "Readiness Report" },
+  ];
+}
+
+function HubProductScreenshots({ pathway }: { pathway: ExamPathwayDefinition }) {
+  const isNewGrad = isNewGradTransitionPathway(pathway);
+  const isPn = isPracticalNursingMarketingPathway(pathway);
+  const shots = hubShotsForPathway(pathway.roleTrack, isNewGrad, isPn);
+
+  return (
+    <div
+      className="mx-auto mt-8 grid w-full max-w-[76rem] gap-4 sm:grid-cols-3"
+      aria-label="Product screenshots"
+      data-testid="hub-product-screenshots"
+    >
+      {shots.map((shot) => (
+        <figure key={shot.label} className="min-w-0 overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-card)]">
+          <div className="overflow-hidden">
+            <img
+              src={shot.src}
+              alt={shot.alt}
+              width={1600}
+              height={936}
+              loading="lazy"
+              decoding="async"
+              className="w-full object-cover object-top transition-transform hover:scale-[1.01]"
+            />
+          </div>
+          <figcaption className="px-4 py-2.5 text-xs font-bold text-[var(--palette-text-muted)]">
+            {shot.label}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  );
+}
+
 export function NursingTierHubPage({
   pathway,
   hubPath,
@@ -567,6 +636,9 @@ export function NursingTierHubPage({
               );
             })}
           </ul>
+
+          {/* ── Product screenshots — below action buttons ──────────── */}
+          <HubProductScreenshots pathway={pathway} />
 
         </section>
 

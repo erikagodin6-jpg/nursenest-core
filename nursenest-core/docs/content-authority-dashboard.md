@@ -1,6 +1,6 @@
 # Content Authority Dashboard
 
-Generated: 2026-05-31T03:49:42.651Z
+Generated: 2026-05-31T04:02:35.429Z
 
 ## Executive Summary
 
@@ -15,6 +15,9 @@ Generated: 2026-05-31T03:49:42.651Z
 - Content production workflow stages: 12
 - Content briefs ready: 84
 - Content calendar items: 84
+- Healthcare knowledge graph nodes: 480
+- Healthcare knowledge graph relationships: 719
+- Authority scores tracked: 38
 
 ## Library Coverage
 
@@ -52,6 +55,44 @@ Workflow: keyword_opportunity -> cluster_assignment -> content_brief -> outline_
 | pt | 24 | 0 | 0 | 0 | high | 100% |
 | mlt | 24 | 0 | 0 | 0 | high | 100% |
 | allied | 0 | 0 | 0 | 0 | medium | 0% |
+
+## Healthcare Topical Authority Network
+
+- Professions mapped: 9
+- Body systems mapped: 11
+- Condition pillars mapped: 10
+- Learning asset types mapped: 13
+- Specialty hubs: 8
+- Allied health hubs: 6
+- Certification hubs: 9
+- Canadian advantage tracks: 5
+- Average authority score: 66/100
+
+| Authority Score | Scope | Score | Target | Drivers |
+| --- | --- | ---: | ---: | --- |
+| Heart Failure Authority Score | topic | 80 | 90 | Cluster completion, Internal linking, Keyword coverage, EEAT coverage |
+| Respiratory Authority Score | system | 77 | 90 | Specialty hub coverage, Connected clusters, Learning asset coverage |
+| Future Allied Certification Hubs Authority Score | certification | 76 | 90 | Exam hub coverage, Related topic clusters, Practice asset coverage |
+| Cardiology Authority Score | system | 75 | 90 | Specialty hub coverage, Connected clusters, Learning asset coverage |
+| COPD Authority Score | topic | 75 | 90 | Cluster completion, Internal linking, Keyword coverage, EEAT coverage |
+| Critical Care Authority Score | system | 75 | 90 | Specialty hub coverage, Connected clusters, Learning asset coverage |
+| Medical Laboratory Technology Authority Score | profession | 75 | 90 | Career coverage, Placement coverage, Clinical skills coverage, Profession-specific clusters |
+| Occupational Therapy Authority Score | profession | 75 | 90 | Career coverage, Placement coverage, Clinical skills coverage, Profession-specific clusters |
+| Paramedic Authority Score | profession | 75 | 90 | Career coverage, Placement coverage, Clinical skills coverage, Profession-specific clusters |
+| Physiotherapy Authority Score | profession | 75 | 90 | Career coverage, Placement coverage, Clinical skills coverage, Profession-specific clusters |
+| Respiratory Therapy Authority Score | profession | 75 | 90 | Career coverage, Placement coverage, Clinical skills coverage, Profession-specific clusters |
+| Community Care Authority Score | system | 74 | 90 | Specialty hub coverage, Connected clusters, Learning asset coverage |
+| AGPCNP Authority Score | certification | 73 | 90 | Exam hub coverage, Related topic clusters, Practice asset coverage |
+| Medical Laboratory Technology Authority Score | topic | 73 | 90 | Cluster completion, Internal linking, Keyword coverage, EEAT coverage |
+| Occupational Therapy Authority Score | topic | 73 | 90 | Cluster completion, Internal linking, Keyword coverage, EEAT coverage |
+
+### Authority Gap Detection
+
+- Missing topic pages: copd, stroke, diabetes, sepsis, aki, ckd, afib, pneumonia, mi
+- Weak clusters: Diabetes, Sepsis, Pneumonia, Stroke, AKI, CKD, Atrial Fibrillation, Myocardial Infarction
+- Weak hubs: Mental Health Hub, Maternal Child Hub, Pediatrics Hub, PSW Hub, PMHNP Hub, WHNP Hub, PNP-PC Hub
+- Underserved professions: PSW Hub
+- Underserved certifications: PMHNP Hub, WHNP Hub, PNP-PC Hub
 
 ## Topic Cluster Readiness
 

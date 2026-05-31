@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 import {
   buildAppLessonsSystemHref,
@@ -35,6 +35,20 @@ test("lesson system route files exist for app and marketing topic navigation", (
   assert.equal(existsSync("src/app/api/learner/pathway-lessons/route.ts"), true);
   assert.equal(existsSync("src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/page.tsx"), true);
   assert.equal(existsSync("src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/topics/[topicSlug]/page.tsx"), true);
+});
+
+test("marketing lessons hub defines topic slug candidates inside metadata and page render scopes", () => {
+  const src = readFileSync("src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/page.tsx", "utf8");
+  assert.equal(
+    src.split("const topicSlugCandidates = topicSlugNorm ? lessonSystemTopicSlugCandidates(topicSlugNorm) : [];").length - 1,
+    2,
+    "metadata and page render scopes must both define topicSlugCandidates before topicSlugsForList is used",
+  );
+  assert.equal(
+    src.split("const topicSlugsForList = topicSlugNorm").length - 1,
+    2,
+    "metadata and page render scopes must both define topicSlugsForList before topic filtering",
+  );
 });
 
 test("legacy taxonomy aliases still resolve when a hub emits category ids", () => {

@@ -8,11 +8,13 @@ import {
   buildAuthorityClusterDashboard,
   buildContentProductionCalendar,
   buildContentProductionDashboard,
+  buildHealthcareTopicalAuthorityDashboard,
 } from "../src/lib/authority/healthcare-authority-content-engine";
 
 const dashboard = buildAuthorityContentDashboard();
 const clusterDashboard = buildAuthorityClusterDashboard();
 const productionDashboard = buildContentProductionDashboard();
+const topicalAuthorityDashboard = buildHealthcareTopicalAuthorityDashboard();
 const productionCalendar = buildContentProductionCalendar();
 const calendarWindows = (["30-day", "90-day", "180-day", "365-day"] as const).map((window) => {
   const items = productionCalendar.filter((item) => item.window === window);
@@ -42,6 +44,9 @@ const lines = [
   `- Content production workflow stages: ${productionDashboard.workflowStages.length}`,
   `- Content briefs ready: ${productionDashboard.briefsReady}`,
   `- Content calendar items: ${productionDashboard.calendarItems}`,
+  `- Healthcare knowledge graph nodes: ${topicalAuthorityDashboard.graph.nodes}`,
+  `- Healthcare knowledge graph relationships: ${topicalAuthorityDashboard.graph.edges}`,
+  `- Authority scores tracked: ${topicalAuthorityDashboard.scoreSummary.totalScores}`,
   "",
   "## Library Coverage",
   "",
@@ -94,6 +99,32 @@ const lines = [
       `${queue.clusterCompletion}%`,
     ].join(" | ").replace(/^/, "| ").replace(/$/, " |"),
   ),
+  "",
+  "## Healthcare Topical Authority Network",
+  "",
+  `- Professions mapped: ${topicalAuthorityDashboard.layerCounts.professions}`,
+  `- Body systems mapped: ${topicalAuthorityDashboard.layerCounts.systems}`,
+  `- Condition pillars mapped: ${topicalAuthorityDashboard.layerCounts.conditionPillars}`,
+  `- Learning asset types mapped: ${topicalAuthorityDashboard.layerCounts.learningAssetTypes}`,
+  `- Specialty hubs: ${topicalAuthorityDashboard.hubs.specialty}`,
+  `- Allied health hubs: ${topicalAuthorityDashboard.hubs.allied}`,
+  `- Certification hubs: ${topicalAuthorityDashboard.hubs.certification}`,
+  `- Canadian advantage tracks: ${topicalAuthorityDashboard.hubs.canadianAdvantage}`,
+  `- Average authority score: ${topicalAuthorityDashboard.scoreSummary.averageScore}/100`,
+  "",
+  "| Authority Score | Scope | Score | Target | Drivers |",
+  "| --- | --- | ---: | ---: | --- |",
+  ...topicalAuthorityDashboard.topScores.map((score) =>
+    [score.label, score.scope, score.score, score.target, score.drivers.join(", ")].join(" | ").replace(/^/, "| ").replace(/$/, " |"),
+  ),
+  "",
+  "### Authority Gap Detection",
+  "",
+  `- Missing topic pages: ${topicalAuthorityDashboard.gapReport.missingTopics.join(", ") || "None"}`,
+  `- Weak clusters: ${topicalAuthorityDashboard.gapReport.weakClusters.join(", ") || "None"}`,
+  `- Weak hubs: ${topicalAuthorityDashboard.gapReport.weakHubs.join(", ") || "None"}`,
+  `- Underserved professions: ${topicalAuthorityDashboard.gapReport.underservedProfessions.join(", ") || "None"}`,
+  `- Underserved certifications: ${topicalAuthorityDashboard.gapReport.underservedCertifications.join(", ") || "None"}`,
   "",
   "## Topic Cluster Readiness",
   "",

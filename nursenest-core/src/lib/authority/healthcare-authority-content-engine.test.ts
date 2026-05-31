@@ -2,24 +2,39 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   AUTHORITY_CATEGORY_META,
+  ALLIED_HEALTH_AUTHORITY_HUBS,
+  AUTHORITY_BODY_SYSTEMS,
+  AUTHORITY_CONDITION_PILLARS,
   AUTHORITY_CONTENT_PHASE_TARGETS,
   AUTHORITY_CONTENT_ROADMAP,
+  AUTHORITY_LAYER_PROFESSIONS,
+  AUTHORITY_LEARNING_ASSET_TYPES,
   AUTHORITY_TOPIC_CLUSTERS,
+  CANADIAN_ADVANTAGE_NETWORK,
+  CERTIFICATION_AUTHORITY_HUBS,
   CLINICAL_AUTHORITY_MINIMUM_PUBLICATION_SCORE,
   CLINICAL_AUTHORITY_STANDARD,
   CONTENT_PRODUCTION_MINIMUM_SCORE,
   CONTENT_PRODUCTION_WORKFLOW,
   CONTENT_SCENARIO_REQUIREMENTS,
   SEO_MONETIZATION_GUARDRAILS,
+  SPECIALTY_AUTHORITY_HUBS,
   buildAuthorityContentDashboard,
   buildAuthorityClusterDashboard,
   buildAuthorityJsonLd,
   buildAuthorityPremiumFunnel,
+  buildAuthorityScoreEngine,
+  buildAuthorityUserJourneyNetwork,
   buildAlliedHealthProductionQueues,
   buildContentProductionCalendar,
   buildContentProductionDashboard,
+  buildHealthcareKnowledgeGraph,
+  buildHealthcareTopicalAuthorityDashboard,
+  detectAuthorityContentGaps,
   generateContentBrief,
   generateContentOutline,
+  getHealthcareKnowledgeGraphEdgesForNode,
+  getHealthcareKnowledgeGraphNode,
   getAuthorityPage,
   getAuthorityPages,
   getAuthorityPagesByCategory,
@@ -146,6 +161,123 @@ test("topic cluster dashboard exposes readiness metrics", () => {
   assert.ok(dashboard.rows.every((row) => row.internalLinkingScore > 0));
   assert.ok(dashboard.rows.every((row) => row.keywordCoverage > 0));
   assert.ok(dashboard.rows.every((row) => row.trafficPotential === "high"));
+});
+
+test("healthcare topical authority network defines all requested authority layers", () => {
+  assert.deepEqual(
+    AUTHORITY_LAYER_PROFESSIONS.map((profession) => profession.label),
+    ["Nursing", "RPN/LPN", "NP", "RT", "Paramedic", "OT", "PT", "MLT", "PSW"],
+  );
+  assert.deepEqual(
+    AUTHORITY_BODY_SYSTEMS.map((system) => system.label),
+    ["Cardiovascular", "Respiratory", "Neurology", "Endocrine", "Renal", "GI", "Hematology", "Oncology", "Mental Health", "Pediatrics", "Maternal Child"],
+  );
+  assert.deepEqual([...AUTHORITY_CONDITION_PILLARS], ["Heart Failure", "COPD", "Stroke", "Diabetes", "Sepsis", "AKI", "CKD", "AFib", "Pneumonia", "MI"]);
+  assert.deepEqual(
+    AUTHORITY_LEARNING_ASSET_TYPES.map((asset) => asset.label),
+    [
+      "Lessons",
+      "Flashcards",
+      "Questions",
+      "CAT",
+      "NGN",
+      "Simulations",
+      "Clinical Skills",
+      "Labs",
+      "Pharmacology",
+      "Care Plans",
+      "Concept Maps",
+      "Study Plans",
+      "Clinical Reasoning Pathways",
+    ],
+  );
+});
+
+test("specialty, allied, and certification authority hubs cover the requested destinations", () => {
+  assert.deepEqual(
+    SPECIALTY_AUTHORITY_HUBS.map((hub) => hub.title),
+    ["Cardiology Hub", "Respiratory Hub", "Critical Care Hub", "Emergency Hub", "Mental Health Hub", "Maternal Child Hub", "Pediatrics Hub", "Community Care Hub"],
+  );
+  assert.deepEqual(
+    ALLIED_HEALTH_AUTHORITY_HUBS.map((hub) => hub.title),
+    ["Respiratory Therapy Hub", "Paramedic Hub", "Occupational Therapy Hub", "Physiotherapy Hub", "Medical Laboratory Technology Hub", "PSW Hub"],
+  );
+  assert.ok(ALLIED_HEALTH_AUTHORITY_HUBS.every((hub) => hub.sections.includes("Career Guides")));
+  assert.ok(ALLIED_HEALTH_AUTHORITY_HUBS.every((hub) => hub.sections.includes("Clinical Placement")));
+  assert.ok(ALLIED_HEALTH_AUTHORITY_HUBS.every((hub) => hub.sections.includes("Clinical Reasoning")));
+
+  assert.deepEqual(
+    CERTIFICATION_AUTHORITY_HUBS.slice(0, 8).map((hub) => hub.title),
+    ["NCLEX-RN Hub", "REx-PN Hub", "CNPLE Hub", "FNP Hub", "PMHNP Hub", "AGPCNP Hub", "WHNP Hub", "PNP-PC Hub"],
+  );
+  assert.ok(CANADIAN_ADVANTAGE_NETWORK.some((entry) => entry.title === "Canadian Nursing" && entry.priority === "highest"));
+});
+
+test("healthcare knowledge graph stores condition, concept, hub, and learning asset relationships", () => {
+  const graph = buildHealthcareKnowledgeGraph();
+  assert.ok(graph.nodes.length > 100);
+  assert.ok(graph.edges.length > 150);
+
+  assert.ok(getHealthcareKnowledgeGraphNode("cluster:heart-failure"));
+  const heartFailureEdges = getHealthcareKnowledgeGraphEdgesForNode("cluster:heart-failure");
+  const targetLabels = heartFailureEdges
+    .map((edge) => getHealthcareKnowledgeGraphNode(edge.targetId)?.label)
+    .filter(Boolean);
+  for (const label of [
+    "BNP",
+    "Furosemide",
+    "Digoxin",
+    "Pulmonary Edema",
+    "Fluid Overload",
+    "Cardiac Output",
+    "AFib",
+    "Echocardiography",
+    "Heart Failure Care Plans",
+    "Heart Failure Simulations",
+    "Heart Failure NCLEX Questions",
+  ]) {
+    assert.ok(targetLabels.includes(label), `${label} should be related to Heart Failure`);
+  }
+});
+
+test("authority score engine and gap detection track topic, system, profession, and certification readiness", () => {
+  const scores = buildAuthorityScoreEngine();
+  assert.ok(scores.some((score) => score.label === "Cardiology Authority Score" && score.scope === "system"));
+  assert.ok(scores.some((score) => score.label === "Respiratory Authority Score" && score.scope === "system"));
+  assert.ok(scores.some((score) => score.label === "Respiratory Therapy Authority Score" && score.scope === "profession"));
+  assert.ok(scores.some((score) => score.label === "NCLEX-RN Authority Score" && score.scope === "certification"));
+  assert.ok(scores.some((score) => score.label === "PMHNP Authority Score" && score.scope === "certification"));
+  assert.ok(scores.every((score) => score.target === 90));
+
+  const gaps = detectAuthorityContentGaps();
+  assert.ok(gaps.missingTopics.includes("copd"));
+  assert.ok(gaps.weakHubs.includes("Mental Health Hub"));
+  assert.ok(gaps.underservedCertifications.includes("PMHNP Hub"));
+
+  const dashboard = buildHealthcareTopicalAuthorityDashboard();
+  assert.equal(dashboard.layerCounts.professions, 9);
+  assert.equal(dashboard.hubs.specialty, 8);
+  assert.equal(dashboard.hubs.allied, 6);
+  assert.ok(dashboard.scoreSummary.totalScores >= 30);
+});
+
+test("authority user journey network connects public pages to premium training experiences", () => {
+  const journey = buildAuthorityUserJourneyNetwork("heart-failure-nursing-care-plan");
+  assert.deepEqual(
+    journey.map((step) => step.title),
+    [
+      "Heart Failure",
+      "Heart Failure Medications",
+      "Heart Failure Labs",
+      "Heart Failure Clinical Skills",
+      "Heart Failure Simulation",
+      "Heart Failure Flashcards",
+      "Heart Failure Questions",
+      "Heart Failure Study Plan",
+    ],
+  );
+  assert.equal(journey[0].access, "public");
+  assert.ok(journey.slice(3).every((step) => step.access === "subscription_required"));
 });
 
 test("SEO monetization guardrails separate public education from premium training", () => {
