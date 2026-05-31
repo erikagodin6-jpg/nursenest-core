@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-04-15T02:11:52.076Z",
+  "generatedAt": "2026-05-31T21:01:36.541Z",
   "readOnly": true,
-  "databaseAvailable": false,
-  "databaseUrlConfigured": false,
+  "databaseAvailable": true,
+  "databaseUrlConfigured": true,
   "queryFailed": true,
-  "queryError": "DATABASE_URL (or PROD_DATABASE_URL in production) not set.",
+  "queryError": "\nInvalid `prisma.blogPost.findMany()` invocation in\n/root/nursenest-core/nursenest-core/scripts/audit/run-blog-prisma-readonly-export.mts:111:42\n\n  108 try {\n  109   let offset = 0;\n  110   for (;;) {\n→ 111     const page = await prisma.blogPost.findMany(\nCan't reach database server at `HOST:5432`\n\nPlease make sure your database server is running at `HOST:5432`.",
   "note": "SELECT-only prisma.blogPost.findMany / prisma.localizedBlogArticle.findMany; no mutations.",
-  "articles": [],
   "counts": {
     "localizedBlogArticle": 0
-  }
+  },
+  "articles": []
 }

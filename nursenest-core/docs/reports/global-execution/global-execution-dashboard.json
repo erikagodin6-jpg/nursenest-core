@@ -1,0 +1,215 @@
+{
+  "generatedAt": "2026-05-31T21:47:18.816Z",
+  "dashboard": {
+    "generatedAt": "2026-05-31T21:47:18.815Z",
+    "killSwitchStatus": "PAUSE_NEW_COUNTRY_EXPANSION",
+    "killSwitchReasons": [
+      "RN Quality Readiness is 0%, below the 90% expansion threshold.",
+      "PN Quality Readiness is 0%, below the 90% expansion threshold.",
+      "NP Quality Readiness is 0%, below the 90% expansion threshold.",
+      "Conversion Readiness is 70%, below the 90% expansion threshold.",
+      "Revenue Readiness is 65%, below the 90% expansion threshold."
+    ],
+    "readinessWeights": {
+      "contentQuality": 30,
+      "questionEnrichment": 20,
+      "flashcards": 10,
+      "cat": 10,
+      "practiceExams": 10,
+      "reliability": 10,
+      "countrySupplements": 5,
+      "seo": 5
+    },
+    "executiveDashboard": {
+      "rn": 35.4,
+      "pn": 39.3,
+      "np": 38.3,
+      "usExpansion": 15.9,
+      "uk": 15.8,
+      "australia": 15.8,
+      "newZealand": 5,
+      "ireland": 0,
+      "overallCommercial": 65,
+      "overallLaunch": 32.2
+    },
+    "countryLaunchGates": [
+      {
+        "country": "United States",
+        "gates": {
+          "Country Supplements": 0,
+          "Question Quality": 0,
+          "Flashcards": 9.3,
+          "CAT": 0
+        },
+        "pass": false
+      },
+      {
+        "country": "United Kingdom",
+        "gates": {
+          "NMC CBT": 0,
+          "OSCE": 0,
+          "NEWS2": 100,
+          "Duty of Candour": 100,
+          "Safeguarding": 100
+        },
+        "pass": false
+      },
+      {
+        "country": "Australia",
+        "gates": {
+          "NMBA": 0,
+          "Ahpra/IQNM": 100,
+          "Aboriginal Health": 100,
+          "Rural Care": 100
+        },
+        "pass": false
+      },
+      {
+        "country": "New Zealand",
+        "gates": {
+          "NCNZ": 0,
+          "Te Tiriti": 100,
+          "Cultural Safety": 100,
+          "Community Care": 0
+        },
+        "pass": false
+      },
+      {
+        "country": "Ireland",
+        "gates": {
+          "NMBI Readiness": 0
+        },
+        "pass": false
+      }
+    ],
+    "currentPriorityRanking": [
+      {
+        "tier": 1,
+        "label": "Core quality and learning engine",
+        "initiatives": [
+          "RN Question Enrichment",
+          "PN Question Enrichment",
+          "NP Question Enrichment",
+          "Flashcard Regeneration",
+          "Practice Exam Quality",
+          "CAT Quality",
+          "Blueprint Coverage"
+        ],
+        "status": "active"
+      },
+      {
+        "tier": 2,
+        "label": "U.S. expansion depth",
+        "initiatives": [
+          "U.S. Expansion",
+          "Delegation",
+          "Legal",
+          "Documentation",
+          "Medicare",
+          "Medicaid",
+          "NCLEX-PN Differentiation"
+        ],
+        "status": "gated"
+      },
+      {
+        "tier": 3,
+        "label": "Hidden international beta",
+        "initiatives": [
+          "UK Hidden Beta",
+          "Australia Hidden Beta",
+          "New Zealand Hidden Beta"
+        ],
+        "status": "paused"
+      },
+      {
+        "tier": 4,
+        "label": "Future country expansion",
+        "initiatives": [
+          "Ireland",
+          "UAE",
+          "Saudi Arabia",
+          "Singapore"
+        ],
+        "status": "paused"
+      }
+    ],
+    "resourceAllocation": {
+      "coreEcosystemMinimumPercent": 70,
+      "internationalMaximumPercent": 20,
+      "experimentalMaximumPercent": 10,
+      "recommendedCoreEcosystemPercent": 90,
+      "recommendedInternationalPercent": 5,
+      "recommendedExperimentalPercent": 5
+    },
+    "launchApprovalFindings": [
+      "RN: overall readiness 35.4% is below 95%.",
+      "RN: question quality 0% is below 95%.",
+      "RN: flashcard quality 0% is below 95%.",
+      "RN: blueprint/content coverage 1.3% is below 95%.",
+      "RN: conversion funnel is not tested.",
+      "RN: monetization is not tested.",
+      "PN: overall readiness 39.3% is below 95%.",
+      "PN: question quality 0% is below 95%.",
+      "PN: flashcard quality 9.3% is below 95%.",
+      "PN: blueprint/content coverage 11.3% is below 95%.",
+      "PN: conversion funnel is not tested.",
+      "PN: monetization is not tested.",
+      "NP: overall readiness 38.3% is below 95%.",
+      "NP: question quality 0% is below 95%.",
+      "NP: flashcard quality 0% is below 95%.",
+      "NP: blueprint/content coverage 11% is below 95%.",
+      "NP: conversion funnel is not tested.",
+      "NP: monetization is not tested.",
+      "U.S. Expansion: overall readiness 15.9% is below 95%.",
+      "U.S. Expansion: question quality 0% is below 95%.",
+      "U.S. Expansion: flashcard quality 9.3% is below 95%.",
+      "U.S. Expansion: blueprint/content coverage 0% is below 95%.",
+      "U.S. Expansion: conversion funnel is not tested.",
+      "U.S. Expansion: monetization is not tested.",
+      "UK: overall readiness 15.8% is below 95%.",
+      "UK: question quality 0% is below 95%.",
+      "UK: flashcard quality 0% is below 95%.",
+      "UK: blueprint/content coverage 0% is below 95%.",
+      "UK: reliability 72.7% is below 99.9%.",
+      "UK: conversion funnel is not tested.",
+      "UK: monetization is not tested.",
+      "UK: learner support systems are not ready.",
+      "Australia: overall readiness 15.8% is below 95%.",
+      "Australia: question quality 0% is below 95%.",
+      "Australia: flashcard quality 0% is below 95%.",
+      "Australia: blueprint/content coverage 0% is below 95%.",
+      "Australia: reliability 72.7% is below 99.9%.",
+      "Australia: conversion funnel is not tested.",
+      "Australia: monetization is not tested.",
+      "Australia: learner support systems are not ready.",
+      "New Zealand: overall readiness 5% is below 95%.",
+      "New Zealand: question quality 0% is below 95%.",
+      "New Zealand: flashcard quality 0% is below 95%.",
+      "New Zealand: blueprint/content coverage 0% is below 95%.",
+      "New Zealand: reliability 0% is below 99.9%.",
+      "New Zealand: conversion funnel is not tested.",
+      "New Zealand: monetization is not tested.",
+      "New Zealand: learner support systems are not ready."
+    ],
+    "nextExecutionFocus": [
+      "RN Question Enrichment",
+      "PN Question Enrichment",
+      "NP Question Enrichment",
+      "Flashcard Regeneration",
+      "Practice Exam Quality",
+      "CAT Quality",
+      "Blueprint Coverage",
+      "Reliability",
+      "Conversion",
+      "Retention"
+    ],
+    "successMetricShift": [
+      "Learner outcomes",
+      "Conversion",
+      "Retention",
+      "Readiness",
+      "Revenue",
+      "Quality"
+    ]
+  }
+}
