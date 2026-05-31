@@ -2,11 +2,13 @@
 
 import type { ReactNode } from "react";
 import { Flag } from "lucide-react";
+import { ClinicalImageGallery, ClinicalImageViewer } from "@/components/clinical-images/clinical-image-viewer";
 import { EcgVideoQuestionMedia } from "@/components/study/ecg-video-question-media";
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
 import { AnswerOptionRow } from "@/components/study/cat-question-card";
 import { RationalePanel, type RationalePanelMode } from "@/components/study/cat-rationale-panel";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
+import { parseRationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
 
 const MCQ_OPTION_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
@@ -20,8 +22,16 @@ export function PracticeTestClinicalFigure({ src, className }: { src: string; cl
         "nn-cat-exam-clinical-figure nn-premium-exam-clinical-figure mb-4 flex justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-primary))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))] p-3"
       }
     >
-      {/* eslint-disable-next-line @next/next/no-img-element -- stems may reference CDN URLs from trusted exam content */}
-      <img src={src} alt="" className="max-h-[min(36vh,20rem)] w-auto max-w-full object-contain" />
+      <ClinicalImageViewer
+        compact
+        image={{
+          url: src,
+          alt: "Clinical question image",
+          title: "Clinical Image",
+          caption: "Use zoom controls to inspect the finding before answering.",
+        }}
+        className="w-full border-0 bg-transparent p-0 shadow-none"
+      />
     </div>
   );
 }
@@ -160,14 +170,23 @@ export function PracticeTestQuestionMediaBlock({
   mode: EcgMode;
   phase: EcgPhase;
 }) {
+  const clinicalImages = parseRationaleReferenceMedia(images as Parameters<typeof parseRationaleReferenceMedia>[0]).map((image) => ({
+    url: image.url,
+    alt: image.alt,
+    caption: image.caption,
+    title: image.kind ? image.kind.replace(/_/g, " ") : "Clinical Image",
+  }));
   return (
-    <EcgVideoQuestionMedia
-      exhibitData={exhibitData}
-      images={images}
-      mode={mode}
-      phase={phase}
-      className="nn-premium-exam-ecg-media"
-    />
+    <>
+      <EcgVideoQuestionMedia
+        exhibitData={exhibitData}
+        images={images}
+        mode={mode}
+        phase={phase}
+        className="nn-premium-exam-ecg-media"
+      />
+      <ClinicalImageGallery images={clinicalImages} className="mb-4" />
+    </>
   );
 }
 

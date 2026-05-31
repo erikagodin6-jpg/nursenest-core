@@ -69,6 +69,13 @@ const RELATED = {
       { href: HUB.questionBank, label: "Practice questions by pathway" },
     ],
   },
+  carePlan: {
+    lessons: [
+      { href: RN.usLessons, label: "RN clinical lesson library" },
+      { href: "/canada/rn/nclex-rn/lessons", label: "NCLEX-RN lessons (Canada)" },
+      { href: HUB.questionBank, label: "Practice questions for clinical reasoning" },
+    ],
+  },
 } as const;
 
 function RelatedLessons({ slug }: { slug: ToolSlug }) {
@@ -81,7 +88,9 @@ function RelatedLessons({ slug }: { slug: ToolSlug }) {
           ? "labValues"
           : slug === "electrolyte-abg"
             ? "electrolyteAbg"
-            : "transfusionSafety";
+            : slug === "care-plan"
+              ? "carePlan"
+              : "transfusionSafety";
   const items = RELATED[key].lessons;
   return (
     <ul className="space-y-2">
@@ -97,6 +106,74 @@ function RelatedLessons({ slug }: { slug: ToolSlug }) {
 }
 
 const CONTENT: Record<ToolSlug, SeoBlock[]> = {
+  "care-plan": [
+    {
+      id: "what",
+      title: "What this care plan generator does",
+      panel: "cool",
+      children: (
+        <>
+          <p>
+            The <strong>Nursing Care Plan Generator</strong> turns patient cues into an educational care plan with priority nursing diagnoses,
+            measurable goals, nursing interventions, rationales, patient education, complication watch, and SBAR. It is designed for learners
+            who need to practice clinical reasoning, not copy generic textbook care plans.
+          </p>
+          <p>
+            The tool uses the entered diagnosis, vital signs, labs, symptoms, assessment findings, medications, allergies, setting, acuity, and
+            learner role to prioritize what matters first. Use the output as a study aid and compare it with local policy, provider orders, and
+            instructor expectations.
+          </p>
+        </>
+      ),
+    },
+    {
+      id: "reasoning",
+      title: "How priorities are ranked",
+      panel: "positive",
+      children: (
+        <>
+          <p>
+            Care plans are ranked using the same reasoning frameworks students use in clinical and on exams: <strong>ABCs</strong>, safety,
+            acute versus chronic, stable versus unstable, Maslow, deterioration risk, and complication prevention. A respiratory or perfusion
+            concern should usually appear before education-only goals because physiologic instability can change quickly.
+          </p>
+          <p>
+            Each diagnosis includes <strong>Problem</strong>, <strong>Related To</strong>, and <strong>As Evidenced By</strong> language so the
+            learner can see how assessment data supports the nursing problem.
+          </p>
+        </>
+      ),
+    },
+    {
+      id: "education",
+      title: "Designed for nursing education",
+      panel: "muted",
+      children: (
+        <>
+          <p>
+            Each intervention includes an action and rationale because care planning is most useful when learners understand why the nurse is
+            doing something. The generator also creates patient education, evaluation criteria, complication monitoring, and SBAR handoff language
+            so the plan feels like real clinical thinking rather than a worksheet.
+          </p>
+          <p>
+            Optional exam prep mode adds clinical pearls, common traps, delegation considerations, and safety alerts for NCLEX, REx-PN, and
+            clinical judgment practice.
+          </p>
+        </>
+      ),
+    },
+    {
+      id: "related",
+      title: "Related lessons & next steps",
+      panel: "warm",
+      children: (
+        <>
+          <p>Pair care planning practice with lessons and questions on assessment, prioritization, pharmacology, labs, and patient safety.</p>
+          <RelatedLessons slug="care-plan" />
+        </>
+      ),
+    },
+  ],
   "iv-infusion": [
     {
       id: "what",

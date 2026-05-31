@@ -19,18 +19,26 @@ function titleKey(slug: ToolSlug): string {
       return "tools.ivInfusion.title";
     case "transfusion-safety":
       return "tools.transfusionSafety.title";
+    case "care-plan":
+      return "Nursing Care Plan Generator";
     default:
       return "tools.hub.title";
   }
 }
 
+function toolTitle(slug: ToolSlug, t: (key: string) => string): string {
+  const key = titleKey(slug);
+  return key.includes(".") ? t(key) : key;
+}
+
 export function ToolsToolShell({ slug }: { slug: ToolSlug }) {
   const { t, locale } = useMarketingI18n();
   const hub = withMarketingLocale(locale, "/tools");
+  const isWideTool = slug === "care-plan";
 
   return (
     <div
-      className="nn-premium-tool-page mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8"
+      className={`nn-premium-tool-page mx-auto px-4 py-10 sm:px-6 lg:px-8 ${isWideTool ? "max-w-7xl" : "max-w-3xl"}`}
       data-testid={`marketing-tool-${slug}`}
       data-marketing-tool-slug={slug}
     >
@@ -42,7 +50,7 @@ export function ToolsToolShell({ slug }: { slug: ToolSlug }) {
         {t("tools.hub.back")}
       </Link>
       <header className="mb-8">
-        <h1 className="nn-marketing-h2 text-[var(--palette-heading)]">{t(titleKey(slug))}</h1>
+        <h1 className="nn-marketing-h2 text-[var(--palette-heading)]">{toolTitle(slug, t)}</h1>
       </header>
       <div className="nn-premium-tools-calculator-wrap nn-tools-calculator-surface p-5 sm:p-8">
         <ToolLazyView slug={slug} />

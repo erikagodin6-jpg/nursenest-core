@@ -49,6 +49,13 @@ async function metaForSlug(
       description: enMessages["tools.transfusionSafety.metaDescription"] ?? "",
     };
   }
+  if (slug === "care-plan") {
+    return {
+      title: "Nursing Care Plan Generator | NurseNest",
+      description:
+        "Create educational nursing care plans with priority diagnoses, goals, interventions, rationales, patient education, complication watch, and SBAR.",
+    };
+  }
   return null;
 }
 

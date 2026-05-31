@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Calculator, Droplets, Activity, Shield } from "lucide-react";
+import { Activity, Calculator, ClipboardList, Droplets, Shield } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getAllToolSlugs } from "@/lib/tools/tool-registry";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -14,7 +14,20 @@ function cardKeyPrefix(slug: string): string {
   if (slug === "electrolyte-abg") return "electrolyteAbg";
   if (slug === "iv-infusion") return "ivInfusion";
   if (slug === "transfusion-safety") return "transfusionSafety";
+  if (slug === "care-plan") return "carePlan";
   return slug.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
+}
+
+function cardTitle(slug: string, t: (key: string) => string): string {
+  if (slug === "care-plan") return "Nursing Care Plan Generator";
+  return t(`tools.card.${cardKeyPrefix(slug)}.title`);
+}
+
+function cardDescription(slug: string, t: (key: string) => string): string {
+  if (slug === "care-plan") {
+    return "Generate priority nursing diagnoses, goals, interventions, rationales, education, complication watch, and SBAR.";
+  }
+  return t(`tools.card.${cardKeyPrefix(slug)}.desc`);
 }
 
 const ICONS = {
@@ -23,6 +36,7 @@ const ICONS = {
   "electrolyte-abg": Activity,
   "iv-infusion": Droplets,
   "transfusion-safety": Shield,
+  "care-plan": ClipboardList,
 } as const;
 
 const ICON_ACCENT: Record<string, string> = {
@@ -31,6 +45,7 @@ const ICON_ACCENT: Record<string, string> = {
   "electrolyte-abg": "var(--semantic-chart-4)",
   "iv-infusion": "var(--semantic-chart-3)",
   "transfusion-safety": "var(--semantic-warning)",
+  "care-plan": "var(--semantic-brand)",
 };
 
 export function ToolsHubClient() {
@@ -73,9 +88,9 @@ export function ToolsHubClient() {
                     <Icon className="h-6 w-6" aria-hidden />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h2 className="nn-marketing-h4 text-[var(--palette-heading)]">{t(`tools.card.${cardKeyPrefix(slug)}.title`)}</h2>
+                    <h2 className="nn-marketing-h4 text-[var(--palette-heading)]">{cardTitle(slug, t)}</h2>
                     <p className="nn-marketing-body-sm mt-1 text-[var(--palette-text-muted)]">
-                      {t(`tools.card.${cardKeyPrefix(slug)}.desc`)}
+                      {cardDescription(slug, t)}
                     </p>
                   </div>
                 </Link>

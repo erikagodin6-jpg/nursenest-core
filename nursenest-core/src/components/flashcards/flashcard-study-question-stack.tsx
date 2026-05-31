@@ -7,6 +7,7 @@ import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-con
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
 import { FlashcardStudyRevealPanels } from "@/components/flashcards/flashcard-study-reveal-panels";
+import { ClinicalImageViewer } from "@/components/clinical-images/clinical-image-viewer";
 import { AdaptiveCaseSimulationPanel } from "@/components/questions/adaptive-case-simulation-panel";
 import { ShowSimilarQuestions } from "@/components/questions/show-similar-questions";
 import { SaveToNotebookButton } from "@/components/notebook/save-to-notebook-button";
@@ -355,7 +356,16 @@ export function FlashcardStudyQuestionStack({
                   className="nn-flashcard-image-card relative z-[1] mb-5 mt-5 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--semantic-surface))] p-3 shadow-inner [&_img]:max-h-72 [&_img]:w-auto [&_img]:max-w-full [&_img]:rounded-lg [&_img]:object-contain"
                   data-nn-flashcard-media="image"
                 >
-                  <FlashcardRichContent text={promptSplit.imageHtml} />
+                  <ClinicalImageViewer
+                    compact
+                    image={{
+                      url: promptSplit.imageHtml,
+                      alt: "Clinical image for this flashcard question",
+                      title: "Clinical Image",
+                      caption: "Use zoom controls to inspect the finding before answering.",
+                    }}
+                    className="border-0 bg-transparent p-0 shadow-none"
+                  />
                 </div>
               ) : null}
 
@@ -633,8 +643,15 @@ export function FlashcardStudyQuestionStack({
                   <div className="nn-flashcard-rationale-panel__body" data-nn-educational-content-container="">
                     {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
                       <div className="nn-flashcard-rationale-image" data-nn-flashcard-media="image">
-                        <div>Clinical figure</div>
-                        <img src={clinicalImageUrl} alt="" loading="lazy" />
+                        <ClinicalImageViewer
+                          compact
+                          image={{
+                            url: clinicalImageUrl,
+                            alt: "Clinical reference figure for this flashcard rationale",
+                            title: "Clinical Figure",
+                          }}
+                          className="border-0 bg-transparent p-0 shadow-none"
+                        />
                       </div>
                     ) : null}
                     <FlashcardStudyRevealPanels

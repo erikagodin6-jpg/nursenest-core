@@ -17,6 +17,7 @@ const LabValuesTool = dynamic(() => import("./calculators/lab-values-tool"), { l
 const ElectrolyteAbgTool = dynamic(() => import("./calculators/electrolyte-abg-tool"), { loading });
 const IvInfusionTool = dynamic(() => import("./calculators/iv-infusion-tool"), { loading });
 const TransfusionSafetyTool = dynamic(() => import("./calculators/transfusion-safety-tool"), { loading });
+const NursingCarePlanTool = dynamic(() => import("./calculators/nursing-care-plan-tool"), { loading });
 
 export function ToolLazyView({ slug }: { slug: ToolSlug }) {
   switch (slug) {
@@ -30,6 +31,8 @@ export function ToolLazyView({ slug }: { slug: ToolSlug }) {
       return <IvInfusionTool />;
     case "transfusion-safety":
       return <TransfusionSafetyTool />;
+    case "care-plan":
+      return <NursingCarePlanTool />;
     default:
       return null;
   }
