@@ -28,6 +28,15 @@ function Inner() {
     setSyncOutcome("pending");
     (async () => {
       try {
+        const billingSync = await fetch("/api/subscriptions/sync-after-checkout", {
+          method: "POST",
+          credentials: "include",
+        });
+        if (cancelled) return;
+        if (!billingSync.ok) {
+          setSyncOutcome("issue");
+          return;
+        }
         const res = await fetch("/api/auth/sync-session", { credentials: "include" });
         if (cancelled) return;
         if (!res.ok) {

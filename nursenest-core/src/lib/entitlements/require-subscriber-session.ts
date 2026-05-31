@@ -4,6 +4,7 @@ import { AUTH_NODE_SESSION_READ_TIMEOUT_MS } from "@/lib/auth/auth-session-const
 import type { AccessScope, UserAccess } from "@/lib/entitlements/get-user-access";
 import { requireSubscriberSessionDeps } from "@/lib/entitlements/require-subscriber-session-deps";
 import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
+import { maybeRecoverUserAccessFromStripe } from "@/lib/entitlements/recover-user-access-from-stripe.server";
 import { recordEntitlementResolveFailureSignal } from "@/lib/observability/production-signal-metrics";
 import { productEvent } from "@/lib/observability/product-events";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
@@ -20,6 +21,7 @@ export type SubscriberSessionResult = SubscriberSessionOk | SubscriberSessionFai
 
 const SUBSCRIBER_GATE_ACCESS_TIMEOUT_MS = 2_000;
 const SUBSCRIBER_GATE_ACCOUNT_SHARING_TIMEOUT_MS = 500;
+const SUBSCRIBER_GATE_STRIPE_RECOVERY_TIMEOUT_MS = 3_500;
 
 export function notSubscribedResponse() {
   return NextResponse.json(
@@ -120,7 +122,32 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
     };
   }
 
-  const entitlement = requireSubscriberSessionDeps.accessScopeFromUserAccess(userAccess);
+  let entitlement = requireSubscriberSessionDeps.accessScopeFromUserAccess(userAccess);
+
+  if (!entitlement.hasAccess) {
+    const recovery = await safeAwait(
+      maybeRecoverUserAccessFromStripe({
+        userId,
+        surface: "subscriber_gate_denied",
+        correlation,
+      }),
+      "subscriber_gate.stripe_access_recovery",
+      SUBSCRIBER_GATE_STRIPE_RECOVERY_TIMEOUT_MS,
+    ).catch((error) => {
+      safeServerLog("entitlement", "subscriber_gate_access_recovery_timeout_or_error", {
+        userIdPrefix: userId.slice(0, 8),
+        correlation,
+        message: error instanceof Error ? error.message.slice(0, 160) : "unknown",
+        severity: "warning",
+      });
+      return null;
+    });
+
+    if (recovery?.userAccess?.hasPremium) {
+      userAccess = recovery.userAccess;
+      entitlement = requireSubscriberSessionDeps.accessScopeFromUserAccess(userAccess);
+    }
+  }
 
   if (!entitlement.hasAccess) {
     safeServerLog("access", "denied", {

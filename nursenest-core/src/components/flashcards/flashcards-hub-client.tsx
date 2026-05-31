@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight, Layers, Shuffle, SlidersHorizontal } from "lucide-react";
+import { Check, Layers, Plus, Shuffle, SlidersHorizontal } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { LearnerStudyPageShell } from "@/components/learner-study-ui";
 import {
@@ -44,6 +44,7 @@ import {
 } from "@/lib/flashcards/flashcards-hub-preferences";
 import { buildFlashcardsSessionPreview } from "@/lib/flashcards/flashcards-hub-session-copy";
 import { parseHubMode, parseHubSystemsFromSearchParams } from "@/lib/flashcards/flashcards-hub-url";
+import { toggleFlashcardsHubSystemSelection } from "@/lib/flashcards/flashcards-hub-system-selection";
 
 const FLASHCARDS_HUB_CLIENT_FETCH_TIMEOUT_MS = 2000;
 
@@ -680,47 +681,6 @@ export function FlashcardsHubClient({
 
   const startHref = `/app/flashcards/custom?${startQuery}`;
   const flashcardCountFormatter = useMemo(() => new Intl.NumberFormat("en-US"), []);
-  const systemStudyHref = useCallback(
-    (systemId: CanonicalBodySystemId) => {
-      const systemBuilderCategoryIds = builderCategoryIdsForCanonicalSelection(
-        scopedPathwayId,
-        builderCategories,
-        new Set([systemId]),
-      );
-      const q = buildCustomSessionQuery({
-        pathwayId: scopedPathwayId,
-        cardLimit,
-        shuffleOn,
-        selectedBuilderCategoryIds: systemBuilderCategoryIds,
-        allBuilderCategoryIds,
-        weakOnly,
-        incorrectOnly,
-        starredOnly,
-        notStudiedOnly,
-        recentStudiedOnly,
-        includeCards: true,
-        forceCategoryFilter: true,
-        alliedProfession: apForQuery || null,
-        hubTopicSlug,
-      });
-      return `/app/flashcards/custom?${q}`;
-    },
-    [
-      scopedPathwayId,
-      builderCategories,
-      cardLimit,
-      shuffleOn,
-      allBuilderCategoryIds,
-      weakOnly,
-      incorrectOnly,
-      starredOnly,
-      notStudiedOnly,
-      recentStudiedOnly,
-      apForQuery,
-      hubTopicSlug,
-    ],
-  );
-
   const starredCount = useMemo(() => countSavedStudyItems().starred, []);
 
   const activePreset = useMemo((): "all" | "weak" | "incorrect" | "recent" | "starred" | "unseen" | "custom" => {
@@ -989,7 +949,7 @@ export function FlashcardsHubClient({
             Choose What to Study
           </h2>
           <p className="mt-3 text-sm leading-6 text-[var(--semantic-text-secondary)] sm:text-base">
-            Select a system, target the cards that need attention, and begin.
+            Select one or more systems, target the cards that need attention, and begin.
           </p>
         </div>
 
@@ -1040,21 +1000,20 @@ export function FlashcardsHubClient({
               {CANONICAL_STUDY_CATEGORIES.map((system) => {
                 const active = selectedCanonicalIds.includes(system.id);
                 const count = countsByCanonical[system.id] ?? 0;
-                const href = systemStudyHref(system.id);
                 const accentIndex = CANONICAL_STUDY_CATEGORIES.findIndex((category) => category.id === system.id) % 4;
                 return (
-                  <Link
+                  <button
                     key={system.id}
-                    href={href}
+                    type="button"
+                    aria-pressed={active}
                     data-selected={active}
                     data-accent={accentIndex}
                     className="nn-flashcards-system-card-v2 group flex min-h-[10rem] flex-col justify-between rounded-[1.25rem] border p-4 text-left text-sm font-semibold transition focus-visible:outline-none"
                     data-nn-e2e-flashcards-system-card={system.id}
-                    onKeyDown={(event) => {
-                      if (event.key === " ") {
-                        event.preventDefault();
-                        event.currentTarget.click();
-                      }
+                    onClick={() => {
+                      setSelectedCanonicalIds((current) => {
+                        return toggleFlashcardsHubSystemSelection(current, system.id);
+                      });
                     }}
                   >
                     <span className="flex items-start justify-between gap-3">
@@ -1062,7 +1021,7 @@ export function FlashcardsHubClient({
                         <Layers className="h-5 w-5" />
                       </span>
                       <span className="nn-flashcards-system-card-v2__arrow inline-flex h-8 w-8 items-center justify-center rounded-full" aria-hidden>
-                        <ArrowRight className="h-4 w-4" />
+                        {active ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                       </span>
                     </span>
                     <span>
@@ -1077,9 +1036,9 @@ export function FlashcardsHubClient({
                       </span>
                     </span>
                     <span className="nn-flashcards-system-card-v2__badge inline-flex min-h-7 w-fit items-center rounded-full px-3 text-xs font-semibold">
-                      Study now
+                      {active ? "Selected" : "Add system"}
                     </span>
-                  </Link>
+                  </button>
                 );
               })}
             </div>

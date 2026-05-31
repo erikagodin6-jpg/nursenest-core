@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { npPathwaySpecialtyAndSql } from "@/lib/flashcards/np-pathway-specialty-sql";
@@ -29,6 +30,28 @@ export function flashcardLearnerExamQualityGatesSql(): Prisma.Sql {
     AND ${EXAM_QUESTION_NON_ECG_TAG_SQL}
     ${GENERAL_STUDY_BANK_MODULE_SCOPE_SQL}
   `;
+}
+
+/**
+ * Flashcards may materialize from the shared NCLEX-RN exam bank. If the Canada RN slice has
+ * no rows because legacy imports marked shared RN content as US-only, retry with the US
+ * region while keeping the same NCLEX-RN exam/tier pathway scope.
+ */
+export function flashcardLearnerExamPoolCandidateScopes(
+  poolScope: AccessScope,
+  pathway: ExamPathwayDefinition,
+): AccessScope[] {
+  const scopes: AccessScope[] = [poolScope];
+  if (
+    pathway.id === "ca-rn-nclex-rn" &&
+    poolScope.hasAccess &&
+    !accessScopeIsStaffLearnerEntitlementBypass(poolScope) &&
+    poolScope.country === "CA" &&
+    poolScope.tier === "RN"
+  ) {
+    scopes.push({ ...poolScope, country: "US" });
+  }
+  return scopes;
 }
 
 /**

@@ -11,7 +11,10 @@ import {
   applyCountsToBuilderCategories,
   type BuilderCategoryOption,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
-import { flashcardLearnerExamPoolWhereSql } from "@/lib/flashcards/flashcard-learner-exam-pool-sql";
+import {
+  flashcardLearnerExamPoolCandidateScopes,
+  flashcardLearnerExamPoolWhereSql,
+} from "@/lib/flashcards/flashcard-learner-exam-pool-sql";
 import { getStudyLinkPathwayColumnExists } from "@/lib/flashcards/flashcard-exam-pool-column-guard";
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 import { foldExamQuestionTopicBodyGroupsIntoBuilderCounts } from "@/lib/flashcards/flashcards-exam-inventory-counts";
@@ -169,7 +172,6 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
   }
 
   const hasStudyLinkCol = await getStudyLinkPathwayColumnExists();
-  const whereSql = flashcardLearnerExamPoolWhereSql(poolScope, pathway, hasStudyLinkCol);
 
   const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathway.id);
   const statementTimeoutMs = flashcardsInventoryStatementTimeoutMs();
@@ -184,13 +186,21 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
   }
 
   const prismaAggStarted = performance.now();
+  const candidateScopes = flashcardLearnerExamPoolCandidateScopes(poolScope, pathway);
   const txResult = await prisma.$transaction(
     async (tx) => {
       // Bound aggregate queries so a single slow exam_questions scan doesn't wedge learner study surfaces.
       await tx.$executeRaw(Prisma.sql`SET LOCAL statement_timeout = ${statementTimeoutMs}`);
 
-      const [totalRow, groupRows, dedicatedFlashcardCount, legacyCanonicalPrismaPoolCount] =
-        await Promise.all([
+      let selectedTotalRow: [{ n: bigint }] = [{ n: BigInt(0) }];
+      let selectedGroupRows: GroupRow[] = [];
+      let selectedPoolScope = poolScope;
+      let regionalFallbackUsed = false;
+
+      for (let i = 0; i < candidateScopes.length; i += 1) {
+        const candidateScope = candidateScopes[i] ?? poolScope;
+        const whereSql = flashcardLearnerExamPoolWhereSql(candidateScope, pathway, hasStudyLinkCol);
+        const [totalRow, groupRows] = await Promise.all([
           tx.$queryRaw<[{ n: bigint }]>`
             SELECT COUNT(*)::bigint AS n FROM exam_questions
             WHERE ${whereSql}
@@ -206,6 +216,23 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
             ORDER BY cnt DESC NULLS LAST
             LIMIT ${FLASHCARD_INVENTORY_GROUP_BY_LIMIT}
           `,
+        ]);
+        selectedTotalRow = totalRow;
+        selectedGroupRows = groupRows;
+        selectedPoolScope = candidateScope;
+        regionalFallbackUsed = i > 0;
+        if (bn(totalRow[0]?.n) > 0 || i === candidateScopes.length - 1) break;
+
+        safeServerLog("flashcards", "exam_inventory_candidate_scope_zero", {
+          pathwayId: pathway.id,
+          country: candidateScope.country != null ? String(candidateScope.country) : "",
+          tier: candidateScope.tier != null ? String(candidateScope.tier) : "",
+          nextCandidateAvailable: i + 1 < candidateScopes.length ? 1 : 0,
+        });
+      }
+
+      const [dedicatedFlashcardCount, legacyCanonicalPrismaPoolCount] =
+        await Promise.all([
           tx.flashcard.count({
             where: {
               status: ContentStatus.PUBLISHED,
@@ -222,7 +249,14 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
             : Promise.resolve(null),
         ]);
 
-      return { totalRow, groupRows, dedicatedFlashcardCount, legacyCanonicalPrismaPoolCount };
+      return {
+        totalRow: selectedTotalRow,
+        groupRows: selectedGroupRows,
+        selectedPoolScope,
+        regionalFallbackUsed,
+        dedicatedFlashcardCount,
+        legacyCanonicalPrismaPoolCount,
+      };
     },
     {
       maxWait: 10_000,
@@ -276,8 +310,8 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
     examQuestionSqlPoolCount: total,
     legacyCanonicalPrismaPoolCount,
     dedicatedFlashcardRowCount: dedicatedFlashcardCount,
-    tier: poolScope.tier != null ? String(poolScope.tier) : null,
-    country: poolScope.country != null ? String(poolScope.country) : null,
+    tier: txResult.selectedPoolScope.tier != null ? String(txResult.selectedPoolScope.tier) : null,
+    country: txResult.selectedPoolScope.country != null ? String(txResult.selectedPoolScope.country) : null,
     poolSource: "flashcard_learner_exam_norm_sql_v1",
     ...(total === 0
       ? {
@@ -328,6 +362,7 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
     distinctTopicBodyBuckets: groups.length,
     dedicatedFlashcardRowCount: dedicatedFlashcardCount,
     legacyCanonicalPrismaPoolCount: legacyCanonicalPrismaPoolCount ?? undefined,
+    regionalFallbackUsed: txResult.regionalFallbackUsed ? 1 : 0,
     tierResolutionSource: accessResolved.tierResolutionSource,
     countryResolutionSource: accessResolved.countryResolutionSource,
     entitlementUserRowCoalesce: accessResolved.entitlementTierCountryUserRowCoalesce,

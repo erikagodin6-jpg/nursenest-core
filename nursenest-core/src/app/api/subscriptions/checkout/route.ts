@@ -56,7 +56,7 @@ import {
   collectAuthoritativeCheckoutGlobalRegionSlugs,
   GLOBAL_CHECKOUT_REGION_CONTEXT_COOKIE,
 } from "@/lib/region/checkout-global-region-context";
-import type { TierCode } from "@prisma/client";
+import { TrialStatus, type TierCode } from "@prisma/client";
 
 /**
  * Stripe Checkout: **line_items** use Price IDs resolved only from server env maps (`pricing-map`, `regional-pricing-map`).
@@ -158,7 +158,15 @@ export async function POST(req: Request) {
 
     const userCheckoutRow = await prisma.user.findUnique({
       where: { id: userId },
-      select: { isDemoUser: true, tier: true, country: true },
+      select: {
+        isDemoUser: true,
+        tier: true,
+        country: true,
+        trialStatus: true,
+        trialStartedAt: true,
+        trialUsedAt: true,
+        subscriptions: { select: { id: true }, take: 1 },
+      },
     });
     if (userCheckoutRow?.isDemoUser) {
       auditCheckoutFailed({ correlation, reason: "demo_forbidden", userId });
@@ -457,7 +465,14 @@ export async function POST(req: Request) {
     });
     const existingCustomerId = existingSub?.stripeCustomerId?.trim() || undefined;
 
-    const trialDays = STRIPE_TRIAL_DAYS;
+    const hasPriorSubscription = (userCheckoutRow?.subscriptions.length ?? 0) > 0;
+    const trialEligible =
+      STRIPE_TRIAL_DAYS > 0 &&
+      !hasPriorSubscription &&
+      !userCheckoutRow?.trialStartedAt &&
+      !userCheckoutRow?.trialUsedAt &&
+      userCheckoutRow?.trialStatus !== TrialStatus.EXHAUSTED;
+    const trialDays = trialEligible ? STRIPE_TRIAL_DAYS : 0;
     const metadata: Record<string, string> = {
       userId,
       currency: resolvedCurrency,
@@ -465,6 +480,7 @@ export async function POST(req: Request) {
       duration,
       planCode,
       trialDays: String(trialDays),
+      trialEligible: trialEligible ? "true" : "false",
       app: "nursenest-core",
       legalPolicyVersion: policyVersion,
       legalPoliciesAcceptedAt: acceptedAt.toISOString(),
@@ -495,7 +511,12 @@ export async function POST(req: Request) {
       tier,
       duration,
       planCode,
+      currency: resolvedCurrency,
+      trialDays: String(trialDays),
+      trialEligible: trialEligible ? "true" : "false",
       app: "nursenest-core",
+      legalPolicyVersion: policyVersion,
+      legalPoliciesAcceptedAt: acceptedAt.toISOString(),
     };
     if (metadata.region) {
       subscriptionMetadata.region = metadata.region;

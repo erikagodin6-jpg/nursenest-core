@@ -4,7 +4,10 @@ import type { GlobalExamContext } from "@/lib/exam-context/global-exam-context";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { BankExamRowForFlashcard } from "@/lib/flashcards/bank-exam-question-to-flashcard-select";
 import { resolveBuilderCategoryId } from "@/lib/flashcards/flashcard-builder-taxonomy";
-import { flashcardLearnerExamPoolWhereSql } from "@/lib/flashcards/flashcard-learner-exam-pool-sql";
+import {
+  flashcardLearnerExamPoolCandidateScopes,
+  flashcardLearnerExamPoolWhereSql,
+} from "@/lib/flashcards/flashcard-learner-exam-pool-sql";
 import { getStudyLinkPathwayColumnExists } from "@/lib/flashcards/flashcard-exam-pool-column-guard";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
@@ -232,32 +235,46 @@ export async function loadExamQuestionRowsForFlashcardPool(
   const topicScope = topicOrBodySystemMatchSql(topicFilter);
   const cap = Math.min(Math.max(Math.floor(take), 1), EXAM_FLASHCARD_SESSION_POOL_CAP);
   const hasStudyLinkCol = await getStudyLinkPathwayColumnExists();
-  const whereSql = flashcardLearnerExamPoolWhereSql(poolScope, pathway, hasStudyLinkCol);
+  const candidateScopes = flashcardLearnerExamPoolCandidateScopes(poolScope, pathway);
 
   const rows = await prisma.$transaction(
     async (tx) => {
       await tx.$executeRawUnsafe(`SET LOCAL statement_timeout = '${DISCOVERY_STATEMENT_TIMEOUT_MS}ms'`);
-      return tx.$queryRaw<ExamQuestionFlashcardPoolRow[]>`
-      SELECT
-        q.id,
-        q.stem,
-        q.options,
-        q.correct_answer AS "correctAnswer",
-        q.question_type AS "questionType",
-        q.rationale,
-        q.distractor_rationales AS "distractorRationales",
-        q.incorrect_answer_rationale AS "incorrectAnswerRationale",
-        q.correct_answer_explanation AS "correctAnswerExplanation",
-        q.clinical_pearl AS "clinicalPearl",
-        q.key_takeaway AS "keyTakeaway",
-        q.images,
-        q.topic,
-        q.body_system AS "bodySystem"
-      FROM exam_questions q
-      WHERE ${whereSql}${topicScope}${FLASHCARD_USABILITY_SQL}
-      ORDER BY q.id
-      LIMIT ${cap}
-    `;
+      let selectedRows: ExamQuestionFlashcardPoolRow[] = [];
+      for (let i = 0; i < candidateScopes.length; i += 1) {
+        const candidateScope = candidateScopes[i] ?? poolScope;
+        const whereSql = flashcardLearnerExamPoolWhereSql(candidateScope, pathway, hasStudyLinkCol);
+        const candidateRows = await tx.$queryRaw<ExamQuestionFlashcardPoolRow[]>`
+          SELECT
+            q.id,
+            q.stem,
+            q.options,
+            q.correct_answer AS "correctAnswer",
+            q.question_type AS "questionType",
+            q.rationale,
+            q.distractor_rationales AS "distractorRationales",
+            q.incorrect_answer_rationale AS "incorrectAnswerRationale",
+            q.correct_answer_explanation AS "correctAnswerExplanation",
+            q.clinical_pearl AS "clinicalPearl",
+            q.key_takeaway AS "keyTakeaway",
+            q.images,
+            q.topic,
+            q.body_system AS "bodySystem"
+          FROM exam_questions q
+          WHERE ${whereSql}${topicScope}${FLASHCARD_USABILITY_SQL}
+          ORDER BY q.id
+          LIMIT ${cap}
+        `;
+        selectedRows = candidateRows;
+        if (candidateRows.length > 0 || i === candidateScopes.length - 1) break;
+        safeServerLog("flashcards", "exam_flashcard_rows_candidate_scope_zero", {
+          pathwayId: pathway.id,
+          country: candidateScope.country != null ? String(candidateScope.country) : "",
+          tier: candidateScope.tier != null ? String(candidateScope.tier) : "",
+          nextCandidateAvailable: i + 1 < candidateScopes.length ? 1 : 0,
+        });
+      }
+      return selectedRows;
     },
     { maxWait: 8_000, timeout: 12_000 },
   );

@@ -230,6 +230,38 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
   }
 }
 
+/** Clear the short-lived process cache after a subscription mirror repair. */
+export function invalidateRuntimeUserAccessCache(userId: string): void {
+  runtimeUserAccessCache.delete(userId);
+}
+
+/**
+ * Bypass the React request cache and runtime cache after a billing repair.
+ * Use sparingly at synchronization boundaries; normal content gates should call {@link getUserAccess}.
+ */
+export async function getUserAccessFresh(userId: string): Promise<UserAccess> {
+  const now = Date.now();
+  const t0 = performance.now();
+  const telemetry = {
+    userFound: false,
+    subscriptionRowsRead: 0,
+    subscriptionQueries: 0,
+  };
+  const ua = await getUserAccessCore(userId, telemetry);
+  if (runtimeUserAccessCache.size > 5000) runtimeUserAccessCache.clear();
+  runtimeUserAccessCache.set(userId, { ua, cachedAtMs: now });
+  safeServerLog("entitlement", "get_user_access_fresh", {
+    durationMs: Math.round(performance.now() - t0),
+    userFound: telemetry.userFound,
+    subscriptionRowsRead: telemetry.subscriptionRowsRead,
+    subscriptionQueries: telemetry.subscriptionQueries,
+    outcome: ua.reason,
+    hasPremium: ua.hasPremium ? 1 : 0,
+    planStatus: ua.plan.status,
+  });
+  return ua;
+}
+
 type EntitlementReadTelemetry = {
   userFound: boolean;
   subscriptionRowsRead: number;
