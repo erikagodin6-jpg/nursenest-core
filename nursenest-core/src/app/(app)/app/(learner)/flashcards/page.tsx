@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import { FlashcardsHubSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
 import { FlashcardsHubClientBoundary } from "@/components/flashcards/flashcards-hub-client-boundary";
@@ -558,14 +557,7 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
   return (
     <div className="space-y-2">
       <Suspense
-        fallback={
-          <BrandedPageLoader
-            message={t("learner.loading.flashcards")}
-            contentClassName="!p-0"
-          >
-            <FlashcardsHubSkeleton withRouteAria={false} />
-          </BrandedPageLoader>
-        }
+        fallback={<FlashcardsHubSkeleton withRouteAria={false} />}
       >
         <FlashcardsHubClientBoundary>
           <FlashcardsHubClient
