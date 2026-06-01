@@ -1,20 +1,20 @@
 # Next.js Performance Audit
 
-Generated: 2026-06-01T10:51:37.575Z
+Generated: 2026-06-01T11:09:21.833Z
 
 ## Client And Hydration Pressure
 
 | Flow | Source KB | `use client` files | useState | useEffect | fetch | Suspense | Primary Pressure |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Lesson launcher | 76.9 KB | 1 | 2 | 2 | 3 | 0 | Server/data path |
-| Lesson detail | 60.4 KB | 0 | 0 | 0 | 0 | 0 | Server/data path |
-| Flashcard launcher | 110.3 KB | 1 | 9 | 6 | 1 | 1 | Server shell/Suspense boundary |
-| Flashcard session | 92 KB | 0 | 0 | 0 | 0 | 0 | Server/data path |
+| Lesson launcher | 79.7 KB | 1 | 2 | 2 | 3 | 0 | Server/data path |
+| Lesson detail | 59.7 KB | 0 | 0 | 0 | 0 | 0 | Server/data path |
+| Flashcard launcher | 111.1 KB | 1 | 9 | 6 | 1 | 1 | Server shell/Suspense boundary |
+| Flashcard session | 91.4 KB | 0 | 0 | 0 | 0 | 0 | Server/data path |
 | Practice launcher | 78.8 KB | 1 | 5 | 5 | 2 | 0 | Server/data path |
-| Practice session | 236.1 KB | 1 | 10 | 24 | 7 | 0 | Client hydration + API waterfall |
-| CAT launcher | 100.3 KB | 1 | 5 | 5 | 2 | 0 | Server/data path |
-| CAT session | 234.9 KB | 1 | 10 | 24 | 7 | 0 | Client hydration + API waterfall |
-| Dashboard | 80.7 KB | 0 | 0 | 0 | 0 | 1 | Server shell/Suspense boundary |
+| Practice session | 237.1 KB | 1 | 10 | 24 | 7 | 0 | Client hydration + API waterfall |
+| CAT launcher | 101 KB | 1 | 5 | 5 | 2 | 0 | Server/data path |
+| CAT session | 237.1 KB | 1 | 10 | 24 | 7 | 0 | Client hydration + API waterfall |
+| Dashboard | 81.3 KB | 0 | 0 | 0 | 0 | 1 | Server shell/Suspense boundary |
 
 ## Findings
 

@@ -110,11 +110,85 @@ export function catReadinessUnavailableMessage(
   return `Adaptive exam not available yet for this pathway. We currently have ${diagnostics.completePracticeQuestions} complete practice questions; at least ${minPool} CAT-ready calibrated questions are required.`;
 }
 
+const CAT_READINESS_SUMMARY_CACHE_TTL_MS = 60_000;
+const CAT_READINESS_SUMMARY_CACHE_MAX = 256;
+const catReadinessSummaryCache = new Map<
+  string,
+  { expiresAt: number; value: CatPracticeReadinessResult }
+>();
+
+function pruneCatReadinessSummaryCache(now: number) {
+  if (catReadinessSummaryCache.size <= CAT_READINESS_SUMMARY_CACHE_MAX) return;
+  for (const [key, entry] of catReadinessSummaryCache) {
+    if (entry.expiresAt <= now) catReadinessSummaryCache.delete(key);
+  }
+  if (catReadinessSummaryCache.size <= CAT_READINESS_SUMMARY_CACHE_MAX) return;
+  const overflow =
+    catReadinessSummaryCache.size - CAT_READINESS_SUMMARY_CACHE_MAX;
+  let removed = 0;
+  for (const key of catReadinessSummaryCache.keys()) {
+    catReadinessSummaryCache.delete(key);
+    removed++;
+    if (removed >= overflow) break;
+  }
+}
+
+function catReadinessSummaryCacheKey(
+  userId: string,
+  entitlement: AccessScope,
+  pathwayId: string,
+) {
+  return [
+    userId,
+    pathwayId,
+    entitlement.tier ?? "",
+    entitlement.country ?? "",
+    entitlement.hasAccess ? "1" : "0",
+  ].join(":");
+}
+
 /**
  * Server-only preflight for pathway CAT practice (same gates as {@link createCatPracticeTestPayload} pool phase).
  * Used by the start UI and GET `/api/practice-tests/cat-readiness` — never trust the client for entitlements.
  */
 export async function assessCatPracticeReadinessForPathway(
+  userId: string,
+  entitlement: AccessScope,
+  pathwayId: string,
+  options: {
+    includeStaffDiagnostics?: boolean;
+    publishedCount?: number | null;
+  } = {},
+): Promise<CatPracticeReadinessResult> {
+  if (!options.includeStaffDiagnostics) {
+    const trimmed = pathwayId.trim();
+    const now = Date.now();
+    pruneCatReadinessSummaryCache(now);
+    const key = catReadinessSummaryCacheKey(userId, entitlement, trimmed);
+    const cached = catReadinessSummaryCache.get(key);
+    if (cached && cached.expiresAt > now) return cached.value;
+    const value = await assessCatPracticeReadinessForPathwayUncached(
+      userId,
+      entitlement,
+      trimmed,
+      options,
+    );
+    catReadinessSummaryCache.set(key, {
+      expiresAt: now + CAT_READINESS_SUMMARY_CACHE_TTL_MS,
+      value,
+    });
+    return value;
+  }
+
+  return assessCatPracticeReadinessForPathwayUncached(
+    userId,
+    entitlement,
+    pathwayId,
+    options,
+  );
+}
+
+async function assessCatPracticeReadinessForPathwayUncached(
   userId: string,
   entitlement: AccessScope,
   pathwayId: string,

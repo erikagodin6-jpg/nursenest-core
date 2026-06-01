@@ -1,6 +1,8 @@
 import "server-only";
 import { prisma } from "@/lib/db";
 import type { ReadinessBand, ReadinessResult } from "@/lib/learner/readiness-score";
+import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
+import { DASHBOARD_ANALYTICS_TTL_SECONDS } from "@/lib/cache/learner-private-read-cache-keying";
 
 /* ═══════════════════════════════════════════════════════════════════════
    Peer benchmark engine
@@ -145,10 +147,9 @@ async function getUserAccuracy(userId: string): Promise<number | null> {
 }
 
 /**
- * Main entry point. Computes benchmark data for a user given their
- * readiness result (already computed upstream).
+ * Uncached implementation — called by the cached wrapper below.
  */
-export async function computeBenchmarkData(
+async function computeBenchmarkDataUncached(
   userId: string,
   readiness: ReadinessResult,
 ): Promise<BenchmarkData> {
@@ -164,4 +165,28 @@ export async function computeBenchmarkData(
     hasEnoughData: totalLearners >= MIN_USERS_FOR_PERCENTILE,
     improvementHint: improvementHintForBand(readiness.band),
   };
+}
+
+/**
+ * Main entry point — 15-minute cached.
+ *
+ * Benchmark data (peer percentile) is slow (~300–600 ms) and changes
+ * infrequently; caching it for 15 minutes has no visible impact on accuracy
+ * while removing it from the critical render path.
+ *
+ * Invalidated by `invalidateLearnerPrivateReadCache(userId, ["performance-summary"])`.
+ */
+export async function computeBenchmarkData(
+  userId: string,
+  readiness: ReadinessResult,
+): Promise<BenchmarkData> {
+  return loadWithLearnerPrivateReadCache(
+    {
+      surface: "performance-summary",
+      userId,
+      ttlSeconds: DASHBOARD_ANALYTICS_TTL_SECONDS,
+      keyParts: [readiness.band, readiness.score],
+    },
+    () => computeBenchmarkDataUncached(userId, readiness),
+  );
 }

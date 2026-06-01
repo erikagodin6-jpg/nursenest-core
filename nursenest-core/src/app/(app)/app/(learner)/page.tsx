@@ -162,49 +162,61 @@ async function LearnerDashboardHeavyContent({
   let weakTopicTitles: string[] = [];
   let benchmark: BenchmarkData | null = null;
   let studySettings = DEFAULT_STUDY_SETTINGS;
+  const skipNonCriticalHome = shouldSkipNonCriticalLearnerWork();
+
   try {
     studySettings = await loadStudySettings(userId);
   } catch {
     studySettings = DEFAULT_STUDY_SETTINGS;
   }
-  const skipNonCriticalHome = shouldSkipNonCriticalLearnerWork();
 
   try {
-    const [socialPrivacy, socialInviteCode] = await Promise.all([
-      prisma.socialPrivacySetting.findUnique({
-        where: { userId },
-        select: { socialEnabled: true, statsHidden: true, visibilityScope: true },
-      }),
-      prisma.socialInviteCode.findFirst({
-        where: { userId },
-        orderBy: { createdAt: "desc" },
-        select: { displayCode: true, enabled: true },
-      }),
-    ]);
-    const snap = await loadPremiumDashboardSnapshot(userId, entitlement);
-    const [nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, daysSinceLastActivity, resumeExtras] =
+    // ── Phase 1: Fan out all independent fast loads in parallel ────────────────
+    // loadPremiumDashboardSnapshot and the lightweight DB reads are kicked off
+    // simultaneously. Previously, the snapshot was awaited first, then the
+    // remaining calls were fanned out — this serialized ~45 ms of network time
+    // unnecessarily.
+    const [snap, socialPrivacy, socialInviteCode, notes, todayGoal, questionBankGoal, retentionPrefs, resumeExtras] =
       await Promise.all([
-        buildLearnerStudySnapshot(userId, entitlement, undefined, {
-          topicPerformance: snap?.topicPerformance,
-          studyBootstrap: snap
-            ? {
-                alliedProfessionKey: snap.studyBootstrap.alliedProfessionKey,
-                tier: snap.studyBootstrap.tier,
-                learnerPath: snap.studyBootstrap.learnerPath,
-              }
-            : undefined,
+        loadPremiumDashboardSnapshot(userId, entitlement),
+        prisma.socialPrivacySetting.findUnique({
+          where: { userId },
+          select: { socialEnabled: true, statsHidden: true, visibilityScope: true },
+        }),
+        prisma.socialInviteCode.findFirst({
+          where: { userId },
+          orderBy: { createdAt: "desc" },
+          select: { displayCode: true, enabled: true },
         }),
         loadRecentLearnerNotesSummary(userId),
         loadTodayGoalProgress(userId),
         loadDailyQuestionGoalProgress(userId),
         loadLearnerRetentionPreferences(userId),
-        skipNonCriticalHome ? Promise.resolve(null) : loadDaysSinceLastActivity(userId),
         loadStudyResumeExtras(userId),
       ]);
+
+    // ── Phase 2: Study snapshot depends on topicPerformance from the premium
+    //            snapshot, and benchmark depends on the readiness score.
+    //            Both are now cached (15 min); run them in parallel.
+    const [nextSnap, benchmarkResult, daysSinceLastActivity] = await Promise.all([
+      buildLearnerStudySnapshot(userId, entitlement, undefined, {
+        topicPerformance: snap?.topicPerformance,
+        studyBootstrap: snap
+          ? {
+              alliedProfessionKey: snap.studyBootstrap.alliedProfessionKey,
+              tier: snap.studyBootstrap.tier,
+              learnerPath: snap.studyBootstrap.learnerPath,
+            }
+          : undefined,
+      }),
+      snap && !skipNonCriticalHome ? computeBenchmarkData(userId, snap.readiness) : Promise.resolve(null),
+      skipNonCriticalHome ? Promise.resolve(null) : loadDaysSinceLastActivity(userId),
+    ]);
+
     snapshot = snap;
     studySnap = nextSnap;
     weakTopicTitles = studySnap?.weakTopics.map((w) => w.topic) ?? [];
-    benchmark = snap && !skipNonCriticalHome ? await computeBenchmarkData(userId, snap.readiness) : null;
+    benchmark = benchmarkResult;
     const progressFeedbackLine = studySnap?.topicTrends.find((r) => r.momentum === "improving")?.summary ?? null;
     let adaptiveStudyNextRecs: Awaited<ReturnType<typeof buildSmartStudyNextRecommendations>> | undefined;
     if (studySnap && !skipNonCriticalHome) {

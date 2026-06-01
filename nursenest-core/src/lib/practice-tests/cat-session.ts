@@ -49,7 +49,12 @@ import {
   pathwaySupportsCatExamSimulation,
   type ExamSimulationNpBoard,
 } from "@/lib/exams/cat-exam-simulation";
-import type { CatAdaptiveState, CatAnswerResult, CatExamReport, CatPresentationMode } from "@/lib/exams/cat-types";
+import type {
+  CatAdaptiveState,
+  CatAnswerResult,
+  CatExamReport,
+  CatPresentationMode,
+} from "@/lib/exams/cat-types";
 import {
   blueprintTagSourceForCategoryKey,
   getExamConfig,
@@ -62,11 +67,17 @@ import {
 } from "@/lib/learner/study-question-signals";
 import { loadWeakTopicPracticePlan } from "@/lib/learner/topic-performance";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
-import { fetchCatPracticePool, fetchCatPracticePoolCached } from "@/lib/practice-tests/cat-pool";
+import { fetchCatPracticePoolCached } from "@/lib/practice-tests/cat-pool";
 import { buildCatSelectionAppliedMeta } from "@/lib/practice-tests/cat-selection-applied-meta";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
-import { normalizedAdaptiveCatRunBounds, practiceCatBounds } from "@/lib/practice-tests/cat-practice-config";
-import { configFromInput, type PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
+import {
+  normalizedAdaptiveCatRunBounds,
+  practiceCatBounds,
+} from "@/lib/practice-tests/cat-practice-config";
+import {
+  configFromInput,
+  type PickQuestionsInput,
+} from "@/lib/practice-tests/pick-question-ids";
 import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
 import { buildCatStudyFeedback } from "@/lib/practice-tests/build-cat-study-feedback";
 import { buildMinimalCatStudyFeedbackPayload } from "@/lib/practice-tests/cat-practice-fallbacks";
@@ -88,32 +99,63 @@ import type {
   PracticeTestResultsJson,
 } from "@/lib/practice-tests/types";
 
-function catEngineTypeFromReadiness(engineType: string | null | undefined): CatEngineType {
+function catEngineTypeFromReadiness(
+  engineType: string | null | undefined,
+): CatEngineType {
   return engineType === "SIMULATION" ? "SIMULATION" : "CAT";
 }
 
-function catEngineModeFromReadiness(mode: string | null | undefined): CatEngineMode {
-  if (mode === "beta" || mode === "mini_adaptive" || mode === "simulation" || mode === "unavailable") {
+function catEngineModeFromReadiness(
+  mode: string | null | undefined,
+): CatEngineMode {
+  if (
+    mode === "beta" ||
+    mode === "mini_adaptive" ||
+    mode === "simulation" ||
+    mode === "unavailable"
+  ) {
     return mode;
   }
   if (mode === "loft_simulation") return "simulation";
   return "production_ready";
 }
 
-function catStopBoundsForConfig(config: PracticeTestConfigJson, bounds: { min: number; max: number }): CatStopBounds {
-  const examCfg = getExamConfig(config.catExamConfigId ?? "") ?? NCLEX_RN_US_EXAM_CONFIG;
+function catStopBoundsForConfig(
+  config: PracticeTestConfigJson,
+  bounds: { min: number; max: number },
+): CatStopBounds {
+  const examCfg =
+    getExamConfig(config.catExamConfigId ?? "") ?? NCLEX_RN_US_EXAM_CONFIG;
   const sim = config.catPresentationMode === "exam_simulation";
-  const thr = typeof config.catPassingThreshold === "number" ? config.catPassingThreshold : 0;
+  const thr =
+    typeof config.catPassingThreshold === "number"
+      ? config.catPassingThreshold
+      : 0;
   if (examCfg.passingLogic === "fixed") {
-    return { ...bounds, passingThreshold: thr, terminationMode: "fixed_full_length" };
+    return {
+      ...bounds,
+      passingThreshold: thr,
+      terminationMode: "fixed_full_length",
+    };
   }
   if (sim && examCfg.type === "NCLEX") {
-    return { ...bounds, passingThreshold: thr, terminationMode: "adaptive_exam_ci" };
+    return {
+      ...bounds,
+      passingThreshold: thr,
+      terminationMode: "adaptive_exam_ci",
+    };
   }
-  return { ...bounds, passingThreshold: thr, terminationMode: "adaptive_practice" };
+  return {
+    ...bounds,
+    passingThreshold: thr,
+    terminationMode: "adaptive_practice",
+  };
 }
 
-function readinessFromReport(report: CatExamReport, presentationMode?: CatPresentationMode): string {
+function readinessFromReport(
+  report: CatExamReport,
+  presentationMode?: CatPresentationMode,
+): string {
   const sim = presentationMode === "exam_simulation";
   if (report.stoppedReason === "confidence_pass") {
     return sim
@@ -125,12 +167,18 @@ function readinessFromReport(report: CatExamReport, presentationMode?: CatPresen
       ? "Exam simulation: remediation signal (estimate below threshold with enough precision)."
       : "Remediation signal. Estimate stabilized below threshold";
   }
-  if (report.decision === "pass") return sim ? "Exam simulation: above passing band" : "On track";
-  if (report.decision === "fail") return sim ? "Exam simulation: below passing band" : "Needs work";
-  return sim ? "Exam simulation: estimate still forming" : "Building confidence";
+  if (report.decision === "pass")
+    return sim ? "Exam simulation: above passing band" : "On track";
+  if (report.decision === "fail")
+    return sim ? "Exam simulation: below passing band" : "Needs work";
+  return sim
+    ? "Exam simulation: estimate still forming"
+    : "Building confidence";
 }
 
-function readinessResultLabel(decision: CatExamReport["decision"]): "PASS" | "BORDERLINE" | "FAIL" {
+function readinessResultLabel(
+  decision: CatExamReport["decision"],
+): "PASS" | "BORDERLINE" | "FAIL" {
   if (decision === "pass") return "PASS";
   if (decision === "fail") return "FAIL";
   return "BORDERLINE";
@@ -166,7 +214,9 @@ function countsFromResults(results: CatAnswerResult[]): Map<string, number> {
 /** Proportional weak boost (0…~9); blueprint balancing still dominates via deficit * 3 in cat-engine. */
 const CAT_WEAK_MAX_BOOST = 9;
 
-function catBoostFromWeakPriorities(priorityByCanonical: Map<string, number>): CatSelectOptions {
+function catBoostFromWeakPriorities(
+  priorityByCanonical: Map<string, number>,
+): CatSelectOptions {
   return {
     categoryPriorityBoost: (cat: string, row: CatPoolRow) => {
       const t = row.topic?.trim() ?? "";
@@ -189,10 +239,14 @@ function sessionMissBoost(state: CatAdaptiveState): CatSelectOptions {
   };
 }
 
-function mergeCatBoosts(a: CatSelectOptions, b: CatSelectOptions): CatSelectOptions {
+function mergeCatBoosts(
+  a: CatSelectOptions,
+  b: CatSelectOptions,
+): CatSelectOptions {
   return {
     categoryPriorityBoost: (cat: string, row: CatPoolRow) =>
-      (a.categoryPriorityBoost?.(cat, row) ?? 0) + (b.categoryPriorityBoost?.(cat, row) ?? 0),
+      (a.categoryPriorityBoost?.(cat, row) ?? 0) +
+      (b.categoryPriorityBoost?.(cat, row) ?? 0),
   };
 }
 
@@ -202,11 +256,17 @@ export function hasUsableCatWeakPriorityMap(
   if (!pri || typeof pri !== "object") return false;
   const entries = Object.entries(pri as Record<string, unknown>);
   if (entries.length === 0) return false;
-  return entries.some(([, v]) => typeof v === "number" && Number.isFinite(v) && v > 0);
+  return entries.some(
+    ([, v]) => typeof v === "number" && Number.isFinite(v) && v > 0,
+  );
 }
 
-function mergeBlueprintIntoBoost(boost: CatSelectOptions, blueprintWeights: Record<string, number> | undefined) {
-  if (!blueprintWeights || Object.keys(blueprintWeights).length === 0) return boost;
+function mergeBlueprintIntoBoost(
+  boost: CatSelectOptions,
+  blueprintWeights: Record<string, number> | undefined,
+) {
+  if (!blueprintWeights || Object.keys(blueprintWeights).length === 0)
+    return boost;
   return { ...boost, blueprintWeights };
 }
 
@@ -226,7 +286,8 @@ async function scoreOne(
   const correct = answerMatches(q.questionType, q.correctAnswer, userAns);
   const row: CatPoolRow = {
     id: q.id,
-    difficulty: typeof q.difficulty === "number" ? clampDifficulty(q.difficulty) : 3,
+    difficulty:
+      typeof q.difficulty === "number" ? clampDifficulty(q.difficulty) : 3,
     bodySystem: q.bodySystem,
     topic: q.topic,
     nclexClientNeedsCategory: q.nclexClientNeedsCategory,
@@ -244,11 +305,16 @@ async function scoreOne(
   };
 }
 
-function patchBlueprintSessionDiagnostics(state: CatAdaptiveState): CatAdaptiveState {
+function patchBlueprintSessionDiagnostics(
+  state: CatAdaptiveState,
+): CatAdaptiveState {
   if (!state.catBlueprintDiagnostics) return state;
   return {
     ...state,
-    catBlueprintDiagnostics: mergeBlueprintDiagnosticsPostScore(state.catBlueprintDiagnostics, state.results),
+    catBlueprintDiagnostics: mergeBlueprintDiagnosticsPostScore(
+      state.catBlueprintDiagnostics,
+      state.results,
+    ),
   };
 }
 
@@ -274,7 +340,8 @@ export async function createCatPracticeTestPayload(
     }
   | { ok: false; message: string; code?: string }
 > {
-  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+  const { getExamPathwayById } =
+    await import("@/lib/exam-pathways/exam-product-registry");
   const sim = presentationMode === "exam_simulation";
   const requestedPathwayId = input.pathwayId?.trim() || null;
   let pathway: ExamPathwayDefinition | null = null;
@@ -318,7 +385,10 @@ export async function createCatPracticeTestPayload(
     try {
       assertCatAdaptiveEngineAllowed(requestedPathwayId);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "CAT engine not allowed for this pathway.";
+      const message =
+        err instanceof Error
+          ? err.message
+          : "CAT engine not allowed for this pathway.";
       return {
         ok: false,
         code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready,
@@ -337,7 +407,9 @@ export async function createCatPracticeTestPayload(
     };
   }
 
-  const pathwayReadiness = await readinessConfigForPathwayId(pathway?.id ?? input.pathwayId ?? null);
+  const pathwayReadiness = await readinessConfigForPathwayId(
+    pathway?.id ?? input.pathwayId ?? null,
+  );
 
   const poolStrictness = input.selectionStrictness ?? "strict";
   /** Original POST `catSelectionBasis` before soft coercion / exam-simulation normalization. */
@@ -345,10 +417,15 @@ export async function createCatPracticeTestPayload(
   let poolBasis: CatSelectionBasis = sim ? "random" : catBasis;
 
   const weakPlan = sim
-    ? { dbTopicNames: [] as string[], priorityByCanonical: new Map<string, number>() }
+    ? {
+        dbTopicNames: [] as string[],
+        priorityByCanonical: new Map<string, number>(),
+      }
     : await loadWeakTopicPracticePlan(userId, entitlement, 14);
   const catWeakCategories = weakPlan.dbTopicNames;
-  const catWeakPriorityByCanonical = Object.fromEntries(weakPlan.priorityByCanonical);
+  const catWeakPriorityByCanonical = Object.fromEntries(
+    weakPlan.priorityByCanonical,
+  );
 
   if (!sim && poolBasis === "weak" && weakPlan.priorityByCanonical.size === 0) {
     if (poolStrictness === "soft") {
@@ -380,7 +457,10 @@ export async function createCatPracticeTestPayload(
   }
 
   if (!sim && poolBasis === "starred") {
-    const starred = await loadSavedRationaleQuestionIdsForPoolFilter(userId, 80);
+    const starred = await loadSavedRationaleQuestionIdsForPoolFilter(
+      userId,
+      80,
+    );
     if (starred.length === 0) {
       if (poolStrictness === "soft") {
         poolBasis = "random";
@@ -397,10 +477,14 @@ export async function createCatPracticeTestPayload(
 
   const examCfg = examSimulationConfigForPathway(
     pathway,
-    sim && pathway?.examFamily === ExamFamily.NP ? { npBoard: catNpExamBoard } : undefined,
+    sim && pathway?.examFamily === ExamFamily.NP
+      ? { npBoard: catNpExamBoard }
+      : undefined,
   );
   const simBounds = nclexRnSimulationBoundsFromConfig(examCfg);
-  const fallbackBounds = sim ? simBounds : practiceCatBounds(input.questionCount);
+  const fallbackBounds = sim
+    ? simBounds
+    : practiceCatBounds(input.questionCount);
   // Guided practice sessions ("practice") must use practiceCatBounds so that short
   // runs (10–50 Q) are honoured.  Readiness-config bounds (e.g. NCLEX 120–145) only
   // apply to full adaptive CAT sessions, not user-requested guided practice.
@@ -408,7 +492,10 @@ export async function createCatPracticeTestPayload(
     ? simBounds
     : adaptiveSessionType === "practice" || !pathwayReadiness
       ? fallbackBounds
-      : { min: pathwayReadiness.minQuestions, max: pathwayReadiness.maxQuestions };
+      : {
+          min: pathwayReadiness.minQuestions,
+          max: pathwayReadiness.maxQuestions,
+        };
 
   const sessionPickSalt = randomUUID();
   const poolInput: PickQuestionsInput = {
@@ -419,7 +506,11 @@ export async function createCatPracticeTestPayload(
     selectionStrictness: poolStrictness,
   };
 
-  const { pool, buildMeta } = await fetchCatPracticePoolCached(userId, entitlement, poolInput);
+  const { pool, buildMeta } = await fetchCatPracticePoolCached(
+    userId,
+    entitlement,
+    poolInput,
+  );
   const pathwayIdForRecent = requestedPathwayId ?? input.pathwayId ?? null;
   const recentPack = await recentPracticeQuestionIdsForPathway({
     userId,
@@ -427,7 +518,10 @@ export async function createCatPracticeTestPayload(
     sessionLookback: STUDY_DIVERSITY_CAT_STEP_RECENT_SESSION_LOOKBACK,
     maxIds: 120,
   });
-  const recentFiltered = filterPoolRemovingRecentQuestions(pool, recentPack.ids);
+  const recentFiltered = filterPoolRemovingRecentQuestions(
+    pool,
+    recentPack.ids,
+  );
   const poolForSelection = recentFiltered.pool;
   const topicNamesForMeta = [...(input.topicNames ?? [])];
   const catSelectionAppliedMeta = buildCatSelectionAppliedMeta({
@@ -480,39 +574,62 @@ export async function createCatPracticeTestPayload(
 
   const delivered = new Map<string, number>();
   const practiceBoost = mergeCatBoosts(
-    mergeCatBoosts(catBoostFromWeakPriorities(weakPlan.priorityByCanonical), sessionMissBoost(state)),
+    mergeCatBoosts(
+      catBoostFromWeakPriorities(weakPlan.priorityByCanonical),
+      sessionMissBoost(state),
+    ),
     catHighYieldPracticeBoost(),
   );
   const selectOpts: CatSelectOptions = {
-    ...(sim ? { blueprintWeights } : mergeBlueprintIntoBoost(practiceBoost, blueprintWeights)),
+    ...(sim
+      ? { blueprintWeights }
+      : mergeBlueprintIntoBoost(practiceBoost, blueprintWeights)),
     sessionPickSalt,
   };
 
-  const sessionTypeResolved: CatAdaptiveSessionType = sim ? "cat" : adaptiveSessionType;
+  const sessionTypeResolved: CatAdaptiveSessionType = sim
+    ? "cat"
+    : adaptiveSessionType;
   const guidedPractice = !sim && sessionTypeResolved === "practice";
 
   if (guidedPractice) {
     const candidatePoolSize = poolForSelection.length;
     const poolIds = poolForSelection.map((r) => r.id);
-    const shuffled = shuffleSeeded([...poolIds], `${sessionPickSalt}${GUIDED_PRACTICE_ORDER_SEED_SUFFIX}`);
-    const runLength = Math.min(Math.max(10, input.questionCount), shuffled.length);
+    const shuffled = shuffleSeeded(
+      [...poolIds],
+      `${sessionPickSalt}${GUIDED_PRACTICE_ORDER_SEED_SUFFIX}`,
+    );
+    const runLength = Math.min(
+      Math.max(10, input.questionCount),
+      shuffled.length,
+    );
     const questionIds = shuffled.slice(0, runLength);
-    const guidedPickInput: PickQuestionsInput = { ...poolInput, questionCount: runLength };
+    const guidedPickInput: PickQuestionsInput = {
+      ...poolInput,
+      questionCount: runLength,
+    };
     const catExamFeedbackMode: CatExamFeedbackMode = "study";
 
-    logTestingModelScopedEvent("practice_test", "cat_session_create", pathwayIdForRecent, {
-      userIdPrefix: userId.slice(0, 8),
-      poolSize: pool.length,
-      candidatePoolSize,
-      recentSessionsScanned: recentPack.sessionsScanned,
-      recentIdCount: recentPack.ids.size,
-      recentExclusionApplied: recentFiltered.applied,
-      recentExclusionSkip: recentFiltered.skipReason,
-      catAdaptiveSessionType: "practice",
-      guidedRunLength: runLength,
-      hasSessionPickSalt: sessionPickSalt.length >= 8,
-      firstQuestionIdPrefix: questionIds[0] ? questionIds[0]!.slice(0, 12) : undefined,
-    });
+    logTestingModelScopedEvent(
+      "practice_test",
+      "cat_session_create",
+      pathwayIdForRecent,
+      {
+        userIdPrefix: userId.slice(0, 8),
+        poolSize: pool.length,
+        candidatePoolSize,
+        recentSessionsScanned: recentPack.sessionsScanned,
+        recentIdCount: recentPack.ids.size,
+        recentExclusionApplied: recentFiltered.applied,
+        recentExclusionSkip: recentFiltered.skipReason,
+        catAdaptiveSessionType: "practice",
+        guidedRunLength: runLength,
+        hasSessionPickSalt: sessionPickSalt.length >= 8,
+        firstQuestionIdPrefix: questionIds[0]
+          ? questionIds[0]!.slice(0, 12)
+          : undefined,
+      },
+    );
 
     const config: PracticeTestConfigJson = {
       ...configFromInput(guidedPickInput, timedMode, timeLimitSec),
@@ -545,7 +662,10 @@ export async function createCatPracticeTestPayload(
   /** NP-style fixed-length exam simulation: full order up front, no adaptive item selection. */
   if (sim && examCfg.passingLogic === "fixed") {
     const poolIds = poolForSelection.map((r) => r.id);
-    const order = shuffleSeeded([...poolIds], `${sessionPickSalt}:np-fixed`).slice(0, bounds.max);
+    const order = shuffleSeeded(
+      [...poolIds],
+      `${sessionPickSalt}:np-fixed`,
+    ).slice(0, bounds.max);
     if (order.length < bounds.max) {
       return {
         ok: false,
@@ -559,15 +679,20 @@ export async function createCatPracticeTestPayload(
       catFixedItemOrder: order,
     };
     const catExamFeedbackModeFixed: CatExamFeedbackMode = "test";
-    logTestingModelScopedEvent("practice_test", "cat_session_create", pathwayIdForRecent, {
-      userIdPrefix: userId.slice(0, 8),
-      poolSize: pool.length,
-      candidatePoolSize: poolForSelection.length,
-      fixedLength: order.length,
-      hasSessionPickSalt: sessionPickSalt.length >= 8,
-      firstQuestionIdPrefix: order[0]!.slice(0, 12),
-      catAdaptiveSessionType: sessionTypeResolved,
-    });
+    logTestingModelScopedEvent(
+      "practice_test",
+      "cat_session_create",
+      pathwayIdForRecent,
+      {
+        userIdPrefix: userId.slice(0, 8),
+        poolSize: pool.length,
+        candidatePoolSize: poolForSelection.length,
+        fixedLength: order.length,
+        hasSessionPickSalt: sessionPickSalt.length >= 8,
+        firstQuestionIdPrefix: order[0]!.slice(0, 12),
+        catAdaptiveSessionType: sessionTypeResolved,
+      },
+    );
     const fixedConfig: PracticeTestConfigJson = {
       ...configFromInput(poolInput, timedMode, timeLimitSec),
       selectionMode: "cat",
@@ -617,20 +742,27 @@ export async function createCatPracticeTestPayload(
     };
   }
 
-  const catExamFeedbackMode: CatExamFeedbackMode = sim ? "test" : examFeedbackMode;
+  const catExamFeedbackMode: CatExamFeedbackMode = sim
+    ? "test"
+    : examFeedbackMode;
 
-  logTestingModelScopedEvent("practice_test", "cat_session_create", pathwayIdForRecent, {
-    userIdPrefix: userId.slice(0, 8),
-    poolSize: pool.length,
-    candidatePoolSize: poolForSelection.length,
-    recentSessionsScanned: recentPack.sessionsScanned,
-    recentIdCount: recentPack.ids.size,
-    recentExclusionApplied: recentFiltered.applied,
-    recentExclusionSkip: recentFiltered.skipReason,
-    hasSessionPickSalt: sessionPickSalt.length >= 8,
-    firstQuestionIdPrefix: first.selected.id.slice(0, 12),
-    catAdaptiveSessionType: sessionTypeResolved,
-  });
+  logTestingModelScopedEvent(
+    "practice_test",
+    "cat_session_create",
+    pathwayIdForRecent,
+    {
+      userIdPrefix: userId.slice(0, 8),
+      poolSize: pool.length,
+      candidatePoolSize: poolForSelection.length,
+      recentSessionsScanned: recentPack.sessionsScanned,
+      recentIdCount: recentPack.ids.size,
+      recentExclusionApplied: recentFiltered.applied,
+      recentExclusionSkip: recentFiltered.skipReason,
+      hasSessionPickSalt: sessionPickSalt.length >= 8,
+      firstQuestionIdPrefix: first.selected.id.slice(0, 12),
+      catAdaptiveSessionType: sessionTypeResolved,
+    },
+  );
 
   const config: PracticeTestConfigJson = {
     ...configFromInput(poolInput, timedMode, timeLimitSec),
@@ -667,8 +799,17 @@ export type AdvanceCatPracticeTestResult =
       adaptiveState: CatAdaptiveState;
       studyFeedback?: CatStudyFeedbackPayload | null;
     }
-  | { kind: "continue"; questionIds: string[]; cursorIndex: number; adaptiveState: CatAdaptiveState }
-  | { kind: "study_reveal"; studyFeedback: CatStudyFeedbackPayload; adaptiveState: CatAdaptiveState }
+  | {
+      kind: "continue";
+      questionIds: string[];
+      cursorIndex: number;
+      adaptiveState: CatAdaptiveState;
+    }
+  | {
+      kind: "study_reveal";
+      studyFeedback: CatStudyFeedbackPayload;
+      adaptiveState: CatAdaptiveState;
+    }
   | { kind: "error"; message: string };
 
 async function catPoolAndSelectOpts(
@@ -684,13 +825,17 @@ async function catPoolAndSelectOpts(
 }> {
   const bounds = normalizedAdaptiveCatRunBounds(config);
   const sim = config.catPresentationMode === "exam_simulation";
-  const examCfg = getExamConfig(config.catExamConfigId ?? "") ?? NCLEX_RN_US_EXAM_CONFIG;
+  const examCfg =
+    getExamConfig(config.catExamConfigId ?? "") ?? NCLEX_RN_US_EXAM_CONFIG;
   const blueprintWeights = nclexBlueprintWeightMap(examCfg);
   const pri = config.catWeakPriorityByCanonical;
   const hasPriority = !sim && hasUsableCatWeakPriorityMap(pri);
   const priorityMap = hasPriority
     ? new Map<string, number>(
-        Object.entries(pri as Record<string, number>).map(([k, v]) => [k, typeof v === "number" ? v : 0]),
+        Object.entries(pri as Record<string, number>).map(([k, v]) => [
+          k,
+          typeof v === "number" ? v : 0,
+        ]),
       )
     : new Map<string, number>();
   const weakBoost = hasPriority
@@ -714,8 +859,11 @@ async function catPoolAndSelectOpts(
     sim ? {} : catHighYieldPracticeBoost(),
   );
   const selectOpts: CatSelectOptions = {
-    ...(sim ? { blueprintWeights } : mergeBlueprintIntoBoost(practiceBoost, blueprintWeights)),
-    ...(typeof config.sessionPickSalt === "string" && config.sessionPickSalt.length >= 8
+    ...(sim
+      ? { blueprintWeights }
+      : mergeBlueprintIntoBoost(practiceBoost, blueprintWeights)),
+    ...(typeof config.sessionPickSalt === "string" &&
+    config.sessionPickSalt.length >= 8
       ? { sessionPickSalt: config.sessionPickSalt }
       : {}),
   };
@@ -728,19 +876,29 @@ async function catPoolAndSelectOpts(
     selectionMode: basis,
     pathwayId: config.pathwayId ?? null,
     selectionStrictness: config.catPoolSelectionStrictness,
-    ...(typeof config.sessionPickSalt === "string" && config.sessionPickSalt.length >= 8
+    ...(typeof config.sessionPickSalt === "string" &&
+    config.sessionPickSalt.length >= 8
       ? { sessionPickSalt: config.sessionPickSalt }
       : {}),
   };
-  const { pool } = await fetchCatPracticePool(userId, entitlement, pickInput);
+  const { pool } = await fetchCatPracticePoolCached(
+    userId,
+    entitlement,
+    pickInput,
+  );
   const recentPack = await recentPracticeQuestionIdsForPathway({
     userId,
     pathwayId: config.pathwayId ?? null,
     sessionLookback: STUDY_DIVERSITY_CAT_STEP_RECENT_SESSION_LOOKBACK,
     maxIds: 120,
   });
-  const { pool: poolForSelection } = filterPoolRemovingRecentQuestions(pool, recentPack.ids);
-  const saltOk = typeof config.sessionPickSalt === "string" && config.sessionPickSalt.trim().length >= 8;
+  const { pool: poolForSelection } = filterPoolRemovingRecentQuestions(
+    pool,
+    recentPack.ids,
+  );
+  const saltOk =
+    typeof config.sessionPickSalt === "string" &&
+    config.sessionPickSalt.trim().length >= 8;
   const presentationMode = config.catPresentationMode ?? "practice";
   if (!sim && !saltOk) {
     logTestingModelScopedEvent(
@@ -775,17 +933,39 @@ async function catAfterScoredStep(params: {
   userId: string;
   entitlement: AccessScope;
 }): Promise<
-  | { kind: "completed"; results: PracticeTestResultsJson; adaptiveState: CatAdaptiveState }
-  | { kind: "continue"; questionIds: string[]; cursorIndex: number; adaptiveState: CatAdaptiveState }
+  | {
+      kind: "completed";
+      results: PracticeTestResultsJson;
+      adaptiveState: CatAdaptiveState;
+    }
+  | {
+      kind: "continue";
+      questionIds: string[];
+      cursorIndex: number;
+      adaptiveState: CatAdaptiveState;
+    }
 > {
-  const { ids, cursor, state: inputState, mergedAnswers, config, userId, entitlement } = params;
+  const {
+    ids,
+    cursor,
+    state: inputState,
+    mergedAnswers,
+    config,
+    userId,
+    entitlement,
+  } = params;
   let state = inputState;
-  const { pool, selectOpts, bounds, presentationMode } = await catPoolAndSelectOpts(state, config, userId, entitlement);
+  const { pool, selectOpts, bounds, presentationMode } =
+    await catPoolAndSelectOpts(state, config, userId, entitlement);
   const used = new Set(ids);
   const deliveredCounts = countsFromResults(state.results);
 
   if (state.catFixedItemOrder && state.catFixedItemOrder.length > 0) {
-    const stopFixed = shouldStopAfterAnswer(state, state.results.length, catStopBoundsForConfig(config, bounds));
+    const stopFixed = shouldStopAfterAnswer(
+      state,
+      state.results.length,
+      catStopBoundsForConfig(config, bounds),
+    );
     if (stopFixed) {
       const earlyDecision =
         stopFixed === "confidence_pass"
@@ -793,29 +973,52 @@ async function catAfterScoredStep(params: {
           : stopFixed === "confidence_fail"
             ? ("fail" as const)
             : null;
-      state = { ...state, stoppedReason: stopFixed, decision: earlyDecision ?? state.decision };
-      const report = buildCatReport(state);
-      logCatBlueprintSessionMappingQualityFromReport(report, {
-        userId,
-        presentationMode,
-      });
-      const baseResults = await computePracticeTestResults(ids, mergedAnswers, entitlement);
-      return { kind: "completed", results: enrichWithCat(baseResults, report, presentationMode), adaptiveState: state };
-    }
-    const nextFixed = state.catFixedItemOrder[ids.length];
-    if (!nextFixed) {
       state = {
         ...state,
-        stoppedReason: "max_length",
-        decision: finalizeThetaDecision(state.theta, config.catPassingThreshold ?? 0),
+        stoppedReason: stopFixed,
+        decision: earlyDecision ?? state.decision,
       };
       const report = buildCatReport(state);
       logCatBlueprintSessionMappingQualityFromReport(report, {
         userId,
         presentationMode,
       });
-      const baseResults = await computePracticeTestResults(ids, mergedAnswers, entitlement);
-      return { kind: "completed", results: enrichWithCat(baseResults, report, presentationMode), adaptiveState: state };
+      const baseResults = await computePracticeTestResults(
+        ids,
+        mergedAnswers,
+        entitlement,
+      );
+      return {
+        kind: "completed",
+        results: enrichWithCat(baseResults, report, presentationMode),
+        adaptiveState: state,
+      };
+    }
+    const nextFixed = state.catFixedItemOrder[ids.length];
+    if (!nextFixed) {
+      state = {
+        ...state,
+        stoppedReason: "max_length",
+        decision: finalizeThetaDecision(
+          state.theta,
+          config.catPassingThreshold ?? 0,
+        ),
+      };
+      const report = buildCatReport(state);
+      logCatBlueprintSessionMappingQualityFromReport(report, {
+        userId,
+        presentationMode,
+      });
+      const baseResults = await computePracticeTestResults(
+        ids,
+        mergedAnswers,
+        entitlement,
+      );
+      return {
+        kind: "completed",
+        results: enrichWithCat(baseResults, report, presentationMode),
+        adaptiveState: state,
+      };
     }
     return {
       kind: "continue",
@@ -825,21 +1028,42 @@ async function catAfterScoredStep(params: {
     };
   }
 
-  const stop = shouldStopAfterAnswer(state, state.results.length, catStopBoundsForConfig(config, bounds));
+  const stop = shouldStopAfterAnswer(
+    state,
+    state.results.length,
+    catStopBoundsForConfig(config, bounds),
+  );
   if (stop) {
     const earlyDecision =
-      stop === "confidence_pass" ? ("pass" as const) : stop === "confidence_fail" ? ("fail" as const) : null;
-    state = { ...state, stoppedReason: stop, decision: earlyDecision ?? state.decision };
+      stop === "confidence_pass"
+        ? ("pass" as const)
+        : stop === "confidence_fail"
+          ? ("fail" as const)
+          : null;
+    state = {
+      ...state,
+      stoppedReason: stop,
+      decision: earlyDecision ?? state.decision,
+    };
     const report = buildCatReport(state);
     logCatBlueprintSessionMappingQualityFromReport(report, {
       userId,
       presentationMode,
     });
-    const baseResults = await computePracticeTestResults(ids, mergedAnswers, entitlement);
-    return { kind: "completed", results: enrichWithCat(baseResults, report, presentationMode), adaptiveState: state };
+    const baseResults = await computePracticeTestResults(
+      ids,
+      mergedAnswers,
+      entitlement,
+    );
+    return {
+      kind: "completed",
+      results: enrichWithCat(baseResults, report, presentationMode),
+      adaptiveState: state,
+    };
   }
 
-  const lastCategoryKey = state.results[state.results.length - 1]?.categoryKey ?? null;
+  const lastCategoryKey =
+    state.results[state.results.length - 1]?.categoryKey ?? null;
   const next = selectNextQuestion(
     pool,
     used,
@@ -851,41 +1075,67 @@ async function catAfterScoredStep(params: {
       theta: state.theta,
       se: state.se,
       answeredBeforePick: state.results.length,
-      passingThreshold: state.passingThreshold ?? config.catPassingThreshold ?? 0,
+      passingThreshold:
+        state.passingThreshold ?? config.catPassingThreshold ?? 0,
     },
   );
   if (!next.selected) {
-    logTestingModelScopedEvent("cat_runner", "cat_pool_exhausted", config.pathwayId ?? null, {
-      poolSize: pool.length,
-      usedCount: used.size,
-      ...(next.detail ? { detail: next.detail } : {}),
-      answeredCount: state.results.length,
-      hasSessionPickSalt: Boolean(selectOpts.sessionPickSalt && selectOpts.sessionPickSalt.length >= 8),
-    });
+    logTestingModelScopedEvent(
+      "cat_runner",
+      "cat_pool_exhausted",
+      config.pathwayId ?? null,
+      {
+        poolSize: pool.length,
+        usedCount: used.size,
+        ...(next.detail ? { detail: next.detail } : {}),
+        answeredCount: state.results.length,
+        hasSessionPickSalt: Boolean(
+          selectOpts.sessionPickSalt && selectOpts.sessionPickSalt.length >= 8,
+        ),
+      },
+    );
     state = pushIncident(state, "pool_exhausted", next.detail);
     state = {
       ...state,
       stoppedReason: "pool_exhausted",
-      decision: finalizeThetaDecision(state.theta, config.catPassingThreshold ?? 0),
+      decision: finalizeThetaDecision(
+        state.theta,
+        config.catPassingThreshold ?? 0,
+      ),
     };
     const report = buildCatReport(state);
     logCatBlueprintSessionMappingQualityFromReport(report, {
       userId,
       presentationMode,
     });
-    const baseResults = await computePracticeTestResults(ids, mergedAnswers, entitlement);
-    return { kind: "completed", results: enrichWithCat(baseResults, report, presentationMode), adaptiveState: state };
+    const baseResults = await computePracticeTestResults(
+      ids,
+      mergedAnswers,
+      entitlement,
+    );
+    return {
+      kind: "completed",
+      results: enrichWithCat(baseResults, report, presentationMode),
+      adaptiveState: state,
+    };
   }
 
   const newIds = [...ids, next.selected.id];
-  logTestingModelScopedEvent("cat_runner", "cat_advance_continue", config.pathwayId ?? null, {
-    poolSize: pool.length,
-    usedCount: used.size,
-    nextQuestionIdPrefix: next.selected.id.slice(0, 12),
-    answeredCount: state.results.length,
-    cursorBefore: cursor,
-    hasSessionPickSalt: Boolean(selectOpts.sessionPickSalt && selectOpts.sessionPickSalt.length >= 8),
-  });
+  logTestingModelScopedEvent(
+    "cat_runner",
+    "cat_advance_continue",
+    config.pathwayId ?? null,
+    {
+      poolSize: pool.length,
+      usedCount: used.size,
+      nextQuestionIdPrefix: next.selected.id.slice(0, 12),
+      answeredCount: state.results.length,
+      cursorBefore: cursor,
+      hasSessionPickSalt: Boolean(
+        selectOpts.sessionPickSalt && selectOpts.sessionPickSalt.length >= 8,
+      ),
+    },
+  );
   return {
     kind: "continue",
     questionIds: newIds,
@@ -909,7 +1159,11 @@ async function completeGuidedCatSession(params: {
     userId,
     presentationMode,
   });
-  const baseResults = await computePracticeTestResults(ids, mergedAnswers, entitlement);
+  const baseResults = await computePracticeTestResults(
+    ids,
+    mergedAnswers,
+    entitlement,
+  );
   return {
     kind: "completed",
     results: enrichWithCat(baseResults, report, presentationMode),
@@ -932,7 +1186,8 @@ async function advanceGuidedCatPracticeTest(params: {
 }): Promise<AdvanceCatPracticeTestResult> {
   const ids = params.questionIds;
   const cursor = params.cursorIndex;
-  if (ids.length === 0) return { kind: "error", message: "No questions in session." };
+  if (ids.length === 0)
+    return { kind: "error", message: "No questions in session." };
   if (cursor < 0 || cursor >= ids.length) {
     return { kind: "error", message: "Invalid question position." };
   }
@@ -940,9 +1195,14 @@ async function advanceGuidedCatPracticeTest(params: {
   const currentId = ids[cursor];
   if (currentId == null) return { kind: "error", message: "Invalid cursor." };
   const userAns = params.mergedAnswers[currentId];
-  if (userAns === undefined) return { kind: "error", message: "Answer the current question before continuing." };
+  if (userAns === undefined)
+    return {
+      kind: "error",
+      message: "Answer the current question before continuing.",
+    };
 
-  let state = parseAdaptiveState(params.adaptiveState) ?? createInitialAdaptiveState();
+  let state =
+    parseAdaptiveState(params.adaptiveState) ?? createInitialAdaptiveState();
   state = {
     ...state,
     passingThreshold:
@@ -964,7 +1224,10 @@ async function advanceGuidedCatPracticeTest(params: {
           last_recorded: last?.questionId?.slice(0, 16),
         },
       );
-      return { kind: "error", message: "Study step state was out of sync. Refresh and try again." };
+      return {
+        kind: "error",
+        message: "Study step state was out of sync. Refresh and try again.",
+      };
     }
     state = { ...state, catStudyAwaitingContinue: false };
     if (cursor >= ids.length - 1) {
@@ -986,7 +1249,10 @@ async function advanceGuidedCatPracticeTest(params: {
   }
 
   if (state.results.some((r) => r.questionId === currentId)) {
-    return { kind: "error", message: "This step was already recorded. Refresh if the UI looks stale." };
+    return {
+      kind: "error",
+      message: "This step was already recorded. Refresh if the UI looks stale.",
+    };
   }
 
   const base = questionAccessWhere(params.entitlement);
@@ -1003,7 +1269,8 @@ async function advanceGuidedCatPracticeTest(params: {
       nclexClientNeedsSubcategory: true,
     },
   });
-  if (!q) return { kind: "error", message: "Question not available for your plan." };
+  if (!q)
+    return { kind: "error", message: "Question not available for your plan." };
 
   const { result } = await scoreOne(q, userAns);
   state = appendScoredResult(state, result);
@@ -1047,17 +1314,26 @@ export async function advanceCatPracticeTest(params: {
 
   const ids = params.questionIds;
   const cursor = params.cursorIndex;
-  if (ids.length === 0) return { kind: "error", message: "No questions in session." };
+  if (ids.length === 0)
+    return { kind: "error", message: "No questions in session." };
   if (cursor !== ids.length - 1) {
-    return { kind: "error", message: "Adaptive advance is only valid on the latest question." };
+    return {
+      kind: "error",
+      message: "Adaptive advance is only valid on the latest question.",
+    };
   }
 
   const currentId = ids[cursor];
   if (currentId == null) return { kind: "error", message: "Invalid cursor." };
   const userAns = params.mergedAnswers[currentId];
-  if (userAns === undefined) return { kind: "error", message: "Answer the current question before continuing." };
+  if (userAns === undefined)
+    return {
+      kind: "error",
+      message: "Answer the current question before continuing.",
+    };
 
-  let state = parseAdaptiveState(params.adaptiveState) ?? createInitialAdaptiveState();
+  let state =
+    parseAdaptiveState(params.adaptiveState) ?? createInitialAdaptiveState();
   state = {
     ...state,
     passingThreshold:
@@ -1065,7 +1341,8 @@ export async function advanceCatPracticeTest(params: {
         ? state.passingThreshold
         : (params.config.catPassingThreshold ?? 0),
   };
-  const feedbackMode: CatExamFeedbackMode = params.config.catExamFeedbackMode ?? "test";
+  const feedbackMode: CatExamFeedbackMode =
+    params.config.catExamFeedbackMode ?? "test";
   const study = feedbackMode === "study";
 
   if (study && state.catStudyAwaitingContinue === true) {
@@ -1105,7 +1382,10 @@ export async function advanceCatPracticeTest(params: {
   }
 
   if (state.results.some((r) => r.questionId === currentId)) {
-    return { kind: "error", message: "This step was already recorded. Refresh if the UI looks stale." };
+    return {
+      kind: "error",
+      message: "This step was already recorded. Refresh if the UI looks stale.",
+    };
   }
 
   const base = questionAccessWhere(params.entitlement);
@@ -1122,14 +1402,19 @@ export async function advanceCatPracticeTest(params: {
       nclexClientNeedsSubcategory: true,
     },
   });
-  if (!q) return { kind: "error", message: "Question not available for your plan." };
+  if (!q)
+    return { kind: "error", message: "Question not available for your plan." };
 
   const { result } = await scoreOne(q, userAns);
   state = appendScoredResult(state, result);
   state = patchBlueprintSessionDiagnostics(state);
 
   const bounds = normalizedAdaptiveCatRunBounds(params.config);
-  const stop = shouldStopAfterAnswer(state, state.results.length, catStopBoundsForConfig(params.config, bounds));
+  const stop = shouldStopAfterAnswer(
+    state,
+    state.results.length,
+    catStopBoundsForConfig(params.config, bounds),
+  );
   if (stop) {
     const tail = await catAfterScoredStep({
       ids,
@@ -1202,21 +1487,32 @@ export async function advanceCatPracticeTest(params: {
 
 function seedAdaptiveStateFromPersisted(
   raw: unknown,
-): Pick<CatAdaptiveState, "catPresentationMode" | "catBlueprintDiagnostics" | "passingThreshold"> {
+): Pick<
+  CatAdaptiveState,
+  "catPresentationMode" | "catBlueprintDiagnostics" | "passingThreshold"
+> {
   const parsed = parseAdaptiveState(raw);
   if (parsed) {
     return {
       catPresentationMode: parsed.catPresentationMode,
       catBlueprintDiagnostics: parsed.catBlueprintDiagnostics,
-      ...(typeof parsed.passingThreshold === "number" ? { passingThreshold: parsed.passingThreshold } : {}),
+      ...(typeof parsed.passingThreshold === "number"
+        ? { passingThreshold: parsed.passingThreshold }
+        : {}),
     };
   }
   if (raw && typeof raw === "object") {
     const o = raw as Record<string, unknown>;
     return {
-      catPresentationMode: o.catPresentationMode as CatPresentationMode | undefined,
-      catBlueprintDiagnostics: coerceCatBlueprintDiagnostics(o.catBlueprintDiagnostics),
-      ...(typeof o.passingThreshold === "number" ? { passingThreshold: o.passingThreshold } : {}),
+      catPresentationMode: o.catPresentationMode as
+        | CatPresentationMode
+        | undefined,
+      catBlueprintDiagnostics: coerceCatBlueprintDiagnostics(
+        o.catBlueprintDiagnostics,
+      ),
+      ...(typeof o.passingThreshold === "number"
+        ? { passingThreshold: o.passingThreshold }
+        : {}),
     };
   }
   return {};
@@ -1228,7 +1524,10 @@ export async function finalizeCatPracticeTest(
   answers: Record<string, unknown>,
   entitlement: AccessScope,
   persistedAdaptiveState?: unknown,
-): Promise<{ results: PracticeTestResultsJson; adaptiveState: CatAdaptiveState }> {
+): Promise<{
+  results: PracticeTestResultsJson;
+  adaptiveState: CatAdaptiveState;
+}> {
   const seed = seedAdaptiveStateFromPersisted(persistedAdaptiveState);
   let state: CatAdaptiveState = {
     ...createInitialAdaptiveState(),
@@ -1260,8 +1559,14 @@ export async function finalizeCatPracticeTest(
   state = patchBlueprintSessionDiagnostics(state);
 
   const report = buildCatReport(state);
-  logCatBlueprintSessionMappingQualityFromReport(report, { presentationMode: state.catPresentationMode });
-  const baseResults = await computePracticeTestResults(questionIds, answers, entitlement);
+  logCatBlueprintSessionMappingQualityFromReport(report, {
+    presentationMode: state.catPresentationMode,
+  });
+  const baseResults = await computePracticeTestResults(
+    questionIds,
+    answers,
+    entitlement,
+  );
   return {
     results: enrichWithCat(baseResults, report, state.catPresentationMode),
     adaptiveState: state,

@@ -1,6 +1,9 @@
 import { randomUUID } from "node:crypto";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { loadMissedQuestionSignals, loadSavedRationaleQuestionIdsForPoolFilter } from "@/lib/learner/study-question-signals";
+import {
+  loadMissedQuestionSignals,
+  loadSavedRationaleQuestionIdsForPoolFilter,
+} from "@/lib/learner/study-question-signals";
 import { loadWeakTopicPracticePlan } from "@/lib/learner/topic-performance";
 import type {
   LinearDeliveryMode,
@@ -8,7 +11,7 @@ import type {
   PracticeTestConfigJson,
   PracticeTestSelectionMode,
 } from "@/lib/practice-tests/types";
-import { fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
+import { fetchCatPracticePoolCached } from "@/lib/practice-tests/cat-pool";
 import {
   filterPoolRemovingRecentQuestions,
   questionLastExposureStartedAtMsForPathway,
@@ -21,7 +24,10 @@ import {
 } from "@/lib/practice-tests/linear-session-pick-order";
 import { balanceCognitiveLoadSequence } from "@/lib/questions/adaptive-question-selection";
 import { buildPrioritizedLinearPickBand } from "@/lib/study/learner-study-prioritizer";
-import { practiceRecentSessionLookback, STUDY_DIVERSITY_PRACTICE_RECENT_MIN_REMAINING_DEFAULT } from "@/lib/study/study-diversity-config";
+import {
+  practiceRecentSessionLookback,
+  STUDY_DIVERSITY_PRACTICE_RECENT_MIN_REMAINING_DEFAULT,
+} from "@/lib/study/study-diversity-config";
 import { logStudyDiversity } from "@/lib/study/study-diversity-log";
 import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 
@@ -57,13 +63,23 @@ export async function pickPracticeQuestionIds(
   entitlement: AccessScope,
   input: PickQuestionsInput,
 ): Promise<
-  | { ok: true; ids: string[]; linearSessionCreateDebug: LinearPracticeSessionPickDebug }
+  | {
+      ok: true;
+      ids: string[];
+      linearSessionCreateDebug: LinearPracticeSessionPickDebug;
+    }
   | { ok: false; message: string }
 > {
-  const n = Math.min(PRACTICE_TEST_MAX_Q, Math.max(PRACTICE_TEST_MIN_Q, Math.floor(input.questionCount)));
+  const n = Math.min(
+    PRACTICE_TEST_MAX_Q,
+    Math.max(PRACTICE_TEST_MIN_Q, Math.floor(input.questionCount)),
+  );
 
   if (input.selectionMode === "starred") {
-    const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(userId, 200);
+    const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(
+      userId,
+      200,
+    );
     if (starredIds.length === 0) {
       return {
         ok: false,
@@ -88,9 +104,15 @@ export async function pickPracticeQuestionIds(
 
   const weakPlanForPrioritize =
     input.selectionMode === "missed"
-      ? { dbTopicNames: [] as string[], priorityByCanonical: new Map<string, number>() }
+      ? {
+          dbTopicNames: [] as string[],
+          priorityByCanonical: new Map<string, number>(),
+        }
       : await loadWeakTopicPracticePlan(userId, entitlement, 16);
-  if (input.selectionMode === "weak" && weakPlanForPrioritize.priorityByCanonical.size === 0) {
+  if (
+    input.selectionMode === "weak" &&
+    weakPlanForPrioritize.priorityByCanonical.size === 0
+  ) {
     return {
       ok: false,
       message:
@@ -99,7 +121,7 @@ export async function pickPracticeQuestionIds(
   }
 
   // Linear practice now reuses the same pathway-safe, rationale-complete CAT pool gates.
-  const { pool } = await fetchCatPracticePool(userId, entitlement, input);
+  const { pool } = await fetchCatPracticePoolCached(userId, entitlement, input);
   if (pool.length < n) {
     return {
       ok: false,
@@ -107,7 +129,9 @@ export async function pickPracticeQuestionIds(
     };
   }
 
-  const pathwayIdForRecent = input.pathwayId?.trim() ? input.pathwayId.trim() : null;
+  const pathwayIdForRecent = input.pathwayId?.trim()
+    ? input.pathwayId.trim()
+    : null;
   const recentPack = await recentPracticeQuestionIdsForPathway({
     userId,
     pathwayId: pathwayIdForRecent,
@@ -117,7 +141,11 @@ export async function pickPracticeQuestionIds(
     Math.max(STUDY_DIVERSITY_PRACTICE_RECENT_MIN_REMAINING_DEFAULT, n),
     pool.length,
   );
-  const recentFiltered = filterPoolRemovingRecentQuestions(pool, recentPack.ids, minRemain);
+  const recentFiltered = filterPoolRemovingRecentQuestions(
+    pool,
+    recentPack.ids,
+    minRemain,
+  );
 
   const saltTrim = input.sessionPickSalt?.trim();
   const pickSalt = saltTrim && saltTrim.length >= 8 ? saltTrim : randomUUID();
@@ -150,7 +178,8 @@ export async function pickPracticeQuestionIds(
   });
   const balancedRows = balanceCognitiveLoadSequence(selectedRows);
   const balancedIds = balancedRows.map((row) => row.id);
-  const ids = balancedIds.length === shuffledIds.length ? balancedIds : shuffledIds;
+  const ids =
+    balancedIds.length === shuffledIds.length ? balancedIds : shuffledIds;
   logStudyDiversity("linear_pick", {
     poolSize: pool.length,
     poolAfterRecent: recentFiltered.pool.length,
@@ -203,8 +232,14 @@ export function configFromInput(
     pathwayId: input.pathwayId,
     timedMode,
     timeLimitSec,
-    ...(extras?.linearDeliveryMode ? { linearDeliveryMode: extras.linearDeliveryMode } : {}),
-    ...(extras?.linearRationaleVisibility ? { linearRationaleVisibility: extras.linearRationaleVisibility } : {}),
-    ...(extras?.linearAllowReviewNavigation === true ? { linearAllowReviewNavigation: true } : {}),
+    ...(extras?.linearDeliveryMode
+      ? { linearDeliveryMode: extras.linearDeliveryMode }
+      : {}),
+    ...(extras?.linearRationaleVisibility
+      ? { linearRationaleVisibility: extras.linearRationaleVisibility }
+      : {}),
+    ...(extras?.linearAllowReviewNavigation === true
+      ? { linearAllowReviewNavigation: true }
+      : {}),
   };
 }

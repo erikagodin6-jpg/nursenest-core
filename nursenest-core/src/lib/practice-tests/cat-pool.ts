@@ -1,4 +1,4 @@
-import { randomInt, randomUUID } from "node:crypto";
+import { createHash, randomInt, randomUUID } from "node:crypto";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { getCatPool, setCatPool } from "@/lib/server/content-cache";
@@ -639,9 +639,26 @@ export async function countCompleteCatPracticePool(
 
 /**
  * Redis-cached variant of {@link fetchCatPracticePool}.
- * Cache key: userId + pathwayId (30-min TTL).
+ * Cache key: userId + pathwayId + filter signature (30-min TTL).
  * Falls through to the live query on cache miss or when Redis is not configured.
  */
+function catPoolSnapshotKey(input: PickQuestionsInput): string {
+  const payload = {
+    difficultyMax: input.difficultyMax,
+    difficultyMin: input.difficultyMin,
+    pathwayId: input.pathwayId?.trim() || null,
+    questionCount: input.questionCount,
+    selectionMode: input.selectionMode,
+    selectionStrictness: input.selectionStrictness ?? null,
+    sessionPickSalt: input.sessionPickSalt ?? null,
+    topicNames: [...input.topicNames].sort(),
+  };
+  return createHash("sha1")
+    .update(JSON.stringify(payload))
+    .digest("hex")
+    .slice(0, 16);
+}
+
 export async function fetchCatPracticePoolCached(
   userId: string,
   entitlement: AccessScope,
@@ -651,7 +668,7 @@ export async function fetchCatPracticePoolCached(
   buildMeta: CatPracticePoolBuildMeta;
   fromCache: boolean;
 }> {
-  const pathwayKey = input.pathwayId?.trim() ?? "_default";
+  const pathwayKey = `${input.pathwayId?.trim() || "_default"}:${catPoolSnapshotKey(input)}`;
   const cached = await getCatPool<{
     pool: CatPoolRow[];
     buildMeta: CatPracticePoolBuildMeta;

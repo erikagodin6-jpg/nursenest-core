@@ -56,6 +56,8 @@ import {
 } from "@/lib/cat/session-persistence";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { analyseSession } from "@/lib/cat/session-analyzer";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
+import { DASHBOARD_ANALYTICS_SURFACES } from "@/lib/cache/learner-private-read-cache-keying";
 import type { CatSessionConfig, CatQuestion } from "@/lib/cat/types";
 
 // ─── Validation ────────────────────────────────────────────────────────────────
@@ -201,6 +203,10 @@ export async function POST(req: NextRequest): Promise<Response> {
           state,
           analysis,
         );
+
+        // Invalidate all dashboard analytics caches — CAT completion changes
+        // readiness, weak areas, study plan, and performance summary.
+        void invalidateLearnerPrivateReadCache(userId, DASHBOARD_ANALYTICS_SURFACES).catch(() => {});
 
         return NextResponse.json({
           nextQuestion: null,

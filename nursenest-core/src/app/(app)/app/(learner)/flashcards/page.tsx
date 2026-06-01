@@ -33,9 +33,13 @@ import {
   tryResolveExamPathwayForFlashcardsMetadataQuery,
   pathwayFlashcardsHubMetaTitle,
 } from "@/lib/lessons/pathway-flashcards-hub-seo";
-import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
+import {
+  pathwayCountryLabel,
+  pathwayRegionAwareExamName,
+} from "@/lib/lessons/pathway-lesson-hub-seo";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
 
 const DEFAULT_FLASHCARDS_PATHWAY_ID = "ca-rn-nclex-rn";
 const FLASHCARDS_PAGE_TIMING_LABEL = "flashcards_hub_server_bootstrap";
@@ -57,7 +61,9 @@ function timeoutAfter<T>(ms: number): Promise<T | null> {
   });
 }
 
-export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams,
+}: PageProps): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
       const sp = await searchParams;
@@ -65,11 +71,15 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
       const pathwayQueryRaw =
         typeof rawPid === "string" && rawPid.trim().length > 2
           ? rawPid.trim()
-          : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
+          : Array.isArray(rawPid) &&
+              typeof rawPid[0] === "string" &&
+              rawPid[0].trim().length > 2
             ? rawPid[0].trim()
             : DEFAULT_FLASHCARDS_PATHWAY_ID;
       const { t } = await getLearnerMarketingBundle();
-      const pathway = pathwayQueryRaw ? tryResolveExamPathwayForFlashcardsMetadataQuery(pathwayQueryRaw) : null;
+      const pathway = pathwayQueryRaw
+        ? tryResolveExamPathwayForFlashcardsMetadataQuery(pathwayQueryRaw)
+        : null;
       const title = pathway
         ? pathwayFlashcardsHubMetaTitle(pathway)
         : `${t("learner.flashcards.page.title")} | NurseNest`;
@@ -95,7 +105,9 @@ export default async function FlashcardsPage(props: PageProps) {
       pathwayId =
         typeof rawPid === "string" && rawPid.trim().length > 2
           ? rawPid.trim()
-          : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
+          : Array.isArray(rawPid) &&
+              typeof rawPid[0] === "string" &&
+              rawPid[0].trim().length > 2
             ? rawPid[0].trim()
             : DEFAULT_FLASHCARDS_PATHWAY_ID;
     } catch {
@@ -103,28 +115,50 @@ export default async function FlashcardsPage(props: PageProps) {
     }
     safeServerLog("learner_flashcards", "page_bootstrap_failed", {
       error_name: e instanceof Error ? e.name : "unknown",
-      error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      error_message:
+        e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
       pathway_id: pathwayId,
       loader_name: "FlashcardsPageContent",
       outcome: "error",
     });
-    return <FlashcardsRouteRecovery pathwayId={pathwayId} reason="page_bootstrap_failed" />;
+    return (
+      <FlashcardsRouteRecovery
+        pathwayId={pathwayId}
+        reason="page_bootstrap_failed"
+      />
+    );
   }
 }
 
-function FlashcardsRouteRecovery({ pathwayId, reason }: { pathwayId: string; reason: string }) {
+function FlashcardsRouteRecovery({
+  pathwayId,
+  reason,
+}: {
+  pathwayId: string;
+  reason: string;
+}) {
   const href = `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId || DEFAULT_FLASHCARDS_PATHWAY_ID)}`;
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6" data-nn-e2e-flashcards-recovery-shell>
+    <div
+      className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6"
+      data-nn-e2e-flashcards-recovery-shell
+    >
       <ContentEmptyState
         variant="generic"
         tone="default"
         headline="Flashcards are recovering"
         body="We could not finish loading the live flashcard workspace, but your account and progress are safe. You can retry this route directly without returning through the dashboard."
-        hint={process.env.NODE_ENV === "development" ? `reason=${reason}; pathwayId=${pathwayId}` : undefined}
+        hint={
+          process.env.NODE_ENV === "development"
+            ? `reason=${reason}; pathwayId=${pathwayId}`
+            : undefined
+        }
         primaryCta={{ label: "Retry flashcards", href }}
         secondaryCtas={[
-          { label: "Open practice exams", href: `/app/practice-tests?pathwayId=${encodeURIComponent(pathwayId)}` },
+          {
+            label: "Open practice exams",
+            href: `/app/practice-tests?pathwayId=${encodeURIComponent(pathwayId)}`,
+          },
           { label: "Return to dashboard", href: "/app", variant: "ghost" },
         ]}
         showGrowthBadge={false}
@@ -135,7 +169,10 @@ function FlashcardsRouteRecovery({ pathwayId, reason }: { pathwayId: string; rea
 
 async function FlashcardsPageContent({ searchParams }: PageProps) {
   const bootstrapStarted = performance.now();
-  if (process.env.NODE_ENV !== "production" || process.env.NN_FLASHCARDS_HUB_TIMING === "1") {
+  if (
+    process.env.NODE_ENV !== "production" ||
+    process.env.NN_FLASHCARDS_HUB_TIMING === "1"
+  ) {
     console.time(FLASHCARDS_PAGE_TIMING_LABEL);
   }
   const [marketingBundle, sp] = await Promise.all([
@@ -148,26 +185,33 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
   const alliedProfessionParam =
     typeof rawAllied === "string" && rawAllied.trim()
       ? rawAllied.trim().toLowerCase()
-      : Array.isArray(rawAllied) && typeof rawAllied[0] === "string" && rawAllied[0].trim()
+      : Array.isArray(rawAllied) &&
+          typeof rawAllied[0] === "string" &&
+          rawAllied[0].trim()
         ? rawAllied[0].trim().toLowerCase()
         : "";
   const alliedProfessionFromQuery = alliedProfessionParam
-    ? getAlliedProfessionByProfessionKey(alliedProfessionParam)?.professionKey ?? ""
+    ? (getAlliedProfessionByProfessionKey(alliedProfessionParam)
+        ?.professionKey ?? "")
     : "";
 
   const rawPid = sp.pathwayId;
   const pathwayQueryRaw =
     typeof rawPid === "string" && rawPid.trim().length > 2
       ? rawPid.trim()
-      : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
-      ? rawPid[0].trim()
-      : DEFAULT_FLASHCARDS_PATHWAY_ID;
+      : Array.isArray(rawPid) &&
+          typeof rawPid[0] === "string" &&
+          rawPid[0].trim().length > 2
+        ? rawPid[0].trim()
+        : DEFAULT_FLASHCARDS_PATHWAY_ID;
 
   const rawTopic = sp.topic;
   const hubTopicFromQuery =
     typeof rawTopic === "string" && rawTopic.trim()
       ? rawTopic.trim().toLowerCase()
-      : Array.isArray(rawTopic) && typeof rawTopic[0] === "string" && rawTopic[0].trim()
+      : Array.isArray(rawTopic) &&
+          typeof rawTopic[0] === "string" &&
+          rawTopic[0].trim()
         ? rawTopic[0].trim().toLowerCase()
         : null;
 
@@ -176,7 +220,9 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     (typeof rawWeak === "string" && rawWeak === "1") ||
     (Array.isArray(rawWeak) && rawWeak.some((v) => v === "1"));
 
-  const session = await getProtectedRouteSession("(student).app.(learner).flashcards");
+  const session = await getProtectedRouteSession(
+    "(student).app.(learner).flashcards",
+  );
   const userId = (session?.user as { id?: string })?.id ?? "";
 
   const entitlement = await resolveEntitlementForPage(userId);
@@ -185,7 +231,12 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     pathway_id_raw: pathwayQueryRaw,
     user_id_prefix: userId.slice(0, 8),
     has_session: session ? "1" : "0",
-    entitlement_state: entitlement === "error" ? "error" : entitlement.hasAccess ? "has_access" : "no_access",
+    entitlement_state:
+      entitlement === "error"
+        ? "error"
+        : entitlement.hasAccess
+          ? "has_access"
+          : "no_access",
     tier: entitlement === "error" ? "" : String(entitlement.tier ?? ""),
     country: entitlement === "error" ? "" : String(entitlement.country ?? ""),
   });
@@ -217,7 +268,10 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
   }
 
   const requestedPathwayId = pathwayQueryRaw
-    ? normalizeLearnerFlashcardsPathwayQueryId(pathwayQueryRaw, entitlement.country)
+    ? normalizeLearnerFlashcardsPathwayQueryId(
+        pathwayQueryRaw,
+        entitlement.country,
+      )
     : null;
 
   let pathwayOptions: { id: string; label: string }[] = [];
@@ -234,11 +288,10 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
   if (userId && isDatabaseUrlConfigured()) {
     try {
       const u = await Promise.race([
-        prisma.user.findUnique({
-          where: { id: userId },
-          select: { learnerPath: true },
-        }),
-        timeoutAfter<{ learnerPath: string | null }>(FLASHCARDS_PROFILE_BOOTSTRAP_TIMEOUT_MS),
+        loadLearnerActivityContext(userId),
+        timeoutAfter<{ learnerPath: string | null }>(
+          FLASHCARDS_PROFILE_BOOTSTRAP_TIMEOUT_MS,
+        ),
       ]);
 
       const lp = u?.learnerPath?.trim() ?? null;
@@ -246,7 +299,10 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
 
       pathwayResolution = resolveSubscribedQuestionBankPathways({
         requestedPathwayId,
-        compatible: compatible.map((p) => ({ id: p.id, shortName: p.shortName })),
+        compatible: compatible.map((p) => ({
+          id: p.id,
+          shortName: p.shortName,
+        })),
         learnerPath: lp,
         requireExplicitRequestedPathwayId: true,
       });
@@ -266,10 +322,15 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
         requested_pathway_id: requestedPathwayId ?? "",
         learner_path: lp ?? "",
         compatible_count: compatible.length,
-        compatible_ids: compatible.map((p) => p.id).join(",").slice(0, 400),
+        compatible_ids: compatible
+          .map((p) => p.id)
+          .join(",")
+          .slice(0, 400),
         resolution_state: pathwayResolution.state,
         default_pathway_id:
-          pathwayResolution.state === "scoped" ? pathwayResolution.defaultPathwayId : "",
+          pathwayResolution.state === "scoped"
+            ? pathwayResolution.defaultPathwayId
+            : "",
       });
     } catch (e) {
       safeServerLog("learner_flashcards", "pathway_bootstrap_primary_failed", {
@@ -278,7 +339,10 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
         tier: String(entitlement.tier ?? ""),
         country: String(entitlement.country ?? ""),
         error_name: e instanceof Error ? e.name : "unknown",
-        error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+        error_message:
+          e instanceof Error
+            ? e.message.slice(0, 400)
+            : String(e).slice(0, 400),
         outcome: "error",
       });
 
@@ -306,7 +370,10 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
         pathwayBootstrapSource = "secondary";
         pathwayResolution = resolveSubscribedQuestionBankPathways({
           requestedPathwayId,
-          compatible: compatible.map((p) => ({ id: p.id, shortName: p.shortName })),
+          compatible: compatible.map((p) => ({
+            id: p.id,
+            shortName: p.shortName,
+          })),
           learnerPath: null,
           requireExplicitRequestedPathwayId: true,
         });
@@ -329,7 +396,10 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
         variant="generic"
         headline="This study track is not on your account"
         body="Choose an exam you are subscribed to."
-        primaryCta={{ label: "Study preferences", href: "/app/account/study-preferences" }}
+        primaryCta={{
+          label: "Study preferences",
+          href: "/app/account/study-preferences",
+        }}
       />
     );
   }
@@ -338,7 +408,10 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     return (
       <div className="space-y-2">
         <FlashcardsPathwayPickSurface
-          title={t("learner.flashcards.page.noPathwayHeadline") ?? t("learner.flashcards.page.title")}
+          title={
+            t("learner.flashcards.page.noPathwayHeadline") ??
+            t("learner.flashcards.page.title")
+          }
           subtitle={
             t("learner.flashcards.page.noPathwayBody") ??
             "Choose an exam track for flashcards. Your selection is applied via the URL — no redirects."
@@ -370,9 +443,14 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
 
   const catalogPathwayForInventory = getExamPathwayById(scopedPathwayId);
   const catalogPathway = catalogPathwayForInventory;
-  const pathwayLabelFromOptions = pathwayOptions.find((p) => p.id === scopedPathwayId)?.label;
+  const pathwayLabelFromOptions = pathwayOptions.find(
+    (p) => p.id === scopedPathwayId,
+  )?.label;
   const pathwayDisplayName =
-    catalogPathway?.displayName ?? catalogPathway?.shortName ?? pathwayLabelFromOptions ?? scopedPathwayId;
+    catalogPathway?.displayName ??
+    catalogPathway?.shortName ??
+    pathwayLabelFromOptions ??
+    scopedPathwayId;
 
   let initialHub: FlashcardsHubServerPayload = {
     categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
@@ -380,8 +458,10 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     lessonVirtualDiagnostics: null,
     poolDiagnostics: null,
   };
-  let inventorySource: "server_inventory" | "server_inventory_timeout" | "deferred_client_api" =
-    "deferred_client_api";
+  let inventorySource:
+    | "server_inventory"
+    | "server_inventory_timeout"
+    | "deferred_client_api" = "deferred_client_api";
 
   if (catalogPathwayForInventory && userId && isDatabaseUrlConfigured()) {
     try {
@@ -392,7 +472,10 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
           pathway: catalogPathwayForInventory,
         }),
         new Promise<null>((resolve) => {
-          setTimeout(() => resolve(null), FLASHCARDS_INVENTORY_BOOTSTRAP_TIMEOUT_MS);
+          setTimeout(
+            () => resolve(null),
+            FLASHCARDS_INVENTORY_BOOTSTRAP_TIMEOUT_MS,
+          );
         }),
       ]);
 
@@ -417,7 +500,10 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
         loader_name: "flashcards_page",
         pathway_id: scopedPathwayId,
         error_name: e instanceof Error ? e.name : "unknown",
-        error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+        error_message:
+          e instanceof Error
+            ? e.message.slice(0, 400)
+            : String(e).slice(0, 400),
       });
     }
   }
@@ -436,7 +522,9 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
   }
 
   const alliedKeyForFlashcards =
-    alliedProfessionFromQuery && isAlliedMarketingCorePathwayId(scopedPathwayId) ? alliedProfessionFromQuery : "";
+    alliedProfessionFromQuery && isAlliedMarketingCorePathwayId(scopedPathwayId)
+      ? alliedProfessionFromQuery
+      : "";
   const catHref = appPathwayCatSessionStartPath(scopedPathwayId, {
     alliedProfession: alliedKeyForFlashcards || null,
   });
@@ -444,10 +532,17 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
   const flashcardsHeroEyebrow = catalogPathway
     ? `${pathwayRegionAwareExamName(catalogPathway)} · ${pathwayCountryLabel(catalogPathway)}`
     : undefined;
-  const flashcardsHeroTitle = catalogPathway ? pathwayFlashcardsHubH1(catalogPathway) : undefined;
-  const flashcardsHeroSubtitle = catalogPathway ? pathwayFlashcardsHubLead(catalogPathway) : undefined;
+  const flashcardsHeroTitle = catalogPathway
+    ? pathwayFlashcardsHubH1(catalogPathway)
+    : undefined;
+  const flashcardsHeroSubtitle = catalogPathway
+    ? pathwayFlashcardsHubLead(catalogPathway)
+    : undefined;
   const bootstrapMs = Math.round(performance.now() - bootstrapStarted);
-  if (process.env.NODE_ENV !== "production" || process.env.NN_FLASHCARDS_HUB_TIMING === "1") {
+  if (
+    process.env.NODE_ENV !== "production" ||
+    process.env.NN_FLASHCARDS_HUB_TIMING === "1"
+  ) {
     console.timeEnd(FLASHCARDS_PAGE_TIMING_LABEL);
   }
   safeServerLog("learner_flashcards", "server_shell_ready", {
@@ -464,7 +559,10 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     <div className="space-y-2">
       <Suspense
         fallback={
-          <BrandedPageLoader message={t("learner.loading.flashcards")} contentClassName="!p-0">
+          <BrandedPageLoader
+            message={t("learner.loading.flashcards")}
+            contentClassName="!p-0"
+          >
             <FlashcardsHubSkeleton withRouteAria={false} />
           </BrandedPageLoader>
         }

@@ -62,7 +62,6 @@ import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-a
 import { cookies } from "next/headers";
 import { LessonMeasurementUnitsBar } from "@/components/lessons/lesson-measurement-units-bar";
 import {
-  parseMeasurementPreference,
   readMeasurementPreferenceFromCookieStore,
   type MeasurementPreference,
 } from "@/lib/measurements/measurement-preference";
@@ -108,7 +107,7 @@ import { LessonStudyPhaseProgress } from "@/components/lessons/lesson-study-phas
 import { PathwayLessonQuickClinicalSummary } from "@/components/lessons/pathway-lesson-quick-clinical-summary";
 import { LessonNavButtons } from "@/components/lessons/lesson-nav-buttons";
 import { AppLessonUnavailable } from "@/components/student/app-lesson-unavailable";
-import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import { loadLessonDetailUserContext } from "@/lib/lessons/load-lesson-detail-user-context";
 import {
   buildLessonStudyLoopBankPackFromPreloadedExplicitItems,
   explicitLessonStudyLoopCombinedSanitizedIds,
@@ -272,16 +271,19 @@ async function LessonDetailPageInner({ params }: Props) {
     "(student).app.(learner).lessons.[id]",
   );
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const [entitlementResult, staff] = await Promise.all([
-    resolveEntitlementForPage(userId),
-    getStaffSession().catch(() => null),
-  ]);
+  const [entitlementResult, staff, userContext, { t }, marketingLocale] =
+    await Promise.all([
+      resolveEntitlementForPage(userId),
+      getStaffSession().catch(() => null),
+      loadLessonDetailUserContext(userId),
+      getLearnerMarketingBundle(),
+      getMarketingLocaleForDefaultRoute(),
+    ]);
+  const { studySettings } = userContext;
   const lessonAccess = accessScopeForLessonCatalogPages(
     entitlementResult,
     staff,
   );
-  const { t } = await getLearnerMarketingBundle();
-  const studySettings = await loadStudySettings(userId);
 
   if (lessonAccess === "error") {
     return (
@@ -316,23 +318,7 @@ async function LessonDetailPageInner({ params }: Props) {
   const email = (session?.user as { email?: string | null })?.email ?? null;
   const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
 
-  const marketingLocalePromise = getMarketingLocaleForDefaultRoute();
-  const learnerPathPromise = userId
-    ? withDatabaseFallback(
-        () =>
-          prisma.user.findUnique({
-            where: { id: userId },
-            select: { learnerPath: true },
-          }),
-        null,
-      )
-    : Promise.resolve(null);
-
-  const [lpRow, marketingLocale] = await Promise.all([
-    learnerPathPromise,
-    marketingLocalePromise,
-  ]);
-  const learnerPath = lpRow?.learnerPath ?? null;
+  const learnerPath = userContext.learnerPath;
 
   const resolved = await withDatabaseFallback(async () => {
     const catalogRef = parseAppLessonCatalogFallbackId(id);
@@ -576,22 +562,8 @@ async function LessonDetailPageInner({ params }: Props) {
     const cookieStore = await cookies();
     const cookieMeasurementPreference: MeasurementPreference | null =
       readMeasurementPreferenceFromCookieStore(cookieStore);
-    let profileMeasurementPreference: MeasurementPreference | null = null;
-    if (userId) {
-      try {
-        const prefRow = await prisma.user.findUnique({
-          where: { id: userId },
-          select: { measurementPreference: true },
-        });
-        profileMeasurementPreference = parseMeasurementPreference(
-          prefRow?.measurementPreference ?? null,
-        );
-      } catch {
-        /* optional */
-      }
-    }
     const measurementPreference =
-      cookieMeasurementPreference ?? profileMeasurementPreference;
+      cookieMeasurementPreference ?? userContext.measurementPreference;
     const lessonMeasurementSystem =
       pathway != null
         ? resolveLessonMeasurementSystem({

@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { ContentStatus } from "@prisma/client";
 import type { PathwayLessonAdjacentHrefs } from "@/components/lessons/pathway-lesson-sequence-nav";
 import { prisma } from "@/lib/db";
@@ -9,6 +10,7 @@ import {
   normalizeLesson,
   sortAndFilterLessonsForPathwayContext,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import { cacheTagPathwayLessonsHub } from "@/lib/cache/cache-tags";
 
 /** Neighbor in pathway lesson order (`sort_order`, catalog, or DB). */
 export type PathwayLessonAdjacentNeighbor = {
@@ -169,8 +171,31 @@ async function loadPathwayLessonAdjacentImpl(
   }
 }
 
+/**
+ * Per-lesson cross-request cache: 5-minute TTL, busted by pathway publish tag.
+ * Creates a keyed unstable_cache entry per (pathwayId, lessonSlug, locale) triple
+ * following the same pattern as pathway-lesson-loader.ts.
+ * The outer React cache() deduplicates within a single request.
+ */
+function loadPathwayLessonAdjacentCrossRequest(
+  pathwayId: string,
+  lessonSlug: string,
+  locale: string,
+): Promise<PathwayLessonAdjacentSlugs> {
+  return unstable_cache(
+    () => loadPathwayLessonAdjacentImpl(pathwayId, lessonSlug, locale),
+    ["pathway-lesson-adjacent", pathwayId, lessonSlug, locale],
+    {
+      revalidate: 300,
+      tags: [cacheTagPathwayLessonsHub(pathwayId)],
+    },
+  )();
+}
+
 /** Request-scoped dedupe for prev/next resolution (same pathway/slug/locale). */
-export const loadPathwayLessonAdjacent = cache(loadPathwayLessonAdjacentImpl);
+export const loadPathwayLessonAdjacent = cache(
+  loadPathwayLessonAdjacentCrossRequest,
+);
 
 /** Build ready-to-render prev/next links (e.g. marketing vs allied URL shapes). */
 export function mapPathwayLessonAdjacentToHrefs(

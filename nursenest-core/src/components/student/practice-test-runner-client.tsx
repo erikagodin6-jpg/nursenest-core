@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -30,10 +31,8 @@ import { QuestionBankPeerPerformancePanel } from "@/components/student/question-
 import { PracticeExamRemediationLinks } from "@/components/student/practice-exam/practice-exam-remediation-links";
 import { PracticeExamRationalePanel } from "@/components/student/practice-exam/practice-exam-rationale-panel";
 import { PracticeExamRationaleMobileDock } from "@/components/student/practice-exam/practice-exam-rationale-mobile-dock";
-import { PracticeTestTeachingReviewPanel } from "@/components/student/practice-test-teaching-review-panel";
-import { PracticeRationaleFullPanel } from "@/components/study/practice-rationale-full-panel";
+import type { PracticeRationaleFullPanelStatus } from "@/components/study/practice-rationale-full-panel";
 import type { PracticeRationaleFullPanelCopy } from "@/components/study/practice-rationale-full-panel.types";
-import { PracticeTestStudyLoopNext } from "@/components/student/practice-test-study-loop-next";
 import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
 import type { QuestionBankPeerStatsClient } from "@/lib/questions/question-bank-client-types";
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
@@ -91,17 +90,12 @@ import {
   type ConfidenceLevel,
 } from "@/components/study/confidence-selector";
 import { ConfidenceAnalyticsBlock } from "@/components/study/confidence-analytics";
-import {
-  SmartReviewLayout,
-  type SmartReviewItem,
-} from "@/components/study/smart-review-screen";
-import { StudyPlanFromResults } from "@/components/study/study-plan";
+import type { SmartReviewItem } from "@/components/study/smart-review-screen";
 import {
   QuestionCard,
   AnswerOptionRow,
 } from "@/components/study/cat-question-card";
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
-import { PostExamAdaptiveReport } from "@/components/student/post-exam-adaptive-report";
 import type { PostExamQuestionOutcome } from "@/lib/learner/post-exam-performance-report";
 import type { StudySettings } from "@/lib/learner/study-settings";
 import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
@@ -122,16 +116,12 @@ import { QuestionBookmarkButton } from "@/components/bookmarks/question-bookmark
 import { ShowSimilarQuestions } from "@/components/questions/show-similar-questions";
 import { MissedQuestionReflection } from "@/components/mistakes/missed-question-reflection";
 import { TeachMeThisPanel } from "@/components/teach-me-this/teach-me-this-panel";
-import {
-  PracticeAdaptivePostMissPanel,
-  type PracticeAdaptivePostMissPayload,
-} from "@/components/student/practice-adaptive-post-miss-panel";
+import type { PracticeAdaptivePostMissPayload } from "@/components/student/practice-adaptive-post-miss-panel";
 import { LearnerStudyCard } from "@/components/learner-ui/learner-study-card";
 import {
   buildExamOptionDisplayOrder,
   shouldDisableOptionShuffleMcq,
 } from "@/lib/practice-tests/exam-option-display-order";
-import { BowtieQuestionRenderer } from "@/components/exams/questions/bowtie-question-renderer";
 import {
   coerceBowtieDraftAnswer,
   isBowtieAnswerComplete,
@@ -152,6 +142,63 @@ import {
   Send,
   Shield,
 } from "lucide-react";
+
+const PracticeTestTeachingReviewPanel = dynamic(
+  () =>
+    import("@/components/student/practice-test-teaching-review-panel").then(
+      (m) => ({ default: m.PracticeTestTeachingReviewPanel }),
+    ),
+  { ssr: false },
+);
+const PracticeRationaleFullPanel = dynamic(
+  () =>
+    import("@/components/study/practice-rationale-full-panel").then((m) => ({
+      default: m.PracticeRationaleFullPanel,
+    })),
+  { ssr: false },
+);
+const PracticeTestStudyLoopNext = dynamic(
+  () =>
+    import("@/components/student/practice-test-study-loop-next").then((m) => ({
+      default: m.PracticeTestStudyLoopNext,
+    })),
+  { ssr: false },
+);
+const SmartReviewLayout = dynamic(
+  () =>
+    import("@/components/study/smart-review-screen").then((m) => ({
+      default: m.SmartReviewLayout,
+    })),
+  { ssr: false },
+);
+const StudyPlanFromResults = dynamic(
+  () =>
+    import("@/components/study/study-plan").then((m) => ({
+      default: m.StudyPlanFromResults,
+    })),
+  { ssr: false },
+);
+const PostExamAdaptiveReport = dynamic(
+  () =>
+    import("@/components/student/post-exam-adaptive-report").then((m) => ({
+      default: m.PostExamAdaptiveReport,
+    })),
+  { ssr: false },
+);
+const PracticeAdaptivePostMissPanel = dynamic(
+  () =>
+    import("@/components/student/practice-adaptive-post-miss-panel").then(
+      (m) => ({ default: m.PracticeAdaptivePostMissPanel }),
+    ),
+  { ssr: false },
+);
+const BowtieQuestionRenderer = dynamic(
+  () =>
+    import("@/components/exams/questions/bowtie-question-renderer").then(
+      (m) => ({ default: m.BowtieQuestionRenderer }),
+    ),
+  { ssr: false },
+);
 
 const PRACTICE_RESUME_STORAGE_KEY = "nursenest.practiceTests.resume.v1";
 
@@ -4142,7 +4189,7 @@ export function PracticeTestRunnerClient({
     />
   );
 
-  const rationaleFullStatus: import("@/components/study/practice-rationale-full-panel").PracticeRationaleFullPanelStatus =
+  const rationaleFullStatus: PracticeRationaleFullPanelStatus =
     isLinearEngine &&
     linearRationaleVisibility === "after_each" &&
     currentCommitted &&

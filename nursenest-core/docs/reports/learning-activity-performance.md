@@ -1,6 +1,6 @@
 # Learning Activity Performance Investigation
 
-Generated: 2026-06-01T10:51:37.516Z
+Generated: 2026-06-01T11:13:49.619Z
 
 ## Measurement Status
 
@@ -11,24 +11,24 @@ Generated: 2026-06-01T10:51:37.516Z
 
 | Rank | Activity | Route | Source Size | Prisma Call Sites | findMany | Transactions | Client fetches | Cold | Warm | Where users wait |
 | ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- | --- |
-| 1 | CAT session | `/app/practice-tests/[id]?mode=cat` | 329 KB | 22 | 8 | 0 | 8 | not measured | not measured | Users wait on CAT pool count/findMany, answer history, adaptive state persistence, and per-question adaptive selection/feedback queries. |
-| 2 | Flashcard session | `/app/flashcards/[deckRef]` | 98 KB | 26 | 12 | 1 | 0 | not measured | not measured | Users wait on custom pool generation: dedicated flashcards, virtual question-derived cards, progress filters, option hydration, and session persistence/hydration. |
-| 3 | Practice session | `/app/practice-tests/[id]` | 244 KB | 4 | 1 | 0 | 8 | not measured | not measured | Users wait on practice test bootstrap plus repeated client saves/question fetches during the session; runner is a large client component. |
-| 4 | Lesson launcher | `/app/lessons` | 63 KB | 12 | 4 | 0 | 3 | not measured | not measured | Users wait on entitlement/profile resolution, contentItem count, pathwayLesson sample/list pagination, then client-side filter fetches. |
+| 1 | CAT session | `/app/practice-tests/[id]?mode=cat` | 332 KB | 22 | 8 | 0 | 8 | not measured | not measured | Users wait on CAT pool count/findMany, answer history, adaptive state persistence, and per-question adaptive selection/feedback queries. |
+| 2 | Flashcard session | `/app/flashcards/[deckRef]` | 97 KB | 26 | 12 | 1 | 0 | not measured | not measured | Users wait on custom pool generation: dedicated flashcards, virtual question-derived cards, progress filters, option hydration, and session persistence/hydration. |
+| 3 | Practice session | `/app/practice-tests/[id]` | 245 KB | 4 | 1 | 0 | 8 | not measured | not measured | Users wait on practice test bootstrap plus repeated client saves/question fetches during the session; runner is a large client component. |
+| 4 | Lesson launcher | `/app/lessons` | 66 KB | 11 | 4 | 0 | 3 | not measured | not measured | Users wait on entitlement/profile resolution, contentItem count, pathwayLesson sample/list pagination, then client-side filter fetches. |
 | 5 | Practice launcher | `/app/practice-tests` | 109 KB | 5 | 3 | 1 | 3 | not measured | not measured | Users wait mostly after shell render: discovery counts, weak-area/readiness/performance-summary calls, then practice test creation when launching. |
 | 6 | CAT launcher | `/app/practice-tests/cat-launch` | 87 KB | 4 | 3 | 1 | 2 | not measured | not measured | Users wait on cat-readiness and POST /api/practice-tests; route shell is light but launch API is heavy. |
-| 7 | Lesson detail | `/app/lessons/[id]` | 76 KB | 6 | 0 | 0 | 3 | not measured | not measured | Users wait on duplicated learnerPath/profile reads, pathwayLesson lookup, legacy ContentItem fallback checks, measurement preference lookup, and related/practice hydration. |
-| 8 | Flashcard launcher | `/app/flashcards` | 110 KB | 1 | 0 | 0 | 1 | not measured | not measured | Users wait on session + entitlement, compatible pathway bootstrap, profile lookup, and flashcard inventory aggregate transaction before the client can trust counts. |
+| 7 | Lesson detail | `/app/lessons/[id]` | 75 KB | 4 | 0 | 0 | 3 | not measured | not measured | Users wait on duplicated learnerPath/profile reads, pathwayLesson lookup, legacy ContentItem fallback checks, measurement preference lookup, and related/practice hydration. |
+| 8 | Flashcard launcher | `/app/flashcards` | 111 KB | 0 | 0 | 0 | 1 | not measured | not measured | Users wait on session + entitlement, compatible pathway bootstrap, profile lookup, and flashcard inventory aggregate transaction before the client can trust counts. |
 
 ## Flow Details
 
 ### Lesson launcher
 
 - Route: `/app/lessons`
-- Data fetched: user.findUnique, pathwayLesson.findFirst, contentItem.count, contentItem.findMany, contentItem.count, user.findUnique, user.update
+- Data fetched: pathwayLesson.findFirst, contentItem.count, contentItem.findMany, contentItem.count, user.findUnique, user.update
 - API/client fetches: /api/learner/lesson-loading-errors
-- Data size proxy: 63 KB across scanned route/API/client files.
-- Query-count proxy: 12 Prisma call sites; 4 findMany; 3 count; 0 transactions; 0 raw queries.
+- Data size proxy: 66 KB across scanned route/API/client files.
+- Query-count proxy: 11 Prisma call sites; 4 findMany; 3 count; 0 transactions; 0 raw queries.
 - Render-count proxy: 2 useState, 2 useEffect, 0 Suspense boundaries across scanned client/server components.
 - Cold load: not measured.
 - Warm load: not measured.
@@ -36,17 +36,17 @@ Generated: 2026-06-01T10:51:37.516Z
 
 | File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `src/app/(app)/app/(learner)/lessons/page.tsx` | 28 KB | 4 | 0 | 1 | 0 | 0 | 0 | 0 |
+| `src/app/(app)/app/(learner)/lessons/page.tsx` | 30 KB | 3 | 0 | 1 | 0 | 0 | 0 | 0 |
 | `src/components/student/learner-lessons-responsive-results.tsx` | 21 KB | 0 | 0 | 0 | 0 | 3 | 2 | 2 |
 | `src/app/api/lessons/route.ts` | 15 KB | 8 | 4 | 2 | 0 | 0 | 0 | 0 |
 
 ### Lesson detail
 
 - Route: `/app/lessons/[id]`
-- Data fetched: user.findUnique, pathwayLesson.findUnique, contentItem.findFirst
+- Data fetched: pathwayLesson.findUnique, contentItem.findFirst
 - API/client fetches: /api/learner/lesson-bank-study-loop?lessonId=${encodeURIComponent(lessonId)}, /api/learner/lesson-bank-study-loop, /api/learner/study-settings
-- Data size proxy: 76 KB across scanned route/API/client files.
-- Query-count proxy: 6 Prisma call sites; 0 findMany; 0 count; 0 transactions; 0 raw queries.
+- Data size proxy: 75 KB across scanned route/API/client files.
+- Query-count proxy: 4 Prisma call sites; 0 findMany; 0 count; 0 transactions; 0 raw queries.
 - Render-count proxy: 2 useState, 5 useEffect, 0 Suspense boundaries across scanned client/server components.
 - Cold load: not measured.
 - Warm load: not measured.
@@ -54,17 +54,17 @@ Generated: 2026-06-01T10:51:37.516Z
 
 | File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `src/app/(app)/app/(learner)/lessons/[id]/page.tsx` | 51 KB | 6 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `src/app/(app)/app/(learner)/lessons/[id]/page.tsx` | 51 KB | 4 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `src/components/lessons/pathway-lesson-study-loop-orchestrator.tsx` | 22 KB | 0 | 0 | 0 | 0 | 3 | 2 | 5 |
 | `src/app/api/learner/pathway-lesson-practice-questions/route.ts` | 2 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ### Flashcard launcher
 
 - Route: `/app/flashcards`
-- Data fetched: user.findUnique
+- Data fetched: mostly route/session helpers or client APIs
 - API/client fetches: none detected in scanned files
-- Data size proxy: 110 KB across scanned route/API/client files.
-- Query-count proxy: 1 Prisma call sites; 0 findMany; 0 count; 0 transactions; 0 raw queries.
+- Data size proxy: 111 KB across scanned route/API/client files.
+- Query-count proxy: 0 Prisma call sites; 0 findMany; 0 count; 0 transactions; 0 raw queries.
 - Render-count proxy: 9 useState, 6 useEffect, 1 Suspense boundaries across scanned client/server components.
 - Cold load: not measured.
 - Warm load: not measured.
@@ -72,7 +72,7 @@ Generated: 2026-06-01T10:51:37.516Z
 
 | File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `src/app/(app)/app/(learner)/flashcards/page.tsx` | 20 KB | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `src/app/(app)/app/(learner)/flashcards/page.tsx` | 20 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `src/components/flashcards/flashcards-hub-client.tsx` | 60 KB | 0 | 0 | 0 | 0 | 1 | 9 | 6 |
 | `src/app/api/flashcards/inventory/route.ts` | 11 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `src/app/api/flashcards/custom-session/route.ts` | 19 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -82,7 +82,7 @@ Generated: 2026-06-01T10:51:37.516Z
 - Route: `/app/flashcards/[deckRef]`
 - Data fetched: flashcard.findMany, examQuestion.findMany, flashcardProgress.findMany, flashcardSession.findFirst, flashcardAttempt.findMany, flashcardDeck.findMany, flashcardDeck.findUnique, flashcardSession.findFirst, flashcardSession.create, flashcardAttempt.count, flashcardAttempt.create, flashcardMastery.upsert, flashcardSession.updateMany, flashcard.count, flashcard.findMany, flashcardProgress.findMany, flashcardStudySession.findUnique, flashcardStudySession.upsert
 - API/client fetches: none detected in scanned files
-- Data size proxy: 98 KB across scanned route/API/client files.
+- Data size proxy: 97 KB across scanned route/API/client files.
 - Query-count proxy: 26 Prisma call sites; 12 findMany; 3 count; 1 transactions; 0 raw queries.
 - Render-count proxy: 0 useState, 0 useEffect, 0 Suspense boundaries across scanned client/server components.
 - Cold load: not measured.
@@ -123,7 +123,7 @@ Generated: 2026-06-01T10:51:37.516Z
 - Route: `/app/practice-tests/[id]`
 - Data fetched: practiceTest.findFirst, examQuestion.findMany, practiceTest.findFirst, examQuestion.findFirst
 - API/client fetches: /api/practice-tests/${testId}, /api/learner/adaptive-post-miss
-- Data size proxy: 244 KB across scanned route/API/client files.
+- Data size proxy: 245 KB across scanned route/API/client files.
 - Query-count proxy: 4 Prisma call sites; 1 findMany; 0 count; 0 transactions; 0 raw queries.
 - Render-count proxy: 10 useState, 24 useEffect, 0 Suspense boundaries across scanned client/server components.
 - Cold load: not measured.
@@ -133,7 +133,7 @@ Generated: 2026-06-01T10:51:37.516Z
 | File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `src/app/(app)/app/(learner)/practice-tests/[id]/page.tsx` | 5 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/components/student/practice-test-runner-client.tsx` | 194 KB | 0 | 0 | 0 | 0 | 8 | 10 | 24 |
+| `src/components/student/practice-test-runner-client.tsx` | 195 KB | 0 | 0 | 0 | 0 | 8 | 10 | 24 |
 | `src/lib/practice-tests/load-practice-test-shell-bootstrap.ts` | 3 KB | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `src/app/api/practice-tests/[id]/route.ts` | 35 KB | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 | `src/app/api/practice-tests/[id]/question/route.ts` | 8 KB | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -163,7 +163,7 @@ Generated: 2026-06-01T10:51:37.516Z
 - Route: `/app/practice-tests/[id]?mode=cat`
 - Data fetched: examQuestion.findMany, examQuestion.count, examQuestion.findFirst, practiceTest.findMany, practiceTest.findFirst, practiceTest.create, practiceTest.findFirst, practiceTest.updateMany, practiceTest.findMany, examQuestion.findMany, practiceTest.findFirst, examQuestion.findFirst
 - API/client fetches: /api/practice-tests/${testId}, /api/learner/adaptive-post-miss
-- Data size proxy: 329 KB across scanned route/API/client files.
+- Data size proxy: 332 KB across scanned route/API/client files.
 - Query-count proxy: 22 Prisma call sites; 8 findMany; 2 count; 0 transactions; 0 raw queries.
 - Render-count proxy: 10 useState, 24 useEffect, 0 Suspense boundaries across scanned client/server components.
 - Cold load: not measured.
@@ -172,9 +172,9 @@ Generated: 2026-06-01T10:51:37.516Z
 
 | File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `src/components/student/practice-test-runner-client.tsx` | 194 KB | 0 | 0 | 0 | 0 | 8 | 10 | 24 |
+| `src/components/student/practice-test-runner-client.tsx` | 195 KB | 0 | 0 | 0 | 0 | 8 | 10 | 24 |
 | `src/lib/practice-tests/cat-pool.ts` | 22 KB | 5 | 3 | 2 | 0 | 0 | 0 | 0 |
-| `src/lib/practice-tests/cat-session.ts` | 46 KB | 3 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `src/lib/practice-tests/cat-session.ts` | 48 KB | 3 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `src/lib/cat/answer-history.ts` | 7 KB | 4 | 3 | 0 | 0 | 0 | 0 | 0 |
 | `src/lib/cat/session-persistence.ts` | 18 KB | 7 | 1 | 0 | 0 | 0 | 0 | 0 |
 | `src/app/api/practice-tests/[id]/route.ts` | 35 KB | 1 | 1 | 0 | 0 | 0 | 0 | 0 |

@@ -16,10 +16,8 @@ import {
   type BuilderCategoryOption,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
 import { loadLessonLinkedFlashcardVirtuals } from "@/lib/flashcards/lesson-linked-flashcards-for-pathway";
-import {
-  collectMergedLessonVirtualFlashcardsForPathway,
-  FLASHCARD_PADDING_CARD_RATIONALE_MARKER,
-} from "@/lib/flashcards/lesson-linked-virtual-flashcards-aggregator";
+import { FLASHCARD_PADDING_CARD_RATIONALE_MARKER } from "@/lib/flashcards/lesson-linked-virtual-flashcards-aggregator";
+import { loadFlashcardPoolSnapshotForPathway } from "@/lib/flashcards/flashcard-pool-snapshot.server";
 import {
   serializeFlashcardForCustomSession,
   type FlashcardStudySelectRow,
@@ -53,7 +51,6 @@ import {
   orderFlashcardsForAdaptiveSession,
   type AdaptiveProgressLite,
 } from "@/lib/flashcards/study-queue";
-import { loadPublishedPathwayLessonsForStudyFromDb } from "@/lib/learner-study-hub/load-published-pathway-lessons-for-study-from-db";
 import { pathwayHubCategoryToCanonical } from "@/lib/learner-study-hub/body-system-data";
 
 export type CustomSessionStudyMode =
@@ -310,15 +307,8 @@ export async function buildFlashcardCustomSession(
           let lessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics | null =
             null;
           let lessonVirtualTotal = 0;
-          const pathwayLessonsForVirtuals =
-            await loadPublishedPathwayLessonsForStudyFromDb(pathwayScopeId);
           const { virtuals: mergedLessonVirtuals, diagnostics: lessonInv } =
-            collectMergedLessonVirtualFlashcardsForPathway(
-              pathwayScopeId,
-              pathwayLessonsForVirtuals.length > 0
-                ? pathwayLessonsForVirtuals
-                : undefined,
-            );
+            await loadFlashcardPoolSnapshotForPathway(pathwayScopeId);
           const mergedCounts: Record<string, number> = {
             ...examInventoryCounts,
           };
@@ -699,15 +689,8 @@ export async function buildFlashcardCustomSession(
       null;
     if (pathwayScopeId && allowLessonQuestionVirtuals) {
       const pid = pathwayScopeId;
-      const pathwayLessonsForVirtuals =
-        await loadPublishedPathwayLessonsForStudyFromDb(pid);
       const { virtuals: mergedLessonVirtuals, diagnostics: lessonInv } =
-        collectMergedLessonVirtualFlashcardsForPathway(
-          pid,
-          pathwayLessonsForVirtuals.length > 0
-            ? pathwayLessonsForVirtuals
-            : undefined,
-        );
+        await loadFlashcardPoolSnapshotForPathway(pid);
       const existingIds = new Set(cardWithCategory.map((c) => c.id));
       for (const v of mergedLessonVirtuals) {
         if (existingIds.has(v.id)) continue;

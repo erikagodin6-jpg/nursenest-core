@@ -8,6 +8,8 @@ import { recommendNextActions } from "@/lib/learner/recommend-next-actions";
 import { attachModes, filterSuppressed, reorderForAfterActivity } from "@/lib/learner/smart-study-next-helpers";
 import type { StudyNextRecommendation } from "@/lib/learner/study-next-types";
 import { coerceSafeLearnerNavHref } from "@/lib/learner/safe-app-href";
+import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
+import { DASHBOARD_ANALYTICS_TTL_SECONDS } from "@/lib/cache/learner-private-read-cache-keying";
 
 const SUPPRESS_LESSON_TAKE = 8;
 const SUPPRESS_FC_SESSION_TAKE = 5;
@@ -60,17 +62,12 @@ async function loadRecentRecommendationSuppressionsImpl(userId: string): Promise
 
 export const loadRecentRecommendationSuppressions = cache(loadRecentRecommendationSuppressionsImpl);
 
-/**
- * Smart “Study next” list: base deterministic recs + anti-repeat filters + optional activity-aware ordering + modes.
- * Tier/pathway safety stays in {@link buildLearnerStudySnapshot} / remediation link resolvers — not relaxed here.
- */
-export async function buildSmartStudyNextRecommendations(
+async function buildSmartStudyNextRecommendationsUncached(
   userId: string,
   snapshot: LearnerStudySnapshot,
   opts?: {
     maxTotal?: number;
-    afterActivity?: "lesson" | "quiz" | "flashcards" | "practice_test" | "blog";
-    /** Extra hrefs to skip (e.g. current page). */
+    afterActivity?: “lesson” | “quiz” | “flashcards” | “practice_test” | “blog”;
     suppressHrefs?: string[];
   },
 ): Promise<StudyNextRecommendation[]> {
@@ -96,4 +93,40 @@ export async function buildSmartStudyNextRecommendations(
     pushSanitized(recommendNextActions(snapshot, { maxTotal: Math.min(5, maxTotal + 2) }));
   }
   return attachModes(out);
+}
+
+/**
+ * Smart “Study next” list — 15-minute cached.
+ *
+ * Recommendations are derived from the study snapshot (which is itself cached)
+ * and a suppression list. Caching here removes a DB round-trip and the
+ * recommendation scoring work from every dashboard load.
+ *
+ * Bypass: when `afterActivity` is set (post-answer context) we skip the cache
+ * so the learner gets fresh recs after completing an activity.
+ *
+ * Invalidated by `invalidateLearnerPrivateReadCache(userId, [“study-plan-summary”])`.
+ */
+export async function buildSmartStudyNextRecommendations(
+  userId: string,
+  snapshot: LearnerStudySnapshot,
+  opts?: {
+    maxTotal?: number;
+    afterActivity?: “lesson” | “quiz” | “flashcards” | “practice_test” | “blog”;
+    suppressHrefs?: string[];
+  },
+): Promise<StudyNextRecommendation[]> {
+  // After an activity the learner should see fresh recs — bypass the cache.
+  const bypassCache = Boolean(opts?.afterActivity);
+
+  return loadWithLearnerPrivateReadCache(
+    {
+      surface: “study-plan-summary”,
+      userId,
+      ttlSeconds: DASHBOARD_ANALYTICS_TTL_SECONDS,
+      keyParts: [opts?.maxTotal ?? 3, snapshot.weakTopics.slice(0, 3).map((w) => w.topic)],
+      bypass: bypassCache,
+    },
+    () => buildSmartStudyNextRecommendationsUncached(userId, snapshot, opts),
+  );
 }

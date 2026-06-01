@@ -1,6 +1,6 @@
 # Database Performance Audit
 
-Generated: 2026-06-01T10:51:37.575Z
+Generated: 2026-06-01T11:09:21.833Z
 
 ## Summary
 
@@ -10,9 +10,9 @@ Generated from the database performance war room initiative.
 
 | Flow | Prisma | findMany | count | groupBy | include | select | Risk |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Lesson launcher | 15 | 4 | 4 | 0 | 0 | 10 | High |
-| Lesson detail | 10 | 1 | 0 | 0 | 0 | 7 | Low |
-| Flashcard launcher | 1 | 0 | 0 | 0 | 0 | 1 | Low |
+| Lesson launcher | 14 | 4 | 4 | 0 | 0 | 9 | High |
+| Lesson detail | 8 | 1 | 0 | 0 | 0 | 5 | Low |
+| Flashcard launcher | 0 | 0 | 0 | 0 | 0 | 0 | Low |
 | Flashcard session | 24 | 11 | 3 | 0 | 0 | 27 | High |
 | Practice launcher | 4 | 3 | 0 | 0 | 0 | 3 | Low |
 | Practice session | 3 | 1 | 0 | 0 | 0 | 3 | Low |
