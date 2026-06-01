@@ -1,46 +1,48 @@
 # Lesson Image Coverage Audit
 
-Generated: 2026-05-21T23:54:28.808Z
+Generated: 2026-06-01T22:19:17.843Z
 
 ## Coverage
 
 | Metric | Value |
 | --- | --- |
-| Pathways scanned | 9 |
-| Marketing-renderable lessons | 3162 |
-| Lessons with any resolved image | 359 (11.4%) |
-| Lessons missing images | 2803 |
-| Lessons that should have images | 318 |
-| Should-have still missing/low quality | 183 |
-| Should-have coverage | 42.5% |
+| Pathways scanned | 1 |
+| Marketing-renderable lessons | 801 |
+| Lessons with any resolved image | 89 (11.1%) |
+| Lessons missing images | 712 |
+| Lessons that should have images | 90 |
+| Should-have still missing/low quality | 53 |
+| Should-have coverage | 41.1% |
 
 ## Status breakdown
 
-- **no_image**: 2803
-- **duplicate_image_candidate**: 324
-- **low_quality_image**: 35
+- **no_image**: 712
+- **duplicate_image_candidate**: 80
+- **fuzzy_match**: 3
+- **fallback_match**: 2
+- **low_quality_image**: 2
+- **exact_match**: 2
 
 ## Priority breakdown (should-have cohort)
 
-- **CRITICAL**: 50
-- **HIGH**: 87
-- **MEDIUM**: 90
-- **LOW**: 2935
+- **CRITICAL**: 19
+- **HIGH**: 22
+- **MEDIUM**: 22
+- **LOW**: 738
 
 ## Production clusters
 
-- **other**: 1781
-- **np_clinical**: 761
-- **respiratory**: 264
-- **pharmacology**: 111
-- **med_surg**: 82
-- **emergency**: 53
-- **labs**: 38
-- **cardiac_arrhythmias**: 19
-- **policy_study_skills**: 17
-- **anatomy**: 15
-- **procedures**: 11
-- **cardiac_ecg**: 10
+- **other**: 650
+- **respiratory**: 68
+- **med_surg**: 29
+- **pharmacology**: 17
+- **labs**: 11
+- **emergency**: 11
+- **cardiac_arrhythmias**: 5
+- **procedures**: 5
+- **cardiac_ecg**: 2
+- **policy_study_skills**: 2
+- **anatomy**: 1
 
 ## Visual style governance
 

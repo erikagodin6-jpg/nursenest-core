@@ -1,0 +1,81 @@
+name: Sync Lesson Image Inventory
+
+# Rebuilds src/config/education-image-inventory.json by listing all images
+# in the DigitalOcean Spaces bucket, then commits the result if changed.
+#
+# Why automated:
+#   The inventory is a static JSON file that must match what's actually uploaded
+#   to Spaces. Without automation, images uploaded to production never appear
+#   on lesson pages because the JSON is stale. Running this daily ensures the
+#   inventory is at most 24 hours behind.
+#
+# Secrets required (add under Settings → Secrets → Actions):
+#   SPACES_KEY    — DigitalOcean Spaces access key ID
+#   SPACES_SECRET — DigitalOcean Spaces secret access key
+
+on:
+  schedule:
+    # Daily at 03:00 UTC (off-peak)
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Print inventory diff without committing"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Sync image inventory from Spaces
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - name: Checkout main (shallow)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: nursenest-core/package-lock.json
+
+      - name: Install Spaces-only dependencies
+        run: npm ci --ignore-scripts --prefer-offline 2>/dev/null || npm install --ignore-scripts
+
+      - name: Run inventory sync
+        env:
+          SPACES_KEY: ${{ secrets.SPACES_KEY }}
+          SPACES_SECRET: ${{ secrets.SPACES_SECRET }}
+          SPACES_BUCKET: ${{ vars.SPACES_BUCKET || 'nursenest-images' }}
+          SPACES_REGION: ${{ vars.SPACES_REGION || 'tor1' }}
+        run: node ../scripts/sync-lesson-image-inventory.mjs
+
+      - name: Check for inventory changes
+        id: diff
+        run: |
+          if git diff --quiet src/config/education-image-inventory.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No inventory changes detected."
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Inventory updated:"
+            git diff --stat src/config/education-image-inventory.json
+          fi
+
+      - name: Commit updated inventory
+        if: steps.diff.outputs.changed == 'true' && github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add src/config/education-image-inventory.json
+          git commit -m "chore: sync lesson image inventory from Spaces [skip ci]"
+          git push origin HEAD:main

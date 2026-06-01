@@ -631,7 +631,23 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     });
 
     if (adv.kind === "error") {
-      return NextResponse.json({ error: adv.message }, { status: 400 });
+      // Structured error with recovery hint: the client can offer "switch to practice mode"
+      // rather than leaving the user with a raw error screen. The `recoveryAction` field
+      // is consumed by PracticeTestRunnerCore to route to the tutor-mode fallback.
+      safeServerLog("cat_runner", "cat_advance_error", {
+        event: "cat_advance_error",
+        practiceTestId: id.slice(0, 16),
+        errorMessage: adv.message?.slice(0, 200) ?? "unknown",
+      });
+      return NextResponse.json(
+        {
+          error: adv.message,
+          code: "cat_advance_failed",
+          recoveryAction: "switch_to_practice_mode",
+          recoveryHref: `/app/practice-tests`,
+        },
+        { status: 400 },
+      );
     }
 
     safeServerLog("cat_runner", "cat_advance_patch", {

@@ -296,7 +296,7 @@ export async function sendRevenueAlert(input: RevenueAlertPayload): Promise<Reve
   };
   const externalDelivered = Object.values(channels).some((channel) => channel.status === "sent");
   const auditChannels = { ...channels, adminDashboard: { status: "sent" as const } };
-  const auditLogId = await writeAuditLog(input, { delivered: true, channels: auditChannels }).catch((e) => {
+  const auditLogId = await writeAuditLog(input, { delivered: externalDelivered, channels: auditChannels }).catch((e) => {
     safeServerLog(LOG_SCOPE, "audit_log_failed", {
       eventType: input.eventType,
       message: e instanceof Error ? e.message.slice(0, 180) : "unknown",
@@ -307,7 +307,9 @@ export async function sendRevenueAlert(input: RevenueAlertPayload): Promise<Reve
   channels = auditLogId
     ? auditChannels
     : { ...channels, adminDashboard: { status: "failed" as const, detail: "audit_log_failed" } };
-  const delivered = externalDelivered || Boolean(auditLogId);
+  // Delivery = at least one EXTERNAL channel (email or SMS) succeeded.
+  // A DB audit log write alone is NOT sufficient — admin must actually receive the notification.
+  const delivered = externalDelivered;
 
   if (!delivered) {
     safeServerLog(LOG_SCOPE, "no_channel_delivered", {

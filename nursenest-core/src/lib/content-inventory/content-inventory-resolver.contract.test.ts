@@ -215,16 +215,40 @@ describe("pool subset invariant (static logic)", () => {
     assert.match(resolverSrc, /flashcardExamPool: canonicalCount/);
   });
 
-  it("parity delta = catEligibleCount - canonicalCount (expected >= 0, negative = misconfiguration)", () => {
+  it("parity delta = catEligibleCount - canonicalCount (expected <= 0, positive = misconfiguration)", () => {
     assert.match(resolverSrc, /examPoolParityDelta = catEligibleCount - canonicalCount/);
   });
 
-  it("parity is OK when delta >= 0 (CAT is stricter than flashcard, which is expected)", () => {
-    assert.match(resolverSrc, /examPoolParityOk = examPoolParityDelta >= 0/);
+  it("parity is OK when delta <= 0 (CAT is stricter than flashcard, which is expected)", () => {
+    assert.match(resolverSrc, /examPoolParityOk = examPoolParityDelta <= 0/);
   });
 });
 
-// ─── 9. Study question pool helper uses same canonical gates ──────────────────
+// ─── 9. Flashcard hub inventory uses shared count-only session helper ─────────
+
+describe("flashcard hub inventory: session-count parity", () => {
+  const routeSrc = read("app/api/flashcards/inventory/route.ts");
+  const pageSrc = read("app/(app)/app/(learner)/flashcards/page.tsx");
+  const helperSrc = read("lib/flashcards/load-shared-flashcards-hub-inventory.server.ts");
+
+  it("API inventory route uses the shared merged flashcard helper", () => {
+    assert.match(routeSrc, /loadSharedFlashcardsHubInventoryForPathway/);
+    assert.ok(!routeSrc.includes("loadFlashcardsExamInventoryForPathway"), "API route must not return exam-only inventory");
+  });
+
+  it("server flashcards page bootstrap uses the same shared helper", () => {
+    assert.match(pageSrc, /loadSharedFlashcardsHubInventoryForPathway/);
+    assert.ok(!pageSrc.includes("loadFlashcardsExamInventoryForPathway"), "page bootstrap must not return exam-only inventory");
+  });
+
+  it("shared helper derives inventory from the count-only session builder", () => {
+    assert.match(helperSrc, /buildFlashcardCustomSession/);
+    assert.match(helperSrc, /includeCards:\s*false/);
+    assert.match(helperSrc, /lessonVirtualDiagnostics/);
+  });
+});
+
+// ─── 10. Study question pool helper uses same canonical gates ─────────────────
 
 describe("get-study-question-pool-for-pathway.ts: canonical gate usage", () => {
   const src = read("lib/study-question-pool/get-study-question-pool-for-pathway.ts");

@@ -1811,6 +1811,9 @@ export function PracticeTestRunnerCore({
       let data: {
         results?: PracticeTestResultsJson;
         error?: string;
+        code?: string;
+        recoveryAction?: string;
+        recoveryHref?: string;
         catAdvanced?: boolean;
         catCompleted?: boolean;
         catStudyReveal?: boolean;
@@ -1821,7 +1824,24 @@ export function PracticeTestRunnerCore({
       } catch {
         throw new Error("Could not read the server response for this step.");
       }
-      if (!res.ok) throw new Error(data.error ?? "Could not advance.");
+      if (!res.ok) {
+        // If the server returned a structured recovery hint, surface it so the
+        // runner can offer "switch to practice mode" rather than a raw error banner.
+        if (data.code === "cat_advance_failed" && data.recoveryHref) {
+          logSessionEvent("cat_advance_server_error_with_recovery", {
+            code: data.code,
+            recoveryAction: data.recoveryAction ?? null,
+          });
+          setError(
+            tx(
+              "learner.practiceTests.run.catAdvanceRecovery",
+              "This adaptive session encountered a problem. You can continue studying from your practice test history.",
+            ),
+          );
+          return; // Don't rethrow — render error state with recovery link
+        }
+        throw new Error(data.error ?? "Could not advance.");
+      }
       assertCatAdvanceResponseShape(data);
       if (
         catExamCatAdvanceResponseIsStale({

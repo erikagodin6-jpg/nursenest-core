@@ -103,12 +103,31 @@ function buildDenialDetail(args: {
  *
  * Never returns scope:null silently — denial always includes a denialCode + denialDetail for
  * structured log events. Callers must log the denialCode when scope is null.
+ *
+ * Phase 3C: in-process memoization with 30-second TTL.
+ * Within a single session-launch the same (userId, tier, country, pathwayId) tuple may be
+ * called from the eager pool chain AND from loadFlashcardsExamInventoryForPathway.
+ * Caching the result eliminates the duplicate User row lookup.
  */
+type AccessMemoEntry = { result: ResolvedFlashcardPoolAccess; expiresAt: number };
+const _accessMemoMap = new Map<string, AccessMemoEntry>();
+const ACCESS_MEMO_TTL_MS = 30_000;
+
+function accessMemoKey(userId: string, entitlement: AccessScope, pathwayId: string): string {
+  return `${userId}:${String(entitlement.tier)}:${String(entitlement.country)}:${pathwayId}`;
+}
+
 export async function resolveAccessScopeForPathwayExamQuestionPool(
   userId: string,
   entitlement: AccessScope,
   pathway: ExamPathwayDefinition,
 ): Promise<ResolvedFlashcardPoolAccess> {
+  // Phase 3C: return cached result if still fresh (avoids User row DB lookup on repeated calls).
+  const memoKey = accessMemoKey(userId, entitlement, pathway.id);
+  const now = Date.now();
+  const memoHit = _accessMemoMap.get(memoKey);
+  if (memoHit && memoHit.expiresAt > now) return memoHit.result;
+
   function denied(
     code: ScopeResolutionDenialCode,
     tierResolutionSource: FlashcardPoolAccessTierCountrySource,
@@ -206,12 +225,16 @@ export async function resolveAccessScopeForPathwayExamQuestionPool(
     return denied("tier_ladder_mismatch", tierSrc, countrySrc, entitlementTierCountryUserRowCoalesce, String(tier), String(country));
   }
 
-  return {
+  const result: ResolvedFlashcardPoolAccess = {
     scope: coalesced,
     tierResolutionSource: tierSrc,
     countryResolutionSource: countrySrc,
     entitlementTierCountryUserRowCoalesce,
   };
+  // Memoize successful access resolution — avoids redundant User row lookup within TTL window.
+  if (_accessMemoMap.size > 500) _accessMemoMap.clear(); // Prevent unbounded growth across long-lived processes.
+  _accessMemoMap.set(memoKey, { result, expiresAt: Date.now() + ACCESS_MEMO_TTL_MS });
+  return result;
 }
 
 const FLASHCARD_INVENTORY_GROUP_BY_LIMIT = 500;

@@ -13,6 +13,11 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { classifyPathwayLessonRecordForHub } from "@/lib/taxonomy/classifier";
 import { shouldSuppressProfessionalPracticeHubLesson } from "@/lib/taxonomy/nursing-taxonomy-validation";
 import { REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
+import {
+  getLessonManifest,
+  setLessonManifest,
+  incrementReliabilityCounter,
+} from "@/lib/server/content-cache";
 
 /** Minimal `pathway_lessons` row fields used by `/app/lessons/[id]` pathway resolution. */
 export type AppSubscriberPathwayLessonDetailRow = Pick<
@@ -107,6 +112,29 @@ export async function resolveAppSubscriberPathwayLessonForDetail(args: {
   }
 
   lessonsPerfMark("detail_lookup_start", { pathwayId: args.pwRow.pathwayId });
+
+  // Tier A — Redis manifest cache (60 min TTL, survives deployments)
+  // The lesson record is content-only — not user-specific. The entitlement gate above
+  // already ran, so the cached record can be served directly if valid.
+  try {
+    const cached = await getLessonManifest<PathwayLessonRecord>(args.pwRow.id);
+    if (cached) {
+      const fast = classifyAppSubscriberPathwayLessonRecord({
+        pathwayId: args.pwRow.pathwayId,
+        slug,
+        record: cached,
+      });
+      if (fast.kind === "pathway_ok") {
+        lessonsPerfMark("detail_lookup_end", { pathwayId: args.pwRow.pathwayId, source: "redis_manifest" });
+        void incrementReliabilityCounter("lesson", "tier_a");
+        return fast;
+      }
+    }
+  } catch {
+    // Redis failure — fall through to DB
+  }
+
+  // Tier B — DB lookup by primary key
   const byId = await getPublishedPathwayLessonRecordById(args.pwRow.id, args.marketingLocale);
   if (byId) {
     const fast = classifyAppSubscriberPathwayLessonRecord({
@@ -116,18 +144,27 @@ export async function resolveAppSubscriberPathwayLessonForDetail(args: {
     });
     if (fast.kind === "pathway_ok") {
       lessonsPerfMark("detail_lookup_end", { pathwayId: args.pwRow.pathwayId, source: "db_by_id" });
+      // Populate Redis cache for future requests and resilience (fire-and-forget)
+      void setLessonManifest(args.pwRow.id, byId);
+      void incrementReliabilityCounter("lesson", "tier_b");
       return fast;
     }
   }
 
+  // Tier B slug fallback — warehouse/catalog resolution when primary key miss
   const bySlug = await getPathwayLesson(args.pwRow.pathwayId, slug, args.marketingLocale);
   lessonsPerfMark("detail_lookup_end", { pathwayId: args.pwRow.pathwayId, source: bySlug ? "slug_resolver" : "miss" });
   if (!bySlug) return { kind: "not_found" };
-  return classifyAppSubscriberPathwayLessonRecord({
+  const slugResult = classifyAppSubscriberPathwayLessonRecord({
     pathwayId: args.pwRow.pathwayId,
     slug,
     record: bySlug,
   });
+  if (slugResult.kind === "pathway_ok") {
+    void setLessonManifest(args.pwRow.id, bySlug);
+    void incrementReliabilityCounter("lesson", "tier_b");
+  }
+  return slugResult;
 }
 
 export async function isAppSubscriberPathwayLessonRowResolvableForDetail(args: {

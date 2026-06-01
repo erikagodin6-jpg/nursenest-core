@@ -16,6 +16,35 @@ export const DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER = "127.0.0.1:5432/post
  */
 export const REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS = "postgres:postgres@127.0.0.1";
 
+/**
+ * Token sequences that appear only in .env.example / template files, never in real credentials.
+ * These are checked REGARDLESS of NN_SKIP_DATABASE_ENV_CONTRACT so a mis-copied template can
+ * never silently reach Prisma's connection engine (which would throw "invalid port number").
+ *
+ * Pattern: the URL-authority section contains literal uppercase placeholder words.
+ * e.g. `postgresql://USER:PASSWORD@HOST:PORT/DATABASE`
+ */
+const ENV_TEMPLATE_PLACEHOLDER_MARKERS = [
+  ":PORT/",     // literal non-numeric port label from .env.example
+  "@HOST:",     // literal hostname label
+  "//USER:",    // literal username label
+  ":PASSWORD@", // literal password label
+  ":port/",     // lowercase variant
+  "@host:",     // lowercase variant
+  "//user:",    // lowercase variant
+  ":password@", // lowercase variant
+] as const;
+
+/**
+ * Returns true if the URL contains a template placeholder token from `.env.example`.
+ * This check runs before the NN_SKIP_DATABASE_ENV_CONTRACT bypass to prevent template
+ * URLs from reaching Prisma where they throw cryptic "invalid port number" errors.
+ */
+export function isEnvTemplatePlaceholderDatabaseUrl(url: string): boolean {
+  const t = url.trim();
+  return ENV_TEMPLATE_PLACEHOLDER_MARKERS.some((marker) => t.includes(marker));
+}
+
 export type DatabaseUrlContractSource = "process_env" | "dotenv" | "unknown";
 
 export type RequireDatabaseEnvOptions = {
@@ -91,6 +120,7 @@ export function isRejectedRuntimePlaceholderDatabaseUrl(url: string): boolean {
   if (t.includes(DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER)) return true;
   if (isAllowedPrismaCodegenStubDatabaseUrl(t)) return false;
   if (t.includes(REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS)) return true;
+  if (isEnvTemplatePlaceholderDatabaseUrl(t)) return true;
   return false;
 }
 
@@ -172,6 +202,15 @@ function logDatabaseContractLine(payload: Record<string, string | boolean>): voi
 export function requireDatabaseEnv(options?: RequireDatabaseEnvOptions): string {
   if (process.env.NN_SKIP_DATABASE_ENV_CONTRACT === "1") {
     const v = process.env.DATABASE_URL?.trim() ?? "";
+    // Template placeholder detection runs even when contract is skipped.
+    // Without this, `postgresql://USER:PASSWORD@HOST:PORT/DATABASE` silently reaches Prisma
+    // which throws a cryptic "invalid port number in database URL" at connection time.
+    if (v && isEnvTemplatePlaceholderDatabaseUrl(v)) {
+      throw new Error(
+        "DATABASE_URL contains .env.example template placeholders (e.g. :PORT/ or @HOST:). " +
+        "Copy real credentials from your database provider into .env.local before running scripts.",
+      );
+    }
     return v;
   }
 

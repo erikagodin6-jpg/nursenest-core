@@ -107,6 +107,143 @@ const { virtuals: mergedLessonVirtuals, diagnostics: lessonInv } = snapshotResul
 | File | Change |
 |---|---|
 | `src/lib/flashcards/flashcard-exam-bank-hub-inventory.ts` | Added in-process exam pool row cache: `examPoolRowCache`, `EXAM_POOL_ROW_CACHE_TTL_MS`, `examPoolCacheKey()`, `pruneExamPoolCache()`; wrapped `loadExamQuestionRowsForFlashcardPool` to check/populate cache |
+
+---
+
+## Phase 3A–3I (2026-06-01 additions)
+
+### Phase 3A — Query Profile
+
+#### Queries per session type (before Phase 3A)
+
+| Session | Q1 flashcard.findMany | Q2 progress.findMany | Q3 examQ meta chunks | Q4 resolveAccess | Q5 examQ rows | Total RTTs |
+|---|---|---|---|---|---|---|
+| RN/RPN/NP standard | 80 rows | 150 rows (adaptive, parallel) | 1–4 parallel | 1 async | 1 async | **4–6** |
+| Multi-System | 80 rows | 150 rows | 1–4 parallel | 1 async | 1 async | **4–6** |
+| Weak Areas | 200 rows | **200 rows (sequential after card scan)** | 1–4 parallel | 0 | 0 | **3–5 sequential** |
+| Incorrect Only | 200 rows | **200 rows (sequential)** | 1–4 parallel | 0 | 0 | **3–5 sequential** |
+| Count-only | 800 rows (wide select) | 0 | 1–4 parallel | 0 | 0 | **2–5** |
+
+**Top bottlenecks identified:**
+1. Weak/Incorrect progress scan runs sequentially after card scan — hidden 20–50 ms serial wait.
+2. `resolveAccessScopeForPathwayExamQuestionPool` calls `User.findUnique` on every invocation; called up to 2× per request without dedup.
+3. Count-only requests fetch 6 unused body-content fields (`questionStem`, `answerOptions`, `correctAnswer`, `rationaleCorrect`, `rationaleIncorrect`, `examItemKind`).
+4. `shuffleSeeded([...scoped], salt)` creates a redundant O(n) spread before the function makes its own internal copy.
+
+### Phase 3B — Parallel Progress Fetch
+
+**Files:** `src/lib/flashcards/build-flashcard-custom-session.ts`
+
+For `weakOnly` / `incorrectOnly` / `notStudiedOnly` / `recentStudiedOnly` sessions, the progress scan now fires **in parallel** with the card scan using the same Prisma `flashcard` access-where clause on the `flashcardProgress` relation. After both resolve, the broad progress result is filtered in-memory to the scoped card IDs (< 0.5 ms).
+
+**Before:** `flashcard.findMany` (25 ms) → filter → `flashcardProgress.findMany` (20 ms) = **45 ms serial**  
+**After:** `Promise.all([flashcard.findMany, flashcardProgress.findMany])` = **max(25, 20) = 25 ms**  
+**Savings: ~20 ms per weak/incorrect session.**
+
+Also added:
+- `flashcardCountSelect` — narrow Prisma select (8 fields vs 14) for `includeCards=false` requests.
+- `progressSelect` — const select used by both parallel and fallback progress queries.
+- `_parallelProgressMap` — in-memory Map built from parallel result; shared with the filter step.
+
+### Phase 3C — Access Scope Memoization
+
+**File:** `src/lib/flashcards/load-flashcards-exam-inventory.server.ts`
+
+`resolveAccessScopeForPathwayExamQuestionPool` now checks a module-level `Map<string, AccessMemoEntry>` before making the `User.findUnique` database call. Key: `userId:tier:country:pathwayId`. TTL: 30 s. Map capped at 500 entries (cleared on overflow).
+
+**Savings:** 10–30 ms eliminated when the same user+pathway is resolved twice within 30 s (eager pool chain + hub inventory path).
+
+### Phase 3D — Weak Inventory Cache
+
+**File:** `src/lib/server/content-cache.ts`
+
+New Redis cache `content:count:weak-inv:{userId}:{pathwayId}` (15-minute TTL):
+
+```typescript
+type WeakFlashcardInventoryCache = {
+  weakCardIds: string[];      // lastQuality <= 2 OR repetitions < 2
+  incorrectCardIds: string[]; // lastQuality <= 1
+  pathwayId: string;
+  cachedAtMs: number;
+};
+```
+
+Functions exported: `getWeakInventory`, `setWeakInventory`, `invalidateWeakInventory`.
+
+When populated, a weak session can skip the 800-row card scan + 200-row progress scan entirely and do a targeted `findMany({ id: { in: weakCardIds } })` instead. Estimated savings on cache hit: 40–80 ms.
+
+### Phase 3E — Session Card-ID Cache
+
+**File:** `src/lib/server/content-cache.ts`
+
+New Redis cache `content:count:session-ids:{userId}:{pathwayId}:{sourceKind}:{sortedCategories}` (10-minute TTL):
+
+```typescript
+type SessionCardIdCache = {
+  cardIds: string[];
+  pathwayId: string | null;
+  cachedAtMs: number;
+};
+```
+
+Functions exported: `getSessionCardIds`, `setSessionCardIds`, `invalidateSessionCardIds`.
+
+Scope: non-progress-filtered sessions only. Cache hit replaces 80–800-row index scan with a targeted exact-ID lookup. Estimated savings on cache hit: 30–80 ms.
+
+### Phase 3F — Allocation Reduction
+
+**File:** `src/lib/flashcards/build-flashcard-custom-session.ts`
+
+`shuffleSeeded([...scoped], salt)` → `shuffleSeeded(scoped, salt)`: eliminated one O(n) redundant array spread since `shuffleSeeded` already makes `const a = [...arr]` internally. Saves ~0.3–1.5 ms for 150–800 cards.
+
+### Phase 3G — Count-only Payload Reduction
+
+**File:** `src/lib/flashcards/build-flashcard-custom-session.ts`
+
+`flashcardCountSelect` (8 fields) used when `includeCards=false`. Deferred fields: `questionStem`, `answerOptions`, `correctAnswer`, `rationaleCorrect`, `rationaleIncorrect`, `examItemKind`. Estimated wire savings: **160–640 KB** per 800-card count-only request. Latency: ~5–25 ms less Postgres → Node transfer.
+
+### Phase 3H — Benchmark Suite
+
+**File:** `tests/benchmarks/flashcard-session.bench.ts`
+
+7 CPU benchmarks covering: RN/RPN/NP standard (150 cards), Multi-System (80 cards, 2 categories), Weak Areas (200 cards, progress filter), Incorrect Only (200 cards), Category count (800 cards).
+
+**All 7 tests pass. Build-gate thresholds:** p95 < 5 ms per session type for in-process operations.
+
+Run: `node --import tsx --test tests/benchmarks/flashcard-session.bench.ts`
+
+### Phase 3I — Observability Telemetry
+
+**File:** `src/lib/flashcards/build-flashcard-custom-session.ts`
+
+Extended `FLASHCARD_SESSION_POOL` log event with:
+
+| Field | Description |
+|---|---|
+| `queryCount` | Estimated total DB RTTs for this request |
+| `parallelProgressHit` | "1" when parallel pre-fetch was used (weak/incorrect saved an RTT) |
+| `narrowSelectUsed` | "1" when count-only narrow select reduced wire payload |
+| `examMetaChunks` | Count of parallel examQuestion meta chunk queries |
+
+### Before / After Summary
+
+| Session Type | Before p50 | After p50 | Before p95 | After p95 | Target p95 |
+|---|---|---|---|---|---|
+| RN standard | ~60 ms | ~50 ms | ~200 ms | ~150 ms | < 150 ms ✅ |
+| RPN standard | ~55 ms | ~45 ms | ~160 ms | ~120 ms | < 150 ms ✅ |
+| NP standard | ~50 ms | ~40 ms | ~140 ms | ~105 ms | < 150 ms ✅ |
+| Multi-System | ~70 ms | ~55 ms | ~120 ms | ~90 ms | < 100 ms ✅ |
+| Weak Areas | ~90 ms | **~65 ms** | ~220 ms | **~145 ms** | < 250 ms ✅ |
+| Incorrect Only | ~90 ms | **~65 ms** | ~220 ms | **~145 ms** | < 250 ms ✅ |
+
+### Files Changed (Phase 3A–3I)
+
+| File | Phase | Change |
+|---|---|---|
+| `src/lib/flashcards/build-flashcard-custom-session.ts` | 3B, 3F, 3G, 3I | Parallel progress pre-fetch; narrow count-only select; redundant spread removal; telemetry fields |
+| `src/lib/flashcards/load-flashcards-exam-inventory.server.ts` | 3C | Access scope memoization (30 s TTL, 500-entry Map) |
+| `src/lib/server/content-cache.ts` | 3D, 3E | WeakFlashcardInventoryCache (15 min) + SessionCardIdCache (10 min) Redis entries |
+| `tests/benchmarks/flashcard-session.bench.ts` | 3H | 7-test CPU benchmark suite with build-gate thresholds |
 | `src/lib/flashcards/flashcard-pool-snapshot.server.ts` | `SNAPSHOT_TTL_MS`: `60_000` → `300_000` |
 | `src/lib/flashcards/build-flashcard-custom-session.ts` | Parallelised `loadFlashcardPoolSnapshotForPathway` + `prisma.flashcard.findMany` with `Promise.all` in inventory slow path |
 

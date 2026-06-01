@@ -505,12 +505,21 @@ export function FlashcardCustomStudyClient() {
             cards: validCards,
             summary: nextSummary,
           });
+          const recoveryTier = res.headers.get("x-nn-recovery-tier") ?? "B";
           emitRuntimeEvent("flashcard_custom_session_bootstrap_complete", {
             pathwayId,
             cardCount: validCards.length,
             status: res.status,
             buildMs: Number(res.headers.get("x-nn-session-build-ms") ?? "0") || undefined,
             responseBytes: Number(res.headers.get("x-nn-session-response-bytes") ?? "0") || undefined,
+            recoveryTier,
+            sessionSource: res.headers.get("x-nn-session-source") ?? "live",
+          });
+          logDedupedClientDiagnostic("flashcard_custom_session", "bootstrap_complete", pathwayId || "unknown", {
+            pathwayId,
+            recoveryTier,
+            cardCount: validCards.length,
+            buildMs: Number(res.headers.get("x-nn-session-build-ms") ?? "0") || 0,
           });
         }
       } catch (err) {

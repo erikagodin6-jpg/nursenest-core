@@ -121,6 +121,8 @@ export interface FlashcardInventoryManifestPayload {
   total: number;
   categoryOptions: unknown[];
   categories: { name: string; count: number }[];
+  diagnostics?: unknown;
+  lessonVirtualDiagnostics?: unknown;
 }
 
 export interface LessonManifestPayload {

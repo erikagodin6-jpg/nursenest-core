@@ -1,3 +1,4 @@
+import "@/app/workspace.css";
 import "@/app/learner-cockpit-premium.css";
 import "@/app/learner-dashboard-report.css";
 import "@/app/learner-surface-primitives.css";
@@ -13,7 +14,7 @@ import "@/app/styles/learner/learner-global.css";
 import "@/app/learner-dashboard-performance.css";
 import "@/app/learning-module-shell.css";
 
-import type { ReactNode } from "react";
+import { type ReactNode, Suspense } from "react";
 import { cookies } from "next/headers";
 
 import {
@@ -77,6 +78,10 @@ import { LearnerMainLandmarkAudit } from "@/components/observability/learner-mai
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import { SiteHeaderServer } from "@/components/layout/site-header-server";
 import { learnerShellFlags } from "@/lib/learner/learner-shell-mode";
+import { WorkspaceShell } from "@/components/workspace/workspace-shell";
+import { ContinueStudyingCardServer } from "@/components/workspace/continue-studying-card.server";
+import { ContinueStudyingCardSkeleton } from "@/components/workspace/continue-studying-card";
+import type { ProgramOption } from "@/components/workspace/program-switcher";
 import { resolveNpCertificationPathwayId } from "@/lib/np/np-certification-selection";
 import { getSessionHubLabel } from "@/lib/learner/session-hub-label";
 import { resolveLearnerRequestPathname } from "@/lib/learner/resolve-learner-request-pathname";
@@ -222,11 +227,13 @@ const LearnerShellLayout = traceLayout(
         Promise.all([
           import("@/components/admin/admin-learner-qa-posthog-suppressor"),
           import("@/components/admin/admin-learner-qa-app-toolbar"),
+          import("@/components/admin/admin-view-as-banner"),
         ]),
       )
     : null;
   const AdminLearnerQaPosthogSuppressor = adminQaModules?.[0].AdminLearnerQaPosthogSuppressor ?? null;
   const AdminLearnerQaAppToolbar = adminQaModules?.[1].AdminLearnerQaAppToolbar ?? null;
+  const AdminViewAsBanner = adminQaModules?.[2].AdminViewAsBanner ?? null;
 
   // Tier for hub label and pathway fallback — compute once, reuse everywhere.
   const learnerTier = (
@@ -261,6 +268,27 @@ const LearnerShellLayout = traceLayout(
     entitlement.hasAccess &&
     !isFocusedExamShell &&
     !isPerformanceSensitiveActivityRoute;
+
+  // Build workspace program list from accessible pathways (fast — pure catalog lookup)
+  let workspacePrograms: ProgramOption[] = [];
+  if (entitlement !== "error" && entitlement.hasAccess) {
+    try {
+      const { listPathwaysCompatibleWithSubscription } = await import(
+        "@/lib/exam-pathways/pathway-entitlements"
+      );
+      const pathways = await listPathwaysCompatibleWithSubscription(entitlement);
+      workspacePrograms = pathways
+        .filter((p) => p.status !== "hidden" && p.status !== "upcoming")
+        .map((p) => ({
+          id: p.id,
+          label: p.shortLabel ?? p.id,
+          shortLabel: (p.shortLabel ?? p.id).slice(0, 8),
+        }));
+    } catch {
+      workspacePrograms = [];
+    }
+  }
+
   const [paywallHomeStats, pathwayNav, nclexTargetDateState] = await Promise.all([
     // Paywall stats — only needed when not subscribed; fast fallback otherwise.
     isFocusedStudySurface
@@ -397,6 +425,196 @@ const LearnerShellLayout = traceLayout(
     });
   }
 
+  // Resolve user's first name for workspace header avatar
+  const userName: string | null =
+    (session?.user as { name?: string | null } | undefined)?.name?.split(" ")[0] ?? null;
+
+  // Continue Studying card streams in via Suspense — does not block layout render
+  const continueStudyingSlot = (
+    <Suspense fallback={<ContinueStudyingCardSkeleton />}>
+      <ContinueStudyingCardServer
+        userId={userId}
+        pathwayId={effectivePathwayId}
+        fallbackHref={pathwayHubHref || "/app/command-center"}
+      />
+    </Suspense>
+  );
+
+  // All inner shell content — shared between focused and workspace modes
+  const shellContent = (
+    <>
+      <PremiumLayoutVersionMarker surface="learner-app" />
+      <LearnerNavigationFeedback />
+      <NclexTargetDateModal
+        enabled={nclexTargetDateEnabled}
+        initialExamDateState={nclexTargetDateState}
+      />
+      <LearnerMainLandmarkAudit />
+      <PathwayLessonProgressRefreshListener />
+      <LearnerDegradedModeBanner
+        serverDegraded={isDegradedMode()}
+        serverCoreEmergency={isCoreOnlyEmergencyMode()}
+      />
+      {entitlement !== "error" &&
+      entitlement.hasAccess &&
+      entitlement.reason === "admin_override" &&
+      !qaShell &&
+      !entitlement.adminLearnerQaSimulation &&
+      !isFocusedStudySurface ? (
+        <div
+          role="region"
+          aria-label="Staff access override"
+          data-nn-staff-access-banner
+          className="mb-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_18%,var(--semantic-surface))] px-3 py-2.5 text-sm text-[var(--semantic-text-primary)] shadow-sm ring-1 ring-[color-mix(in_srgb,var(--semantic-warning)_14%,transparent)] sm:px-4"
+        >
+          <div className="mb-1.5 flex flex-wrap items-center gap-2">
+            <span className="nn-badge-semantic-warning inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+              Staff access
+            </span>
+            <span className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+              Admin / QA — not a subscription
+            </span>
+          </div>
+          <p className="m-0 text-sm leading-snug text-[var(--semantic-text-primary)]">
+            You have full learner access from your staff role. This is not paid billing or a subscriber
+            entitlement, and it is separate from simulated learner QA.
+          </p>
+        </div>
+      ) : null}
+      {qaShell && AdminLearnerQaAppToolbar ? (
+        <AdminLearnerQaAppToolbar
+          bannerTitle={adminQaSimulationHelpers?.bannerTitleForPayload(qaShell) ?? "Simulated learner view"}
+          initialPublicState={
+            adminQaSimulationHelpers?.publicQaStateFromPayload(qaShell) ?? {
+              active: true,
+              track: qaShell.track,
+              lifecycle: qaShell.lifecycle,
+              country: qaShell.country,
+              npSpecialty: qaShell.npSpecialty ?? null,
+              alliedCareer: qaShell.alliedCareer ?? null,
+              planVariant: qaShell.planVariant ?? null,
+              billingRegionSlug: null,
+              bannerTitle: "Simulated learner view",
+              pathwayId: effectivePathwayId,
+              targetUserId: qaShell.targetUserId ?? null,
+              targetEmail: qaShell.targetEmail ?? null,
+              experienceLevel: qaShell.experienceLevel ?? null,
+              isRealUser: Boolean(qaShell.targetUserId),
+            }
+          }
+        />
+      ) : null}
+      {/* Persistent bottom banner for all view-as sessions (real user + simulated) */}
+      {qaShell && AdminViewAsBanner ? (
+        <AdminViewAsBanner
+          state={
+            adminQaSimulationHelpers?.publicQaStateFromPayload(qaShell) ?? {
+              active: true,
+              track: qaShell.track,
+              lifecycle: qaShell.lifecycle,
+              country: qaShell.country,
+              npSpecialty: qaShell.npSpecialty ?? null,
+              alliedCareer: qaShell.alliedCareer ?? null,
+              planVariant: qaShell.planVariant ?? null,
+              billingRegionSlug: null,
+              bannerTitle: adminQaSimulationHelpers?.bannerTitleForPayload(qaShell) ?? "View-as session active",
+              pathwayId: effectivePathwayId,
+              targetUserId: qaShell.targetUserId ?? null,
+              targetEmail: qaShell.targetEmail ?? null,
+              experienceLevel: qaShell.experienceLevel ?? null,
+              isRealUser: Boolean(qaShell.targetUserId),
+            }
+          }
+          entitlementDebug={
+            entitlement !== "error"
+              ? {
+                  hasAccess: entitlement.hasAccess,
+                  reason: entitlement.reason,
+                  tier: entitlement.tier ? String(entitlement.tier) : null,
+                  country: entitlement.country ? String(entitlement.country) : null,
+                  adminLearnerQaSimulation: Boolean(entitlement.adminLearnerQaSimulation),
+                  pathwayId: effectivePathwayId,
+                  planStatus: null,
+                  lifecycle: qaShell.lifecycle,
+                }
+              : null
+          }
+        />
+      ) : null}
+      {!skipNonCritical && !qaShell ? (
+        <>
+          <LearnerAppSectionAnalytics />
+          <LearnerActivityLifecycleBeacon />
+        </>
+      ) : null}
+      <div className="nn-learner-exam-chrome-dim">
+        <CheckoutSuccessBanner />
+      </div>
+      {entitlement === "error" ? (
+        <div
+          role="alert"
+          className="mb-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_55%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)] shadow-sm"
+        >
+          <span className="font-semibold">Having trouble verifying your subscription.</span>{" "}
+          Your access may be temporarily unavailable.{" "}
+          <a href="/app" className="font-semibold underline hover:no-underline">
+            Refresh to try again
+          </a>{" "}
+          or contact{" "}
+          <a href="mailto:support@nursenest.io" className="font-semibold underline hover:no-underline">
+            support
+          </a>
+          {" "}if this persists.
+        </div>
+      ) : null}
+      {entitlement !== "error" &&
+      entitlement.hasAccess &&
+      entitlement.reason === "active_trial" &&
+      !isFocusedExamShell &&
+      !isFocusedStudySurface ? (
+        <div
+          className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_05%,var(--semantic-surface))] px-4 py-2.5 text-sm text-[var(--semantic-text-primary)] shadow-sm"
+        >
+          <span>
+            <span className="font-semibold">Free trial active.</span>{" "}
+            Upgrade anytime to keep your progress after the trial ends.
+          </span>
+          <a
+            href="/pricing"
+            className="inline-flex min-h-8 items-center rounded-full bg-[var(--role-cta)] px-4 text-xs font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_10px_var(--role-cta-shadow)]"
+          >
+            View plans
+          </a>
+        </div>
+      ) : null}
+      <BaselineAssessmentPrompt show={showBaselinePrompt} />
+      <PageTransitionShell shouldDisableTransition={learnerShellShouldDisablePageTransition}>
+        <main
+          id="nn-learner-main"
+          data-nn-learner-main=""
+          className="min-h-[40vh] min-w-0 outline-none"
+          tabIndex={-1}
+        >
+          {paywalledRouteBody}
+        </main>
+      </PageTransitionShell>
+      {tutorContext ? (
+        <LearnerSilentSectionBoundary name="tutor">
+          {LearnerTutorShellComponent ? <LearnerTutorShellComponent context={tutorContext} /> : null}
+        </LearnerSilentSectionBoundary>
+      ) : null}
+      <MarketingCountryChromeProvider
+        country={marketingChromeCountryFromSession(
+          (session?.user as { country?: string | null } | undefined)?.country,
+        )}
+      >
+        <div className="nn-learner-exam-chrome-dim nn-learner-site-footer-bleed mt-10">
+          <LearnerAppFooter />
+        </div>
+      </MarketingCountryChromeProvider>
+    </>
+  );
+
   return (
     <SentryLearnerShell userId={userId}>
       {AdminLearnerQaPosthogSuppressor ? (
@@ -406,148 +624,41 @@ const LearnerShellLayout = traceLayout(
         <LearnerExamStudyProviders>
           <LearnerExamChromeGate hubLabel={sessionHubLabel} hubHref={pathwayHubHref || "/app"}>
             <LearnerShellDevDiagnostics />
-            {shouldRenderGlobalSiteHeader ? (
-              <SiteHeaderServer serverHasStaffSession={staffSession != null && !qaShell} />
-            ) : null}
-            <div
-              className="nn-learner-app nn-learner-ds-ambient nn-brand-learner-atmosphere relative isolate mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[var(--nn-rhythm-shell-y)] sm:px-5 md:px-6"
-              data-nn-learner-ds
-              data-nn-learner-workspace=""
-              data-learner-exam-chrome={isFocusedExamShell ? "hidden" : undefined}
-              data-testid="learner-shell"
-            >
-              <PremiumLayoutVersionMarker surface="learner-app" />
-              <LearnerNavigationFeedback />
-              <NclexTargetDateModal
-                enabled={nclexTargetDateEnabled}
-                initialExamDateState={nclexTargetDateState}
-              />
-              <LearnerMainLandmarkAudit />
-              <PathwayLessonProgressRefreshListener />
-              <LearnerDegradedModeBanner
-                serverDegraded={isDegradedMode()}
-                serverCoreEmergency={isCoreOnlyEmergencyMode()}
-              />
-              {entitlement !== "error" &&
-              entitlement.hasAccess &&
-              entitlement.reason === "admin_override" &&
-              !qaShell &&
-              !entitlement.adminLearnerQaSimulation &&
-              !isFocusedStudySurface ? (
+            {isFocusedExamShell ? (
+              /* ── Focused exam/flashcard shell: full-width, original container, retains marketing header ── */
+              <>
+                {shouldRenderGlobalSiteHeader ? (
+                  <SiteHeaderServer serverHasStaffSession={staffSession != null && !qaShell} />
+                ) : null}
                 <div
-                  role="region"
-                  aria-label="Staff access override"
-                  data-nn-staff-access-banner
-                  className="mb-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_18%,var(--semantic-surface))] px-3 py-2.5 text-sm text-[var(--semantic-text-primary)] shadow-sm ring-1 ring-[color-mix(in_srgb,var(--semantic-warning)_14%,transparent)] sm:px-4"
+                  className="nn-learner-app nn-learner-ds-ambient nn-brand-learner-atmosphere relative isolate mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[var(--nn-rhythm-shell-y)] sm:px-5 md:px-6"
+                  data-nn-learner-ds
+                  data-nn-learner-workspace=""
+                  data-learner-exam-chrome="hidden"
+                  data-testid="learner-shell"
                 >
-                  <div className="mb-1.5 flex flex-wrap items-center gap-2">
-                    <span className="nn-badge-semantic-warning inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
-                      Staff access
-                    </span>
-                    <span className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-                      Admin / QA — not a subscription
-                    </span>
-                  </div>
-                  <p className="m-0 text-sm leading-snug text-[var(--semantic-text-primary)]">
-                    You have full learner access from your staff role. This is not paid billing or a subscriber
-                    entitlement, and it is separate from simulated learner QA.
-                  </p>
+                  {shellContent}
                 </div>
-              ) : null}
-              {qaShell && AdminLearnerQaAppToolbar ? (
-                <AdminLearnerQaAppToolbar
-                  bannerTitle={adminQaSimulationHelpers?.bannerTitleForPayload(qaShell) ?? "Simulated learner view"}
-                  initialPublicState={
-                    adminQaSimulationHelpers?.publicQaStateFromPayload(qaShell) ?? {
-                      active: true,
-                      track: qaShell.track,
-                      lifecycle: qaShell.lifecycle,
-                      country: qaShell.country,
-                      npSpecialty: qaShell.npSpecialty ?? null,
-                      alliedCareer: qaShell.alliedCareer ?? null,
-                      planVariant: qaShell.planVariant ?? null,
-                      billingRegionSlug: null,
-                      bannerTitle: "Simulated learner view",
-                      pathwayId: effectivePathwayId,
-                    }
-                  }
-                />
-              ) : null}
-              {!skipNonCritical && !qaShell ? (
-                <>
-                  <LearnerAppSectionAnalytics />
-                  <LearnerActivityLifecycleBeacon />
-                </>
-              ) : null}
-              <div className="nn-learner-exam-chrome-dim">
-                <CheckoutSuccessBanner />
-              </div>
-              {entitlement === "error" ? (
-                <div
-                  role="alert"
-                  className="mb-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_55%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)] shadow-sm"
-                >
-                  <span className="font-semibold">Having trouble verifying your subscription.</span>{" "}
-                  Your access may be temporarily unavailable.{" "}
-                  <a href="/app" className="font-semibold underline hover:no-underline">
-                    Refresh to try again
-                  </a>{" "}
-                  or contact{" "}
-                  <a href="mailto:support@nursenest.io" className="font-semibold underline hover:no-underline">
-                    support
-                  </a>
-                  {" "}if this persists.
-                </div>
-              ) : null}
-              {entitlement !== "error" &&
-              entitlement.hasAccess &&
-              entitlement.reason === "active_trial" &&
-              !isFocusedExamShell &&
-              !isFocusedStudySurface ? (
-                <div
-                  className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_05%,var(--semantic-surface))] px-4 py-2.5 text-sm text-[var(--semantic-text-primary)] shadow-sm"
-                >
-                  <span>
-                    <span className="font-semibold">Free trial active.</span>{" "}
-                    Upgrade anytime to keep your progress after the trial ends.
-                  </span>
-                  <a
-                    href="/pricing"
-                    className="inline-flex min-h-8 items-center rounded-full bg-[var(--role-cta)] px-4 text-xs font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_10px_var(--role-cta-shadow)]"
-                  >
-                    View plans
-                  </a>
-                </div>
-              ) : null}
-              <BaselineAssessmentPrompt show={showBaselinePrompt} />
-              <PageTransitionShell shouldDisableTransition={learnerShellShouldDisablePageTransition}>
-                {/**
-                 * Single document landmark for learner routes — inner pages/components use `<div>`, not nested `<main>`.
-                 */}
-                <main
-                  id="nn-learner-main"
-                  data-nn-learner-main=""
-                  className="min-h-[40vh] min-w-0 outline-none"
-                  tabIndex={-1}
-                >
-                  {paywalledRouteBody}
-                </main>
-              </PageTransitionShell>
-              {tutorContext ? (
-                <LearnerSilentSectionBoundary name="tutor">
-                  {LearnerTutorShellComponent ? <LearnerTutorShellComponent context={tutorContext} /> : null}
-                </LearnerSilentSectionBoundary>
-              ) : null}
-              <MarketingCountryChromeProvider
-                country={marketingChromeCountryFromSession(
-                  (session?.user as { country?: string | null } | undefined)?.country,
-                )}
+              </>
+            ) : (
+              /* ── Workspace shell: sidebar + slim header + max-w-1600 content ── */
+              <div
+                data-nn-learner-ds
+                data-nn-learner-workspace=""
+                data-testid="learner-shell"
+                className="nn-learner-ds-ambient nn-brand-learner-atmosphere"
               >
-                <div className="nn-learner-exam-chrome-dim nn-learner-site-footer-bleed mt-10">
-                  <LearnerAppFooter />
-                </div>
-              </MarketingCountryChromeProvider>
-            </div>
+                <WorkspaceShell
+                  pathwayId={effectivePathwayId}
+                  programs={workspacePrograms}
+                  userName={userName}
+                  isFocused={false}
+                  continueStudyingSlot={continueStudyingSlot}
+                >
+                  {shellContent}
+                </WorkspaceShell>
+              </div>
+            )}
           </LearnerExamChromeGate>
         </LearnerExamStudyProviders>
       </PaywallHomeStatsProvider>

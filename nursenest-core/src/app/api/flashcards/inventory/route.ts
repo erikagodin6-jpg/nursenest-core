@@ -5,7 +5,7 @@ import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
+import { loadSharedFlashcardsHubInventoryForPathway } from "@/lib/flashcards/load-shared-flashcards-hub-inventory.server";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { isTransientDatabaseError } from "@/lib/resilience/with-retry";
@@ -25,6 +25,7 @@ type InventoryCacheEntry = {
     categoryOptions: unknown[];
     categories: unknown[];
     diagnostics?: unknown;
+    lessonVirtualDiagnostics?: unknown;
   };
 };
 
@@ -151,7 +152,7 @@ export async function GET(req: NextRequest) {
           redisTtl: 60 * 60,
           snapshotPath: flashcardInventorySnapshotPath(tier, country, pathway.id),
           buildLive: async () => {
-            const inv = await loadFlashcardsExamInventoryForPathway({
+            const inv = await loadSharedFlashcardsHubInventoryForPathway({
               userId: gate.userId,
               entitlement: gate.entitlement,
               pathway,
@@ -159,9 +160,11 @@ export async function GET(req: NextRequest) {
             if (!inv.ok) throw new Error(inv.code);
             return {
               tier, country, pathwayId: pathway.id,
-              total: inv.total,
-              categoryOptions: inv.categoryOptions,
-              categories: Object.entries(inv.countsByBuilderId).map(([name, count]) => ({ name, count })),
+              total: inv.payload.matchingTotal,
+              categoryOptions: inv.payload.categoryOptions,
+              categories: inv.categories,
+              diagnostics: inv.payload.poolDiagnostics ?? undefined,
+              lessonVirtualDiagnostics: inv.payload.lessonVirtualDiagnostics ?? undefined,
             };
           },
           isValid: (d) => d.total > 0,
@@ -175,6 +178,8 @@ export async function GET(req: NextRequest) {
             total: mp.total,
             categoryOptions: mp.categoryOptions,
             categories: mp.categories,
+            diagnostics: mp.diagnostics,
+            lessonVirtualDiagnostics: mp.lessonVirtualDiagnostics,
           };
           const h = new Headers(headers);
           h.set("x-nn-inventory-cache", "miss");
@@ -195,7 +200,7 @@ export async function GET(req: NextRequest) {
       const invStarted = performance.now();
       let inv;
       try {
-        inv = await loadFlashcardsExamInventoryForPathway({
+        inv = await loadSharedFlashcardsHubInventoryForPathway({
           userId: gate.userId,
           entitlement: gate.entitlement,
           pathway,
@@ -250,22 +255,22 @@ export async function GET(req: NextRequest) {
         );
       }
 
-      const categories = Object.entries(inv.countsByBuilderId).map(([name, count]) => ({ name, count }));
-
       safeServerLog("flashcards", "inventory_route_ok", {
         pathwayId: pathway.id,
         inventoryRouteMs,
-        total: inv.total,
-        categoriesReturned: inv.categoryOptions.length,
-        matchingCards: inv.total,
+        total: inv.payload.matchingTotal,
+        categoriesReturned: inv.payload.categoryOptions.length,
+        matchingCards: inv.payload.matchingTotal,
+        lessonVirtualCards: inv.payload.lessonVirtualDiagnostics?.totalGeneratedVirtualCards ?? 0,
       });
 
       const body = {
         success: true as const,
-        total: inv.total,
-        categoryOptions: inv.categoryOptions,
-        categories,
-        diagnostics: inv.diagnostics,
+        total: inv.payload.matchingTotal,
+        categoryOptions: inv.payload.categoryOptions,
+        categories: inv.categories,
+        diagnostics: inv.payload.poolDiagnostics,
+        lessonVirtualDiagnostics: inv.payload.lessonVirtualDiagnostics,
       };
 
       if (inventoryCache.size > INVENTORY_CACHE_MAX) inventoryCache.clear();

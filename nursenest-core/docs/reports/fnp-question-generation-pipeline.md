@@ -1,16 +1,8 @@
 # FNP Question Generation Pipeline
 
-Generated: 2026-06-01T21:00:01.164Z
+Generated: 2026-06-01T22:39:34.036Z
 Mode: apply
-Blocker: Database-backed production lesson load failed; static lesson inventory was inspected only. Publish blocked: 
-Invalid `prisma.pathwayLesson.findMany()` invocation in
-/root/nursenest-core/nursenest-core/scripts/generate-fnp-question-flashcard-pipeline.mts:228:43
-
-  225 }
-  226 
-  227 async function loadDbLessons(prisma: PrismaClient): Promise<Lesson[]> {
-→ 228   const rows = await prisma.pathwayLesson.findMany(
-The provided database string is invalid. Error parsing connection string: invalid port number in database URL. Please refer to the documentation in https://www.prisma.io/docs/reference/database-reference/connection-urls for constructing a correct connection string. In some cases, certain characters must be escaped. Please check the string for any illegal characters.
+Blocker: OPENAI_API_KEY or BLOG_OPENAI_API_KEY is required to generate non-placeholder FNP questions.
 
 ## Targets
 
@@ -47,206 +39,206 @@ The provided database string is invalid. Error parsing connection string: invali
 
 ## Selected Lesson Order
 
-1. np-hypertension-diagnosis-and-guideline-based-management - Hypertension Diagnosis and Guideline Based Management: NP Diagnosis and Management
-2. np-coronary-artery-disease-risk-stratification-and-management - Coronary Artery Disease Risk Stratification and Management: NP Diagnosis and Management
-3. np-heart-failure-with-reduced-and-preserved-ejection-fraction - Heart Failure With Reduced and Preserved Ejection Fraction: NP Diagnosis and Management
-4. np-atrial-fibrillation-rate-versus-rhythm-control-decisions - Atrial Fibrillation Rate Versus Rhythm Control Decisions: NP Diagnosis and Management
-5. np-stable-angina-diagnostic-workup-and-treatment - Stable Angina Diagnostic Workup and Treatment: NP Diagnosis and Management
-6. np-acute-coronary-syndrome-recognition-and-initial-management - Acute Coronary Syndrome Recognition and Initial Management: NP Diagnosis and Management
-7. np-valvular-heart-disease-murmur-recognition-and-referral - Valvular Heart Disease Murmur Recognition and Referral: NP Diagnosis and Management
-8. np-peripheral-artery-disease-diagnosis-and-management - Peripheral Artery Disease Diagnosis and Management: NP Diagnosis and Management
-9. np-deep-vein-thrombosis-and-pulmonary-embolism-management - Deep Vein Thrombosis and Pulmonary Embolism Management: NP Diagnosis and Management
-10. np-hyperlipidemia-statin-selection-and-monitoring - Hyperlipidemia Statin Selection and Monitoring: NP Diagnosis and Management
-11. np-syncope-differential-diagnosis-and-workup - Syncope Differential Diagnosis and Workup: NP Diagnosis and Management
-12. np-palpitations-evaluation-and-management - Palpitations Evaluation and Management: NP Diagnosis and Management
-13. np-anticoagulation-management-and-reversal-strategies - Anticoagulation Management and Reversal Strategies: NP Diagnosis and Management
-14. np-cardiomyopathy-classification-and-management - Cardiomyopathy Classification and Management: NP Diagnosis and Management
-15. np-pericarditis-and-myocarditis-diagnosis - Pericarditis and Myocarditis Diagnosis: NP Diagnosis and Management
-16. np-aortic-stenosis-severity-assessment-and-timing-of-intervention - Aortic Stenosis Severity Assessment and Timing of Intervention: NP Diagnosis and Management
-17. np-mitral-valve-prolapse-evaluation-and-counseling - Mitral Valve Prolapse Evaluation and Counseling: NP Diagnosis and Management
-18. np-hypertensive-urgency-versus-emergency-decision-making - Hypertensive Urgency Versus Emergency Decision Making: NP Diagnosis and Management
-19. np-cardiac-biomarker-interpretation-in-acute-settings - Cardiac Biomarker Interpretation in Acute Settings: NP Diagnosis and Management
-20. np-ecg-interpretation-for-advanced-practice - ECG Interpretation for Advanced Practice: NP Diagnosis and Management
-21. np-stress-test-selection-and-result-interpretation - Stress Test Selection and Result Interpretation: NP Diagnosis and Management
-22. np-echocardiogram-findings-and-clinical-correlation - Echocardiogram Findings and Clinical Correlation: NP Diagnosis and Management
-23. np-cardiac-ct-and-mri-indications-in-outpatient-practice - Cardiac CT and MRI Indications in Outpatient Practice: NP Diagnosis and Management
-24. np-cardiovascular-disease-prevention-strategies - Cardiovascular Disease Prevention Strategies: NP Diagnosis and Management
-25. np-post-mi-secondary-prevention-and-rehabilitation - Post MI Secondary Prevention and Rehabilitation: NP Diagnosis and Management
-26. np-heart-failure-medication-titration-and-monitoring - Heart Failure Medication Titration and Monitoring: NP Diagnosis and Management
-27. np-device-therapy-indications-pacemakers-and-icds - Device Therapy Indications Pacemakers and ICDs: NP Diagnosis and Management
-28. np-endocarditis-prophylaxis-guidelines-and-risk-stratification - Endocarditis Prophylaxis Guidelines and Risk Stratification: NP Diagnosis and Management
-29. np-asthma-diagnosis-and-stepwise-management - Asthma Diagnosis and Stepwise Management: NP Diagnosis and Management
-30. np-copd-diagnosis-gold-staging-and-management - COPD Diagnosis GOLD Staging and Management: NP Diagnosis and Management
-31. np-pneumonia-cap-versus-hap-diagnosis-and-treatment - Pneumonia CAP Versus HAP Diagnosis and Treatment: NP Diagnosis and Management
-32. np-pulmonary-nodule-evaluation-and-follow-up - Pulmonary Nodule Evaluation and Follow Up: NP Diagnosis and Management
-33. np-interstitial-lung-disease-recognition-and-referral - Interstitial Lung Disease Recognition and Referral: NP Diagnosis and Management
-34. np-pulmonary-embolism-risk-stratification-and-treatment - Pulmonary Embolism Risk Stratification and Treatment: NP Diagnosis and Management
-35. np-sleep-apnea-diagnosis-and-cpap-management - Sleep Apnea Diagnosis and CPAP Management: NP Diagnosis and Management
-36. np-pleural-effusion-differential-diagnosis-and-workup - Pleural Effusion Differential Diagnosis and Workup: NP Diagnosis and Management
-37. np-hemoptysis-evaluation-and-management - Hemoptysis Evaluation and Management: NP Diagnosis and Management
-38. np-chronic-cough-diagnostic-algorithm - Chronic Cough Diagnostic Algorithm: NP Diagnosis and Management
-39. np-tuberculosis-screening-and-treatment - Tuberculosis Screening and Treatment: NP Diagnosis and Management
-40. np-bronchiectasis-diagnosis-and-management - Bronchiectasis Diagnosis and Management: NP Diagnosis and Management
-41. np-pulmonary-function-test-interpretation - Pulmonary Function Test Interpretation: NP Diagnosis and Management
-42. np-oxygen-therapy-indications-and-prescribing - Oxygen Therapy Indications and Prescribing: NP Diagnosis and Management
-43. np-lung-cancer-screening-criteria-and-follow-up - Lung Cancer Screening Criteria and Follow Up: NP Diagnosis and Management
-44. np-allergic-rhinitis-and-sinusitis-management - Allergic Rhinitis and Sinusitis Management: NP Diagnosis and Management
-45. np-acute-bronchitis-versus-pneumonia-differentiation - Acute Bronchitis Versus Pneumonia Differentiation: NP Diagnosis and Management
-46. np-pulmonary-hypertension-recognition-and-referral - Pulmonary Hypertension Recognition and Referral: NP Diagnosis and Management
-47. np-sarcoidosis-diagnosis-and-management - Sarcoidosis Diagnosis and Management: NP Diagnosis and Management
-48. np-occupational-lung-disease-evaluation - Occupational Lung Disease Evaluation: NP Diagnosis and Management
-49. np-cystic-fibrosis-adult-management-basics - Cystic Fibrosis Adult Management Basics: NP Diagnosis and Management
-50. np-respiratory-infection-in-immunocompromised-host - Respiratory Infection in Immunocompromised Host: NP Diagnosis and Management
-51. np-thoracentesis-indications-and-complications - Thoracentesis Indications and Complications: NP Diagnosis and Management
-52. np-mechanical-ventilation-basics-for-np - Mechanical Ventilation Basics for NP: NP Diagnosis and Management
-53. np-asthma-copd-overlap-syndrome-management - Asthma COPD Overlap Syndrome Management: NP Diagnosis and Management
-54. np-headache-differential-diagnosis-and-management - Headache Differential Diagnosis and Management: NP Diagnosis and Management
-55. np-migraine-prophylaxis-and-abortive-therapy - Migraine Prophylaxis and Abortive Therapy: NP Diagnosis and Management
-56. np-tension-type-headache-management - Tension Type Headache Management: NP Diagnosis and Management
-57. np-cluster-headache-diagnosis-and-treatment - Cluster Headache Diagnosis and Treatment: NP Diagnosis and Management
-58. np-seizure-classification-and-antiepileptic-selection - Seizure Classification and Antiepileptic Selection: NP Diagnosis and Management
-59. np-stroke-acute-management-and-secondary-prevention - Stroke Acute Management and Secondary Prevention: NP Diagnosis and Management
-60. np-tia-workup-and-risk-stratification - TIA Workup and Risk Stratification: NP Diagnosis and Management
-61. np-parkinson-disease-diagnosis-and-management - Parkinson Disease Diagnosis and Management: NP Diagnosis and Management
-62. np-essential-tremor-evaluation-and-treatment - Essential Tremor Evaluation and Treatment: NP Diagnosis and Management
-63. np-multiple-sclerosis-diagnosis-and-disease-modifying-therapy - Multiple Sclerosis Diagnosis and Disease Modifying Therapy: NP Diagnosis and Management
-64. np-peripheral-neuropathy-workup-and-management - Peripheral Neuropathy Workup and Management: NP Diagnosis and Management
-65. np-dementia-diagnosis-and-disease-modifying-therapy - Dementia Diagnosis and Disease Modifying Therapy: NP Diagnosis and Management
-66. np-delirium-recognition-and-management - Delirium Recognition and Management: NP Diagnosis and Management
-67. np-meningitis-and-encephalitis-recognition - Meningitis and Encephalitis Recognition: NP Diagnosis and Management
-68. np-myasthenia-gravis-diagnosis-and-management - Myasthenia Gravis Diagnosis and Management: NP Diagnosis and Management
-69. np-bell-palsy-evaluation-and-treatment - Bell Palsy Evaluation and Treatment: NP Diagnosis and Management
-70. np-carpal-tunnel-syndrome-diagnosis-and-management - Carpal Tunnel Syndrome Diagnosis and Management: NP Diagnosis and Management
-71. np-low-back-pain-with-radiculopathy-management - Low Back Pain With Radiculopathy Management: NP Diagnosis and Management
-72. np-cervical-radiculopathy-evaluation - Cervical Radiculopathy Evaluation: NP Diagnosis and Management
-73. np-vertigo-and-dizziness-differential-diagnosis - Vertigo and Dizziness Differential Diagnosis: NP Diagnosis and Management
-74. np-syncope-neurologic-evaluation - Syncope Neurologic Evaluation: NP Diagnosis and Management
-75. np-neuroimaging-in-clinical-neurology - Neuroimaging in Clinical Neurology: NP Diagnosis and Management
-76. np-neuromuscular-junction-disorders - Neuromuscular Junction Disorders: NP Diagnosis and Management
-77. np-movement-disorders-beyond-parkinson-disease - Movement Disorders beyond Parkinson Disease: NP Diagnosis and Management
-78. np-neurologic-manifestations-of-systemic-disease - Neurologic Manifestations of Systemic Disease: NP Diagnosis and Management
-79. np-type-2-diabetes-diagnosis-and-initial-management - Type 2 Diabetes Diagnosis and Initial Management: NP Diagnosis and Management
-80. np-type-1-diabetes-insulin-regimen-selection - Type 1 Diabetes Insulin Regimen Selection: NP Diagnosis and Management
-81. np-diabetes-medication-selection-beyond-metformin - Diabetes Medication Selection beyond Metformin: NP Diagnosis and Management
-82. np-insulin-initiation-and-titration-protocols - Insulin Initiation and Titration Protocols: NP Diagnosis and Management
-83. np-continuous-glucose-monitoring-interpretation - Continuous Glucose Monitoring Interpretation: NP Diagnosis and Management
-84. np-diabetic-ketoacidosis-recognition-and-management - Diabetic Ketoacidosis Recognition and Management: NP Diagnosis and Management
-85. np-hyperosmolar-hyperglycemic-state-management - Hyperosmolar Hyperglycemic State Management: NP Diagnosis and Management
-86. np-hypoglycemia-evaluation-and-prevention - Hypoglycemia Evaluation and Prevention: NP Diagnosis and Management
-87. np-hypothyroidism-diagnosis-and-levothyroxine-dosing - Hypothyroidism Diagnosis and Levothyroxine Dosing: NP Diagnosis and Management
-88. np-hyperthyroidism-diagnosis-and-management - Hyperthyroidism Diagnosis and Management: NP Diagnosis and Management
-89. np-thyroid-nodule-evaluation-and-fna-indications - Thyroid Nodule Evaluation and FNA Indications: NP Diagnosis and Management
-90. np-thyroid-cancer-follow-up-and-surveillance - Thyroid Cancer Follow Up and Surveillance: NP Diagnosis and Management
-91. np-adrenal-insufficiency-diagnosis-and-management - Adrenal Insufficiency Diagnosis and Management: NP Diagnosis and Management
-92. np-cushing-syndrome-evaluation - Cushing Syndrome Evaluation: NP Diagnosis and Management
-93. np-pheochromocytoma-recognition-and-workup - Pheochromocytoma Recognition and Workup: NP Diagnosis and Management
-94. np-hyperparathyroidism-diagnosis-and-management - Hyperparathyroidism Diagnosis and Management: NP Diagnosis and Management
-95. np-hypoparathyroidism-management - Hypoparathyroidism Management: NP Diagnosis and Management
-96. np-vitamin-d-deficiency-evaluation-and-treatment - Vitamin D Deficiency Evaluation and Treatment: NP Diagnosis and Management
-97. np-osteoporosis-diagnosis-and-pharmacotherapy - Osteoporosis Diagnosis and Pharmacotherapy: NP Diagnosis and Management
-98. np-metabolic-bone-disease-evaluation - Metabolic Bone Disease Evaluation: NP Diagnosis and Management
-99. np-pituitary-adenoma-recognition-and-management - Pituitary Adenoma Recognition and Management: NP Diagnosis and Management
-100. np-polycystic-ovary-syndrome-metabolic-management - Polycystic Ovary Syndrome Metabolic Management: NP Diagnosis and Management
-101. np-lipid-disorders-diagnosis-and-management - Lipid Disorders Diagnosis and Management: NP Diagnosis and Management
-102. np-obesity-pharmacotherapy-selection - Obesity Pharmacotherapy Selection: NP Diagnosis and Management
-103. np-electrolyte-disorders-sodium-and-potassium - Electrolyte Disorders Sodium and Potassium: NP Diagnosis and Management
-104. np-calcium-disorders-hypercalcemia-and-hypocalcemia - Calcium Disorders Hypercalcemia and Hypocalcemia: NP Diagnosis and Management
-105. np-gastroesophageal-reflux-disease-diagnosis-and-management - Gastroesophageal Reflux Disease Diagnosis and Management: NP Diagnosis and Management
-106. np-peptic-ulcer-disease-and-h-pylori-management - Peptic Ulcer Disease and H Pylori Management: NP Diagnosis and Management
-107. np-dyspepsia-evaluation-and-management - Dyspepsia Evaluation and Management: NP Diagnosis and Management
-108. np-inflammatory-bowel-disease-diagnosis-and-management - Inflammatory Bowel Disease Diagnosis and Management: NP Diagnosis and Management
-109. np-irritable-bowel-syndrome-diagnosis-and-management - Irritable Bowel Syndrome Diagnosis and Management: NP Diagnosis and Management
-110. np-celiac-disease-diagnosis-and-management - Celiac Disease Diagnosis and Management: NP Diagnosis and Management
-111. np-hepatitis-b-and-c-evaluation-and-treatment - Hepatitis B and C Evaluation and Treatment: NP Diagnosis and Management
-112. np-nonalcoholic-fatty-liver-disease-management - Nonalcoholic Fatty Liver Disease Management: NP Diagnosis and Management
-113. np-alcoholic-liver-disease-evaluation - Alcoholic Liver Disease Evaluation: NP Diagnosis and Management
-114. np-cirrhosis-complications-management - Cirrhosis Complications Management: NP Diagnosis and Management
-115. np-hepatic-encephalopathy-recognition-and-treatment - Hepatic Encephalopathy Recognition and Treatment: NP Diagnosis and Management
-116. np-pancreatitis-diagnosis-and-management - Pancreatitis Diagnosis and Management: NP Diagnosis and Management
-117. np-gallbladder-disease-evaluation-and-management - Gallbladder Disease Evaluation and Management: NP Diagnosis and Management
-118. np-colorectal-cancer-screening-and-surveillance - Colorectal Cancer Screening and Surveillance: NP Diagnosis and Management
-119. np-colorectal-polyp-follow-up-guidelines - Colorectal Polyp Follow Up Guidelines: NP Diagnosis and Management
-120. np-chronic-constipation-evaluation-and-management - Chronic Constipation Evaluation and Management: NP Diagnosis and Management
-121. np-chronic-diarrhea-workup - Chronic Diarrhea Workup: NP Diagnosis and Management
-122. np-gi-bleeding-evaluation-and-management - GI Bleeding Evaluation and Management: NP Diagnosis and Management
-123. np-dysphagia-evaluation-and-management - Dysphagia Evaluation and Management: NP Diagnosis and Management
-124. np-hemorrhoids-and-anorectal-disorders - Hemorrhoids and Anorectal Disorders: NP Diagnosis and Management
-125. np-abdominal-pain-diagnostic-approach - Abdominal Pain Diagnostic Approach: NP Diagnosis and Management
-126. np-liver-function-test-interpretation-in-gi-disease - Liver Function Test Interpretation in GI Disease: NP Diagnosis and Management
-127. np-tumor-marker-interpretation-in-gi-disease - Tumor Marker Interpretation in GI Disease: NP Diagnosis and Management
-128. np-endoscopy-indications-and-follow-up - Endoscopy Indications and Follow Up: NP Diagnosis and Management
-129. np-nutritional-assessment-and-supplementation - Nutritional Assessment and Supplementation: NP Diagnosis and Management
-130. np-short-bowel-syndrome-management - Short Bowel Syndrome Management: NP Diagnosis and Management
-131. np-chronic-kidney-disease-staging-and-management - Chronic Kidney Disease Staging and Management: NP Diagnosis and Management
-132. np-acute-kidney-injury-recognition-and-workup - Acute Kidney Injury Recognition and Workup: NP Diagnosis and Management
-133. np-proteinuria-evaluation-and-management - Proteinuria Evaluation and Management: NP Diagnosis and Management
-134. np-hematuria-workup-and-differential-diagnosis - Hematuria Workup and Differential Diagnosis: NP Diagnosis and Management
-135. np-urinary-tract-infection-diagnosis-and-management - Urinary Tract Infection Diagnosis and Management: NP Diagnosis and Management
-136. np-pyelonephritis-diagnosis-and-treatment - Pyelonephritis Diagnosis and Treatment: NP Diagnosis and Management
-137. np-nephrolithiasis-evaluation-and-prevention - Nephrolithiasis Evaluation and Prevention: NP Diagnosis and Management
-138. np-glomerulonephritis-recognition-and-referral - Glomerulonephritis Recognition and Referral: NP Diagnosis and Management
-139. np-diabetic-nephropathy-prevention-and-management - Diabetic Nephropathy Prevention and Management: NP Diagnosis and Management
-140. np-hypertensive-nephrosclerosis-management - Hypertensive Nephrosclerosis Management: NP Diagnosis and Management
-141. np-electrolyte-management-in-ckd - Electrolyte Management in CKD: NP Diagnosis and Management
-142. np-anemia-of-ckd-evaluation-and-treatment - Anemia of CKD Evaluation and Treatment: NP Diagnosis and Management
-143. np-mineral-bone-disorder-in-ckd - Mineral Bone Disorder in CKD: NP Diagnosis and Management
-144. np-dialysis-indications-and-preparation - Dialysis Indications and Preparation: NP Diagnosis and Management
-145. np-kidney-transplant-follow-up-basics - Kidney Transplant Follow Up Basics: NP Diagnosis and Management
-146. np-drug-dosing-in-renal-impairment - Drug Dosing in Renal Impairment: NP Diagnosis and Management
-147. np-benign-prostatic-hyperplasia-management - Benign Prostatic Hyperplasia Management: NP Diagnosis and Management
-148. np-urinary-incontinence-evaluation-and-treatment - Urinary Incontinence Evaluation and Treatment: NP Diagnosis and Management
-149. np-overactive-bladder-management - Overactive Bladder Management: NP Diagnosis and Management
-150. np-erectile-dysfunction-evaluation-and-treatment - Erectile Dysfunction Evaluation and Treatment: NP Diagnosis and Management
-151. np-prostatitis-diagnosis-and-management - Prostatitis Diagnosis and Management: NP Diagnosis and Management
-152. np-testicular-disorders-evaluation - Testicular Disorders Evaluation: NP Diagnosis and Management
-153. np-renal-imaging-interpretation - Renal Imaging Interpretation: NP Diagnosis and Management
-154. np-urinalysis-in-renal-disease - Urinalysis in Renal Disease: NP Diagnosis and Management
-155. np-acid-base-disorders-evaluation - Acid Base Disorders Evaluation: NP Diagnosis and Management
-156. np-acne-vulgaris-diagnosis-and-treatment - Acne Vulgaris Diagnosis and Treatment: NP Diagnosis and Management
-157. np-rosacea-diagnosis-and-management - Rosacea Diagnosis and Management: NP Diagnosis and Management
-158. np-atopic-dermatitis-management - Atopic Dermatitis Management: NP Diagnosis and Management
-159. np-contact-dermatitis-evaluation-and-management - Contact Dermatitis Evaluation and Management: NP Diagnosis and Management
-160. np-psoriasis-diagnosis-and-treatment - Psoriasis Diagnosis and Treatment: NP Diagnosis and Management
-161. np-seborrheic-dermatitis-management - Seborrheic Dermatitis Management: NP Diagnosis and Management
-162. np-bacterial-skin-infections-management - Bacterial Skin Infections Management: NP Diagnosis and Management
-163. np-viral-skin-infections-diagnosis-and-treatment - Viral Skin Infections Diagnosis and Treatment: NP Diagnosis and Management
-164. np-fungal-skin-infections-diagnosis-and-treatment - Fungal Skin Infections Diagnosis and Treatment: NP Diagnosis and Management
-165. np-skin-cancer-screening-and-recognition - Skin Cancer Screening and Recognition: NP Diagnosis and Management
-166. np-melanoma-recognition-and-referral - Melanoma Recognition and Referral: NP Diagnosis and Management
-167. np-basal-cell-carcinoma-management - Basal Cell Carcinoma Management: NP Diagnosis and Management
-168. np-squamous-cell-carcinoma-management - Squamous Cell Carcinoma Management: NP Diagnosis and Management
-169. np-actinic-keratosis-treatment - Actinic Keratosis Treatment: NP Diagnosis and Management
-170. np-pigmented-lesion-evaluation - Pigmented Lesion Evaluation: NP Diagnosis and Management
-171. np-urticaria-and-angioedema-management - Urticaria and Angioedema Management: NP Diagnosis and Management
-172. np-drug-eruptions-recognition-and-management - Drug Eruptions Recognition and Management: NP Diagnosis and Management
-173. np-autoimmune-blistering-disorders-recognition - Autoimmune Blistering Disorders Recognition: NP Diagnosis and Management
-174. np-skin-biopsy-techniques-and-indications - Skin Biopsy Techniques and Indications: NP Diagnosis and Management
-175. np-cryotherapy-and-electrosurgery-basics - Cryotherapy and Electrosurgery Basics: NP Diagnosis and Management
-176. np-wound-care-and-healing-principles - Wound Care and Healing Principles: NP Diagnosis and Management
-177. np-leg-ulcer-evaluation-and-management - Leg Ulcer Evaluation and Management: NP Diagnosis and Management
-178. np-hidradenitis-suppurativa-management - Hidradenitis Suppurativa Management: NP Diagnosis and Management
-179. np-hair-loss-evaluation-and-treatment - Hair Loss Evaluation and Treatment: NP Diagnosis and Management
-180. np-nail-disorders-diagnosis - Nail Disorders Diagnosis: NP Diagnosis and Management
-181. np-pediatric-dermatology-common-conditions - Pediatric Dermatology Common Conditions: NP Diagnosis and Management
-182. np-osteoarthritis-diagnosis-and-management - Osteoarthritis Diagnosis and Management: NP Diagnosis and Management
-183. np-rheumatoid-arthritis-diagnosis-and-management - Rheumatoid Arthritis Diagnosis and Management: NP Diagnosis and Management
-184. np-gout-and-pseudogout-diagnosis-and-treatment - Gout and Pseudogout Diagnosis and Treatment: NP Diagnosis and Management
-185. np-systemic-lupus-erythematosus-diagnosis-and-management - Systemic Lupus Erythematosus Diagnosis and Management: NP Diagnosis and Management
-186. np-polymyalgia-rheumatica-diagnosis-and-treatment - Polymyalgia Rheumatica Diagnosis and Treatment: NP Diagnosis and Management
-187. np-fibromyalgia-diagnosis-and-management - Fibromyalgia Diagnosis and Management: NP Diagnosis and Management
-188. np-low-back-pain-evaluation-and-management - Low Back Pain Evaluation and Management: NP Diagnosis and Management
-189. np-neck-pain-evaluation-and-management - Neck Pain Evaluation and Management: NP Diagnosis and Management
-190. np-shoulder-pain-differential-diagnosis - Shoulder Pain Differential Diagnosis: NP Diagnosis and Management
-191. np-knee-pain-evaluation-and-management - Knee Pain Evaluation and Management: NP Diagnosis and Management
-192. np-hip-pain-evaluation-and-management - Hip Pain Evaluation and Management: NP Diagnosis and Management
-193. np-hand-and-wrist-disorders - Hand and Wrist Disorders: NP Diagnosis and Management
-194. np-foot-and-ankle-disorders - Foot and Ankle Disorders: NP Diagnosis and Management
-195. np-sports-medicine-common-injuries - Sports Medicine Common Injuries: NP Diagnosis and Management
-196. np-tendonitis-and-bursitis-management - Tendonitis and Bursitis Management: NP Diagnosis and Management
-197. np-ligament-injuries-evaluation - Ligament Injuries Evaluation: NP Diagnosis and Management
-198. np-meniscal-tears-diagnosis-and-management - Meniscal Tears Diagnosis and Management: NP Diagnosis and Management
-199. np-rotator-cuff-disorders - Rotator Cuff Disorders: NP Diagnosis and Management
-200. np-carpal-tunnel-syndrome-management - Carpal Tunnel Syndrome Management: NP Diagnosis and Management
+1. differential-diagnosis-np - Differential Diagnosis Formulation
+2. np-testbank-prescribing - Prescribing & Pharmacotherapeutics Test Bank
+3. pharmacotherapeutics-principles-np - Pharmacotherapeutics: Core Principles, OTC
+4. pharm-np-prescribing-principles - Prescribing Principles
+5. trisomy-21-management-np - Trisomy 21 (Down Syndrome)
+6. abdominal-exam-np - Abdominal Examination (Murphy, McBurney
+7. ana-interpretation-np - Antinuclear Antibody Interpretation: Patterns & Specificities
+8. antiepileptics-basics-np - Antiepileptics Basics
+9. anxiety-ssri-firstline-np - Anxiety: First-Line SSRIs
+10. assessment-np - Comprehensive History and Physical (H&P)
+11. benzodiazepine-pharmacology-np - Benzodiazepine Pharmacology: GABA
+12. bipolar-mood-stabilizers-rx-np - Bipolar: Mood Stabilizer Prescribing
+13. black-box-warnings-np - Black Box Warnings: High-Yield
+14. cardiovascular-pathophysiology-np - Hypertension Mechanisms: RAAS
+15. coagulation-disorders-patho-np - Coagulation Disorders Pathophysiology
+16. dka-hhs-basics-np - DKA vs HHS Basics
+17. drug-hypersensitivity-np - Drug Hypersensitivity Reactions: Gell-Coombs Classification
+18. fibromuscular-dysplasia-np - Fibromuscular Dysplasia: Renal & Carotid Involvement
+19. gad-diagnostic-criteria-np - GAD: Duration Requirement
+20. informed-consent-prescribing-np - Informed Consent for Prescribing
+21. inhaled-corticosteroids-np - Inhaled Corticosteroids: Pharmacology and Clinical Application
+22. legal-ethical-prescribing-np - Legal and Ethical Considerations in NP Prescribing
+23. monitoring-safety-np - Monitoring & Safety: Baseline Labs & Ongoing Requirements
+24. pharmacology-np - Advanced Pharmacology Principles
+25. pregnancy-safe-meds-np - Pregnancy-Safe Medication Logic
+26. pregnancy-safety-prescribing-np - Pregnancy Safety Categories & Logic
+27. prescribing-process-logic-np - Prescribing Process: Diagnosis to Follow-Up
+28. ssri-selection-differences-np - SSRI Selection & Differences
+29. toxic-multinodular-goiter-np - Toxic Multinodular Goiter: Diagnosis & RAI Therapy
+30. trauma-atls-np - Trauma Atls
+31. type1-vs-type2-dm-np - Type 1 vs Type 2 Diabetes
+32. uti-primary-care-np - UTI: Primary Care Management
+33. hypertensive-crisis-np - Hypertensive Crisis
+34. bipolar-disorder-np - Bipolar Disorder
+35. anticoagulants-np - Anticoagulant Therapy
+36. np-high-risk-prescribing-and-safety - High-Risk Prescribing and Safety
+37. np-meningitis-management - Meningitis: Diagnosis and Management
+38. np-vaccines-immunology-preventive - Vaccines, Immunology & Preventive Care
+39. psych-patho-schizophrenia-dopamine-np - Schizophrenia Neurobiology: Dopamine Hypothesis & Glutamate Theory
+40. pediatric-weight-dosing-np - Pediatric Weight-Based Dosing
+41. stemi-molecular-and-pharmacology-np - STEMI: Molecular & Pharmacology
+42. copd-pharmacotherapy-lama-laba-and-ics-np - COPD Pharmacotherapy: LAMA, LABA, and ICS
+43. separation-anxiety-disorder-np-advanced-psychopharmacology-np - Separation Anxiety Disorder
+44. polypharmacy-np - Polypharmacy
+45. np-prescribing-calculations-np - Prescribing Calculations
+46. advanced-nutritional-pharmacology-and-micronutrient-management-np - Nutritional Pharmacology
+47. endocannabinoid-pharmacology-ecs-receptor-targets-and-np - Endocannabinoid Pharmacology: ECS, Receptor
+48. methotrexate-np-molecular-pharmacology-and-prescriptive-np - Methotrexate
+49. pharmacotherapeutics-core-principles-otc-management-and-np - Pharmacotherapeutics: Core Principles, OTC
+50. fnp-differential-primary-care - Differential reasoning in primary care (FNP track)
+51. fnp-overlay-diabetes-metabolic - Diabetes & metabolic complications — NP overlay (FNP)
+52. htn-guideline-based-plans - HTN Guideline-Based Plans (NP certification, US)
+53. diabetes-a1c-medication-escalation - Diabetes A1c & Medication Escalation (NP certification, US)
+54. hyperlipidemia-risk-discussion - Hyperlipidemia Risk Discussion (NP certification, US)
+55. women-s-health-screening-ages - Women's Health Screening Ages (NP certification, US)
+56. pediatric-well-visits-red-flags - Pediatric Well Visits Red Flags (NP certification, US)
+57. htn-guidelines-np - Hypertension: JNC/ACC-AHA Guidelines & Stepped Therapy
+58. copd-outpatient-np - COPD Management: GOLD Guidelines & Inhalers
+59. alcohol-use-screening-np - Alcohol Use Screening: AUDIT-C & Brief Intervention
+60. pca-management-np - Patient-Controlled Analgesia: Programming & Safety
+61. joint-exam-np - Comprehensive Joint Examination: MSK Assessment
+62. vaginal-hematoma-np - Vaginal Hematoma: Surgical Management & Embolization
+63. comprehensive-history-and-physical-np-level-np - Comprehensive History and Physical (NP Level)
+64. meconium-ileus-np - Meconium Ileus
+65. neonatal-hie-np - HIE: Therapeutic Hypothermia
+66. mastitis-np - Mastitis
+67. infant-reflexes-np - Infant Reflexes
+68. np-testbank-advanced-assessment - Advanced Assessment Test Bank
+69. np-testbank-differential-diagnosis - Differential Diagnosis Test Bank
+70. np-testbank-emergency-management - Emergency & Complex Management Test Bank
+71. delayed-puberty-np - Delayed Puberty: Molecular
+72. precocious-puberty-np - Precocious Puberty: Molecular Mechanisms
+73. dysmenorrhea-np - Dysmenorrhea: COX-2 Pathways
+74. aub-np - Abnormal Uterine Bleeding: PALM-COEIN
+75. pid-np - Pelvic Inflammatory Disease: CDC Guidelines
+76. cervicitis-np - Cervicitis: Pathogen Molecular Biology
+77. bartholinitis-np - Bartholinitis: Glandular Anatomy, Abscess
+78. uterine-prolapse-np - Uterine Prolapse: Connective Tissue Biology
+79. endometrial-polyp-np - Endometrial Polyps: Molecular Proliferation
+80. endometriosis-np - Endometriosis
+81. copd-diagnostic-criteria-np - COPD Diagnostic Criteria and GOLD Staging
+82. pediatric-asthma-np - Pediatric Asthma Assessment
+83. msk-rheumatoid-arthritis-np - Rheumatoid Arthritis
+84. neuro-seizures-np - Seizure Disorders and Epilepsy
+85. neuro-sleep-disorders-np - Sleep Disorders
+86. neuro-depression-anxiety-np - Depression and Anxiety Disorders
+87. stress-chronic-disease-np - Chronic Stress and Disease
+88. endocannabinoid-pharmacology-np - Endocannabinoid Pharmacology: ECS, Receptor
+89. core-fundamentals-np - Advanced Core Fundamentals
+90. heent-np - Advanced HEENT Diagnostics and Management
+91. neonatal-np-exp - Neonatal Care
+92. mental-health-np-exp - Mental Health Nursing
+93. safety-ethics-np - Advanced Safety, Ethics, and Legal Practice
+94. toxicology-np-exp - Advanced Toxicology and Environmental Medicine
+95. labs-diagnostics-np - Labs and Diagnostics
+96. maternal-newborn-edge-np - Maternal-Newborn and Reproductive Health
+97. pharm-np-controlled-substances - Controlled Substance Management
+98. iron-deficiency-anemia-np - Iron Deficiency Anemia
+99. sickle-cell-crisis-np - Sickle Cell Crisis
+100. conduct-disorder-np - Conduct Disorder
+101. intimate-partner-violence-np - Intimate Partner Violence
+102. insulin-pump-management-np - Insulin Pump Management
+103. anticoagulation-therapy-np - Anticoagulation Therapy
+104. hypospadias-management-np - Hypospadias
+105. vp-shunt-management-np - Ventriculoperitoneal Shunt
+106. a1c-interpretation-np - A1C Interpretation
+107. abdominal-pain-algorithm-np - Abdominal Pain Algorithm: Surgical vs Medical
+108. acei-arb-selection-np - Acei Arb Selection
+109. acetaminophen-od-np - Acetaminophen Overdose: NAC Protocol
+110. acs-diagnostic-criteria-np - ACS: Troponin Rise/Fall & ECG Changes
+111. acute-abdomen-np - Acute Abdomen: Differential Diagnosis
+112. adhd-basics-np - ADHD Basics
+113. adhd-dsm5-criteria-np - ADHD: DSM-5 Duration & Impairment Criteria
+114. adult-immunizations-np - Adult Immunizations
+115. aging-physiology-changes-np - Aging Physiology: Pharmacokinetic
+116. annual-wellness-visit-np - Annual Wellness Visit: Age-Appropriate Components & Screening
+117. antibiotic-duration-decisions-np - Antibiotic Duration Decisions
+118. anticholinergic-toxidrome-np - Anticholinergic Toxidrome
+119. antihypertensives-comparison-np - Antihypertensives: Mechanism-Based Comparison
+120. antiphospholipid-syndrome-np - Antiphospholipid Syndrome: Thrombosis
+121. antipsychotic-metabolic-monitoring-np - Antipsychotic Metabolic Monitoring
+122. antipsychotic-profiles-np - Antipsychotic Profiles
+123. antipsychotic-qt-risk-np - Antipsychotic QT Risk
+124. antiviral-basics-np - Antiviral Basics
+125. anxiety-disorders-core-np - Anxiety Disorders
+126. aspirin-od-np - Aspirin Overdose: Alkalinization & Dialysis
+127. atypical-antipsychotics-rx-np - Atypical Antipsychotics: Selection
+128. aub-mechanisms-np - Aub Mechanisms
+129. aub-palm-coein-criteria-np - Aub Palm Coein Criteria
+130. autism-screening-np - Autism Screening: M-CHAT
+131. b12-deficiency-criteria-np - B12 Deficiency Diagnostic Criteria
+132. beers-criteria-np - Beers Criteria: Potentially Inappropriate
+133. benzodiazepine-risks-rx-np - Benzodiazepine Risks & Prescribing
+134. beta-blocker-overdose-np - Beta-Blocker Overdose
+135. bipolar-diagnostic-criteria-np - Bipolar Disorder: Mania Duration Threshold
+136. bipolar-disorder-core-np - Bipolar Disorder
+137. bleeding-risk-stacking-np - Bleeding Risk: Anticoagulant Stacking
+138. borderline-lab-values-np - Borderline Lab Values
+139. brain-death-assessment-np - Brain Death Assessment Protocol
+140. brain-death-determination-np - Brain Death Determination Criteria
+141. burn-resuscitation-np - Burn Resuscitation: Parkland Formula
+142. calcium-channel-blocker-overdose-np - Calcium Channel Blocker Overdose
+143. cardiovascular-diagnostic-criteria-np - Hypertension: BP Thresholds & Confirmation
+144. cardiovascular-prescribing-np - Hypertension: ACEi vs ARB Selection
+145. chest-pain-workup-np - Chest Pain Workup: ACS Rule-Out
+146. cirrhosis-core-np - Cirrhosis Core Concepts
+147. clinical-prioritization-np - Clinical Prioritization
+148. clinical-reasoning-np - Clinical Reasoning
+149. congenital-heart-disease-patho-np - Congenital Heart Disease Pathophysiology
+150. contraception-np - Contraception
+151. contraceptive-selection-np - Contraceptive Selection
+152. criteria-fulfillment-np - Diagnostic Criteria Fulfillment
+153. cryptorchidism-np - Cryptorchidism
+154. cyp450-interactions-np - CYP450 Drug Interactions
+155. damage-control-resus-np - Damage Control Resuscitation: Permissive
+156. d-dimer-logic-np - D-Dimer Logic
+157. depression-core-np - Depression Core
+158. dermatitis-herpetiformis-np - Dermatitis Herpetiformis: Celiac Association
+159. developmental-screening-np - Pediatric Developmental Screening (ASQ)
+160. diabetes-pregnancy-np - Diabetes Management in Pregnancy
+161. diabetes-technology-np - Diabetes Technology: CGM, Insulin Pumps
+162. diagnostic-reasoning-np - Diagnostic Criteria Logic: Screening vs Diagnostic Tests
+163. differential-diagnosis-narrowing-np - Differential Diagnosis Narrowing
+164. digoxin-toxicity-np - Digoxin Toxicity
+165. dka-hhs-patho-np - DKA vs HHS: Ketogenesis & Osmotic Diuresis
+166. dm2-management-np - Diabetes Type 2: ADA Guidelines & SGLT2/GLP-1
+167. doac-warfarin-selection-np - DOAC vs Warfarin Selection
+168. drowning-management-np - Drowning Management: Pulmonary & Neurological Care
+169. drug-drug-interactions-np - Drug–Drug Interactions: CYP Inhibitors/Inducers
+170. dvt-diagnostic-criteria-np - DVT: Wells Criteria & Imaging Confirmation
+171. ect-np - Electroconvulsive Therapy: Pre/Post
+172. endocrine-core-np - Hypothalamic-Pituitary Axis
+173. endocrine-diagnostic-criteria-np - Type 2 Diabetes: A1C, FPG, OGTT Criteria
+174. endometriosis-patho-np - Endometriosis: Ectopic Endometrial Implantation
+175. epilepsy-diagnostic-criteria-np - Epilepsy: Diagnostic Criteria and Seizure Classification
+176. eps-recognition-np - Extrapyramidal Symptoms: Recognition and Management
+177. ethics-np-practice-np - Ethics in NP Practice: Autonomy and Beneficence
+178. evidence-based-assessment-np - Evidence-Based Assessment: Diagnostic Reasoning and Clinical Decision Tools
+179. fabry-disease-np - Fabry Disease
+180. factor-v-leiden-np - Factor V Leiden: Thrombophilia Screening and Management
+181. failure-to-thrive-np - Failure to Thrive: Organic vs. Non-Organic Workup
+182. family-medicine-np - Hypertension: JNC/ACC-AHA Guidelines and Stepped Therapy
+183. febrile-infant-algorithm-np - Febrile Infant Algorithm: Rochester & Step-by-Step Criteria
+184. frailty-np - Frailty
+185. g6pd-deficiency-np - G6PD Deficiency
+186. geriatric-prescribing-np - Beers Criteria: Prescribing Application
+187. gestational-diabetes-screening-np - Gestational Diabetes Screening: OGTT
+188. knee-pain-differential--np-advanced-batch-01 - Knee Pain Differential: Structural vs Inflammatory vs Referred
+189. uti-uncomplicated-complicated-stewardship--np-advanced-batch-01 - UTI Management: Uncomplicated vs Complicated, Antibiotic Stewardship
+190. t2dm-intensification-beyond-metformin--np-advanced-batch-01 - Type 2 Diabetes: Intensification Beyond Metformin
+191. gi-hepatic-core-np - Liver Function
+192. gi-hepatology-np - Cirrhosis: Child-Pugh & MELD Scoring
+193. syncope-differential-vasovagal-cardiac-neuro--np-advanced-batch-01 - Syncope Differential: Vasovagal vs Cardiac vs Neurological
+194. gi-infections-np - GI Infections
+195. hypertension-red-flags-referral--np-advanced-batch-01 - Red Flags in Hypertension: When to Refer or Admit
+196. uti-uncomplicated-complicated-stewardship-lesson-01--np-advanced-batch-02 - Evidence-Based UTI Management with Stewardship Principles
+197. growth-development-milestones-np - Growth & Development Milestones
+198. half-life-dosing-np - Half-Life & Steady-State Dosing Principles
+199. hematology-diagnostic-criteria-np - Iron Deficiency Anemia: Ferritin
+200. hepatitis-core-np - Hepatitis
 
 ## Quality Gates
 

@@ -522,7 +522,19 @@
     "test:ecg-cluster": "node --import tsx --test src/lib/ecg-module/ecg-cluster-sitemap.contract.test.ts",
     "test:ecg-full": "node --import tsx --test src/lib/ecg-module/ecg-cluster-sitemap.contract.test.ts src/lib/navigation/ecg-nav-visibility.contract.test.ts src/lib/navigation/ecg-seo-authority.contract.test.ts src/lib/ecg-module/ecg-route-existence.contract.test.ts",
     "knip": "knip",
-    "i18n:validate-runtime": "npx tsx scripts/validate-i18n-runtime-keys.ts"
+    "i18n:validate-runtime": "npx tsx scripts/validate-i18n-runtime-keys.ts",
+    "test:e2e:production-critical": "npx playwright test --config playwright.production-critical.config.ts",
+    "test:e2e:smoke:homepage": "npx playwright test tests/e2e/smoke/homepage-comprehensive.spec.ts --config playwright.production-critical.config.ts",
+    "test:e2e:smoke:tier-hubs": "npx playwright test tests/e2e/smoke/tier-hubs-smoke.spec.ts --config playwright.production-critical.config.ts",
+    "test:e2e:smoke:flashcards": "npx playwright test tests/e2e/smoke/flashcards-smoke.spec.ts --config playwright.production-critical.config.ts",
+    "test:e2e:smoke:cat": "npx playwright test tests/e2e/smoke/cat-smoke.spec.ts --config playwright.production-critical.config.ts",
+    "test:e2e:smoke:practice-tests": "npx playwright test tests/e2e/smoke/practice-tests-smoke.spec.ts --config playwright.production-critical.config.ts",
+    "test:e2e:smoke:blog": "npx playwright test tests/e2e/smoke/blog-smoke.spec.ts --config playwright.production-critical.config.ts",
+    "test:e2e:navigation-crawl": "npx playwright test tests/e2e/navigation/navigation-crawl.spec.ts --config playwright.production-critical.config.ts",
+    "test:e2e:performance-budget": "npx playwright test tests/e2e/performance/performance-budget-comprehensive.spec.ts --config playwright.production-critical.config.ts",
+    "test:e2e:revenue": "npx playwright test tests/e2e/revenue/subscription-purchase-flow.spec.ts tests/e2e/revenue/subscription-persistence.spec.ts --config playwright.production-critical.config.ts",
+    "audit:nightly": "npx tsx scripts/nightly-production-audit.ts",
+    "verify:no-middleware": "node --import tsx --test src/middleware-ban.contract.test.ts"
   },
   "dependencies": {
     "@auth/core": "0.37.2",

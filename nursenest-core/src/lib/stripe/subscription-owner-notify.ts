@@ -136,13 +136,19 @@ export async function scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligib
       planTier: args.planTier,
     })
   ) {
+    const isTestWithAmount = !args.event.livemode && amountTotal != null && amountTotal > 0;
     safeServerLog(LOG_SCOPE, "checkout_notify_skipped_ineligible", {
       eventIdPrefix: args.event.id.slice(0, 12),
       correlation: args.correlation,
       stripeSubStatus: args.stripeSubStatus ?? "",
       sessionAmountTotal: amountTotal ?? -1,
       statusForDb: String(args.statusForDb),
-      severity: "info",
+      // Escalate to warning when a real-looking amount was present but suppressed by test-mode filter.
+      // Set ADMIN_SUBSCRIPTION_NOTIFY_INCLUDE_TEST_MODE=1 to receive these notifications.
+      severity: isTestWithAmount ? "warning" : "info",
+      hint: isTestWithAmount
+        ? "Set ADMIN_SUBSCRIPTION_NOTIFY_INCLUDE_TEST_MODE=1 to receive test-mode notifications"
+        : undefined,
     });
     return;
   }

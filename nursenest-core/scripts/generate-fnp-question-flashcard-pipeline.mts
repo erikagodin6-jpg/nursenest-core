@@ -1,8 +1,8 @@
 #!/usr/bin/env npx tsx
+import "@/lib/db/script-env-bootstrap";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import crypto from "node:crypto";
-import { config as loadDotenv } from "dotenv";
 import OpenAI from "openai";
 import { z } from "zod";
 import {
@@ -648,7 +648,6 @@ function writeReport(params: {
 
 async function main(): Promise<void> {
   const generatedAt = new Date();
-  loadDotenv({ path: resolve(process.cwd(), ".env.local"), override: false, quiet: true });
   const stats: PipelineStats = {
     selectedLessons: 0,
     productionReadyLessonsFirst: 0,

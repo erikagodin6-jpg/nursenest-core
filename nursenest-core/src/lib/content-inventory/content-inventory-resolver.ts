@@ -95,7 +95,7 @@ export type ContentInventoryResolverResult = {
    * (flashcards do not require rationale; CAT does).
    */
   examPoolParityOk: boolean;
-  /** Mismatch magnitude: catPool minus flashcardExamPool.  Positive = CAT is stricter. */
+  /** Mismatch magnitude: catPool minus flashcardExamPool. Negative = CAT is stricter. */
   examPoolParityDelta: number;
   /** ISO timestamp of when this snapshot was computed. */
   resolvedAt: string;
@@ -280,10 +280,10 @@ export async function contentInventoryResolver(args: {
 
   // ── Parity check ──────────────────────────────────────────────────────────
   // CAT pool is a strict subset of flashcard exam pool (CAT requires rationale;
-  // flashcards do not). Any delta > 0 is expected; a NEGATIVE delta is a
+  // flashcards do not). Any delta <= 0 is expected; a POSITIVE delta is a
   // misconfiguration where flashcards see fewer questions than CAT.
   const examPoolParityDelta = catEligibleCount - canonicalCount;
-  const examPoolParityOk = examPoolParityDelta >= 0;
+  const examPoolParityOk = examPoolParityDelta <= 0;
 
   return {
     pathwayId: args.pathwayId,

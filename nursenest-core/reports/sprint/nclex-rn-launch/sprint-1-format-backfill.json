@@ -1,0 +1,34 @@
+{
+  "generatedAt": "2026-06-01T22:21:08.236Z",
+  "mode": "applied",
+  "examFilter": "NCLEX-RN",
+  "totalAnalyzed": 7667,
+  "formatDistribution": {
+    "multiple_choice": 7450,
+    "sata": 193,
+    "ordering": 24
+  },
+  "topSamples": {
+    "multiple_choice": [
+      "0014e2d9-afe3-4f60-bf14-9c6bfe225820",
+      "001e384d-9c3d-44ef-9981-6aa63a549756",
+      "0027de4e-6bd3-454e-b0e7-01823075f49f",
+      "002c7099-87cd-4af5-966d-ebc3a24467f3",
+      "003254f5-b6d2-4e7f-b27b-56b7c3e120f3"
+    ],
+    "sata": [
+      "012746bb-03a5-4d41-8ee5-4ce502d1bd66",
+      "02eb08db-7a7c-4ecf-8b91-7246a6468075",
+      "0308ddeb-082a-4eb0-a816-7c0ad104afd1",
+      "03b9841e-0551-4d35-8cb4-e739ccb368fe",
+      "047ce68b-0d68-428b-8d15-754ffba6ac67"
+    ],
+    "ordering": [
+      "07b846ab-c9e8-4268-8926-0feef92b3f3c",
+      "0aea6aec-08b9-4955-9f0f-3047ea2a2996",
+      "1442f795-1794-477d-bc2d-85d6b76903ce",
+      "246fbb2b-8b11-4bb7-8420-109454dbb78f",
+      "2bf7a3ea-9481-447e-b4bb-e916b9d15a52"
+    ]
+  }
+}

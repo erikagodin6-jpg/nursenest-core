@@ -679,8 +679,8 @@ async function createPracticeExams(
       await prisma.$executeRaw`
         UPDATE exam_questions
         SET tags = array_append(tags, ${tag})
-        WHERE id = ANY(${selected}::varchar[])
-          AND NOT (tags @> ARRAY[${tag}]::varchar[])
+        WHERE id = ANY(${selected}::text[])
+          AND NOT (tags @> ARRAY[${tag}]::text[])
       `;
     }
     if (i % 25 === 0) console.log(`Practice exams published: ${i}/${EXAM_TARGET}`);

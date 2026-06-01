@@ -21,13 +21,25 @@ export type AdminLearnerQaTrack =
   | "ALLIED"
   | "NEW_GRAD"
   | "PRE_NURSING";
-export type AdminLearnerQaLifecycle = "paid_active" | "none" | "expired" | "trial";
+export type AdminLearnerQaLifecycle =
+  | "paid_active"        // Active subscriber — any billing cadence (default: yearly)
+  | "paid_monthly"       // Active monthly subscriber (explicit cadence)
+  | "paid_annual"        // Active annual subscriber (explicit cadence)
+  | "none"               // Free user — no subscription ever
+  | "expired"            // Subscription expired, no access
+  | "trial"              // Active trial user
+  | "trial_expired"      // Trial ended, no conversion
+  | "canceled"           // Subscription cancelled but still within paid period
+  | "past_due";          // Failed payment — past-due grace period
 
 /** NP board prep specialization — maps to `exam-pathways` ids (US). */
 export type AdminLearnerQaNpSpecialty = "FNP" | "AGPCNP" | "PMHNP" | "WHNP" | "PNP_PC";
 
 /** Simulated plan cadence for catalog / plan row display (not Stripe). */
 export type AdminLearnerQaPlanVariant = Extract<BillingDuration, "monthly" | "6-month" | "yearly">;
+
+/** For display / analytics — does not affect entitlements. */
+export type AdminLearnerQaExperienceLevel = "new" | "active" | "returning";
 
 export type AdminLearnerQaPayloadV1 = {
   v: typeof PAYLOAD_VERSION;
@@ -43,6 +55,17 @@ export type AdminLearnerQaPayloadV1 = {
   alliedCareer?: AlliedCareerKey;
   /** Billing cadence reflected on synthetic `UserAccess.plan`; sensible default per lifecycle. */
   planVariant?: AdminLearnerQaPlanVariant;
+  /**
+   * When set, this is a REAL USER view-as session.
+   * Stored for audit/display — the `track`/`lifecycle`/`country` are derived from the real user's
+   * actual subscription data at session-start time.  The real user's study data is NOT loaded;
+   * entitlements are synthetic (built from the mapped params) to avoid data privacy issues.
+   */
+  targetUserId?: string;
+  /** Real user's email — for banner display only, never used for data access. */
+  targetEmail?: string;
+  /** Experience level label — for banner display only. */
+  experienceLevel?: AdminLearnerQaExperienceLevel;
 };
 
 export type AdminLearnerQaPublicState = {
@@ -56,6 +79,11 @@ export type AdminLearnerQaPublicState = {
   billingRegionSlug: string | null;
   bannerTitle: string;
   pathwayId: string | null;
+  /** Set for real-user view-as sessions. */
+  targetUserId: string | null;
+  targetEmail: string | null;
+  experienceLevel: AdminLearnerQaExperienceLevel | null;
+  isRealUser: boolean;
 };
 
 export function qaSigningSecret(): string | null {
@@ -118,9 +146,46 @@ export function defaultAlliedCareerForTrack(track: AdminLearnerQaTrack): AlliedC
 }
 
 export function defaultPlanVariantForLifecycle(lifecycle: AdminLearnerQaLifecycle): AdminLearnerQaPlanVariant | null {
-  if (lifecycle === "paid_active") return "yearly";
-  if (lifecycle === "trial") return "monthly";
+  if (lifecycle === "paid_active" || lifecycle === "paid_annual" || lifecycle === "canceled") return "yearly";
+  if (lifecycle === "paid_monthly") return "monthly";
+  if (lifecycle === "trial" || lifecycle === "trial_expired") return "monthly";
   return null;
+}
+
+/** Human-readable one-liner for the given lifecycle — used in banner + toolbar. */
+export function lifecycleLabel(lifecycle: AdminLearnerQaLifecycle): string {
+  switch (lifecycle) {
+    case "paid_active":   return "Active subscriber";
+    case "paid_monthly":  return "Active monthly subscriber";
+    case "paid_annual":   return "Active annual subscriber";
+    case "none":          return "Free user (no subscription)";
+    case "expired":       return "Expired subscription";
+    case "trial":         return "Active trial";
+    case "trial_expired": return "Expired trial";
+    case "canceled":      return "Cancelled subscription";
+    case "past_due":      return "Failed payment / past-due";
+  }
+}
+
+/**
+ * Map a real subscriber's DB status to the nearest QA lifecycle enum.
+ * Used when starting a real-user view-as session.
+ */
+export function lifecycleFromSubscriptionStatus(
+  status: "none" | "active" | "canceled" | "grace" | "past_due",
+  planDuration: string | null,
+  trialStatus: "NONE" | "ACTIVE" | "EXPIRED" | "CONVERTED" | null,
+): AdminLearnerQaLifecycle {
+  if (status === "active") {
+    if (trialStatus === "ACTIVE") return "trial";
+    if (planDuration === "monthly") return "paid_monthly";
+    if (planDuration === "yearly" || planDuration === "6-month") return "paid_annual";
+    return "paid_active";
+  }
+  if (status === "past_due") return "past_due";
+  if (status === "canceled" || status === "grace") return "canceled";
+  if (trialStatus === "EXPIRED") return "trial_expired";
+  return "none";
 }
 
 /** Default pathway ids for chrome + context bar (registry-backed). */
@@ -153,14 +218,8 @@ export function pathwayIdForQaTrack(
 
 /** Copy for learner shell user menu (plain language; avoids JWT subscription mismatch during QA). */
 export function learnerQaUserBarOverlayFromPayload(p: AdminLearnerQaPayloadV1): { planLabel: string; scopeLine: string } {
-  const life =
-    p.lifecycle === "paid_active"
-      ? "Simulated: paid (active)"
-      : p.lifecycle === "trial"
-        ? "Simulated: trial"
-        : p.lifecycle === "expired"
-          ? "Simulated: expired subscription"
-          : "Simulated: no subscription";
+  const prefix = p.targetUserId ? "Real user" : "Simulated";
+  const life = `${prefix}: ${lifecycleLabel(p.lifecycle)}`;
   const track =
     p.track === "LVN_LPN"
       ? "LVN/LPN"
@@ -192,14 +251,7 @@ export function bannerTitleForPayload(p: AdminLearnerQaPayloadV1): string {
           : p.track === "PRE_NURSING"
             ? "Pre-Nursing"
             : p.track;
-  const life =
-    p.lifecycle === "paid_active"
-      ? "Paid (active)"
-      : p.lifecycle === "trial"
-        ? "Trial"
-        : p.lifecycle === "expired"
-          ? "Expired subscription"
-          : "No subscription";
+  const life = lifecycleLabel(p.lifecycle);
   const np =
     p.track === "NP"
       ? ` · NP ${(p.npSpecialty ?? "FNP").replace(/_/g, "/")}`
@@ -207,7 +259,10 @@ export function bannerTitleForPayload(p: AdminLearnerQaPayloadV1): string {
         ? ` · Allied: ${(p.alliedCareer ?? "paramedic").replace(/_/g, " ")}`
         : "";
   const plan = p.planVariant ? ` · Plan: ${p.planVariant}` : "";
-  return `You are viewing a simulated learner — ${trackLabel}${np}${plan} · ${life} · ${p.country}`;
+  if (p.targetUserId && p.targetEmail) {
+    return `VIEWING AS USER — ${p.targetEmail} · ${trackLabel}${np}${plan} · ${life} · ${p.country}`;
+  }
+  return `SIMULATED LEARNER — ${trackLabel}${np}${plan} · ${life} · ${p.country}`;
 }
 
 function hmacHex(secret: string, message: string): string {
@@ -264,7 +319,10 @@ export function verifyAdminLearnerQaCookieValue(
     "NEW_GRAD",
     "PRE_NURSING",
   ];
-  const validLife: AdminLearnerQaLifecycle[] = ["paid_active", "none", "expired", "trial"];
+  const validLife: AdminLearnerQaLifecycle[] = [
+    "paid_active", "paid_monthly", "paid_annual",
+    "none", "expired", "trial", "trial_expired", "canceled", "past_due",
+  ];
   if (!validTracks.includes(track)) return null;
   if (!validLife.includes(lifecycle)) return null;
   if (country !== "US" && country !== "CA") return null;
@@ -286,6 +344,14 @@ export function verifyAdminLearnerQaCookieValue(
     planVariant = o.planVariant;
   }
 
+  const targetUserId = typeof o.targetUserId === "string" && o.targetUserId.trim() ? o.targetUserId.trim() : undefined;
+  const targetEmail = typeof o.targetEmail === "string" && o.targetEmail.trim() ? o.targetEmail.trim() : undefined;
+  const validExpLevels: AdminLearnerQaExperienceLevel[] = ["new", "active", "returning"];
+  const experienceLevel =
+    typeof o.experienceLevel === "string" && validExpLevels.includes(o.experienceLevel as AdminLearnerQaExperienceLevel)
+      ? (o.experienceLevel as AdminLearnerQaExperienceLevel)
+      : undefined;
+
   return {
     v: PAYLOAD_VERSION,
     sub: o.sub,
@@ -296,6 +362,9 @@ export function verifyAdminLearnerQaCookieValue(
     ...(npSpecialty ? { npSpecialty } : {}),
     ...(alliedCareer ? { alliedCareer } : {}),
     ...(planVariant ? { planVariant } : {}),
+    ...(targetUserId ? { targetUserId } : {}),
+    ...(targetEmail ? { targetEmail } : {}),
+    ...(experienceLevel ? { experienceLevel } : {}),
   };
 }
 
@@ -339,6 +408,10 @@ export function publicQaStateFromPayload(p: AdminLearnerQaPayloadV1): AdminLearn
     billingRegionSlug: billingRegionSlugForQaCountry(p.country),
     bannerTitle: bannerTitleForPayload(p),
     pathwayId: pathwayIdForQaTrack(p.track, p.country, np),
+    targetUserId: p.targetUserId ?? null,
+    targetEmail: p.targetEmail ?? null,
+    experienceLevel: p.experienceLevel ?? null,
+    isRealUser: Boolean(p.targetUserId),
   };
 }
 
@@ -429,6 +502,8 @@ export function buildUserAccessForAdminLearnerQa(payload: AdminLearnerQaPayloadV
 
   switch (payload.lifecycle) {
     case "paid_active":
+    case "paid_monthly":
+    case "paid_annual":
       hasPremium = true;
       reason = "active_subscription";
       planStatus = "active";
@@ -440,7 +515,22 @@ export function buildUserAccessForAdminLearnerQa(payload: AdminLearnerQaPayloadV
       planStatus = "active";
       expiresAt = new Date(Date.now() + 86400_000 * 7);
       break;
+    case "canceled":
+      // Cancelled but within paid period — still has access
+      hasPremium = true;
+      reason = "canceled_paid_through";
+      planStatus = "canceled";
+      expiresAt = new Date(Date.now() + 86400_000 * 14);
+      break;
+    case "past_due":
+      // Failed payment — in past-due grace period (still has temporary access)
+      hasPremium = true;
+      reason = "past_due_grace";
+      planStatus = "past_due";
+      expiresAt = new Date(Date.now() + 86400_000 * 3);
+      break;
     case "expired":
+    case "trial_expired":
       hasPremium = false;
       reason = "no_access";
       planStatus = "canceled";

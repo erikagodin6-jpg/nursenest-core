@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { withRetry } from "@/lib/resilience/with-retry";
 import {
   captureCatCoachGenerationAnalytics,
   capturePracticeTestCompletedAnalytics,
@@ -24,9 +25,9 @@ export const practiceTestRouteDeps = {
   requireSubscriberSession,
   prisma,
   findPracticeTest: (args: Parameters<typeof prisma.practiceTest.findFirst>[0]) =>
-    prisma.practiceTest.findFirst(args),
+    withRetry(() => prisma.practiceTest.findFirst(args), { maxAttempts: 3 }),
   updatePracticeTest: (args: Parameters<typeof prisma.practiceTest.update>[0]) =>
-    prisma.practiceTest.update(args),
+    withRetry(() => prisma.practiceTest.update(args), { maxAttempts: 2 }),
   setSentryServerContext,
   advanceCatPracticeTest,
   finalizeCatPracticeTest,

@@ -48,17 +48,32 @@ type QuestionRow = Prisma.ExamQuestionCreateManyInput;
 type FlashcardRow = Prisma.FlashcardCreateManyInput;
 
 const APPLY = process.argv.includes("--apply");
-const QUESTION_TARGET = readNumberFlag("--question-target", 7500);
-const FLASHCARD_TARGET = readNumberFlag("--flashcard-target", 7500);
-const EXAM_TARGET = readNumberFlag("--practice-exams", 300);
+const QUESTION_TARGET = readNumberFlag("--question-target", 4000);
+const FLASHCARD_TARGET = readNumberFlag("--flashcard-target", 4000);
+const EXAM_TARGET = readNumberFlag("--practice-exams", 200);
 const QUESTIONS_PER_LESSON = readNumberFlag("--questions-per-lesson", 25);
 const FLASHCARDS_PER_LESSON = readNumberFlag("--flashcards-per-lesson", 20);
-const CAT_TARGET = readNumberFlag("--cat-target", 5000);
-const PATHWAY_ID = "us-np-fnp";
-const SOURCE = "fnp-launch-readiness-sprint";
-const CATEGORY_SLUG = "fnp-launch-readiness";
-const DECK_SLUG = "fnp-clinical-reasoning-launch-deck";
+const CAT_TARGET = readNumberFlag("--cat-target", 3000);
+const PATHWAY_ID = "us-np-whnp";
+const SOURCE_LESSON_PATHWAY_ID = "us-np-fnp";
+const SOURCE = "whnp-launch-readiness-sprint";
+const CATEGORY_SLUG = "whnp-launch-readiness";
+const DECK_SLUG = "whnp-clinical-reasoning-launch-deck";
 const LESSON_CATALOG = resolve(process.cwd(), "src/content/pathway-lessons/np-parity-expansion-catalog.json");
+const WHNP_INCLUDED_LESSON_RE =
+  /\b(women|woman|female|reproductive|contraception|preconception|prenatal|pregnan\w*|postpartum|gynec\w*|gyn|uterine|menopause|infertility|breast|cervical|ovarian|fetal|pap|hpv|vaginitis|pelvic|hormone|estrogen|progesterone|endometriosis|pcos|mammogram|sti|stis|std|stds)\b/i;
+const WHNP_PRIORITY_DOMAIN_IDS = new Set([
+  "health-promotion",
+  "preventive-care",
+  "maternal-health",
+  "womens-health",
+  "pharmacotherapeutics",
+  "differential-diagnosis",
+  "diagnostic-testing",
+  "primary-care-assessment",
+  "professional-practice",
+  "ethics",
+]);
 
 const PRIORITY_DOMAINS: Domain[] = [
   domain("professional-practice", "Professional Practice", "Professional Practice", "Professional Practice", "Scope and accountability", "Professional practice", "a primary care visit where the requested action may exceed local NP authority", "unclear authority, incomplete consent, or missing follow-up responsibility", "regulatory scope issue versus clinical appropriateness versus organizational privilege gap", "verify legal authority, competence, patient-specific indication, and organizational policy before acting", "decline or modify the plan, document rationale, and arrange appropriate referral or consultation", "prescribe or perform only when authority, competence, indication, and monitoring are all satisfied", "proceeding because the clinical request seems reasonable", "clinical appropriateness alone does not authorize practice", "integrate legal authority, competence, context, and continuity before deciding", "unsafe practice, regulatory breach, and fragmented care"),
@@ -81,6 +96,20 @@ const PRIORITY_DOMAINS: Domain[] = [
   domain("urgent-care", "Urgent Care Presentations", "Urgent Care", "Clinical Assessment and Diagnosis", "Urgent presentations", "Clinical judgment", "a patient presents with acute pain, dyspnea, fever, neurologic deficit, or severe dehydration", "abnormal vitals, altered mental status, severe pain, or rapid progression indicate higher acuity", "primary-care-manageable issue versus emergency referral versus same-day diagnostics", "stabilize, identify red flags, and determine disposition before routine outpatient treatment", "refer or transfer when acuity exceeds outpatient safety, while communicating key findings", "use empiric treatment only when it does not delay needed emergency care", "trying outpatient treatment first to avoid inconvenience", "under-triage of unstable presentations", "disposition is the diagnosis when safety is at stake", "shock, stroke delay, respiratory failure, and sepsis"),
   domain("leadership", "Leadership", "Leadership", "Professional Practice", "Systems leadership", "Leadership", "a clinic process creates repeated missed follow-up or medication errors", "similar near-misses recur across providers and documentation handoffs", "individual lapse versus system failure versus policy gap", "analyze the process, identify failure points, and engage team-based improvement", "implement a practical safety process and monitor outcomes", "avoid blame-only responses; fix the system and preserve accountability", "retraining one person without changing the unsafe workflow", "person-focused correction for a system defect", "NP leadership includes clinical care, quality improvement, and accountability", "repeat harm, unsafe transitions, and poor team trust"),
   domain("ethics", "Ethics", "Professional Practice", "Professional Practice", "Ethics and consent", "Ethics", "a patient refuses a recommended diagnostic test or treatment", "capacity, voluntariness, understanding, risk severity, and substitute decision-maker rules matter", "capable refusal versus impaired capacity versus coercion versus information gap", "assess capacity, provide balanced information, explore values, and document informed refusal", "respect capable decisions while arranging safety-netting and follow-up", "avoid coercive prescribing or testing when valid refusal is present", "asking family to decide because the clinician disagrees with the patient", "overriding autonomy without capacity assessment", "ethical practice balances autonomy, beneficence, nonmaleficence, and justice", "coercion, delayed care, complaint risk, and loss of trust"),
+];
+
+const WHNP_OVERLAY_DOMAINS: Domain[] = [
+  domain("contraception", "Contraception", "Women's Health", "Pharmacotherapeutics", "Contraceptive eligibility and counselling", "Pharmacology", "a patient requests contraception with comorbidities or medication interactions", "migraine with aura, smoking status, hypertension, postpartum timing, VTE history, and patient preference change eligibility", "safe contraception option versus contraindicated estrogen exposure versus adherence barrier", "assess pregnancy status, contraindications, goals, interactions, and need for STI protection", "select a method using shared decision-making and document warning signs and follow-up", "choose estrogen-free or long-acting options when estrogen risk, adherence, or interactions make combined methods unsafe", "offering the most popular combined pill without checking eligibility", "method popularity overriding contraindications and reproductive goals", "use patient-specific contraindications, preference, and continuation likelihood to select therapy", "VTE, stroke, unintended pregnancy, and poor adherence"),
+  domain("preconception-care", "Preconception Care", "Women's Health", "Health Promotion and Prevention", "Preconception risk optimization", "Preventive care", "a patient is planning pregnancy and has chronic disease or medication exposure", "A1c, blood pressure, teratogenic medications, folic acid use, immunization status, and genetic risk change planning", "safe preconception optimization versus urgent pregnancy evaluation versus medication teratogenicity risk", "review pregnancy intention, medications, immunizations, genetic/family history, and chronic disease targets", "optimize risk before conception and coordinate referral for high-risk conditions", "switch or stop teratogenic medications only with a safe alternative and monitoring plan", "waiting until pregnancy is confirmed before addressing medication risk", "missing the preconception window for preventable harm", "anticipate fetal and maternal risks before conception occurs", "teratogenic exposure, miscarriage risk, congenital anomaly, and maternal complication"),
+  domain("abnormal-uterine-bleeding", "Abnormal Uterine Bleeding", "Women's Health", "Clinical Assessment and Diagnosis", "AUB evaluation", "Differential diagnosis", "a reproductive-age or perimenopausal patient reports abnormal uterine bleeding", "pregnancy possibility, hemodynamic stability, anemia symptoms, age, cancer risk, and medication use determine urgency", "pregnancy complication versus structural uterine cause versus ovulatory dysfunction versus malignancy risk", "assess stability, rule out pregnancy, check anemia risk, and choose ultrasound, labs, or endometrial sampling when indicated", "treat based on acuity, fertility goals, contraindications, and need for urgent referral", "use hormonal or nonhormonal therapy only after pregnancy and red flags are addressed", "starting hormones before excluding pregnancy or malignancy risk", "symptom control before diagnostic risk stratification", "separate unstable bleeding, pregnancy-related bleeding, and malignancy risk before routine management", "hemorrhage, missed ectopic pregnancy, cancer delay, and medication harm"),
+  domain("menopause", "Menopause", "Women's Health", "Health Promotion and Prevention", "Menopause and hormone therapy", "Management reasoning", "a midlife patient asks about vasomotor symptoms, genitourinary symptoms, or hormone therapy", "age, time since menopause, uterus status, VTE/breast cancer risk, and symptom severity drive treatment", "menopause symptoms versus thyroid/mood/sleep mimic versus contraindicated hormone therapy", "confirm symptom pattern, assess contraindications, review screening, and discuss nonhormonal and hormonal options", "individualize therapy, use the lowest effective dose when appropriate, and set reassessment timing", "avoid systemic estrogen when contraindications are present; add progestogen if uterus is present", "prescribing estrogen because symptoms are severe without checking uterus and VTE/breast cancer risk", "symptom relief overriding hormone-safety assessment", "match therapy route and regimen to risk profile and treatment goals", "VTE, endometrial hyperplasia, undertreated symptoms, and missed mimic"),
+  domain("sti-treatment", "STIs", "Women's Health", "Clinical Assessment and Diagnosis", "STI diagnosis and treatment", "Pharmacology", "a patient has pelvic symptoms, exposure concern, or positive STI test", "pregnancy status, PID signs, partner exposure, allergy history, and local resistance patterns alter treatment", "cervicitis versus PID versus vaginitis versus urinary or pregnancy-related mimic", "assess pregnancy and PID red flags, collect indicated tests, and treat promptly when risk warrants", "choose guideline-aligned antimicrobial therapy, partner management, abstinence counselling, and retesting plan", "adjust treatment for pregnancy, allergies, interactions, and adherence barriers", "waiting for every result before treating high-risk cervicitis or PID", "diagnostic delay when empiric treatment is clinically indicated", "balance diagnostic confirmation with transmission prevention and fertility protection", "PID, infertility, ectopic risk, transmission, and antimicrobial failure"),
+  domain("cervical-screening", "Cervical Disorders", "Women's Health", "Health Promotion and Prevention", "Cervical screening and follow-up", "Preventive care", "a patient has abnormal cervical screening, HPV results, or overdue screening", "age, cytology result, HPV status, immunosuppression, pregnancy, and prior results determine next step", "routine screening versus surveillance versus colposcopy referral versus diagnostic evaluation", "interpret results by risk category and choose repeat testing, genotyping, colposcopy, or treatment referral", "close the loop with follow-up timing, counselling, and documentation", "avoid unnecessary procedures when surveillance is appropriate, and do not delay colposcopy when high-risk results are present", "treating all abnormal results the same way", "failing to risk-stratify HPV/cytology combinations", "screening decisions depend on current result plus history and risk", "cancer delay, overtreatment, anxiety, and loss to follow-up"),
+];
+
+const WHNP_PRIORITY_DOMAINS = [
+  ...WHNP_OVERLAY_DOMAINS,
+  ...PRIORITY_DOMAINS.filter((domain) => WHNP_PRIORITY_DOMAIN_IDS.has(domain.id)),
 ];
 
 function readNumberFlag(name: string, fallback: number): number {
@@ -124,19 +153,22 @@ function loadLessons(): CatalogLesson[] {
   const raw = JSON.parse(readFileSync(LESSON_CATALOG, "utf8")) as {
     pathways?: Record<string, CatalogLesson[] | { lessons?: CatalogLesson[] }>;
   };
-  const entry = raw.pathways?.[PATHWAY_ID];
-  const lessons = Array.isArray(entry) ? entry : entry?.lessons ?? [];
-  if (lessons.length === 0) throw new Error(`No ${PATHWAY_ID} lessons found in ${LESSON_CATALOG}`);
+  const entry = raw.pathways?.[SOURCE_LESSON_PATHWAY_ID];
+  const lessons = (Array.isArray(entry) ? entry : entry?.lessons ?? []).filter((lesson) => {
+    const text = `${lesson.title} ${lesson.topic ?? ""} ${lesson.topicSlug ?? ""} ${lesson.bodySystem ?? ""}`;
+    return WHNP_INCLUDED_LESSON_RE.test(text);
+  });
+  if (lessons.length === 0) throw new Error(`No reusable ${SOURCE_LESSON_PATHWAY_ID} lessons found for ${PATHWAY_ID} in ${LESSON_CATALOG}`);
   return lessons;
 }
 
 function lessonDomain(lesson: CatalogLesson, index: number): Domain {
   const text = `${lesson.title} ${lesson.topic ?? ""} ${lesson.topicSlug ?? ""} ${lesson.bodySystem ?? ""}`.toLowerCase();
   const direct =
-    PRIORITY_DOMAINS.find((d) => text.includes(d.id.replace(/-/g, " "))) ??
-    PRIORITY_DOMAINS.find((d) => text.includes(d.label.toLowerCase())) ??
-    PRIORITY_DOMAINS.find((d) => text.includes(d.system.toLowerCase()));
-  return direct ?? PRIORITY_DOMAINS[index % PRIORITY_DOMAINS.length]!;
+    WHNP_PRIORITY_DOMAINS.find((d) => text.includes(d.id.replace(/-/g, " "))) ??
+    WHNP_PRIORITY_DOMAINS.find((d) => text.includes(d.label.toLowerCase())) ??
+    WHNP_PRIORITY_DOMAINS.find((d) => text.includes(d.system.toLowerCase()));
+  return direct ?? WHNP_PRIORITY_DOMAINS[index % WHNP_PRIORITY_DOMAINS.length]!;
 }
 
 function lessonSummary(lesson: CatalogLesson): string {
@@ -163,8 +195,8 @@ function difficulty(index: number): number {
 function baseTags(lesson: CatalogLesson, domain: Domain, format: string): string[] {
   return [
     SOURCE,
-    "pathway:us-np-fnp",
-    "exam:FNP",
+    "pathway:us-np-whnp",
+    "exam:WHNP",
     "tier:NP",
     `lesson:${lesson.slug}`,
     `topic:${slug(lesson.topic ?? domain.label)}`,
@@ -184,7 +216,7 @@ function baseTags(lesson: CatalogLesson, domain: Domain, format: string): string
 function teachingRationale(lesson: CatalogLesson, domain: Domain, correct: string): string {
   return [
     `Correct because the NP must integrate diagnostic probability, patient-specific risk, prescribing safety, and follow-up responsibility: ${correct}.`,
-    `Why alternatives are tempting: ${domain.tempting}. The FNP trap is ${domain.trap}.`,
+    `Why alternatives are tempting: ${domain.tempting}. The WHNP trap is ${domain.trap}.`,
     `Clinical cue to recognize: ${domain.cue}. That cue should shift the differential toward ${domain.differential}.`,
     `NP-level reasoning: ${domain.reasoning}.`,
     `Clinical takeaway for ${lesson.title}: choose the plan that confirms the diagnosis when needed, treats current risk, avoids unsafe prescribing, and closes the loop with monitoring.`,
@@ -202,7 +234,7 @@ function optionRationales(optionMap: Record<string, string>, correctLetter: stri
       }
       return [
         letter,
-        `${letter} is incorrect. ${text} is tempting because ${domain.tempting}, but it misses ${domain.cue}, tests the FNP trap of ${domain.trap}, and fails to apply this NP reasoning: ${domain.reasoning}.`,
+        `${letter} is incorrect. ${text} is tempting because ${domain.tempting}, but it misses ${domain.cue}, tests the WHNP trap of ${domain.trap}, and fails to apply this NP reasoning: ${domain.reasoning}.`,
       ];
     }),
   );
@@ -219,9 +251,9 @@ function buildMcq(lesson: CatalogLesson, domain: Domain, localIndex: number, glo
   const optionLetters = letters(4);
   const optionMap = Object.fromEntries(optionLetters.map((letter, idx) => [letter, rotated[idx]!]));
   const correctLetter = optionLetters[rotated.indexOf(correct)]!;
-  const stem = `FNP ${domain.label} item ${localIndex + 1}. A nurse practitioner sees ${domain.presentation} while applying ${lesson.title}. Key cue: ${domain.cue}. Which plan best demonstrates advanced NP clinical reasoning?`;
+  const stem = `WHNP ${domain.label} item ${localIndex + 1}. A nurse practitioner sees ${domain.presentation} while applying ${lesson.title}. Key cue: ${domain.cue}. Which plan best demonstrates advanced NP clinical reasoning?`;
   return questionRow({
-    id: `fnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
+    id: `whnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
     lesson,
     domain,
     stem,
@@ -252,7 +284,7 @@ function buildSata(lesson: CatalogLesson, domain: Domain, localIndex: number, gl
   const optionMap = Object.fromEntries(letters(6).map((letter, idx) => [letter, options[idx]!]));
   const correctLetters = ["A", "B", "C", "D"];
   return questionRow({
-    id: `fnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
+    id: `whnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
     lesson,
     domain,
     stem: `Select all that apply. For ${lesson.title}, which NP actions best address ${domain.presentation} when the cue is ${domain.cue}?`,
@@ -260,7 +292,7 @@ function buildSata(lesson: CatalogLesson, domain: Domain, localIndex: number, gl
     questionFormat: "sata",
     options: letters(6).map((letter) => ({ letter, text: optionMap[letter] })),
     correctAnswer: correctLetters,
-    rationale: `A-D are correct because FNP-level care requires differential diagnosis, targeted diagnostic interpretation, management reasoning, and prescribing safety. E is premature closure. F is low-value testing unless each test changes probability, safety, treatment, or follow-up.`,
+    rationale: `A-D are correct because WHNP-level care requires differential diagnosis, targeted diagnostic interpretation, management reasoning, and prescribing safety. E is premature closure. F is low-value testing unless each test changes probability, safety, treatment, or follow-up.`,
     difficulty: difficulty(globalIndex),
     tags: [...baseTags(lesson, domain, "sata"), "select-all-that-apply"],
     distractorRationales: {
@@ -286,7 +318,7 @@ function buildMatrix(lesson: CatalogLesson, domain: Domain, localIndex: number, 
     { id: "prevention", label: `Average-risk counselling or screening opportunity`, answer: "Preventive care" },
   ];
   return questionRow({
-    id: `fnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
+    id: `whnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
     lesson,
     domain,
     stem: `Matrix. For each finding in this ${lesson.title} encounter, choose the NP reasoning lane.`,
@@ -318,7 +350,7 @@ function buildBowtie(lesson: CatalogLesson, domain: Domain, localIndex: number, 
     { id: "broadtest", label: "Order broad testing that does not change management" },
   ];
   return questionRow({
-    id: `fnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
+    id: `whnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
     lesson,
     domain,
     stem: `Bowtie. Complete the NP reasoning map for ${domain.presentation}. Cue: ${domain.cue}.`,
@@ -360,7 +392,7 @@ function buildOrdered(lesson: CatalogLesson, domain: Domain, localIndex: number,
     `Prescribe and monitor safely: ${domain.prescribingDecision}.`,
   ];
   return questionRow({
-    id: `fnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
+    id: `whnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
     lesson,
     domain,
     stem: `Ordered response. Place the NP clinical reasoning steps in the safest order for ${lesson.title}.`,
@@ -368,7 +400,7 @@ function buildOrdered(lesson: CatalogLesson, domain: Domain, localIndex: number,
     questionFormat: "ordered",
     options: rotate(ordered, 2).map((text, idx) => ({ letter: String.fromCharCode(65 + idx), text })),
     correctAnswer: ordered,
-    rationale: `FNP reasoning moves from differential diagnosis to diagnostic confirmation, management decision, and prescribing/monitoring. The trap is prescribing or reassuring before diagnostic risk is resolved.`,
+    rationale: `WHNP reasoning moves from differential diagnosis to diagnostic confirmation, management decision, and prescribing/monitoring. The trap is prescribing or reassuring before diagnostic risk is resolved.`,
     difficulty: difficulty(globalIndex),
     tags: [...baseTags(lesson, domain, "ordered"), "ordered-response"],
     distractorRationales: {
@@ -395,7 +427,7 @@ function buildDifferential(lesson: CatalogLesson, domain: Domain, localIndex: nu
   const optionMap = Object.fromEntries(optionLetters.map((letter, idx) => [letter, rotated[idx]!]));
   const correctLetter = optionLetters[rotated.indexOf(correct)]!;
   return questionRow({
-    id: `fnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
+    id: `whnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
     lesson,
     domain,
     stem: `Differential diagnosis. In ${lesson.title}, which diagnostic reasoning approach best fits the cue: ${domain.cue}?`,
@@ -427,10 +459,10 @@ function buildClinicalManagement(lesson: CatalogLesson, domain: Domain, localInd
   const optionMap = Object.fromEntries(optionLetters.map((letter, idx) => [letter, rotated[idx]!]));
   const correctLetter = optionLetters[rotated.indexOf(correct)]!;
   return questionRow({
-    id: `fnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
+    id: `whnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
     lesson,
     domain,
-    stem: `Clinical management. Which management plan is safest for ${domain.presentation} in a FNP-style ${lesson.title} encounter?`,
+    stem: `Clinical management. Which management plan is safest for ${domain.presentation} in a WHNP-style ${lesson.title} encounter?`,
     questionType: "MCQ",
     questionFormat: "clinical_management",
     options: optionLetters.map((letter) => ({ letter, text: optionMap[letter] })),
@@ -459,10 +491,10 @@ function buildDiagnosticInterpretation(lesson: CatalogLesson, domain: Domain, lo
   const optionMap = Object.fromEntries(optionLetters.map((letter, idx) => [letter, rotated[idx]!]));
   const correctLetter = optionLetters[rotated.indexOf(correct)]!;
   return questionRow({
-    id: `fnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
+    id: `whnp-${slug(lesson.slug)}-q-${String(localIndex + 1).padStart(3, "0")}`,
     lesson,
     domain,
-    stem: `Diagnostic interpretation. A result is available during ${lesson.title}. Which interpretation best reflects FNP-level NP reasoning?`,
+    stem: `Diagnostic interpretation. A result is available during ${lesson.title}. Which interpretation best reflects WHNP-level NP reasoning?`,
     questionType: "MCQ",
     questionFormat: "diagnostic_interpretation",
     options: optionLetters.map((letter) => ({ letter, text: optionMap[letter] })),
@@ -496,7 +528,7 @@ function questionRow(input: {
   return {
     id: input.id,
     tier: "NP",
-    exam: "FNP",
+    exam: "WHNP",
     questionType: input.questionType,
     status: "published",
     publishAt: new Date(),
@@ -514,8 +546,8 @@ function questionRow(input: {
     stemHash: hash(input.stem),
     careerType: "nursing",
     scenario: `${input.domain.presentation}. ${lessonSummary(input.lesson)}`,
-    clinicalPearl: `FNP pearl: ${input.domain.cue} should change the differential, diagnostic plan, management plan, prescribing safety check, or follow-up interval.`,
-    examStrategy: "For FNP, avoid RN-level recall. Identify the differential, interpret targeted data, prescribe safely, and decide whether outpatient management is safe.",
+    clinicalPearl: `WHNP pearl: ${input.domain.cue} should change the differential, diagnostic plan, management plan, prescribing safety check, or follow-up interval.`,
+    examStrategy: "For WHNP, avoid RN-level recall. Identify the differential, interpret targeted data, prescribe safely, and decide whether outpatient management is safe.",
     memoryHook: "Differentiate -> test with purpose -> manage by risk -> prescribe safely -> close follow-up.",
     frameworkUsed: "Advanced NP clinical reasoning: differential diagnosis, diagnostic interpretation, management reasoning, prescribing safety, preventive care, and professional accountability.",
     clinicalTrap: input.domain.trap,
@@ -524,7 +556,7 @@ function questionRow(input: {
     qualityScore: 95,
     countryCode: "US",
     regionCode: "US",
-    licensingBody: "ANCC / AANP Family NP",
+    licensingBody: "Women's Health Nurse Practitioner",
     languageCode: "en",
     cognitiveLevel: input.questionFormat === "mcq" ? "analyze" : "evaluate",
     questionFormat: input.questionFormat,
@@ -539,7 +571,7 @@ function questionRow(input: {
     clinicalReasoning: `The NP must connect ${input.domain.cue} to ${input.domain.differential}, choose ${input.domain.diagnosticPlan}, manage with ${input.domain.managementPlan}, and prescribe with ${input.domain.prescribingDecision}.`,
     keyTakeaway: `For ${input.lesson.title}, the safest answer is the one that changes diagnosis, management, prescribing safety, or follow-up in response to the cue.`,
     mnemonic: "Dx, Data, Decision, Drug safety, Disposition",
-    referenceSource: "NurseNest FNP lesson-derived launch readiness sprint",
+    referenceSource: "NurseNest WHNP lesson-derived launch readiness sprint",
     blueprintWeight: input.adaptiveEligible ? 1.1 : 0.7,
     nclexClientNeedsCategory: input.domain.blueprint,
     nclexClientNeedsSubcategory: input.domain.weakArea.slice(0, 128),
@@ -581,7 +613,7 @@ function buildQuestions(lessons: CatalogLesson[]): QuestionRow[] {
   let extra = 0;
   while (rows.length < QUESTION_TARGET) {
     const lesson = lessons[extra % lessons.length]!;
-    const domain = PRIORITY_DOMAINS[extra % PRIORITY_DOMAINS.length]!;
+    const domain = WHNP_PRIORITY_DOMAINS[extra % WHNP_PRIORITY_DOMAINS.length]!;
     rows.push(buildQuestionByType(lesson, domain, QUESTIONS_PER_LESSON + extra, rows.length));
     extra++;
   }
@@ -598,7 +630,7 @@ function buildFlashcards(lessons: CatalogLesson[], categoryId: string, deckId: s
   let extra = 0;
   while (rows.length < FLASHCARD_TARGET) {
     const lesson = lessons[extra % lessons.length]!;
-    const domain = PRIORITY_DOMAINS[extra % PRIORITY_DOMAINS.length]!;
+    const domain = WHNP_PRIORITY_DOMAINS[extra % WHNP_PRIORITY_DOMAINS.length]!;
     rows.push(flashcardRow(lesson, domain, rows.length, categoryId, deckId, `extra:${String(extra + 1).padStart(5, "0")}`));
     extra++;
   }
@@ -610,8 +642,8 @@ function flashcardRow(lesson: CatalogLesson, domain: Domain, index: number, cate
   const mode = modes[index % modes.length]!;
   const front =
     mode === "case"
-      ? `FNP case: In ${lesson.title}, how should the NP reason through ${domain.presentation} when the cue is ${domain.cue}?`
-      : `FNP ${mode}: What is the key NP-level decision in ${lesson.title} when ${domain.cue} is present?`;
+      ? `WHNP case: In ${lesson.title}, how should the NP reason through ${domain.presentation} when the cue is ${domain.cue}?`
+      : `WHNP ${mode}: What is the key NP-level decision in ${lesson.title} when ${domain.cue} is present?`;
   const back = [
     `Core answer: consider ${domain.differential}; use ${domain.diagnosticPlan}; manage with ${domain.managementPlan}; prescribe with ${domain.prescribingDecision}.`,
     `Difficulty: ${difficulty(index)}.`,
@@ -624,7 +656,7 @@ function flashcardRow(lesson: CatalogLesson, domain: Domain, index: number, cate
     `Clinical application example: In clinic, pause routine treatment, confirm the leading and cannot-miss diagnoses, choose targeted testing, select safe therapy, and arrange measurable follow-up.`,
   ].join("\n\n");
   return {
-    id: `fnp-fc-${String(index + 1).padStart(5, "0")}`,
+    id: `whnp-fc-${String(index + 1).padStart(5, "0")}`,
     front,
     back,
     country: CountryCode.US,
@@ -635,7 +667,7 @@ function flashcardRow(lesson: CatalogLesson, domain: Domain, index: number, cate
     lessonId: lesson.slug,
     deckId,
     positionInDeck: index + 1,
-    sourceKey: `fnp:flashcard:${sourceSuffix}`,
+    sourceKey: `whnp:flashcard:${sourceSuffix}`,
     examItemKind: null,
   };
 }
@@ -660,14 +692,14 @@ async function createPracticeExams(
 ): Promise<void> {
   for (let i = 1; i <= EXAM_TARGET; i++) {
     const padded = String(i).padStart(3, "0");
-    const examId = `exam_fnp_launch_${padded}`;
-    const tag = `exam-preset-fnp-launch-${padded}`;
+    const examId = `exam_whnp_launch_${padded}`;
+    const tag = `exam-preset-whnp-launch-${padded}`;
     await prisma.exam.upsert({
       where: { id: examId },
-      update: { title: `FNP Blueprint Practice Exam ${i}`, status: ContentStatus.PUBLISHED },
+      update: { title: `WHNP Blueprint Practice Exam ${i}`, status: ContentStatus.PUBLISHED },
       create: {
         id: examId,
-        title: `FNP Blueprint Practice Exam ${i}`,
+        title: `WHNP Blueprint Practice Exam ${i}`,
         country: CountryCode.US,
         tier: TierCode.NP,
         examFamily: ExamFamily.NP,
@@ -679,8 +711,8 @@ async function createPracticeExams(
       await prisma.$executeRaw`
         UPDATE exam_questions
         SET tags = array_append(tags, ${tag})
-        WHERE id = ANY(${selected}::varchar[])
-          AND NOT (tags @> ARRAY[${tag}]::varchar[])
+        WHERE id = ANY(${selected}::text[])
+          AND NOT (tags @> ARRAY[${tag}]::text[])
       `;
     }
     if (i % 25 === 0) console.log(`Practice exams published: ${i}/${EXAM_TARGET}`);
@@ -705,14 +737,14 @@ async function main(): Promise<void> {
   try {
     const category = await prisma.category.upsert({
       where: { slug: CATEGORY_SLUG },
-      update: { name: "FNP Launch Readiness", topicCode: "fnp-launch-readiness" },
-      create: { slug: CATEGORY_SLUG, name: "FNP Launch Readiness", topicCode: "fnp-launch-readiness" },
+      update: { name: "WHNP Launch Readiness", topicCode: "whnp-launch-readiness" },
+      create: { slug: CATEGORY_SLUG, name: "WHNP Launch Readiness", topicCode: "whnp-launch-readiness" },
     });
     const deck = await prisma.flashcardDeck.upsert({
       where: { slug: DECK_SLUG },
       update: {
-        title: "FNP Advanced NP Clinical Reasoning Deck",
-        description: "Lesson-derived Family NP flashcards focused on differential diagnosis, diagnostics, prescribing, preventive care, professional practice, and clinical management.",
+        title: "WHNP Advanced NP Clinical Reasoning Deck",
+        description: "Lesson-derived Women's Health NP flashcards focused on reproductive health, prenatal care, gynecologic assessment, hormonal management, pharmacology, prevention, and clinical reasoning.",
         country: CountryCode.US,
         tier: TierCode.NP,
         examFamily: ExamFamily.NP,
@@ -722,8 +754,8 @@ async function main(): Promise<void> {
       },
       create: {
         slug: DECK_SLUG,
-        title: "FNP Advanced NP Clinical Reasoning Deck",
-        description: "Lesson-derived Family NP flashcards focused on differential diagnosis, diagnostics, prescribing, preventive care, professional practice, and clinical management.",
+        title: "WHNP Advanced NP Clinical Reasoning Deck",
+        description: "Lesson-derived Women's Health NP flashcards focused on reproductive health, prenatal care, gynecologic assessment, hormonal management, pharmacology, prevention, and clinical reasoning.",
         country: CountryCode.US,
         tier: TierCode.NP,
         examFamily: ExamFamily.NP,
@@ -733,14 +765,14 @@ async function main(): Promise<void> {
       },
     });
 
-    console.log(`Publishing ${questions.length} FNP questions...`);
+    console.log(`Publishing ${questions.length} WHNP questions...`);
     for (const batch of chunk(questions, 250)) {
       await prisma.examQuestion.createMany({ data: batch, skipDuplicates: true });
     }
 
     const flashcards = buildFlashcards(lessons, category.id, deck.id);
     if (flashcards.length < FLASHCARD_TARGET) throw new Error(`Flashcard target not met: ${flashcards.length}/${FLASHCARD_TARGET}`);
-    console.log(`Publishing ${flashcards.length} FNP flashcards...`);
+    console.log(`Publishing ${flashcards.length} WHNP flashcards...`);
     for (const batch of chunk(flashcards, 250)) {
       await prisma.flashcard.createMany({ data: batch, skipDuplicates: true });
     }
@@ -752,7 +784,7 @@ async function main(): Promise<void> {
     const pool = await prisma.examQuestion.findMany({
       where: {
         status: { in: ["published", "PUBLISHED"] },
-        exam: { in: ["FNP", "AANP", "AANP-FNP", "ANCC-FNP", "NP-FNP", "NP"] },
+        exam: { in: ["WHNP", "NP-WHNP", "Womens-Health-NP", "NP"] },
         tier: { equals: "NP", mode: "insensitive" },
         countryCode: "US",
         isAdaptiveEligible: true,
@@ -763,7 +795,7 @@ async function main(): Promise<void> {
     if (pool.length < CAT_TARGET) throw new Error(`Published adaptive/CAT pool below target: ${pool.length}/${CAT_TARGET}`);
 
     await createPracticeExams(prisma, pool);
-    console.log(`FNP launch readiness content published: questions=${questions.length}, flashcards=${flashcards.length}, adaptivePool=${pool.length}, practiceExams=${EXAM_TARGET}`);
+    console.log(`WHNP launch readiness content published: questions=${questions.length}, flashcards=${flashcards.length}, adaptivePool=${pool.length}, practiceExams=${EXAM_TARGET}`);
   } finally {
     await prisma.$disconnect();
   }

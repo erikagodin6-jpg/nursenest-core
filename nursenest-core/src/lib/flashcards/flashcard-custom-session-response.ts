@@ -360,7 +360,7 @@ export function parseFlashcardInventoryResponse(
     revisitOnly: false,
     notStudiedOnly: false,
     cardLimit: "20",
-    lessonVirtualDiagnostics: undefined,
+    lessonVirtualDiagnostics: parseLessonVirtualDiagnostics(o.lessonVirtualDiagnostics),
     poolInventoryDiagnostics,
   };
 

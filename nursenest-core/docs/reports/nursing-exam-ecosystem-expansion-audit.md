@@ -1,8 +1,8 @@
 # Nursing Exam Ecosystem Expansion Audit
 
-Generated: 2026-05-31T20:08:01.464Z
+Generated: 2026-06-01T22:37:14.555Z
 Inventory source: unavailable
-Database status: Database connection failed before inventory counts could be measured.
+Database status:  Invalid `prisma.examQuestion.count()` invocation in /root/nursenest-core/nursenest-core/scripts/audit-nursing-exam-ecosystem.mts:72:27 69 70 const [publishedQuestions, activeQuestions, visibleQuestions, publishedLessons, publishedFlashcard
 
 ## Publication Rule
 

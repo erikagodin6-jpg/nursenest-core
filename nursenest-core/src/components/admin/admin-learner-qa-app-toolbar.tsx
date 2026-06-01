@@ -3,17 +3,18 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import type { AdminLearnerQaPublicState } from "@/lib/admin/admin-learner-qa-simulation";
+import type { AdminLearnerQaLifecycle, AdminLearnerQaPublicState } from "@/lib/admin/admin-learner-qa-simulation";
 import { adminLearnerQaMobilePreviewHref } from "@/lib/admin/admin-learner-qa-mobile-preview";
 
 const TRACKS = ["RN", "RPN", "LVN_LPN", "NP", "ALLIED", "NEW_GRAD", "PRE_NURSING"] as const;
-const LIFECYCLES = ["paid_active", "none", "expired", "trial"] as const;
+const LIFECYCLES: AdminLearnerQaLifecycle[] = ["paid_active", "none", "expired", "trial"];
 const NP_SPECIALTIES = ["FNP", "AGPCNP", "PMHNP", "WHNP", "PNP_PC"] as const;
 const ALLIED_CAREERS = ["paramedic", "rrt", "mlt", "imaging", "ota_pta", "pharmtech", "socialwork"] as const;
 
 type Track = (typeof TRACKS)[number];
 type NpSpec = (typeof NP_SPECIALTIES)[number];
 type Allied = (typeof ALLIED_CAREERS)[number];
+type Lifecycle = AdminLearnerQaLifecycle;
 
 const MOBILE_W = 390;
 
@@ -36,7 +37,7 @@ export function AdminLearnerQaAppToolbar(props: {
   const [err, setErr] = useState<string | null>(null);
   const [state, setState] = useState(initialPublicState);
   const [track, setTrack] = useState<Track>(initialPublicState.track);
-  const [lifecycle, setLifecycle] = useState<(typeof LIFECYCLES)[number]>(initialPublicState.lifecycle);
+  const [lifecycle, setLifecycle] = useState<Lifecycle>(initialPublicState.lifecycle);
   const [country, setCountry] = useState<"US" | "CA">(initialPublicState.country);
   const [npSpecialty, setNpSpecialty] = useState<NpSpec>(initialPublicState.npSpecialty ?? "FNP");
   const [alliedCareer, setAlliedCareer] = useState<Allied>((initialPublicState.alliedCareer as Allied) ?? "paramedic");
@@ -89,7 +90,7 @@ export function AdminLearnerQaAppToolbar(props: {
 
   async function applyPreset(preset: {
     track: Track;
-    lifecycle: (typeof LIFECYCLES)[number];
+    lifecycle: Lifecycle;
     country: "US" | "CA";
     npSpecialty?: NpSpec;
     alliedCareer?: Allied;
@@ -167,29 +168,41 @@ export function AdminLearnerQaAppToolbar(props: {
   return (
     <div
       role="region"
-      aria-label="View as learner (admin simulation)"
+      aria-label="Admin: viewing as customer"
       data-testid="admin-view-as-toolbar"
-      className="mb-2 space-y-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_12%,var(--semantic-surface))] px-3 py-2.5 text-sm text-[var(--semantic-text-primary)] shadow-sm sm:px-4"
+      className="mb-2 space-y-2 rounded-lg border-2 border-amber-400 bg-amber-50 px-3 py-2.5 text-sm text-amber-900 shadow-sm dark:border-amber-500 dark:bg-amber-950/40 dark:text-amber-100 sm:px-4"
     >
-      <div className="flex flex-wrap items-start justify-between gap-2">
-        <div className="min-w-0 flex-1">
-          <span className="nn-badge-semantic-warning mr-2 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
-            View as learner
+      {/* ── Primary VIEWING AS banner ───────────────────────────────────────── */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          <span className="shrink-0 rounded-full bg-amber-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-white">
+            VIEWING AS USER
           </span>
-          <p className="mt-1 font-semibold leading-snug">{bannerTitle}</p>
-          <p className="mt-0.5 text-xs text-muted-foreground">
-            Simulated: <strong>{trackLabel(state.track)}</strong> · {state.lifecycle.replace(/_/g, " ")} · {state.country}
+          <p className="min-w-0 truncate font-semibold leading-snug">
+            {bannerTitle}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => void exit()}
-          disabled={busy}
-          className="shrink-0 rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 text-xs font-semibold hover:bg-[var(--surface-interactive-hover)] disabled:opacity-50"
-        >
-          {busy ? "…" : "Exit simulation"}
-        </button>
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <Link
+            href="/admin/view-as-customer"
+            className="rounded-md border border-amber-400 bg-white px-3 py-1.5 text-xs font-semibold text-amber-900 hover:bg-amber-50 dark:bg-amber-900/30 dark:text-amber-200 dark:hover:bg-amber-900/50"
+          >
+            ← Return To Admin
+          </Link>
+          <button
+            type="button"
+            onClick={() => void exit()}
+            disabled={busy}
+            className="rounded-md border border-amber-300 bg-amber-100 px-3 py-1.5 text-xs font-semibold text-amber-900 hover:bg-amber-200 disabled:opacity-50 dark:border-amber-600 dark:bg-amber-900/20 dark:text-amber-200"
+          >
+            {busy ? "…" : "Stop Viewing"}
+          </button>
+        </div>
       </div>
+      <p className="text-xs text-amber-700 dark:text-amber-400">
+        Simulated: <strong>{trackLabel(state.track)}</strong> · {state.lifecycle.replace(/_/g, " ")} · {state.country}
+        {" · "}No writes performed as this user · All actions audited
+      </p>
       <div className="flex flex-wrap gap-1.5 border-t border-[color-mix(in_srgb,var(--semantic-warning)_22%,transparent)] pt-2">
         <button type="button" disabled={busy} onClick={() => void applyPreset({ track: "RN", lifecycle: "none", country: "US" })} className={presetClass}>
           View As RN Free User
@@ -262,7 +275,7 @@ export function AdminLearnerQaAppToolbar(props: {
           <select
             className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-1.5 text-xs font-medium"
             value={lifecycle}
-            onChange={(e) => setLifecycle(e.target.value as (typeof LIFECYCLES)[number])}
+            onChange={(e) => setLifecycle(e.target.value as Lifecycle)}
           >
             <option value="paid_active">Paid active</option>
             <option value="trial">Trial</option>
@@ -290,13 +303,17 @@ export function AdminLearnerQaAppToolbar(props: {
           {busy ? "…" : "Apply"}
         </button>
       </div>
-      <p className="text-xs text-muted-foreground">
-        <Link className="font-semibold text-primary underline" href="/admin/learner-qa">
-          Full presets and tools
+      <p className="text-xs text-amber-700 dark:text-amber-400">
+        <Link className="font-semibold underline hover:opacity-80" href="/admin/view-as-customer">
+          View As Customer
         </Link>
         {" · "}
-        <Link className="font-semibold text-primary underline" href={mobileHref}>
-          Mobile frame ({MOBILE_W}px)
+        <Link className="font-semibold underline hover:opacity-80" href="/admin/learner-qa">
+          Full QA tools
+        </Link>
+        {" · "}
+        <Link className="font-semibold underline hover:opacity-80" href={mobileHref}>
+          Mobile preview ({MOBILE_W}px)
         </Link>
       </p>
       {err ? <p className="text-xs text-[var(--semantic-danger)]">{err}</p> : null}

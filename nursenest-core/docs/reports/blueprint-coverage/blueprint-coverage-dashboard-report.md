@@ -1,10 +1,10 @@
 # Blueprint Coverage Dashboard and Content Gap Report
 
-Generated: 2026-05-31T21:30:05.028Z
+Generated: 2026-06-01T22:37:14.548Z
 
 The live database inventory was not audited because the database was unavailable in this environment.
 
-Reason:  Invalid `db.examQuestion.findMany()` invocation in /root/nursenest-core/nursenest-core/scripts/audit-blueprint-coverage-gap-engine.mts:239:21 236 clinicalNursingScenario: { findMany: (args: unknown) => Promise<Array<Record<string, unknown>>> }; 237 }; 238 const [questions, lessons, flashcards, simulations] = await Promise.all([ → 239 db.examQuestion.findMany( Can't reach database server at `HOST:5432` Please make sure your database server is running at `HOST:5432`.
+Reason:  Invalid `db.pathwayLesson.findMany()` invocation in /root/nursenest-core/nursenest-core/scripts/audit-blueprint-coverage-gap-engine.mts:264:22 261 isFlashcardSource: true, 262 }, 263 }), → 264 db.pathwayLesson.findMany( Too many database connections opened: FATAL: remaining connection slots are reserved for roles with the SUPERUSER attribute Prisma Accelerate has built-in connection pooling to prevent such errors: https://pris.ly/client/error-accelerate
 
 Static fallback covers repository-authored RN catalogs, PN CNPLE expansion questions, and CNPLE NP LOFT case steps only.
 

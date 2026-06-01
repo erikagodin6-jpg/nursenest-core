@@ -4,6 +4,10 @@ import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ExamFamily, PracticeTestStatus, Prisma } from "@prisma/client";
 import { z } from "zod";
 import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
+import {
+  setPracticeSessionRecovery,
+  incrementReliabilityCounter,
+} from "@/lib/server/content-cache";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { enforcePracticeTestsListProtection } from "@/lib/http/api-protection";
 import { prisma } from "@/lib/db";
@@ -946,6 +950,14 @@ export async function POST(req: Request) {
           });
         }
 
+        // Cache question IDs for self-healing recovery (20-min TTL, fire-and-forget)
+        void setPracticeSessionRecovery(
+          gate.userId,
+          pathwayIdForCat,
+          d.selectionMode,
+          { questionIds: cat.questionIds, config: row.config, cachedAt: new Date().toISOString() },
+        );
+        void incrementReliabilityCounter("practice", "tier_b");
         return NextResponse.json(
           {
             id: row.id,
@@ -1154,6 +1166,14 @@ export async function POST(req: Request) {
         false,
         { timeoutMs: 500, label: "linear_create_cache_invalidation" },
       );
+      // Cache question IDs for self-healing recovery (20-min TTL, fire-and-forget)
+      void setPracticeSessionRecovery(
+        gate.userId,
+        d.pathwayId?.trim() || null,
+        d.selectionMode,
+        { questionIds: picked.ids, config, cachedAt: new Date().toISOString() },
+      );
+      void incrementReliabilityCounter("practice", "tier_b");
       return NextResponse.json(
         { id: row.id, questionCount: picked.ids.length, config },
         { status: 201 },

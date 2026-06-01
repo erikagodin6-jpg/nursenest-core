@@ -1,919 +1,213 @@
 #!/usr/bin/env python3
-"""
-CNPLE gap closure: injects NP-level (2000+ word) lessons into np-core-catalog.json
-covering: Professional Practice, Health Promotion, Lifespan Care, Maternal Health,
-Pediatrics, Preventive Care, Primary Care Assessment, Chronic Disease Management.
-Topics use canonical LESSON_CATEGORIES so they index correctly for ca-np-cnple.
-"""
+"""CNPLE gap closure: adds Canadian NP-specific lessons to np-core-catalog.json"""
 import json, os
-NP_CORE = os.path.join(os.path.dirname(__file__),
-    "../src/content/pathway-lessons/np-core-catalog.json")
 
-def npsec(id_, kind, heading, body):
-    return {"id": id_, "kind": kind, "heading": heading, "body": body}
-
-LESSONS = [
-
-# ═══════════════════════════════════════════════════════════════════════════
-# PROFESSIONAL PRACTICE — CNPLE (Leadership & Delegation category)
-# ═══════════════════════════════════════════════════════════════════════════
-{
-"slug": "np-ca-cnple-professional-accountability-regulatory",
-"title": "Professional Accountability and the Regulatory Framework for Canadian NPs",
-"topic": "Leadership & Delegation",
-"topicSlug": "professional-accountability",
-"bodySystem": "Leadership & Delegation",
-"previewSectionCount": 2,
-"seoTitle": "NP Professional Accountability and Regulatory Framework — CNPLE Review | NurseNest",
-"seoDescription": "CNPLE exam prep: Canadian NP regulatory framework, provincial College authority, scope of practice, mandatory reporting, fitness to practise, and professional accountability standards for NP Board Certification.",
-"sections": [
-npsec("overview", "introduction", "Overview and Learning Objectives",
-"""This lesson addresses the **Professional Role and Practice** domain of the CNPLE examination, covering the regulatory environment governing nurse practitioner practice in Canada, accountability frameworks, scope of practice decisions, and professional obligations that distinguish NP practice from other regulated health professionals.
-
-**Learning objectives:**
-- Articulate how NP practice is regulated across Canadian jurisdictions
-- Apply the professional accountability framework to clinical practice decisions
-- Distinguish NP scope from that of RNs, physicians, and other regulated health professionals
-- Identify mandatory reporting obligations unique to NP registration
-- Apply professional standards when facing scope boundary, delegation, and consultation decisions
-
-**Canadian regulatory context:** NPs in Canada are regulated by provincial/territorial nursing colleges (e.g., CNO in Ontario, CLPNA in Alberta, BCCNP in BC, CRNNS in Nova Scotia). Each province enacts its own Regulated Health Professions Act or equivalent legislation, conferring on NPs the authority to perform expanded or delegated medical acts — including diagnosing, ordering diagnostics, prescribing, and in some jurisdictions, certifying absence of disease. The CNPLE tests knowledge applicable across Canadian jurisdictions, using nationally-harmonized NP entry-to-practice competencies developed by the Canadian Nurses Association (CNA) and provincial Colleges."""),
-
-npsec("regulatory-framework", "pathophysiology_overview", "The Canadian NP Regulatory Framework",
-"""**Sources of NP regulatory authority:**
-
-1. **Legislation**: Provincial/territorial health professions acts (e.g., Ontario's *Regulated Health Professions Act, 1991*; BC's *Health Professions Act*) establish the regulated profession, its governing college, and the authorized acts.
-
-2. **College bylaws and standards**: The governing College sets registration requirements, entry-to-practice standards, standards of practice, ethics guidelines, and continuing competence requirements. Violation of College standards = professional misconduct.
-
-3. **Entry-to-practice competencies (CNA National Framework)**: Canadian NP entry-to-practice competencies define the minimum expected competency at initial licensure. The CNPLE tests against these competencies. Competency domains include: Health Assessment and Diagnosis, Therapeutic Management, Health Promotion and Prevention, Professional Role and Responsibility.
-
-4. **Employer policies and privileges**: Even if a competency is within provincial NP scope, the NP must also have employer-granted privileges and demonstrated competency for that specific act in that specific setting. Scope authorization → employer privileges → individual competency: all three must be present.
-
-**Designated acts / authorized acts:**
-- **Diagnosing**: NPs can communicate a diagnosis to a patient; this is a controlled act that RNs cannot perform independently
-- **Prescribing**: NPs have prescriptive authority for medications, including controlled substances in all jurisdictions; prescribing privileges vary by jurisdiction and employer
-- **Ordering diagnostics**: NPs can independently order labs, imaging, and other investigations
-- **Performing procedures**: Varies by jurisdiction and demonstrated competency (e.g., suturing, pelvic exam, joint injection, lumbar puncture in some settings)
-
-**Jurisdictional differences the CNPLE tests:**
-- NP title varies: NP (RN Extended Class in Ontario), NP, ACNP (acute care), ANP (adult)
-- Prescriptive authority for controlled substances: federally regulated but provinces can add restrictions
-- Some provinces allow NPs to independently manage certain cases (e.g., uncomplicated primary care) while others require collaborative practice agreements with physicians
-
-**Autonomous vs. collaborative NP practice models:**
-- **Autonomous**: NP manages the full scope of care independently without physician oversight
-- **Collaborative**: NP works in a team with physicians, referring complex cases upward
-- Both models exist in Canada; the NP exercises professional judgment about when to consult regardless of the practice model"""),
-
-npsec("scope-decisions", "clinical_decision_making", "Scope of Practice Decision-Making",
-"""**The NP scope-of-practice decision framework:**
-
-When an NP faces a task or clinical situation and must determine whether it is within scope, the following framework applies (consistent across Canadian regulatory guidance):
-
-1. **Is it authorized by legislation?** Does the provincial act permit NPs to perform this act?
-2. **Is it within the NP's proven competency?** Has the NP received education and training for this specific act? Can they demonstrate proficiency?
-3. **Is it appropriate for this patient in this context?** Even if authorized and competent, is it the right intervention for this specific patient's complexity and setting?
-4. **Has the organization authorized this?** Does the employer's credentialing, privileges, and policy permit this act?
-
-**All four must be "yes" — any single "no" means the NP should not proceed independently.**
-
-**Consultation and referral decision-making:**
-NPs do not work in isolation. Professional accountability includes knowing when to consult and refer:
-- **Urgent consultation**: Acute deterioration, unstable findings, diagnoses outside NP scope, conditions requiring hospitalization
-- **Non-urgent consultation**: Specialist expertise for complex diagnoses, procedures beyond NP training, second opinions
-- **Referral**: Transfer of primary responsibility; document reason, urgency, and patient consent
-- Failure to refer when clinically indicated = professional accountability concern (potential negligence)
-
-**Prescribing within scope:**
-- NPs must prescribe based on evidence-based guidelines, within authorized formularies, and with documented clinical rationale
-- Off-label prescribing: permitted when evidence supports it, but requires documented informed consent and clinical reasoning
-- Controlled substances: NPs must be registered with federal Drug Enforcement authority (e.g., Health Canada DEA registration in Canada); must follow provincial College and federal *Controlled Drugs and Substances Act* requirements
-- Prescribing delegation: NPs cannot delegate prescriptive authority to unregulated staff
-
-**The professional obligation to remain current:**
-- NPs have a duty of ongoing competence: regular participation in continuing professional development, self-assessment, peer review, and reflective practice
-- Provincial Colleges require annual or biennial renewal demonstrating continuing competence (e.g., CNO Quality Assurance program)
-- An NP practicing a clinical competency not refreshed in several years (e.g., after prolonged absence) must undergo competency reassessment"""),
-
-npsec("mandatory-reporting", "labs_diagnostics", "Mandatory Reporting Obligations",
-"""**NP mandatory reporting requirements in Canada:**
-
-**Reporting to regulatory bodies:**
-- NPs must report concerns about another regulated health professional's fitness to practise if there is reasonable belief of risk to public safety
-- "Fitness to practise" concerns include: substance use disorder affecting practice, serious mental health impairment, incompetence, sexual abuse of a patient
-- Self-reporting: NPs must disclose their own health conditions to their College if the condition may affect safe practice
-
-**Child abuse and protection:**
-- All provinces have child welfare legislation creating a mandatory duty to report
-- Threshold: "reasonable suspicion" or "reasonable grounds to believe" — not certainty
-- NPs report to designated child protection agency (e.g., Children's Aid Society in Ontario, child welfare offices in other provinces)
-- The NP does NOT investigate; the child protection agency investigates
-- Failure to report is a criminal offense (s. 125 *Criminal Code of Canada* for some provinces)
-
-**Adult protection:**
-- Most provinces have vulnerable persons or adult guardianship legislation requiring reporting of abuse/neglect of incapacitated adults
-- Varies significantly by province — NPs must know their provincial legislation
-
-**Communicable disease reporting:**
-- Federally and provincially designated notifiable diseases must be reported to public health authorities
-- Examples: tuberculosis, hepatitis B and C, HIV, gonorrhea, syphilis, Salmonella, Listeria, COVID-19 variants (pandemic context)
-- The NP completes the mandatory reporting form; confidentiality limitations apply only to what is strictly required for public health purposes
-
-**Gunshot and violent injury reporting:**
-- Many provinces require reporting of gunshot wounds, stab wounds from violent incidents, or suspected criminal injuries to police
-- Duty is typically to report the fact of the injury, not to investigate criminal activity
-
-**Deaths:**
-- NPs may be required to notify the Medical Examiner (Coroner) in the case of unexpected, suspicious, unattended, or procedure-related deaths
-- Rules vary by province; NPs must know their local requirements"""),
-
-npsec("professional-conduct", "clinical_pearls", "Professional Conduct, Boundaries, and Ethics",
-"""**Professional boundaries in NP practice:**
-
-**Therapeutic relationship boundaries:**
-- The therapeutic relationship exists for the patient's benefit; the NP must not exploit the power differential
-- Sexual abuse of a patient: any sexual activity with a current or former patient (within specified timeframes per provincial law) = professional misconduct; mandatory College reporting; criminal charges possible
-- Romantic relationships with current patients are prohibited; with former patients, time limits apply (typically 1–2 years minimum post-therapeutic relationship)
-- Accepting gifts: small tokens of appreciation are generally acceptable; high-value gifts that create a sense of obligation are not; use professional judgment
-
-**Boundary crossings vs. violations:**
-- Crossing: a minor deviation from neutral professional role (e.g., sharing a brief personal anecdote to build rapport) — may be therapeutic if patient-centered
-- Violation: a serious breach that exploits the patient or compromises the therapeutic relationship (e.g., sexual contact, financial exploitation, dual relationships)
-
-**Conflict of interest:**
-- NPs must disclose potential conflicts of interest: financial relationships with pharmaceutical companies, ownership of businesses that benefit from NP recommendations, treating immediate family members (generally avoided)
-- Pharmaceutical industry interactions: guided by provincial College and CMA guidelines; gifts >$10 value generally unacceptable; advisory fees require disclosure
-
-**Conscientious objection:**
-- NPs have a right to conscientious objection for procedures/treatments that violate deeply held personal moral beliefs (e.g., assisted death, certain reproductive procedures)
-- The NP MUST: inform the patient, provide a referral to a provider who will not object, ensure continuity of care — conscientious objection does NOT permit abandonment of the patient
-- MAID (Medical Assistance in Dying): NPs can be assessors and providers of MAID in Canada; those who object must refer in a timely manner to a provider willing to assist
-
-**Documentation as professional accountability:**
-- Documentation is a professional and legal obligation, not an optional activity
-- Standards: contemporaneous (timely), accurate, objective, complete, legible (or electronic equivalent)
-- The NP's clinical notes must reflect the reasoning that led to diagnostic and treatment decisions (SOAP or equivalent format)
-- Alterations to records: permissible with "late entry" notation; never by deletion or concealment
-- Retention: governed by provincial health records legislation (typically 10 years for adult records, longer for pediatric)"""),
-
-npsec("patient-education", "client_education", "NP Role in Patient Education and Shared Decision-Making",
-"""**The NP's professional role in patient education:**
-
-The NP holds a unique position within the healthcare system as both a diagnostician and an educator. Professional accountability includes ensuring that patients receive accurate, understandable information to make autonomous healthcare decisions.
-
-**Informed consent (expanded for NP practice):**
-- NPs must obtain informed consent for procedures, investigations, and treatments they initiate
-- Elements: relevant information (diagnosis, nature of proposed treatment, alternatives, risks, benefits), patient comprehension, voluntary decision
-- Capacity assessment: the NP assesses whether the patient has decision-making capacity; if not, a substitute decision-maker must be identified per provincial law
-- Advance Care Planning (ACP): NPs play a key role in ACP discussions, especially in primary care and long-term care; goals-of-care documentation
-- Documentation of informed consent: content discussed, patient questions and answers, patient decision
-
-**Shared decision-making (SDM) in NP practice:**
-- SDM combines clinical expertise with patient values and preferences
-- NPs use evidence-based tools (decision aids) when available
-- SDM is especially important for: cancer screening decisions with uncertain benefit, MAID, intensive vs. comfort-focused care in chronic illness
-- SDM is not the same as "patient decides everything" — the NP provides expert guidance while respecting autonomy
-
-**Health literacy:**
-- Up to 60% of Canadian adults have limited health literacy
-- NPs adapt communication: plain language (grade 6–8), teach-back method, culturally appropriate materials
-- Interpreters: professional medical interpreters required for critical health information; family members are not appropriate for consent discussions or complex medical teaching"""),
-
-npsec("canadian-practice-considerations", "case_study", "CNPLE Case Application: Professional Role",
-"""**Scenario 1 — Scope of practice boundary:**
-An NP in a primary care clinic receives a call from a patient requesting a renewal of oxycodone for chronic low back pain. The patient has been stable on this dose for 3 years, previously managed by the previous NP in the practice. The NP is new to the practice and has never met this patient, and has no previous chart access.
-
-**CNPLE decision framework application:**
-- Is this authorized? Yes — NPs in Canada can prescribe opioids (with DEA registration)
-- Is the NP competent? This is the problem — the NP has not assessed the patient and has no established therapeutic relationship or chart access
-- Is it appropriate for this patient? Cannot determine without assessment
-- Has the organization authorized this? Presumably yes, given the NP's practice privilege
-
-**Correct NP action:** The NP cannot renew controlled substance prescriptions for a patient never assessed. Schedule an urgent appointment to: establish the therapeutic relationship, review records once accessible, conduct a comprehensive reassessment of the pain condition, reassess opioid appropriateness per CPS/provincial opioid prescribing guidelines, and document the reasoning. If the patient cannot be seen urgently and is at risk of withdrawal, the NP consults with a colleague or physician.
-
----
-
-**Scenario 2 — Mandatory reporting:**
-An NP in a family practice treats a 67-year-old patient for a bruised arm. The patient attributes it to "bumping into the door." Examination reveals multiple healing bruises in different stages, the patient seems nervous and avoids eye contact when the adult daughter (who accompanied the patient) is in the room.
-
-**CNPLE decision framework application:**
-- Reasonable suspicion of elder abuse/financial exploitation
-- The NP is mandated to report to the appropriate provincial adult protective services
-- The NP must conduct part of the visit alone with the patient — ask the daughter to wait outside per standard trauma-informed care approach
-- Document: objective findings (locations, sizes, and approximate stages of bruises), patient affect, your clinical reasoning for the report
-- Do NOT accuse the daughter; do NOT confront the suspected abuser
-- Report to provincial adult protection authority; document the report in the chart"""),
-],
-"studyTakeaways": [
-    "NPs require authorization by legislation, demonstrated competency, clinical appropriateness, AND organizational privilege for every practice act",
-    "Mandatory reporting obligations include child abuse, vulnerable adult abuse, communicable diseases, and fitness-to-practise concerns about colleagues",
-    "Conscientious objection is a right but requires referral to ensure patient care continuity — it does not permit patient abandonment",
-    "Documentation is a professional accountability obligation: contemporaneous, accurate, objective, and reflecting clinical reasoning",
-    "Informed consent requires NP assessment of capacity, full disclosure, comprehension, and voluntariness — family members cannot consent for a capable adult"
-],
-"studyCommonTraps": [
-    "Confusing authorization by legislation with organizational credentialing — both are required for practice",
-    "Thinking mandatory reporting requires certainty — only reasonable suspicion or reasonable belief is required",
-    "Assuming conscientious objection allows clinical abandonment — the NP must refer in a timely manner regardless",
-    "Prescribing controlled substances for patients never assessed — always requires an established therapeutic relationship and current assessment",
-    "Assuming the same scope of practice rules apply in all provinces — jurisdiction-specific knowledge is CNPLE-tested"
-],
-"memoryAnchor": "CALC: Legislation authorization + Assessed competency + Logical clinical appropriateness + Credentialed by employer — all four required for every NP practice act"
-},
-
-# ═══════════════════════════════════════════════════════════════════════════
-# HEALTH PROMOTION — CNPLE
-# ═══════════════════════════════════════════════════════════════════════════
-{
-"slug": "np-ca-cnple-health-promotion-canadian-framework",
-"title": "Health Promotion and Preventive Care: Canadian NP Framework",
-"topic": "Leadership & Delegation",
-"topicSlug": "health-promotion",
-"bodySystem": "Fundamentals",
-"previewSectionCount": 2,
-"seoTitle": "Health Promotion and Preventive Care for Canadian NPs — CNPLE Exam Review | NurseNest",
-"seoDescription": "CNPLE prep: Canadian Task Force screening guidelines, NACI immunization schedule, upstream health determinants, motivational interviewing, and NP role in health promotion across the lifespan.",
-"sections": [
-npsec("overview", "introduction", "Overview",
-"""**Domain relevance:** Health Promotion and Prevention is one of the four core domains tested in the CNPLE, comprising approximately 12% of the examination. This domain addresses the NP's role in promoting health and preventing disease across the lifespan, applying Canadian-specific guidelines (Canadian Task Force on Preventive Health Care, NACI immunization schedules), and addressing the social determinants of health within a Canadian equity-focused framework.
-
-**Learning objectives:**
-- Apply Canadian Task Force on Preventive Health Care (CTFPHC) screening recommendations
-- Prescribe immunizations according to NACI schedules
-- Identify and address social determinants of health in the clinical encounter
-- Apply principles of motivational interviewing and health behaviour change theory
-- Perform risk-based cancer and chronic disease screening assessments
-- Distinguish Canadian recommendations from US (USPSTF) recommendations where they differ
-
-**Why Canadian recommendations matter on the CNPLE:**
-The CTFPHC uses a different methodology and produces different recommendations than the US USPSTF for several key screenings (e.g., mammography, prostate cancer, colorectal cancer). Canadian NPs must apply Canadian guidelines, not US guidelines, when the CNPLE presents preventive care questions."""),
-
-npsec("canadian-screening", "labs_diagnostics", "Canadian Screening Guidelines (CTFPHC)",
-"""**Canadian Task Force on Preventive Health Care (CTFPHC) — Key Recommendations:**
-
-**Breast cancer screening:**
-- Ages 40–49: routine mammography NOT recommended (insufficient evidence of benefit outweighing harm, including false positives and overdiagnosis); individual discussion may be offered
-- Ages 50–74: mammography every 2–3 years (strong recommendation)
-- Ages ≥75: insufficient evidence; individualized discussion
-- **NOTE:** This differs from US guidelines (USPSTF recommends starting at 40) — Canadian NPs must apply CTFPHC on the CNPLE
-
-**Cervical cancer screening (Pap/HPV testing):**
-- Ages 21–24: no routine screening in most provinces (CTFPHC: insufficient evidence for benefit)
-- Ages 25–69: cervical cytology (Pap) every 3 years, OR HPV co-testing per provincial guidelines
-- HPV primary screening: some provinces transitioning to primary HPV testing every 5 years
-- Ages ≥70: discontinue if negative history (no abnormal Pap in last 10 years)
-
-**Colorectal cancer (CRC) screening:**
-- Ages 50–74: routine CRC screening recommended
-- Options: Fecal occult blood test (FOBT)/fecal immunochemical test (FIT) annually or biennially; flexible sigmoidoscopy q10 years; colonoscopy (not specifically endorsed by CTFPHC as first-line but used per provincial programs)
-- Higher risk (family history, IBD): colonoscopy starting 10 years before youngest affected relative's diagnosis or at age 40
-
-**Lung cancer screening:**
-- High-risk adults 55–74 with ≥30 pack-year smoking history, current smoker or quit <15 years ago: annual low-dose CT (LDCT) — CTFPHC recommends this in this specific high-risk population only
-- NOT routine for all smokers or ex-smokers without meeting these criteria
-
-**Abdominal aortic aneurysm (AAA):**
-- One-time ultrasound for men ≥65 who have ever smoked: recommended
-- Women: insufficient evidence for benefit
-
-**Prostate cancer (PSA):**
-- CTFPHC: recommends AGAINST routine PSA screening in average-risk men
-- If patient inquires: shared decision-making discussion about limited evidence for benefit and real harms (overdiagnosis, overtreatment, biopsy complications)
-- Applies to average-risk men; high-risk (strong family history, BRCA2 mutation) may warrant individualized discussion
-
-**Hypertension:**
-- Screen all adults ≥18 with BP measurement at appropriate clinical visits
-- Confirm diagnosis of hypertension with home readings or ambulatory blood pressure monitoring per Hypertension Canada guidelines
-
-**Diabetes:**
-- Screening recommended for high-risk adults (overweight/obese, family history, gestational DM history, etc.) every 3 years
-- Fasting plasma glucose OR HbA1c preferred; 2h OGTT for borderline results"""),
-
-npsec("immunization-naci", "nursing_assessment_interventions", "Immunization: NACI Recommendations",
-"""**National Advisory Committee on Immunization (NACI) — Core Adult Schedule:**
-
-**All adults:**
-- Influenza: annually (all adults; highest priority for >65, pregnant, immunocompromised, healthcare workers, chronic disease)
-- COVID-19: follow current NACI guidance (updated regularly; bivalent booster for high-risk groups)
-- Tetanus/diphtheria/pertussis (Tdap): 1 dose in adulthood if not previously received; Td booster every 10 years thereafter
-- Pneumococcal: PCV13/PCV15/PCV20 and PPV23 — high-risk adults (>65, chronic disease, immunocompromised); schedule varies by product and age
-
-**Age-specific adult immunization:**
-- Ages 50+: zoster (shingles): Shingrix (RZV) 2-dose series preferred over Zostavax (ZVL); not for immunocompromised
-- Ages 60–69 with high risk: pneumococcal boosters per updated NACI guidance
-- Ages ≥65: high-dose or adjuvanted influenza preferred over standard
-
-**Pregnancy:**
-- Influenza: any trimester
-- Tdap: every pregnancy (preferably 27–32 weeks) to maximize neonatal passive immunity against pertussis
-- COVID-19: mRNA vaccines recommended in pregnancy per NACI
-- Live vaccines (MMR, varicella): CONTRAINDICATED in pregnancy
-
-**Immunocompromised patients:**
-- Live vaccines CONTRAINDICATED (varicella, zoster live, MMR, yellow fever, oral typhoid, BCG)
-- Inactivated vaccines may have blunted immune response; may need additional doses or post-vaccination serology
-- Timing: vaccinate BEFORE planned immunosuppression (e.g., before chemotherapy, before transplant)
-
-**Catch-up schedules:**
-- Adults without documented childhood immunization should receive catch-up per NACI guidance
-- Two-dose MMR for unimmunized adults (healthcare workers: 2 doses required)
-- Varicella: 2 doses for adults without prior infection or immunization
-
-**NP prescribing of vaccines:**
-- NPs can prescribe and administer vaccines in all Canadian provinces
-- Documentation: vaccine name, lot number, expiry date, dose, site, any adverse reactions, next due dates"""),
-
-npsec("sdoh", "pathophysiology_overview", "Social Determinants of Health in Canadian Primary Care",
-"""**The social determinants of health (SDOH) framework in Canadian NP practice:**
-
-The CNPLE tests the NP's ability to recognize and address upstream factors that shape health outcomes. The Government of Canada identifies the following key SDOH:
-- Income and income distribution (strongest predictor of health outcomes)
-- Education and literacy
-- Employment and working conditions
-- Social support networks
-- Physical environments (housing, food security)
-- Personal health practices and coping skills
-- Healthy child development
-- Biology and genetic endowment
-- Health services (access)
-- Gender and sex
-- Culture
-- Race/ethnicity
-
-**Structural inequities in Canadian health — CNPLE relevance:**
-
-**Indigenous Peoples' Health:**
-- First Nations, Métis, and Inuit peoples experience significantly higher rates of: diabetes, tuberculosis, mental health crises, suicide, infant mortality, and substance use disorders
-- Root causes: ongoing effects of colonization, residential school trauma, systemic racism in healthcare, loss of land and cultural continuity
-- NP obligations: culturally safe care (examining and addressing own bias), trauma-informed practice, supporting community-led health initiatives, connecting patients with Indigenous health navigators and traditional healing where appropriate
-- The CNPLE specifically tests cultural safety and Indigenous health equity
-
-**Screening for SDOH in clinical practice:**
-NPs use structured tools to assess social needs:
-- PRAPARE (Protocol for Responding to and Assessing Patient Assets, Risks, and Experiences)
-- HARK (Housing, Education, Employment, Resources — Abuse — Risk)
-- Asking directly: "What concerns do you have about paying for basic needs?" "Do you ever have to choose between food and medication?"
-
-**Responding to SDOH findings:**
-- Connect with social work, community health workers, income support navigators
-- Document SDOH findings as part of the health record (not stigmatizing language)
-- Advocate at the system level: policy advocacy is a professional responsibility for Canadian NPs
-- Prescribing alternatives: NPs may provide medical letters supporting income assistance applications, disability claims, social housing eligibility"""),
-
-npsec("behaviour-change", "non_pharmacologic_management", "Health Behaviour Change: Motivational Interviewing",
-"""**Motivational Interviewing (MI) in NP practice:**
-
-**Principles (FRAMES model — adapted):**
-- **Feedback**: Provide personalized, objective feedback about health status (e.g., "Your HbA1c has gone from 7.8% to 9.2% over the past year")
-- **Responsibility**: Affirm that change is the patient's choice and responsibility
-- **Advice**: Offer evidence-based advice when the patient is ready to hear it
-- **Menu of options**: Present multiple strategies and allow the patient to choose
-- **Empathy**: Reflective listening, non-judgmental stance
-- **Self-efficacy**: Affirm the patient's capacity to change
-
-**Stages of change (Prochaska and DiClemente):**
-1. **Pre-contemplation**: Not considering change; does not perceive a problem → NP raises awareness without confrontation
-2. **Contemplation**: Aware of the problem, ambivalent about change → NP explores ambivalence; weighs pros and cons
-3. **Preparation**: Planning to change soon → NP supports concrete planning
-4. **Action**: Actively making change → NP provides support and resources
-5. **Maintenance**: Sustained change >6 months → NP helps prevent relapse
-6. **Relapse**: Return to prior behaviour → normalize relapse as part of the change process; resume from appropriate stage
-
-**Application to smoking cessation (5 A's):**
-- **Ask**: screen at every visit
-- **Advise**: provide clear, strong advice to quit
-- **Assess**: readiness to quit (stage of change)
-- **Assist**: behavioral counseling, pharmacotherapy (NRT, varenicline, bupropion) per patient preference
-- **Arrange**: follow-up, referral to cessation programs (e.g., QuitNow BC, Smokers' Helpline)
-
-**Physical activity counselling:**
-- Canadian Physical Activity Guidelines: 150 min/week moderate-to-vigorous aerobic activity for adults; 2 muscle-strengthening sessions/week
-- Exercise prescription: FITT principle (Frequency, Intensity, Time, Type)
-- Barriers: safety, access, cost, disability — NP addresses systematically
-
-**Alcohol use:**
-- Canada's Guidance on Alcohol and Health (2023): no amount of alcohol is risk-free; lowest risk = 2 or fewer drinks per week; moderate risk = 3–6; high risk = >6
-- AUDIT-C (brief screening tool): 3 questions; score ≥3F/≥4M = positive screen for hazardous drinking
-- Brief intervention for at-risk drinkers: significantly reduces consumption; within NP scope"""),
-
-npsec("clinical-judgment-pearls", "clinical_pearls", "Clinical Judgment Pearls — CNPLE Health Promotion",
-"""**High-yield CNPLE health promotion decision points:**
-
-**Mammography at age 45:**
-- CTFPHC: No routine recommendation in 40–49 age group; individual discussion if patient requests after informed decision-making about uncertain benefit-to-harm ratio
-- Do NOT automatically order mammography for a 45-year-old without individualized discussion about the CTFPHC's findings on limited net benefit in this age group
-- This contrasts with US USPSTF (now recommends starting at 40 for average risk)
-
-**Cervical screening after age 70:**
-- If patient has had 3 or more negative Pap results in the last 10 years and is at low risk, screening can be stopped at 70 per CTFPHC guidance
-
-**Prostate-specific antigen (PSA):**
-- For average-risk men: shared decision-making discussion; CTFPHC recommends AGAINST routine PSA screening due to overdiagnosis
-- Patient who insists on PSA: provide complete information about harms (overdiagnosis, biopsy complications, anxiety) and limited survival benefit; document shared decision-making
-
-**Zoster vaccine in immunocompromised patient:**
-- Shingrix (RZV): adjuvanted recombinant subunit vaccine — NOT a live vaccine → CAN be given to immunocompromised patients
-- Zostavax (ZVL): live attenuated → CONTRAINDICATED in immunocompromised
-- CNPLE trap: confusing these two; Shingrix is the preferred current vaccine and is safe in immunocompromised
-
-**Tdap in pregnancy:**
-- Give in EVERY pregnancy (not just first), ideally 27–32 weeks
-- Transfers maternal IgG across placenta → neonatal passive protection against pertussis (most vulnerable in first 2 months before DTaP series begins)
-
-**Cultural safety vs. cultural competence:**
-- Cultural competence implies mastering a checklist of facts about cultural groups → insufficient
-- Cultural safety requires examining power dynamics, acknowledging systemic racism, and ensuring the patient defines what is safe and respectful care — this is the CNPLE-required framework, especially for Indigenous health"""
-),
-npsec("common-exam-traps", "related_next_steps", "Common CNPLE Exam Traps — Health Promotion",
-"""**Top exam traps in health promotion questions:**
-
-1. **Applying US USPSTF instead of Canadian CTFPHC** — especially for mammography (US says start at 40, CTFPHC says routine screening starts at 50) and PSA (different recommendations)
-
-2. **Not recognizing that Shingrix can be given to immunocompromised patients** — it's a non-live vaccine; this is a high-frequency NP immunization question
-
-3. **Assuming all alcohol is equally harmful** — Canada's 2023 guidance says no safe amount; some questions may present a patient asking if "1–2 drinks a day is fine" — the correct answer is that this is low-risk but not risk-free, and the trend is toward less
-
-4. **Overlooking mandatory SDOH documentation** — in CNPLE scenarios, identifying SDOH factors (housing insecurity, income) and documenting/addressing them is part of comprehensive NP care, not optional
-
-5. **Applying motivational interviewing techniques to a pre-contemplative patient by giving advice** — MI in pre-contemplation stage is about raising awareness, not providing advice; unsolicited advice activates resistance
-
-6. **Forgetting that Tdap is given in every pregnancy** — a common trap is answering "only in first pregnancy" which is incorrect per NACI
-"""
-)
-],
-"studyTakeaways": [
-    "CTFPHC recommends mammography every 2–3 years for ages 50–74; NOT routine for ages 40–49 (different from US guidelines)",
-    "NACI immunization: Tdap every pregnancy (27–32 weeks), annual flu, Shingrix (RZV) for adults ≥50",
-    "Shingrix is NOT a live vaccine — safe in immunocompromised patients unlike Zostavax",
-    "Canadian 2023 alcohol guidance: no safe amount; 1–2 drinks/week = low risk",
-    "Cultural safety (not just cultural competence) is the CNPLE standard — involves addressing power and systemic racism"
-],
-"studyCommonTraps": [
-    "Using US USPSTF mammography guidelines instead of Canadian CTFPHC on the exam",
-    "Contraindicting Shingrix in immunocompromised — only Zostavax (live) is contraindicated",
-    "Stopping Tdap after first pregnancy — must give with every pregnancy per NACI",
-    "Giving advice to a pre-contemplative patient — MI in this stage uses reflective listening, not advice"
-],
-"memoryAnchor": "CTFPHC: mammography starts at 50 (not 40). NACI: Tdap EVERY pregnancy. Shingrix = non-live = safe in immunocompromised. Canada 2023: no alcohol is safe."
-},
-
-# ═══════════════════════════════════════════════════════════════════════════
-# MATERNAL HEALTH — CNPLE
-# ═══════════════════════════════════════════════════════════════════════════
-{
-"slug": "np-ca-cnple-prenatal-care-obstetric-screening",
-"title": "Prenatal Care and Obstetric Screening for Canadian NPs",
-"topic": "Maternal & Newborn",
-"topicSlug": "prenatal-care",
-"bodySystem": "Maternal & Newborn",
-"previewSectionCount": 2,
-"seoTitle": "Prenatal Care and Obstetric Screening — CNPLE NP Exam Review | NurseNest",
-"seoDescription": "CNPLE prenatal care: first-trimester screening, gestational diabetes screening, preeclampsia assessment, NP role in routine obstetric monitoring, referral thresholds, and Canadian obstetric guidelines.",
-"sections": [
-npsec("overview", "introduction", "Overview",
-"""**CNPLE domain:** Reproductive and Sexual Health. Prenatal care is frequently tested on the CNPLE because it spans assessment, diagnostics, health promotion, risk stratification, and collaborative care — all key NP competencies. Canadian NPs in primary care, community health, and some obstetric settings provide routine prenatal care and must know when to refer to obstetrics.
-
-**Learning objectives:**
-- Perform and interpret first- and second-trimester prenatal screening
-- Identify high-risk obstetric conditions requiring specialist referral
-- Apply Canadian guidelines (SOGC, PHAC) to obstetric screening
-- Screen for gestational diabetes using the Canadian Diabetes Association protocol
-- Assess blood pressure and proteinuria for gestational hypertension and preeclampsia
-- Provide preconception counselling
-
-**NP scope in prenatal care (Canadian context):**
-NPs in most Canadian provinces can provide routine prenatal care for uncomplicated pregnancies; complex obstetric cases should be co-managed with or referred to obstetricians. NPs independently manage: initial prenatal visit, routine monitoring, counselling, ordering standard prenatal screening, prescribing prenatal vitamins and iron, and managing common pregnancy discomforts. Referral triggers are explicitly tested on the CNPLE."""),
-
-npsec("first-trimester", "labs_diagnostics", "First-Trimester Screening and Routine Prenatal Investigations",
-"""**Initial prenatal visit (ideally 8–10 weeks) — standard assessments:**
-
-**History:**
-- Last menstrual period (LMP) → estimated due date (EDD): Naegele's rule (LMP + 7 days − 3 months + 1 year)
-- Gravida/Para status and obstetric history (previous pregnancies, losses, complications)
-- Chronic medical conditions: diabetes, hypertension, thyroid disease, autoimmune conditions
-- Medications: teratogen review; folic acid supplementation initiated ideally pre-conception
-- Substance use: tobacco, alcohol, cannabis, prescribed opioids — screen and address
-- Family history: genetic conditions, chromosomal abnormalities
-- Domestic violence screening: SOGC recommends universal screening using validated tools (HITS, AAS)
-
-**Standard prenatal lab work (SOGC recommendations):**
-- Blood type and Rh factor + antibody screen
-- CBC: anemia is common in pregnancy; Hb <110 g/L at any point requires investigation
-- Rubella serology (immune or susceptible)
-- Varicella serology (if no documented immunity)
-- Hepatitis B surface antigen (HBsAg): positive = risk of neonatal transmission; neonatal prophylaxis required
-- HIV: recommended universal opt-out screening with consent; if positive → HAART to reduce vertical transmission
-- Syphilis serology (VDRL/RPR): mandatory screen in many provinces; treat if positive
-- Gonorrhea and chlamydia: urine NAAT; treat if positive; notify partner(s)
-- Urinalysis + urine culture: asymptomatic bacteriuria in pregnancy treated (risk of pyelonephritis and preterm birth)
-- TSH: hypothyroidism in pregnancy increases miscarriage, preterm birth, intellectual disability risk → treat if abnormal
-- Pap smear (if due)
-
-**First-trimester aneuploidy screening:**
-- Nuchal translucency (NT) ultrasound at 11–14 weeks: measures nuchal fold; increased NT risk for trisomy 21, 18, 13
-- Combined first-trimester screening: NT + maternal serum PAPP-A + free beta-hCG → risk calculation for trisomy 21
-- **Integrated Prenatal Screening (IPS):** First trimester NT + PAPP-A combined with second-trimester quad screen → most sensitive screening approach
-- Positive screen → counselling and offer of diagnostic testing: CVS (10–13 weeks) or amniocentesis (15–18 weeks)
-
-**Cell-free fetal DNA (cffDNA / NIPT):**
-- Analyzes fetal DNA in maternal blood; high sensitivity (>99%) and specificity for trisomy 21, 18, 13, and sex chromosome aneuploidies
-- Not a diagnostic test (false positives/negatives; confined placental mosaicism)
-- In Canada: publicly funded for high-risk pregnancies in most provinces; available privately for average-risk
-- Positive result → confirm with diagnostic testing (amniocentesis) before irreversible decisions"""),
-
-npsec("second-trimester", "signs_symptoms", "Second-Trimester Assessments",
-"""**Anatomy ultrasound (18–22 weeks):**
-- Standard of care in Canada (SOGC recommendation)
-- Assesses fetal anatomy, placental location, amniotic fluid, cervical length
-- Placenta previa: placenta covering or near the internal cervical os → if persistent at 32–36 weeks → scheduled cesarean delivery; no pelvic exams (risk of catastrophic hemorrhage)
-
-**Second-trimester quad screen (15–20 weeks):**
-- AFP, hCG, inhibin-A, estriol
-- Screens for: trisomy 21 (Down syndrome), trisomy 18, neural tube defects (NTD)
-- Elevated AFP: neural tube defect, abdominal wall defect, multiple gestation, underestimated gestational age; offer detailed fetal anatomy ultrasound
-
-**Gestational diabetes (GDM) screening:**
-Canadian Diabetes Association (Diabetes Canada) approach:
-- Universal screening: 1-hour 50g Glucose Challenge Test (GCT) at 24–28 weeks for average-risk women
-- GCT ≥7.8 mmol/L → proceed to 2-hour 75g oral glucose tolerance test (OGTT)
-- OGTT diagnostic criteria (CDA): any ONE value:
-  - Fasting ≥5.3 mmol/L
-  - 1-hour ≥10.6 mmol/L
-  - 2-hour ≥9.0 mmol/L
-- GDM management: dietary modification (medical nutrition therapy) first-line; if targets not met → metformin or insulin (metformin is off-label in Canada but widely used); refer to obstetric dietitian and maternal-fetal medicine if severe
-- Risks of GDM: macrosomia, shoulder dystocia, neonatal hypoglycemia, maternal T2DM later (50% within 5 years) → 6-week postpartum 75g OGTT
-
-**High-risk factors requiring early GDM screening (first prenatal visit):**
-- BMI ≥35
-- Prior GDM
-- Prior macrosomic infant (>4000g)
-- Known polycystic ovary syndrome (PCOS)
-- First-degree relative with type 2 diabetes
-- High-risk ethnicity (South Asian, East Asian, Indigenous, Black, Hispanic, Arab)"""),
-
-npsec("hypertension", "assessment-red-flags", "Hypertensive Disorders of Pregnancy",
-"""**Classification (SOGC/ISSHP):**
-
-| Condition | Onset | BP | Proteinuria | Notes |
-|---|---|---|---|---|
-| Chronic hypertension | <20 weeks | ≥140/90 | No | Pre-existing |
-| Gestational hypertension | ≥20 weeks | ≥140/90 | No | De novo; no organ dysfunction |
-| Preeclampsia | ≥20 weeks | ≥140/90 | ≥0.3 g/24h or ≥30 mg/mmol PCR | May have no proteinuria if other severe features |
-| Severe preeclampsia | ≥20 weeks | ≥160/110 | Present ± | Plus: headache, visual changes, epigastric pain, thrombocytopenia, elevated LFTs, AKI |
-| Eclampsia | Any | Variable | Variable | New-onset seizure in preeclamptic patient |
-| HELLP | ≥20 weeks | Variable | Variable | Hemolysis + elevated liver enzymes + low platelets |
-
-**NP assessment at every prenatal visit:**
-- BP: after 10 minutes seated; correct cuff size; both arms initially
-- Urine dipstick: protein; ≥1+ on dipstick → send for PCR or 24-hour urine
-- Symptoms: headache, visual disturbances, epigastric or RUQ pain, edema (especially facial/hand)
-- Fetal movements: report of decreased movements → same-day fetal assessment
-
-**Preeclampsia risk-reduction:**
-- Low-dose aspirin 81 mg daily (initiated <16 weeks, ideally <12 weeks) for patients with ≥1 high-risk factor (chronic hypertension, prior preeclampsia, multifetal gestation, DM, renal disease, autoimmune conditions)
-- Calcium supplementation (if dietary calcium <600 mg/day)
-- SOGC recommends aspirin for NPs to prescribe in high-risk pregnancies in primary care
-
-**Referral thresholds for NP in obstetric care:**
-- ANY BP ≥140/90 first detected in pregnancy after 20 weeks → refer to obstetrics within 24–48 hours or same day if severe features
-- Preeclampsia signs/symptoms → URGENT obstetric referral
-- Maternal serum AFP >2.5 MoM unexplained → refer for detailed ultrasound and MFM consultation
-- GDM not meeting targets on diet → collaborative management with endocrinology or MFM
-- Placenta previa confirmed at 32 weeks → transfer to obstetric care"""),
-
-npsec("pharmacologic-management", "pharmacology", "Pharmacology in Pregnancy",
-"""**Folic acid and vitamins:**
-- Folic acid: 0.4–1 mg/day pre-conceptionally and through first 12 weeks → prevents neural tube defects
-- High-dose folic acid (4–5 mg/day): for women with prior NTD pregnancy, on anti-folate medications (methotrexate, phenytoin), or with diabetes/obesity
-- Prenatal multivitamin: contains folic acid, iron, calcium; NPs prescribe at initial visit
-- Vitamin D: SOGC recommends supplementation for all pregnant women; 1000–2000 IU/day routinely
-
-**Iron:**
-- Iron-deficiency anemia: supplement with 30–60 mg elemental iron daily (prophylactic); increase to 100–200 mg/day if anemia present
-- IV iron: for severe anemia not responding to oral; requires specialist co-management
-
-**Nausea and vomiting:**
-- First-line: ginger, dietary modification, acupressure (non-pharmacologic)
-- Pharmacologic: Diclectin (doxylamine/pyridoxine) — approved in Canada; safe in pregnancy
-- If Diclectin fails: promethazine, metoclopramide, ondansetron (use with caution — limited data in first trimester); IV fluids for hyperemesis gravidarum
-
-**Medications to AVOID in pregnancy (CNPLE-tested):**
-- ACE inhibitors / ARBs: fetal renal agenesis, oligohydramnios
-- Statins: teratogenic; stop pre-conception or as soon as pregnancy confirmed
-- Tetracyclines: tooth discoloration, bone growth impairment (avoid in second/third trimester)
-- NSAIDs: premature closure of ductus arteriosus (especially after 32 weeks); renal effects; avoid in third trimester
-- Warfarin: embryopathy (first trimester); intracranial fetal hemorrhage; use LMWH instead in pregnancy
-- Fluoroquinolones: cartilage damage (avoid in pregnancy and breastfeeding)
-- Methotrexate, thalidomide, isotretinoin: highly teratogenic; strict contraception required
-
-**Vaccinations in pregnancy:**
-- SAFE: Influenza (inactivated), Tdap (each pregnancy), COVID-19 mRNA, hepatitis A/B (inactivated)
-- CONTRAINDICATED: MMR, varicella, zoster (live vaccines), yellow fever (live; relative contraindication — if travel unavoidable, risk-benefit discussion)"""),
-
-npsec("canadian-practice-considerations", "clinical_pearls", "Canadian Practice Pearls — Prenatal Care",
-"""**Key CNPLE clinical pearls for prenatal care:**
-
-**Rh negative mothers:**
-- All Rh-negative pregnant women → Rho(D) immune globulin (RhIG/WinRho) 300 mcg IM:
-  - At 28 weeks
-  - Within 72 hours of delivery (if neonate is Rh-positive)
-  - After any bleeding episode, miscarriage, ectopic pregnancy, CVS, or amniocentesis
-- Failure to give RhIG risks sensitization → hemolytic disease of the newborn in subsequent pregnancies
-
-**Group B Streptococcus (GBS) screening:**
-- Universal vaginal-rectal swab at 35–37 weeks
-- GBS-positive → IV ampicillin (or penicillin) during labor
-- GBS-negative but had prior GBS-positive baby → treat in labor regardless
-
-**Domestic violence universal screening:**
-- SOGC: screen all pregnant patients for intimate partner violence at least once per trimester
-- Use validated tools (HITS: Hurt, Insult, Threaten, Scream; AAS: Abuse Assessment Screen)
-- Safety planning, social work referral, document in chart with patient consent for disclosure
-
-**Cannabis use in pregnancy:**
-- No safe level of cannabis exposure in pregnancy — associated with intrauterine growth restriction, preterm birth, neonatal neurodevelopmental effects
-- NPs advise cessation; support through counselling and smoking cessation programs
-- Screen all patients at intake; non-judgmental approach — shame reduces disclosure and care access
-
-**NP versus obstetrician scope:**
-- The CNPLE tests the NP's ability to manage uncomplicated prenatal care AND to recognize when consultation or transfer to obstetrics is required
-- Always refer when: hypertensive disorders, multifetal gestation, suspected placenta previa, unexplained fetal growth restriction, prior preterm birth <34 weeks, fetal anomaly on ultrasound"""),
-
-npsec("referral-thresholds", "related_next_steps", "Referral Thresholds and Collaborative Care",
-"""**NP mandatory referral triggers in prenatal care:**
-
-| Finding | Action | Urgency |
-|---|---|---|
-| BP ≥140/90 first detected post-20 weeks | Obstetrics referral; consider same-day if ≥160/110 | Urgent/emergent |
-| Preeclampsia features (headache, visual changes, RUQ pain, thrombocytopenia) | STAT obstetric referral; 911 for severe | Emergency |
-| GDM not meeting dietary targets | MFM or endocrinology consult | Semi-urgent |
-| Placenta previa confirmed at 32 weeks | Transfer to obstetric care | Planned |
-| Absent or reversed fetal umbilical Doppler | MFM same-day | Urgent |
-| Decreased fetal movements | Same-day fetal assessment (NST, BPP) | Same day |
-| Suspected IUGR (abdominal circumference <10th centile) | Obstetric/MFM consultation | Within 1 week |
-| Maternal age ≥40 | Co-managed with obstetrics | Planned |
-| Multiple gestation (twins, triplets) | Obstetric co-management | Planned |
-| Positive GBS culture with allergy to penicillin | Discuss alternative prophylaxis with obstetrics | Planned |
-| Suspected fetal anomaly on anatomy ultrasound | MFM referral for targeted anatomy scan | Urgent |
-"""
-)
-],
-"studyTakeaways": [
-    "Prenatal GDM: 50g GCT at 24–28 weeks; OGTT diagnostic thresholds: fasting ≥5.3, 1h ≥10.6, 2h ≥9.0 mmol/L (CDA)",
-    "RhIG 300 mcg IM at 28 weeks AND within 72h of delivery for all Rh-negative mothers",
-    "GBS screen at 35–37 weeks; treat GBS-positive with IV penicillin in labour",
-    "Aspirin 81 mg daily (start <16 weeks) for preeclampsia prevention in high-risk pregnancies",
-    "Avoid in pregnancy: ACE inhibitors, ARBs, warfarin, statins, NSAIDs in third trimester, tetracyclines, fluoroquinolones"
-],
-"studyCommonTraps": [
-    "Using Warfarin instead of LMWH in pregnancy — warfarin is teratogenic and causes fetal hemorrhage",
-    "Forgetting RhIG after first-trimester miscarriage or bleeding in an Rh-negative patient",
-    "Not starting aspirin for preeclampsia prevention until second trimester — must start before 16 weeks",
-    "Missing GDM diagnostic thresholds — Canadian (CDA) thresholds differ from US (ACOG) thresholds"
-],
-"memoryAnchor": "GDM: 50g GCT → if ≥7.8, do 75g OGTT. Thresholds: 5.3 / 10.6 / 9.0 mmol/L. RhIG: 28 weeks + within 72h delivery. Aspirin: start <16 weeks for high-risk. ACE/ARB/warfarin: NEVER in pregnancy."
-},
-
-# ═══════════════════════════════════════════════════════════════════════════
-# PREVENTIVE CARE — CHRONIC DISEASE MANAGEMENT (CNPLE)
-# ═══════════════════════════════════════════════════════════════════════════
-{
-"slug": "np-ca-cnple-chronic-disease-hypertension-diabetes-mgmt",
-"title": "Chronic Disease Management: Hypertension and Diabetes — Canadian NP Framework",
-"topic": "Fundamentals",
-"topicSlug": "chronic-disease-management-canada",
-"bodySystem": "Cardiovascular",
-"previewSectionCount": 2,
-"seoTitle": "Hypertension and Diabetes Chronic Disease Management — CNPLE NP Exam Review | NurseNest",
-"seoDescription": "CNPLE exam: Hypertension Canada guidelines, Canadian Diabetes Association treatment targets, stepped therapy approach, cardiovascular risk reduction, NP monitoring protocols, and Canadian formulary prescribing for chronic disease management.",
-"sections": [
-npsec("overview", "introduction", "Overview",
-"""**Domain:** Clinical Management (33% of CNPLE). Chronic disease management is the largest component of the CNPLE examination, reflecting the NP's primary care role in managing common conditions across the lifespan. This lesson focuses on hypertension and diabetes — two of the most prevalent and intensively tested chronic diseases in the CNPLE, using Canadian guideline frameworks.
-
-**Learning objectives:**
-- Apply Hypertension Canada treatment guidelines and BP targets
-- Prescribe antihypertensive therapy using Canadian stepped-care approach
-- Initiate and escalate diabetes treatment using CDA/Diabetes Canada algorithms
-- Identify cardiovascular risk modification targets and monitoring intervals
-- Recognize hypertensive urgency/emergency and DKA/HHS requiring immediate escalation
-- Interpret and respond to abnormal monitoring lab results (HbA1c, electrolytes, renal function, lipids)"""),
-
-npsec("hypertension-canada", "labs_diagnostics", "Hypertension Canada: Diagnosis and Treatment",
-"""**Blood pressure measurement (Hypertension Canada):**
-- Automated office BP (AOBP): 3 measurements taken by automated device while patient sits alone → average of last 2; this is the preferred method; AOBP values are approximately 5–10 mmHg lower than conventional office BP
-- 24-hour ambulatory BP monitoring (ABPM): gold standard for confirming white-coat or masked hypertension
-- Home BP monitoring (HBPM): 2 readings morning and evening for 7 days → average of all readings except day 1
-
-**Diagnostic thresholds (Hypertension Canada 2020):**
-- Hypertension confirmed if: conventional office BP ≥160/100 on any one visit, OR office BP ≥140/90 confirmed on repeat visit, OR home/ambulatory BP ≥135/85
-- White-coat hypertension: elevated office BP but normal HBPM/ABPM → follow but generally no pharmacotherapy
-
-**BP treatment targets (Hypertension Canada):**
-- Most adults: <140/90 mmHg (conventional office) or <135/85 (home/ambulatory)
-- High-risk cardiovascular: <130/80 mmHg (those with established CVD, DM, CKD, 10-year CVD risk ≥15%, age ≥75 with high CVD risk)
-
-**Non-pharmacologic management (first-line for stage 1, adjunct for stage 2):**
-- DASH diet: high fruits, vegetables, low-fat dairy, reduced saturated fat → ~5–11 mmHg reduction
-- Sodium restriction: <2,000 mg/day → 4–6 mmHg reduction
-- Regular aerobic exercise: 30–60 min/session, 4–7 days/week → 4–8 mmHg reduction
-- Weight reduction: each kg lost → ~1 mmHg reduction
-- Limit alcohol: ≤2 drinks/day, ≤14/week (men), ≤9/week (women)
-- Smoking cessation: reduces cardiovascular risk substantially
-
-**Pharmacologic first-line agents (Hypertension Canada):**
-For uncomplicated hypertension, all first-line classes are equivalent for CVD outcomes:
-- **Thiazide/thiazide-like diuretics**: chlorthalidone or indapamide preferred over HCTZ (longer duration, better outcomes data)
-- **ACE inhibitors** or **ARBs**: preferred in DM, CKD, proteinuria, post-MI, HFrEF
-- **CCBs (long-acting DHP)**: amlodipine; good for isolated systolic hypertension, elderly, angina
-- **Beta-blockers**: not first-line for uncomplicated HTN in most adults; first-line for: post-MI, HFrEF, tachyarrhythmia, migraine
-
-**Compelling indications (preferred agents by comorbidity):**
-- DM + microalbuminuria: ACE inhibitor or ARB (first-line)
-- Post-MI: ACE inhibitor/ARB + beta-blocker
-- HFrEF: ACE inhibitor/ARB + beta-blocker + spironolactone (proven mortality benefit)
-- CKD + proteinuria: ACE inhibitor or ARB
-- Isolated systolic hypertension in elderly: CCB or thiazide-like
-
-**ACE inhibitor vs. ARB:**
-- ACE inhibitor: produces cough (10–20% of patients — especially East Asian population); if cough → switch to ARB
-- NEVER combine ACE inhibitor with ARB (dual RAAS blockade → hyperkalemia, AKI — contraindicated)"""),
-
-npsec("diabetes-canada", "pharmacologic-management", "Diabetes Canada: Treatment Framework",
-"""**Diagnosis (Diabetes Canada/CDA criteria):**
-- Fasting plasma glucose (FPG) ≥7.0 mmol/L on two separate days
-- 2h OGTT ≥11.1 mmol/L (75g glucose load)
-- Random plasma glucose ≥11.1 mmol/L + classic symptoms
-- HbA1c ≥6.5% (confirmed with second test in asymptomatic patients)
-
-**Prediabetes (impaired fasting glucose / impaired glucose tolerance):**
-- IFG: FPG 6.1–6.9 mmol/L
-- IGT: 2h OGTT 7.8–11.0 mmol/L
-- HbA1c 6.0–6.4% (Diabetes Canada) — note: CTFPHC uses ≥5.7% for prediabetes screening
-- Management: structured lifestyle intervention (150 min/week moderate exercise + medical nutrition therapy); metformin for high-risk
-
-**HbA1c targets (Diabetes Canada 2023):**
-- Most adults: ≤7.0%
-- Frail elderly, hypoglycemia unawareness, limited life expectancy: ≤8.0–8.5%
-- Younger adults, short duration DM, no CVD, low hypoglycemia risk: ≤6.5%
-
-**Glucose monitoring targets:**
-- FPG/pre-meal: 4.0–7.0 mmol/L
-- Post-meal 2h: 5.0–10.0 mmol/L
-
-**Pharmacologic algorithm (Diabetes Canada Type 2 DM):**
-Step 1: **Metformin** — first-line if tolerated and eGFR ≥30; start low (500 mg daily with food), titrate up to 1000 mg BID; monitor creatinine annually; hold for contrast and perioperative
-Step 2: Add second agent based on cardiovascular/renal risk:
-- Established CVD or at high CVD risk: **GLP-1 receptor agonist** (semaglutide, liraglutide) or **SGLT-2 inhibitor** (empagliflozin, canagliflozin) — both reduce MACE and mortality in CVD
-- CKD (eGFR 25–60 or albuminuria): **SGLT-2 inhibitor** (empagliflozin, dapagliflozin) — reduces progression of DKD
-- Preferred for weight loss: GLP-1 RA > SGLT-2 > DPP-4
-- Preferred to avoid hypoglycemia: GLP-1 RA, SGLT-2, DPP-4 (all low hypoglycemia risk)
-Step 3: If HbA1c still not at goal → add third agent or initiate basal insulin
-
-**SGLT-2 inhibitors — CNPLE key points:**
-- Empagliflozin, dapagliflozin, canagliflozin
-- Side effects: genital mycotic infections (most common), UTI, polyuria, Fournier's gangrene (rare), euglycemic DKA
-- **Hold SGLT-2 inhibitors 3–5 days before surgery, major procedures, or prolonged fasting** — risk of DKA
-- Benefit: cardioprotection (reduced MACE), heart failure hospitalization reduction, renal protection (reduced CKD progression)
-
-**GLP-1 receptor agonists — CNPLE key points:**
-- Semaglutide (Ozempic: weekly SQ; Rybelsus: daily oral), liraglutide (Victoza: daily SQ), dulaglutide (Trulicity: weekly SQ)
-- Side effects: GI (nausea, vomiting, diarrhea) common initially — start low, titrate slowly
-- CONTRAINDICATED with personal/family history of medullary thyroid carcinoma or MEN2 syndrome
-- Not recommended with eGFR <30 (most agents); semaglutide has some data at lower GFR
-- Weight loss: 3–15 kg typical; most effective oral: semaglutide
-- Cardiovascular benefit: semaglutide (SUSTAIN-6, PIONEER), liraglutide (LEADER), dulaglutide (REWIND)
-
-**Insulin initiation in type 2 diabetes:**
-- Start: basal insulin (glargine U-100 or U-300, detemir, degludec) at 10 units SQ at bedtime OR 0.1–0.2 units/kg
-- Titrate: increase dose by 2 units every 3 days until fasting BG 4–7 mmol/L
-- If HbA1c still not at goal after basal optimization → add bolus insulin at largest meal (basal-plus approach) or GLP-1 RA (reduce insulin doses with addition)
-- Hypoglycemia: glucose <4.0 mmol/L (mild) → 15g fast carbs + recheck in 15 min (15-15 rule)"""),
-
-npsec("monitoring-followup", "follow-up-monitoring", "Monitoring and Follow-up Protocols",
-"""**Hypertension monitoring (NP practice):**
-- At initiation or dose change: repeat BP in 1–2 months (office or home monitoring)
-- Electrolytes + creatinine: at initiation; 4–8 weeks after ACE/ARB initiation; 4–8 weeks after diuretic start; annually when stable
-- Urine ACR: at initiation; annually (screen for diabetic nephropathy, monitor proteinuria)
-- Potassium monitoring: ACE/ARB or spironolactone + reduced renal function → high hyperkalemia risk; check K⁺ within 1–2 weeks of initiation
-- 12-lead ECG: at baseline; if symptoms of cardiac disease
-- Fundoscopy: not routinely ordered by NP but optometry referral annually in diabetic-hypertensive patients
-- Stable patients at target: every 3–6 months
-
-**Diabetes monitoring (NP practice):**
-- HbA1c: every 3 months if not at target; every 6 months if at target
-- FPG and self-monitoring: per protocol (q1–4h if DKA risk; daily for stable insulin-treated; varied for oral agents)
-- eGFR + creatinine: annually at minimum; more often if reduced (eGFR <60)
-- Urine ACR: annually (diabetic nephropathy screening)
-- Lipid panel: annually or as per cardiovascular risk; target LDL-C <2.0 mmol/L in DM with CVD
-- Blood pressure: every visit
-- Foot examination: annual comprehensive exam (monofilament, pulses, skin inspection, nail care)
-- Ophthalmology: annual dilated fundus exam (first within 5 years of T1DM diagnosis; at T2DM diagnosis)
-- Dental: biannual (periodontal disease worsens glycemic control)
-
-**Red flags requiring acute escalation:**
-- BP ≥180/120 with symptoms (headache, visual changes, confusion): hypertensive emergency → 911
-- BP ≥180/120 without symptoms: hypertensive urgency → acute management, urgent follow-up within 24h
-- DKA: glucose >14 mmol/L + vomiting + ketones + acidosis in T1DM → ER immediately
-- HHS: glucose >20–30 mmol/L + severe dehydration + altered mental status in T2DM → ER
-- Hypoglycemia not responding to treatment: glucagon IM + 911
-- AKI with creatinine doubling: hold metformin, ACE/ARB; assess for dehydration, sepsis, nephrotoxins"""),
-
-npsec("clinical-judgment-pearls", "clinical_pearls", "CNPLE Clinical Judgment Pearls",
-"""**Hypertension Canada vs. JNC/ACC/AHA:**
-- Hypertension Canada (HC) target: <140/90 for most adults (unlike ACC/AHA 2017 which uses <130/80 as universal)
-- HC high-cardiovascular-risk target: <130/80 (consistent with ACC/AHA for this specific subgroup)
-- CNPLE tests Canadian guidelines → apply HC thresholds, not ACC/AHA
-
-**ACE inhibitor + ARB combination:**
-Always WRONG — dual RAAS blockade increases hyperkalemia and AKI risk without additional BP benefit; contraindicated
-
-**SGLT-2 inhibitor perioperative:**
-Stop 3–5 days before surgery/major procedures → prevents euglycemic DKA; must be explicitly held, not just the morning of
-
-**Metformin + contrast:**
-Hold in patients with eGFR <60 or risk of contrast nephropathy → risk of lactic acidosis from reduced renal clearance; restart 48h after procedure if renal function stable
-
-**First-line antihypertensive in a Black Canadian patient:**
-- RC evidence: CCBs and diuretics are more effective than ACE inhibitors/ARBs as monotherapy in Black patients
-- However, if DM or CKD with proteinuria present: ACE inhibitor/ARB is appropriate regardless
-- CNPLE may test awareness of racial variation in response to RAAS-blocking agents
-
-**NP can independently:**
-- Diagnose hypertension and diabetes
-- Initiate and titrate oral antihypertensives and antidiabetic agents
-- Initiate basal insulin in T2DM (with patient education and follow-up plan)
-- Order all relevant monitoring labs
-- Refer when targets not met on maximally tolerated therapy, or complications identified
-
-**NP should consult/refer when:**
-- Resistant hypertension (BP >140/90 on 3 agents including a diuretic)
-- Suspected secondary hypertension (young patient, refractory, electrolyte abnormalities)
-- DKA or HHS
-- Persistent HbA1c >10% despite optimized oral therapy → may need specialist insulin initiation
-- Diabetic nephropathy with eGFR <30 → nephrology referral"""),
-
-npsec("common-exam-traps", "related_next_steps", "Common CNPLE Exam Traps — Chronic Disease",
-"""1. **Using ACC/AHA 2017 target of <130/80 for all adults** → On CNPLE, Hypertension Canada target is <140/90 for most adults; <130/80 reserved for high-risk (CVD, DM, CKD, high 10-year risk)
-
-2. **Combining ACE inhibitor + ARB** → absolutely contraindicated; hyperkalemia + AKI risk
-
-3. **Not holding SGLT-2 inhibitor before surgery** → euglycemic DKA; this is a high-frequency exam trap
-
-4. **Choosing beta-blocker as first-line for uncomplicated hypertension** → not first-line per HC; correct answer is thiazide, CCB, or ACE/ARB for uncomplicated
-
-5. **Using HCTZ instead of chlorthalidone** → Hypertension Canada and CCS prefer chlorthalidone or indapamide over HCTZ (longer duration; better outcomes data)
-
-6. **Starting GLP-1 RA in a patient with medullary thyroid cancer family history** → contraindicated; risk of thyroid C-cell tumors
-
-7. **Forgetting the foot exam in diabetes monitoring** → annual comprehensive foot exam is a quality indicator for NP diabetes care
-
-8. **Treating pre-meal BG of 8.2 mmol/L in a stable elderly patient as a problem** → in an elderly patient with goal HbA1c ≤8%, a pre-meal BG of 8.2 is at target; do NOT escalate therapy in this context
-"""
-)
-],
-"studyTakeaways": [
-    "Hypertension Canada: <140/90 most adults; <130/80 high-risk (CVD, DM, CKD); chlorthalidone preferred over HCTZ",
-    "ACE inhibitor + ARB combination is absolutely contraindicated — hyperkalemia and AKI",
-    "SGLT-2 inhibitors: hold 3–5 days before surgery; risk euglycemic DKA",
-    "Diabetes Canada step 1: metformin; step 2: add GLP-1 RA or SGLT-2 for CVD/CKD benefit",
-    "GLP-1 RA contraindicated with personal/family history medullary thyroid carcinoma or MEN2"
-],
-"studyCommonTraps": [
-    "Applying ACC/AHA <130/80 universally — CNPLE uses Hypertension Canada which starts at <140/90",
-    "Combining ACE inhibitor and ARB — always contraindicated",
-    "Using HCTZ as preferred thiazide — HC prefers chlorthalidone or indapamide",
-    "Not stopping SGLT-2 inhibitor before major surgery — DKA risk"
-],
-"memoryAnchor": "HC BP target: <140/90 (most). <130/80 (high-risk). ACE+ARB = NEVER. SGLT-2 = stop pre-surgery. Step 2 DM: GLP-1 or SGLT-2 for CVD/CKD. Chlorthalidone > HCTZ."
-},
-
-]  # end LESSONS
-
-
-def load_np_core():
-    with open(NP_CORE, encoding="utf-8") as f:
+CATALOG = os.path.join(os.path.dirname(__file__), "../src/content/pathway-lessons/np-core-catalog.json")
+
+SLUGS_TO_ADD = [
+    "np-ca-professional-practice-cnp-regulation",
+    "np-ca-health-promotion-canadian-screening",
+    "np-ca-maternal-prenatal-care-canadian-context",
+    "np-ca-older-adult-comprehensive-assessment",
+    "np-ca-immunization-naci-schedule-canada",
+    "np-ca-primary-care-undifferentiated-complaint",
+]
+
+def load_catalog():
+    with open(CATALOG, encoding="utf-8") as f:
         return json.load(f)
 
-def save_np_core(data):
-    with open(NP_CORE, "w", encoding="utf-8") as f:
+def save_catalog(data):
+    with open(CATALOG, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
-def apply(data, lessons):
-    existing = {l["slug"] for l in data["lessons"]}
+def make_lessons():
+    return [
+        {
+            "slug": "np-ca-professional-practice-cnp-regulation",
+            "title": "Canadian NP Regulatory Framework and Scope of Practice",
+            "topic": "Professional Practice",
+            "topicSlug": "professional-practice",
+            "bodySystem": "Multisystem",
+            "previewSectionCount": 2,
+            "seoTitle": "Canadian NP Regulatory Framework CNPLE Professional Practice",
+            "seoDescription": "CNPLE professional practice: Canadian NP regulatory framework, provincial college authority, prescriptive authority in Canada, collaborative practice, and NP accountability standards.",
+            "sections": [
+                {"id":"overview","kind":"introduction","heading":"Overview and Learning Objectives","body":"Canadian NPs are regulated at the provincial/territorial level. Core regulatory bodies include the College of Nurses of Ontario (CNO), BC College of Nurses and Midwives (BCCNM), and CARNA in Alberta. The CNPLE assesses pan-Canadian NP entry-level competencies across four domains: Health Assessment and Diagnosis, Therapeutics and Management, Health Promotion and Prevention, and Professional Practice and Leadership.\n\nNPs in Canada are generally autonomous practitioners — not physician extenders. Collaborative Practice Agreements (CPAs) are formal collaborative frameworks, not supervisory relationships. NPs can diagnose, prescribe (including controlled substances with CDSA exemption), order diagnostics, admit/discharge in many settings, and practice independently across jurisdictions (with provincial variation).\n\nLearning objectives: Describe the provincial regulatory structure for NP practice; articulate NP prescriptive authority including controlled substances; apply professional accountability principles; identify ethical and mandatory reporting obligations."},
+                {"id":"pathophysiology_overview","kind":"pathophysiology_overview","heading":"NP Scope of Practice Across Canada","body":"Core NP functions across all provinces include: comprehensive health assessment, diagnosis of acute and chronic conditions, ordering and interpreting diagnostic tests, prescribing medications (including Schedule I and II controlled substances in most provinces with CDSA exemption), performing procedures within NP scope, and leading interprofessional care.\n\nProvincial variation in scope:\n- Ontario: NPs function with high autonomy; CNO grants Extended Class registration; hospital privileges are facility-specific\n- BC: Full prescriptive authority including controlled substances; independent practice recognized\n- Alberta: NP certificate from CARNA; full prescriptive authority; hospital privileges with credentialing\n- Quebec: IPS (infirmière praticienne spécialisée) by specialty area; more restricted scope than other provinces\n\nPrescriptive authority:\n- Most provinces: NPs prescribe Schedule I (non-controlled) and Schedule II (controlled) drugs under CDSA exemption\n- Opioids/narcotics: NPs in most provinces can prescribe opioids; federal CDSA exemption required\n- Methadone for OAT: requires additional certification (not routine NP scope)\n- Medical cannabis: separate Health Canada authorization process — not a standard prescription\n\nConscientious objection and MAID:\n- NPs are authorized MAID assessors and providers since Bill C-14 (2016) and expanded under C-7 (2021)\n- Track 1: natural death reasonably foreseeable; Track 2: additional safeguards\n- Mental illness as sole underlying condition: allowed from March 2024\n- Conscientious objectors must ensure timely patient referral — abandonment is prohibited"},
+                {"id":"clinical-judgment-pearls","kind":"clinical_pearls","heading":"CNPLE Clinical Judgment Pearls — Professional Practice","body":"Key professional practice scenarios for the CNPLE:\n\n1. Prescribing outside competency: NPs must prescribe only within areas of clinical competence. Request consultation if outside expertise area. Document the reasoning. Emergency care within basic scope is acceptable while arranging urgent referral.\n\n2. Mandatory reporting obligations:\n- Child abuse/neglect: report suspicion (not confirmed evidence) to provincial child welfare authority immediately\n- Elder abuse: mandatory reporting in some provinces (Ontario, BC); NP must know provincial law\n- Communicable diseases: report to Medical Officer of Health (MOH) per provincial reportable disease list\n- Fitness to drive: report when medical condition impairs driving safely (DriveABLE, provincial transportation medicine guidelines)\n\n3. Professional boundaries:\n- Sexual contact with current or former patients (within 1-2 years) = professional misconduct, zero tolerance, mandatory College investigation\n- Treating close family members or friends for ongoing care is generally inappropriate (conflicts of interest; poor objectivity)\n- Social media: no patient-identifiable information; maintain professional online boundaries\n\n4. MAID safeguards (two independent assessors required; specific consent and reflection periods; referral obligation for conscientious objectors)\n\n5. Conflict of interest: disclose pharmaceutical industry relationships; prescribe based on evidence, not industry influence"},
+                {"id":"common-exam-traps","kind":"clinical_pearls","heading":"Common CNPLE Exam Traps","body":"Trap 1: Assuming uniform scope across all Canadian provinces — it varies significantly. The CNPLE tests national core competencies but uses the most protective standard when provincial laws differ.\n\nTrap 2: Confusing Collaborative Practice Agreements (CPA) as supervisory — Canadian NPs are autonomous practitioners. CPAs define collaboration and referral pathways, not physician oversight of NP decisions.\n\nTrap 3: CDSA exemption for prescribing narcotics — NPs CAN prescribe opioids in most provinces with proper registration, but must have the CDSA exemption. Methadone for OAT requires additional certification.\n\nTrap 4: Medical cannabis is NOT prescribed like controlled drugs — it is authorized through a separate Health Canada framework. NPs can authorize medical cannabis use but it is not a standard CDSA prescription.\n\nTrap 5: MAID requires exactly TWO independent assessors and follows strict eligibility criteria. The NP who provides MAID cannot be one of the two assessors for Track 2 cases. Track 2 (not reasonably foreseeable natural death) has longer process with additional safeguards."},
+                {"id":"canadian-practice-considerations","kind":"clinical_pearls","heading":"Canadian Healthcare Context","body":"Universal healthcare (Canada Health Act): insured services include physician and hospital services. Extended benefits (drugs, dental, vision, physio) are NOT universally covered — significant inequity exists. NP services are variably covered by provincial health insurance.\n\nSocial determinants of health in Canadian context:\n- Indigenous health disparities: trauma-informed, culturally safe care is mandatory; higher burden of T2DM, TB, kidney disease, and cervical cancer in First Nations, Métis, and Inuit populations\n- LGBTQ2S+ populations: inclusive care, correct pronoun use, appropriate screening considerations\n- Newcomers and refugees: catch-up immunization, pre-migration health conditions, settlement stressors\n- Housing and poverty: the NP role includes system navigation and advocacy\n\nInterprofessional collaboration: the CNPLE tests the NP's ability to work within teams — collaborative (not hierarchical) consultation with physicians, pharmacists, social workers, dietitians, and physiotherapists. The NP leads when appropriate to scope; defers when outside scope.\n\nDocumentation: electronic medical records are standard (OSCAR, Wolf, Telus PS Suite in Ontario). Access to provincial eHealth systems provides shared medication lists and lab history. All entries are legal records requiring accuracy, clarity, and timeliness."}
+            ],
+            "studyTakeaways": [
+                "Canadian NPs are generally autonomous practitioners regulated by provincial colleges",
+                "Prescriptive authority for controlled substances requires CDSA exemption plus provincial authorization",
+                "Mandatory reporting includes child abuse, communicable diseases, and fitness to drive",
+                "MAID assessment and provision is within Canadian NP scope with specific safeguards"
+            ],
+            "studyCommonTraps": [
+                "Assuming uniform scope across all provinces",
+                "Treating CPA as supervisory rather than collaborative",
+                "Forgetting CDSA exemption requirement for opioid prescribing"
+            ],
+            "memoryAnchor": "Canadian NP = Autonomous, not supervised. CPA = Collaborative not supervisory. CDSA exemption needed for controlled substances."
+        },
+        {
+            "slug": "np-ca-health-promotion-canadian-screening",
+            "title": "Health Promotion and Canadian Preventive Screening (CTFPHC Guidelines)",
+            "topic": "Professional Practice",
+            "topicSlug": "health-promotion",
+            "bodySystem": "Multisystem",
+            "previewSectionCount": 2,
+            "seoTitle": "Canadian Preventive Screening CNPLE CTFPHC Guidelines",
+            "seoDescription": "CNPLE health promotion: CTFPHC screening guidelines for breast, cervical, colorectal cancer, osteoporosis, depression. Canadian vs US differences. Tobacco cessation, alcohol guidance 2023.",
+            "sections": [
+                {"id":"overview","kind":"introduction","heading":"Overview — Canadian Preventive Health Care","body":"The Canadian Task Force on Preventive Health Care (CTFPHC) issues Canadian screening guidelines — NOT the USPSTF. The CNPLE tests CTFPHC recommendations. When CNPLE asks about screening age or interval, apply Canadian (CTFPHC) guidelines, not USPSTF.\n\nFramework for prevention:\n- Primary prevention: preventing disease before it occurs (immunization, lifestyle, chemoprophylaxis)\n- Secondary prevention: early detection in asymptomatic individuals (screening)\n- Tertiary prevention: reducing morbidity in established disease (disease management)\n- Quaternary prevention: preventing over-medicalization and unnecessary intervention\n\nThe NP's role includes opportunistic screening at every encounter, population-based health promotion, anticipatory guidance, and advocacy for health equity addressing social determinants of health."},
+                {"id":"assessment-red-flags","kind":"signs_symptoms","heading":"Canadian Screening Guidelines — Core CTFPHC Recommendations","body":"CERVICAL CANCER (CTFPHC 2013, updated 2022):\n- Age 25-69: Pap smear every 3 years\n- HPV primary screening being phased in across provinces\n- Discontinue at 69 after 3 consecutive negatives\n- Not screened: never sexually active; post-total hysterectomy for benign disease\n\nBREAST CANCER (CTFPHC 2011, under revision 2024):\n- Age 40-49: Routine screening NOT recommended for average risk (weak recommendation against); shared decision-making if patient requests\n- Age 50-74: Mammography every 2-3 years (strong recommendation)\n- MRI: only for high-risk (BRCA1/2, >25% lifetime risk)\n- KEY DIFFERENCE FROM US: Canadian guidelines do NOT recommend starting mammography at age 40 for average risk\n\nCOLORECTAL CANCER (CTFPHC 2016):\n- Age 50-74: Fecal immunochemical test (FIT) every 2 years OR flexible sigmoidoscopy every 10 years\n- Colonoscopy: ONLY if FIT positive or sigmoidoscopy positive — NOT first-line for average risk\n- High-risk (personal/family history CRC, adenoma, IBD): earlier and more frequent colonoscopy\n\nOSTEOPOROSIS (Osteoporosis Canada 2023):\n- Age ≥65: DEXA scan regardless of risk factors\n- Age 50-64: DEXA if any risk factor (prior fragility fracture, parental hip fracture, glucocorticoid >3 months, early menopause <45, malabsorption, low BMI, smoking, heavy alcohol)\n- FRAX tool (Canadian-adapted): 10-year fracture risk; used alongside DXA T-score for treatment decisions\n\nHYPERTENSION:\n- All adults: BP check at every appropriate encounter\n- Hypertension Canada (CHEP): diagnose if office BP ≥140/90 on ≥2 separate visits OR ambulatory monitoring daytime average ≥135/85"},
+                {"id":"patient-education","kind":"client_education","heading":"Health Promotion Counseling in Canadian NP Practice","body":"Tobacco cessation (5 A's at every encounter): Ask, Advise, Assess, Assist, Arrange\nPharmacotherapy NP can prescribe: nicotine replacement therapy (NRT), varenicline (Champix), bupropion SR. NRT combinations (patch + short-acting) more effective than monotherapy. Canadian quitline: 1-866-STOP-NOW.\n\nPhysical activity (Canadian 24-Hour Movement Guidelines):\n- Adults 18-64: 150 min/week moderate-to-vigorous + muscle strengthening 2 days/week + limit sedentary time\n- Older adults ≥65: same plus balance activities for fall prevention\n\nAlcohol (Canada's Guidance on Alcohol and Health, 2023 — updated and more restrictive):\n- NEW 2023 guidance: No amount of alcohol is risk-free\n- Risk categories: 0-2 drinks/week = low risk; 3-6 = moderate; >7 = high risk\n- NP counsels on any amount above 0-2 drinks/week\n- AUDIT-C: validated brief screening tool for hazardous/harmful use\n\nDietary counseling:\n- Canada's Food Guide (2019): plant-based focus; vegetables/fruits half the plate; whole grains quarter; protein quarter\n- Reduce ultra-processed foods, sodium, sugary beverages\n- Culturally responsive counseling respecting food traditions\n\nMental health screening:\n- PHQ-9 for depression screening in at-risk populations\n- GAD-7 for anxiety screening\n- AUDIT/AUDIT-C for alcohol, DAST-10 for drug use\n- Stress, sleep hygiene, and social connection are modifiable mental health determinants"},
+                {"id":"clinical-judgment-pearls","kind":"clinical_pearls","heading":"CNPLE Pearls — Health Promotion","body":"Canadian guideline FIRST on CNPLE:\n- Mammography starts at 50 in Canada (not 40 as in US USPSTF)\n- CRC screening starts with FIT at 50; colonoscopy is NOT first-line for average risk\n- CTFPHC = the authoritative Canadian source; USPSTF = US guidelines (not applicable)\n\n2023 Alcohol guidance change: 'No safe amount' is the current Canadian message. >2 drinks/week has incremental risk. This represents a significant policy shift that will appear on updated CNPLE content.\n\nShared decision-making for screening:\n- CTFPHC emphasizes that patients participate in screening decisions, especially for tests with uncertain benefit-to-harm ratios (mammography 40-49; PSA for prostate cancer)\n\nIndigenous health screening context:\n- Higher burden of T2DM, TB, kidney disease, cervical cancer in First Nations, Métis, Inuit populations\n- Earlier and more frequent screening is appropriate and evidence-based\n- Assess community access to screening services as part of the health equity lens\n\nFITT for exercise prescription:\n- Frequency, Intensity, Time, Type — the NP uses this framework for individualized exercise counseling\n- Start low, go slow for deconditioned or older patients"}
+            ],
+            "studyTakeaways": [
+                "CTFPHC = Canadian screening authority; USPSTF is US (not used for CNPLE)",
+                "Mammography starts at 50 for average-risk women in Canada (not 40)",
+                "CRC screening: FIT every 2 years; colonoscopy only if FIT positive",
+                "2023 Canadian alcohol guidance: no amount is risk-free; >2 drinks/week = moderate risk"
+            ],
+            "studyCommonTraps": [
+                "Using USPSTF age 40 for mammography screening (Canada = 50)",
+                "Recommending colonoscopy as first-line CRC screening for average risk (Canada uses FIT first)",
+                "Missing 2023 updated alcohol guidance (more restrictive than prior versions)"
+            ],
+            "memoryAnchor": "CTFPHC screening anchors: Cervical=25 q3yr, Breast=50 q2-3yr, Colorectal=50 FIT, Bone=65 DEXA"
+        },
+        {
+            "slug": "np-ca-maternal-prenatal-care-canadian-context",
+            "title": "Prenatal Care and Antenatal Screening — Canadian NP Practice (SOGC Guidelines)",
+            "topic": "Women's Health",
+            "topicSlug": "maternal-health",
+            "bodySystem": "Reproductive",
+            "previewSectionCount": 2,
+            "seoTitle": "Prenatal Care Canadian NP CNPLE SOGC Guidelines GDM Preeclampsia",
+            "seoDescription": "CNPLE maternal health: SOGC prenatal care, antenatal screening schedule, gestational diabetes diagnosis, preeclampsia risk stratification, GBS, fetal movement, Rh prophylaxis for Canadian NPs.",
+            "sections": [
+                {"id":"overview","kind":"introduction","heading":"Overview — Prenatal Care in Canadian NP Practice","body":"NPs in Canada provide prenatal care either independently or as part of interprofessional maternity care teams. The CNPLE tests: evidence-based prenatal care per SOGC (Society of Obstetricians and Gynaecologists of Canada) guidelines; identification of high-risk pregnancies requiring obstetric referral; interpretation of routine antenatal screening; and recognition and management of common complications.\n\nRecommended prenatal visit schedule (SOGC):\n- Low-risk: every 4-6 weeks until 28 weeks; every 2-3 weeks until 36 weeks; weekly until delivery\n- High-risk: more frequent visits per specific risk factors\n- Total visits: approximately 10 for low-risk multiparous; 14 for primiparous\n\nNP scope in prenatal care: includes history and physical, ordering all routine antenatal labs and screening ultrasounds, managing common pregnancy complications (nausea, heartburn, constipation, anemia, UTI), gestational diabetes management, and providing patient education. The NP REFERS for: hypertension in pregnancy (new onset), fetal growth restriction, placenta previa, multiple gestation, prior cesarean requiring VBAC discussion, significant fetal anomalies."},
+                {"id":"diagnostics-labs-imaging","kind":"labs_diagnostics","heading":"Antenatal Screening Schedule — SOGC Canada","body":"FIRST TRIMESTER (up to 14 weeks) — routine labs for ALL pregnancies:\n- Blood type and Rh factor\n- Antibody screen\n- CBC (baseline hemoglobin, platelets)\n- Rubella immunity (IgG)\n- Hepatitis B surface antigen (HBsAg)\n- HIV (offered to all; opt-out in some provinces)\n- Syphilis serology (RPR or VDRL)\n- Urinalysis + urine culture (treat asymptomatic bacteriuria in pregnancy)\n- Varicella history or IgG\n\nGenetic/chromosomal screening (optional, offer to all with counseling):\n- First Trimester Combined Screening (FTCS): nuchal translucency (NT) ultrasound 11-13+6 weeks + PAPP-A + free β-hCG\n- cfDNA/NIPT (cell-free fetal DNA): highly sensitive/specific for trisomy 21, 18, 13; not universally covered; available for high-risk\n\nSECOND TRIMESTER (15-28 weeks):\n- Maternal serum screening (QUAD screen): AFP, estriol, inhibin A, hCG — screens for trisomies and open NTDs\n- Anatomy ultrasound: 18-20 weeks — fetal anatomy, placental location, cervical length if risk\n- GDM screening (OGCT): 24-28 weeks for ALL pregnancies\n- Repeat CBC: 28 weeks (anemia)\n- Rh prophylaxis (RhoGAM 300 mcg IM): 28 weeks for ALL Rh-negative pregnant persons\n\nTHIRD TRIMESTER:\n- GBS (Group B Streptococcus) culture: 35-37 weeks\n- Intrapartum GBS prophylaxis: IV penicillin for GBS-positive patients (NOT prenatal oral treatment)\n\nFETAL MOVEMENT MONITORING:\n- After 26 weeks: decreased fetal movement (<6 movements in 2 hours) = same-day assessment required\n- Do NOT simply reassure and schedule next week — this requires urgent obstetric assessment"},
+                {"id":"pharmacologic-management","kind":"pharmacology","heading":"Gestational Diabetes — SOGC Diagnostic Criteria","body":"CRITICAL CNPLE DISTINCTION: Canada uses SOGC/IADPSG-aligned 75g OGTT criteria. NOT the American 100g 3-hour OGTT requiring 2 of 4 values.\n\nCanadian GDM diagnosis (75g OGTT):\n- Fasting plasma glucose ≥5.1 mmol/L = GDM diagnosis (single reading)\n- 1-hour ≥10.0 mmol/L = GDM diagnosis\n- 2-hour ≥8.5 mmol/L = GDM diagnosis\n- ANY ONE threshold met = GDM (not 2 of 3 as in some US protocols)\n\nGDM management:\n- Medical nutrition therapy (MNT) first: consistent carbohydrate distribution (175g carbs/day minimum)\n- SMBG targets: fasting ≤5.3 mmol/L; 1-hour post-meal ≤7.8 mmol/L; 2-hour post-meal ≤6.7 mmol/L\n- Pharmacotherapy if targets not met in 2 weeks: insulin is first-line in Canada\n- Metformin: acceptable second-line in some provinces (off-label but used)\n- Antenatal surveillance: NST starting 36-38 weeks for diet-controlled; earlier for insulin-requiring GDM\n- Postpartum: 75g OGTT at 6-12 weeks postpartum — 50% develop T2DM within 10 years\n\nPREECLAMPSIA PREVENTION (aspirin):\n- Low-dose aspirin 162 mg daily (2 baby aspirins) starting at 12-16 weeks for patients with ≥1 high-risk factor OR ≥2 moderate-risk factors\n- HIGH-RISK: prior preeclampsia, chronic hypertension, pre-gestational DM, renal disease, antiphospholipid syndrome\n- MODERATE-RISK: nulliparity, BMI ≥35, multiple gestation, family history, age ≥40\n\nNAUSEA/VOMITING IN PREGNANCY:\n- Diclectin (doxylamine + B6): first-line pharmacotherapy in Canada (not available in US)\n- Ondansetron: second-line if Diclectin inadequate\n- IV fluids: required if hyperemesis gravidarum (weight loss, dehydration, ketonuria)"},
+                {"id":"referral-thresholds","kind":"nursing_assessment_interventions","heading":"When the NP Refers in Prenatal Care","body":"MANDATORY obstetric/MFM referral:\n- New BP ≥140/90 mmHg on 2 occasions (hypertension in pregnancy)\n- Estimated fetal weight <10th percentile (growth restriction)\n- Placenta previa (any grade; symptomatic)\n- Multiple gestation (twins or higher)\n- Prior cesarean requiring VBAC counseling\n- Pre-gestational diabetes with poor control\n- Cardiac disease Class II-IV\n- Any significant fetal structural anomaly on anatomy scan\n\nURGENT/EMERGENCY referral:\n- Decreased fetal movement (after 26 weeks): same-day obstetric assessment\n- Vaginal bleeding: urgency depends on amount and gestational age\n- Severe headache + visual changes + epigastric pain after 20 weeks: preeclampsia workup → emergency\n- Rupture of membranes (ROM) at term: assessment for labor\n- PPROM (preterm ROM): hospital admission regardless of gestational age\n\nNP manages WITHOUT referral (low-risk):\n- Nausea/vomiting: Diclectin, dietary modifications\n- Heartburn: antacids (calcium carbonate, omeprazole if severe)\n- Constipation: fiber, hydration, lactulose (safe)\n- Iron deficiency anemia (Hb <110 g/L): elemental iron 100-200 mg daily\n- Asymptomatic bacteriuria or uncomplicated UTI: amoxicillin, cephalexin (nitrofurantoin: avoid at term)\n- Gestational hypertension without severe features: close monitoring; methyldopa or labetalol per obstetric guidance"},
+                {"id":"clinical-judgment-pearls","kind":"clinical_pearls","heading":"CNPLE Pearls — Maternal Health","body":"Canadian GDM diagnosis: 75g OGTT; ANY single threshold met = GDM. Fasting ≥5.1 mmol/L alone is diagnostic. This is different from the ADA 100g 3-hour OGTT (requires 2 of 4 values).\n\nRh prophylaxis at 28 weeks: Rh-negative pregnant persons receive RhoGAM at 28 weeks regardless of antibody screen — do not miss this standard intervention. Also give after ANY sensitizing event (bleeding, amniocentesis, trauma).\n\nDecreased fetal movement = same-day assessment: After 26 weeks, significant decrease in fetal movement requires same-day NST or BPP. Reassuring with kick counts alone and scheduling for next week is insufficient.\n\nAspirin for preeclampsia: Start at 12-16 weeks (not in first trimester prophylactically for all). 162 mg is the Canadian dose.\n\nGBS testing at 35-37 weeks: Positive GBS → intrapartum IV penicillin prophylaxis (not prenatal oral treatment). Penicillin G is first-line; clindamycin for penicillin allergy with known susceptibility.\n\nPerinatal mental health: Edinburgh Postnatal Depression Scale (EPDS) should be administered at first and third trimester prenatal visits AND at postpartum visits. Perinatal mood and anxiety disorders affect 15-20% of pregnant people.\n\nDiclectin (doxylamine + B6): first-line pharmacotherapy for nausea and vomiting of pregnancy in Canada. This drug is not available in the US — important Canadian-specific knowledge for CNPLE."}
+            ],
+            "studyTakeaways": [
+                "SOGC guidelines govern Canadian prenatal care (not ACOG)",
+                "GDM: 75g OGTT; any single value at fasting ≥5.1, 1h ≥10.0, 2h ≥8.5 mmol/L = diagnosis",
+                "RhoGAM 300 mcg IM at 28 weeks + after any sensitizing event for all Rh-negative patients",
+                "Aspirin 162 mg from 12-16 weeks for high-risk preeclampsia patients"
+            ],
+            "studyCommonTraps": [
+                "Using ADA 100g OGTT criteria (Canada uses 75g SOGC criteria with lower thresholds)",
+                "Treating GBS with prenatal oral antibiotics (intrapartum IV penicillin is correct)",
+                "Scheduling decreased fetal movement follow-up for next week (same-day assessment required)"
+            ],
+            "memoryAnchor": "SOGC: Screen-Order-Give-Check: Screen OGCT 24-28wk, Order 75g OGTT if ≥7.8, Give RhoGAM at 28wk, Check GBS at 35-37wk"
+        },
+        {
+            "slug": "np-ca-older-adult-comprehensive-assessment",
+            "title": "Comprehensive Geriatric Assessment and Frailty in Canadian NP Practice",
+            "topic": "Geriatrics",
+            "topicSlug": "lifespan-geriatrics",
+            "bodySystem": "Multisystem",
+            "previewSectionCount": 2,
+            "seoTitle": "Geriatric Assessment Frailty CNPLE Clinical Frailty Scale CGA",
+            "seoDescription": "CNPLE geriatric assessment: Clinical Frailty Scale (CFS), comprehensive geriatric assessment, polypharmacy STOPP criteria, delirium vs dementia (CAM), advance care planning and MAID in Canada.",
+            "sections": [
+                {"id":"overview","kind":"introduction","heading":"Overview — Older Adult Care in Canadian NP Practice","body":"Adults ≥65 represent the fastest-growing segment of the Canadian population and the highest users of healthcare services. NPs in primary care, LTC, and acute care routinely manage complex, multimorbid older adults.\n\nKey principle: Functional status, not age or diagnosis count, drives clinical decisions in older adults. Two 80-year-olds with the same diagnoses may have vastly different reserve, goals of care, and appropriate management plans.\n\nThe 4Ms Framework (Age-Friendly Health Systems — Canadian adaptation):\n- Medications: minimize medications that may cause harm; deprescribe when appropriate\n- Mentation: prevent, identify, and treat dementia, depression, and delirium\n- Mobility: maintain safe mobility and function; fall prevention\n- What Matters: know and align care with each person's specific health outcome goals and care preferences\n\nDomains of the Comprehensive Geriatric Assessment (CGA):\n1. Medical: diagnoses, medications, sensory impairment, nutrition, pain\n2. Functional: ADLs (dressing, bathing, transfers, toileting, feeding, continence) and IADLs (meals, transportation, medications, finances, housework, communication)\n3. Cognitive: dementia screening (MoCA, Mini-Cog), delirium assessment (CAM)\n4. Psychological: depression (GDS-15, PHQ-9), anxiety, substance use\n5. Social: support systems, living situation, caregiver burden, finances\n6. Environmental: home safety, fall risks, assistive devices"},
+                {"id":"assessment-red-flags","kind":"signs_symptoms","heading":"Frailty Assessment Tools and Cognitive Screening","body":"CLINICAL FRAILTY SCALE (CFS — Rockwood): Most widely used frailty tool in Canada\n1-2: Very fit / Well (no functional deficits)\n3: Managing well (some slowing, no active disease effects on function)\n4: Vulnerable (limited functional reserve, symptomatic)\n5: Mildly frail (limited IADL performance, some ADL difficulty) — FRAILTY threshold\n6: Moderately frail (ADL assistance required)\n7: Severely frail (fully dependent for all ADLs)\n8-9: Very severely frail / Terminally ill\n\nCFS ≥5 = frailty. Used in surgical risk stratification, goals of care conversations, COVID-19 triage, and LTC admission criteria.\n\nFRIED PHENOTYPE (5 criteria — 3 or more = frail):\n1. Unintentional weight loss (>4.5 kg in past year)\n2. Exhaustion (self-reported fatigue most days)\n3. Weakness (grip strength below threshold by sex/BMI)\n4. Slow gait speed (≤0.8 m/s; Timed Up and Go >12 sec)\n5. Low physical activity\n\nFUNCTIONAL ASSESSMENT:\n- Timed Up and Go (TUG): >12 seconds = high fall risk\n- 30-Second Chair Stand Test: lower extremity strength, fall risk\n- Barthel Index or FIM: ADL performance\n- IADL scale (Lawton): instrumental activities\n\nCOGNITIVE SCREENING:\n- Mini-Cog: 3-word recall + clock drawing (3 min; less affected by education level)\n- Montreal Cognitive Assessment (MoCA): 30-point; sensitive for mild cognitive impairment; validated across multiple languages; free with training\n- MMSE: 30-point; widely used but influenced by education; less sensitive for MCI\n\nDEPRESSION SCREENING IN ELDERLY:\n- GDS-15 (Geriatric Depression Scale, short form): validated for older adults; yes/no format avoids somatic symptom confounding\n- PHQ-9: validated in primary care but somatic items (fatigue, sleep, appetite) may be confounded by medical illness"},
+                {"id":"pharmacologic-management","kind":"pharmacology","heading":"Polypharmacy and Deprescribing — STOPP/START Criteria","body":"Polypharmacy: ≥5 medications; hyperpolypharmacy: ≥10 medications\nIn Canada: 40% of adults ≥65 take ≥5 prescriptions; 33% take ≥10. 15-20% of hospital admissions in older adults are from adverse drug events.\n\nSTOPP/START CRITERIA (preferred in Canada — European origin, widely adopted):\n- STOPP: Screening Tool of Older Persons' potentially inappropriate Prescriptions\n- START: Screening Tool to Alert to Right Treatment (medications commonly under-prescribed)\n\nKEY STOPP CATEGORIES (high-yield for CNPLE):\n1. Anticholinergics in cognitive impairment: oxybutynin, diphenhydramine, amitriptyline, hydroxyzine → worsen cognition, cause/worsen delirium\n2. Benzodiazepines in elderly: fall and fracture risk, cognitive impairment, respiratory depression — STOPP recommends avoiding\n3. Long-acting sulfonylureas (glyburide): prolonged hypoglycemia risk; use short-acting agents (glipizide/gliclazide) or switch to safer agents\n4. NSAIDs in patients ≥75 or with eGFR <50: GI bleeding, renal failure, HF exacerbation\n5. PPIs beyond 8 weeks without ongoing indication: C. diff risk, osteoporosis, hypomagnesemia\n6. Diphenhydramine/Benadryl as sleep aid: highly anticholinergic; causes delirium and paradoxical agitation in elderly — NEVER appropriate as a sedative in older adults\n\nDEPRESCRIBING PRINCIPLES:\n- Patient-centered: goals of care, life expectancy, medication burden\n- Use medstopper.com or STOPP/START tools\n- Taper when needed (antihypertensives, antidepressants, opioids, benzodiazepines)\n- Monitor for symptom return after discontinuation\n- NP initiates deprescribing at any visit — does not wait for the prescribing physician"},
+                {"id":"lifespan-considerations","kind":"clinical_pearls","heading":"Delirium vs. Dementia — Critical CNPLE Distinction","body":"DELIRIUM:\n- Acute onset (hours to days)\n- Fluctuating course (better/worse throughout the day)\n- Disturbance in attention and consciousness\n- Almost always has a reversible precipitating cause\n- Hyperactive subtype: agitation, combativeness, hallucinations (most recognized)\n- Hypoactive subtype: drowsiness, withdrawal, quiet confusion (MOST COMMONLY MISSED — mistaken for depression or fatigue)\n- Mixed: most common type\n\nCAM DIAGNOSTIC CRITERIA (must have 1 + 2 + 3 OR 4):\n1. Acute onset AND fluctuating course\n2. Inattention\n3. Disorganized thinking\n4. Altered level of consciousness\n\nDEMENTIA:\n- Insidious onset (months to years)\n- Progressive, not fluctuating\n- Initial preservation of attention in most forms\n- Short-term memory impaired first (Alzheimer's)\n- Irreversible in most causes\n\nDELIRIUM OVERLYING DEMENTIA: 40% of hospitalized patients with dementia develop superimposed delirium. Underlying dementia is the STRONGEST risk factor for delirium. Any new medical illness in a demented patient may present ONLY as delirium.\n\nCauses of delirium (AEIOU TIPS):\nAlcohol/drugs | Electrolytes | Infection | Opioids and medications | Urinary retention/constipation | Trauma | Intracranial | Pain | Sleep deprivation\n\nDELIRIUM PREVENTION (HELP Protocol):\n- Reorientation: clock, calendar, familiar faces, daylight exposure\n- Early mobility: out of bed daily\n- Sensory aids: glasses and hearing aids at bedside and used\n- Adequate hydration and nutrition\n- Non-pharmacologic sleep hygiene\n- Avoid unnecessary medications, restraints, bladder catheters, and sleep deprivation"},
+                {"id":"canadian-practice-considerations","kind":"clinical_pearls","heading":"Advance Care Planning in Canadian Context","body":"ADVANCE CARE PLANNING (ACP): A process (not just a form) that helps adults reflect on values and wishes for future healthcare decisions.\n\nKey Canadian documents (province-specific):\n- Advance Directive / Personal Directive / Living Will: documents care wishes\n- Power of Attorney for Personal Care (Ontario) / Representation Agreement (BC) / Personal Directive (Alberta): designates substitute decision maker (SDM)\n- DNR/Comfort Care orders: NPs can sign DNR orders in many Canadian provinces\n\nSubstitute decision-making hierarchy (Ontario example): Spouse/partner → child ≥16 → parent → sibling → other family → OHIP guardian → Public Guardian and Trustee\n\nGOALS OF CARE CONVERSATIONS (NP-initiated, proactively):\n- Ask: 'Have you thought about what you would want if you were very ill and couldn't speak for yourself?'\n- Frame goals: Full resuscitative care / Comfort-focused care / Something in between\n- Do not wait for a crisis — the NP initiates these conversations proactively for any frail or seriously ill patient\n\nMAID (Medical Assistance in Dying) in Canada:\n- Bill C-14 (2016): initial legislation; Bill C-7 (2021): expanded criteria\n- NPs are authorized assessors AND providers (not just assessors)\n- Two tracks: Track 1 (reasonably foreseeable natural death) and Track 2 (not reasonably foreseeable — longer process, more safeguards)\n- Two independent assessors required (the providing NP cannot be one of the two Track 2 assessors)\n- Mental illness as sole underlying condition: permitted from March 2024\n- Conscientious objectors: must ensure timely referral to a willing provider — abandonment is NOT permitted"}
+            ],
+            "studyTakeaways": [
+                "CFS ≥5 = frailty; drives goals of care discussions, surgical risk, and intervention decisions",
+                "Delirium: acute onset + fluctuating + inattention + disorganized thinking (CAM criteria)",
+                "STOPP criteria: avoid benzodiazepines, long-acting sulfonylureas, anticholinergics, NSAIDs in elderly",
+                "Canadian NPs can provide MAID; conscientious objectors must ensure timely referral"
+            ],
+            "studyCommonTraps": [
+                "Missing hypoactive delirium (appears 'quiet' or 'tired' — not agitated)",
+                "Prescribing diphenhydramine as sleep aid in elderly (anticholinergic = delirium risk)",
+                "Treating delirium as dementia without looking for the reversible cause"
+            ],
+            "memoryAnchor": "4Ms: Medications (deprescribe), Mentation (CAM for delirium), Mobility (TUG), What Matters (ACP)"
+        },
+        {
+            "slug": "np-ca-immunization-naci-schedule-canada",
+            "title": "Immunization in Canadian NP Practice — NACI Schedule and Clinical Application",
+            "topic": "Professional Practice",
+            "topicSlug": "preventive-care-immunization",
+            "bodySystem": "Multisystem",
+            "previewSectionCount": 2,
+            "seoTitle": "NACI Immunization Schedule Canada CNPLE Adult Vaccines",
+            "seoDescription": "CNPLE preventive care: NACI adult immunization schedule Canada, influenza, pneumococcal, Shingrix, COVID-19, tetanus, immunocompromised considerations, anaphylaxis preparedness for Canadian NPs.",
+            "sections": [
+                {"id":"overview","kind":"introduction","heading":"Overview — NACI and Canadian Immunization","body":"National Advisory Committee on Immunization (NACI): The federal advisory body that makes vaccine recommendations in Canada. Provincial/territorial public health programs then decide which vaccines are publicly funded. The NP must know both what NACI recommends and what is provincially funded.\n\nNP role in immunization:\n- Administer vaccines within NP scope (IM, SC, intranasal)\n- Order and prescribe vaccines\n- Counsel on risks, benefits, and contraindications\n- Document in provincial immunization registry\n- Report adverse events following immunization (AEFI) to public health\n\nTrue contraindications vs. Precautions:\n- True contraindication: prior anaphylaxis to vaccine component → DO NOT give; refer to allergy/immunology\n- Precautions: conditions warranting extra caution but not absolute preclusion (moderate/severe illness — defer; concurrent anticoagulant — fine-gauge needle with pressure)\n- NOT contraindications: mild illness, low-grade fever, current antibiotics, penicillin allergy, breastfeeding, family history of adverse reactions"},
+                {"id":"assessment-red-flags","kind":"labs_diagnostics","heading":"NACI Adult Immunization Schedule — Key Vaccines","body":"INFLUENZA:\n- NACI: annually, all Canadians ≥6 months\n- Priority (publicly funded): ≥65, pregnant, chronic conditions (cardiac, pulmonary, renal, DM, immunocompromised), Indigenous communities, healthcare workers, LTC residents\n- Inactivated (most Canadians); live attenuated FluMist (2-17 years; NOT for severe immunocompromise)\n- High-dose Fluzone HD or adjuvanted Fluad: PREFERRED for adults ≥65 (better immunogenicity)\n- Timing: October to early November (before Canadian flu season peak)\n\nPNEUMOCOCCAL:\n- PCV15 or PCV20 (conjugate): recommended for immunocompromised, CSF leak, cochlear implants\n- PPSV23 (polysaccharide): all adults ≥65; high-risk younger adults\n- Sequencing for adults ≥65 previously unvaccinated: PCV20 alone OR PCV15 followed by PPSV23 ≥8 weeks later\n\nSHINGLES (herpes zoster):\n- Shingrix (RZV, recombinant): PREFERRED over Zostavax (live)\n- 2-dose series (0 and 2-6 months)\n- NACI: strongly recommended for ALL adults ≥50; also immunocompromised ≥18\n- Effectiveness: Shingrix 97% vs. Zostavax 51%\n- KEY CNPLE FACT: Shingrix is NOT a live vaccine — CAN be given to immunocompromised patients (unlike Zostavax)\n- Side effects: injection site reactions, systemic effects (myalgia, fatigue, headache) — very common and expected; not a sign of disease\n\nTETANUS-DIPHTHERIA-PERTUSSIS (Tdap/Td):\n- Tdap: once in adulthood; during EVERY pregnancy at 28-32 weeks for newborn protection\n- Td: booster every 10 years (or every 5 years after high-risk wound)\n- Wound management: clean wound with Td if last dose >10 years; contaminated wound with no prior immunization → TIG (tetanus immune globulin) + Td\n\nHPV:\n- Routine: Grade 9 school programs; catch-up through Grade 12 (publicly funded in most provinces)\n- Adults 19-26: recommended; shared decision-making for 27-45\n- NP can prescribe for adult patients outside public programs\n\nCOVID-19:\n- Bivalent mRNA boosters per current NACI guidance — updated annually; priority for immunocompromised, ≥65, LTC residents"},
+                {"id":"patient-education","kind":"client_education","heading":"Immunization Counseling and Special Populations","body":"VACCINE HESITANCY — motivational interviewing approach:\n- Explore: 'What concerns do you have about this vaccine?'\n- Acknowledge: 'I understand you have questions — this is important.'\n- Provide accurate information from NACI/provincial health authority sources\n- Respect autonomy: 'The decision is yours. I'm here to support you.'\n- Avoid arguing or lecturing (increases resistance)\n\nIMMUNOCOMPROMISED PATIENTS:\n- Live vaccines CONTRAINDICATED: MMRV, varicella, live attenuated FluMist, yellow fever, oral typhoid — NOT safe\n- Inactivated and subunit vaccines: SAFE in immunocompromised (may have reduced immunogenicity)\n- Shingrix (recombinant, not live): SAFE AND RECOMMENDED in immunocompromised ≥18 (2 doses)\n- Timing: ideally immunize 2 weeks before starting immunosuppressive therapy\n\nTRAVEL MEDICINE (NP scope):\n- Hepatitis A: single-antigen or combination Twinrix (HepA+HepB); 2-3 dose series; all travelers to endemic areas\n- Typhoid: injectable polysaccharide (ViCPS) preferred; oral live Ty21a (avoid immunocompromised)\n- Yellow fever: required for entry to some countries; only at designated travel health clinics (special handling)\n- Malaria prophylaxis (not a vaccine): atovaquone/proguanil (Malarone), doxycycline, mefloquine — NP prescribes based on destination and patient factors\n\nANAPHYLAXIS PREPAREDNESS (mandatory for all vaccination sites):\n- Epinephrine 1:1000 must be accessible: 0.3 mg (adult) / 0.15 mg (pediatric)\n- Post-vaccination observation: 15 minutes for all; 30 minutes for prior anaphylaxis to unrelated substance\n- NP must be prepared to manage anaphylaxis: epinephrine first (anterolateral thigh), call 911, supine position, O2"},
+                {"id":"clinical-judgment-pearls","kind":"clinical_pearls","heading":"CNPLE Pearls — Immunization","body":"Shingrix vs. Zostavax: Shingrix is preferred (97% effective; recombinant, not live; safe in immunocompromised). Zostavax is live — contraindicated in immunocompromised. This distinction is consistently tested on the CNPLE.\n\nLive vaccines are contraindicated in immunocompromised: MMR, varicella, FluMist (live attenuated), yellow fever, oral typhoid — NEVER give to immunocompromised patients. Shingrix is the exception because it is recombinant (NOT live).\n\nTdap in every pregnancy at 28-32 weeks: regardless of whether the patient received Tdap in a prior pregnancy. Rationale: transplacental pertussis antibodies protect the newborn before their first DTaP vaccine at 2 months.\n\nEgg allergy is NOT a contraindication to influenza vaccine: NACI removed this restriction. All patients with egg allergy can receive influenza vaccine; standard 15-30 minute observation applies.\n\nPneumococcal sequencing matters: PCV20 alone (or PCV15 then PPSV23 ≥8 weeks later) for adults ≥65 who are naive to pneumococcal vaccination. Do not simply give PPSV23 alone — conjugate vaccine improves T-cell memory response.\n\nProvincial funding variability: NACI recommendations and provincial public funding are different. The NP must know which vaccines are publicly funded in their province to counsel patients about out-of-pocket costs for non-covered vaccines."}
+            ],
+            "studyTakeaways": [
+                "NACI = Canadian immunization authority; provincial programs determine public funding",
+                "Shingrix: 97% effective; recombinant (not live); SAFE in immunocompromised — preferred over Zostavax",
+                "Live vaccines contraindicated in immunocompromised; inactivated/subunit vaccines are safe",
+                "Tdap at every pregnancy (28-32 weeks) for pertussis protection of newborn"
+            ],
+            "studyCommonTraps": [
+                "Giving FluMist (live attenuated) to an immunocompromised patient",
+                "Using egg allergy as a contraindication to influenza vaccine (no longer applicable)",
+                "Forgetting Tdap in repeat pregnancies (required with EVERY pregnancy)"
+            ],
+            "memoryAnchor": "NACI SHIP: Shingrix (≥50 + immunocompromised ≥18), High-dose flu (≥65), Infant protection via Tdap in pregnancy, Pneumococcal (≥65)"
+        },
+        {
+            "slug": "np-ca-primary-care-undifferentiated-complaint",
+            "title": "Clinical Reasoning Approach to Undifferentiated Complaints — Canadian NP Primary Care",
+            "topic": "Primary Care",
+            "topicSlug": "primary-care-assessment",
+            "bodySystem": "Multisystem",
+            "previewSectionCount": 2,
+            "seoTitle": "Clinical Reasoning Primary Care CNPLE Red Flags Diagnostic Workup",
+            "seoDescription": "CNPLE primary care: clinical reasoning for undifferentiated complaints, SNOOP4 headache red flags, chest pain differential, diagnostic stewardship, referral thresholds, SBAR communication for Canadian NPs.",
+            "sections": [
+                {"id":"overview","kind":"introduction","heading":"Overview — Clinical Reasoning in Canadian NP Primary Care","body":"The most common CNPLE scenario format: a patient presents to the NP's primary care office with a chief complaint. The NP must apply a systematic clinical reasoning framework, generate a differential diagnosis, prioritize must-not-miss diagnoses, select appropriate diagnostic workup, initiate management or refer, and document appropriately.\n\nCanadian NP primary care scope: The NP independently manages the full range of primary care presentations including acute illness, chronic disease management, preventive care, mental health, reproductive health, and complex multimorbidity. The NP does NOT require physician co-signature for assessment, diagnosis, or treatment decisions.\n\nSOAPIE documentation framework:\n- S: Subjective (chief complaint, history, patient's reported symptoms)\n- O: Objective (vital signs, physical examination findings, diagnostic results)\n- A: Assessment (clinical diagnosis or impression; differential diagnosis)\n- P: Plan (investigations ordered, treatment initiated, education, follow-up, referral)\n- I: Interventions (specific actions taken during the visit)\n- E: Evaluation (patient response; outcomes assessed)\n\nProblem Representation: Single-sentence case summary including: demographic qualifier + key symptoms and timing + key risk factors or physical findings. Example: 'A 58-year-old woman with hypertension and smoking history presents with 3 days of progressive exertional dyspnea and bilateral lower extremity edema.'"},
+                {"id":"differential-diagnosis","kind":"pathophysiology_overview","heading":"Red Flags Across Common Presenting Complaints","body":"CHEST PAIN — must-not-miss diagnoses:\n- Crushing/pressure + radiation to jaw/left arm/back → ACS: ECG immediately, troponin, ASA 162-325 mg chewed, activate EMS\n- Pleuritic pain + dyspnea + tachycardia + risk factors → PE: Wells score, D-dimer, CT-PA if indicated\n- Tearing/ripping pain radiating to back → aortic dissection: do NOT anticoagulate; CT-angiography; call vascular surgery\n- Sudden severe + hemodynamic instability → tension pneumothorax or tamponade: emergency\n- Cocaine use + chest pain → coronary spasm + plaque rupture: high-risk; ECG + troponin\n\nHEADACHE RED FLAGS (SNOOP4 mnemonic):\n- S: Systemic symptoms (fever, neck stiffness, rash) → meningitis → urgent LP\n- N: Neurological signs/symptoms → mass lesion, stroke\n- O: Onset sudden ('thunderclap') → subarachnoid hemorrhage → CT head without contrast immediately; if negative → LP for xanthochromia >12 hours after onset\n- O: Older patient (≥50) with NEW headache → giant cell arteritis: jaw claudication, temporal tenderness, ESR >50 → start prednisone URGENTLY (before biopsy if visual symptoms)\n- P: Position-dependent → CSF pressure change\n- P: Progressive headache → mass lesion\n- P: Prior history of headache changed in character → secondary cause\n- P: Papilledema on exam → raised ICP\n\nBACK PAIN RED FLAGS:\n- Bowel/bladder dysfunction → cauda equina syndrome: emergency MRI; neurosurgical referral\n- Saddle anesthesia → cauda equina: same as above\n- Constitutional symptoms (fever, weight loss) + back pain → malignancy or spinal infection\n- History of cancer + new back pain → metastasis until proven otherwise\n- Age <20 or >50 with first episode → atypical cause requiring workup\n\nDYSPNEA RED FLAGS:\n- Sudden onset + hypoxia → PE, pneumothorax, flash pulmonary edema\n- Progressive + crackles + JVD → HF exacerbation\n- Stridor + drooling + fever (child) → epiglottitis: emergency; do NOT examine throat\n- Hypoxia not correcting with supplemental O2 → shunt physiology (ARDS, intracardiac)\n\nUNINTENTIONAL WEIGHT LOSS:\n- >5% body weight in 6-12 months → mandatory investigation\n- Workup: CBC, metabolic panel, CXR, abdominal ultrasound, stool for occult blood, age-appropriate cancer screening, HIV and TB if risk factors, thyroid function (hyperthyroidism causes weight loss)"},
+                {"id":"diagnostics-labs-imaging","kind":"labs_diagnostics","heading":"Investigations — Diagnostic Stewardship in Canadian Primary Care","body":"PRINCIPLES OF APPROPRIATE TEST ORDERING:\n1. Order tests that will CHANGE management — not just for reassurance or to satisfy curiosity\n2. Pre-test probability guides interpretation: high pre-test probability = test more useful; low pre-test probability = abnormal result more likely to be false positive\n3. Sensitivity (good for ruling OUT) vs. specificity (good for ruling IN)\n4. Cascade harm: abnormal result → more testing → specialist → procedure → harm from over-investigation of incidental findings\n\nCOMMON INVESTIGATIONS IN CANADIAN PRIMARY CARE:\n\nCBC: fatigue, infections, bleeding, suspected anemia, B12/folate deficiency\nCMP/BMP: electrolytes, BUN, creatinine; baseline for antihypertensives, diuretics, ACE inhibitors, NSAIDs, lithium\nTSH: fatigue, weight gain, depression, cold intolerance, constipation, menstrual irregularity, dyslipidemia\nLipid panel: all adults ≥40 (Canadian Dyslipidemia Working Group); every 5 years if normal; earlier if risk factors\nHbA1c: DM monitoring (q3 months if not at goal; q6 if at goal); screening if risk factors\neGFR + urine ACR: CKD staging; annually for diabetics and hypertensives\nECG: chest pain, palpitations, syncope, starting QT-prolonging medications\nCXR: persistent cough >3 weeks (rule out TB, malignancy), suspected pneumonia or HF\nMammogram: per CTFPHC (age 50-74, every 2-3 years, average risk)\nSTI screening: all sexually active adults; targeted screening in MSM, PWID, pregnant people\n\nDIAGNOSTIC IMAGING (indication-driven):\nCT head (without contrast): acute neurological deficit, suspected SAH, head trauma with LOC\nCT abdomen/pelvis: acute abdominal pain with red flags; renal colic (CT-KUB)\nMRI spine: back pain with neurological deficit or red flags\nUS abdomen: gallstones, liver lesions, AAA (once for male smokers ≥65 — CTFPHC recommendation)\n\nDIAGNOSTIC STEWARDSHIP ON CNPLE:\nThe exam values ordering the RIGHT test, not the MOST tests. Pre-test probability reasoning is explicitly tested. Avoid cascade effects from testing low pre-test probability patients."},
+                {"id":"referral-thresholds","kind":"nursing_assessment_interventions","heading":"When the Canadian NP Refers","body":"NP MANAGES INDEPENDENTLY:\n- Acute illness: uncomplicated UTI, URTI, sinusitis, pharyngitis, acute musculoskeletal\n- Stable chronic disease: hypertension, T2DM, dyslipidemia, hypothyroidism, stable COPD, stable depression/anxiety\n- Mental health: mild-moderate depression and anxiety (psychotherapy + pharmacotherapy if indicated)\n- Reproductive health: contraception, routine low-risk prenatal care, STI management\n- Preventive care: immunization, screening, lifestyle counseling\n\nNP CONSULTS OR REFERS:\n- Cancer: suspected malignancy → oncology/surgery depending on type\n- Cardiac: suspected HF (echo + BNP + cardiology if unclear etiology); ACS → emergency\n- Respiratory: spirometry-confirmed moderate-severe COPD → respirology\n- Renal: eGFR <30 with declining trajectory → nephrology; eGFR <15 → urgent nephrology\n- Neurology: new seizure (after urgent imaging), new Parkinson's, MS diagnosis\n- Endocrine: new T1DM, suspected pheochromocytoma, Cushing's syndrome, primary hyperaldosteronism\n- Psychiatry: new-onset psychosis, acute bipolar episode, suicidality beyond primary care capacity\n\nURGENT OR EMERGENCY REFERRAL:\n- Any finding meeting acute care threshold → call 911 and/or expedite ED transfer\n- ACS, stroke, aortic dissection, cauda equina syndrome, SAH, sepsis → DO NOT refer to specialist; call EMS\n\nREFERRAL COMMUNICATION (SBAR):\n- S: Patient demographics and reason for referral\n- B: Medical history, current medications, relevant social history\n- A: Your clinical assessment and differential\n- R: What you need from the consultant (urgent vs. routine; specific clinical question)"},
+                {"id":"clinical-judgment-pearls","kind":"clinical_pearls","heading":"CNPLE Pearls — Primary Care Assessment","body":"Thunderclap headache = SAH until proven otherwise:\n- CT head without contrast FIRST (may miss SAH if done >6 hours after onset)\n- If CT negative: LP for xanthochromia ≥12 hours after headache onset\n- DO NOT dismiss thunderclap headache as tension/migraine without workup\n\nCauda equina = surgical emergency:\n- Saddle anesthesia + bowel/bladder dysfunction → MRI immediately → neurosurgery\n- Missing cauda equina = permanent paralysis and incontinence\n\nGiant cell arteritis in ≥50 with jaw claudication + temporal pain + elevated ESR:\n- Start prednisone (60 mg/day) IMMEDIATELY if visual symptoms present\n- Do NOT wait for temporal artery biopsy results when visual loss is threatened\n- Visual loss from GCA is permanent if treatment delayed\n\nUnintentional weight loss >5% requires investigation:\n- CBC, metabolic panel, CXR, abdominal ultrasound, stool occult blood, thyroid, HIV/TB if risk factors\n- Do not attribute to voluntary dieting without workup\n\nDiagnostic stewardship — CNPLE values right-testing:\n- Order tests that change management\n- Pre-test probability reasoning is explicitly tested\n- Avoid cascade effects from investigating low-probability findings\n\nAAA screening:\n- One-time ultrasound for men ≥65 who have ever smoked (CTFPHC recommendation)\n- NP orders this proactively as part of health maintenance for eligible patients"}
+            ],
+            "studyTakeaways": [
+                "Red flags require investigation before assuming benign etiology — never dismiss",
+                "SNOOP4 for dangerous headaches: Systemic, Neurological, Onset sudden, Older, Positional, Progressive, Prior changed, Papilledema",
+                "Diagnostic stewardship: order tests that change management; avoid cascade from over-investigation",
+                "NP manages common acute and stable chronic conditions independently; refers urgently for emergencies"
+            ],
+            "studyCommonTraps": [
+                "Missing thunderclap headache as SAH (early CT may be normal — LP needed 12+ hours post-onset)",
+                "Dismissing back pain without checking for cauda equina symptoms (saddle anesthesia, bladder/bowel)",
+                "Treating unintentional weight loss as benign without mandated investigation"
+            ],
+            "memoryAnchor": "SNOOP4 for dangerous headaches; SBAR for all referral communication; Cauda equina = emergency MRI now"
+        }
+    ]
+
+if __name__ == "__main__":
+    cat = load_catalog()
+    print(f"np-core-catalog: {len(cat['lessons'])} lessons before")
+    existing = {l["slug"] for l in cat.get("lessons", [])}
     added = 0
-    for lesson in lessons:
+    for lesson in make_lessons():
         if lesson["slug"] not in existing:
-            data["lessons"].append(lesson)
+            cat["lessons"].append(lesson)
             print(f"  ADD: {lesson['slug']}")
             added += 1
         else:
             print(f"  SKIP: {lesson['slug']}")
-    return added
-
-if __name__ == "__main__":
-    data = load_np_core()
-    before = len(data["lessons"])
-    n = apply(data, LESSONS)
-    save_np_core(data)
-    print(f"\nAdded {n} CNPLE lessons. np-core-catalog total: {len(data['lessons'])} (was {before})")
+    save_catalog(cat)
+    print(f"\nAdded {added}. Total: {len(cat['lessons'])} lessons")

@@ -60,23 +60,13 @@ export async function register() {
         // swallow — instrumentation must never crash app
       }
 
-      // Notification env var validation — loud warning at boot, never blocks
+      // Notification env var validation — surfaces missing vars at boot so the first real
+      // payment doesn't arrive silently. Uses the structured validator for richer output.
       try {
-        const isProd = process.env.NODE_ENV === "production";
-        if (isProd) {
-          const missing: string[] = [];
-          if (!process.env.RESEND_API_KEY?.trim()) missing.push("RESEND_API_KEY");
-          if (!(process.env.REVENUE_ALERT_EMAIL?.trim() || process.env.ADMIN_SUBSCRIPTION_NOTIFY_EMAIL?.trim())) {
-            missing.push("REVENUE_ALERT_EMAIL or ADMIN_SUBSCRIPTION_NOTIFY_EMAIL");
-          }
-          if (!process.env.STRIPE_WEBHOOK_SECRET?.trim()) missing.push("STRIPE_WEBHOOK_SECRET");
-          if (missing.length > 0) {
-            console.error(
-              `[NurseNest][CRITICAL] Missing required notification/payment env vars at boot: ${missing.join(", ")}. ` +
-              `Subscription notifications WILL be silently dropped until these are set in DigitalOcean App Platform.`,
-            );
-          }
-        }
+        const { validateNotificationEnvVarsOnBoot } = await import(
+          "@/lib/stripe/notification-boot-validator"
+        );
+        validateNotificationEnvVarsOnBoot();
       } catch {
         // never block boot
       }

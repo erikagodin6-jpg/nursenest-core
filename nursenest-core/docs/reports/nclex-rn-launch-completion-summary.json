@@ -1,0 +1,111 @@
+{
+  "generatedAt": "2026-06-01T22:26:18.272Z",
+  "totalQuestions": 12902,
+  "weakQuestions": 12902,
+  "formatRows": [
+    {
+      "format": "multiple_choice",
+      "actual": 9034,
+      "target": 3500,
+      "deficit": 0,
+      "status": "PASS"
+    },
+    {
+      "format": "sata",
+      "actual": 1635,
+      "target": 1500,
+      "deficit": 0,
+      "status": "PASS"
+    },
+    {
+      "format": "bowtie",
+      "actual": 392,
+      "target": 1000,
+      "deficit": 608,
+      "status": "SHORT"
+    },
+    {
+      "format": "matrix",
+      "actual": 197,
+      "target": 500,
+      "deficit": 303,
+      "status": "SHORT"
+    },
+    {
+      "format": "ordering",
+      "actual": 730,
+      "target": 500,
+      "deficit": 0,
+      "status": "PASS"
+    },
+    {
+      "format": "hotspot",
+      "actual": 0,
+      "target": 500,
+      "deficit": 500,
+      "status": "SHORT"
+    },
+    {
+      "format": "calculation",
+      "actual": 0,
+      "target": 300,
+      "deficit": 300,
+      "status": "SHORT"
+    },
+    {
+      "format": "ecg",
+      "actual": 0,
+      "target": 300,
+      "deficit": 300,
+      "status": "SHORT"
+    },
+    {
+      "format": "case_study",
+      "actual": 0,
+      "target": 0,
+      "deficit": 0,
+      "status": "PASS"
+    },
+    {
+      "format": "trend",
+      "actual": 51,
+      "target": 0,
+      "deficit": 0,
+      "status": "PASS"
+    },
+    {
+      "format": "cloze",
+      "actual": 0,
+      "target": 0,
+      "deficit": 0,
+      "status": "PASS"
+    },
+    {
+      "format": "matrix_mr",
+      "actual": 0,
+      "target": 0,
+      "deficit": 0,
+      "status": "PASS"
+    }
+  ],
+  "flashCounts": {
+    "strict": 0,
+    "genericRn": 1991,
+    "decksStrict": 0,
+    "sourceQuestions": 12902
+  },
+  "flashTarget": 51608,
+  "flashDeficit": 51608,
+  "examCount": 0,
+  "catEligible": 12902,
+  "catCategoryFailures": 0,
+  "lessons": 1043,
+  "lessonPass": 0,
+  "overall": 40,
+  "verdict": "FAIL",
+  "providerConfigured": {
+    "anthropic": false,
+    "openrouter": false,
+    "openai": false
+  }
+}

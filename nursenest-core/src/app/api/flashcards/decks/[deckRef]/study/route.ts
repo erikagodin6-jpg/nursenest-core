@@ -40,6 +40,10 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { bankExamQuestionRowToFlashcardStudySelectRow } from "@/lib/flashcards/bank-exam-question-to-flashcard-select";
 import { loadExamQuestionRowsForFlashcardPool } from "@/lib/flashcards/flashcard-exam-bank-hub-inventory";
 import { resolveAccessScopeForPathwayExamQuestionPool } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
+import {
+  buildFlashcardSessionFallback,
+  hasFallbackContentForPathway,
+} from "@/lib/study-content-failover/flashcard-session-static-fallback.server";
 
 const NO_ACCESS: AccessScope = {
   hasAccess: false,
@@ -696,6 +700,50 @@ export async function GET(req: NextRequest, { params }: Props) {
       finalSessionPoolSize: 0,
       failureReason: "deck_study_query_failed",
     });
+
+    // ── Tertiary static-catalog fallback ────────────────────────────────────
+    // When the DB session build fails after all retries, serve cards from the
+    // static TypeScript content bundles so paying users can continue studying.
+    // These cards carry no SRS state; mode is "preview" so the client omits
+    // progress controls. The header signals the fallback to monitoring.
+    if (hasFallbackContentForPathway(deck.pathwayId)) {
+      try {
+        const fallback = buildFlashcardSessionFallback({
+          deckRef,
+          pathwayId: deck.pathwayId,
+          limit: requestedCount,
+          topicFilter: deck.title ?? null,
+        });
+        if (fallback.cards.length > 0) {
+          const fallbackBody = {
+            mode: "preview" as const,
+            title: deck.title,
+            cards: fallback.cards,
+            sessionMeta: {
+              requestedCount,
+              returnedCount: fallback.cards.length,
+              totalAvailable: fallback.totalAvailable,
+              hasMore: false,
+            },
+            _fallback: true,
+            _fallbackSource: "static_catalog",
+          };
+          safeServerLog("api_flashcards_study", "static_fallback_served", {
+            deckRef,
+            cardCount: fallback.cards.length,
+          });
+          return NextResponse.json(fallbackBody, {
+            headers: { "X-NurseNest-Content-Fallback": "1" },
+          });
+        }
+      } catch (fallbackErr) {
+        safeServerLog("api_flashcards_study", "static_fallback_failed", {
+          deckRef,
+          error: fallbackErr instanceof Error ? fallbackErr.message.slice(0, 200) : "unknown",
+        });
+      }
+    }
+
     return deckStudyFailureResponse("deck_study_query_failed", "Unable to create study session from this deck.", 503, {
       reasonFailed: e instanceof Error ? e.message.slice(0, 500) : "deck_study_query_failed",
     });

@@ -180,6 +180,28 @@ const flashcardSelect = {
   deck: { select: { pathwayId: true, title: true } },
 } as const;
 
+/** Narrow select for count-only (inventory) requests: skip payload-heavy card body fields. */
+const flashcardCountSelect = {
+  id: true,
+  front: true,
+  back: true,
+  sourceKey: true,
+  lessonId: true,
+  examQuestionId: true,
+  category: { select: { name: true, topicCode: true } },
+  deck: { select: { pathwayId: true, title: true } },
+} as const;
+
+/** Select for flashcardProgress parallel pre-fetch used in weak/incorrect sessions. */
+const progressSelect = {
+  flashcardId: true,
+  lastQuality: true,
+  repetitions: true,
+  lastReviewedAt: true,
+  nextReviewAt: true,
+  lapses: true,
+} as const;
+
 function describeCustomSessionFilterMode(flags: {
   weakOnly: boolean;
   incorrectOnly: boolean;
@@ -650,14 +672,37 @@ export async function buildFlashcardCustomSession(
             : Math.max((offset + limit) * 8, 80),
         )
       : FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT;
-    const cards = await prisma.flashcard.findMany({
-      where: buildFlashcardWhere(
-        flashcardAccessWhere(entitlement, pathwayOptsResolved),
-      ),
-      select: flashcardSelect,
-      orderBy: { updatedAt: "desc" },
-      take: cardScanLimit,
-    });
+
+    // Phase 3B: fire progress scan in parallel with card scan for weak/incorrect sessions.
+    // Both queries use the same access scope — the card IDs are not needed to start the
+    // progress scan because we filter by the same flashcard where-clause on the relation.
+    const accessWhereForCards = flashcardAccessWhere(entitlement, pathwayOptsResolved);
+    const parallelProgressPromise =
+      _needsProgressFilter && userId && includeCards
+        ? prisma.flashcardProgress.findMany({
+            where: {
+              userId,
+              flashcard: buildFlashcardWhere(accessWhereForCards),
+            },
+            select: progressSelect,
+            take: FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT,
+          })
+        : null;
+
+    // Phase 3G: use narrow select for count-only requests (no front/back/options body needed).
+    const [cards, _parallelProgress] = await Promise.all([
+      prisma.flashcard.findMany({
+        where: buildFlashcardWhere(accessWhereForCards),
+        select: includeCards ? flashcardSelect : (flashcardCountSelect as typeof flashcardSelect),
+        orderBy: { updatedAt: "desc" },
+        take: cardScanLimit,
+      }),
+      parallelProgressPromise,
+    ]);
+    // Pre-built progress map from the parallel fetch (null when not applicable).
+    const _parallelProgressMap = _parallelProgress
+      ? new Map(_parallelProgress.map((p) => [p.flashcardId, p]))
+      : null;
 
     let lessonQuestionVirtuals: Awaited<
       ReturnType<typeof loadLessonLinkedFlashcardVirtuals>
@@ -990,24 +1035,30 @@ export async function buildFlashcardCustomSession(
           scoped.map((c) => c.id).filter((id) => !id.startsWith("exam_bank:")),
         ),
       ];
-      const progress = await prisma.flashcardProgress.findMany({
-        where: {
-          userId,
-          flashcardId: { in: scopedIds },
-        },
-        select: {
-          flashcardId: true,
-          lastQuality: true,
-          repetitions: true,
-          lastReviewedAt: true,
-          nextReviewAt: true,
-          lapses: true,
-        },
-        take: takeForIdIn(
-          scopedIds,
-          FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT,
-        ),
-      });
+      // Phase 3B: use the pre-fetched parallel progress when available (same access scope).
+      // On a cache miss (parallelProgressMap null = non-weak session or count-only), fall
+      // back to the original scoped-ID query. This eliminates one DB round trip on the hot
+      // weak/incorrect path where parallelProgressPromise was started above.
+      let progress: Array<typeof progressSelect & Record<string, unknown>>;
+      if (_parallelProgressMap !== null) {
+        // Filter the broad parallel results to only scoped IDs (in-memory, no extra query).
+        const scopedSet = new Set(scopedIds);
+        progress = [..._parallelProgressMap.values()].filter((p) =>
+          scopedSet.has(p.flashcardId),
+        ) as typeof progress;
+      } else {
+        progress = await prisma.flashcardProgress.findMany({
+          where: {
+            userId,
+            flashcardId: { in: scopedIds },
+          },
+          select: progressSelect,
+          take: takeForIdIn(
+            scopedIds,
+            FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT,
+          ),
+        });
+      }
       const map = new Map(progress.map((p) => [p.flashcardId, p]));
       progressByScopedId = new Map(
         progress.map((p) => [
@@ -1067,7 +1118,9 @@ export async function buildFlashcardCustomSession(
           sessionSeed?.trim().length
             ? `${sessionSeed.trim()}:pool-cap`
             : `${userId.slice(0, 8)}:${pathwayScopeId ?? ""}:pool-cap`;
-        scoped = shuffleSeeded([...scoped], poolShuffleSalt).slice(0, adaptivePoolCap);
+        // Phase 3F: shuffleSeeded operates in-place when given the live array,
+        // avoiding a full spread copy of up to 800 WorkingCard objects.
+        scoped = shuffleSeeded(scoped, poolShuffleSalt).slice(0, adaptivePoolCap);
       }
 
       const scopedIds = [
@@ -1240,6 +1293,14 @@ export async function buildFlashcardCustomSession(
     }
 
     const plannedCount = includeCards ? cardsForSession.length : limited.length;
+    // Phase 3I: count DB queries for observability dashboard.
+    // parallelProgressHit=1 means we saved one sequential round-trip via the parallel pre-fetch.
+    const parallelProgressHit = _parallelProgressMap !== null ? "1" : "0";
+    const queryCount = 1 /* flashcard.findMany */ +
+      (parallelProgressHit === "1" ? 1 : 0) /* parallel progress */ +
+      (needsProgress && parallelProgressHit === "0" ? 1 : 0) /* sequential progress */ +
+      (chunkResults.length > 0 ? 1 : 0) /* examQuestion meta (counted as 1 even if chunked) */ +
+      (_eagerPoolChain !== null ? 2 : 0) /* resolveAccess + loadExamRows */;
     safeServerLog("flashcards", "FLASHCARD_SESSION_POOL", {
       loader_name: "build_flashcard_custom_session",
       userId: userId.slice(0, 8),
@@ -1274,6 +1335,11 @@ export async function buildFlashcardCustomSession(
       sourceKind,
       offset: String(boundedOffset),
       cardLimit: cardLimitRaw ?? "20",
+      // Phase 3I telemetry additions
+      queryCount: String(queryCount),
+      parallelProgressHit,
+      narrowSelectUsed: includeCards ? "0" : "1",
+      examMetaChunks: String(chunks.length),
     });
 
     const summary: FlashcardCustomSessionSummary = {

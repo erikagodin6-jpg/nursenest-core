@@ -54,6 +54,10 @@ import {
 } from "@/lib/subscriptions/stripe-subscription-reconcile";
 import { markReferralSubscribed } from "@/lib/referrals/referral-rewards";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
+import {
+  buildSubscriberConfirmationFromCheckout,
+  sendSubscriberConfirmationEmail,
+} from "@/lib/stripe/subscriber-confirmation-email";
 
 type LifecycleData = ReturnType<typeof billingLifecycleFields>;
 
@@ -822,6 +826,28 @@ export async function applyStripeWebhookEvent(
         planName: plan?.tier != null ? String(plan.tier) : null,
         planTier: plan?.tier,
       });
+
+      // ── Subscriber confirmation email ─────────────────────────────────────
+      // Sends to the paying subscriber (not the admin) with plan, amount, country, timestamp.
+      // Does NOT throw on failure — admin notification paths handle Stripe retry forcing.
+      const subscriberConfirmInput = buildSubscriberConfirmationFromCheckout({
+        session,
+        stripeSubscription,
+        planLabel: plan?.tier != null ? String(plan.tier) : null,
+        planCountryLabel: plan?.country != null ? String(plan.country) : null,
+        billingRegionSlug: billingRegionMeta ?? null,
+        eventCreated: event.created,
+        livemode: event.livemode,
+      });
+      if (subscriberConfirmInput) {
+        void sendSubscriberConfirmationEmail(subscriberConfirmInput).catch((e) => {
+          safeServerLog("stripe_webhook", "subscriber_confirmation_email_exception", {
+            eventIdPrefix,
+            message: e instanceof Error ? e.message.slice(0, 160) : "unknown",
+            severity: "error",
+          });
+        });
+      }
     } else if (userId && session.mode === "payment" && typeof session.payment_intent === "string") {
       // ── One-time payment mode (Advanced Hemodynamics, Critical Care Bundle) ──────
       const paymentIntentId = session.payment_intent;

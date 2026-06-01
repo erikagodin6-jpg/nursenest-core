@@ -16,13 +16,18 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const payloadSchema = z.object({
   track: z.enum(["RN", "RPN", "LVN_LPN", "NP", "ALLIED", "NEW_GRAD", "PRE_NURSING"]),
-  lifecycle: z.enum(["paid_active", "none", "expired", "trial"]),
+  lifecycle: z.enum([
+    "paid_active", "paid_monthly", "paid_annual",
+    "none", "expired", "trial", "trial_expired", "canceled", "past_due",
+  ]),
   country: z.enum(["US", "CA"]).default("US"),
   npSpecialty: z.enum(["FNP", "AGPCNP", "PMHNP", "WHNP", "PNP_PC"]).optional(),
   alliedCareer: z
     .enum(["paramedic", "rrt", "mlt", "imaging", "ota_pta", "pharmtech", "socialwork"])
     .optional(),
   planVariant: z.enum(["monthly", "6-month", "yearly"]).optional(),
+  /** Optional caller tag — "view_as_customer" when invoked from the View As Customer portal. */
+  source: z.enum(["view_as_customer", "learner_qa_panel", "toolbar", "api"]).optional(),
 });
 
 export async function POST(req: Request) {
@@ -105,6 +110,7 @@ export async function POST(req: Request) {
     npSpecialty: d.npSpecialty,
     alliedCareer: d.alliedCareer,
     planVariant: d.planVariant,
+    source: d.source ?? "api",
   });
   safeServerLog("admin_learner_qa", "simulate_cookie_set", {
     userIdPrefix: gate.admin.userId.slice(0, 8),
@@ -116,6 +122,7 @@ export async function POST(req: Request) {
     npSpecialty: d.npSpecialty,
     alliedCareer: d.alliedCareer,
     planVariant: d.planVariant,
+    source: d.source ?? "api",
   });
 
   return NextResponse.json({ ok: true, dryRun: false, state: publicQaStateFromPayload(payload) });

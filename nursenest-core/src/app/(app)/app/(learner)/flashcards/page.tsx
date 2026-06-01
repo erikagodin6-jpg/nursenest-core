@@ -24,7 +24,7 @@ import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-f
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { builderCategoryOptionsForPathway } from "@/lib/flashcards/flashcard-builder-taxonomy";
-import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
+import { loadSharedFlashcardsHubInventoryForPathway } from "@/lib/flashcards/load-shared-flashcards-hub-inventory.server";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import {
   pathwayFlashcardsHubH1,
@@ -472,7 +472,7 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
   if (catalogPathwayForInventory && userId && isDatabaseUrlConfigured()) {
     try {
       const timedInventory = await Promise.race([
-        loadFlashcardsExamInventoryForPathway({
+        loadSharedFlashcardsHubInventoryForPathway({
           userId,
           entitlement,
           pathway: catalogPathwayForInventory,
@@ -486,12 +486,7 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
       ]);
 
       if (timedInventory?.ok) {
-        initialHub = {
-          categoryOptions: timedInventory.categoryOptions,
-          matchingTotal: timedInventory.total,
-          lessonVirtualDiagnostics: null,
-          poolDiagnostics: timedInventory.diagnostics,
-        };
+        initialHub = timedInventory.payload;
         inventorySource = "server_inventory";
       } else if (timedInventory === null) {
         inventorySource = "server_inventory_timeout";
