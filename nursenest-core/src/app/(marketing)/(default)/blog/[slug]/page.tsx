@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { CheckCircle2, GraduationCap, Share2, Sparkles, Stethoscope } from "lucide-react";
@@ -12,8 +13,8 @@ import {
 import {
   getBlogPostMetaBySlug,
   getPublishedBlogPostBySlug,
-  isBlogPostMetaVisible,
 } from "@/lib/blog/safe-blog-queries";
+import { isBlogPostMarketingMetaVisible } from "@/lib/blog/blog-visibility";
 import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
 import {
   BlogFaqPageJsonLd,
@@ -62,10 +63,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pathname = `/blog/${slug}`;
   return safeGenerateMetadata(
     async () => {
-      const visible = await isBlogPostMetaVisible(slug);
-      if (!visible) return {};
       const post = await getBlogPostMetaBySlug(slug);
       if (!post) return {};
+      if (!isBlogPostMarketingMetaVisible({ postStatus: post.postStatus, publishAt: post.publishAt, scheduledAt: post.scheduledAt, workflowStatus: post.workflowStatus })) return {};
       const seo = parseInternalLinkPlanJson(post.internalLinkPlan).seo;
       const title = post.seoTitle?.trim() || post.title;
       const description = (post.seoDescription?.trim() || post.excerpt).slice(
@@ -271,13 +271,13 @@ export default async function BlogPostPage({ params }: Props) {
               <figure className="min-w-0">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] border-0 border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--theme-card-bg))] shadow-sm sm:border">
                   {post.coverImage ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Image
                       src={post.coverImage}
                       alt={"coverImageAlt" in post ? (post.coverImageAlt ?? "") : ""}
-                      loading="eager"
-                      decoding="async"
-                      className="absolute inset-0 h-full w-full object-cover"
+                      fill
+                      priority
+                      sizes="(max-width: 1024px) 100vw, 420px"
+                      className="object-cover"
                     />
                   ) : (
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,color-mix(in_srgb,var(--semantic-success)_18%,transparent),transparent_34%),linear-gradient(135deg,color-mix(in_srgb,var(--semantic-brand)_12%,var(--theme-card-bg)),var(--theme-card-bg))]" />

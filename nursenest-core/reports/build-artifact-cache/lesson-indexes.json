@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "lesson_indexes",
-  "fingerprint": "f3314b6ab286b8d249444188e68583688c84b54eaaf6a733b12914523e1ea90c",
-  "generatedAt": "2026-06-01T18:12:59.358Z",
+  "fingerprint": "13cb3939fd9f2babc6fd296d5df0777f87e411366c2e1dd42b4536a06ca2c98a",
+  "generatedAt": "2026-06-01T20:37:12.553Z",
   "inputs": [
     {
       "type": "file",
@@ -1839,7 +1839,7 @@
   ],
   "metadata": {
     "verifyMode": "deep",
-    "buildLessonIndexesMs": 94423,
-    "verifyLessonIndexesMs": 91268
+    "buildLessonIndexesMs": 110553,
+    "verifyLessonIndexesMs": 96077
   }
 }

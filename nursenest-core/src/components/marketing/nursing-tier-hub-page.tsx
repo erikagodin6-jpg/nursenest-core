@@ -1,9 +1,10 @@
 "use client";
 
+import { useContext } from "react";
 import Link from "next/link";
 import { Activity, BookOpen, Brain, ClipboardList, Target } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { SessionContext } from "next-auth/react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { catPathwayExamCodeLabel, catPathwayRegionalExamLine } from "@/lib/exam-pathways/cat-pathway-labels";
@@ -169,8 +170,10 @@ export function NursingTierHubPage({
   oscePublic?: boolean;
 }) {
   const { t } = useMarketingI18n();
-  const { status, data: clientSession } = useSession();
-  const clientSignedIn = status === "authenticated" && Boolean((clientSession?.user as { id?: string } | undefined)?.id);
+  const sessionContext = useContext(SessionContext);
+  const clientSignedIn =
+    sessionContext?.status === "authenticated" &&
+    Boolean((sessionContext.data?.user as { id?: string } | undefined)?.id);
   const effectiveViewerSignedIn = viewerSignedIn || clientSignedIn;
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
   const catAppStartHref = appPathwayCatSessionStartPath(pathway.id);

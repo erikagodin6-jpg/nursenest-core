@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -18,7 +19,6 @@ import { BlogPostCard } from "@/components/blog/blog-post-card";
 import { BlogMarketingPostListClient } from "@/components/blog/blog-marketing-post-list-client";
 import {
   BLOG_LIST_PAGE_SIZE,
-  PATHOPHYSIOLOGY_HUB_PRIMARY_TAG,
   getPublishedBlogPostsPage,
 } from "@/lib/blog/safe-blog-queries";
 import { logPublicContentSurfaceFailure } from "@/lib/observability/public-content-surface-failure-log";
@@ -106,10 +106,10 @@ export default async function BlogIndexPage({ searchParams }: Props) {
   if (!Number.isFinite(raw) || raw < 1 || raw > BLOG_PUBLIC_MAX_PAGE) notFound();
   const page = Math.floor(raw);
   const initialQuery = typeof sp.q === "string" ? sp.q.trim().slice(0, 80) : "";
-  const { posts, total, pageSize, listLoad } = await getPublishedBlogPostsPage(page, BLOG_LIST_PAGE_SIZE, undefined, {
-    includeTotal: false,
-  });
-  const pathophysiologyHub: typeof posts = [];
+  const [{ posts, total, pageSize, listLoad }, blogInlinePreloaded] = await Promise.all([
+    getPublishedBlogPostsPage(page, BLOG_LIST_PAGE_SIZE, undefined, { includeTotal: false }),
+    preloadInlineContentMap([...BLOG_INLINE_KEYS]),
+  ]);
   if (process.env.BLOG_INDEX_ROUTE_LIST_LOAD === "1") {
     safeServerLog("blog", "BLOG_INDEX_ROUTE_LIST_LOAD", {
       pathname: "/blog",
@@ -138,14 +138,10 @@ export default async function BlogIndexPage({ searchParams }: Props) {
       exampleUrls: posts.slice(0, 3).map((p) => `/blog/${p.slug}`),
     });
   }
-  const pathoSlugSet = new Set(pathophysiologyHub.map((p) => p.slug));
-  const postsForList = page === 1 ? posts.filter((p) => !pathoSlugSet.has(p.slug)) : posts;
+  const postsForList = posts;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const { crumbs, schemaItems } = blogIndexBreadcrumbs();
-  const blogInlinePreloaded = await preloadInlineContentMap([...BLOG_INLINE_KEYS]);
-  const pathoTagHref = `/blog/tag/${encodeURIComponent(PATHOPHYSIOLOGY_HUB_PRIMARY_TAG)}`;
-  const showPathophysiologySection = pathophysiologyHub.length > 0;
-  const showEmptyState = posts.length === 0 && !showPathophysiologySection;
+  const showEmptyState = posts.length === 0;
   const showListLoadError = !listLoad.querySucceeded;
 
   const featured = page === 1 && postsForList.length > 0 ? postsForList[0] : null;
@@ -246,13 +242,13 @@ export default async function BlogIndexPage({ searchParams }: Props) {
             </div>
             <div className="relative mt-8 hidden min-h-[260px] overflow-hidden rounded-[1.75rem] border border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] bg-[var(--theme-card-bg)] shadow-[var(--semantic-shadow-soft)] md:block lg:mt-0">
               {featured?.coverImage ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={featured.coverImage}
                   alt=""
-                  loading="eager"
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
                 />
               ) : (
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,color-mix(in_srgb,var(--semantic-success)_20%,transparent),transparent_34%),linear-gradient(135deg,color-mix(in_srgb,var(--semantic-brand)_12%,var(--theme-card-bg)),var(--theme-card-bg))]" />
@@ -298,53 +294,8 @@ export default async function BlogIndexPage({ searchParams }: Props) {
             </div>
           </section>
 
-          {showPathophysiologySection ? (
-            <section
-              className="nn-premium-blog-patho-spotlight nn-spectrum-rule-top mb-12 overflow-hidden rounded-[1.75rem] border border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] bg-[var(--theme-card-bg)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-7"
-              aria-labelledby="blog-pathophysiology-heading"
-              data-nn-blog-spotlight="pathophysiology"
-            >
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h2
-                    id="blog-pathophysiology-heading"
-                    className="text-xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-2xl"
-                  >
-                    Pathophysiology for nursing students
-                  </h2>
-                  <p className="mt-2 max-w-prose text-sm text-[var(--theme-muted-text)]">
-                    Exam-style disease mechanisms and clinical reasoning — NCLEX-oriented depth with nursing scope in mind.
-                  </p>
-                </div>
-                <Link
-                  href={pathoTagHref}
-                  className="inline-flex min-h-[44px] shrink-0 items-center rounded-full border border-primary/35 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary shadow-sm transition hover:bg-primary/15"
-                >
-                  Browse all pathophysiology articles
-                </Link>
-              </div>
-              <ul className="mt-6 grid list-none gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {pathophysiologyHub.map((p) => (
-                  <BlogPostCard
-                    key={p.slug}
-                    post={{
-                      slug: p.slug,
-                      title: p.title,
-                      excerpt: p.excerpt,
-                      category: p.category ?? null,
-                      coverImage: p.coverImage ?? null,
-                      createdAt: p.createdAt,
-                    }}
-                  />
-                ))}
-              </ul>
-            </section>
-          ) : null}
           {postsForList.length > 0 ? (
             <>
-              {page === 1 && showPathophysiologySection ? (
-                <h2 className="mb-4 text-lg font-semibold text-[var(--theme-heading-text)]">All articles</h2>
-              ) : null}
               {featured ? (
                 <div className="mb-8">
                   <div className="mb-5 flex items-end justify-between gap-4">
@@ -373,8 +324,6 @@ export default async function BlogIndexPage({ searchParams }: Props) {
                 <p className="text-sm text-[var(--theme-muted-text)]">More articles appear here as they publish.</p>
               ) : null}
             </>
-          ) : page === 1 && showPathophysiologySection ? (
-            <p className="text-sm text-[var(--theme-muted-text)]">More clinical articles appear in the list as they publish.</p>
           ) : null}
           {totalPages > 1 ? (
             <nav className="mt-10 flex flex-wrap items-center justify-between gap-4 text-sm" aria-label="Blog pagination">

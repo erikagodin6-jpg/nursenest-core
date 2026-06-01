@@ -509,3 +509,21 @@ export function questionDifficultyScopeSqlForMode(mode: QuestionDifficultyScopeM
   if (mode === "advanced_review") return advancedReviewQuestionScopeSql();
   return standardExamPrepQuestionScopeSql();
 }
+
+/**
+ * NP scope gate (SQL twin of {@link npProviderQuestionScopeWhere}).
+ *
+ * Excludes only SPECIALTY tags (ICU, critical-care, ventilator-management, etc.) but allows
+ * provider-level / advanced-review content — NP learners should see diagnostic, prescribing, and
+ * differential-diagnosis questions that `standardExamPrepQuestionScopeSql` would exclude.
+ *
+ * Use instead of {@link standardExamPrepQuestionScopeSql} when `entitlement.tier === "NP"`.
+ */
+export function npProviderQuestionScopeSql(): Prisma.Sql {
+  return Prisma.sql`
+    AND NOT EXISTS (
+      SELECT 1 FROM unnest(coalesce(tags, '{}'::text[])) AS t(tag)
+      WHERE lower(trim(t.tag)) IN (${Prisma.join([...SPECIALTY_SCOPE_TAGS])})
+    )
+  `;
+}

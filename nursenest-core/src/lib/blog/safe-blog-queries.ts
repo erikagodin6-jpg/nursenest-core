@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { BlogPost, Prisma } from "@prisma/client";
 import { BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
@@ -1220,7 +1221,7 @@ async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope)
   return localizedVariant ?? canonical;
 }
 
-export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPostMeta | null> {
+async function getBlogPostMetaBySlugImpl(slug: string, scope?: BlogQueryScope): Promise<BlogPostMeta | null> {
   if (shouldSkipBlogDbForProductionBuild()) {
     return getStaticBlogMetaFallback(slug);
   }
@@ -1254,6 +1255,9 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
   return getStaticBlogMetaFallback(slug);
 }
 
+/** Request-scoped cache: deduplicates `generateMetadata` and page-component reads for the same slug. */
+export const getBlogPostMetaBySlug = cache(getBlogPostMetaBySlugImpl);
+
 /** True when slug should receive public metadata (SEO) and indexing. */
 export async function isBlogPostMetaVisible(slug: string, scope?: BlogQueryScope): Promise<boolean> {
   const meta = await getBlogPostMetaBySlug(slug, scope);
@@ -1266,7 +1270,7 @@ export async function isBlogPostMetaVisible(slug: string, scope?: BlogQueryScope
   });
 }
 
-export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPost | null> {
+async function getPublishedBlogPostBySlugImpl(slug: string, scope?: BlogQueryScope): Promise<BlogPost | null> {
   const now = new Date();
   if (shouldSkipBlogDbForProductionBuild()) {
     return getStaticBlogPostFallback(slug);
@@ -1375,6 +1379,9 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
   }
   return row;
 }
+
+/** Request-scoped cache: deduplicates `generateMetadata` and page-component reads for the same slug. */
+export const getPublishedBlogPostBySlug = cache(getPublishedBlogPostBySlugImpl);
 
 export async function countPublishedPostsWithTag(tag: string): Promise<number> {
   const t = tag.trim();
@@ -1593,6 +1600,12 @@ export type BlogSitemapSlugRow = {
   updatedAt: Date;
 };
 
+/** Combined row from the single-pass sitemap DB walk (Fix 8: merges slug + tag/category scan). */
+export type BlogSitemapFullRow = BlogSitemapSlugRow & {
+  tags: string[];
+  category: string | null;
+};
+
 export async function getSitemapPublishedBlogSlugs(): Promise<BlogSitemapSlugRow[]> {
   const now = new Date();
   return withBlogTimeoutFallback(
@@ -1673,10 +1686,14 @@ function blogSitemapDateFromYmdOrIso(value: string): Date {
   return Number.isNaN(d.getTime()) ? new Date() : d;
 }
 
+let _staticBlogSitemapSlugRowsCache: BlogSitemapSlugRow[] | null = null;
+
 /**
  * Bundled static plus long-tail markdown for sitemap and static-only builds; deduped (static wins on slug).
+ * Module-level memoized: the static corpus is immutable after process boot.
  */
 export function staticBlogSitemapSlugRows(): BlogSitemapSlugRow[] {
+  if (_staticBlogSitemapSlugRowsCache) return _staticBlogSitemapSlugRowsCache;
   const bySlug = new Map<string, BlogSitemapSlugRow>();
   for (const p of listStaticBlogPostsForIndex()) {
     const slug = p.slug?.trim();
@@ -1688,7 +1705,8 @@ export function staticBlogSitemapSlugRows(): BlogSitemapSlugRow[] {
     if (!slug || bySlug.has(slug)) continue;
     bySlug.set(slug, { slug, careerSlug: null, updatedAt: blogSitemapDateFromYmdOrIso(r.updatedAt) });
   }
-  return [...bySlug.values()];
+  _staticBlogSitemapSlugRowsCache = [...bySlug.values()];
+  return _staticBlogSitemapSlugRowsCache;
 }
 
 /** DB rows first; supplement URLs only when no live row exists for that slug. */
@@ -1718,6 +1736,95 @@ export async function getMergedBlogSitemapSlugRows(): Promise<BlogSitemapSlugRow
     return [];
   } catch (e) {
     if (await canUseStaticBlogFallback()) return staticBlogSitemapSlugRows();
+    throw e;
+  }
+}
+
+/**
+ * Single DB cursor-walk that collects slug, careerSlug, updatedAt, tags, and category in one pass.
+ * Replaces the two separate cursor-walks previously performed by `getSitemapPublishedBlogSlugsStrict`
+ * and `getSitemapBlogTagsAndCategories`. Used by `getMergedBlogSitemapData`.
+ */
+async function getSitemapPublishedBlogRowsFullStrict(): Promise<BlogSitemapFullRow[]> {
+  const now = new Date();
+  return withDatabaseFallbackTimeoutOrThrow(
+    async () => {
+      const out: BlogSitemapFullRow[] = [];
+      let cursor: { slug: string } | undefined;
+      for (;;) {
+        const page = await prisma.blogPost.findMany({
+          where: blogLiveWhere(now),
+          select: { slug: true, updatedAt: true, careerSlug: true, tags: true, category: true },
+          orderBy: { slug: "asc" },
+          take: SITEMAP_BLOG_SLUG_PAGE_SIZE,
+          ...(cursor ? { cursor, skip: 1 } : {}),
+        });
+        if (page.length === 0) break;
+        for (const r of page) {
+          const s = r.slug?.trim();
+          if (s) out.push({ slug: s, careerSlug: r.careerSlug?.trim() ?? null, updatedAt: r.updatedAt, tags: r.tags, category: r.category });
+        }
+        if (out.length >= SITEMAP_BLOG_ROW_CAP) break;
+        if (page.length < SITEMAP_BLOG_SLUG_PAGE_SIZE) break;
+        const last = page[page.length - 1];
+        if (!last?.slug) break;
+        cursor = { slug: last.slug };
+      }
+      return out.slice(0, SITEMAP_BLOG_ROW_CAP);
+    },
+    BLOG_SITEMAP_SLUG_LIST_TIMEOUT_MS,
+    { scope: "blog", label: "blog_sitemap.full_rows_strict" },
+  );
+}
+
+/**
+ * Returns DB slug rows merged with static supplement **and** the deduplicated tag/category sets —
+ * derived from a single DB cursor-walk instead of two separate ones.
+ */
+export async function getMergedBlogSitemapData(): Promise<{
+  slugRows: BlogSitemapSlugRow[];
+  tags: string[];
+  categories: string[];
+}> {
+  const tagSet = new Set<string>();
+  const categorySet = new Set<string>();
+
+  // Always seed from static corpus first (no DB dependency).
+  for (const p of listStaticBlogPostsForIndex()) {
+    for (const t of p.tags ?? []) { const v = t.trim(); if (v) tagSet.add(v); }
+    const c = (p.category ?? "").trim(); if (c) categorySet.add(c);
+  }
+  for (const r of listBlogStaticLongtailRecords()) {
+    for (const t of r.tags ?? []) { const v = t.trim(); if (v) tagSet.add(v); }
+    const c = (r.category ?? "").trim(); if (c) categorySet.add(c);
+  }
+  const staticSlugRows = staticBlogSitemapSlugRows();
+
+  if (!isDatabaseUrlConfigured() || shouldSkipBlogDbForProductionBuild() || shouldSkipDbBackedSitemapUrlsForBuild()) {
+    return { slugRows: staticSlugRows, tags: [...tagSet].sort(), categories: [...categorySet].sort() };
+  }
+
+  try {
+    const dbRows = await getSitemapPublishedBlogRowsFullStrict();
+    if (dbRows.length > 0) {
+      for (const r of dbRows) {
+        for (const t of r.tags) { const v = t.trim(); if (v) tagSet.add(v); }
+        const c = (r.category ?? "").trim(); if (c) categorySet.add(c);
+      }
+      return {
+        slugRows: mergeBlogSitemapRowsDbPrimary(dbRows, staticSlugRows),
+        tags: [...tagSet].sort(),
+        categories: [...categorySet].sort(),
+      };
+    }
+    if (await canUseStaticBlogFallback()) {
+      return { slugRows: staticSlugRows, tags: [...tagSet].sort(), categories: [...categorySet].sort() };
+    }
+    return { slugRows: [], tags: [...tagSet].sort(), categories: [...categorySet].sort() };
+  } catch (e) {
+    if (await canUseStaticBlogFallback()) {
+      return { slugRows: staticSlugRows, tags: [...tagSet].sort(), categories: [...categorySet].sort() };
+    }
     throw e;
   }
 }

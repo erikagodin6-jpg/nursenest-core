@@ -143,32 +143,38 @@ function isPipelineOnlyPublicH2Inner(inner: string): boolean {
   return false;
 }
 
-function stripFirstPredicateH2Section(html: string, innerPredicate: (inner: string) => boolean): string {
-  const re = /<h2[^>]*>([\s\S]*?)<\/h2>/gi;
+/**
+ * Single-pass removal of all pipeline-only H2 sections. Collects keep/drop spans in one
+ * traversal rather than restarting from the beginning after each stripped section.
+ */
+function stripAllPipelineScaffoldH2Sections(html: string): string {
+  const h2Re = /<h2[^>]*>([\s\S]*?)<\/h2>/gi;
+  const keepChunks: string[] = [];
+  let cursor = 0;
   let m: RegExpExecArray | null;
-  while ((m = re.exec(html)) !== null) {
+
+  while ((m = h2Re.exec(html)) !== null) {
     const innerText = stripHtmlTags(m[1] ?? "").replace(/\s+/g, " ").trim();
-    if (!innerPredicate(innerText)) continue;
-    const start = m.index;
-    const after = m.index + m[0].length;
-    const rest = html.slice(after);
+    if (!isPipelineOnlyPublicH2Inner(innerText)) continue;
+
+    // Keep everything before this H2.
+    keepChunks.push(html.slice(cursor, m.index));
+
+    // Skip the H2 tag itself plus its section content up to the next h2/aside.
+    const afterTag = m.index + m[0].length;
+    const rest = html.slice(afterTag);
     const nextH2 = rest.search(/<h2\b/i);
     const nextAside = rest.search(/<aside\b/i);
     const candidates = [nextH2, nextAside].filter((i) => i >= 0);
     const endRel = candidates.length > 0 ? Math.min(...candidates) : rest.length;
-    return html.slice(0, start) + rest.slice(endRel);
-  }
-  return html;
-}
 
-function stripAllPipelineScaffoldH2Sections(html: string): string {
-  let s = html;
-  let prev = "";
-  while (prev !== s) {
-    prev = s;
-    s = stripFirstPredicateH2Section(s, isPipelineOnlyPublicH2Inner);
+    cursor = afterTag + endRel;
+    // Reset regex to resume scanning from the next section.
+    h2Re.lastIndex = cursor;
   }
-  return s;
+
+  keepChunks.push(html.slice(cursor));
+  return keepChunks.join("");
 }
 
 function transformFaqSchemaSectionToAccordion(html: string): string {

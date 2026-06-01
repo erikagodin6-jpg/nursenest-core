@@ -6,6 +6,7 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
+import { prismaTierCodesForProfileTier } from "@/lib/entitlements/accessible-tiers";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   applyCountsToBuilderCategories,
@@ -39,6 +40,14 @@ function bn(v: bigint | number | null | undefined): number {
 
 export type FlashcardPoolAccessTierCountrySource = "entitlement" | "user_profile" | "pathway_catalog_default";
 
+export type ScopeResolutionDenialCode =
+  | "subscription_no_access"
+  | "missing_tier_after_coalesce"
+  | "missing_country_after_coalesce"
+  | "country_mismatch"
+  | "tier_ladder_mismatch"
+  | "pathway_hidden";
+
 /** How tier/country were resolved for the exam pool (no user ids). */
 export type ResolvedFlashcardPoolAccess = {
   scope: AccessScope | null;
@@ -46,6 +55,10 @@ export type ResolvedFlashcardPoolAccess = {
   countryResolutionSource: FlashcardPoolAccessTierCountrySource;
   /** True when a `User` row was read to fill missing tier/country on the entitlement scope. */
   entitlementTierCountryUserRowCoalesce: boolean;
+  /** Populated when scope is null — machine-readable denial reason for diagnostics. */
+  denialCode?: ScopeResolutionDenialCode;
+  /** Human-readable denial detail for log events. Never null when denialCode is set. */
+  denialDetail?: string;
 };
 
 function tierCountrySource(
@@ -57,10 +70,39 @@ function tierCountrySource(
   return "pathway_catalog_default";
 }
 
+function buildDenialDetail(args: {
+  code: ScopeResolutionDenialCode;
+  userTier: string;
+  userCountry: string;
+  pathwayId: string;
+  pathwayTier: string;
+  pathwayCountry: string;
+  tierSource: FlashcardPoolAccessTierCountrySource;
+  countrySource: FlashcardPoolAccessTierCountrySource;
+}): string {
+  switch (args.code) {
+    case "subscription_no_access":
+      return `User subscription does not grant hasAccess=true. Pathway: ${args.pathwayId}`;
+    case "missing_tier_after_coalesce":
+      return `tier is null after entitlement + User row coalesce. Pathway requires tier=${args.pathwayTier}. tierSource=${args.tierSource}`;
+    case "missing_country_after_coalesce":
+      return `country is null after entitlement + User row coalesce. Pathway requires country=${args.pathwayCountry}. countrySource=${args.countrySource}`;
+    case "country_mismatch":
+      return `User country=${args.userCountry} does not match pathway country=${args.pathwayCountry} (pathway=${args.pathwayId}). countrySource=${args.countrySource}`;
+    case "tier_ladder_mismatch":
+      return `User tier=${args.userTier} is not in the tier ladder for pathway stripeTier=${args.pathwayTier} (pathway=${args.pathwayId}). tierSource=${args.tierSource}`;
+    case "pathway_hidden":
+      return `Pathway ${args.pathwayId} is hidden (status=hidden); access denied for all subscribers.`;
+  }
+}
+
 /**
  * Resolves tier/country for `ExamQuestion` gates when subscription-derived `AccessScope`
  * is missing `country` and/or `tier` (e.g. `planCountry` not yet synced) by coalescing from
  * the `User` row, then the pathway catalog — then verifies pathway coverage like CAT.
+ *
+ * Never returns scope:null silently — denial always includes a denialCode + denialDetail for
+ * structured log events. Callers must log the denialCode when scope is null.
  */
 export async function resolveAccessScopeForPathwayExamQuestionPool(
   userId: string,
@@ -68,19 +110,44 @@ export async function resolveAccessScopeForPathwayExamQuestionPool(
   pathway: ExamPathwayDefinition,
 ): Promise<ResolvedFlashcardPoolAccess> {
   function denied(
+    code: ScopeResolutionDenialCode,
     tierResolutionSource: FlashcardPoolAccessTierCountrySource,
     countryResolutionSource: FlashcardPoolAccessTierCountrySource,
     entitlementTierCountryUserRowCoalesce: boolean,
+    resolvedTier: string,
+    resolvedCountry: string,
   ): ResolvedFlashcardPoolAccess {
+    const denialDetail = buildDenialDetail({
+      code,
+      userTier: resolvedTier,
+      userCountry: resolvedCountry,
+      pathwayId: pathway.id,
+      pathwayTier: pathway.stripeTier,
+      pathwayCountry: pathway.countryCode,
+      tierSource: tierResolutionSource,
+      countrySource: countryResolutionSource,
+    });
     return {
       scope: null,
       tierResolutionSource,
       countryResolutionSource,
       entitlementTierCountryUserRowCoalesce,
+      denialCode: code,
+      denialDetail,
     };
   }
 
-  if (!entitlement.hasAccess) return denied("entitlement", "entitlement", false);
+  if (!entitlement.hasAccess) {
+    return denied(
+      "subscription_no_access",
+      "entitlement",
+      "entitlement",
+      false,
+      String(entitlement.tier ?? ""),
+      String(entitlement.country ?? ""),
+    );
+  }
+
   if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
     return {
       scope: entitlement,
@@ -109,22 +176,40 @@ export async function resolveAccessScopeForPathwayExamQuestionPool(
 
   const tierAfterUser = tier;
   const countryAfterUser = country;
+  const tierSrc = tierCountrySource(hadEntTier, tierAfterUser != null);
+  const countrySrc = tierCountrySource(hadEntCountry, countryAfterUser != null);
+
   tier = tier ?? pathway.stripeTier;
   country = country ?? pathway.countryCode;
 
+  // Diagnose the specific denial reason so callers can log actionable detail.
+  if (!tier) {
+    return denied("missing_tier_after_coalesce", tierSrc, countrySrc, entitlementTierCountryUserRowCoalesce, "", String(country ?? ""));
+  }
+  if (!country) {
+    return denied("missing_country_after_coalesce", tierSrc, countrySrc, entitlementTierCountryUserRowCoalesce, String(tier), "");
+  }
+  if (pathway.status === "hidden") {
+    return denied("pathway_hidden", tierSrc, countrySrc, entitlementTierCountryUserRowCoalesce, String(tier), String(country));
+  }
+  if (country !== pathway.countryCode) {
+    return denied("country_mismatch", tierSrc, countrySrc, entitlementTierCountryUserRowCoalesce, String(tier), String(country));
+  }
+  const accessibleTiers = prismaTierCodesForProfileTier(tier as Parameters<typeof prismaTierCodesForProfileTier>[0]);
+  if (!accessibleTiers.includes(pathway.stripeTier)) {
+    return denied("tier_ladder_mismatch", tierSrc, countrySrc, entitlementTierCountryUserRowCoalesce, String(tier), String(country));
+  }
+
   const coalesced: AccessScope = { ...entitlement, tier, country };
+  // Belt-and-suspenders: re-run the canonical check in case the pathway policy adds more rules.
   if (!subscriptionCoversPathwayBase(coalesced, pathway)) {
-    return denied(
-      tierCountrySource(hadEntTier, tierAfterUser != null),
-      tierCountrySource(hadEntCountry, countryAfterUser != null),
-      entitlementTierCountryUserRowCoalesce,
-    );
+    return denied("tier_ladder_mismatch", tierSrc, countrySrc, entitlementTierCountryUserRowCoalesce, String(tier), String(country));
   }
 
   return {
     scope: coalesced,
-    tierResolutionSource: tierCountrySource(hadEntTier, tierAfterUser != null),
-    countryResolutionSource: tierCountrySource(hadEntCountry, countryAfterUser != null),
+    tierResolutionSource: tierSrc,
+    countryResolutionSource: countrySrc,
     entitlementTierCountryUserRowCoalesce,
   };
 }
@@ -163,10 +248,12 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
       tierResolutionSource: accessResolved.tierResolutionSource,
       countryResolutionSource: accessResolved.countryResolutionSource,
       entitlementUserRowCoalesce: accessResolved.entitlementTierCountryUserRowCoalesce,
+      denialCode: accessResolved.denialCode ?? "unknown",
+      denialDetail: accessResolved.denialDetail?.slice(0, 400) ?? "",
     });
     return {
       ok: false,
-      code: "pathway_not_entitled",
+      code: accessResolved.denialCode ?? "pathway_not_entitled",
       message: "This pathway is not available for your subscription.",
     };
   }

@@ -1,6 +1,6 @@
 # Server/Client Boundary Audit
 
-Generated: 2026-06-01T18:34:06.051Z
+Generated: 2026-06-01T20:33:40.210Z
 
 Scope: `all`
 

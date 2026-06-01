@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import type { GlobalExamContext } from "@/lib/exam-context/global-exam-context";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { BankExamRowForFlashcard } from "@/lib/flashcards/bank-exam-question-to-flashcard-select";
 import { resolveBuilderCategoryId } from "@/lib/flashcards/flashcard-builder-taxonomy";
 import {
@@ -15,9 +16,17 @@ import {
   discoveryExamContextScopeForFlashcardFallback,
   examQuestionsDiscoveryWhereSql,
 } from "@/lib/questions/subscriber-discovery-aggregates";
-import { standardExamPrepQuestionScopeSql } from "@/lib/questions/difficulty-scope-filter";
+import {
+  npProviderQuestionScopeSql,
+  standardExamPrepQuestionScopeSql,
+} from "@/lib/questions/difficulty-scope-filter";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { GENERAL_STUDY_BANK_MODULE_SCOPE_SQL } from "@/lib/study-question-pool/study-question-pool-gates";
+import {
+  canAccessRtVentilatorModuleForTierAndProfession,
+  isRtVentilatorLearnerModuleEnabled,
+} from "@/lib/rt-ventilator/rt-ventilator-module-config";
+import { RT_VENTILATOR_BANK_TAG } from "@/lib/rt-ventilator/rt-ventilator-content-taxonomy";
 
 /** Match discovery-style caps — only affects grouped rows, not the total COUNT(*). */
 const EXAM_HUB_GROUP_ROW_LIMIT = 320;
@@ -26,20 +35,59 @@ const EXAM_HUB_GROUP_ROW_LIMIT = 320;
 const EXAM_FLASHCARD_SESSION_POOL_CAP = 4000;
 
 /**
- * SQL fragment that excludes question formats unsuitable for normal flashcard study:
- * - ECG / EKG / rhythm strip questions (separate premium module)
- * - Video / media-only questions (require player, not displayable as text cards)
- * - Questions with no stem text (cannot render a card front)
- * - Questions with no correct answer (cannot render a card back)
+ * RT ventilator gate SQL fragment — mirrors {@link rtVentilatorPremiumBankGateWhere} for raw SQL paths.
+ * Returns Prisma.empty when the learner may access the RT ventilator module, otherwise excludes
+ * rows tagged `module:rt-ventilator`.
  */
-const FLASHCARD_USABILITY_SQL = Prisma.sql`
-  AND (question_format IS NULL OR lower(trim(question_format)) NOT IN ('ecg', 'ekg', 'video', 'video_case', 'media', 'image_only'))
-  AND NOT ('ecg-video' = ANY(tags))
-  AND coalesce(trim(stem), '') <> ''
-  AND correct_answer IS NOT NULL
-  ${standardExamPrepQuestionScopeSql()}
-  ${GENERAL_STUDY_BANK_MODULE_SCOPE_SQL}
-`;
+function rtVentilatorGateSql(entitlement: AccessScope): Prisma.Sql {
+  if (!isRtVentilatorLearnerModuleEnabled()) {
+    return Prisma.sql`AND NOT (${RT_VENTILATOR_BANK_TAG} = ANY(tags))`;
+  }
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) return Prisma.empty;
+  const allowed =
+    entitlement.hasAccess &&
+    canAccessRtVentilatorModuleForTierAndProfession({
+      tier: entitlement.tier ?? null,
+      alliedCareer: entitlement.alliedCareer,
+    });
+  if (allowed) return Prisma.empty;
+  return Prisma.sql`AND NOT (${RT_VENTILATOR_BANK_TAG} = ANY(tags))`;
+}
+
+/**
+ * Scope gate SQL fragment — mirrors CAT's scopeGate logic for the raw SQL path:
+ * - NP tier → {@link npProviderQuestionScopeSql} (exclude specialty/ICU only, allow provider-level)
+ * - All other tiers → {@link standardExamPrepQuestionScopeSql} (exclude specialty + advanced/provider)
+ */
+function scopeGateSql(entitlement: AccessScope): Prisma.Sql {
+  if (entitlement.tier === "NP") return npProviderQuestionScopeSql();
+  return standardExamPrepQuestionScopeSql();
+}
+
+/**
+ * Builds the flashcard usability SQL fragment for a given entitlement.
+ *
+ * Excludes:
+ * - ECG / EKG / video / media question formats (separate premium modules)
+ * - Questions with no stem text or no correct answer (cannot render a card)
+ * - Study-bank module-only rows (`lab-drills-only`, `med-calculations-only`)
+ * - RT ventilator premium bank rows (unless learner holds RT entitlement) ← parity with CAT
+ * - Out-of-scope difficulty/audience level based on tier (NP or standard) ← parity with CAT
+ *
+ * Intentionally does NOT require `rationale` — flashcards display without rationale, whereas CAT
+ * applies `CAT_DB_COMPLETENESS_WHERE` which also checks rationale non-empty.
+ */
+function buildFlashcardUsabilitySql(entitlement: AccessScope): Prisma.Sql {
+  return Prisma.sql`
+    AND (question_format IS NULL OR lower(trim(question_format)) NOT IN ('ecg', 'ekg', 'video', 'video_case', 'media', 'image_only'))
+    AND NOT ('ecg-video' = ANY(tags))
+    AND coalesce(trim(stem), '') <> ''
+    AND correct_answer IS NOT NULL
+    ${scopeGateSql(entitlement)}
+    ${GENERAL_STUDY_BANK_MODULE_SCOPE_SQL}
+    ${rtVentilatorGateSql(entitlement)}
+  `;
+}
 
 export type ExamQuestionHubInventory = {
   total: number;

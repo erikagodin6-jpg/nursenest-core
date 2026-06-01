@@ -1,6 +1,6 @@
 # Lesson Normalization Coverage
 
-Generated at: 2026-06-01T18:11:27.903Z
+Generated at: 2026-06-01T20:35:36.291Z
 
 ## Pathway Coverage
 
@@ -69,12 +69,12 @@ Exclusions:
 
 ### `ca-rpn-rex-pn`
 
-- Raw lessons: 478
-- Normalized lessons: 478
-- Renderable lessons: 410
+- Raw lessons: 481
+- Normalized lessons: 481
+- Renderable lessons: 413
 - Excluded lessons: 68
-- Raw to renderable ratio: 410/478 (86%)
-- Unexpected exclusions: 68 (14.2% of raw)
+- Raw to renderable ratio: 413/481 (86%)
+- Unexpected exclusions: 68 (14.1% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /canada/pn/rex-pn/lessons/{lessonSlug}
 - Sample public lesson path: /canada/pn/rex-pn/lessons/rpn-anticoagulant-safety-teaching
@@ -178,11 +178,11 @@ Exclusions:
 
 ### `us-lpn-nclex-pn`
 
-- Raw lessons: 153
-- Normalized lessons: 153
-- Renderable lessons: 89
+- Raw lessons: 160
+- Normalized lessons: 160
+- Renderable lessons: 96
 - Excluded lessons: 64
-- Raw to renderable ratio: 89/153 (58%)
+- Raw to renderable ratio: 96/160 (60%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /us/pn/nclex-pn/lessons/{lessonSlug}
@@ -362,11 +362,11 @@ Exclusions:
 
 ### `us-rn-nclex-rn`
 
-- Raw lessons: 796
-- Normalized lessons: 796
-- Renderable lessons: 796
+- Raw lessons: 798
+- Normalized lessons: 798
+- Renderable lessons: 798
 - Excluded lessons: 0
-- Raw to renderable ratio: 796/796 (100%)
+- Raw to renderable ratio: 798/798 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /us/rn/nclex-rn/lessons/{lessonSlug}

@@ -1,7 +1,6 @@
 import "server-only";
 
 import { isEcgModuleEnabled } from "@/lib/ecg-module/ecg-module-config";
-import { getEcgModuleStatus } from "@/lib/ecg-module/ecg-module-status";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
 /**
@@ -12,6 +11,7 @@ export async function resolveMarketingHubEcgModulePublic(): Promise<boolean> {
   if (!isEcgModuleEnabled()) return false;
   if (!isDatabaseUrlConfigured()) return false;
   try {
+    const { getEcgModuleStatus } = await import("@/lib/ecg-module/ecg-module-status");
     const status = await getEcgModuleStatus();
     return status === "published";
   } catch {

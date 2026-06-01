@@ -2,7 +2,7 @@ import "server-only";
 
 import { expectedCanonicalBlogPath } from "@/lib/blog/generated-blog-post-publish";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { getMergedBlogSitemapSlugRows, getSitemapBlogTagsAndCategories } from "@/lib/blog/safe-blog-queries";
+import { getMergedBlogSitemapData } from "@/lib/blog/safe-blog-queries";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
   minimalUrlsetSingleHome,
@@ -13,7 +13,7 @@ import {
 import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
 
 /**
- * Blog slice for merged `/sitemap.xml`: `/blog` plus post URLs from {@link getMergedBlogSitemapSlugRows}
+ * Blog slice for merged `/sitemap.xml`: `/blog` plus post URLs from {@link getMergedBlogSitemapData}
  * (live DB when configured; otherwise the bundled static corpus aligned with `/blog` HTML).
  */
 export async function listBlogSitemapUrlsSafe(): Promise<string[]> {
@@ -28,7 +28,11 @@ export async function listBlogSitemapEntriesSafe(): Promise<SitemapUrlEntry[]> {
 
   /** Sitemaps support at most ~50k URLs per file; split into multiple sitemaps if you exceed this. */
   const SITEMAP_BLOG_CAP = 50_000;
-  const rows = await getMergedBlogSitemapSlugRows();
+
+  // Single DB cursor-walk produces slug rows + tag/category sets in one pass (Fix 8).
+  const { slugRows: rows, tags: allTags, categories: allCategories } = await getMergedBlogSitemapData();
+  const tagsCategories = { tags: allTags, categories: allCategories };
+
   if (rows.length >= SITEMAP_BLOG_CAP) {
     safeServerLog("seo", "sitemap_blog_url_cap_reached", { cap: SITEMAP_BLOG_CAP });
   }
@@ -62,22 +66,14 @@ export async function listBlogSitemapEntriesSafe(): Promise<SitemapUrlEntry[]> {
     if (!seenLoc.has(loc)) { seenLoc.add(loc); entries.push({ loc }); }
   }
 
-  // Tag and category hub pages — discoverable without hitting post-level crawl budget.
-  // Empty hubs emit `robots: noindex` at the page level so including them here is safe.
-  try {
-    const { tags, categories } = await getSitemapBlogTagsAndCategories();
-    for (const tag of tags) {
-      const loc = `${origin}/blog/tag/${encodeURIComponent(tag)}`;
-      if (!seenLoc.has(loc)) { seenLoc.add(loc); entries.push({ loc }); }
-    }
-    for (const cat of categories) {
-      const loc = `${origin}/blog/category/${encodeURIComponent(cat)}`;
-      if (!seenLoc.has(loc)) { seenLoc.add(loc); entries.push({ loc }); }
-    }
-  } catch (e) {
-    safeServerLog("seo", "sitemap_blog_tag_category_collection_failed", {
-      error: e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200),
-    });
+  // Tag and category hub pages — pre-fetched in parallel above.
+  for (const tag of tagsCategories.tags) {
+    const loc = `${origin}/blog/tag/${encodeURIComponent(tag)}`;
+    if (!seenLoc.has(loc)) { seenLoc.add(loc); entries.push({ loc }); }
+  }
+  for (const cat of tagsCategories.categories) {
+    const loc = `${origin}/blog/category/${encodeURIComponent(cat)}`;
+    if (!seenLoc.has(loc)) { seenLoc.add(loc); entries.push({ loc }); }
   }
 
   logSeoEmittedUrlBatch("sitemap_blog", entries.map((e) => e.loc), {

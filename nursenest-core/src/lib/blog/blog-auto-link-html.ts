@@ -19,8 +19,11 @@ function escapeRegex(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-/** Build phrase → link rules from post context (longest phrases first to avoid partial matches). */
+/** Build phrase → link rules from post context (longest phrases first to avoid partial matches). Memoized by context key. */
 export function buildAutoLinkRules(ctx: BlogAutoLinkContext): LinkRule[] {
+  const key = autoLinkCacheKey(ctx);
+  const cached = autoLinkRulesCache.get(key);
+  if (cached) return cached;
   const rules: LinkRule[] = [];
   const hubs = marketingStudyHubsForBlogExam(ctx.exam ?? "", blogCountryFromPrismaTarget(ctx.countryTarget));
   const questionsHub = hubs.pathwayQuestionsHub ?? hubs.questionBankHub;
@@ -72,7 +75,17 @@ export function buildAutoLinkRules(ctx: BlogAutoLinkContext): LinkRule[] {
     return bl - al;
   });
 
-  return dedupeRules(rules);
+  const result = dedupeRules(rules);
+  autoLinkRulesCache.set(key, result);
+  return result;
+}
+
+const autoLinkRulesCache = new Map<string, LinkRule[]>();
+
+function autoLinkCacheKey(ctx: BlogAutoLinkContext): string {
+  const paths = (ctx.relatedLessonPaths ?? []).slice().sort().join("|");
+  const tools = (ctx.relatedTools ?? []).slice().sort().join("|");
+  return `${ctx.exam ?? ""}::${ctx.countryTarget ?? ""}::${paths}::${tools}::${ctx.maxTotalAutoLinks ?? 14}`;
 }
 
 function dedupeRules(rules: LinkRule[]): LinkRule[] {

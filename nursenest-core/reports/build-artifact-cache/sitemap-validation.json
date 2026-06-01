@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "2c8f4e9123a7edf4322f6fb6ab25170d74f29cc6df644f8a56305e269c2ddbda",
-  "generatedAt": "2026-06-01T18:28:51.114Z",
+  "fingerprint": "eaa4d117204b35152bad2ccd844fc7316000027fcff45c85a8506e5cbeeceb73",
+  "generatedAt": "2026-06-01T20:37:38.906Z",
   "inputs": [
     {
       "type": "file",
@@ -2951,6 +2951,10 @@
     {
       "type": "file",
       "path": "src/app/(runtime)/_nn_bootstrap_ready_check__/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(runtime)/healthz/deep/route.ts"
     },
     {
       "type": "file",
@@ -8029,6 +8033,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 25445
+    "durationMs": 25986
   }
 }
