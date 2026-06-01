@@ -130,3 +130,8 @@ storybook-static/
 
 # Next build single-flight mutex (see scripts/next-build-exclusive.mjs)
 .nn-next-build-exclusive.lock
+
+# middleware.ts is permanently banned — use src/proxy.ts instead.
+# See: docs/reports/middleware-regeneration-root-cause.md
+src/middleware.ts
+src/middleware.js
