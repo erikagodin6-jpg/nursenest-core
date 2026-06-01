@@ -6,7 +6,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
  * Slow-query threshold in milliseconds.
- * Production default: 500ms (always-on).
+ * Production default: 250ms (always-on).
  * Override via PRISMA_SLOW_QUERY_LOG_MS env var (set to "0" to disable).
  */
 export function readPrismaSlowQueryThresholdMs(): number {
@@ -16,7 +16,7 @@ export function readPrismaSlowQueryThresholdMs(): number {
     const n = Number(raw);
     if (Number.isFinite(n) && n > 0) return Math.floor(n);
   }
-  return 500;
+  return 250;
 }
 
 /** When set to a positive integer (chars), logs a fingerprint for unusually long SQL text (no literals redacted beyond Prisma’s `$n` params). */

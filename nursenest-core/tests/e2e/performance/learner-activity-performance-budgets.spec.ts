@@ -26,6 +26,7 @@
  */
 
 import { expect, test, type Page, type Locator } from "@playwright/test";
+import { PERFORMANCE_BUDGETS } from "../../../performance-budget.config";
 import { readDomInteractiveMs, attachApiResponseTimeCollector } from "../helpers/learner-key-pages-performance";
 import {
   ROUTE_PERFORMANCE_REGISTRY,
@@ -39,6 +40,8 @@ const CONTENT_BUDGET_MS_OVERRIDE = process.env.E2E_PERF_CONTENT_BUDGET_MS
   : null;
 const LOADING_BUDGET_MS = Number(process.env.E2E_PERF_LOADING_BUDGET_MS ?? "5000");
 const RECORD_BASELINE = process.env.E2E_PERF_RECORD_BASELINE === "1";
+const GLOBAL_ROUTE_BUDGET_MS = PERFORMANCE_BUDGETS.routes.maxDurationMs;
+const API_RESPONSE_BUDGET_MS = PERFORMANCE_BUDGETS.api.maxDurationMs;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -94,7 +97,8 @@ async function measureRoute(
   const api = attachApiResponseTimeCollector(page, appOrigin);
   api.clear();
 
-  const effectiveBudget = CONTENT_BUDGET_MS_OVERRIDE ?? budget.firstContentBudgetMs;
+  const configuredBudget = CONTENT_BUDGET_MS_OVERRIDE ?? budget.firstContentBudgetMs;
+  const effectiveBudget = Math.min(configuredBudget, GLOBAL_ROUTE_BUDGET_MS);
   const navStart = Date.now();
 
   await page.goto(budget.route, { waitUntil: "domcontentloaded", timeout: 60_000 });
@@ -115,6 +119,13 @@ async function measureRoute(
   const worstApiMs = apiSamples.reduce((max, s) => Math.max(max, s.durationMs), 0);
 
   api.dispose();
+
+  if (worstApiMs > 0) {
+    expect(
+      worstApiMs,
+      `${budget.label}: slowest API call ${worstApiMs}ms > ${API_RESPONSE_BUDGET_MS}ms budget`,
+    ).toBeLessThanOrEqual(API_RESPONSE_BUDGET_MS);
+  }
 
   return {
     id: budget.id,

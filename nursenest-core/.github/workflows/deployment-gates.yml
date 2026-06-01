@@ -213,6 +213,9 @@ jobs:
           fi
           echo "Build successful"
 
+      - name: Enforce performance budgets
+        run: npm run perf:budgets
+
   architectural-regression-check:
     name: Architectural Regression Check
     runs-on: ubuntu-latest
