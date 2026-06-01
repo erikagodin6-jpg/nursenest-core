@@ -1876,6 +1876,7 @@ model ExamQuestion {
   @@index([questionFormat, level, mode])
   @@index([studyLinkPathwayId, studyLinkLessonSlug])
   @@index([status, exam, tier, countryCode], map: "exam_questions_status_exam_tier_country_idx")
+  @@index([studyLinkPathwayId, isAdaptiveEligible, status], map: "exam_questions_cat_pool_idx")
   @@map("exam_questions")
 }
 

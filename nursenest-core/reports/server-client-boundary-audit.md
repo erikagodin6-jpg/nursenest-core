@@ -1,10 +1,10 @@
 # Server/Client Boundary Audit
 
-Generated: 2026-06-01T20:33:40.210Z
+Generated: 2026-06-01T23:20:59.253Z
 
 Scope: `all`
 
-Client entrypoints audited: 901
+Client entrypoints audited: 915
 
 Violations: 0
 

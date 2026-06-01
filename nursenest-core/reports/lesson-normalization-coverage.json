@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-01T21:18:58.567Z",
+  "generatedAt": "2026-06-01T23:22:22.822Z",
   "pathways": [
     {
       "pathwayId": "ca-allied-core",
@@ -23,11 +23,11 @@
       "pathwayId": "ca-np-cnple",
       "publicLessonsPath": null,
       "publicUrlPattern": "/canada/np/cnple/lessons/{lessonSlug}",
-      "rawCount": 441,
-      "normalizedCount": 441,
-      "renderableCount": 441,
+      "rawCount": 447,
+      "normalizedCount": 447,
+      "renderableCount": 447,
       "excludedCount": 0,
-      "rawToRenderableRatio": "441/441 (100%)",
+      "rawToRenderableRatio": "447/447 (100%)",
       "unexpectedExclusionRate": 0,
       "passesExclusionQualityGate": true,
       "topExclusionReasons": [],
@@ -1245,12 +1245,12 @@
       "pathwayId": "us-np-fnp",
       "publicLessonsPath": null,
       "publicUrlPattern": "/us/np/fnp/lessons/{lessonSlug}",
-      "rawCount": 581,
-      "normalizedCount": 581,
-      "renderableCount": 501,
+      "rawCount": 587,
+      "normalizedCount": 587,
+      "renderableCount": 507,
       "excludedCount": 80,
-      "rawToRenderableRatio": "501/581 (86%)",
-      "unexpectedExclusionRate": 0.13769363166953527,
+      "rawToRenderableRatio": "507/587 (86%)",
+      "unexpectedExclusionRate": 0.1362862010221465,
       "passesExclusionQualityGate": true,
       "topExclusionReasons": [
         {

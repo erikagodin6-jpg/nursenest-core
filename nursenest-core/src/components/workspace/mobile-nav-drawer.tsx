@@ -73,8 +73,7 @@ export function MobileNavDrawer({ open, onClose, children }: MobileNavDrawerProp
         aria-label="Navigation menu"
         className="nn-workspace-drawer"
         data-open={open}
-        // inert suppresses tab focus when drawer is closed
-        {...(!open ? { inert: "" } : {})}
+        aria-hidden={!open}
       >
         <div className="nn-workspace-drawer__header">
           <span

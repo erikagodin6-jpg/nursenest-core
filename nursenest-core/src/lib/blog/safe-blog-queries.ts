@@ -1,6 +1,8 @@
 import { cache } from "react";
 import type { BlogPost, Prisma } from "@prisma/client";
 import { BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { prisma } from "@/lib/db";
 import {
   isDatabaseUrlConfigured,
@@ -64,6 +66,10 @@ const BLOG_PUBLIC_QUERY_TIMEOUT_MS = 12_000;
 const BLOG_INDEX_EMPTY_RETRY_TIMEOUT_MS = 24_000;
 /** Batched slug walk for sitemap — one outer budget for many small `findMany` pages. */
 const BLOG_SITEMAP_SLUG_LIST_TIMEOUT_MS = 35_000;
+const BLOG_INDEX_SNAPSHOT_PATH = resolve(
+  process.cwd(),
+  process.env.BLOG_INDEX_SNAPSHOT_PATH ?? "data/snapshots/blog_index_snapshot.json",
+);
 const BLOG_PUBLIC_DB_CONCURRENCY = Math.min(
   8,
   Math.max(1, Number(process.env.BLOG_PUBLIC_DB_CONCURRENCY ?? "4") || 4),
@@ -77,6 +83,18 @@ type BlogDbQueueItem<T> = {
 
 let activeBlogDbReads = 0;
 const blogDbReadQueue: BlogDbQueueItem<unknown>[] = [];
+
+function readBlogIndexSnapshotTotal(): number | null {
+  try {
+    if (!existsSync(BLOG_INDEX_SNAPSHOT_PATH)) return null;
+    const parsed = JSON.parse(readFileSync(BLOG_INDEX_SNAPSHOT_PATH, "utf8")) as {
+      totalPublished?: number;
+    };
+    return Number.isFinite(parsed.totalPublished) ? Number(parsed.totalPublished) : null;
+  } catch {
+    return null;
+  }
+}
 
 function drainBlogDbReadQueue(): void {
   while (activeBlogDbReads < BLOG_PUBLIC_DB_CONCURRENCY) {
@@ -606,24 +624,15 @@ async function loadBlogIndexPageFromDb(
 }
 
 export async function countPublishedBlogPosts(): Promise<number> {
+  const snapshotTotal = readBlogIndexSnapshotTotal();
+  if (snapshotTotal !== null) return snapshotTotal;
   if (shouldSkipBlogDbForProductionBuild()) {
     return buildSupplementBlogIndexRowsExcludingLiveSlugs(new Set()).length;
   }
   if (!isDatabaseUrlConfigured()) {
     return buildSupplementBlogIndexRowsExcludingLiveSlugs(new Set()).length;
   }
-  const now = new Date();
-  const dbCount = await withBlogTimeoutFallback(
-    () => prisma.blogPost.count({ where: blogLiveWhere(now) }),
-    0,
-    "blog_posts_published_count",
-  );
-  const overlap = await fetchLiveBlogSlugsOverlappingSupplementSlugs(now);
-  const staticOnly = buildSupplementBlogIndexRowsExcludingLiveSlugs(overlap).length;
-  if (dbCount > BLOG_INDEX_MERGE_DB_MAX) {
-    return dbCount;
-  }
-  return dbCount + staticOnly;
+  return buildSupplementBlogIndexRowsExcludingLiveSlugs(new Set()).length;
 }
 
 export async function getPublishedBlogPostsPage(
@@ -642,7 +651,7 @@ export async function getPublishedBlogPostsPage(
   const normalizedPageSize = Number.isFinite(pageSize) ? Math.floor(pageSize) : BLOG_LIST_PAGE_SIZE;
   const safePage = Math.max(1, normalizedPage);
   const safeSize = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, normalizedPageSize));
-  const includeTotal = options?.includeTotal !== false;
+  const includeTotal = options?.includeTotal === true;
 
   if (shouldSkipBlogDbForProductionBuild()) {
     const built = blogIndexPostsFromStaticCorpusOnly(safePage, safeSize);

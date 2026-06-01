@@ -1,8 +1,16 @@
 "use client";
 
-import { LearnerReportCardPremium } from "@/components/student/learner-report-card-premium";
+import dynamic from "next/dynamic";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import type { ReportCardData } from "@/lib/learner/load-report-card-data";
+
+const LearnerReportCardPremium = dynamic(
+  () =>
+    import("@/components/student/learner-report-card-premium").then(
+      (mod) => mod.LearnerReportCardPremium,
+    ),
+  { ssr: false },
+);
 
 export function LearnerReportCardPremiumClient({
   data,

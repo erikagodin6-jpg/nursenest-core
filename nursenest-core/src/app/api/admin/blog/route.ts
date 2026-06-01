@@ -143,20 +143,27 @@ export async function GET(req: NextRequest) {
       : Promise.resolve(null),
   ]);
 
-  const [draftCount, needsReviewCount, approvedCount, scheduledCount, publishedCount, failedCount, nextScheduled] =
+  const [statusGroups, nextScheduled] =
     await Promise.all([
-      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.DRAFT } }),
-      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.NEEDS_REVIEW } }),
-      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.APPROVED } }),
-      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.SCHEDULED } }),
-      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.PUBLISHED } }),
-      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.FAILED } }),
+      prisma.blogPost.groupBy({
+        by: ["postStatus"],
+        _count: { _all: true },
+      }),
       prisma.blogPost.findFirst({
         where: { postStatus: BlogPostStatus.SCHEDULED, publishAt: { not: null } },
         orderBy: { publishAt: "asc" },
         select: { id: true, slug: true, publishAt: true, title: true },
       }),
     ]);
+  const statusCounts = Object.fromEntries(statusGroups.map((row) => [row.postStatus, row._count._all])) as Partial<
+    Record<BlogPostStatus, number>
+  >;
+  const draftCount = statusCounts[BlogPostStatus.DRAFT] ?? 0;
+  const needsReviewCount = statusCounts[BlogPostStatus.NEEDS_REVIEW] ?? 0;
+  const approvedCount = statusCounts[BlogPostStatus.APPROVED] ?? 0;
+  const scheduledCount = statusCounts[BlogPostStatus.SCHEDULED] ?? 0;
+  const publishedCount = statusCounts[BlogPostStatus.PUBLISHED] ?? 0;
+  const failedCount = statusCounts[BlogPostStatus.FAILED] ?? 0;
 
   const now = new Date();
   const postsWithPublicSurface = posts.map((p) => {

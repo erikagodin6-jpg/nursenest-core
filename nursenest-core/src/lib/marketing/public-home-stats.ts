@@ -1,6 +1,8 @@
 import "server-only";
 
 import { ContentStatus, UserRole } from "@prisma/client";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { unstable_cache } from "next/cache";
 import { cacheDeploymentRevision } from "@/lib/cache/cache-revision";
 import { CACHE_TAG_MARKETING_PUBLIC_HOME_STATS } from "@/lib/cache/cache-tags";
@@ -38,6 +40,10 @@ const HOME_STATS_HOMEPAGE_MEMORY_TTL_MS = 5 * 60_000;
 const HOME_STATS_HOMEPAGE_SHARED_CACHE_BUDGET_MS = 75;
 const HOME_STATS_HOMEPAGE_REFRESH_BUDGET_MS = 1200;
 const HOME_STATS_HOMEPAGE_REFRESH_COOLDOWN_MS = 15_000;
+const PUBLIC_HOME_STATS_SNAPSHOT_PATH = resolve(
+  process.cwd(),
+  process.env.PUBLIC_HOME_STATS_SNAPSHOT_PATH ?? "data/snapshots/public_home_stats_snapshot.json",
+);
 
 const HOME_STATS_CACHE_TIMEOUT = Symbol("home_stats_cache_timeout");
 
@@ -47,6 +53,30 @@ function hasMeaningfulPublicHomeStats(payload: PublicHomeStatsPayload): boolean 
 
 function isHomeStatsSnapshotFresh(cachedAtMs: number, nowMs = Date.now()): boolean {
   return nowMs - cachedAtMs < HOME_STATS_HOMEPAGE_MEMORY_TTL_MS;
+}
+
+function readPublicHomeStatsSnapshot(): PublicHomeStatsPayload | null {
+  try {
+    if (!existsSync(PUBLIC_HOME_STATS_SNAPSHOT_PATH)) return null;
+    const parsed = JSON.parse(readFileSync(PUBLIC_HOME_STATS_SNAPSHOT_PATH, "utf8")) as {
+      payload?: PublicHomeStatsPayload;
+    };
+    return parsed.payload && hasMeaningfulPublicHomeStats(parsed.payload) ? parsed.payload : null;
+  } catch (error) {
+    safeServerLog("marketing", "home_stats_snapshot_read_failed", {
+      message: error instanceof Error ? error.message.slice(0, 200) : String(error).slice(0, 200),
+    });
+    return null;
+  }
+}
+
+function writePublicHomeStatsSnapshot(payload: PublicHomeStatsPayload): void {
+  mkdirSync(dirname(PUBLIC_HOME_STATS_SNAPSHOT_PATH), { recursive: true });
+  writeFileSync(
+    PUBLIC_HOME_STATS_SNAPSHOT_PATH,
+    `${JSON.stringify({ schema: "public_home_stats_snapshot.v1", generatedAt: new Date().toISOString(), payload }, null, 2)}\n`,
+    "utf8",
+  );
 }
 
 async function readSharedHomeStatsWithinBudget(timeoutMs: number): Promise<PublicHomeStatsPayload | typeof HOME_STATS_CACHE_TIMEOUT> {
@@ -114,6 +144,9 @@ function scheduleHomepageHomeStatsRefresh(trigger: string): void {
  * Use `getCachedPublicHomeStats` on the homepage / paywall to avoid duplicate DB work and “0 → value” flashes.
  */
 export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
+  const snapshot = readPublicHomeStatsSnapshot();
+  if (snapshot) return snapshot;
+
   const { withSentryRuntimeSpan, captureSentryRuntimeSoftError } = await publicHomeStatsSentryRuntimePromise;
   return withSentryRuntimeSpan(
     {
@@ -195,49 +228,21 @@ export async function getHomepagePublicHomeStats(): Promise<PublicHomeStatsPaylo
     return memorySnapshot.payload;
   }
 
-  const sharedCachePayload = await readSharedHomeStatsWithinBudget(HOME_STATS_HOMEPAGE_SHARED_CACHE_BUDGET_MS);
-  if (sharedCachePayload !== HOME_STATS_CACHE_TIMEOUT) {
-    if (hasMeaningfulPublicHomeStats(sharedCachePayload)) {
-      setHomeStatsMemorySnapshot(sharedCachePayload, nowMs);
-      safeServerLog("marketing", "home_stats_cache_hit", {
-        source: "shared_cache",
-        stale: false,
-      });
-      return sharedCachePayload;
-    }
-    safeServerLog("marketing", "home_stats_fail_soft", {
-      reason: sharedCachePayload.degraded ? "shared_cache_degraded" : "shared_cache_empty",
-    });
-    return getDegradedPublicHomeStatsFallback(
-      sharedCachePayload.degraded ? "shared_cache_degraded" : "shared_cache_empty",
-      { silent: true },
-    );
+  const snapshot = readPublicHomeStatsSnapshot();
+  if (snapshot) {
+    setHomeStatsMemorySnapshot(snapshot, nowMs);
+    safeServerLog("marketing", "home_stats_cache_hit", { source: "snapshot" });
+    return snapshot;
   }
 
   safeServerLog("marketing", "home_stats_cache_miss", {
-    source: "shared_cache",
-    timeout_ms: HOME_STATS_HOMEPAGE_SHARED_CACHE_BUDGET_MS,
+    source: "snapshot",
   });
 
-  if (shouldBypassPublicHomeStatsDbAtStartup()) {
-    safeServerLog("marketing", "home_stats_fail_soft", {
-      reason: "startup_window_optional_db_skipped",
-    });
-    return getDegradedPublicHomeStatsFallback("startup_window_optional_db_skipped", { silent: true });
-  }
-
-  if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) {
-    const reason = !isDatabaseUrlConfigured() ? "database_url_missing" : "runtime_safe_mode";
-    safeServerLog("marketing", "home_stats_fail_soft", { reason });
-    return getDegradedPublicHomeStatsFallback(reason, { silent: true });
-  }
-
-  scheduleHomepageHomeStatsRefresh("shared_cache_miss");
   safeServerLog("marketing", "home_stats_fail_soft", {
-    reason: "shared_cache_timeout",
-    timeout_ms: HOME_STATS_HOMEPAGE_SHARED_CACHE_BUDGET_MS,
+    reason: "snapshot_missing",
   });
-  return getDegradedPublicHomeStatsFallback("shared_cache_timeout", { silent: true });
+  return getDegradedPublicHomeStatsFallback("snapshot_missing", { silent: true });
 }
 
 
@@ -401,6 +406,13 @@ async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayloa
     ...(degraded ? { degraded: true } : {}),
     ...(proofDisplay ? { proofDisplay } : {}),
   };
+}
+
+export async function refreshPublicHomeStatsSnapshot(): Promise<PublicHomeStatsPayload> {
+  const payload = await computePublicHomeStats(Date.now());
+  writePublicHomeStatsSnapshot(payload);
+  setHomeStatsMemorySnapshot(payload);
+  return payload;
 }
 
 /** Re-export for pages importing from `@/lib/marketing/public-home-stats`. */

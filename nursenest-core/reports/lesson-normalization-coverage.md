@@ -1,6 +1,6 @@
 # Lesson Normalization Coverage
 
-Generated at: 2026-06-01T21:18:58.567Z
+Generated at: 2026-06-01T23:22:22.822Z
 
 ## Pathway Coverage
 
@@ -27,11 +27,11 @@ Exclusions:
 
 ### `ca-np-cnple`
 
-- Raw lessons: 441
-- Normalized lessons: 441
-- Renderable lessons: 441
+- Raw lessons: 447
+- Normalized lessons: 447
+- Renderable lessons: 447
 - Excluded lessons: 0
-- Raw to renderable ratio: 441/441 (100%)
+- Raw to renderable ratio: 447/447 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /canada/np/cnple/lessons/{lessonSlug}
@@ -262,12 +262,12 @@ Exclusions:
 
 ### `us-np-fnp`
 
-- Raw lessons: 581
-- Normalized lessons: 581
-- Renderable lessons: 501
+- Raw lessons: 587
+- Normalized lessons: 587
+- Renderable lessons: 507
 - Excluded lessons: 80
-- Raw to renderable ratio: 501/581 (86%)
-- Unexpected exclusions: 80 (13.8% of raw)
+- Raw to renderable ratio: 507/587 (86%)
+- Unexpected exclusions: 80 (13.6% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /us/np/fnp/lessons/{lessonSlug}
 - Sample public lesson path: /us/np/fnp/lessons/np-acute-coronary-syndrome-recognition-and-initial-management

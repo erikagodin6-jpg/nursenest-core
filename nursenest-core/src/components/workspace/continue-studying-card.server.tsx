@@ -31,17 +31,7 @@ export async function ContinueStudyingCardServer({ userId, pathwayId, fallbackHr
       return <ContinueStudyingCard data={null} fallbackHref={fallbackHref} />;
     }
 
-    // Attempt to enrich with lesson progress subtitle
-    let subtitle = "In progress";
-    try {
-      const { getInProgressLessonProgress } = await import(
-        "@/lib/learner/learner-lesson-progress-summary"
-      );
-      const prog = await getInProgressLessonProgress(userId, pathwayId ?? undefined);
-      if (prog?.progressLabel) subtitle = prog.progressLabel;
-    } catch {
-      // Non-critical — subtitle stays as "In progress"
-    }
+    const subtitle = "In progress";
 
     return (
       <ContinueStudyingCard

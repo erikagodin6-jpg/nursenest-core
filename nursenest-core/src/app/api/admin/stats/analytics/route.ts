@@ -58,53 +58,40 @@ export async function GET(req: NextRequest) {
   }
 
   const now = new Date();
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const since1d  = new Date(now.getTime() - 1  * 24 * 60 * 60 * 1000);
   const since7d  = new Date(now.getTime() - 7  * 24 * 60 * 60 * 1000);
   const since30d = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-  const realUsers = { isDemoUser: false } as const;
-
-  // Run each query independently so one failure doesn't kill the whole response
   const [
-    totalUsers,
-    dau,
-    wau,
-    mau,
-    newToday,
-    newThisMonth,
-    deadAccounts,
+    userMetrics,
     monthlyGrowthRaw,
     emailDomainsRaw,
     practiceTestsStarted,
     lessonsCompleted,
     securityTelemetry,
   ] = await Promise.all([
-    // Total non-demo users
-    prisma.user.count({ where: realUsers }).catch(() => null),
-
-    // DAU — updatedAt within 24h
-    prisma.user.count({ where: { ...realUsers, updatedAt: { gte: since1d } } }).catch(() => null),
-
-    // WAU — updatedAt within 7 days
-    prisma.user.count({ where: { ...realUsers, updatedAt: { gte: since7d } } }).catch(() => null),
-
-    // MAU — updatedAt within 30 days
-    prisma.user.count({ where: { ...realUsers, updatedAt: { gte: since30d } } }).catch(() => null),
-
-    // New today (createdAt >= start of today UTC)
-    prisma.user.count({ where: { ...realUsers, createdAt: { gte: startOfToday } } }).catch(() => null),
-
-    // New this calendar month
-    prisma.user.count({ where: { ...realUsers, createdAt: { gte: startOfMonth } } }).catch(() => null),
-
-    // Dead accounts: createdAt === updatedAt (registered, never returned)
-    // Prisma doesn't support column-to-column comparison; use raw SQL
-    prisma.$queryRaw<[{ n: bigint }]>`
-      SELECT COUNT(*)::bigint AS n FROM "User"
-      WHERE "createdAt" = "updatedAt" AND is_demo_user = false
-    `.then((r) => Number(r[0]?.n ?? 0)).catch(() => null),
+    prisma.$queryRaw<
+      Array<{
+        total_users: bigint;
+        dau: bigint;
+        wau: bigint;
+        mau: bigint;
+        new_today: bigint;
+        new_this_month: bigint;
+        dead_accounts: bigint;
+      }>
+    >`
+      SELECT
+        COUNT(*)::bigint AS total_users,
+        COUNT(*) FILTER (WHERE "updatedAt" >= ${since1d})::bigint AS dau,
+        COUNT(*) FILTER (WHERE "updatedAt" >= ${since7d})::bigint AS wau,
+        COUNT(*) FILTER (WHERE "updatedAt" >= ${since30d})::bigint AS mau,
+        COUNT(*) FILTER (WHERE "createdAt" >= CURRENT_DATE)::bigint AS new_today,
+        COUNT(*) FILTER (WHERE "createdAt" >= DATE_TRUNC('month', NOW()))::bigint AS new_this_month,
+        COUNT(*) FILTER (WHERE "createdAt" = "updatedAt")::bigint AS dead_accounts
+      FROM "User"
+      WHERE is_demo_user = false
+    `.then((rows) => rows[0] ?? null).catch(() => null),
 
     // Monthly signup growth (last 24 months)
     prisma.$queryRaw<{ month: Date; users: bigint }[]>`
@@ -135,6 +122,13 @@ export async function GET(req: NextRequest) {
     // DB-backed anti-fraud / user verification telemetry.
     loadAdminSecurityTelemetry().catch(() => null),
   ]);
+  const totalUsers = userMetrics ? Number(userMetrics.total_users) : null;
+  const dau = userMetrics ? Number(userMetrics.dau) : null;
+  const wau = userMetrics ? Number(userMetrics.wau) : null;
+  const mau = userMetrics ? Number(userMetrics.mau) : null;
+  const newToday = userMetrics ? Number(userMetrics.new_today) : null;
+  const newThisMonth = userMetrics ? Number(userMetrics.new_this_month) : null;
+  const deadAccounts = userMetrics ? Number(userMetrics.dead_accounts) : null;
 
   // Compute retention % (MAU / total, rough proxy)
   const retentionPct =

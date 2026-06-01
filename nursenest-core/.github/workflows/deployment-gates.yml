@@ -110,10 +110,36 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
+  middleware-ban:
+    name: 🚫 middleware.ts Ban Enforcement
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify src/middleware.ts does not exist
+        run: npm run verify:no-middleware
+        # This test will:
+        # 1. FAIL loudly if src/middleware.ts exists (permanent ban)
+        # 2. VERIFY src/proxy.ts exists and has correct exports
+        # 3. VERIFY proxy.ts is not referencing a banned middleware.ts shim
+        #
+        # Root cause of the ban:
+        # AI-assisted commits have re-added middleware.ts 6 times.
+        # See: docs/reports/middleware-regeneration-root-cause.md
+
   smoke-tests:
     name: Production Smoke Tests
     runs-on: ubuntu-latest
-    needs: [typecheck, lint]
+    needs: [typecheck, lint, middleware-ban]
     steps:
       - uses: actions/checkout@v4
       
@@ -238,12 +264,13 @@ jobs:
   deployment-gate-summary:
     name: 🎯 Deployment Gate Summary
     runs-on: ubuntu-latest
-    needs: 
+    needs:
       - typecheck
       - runtime-boundary-audit
       - force-dynamic-audit
       - unbounded-query-audit
       - lint
+      - middleware-ban
       - smoke-tests
       - runtime-browser-gate
       - render-verification
@@ -257,6 +284,7 @@ jobs:
              [ "${{ needs.force-dynamic-audit.result }}" != "success" ] || \
              [ "${{ needs.unbounded-query-audit.result }}" != "success" ] || \
              [ "${{ needs.lint.result }}" != "success" ] || \
+             [ "${{ needs.middleware-ban.result }}" != "success" ] || \
              [ "${{ needs.smoke-tests.result }}" != "success" ] || \
              [ "${{ needs.runtime-browser-gate.result }}" != "success" ] || \
              [ "${{ needs.render-verification.result }}" != "success" ] || \

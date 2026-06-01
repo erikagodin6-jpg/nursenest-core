@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "eaa4d117204b35152bad2ccd844fc7316000027fcff45c85a8506e5cbeeceb73",
-  "generatedAt": "2026-06-01T20:37:38.906Z",
+  "fingerprint": "7d927e7088aabf9caf0f01fa5269bbf573e6d985c156000fd0437f3af66f89ff",
+  "generatedAt": "2026-06-01T23:23:51.590Z",
   "inputs": [
     {
       "type": "file",
@@ -462,6 +462,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(admin)/admin/reliability/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(admin)/admin/revenue-alerts/page.tsx"
     },
     {
@@ -507,6 +511,18 @@
     {
       "type": "file",
       "path": "src/app/(admin)/admin/users/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/view-as-customer/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/view-as-customer/view-as-customer-client.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/view-as/page.tsx"
     },
     {
       "type": "file",
@@ -2858,6 +2874,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/[locale]/rpn/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/[locale]/sign-up/page.tsx"
     },
     {
@@ -3682,6 +3702,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/reliability-metrics/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/revenue-alerts/test/route.ts"
     },
     {
@@ -3787,6 +3811,14 @@
     {
       "type": "file",
       "path": "src/app/api/admin/verified-study/pending/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/view-as/real-user/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/view-as/user-search/route.ts"
     },
     {
       "type": "file",
@@ -4607,6 +4639,10 @@
     {
       "type": "file",
       "path": "src/app/api/subscriptions/checkout/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/subscriptions/notification-health/route.ts"
     },
     {
       "type": "file",
@@ -8033,6 +8069,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 25986
+    "durationMs": 5449
   }
 }

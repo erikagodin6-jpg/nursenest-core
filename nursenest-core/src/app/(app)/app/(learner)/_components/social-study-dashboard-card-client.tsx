@@ -1,6 +1,14 @@
 "use client";
 
-import { SocialStudyDashboardCard } from "@/components/student/social-study-dashboard-card";
+import dynamic from "next/dynamic";
+
+const SocialStudyDashboardCard = dynamic(
+  () =>
+    import("@/components/student/social-study-dashboard-card").then(
+      (mod) => mod.SocialStudyDashboardCard,
+    ),
+  { ssr: false },
+);
 
 export function SocialStudyDashboardCardClient({
   initialCode,
