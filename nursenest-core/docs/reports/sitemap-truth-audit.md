@@ -41,11 +41,11 @@ Generated: 2026-06-01T02:26:23.685Z
 | --- | ---: |
 | URLs missing from all sitemaps | 0 discovered by this live-sitemap crawl |
 | URLs present in sitemaps but non-200 | 6828 |
-| Canonical failures | 40 |
-| Noindex pages | 40 |
+| Canonical failures in sampled HTML URLs | 40 |
+| Noindex pages in sampled HTML URLs | 40 |
 | Duplicate URLs across child sitemaps | 0 |
-| Fully indexable sitemap URLs | 1090 |
+| HTTP-200 sitemap URLs | 1090 |
 
-CSV exports are in `reports/production-seo-current/`.
+Canonical/noindex inspection was capped at the first 50 sitemap URLs to keep the production audit bounded while blog pages are very large. CSV exports are in `reports/production-seo-current/`.
 
 Note: this is current live production truth. Local build validation now contains the newer 25-child sitemap index, so production should be redeployed before using this report as post-fix truth.
