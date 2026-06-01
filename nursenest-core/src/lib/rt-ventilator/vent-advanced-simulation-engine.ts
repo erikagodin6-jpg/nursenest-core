@@ -29,6 +29,7 @@ export type VitalSigns = {
   gcs?: number;       // Glasgow Coma Scale total
   cvp?: number;       // cmH₂O
   map_bp?: number;    // Mean arterial pressure mmHg
+  lactate?: number;   // mmol/L (also available in LabValues; repeated here for vitals strip convenience)
 };
 
 // ─── Lab Values ────────────────────────────────────────────────────────────────

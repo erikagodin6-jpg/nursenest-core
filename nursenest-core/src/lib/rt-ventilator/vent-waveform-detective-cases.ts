@@ -13,6 +13,7 @@
  */
 
 import type { DetectiveCase, AdvancedSimChoice, ConsequenceOfInaction } from "./vent-advanced-simulation-engine";
+export type { DetectiveCase } from "./vent-advanced-simulation-engine";
 import type { VentWaveformConfig } from "./vent-waveform-generator";
 
 // ─── Helper ────────────────────────────────────────────────────────────────────

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "d6dba1dea9066a5848b618edb3a4cf76070ca6524a1bb62374e759fffdf94618",
-  "generatedAt": "2026-05-31T07:36:39.825Z",
+  "fingerprint": "6786e5ded611507121e6f62d0f870c6405aef99392d9e3f73596e7f5bd456338",
+  "generatedAt": "2026-06-01T01:53:59.608Z",
   "inputs": [
     {
       "type": "file",
@@ -406,6 +406,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(admin)/admin/platform-governance/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(admin)/admin/premium-protection/page.tsx"
     },
     {
@@ -466,6 +470,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(admin)/admin/revenue-reliability/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(admin)/admin/scope-compliance/page.tsx"
     },
     {
@@ -483,6 +491,10 @@
     {
       "type": "file",
       "path": "src/app/(admin)/admin/system-status/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/us-launch-status/page.tsx"
     },
     {
       "type": "file",
@@ -575,6 +587,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/shared/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/academic-success-toolkit/page.tsx"
     },
     {
       "type": "file",
@@ -774,6 +790,18 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-assignments/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-day-survival/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-education-suite/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/clinical-image-library/page.tsx"
     },
     {
@@ -810,6 +838,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-worksheet-builder/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/coach/page.tsx"
     },
     {
@@ -827,6 +859,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/ecg-video-quiz/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/ecg/page.tsx"
     },
     {
       "type": "file",
@@ -918,6 +954,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/interprofessional-cases/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/labs/[category]/[slug]/page.tsx"
     },
     {
@@ -1003,6 +1043,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/med-calculations/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/medication-math/page.tsx"
     },
     {
       "type": "file",
@@ -1118,6 +1162,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/question-bank/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/questions/bank/page.tsx"
     },
     {
@@ -1155,6 +1203,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/quick-start/quick-start-flow-client.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/readiness/page.tsx"
     },
     {
       "type": "file",
@@ -2535,6 +2587,10 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/us/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/us/rn/nclex-rn/guide/[topic]/page.tsx"
     },
     {
       "type": "file",
@@ -4522,6 +4578,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/subscriptions/sync-after-checkout/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/subscriptions/webhook/route.ts"
     },
     {
@@ -4614,6 +4674,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/sitemap-ar.xml/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/sitemap-authority-clusters.xml/route.ts"
     },
     {
@@ -4634,11 +4698,43 @@
     },
     {
       "type": "file",
+      "path": "src/app/sitemap-de.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/sitemap-en.xml/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/sitemap-es-blog.xml/route.ts"
     },
     {
       "type": "file",
+      "path": "src/app/sitemap-es.xml/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/sitemap-fr-blog.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/sitemap-fr.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/sitemap-hi.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/sitemap-it.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/sitemap-jp.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/sitemap-ko.xml/route.ts"
     },
     {
       "type": "file",
@@ -4659,6 +4755,22 @@
     {
       "type": "file",
       "path": "src/app/sitemap-pathways.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/sitemap-pt.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/sitemap-tl.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/sitemap-zh-tw.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/sitemap-zh.xml/route.ts"
     },
     {
       "type": "file",
@@ -5711,6 +5823,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/exam-takeaways-items.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/extract-clinical-pearl-lines.test.ts"
     },
     {
       "type": "file",
@@ -7130,6 +7246,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/english-seo-isolation.contract.test.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/exam-hub-structured-data.test.ts"
     },
     {
@@ -7275,6 +7395,14 @@
     {
       "type": "file",
       "path": "src/lib/seo/internal-links.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/language-sitemap-xml.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/language-sitemap-xml.ts"
     },
     {
       "type": "file",
@@ -7802,6 +7930,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/sitemap-response-cache.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/sitemap-rn-pn-core-pathways.contract.test.ts"
     },
     {
@@ -7865,6 +7997,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 23159
+    "durationMs": 21858
   }
 }

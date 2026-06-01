@@ -38,8 +38,8 @@ export const picu_status_asthmaticus: AdvancedSimulation = makeSimulation(
       vitals: { hr: 158, spo2: 88, rr: 48, bp: "88/52", fio2: 40 },
       question: "Silent chest, SpO₂ 88%, failing first-line therapy. Next pharmacological escalation?",
       choices: [
-        adv("a", "IV magnesium sulfate 50 mg/kg (max 2g) over 20 min + heliox 70:30 via tight-fitting mask + consider IV ketamine 0.3 mg/kg for bronchodilation + sedation", true,
-          "CORRECT. Status asthmaticus escalation at this severity: (1) IV magnesium 50 mg/kg (max 2g) — smooth muscle relaxation, evidence Grade I (GINA 2022); (2) Heliox 70:30 — reduces turbulent flow resistance, buys time; (3) Ketamine 0.3 mg/kg IV — bronchodilator + anxiolytic without respiratory depression (maintains drive); (4) BiPAP trial before intubation if cooperative. Silent chest = pre-arrest — this is urgent."),
+        adv("a", "IV magnesium sulfate 50 mg/kg (max 2g) over 20 min + heliox 70:30 via tight-fitting mask + IV ketamine 0.5–1.5 mg/kg subanesthetic for bronchodilation + sedation", true,
+          "CORRECT. Status asthmaticus escalation at this severity: (1) IV magnesium 50 mg/kg (max 2g) — smooth muscle relaxation, evidence Grade I (GINA 2022, Pediatric Emergency Care Applied Research Network); (2) Heliox 70:30 — reduces turbulent flow resistance, buys time before steroids peak; (3) Ketamine 0.5–1.5 mg/kg IV subanesthetic dose — catecholamine release causes bronchodilation + anxiolysis without respiratory depression (maintains drive). Start at 0.5 mg/kg, titrate to 1.5 mg/kg if needed; (4) BiPAP trial before intubation if cooperative. Silent chest = pre-arrest — this is urgent."),
         adv("b", "Continue albuterol every 20 minutes — the cumulative effect will eventually work", false,
           "The patient has already received 3 doses of albuterol and is deteriorating. Continuing the same therapy expecting different results is not evidence-based."),
         adv("c", "Intubate immediately — silent chest requires immediate airway control", false,
@@ -60,7 +60,7 @@ export const picu_status_asthmaticus: AdvancedSimulation = makeSimulation(
       ),
     }),
     step("post_mag", {
-      context: "Magnesium given. SpO₂ improves to 93% with heliox. Ketamine 0.3 mg/kg given — child is more relaxed. RR 38. Pulsus 12 mmHg. Considering BiPAP.",
+      context: "Magnesium given. SpO₂ improves to 93% with heliox. Ketamine 0.5 mg/kg IV (subanesthetic bronchodilator dose) given — child is more relaxed. RR 38. Pulsus 12 mmHg. Considering BiPAP.",
       waveformConfig: pediatricVentConfig(26, "asthma", "pressure_support"),
       vitals: { hr: 138, spo2: 93, rr: 38, bp: "92/56", fio2: 40 },
       question: "BiPAP parameters for pediatric status asthmaticus as a non-invasive bridge?",
@@ -87,11 +87,11 @@ export const picu_status_asthmaticus: AdvancedSimulation = makeSimulation(
         adv("a", "Ketamine 1.5–2 mg/kg IV induction (bronchodilator) + rocuronium 1.2 mg/kg IV. Post-intubation: RR 10–12, Vt 6 mL/kg, PEEP 0–3, accept hypercapnia (pH ≥ 7.20)", true,
           "CORRECT. Ketamine is ideal for asthma RSI: (1) Catecholamine release causes bronchodilation; (2) Does not cause histamine release (unlike morphine). Rocuronium for paralysis. Post-intubation vent: LOW RR (10–12), long Te (I:E 1:4–1:6), low PEEP (0–3), accept hypercapnia. Expected: auto-PEEP will be significant. Expect hemodynamic instability post-intubation from positive pressure + dynamic hyperinflation."),
         adv("b", "Propofol 2 mg/kg + succinylcholine 2 mg/kg. Standard post-intubation settings (RR 20, Vt 8 mL/kg, PEEP 5)", false,
-          "Propofol can cause histamine release and is a negative inotrope — risk at this BP. Standard ventilation settings (RR 20, PEEP 5) will cause severe auto-PEEP in a fully obstructed patient. Post-asthma ventilation MUST use low RR and low PEEP."),
+          "Propofol does NOT cause clinically significant histamine release (a common misconception — that is morphine and thiopental). Propofol is actually mildly bronchodilatory. HOWEVER: propofol is a significant negative inotrope, causing hypotension in hemodynamically compromised patients. At BP 84/48, propofol risks severe post-intubation hypotension — ketamine maintains BP. Also: standard ventilation settings (RR 20, PEEP 5) cause severe auto-PEEP in bronchospasm — post-asthma ventilation MUST use low RR (10–12) and low PEEP (0–3)."),
         adv("c", "Midazolam 0.1 mg/kg + ketamine + no paralytic (to assess respiratory drive)", false,
           "Midazolam is second-line in status asthmaticus (respiratory depression in already-failing patient). Paralytic IS needed for controlled ventilation in severe asthma — attempting spontaneous breathing in a fully obstructed intubated asthmatic leads to double-triggering and breath stacking."),
         adv("d", "Fentanyl 5 mcg/kg + ketamine, no succinylcholine (prolonged paralysis risk)", false,
-          "Fentanyl causes histamine release — avoid in asthma. RSI: fast-onset paralytic (rocuronium + sugammadex reversal available, or succinylcholine if no contraindications) is appropriate."),
+          "Fentanyl does NOT cause clinically significant histamine release — that is morphine. Fentanyl is actually safe in asthma. However, fentanyl provides minimal bronchodilation compared to ketamine, and at 5 mcg/kg without a full paralytic (succinylcholine or rocuronium) you risk intubation without adequate relaxation. Use ketamine + rocuronium for optimal asthma RSI."),
       ],
       nextKey: "end",
       keyLearning: "Asthma RSI: ketamine + rocuronium. Post-intubation: RR 10–12, PEEP 0–3, accept hypercapnia. EXPECT auto-PEEP and hemodynamic instability. Have fluids ready for post-intubation BP drop.",
@@ -472,7 +472,7 @@ export const picu_epiglottitis: AdvancedSimulation = makeSimulation(
           "Dexamethasone effect takes hours. The intubation must happen now."),
       ],
       nextKey: "end",
-      keyLearning: "Epiglottitis intubation: video laryngoscopy, smaller ETT, follow bubbles, ENT for surgical airway backup. Dexamethasone after intubation. IV ceftriaxone for H. influenzae coverage.",
+      keyLearning: "Epiglottitis intubation: video laryngoscopy, smaller ETT (0.5 mm below age-expected), follow bubbles to glottis, ENT for surgical airway backup. Dexamethasone 0.6 mg/kg IV after intubation. IV ceftriaxone 50 mg/kg/day (max 2g/dose) for H. influenzae type b coverage. Post-Hib-vaccine era: Group A strep and Staph aureus are now common — add broader coverage if atypical presentation.",
     }),
   ],
 );
@@ -530,6 +530,233 @@ export const picu_croup: AdvancedSimulation = makeSimulation(
 
 // ─── Registry ──────────────────────────────────────────────────────────────────
 
+// ─── 9. Near Drowning ─────────────────────────────────────────────────────────
+
+export const picu_near_drowning: AdvancedSimulation = makeSimulation(
+  "picu_near_drowning",
+  {
+    category: "picu",
+    title: "Near Drowning — Secondary ARDS",
+    summary: "Pediatric submersion injury with evolving aspiration pneumonitis and secondary ARDS.",
+    patient: "7-year-old male, found in backyard pool, resuscitated on scene. Transported to ED intubated.",
+    difficulty: "intermediate",
+    estimatedMinutes: 7,
+    competencies: ["Submersion pathophysiology", "Lung-protective ventilation", "Secondary ARDS", "Temperature management"],
+  },
+  [
+    step("admission", {
+      context:
+        "7-year-old, 22 kg. Resuscitated on scene after approximately 5-minute submersion. " +
+        "Intubated in ED. GCS 6 (E1V1M4). Temperature 33°C. " +
+        "CXR: bilateral fluffy infiltrates. SpO₂ 87% on FiO₂ 80%.",
+      waveformConfig: pediatricVentConfig(22, "ards", "pressure_control"),
+      question: "Hypothermia 33°C in a post-submersion child. What is the correct temperature management?",
+      choices: [
+        adv("a", "Controlled rewarming — target core temp 36–37°C over 4–6 hours. Do NOT actively warm above 37°C. Mild hypothermia may be neuroprotective if resuscitated without ROSC.", true,
+          "CORRECT. Submersion-associated hypothermia: protective effect on the brain during submersion is well-documented. Rewarming should be controlled (0.5°C/h) to avoid overshoot. Never aggressively warm to > 37°C. If ROSC achieved after prolonged arrest: consider targeted temperature management (TTM) 32–36°C for 24h (same evidence as adult cardiac arrest, though pediatric data limited). Continue CPR until temp 32°C in refractory arrest ('not dead until warm and dead')."),
+        adv("b", "Rapid active rewarming to 37°C immediately — hypothermia impairs hemostasis and cardiac function", false,
+          "Rapid rewarming can precipitate vasodilation, hypotension, and ventricular fibrillation. Controlled rewarming is safer."),
+        adv("c", "Maintain hypothermia at 33°C for 24 hours — standard TTM protocol", false,
+          "TTM is considered for specific cases (prolonged submersion with cardiac arrest). For a child who was resuscitated with ROSC and is hemodynamically stable, controlled normalization is appropriate. The TTM decision requires full clinical picture."),
+        adv("d", "Temperature management is not a priority — focus on the pulmonary injury first", false,
+          "Hypothermia affects cardiac rhythm, coagulation, and drug metabolism — it must be managed concurrently, not deferred."),
+      ],
+      nextKey: "ards_management",
+      keyLearning: "Submersion hypothermia: controlled rewarming to 36–37°C. Consider TTM for arrest cases. 'Not dead until warm and dead' applies — continue resuscitation until 32°C.",
+      vitals: { hr: 118, spo2: 87, rr: 22, bp: "88/52", fio2: 80, temp: 33.2 },
+      imaging: "CXR: bilateral fluffy infiltrates — aspiration + early ARDS pattern.",
+    }),
+    step("ards_management", {
+      context:
+        "Temperature 36°C. ABG: pH 7.24, PaCO₂ 52, PaO₂ 58. P/F = 72. Bilateral ARDS confirmed. " +
+        "Current settings: PC, PIP 26, PEEP 8, RR 22, FiO₂ 80%, Ti 0.9s.",
+      waveformConfig: pediatricVentConfig(22, "ards", "pressure_control"),
+      question: "PARDS (Pediatric ARDS) confirmed. P/F 72. What is the PALICC-2 lung-protective target?",
+      choices: [
+        adv("a", "Vt 4–6 mL/kg IBW (88–132 mL), PEEP titrated to FiO₂ requirement, Pplat ≤ 29 cmH₂O (or ΔP ≤ 15 cmH₂O). Accept permissive hypercapnia pH ≥ 7.20.", true,
+          "CORRECT. PALICC-2 (2022 Pediatric ARDS Consensus): Vt 4–6 mL/kg IBW (same principle as adults), Pplat ≤ 29 cmH₂O, driving pressure ≤ 15 cmH₂O. Permissive hypercapnia (pH ≥ 7.20) preferred over aggressive ventilation. High PEEP strategy if severe (PEEP/FiO₂ table or OI-guided). Consider prone for OI > 16 (similar to adult P/F < 150)."),
+        adv("b", "Vt 10 mL/kg — pediatric patients need higher volumes due to their smaller airways", false,
+          "Higher Vt worsens VILI regardless of age. PALICC-2 targets 4–6 mL/kg IBW, identical to ARDSNet."),
+        adv("c", "FiO₂ 100% to maximize oxygenation — hypoxemia is the immediate threat", false,
+          "FiO₂ 100% causes oxygen toxicity and does not address the underlying ARDS. Optimize PEEP to improve oxygenation and reduce FiO₂ requirement."),
+        adv("d", "Steroids immediately — pediatric ARDS responds better to steroids than adults", false,
+          "Steroids in PARDS have limited evidence. They are not first-line. Lung-protective ventilation is the priority."),
+      ],
+      nextKey: "end",
+      keyLearning: "PARDS: Vt 4–6 mL/kg IBW, Pplat ≤ 29, ΔP ≤ 15, permissive hypercapnia. Same principles as adult ARDS. Prone if OI > 16.",
+      vitals: { hr: 118, spo2: 87, rr: 22, bp: "96/60", fio2: 80 },
+      labs: { ph: 7.24, paco2: 52, pao2: 58, pf_ratio: 72 },
+    }),
+  ],
+);
+
+// ─── 10. Severe Pediatric Asthma — Non-Invasive ────────────────────────────────
+
+export const picu_asthma_niv: AdvancedSimulation = makeSimulation(
+  "picu_asthma_niv",
+  {
+    category: "picu",
+    title: "Severe Pediatric Asthma — NIV Bridge to Avoid Intubation",
+    summary: "Severe pediatric asthma — escalation from SABA to heliox to BiPAP to avoid intubation.",
+    patient: "9-year-old female, known asthma, unresponsive to 3 rounds of albuterol in ED. Tripod posturing, pulsus paradoxus 18 mmHg.",
+    difficulty: "intermediate",
+    estimatedMinutes: 7,
+    competencies: ["NIV for asthma", "Heliox delivery", "Pulsus paradoxus", "Ketamine"],
+  },
+  [
+    step("severity", {
+      context:
+        "9-year-old, 32 kg. SpO₂ 89% on 10 L O₂ mask. Pulsus paradoxus 18 mmHg. HR 148. RR 36. " +
+        "Tripod posturing, accessory muscles. 3 × albuterol + ipratropium given. " +
+        "Magnesium sulfate 50 mg/kg IV being administered now.",
+      question: "Pulsus paradoxus of 18 mmHg. What does this indicate about asthma severity?",
+      choices: [
+        adv("a", "Pulsus paradoxus > 10 mmHg = severe asthma. Dynamic hyperinflation causes large intrapleural pressure swings, reducing venous return to the left heart during inspiration — producing the paradoxical BP drop.", true,
+          "CORRECT. Normal pulsus paradoxus < 10 mmHg. In severe asthma: intense respiratory effort and dynamic hyperinflation cause large negative intrapleural pressure during inspiration → compresses the pulmonary circulation → reduces LVEDV → drops SBP during inspiration. Pulsus paradoxus > 20 mmHg = impending respiratory failure. 18 mmHg = severe — very close to the danger threshold."),
+        adv("b", "Pulsus paradoxus 18 mmHg is normal in a child — pediatric values differ from adults", false,
+          "Normal pulsus paradoxus is < 10 mmHg in all ages. Adult threshold for cardiac tamponade is > 10 mmHg. In asthma, > 10 mmHg = severe, > 20 mmHg = impending arrest."),
+        adv("c", "Pulsus paradoxus reflects cardiac tamponade — urgent echocardiogram needed", false,
+          "Pulsus paradoxus is NOT specific to tamponade — it occurs in severe asthma from hyperinflation, constrictive pericarditis, and right heart failure. Clinical context (severe asthma) guides interpretation."),
+        adv("d", "Pulsus paradoxus is a measurement artefact — it is not clinically useful", false,
+          "Pulsus paradoxus is a validated, objective measure of respiratory severity. A decrease to < 10 mmHg after treatment confirms improvement."),
+      ],
+      nextKey: "heliox_niv",
+      keyLearning: "Pulsus paradoxus > 10 mmHg = severe asthma. > 20 mmHg = impending arrest. Decreasing pulsus with treatment = clinical improvement. Measure with a sphygmomanometer.",
+      vitals: { hr: 148, spo2: 89, rr: 36, bp: "92/60", fio2: 60 },
+    }),
+    step("heliox_niv", {
+      context:
+        "MgSO₄ administered. SpO₂ still 90%. Child tiring. Decision needed: BiPAP trial or intubate?",
+      question: "Before intubating, you trial BiPAP + heliox. What FiO₂ limit applies to heliox delivery?",
+      choices: [
+        adv("a", "Heliox requires FiO₂ ≤ 30% (70:30 mix) or ≤ 40% (60:40 mix). If FiO₂ > 40% needed, heliox is ineffective — not enough helium to reduce turbulence.", true,
+          "CORRECT. Heliox blends: 70:30 He:O₂ = FiO₂ 30%. 60:40 He:O₂ = FiO₂ 40%. Helium's benefit comes from reducing gas density → reducing Reynold's number → turbulent-to-laminar flow conversion. If FiO₂ > 40%, the helium percentage is too low to significantly reduce density. Patient must tolerate SpO₂ ≥ 92% on FiO₂ ≤ 40% to benefit from heliox."),
+        adv("b", "Heliox works at any FiO₂ — add supplemental O₂ as needed alongside heliox", false,
+          "Adding supplemental O₂ to heliox dilutes the helium concentration, reducing the density benefit. Standard heliox blends have fixed compositions."),
+        adv("c", "Heliox requires 100% helium for maximum effect — no oxygen is needed", false,
+          "100% helium causes asphyxia. Oxygen must be included. Standard clinical blends are 70:30 or 60:40 He:O₂."),
+        adv("d", "Heliox FiO₂ limit is 60% — the 40:60 He:O₂ blend is standard", false,
+          "A 40:60 He:O₂ blend reduces density less than a 70:30 or 60:40 blend. The highest helium concentration compatible with adequate oxygenation provides the most benefit."),
+      ],
+      nextKey: "end",
+      keyLearning: "Heliox FiO₂ limit: ≤ 30–40%. Below this limit, helium concentration reduces gas density and turbulence. Above 40% FiO₂ need: heliox has minimal benefit.",
+      vitals: { hr: 140, spo2: 90, rr: 34, bp: "96/62", fio2: 40 },
+    }),
+  ],
+);
+
+// ─── 11. RSV Escalation ────────────────────────────────────────────────────────
+
+export const picu_rsv: AdvancedSimulation = makeSimulation(
+  "picu_rsv",
+  {
+    category: "picu",
+    title: "RSV Bronchiolitis — Escalation Ladder",
+    summary: "Infant with severe RSV bronchiolitis — nasal cannula → HFNC → CPAP → intubation decision.",
+    patient: "5-week-old, 3.8 kg, ex-29 weeker (corrected 37 weeks). RSV bronchiolitis, SpO₂ 88% on standard NC.",
+    difficulty: "intermediate",
+    estimatedMinutes: 7,
+    competencies: ["Bronchiolitis escalation", "HFNC vs CPAP", "RSV high-risk factors", "Intubation threshold"],
+  },
+  [
+    step("escalation_decision", {
+      context:
+        "5-week-old ex-premature infant, RSV positive. SpO₂ 88% on 2 L/min NC. RR 72, retracting. " +
+        "HR 168. Temperature 38.1°C.",
+      question: "This infant is at high risk for rapid deterioration from RSV. What risk factors make this a PICU-level patient?",
+      choices: [
+        adv("a", "Age < 3 months + ex-prematurity (29 weeks) + tachypnea RR 72 + SpO₂ < 90% = multiple high-risk factors for severe RSV requiring PICU-level monitoring and escalation readiness.", true,
+          "CORRECT. RSV high-risk: (1) Age < 3 months (immature respiratory reserve, prone to apnea). (2) Former prematurity < 32 weeks (BPD risk, small airways). (3) SpO₂ < 90% on NC. (4) Hemodynamic instability. (5) Toxic appearance. This infant has 3 major risk factors. PICU admission for continuous monitoring is appropriate."),
+        adv("b", "RSV is a self-limiting infection — observation only is appropriate regardless of age", false,
+          "RSV is life-threatening in infants < 3 months and ex-premature infants. Self-limiting does not mean safe at home for this patient."),
+        adv("c", "Palivizumab prophylaxis should have prevented this — escalation is not needed", false,
+          "Palivizumab is prophylactic (monthly IM) and reduces severity but does not eliminate RSV infection. Breakthrough RSV can still cause severe disease."),
+        adv("d", "SpO₂ 88% is acceptable for infants — their saturation curve is different from adults", false,
+          "SpO₂ < 90% is below acceptable for any age group. Target ≥ 92% in infants without congenital heart disease."),
+      ],
+      nextKey: "hfnc_escalation",
+      keyLearning: "RSV high-risk: age < 3 months, ex-prematurity, BPD, CHD, immunocompromised. Escalate early. HFNC reduces intubation rate by 50% in bronchiolitis.",
+      vitals: { hr: 168, spo2: 88, rr: 72, bp: "60/38", fio2: 25, temp: 38.1 },
+    }),
+    step("hfnc_escalation", {
+      context:
+        "You escalate to HFNC 2 L/kg/min (7.6 L/min), FiO₂ 40%. SpO₂ improves to 94%. " +
+        "30 minutes later: SpO₂ 89%, RR 80, increasing retractions. Apnea episode × 1 lasting 12 seconds.",
+      question: "HFNC failing in an ex-premature infant with apnea. Next escalation?",
+      choices: [
+        adv("a", "CPAP 6–7 cmH₂O — provides PEEP to stent open small airways, reduces WOB, and addresses apnea component better than HFNC.", true,
+          "CORRECT. CPAP superiority over HFNC in ex-premature infants: (1) Provides reliable PEEP (HFNC generates only 2–4 cmH₂O PEEP). (2) Better for apnea of prematurity component. (3) High-flow nasal cannula and CPAP both reduce intubation in bronchiolitis, but ex-premature infants with apnea benefit more from reliable PEEP. If CPAP fails (apnea × 2, respiratory failure, SpO₂ < 88% on FiO₂ ≥ 60%) → intubate."),
+        adv("b", "Increase HFNC to 4 L/kg/min (15 L/min) before considering CPAP", false,
+          "HFNC flows above 2–2.5 L/kg/min provide little additional benefit and worsen patient comfort without better PEEP delivery. Step up to CPAP, not higher HFNC."),
+        adv("c", "Intubate now — the apnea episode means the infant cannot be managed without intubation", false,
+          "One 12-second apnea episode is not an immediate intubation indication. Trial CPAP first. Intubation threshold: recurrent apnea requiring stimulation or bagging × 2, failure of maximal non-invasive support."),
+        adv("d", "Administer caffeine for apnea of prematurity component", false,
+          "Caffeine is indicated for AOP in premature infants but the acute problem here is RSV bronchiolitis causing increased WOB and apnea. CPAP addresses both the mechanical and apnea components more directly."),
+      ],
+      nextKey: "end",
+      keyLearning: "HFNC failure → CPAP in ex-premature infants. CPAP provides reliable PEEP for small airways. Intubation if apnea × 2 requiring intervention or SpO₂ < 88% on FiO₂ 60%.",
+      vitals: { hr: 172, spo2: 89, rr: 80, bp: "60/36", fio2: 40 },
+    }),
+  ],
+);
+
+// ─── 12. Congenital Heart Disease — Respiratory Support ───────────────────────
+
+export const picu_chd_respiratory: AdvancedSimulation = makeSimulation(
+  "picu_chd_respiratory",
+  {
+    category: "picu",
+    title: "Single Ventricle CHD — Oxygen Avoidance Strategy",
+    summary: "Post-Norwood infant with hypoplastic left heart — avoiding oxygen to maintain pulmonary-systemic balance.",
+    patient: "3-week-old, 3.2 kg. Norwood stage 1 done day 2 of life. Now on room air, shunt-dependent circulation.",
+    difficulty: "advanced",
+    estimatedMinutes: 7,
+    competencies: ["Single ventricle physiology", "Qp:Qs ratio", "Oxygen avoidance", "Hypoxia targets in CHD"],
+  },
+  [
+    step("shunt_physiology", {
+      context:
+        "Post-Norwood infant. SpO₂ 82% on room air. Parents alarmed by SpO₂. " +
+        "Nurse asks to start supplemental O₂ to 'improve' the saturation.",
+      question: "SpO₂ 82% in a post-Norwood infant. Should you give supplemental oxygen?",
+      choices: [
+        adv("a", "No — SpO₂ 75–85% is the TARGET for balanced Qp:Qs in single ventricle physiology. Giving O₂ vasodilates the pulmonary circulation, 'steals' systemic blood flow, and causes systemic hypoperfusion.", true,
+          "CORRECT. Single ventricle (Norwood): one ventricle serves both circulations. Pulmonary blood flow comes from the modified BT shunt. Too much pulmonary flow (Qp > Qs) = systemic steal → organ ischemia. SpO₂ 75–85% represents balanced Qp:Qs. O₂ is a pulmonary vasodilator — it INCREASES pulmonary flow and DECREASES systemic flow. Target SpO₂ 75–85%, NOT 95–100%."),
+        adv("b", "Yes — SpO₂ 82% is dangerously low and requires immediate oxygen supplementation", false,
+          "This is the most dangerous mistake in CHD management. Supplemental O₂ to a post-Norwood infant reduces systemic perfusion and can cause fatal systemic hypoperfusion. SpO₂ 82% is the TARGET, not a danger sign."),
+        adv("c", "Yes — give O₂ briefly then reassess in 15 minutes", false,
+          "Even brief O₂ supplementation in single ventricle physiology can shift Qp:Qs dangerously. No supplemental O₂ without explicit cardiologist approval."),
+        adv("d", "Only give O₂ if SpO₂ drops below 70%", false,
+          "SpO₂ 70% triggers concern about increased PVR or shunt compromise — but supplemental O₂ is still not the first intervention. Evaluate Qp:Qs, check hemoglobin, consider shunt assessment."),
+      ],
+      nextKey: "deterioration",
+      keyLearning: "Single ventricle CHD: SpO₂ TARGET is 75–85%. Supplemental O₂ is contraindicated — it vasodilates pulmonary vasculature, steals systemic flow, and causes organ failure. This is life-threatening if mismanaged.",
+      vitals: { hr: 155, spo2: 82, rr: 48, bp: "62/38", fio2: 21 },
+    }),
+    step("deterioration", {
+      context:
+        "SpO₂ drops acutely to 65%. HR 168. BP 48/30. The infant appears mottled, poor perfusion. " +
+        "Concern: shunt thrombosis vs increased PVR.",
+      question: "Acute SpO₂ 65% in post-Norwood — shunt compromise suspected. What is your evaluation and intervention?",
+      choices: [
+        adv("a", "Urgent echo to assess shunt patency → if thrombosed: heparin bolus 100 units/kg IV → emergent catheterization vs surgical revision. Maintain high systemic BP with phenylephrine to drive shunt flow.", true,
+          "CORRECT. Shunt thrombosis is a life-threatening emergency. Evaluation: (1) Echo — direct visualization of shunt flow (absent = thrombosis). (2) If thrombosis confirmed: heparin 50–100 u/kg IV bolus. (3) Maintain systemic perfusion pressure with phenylephrine (α-agonist — increases systemic vascular resistance without excessive tachycardia). (4) Emergency cath or surgery. Time-critical: shunt thrombosis can cause cardiac arrest within minutes."),
+        adv("b", "Intubate and increase FiO₂ to 100% to maximize oxygenation", false,
+          "FiO₂ 100% in single ventricle = catastrophic pulmonary overcirculation. This can cause rapid systemic cardiovascular collapse. Absolutely contraindicated.", { danger: "fatal" as const }),
+        adv("c", "Give fluid bolus 20 mL/kg — the mottling suggests hypovolemia", false,
+          "Fluid may be appropriate but does not address shunt thrombosis. Without echo to assess shunt patency, fluid alone is inadequate management."),
+        adv("d", "Observe for spontaneous improvement — acute desaturation often resolves in CHD", false,
+          "Acute SpO₂ 65% in post-Norwood is a cardiac emergency. There is no watching and waiting.", { danger: "harmful" as const }),
+      ],
+      nextKey: "end",
+      keyLearning: "Post-Norwood acute desaturation: think shunt thrombosis. Echo STAT. Heparin if thrombosis confirmed. NEVER give high FiO₂ — it is immediately fatal in single ventricle physiology.",
+      vitals: { hr: 168, spo2: 65, rr: 60, bp: "48/30", fio2: 21 },
+    }),
+  ],
+);
+
+// ─── Expanded Registry (15 total) ─────────────────────────────────────────────
+
 export const PICU_SIMULATIONS: readonly AdvancedSimulation[] = [
   picu_status_asthmaticus,
   picu_pards,
@@ -539,6 +766,10 @@ export const PICU_SIMULATIONS: readonly AdvancedSimulation[] = [
   picu_sepsis,
   picu_epiglottitis,
   picu_croup,
+  picu_near_drowning,
+  picu_asthma_niv,
+  picu_rsv,
+  picu_chd_respiratory,
 ];
 
 export function getPicuSimulation(id: string): AdvancedSimulation | undefined {

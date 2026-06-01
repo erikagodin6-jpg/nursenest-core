@@ -44,8 +44,8 @@ export const transport_altitude: AdvancedSimulation = makeSimulation(
       vitals: { hr: 118, spo2: 88, rr: 14, bp: "112/68", fio2: 60 },
       question: "Why does SpO₂ drop at altitude even with the same FiO₂ setting on the ventilator?",
       choices: [
-        adv("a", "At 3,000 ft cabin altitude, barometric pressure is lower (~697 mmHg vs 760 mmHg at sea level). FiO₂ 60% delivers LESS oxygen per breath because: PAO₂ = FiO₂ × (PB − PH₂O) − PaCO₂/R. Lower PB → lower PAO₂ → lower PaO₂.", true,
-          "CORRECT. Dalton's Law and the alveolar gas equation: PAO₂ = FiO₂ × (PB − 47) − (PaCO₂ / 0.8). At sea level: PB = 760 mmHg. At 3,000 ft: PB ≈ 697 mmHg. At FiO₂ 0.60: PAO₂ decreases by approximately 38 mmHg. In an ARDS patient with already limited reserve, this translates directly to SpO₂ desaturation. FIX: increase FiO₂ to compensate for altitude (target same PAO₂)."),
+        adv("a", "At 3,000 ft altitude (helicopter, unpressurized), barometric pressure is lower (~681 mmHg vs 760 mmHg at sea level). FiO₂ 60% delivers LESS oxygen per breath because: PAO₂ = FiO₂ × (PB − PH₂O) − PaCO₂/R. Lower PB → lower PAO₂ → lower PaO₂.", true,
+          "CORRECT. Alveolar gas equation: PAO₂ = FiO₂ × (PB − 47) − (PaCO₂ / 0.8). Standard atmosphere at 3,000 ft: PB ≈ 681 mmHg (not 697 — verified against ICAO standard atmosphere table). At FiO₂ 0.60 and 3,000 ft: PAO₂ decreases by approximately 47 mmHg vs sea level. Note: pressurized fixed-wing aircraft maintain cabin altitude 6,000–8,000 ft equivalent (PB ≈ 565–609 mmHg) — larger PAO₂ reduction. Helicopters fly unpressurized at actual altitude. FIX: increase FiO₂ to compensate for altitude-related PAO₂ reduction."),
         adv("b", "The transport vent blends differently at altitude — actual delivered FiO₂ is lower than displayed", false,
           "Modern transport ventilators are calibrated for altitude-independent FiO₂ delivery. The set FiO₂ represents the fraction of O₂ in the gas mixture, which doesn't change. What changes is the PARTIAL PRESSURE of that O₂ due to lower ambient pressure."),
         adv("c", "Turbulence at altitude causes airway derecruitment — PEEP is less effective", false,

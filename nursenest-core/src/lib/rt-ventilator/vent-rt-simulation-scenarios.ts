@@ -696,7 +696,7 @@ export const sim_double_triggering: RtSimulation = {
           true,
           "CORRECT. With severe ARDS and dangerous breath stacking (Pplat > 40, effective Vt 12 mL/kg), " +
           "neuromuscular blockade is indicated to eliminate dyssynchrony and prevent acute VILI. " +
-          "ACURASYS and ROSE trials: NMB for first 48h in severe ARDS (P/F < 150) improves 90-day mortality in some protocols."),
+          "IMPORTANT: ACURASYS (2010) showed NMB benefit for P/F < 150; however, the ROSE trial (2019) found NO 90-day mortality benefit of routine NMB vs light sedation in unselected ARDS. Current ATS guideline: NMB is NOT routine — it is reserved specifically for refractory ventilator dyssynchrony causing VILI (exactly this case) or refractory hypoxemia not manageable otherwise."),
         choice("b",
           "Lengthen Ti to match the patient's neural inspiratory time",
           false,
@@ -720,7 +720,7 @@ export const sim_double_triggering: RtSimulation = {
         "In severe ARDS with double triggering: (1) Try lengthening Ti first. " +
         "(2) If ineffective or urgent, initiate NMB (cisatracurium 0.15 mg/kg/h continuous). " +
         "NMB removes all patient effort → eliminates the neural Ti mismatch. " +
-        "ARDS Network: NMB for 48h is indicated when P/F < 150 with uncontrolled dyssynchrony.",
+        "NMB is appropriate for REFRACTORY DYSSYNCHRONY causing VILI (this scenario). It is NOT routinely indicated for all P/F < 150 (ROSE trial 2019 found no mortality benefit of routine NMB). Cisatracurium preferred: no histamine release, degraded by Hofmann elimination (organ-independent).",
     },
   ],
 };

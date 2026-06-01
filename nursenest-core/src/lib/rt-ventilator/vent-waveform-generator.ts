@@ -932,7 +932,7 @@ export function neonatalVentConfig(
 export function pediatricVentConfig(
   weightKg: number,
   condition: "normal" | "asthma" | "ards" | "bronchiolitis",
-  mode: "volume_control" | "pressure_control" | "pressure_support" = "pressure_control",
+  mode: "volume_control" | "pressure_control" | "pressure_support" | "cpap" = "pressure_control",
 ): VentWaveformConfig {
   const vtTarget = Math.round(weightKg * 6);   // 6 mL/kg target
   const cst = condition === "ards" ? weightKg * 0.8

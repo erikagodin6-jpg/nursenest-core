@@ -54,8 +54,8 @@ export const ecmo_vv_initiation: AdvancedSimulation = makeSimulation(
       labs: { ph: 7.28, paco2: 62, pao2: 41, pf_ratio: 41, lactate: 3.2 },
       question: "Does this patient meet ELSO criteria for VV-ECMO? What is the primary CONTRAINDICATION to check?",
       choices: [
-        adv("a", "YES — OI > 40 for > 6 hours on optimal ventilation meets ELSO criteria. Primary contraindication: irreversible underlying condition (malignancy, severe anoxic brain injury). Check for futility before initiating.", true,
-          "CORRECT. ELSO criteria for VV-ECMO: (1) PaO₂/FiO₂ < 100 despite optimal care × 6 hours; (2) Murray Score > 3.0; (3) OI > 40 × 6 hours. This patient meets criteria. PRIMARY contraindications: non-recoverable disease, untreatable underlying cause, severe aortic insufficiency (VA-ECMO contraindication). For VV-ECMO: advanced malignancy, chronic end-organ failure without transplant listing, severe COPD without transplant plan."),
+        adv("a", "YES — OI > 40 for ≥ 4 hours (ELSO 2021) on optimal lung-protective ventilation meets VV-ECMO criteria. Primary contraindication: irreversible underlying condition (malignancy, severe anoxic brain injury). Check for disease reversibility before initiating.", true,
+          "CORRECT. ELSO 2021 Adult VV-ECMO criteria: (1) PaO₂/FiO₂ < 80 mmHg despite optimal lung-protective ventilation × 6 hours (or P/F < 50 for < 3 hours); (2) Murray Score > 3.0; (3) OI > 40 for ≥ 4 hours; (4) Uncompensated hypercapnia pH < 7.15 despite optimal ventilation. This patient meets criteria (P/F 62, OI 42 × 8h). PRIMARY contraindications: non-recoverable disease, untreatable underlying cause, severe aortic insufficiency (for VA-ECMO), advanced malignancy, severe COPD without transplant plan."),
         adv("b", "NO — the patient must also fail iNO and prone positioning before ECMO", false,
           "While iNO and prone positioning are used before ECMO in many protocols, ELSO does not REQUIRE failure of these adjuncts — it requires failure of optimal CONVENTIONAL ventilation for > 6 hours. If the patient is deteriorating on optimal therapy, ECMO can be initiated even without iNO or prone if those are judged unlikely to help."),
         adv("c", "YES — but only if the patient is VA-ECMO (cardiac support needed)", false,
@@ -64,7 +64,7 @@ export const ecmo_vv_initiation: AdvancedSimulation = makeSimulation(
           "Echocardiogram is important (rules out cardiac failure needing VA-ECMO, identifies RV strain) but is not required before deciding on ECMO initiation criteria — which are based on oxygenation failure."),
       ],
       nextKey: "cannulation",
-      keyLearning: "VV-ECMO criteria: OI > 40 or P/F < 100 for > 6 hours on optimal therapy. Check reversibility before initiating. ECMO is bridge-to-recovery — disease must be potentially reversible.",
+      keyLearning: "VV-ECMO criteria (ELSO 2021): P/F < 80 × 6 hours OR OI > 40 × 4 hours OR pH < 7.15 from hypercapnia — on optimal lung-protective ventilation. Check disease reversibility first. ECMO is bridge-to-recovery.",
       consequenceOfInaction: noAction(
         "ARDS with OI 42 and P/F 41: escalating VILI with each vent breath.",
         [

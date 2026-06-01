@@ -148,17 +148,17 @@ function CasePicker({ onSelect }: { onSelect: (c: DetectiveCase) => void }) {
               <p className="text-sm font-bold text-[var(--semantic-text-primary)] group-hover:text-[var(--semantic-brand)]">
                 {c.title}
               </p>
-              <span className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide ${DIFF_COLOR[c.difficulty]}`}>
+              <span className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide ${DIFF_COLOR[c.difficulty as keyof typeof DIFF_COLOR]}`}>
                 {c.difficulty}
               </span>
             </div>
             <div className="mt-2 flex flex-wrap gap-1">
-              {c.findingTraces.map((t) => (
+              {c.findingTraces.map((trace: string) => (
                 <span
-                  key={t}
+                  key={trace}
                   className="rounded-full bg-[var(--semantic-surface-alt)] px-1.5 py-0.5 text-[9px] font-semibold text-[var(--semantic-text-muted)]"
                 >
-                  {t}
+                  {trace}
                 </span>
               ))}
             </div>
@@ -243,7 +243,7 @@ function ActiveCase({ detective, onBack, onComplete }: {
             />
           ))}
         </div>
-        <span className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase ${DIFF_COLOR[detective.difficulty]}`}>
+        <span className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase ${DIFF_COLOR[detective.difficulty as keyof typeof DIFF_COLOR]}`}>
           {detective.difficulty}
         </span>
       </div>
@@ -320,7 +320,7 @@ function ActiveCase({ detective, onBack, onComplete }: {
           </p>
           <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{detective.consequenceOfInaction.description}</p>
           <div className="mt-3 space-y-2">
-            {detective.consequenceOfInaction.timeline.map((event, i) => (
+            {detective.consequenceOfInaction.timeline.map((event: { timeframe: string; event: string }, i: number) => (
               <div key={i} className="flex gap-2 text-xs">
                 <span className="shrink-0 font-semibold text-[var(--semantic-error)]">{event.timeframe}</span>
                 <span className="text-[var(--semantic-text-secondary)]">{event.event}</span>

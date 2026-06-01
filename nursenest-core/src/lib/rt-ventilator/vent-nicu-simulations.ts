@@ -48,7 +48,7 @@ export const nicu_rds_28wk: AdvancedSimulation = makeSimulation(
         adv("b", "Immediate intubation and mechanical ventilation — 28-weekers always need intubation", false,
           "Evidence shows outcomes are equivalent or better with CPAP first for 28-weekers with spontaneous effort. Routine immediate intubation is no longer recommended (NRP 2021)."),
         adv("c", "100% FiO₂ by mask until SpO₂ improves — avoid CPAP in extremely premature infants", false,
-          "CRITICAL. 100% FiO₂ without CPAP provides no alveolar distending pressure — the surfactant-deficient lung collapses. Also: hyperoxia causes retinopathy of prematurity and BPD. Target SpO₂ 85–90% at 1 min, 80–90% at 2–3 min, 85–90% at 4 min (NRP 2021 target table)."),
+          "CRITICAL. 100% FiO₂ without CPAP provides no alveolar distending pressure — the surfactant-deficient lung collapses. Also: hyperoxia causes retinopathy of prematurity and BPD. NRP 2021 preductal SpO₂ targets at delivery: 1 min 60–65%, 2 min 65–70%, 3 min 70–75%, 4 min 75–80%, 5 min 80–85%, 10 min 85–95%. Do NOT target 85–90% at 1 minute — this would require unsafe oxygen exposure."),
         adv("d", "Bag-mask PPV at 60 breaths/min — the HR is only 86, which requires positive pressure", false,
           "NRP 2021: PPV is indicated if HR < 100 after initial steps. With HR 86: begin PPV. BUT the preferred device is CPAP via T-piece (PEEP-providing device), not simple mask. Also: FiO₂ should start at 30% (not 100%) for preterms."),
       ],
