@@ -1352,6 +1352,11 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
  * Rich HTML from CMS / blog (`prose` class) — comfortable long-form reading without
  * requiring @tailwindcss/typography; theme tokens only, no color redesign.
  */
+.nn-premium-blog-index .border,
+.nn-premium-blog-article .border {
+  border-color: color-mix(in srgb, var(--semantic-info) 35%, var(--semantic-border-soft)) !important;
+}
+
 article .prose {
   margin-inline: auto;
   width: 100%;

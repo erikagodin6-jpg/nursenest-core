@@ -3,6 +3,7 @@ import {
   auditQuestionEnrichment,
   type QuestionEnrichmentAuditRow,
 } from "@/lib/questions/question-enrichment-governance";
+import { scoreHintQuality } from "@/lib/questions/hint-quality-score";
 
 export type QuestionGovernanceStatus =
   | "PUBLICATION_ELIGIBLE"
@@ -161,13 +162,23 @@ export function enforceQuestionPublicationGovernance(
   }
 
   const hint = hintText(row);
-  const answerTerms = textList(row.correctAnswer).filter((term) => term.length >= 5);
-  if (
-    !hint ||
-    DIRECT_ANSWER_HINT_RE.test(hint) ||
-    answerTerms.some((term) => hint.toLowerCase().includes(term.toLowerCase()))
-  ) {
-    addStatus(statuses, blockers, "HINT_REWRITE_REQUIRED", "Hint is missing or reveals answer terminology/options.");
+  const hintQuality = scoreHintQuality({
+    id: row.id,
+    hint,
+    stem: row.stem,
+    options: textList(row.options),
+    correctAnswer: textList(row.correctAnswer),
+    pathway: row.exam ?? row.tier,
+    topic: row.topic ?? row.bodySystem,
+    questionType: row.questionType,
+  });
+  if (!hintQuality.publishAllowed || DIRECT_ANSWER_HINT_RE.test(hint)) {
+    addStatus(
+      statuses,
+      blockers,
+      "HINT_REWRITE_REQUIRED",
+      `Hint quality gate failed: score ${hintQuality.score}; issues: ${hintQuality.issues.join(", ") || "review required"}.`,
+    );
   }
 
   const pearl = plain(row.clinicalPearl);
@@ -245,6 +256,10 @@ export function enforceQuestionPublicationGovernance(
   }
   if (scores.examRealism < QUESTION_ENFORCEMENT_SCORE_THRESHOLDS.examRealism) {
     blockers.push(`Exam realism score below ${QUESTION_ENFORCEMENT_SCORE_THRESHOLDS.examRealism}.`);
+    statuses.add("BLOCKED_FROM_PUBLICATION");
+  }
+  if (enrichment.scores.distractorQuality < 80) {
+    blockers.push("Distractor quality score below 80 or missing misconception, safety, remediation, or readiness mapping.");
     statuses.add("BLOCKED_FROM_PUBLICATION");
   }
   if (scores.publicationReadiness < QUESTION_ENFORCEMENT_SCORE_THRESHOLDS.publicationReadiness) {

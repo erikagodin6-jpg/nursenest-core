@@ -32,7 +32,8 @@ export type VentMode =
   | "cpap"
   | "bipap"
   | "aprv"
-  | "prvc";
+  | "prvc"
+  | "hfov";   // High-Frequency Oscillatory Ventilation — neonatal/ARDS rescue
 
 export type VentFlowPattern = "square" | "decelerating";
 
@@ -48,7 +49,11 @@ export type VentCondition =
   | "circuit_leak"
   | "ett_cuff_leak"
   | "auto_peep"
-  | "patient_agitation";
+  | "patient_agitation"
+  | "water_in_circuit"     // oscillating saw-tooth artefact on flow/pressure
+  | "circuit_disconnect"   // near-zero pressure/flow after circuit separation
+  | "mainstem_intubation"  // one-lung delivery: reduced compliance, high pressures
+  | "pulmonary_hemorrhage";// blood in airway — pressure/flow disturbance
 
 export type VentAsynchrony =
   | "none"
@@ -59,7 +64,7 @@ export type VentAsynchrony =
   | "delayed_cycling"
   | "premature_cycling"
   | "breath_stacking"
-  | "reverse_triggering";
+  | "reverse_triggering";  // diaphragm contracts reflexively during/after mandatory breath
 
 export type VentDifficulty = "basic" | "intermediate" | "advanced";
 
@@ -89,6 +94,13 @@ export type VentWaveformConfig = {
   resistance: number;
   /** Intrinsic PEEP / auto-PEEP (cmH₂O). Indicates air trapping when > 0. */
   autoPeep?: number;
+
+  // ── HFOV-specific parameters (mode === "hfov") ──────────────────────────────
+  /** HFOV oscillation frequency in Hz. Typical neonatal: 10–15 Hz. Adult ARDS rescue: 5–8 Hz. */
+  hfovFrequency?: number;
+  /** HFOV amplitude (ΔP) in cmH₂O — controls CO₂ elimination. Typical: 20–60. */
+  hfovAmplitude?: number;
+  // peep field reused as MAP (Mean Airway Pressure) for HFOV display context
 
   // ── Condition & asynchrony overlays ─────────────────────────────────────────
   condition?: VentCondition;
@@ -361,6 +373,7 @@ export function generateVentWaveform(
   const isPS = config.mode === "pressure_support" || config.mode === "bipap";
   const isCPAP = config.mode === "cpap";
   const isAPRV = config.mode === "aprv";
+  const isHFOV = config.mode === "hfov";
 
   const includePlateau = options.includePlateau ?? isVC;
   // FIX 3: Plateau must be ≥ 350 ms — fraction alone gives too short a plateau at normal Ti.
@@ -463,6 +476,34 @@ export function generateVentWaveform(
         points.push({ t, ...result });
         sumPressure += result.pressure;
         pointCount++;
+        continue;
+      }
+
+      // ── HFOV mode ─────────────────────────────────────────────────────────────
+      // High-frequency oscillatory ventilation: rapid sinusoidal pressure oscillations
+      // around a constant mean airway pressure (MAP = peep field).
+      // Physics:
+      //   P(t) = MAP ± (ΔP/2)·sin(2π·freq·t)          [pressure oscillates bidirectionally]
+      //   F(t) = Vt_hfov·(2π·freq)·cos(2π·freq·t)     [flow = dV/dt]
+      //   Vt_hfov = Cst·(ΔP/2)·(1 − e^−1/(2·freq·τ)) ≈ Cst·ΔP/2 at high freq
+      // CO₂ eliminated by: DCO₂ = Vt² × frequency (power law)
+      // Oxygenation: controlled by MAP and FiO₂
+      if (isHFOV) {
+        const map = peep; // MAP (set as the "PEEP" field in config)
+        const amplitude = config.hfovAmplitude ?? 30; // ΔP
+        const freq = config.hfovFrequency ?? 10; // Hz
+        // Each "breath" cycle spans cycleDuration; t is absolute time
+        const pressure = map + (amplitude / 2) * Math.sin(2 * Math.PI * freq * t);
+        const vtHfov = cstL * (amplitude / 2) * 1000; // mL — small
+        const flow = vtHfov / 1000 * (2 * Math.PI * freq) * Math.cos(2 * Math.PI * freq * t);
+        const volume = vtHfov * (1 - Math.cos(2 * Math.PI * freq * t)) / 2;
+        // HFOV noise is minimal (circuit is sealed)
+        const hfovNoise = deterministicNoise(noiseIndex, 0.08);
+        points.push({ t, pressure: pressure + hfovNoise, flow, volume: Math.max(0, volume) });
+        sumPressure += pressure;
+        pointCount++;
+        peakPressureSeen = Math.max(peakPressureSeen, pressure);
+        vtMeasured = Math.max(vtMeasured, vtHfov);
         continue;
       }
 
@@ -596,6 +637,52 @@ export function generateVentWaveform(
         result.flow += agitNoise * 0.06;
       }
 
+      // Water in circuit: characteristic saw-tooth oscillation on flow and pressure.
+      // Pooled water in dependent circuit loops creates turbulence and flow oscillation
+      // that is transmitted to the waveform as high-frequency irregular artefact.
+      if (config.condition === "water_in_circuit") {
+        const waterFreq = 12.7 + deterministicNoise(noiseIndex, 2.0);
+        const waterAmp = 0.8 + 0.4 * Math.abs(result.flow); // worse during high flow
+        result.flow += waterAmp * Math.sin(waterFreq * tInCycle + noiseIndex * 0.3);
+        result.pressure += waterAmp * 0.6 * Math.sin(waterFreq * tInCycle + 0.7);
+      }
+
+      // Circuit disconnect: pressure collapses to ambient (0), flow drops to near zero.
+      // Volume trace shows rapid descent. Alarms: LOW PRESSURE, LOW Vt.
+      if (config.condition === "circuit_disconnect") {
+        const disconnectFrac = Math.min(1, (tInCycle - tiFlow * 0.2) / 0.3);
+        if (disconnectFrac > 0) {
+          result.pressure = Math.max(0, result.pressure * (1 - disconnectFrac));
+          result.flow *= (1 - disconnectFrac * 0.9);
+          result.volume *= (1 - disconnectFrac);
+        }
+      }
+
+      // Mainstem intubation: right-lung-only delivery — half the effective compliance,
+      // elevated peak pressures, reduced delivered volume to left lung.
+      // Waveform: higher Ppeak, smaller Vt measured, rapid rate of volume loss on exp.
+      if (config.condition === "mainstem_intubation") {
+        // Effective single-lung compliance ~half; pressure rises more per unit volume
+        result.pressure = peep + (result.pressure - peep) * 1.55;
+        result.volume *= 0.60; // volume distributed to one lung
+      }
+
+      // Pulmonary hemorrhage: gross disturbance on expiration (blood pooling/movement)
+      if (config.condition === "pulmonary_hemorrhage") {
+        const hemorrhageOsc = 0.6 * Math.sin(tInCycle * 22 + n * 1.7) * (tInCycle > tiActual ? 1 : 0.2);
+        result.pressure += hemorrhageOsc;
+        result.flow += hemorrhageOsc * 0.05;
+      }
+
+      // Reverse triggering: diaphragm contracts reflexively during mandatory breath.
+      // Shows as brief expiratory flow effort DURING the inspiratory phase, then
+      // a large breath immediately following. Often seen with high RR and deep sedation.
+      if (config.asynchrony === "reverse_triggering" && n % 3 === 0 && tInCycle > tiFlow * 0.6 && tInCycle < tiActual) {
+        const rtPhase = (tInCycle - tiFlow * 0.6) / (tiActual - tiFlow * 0.6);
+        result.pressure -= 1.5 * Math.sin(Math.PI * rtPhase); // diaphragm contraction pulls P down
+        result.flow -= 0.08 * Math.sin(Math.PI * rtPhase);    // brief expiratory effort during insp
+      }
+
       // Micro-variation (clinical noise) — prevents perfectly smooth unrealistic traces
       const noise = deterministicNoise(noiseIndex, 0.18);
       result.pressure += noise;
@@ -714,7 +801,164 @@ export function defaultVentConfigForMode(mode: VentMode): VentWaveformConfig {
 
     case "prvc":
       return { ...base, pip: 20, tidalVolume: 500, rr: 14 };
+
+    case "hfov":
+      // Adult ARDS rescue HFOV defaults (Hamilton Health Sciences protocol)
+      return {
+        ...base,
+        peep: 20,          // MAP 20 cmH₂O — higher than conventional to recruit
+        hfovFrequency: 5,  // Hz — lower freq = higher Vt = better CO₂ clearance in adults
+        hfovAmplitude: 60, // ΔP — adjust to achieve visible chest "wiggle"
+        rr: 300,           // 5 Hz × 60 = 300 "breaths"/min (internally as Hz)
+        ti: 0.1,           // Not clinically meaningful for HFOV — placeholder
+        compliance: 25,    // Typical severe ARDS compliance
+        resistance: 8,
+        professionScope: ["rt", "critical_care"],
+        difficulty: "advanced",
+      };
   }
+}
+
+// ─── Neonatal config factory ────────────────────────────────────────────────────
+
+export type NeonatalPhysiology =
+  | "term_normal"       // Term infant, no pathology
+  | "rds_28wk"          // 28-week premature, RDS (severe surfactant deficiency)
+  | "rds_32wk"          // 32-week premature, RDS (moderate)
+  | "mas"               // Meconium Aspiration Syndrome — high resistance + air trapping
+  | "pphn"              // PPHN — near-normal lung mechanics, pulmonary HTN
+  | "bpd"               // Bronchopulmonary Dysplasia — high resistance, variable compliance
+  | "cdh";              // Congenital Diaphragmatic Hernia — reduced lung volume
+
+/**
+ * Returns a clinically accurate VentWaveformConfig for neonatal scenarios.
+ * All compliance/resistance values derived from published neonatal respiratory mechanics.
+ *
+ * Sources: Bancalari & Jobe (NEJM), Sweet et al (ERS/ESPR 2019 guidelines),
+ *          Goldsmith/Karotkin Assisted Ventilation of the Neonate (6th ed).
+ */
+export function neonatalVentConfig(
+  physiology: NeonatalPhysiology,
+  mode: "pressure_control" | "hfov" | "cpap" = "pressure_control",
+): VentWaveformConfig {
+  const base: VentWaveformConfig = {
+    mode,
+    peep: 5,
+    rr: 50,
+    ti: 0.30,
+    compliance: 2,
+    resistance: 50,
+    condition: "normal",
+    asynchrony: "none",
+    difficulty: "advanced",
+    professionScope: ["rt", "nicu", "critical_care"],
+  };
+
+  switch (physiology) {
+    case "term_normal":
+      // Term neonate (3.5 kg): Cst ~3–5 mL/cmH₂O, Raw ~25–40 cmH₂O/L/s
+      return { ...base, mode, pip: 18, peep: 4, rr: 40, ti: 0.35, compliance: 4, resistance: 30 };
+
+    case "rds_28wk":
+      // 28-weeker (1 kg): Severe RDS. Cst ~0.5–1.5 mL/cmH₂O, Raw ~60–100 cmH₂O/L/s
+      // τ = 80 × 0.001 = 0.08s — very fast time constant, emphysema of prematurity
+      return {
+        ...base, mode,
+        pip: 22, peep: 6, rr: 55, ti: 0.25,
+        compliance: 1.0, resistance: 80,
+        tidalVolume: 4,  // 4 mL/kg for 1 kg baby
+        condition: "low_compliance",
+      };
+
+    case "rds_32wk":
+      // 32-weeker (1.8 kg): Moderate RDS. Cst ~1.5–3 mL/cmH₂O
+      return {
+        ...base, mode,
+        pip: 20, peep: 5, rr: 50, ti: 0.28,
+        compliance: 2.0, resistance: 55,
+        tidalVolume: 9,  // ~5 mL/kg
+        condition: "low_compliance",
+      };
+
+    case "mas":
+      // MAS: meconium obstructs airways → high resistance, partial air trapping
+      // Cst normal-high (3–5), Raw very high (80–150 cmH₂O/L/s)
+      return {
+        ...base, mode,
+        pip: 24, peep: 5, rr: 40, ti: 0.35,
+        compliance: 3.5, resistance: 100,
+        tidalVolume: 14, // ~4 mL/kg for 3.5 kg term baby
+        condition: "high_resistance",
+        autoPeep: 3,     // Air trapping from ball-valve obstruction
+      };
+
+    case "pphn":
+      // PPHN: lungs often normal mechanics; problem is vascular resistance
+      return {
+        ...base, mode,
+        pip: 20, peep: 4, rr: 40, ti: 0.35,
+        compliance: 3.5, resistance: 35,
+        tidalVolume: 15, // slightly higher Vt to support lung inflation
+        condition: "normal",
+      };
+
+    case "bpd":
+      // BPD: patchy atelectasis + hyperinflation, high Raw, variable Cst
+      return {
+        ...base, mode,
+        pip: 22, peep: 5, rr: 35, ti: 0.40,
+        compliance: 2.5, resistance: 70,
+        tidalVolume: 12,
+        condition: "high_resistance",
+        autoPeep: 2,
+      };
+
+    case "cdh":
+      // CDH: one lung hypoplastic; normal lung Cst but reduced total respiratory system Cst
+      return {
+        ...base, mode,
+        pip: 22, peep: 5, rr: 45, ti: 0.30,
+        compliance: 1.8, resistance: 50,
+        tidalVolume: 5,
+        condition: "low_compliance",
+      };
+  }
+}
+
+/**
+ * Pediatric VentWaveformConfig by weight and condition.
+ * Weight in kg used to calculate weight-appropriate Vt (6 mL/kg).
+ */
+export function pediatricVentConfig(
+  weightKg: number,
+  condition: "normal" | "asthma" | "ards" | "bronchiolitis",
+  mode: "volume_control" | "pressure_control" | "pressure_support" = "pressure_control",
+): VentWaveformConfig {
+  const vtTarget = Math.round(weightKg * 6);   // 6 mL/kg target
+  const cst = condition === "ards" ? weightKg * 0.8
+            : condition === "asthma" ? weightKg * 1.2
+            : weightKg * 1.5;                  // mL/cmH₂O scales ~linearly with weight
+  const raw = condition === "asthma" ? 25
+            : condition === "bronchiolitis" ? 18
+            : 8;
+
+  return {
+    mode,
+    pip: condition === "ards" ? 22 : 20,
+    peep: condition === "ards" ? 8 : condition === "asthma" ? 3 : 5,
+    rr: condition === "asthma" ? 14 : weightKg < 10 ? 30 : weightKg < 20 ? 22 : 16,
+    ti: weightKg < 10 ? 0.55 : weightKg < 20 ? 0.70 : 0.90,
+    compliance: cst,
+    resistance: raw,
+    tidalVolume: vtTarget,
+    condition: condition === "normal" ? "normal"
+             : condition === "asthma" ? "bronchospasm"
+             : condition === "ards" ? "ards"
+             : "high_resistance",
+    asynchrony: "none",
+    difficulty: "intermediate",
+    professionScope: ["rt", "picu", "critical_care"],
+  };
 }
 
 // ─── SVG path builder ──────────────────────────────────────────────────────────

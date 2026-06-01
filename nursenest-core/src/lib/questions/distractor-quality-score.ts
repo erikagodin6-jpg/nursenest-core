@@ -6,14 +6,27 @@ export type DistractorTaxonomy =
   | "interpretation_error"
   | "scope_error"
   | "communication_error"
-  | "documentation_error";
+  | "documentation_error"
+  | "anchoring_bias"
+  | "premature_closure"
+  | "confirmation_bias"
+  | "task_fixation"
+  | "tunnel_vision"
+  | "overconfidence"
+  | "under_escalation"
+  | "over_escalation"
+  | "failure_to_rescue"
+  | "pattern_recognition_error"
+  | "medication_monitoring_failure"
+  | "trend_interpretation_failure";
 
 export type DistractorQualityDimension =
   | "plausibility"
   | "clinicalRealism"
   | "educationalValue"
   | "differentiation"
-  | "safetyRelevance";
+  | "safetyRelevance"
+  | "analyticsReadiness";
 
 export type DistractorQualityGate = "fail" | "review" | "publish_eligible" | "flagship";
 
@@ -26,9 +39,22 @@ export type DistractorQualityInput = {
   whyTempting?: string | null;
   whyIncorrect?: string | null;
   riskIntroduced?: string | null;
+  commonLearnerBelief?: string | null;
+  incorrectAssumption?: string | null;
+  knowledgeGap?: string | null;
+  remediation?: string | null;
+  readinessDomains?: readonly DistractorReadinessDomain[] | null;
   pathway?: string | null;
   questionType?: string | null;
 };
+
+export type DistractorReadinessDomain =
+  | "clinical_judgment_readiness"
+  | "patient_safety_readiness"
+  | "escalation_readiness"
+  | "medication_safety_readiness"
+  | "documentation_readiness"
+  | "communication_readiness";
 
 export type DistractorQualityResult = {
   id?: string;
@@ -36,10 +62,17 @@ export type DistractorQualityResult = {
   gate: DistractorQualityGate;
   publishAllowed: boolean;
   taxonomy: DistractorTaxonomy[];
+  learnerMisconception: string;
+  remediationTargets: readonly string[];
+  readinessDomains: readonly DistractorReadinessDomain[];
+  failureToRescueSignal: boolean;
   dimensions: Record<DistractorQualityDimension, number>;
   issues: string[];
   strengths: string[];
   whyTemptingComplete: boolean;
+  misconceptionMappingPresent: boolean;
+  remediationMappingPresent: boolean;
+  readinessMappingPresent: boolean;
   safetyAnalysisPresent: boolean;
 };
 
@@ -59,7 +92,8 @@ export type DistractorSetQualityResult = {
   issues: string[];
 };
 
-export const DISTRACTOR_MIN_PUBLISH_SCORE = 70;
+export const DISTRACTOR_MIN_PUBLISH_SCORE = 80;
+export const DISTRACTOR_FLAGSHIP_SCORE = 95;
 
 const TAXONOMY_PATTERNS: Array<{ type: DistractorTaxonomy; patterns: RegExp[] }> = [
   {
@@ -94,10 +128,58 @@ const TAXONOMY_PATTERNS: Array<{ type: DistractorTaxonomy; patterns: RegExp[] }>
     type: "documentation_error",
     patterns: [/\b(document|chart|record|note|incident report|flow sheet)\b/i],
   },
+  {
+    type: "anchoring_bias",
+    patterns: [/\b(anchor|focuses on the first cue|baseline|known history|previous diagnosis|familiar finding)\b/i],
+  },
+  {
+    type: "premature_closure",
+    patterns: [/\b(assumes|concludes|without assessing|without reassessing|stops after|single finding)\b/i],
+  },
+  {
+    type: "confirmation_bias",
+    patterns: [/\b(confirms|expected finding|fits the diagnosis|supports the initial impression|ignores conflicting)\b/i],
+  },
+  {
+    type: "task_fixation",
+    patterns: [/\b(task|checklist|routine|scheduled|complete the task|charting first|med pass)\b/i],
+  },
+  {
+    type: "tunnel_vision",
+    patterns: [/\b(tunnel|one cue|isolated|only the lab|only the monitor|single symptom|misses the bigger picture)\b/i],
+  },
+  {
+    type: "overconfidence",
+    patterns: [/\b(independent|without notifying|without protocol|assumes stable|does not need help|manage alone)\b/i],
+  },
+  {
+    type: "under_escalation",
+    patterns: [/\b(delay escalation|delays escalation|waits to notify|monitor only|recheck later|observe only|routine report)\b/i],
+  },
+  {
+    type: "over_escalation",
+    patterns: [/\b(rapid response|code|emergency response|activate|stat|immediately notify).{0,80}\b(stable|expected|routine|mild)\b/i],
+  },
+  {
+    type: "failure_to_rescue",
+    patterns: [/\b(failure to rescue|missed deterioration|delayed response|delayed rescue|worsening hypox|shock progression|cannot wait)\b/i],
+  },
+  {
+    type: "pattern_recognition_error",
+    patterns: [/\b(pattern|cluster|syndrome|clinical picture|presentation|cue cluster)\b/i],
+  },
+  {
+    type: "medication_monitoring_failure",
+    patterns: [/\b(monitoring|hold parameter|toxicity|adverse effect|therapeutic level|interaction|contraindication)\b/i],
+  },
+  {
+    type: "trend_interpretation_failure",
+    patterns: [/\b(trend|rising|falling|worsening|improving|serial|over time|progressive)\b/i],
+  },
 ];
 
 const CLINICAL_ACTION_PATTERN =
-  /\b(assess|monitor|reassess|administer|hold|position|suction|oxygen|notify|delegate|document|teach|clarify|prepare|obtain|check|report)\b/i;
+  /\b(assess|monitor|reassess|administer|hold|position|reposition|suction|oxygen|notify|delegate|document|teach|clarify|prepare|obtain|check|recheck|report|reading)\b/i;
 const SAFETY_PATTERN =
   /\b(unsafe|risk|harm|delay|worsen|deteriorat|hypox|bleeding|shock|sepsis|fall|aspiration|toxicity|contraindicat|failure|emergency|cannot wait)\b/i;
 const WHY_TEMPTING_PATTERN = /\b(tempt|seem|reasonable|because|may choose|appears|sounds|looks|common)\b/i;
@@ -107,6 +189,8 @@ const THROWAWAY_PATTERN =
 const GENERIC_RATIONALE_PATTERN =
   /\b(not the priority|less appropriate|incorrect because|wrong because|not best|review the topic|study the material)\b/i;
 const ABSOLUTE_GIVEAWAY_PATTERN = /\b(always|never|only|all patients|no patients|guaranteed)\b/i;
+const REMEDIATION_PATTERN =
+  /\b(remediate|review|practice|revisit|study|reinforce|teach|focus on|compare|use|apply|map|connect)\b/i;
 
 function plain(value: unknown): string {
   return String(value ?? "")
@@ -136,9 +220,9 @@ function wordOverlap(a: string, b: string): number {
 }
 
 function taxonomyFor(text: string): DistractorTaxonomy[] {
-  return TAXONOMY_PATTERNS.flatMap(({ type, patterns }) =>
+  return [...new Set(TAXONOMY_PATTERNS.flatMap(({ type, patterns }) =>
     patterns.some((pattern) => pattern.test(text)) ? [type] : [],
-  );
+  ))];
 }
 
 function gateFor(score: number): DistractorQualityGate {
@@ -163,6 +247,134 @@ function hasSafetyAnalysis(input: DistractorQualityInput): boolean {
   return SAFETY_PATTERN.test(text);
 }
 
+function hasMisconceptionMapping(input: DistractorQualityInput, taxonomy: readonly DistractorTaxonomy[]): boolean {
+  const text = [input.commonLearnerBelief, input.incorrectAssumption, input.knowledgeGap, input.whyTempting, input.rationale]
+    .map(plain)
+    .join(" ");
+  return taxonomy.length > 0 && (wordCount(text) >= 8 || WHY_TEMPTING_PATTERN.test(text));
+}
+
+function hasRemediationMapping(input: DistractorQualityInput, taxonomy: readonly DistractorTaxonomy[]): boolean {
+  const text = [input.remediation, input.knowledgeGap, input.whyIncorrect, input.rationale].map(plain).join(" ");
+  return taxonomy.length > 0 && wordCount(text) >= 8 && (REMEDIATION_PATTERN.test(text) || WHY_INCORRECT_PATTERN.test(text));
+}
+
+function readinessDomainsFor(
+  taxonomy: readonly DistractorTaxonomy[],
+  input: DistractorQualityInput,
+): DistractorReadinessDomain[] {
+  const domains = new Set<DistractorReadinessDomain>(input.readinessDomains ?? []);
+  for (const type of taxonomy) {
+    if (
+      type === "priority_error" ||
+      type === "assessment_error" ||
+      type === "interpretation_error" ||
+      type === "pattern_recognition_error" ||
+      type === "trend_interpretation_failure" ||
+      type === "anchoring_bias" ||
+      type === "premature_closure" ||
+      type === "confirmation_bias" ||
+      type === "task_fixation" ||
+      type === "tunnel_vision" ||
+      type === "overconfidence"
+    ) {
+      domains.add("clinical_judgment_readiness");
+    }
+    if (
+      type === "safety_error" ||
+      type === "under_escalation" ||
+      type === "over_escalation" ||
+      type === "failure_to_rescue"
+    ) {
+      domains.add("patient_safety_readiness");
+      domains.add("escalation_readiness");
+    }
+    if (type === "medication_monitoring_failure") domains.add("medication_safety_readiness");
+    if (type === "documentation_error") domains.add("documentation_readiness");
+    if (type === "communication_error") domains.add("communication_readiness");
+    if (type === "scope_error") {
+      domains.add("clinical_judgment_readiness");
+      domains.add("patient_safety_readiness");
+    }
+  }
+  return [...domains];
+}
+
+function misconceptionFor(taxonomy: readonly DistractorTaxonomy[], input: DistractorQualityInput): string {
+  const explicit = plain(input.commonLearnerBelief) || plain(input.incorrectAssumption);
+  if (explicit) return explicit;
+  const primary = taxonomy[0];
+  switch (primary) {
+    case "priority_error":
+      return "Learner recognizes a real need but ranks it above the more urgent patient threat.";
+    case "timing_error":
+      return "Learner chooses an action that may be appropriate at the wrong point in the care sequence.";
+    case "assessment_error":
+      return "Learner misses the assessment or reassessment cue that should drive the next action.";
+    case "safety_error":
+      return "Learner underestimates the harm created by delay, contraindication, or unsafe workflow.";
+    case "interpretation_error":
+      return "Learner misinterprets clinical data, expected findings, or abnormal cues.";
+    case "scope_error":
+      return "Learner selects an action that does not match the role, setting, or delegation boundary.";
+    case "communication_error":
+      return "Learner delays or misdirects communication needed for safe care.";
+    case "documentation_error":
+      return "Learner prioritizes charting or records without completing assessment, action, or escalation.";
+    case "failure_to_rescue":
+      return "Learner misses deterioration and delays rescue actions.";
+    case "trend_interpretation_failure":
+      return "Learner treats a worsening trend as an isolated value.";
+    case "medication_monitoring_failure":
+      return "Learner misses medication monitoring, toxicity, contraindication, or hold-parameter logic.";
+    case "pattern_recognition_error":
+      return "Learner fails to connect cue clusters into the correct clinical pattern.";
+    default:
+      return "Learner selects a plausible but clinically incomplete reasoning path.";
+  }
+}
+
+function remediationTargetsFor(taxonomy: readonly DistractorTaxonomy[], input: DistractorQualityInput): string[] {
+  const explicit = plain(input.remediation);
+  if (explicit) return [explicit];
+  const targets = new Set<string>();
+  for (const type of taxonomy) {
+    if (type === "priority_error") targets.add("Priority framework: ABCs, safety, instability, and first-action decisions.");
+    if (type === "timing_error") targets.add("Care sequencing: assessment, intervention, reassessment, escalation, documentation.");
+    if (type === "assessment_error") targets.add("Assessment and reassessment cue selection.");
+    if (type === "safety_error") targets.add("Patient safety risk recognition and harm prevention.");
+    if (type === "interpretation_error") targets.add("Clinical interpretation of labs, ECGs, symptoms, and expected versus unexpected findings.");
+    if (type === "scope_error") targets.add("Role scope, delegation, and escalation boundaries.");
+    if (type === "communication_error") targets.add("SBAR, provider notification, handoff, and therapeutic communication.");
+    if (type === "documentation_error") targets.add("Defensible documentation after assessment, action, and evaluation.");
+    if (type === "failure_to_rescue" || type === "under_escalation") targets.add("Deterioration recognition and timely escalation.");
+    if (type === "over_escalation") targets.add("Escalation calibration for stable versus unstable findings.");
+    if (type === "trend_interpretation_failure") targets.add("Trend interpretation and serial data comparison.");
+    if (type === "medication_monitoring_failure") targets.add("Medication monitoring, adverse effects, toxicity, and hold parameters.");
+    if (type === "pattern_recognition_error") targets.add("Cue clustering and pattern recognition.");
+    if (
+      type === "anchoring_bias" ||
+      type === "premature_closure" ||
+      type === "confirmation_bias" ||
+      type === "task_fixation" ||
+      type === "tunnel_vision" ||
+      type === "overconfidence"
+    ) {
+      targets.add("Cognitive bias correction using cue validation and alternate-hypothesis checks.");
+    }
+  }
+  return [...targets];
+}
+
+function isFailureToRescueSignal(taxonomy: readonly DistractorTaxonomy[], input: DistractorQualityInput): boolean {
+  const text = [input.distractor, input.rationale, input.whyIncorrect, input.riskIntroduced].map(plain).join(" ");
+  return (
+    taxonomy.some((type) =>
+      ["under_escalation", "failure_to_rescue", "trend_interpretation_failure", "priority_error", "assessment_error"].includes(type),
+    ) && /\b(deteriorat|escalat|delay|missed|worsen|unstable|shock|hypox|sepsis|stroke|bleeding|cannot wait)\b/i.test(text)
+  );
+}
+
 export function normalizeDistractorForDuplicateDetection(value: unknown): string {
   return plain(value).toLowerCase().replace(/["'“”‘’]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
 }
@@ -176,15 +388,23 @@ export function scoreDistractorQuality(input: DistractorQualityInput): Distracto
   const issues: string[] = [];
   const strengths: string[] = [];
   const taxonomy = taxonomyFor(combined);
+  const readinessDomains = readinessDomainsFor(taxonomy, input);
+  const learnerMisconception = misconceptionFor(taxonomy, input);
+  const remediationTargets = remediationTargetsFor(taxonomy, input);
+  const failureToRescueSignal = isFailureToRescueSignal(taxonomy, input);
   const whyTemptingComplete = hasWhyTempting(input);
   const whyIncorrectComplete = hasWhyIncorrect(input);
   const safetyAnalysisPresent = hasSafetyAnalysis(input);
+  const misconceptionMappingPresent = hasMisconceptionMapping(input, taxonomy);
+  const remediationMappingPresent = hasRemediationMapping(input, taxonomy);
+  const readinessMappingPresent = readinessDomains.length > 0;
 
   let plausibility = 82;
   let clinicalRealism = 78;
   let educationalValue = 72;
   let differentiation = 80;
   let safetyRelevance = 70;
+  let analyticsReadiness = 72;
 
   if (!distractor) {
     issues.push("Distractor text is missing.");
@@ -216,9 +436,11 @@ export function scoreDistractorQuality(input: DistractorQualityInput): Distracto
   if (taxonomy.length === 0) {
     issues.push("Distractor does not map to a defined misconception taxonomy.");
     educationalValue -= 20;
+    analyticsReadiness -= 35;
   } else {
     strengths.push(`Maps to ${taxonomy.map((item) => item.replace(/_/g, " ")).join(", ")}.`);
     educationalValue += 10;
+    analyticsReadiness += 8;
   }
   if (!whyTemptingComplete) {
     issues.push("Why-tempting analysis is missing or too implicit.");
@@ -226,6 +448,7 @@ export function scoreDistractorQuality(input: DistractorQualityInput): Distracto
   } else {
     strengths.push("Why-tempting analysis present.");
     educationalValue += 10;
+    analyticsReadiness += 6;
   }
   if (!whyIncorrectComplete) {
     issues.push("Why-incorrect analysis is missing or too implicit.");
@@ -233,6 +456,7 @@ export function scoreDistractorQuality(input: DistractorQualityInput): Distracto
   } else {
     strengths.push("Why-incorrect analysis present.");
     educationalValue += 10;
+    analyticsReadiness += 6;
   }
   if (!safetyAnalysisPresent) {
     issues.push("Safety risk or consequence analysis is missing.");
@@ -240,6 +464,25 @@ export function scoreDistractorQuality(input: DistractorQualityInput): Distracto
   } else {
     strengths.push("Safety consequence signal present.");
     safetyRelevance += 14;
+    analyticsReadiness += 6;
+  }
+  if (!misconceptionMappingPresent) {
+    issues.push("Misconception mapping is missing.");
+    analyticsReadiness -= 18;
+  } else {
+    strengths.push("Learner misconception mapping present.");
+  }
+  if (!remediationMappingPresent) {
+    issues.push("Remediation mapping is missing.");
+    analyticsReadiness -= 18;
+  } else {
+    strengths.push("Remediation mapping present.");
+  }
+  if (!readinessMappingPresent) {
+    issues.push("Readiness domain mapping is missing.");
+    analyticsReadiness -= 20;
+  } else {
+    strengths.push("Readiness domain mapping present.");
   }
   if (GENERIC_RATIONALE_PATTERN.test(rationale)) {
     issues.push("Generic distractor rationale language detected.");
@@ -253,7 +496,7 @@ export function scoreDistractorQuality(input: DistractorQualityInput): Distracto
     strengths.push("Distractor shares enough surface features to feel plausible.");
     plausibility += 8;
   }
-  if (stem && wordOverlap(distractor, stem) < 0.05 && wordOverlap(rationale, stem) < 0.05) {
+  if (stem && wordOverlap(distractor, stem) < 0.05 && wordOverlap(combined.replace(stem, ""), stem) < 0.05) {
     issues.push("Distractor appears weakly connected to the stem.");
     plausibility -= 18;
   }
@@ -264,30 +507,48 @@ export function scoreDistractorQuality(input: DistractorQualityInput): Distracto
     educationalValue: clamp(educationalValue),
     differentiation: clamp(differentiation),
     safetyRelevance: clamp(safetyRelevance),
+    analyticsReadiness: clamp(analyticsReadiness),
   };
 
   let score = clamp(
-    dimensions.plausibility * 0.24 +
-      dimensions.clinicalRealism * 0.2 +
-      dimensions.educationalValue * 0.24 +
-      dimensions.differentiation * 0.14 +
-      dimensions.safetyRelevance * 0.18,
+    dimensions.plausibility * 0.2 +
+      dimensions.clinicalRealism * 0.18 +
+      dimensions.educationalValue * 0.22 +
+      dimensions.differentiation * 0.12 +
+      dimensions.safetyRelevance * 0.16 +
+      dimensions.analyticsReadiness * 0.12,
   );
 
-  if (!whyTemptingComplete || !safetyAnalysisPresent) score = Math.min(score, 69);
+  if (!whyTemptingComplete || !safetyAnalysisPresent || !misconceptionMappingPresent || !remediationMappingPresent || !readinessMappingPresent) {
+    score = Math.min(score, DISTRACTOR_MIN_PUBLISH_SCORE - 1);
+  }
   if (issues.some((issue) => /missing|throwaway|too similar/i.test(issue))) score = Math.min(score, 78);
 
   const gate = gateFor(score);
+  const publishAllowed =
+    score >= DISTRACTOR_MIN_PUBLISH_SCORE &&
+    whyTemptingComplete &&
+    safetyAnalysisPresent &&
+    misconceptionMappingPresent &&
+    remediationMappingPresent &&
+    readinessMappingPresent;
   return {
     id: input.id,
     score,
     gate,
-    publishAllowed: score >= DISTRACTOR_MIN_PUBLISH_SCORE && whyTemptingComplete && safetyAnalysisPresent,
+    publishAllowed,
     taxonomy,
+    learnerMisconception,
+    remediationTargets,
+    readinessDomains,
+    failureToRescueSignal,
     dimensions,
     issues,
     strengths,
     whyTemptingComplete,
+    misconceptionMappingPresent,
+    remediationMappingPresent,
+    readinessMappingPresent,
     safetyAnalysisPresent,
   };
 }
@@ -329,4 +590,3 @@ export function scoreDistractorSetQuality(input: DistractorSetInput): Distractor
     issues,
   };
 }
-

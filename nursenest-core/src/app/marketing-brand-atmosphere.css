@@ -190,6 +190,13 @@ html[data-theme="sunset"] .nn-marketing-brand-root {
 }
 
 /* Blog / editorial cards — slightly richer premium rim (marketing routes only). */
+.nn-premium-blog-index .border,
+.nn-premium-blog-article .border,
+.nn-marketing-brand-root .nn-premium-blog-index .border,
+.nn-marketing-brand-root .nn-premium-blog-article .border {
+  border-color: color-mix(in srgb, var(--semantic-brand) 16%, var(--semantic-border-soft));
+}
+
 .nn-marketing-brand-root .nn-premium-blog-related-card,
 .nn-marketing-brand-root .nn-premium-blog-toc {
   border-color: color-mix(in srgb, var(--semantic-chart-3) 20%, var(--semantic-border-soft));

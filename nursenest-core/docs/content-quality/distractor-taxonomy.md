@@ -18,6 +18,18 @@ Every distractor should map to at least one class.
 | Scope Error | Assigning, delegating, prescribing, diagnosing, or performing an action outside role or setting expectations. | Delegating unstable assessment to unregulated personnel. |
 | Communication Error | Failing to notify, escalate, hand off, clarify, or use therapeutic communication safely. | Reassuring a suicidal client instead of assessing safety directly. |
 | Documentation Error | Charting, reporting, or relying on records without assessment, intervention, evaluation, or escalation. | Documenting a fall-risk concern without initiating fall precautions. |
+| Anchoring Bias | Fixating on the first cue, known diagnosis, or expected baseline finding. | Treating new confusion as dementia baseline without assessing sepsis cues. |
+| Premature Closure | Stopping reasoning after one plausible explanation. | Assuming pain explains tachycardia without checking bleeding or shock cues. |
+| Confirmation Bias | Choosing data that supports the first impression while ignoring conflicting evidence. | Focusing on COPD history while missing acute pneumonia deterioration. |
+| Task Fixation | Completing routine tasks while missing instability. | Continuing medication pass while a patient is deteriorating. |
+| Tunnel Vision | Focusing on one lab, symptom, monitor, or device reading in isolation. | Rechecking the pulse oximeter while visible airway distress worsens. |
+| Overconfidence | Acting independently when role, policy, or escalation requires support. | Adjusting medication without provider order or protocol. |
+| Under-Escalation | Monitoring or waiting when urgent escalation is required. | Rechecking later instead of calling rapid response for deterioration. |
+| Over-Escalation | Activating urgent escalation for stable or expected findings. | Calling emergency response for a mild expected postoperative finding. |
+| Failure-To-Rescue | Missing deterioration, delayed rescue, or delayed escalation. | Delaying intervention for worsening shock. |
+| Pattern-Recognition Error | Failing to connect cue clusters into a clinical pattern. | Missing sepsis because each abnormal cue is considered separately. |
+| Medication-Monitoring Failure | Missing toxicity, contraindications, interactions, or hold parameters. | Giving a beta blocker despite symptomatic bradycardia. |
+| Trend-Interpretation Failure | Treating serial worsening as an isolated finding. | Missing rising lactate or falling hemoglobin trends. |
 
 ## Why-Tempting Framework
 
@@ -50,11 +62,16 @@ Strong:
 
 No question may publish if:
 
-- Any distractor score is below `70`.
+- Any distractor score is below `80`.
 - Any distractor fails plausibility.
 - Safety analysis is missing.
 - Why-tempting analysis is missing.
+- Misconception mapping is missing.
+- Remediation mapping is missing.
+- Readiness domain mapping is missing.
 - Duplicate or throwaway distractors are present.
+
+Flagship distractor quality requires a score of `95+`.
 
 ## Throwaway Patterns
 
@@ -76,4 +93,3 @@ Before publication, reviewers should ask:
 - Is the workflow realistic for the stated role and setting?
 - Does the explanation teach what risk the wrong choice creates?
 - Are all wrong options meaningfully different from one another?
-

@@ -8,6 +8,7 @@ export type BlogPostCardFields = {
   title: string;
   excerpt: string;
   category?: string | null;
+  coverImage?: string | null;
   createdAt: Date | string;
 };
 
@@ -28,13 +29,27 @@ export function BlogPostCard({
   return (
     <li
       className={[
-        "nn-premium-blog-post-card group min-w-0 overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--semantic-shadow-soft,0_1px_0_rgba(0,0,0,0.04))] transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-md",
+        "nn-premium-blog-post-card group min-w-0 overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] bg-[var(--theme-card-bg)] shadow-[var(--semantic-shadow-soft,0_1px_0_rgba(0,0,0,0.04))] transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-md",
         featured ? "sm:col-span-2" : "",
       ]
         .filter(Boolean)
         .join(" ")}
     >
       <Link href={href} className="block h-full min-w-0 p-4 sm:p-5">
+        <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--theme-card-bg))]">
+          {post.coverImage ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={post.coverImage}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,color-mix(in_srgb,var(--semantic-brand)_22%,transparent),transparent_34%),linear-gradient(135deg,color-mix(in_srgb,var(--semantic-success)_16%,var(--theme-card-bg)),var(--theme-card-bg))]" />
+          )}
+        </div>
         <div className="flex min-w-0 flex-wrap items-start justify-between gap-2 gap-y-1">
           {topic.displayLabel ? (
             <BlogTopicBadge

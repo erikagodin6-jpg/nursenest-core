@@ -76,6 +76,7 @@
     "audit:exam-bank": "npx tsx scripts/audit-exam-question-bank.ts",
     "audit:content-completeness": "npx tsx scripts/audit-platform-content-completeness.mts",
     "audit:educational-readiness": "npx tsx scripts/audit-educational-readiness.mts",
+    "audit:certification-readiness": "npx tsx scripts/audit-certification-readiness-monetization.mts",
     "audit:academic-content-graph": "npx tsx scripts/build-academic-content-graph.mts",
     "audit:simulation-content": "npx tsx scripts/audit-simulation-content.ts",
     "audit:rationale-quality": "npx tsx scripts/audit-question-flashcard-rationales.mts",

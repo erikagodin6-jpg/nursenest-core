@@ -1,0 +1,5050 @@
+{
+  "summary": {
+    "generatedAt": "2026-06-01T00:30:05.689Z",
+    "scopeNote": "Static repository-authored banks were audited. DB-backed live exam_questions pools were not queried by this script.",
+    "totalQuestions": 230,
+    "totalHints": 504,
+    "averageHintScore": 2.77,
+    "failedHints": 136,
+    "answerLeakingHints": 43,
+    "genericHints": 17,
+    "missingHints": 93,
+    "unsafeHints": 0,
+    "pathwaySpecificHintRate": 54.8
+  },
+  "pathwayScores": [
+    {
+      "pathway": "Pre-Nursing",
+      "totalHints": 80,
+      "averageHintScore": 1,
+      "failedHints": 80,
+      "missingHints": 80,
+      "answerLeakingHints": 0,
+      "genericHints": 0,
+      "pathwaySpecificHintRate": 0
+    },
+    {
+      "pathway": "Allied Health - Pharmacy Technician",
+      "totalHints": 13,
+      "averageHintScore": 1,
+      "failedHints": 13,
+      "missingHints": 13,
+      "answerLeakingHints": 0,
+      "genericHints": 0,
+      "pathwaySpecificHintRate": 0
+    },
+    {
+      "pathway": "RN",
+      "totalHints": 108,
+      "averageHintScore": 2.31,
+      "failedHints": 27,
+      "missingHints": 0,
+      "answerLeakingHints": 27,
+      "genericHints": 3,
+      "pathwaySpecificHintRate": 22.2
+    },
+    {
+      "pathway": "RN/RPN-PN authored tier 1",
+      "totalHints": 78,
+      "averageHintScore": 2.55,
+      "failedHints": 16,
+      "missingHints": 0,
+      "answerLeakingHints": 16,
+      "genericHints": 12,
+      "pathwaySpecificHintRate": 78.2
+    },
+    {
+      "pathway": "CNPLE/RPN-PN",
+      "totalHints": 225,
+      "averageHintScore": 3.8,
+      "failedHints": 0,
+      "missingHints": 0,
+      "answerLeakingHints": 0,
+      "genericHints": 2,
+      "pathwaySpecificHintRate": 84.9
+    }
+  ],
+  "failedHints": [
+    {
+      "questionId": "nclex-tier1-falls-call-light",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Falls prevention",
+      "hintIndex": 2,
+      "currentHint": "Choose direct assistance with transfer safety.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-copd-positioning",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "COPD",
+      "hintIndex": 0,
+      "currentHint": "Focus on breathing first.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-chf-daily-weight",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Heart failure",
+      "hintIndex": 0,
+      "currentHint": "Heart failure teaching often focuses on fluid trends.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier1-chf-daily-weight",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Heart failure",
+      "hintIndex": 1,
+      "currentHint": "Trends require consistent measurement.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-chf-daily-weight",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Heart failure",
+      "hintIndex": 2,
+      "currentHint": "Choose the instruction that makes daily weight data reliable.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier1-pneumonia-cough-deep-breathe",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Pneumonia",
+      "hintIndex": 0,
+      "currentHint": "Think about airway clearance.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-pneumonia-cough-deep-breathe",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Pneumonia",
+      "hintIndex": 2,
+      "currentHint": "Hydration and deep breathing are standard foundational interventions.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-postop-incentive-spirometer",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Postoperative care",
+      "hintIndex": 0,
+      "currentHint": "Post-op pulmonary care prevents alveoli from collapsing.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-postop-incentive-spirometer",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Postoperative care",
+      "hintIndex": 2,
+      "currentHint": "Choose the option involving incentive spirometry.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-standard-precautions-blood",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Standard precautions",
+      "hintIndex": 0,
+      "currentHint": "Standard precautions apply to all clients.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-standard-precautions-blood",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Standard precautions",
+      "hintIndex": 2,
+      "currentHint": "Choose gloves and splash protection if needed.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-anticoagulant-bleeding",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Anticoagulants",
+      "hintIndex": 0,
+      "currentHint": "Warfarin increases bleeding risk.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier1-anticoagulant-bleeding",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Anticoagulants",
+      "hintIndex": 1,
+      "currentHint": "Black, tarry stools can indicate GI bleeding.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier1-anticoagulant-bleeding",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Anticoagulants",
+      "hintIndex": 2,
+      "currentHint": "Choose assessment and prompt notification.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier1-delegation-vitals",
+      "pathway": "RN",
+      "topic": "Delegation",
+      "hintIndex": 0,
+      "currentHint": "Think about what requires nursing judgment.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-delegation-vitals",
+      "pathway": "RN",
+      "topic": "Delegation",
+      "hintIndex": 1,
+      "currentHint": "Stable client plus routine task is usually more delegable.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier1-delegation-vitals",
+      "pathway": "RN",
+      "topic": "Delegation",
+      "hintIndex": 2,
+      "currentHint": "Vital signs can be delegated with reporting parameters.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-fluid-balance-output",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Fluid balance",
+      "hintIndex": 1,
+      "currentHint": "Urine output is a key perfusion cue.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "generic_hint"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-fluid-balance-output",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Fluid balance",
+      "hintIndex": 2,
+      "currentHint": "Choose the low output trend.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-pain-reassessment",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Pain management",
+      "hintIndex": 0,
+      "currentHint": "Think about the nursing process after an intervention.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-pain-reassessment",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Pain management",
+      "hintIndex": 2,
+      "currentHint": "Choose reassessment after the medication has time to work.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-hypertension-teaching",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Hypertension",
+      "hintIndex": 0,
+      "currentHint": "Look for the statement that supports long-term blood pressure control.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier1-hypertension-teaching",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Hypertension",
+      "hintIndex": 1,
+      "currentHint": "Hypertension often has no symptoms.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-hypertension-teaching",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Hypertension",
+      "hintIndex": 2,
+      "currentHint": "Sodium label reading is appropriate teaching.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier1-lab-potassium",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Basic labs",
+      "hintIndex": 0,
+      "currentHint": "Focus on the value farthest outside the expected range.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_lab_pattern_or_trend",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the abnormal value is isolated or part of a worsening pattern or trend before choosing the next action.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-lab-potassium",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Basic labs",
+      "hintIndex": 1,
+      "currentHint": "Potassium changes can affect the heart.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_lab_pattern_or_trend",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the abnormal value is isolated or part of a worsening pattern or trend before choosing the next action.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier1-lab-potassium",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Basic labs",
+      "hintIndex": 2,
+      "currentHint": "Choose the elevated potassium of 6.1 mEq/L.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint",
+        "missing_lab_pattern_or_trend",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the abnormal value is isolated or part of a worsening pattern or trend before choosing the next action.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-documentation-objective",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Documentation",
+      "hintIndex": 1,
+      "currentHint": "Look for measurable data and the action taken.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-oxygen-nasal-cannula-safety",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Oxygenation",
+      "hintIndex": 2,
+      "currentHint": "Choose the instruction about smoking and open flames.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-mobility-cane",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Mobility",
+      "hintIndex": 0,
+      "currentHint": "The cane goes on the stronger side.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-mobility-cane",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Mobility",
+      "hintIndex": 1,
+      "currentHint": "Right weakness means the left side is stronger.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-mobility-cane",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Mobility",
+      "hintIndex": 2,
+      "currentHint": "Choose the left side because it is the stronger side.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-fever-postop",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Postoperative care",
+      "hintIndex": 0,
+      "currentHint": "Decide whether the findings are expected or unexpected.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-fever-postop",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Postoperative care",
+      "hintIndex": 1,
+      "currentHint": "Purulent drainage is a concern.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-fever-postop",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Postoperative care",
+      "hintIndex": 2,
+      "currentHint": "Choose assessment and reporting.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "generic_hint"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-suicide-direct-question",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Suicide risk",
+      "hintIndex": 2,
+      "currentHint": "Ask clearly about harming self.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-maternity-postpartum-fundus",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Postpartum care",
+      "hintIndex": 0,
+      "currentHint": "A boggy uterus is not firm.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-maternity-postpartum-fundus",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Postpartum care",
+      "hintIndex": 1,
+      "currentHint": "Think about preventing postpartum bleeding.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier1-maternity-postpartum-fundus",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Postpartum care",
+      "hintIndex": 2,
+      "currentHint": "Massage the fundus first.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "generic_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-peds-dehydration",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Pediatric care",
+      "hintIndex": 0,
+      "currentHint": "Think about hydration output.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-peds-dehydration",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Pediatric care",
+      "hintIndex": 1,
+      "currentHint": "Wet diapers are important in infants.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint",
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-med-admin-allergy",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Medication administration",
+      "hintIndex": 1,
+      "currentHint": "What could cause immediate harm?",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-med-admin-allergy",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Medication administration",
+      "hintIndex": 2,
+      "currentHint": "Check allergies before administering the new antibiotic.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier1-expected-unexpected-cast",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Expected vs unexpected findings",
+      "hintIndex": 0,
+      "currentHint": "Think circulation and sensation.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint",
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-expected-unexpected-cast",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Expected vs unexpected findings",
+      "hintIndex": 2,
+      "currentHint": "Pain plus numbness and tingling is concerning.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-hand-hygiene",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Hand hygiene",
+      "hintIndex": 2,
+      "currentHint": "Perform hand hygiene immediately after glove removal.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-stroke-swallow",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Stroke",
+      "hintIndex": 2,
+      "currentHint": "Keep NPO until swallowing is evaluated.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-renal-fluid-teaching",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Renal basics",
+      "hintIndex": 0,
+      "currentHint": "Think about what melts or is liquid at room temperature.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-renal-fluid-teaching",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Renal basics",
+      "hintIndex": 2,
+      "currentHint": "Soup, ice, and gelatin count.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "generic_hint",
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-discharge-teaching-antibiotics",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Patient education",
+      "hintIndex": 1,
+      "currentHint": "Antibiotics should not be stopped just because symptoms improve.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier1-discharge-teaching-antibiotics",
+      "pathway": "RN/RPN-PN authored tier 1",
+      "topic": "Patient education",
+      "hintIndex": 2,
+      "currentHint": "Choose the stop-when-better statement.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-01-sepsis-older-adult",
+      "pathway": "RN",
+      "topic": "Sepsis recognition",
+      "hintIndex": 0,
+      "currentHint": "Look for the client with both infection and unstable vital signs.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-01-sepsis-older-adult",
+      "pathway": "RN",
+      "topic": "Sepsis recognition",
+      "hintIndex": 1,
+      "currentHint": "New confusion plus hypotension is more urgent than stable chronic symptoms.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-01-sepsis-older-adult",
+      "pathway": "RN",
+      "topic": "Sepsis recognition",
+      "hintIndex": 2,
+      "currentHint": "Choose the client with possible sepsis and poor perfusion.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier2-02-postop-bleeding",
+      "pathway": "RN",
+      "topic": "Postoperative complications",
+      "hintIndex": 0,
+      "currentHint": "Compare the current vital signs with the earlier baseline.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier2-02-postop-bleeding",
+      "pathway": "RN",
+      "topic": "Postoperative complications",
+      "hintIndex": 1,
+      "currentHint": "Bright red drainage plus tachycardia and lower blood pressure is not routine.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-03-stroke-last-known-well",
+      "pathway": "RN",
+      "topic": "Stroke recognition",
+      "hintIndex": 0,
+      "currentHint": "Sudden focal deficits are time-sensitive.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-03-stroke-last-known-well",
+      "pathway": "RN",
+      "topic": "Stroke recognition",
+      "hintIndex": 1,
+      "currentHint": "Swallow safety matters before oral intake.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier2-03-stroke-last-known-well",
+      "pathway": "RN",
+      "topic": "Stroke recognition",
+      "hintIndex": 2,
+      "currentHint": "Choose last-known-well, NPO, and stroke activation.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-04-chest-pain-unstable",
+      "pathway": "RN",
+      "topic": "Chest pain",
+      "hintIndex": 0,
+      "currentHint": "Look for acute cardiac warning signs.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-05-respiratory-distress-pneumonia",
+      "pathway": "RN",
+      "topic": "Respiratory distress",
+      "hintIndex": 0,
+      "currentHint": "The client's breathing is worsening now.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-05-respiratory-distress-pneumonia",
+      "pathway": "RN",
+      "topic": "Respiratory distress",
+      "hintIndex": 1,
+      "currentHint": "Accessory muscle use and low saturation are urgent cues.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-05-respiratory-distress-pneumonia",
+      "pathway": "RN",
+      "topic": "Respiratory distress",
+      "hintIndex": 2,
+      "currentHint": "Choose positioning, assessment, equipment check, and help.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-06-hypoglycemia-confused",
+      "pathway": "RN",
+      "topic": "Hypoglycemia",
+      "hintIndex": 0,
+      "currentHint": "Do not treat one problem while creating another safety risk.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier2-06-hypoglycemia-confused",
+      "pathway": "RN",
+      "topic": "Hypoglycemia",
+      "hintIndex": 1,
+      "currentHint": "The glucose is low, but swallowing may be unsafe.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint",
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-06-hypoglycemia-confused",
+      "pathway": "RN",
+      "topic": "Hypoglycemia",
+      "hintIndex": 2,
+      "currentHint": "Choose protocol-based treatment without oral intake.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-07-hyperglycemia-dka-cues",
+      "pathway": "RN",
+      "topic": "Hyperglycemia",
+      "hintIndex": 0,
+      "currentHint": "Match the symptoms with the high glucose value.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-07-hyperglycemia-dka-cues",
+      "pathway": "RN",
+      "topic": "Hyperglycemia",
+      "hintIndex": 1,
+      "currentHint": "Deep rapid respirations are a concerning cue.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier2-08-heart-failure-fluid-overload",
+      "pathway": "RN",
+      "topic": "Heart failure",
+      "hintIndex": 0,
+      "currentHint": "Daily weight changes can reveal fluid retention.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-08-heart-failure-fluid-overload",
+      "pathway": "RN",
+      "topic": "Heart failure",
+      "hintIndex": 1,
+      "currentHint": "Orthopnea and crackles raise concern for pulmonary congestion.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-08-heart-failure-fluid-overload",
+      "pathway": "RN",
+      "topic": "Heart failure",
+      "hintIndex": 2,
+      "currentHint": "Choose respiratory assessment and reporting.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-09-potassium-loop-diuretic",
+      "pathway": "RN",
+      "topic": "Electrolytes",
+      "hintIndex": 0,
+      "currentHint": "Connect the diuretic with the electrolyte value.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_lab_pattern_or_trend",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-09-potassium-loop-diuretic",
+      "pathway": "RN",
+      "topic": "Electrolytes",
+      "hintIndex": 1,
+      "currentHint": "Muscle weakness can match low potassium.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_lab_pattern_or_trend",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-09-potassium-loop-diuretic",
+      "pathway": "RN",
+      "topic": "Electrolytes",
+      "hintIndex": 2,
+      "currentHint": "Choose safety measures and notification.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_lab_pattern_or_trend",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier2-10-delegation-new-confusion",
+      "pathway": "RN",
+      "topic": "Delegation",
+      "hintIndex": 0,
+      "currentHint": "Separate tasks from nursing judgment.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-10-delegation-new-confusion",
+      "pathway": "RN",
+      "topic": "Delegation",
+      "hintIndex": 2,
+      "currentHint": "Choose the routine care task for the stable client.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier2-11-opioid-sedation",
+      "pathway": "RN",
+      "topic": "Opioid adverse effects",
+      "hintIndex": 0,
+      "currentHint": "The respiratory rate is the key safety cue.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-11-opioid-sedation",
+      "pathway": "RN",
+      "topic": "Opioid adverse effects",
+      "hintIndex": 1,
+      "currentHint": "Difficult arousal after opioids is concerning.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-11-opioid-sedation",
+      "pathway": "RN",
+      "topic": "Opioid adverse effects",
+      "hintIndex": 2,
+      "currentHint": "Choose airway/breathing assessment and help.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-12-transfusion-reaction",
+      "pathway": "RN",
+      "topic": "Blood transfusion reaction",
+      "hintIndex": 0,
+      "currentHint": "Timing matters: symptoms began soon after transfusion started.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-12-transfusion-reaction",
+      "pathway": "RN",
+      "topic": "Blood transfusion reaction",
+      "hintIndex": 1,
+      "currentHint": "The safest action prevents more blood product exposure.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier2-12-transfusion-reaction",
+      "pathway": "RN",
+      "topic": "Blood transfusion reaction",
+      "hintIndex": 2,
+      "currentHint": "Stop the transfusion first to prevent further exposure.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-13-postop-pulmonary-embolism",
+      "pathway": "RN",
+      "topic": "Pulmonary embolism cues",
+      "hintIndex": 0,
+      "currentHint": "Sudden symptoms after surgery are concerning.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-13-postop-pulmonary-embolism",
+      "pathway": "RN",
+      "topic": "Pulmonary embolism cues",
+      "hintIndex": 1,
+      "currentHint": "Low oxygen saturation plus chest pain is unstable.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-13-postop-pulmonary-embolism",
+      "pathway": "RN",
+      "topic": "Pulmonary embolism cues",
+      "hintIndex": 2,
+      "currentHint": "Choose support, assessment, and rapid escalation.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-14-sodium-confusion",
+      "pathway": "RN",
+      "topic": "Fluid and electrolyte imbalance",
+      "hintIndex": 1,
+      "currentHint": "Confusion is a neurologic cue that changes priority.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_lab_pattern_or_trend",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier2-14-sodium-confusion",
+      "pathway": "RN",
+      "topic": "Fluid and electrolyte imbalance",
+      "hintIndex": 2,
+      "currentHint": "Choose safety, neuro assessment, and notification.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "missing_lab_pattern_or_trend",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-15-asthma-worsening",
+      "pathway": "RN",
+      "topic": "Asthma",
+      "hintIndex": 0,
+      "currentHint": "The rescue inhaler did not resolve symptoms.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-15-asthma-worsening",
+      "pathway": "RN",
+      "topic": "Asthma",
+      "hintIndex": 1,
+      "currentHint": "Speaking in short phrases is a concerning respiratory cue.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier2-15-asthma-worsening",
+      "pathway": "RN",
+      "topic": "Asthma",
+      "hintIndex": 2,
+      "currentHint": "Choose reassessment, positioning, oxygen check, and escalation.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier2-16-priority-four-clients",
+      "pathway": "RN",
+      "topic": "Prioritization",
+      "hintIndex": 2,
+      "currentHint": "Choose the client with possible stroke cues.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-01-ventilated-high-pressure-alarm",
+      "pathway": "RN",
+      "topic": "Ventilated patient deterioration",
+      "hintIndex": 0,
+      "currentHint": "Connect the alarm to the client's visible distress and oxygen trend.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-01-ventilated-high-pressure-alarm",
+      "pathway": "RN",
+      "topic": "Ventilated patient deterioration",
+      "hintIndex": 1,
+      "currentHint": "A high-pressure alarm with secretions suggests resistance to airflow or airway obstruction.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-01-ventilated-high-pressure-alarm",
+      "pathway": "RN",
+      "topic": "Ventilated patient deterioration",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that assesses the patient, protects oxygenation, and brings help.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-02-septic-shock-progression",
+      "pathway": "RN",
+      "topic": "Sepsis progression",
+      "hintIndex": 0,
+      "currentHint": "Do not evaluate the lactate, MAP, urine output, and mentation separately.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-02-septic-shock-progression",
+      "pathway": "RN",
+      "topic": "Sepsis progression",
+      "hintIndex": 1,
+      "currentHint": "Ask whether perfusion is improving or worsening after initial therapy.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-02-septic-shock-progression",
+      "pathway": "RN",
+      "topic": "Sepsis progression",
+      "hintIndex": 2,
+      "currentHint": "The safest response treats the pattern as shock until proven otherwise.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-03-norepinephrine-extravasation",
+      "pathway": "RN",
+      "topic": "Vasoactive medication safety",
+      "hintIndex": 0,
+      "currentHint": "The medication is high-alert and the IV site findings are not benign.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-03-norepinephrine-extravasation",
+      "pathway": "RN",
+      "topic": "Vasoactive medication safety",
+      "hintIndex": 1,
+      "currentHint": "Think about preventing tissue damage while preserving protocol treatment options.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-03-norepinephrine-extravasation",
+      "pathway": "RN",
+      "topic": "Vasoactive medication safety",
+      "hintIndex": 2,
+      "currentHint": "The safest first step stops the infusion without removing the catheter immediately.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-04-wide-complex-tachycardia-unstable",
+      "pathway": "RN",
+      "topic": "Telemetry deterioration",
+      "hintIndex": 1,
+      "currentHint": "Hypotension and chest pressure make this unstable.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_ecg_framework",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-04-wide-complex-tachycardia-unstable",
+      "pathway": "RN",
+      "topic": "Telemetry deterioration",
+      "hintIndex": 2,
+      "currentHint": "Choose immediate assessment, emergency help, and readiness for ordered interventions.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "missing_ecg_framework",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-05-postop-hemorrhage-abdominal",
+      "pathway": "RN",
+      "topic": "Postoperative hemorrhage",
+      "hintIndex": 0,
+      "currentHint": "Compare the vital signs and drain output to the earlier baseline.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-05-postop-hemorrhage-abdominal",
+      "pathway": "RN",
+      "topic": "Postoperative hemorrhage",
+      "hintIndex": 1,
+      "currentHint": "A firm distended abdomen with hypotension is not routine gas pain.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-05-postop-hemorrhage-abdominal",
+      "pathway": "RN",
+      "topic": "Postoperative hemorrhage",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that treats possible bleeding as an emergency.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-06-increased-icp-cushing-cues",
+      "pathway": "RN",
+      "topic": "Increased intracranial pressure",
+      "hintIndex": 0,
+      "currentHint": "The vital-sign pattern and pupil change should be interpreted together.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-06-increased-icp-cushing-cues",
+      "pathway": "RN",
+      "topic": "Increased intracranial pressure",
+      "hintIndex": 1,
+      "currentHint": "Decreased arousal changes airway and safety priorities.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-06-increased-icp-cushing-cues",
+      "pathway": "RN",
+      "topic": "Increased intracranial pressure",
+      "hintIndex": 2,
+      "currentHint": "Choose airway protection, safer positioning, and urgent escalation.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-07-dka-insulin-potassium",
+      "pathway": "RN",
+      "topic": "DKA infusion safety",
+      "hintIndex": 0,
+      "currentHint": "Insulin affects more than glucose during DKA treatment.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-07-dka-insulin-potassium",
+      "pathway": "RN",
+      "topic": "DKA infusion safety",
+      "hintIndex": 1,
+      "currentHint": "Low potassium plus weakness is a medication-safety warning.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-07-dka-insulin-potassium",
+      "pathway": "RN",
+      "topic": "DKA infusion safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that prevents worsening hypokalemia.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-08-ards-worsening-on-high-flow",
+      "pathway": "RN",
+      "topic": "Acute respiratory compromise",
+      "hintIndex": 0,
+      "currentHint": "The client is worsening despite already receiving significant oxygen support.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-08-ards-worsening-on-high-flow",
+      "pathway": "RN",
+      "topic": "Acute respiratory compromise",
+      "hintIndex": 1,
+      "currentHint": "Decreased responsiveness makes this an airway and breathing emergency.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-08-ards-worsening-on-high-flow",
+      "pathway": "RN",
+      "topic": "Acute respiratory compromise",
+      "hintIndex": 2,
+      "currentHint": "Choose immediate support and escalation.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-09-transfusion-reaction-shock",
+      "pathway": "RN",
+      "topic": "Transfusion reaction",
+      "hintIndex": 0,
+      "currentHint": "Timing matters: symptoms began shortly after blood administration started.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-09-transfusion-reaction-shock",
+      "pathway": "RN",
+      "topic": "Transfusion reaction",
+      "hintIndex": 1,
+      "currentHint": "Back pain, dyspnea, chills, and hypotension are not routine discomforts.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-09-transfusion-reaction-shock",
+      "pathway": "RN",
+      "topic": "Transfusion reaction",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stops exposure and preserves emergency IV access.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-10-complex-icu-delegation",
+      "pathway": "RN",
+      "topic": "High-acuity assignment safety",
+      "hintIndex": 1,
+      "currentHint": "Unstable symptoms and titrated infusions require licensed nursing oversight.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-10-complex-icu-delegation",
+      "pathway": "RN",
+      "topic": "High-acuity assignment safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the task with a stable client, clear instructions, and reportable cues.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-11-pca-opioid-oversedation",
+      "pathway": "RN",
+      "topic": "Opioid safety",
+      "hintIndex": 0,
+      "currentHint": "The respiratory rate and arousal level show opioid-related ventilatory depression.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-11-pca-opioid-oversedation",
+      "pathway": "RN",
+      "topic": "Opioid safety",
+      "hintIndex": 1,
+      "currentHint": "Oxygen saturation may improve temporarily while ventilation remains inadequate.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-11-pca-opioid-oversedation",
+      "pathway": "RN",
+      "topic": "Opioid safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stops medication exposure and supports breathing.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-12-hyperkalemia-telemetry-cues",
+      "pathway": "RN",
+      "topic": "Hyperkalemia safety",
+      "hintIndex": 0,
+      "currentHint": "A high potassium level becomes more urgent when ECG changes appear.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-12-hyperkalemia-telemetry-cues",
+      "pathway": "RN",
+      "topic": "Hyperkalemia safety",
+      "hintIndex": 1,
+      "currentHint": "Weakness and nausea are less important than cardiac conduction risk.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-12-hyperkalemia-telemetry-cues",
+      "pathway": "RN",
+      "topic": "Hyperkalemia safety",
+      "hintIndex": 2,
+      "currentHint": "Choose monitoring, assessment, and urgent notification.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-13-stroke-thrombolytic-neuro-change",
+      "pathway": "RN",
+      "topic": "Post-thrombolytic monitoring",
+      "hintIndex": 0,
+      "currentHint": "Think about the major bleeding risk associated with the recent treatment.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-13-stroke-thrombolytic-neuro-change",
+      "pathway": "RN",
+      "topic": "Post-thrombolytic monitoring",
+      "hintIndex": 1,
+      "currentHint": "New severe headache and decreased consciousness are red flags.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-13-stroke-thrombolytic-neuro-change",
+      "pathway": "RN",
+      "topic": "Post-thrombolytic monitoring",
+      "hintIndex": 2,
+      "currentHint": "Choose immediate neurologic assessment and stroke-team escalation.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-14-cardiogenic-shock-post-mi",
+      "pathway": "RN",
+      "topic": "Cardiogenic shock",
+      "hintIndex": 0,
+      "currentHint": "Low urine output plus cool clammy skin points to poor perfusion.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-14-cardiogenic-shock-post-mi",
+      "pathway": "RN",
+      "topic": "Cardiogenic shock",
+      "hintIndex": 1,
+      "currentHint": "Crackles after myocardial infarction change how you think about fluids and positioning.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-15-burn-inhalation-deterioration",
+      "pathway": "RN",
+      "topic": "Burn inhalation injury",
+      "hintIndex": 0,
+      "currentHint": "Facial burns plus hoarseness suggest inhalation injury risk.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-15-burn-inhalation-deterioration",
+      "pathway": "RN",
+      "topic": "Burn inhalation injury",
+      "hintIndex": 1,
+      "currentHint": "Stridor and drooling indicate the airway is worsening.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-15-burn-inhalation-deterioration",
+      "pathway": "RN",
+      "topic": "Burn inhalation injury",
+      "hintIndex": 2,
+      "currentHint": "Choose the response that brings emergency airway help now.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-16-massive-pe-deterioration",
+      "pathway": "RN",
+      "topic": "Pulmonary embolism deterioration",
+      "hintIndex": 0,
+      "currentHint": "The client is postoperative and suddenly hypoxemic and hypotensive.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-16-massive-pe-deterioration",
+      "pathway": "RN",
+      "topic": "Pulmonary embolism deterioration",
+      "hintIndex": 1,
+      "currentHint": "Severe anxiety can be a symptom of hypoxia and shock.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-16-massive-pe-deterioration",
+      "pathway": "RN",
+      "topic": "Pulmonary embolism deterioration",
+      "hintIndex": 2,
+      "currentHint": "Choose bed rest, oxygenation support, and emergency escalation.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-17-acute-liver-failure-bleeding-confusion",
+      "pathway": "RN",
+      "topic": "Multisystem deterioration",
+      "hintIndex": 0,
+      "currentHint": "Identify the immediate harms: fall injury and bleeding.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-17-acute-liver-failure-bleeding-confusion",
+      "pathway": "RN",
+      "topic": "Multisystem deterioration",
+      "hintIndex": 1,
+      "currentHint": "Asterixis and confusion suggest neurologic involvement, not just noncompliance.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-17-acute-liver-failure-bleeding-confusion",
+      "pathway": "RN",
+      "topic": "Multisystem deterioration",
+      "hintIndex": 2,
+      "currentHint": "Choose precautions, assessment, and escalation.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-18-sedation-handoff-instability",
+      "pathway": "RN",
+      "topic": "High-acuity handoff",
+      "hintIndex": 0,
+      "currentHint": "Do not let the handoff process override the client's current condition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-18-sedation-handoff-instability",
+      "pathway": "RN",
+      "topic": "High-acuity handoff",
+      "hintIndex": 1,
+      "currentHint": "Snoring, low respirations, and low saturation point to airway and breathing compromise.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage",
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-18-sedation-handoff-instability",
+      "pathway": "RN",
+      "topic": "High-acuity handoff",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that interrupts the workflow to stabilize the client.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "nclex-tier3-19-aortic-dissection-warning",
+      "pathway": "RN",
+      "topic": "Acute vascular emergency cues",
+      "hintIndex": 0,
+      "currentHint": "Sudden tearing pain radiating to the back is a major red flag.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-19-aortic-dissection-warning",
+      "pathway": "RN",
+      "topic": "Acute vascular emergency cues",
+      "hintIndex": 1,
+      "currentHint": "Unequal arm pressures and leg weakness point to perfusion compromise.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nclex-tier3-19-aortic-dissection-warning",
+      "pathway": "RN",
+      "topic": "Acute vascular emergency cues",
+      "hintIndex": 2,
+      "currentHint": "Choose bed rest, focused assessment, and immediate escalation.",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "answer_wording_leakage"
+      ],
+      "suggestedRewrite": "Identify the most important cue, then choose the action that best protects safety, priority, or escalation timing.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-priority-copd-decline",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Respiratory deterioration",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in respiratory deterioration.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-sata-copd-decline",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Respiratory deterioration",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in respiratory deterioration.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-matrix-copd-decline",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Respiratory deterioration",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in respiratory deterioration.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-copd-decline",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Respiratory deterioration",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in respiratory deterioration.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-priority-sepsis-ltc",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Sepsis recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in sepsis recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-sata-sepsis-ltc",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Sepsis recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in sepsis recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-matrix-sepsis-ltc",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Sepsis recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in sepsis recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-sepsis-ltc",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Sepsis recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in sepsis recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-priority-heart-failure-fluid",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Heart failure",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in heart failure.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-sata-heart-failure-fluid",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Heart failure",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in heart failure.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-matrix-heart-failure-fluid",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Heart failure",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in heart failure.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-heart-failure-fluid",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Heart failure",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in heart failure.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-priority-stroke-cue",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Stroke recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in stroke recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-sata-stroke-cue",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Stroke recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in stroke recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-matrix-stroke-cue",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Stroke recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in stroke recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-stroke-cue",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Stroke recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in stroke recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-priority-postpartum-hemorrhage",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postpartum assessment",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in postpartum assessment.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-sata-postpartum-hemorrhage",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postpartum assessment",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in postpartum assessment.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-matrix-postpartum-hemorrhage",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postpartum assessment",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in postpartum assessment.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-postpartum-hemorrhage",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postpartum assessment",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in postpartum assessment.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-priority-pediatric-respiratory",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Pediatric respiratory distress",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in pediatric respiratory distress.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-sata-pediatric-respiratory",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Pediatric respiratory distress",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in pediatric respiratory distress.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-matrix-pediatric-respiratory",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Pediatric respiratory distress",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in pediatric respiratory distress.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-pediatric-respiratory",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Pediatric respiratory distress",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in pediatric respiratory distress.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-priority-hypoglycemia",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Diabetes medication safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating hypoglycemia.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-sata-hypoglycemia",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Diabetes medication safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating hypoglycemia.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-matrix-hypoglycemia",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Diabetes medication safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating hypoglycemia.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-hypoglycemia",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Diabetes medication safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating hypoglycemia.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-priority-warfarin-bleeding",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Anticoagulant safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating possible gastrointestinal bleeding with over-anticoagulation.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-sata-warfarin-bleeding",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Anticoagulant safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating possible gastrointestinal bleeding with over-anticoagulation.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-matrix-warfarin-bleeding",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Anticoagulant safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating possible gastrointestinal bleeding with over-anticoagulation.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-warfarin-bleeding",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Anticoagulant safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating possible gastrointestinal bleeding with over-anticoagulation.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-priority-delirium-dementia",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Delirium recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in delirium recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-sata-delirium-dementia",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Delirium recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in delirium recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-matrix-delirium-dementia",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Delirium recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in delirium recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-delirium-dementia",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Delirium recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in delirium recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-priority-cdiff-ipac",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "C. difficile infection control",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in c. difficile infection control.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-sata-cdiff-ipac",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "C. difficile infection control",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in c. difficile infection control.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-matrix-cdiff-ipac",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "C. difficile infection control",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in c. difficile infection control.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-cdiff-ipac",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "C. difficile infection control",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in c. difficile infection control.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-priority-wound-infection",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postoperative wound complication",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in postoperative wound complication.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-priority-wound-infection",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postoperative wound complication",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating possible surgical site infection.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-sata-wound-infection",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postoperative wound complication",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in postoperative wound complication.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-sata-wound-infection",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postoperative wound complication",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating possible surgical site infection.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-matrix-wound-infection",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postoperative wound complication",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in postoperative wound complication.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-matrix-wound-infection",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postoperative wound complication",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating possible surgical site infection.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-wound-infection",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postoperative wound complication",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in postoperative wound complication.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-wound-infection",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postoperative wound complication",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating possible surgical site infection.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-priority-ethics-capacity",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Consent and capacity",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in consent and capacity.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-sata-ethics-capacity",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Consent and capacity",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in consent and capacity.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-matrix-ethics-capacity",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Consent and capacity",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in consent and capacity.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-bowtie-ethics-capacity",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Consent and capacity",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in consent and capacity.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-ordered-hypoglycemia-response",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Diabetes medication safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating hypoglycemia.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-ordered-postpartum-bleeding",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postpartum assessment",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in postpartum assessment.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-ordered-warfarin-bleed",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Anticoagulant safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating possible gastrointestinal bleeding with over-anticoagulation.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-ordered-wound-infection",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postoperative wound complication",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating possible surgical site infection.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-chart-copd-decline",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Respiratory deterioration",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in respiratory deterioration.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-chart-sepsis-ltc",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Sepsis recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in sepsis recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-chart-heart-failure-fluid",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Heart failure",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in heart failure.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-chart-stroke-cue",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Stroke recognition",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in stroke recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-chart-postpartum-hemorrhage",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Postpartum assessment",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in postpartum assessment.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-chart-pediatric-respiratory",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Pediatric respiratory distress",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in pediatric respiratory distress.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-hotspot-im-injection-site",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Medication administration",
+      "hintIndex": 0,
+      "currentHint": "Think landmark, not just muscle name.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-hotspot-im-injection-site",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Medication administration",
+      "hintIndex": 1,
+      "currentHint": "Avoid sites too close to joints, nerves, or compromised skin.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-hotspot-im-injection-site",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Medication administration",
+      "hintIndex": 2,
+      "currentHint": "Choose the central deltoid region appropriate for an adult IM vaccine.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-cloze-insulin-hypoglycemia",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Diabetes safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating hypoglycemia.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-cloze-documentation",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Documentation",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating informed refusal of care.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-extended-matching-respiratory-cues",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Respiratory cue differentiation",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in respiratory deterioration.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-extended-matching-respiratory-cues",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Respiratory cue differentiation",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating acute respiratory deterioration.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-extended-matching-pharm-risk",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "High-alert medication safety",
+      "hintIndex": 2,
+      "currentHint": "Choose the action that stays within practical nursing scope while escalating possible gastrointestinal bleeding with over-anticoagulation.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-communication-sbar-sepsis",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "SBAR escalation",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in sepsis recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-communication-therapeutic-panic",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Therapeutic communication",
+      "hintIndex": 0,
+      "currentHint": "Acknowledge fear without diagnosing it.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-delegation-ucp-stable-care",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Delegation and assignment",
+      "hintIndex": 1,
+      "currentHint": "Stable routine care is more delegable than new or unstable findings.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-med-safety-opioid-sedation",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Opioid safety",
+      "hintIndex": 0,
+      "currentHint": "Check ABCs before giving a scheduled medication.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-med-safety-opioid-sedation",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Opioid safety",
+      "hintIndex": 1,
+      "currentHint": "RR 8/min is not a normal sleep finding.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint",
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-med-safety-digoxin-apical",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Cardiac medication safety",
+      "hintIndex": 0,
+      "currentHint": "Connect pulse rate with medication effect.",
+      "score": 3,
+      "gate": "foundational_only",
+      "publishAllowed": false,
+      "issues": [
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 4
+    },
+    {
+      "questionId": "cnple-rpn-med-safety-digoxin-apical",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Cardiac medication safety",
+      "hintIndex": 1,
+      "currentHint": "Nausea plus visual changes are not random here.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected",
+        "missing_pharmacology_safety_monitoring",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-case-study-sepsis-evolution",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Evolving sepsis case",
+      "hintIndex": 0,
+      "currentHint": "Start by separating baseline findings from acute change in sepsis recognition.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "stem_disconnected"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "cnple-rpn-safety-deterioration-shock",
+      "pathway": "CNPLE/RPN-PN",
+      "topic": "Shock recognition",
+      "hintIndex": 0,
+      "currentHint": "Look for a pattern, not one number.",
+      "score": 2,
+      "gate": "review_required",
+      "publishAllowed": false,
+      "issues": [
+        "generic_hint"
+      ],
+      "suggestedRewrite": "Decide whether the finding is expected and predictable or requires reporting, monitoring, and reassessment within scope.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ap-01",
+      "pathway": "Pre-Nursing",
+      "topic": "anatomy-physiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ap-02",
+      "pathway": "Pre-Nursing",
+      "topic": "anatomy-physiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ap-03",
+      "pathway": "Pre-Nursing",
+      "topic": "anatomy-physiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ap-04",
+      "pathway": "Pre-Nursing",
+      "topic": "anatomy-physiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ap-05",
+      "pathway": "Pre-Nursing",
+      "topic": "anatomy-physiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ap-06",
+      "pathway": "Pre-Nursing",
+      "topic": "anatomy-physiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ap-07",
+      "pathway": "Pre-Nursing",
+      "topic": "anatomy-physiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ap-08",
+      "pathway": "Pre-Nursing",
+      "topic": "anatomy-physiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "mt-01",
+      "pathway": "Pre-Nursing",
+      "topic": "medical-terminology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "mt-02",
+      "pathway": "Pre-Nursing",
+      "topic": "medical-terminology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "mt-03",
+      "pathway": "Pre-Nursing",
+      "topic": "medical-terminology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "mt-04",
+      "pathway": "Pre-Nursing",
+      "topic": "medical-terminology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "mt-05",
+      "pathway": "Pre-Nursing",
+      "topic": "medical-terminology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "mt-06",
+      "pathway": "Pre-Nursing",
+      "topic": "medical-terminology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "mt-07",
+      "pathway": "Pre-Nursing",
+      "topic": "medical-terminology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "mt-08",
+      "pathway": "Pre-Nursing",
+      "topic": "medical-terminology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ph-01",
+      "pathway": "Pre-Nursing",
+      "topic": "pharmacology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ph-02",
+      "pathway": "Pre-Nursing",
+      "topic": "pharmacology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ph-03",
+      "pathway": "Pre-Nursing",
+      "topic": "pharmacology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ph-04",
+      "pathway": "Pre-Nursing",
+      "topic": "pharmacology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ph-05",
+      "pathway": "Pre-Nursing",
+      "topic": "pharmacology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ph-06",
+      "pathway": "Pre-Nursing",
+      "topic": "pharmacology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ph-07",
+      "pathway": "Pre-Nursing",
+      "topic": "pharmacology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ph-08",
+      "pathway": "Pre-Nursing",
+      "topic": "pharmacology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "fe-01",
+      "pathway": "Pre-Nursing",
+      "topic": "fluids-electrolytes",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "fe-02",
+      "pathway": "Pre-Nursing",
+      "topic": "fluids-electrolytes",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "fe-03",
+      "pathway": "Pre-Nursing",
+      "topic": "fluids-electrolytes",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "fe-04",
+      "pathway": "Pre-Nursing",
+      "topic": "fluids-electrolytes",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "fe-05",
+      "pathway": "Pre-Nursing",
+      "topic": "fluids-electrolytes",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "fe-06",
+      "pathway": "Pre-Nursing",
+      "topic": "fluids-electrolytes",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "fe-07",
+      "pathway": "Pre-Nursing",
+      "topic": "fluids-electrolytes",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "fe-08",
+      "pathway": "Pre-Nursing",
+      "topic": "fluids-electrolytes",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ic-01",
+      "pathway": "Pre-Nursing",
+      "topic": "infection-control",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ic-02",
+      "pathway": "Pre-Nursing",
+      "topic": "infection-control",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ic-03",
+      "pathway": "Pre-Nursing",
+      "topic": "infection-control",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ic-04",
+      "pathway": "Pre-Nursing",
+      "topic": "infection-control",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ic-05",
+      "pathway": "Pre-Nursing",
+      "topic": "infection-control",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ic-06",
+      "pathway": "Pre-Nursing",
+      "topic": "infection-control",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ic-07",
+      "pathway": "Pre-Nursing",
+      "topic": "infection-control",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ic-08",
+      "pathway": "Pre-Nursing",
+      "topic": "infection-control",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pp-01",
+      "pathway": "Pre-Nursing",
+      "topic": "pathophysiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pp-02",
+      "pathway": "Pre-Nursing",
+      "topic": "pathophysiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pp-03",
+      "pathway": "Pre-Nursing",
+      "topic": "pathophysiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pp-04",
+      "pathway": "Pre-Nursing",
+      "topic": "pathophysiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pp-05",
+      "pathway": "Pre-Nursing",
+      "topic": "pathophysiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pp-06",
+      "pathway": "Pre-Nursing",
+      "topic": "pathophysiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pp-07",
+      "pathway": "Pre-Nursing",
+      "topic": "pathophysiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pp-08",
+      "pathway": "Pre-Nursing",
+      "topic": "pathophysiology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ch-01",
+      "pathway": "Pre-Nursing",
+      "topic": "chemistry",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ch-02",
+      "pathway": "Pre-Nursing",
+      "topic": "chemistry",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ch-03",
+      "pathway": "Pre-Nursing",
+      "topic": "chemistry",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ch-04",
+      "pathway": "Pre-Nursing",
+      "topic": "chemistry",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ch-05",
+      "pathway": "Pre-Nursing",
+      "topic": "chemistry",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ch-06",
+      "pathway": "Pre-Nursing",
+      "topic": "chemistry",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ch-07",
+      "pathway": "Pre-Nursing",
+      "topic": "chemistry",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ch-08",
+      "pathway": "Pre-Nursing",
+      "topic": "chemistry",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nf-01",
+      "pathway": "Pre-Nursing",
+      "topic": "nutrition-foundations",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nf-02",
+      "pathway": "Pre-Nursing",
+      "topic": "nutrition-foundations",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nf-03",
+      "pathway": "Pre-Nursing",
+      "topic": "nutrition-foundations",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nf-04",
+      "pathway": "Pre-Nursing",
+      "topic": "nutrition-foundations",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nf-05",
+      "pathway": "Pre-Nursing",
+      "topic": "nutrition-foundations",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nf-06",
+      "pathway": "Pre-Nursing",
+      "topic": "nutrition-foundations",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nf-07",
+      "pathway": "Pre-Nursing",
+      "topic": "nutrition-foundations",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "nf-08",
+      "pathway": "Pre-Nursing",
+      "topic": "nutrition-foundations",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ox-01",
+      "pathway": "Pre-Nursing",
+      "topic": "oxygenation",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ox-02",
+      "pathway": "Pre-Nursing",
+      "topic": "oxygenation",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ox-03",
+      "pathway": "Pre-Nursing",
+      "topic": "oxygenation",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ox-04",
+      "pathway": "Pre-Nursing",
+      "topic": "oxygenation",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ox-05",
+      "pathway": "Pre-Nursing",
+      "topic": "oxygenation",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ox-06",
+      "pathway": "Pre-Nursing",
+      "topic": "oxygenation",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ox-07",
+      "pathway": "Pre-Nursing",
+      "topic": "oxygenation",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ox-08",
+      "pathway": "Pre-Nursing",
+      "topic": "oxygenation",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ha-01",
+      "pathway": "Pre-Nursing",
+      "topic": "health-assessment",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ha-02",
+      "pathway": "Pre-Nursing",
+      "topic": "health-assessment",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ha-03",
+      "pathway": "Pre-Nursing",
+      "topic": "health-assessment",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ha-04",
+      "pathway": "Pre-Nursing",
+      "topic": "health-assessment",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ha-05",
+      "pathway": "Pre-Nursing",
+      "topic": "health-assessment",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ha-06",
+      "pathway": "Pre-Nursing",
+      "topic": "health-assessment",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ha-07",
+      "pathway": "Pre-Nursing",
+      "topic": "health-assessment",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "ha-08",
+      "pathway": "Pre-Nursing",
+      "topic": "health-assessment",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Think about the primary function, structure, or process before choosing the answer.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-workflow-quantity-mismatch",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "workflow",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-workflow-lasa-product-selection",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "workflow",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-calc-liquid-dose",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "calculations",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Set up the units first, convert carefully, and check whether the final dose is clinically reasonable.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-calc-days-supply",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "calculations",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Set up the units first, convert carefully, and check whether the final dose is clinically reasonable.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-calc-mg-mcg",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "calculations",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Set up the units first, convert carefully, and check whether the final dose is clinically reasonable.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-pharm-warfarin-class",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "pharmacology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-pharm-lisinopril-suffix",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "pharmacology",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-safety-insulin-u",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "medicationSafety",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-safety-leading-zero",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "medicationSafety",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-law-privacy-family",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "law",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-law-controlled-substance",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "law",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-compounding-first-air",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "compounding",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    },
+    {
+      "questionId": "pharm-tech-compounding-bud",
+      "pathway": "Allied Health - Pharmacy Technician",
+      "topic": "compounding",
+      "hintIndex": 0,
+      "currentHint": "",
+      "score": 1,
+      "gate": "hard_fail",
+      "publishAllowed": false,
+      "issues": [
+        "missing_hint",
+        "missing_pathway_specificity"
+      ],
+      "suggestedRewrite": "Consider contraindications, monitoring needs, adverse effects, and whether the finding requires holding or reporting.",
+      "targetScore": 5
+    }
+  ]
+}

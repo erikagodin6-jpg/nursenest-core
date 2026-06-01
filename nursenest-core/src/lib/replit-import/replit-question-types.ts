@@ -18,6 +18,7 @@ export type NormalizedExamQuestion = {
   topic: string | null;
   bodySystem: string | null;
   tags: string[];
+  hint?: string | null;
   difficulty: number;
   stemHash: string;
 };

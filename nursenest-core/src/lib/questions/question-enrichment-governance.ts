@@ -262,17 +262,19 @@ function qualityInput(row: QuestionEnrichmentAuditRow): QuestionQualityInput {
 }
 
 function scoreDistractors(row: QuestionEnrichmentAuditRow): number {
-  const distractors = incorrectRationales(row);
+  const rationales = incorrectRationales(row);
   const options = optionTexts(row.options);
   const correct = correctAnswerText(row.correctAnswer);
-  const distractorInputs: DistractorQualityInput[] = (distractors.length ? distractors : options.filter((option) => option !== correct)).map((distractor, index) => ({
+  const distractorOptions = options.filter((option) => option !== correct);
+  const sourceDistractors = distractorOptions.length ? distractorOptions : rationales;
+  const distractorInputs: DistractorQualityInput[] = sourceDistractors.map((distractor, index) => ({
     id: `${row.id}:d${index + 1}`,
     distractor,
     stem: row.stem,
     correctAnswer: correct,
-    rationale: distractors[index] ?? "",
-    whyTempting: distractors[index] ?? "",
-    whyIncorrect: distractors[index] ?? "",
+    rationale: rationales[index] ?? "",
+    whyTempting: rationales[index] ?? "",
+    whyIncorrect: rationales[index] ?? "",
     riskIntroduced: row.clinicalTrap,
     pathway: row.exam,
     questionType: row.questionType,

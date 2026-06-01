@@ -9,6 +9,7 @@ export type BlogMarketingPostJson = {
   title: string;
   excerpt: string;
   category: string | null;
+  coverImage?: string | null;
   createdAt: string;
 };
 
@@ -21,8 +22,14 @@ const TOPIC_LINKS: { label: string; href: string }[] = [
 /**
  * Search + topic shortcuts + responsive card grid for marketing `/blog` lists.
  */
-export function BlogMarketingPostListClient({ posts }: { posts: BlogMarketingPostJson[] }) {
-  const [q, setQ] = useState("");
+export function BlogMarketingPostListClient({
+  posts,
+  initialQuery = "",
+}: {
+  posts: BlogMarketingPostJson[];
+  initialQuery?: string;
+}) {
+  const [q, setQ] = useState(initialQuery);
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
     if (!needle) return posts;
@@ -75,6 +82,7 @@ export function BlogMarketingPostListClient({ posts }: { posts: BlogMarketingPos
                 title: p.title,
                 excerpt: p.excerpt,
                 category: p.category,
+                coverImage: p.coverImage,
                 createdAt: new Date(p.createdAt),
               }}
             />

@@ -23,6 +23,42 @@ const customSessionCountOnlyCache = new Map<string, CustomSessionCountOnlyCacheE
 const CUSTOM_SESSION_COUNT_ONLY_CACHE_TTL_MS = 15_000;
 const CUSTOM_SESSION_COUNT_ONLY_CACHE_MAX = 2000;
 
+type FlashcardSessionCreateLogContext = {
+  userIdPrefix: string;
+  pathway: string;
+  pathwayRaw: string;
+  country: string;
+  tier: string;
+  systems: string;
+  selectedTopics: string;
+  selectedFilters: string;
+  selectedDeckIds: string;
+  sessionId: string;
+  includeCards: string;
+  mode: string;
+  cardLimit: string;
+  offset: string;
+};
+
+function flashcardSessionCreateLogBase(ctx: FlashcardSessionCreateLogContext) {
+  return {
+    userId: ctx.userIdPrefix,
+    pathway: ctx.pathway,
+    pathwayRaw: ctx.pathwayRaw,
+    country: ctx.country,
+    tier: ctx.tier,
+    systems: ctx.systems,
+    selectedTopics: ctx.selectedTopics,
+    selectedFilters: ctx.selectedFilters,
+    selectedDeckIds: ctx.selectedDeckIds,
+    sessionId: ctx.sessionId,
+    includeCards: ctx.includeCards,
+    mode: ctx.mode,
+    cardLimit: ctx.cardLimit,
+    offset: ctx.offset,
+  };
+}
+
 function customSessionCountOnlyCacheKey(userId: string, url: string): string {
   // Key by exact query string to avoid drift across filter combinations.
   // Strip origin to keep key short.
@@ -36,11 +72,39 @@ function customSessionCountOnlyCacheKey(userId: string, url: string): string {
 
 export async function GET(req: NextRequest) {
   return runWithApiTelemetry(req, "GET /api/flashcards/custom-session", "content", async () => {
+    let launchLogContext: FlashcardSessionCreateLogContext | null = null;
     try {
       const headers = mergeSubscriberPrivateCacheHeaders();
 
       const gate = await requireSubscriberSession();
-      if (!gate.ok) return gate.response;
+      if (!gate.ok) {
+        safeServerLog("flashcards", "FLASHCARD_SESSION_CREATE", {
+          stage: "failed",
+          userId: "",
+          pathway: req.nextUrl.searchParams.get("pathwayId")?.trim() ?? "",
+          pathwayRaw: req.nextUrl.searchParams.get("pathwayId")?.trim() ?? "",
+          country: "",
+          tier: "",
+          systems: req.nextUrl.searchParams.get("categories")?.trim() ?? "",
+          selectedTopics:
+            req.nextUrl.searchParams.get("topicCode")?.trim() ||
+            req.nextUrl.searchParams.get("topic")?.trim() ||
+            "",
+          selectedFilters: "entitlement_required",
+          selectedDeckIds: req.nextUrl.searchParams.get("lessonId")?.trim() ? "lesson" : "",
+          candidateFlashcards: null,
+          publishedFlashcards: null,
+          eligibleFlashcards: null,
+          finalSessionPoolSize: 0,
+          sessionId: req.nextUrl.searchParams.get("sessionSeed")?.trim().slice(0, 12) ?? "",
+          failureReason: "entitlement_denied_or_session_missing",
+          includeCards: req.nextUrl.searchParams.get("includeCards") === "1" ? "1" : "0",
+          mode: req.nextUrl.searchParams.get("mode")?.trim() ?? "mixed",
+          cardLimit: req.nextUrl.searchParams.get("cardLimit")?.trim() ?? "20",
+          offset: req.nextUrl.searchParams.get("offset")?.trim() ?? "0",
+        });
+        return gate.response;
+      }
 
       const userId = gate.userId;
       const entitlement = gate.entitlement;
@@ -94,6 +158,32 @@ export async function GET(req: NextRequest) {
       // NOTE: includeCards is read above for cache gating.
       const sourceKind = parseCustomSessionSourceKind(sp.get("sourceKind"));
       const sessionSeed = sp.get("sessionSeed")?.trim() || null;
+      const selectedFiltersForLog = [
+        weakOnly ? "weak" : "",
+        incorrectOnly ? "incorrect" : "",
+        starredOnly ? "starred" : "",
+        savedOnly ? "saved" : "",
+        notesOnly ? "notes" : "",
+        revisitOnly ? "revisit" : "",
+        notStudiedOnly ? "not_studied" : "",
+        recentStudiedOnly ? "recent" : "",
+      ].filter(Boolean).join(",");
+      launchLogContext = {
+        userIdPrefix: userId.slice(0, 8),
+        pathway: pathwayId ?? "",
+        pathwayRaw: pathwayIdRaw ?? "",
+        country: String(entitlement.country ?? ""),
+        tier: String(entitlement.tier ?? ""),
+        systems: selectedCategories.slice(0, 24).join(","),
+        selectedTopics: topicCode ?? "",
+        selectedFilters: selectedFiltersForLog,
+        selectedDeckIds: lessonId ? `lesson:${lessonId.slice(0, 12)}` : "",
+        sessionId: sessionSeed ? sessionSeed.slice(0, 12) : "",
+        includeCards: includeCards ? "1" : "0",
+        mode,
+        cardLimit: String(limit),
+        offset: String(offset),
+      };
 
       const topicIdsForLog =
         selectedCategories.length > 0
@@ -120,34 +210,12 @@ export async function GET(req: NextRequest) {
       });
       safeServerLog("flashcards", "FLASHCARD_SESSION_CREATE", {
         stage: "attempt",
-        userId: userId.slice(0, 8),
-        pathway: pathwayId ?? "",
-        pathwayRaw: pathwayIdRaw ?? "",
-        country: String(entitlement.country ?? ""),
-        tier: String(entitlement.tier ?? ""),
-        systems: selectedCategories.slice(0, 24).join(","),
-        selectedTopics: topicCode ?? "",
-        selectedFilters: [
-          weakOnly ? "weak" : "",
-          incorrectOnly ? "incorrect" : "",
-          starredOnly ? "starred" : "",
-          savedOnly ? "saved" : "",
-          notesOnly ? "notes" : "",
-          revisitOnly ? "revisit" : "",
-          notStudiedOnly ? "not_studied" : "",
-          recentStudiedOnly ? "recent" : "",
-        ].filter(Boolean).join(","),
-        selectedDeckIds: lessonId ? `lesson:${lessonId.slice(0, 12)}` : "",
+        ...flashcardSessionCreateLogBase(launchLogContext),
         candidateFlashcards: null,
         publishedFlashcards: null,
         eligibleFlashcards: null,
         finalSessionPoolSize: null,
-        sessionId: sessionSeed ? sessionSeed.slice(0, 12) : "",
         failureReason: "",
-        includeCards: includeCards ? "1" : "0",
-        mode,
-        cardLimit: String(limit),
-        offset: String(offset),
       });
 
       const built = await withTimeout(
@@ -195,34 +263,12 @@ export async function GET(req: NextRequest) {
         });
         safeServerLog("flashcards", "FLASHCARD_SESSION_CREATE", {
           stage: "failed",
-          userId: userId.slice(0, 8),
-          pathway: pathwayId ?? "",
-          pathwayRaw: pathwayIdRaw ?? "",
-          country: String(entitlement.country ?? ""),
-          tier: String(entitlement.tier ?? ""),
-          systems: selectedCategories.slice(0, 24).join(","),
-          selectedTopics: topicCode ?? "",
-          selectedFilters: [
-            weakOnly ? "weak" : "",
-            incorrectOnly ? "incorrect" : "",
-            starredOnly ? "starred" : "",
-            savedOnly ? "saved" : "",
-            notesOnly ? "notes" : "",
-            revisitOnly ? "revisit" : "",
-            notStudiedOnly ? "not_studied" : "",
-            recentStudiedOnly ? "recent" : "",
-          ].filter(Boolean).join(","),
-          selectedDeckIds: lessonId ? `lesson:${lessonId.slice(0, 12)}` : "",
+          ...flashcardSessionCreateLogBase(launchLogContext),
           candidateFlashcards: null,
           publishedFlashcards: null,
           eligibleFlashcards: null,
           finalSessionPoolSize: 0,
-          sessionId: sessionSeed ? sessionSeed.slice(0, 12) : "",
           failureReason: `${built.code}:${kind}`.slice(0, 120),
-          includeCards: includeCards ? "1" : "0",
-          mode,
-          cardLimit: String(limit),
-          offset: String(offset),
         });
         const h = new Headers(headers);
         h.set("Retry-After", "3");
@@ -242,6 +288,68 @@ export async function GET(req: NextRequest) {
             },
           },
           { status: 503, headers: h },
+        );
+      }
+
+      if (includeCards && built.summary.matchingCards === 0) {
+        const h = new Headers(headers);
+        h.set("Retry-After", "0");
+        safeServerLog("flashcards", "FLASHCARD_SESSION_CREATE", {
+          stage: "empty",
+          ...flashcardSessionCreateLogBase(launchLogContext),
+          candidateFlashcards: built.summary.poolInventoryDiagnostics?.examQuestionSqlPoolCount ?? 0,
+          publishedFlashcards: built.summary.poolInventoryDiagnostics?.dedicatedFlashcardRowCount ?? null,
+          eligibleFlashcards: 0,
+          finalSessionPoolSize: 0,
+          failureReason: "empty_pool_after_filters",
+        });
+        return NextResponse.json(
+          {
+            ok: false,
+            code: "empty_flashcard_pool",
+            error: "No flashcards found for selected systems.",
+            retryable: false,
+            integrity: {
+              querySucceeded: true,
+              source: "flashcard_custom_session",
+              rawCount: built.summary.poolInventoryDiagnostics?.examQuestionSqlPoolCount ?? null,
+              filteredCount: 0,
+              finalCount: 0,
+              reasonFailed: "empty_pool_after_filters",
+            },
+          },
+          { status: 404, headers: h },
+        );
+      }
+
+      if (includeCards && built.summary.matchingCards > 0 && built.summary.returnedCards === 0) {
+        const h = new Headers(headers);
+        h.set("Retry-After", "0");
+        safeServerLog("flashcards", "FLASHCARD_SESSION_CREATE", {
+          stage: "failed",
+          ...flashcardSessionCreateLogBase(launchLogContext),
+          candidateFlashcards: built.summary.poolInventoryDiagnostics?.examQuestionSqlPoolCount ?? built.summary.matchingCards,
+          publishedFlashcards: built.summary.poolInventoryDiagnostics?.dedicatedFlashcardRowCount ?? null,
+          eligibleFlashcards: built.summary.matchingCards,
+          finalSessionPoolSize: 0,
+          failureReason: "serialized_session_window_empty",
+        });
+        return NextResponse.json(
+          {
+            ok: false,
+            code: "session_data_invalid",
+            error: "Session data is invalid.",
+            retryable: false,
+            integrity: {
+              querySucceeded: true,
+              source: "flashcard_custom_session",
+              rawCount: built.summary.poolInventoryDiagnostics?.examQuestionSqlPoolCount ?? built.summary.matchingCards,
+              filteredCount: built.summary.matchingCards,
+              finalCount: 0,
+              reasonFailed: "serialized_session_window_empty",
+            },
+          },
+          { status: 422, headers: h },
         );
       }
 
@@ -329,6 +437,19 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(body, { headers });
     } catch (error) {
       safeServerLogCritical("flashcards", "custom_session_route_error", {}, error);
+      if (launchLogContext) {
+        safeServerLog("flashcards", "FLASHCARD_SESSION_CREATE", {
+          stage: "failed",
+          ...flashcardSessionCreateLogBase(launchLogContext),
+          candidateFlashcards: null,
+          publishedFlashcards: null,
+          eligibleFlashcards: null,
+          finalSessionPoolSize: 0,
+          failureReason: error instanceof TimeoutError || (error instanceof Error && /timeout/i.test(error.message))
+            ? "session_timeout"
+            : "route_exception",
+        });
+      }
       const h = mergeSubscriberPrivateCacheHeaders();
       h.set("Retry-After", "3");
       const isTimeout = error instanceof TimeoutError || (error instanceof Error && /timeout/i.test(error.message));

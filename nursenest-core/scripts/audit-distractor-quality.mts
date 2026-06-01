@@ -220,7 +220,7 @@ Static source-backed audit of explicit false options found in NurseNest question
 - Failed publish gate: ${failed.length}
 - Duplicate distractor text instances: ${duplicates.length}
 - Throwaway or unrealistic distractor signals: ${throwaways.length}
-- Minimum publish score: 70
+- Minimum publish score: 80
 
 ## Pathway Scores
 
@@ -295,7 +295,177 @@ ${table([
 
 ## Publish Gate
 
-No question may publish when any distractor score is below 70, why-tempting analysis is missing, safety analysis is missing, or duplicate/throwaway distractors are present.
+No question may publish when any distractor score is below 80, why-tempting analysis is missing, safety analysis is missing, misconception mapping is missing, remediation mapping is missing, readiness mapping is missing, or duplicate/throwaway distractors are present.
+`;
+}
+
+function buildDistractorAnalyticsDashboard(records: DistractorRecord[]): string {
+  const taxonomyCounts = new Map<string, number>();
+  const readinessCounts = new Map<string, number>();
+  for (const record of records) {
+    for (const type of record.score.taxonomy) taxonomyCounts.set(type, (taxonomyCounts.get(type) ?? 0) + 1);
+    for (const domain of record.score.readinessDomains) readinessCounts.set(domain, (readinessCounts.get(domain) ?? 0) + 1);
+  }
+  const byTopic = new Map<string, DistractorRecord[]>();
+  for (const record of records) {
+    const key = `${record.pathway} · ${record.questionId}`;
+    byTopic.set(key, [...(byTopic.get(key) ?? []), record]);
+  }
+
+  return `# Distractor Analytics Dashboard
+
+Generated: ${new Date().toISOString()}
+
+Wrong-answer selections should feed misconception frequency, topic weakness, safety weakness, clinical judgment weakness, and readiness-domain updates.
+
+## Misconception Frequency
+
+${table([
+  ["Misconception", "Distractor Count"],
+  ...[...taxonomyCounts.entries()].sort((a, b) => b[1] - a[1]).map(([type, count]) => [type.replace(/_/g, " "), count]),
+])}
+
+## Readiness Domain Signals
+
+${table([
+  ["Readiness Domain", "Mapped Distractors"],
+  ...[...readinessCounts.entries()].sort((a, b) => b[1] - a[1]).map(([domain, count]) => [domain.replace(/_/g, " "), count]),
+])}
+
+## Weakness Detection Rules
+
+| Signal | Analytics Update |
+| --- | --- |
+| Most selected wrong answer | Increment primary misconception and readiness domain |
+| Second most selected wrong answer | Increment secondary misconception and compare against stem topic |
+| Repeated safety distractors | Increase patient safety weakness score |
+| Repeated under-escalation or failure-to-rescue | Increase escalation readiness risk |
+| Repeated medication-monitoring failure | Increase medication safety remediation priority |
+| Repeated documentation error | Assign documentation practice |
+
+## Lowest-Scoring Question Clusters
+
+${table([
+  ["Question", "Pathway", "Average Distractor Score", "Lowest Score", "Mapped Domains"],
+  ...[...byTopic.entries()]
+    .map(([question, items]) => ({
+      question,
+      pathway: items[0]?.pathway ?? "Unknown",
+      average: average(items.map((item) => item.score.score)),
+      lowest: Math.min(...items.map((item) => item.score.score)),
+      domains: [...new Set(items.flatMap((item) => item.score.readinessDomains))].join(", "),
+    }))
+    .sort((a, b) => a.lowest - b.lowest)
+    .slice(0, 80)
+    .map((row) => [row.question, row.pathway, row.average, row.lowest, row.domains || "missing"]),
+])}
+`;
+}
+
+function buildFailureToRescueLibrary(records: DistractorRecord[]): string {
+  const items = records.filter((record) => record.score.failureToRescueSignal);
+  return `# Failure-To-Rescue Library
+
+Generated: ${new Date().toISOString()}
+
+Distractors in this library involve missed deterioration, delayed escalation, incorrect prioritization, delayed assessment, or missed trends.
+
+## Summary
+
+- Failure-to-rescue distractors: ${items.length}
+- Affected pathways: ${[...new Set(items.map((item) => item.pathway))].join(", ") || "None detected"}
+
+## Library
+
+${table([
+  ["Score", "Pathway", "Source", "Taxonomy", "Distractor", "Risk"],
+  ...items.slice(0, 200).map((record) => [
+    record.score.score,
+    record.pathway,
+    `${record.file}:${record.line}`,
+    record.score.taxonomy.join(", "),
+    excerpt(record.text),
+    excerpt(record.score.learnerMisconception),
+  ]),
+])}
+`;
+}
+
+function buildDistractorRewriteQueue(records: DistractorRecord[]): string {
+  const items = records.filter((record) => !record.score.publishAllowed || record.duplicateCount > 1);
+  return `# Distractor Rewrite Queue
+
+Generated: ${new Date().toISOString()}
+
+Every listed distractor remains blocked or review-required until it has plausible learner psychology, safety analysis, remediation mapping, and readiness mapping.
+
+${table([
+  ["Question ID", "Distractor", "Failure Reason", "Recommended Replacement"],
+  ...items.slice(0, 250).map((record) => [
+    record.questionId,
+    excerpt(record.text),
+    record.duplicateCount > 1 ? "Duplicate distractor text" : record.score.issues[0] ?? "Below publish gate",
+    `Create a plausible ${record.score.taxonomy[0]?.replace(/_/g, " ") || "clinical reasoning"} distractor that explains why it is tempting, why it is wrong, the risk it creates, and the remediation domain.`,
+  ]),
+])}
+`;
+}
+
+function buildQuestionRealismScore(records: DistractorRecord[]): string {
+  const summaries = summarizePathways(records);
+  return `# Question Realism Score
+
+Generated: ${new Date().toISOString()}
+
+Target realism score: 95%.
+
+## Scoring Domains
+
+| Domain | Evidence |
+| --- | --- |
+| Workflow realism | Action fits bedside, clinical, or exam workflow |
+| Assessment realism | Distractor reflects a believable assessment or reassessment mistake |
+| Communication realism | Communication choices reflect SBAR, handoff, clarification, teaching, or escalation needs |
+| Documentation realism | Documentation choices follow assess-act-evaluate-document sequence |
+| Escalation realism | Escalation level matches patient acuity |
+
+## Current Source-Backed Scores
+
+${table([
+  ["Pathway", "Distractors", "Average Score", "Clinical Realism", "Failed Gate"],
+  ...summaries.map((summary) => [summary.pathway, summary.count, summary.average, summary.realism, summary.failed]),
+])}
+
+## Publish Rule
+
+Any question with a distractor score below 80, missing misconception mapping, missing safety analysis, missing remediation mapping, or missing readiness mapping is blocked from publication.
+`;
+}
+
+function buildFlagshipDistractorLibrary(records: DistractorRecord[]): string {
+  const items = records.filter((record) => record.score.score >= 95).sort((a, b) => b.score.score - a.score.score);
+  return `# Flagship Distractor Library
+
+Generated: ${new Date().toISOString()}
+
+Goal: maintain a repository of the top 1,000 distractors. A flagship distractor has score 95+, clear learner psychology, misconception mapping, remediation mapping, readiness mapping, and clinical safety consequence.
+
+## Current Flagship Candidates
+
+${table([
+  ["Score", "Pathway", "Source", "Why It Works", "Misconception", "Remediation", "Readiness Domains"],
+  ...items.slice(0, 1000).map((record) => [
+    record.score.score,
+    record.pathway,
+    `${record.file}:${record.line}`,
+    excerpt(record.text),
+    excerpt(record.score.learnerMisconception),
+    excerpt(record.score.remediationTargets.join("; ")),
+    record.score.readinessDomains.join(", "),
+  ]),
+])}
+
+${items.length === 0 ? "No source-backed distractors currently meet the 95+ flagship threshold under Distractor Intelligence 2.0." : ""}
 `;
 }
 
@@ -303,8 +473,14 @@ mkdirSync(OUTPUT_DIR, { recursive: true });
 const records = collectRecords();
 writeFileSync(path.join(OUTPUT_DIR, "distractor-quality-audit.md"), buildDistractorAudit(records));
 writeFileSync(path.join(OUTPUT_DIR, "question-realism-dashboard.md"), buildRealismDashboard(records));
+writeFileSync(path.join(OUTPUT_DIR, "distractor-analytics-dashboard.md"), buildDistractorAnalyticsDashboard(records));
+writeFileSync(path.join(OUTPUT_DIR, "failure-to-rescue-library.md"), buildFailureToRescueLibrary(records));
+writeFileSync(path.join(OUTPUT_DIR, "distractor-rewrite-queue.md"), buildDistractorRewriteQueue(records));
+writeFileSync(path.join(OUTPUT_DIR, "question-realism-score.md"), buildQuestionRealismScore(records));
+writeFileSync(path.join(OUTPUT_DIR, "flagship-distractor-library.md"), buildFlagshipDistractorLibrary(records));
 
 console.log(`Scored ${records.length} distractors.`);
 console.log(`Failed publish gate: ${records.filter((record) => !record.score.publishAllowed).length}.`);
 console.log("Wrote docs/content-quality/distractor-quality-audit.md");
 console.log("Wrote docs/content-quality/question-realism-dashboard.md");
+console.log("Wrote distractor intelligence dashboards and queues.");

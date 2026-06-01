@@ -289,6 +289,28 @@ export function FlashcardCustomStudyClient() {
           (c) => c && typeof c.id === "string" && c.id.length > 0 &&
                  typeof c.front === "string" && typeof c.back === "string",
         ).filter(hasRenderableFlashcard);
+        if (parsed.summary && parsed.summary.matchingCards > 0 && rawCards.length > 0 && validCards.length === 0) {
+          const failureCopy = flashcardSessionFailureCopy(
+            "session_data_invalid",
+            "Session data is invalid. The selected flashcards could not be prepared for study.",
+            initialCardIndex > 0,
+          );
+          emitRuntimeEvent("activity_bootstrap_failure", {
+            activity: "flashcards",
+            pathwayId,
+            status: res.status,
+            errorCode: "session_data_invalid",
+          });
+          logDedupedClientDiagnostic("flashcard_custom_session", "renderable_cards_empty", `${pathwayId}:${res.status}`, {
+            pathwayId,
+            httpStatus: res.status,
+            matchingCards: parsed.summary.matchingCards,
+            returnedCards: parsed.summary.returnedCards,
+            rawCards: rawCards.length,
+          });
+          if (!cancelled) setError(failureCopy);
+          return;
+        }
         if (!cancelled) {
           setCards(validCards);
           setSummary(

@@ -32,6 +32,26 @@ test("rewards realistic distractors with why-tempting and safety analysis", () =
   assert.ok(result.score >= 70);
   assert.ok(result.taxonomy.includes("assessment_error"));
   assert.ok(result.taxonomy.includes("safety_error"));
+  assert.equal(result.misconceptionMappingPresent, true);
+  assert.equal(result.remediationMappingPresent, true);
+  assert.equal(result.readinessMappingPresent, true);
+  assert.ok(result.readinessDomains.includes("patient_safety_readiness"));
+  assert.ok(result.remediationTargets.length > 0);
+});
+
+test("maps failure-to-rescue distractors to remediation and readiness intelligence", () => {
+  const result = scoreDistractorQuality({
+    distractor: "Recheck the oxygen saturation later during routine rounds.",
+    stem: "A client has new confusion, SpO2 of 84%, and labored respirations.",
+    correctAnswer: "Assess airway and breathing, apply oxygen per protocol, and escalate immediately.",
+    whyTempting: "A learner may select this because rechecking data can seem careful.",
+    whyIncorrect: "It is incorrect because this delays response to an unstable respiratory pattern.",
+    riskIntroduced: "The risk is missed deterioration and failure to rescue.",
+  });
+
+  assert.equal(result.publishAllowed, true);
+  assert.ok(result.failureToRescueSignal);
+  assert.ok(result.taxonomy.includes("failure_to_rescue"));
 });
 
 test("question set blocks publication when any distractor fails", () => {
@@ -61,4 +81,3 @@ test("question set blocks publication when any distractor fails", () => {
   assert.equal(result.publishAllowed, false);
   assert.equal(result.gate, "fail");
 });
-

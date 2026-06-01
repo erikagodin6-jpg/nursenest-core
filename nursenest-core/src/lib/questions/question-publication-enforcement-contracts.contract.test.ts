@@ -21,9 +21,9 @@ const readyQuestion = {
   correctAnswerExplanation:
     "Oxygen addresses the immediate breathing problem and allows the nurse to evaluate whether escalation is needed.",
   distractorRationales: {
-    B: "Fluids may seem helpful because hydration can thin secretions, but this does not address the immediate hypoxemia. Learners choose it when they focus on general pneumonia care instead of the unstable respiratory cue. The better thinking process is to treat oxygenation first, then support hydration when safe.",
-    C: "Incentive spirometry is useful for lung expansion, but teaching or coaching can wait when the client is hypoxemic and restless. Learners choose it because it is pneumonia-related. Future questions should be approached by separating long-term pulmonary care from immediate ABC priorities.",
-    D: "Documentation is necessary after assessment and intervention, but documenting first delays treatment of a low oxygen saturation. Learners choose it when they focus on legal completion rather than patient safety. The better process is intervene, reassess, escalate if needed, then document.",
+    B: "Fluids may seem helpful because hydration can thin secretions, but this is incorrect because it does not address the immediate hypoxemia. Learners choose it when they focus on general pneumonia care instead of the unstable respiratory cue. The safety risk is delayed oxygenation support, worsening respiratory deterioration, and failure to rescue. Remediate with ABC prioritization and respiratory escalation practice.",
+    C: "Incentive spirometry may seem reasonable because it is pneumonia-related and supports lung expansion, but this is incorrect because teaching or coaching can wait when the client is hypoxemic and restless. The safety risk is delayed response to an unstable breathing cue. Remediate by separating long-term pulmonary care from immediate ABC priorities.",
+    D: "Documentation may seem necessary because abnormal findings must be charted, but this is incorrect because documenting first delays treatment of a low oxygen saturation. The safety risk is delayed correction of hypoxemia and delayed escalation. Remediate with the sequence: assess, intervene, reassess, escalate if needed, then document.",
   },
   clinicalReasoning:
     "The assessment cue cluster points to unstable breathing, so the nurse prioritizes oxygenation and reassessment.",

@@ -13,6 +13,7 @@ import {
 import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import { BOWTIE_SLOT_KEYS, type BowtieSlotKey } from "@/lib/questions/bowtie-adapter";
 import { validateBowtieQuestionPayload } from "@/lib/questions/bowtie-question-schema";
+import { scoreHintQuality } from "@/lib/questions/hint-quality-score";
 
 const tierEnum = z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED", "PRE_NURSING", "NEW_GRAD"]);
 const qTypeEnum = z.enum(["MCQ", "SATA", "NGN_CASE", "ORDERING", "FIB_NUMERIC"]);
@@ -47,6 +48,7 @@ const conventionalQuestionBankBulkItemSchema = z.object({
   topicTag: z.string().optional(),
   systemTag: z.string().optional(),
   tags: z.array(z.string()).optional(),
+  hint: z.string().optional(),
 });
 
 const canonicalBowtieQuestionBankBulkItemSchema = z
@@ -66,6 +68,7 @@ const canonicalBowtieQuestionBankBulkItemSchema = z
     topicTag: z.string().optional(),
     systemTag: z.string().optional(),
     tags: z.array(z.string()).optional(),
+    hint: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     const result = validateBowtieQuestionPayload({
@@ -120,6 +123,7 @@ const bowtieQuestionBankBulkItemSchema = z
     vitals: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
     labs: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
     professionScope: z.string().min(2).optional(),
+    hint: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     const bankIds = new Set(data.bank.map((item) => item.id));
@@ -219,6 +223,10 @@ function normalizeItems(raw: unknown): unknown[] {
   return [];
 }
 
+function hintForImport(data: QuestionBankBulkItem): string | undefined {
+  return "hint" in data && typeof data.hint === "string" && data.hint.trim() ? data.hint.trim() : undefined;
+}
+
 export async function runQuestionBankBulkImportReport(itemsRaw: unknown): Promise<{
   rowReports: BulkRowReport[];
   summary: {
@@ -247,6 +255,29 @@ export async function runQuestionBankBulkImportReport(itemsRaw: unknown): Promis
       continue;
     }
     const data = parsed.data;
+    const hint = hintForImport(data);
+    if (hint) {
+      const hintQuality = scoreHintQuality({
+        hint,
+        stem: data.stem,
+        correctAnswer: isBowtieBulkItem(data)
+          ? Object.values(data.correctMapping)
+          : "answerKey" in data
+            ? Object.values(data.answerKey).map(String)
+            : data.answerKey.map(String),
+        pathway: data.examFamily ?? data.tier,
+        topic: data.topicTag ?? data.systemTag,
+        questionType: data.questionType,
+      });
+      if (hintQuality.gate === "hard_fail") {
+        rowReports.push({
+          index: i,
+          ok: false,
+          errors: [`hint: score ${hintQuality.score}; ${hintQuality.issues.join(", ")}`],
+        });
+        continue;
+      }
+    }
     const sh = stemHash(data.stem);
     const first = hashFirstIndex.get(sh);
     if (first !== undefined) {
@@ -342,6 +373,7 @@ export async function applyQuestionBankBulkImport(
       if (!isBowtieBulkItem(data) && !cat) continue;
 
       const topic = [cat?.name, data.topicTag].filter(Boolean).join(" · ") || cat?.slug;
+      const hint = hintForImport(data);
       const hash = stemHash(data.stem);
 
       const taxonomy = examQuestionTaxonomyFromCorpus({
@@ -385,6 +417,7 @@ export async function applyQuestionBankBulkImport(
           subtopic: data.systemTag,
           tags: [
             ...(data.tags ?? []),
+            ...(hint ? [`hint:${hint}`] : []),
             ...(isBowtieBulkItem(data)
               ? [data.clinicalCategory, data.clinicalJudgmentFunction, ...data.safetyPriorityTags]
               : []),

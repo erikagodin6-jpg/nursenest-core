@@ -5,6 +5,7 @@ import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-
 import { adminQuestionTypeToDb } from "@/lib/prisma/exam-question-maps";
 import { isBowtieQuestionType } from "@/lib/questions/bowtie-adapter";
 import { validateBowtieQuestionPayload } from "@/lib/questions/bowtie-question-schema";
+import { scoreHintQuality } from "@/lib/questions/hint-quality-score";
 import { inferCountryFromRaw, inferTrackFromRaw, mapTrackAndCountryToExamFields } from "./replit-exam-country-map";
 import type { ImportCountry, NormalizedExamQuestion, ProductTrack } from "./replit-question-types";
 
@@ -113,6 +114,27 @@ function rationaleFrom(raw: Record<string, unknown>, allowPlaceholder: boolean):
   return null;
 }
 
+function hintFrom(raw: Record<string, unknown>): string | null {
+  const keys = ["hint", "hints", "teachingHint", "teaching_hint"] as const;
+  for (const key of keys) {
+    const value = raw[key];
+    if (typeof value === "string" && value.trim()) return value.trim();
+    if (Array.isArray(value)) {
+      const first = value.find((item) => typeof item === "string" && item.trim());
+      if (typeof first === "string") return first.trim();
+    }
+  }
+  return null;
+}
+
+function textListForHint(value: unknown): string[] {
+  if (value == null) return [];
+  if (typeof value === "string" || typeof value === "number") return [String(value)];
+  if (Array.isArray(value)) return value.flatMap(textListForHint);
+  if (typeof value === "object") return Object.values(value as Record<string, unknown>).flatMap(textListForHint);
+  return [];
+}
+
 export type NormalizeOk = { ok: true; row: NormalizedExamQuestion };
 export type NormalizeErr = { ok: false; message: string };
 
@@ -152,6 +174,21 @@ export function normalizeRawQuestionRecord(
       : typeof o.body_system === "string"
         ? o.body_system.trim()
         : null;
+  const hint = hintFrom(o);
+  if (hint) {
+    const hintQuality = scoreHintQuality({
+      hint,
+      stem,
+      options: Array.isArray(options) ? options.map(String) : [],
+      correctAnswer: textListForHint(correctAnswer),
+      pathway: typeof o.exam === "string" ? o.exam : ctx.defaultTrack,
+      topic: topic ?? bodySystem,
+      questionType,
+    });
+    if (hintQuality.gate === "hard_fail") {
+      return { ok: false, message: `hint_quality_failed:${hintQuality.issues.join(",")}` };
+    }
+  }
 
   if (isBowtieQuestionType(questionType)) {
     const bowtie = validateBowtieQuestionPayload({
@@ -200,6 +237,7 @@ export function normalizeRawQuestionRecord(
     topic,
     bodySystem,
     tags,
+    hint,
     difficulty,
     stemHash: stemHash(stem),
   };
@@ -227,7 +265,7 @@ export function toPrismaCreateInput(
     rationale: row.rationale,
     topic: row.topic ?? undefined,
     bodySystem: row.bodySystem ?? undefined,
-    tags: row.tags,
+    tags: row.hint ? [...row.tags, `hint:${row.hint}`] : row.tags,
     difficulty: row.difficulty,
     countryCode: row.countryCode ?? undefined,
   };

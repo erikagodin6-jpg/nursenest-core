@@ -56,6 +56,78 @@ type Props = { params: Promise<{ deckRef: string }> };
 
 export const dynamic = "force-dynamic";
 
+type DeckStudyFailureCode =
+  | "auth_required"
+  | "deck_not_found"
+  | "deck_study_empty_pool"
+  | "deck_study_query_failed"
+  | "entitlement_check_failed";
+
+function deckStudyFailureResponse(
+  code: DeckStudyFailureCode,
+  error: string,
+  status: number,
+  integrity?: {
+    rawCount?: number | null;
+    filteredCount?: number | null;
+    finalCount?: number | null;
+    reasonFailed?: string;
+  },
+) {
+  return NextResponse.json(
+    {
+      ok: false,
+      code,
+      error,
+      retryable: status >= 500,
+      integrity: {
+        querySucceeded: status < 500,
+        source: "flashcard_deck_study",
+        rawCount: integrity?.rawCount ?? null,
+        filteredCount: integrity?.filteredCount ?? null,
+        finalCount: integrity?.finalCount ?? 0,
+        reasonFailed: integrity?.reasonFailed ?? code,
+      },
+    },
+    { status },
+  );
+}
+
+function logDeckSessionLoad(args: {
+  stage: "attempt" | "success" | "failed" | "empty";
+  deckRef: string;
+  deckId?: string | null;
+  userId?: string | null;
+  pathway?: string | null;
+  country?: string | null;
+  tier?: string | null;
+  requestedCount?: number | null;
+  candidateFlashcards?: number | null;
+  publishedFlashcards?: number | null;
+  eligibleFlashcards?: number | null;
+  finalSessionPoolSize?: number | null;
+  sessionId?: string | null;
+  failureReason?: string;
+}) {
+  safeServerLog("api_flashcards_study", "FLASHCARD_DECK_SESSION_LOAD", {
+    stage: args.stage,
+    userId: args.userId?.slice(0, 8) ?? "",
+    pathway: args.pathway ?? "",
+    country: args.country ?? "",
+    tier: args.tier ?? "",
+    systems: "",
+    selectedTopics: args.deckRef,
+    selectedDeckIds: args.deckId ? `deck:${args.deckId.slice(0, 12)}` : args.deckRef,
+    candidateFlashcards: args.candidateFlashcards ?? null,
+    publishedFlashcards: args.publishedFlashcards ?? null,
+    eligibleFlashcards: args.eligibleFlashcards ?? null,
+    finalSessionPoolSize: args.finalSessionPoolSize ?? null,
+    sessionId: args.sessionId ?? "",
+    requestedCount: args.requestedCount ?? null,
+    failureReason: args.failureReason ?? "",
+  });
+}
+
 async function loadBankBackedStudyCards(args: {
   userId: string;
   entitlement: AccessScope;
@@ -122,10 +194,27 @@ export async function GET(req: NextRequest, { params }: Props) {
   const examOptionShuffleSalt = randomUUID();
 
   setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]/study", feature: SERVER_FEATURE.flashcard, userId: userId ?? "" });
+  logDeckSessionLoad({
+    stage: "attempt",
+    deckRef,
+    userId,
+    requestedCount,
+    finalSessionPoolSize: null,
+  });
 
   const deck = await findPublishedDeckByRef(deckRef);
   if (!deck) {
-    return NextResponse.json({ error: "Deck not found" }, { status: 404 });
+    logDeckSessionLoad({
+      stage: "failed",
+      deckRef,
+      userId,
+      requestedCount,
+      finalSessionPoolSize: 0,
+      failureReason: "deck_not_found",
+    });
+    return deckStudyFailureResponse("deck_not_found", "Flashcard deck was not found.", 404, {
+      reasonFailed: "deck_not_found",
+    });
   }
 
   let entitlement: AccessScope = NO_ACCESS;
@@ -134,7 +223,19 @@ export async function GET(req: NextRequest, { params }: Props) {
       entitlement = await resolveEntitlement(userId);
     } catch (e) {
       safeServerLogCritical("api_flashcards_study", "entitlement_failed", { deckId: deck.id.slice(0, 12) }, e);
-      return NextResponse.json({ error: "Unable to verify access" }, { status: 503 });
+      logDeckSessionLoad({
+        stage: "failed",
+        deckRef,
+        deckId: deck.id,
+        userId,
+        pathway: deck.pathwayId,
+        requestedCount,
+        finalSessionPoolSize: 0,
+        failureReason: "entitlement_check_failed",
+      });
+      return deckStudyFailureResponse("entitlement_check_failed", "Unable to verify access to this flashcard deck.", 503, {
+        reasonFailed: "entitlement_check_failed",
+      });
     }
   }
 
@@ -225,12 +326,39 @@ export async function GET(req: NextRequest, { params }: Props) {
       const approx = estimateJsonUtf8Bytes(body);
       logLargeApiResponse(`/api/flashcards/decks/${deckRef}/study`, approx);
       if (approx > 350_000) logFlashcardLargePayload({ route: "study_preview", approxUtf8: approx });
+      logDeckSessionLoad({
+        stage: serializedCards.length > 0 ? "success" : "empty",
+        deckRef,
+        deckId: deck.id,
+        userId,
+        pathway: deck.pathwayId,
+        country: String(entitlement.country ?? ""),
+        tier: String(entitlement.tier ?? ""),
+        requestedCount,
+        candidateFlashcards: totalPreviewAvailable,
+        publishedFlashcards: totalPreviewAvailable,
+        eligibleFlashcards: totalPreviewAvailable,
+        finalSessionPoolSize: serializedCards.length,
+        sessionId: `preview:${deck.id.slice(0, 8)}`,
+        failureReason: serializedCards.length > 0 ? "" : "deck_study_empty_pool",
+      });
       return NextResponse.json(body);
     }
 
     if (!userId) {
       logFlashcardAccessDenied({ deckId: deck.id.slice(0, 12), reason: "auth_required_full_study" });
-      return NextResponse.json({ error: "Sign in to study this deck", code: "auth_required" }, { status: 401 });
+      logDeckSessionLoad({
+        stage: "failed",
+        deckRef,
+        deckId: deck.id,
+        pathway: deck.pathwayId,
+        requestedCount,
+        finalSessionPoolSize: 0,
+        failureReason: "auth_required",
+      });
+      return deckStudyFailureResponse("auth_required", "Sign in to study this deck.", 401, {
+        reasonFailed: "auth_required",
+      });
     }
 
     if (deck.visibility === FlashcardDeckVisibility.SUBSCRIBER && !isSubscriber) {
@@ -293,6 +421,30 @@ export async function GET(req: NextRequest, { params }: Props) {
           }),
         );
       const studyCards = serializedDeckCards.slice(0, limit);
+      if (requestedCursor === 0 && studyCards.length === 0) {
+        logDeckSessionLoad({
+          stage: "empty",
+          deckRef,
+          deckId: deck.id,
+          userId,
+          pathway: deck.pathwayId,
+          country: String(entitlement.country ?? ""),
+          tier: String(entitlement.tier ?? ""),
+          requestedCount,
+          candidateFlashcards: rows.length,
+          publishedFlashcards: rows.length,
+          eligibleFlashcards: rows.length,
+          finalSessionPoolSize: 0,
+          sessionId: `instant:${deck.id.slice(0, 8)}`,
+          failureReason: "deck_study_empty_pool",
+        });
+        return deckStudyFailureResponse("deck_study_empty_pool", "No flashcards were found for this deck.", 404, {
+          rawCount: rows.length,
+          filteredCount: rows.length,
+          finalCount: 0,
+          reasonFailed: "empty_deck_study_pool",
+        });
+      }
       const body = {
         mode: "subscriber" as const,
         deckId: deck.id,
@@ -316,6 +468,21 @@ export async function GET(req: NextRequest, { params }: Props) {
       const approx = estimateJsonUtf8Bytes(body);
       logLargeApiResponse(`/api/flashcards/decks/${deckRef}/study?instant=1`, approx);
       if (approx > 120_000) logFlashcardLargePayload({ route: "study_subscriber_instant", approxUtf8: approx });
+      logDeckSessionLoad({
+        stage: "success",
+        deckRef,
+        deckId: deck.id,
+        userId,
+        pathway: deck.pathwayId,
+        country: String(entitlement.country ?? ""),
+        tier: String(entitlement.tier ?? ""),
+        requestedCount,
+        candidateFlashcards: rows.length,
+        publishedFlashcards: rows.length,
+        eligibleFlashcards: rows.length,
+        finalSessionPoolSize: studyCards.length,
+        sessionId: `instant:${deck.id.slice(0, 8)}`,
+      });
       return NextResponse.json(body);
     }
 
@@ -329,19 +496,27 @@ export async function GET(req: NextRequest, { params }: Props) {
     );
 
     if (deckCards.length === 0) {
-      return NextResponse.json({
-        mode: "subscriber" as const,
+      logDeckSessionLoad({
+        stage: "empty",
+        deckRef,
         deckId: deck.id,
-        slug: deck.slug,
-        title: deck.title,
-        cards: [],
-        session: { cursor: 0, queueLength: 0, done: true },
-        sessionMeta: {
-          requestedCount,
-          returnedCount: 0,
-          totalAvailable: 0,
-          hasMore: false,
-        },
+        userId,
+        pathway: deck.pathwayId,
+        country: String(entitlement.country ?? ""),
+        tier: String(entitlement.tier ?? ""),
+        requestedCount,
+        candidateFlashcards: 0,
+        publishedFlashcards: 0,
+        eligibleFlashcards: 0,
+        finalSessionPoolSize: 0,
+        sessionId: `deck:${deck.id.slice(0, 8)}`,
+        failureReason: "deck_study_empty_pool",
+      });
+      return deckStudyFailureResponse("deck_study_empty_pool", "No flashcards were found for this deck.", 404, {
+        rawCount: 0,
+        filteredCount: 0,
+        finalCount: 0,
+        reasonFailed: "empty_deck_study_pool",
       });
     }
 
@@ -489,11 +664,41 @@ export async function GET(req: NextRequest, { params }: Props) {
     const approx = estimateJsonUtf8Bytes(body);
     logLargeApiResponse(`/api/flashcards/decks/${deckRef}/study`, approx);
     if (approx > 400_000) logFlashcardLargePayload({ route: "study_subscriber", approxUtf8: approx });
+    logDeckSessionLoad({
+      stage: studyCards.length > 0 ? "success" : "empty",
+      deckRef,
+      deckId: deck.id,
+      userId,
+      pathway: deck.pathwayId,
+      country: String(entitlement.country ?? ""),
+      tier: String(entitlement.tier ?? ""),
+      requestedCount,
+      candidateFlashcards: deckCards.length,
+      publishedFlashcards: deckCards.length,
+      eligibleFlashcards: deckCards.length,
+      finalSessionPoolSize: studyCards.length,
+      sessionId: sessionRow.id,
+      failureReason: studyCards.length > 0 ? "" : "deck_study_empty_pool",
+    });
 
     return NextResponse.json(body);
   } catch (e) {
     safeServerLogCritical("api_flashcards_study", "query_failed", { deckRef }, e);
-    return NextResponse.json({ error: "Unable to load study batch" }, { status: 503 });
+    logDeckSessionLoad({
+      stage: "failed",
+      deckRef,
+      deckId: deck.id,
+      userId,
+      pathway: deck.pathwayId,
+      country: String(entitlement.country ?? ""),
+      tier: String(entitlement.tier ?? ""),
+      requestedCount,
+      finalSessionPoolSize: 0,
+      failureReason: "deck_study_query_failed",
+    });
+    return deckStudyFailureResponse("deck_study_query_failed", "Unable to create study session from this deck.", 503, {
+      reasonFailed: e instanceof Error ? e.message.slice(0, 500) : "deck_study_query_failed",
+    });
   }
   });
 }

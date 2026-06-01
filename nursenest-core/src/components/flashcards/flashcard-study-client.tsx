@@ -47,6 +47,21 @@ type StudyResponse = {
   };
 };
 
+type DeckStudyFailureResponse = {
+  ok?: false;
+  code?: string;
+  error?: string;
+  retryable?: boolean;
+  integrity?: {
+    querySucceeded?: boolean;
+    source?: string;
+    rawCount?: number | null;
+    filteredCount?: number | null;
+    finalCount?: number | null;
+    reasonFailed?: string;
+  };
+};
+
 type DeckCardLimit = 10 | 20 | 25 | 50 | "all";
 
 const DECK_CARD_LIMITS: readonly DeckCardLimit[] = [10, 20, 25, 50, "all"];
@@ -84,6 +99,41 @@ function deckTitleFromRef(deckRef: string): string {
     }
   })();
   return formatTitleCase(decoded.replace(/[/_-]+/g, " ").replace(/\s+/g, " ").trim() || "Flashcards");
+}
+
+function deckStudyFailureCopy(code: string | undefined, message: string | undefined, status?: number): string {
+  const normalizedCode = (code ?? "").trim().toLowerCase();
+  const normalizedMessage = message?.trim();
+  if (normalizedCode.includes("empty")) {
+    return normalizedMessage || "No flashcards were found for this deck.";
+  }
+  if (normalizedCode.includes("deck_not_found")) {
+    return "This flashcard deck is no longer available. Return to the hub and choose another deck.";
+  }
+  if (normalizedCode.includes("auth_required")) {
+    return "Sign in to study this flashcard deck.";
+  }
+  if (normalizedCode.includes("entitlement")) {
+    return "Unable to verify access to this flashcard deck. Retry from here or return to the hub.";
+  }
+  if (normalizedCode.includes("query_failed")) {
+    return "Unable to create study session from this deck. Retry from here or return to the hub.";
+  }
+  if (status === 408 || status === 504 || /timeout/i.test(normalizedMessage ?? "")) {
+    return "Study session timed out. Retry from here or return to the hub.";
+  }
+  if (normalizedMessage) return normalizedMessage;
+  return "Unable to create study session from this deck. Retry from here or return to the hub.";
+}
+
+async function parseDeckStudyFailure(res: Response): Promise<Error> {
+  try {
+    const body = (await res.json()) as DeckStudyFailureResponse;
+    const message = deckStudyFailureCopy(body.code, body.error, res.status);
+    return new Error(message);
+  } catch {
+    return new Error(deckStudyFailureCopy(undefined, undefined, res.status));
+  }
 }
 
 function DeckStudyLauncher({
@@ -261,7 +311,7 @@ export function FlashcardStudyClient({
           signal: controller.signal,
         }, { attempts: 2, timeoutMs: 8_000 });
         if (!res.ok) {
-          throw new Error(`study_http_${res.status}`);
+          throw await parseDeckStudyFailure(res);
         }
         const data = (await res.json()) as StudyResponse;
         const cardsRaw = Array.isArray(data.cards)
@@ -289,7 +339,11 @@ export function FlashcardStudyClient({
           message: error instanceof Error ? error.message : "unknown",
         });
         setQueue([]);
-        setLoadError("We could not load this flashcard session. Retry from here or return to the hub.");
+        setLoadError(
+          error instanceof Error && error.message.trim()
+            ? error.message
+            : "Unable to create study session from this deck. Retry from here or return to the hub.",
+        );
       } finally {
         if (!cancelled) setLoading(false);
       }
