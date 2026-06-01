@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { loadTodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
 import { loadStudyStreakDays } from "@/lib/learner/premium-dashboard-snapshot";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
@@ -29,10 +30,7 @@ export async function GET(req: Request) {
       loadTodayGoalProgress(userId),
       loadStudyStreakDays(userId),
       loadHoursSinceLastActivity(userId),
-      prisma.user.findUnique({
-        where: { id: userId },
-        select: { examDate: true, learnerPath: true },
-      }),
+      loadLearnerRequestUser(userId),
     ]);
 
     const topicStats = await prisma.userTopicStat.findMany({

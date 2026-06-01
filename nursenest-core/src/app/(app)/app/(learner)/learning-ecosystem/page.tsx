@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Compass, LockKeyhole, Sparkles } from "lucide-react";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
 import { loadFeatureValueActivitySnapshot } from "@/lib/discovery/feature-value-activity-events.server";
 import {
   buildProductDiscoveryDashboard,
@@ -36,15 +36,9 @@ async function loadDiscoveryDashboard(userId: string, session: SessionLike): Pro
   let learnerPath: string | null = null;
   let alliedCareer: string | null = null;
   if (isDatabaseUrlConfigured()) {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        learnerPath: true,
-        alliedProfessionKey: true,
-      },
-    }).catch(() => null);
-    learnerPath = user?.learnerPath ?? null;
-    alliedCareer = user?.alliedProfessionKey ?? null;
+    const learnerContext = await loadLearnerActivityContext(userId).catch(() => null);
+    learnerPath = learnerContext?.learnerPath ?? null;
+    alliedCareer = learnerContext?.alliedProfessionKey ?? null;
   }
 
   const activityUsage = await loadFeatureValueActivitySnapshot(userId);

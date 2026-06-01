@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import type { StudySettings } from "@/lib/learner/study-settings";
 import {
   ALLOWED_STUDY_SESSION_LENGTHS,
@@ -37,10 +38,7 @@ export async function GET(req: Request) {
   }
 
   try {
-    const row = await prisma.user.findUnique({
-      where: { id: userId },
-      select: studySettingsUserSelect,
-    });
+    const row = await loadLearnerRequestUser(userId);
     return NextResponse.json({ settings: rowToStudySettings(row) });
   } catch {
     return NextResponse.json({ error: "Unable to load study settings." }, { status: 503 });

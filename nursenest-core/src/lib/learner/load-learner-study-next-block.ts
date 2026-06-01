@@ -3,6 +3,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
 import { buildCountdownCopy } from "@/lib/learner/exam-timeline";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { loadTodayGoalProgress, TODAY_GOAL_CREDIT_TARGET } from "@/lib/learner/load-today-goal-progress";
 import { loadStudyStreakDays } from "@/lib/learner/premium-dashboard-snapshot";
 import { buildSmartStudyNextRecommendations } from "@/lib/learner/smart-study-next-engine";
@@ -48,10 +49,7 @@ export async function loadLearnerStudyNextBlock(
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
   const [user, streakDays, todayGoal] = await Promise.all([
-    prisma.user.findUnique({
-      where: { id: userId },
-      select: { examDate: true, examDatePlanType: true, learnerPath: true },
-    }),
+    loadLearnerRequestUser(userId),
     loadStudyStreakDays(userId),
     loadTodayGoalProgress(userId),
   ]);

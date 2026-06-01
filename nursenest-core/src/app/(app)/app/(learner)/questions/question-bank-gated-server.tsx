@@ -9,13 +9,13 @@ import { QuestionBankPracticeClient } from "@/components/student/question-bank-p
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { freemiumLessonsExhausted, freemiumQuestionsExhausted } from "@/lib/conversion/freemium-gates";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
@@ -82,11 +82,8 @@ export async function QuestionBankGatedEntry({
   if (userId && entitlement.hasAccess && isDatabaseUrlConfigured()) {
     try {
       const compatible = await listPathwaysCompatibleWithSubscription(entitlement);
-      const u = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { learnerPath: true },
-      });
-      const lp = u?.learnerPath?.trim() ?? null;
+      const learnerContext = await loadLearnerActivityContext(userId);
+      const lp = learnerContext.learnerPath;
       const requestedPathwayId = pathwayQueryRaw
         ? normalizeLearnerFlashcardsPathwayQueryId(pathwayQueryRaw, entitlement.country)
         : null;

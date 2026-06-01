@@ -82,7 +82,7 @@ import { getSessionHubLabel } from "@/lib/learner/session-hub-label";
 import { resolveLearnerRequestPathname } from "@/lib/learner/resolve-learner-request-pathname";
 import { LearnerShellDevDiagnostics } from "@/components/dev/learner-shell-dev-diagnostics";
 import type { AdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
-import { prisma } from "@/lib/db";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(app)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
@@ -136,14 +136,7 @@ type LearnerExamDateState = {
 };
 
 async function loadLearnerExamDateState(userId: string): Promise<LearnerExamDateState | null> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      examDate: true,
-      examDatePlanType: true,
-      examGoalSetAt: true,
-    },
-  });
+  const user = await loadLearnerRequestUser(userId);
   if (!user) return null;
   return {
     examDate: user.examDate?.toISOString() ?? null,

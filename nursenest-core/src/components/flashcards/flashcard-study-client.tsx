@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
@@ -136,7 +137,7 @@ async function parseDeckStudyFailure(res: Response): Promise<Error> {
   }
 }
 
-function DeckStudyLauncher({
+const DeckStudyLauncher = React.memo(function DeckStudyLauncher({
   deckRef,
   title,
   selectedTopic,
@@ -248,7 +249,7 @@ function DeckStudyLauncher({
       </div>
     </div>
   );
-}
+});
 
 export function FlashcardStudyClient({
   deckRef,
@@ -439,6 +440,37 @@ export function FlashcardStudyClient({
   const programHub = useMemo(() => resolveProgramHub(queue, deckRef), [deckRef, queue]);
   const launcherTitle = title || deckTitleFromRef(deckRef);
 
+  const handleReturn = useCallback(() => {
+    router.push("/app/flashcards");
+  }, [router]);
+
+  const handleStart = useCallback(() => {
+    setQueue([]);
+    setSessionMeta(undefined);
+    setLoadError(null);
+    setLoading(true);
+    setLauncherConfirmed(true);
+    setSessionKey((k) => k + 1);
+  }, []);
+
+  const handleStudyProgress = useCallback(
+    (s: { index: number; revealed: boolean }) => {
+      saveDeckSessionCheckpoint(deckRef, s.index, s.revealed);
+    },
+    [deckRef],
+  );
+
+  const handleSessionComplete = useCallback(() => {
+    clearDeckSessionCheckpoint(deckRef);
+  }, [deckRef]);
+
+  const handleNeedMore = useCallback(
+    ({ loadedCount }: { loadedCount: number }) => {
+      void prefetchMore(loadedCount);
+    },
+    [prefetchMore],
+  );
+
   if (!launcherConfirmed && !hasResumeCheckpoint) {
     return (
       <DeckStudyLauncher
@@ -448,15 +480,8 @@ export function FlashcardStudyClient({
         selectedCardLimit={selectedCardLimit}
         onSelectTopic={setSelectedTopic}
         onSelectCardLimit={setSelectedCardLimit}
-        onReturn={() => router.push("/app/flashcards")}
-        onStart={() => {
-          setQueue([]);
-          setSessionMeta(undefined);
-          setLoadError(null);
-          setLoading(true);
-          setLauncherConfirmed(true);
-          setSessionKey((k) => k + 1);
-        }}
+        onReturn={handleReturn}
+        onStart={handleStart}
       />
     );
   }
@@ -573,13 +598,9 @@ export function FlashcardStudyClient({
             totalAvailable: sessionMeta?.totalAvailable ?? undefined,
             hasMore: Boolean(sessionMeta?.hasMore),
           }}
-          onNeedMore={({ loadedCount }) => void prefetchMore(loadedCount)}
-          onStudyProgress={(s) =>
-            saveDeckSessionCheckpoint(deckRef, s.index, s.revealed)
-          }
-          onSessionComplete={() =>
-            clearDeckSessionCheckpoint(deckRef)
-          }
+          onNeedMore={handleNeedMore}
+          onStudyProgress={handleStudyProgress}
+          onSessionComplete={handleSessionComplete}
         />
       </ExamSessionShell>
     </div>

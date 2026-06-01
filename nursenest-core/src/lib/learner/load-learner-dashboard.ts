@@ -10,6 +10,7 @@ import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { catPathwayExamCodeLabel, catPathwayRegionalExamLine } from "@/lib/exam-pathways/cat-pathway-labels";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
@@ -354,10 +355,7 @@ export async function loadLearnerDashboardCore(
   const userPromise =
     preload?.userProfile !== undefined
       ? Promise.resolve(preload.userProfile)
-      : prisma.user.findUnique({
-          where: { id: userId },
-          select: { learnerPath: true, tier: true, alliedProfessionKey: true },
-        });
+      : loadLearnerRequestUser(userId);
 
   let user: Awaited<typeof userPromise> = null;
   let userProfileReliable = false;
@@ -822,19 +820,7 @@ export async function loadPathwayLessonProgressBundle(
 
   let durationMsUser = 0;
   const tUser = performance.now();
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      learnerPath: true,
-      tier: true,
-      alliedProfessionKey: true,
-      examDate: true,
-      examDatePlanType: true,
-      dailyStudyMinutes: true,
-      examFocus: true,
-      studyGoal: true,
-    },
-  });
+  const user = await loadLearnerRequestUser(userId);
   durationMsUser = Math.round(performance.now() - tUser);
 
   const pathwayWhere = await pathwayLessonsAppListWhere(entitlement, user?.learnerPath ?? null);

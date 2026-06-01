@@ -1,6 +1,6 @@
 # Allied SEO Truthfulness Audit
 
-Generated: 2026-06-01T01:33:24.205Z
+Generated: 2026-06-01T12:00:37.987Z
 
 Scope: meta titles, descriptions, canonical URLs, Open Graph, WebPage JSON-LD, breadcrumb schema, and FAQ/schema risk after the homepage.
 

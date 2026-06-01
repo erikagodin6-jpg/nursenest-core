@@ -6,7 +6,6 @@ import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-ca
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
 import { StudyPlanToolGateway } from "@/components/student/study-plan-tool-gateway";
 import { StructuredStudyPathSection } from "@/components/student/structured-study-path-section";
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildGovernedAdaptiveRecommendations } from "@/lib/educational-cognition/adaptive-recommendation-cognition";
@@ -17,6 +16,7 @@ import {
   loadStructuredStudyPathForSubscriber,
   STUDY_PATH_KINDS,
 } from "@/lib/learner/structured-study-path";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { buildCognitionIntegratedStudyPlan } from "@/lib/educational-cognition/study-plan-cognition";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
@@ -63,16 +63,7 @@ export default async function StudyPlanPage({ searchParams }: Props) {
       const [premiumSnapshot, topicPerf, userExam] = await Promise.all([
         loadPremiumDashboardSnapshot(userId, entitlement),
         loadUnifiedTopicPerformance(userId, entitlement, 12),
-        prisma.user.findUnique({
-          where: { id: userId },
-          select: {
-            examDate: true,
-            examDatePlanType: true,
-            studyCadencePreference: true,
-            tier: true,
-            learnerPath: true,
-          },
-        }),
+        loadLearnerRequestUser(userId),
       ]);
       if (topicPerf) {
         weakPlan = await buildCognitionIntegratedStudyPlan({

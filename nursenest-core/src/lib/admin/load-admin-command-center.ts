@@ -137,8 +137,16 @@ function daysAgo(n: number): Date {
   return new Date(Date.now() - n * 86400000);
 }
 
+// In-process cache: admin dashboard is per-instance, payload is large, TTL 10 min.
+const ADMIN_CC_TTL_MS = 10 * 60 * 1000;
+let _adminCcCache: { expiresAt: number; value: AdminCommandCenterData } | null = null;
+
 export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData | null> {
   if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) return null;
+
+  const now = Date.now();
+  if (_adminCcCache && _adminCcCache.expiresAt > now) return _adminCcCache.value;
+
   const generatedAt = new Date().toISOString();
 
   const [stats, diagnostics, qa] = await Promise.all([
@@ -510,7 +518,7 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       return rank[a.severity] - rank[b.severity];
     });
 
-    return {
+    const result = {
       generatedAt,
       stats,
       diagnostics,
@@ -583,6 +591,8 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       premiumProtection,
       questionBankIntel,
     };
+    _adminCcCache = { expiresAt: Date.now() + ADMIN_CC_TTL_MS, value: result };
+    return result;
   } catch (e) {
     console.error("[loadAdminCommandCenter]", e);
     return {

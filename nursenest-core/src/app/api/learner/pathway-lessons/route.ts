@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 import { TierCode } from "@prisma/client";
-import { auth } from "@/lib/auth";
 import { maxSafeOffsetPage, parseLessonLibraryLimit, parseListPage } from "@/lib/api/api-pagination-limits";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
-import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
 import { pathwayLessonAppHubSafetyPrismaWhere } from "@/lib/lessons/app-lessons-hub-pathway-safety-where";
 import { paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver } from "@/lib/lessons/app-lessons-hub-row-renderability";
 import { pickAppLessonsHubListSource } from "@/lib/lessons/app-lessons-hub-list-source";
@@ -52,28 +51,9 @@ function pathwayLessonCardSummary(row: {
  */
 export async function GET(req: Request) {
   return runWithApiTelemetry(req, "GET /api/learner/pathway-lessons", "content", async () => {
-    const session = await auth();
-    const userId = (session?.user as { id?: string } | undefined)?.id;
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    let entitlement;
-    try {
-      entitlement = await resolveEntitlement(userId);
-    } catch {
-      return NextResponse.json({ error: "Unable to verify access. Try again shortly." }, { status: 503 });
-    }
-
-    if (!entitlement.hasAccess) {
-      return NextResponse.json(
-        { error: "Subscription required", code: "not_subscribed" },
-        { status: 403 },
-      );
-    }
-
     const gate = await requireSubscriberSession();
     if (!gate.ok) return gate.response;
+    const { entitlement } = gate;
 
     setSentryServerContext({
       route: "/api/learner/pathway-lessons",
@@ -107,25 +87,21 @@ export async function GET(req: Request) {
     }
     const pageRequested = Math.min(pageParsed.page, maxOffsetPage);
 
-    const learnerPathRow = await withDatabaseFallbackTimeout(
-      async () =>
-        prisma.user.findUnique({
-          where: { id: gate.userId },
-          select: { learnerPath: true, alliedProfessionKey: true, tier: true },
-        }),
+    const learnerContext = await withDatabaseFallbackTimeout(
+      () => loadLearnerActivityContext(gate.userId),
       null,
       HUB_DB_TIMEOUT_MS,
-      { scope: "api_pathway_lessons", label: "learner_path" },
+      { scope: "api_pathway_lessons", label: "learner_context" },
     );
 
-    const learnerPath = learnerPathRow?.learnerPath ?? null;
+    const learnerPath = learnerContext?.learnerPath ?? null;
     const effectivePathwayForAlliedScope = (pathwayIdFilter ?? learnerPath ?? "").trim();
     const alliedProfessionForAppList =
-      learnerPathRow?.tier === TierCode.ALLIED &&
-      learnerPathRow.alliedProfessionKey?.trim() &&
+      learnerContext?.tier === TierCode.ALLIED &&
+      learnerContext.alliedProfessionKey?.trim() &&
       effectivePathwayForAlliedScope &&
       isAlliedMarketingCorePathwayId(effectivePathwayForAlliedScope)
-        ? learnerPathRow.alliedProfessionKey.trim().toLowerCase()
+        ? learnerContext.alliedProfessionKey.trim().toLowerCase()
         : null;
 
     const marketingLocale = await getMarketingLocaleForDefaultRoute();

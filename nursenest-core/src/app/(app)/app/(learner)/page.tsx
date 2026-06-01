@@ -6,7 +6,7 @@ import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { LockedDashboardOverlay } from "@/components/student/dashboard/locked-dashboard-overlay";
-import { WeaknessHeatmap, type HeatmapTopic } from "@/components/student/dashboard/weakness-heatmap";
+import type { HeatmapTopic } from "@/components/student/dashboard/weakness-heatmap";
 import { ReadinessLockedCard } from "@/components/student/dashboard/readiness-score-card";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -46,6 +46,7 @@ import { BenchmarkLockedCard } from "@/components/student/dashboard/benchmark-ca
 import { resolveDisplayName } from "@/lib/user/resolve-display-name";
 import { resolveDashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { DEFAULT_STUDY_SETTINGS } from "@/lib/learner/study-settings";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
@@ -61,7 +62,15 @@ import { isAdaptiveLearningEnabled } from "@/lib/learner/adaptive-learning-env";
 import { loadLearnerAdaptiveWireBundle } from "@/lib/learner/build-learner-adaptive-wire-bundle";
 import { emitLearnerDashboardGraphTelemetry } from "@/lib/educational-cognition/emit-learner-dashboard-graph-telemetry";
 import { LearnerAdaptiveRecommendationsSection } from "@/components/student/learner-adaptive-recommendations-section";
-import { SocialStudyDashboardCard } from "@/components/student/social-study-dashboard-card";
+import dynamic from "next/dynamic";
+
+const SocialStudyDashboardCard = dynamic(
+  () =>
+    import("@/components/student/social-study-dashboard-card").then((m) => ({
+      default: m.SocialStudyDashboardCard,
+    })),
+  { ssr: false },
+);
 import { NpCertificationSelector } from "@/components/np/np-certification-selector";
 import { listNpCertificationPathways } from "@/lib/np/np-certification-pathways";
 import { resolveNpCertificationPathwayId } from "@/lib/np/np-certification-selection";
@@ -218,12 +227,71 @@ async function LearnerDashboardHeavyContent({
     weakTopicTitles = studySnap?.weakTopics.map((w) => w.topic) ?? [];
     benchmark = benchmarkResult;
     const progressFeedbackLine = studySnap?.topicTrends.find((r) => r.momentum === "improving")?.summary ?? null;
-    let adaptiveStudyNextRecs: Awaited<ReturnType<typeof buildSmartStudyNextRecommendations>> | undefined;
-    if (studySnap && !skipNonCriticalHome) {
-      adaptiveStudyNextRecs = await buildSmartStudyNextRecommendations(userId, studySnap, { maxTotal: 2 });
-    }
+
     if (snapshot) {
       const premiumSnapshot = snapshot;
+
+      // Resolve pathway once; all Phase 3 calls depend on it.
+      const preferredPathwayId =
+        selectedNpPathwayId ??
+        premiumSnapshot.pathways.find((p) => p.pathwayId === premiumSnapshot.learnerPath)?.pathwayId ??
+        premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
+        premiumSnapshot.pathways[0]?.pathwayId ??
+        null;
+
+      // ── Phase 3: Fan out all remaining independent loads in parallel ──────────
+      // These were previously sequential awaits; they can all start once
+      // `snapshot`, `studySnap`, and `preferredPathwayId` are available.
+      const labTrack = labTrackFromTier(entitlement.tier);
+      const labLessons = !skipNonCriticalHome && entitlement.hasAccess
+        ? listLabLessonsForTrack(labTrack, entitlement)
+        : [];
+
+      const [
+        continueCheckpoint,
+        labProgressMap,
+        adaptiveWireBundleResult,
+        adaptiveStudyNextRecs,
+      ] = await Promise.all([
+        preferredPathwayId && !skipNonCriticalHome
+          ? inferContinueStudyFromActivity(userId, preferredPathwayId)
+          : Promise.resolve(null),
+        !skipNonCriticalHome && entitlement.hasAccess && labLessons.length > 0
+          ? loadLabLessonProgressMap(userId, labTrack, labLessons, entitlement)
+          : Promise.resolve(null),
+        isAdaptiveLearningEnabled() && !skipNonCriticalHome
+          ? loadLearnerAdaptiveWireBundle(userId, entitlement, {
+              source: "rsc:learner-dashboard-adaptive",
+              topicPerformance: premiumSnapshot.topicPerformance,
+              supplementalWeakTopicRows: studySnap?.weakTopics ?? null,
+            })
+          : Promise.resolve(null),
+        studySnap && !skipNonCriticalHome
+          ? buildSmartStudyNextRecommendations(userId, studySnap, { maxTotal: 2 })
+          : Promise.resolve(undefined),
+      ]);
+
+      // Compute derived values from Phase 3 results.
+      let labsLessonsCompleted: number | undefined;
+      let labsLessonsTotal: number | undefined;
+      if (labProgressMap) {
+        const labAgg = aggregateLabProgressCounts(labProgressMap);
+        labsLessonsCompleted = labAgg.completed;
+        labsLessonsTotal = labAgg.total;
+      }
+
+      // Fire-and-forget telemetry — never blocks the render.
+      if (preferredPathwayId && entitlement.hasAccess && !skipNonCriticalHome) {
+        emitLearnerDashboardGraphTelemetry({
+          userId,
+          entitlement,
+          pathwayId: preferredPathwayId,
+          readiness: premiumSnapshot.readiness,
+          topicTrends: premiumSnapshot.topicPerformance?.trends,
+          weakTopics: studySnap?.weakTopics ?? undefined,
+        });
+      }
+
       const resume =
         premiumSnapshot.continueLesson ??
         (premiumSnapshot.lessonContinuations[0]
@@ -242,26 +310,6 @@ async function LearnerDashboardHeavyContent({
         todayGoal != null && premiumSnapshot.studyStreakDays > 0 && todayGoal.credits < todayGoal.target;
 
       const dashModel = buildDashboardModel(premiumSnapshot, studySnap, todayGoal, studySettings);
-      const preferredPathwayId =
-        selectedNpPathwayId ??
-        premiumSnapshot.pathways.find((p) => p.pathwayId === premiumSnapshot.learnerPath)?.pathwayId ??
-        premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
-        premiumSnapshot.pathways[0]?.pathwayId ??
-        null;
-      const continueCheckpoint =
-        preferredPathwayId && !skipNonCriticalHome
-          ? await inferContinueStudyFromActivity(userId, preferredPathwayId)
-          : null;
-      let labsLessonsCompleted: number | undefined;
-      let labsLessonsTotal: number | undefined;
-      if (!skipNonCriticalHome && entitlement.hasAccess) {
-        const labTrack = labTrackFromTier(entitlement.tier);
-        const labLessons = listLabLessonsForTrack(labTrack, entitlement);
-        const labProgressMap = await loadLabLessonProgressMap(userId, labTrack, labLessons, entitlement);
-        const labAgg = aggregateLabProgressCounts(labProgressMap);
-        labsLessonsCompleted = labAgg.completed;
-        labsLessonsTotal = labAgg.total;
-      }
       const reportCard =
         preferredPathwayId && studySnap
           ? buildLearnerReportCardViewModel({
@@ -325,25 +373,7 @@ async function LearnerDashboardHeavyContent({
             })()
           : null;
 
-      let adaptiveWireBundle: Awaited<ReturnType<typeof loadLearnerAdaptiveWireBundle>> = null;
-      if (isAdaptiveLearningEnabled() && !skipNonCriticalHome) {
-        adaptiveWireBundle = await loadLearnerAdaptiveWireBundle(userId, entitlement, {
-          source: "rsc:learner-dashboard-adaptive",
-          topicPerformance: premiumSnapshot.topicPerformance,
-          supplementalWeakTopicRows: studySnap?.weakTopics ?? null,
-        });
-      }
-
-      if (preferredPathwayId && entitlement.hasAccess && !skipNonCriticalHome) {
-        emitLearnerDashboardGraphTelemetry({
-          userId,
-          entitlement,
-          pathwayId: preferredPathwayId,
-          readiness: premiumSnapshot.readiness,
-          topicTrends: premiumSnapshot.topicPerformance?.trends,
-          weakTopics: studySnap?.weakTopics ?? undefined,
-        });
-      }
+      const adaptiveWireBundle = adaptiveWireBundleResult;
 
       return (
         <>
@@ -461,17 +491,7 @@ async function LearnerDashboardDeferredContent({
 
   // Redirect to onboarding if user hasn't completed it yet
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        onboardingCompletedAt: true,
-        firstName: true,
-        displayName: true,
-        name: true,
-        learnerPath: true,
-        alliedProfessionKey: true,
-      },
-    });
+    const user = await loadLearnerRequestUser(userId);
     if (user && !user.onboardingCompletedAt) {
       redirect("/app/onboarding");
     }

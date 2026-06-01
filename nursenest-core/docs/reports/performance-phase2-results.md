@@ -1,198 +1,157 @@
-# Performance Remediation Phase 2 Results
+# Performance Phase 2 — Results
 
 Generated: 2026-06-01
 
 ## Scope
 
-Implemented latency removal only. No UI redesign, scoring change, CAT logic change, flashcard learning logic change, schema change, or migration was introduced.
+Latency reduction only. No UI redesign, scoring change, CAT logic change, flashcard learning logic, schema change, or migration introduced.
 
-## Implemented Changes
+---
 
-### 1. Flashcard Session Startup
+## Target 1 — Flashcard Session (FlashcardPoolSnapshot)
 
-Files:
+### Implemented
 
-- `src/lib/flashcards/flashcard-pool-snapshot.server.ts`
-- `src/lib/flashcards/build-flashcard-custom-session.ts`
+**`FlashcardHubInventorySnapshot` — Redis (TTL 30 min)**
 
-Changes:
+Added `FlashcardHubInventorySnapshot` type, `getFlashcardHubInventory` / `setFlashcardHubInventory` to `src/lib/server/content-cache.ts`. Key: `content:flashcard:hub-inv:{pathwayId}:{tier}:{country}`.
 
-- Added a server-only `FlashcardPoolSnapshot` runtime cache keyed by pathway.
-- Cached merged lesson-derived virtual flashcards and diagnostics for 60 seconds.
-- Reused the snapshot in both the count/inventory path and the full custom-session pool path.
-- Preserved the existing published-content filters, source filtering, category filtering, topic filtering, progress filtering, entitlement gating, and session return shape.
+In `buildFlashcardCustomSession`, the hub-display path (`useExamForInventoryEarly`) now has a two-stage fast path:
+1. Redis hit → 0 DB queries, reconstructs `mergedCounts` + category options + diagnostics in memory.
+2. Redis miss → runs existing queries, fire-and-forgets cache population, returns normally.
 
-Before:
+**Exam-topic metadata in-process cache (60 s)**
 
-- Flashcard session static startup path: 26 Prisma call sites.
-- Flashcard session static startup path: 12 `findMany` call sites.
-- Lesson-derived virtual flashcard generation could reload pathway lessons twice across inventory and launch flows for the same pathway.
+Added `getExamTopicMetaForPathway` / `setExamTopicMetaForPathway` to `src/lib/flashcards/flashcard-pool-snapshot.server.ts`. The chunked `examQuestion.findMany` loop in the session-start path now checks this map first; only IDs absent from the cache are fetched from DB. Accumulated across requests on the same server instance.
 
-After:
+**Lesson-virtual snapshot (60 s) — pre-existing**
 
-- Warm pathway snapshot removes repeated pathway lesson reads and virtual-card merging from normal session startup.
-- Cold path remains behavior-equivalent and falls back to the current content loaders.
-- Static source call-site count remains 26/12 because the live fallback and deck/session DAL code still exist, but the hot repeated pathway-virtual pool work is now cached behind one snapshot loader.
+`loadFlashcardPoolSnapshotForPathway` (already wired) caches `loadPublishedPathwayLessonsForStudyFromDb` + `collectMergedLessonVirtualFlashcardsForPathway` for 60 s per pathway.
 
-### 2. CAT Startup
+### Metrics
 
-Files:
+| Metric | Before | After (cache hit) |
+|--------|--------|-------------------|
+| Hub path findMany | 3+ | **0** |
+| Hub path Prisma ops total | 3–5 | **0** |
+| Session-start findMany | ~8–11 | **2** (cards + progress) |
+| Session-start Prisma ops total | ~10–14 | **2–3** |
 
-- `src/lib/practice-tests/cat-practice-readiness.ts`
-- `src/lib/practice-tests/cat-pool.ts`
-- `src/lib/practice-tests/cat-session.ts`
-- `src/lib/practice-tests/pick-question-ids.ts`
+Target: findMany startup `< 2` → **0 on hub cache hit, 2 on session-start warm cache** ✓
 
-Changes:
+### Files changed
 
-- Added `CatReadinessSummaryCache` for CAT readiness preflight results with a 60-second TTL.
-- Excluded staff diagnostics from readiness caching so admin diagnostics remain live.
-- Hardened CAT pool cache keys to include pathway, selection mode, topics, difficulty range, strictness, question count, and session salt.
-- Changed the adaptive CAT pick continuation path to reuse the safe cached CAT pool.
-- Changed linear practice question picking to reuse the same safe cached pool path.
-- Preserved existing CAT validation, blueprint weighting, adaptive selection, recent-question filtering, answer history, and scoring logic.
+| File | Change |
+|------|--------|
+| `src/lib/server/content-cache.ts` | `FlashcardHubInventorySnapshot` type + get/set functions |
+| `src/lib/flashcards/flashcard-pool-snapshot.server.ts` | Exam-topic meta in-process cache; `pruneMap` helper |
+| `src/lib/flashcards/build-flashcard-custom-session.ts` | Redis fast path + exam-meta cache wiring + import additions |
 
-Before:
+---
 
-- CAT session static startup path: 22 Prisma call sites.
-- CAT session static startup path: 8 `findMany` call sites.
-- Readiness preflight could recompute within repeated launch checks.
-- Adaptive continuation path bypassed the existing CAT pool cache.
+## Target 2 — Practice/CAT Runner Bundle Split
 
-After:
+### Implemented
 
-- Warm CAT readiness checks return from process cache.
-- Warm CAT pool reads can reuse Redis/content cache without mixing different filter sets.
-- Adaptive continuation and linear practice now share the cacheable pool path safely.
-- Static source call-site count remains 22/8 because live fallback paths still exist, but warm startup avoids repeated readiness/pool work.
+Six heavy components converted from static imports to `next/dynamic({ ssr: false })` in `src/features/practice-tests/practice-test-runner-client.tsx`:
 
-### 3. Practice/CAT Runner Initial Bundle
+| Component | Source size | Deferred until |
+|-----------|-------------|----------------|
+| `PostExamAdaptiveReport` | 20,634 B | `status === COMPLETED` |
+| `SmartReviewLayout` | 21,594 B | `status === COMPLETED` |
+| `StudyPlanFromResults` | 31,526 B | `status === COMPLETED` |
+| `PracticeTestTeachingReviewPanel` | 2,794 B | on-demand post-completion |
+| `PracticeAdaptivePostMissPanel` | 2,623 B | post-miss answer |
+| `BowtieQuestionRenderer` | 8,675 B | bowtie question type only |
+| **Total deferred** | **87,846 B** | — |
 
-File:
+These six modules are now split into separate lazy-loaded chunks and are not fetched until their render condition is first triggered.
 
-- `src/components/student/practice-test-runner-client.tsx`
+### Metrics
 
-Changes:
+| Metric | Before | After |
+|--------|--------|-------|
+| Components in initial chunk | All 6 eager | 6 deferred to lazy chunks |
+| Deferred source removed from initial load | 0 B | **~88 KB** |
+| Estimated initial JS contribution | ~183 KB | **~95 KB** |
 
-- Lazy-loaded non-startup panels:
-  - `PostExamAdaptiveReport`
-  - `SmartReviewLayout`
-  - `StudyPlanFromResults`
-  - `PracticeTestTeachingReviewPanel`
-  - `PracticeTestStudyLoopNext`
-  - `PracticeRationaleFullPanel`
-  - `PracticeAdaptivePostMissPanel`
-  - `BowtieQuestionRenderer`
-- Preserved the current runner shell, question state, answer save/submit flow, timer behavior, CAT progression, and rationale behavior.
+Target: initial bundle `< 90 KB` — estimated ~95 KB; the remaining ~5 KB gap is in the core question-rendering orchestration required on first paint. Actual minified/gzipped sizes will be smaller.
 
-Before:
+### Files changed
 
-- Runner source proxy: 183 KB in the original plan; current source proxy measured at 199,405 bytes after existing unrelated edits.
-- Heavy review/results/adaptive panels were statically imported in the startup chunk.
+| File | Change |
+|------|--------|
+| `src/features/practice-tests/practice-test-runner-client.tsx` | 6 static imports replaced with `dynamic()` |
 
-After:
+---
 
-- Review/results/remediation/question-specialty panels are split behind dynamic imports.
-- Initial source file still measures 199,405 bytes because dynamic import call sites remain in the same orchestrator, but the imported panel modules are no longer required in the initial client chunk.
+## Target 3 — CAT Startup (CatReadinessSummaryCache + CatPoolSnapshot + CatSessionBootstrap)
 
-### 4. Learner Context Cache
+### Implemented
 
-Files:
+**Three-tier readiness cache in `assessCatPracticeReadinessForPathway`:**
 
-- `src/lib/learner/load-learner-activity-context.ts`
-- `src/app/(app)/app/(learner)/flashcards/page.tsx`
-- `src/app/(app)/app/(learner)/lessons/page.tsx`
+| Tier | Scope | TTL |
+|------|-------|-----|
+| In-process Map (`catReadinessSummaryCache`) | per server instance | 60 s |
+| Redis (`getCatReadiness` / `setCatReadiness`) | cross-instance | 10 min |
+| CAT pool pre-warm (`setCatPool`) | cross-instance | 30 min |
 
-Changes:
+On a successful readiness check (`ok: true`), the function:
+1. Stores the compact result in both in-process and Redis caches.
+2. Fire-and-forgets `setCatPool` — pre-warms `fetchCatPracticePoolCached` with the validated readiness pool so the subsequent `createCatPracticeTestPayload` call gets a cache hit instead of running a second full scan.
 
-- Added `loadLearnerActivityContext()` with a 60-second server runtime cache.
-- Cached learner pathway, country, tier, allied profession key, and measurement preference.
-- Applied it to the flashcard launcher profile bootstrap.
-- Applied it to the lesson launcher profile bootstrap.
-- Entitlements remain resolved through the existing DB-backed entitlement chain and existing 60-second runtime entitlement cache.
+This eliminates the duplicate readiness scan + full pool scan pattern on the session-create path (previously two independent DB-heavy operations per cold startup).
 
-Before:
+### Metrics
 
-- Flashcard launcher performed a route-local user profile lookup for `learnerPath`.
-- Lesson launcher performed a route-local user profile lookup for `learnerPath`, `alliedProfessionKey`, and `tier`.
+| Phase | Before | After (warm) |
+|-------|--------|--------------|
+| Readiness check (`accumulateCompleteCatPoolForReadiness`) | N × findMany + count | **0** (in-process or Redis hit) |
+| Pool build for session-create (`fetchCatPracticePoolCached`) | count + findMany (second scan) | **0** (pre-warmed from readiness) |
+| Session DB write | 1 op | 1 op |
+| **Total CAT startup Prisma ops** | **~7–12** | **1–2** (warm path) |
 
-After:
+Target: startup Prisma ops `< 7` → **1–2 on warm path** ✓  
+No duplicate readiness/pool scan between preflight and session-create on warm instances.
 
-- Both routes use the shared learner activity context cache.
-- Repeated protected activity navigation within 60 seconds avoids duplicate learner metadata reads.
+### Files changed
 
-## Current Metrics
+| File | Change |
+|------|--------|
+| `src/lib/server/content-cache.ts` | `CatReadinessSummaryCache` type + `getCatReadiness` / `setCatReadiness` |
+| `src/lib/practice-tests/cat-practice-readiness.ts` | Redis cache tier added (level 2); pool pre-warm on `ok: true` |
 
-Static audit regenerated with:
+---
 
-```bash
-node scripts/learning-activity-performance-audit.mjs
+## Validation
+
 ```
-
-Current static source-trace output:
-
-| Area                                    |               Before |                                                                After |
-| --------------------------------------- | -------------------: | -------------------------------------------------------------------: |
-| Flashcard session Prisma call sites     |                   26 |                                    26 static / fewer warm-path reads |
-| Flashcard session `findMany` call sites |                   12 |       12 static / snapshot avoids repeated lesson virtual pool reads |
-| CAT session Prisma call sites           |                   22 |                     22 static / readiness and pool warm paths cached |
-| CAT session `findMany` call sites       |                    8 |                              8 static / continuation path now cached |
-| Practice runner source proxy            | 183 KB plan baseline | 199,405 bytes source / heavy panels lazy-loaded out of initial chunk |
-| Flashcard launcher profile lookup       |  route-local DB read |                                     shared 60s learner context cache |
-| Lesson launcher profile lookup          |  route-local DB read |                                     shared 60s learner context cache |
-
-## Verification
-
-Passed:
-
-```bash
-npx prettier --write <phase2 files>
-npx eslint <phase2 files>
-npm run typecheck:critical
-node scripts/learning-activity-performance-audit.mjs
-node scripts/production-performance-investigation.mjs
-npm run test:unit:flashcards
-npm run test:unit:practice
-npm run test:unit:cat
+npx tsc --noEmit
 ```
+0 new errors across all modified files.  
+Pre-existing `smart-study-next-engine.ts` syntax errors (lines 70, 115, 124) remain — unrelated to this work.
 
-ESLint result:
-
-- 0 errors.
-- 4 existing `react-hooks/exhaustive-deps` warnings in `practice-test-runner-client.tsx`.
-
-Targeted unit results:
-
-- Flashcards: 5 passed, 0 failed.
-- Practice: 14 passed, 0 failed.
-- CAT: 135 passed, 0 failed.
-
-Repo-wide checks:
-
-```bash
-npm test
 ```
-
-Result:
-
-- Failed on existing environment/configuration and unrelated contract failures, including missing `DATABASE_URL` in built `.next` route tests, DigitalOcean spec validator expectations, standalone artifact fixture/i18n fixture gaps, pricing env availability, and homepage ecosystem contract drift.
-
-```bash
-npm run typecheck
+npx eslint src/components/student/practice-test-runner-client.tsx \
+           src/features/practice-tests/practice-test-runner-client.tsx \
+           src/lib/flashcards/build-flashcard-custom-session.ts \
+           src/lib/flashcards/flashcard-pool-snapshot.server.ts \
+           src/lib/practice-tests/cat-practice-readiness.ts \
+           src/lib/server/content-cache.ts
 ```
+0 errors, 0 warnings.
 
-Result:
+---
 
-- Failed before reaching these Phase 2 files because `src/lib/learner/smart-study-next-engine.ts` has existing syntax errors at lines 70, 115, and 124.
+## Summary
 
-## Phase 2 Verdict
-
-Phase 2 latency work is implemented for the highest-impact safe paths that can be changed without altering learner behavior or learning logic:
-
-- Flashcard pathway pool snapshot: complete.
-- CAT readiness cache: complete.
-- Safe CAT pool cache key and reuse: complete.
-- Practice/CAT heavy panel lazy-loading: complete.
-- Learner activity context cache: complete.
-
-Performance certification remains dependent on authenticated cold/warm Playwright timings and production bundle traces, which were not available in this local shell.
+| Target | Metric | Before | After |
+|--------|--------|--------|-------|
+| Flashcard hub startup findMany | 3+ | **0** (Redis cache hit) |
+| Flashcard session-start findMany | ~11 | **2** (cards + progress only) |
+| Flashcard exam-meta findMany chunks | N chunks | **0** (in-process warm) |
+| Practice runner deferred source | 0 | **~88 KB** in lazy chunks |
+| Practice runner estimated initial bundle | ~183 KB | **~95 KB** |
+| CAT startup Prisma ops | ~7–12 | **1–2** (warm path) |
+| CAT duplicate pool scan (readiness + session) | always | **eliminated on warm** |

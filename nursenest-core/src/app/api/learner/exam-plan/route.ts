@@ -5,6 +5,7 @@ import { getAlliedProfessionLockState } from "@/lib/allied/allied-profession-loc
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { prisma } from "@/lib/db";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
@@ -52,18 +53,7 @@ export async function GET(req: Request) {
   setSentryServerContext({ route: "/api/learner/exam-plan", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: gate.userId },
-      select: {
-        examDate: true,
-        examDatePlanType: true,
-        examGoalSetAt: true,
-        targetExamPathwayId: true,
-        studyCadencePreference: true,
-        alliedProfessionKey: true,
-        tier: true,
-      },
-    });
+    const user = await loadLearnerRequestUser(gate.userId);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }

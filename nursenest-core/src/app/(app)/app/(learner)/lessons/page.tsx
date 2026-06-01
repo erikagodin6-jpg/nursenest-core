@@ -1,7 +1,10 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { ContentStatus, TierCode } from "@prisma/client";
+import { unstable_cache } from "next/cache";
+import { ContentStatus, CountryCode, TierCode } from "@prisma/client";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { cacheTagPathwayLessonsHub } from "@/lib/cache/cache-tags";
 import { EcgAuthorityLinkBlock } from "@/components/ecg-module/ecg-authority-link-block";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getStaffSession } from "@/lib/auth/staff-session";
@@ -82,6 +85,312 @@ type LessonsListBlock = {
   pageCount: number;
   rows: AppLessonListRow[];
 };
+
+/**
+ * Primitive-keyed args so unstable_cache can serialize the cache key.
+ * Entitlement scope (tier, country, alliedCareer) + all filter/pagination params.
+ * Progress is deliberately excluded — it is personalized and loaded separately.
+ */
+type HubLessonsBlockCacheArgs = [
+  tier: string,
+  country: string,
+  alliedCareer: string,
+  learnerPath: string,
+  pathwayIdFilter: string,
+  topicSlugFilter: string,
+  topicFilter: string,
+  qEffective: string,
+  pageRequested: number,
+  limitParsed: number,
+  marketingLocale: string,
+  alliedProfessionKey: string,
+];
+
+async function fetchHubLessonsBlock(
+  ...[
+    tier,
+    country,
+    alliedCareer,
+    learnerPath,
+    pathwayIdFilter,
+    topicSlugFilter,
+    topicFilter,
+    qEffective,
+    pageRequested,
+    limitParsed,
+    marketingLocale,
+    alliedProfessionKey,
+  ]: HubLessonsBlockCacheArgs
+): Promise<LessonsListBlock | null> {
+  const entitlement: AccessScope = {
+    hasAccess: true,
+    reason: "active" as const,
+    tier: (tier as TierCode) || null,
+    country: (country as CountryCode) || null,
+    alliedCareer: alliedCareer || null,
+  };
+  const effectiveLearnerPath = learnerPath || null;
+  const effectivePathwayId = pathwayIdFilter || null;
+  const effectiveTopicSlug = topicSlugFilter || null;
+  const effectiveTopic = topicFilter || null;
+  const effectiveQ = qEffective || null;
+  const effectiveAlliedProfession = alliedProfessionKey || null;
+
+  const contentWhere = lessonAccessWhere(entitlement);
+  const contentFilters: (typeof contentWhere)[] = [];
+
+  if (effectiveTopic || effectiveTopicSlug) {
+    const term = (effectiveTopicSlug ?? effectiveTopic ?? "").trim();
+    if (term.length > 0) {
+      contentFilters.push({
+        OR: [
+          { title: { contains: term, mode: "insensitive" } },
+          { bodySystem: { contains: term, mode: "insensitive" } },
+          { category: { contains: term, mode: "insensitive" } },
+        ],
+      });
+    }
+  }
+
+  if (effectiveQ) {
+    contentFilters.push({
+      OR: [
+        { title: { contains: effectiveQ, mode: "insensitive" } },
+        { bodySystem: { contains: effectiveQ, mode: "insensitive" } },
+        { category: { contains: effectiveQ, mode: "insensitive" } },
+      ],
+    });
+  }
+
+  const contentScopedWhere =
+    contentFilters.length > 0
+      ? { AND: [contentWhere, ...contentFilters] }
+      : contentWhere;
+
+  const contentTotal = await prisma.contentItem.count({
+    where: contentScopedWhere,
+  });
+
+  const pathwayWhere = await pathwayLessonsAppListWhereWithTopicFilter(
+    entitlement,
+    effectiveLearnerPath,
+    {
+      topic: effectiveTopic,
+      topicSlug: effectiveTopicSlug,
+      pathwayId: effectivePathwayId,
+      alliedProfessionKey: effectiveAlliedProfession,
+    },
+  );
+
+  const pathwayWhereWithSafety = {
+    AND: [
+      pathwayWhere,
+      pathwayLessonAppHubSafetyPrismaWhere(),
+      ...(effectiveQ
+        ? [
+            {
+              OR: [
+                {
+                  title: { contains: effectiveQ, mode: "insensitive" as const },
+                },
+                {
+                  topic: { contains: effectiveQ, mode: "insensitive" as const },
+                },
+                {
+                  bodySystem: {
+                    contains: effectiveQ,
+                    mode: "insensitive" as const,
+                  },
+                },
+                {
+                  slug: { contains: effectiveQ, mode: "insensitive" as const },
+                },
+                {
+                  seoTitle: {
+                    contains: effectiveQ,
+                    mode: "insensitive" as const,
+                  },
+                },
+              ],
+            },
+          ]
+        : []),
+    ],
+  };
+
+  const pathwaySample = await prisma.pathwayLesson.findFirst({
+    where: pathwayWhereWithSafety,
+    select: { id: true },
+  });
+
+  const listSource = pickAppLessonsHubListSource({
+    pathwaySampleExists: Boolean(pathwaySample),
+    contentTotal,
+    pathwayIdFilter: effectivePathwayId,
+  });
+
+  if (listSource === "pathway_lessons") {
+    let paginated =
+      await paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver({
+        where: pathwayWhereWithSafety,
+        page: pageRequested,
+        pageSize: limitParsed,
+        entitlement,
+        learnerPath: effectiveLearnerPath,
+        marketingLocale,
+      });
+
+    const pathwayTotal = paginated.totalResolvable;
+    const pageCount = Math.max(
+      1,
+      Math.ceil(pathwayTotal / limitParsed) || 1,
+    );
+    const safePage = Math.min(pageRequested, pageCount);
+
+    if (
+      paginated.rows.length === 0 &&
+      pathwayTotal > 0 &&
+      safePage !== pageRequested
+    ) {
+      paginated =
+        await paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver({
+          where: pathwayWhereWithSafety,
+          page: safePage,
+          pageSize: limitParsed,
+          entitlement,
+          learnerPath: effectiveLearnerPath,
+          marketingLocale,
+        });
+    }
+
+    if (paginated.scanCapped) {
+      safeServerLog(
+        "page_lessons",
+        "app_lessons_hub_pathway_total_may_be_truncated",
+        {
+          dbRowsScanned: String(paginated.dbRowsScanned),
+          resolvableTotal: String(pathwayTotal),
+        },
+      );
+    }
+
+    const rows: AppLessonListRow[] = paginated.rows.map((r) => ({
+      id: r.id,
+      title: r.title,
+      summary: pathwayLessonCardSummary(r),
+      topic: r.topic,
+      topicSlug: r.topicSlug,
+      bodySystem: r.bodySystem,
+      pathwayMeta: { pathwayId: r.pathwayId, slug: r.slug },
+    }));
+
+    return {
+      source: "pathway_lessons" as const,
+      total: pathwayTotal,
+      page: safePage,
+      pageCount,
+      rows,
+    };
+  }
+
+  if (listSource === "content_items") {
+    let paginated =
+      await paginateContentItemsForAppSubscriberHubMatchingDetailResolver({
+        where: contentScopedWhere,
+        page: pageRequested,
+        pageSize: limitParsed,
+        entitlement,
+      });
+
+    const contentResolvableTotal = paginated.totalResolvable;
+    const pageCount = Math.max(
+      1,
+      Math.ceil(contentResolvableTotal / limitParsed) || 1,
+    );
+    const safePage = Math.min(pageRequested, pageCount);
+
+    if (
+      paginated.rows.length === 0 &&
+      contentResolvableTotal > 0 &&
+      safePage !== pageRequested
+    ) {
+      paginated =
+        await paginateContentItemsForAppSubscriberHubMatchingDetailResolver({
+          where: contentScopedWhere,
+          page: safePage,
+          pageSize: limitParsed,
+          entitlement,
+        });
+    }
+
+    if (paginated.scanCapped) {
+      safeServerLog(
+        "page_lessons",
+        "app_lessons_hub_content_total_may_be_truncated",
+        {
+          dbRowsScanned: String(paginated.dbRowsScanned),
+          resolvableTotal: String(contentResolvableTotal),
+        },
+      );
+    }
+
+    const rows: AppLessonListRow[] = paginated.rows.map((r) => ({
+      id: r.id,
+      title: r.title,
+      summary: r.summary ?? null,
+    }));
+
+    return {
+      source: "content_items" as const,
+      total: contentResolvableTotal,
+      page: safePage,
+      pageCount,
+      rows,
+    };
+  }
+
+  const legacy =
+    await paginateLegacyContentMapLessonsForAppSubscriberHubMatchingDetailResolver(
+      entitlement,
+      pageRequested,
+      limitParsed,
+      effectiveQ,
+    );
+
+  const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
+    id: r.id,
+    title: r.title,
+    summary: r.summary,
+  }));
+
+  return {
+    source: "legacy_content_map" as const,
+    total: legacy.total,
+    page: legacy.page,
+    pageCount: legacy.pageCount,
+    rows,
+  };
+}
+
+/**
+ * 60-second stale-while-revalidate cache for the hub lesson list.
+ * Key: entitlement scope + all filter/pagination params — shared across users with
+ * identical scope, so user-specific progress is never included here.
+ * Busted by admin lesson publish via cacheTagPathwayLessonsHub.
+ */
+function getCachedHubLessonsBlock(
+  args: HubLessonsBlockCacheArgs,
+): Promise<LessonsListBlock | null> {
+  const pathwayId = args[4];
+  const tags = pathwayId
+    ? [cacheTagPathwayLessonsHub(pathwayId)]
+    : ["app-lessons-hub-unscoped"];
+  return unstable_cache(
+    () => fetchHubLessonsBlock(...args),
+    ["app-lessons-hub", ...args.map(String)],
+    { revalidate: 60, tags },
+  )();
+}
 
 async function withLessonsStartupBudget<T>(
   work: Promise<T>,
@@ -346,260 +655,21 @@ export default async function LessonsPage({ searchParams }: Props) {
     }
 
     const lessonsBlockFromDb = await withDatabaseFallbackTimeout(
-      async () => {
-        const contentWhere = lessonAccessWhere(entitlement);
-        const contentFilters: (typeof contentWhere)[] = [];
-
-        if (topicFilter || topicSlugFilter) {
-          const term = (topicSlugFilter ?? topicFilter ?? "").trim();
-
-          if (term.length > 0) {
-            contentFilters.push({
-              OR: [
-                { title: { contains: term, mode: "insensitive" } },
-                { bodySystem: { contains: term, mode: "insensitive" } },
-                { category: { contains: term, mode: "insensitive" } },
-              ],
-            });
-          }
-        }
-
-        if (qEffective) {
-          contentFilters.push({
-            OR: [
-              { title: { contains: qEffective, mode: "insensitive" } },
-              { bodySystem: { contains: qEffective, mode: "insensitive" } },
-              { category: { contains: qEffective, mode: "insensitive" } },
-            ],
-          });
-        }
-
-        const contentScopedWhere =
-          contentFilters.length > 0
-            ? { AND: [contentWhere, ...contentFilters] }
-            : contentWhere;
-
-        const contentTotal = await prisma.contentItem.count({
-          where: contentScopedWhere,
-        });
-
-        const pathwayWhere = await pathwayLessonsAppListWhereWithTopicFilter(
-          entitlement,
-          learnerPath,
-          {
-            topic: topicFilter,
-            topicSlug: topicSlugFilter,
-            pathwayId: pathwayIdFilter,
-            alliedProfessionKey: alliedProfessionForAppList,
-          },
-        );
-
-        const pathwayWhereWithSafety = {
-          AND: [
-            pathwayWhere,
-            pathwayLessonAppHubSafetyPrismaWhere(),
-            ...(qEffective
-              ? [
-                  {
-                    OR: [
-                      {
-                        title: {
-                          contains: qEffective,
-                          mode: "insensitive" as const,
-                        },
-                      },
-                      {
-                        topic: {
-                          contains: qEffective,
-                          mode: "insensitive" as const,
-                        },
-                      },
-                      {
-                        bodySystem: {
-                          contains: qEffective,
-                          mode: "insensitive" as const,
-                        },
-                      },
-                      {
-                        slug: {
-                          contains: qEffective,
-                          mode: "insensitive" as const,
-                        },
-                      },
-                      {
-                        seoTitle: {
-                          contains: qEffective,
-                          mode: "insensitive" as const,
-                        },
-                      },
-                    ],
-                  },
-                ]
-              : []),
-          ],
-        };
-
-        const pathwaySample = await prisma.pathwayLesson.findFirst({
-          where: pathwayWhereWithSafety,
-          select: { id: true },
-        });
-
-        const listSource = pickAppLessonsHubListSource({
-          pathwaySampleExists: Boolean(pathwaySample),
-          contentTotal,
-          pathwayIdFilter,
-        });
-
-        if (listSource === "pathway_lessons") {
-          let paginated =
-            await paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver(
-              {
-                where: pathwayWhereWithSafety,
-                page: pageRequested,
-                pageSize: limitParsed,
-                entitlement,
-                learnerPath,
-                marketingLocale,
-              },
-            );
-
-          const pathwayTotal = paginated.totalResolvable;
-          const pageCount = Math.max(
-            1,
-            Math.ceil(pathwayTotal / limitParsed) || 1,
-          );
-          const safePage = Math.min(pageRequested, pageCount);
-
-          if (
-            paginated.rows.length === 0 &&
-            pathwayTotal > 0 &&
-            safePage !== pageRequested
-          ) {
-            paginated =
-              await paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver(
-                {
-                  where: pathwayWhereWithSafety,
-                  page: safePage,
-                  pageSize: limitParsed,
-                  entitlement,
-                  learnerPath,
-                  marketingLocale,
-                },
-              );
-          }
-
-          if (paginated.scanCapped) {
-            safeServerLog(
-              "page_lessons",
-              "app_lessons_hub_pathway_total_may_be_truncated",
-              {
-                dbRowsScanned: String(paginated.dbRowsScanned),
-                resolvableTotal: String(pathwayTotal),
-              },
-            );
-          }
-
-          const rows: AppLessonListRow[] = paginated.rows.map((r) => ({
-            id: r.id,
-            title: r.title,
-            summary: pathwayLessonCardSummary(r),
-            topic: r.topic,
-            topicSlug: r.topicSlug,
-            bodySystem: r.bodySystem,
-            pathwayMeta: { pathwayId: r.pathwayId, slug: r.slug },
-          }));
-
-          return {
-            source: "pathway_lessons" as const,
-            total: pathwayTotal,
-            page: safePage,
-            pageCount,
-            rows,
-          };
-        }
-
-        if (listSource === "content_items") {
-          let paginated =
-            await paginateContentItemsForAppSubscriberHubMatchingDetailResolver(
-              {
-                where: contentScopedWhere,
-                page: pageRequested,
-                pageSize: limitParsed,
-                entitlement,
-              },
-            );
-
-          const contentResolvableTotal = paginated.totalResolvable;
-          const pageCount = Math.max(
-            1,
-            Math.ceil(contentResolvableTotal / limitParsed) || 1,
-          );
-          const safePage = Math.min(pageRequested, pageCount);
-
-          if (
-            paginated.rows.length === 0 &&
-            contentResolvableTotal > 0 &&
-            safePage !== pageRequested
-          ) {
-            paginated =
-              await paginateContentItemsForAppSubscriberHubMatchingDetailResolver(
-                {
-                  where: contentScopedWhere,
-                  page: safePage,
-                  pageSize: limitParsed,
-                  entitlement,
-                },
-              );
-          }
-
-          if (paginated.scanCapped) {
-            safeServerLog(
-              "page_lessons",
-              "app_lessons_hub_content_total_may_be_truncated",
-              {
-                dbRowsScanned: String(paginated.dbRowsScanned),
-                resolvableTotal: String(contentResolvableTotal),
-              },
-            );
-          }
-
-          const rows: AppLessonListRow[] = paginated.rows.map((r) => ({
-            id: r.id,
-            title: r.title,
-            summary: r.summary ?? null,
-          }));
-
-          return {
-            source: "content_items" as const,
-            total: contentResolvableTotal,
-            page: safePage,
-            pageCount,
-            rows,
-          };
-        }
-
-        const legacy =
-          await paginateLegacyContentMapLessonsForAppSubscriberHubMatchingDetailResolver(
-            entitlement,
-            pageRequested,
-            limitParsed,
-            qEffective,
-          );
-
-        const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
-          id: r.id,
-          title: r.title,
-          summary: r.summary,
-        }));
-
-        return {
-          source: "legacy_content_map" as const,
-          total: legacy.total,
-          page: legacy.page,
-          pageCount: legacy.pageCount,
-          rows,
-        };
-      },
+      () =>
+        getCachedHubLessonsBlock([
+          entitlement.tier ?? "",
+          entitlement.country ?? "",
+          entitlement.alliedCareer ?? "",
+          learnerPath ?? "",
+          pathwayIdFilter ?? "",
+          topicSlugFilter ?? "",
+          topicFilter ?? "",
+          qEffective ?? "",
+          pageRequested,
+          limitParsed,
+          marketingLocale,
+          alliedProfessionForAppList ?? "",
+        ]),
       null,
       LESSONS_PAGE_DB_TIMEOUT_MS,
       { scope: "page_lessons", label: "lesson_list_block" },

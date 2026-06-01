@@ -19,7 +19,6 @@ import {
   resolveSubscribedQuestionBankPathways,
   type ResolvedQuestionBankPathways,
 } from "@/lib/learner/tier-scoped-study-routes";
-import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { readPracticeTestsHubBootstrapSnapshot } from "@/lib/study-content-failover/practice-tests-hub-bootstrap-snapshot-read";
@@ -28,6 +27,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { loadSubscriberDiscoveryAggregates } from "@/lib/questions/subscriber-discovery-aggregates";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
 
 type PageProps = {
   searchParams: Promise<{
@@ -144,7 +144,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
       listPathwaysCompatibleWithSubscription(entitlement),
       userId
         ? withDatabaseFallbackTimeout(
-            () => prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }),
+            () => loadLearnerActivityContext(userId),
             null,
             650,
             { scope: "practice_tests_page", label: "learner_path" },

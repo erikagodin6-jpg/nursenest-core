@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
 import { isSafeRelativeNavHref, sanitizeRelativeNavHrefOrFallback } from "@/lib/ui/safe-relative-href";
 
@@ -13,10 +14,7 @@ export async function loadResumeStudyingForNotFound(userId: string): Promise<Not
   const ent = await resolveEntitlementForPage(uid);
   if (ent === "error" || !ent.hasAccess) return null;
 
-  const user = await prisma.user.findUnique({
-    where: { id: uid },
-    select: { learnerPath: true },
-  });
+  const learnerContext = await loadLearnerActivityContext(uid);
 
   const incomplete = await prisma.progress.findFirst({
     where: { userId: uid, completed: false },
@@ -29,7 +27,7 @@ export async function loadResumeStudyingForNotFound(userId: string): Promise<Not
     const ref = await resolveLessonRefFromProgressId({
       lessonId: incomplete.lessonId,
       entitlement: ent,
-      learnerPath: user?.learnerPath ?? null,
+      learnerPath: learnerContext.learnerPath,
     });
     if (!ref?.href) return null;
     const href = sanitizeRelativeNavHrefOrFallback(ref.href.trim());

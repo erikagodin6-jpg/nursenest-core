@@ -1,6 +1,6 @@
 # Allied Signup Truthfulness Audit
 
-Generated: 2026-06-01T01:33:24.204Z
+Generated: 2026-06-01T12:00:37.986Z
 
 Scope: `/pricing`, `/signup`, `/allied/allied-health/pricing`, checkout handoff, and upgrade/subscription routing evidence.
 

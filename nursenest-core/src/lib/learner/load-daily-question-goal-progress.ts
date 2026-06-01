@@ -1,7 +1,7 @@
 import "server-only";
 
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { sameUtcCalendarDay, startOfUtcDay } from "@/lib/time/utc-calendar";
 
 export const DEFAULT_DAILY_QUESTION_GOAL = 20;
@@ -30,14 +30,7 @@ export async function loadDailyQuestionGoalProgress(userId: string): Promise<Dai
   const utcDate = today.toISOString().slice(0, 10);
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        dailyQuestionGoal: true,
-        bankQuestionsGradedUtcDay: true,
-        bankQuestionsGradedCount: true,
-      },
-    });
+    const user = await loadLearnerRequestUser(userId);
     if (!user) return null;
 
     const gradedToday =

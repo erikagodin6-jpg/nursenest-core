@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PharmacologyHubClient } from "@/components/pharmacology/pharmacology-hub-client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 const DEFAULT_PHARMACOLOGY_PATHWAY_ID = "ca-rn-nclex-rn";
@@ -72,7 +72,7 @@ export default async function PharmacologyPage({ searchParams }: PageProps) {
     const [compatible, user] = await Promise.all([
       listPathwaysCompatibleWithSubscription(entitlement).catch(() => []),
       withDatabaseFallbackTimeout(
-        () => prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }),
+        () => loadLearnerActivityContext(userId),
         null,
         PHARMACOLOGY_PATHWAY_BOOTSTRAP_DB_TIMEOUT_MS,
         { scope: "pharmacology_page", label: "learner_path" },

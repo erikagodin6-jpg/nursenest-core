@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { CountryCode } from "@prisma/client";
 
-import { prisma } from "@/lib/db";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
 import { loadLearnerPathwayNavMetadata } from "@/lib/learner/load-learner-shell-pathway-metadata";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { cacheSet } from "@/lib/server/content-cache";
@@ -59,16 +58,13 @@ async function resolveWarmPathway(userId: string, fallbackTier: string | null | 
   const nav = await withWarmBudget("pathway_nav", loadLearnerPathwayNavMetadata(userId));
   if (nav?.pathwayId) return nav.pathwayId;
 
-  const user = await withWarmBudget(
+  const learnerContext = await withWarmBudget(
     "pathway_user_fallback",
-    prisma.user.findUnique({
-      where: { id: userId },
-      select: { learnerPath: true, country: true },
-    }),
+    loadLearnerActivityContext(userId),
   );
-  if (user?.learnerPath?.trim()) return user.learnerPath.trim();
+  if (learnerContext?.learnerPath?.trim()) return learnerContext.learnerPath.trim();
   if (fallbackTier === "NP") return "ca-np-cnple";
-  if (fallbackTier === "RPN" || fallbackTier === "LVN_LPN") return user?.country === CountryCode.US ? "us-lpn-nclex-pn" : "ca-rpn-rex-pn";
+  if (fallbackTier === "RPN" || fallbackTier === "LVN_LPN") return learnerContext?.country === "US" ? "us-lpn-nclex-pn" : "ca-rpn-rex-pn";
   return "us-rn-nclex-rn";
 }
 

@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { ExamDayModeClient } from "@/components/exam-day/exam-day-mode-client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 const DEFAULT_EXAM_DAY_PATHWAY_ID = "ca-rn-nclex-rn";
@@ -72,7 +72,7 @@ export default async function ExamDayModePage({ searchParams }: PageProps) {
     const [compatible, user] = await Promise.all([
       listPathwaysCompatibleWithSubscription(entitlement).catch(() => []),
       withDatabaseFallbackTimeout(
-        () => prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }),
+        () => loadLearnerActivityContext(userId),
         null,
         EXAM_DAY_PATHWAY_BOOTSTRAP_DB_TIMEOUT_MS,
         { scope: "exam_day_page", label: "learner_path" },

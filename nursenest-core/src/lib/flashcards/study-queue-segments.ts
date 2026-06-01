@@ -17,6 +17,7 @@ import { prisma } from "@/lib/db";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
+import { getStudyQueueCounts, setStudyQueueCounts } from "@/lib/server/content-cache";
 
 const SEGMENT_CARD_LIMIT = 50;
 
@@ -58,6 +59,9 @@ export async function loadStudyQueueCounts(
   entitlement: AccessScope,
   pathwayId?: string | null,
 ): Promise<StudyQueueCounts> {
+  const cached = await getStudyQueueCounts(userId, pathwayId);
+  if (cached) return cached;
+
   const now = new Date();
   const { start: todayStart, end: todayEnd } = utcDayBounds(now);
   const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathwayId ?? null);
@@ -110,7 +114,9 @@ export async function loadStudyQueueCounts(
   ]);
 
   const newCards = Math.max(0, totalAccessible - totalReviewed);
-  return { newCards, dueToday, overdue, lapsing, totalReviewed };
+  const counts: StudyQueueCounts = { newCards, dueToday, overdue, lapsing, totalReviewed };
+  await setStudyQueueCounts(userId, pathwayId, counts);
+  return counts;
 }
 
 /**

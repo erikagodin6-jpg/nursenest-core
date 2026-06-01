@@ -1,7 +1,7 @@
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
-import { prisma } from "@/lib/db";
 import { resolveEntitlementForPage, type PageEntitlementResult } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
 import { medCalcTrackFromTier, type MedCalcTrack } from "@/lib/med-calculations/med-calculations-engine";
 
 export type MedCalculationsRouteContext = {
@@ -32,11 +32,7 @@ export async function loadMedCalculationsRouteContext(routeKey: string): Promise
   const pathwayRow =
     userId.length > 0
       ? await withDatabaseFallback(
-          () =>
-            prisma.user.findUnique({
-              where: { id: userId },
-              select: { learnerPath: true },
-            }),
+          () => loadLearnerActivityContext(userId),
           null,
         )
       : null;

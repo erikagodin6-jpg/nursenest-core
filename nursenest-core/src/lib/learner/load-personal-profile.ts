@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import {
   listPathwayPicksForProfile,
   subscriptionLocksProfileRegionAndTier,
@@ -57,27 +58,7 @@ export async function loadPersonalProfilePayload(
   if (!userId || !isDatabaseUrlConfigured()) return null;
 
   const [user, subscriptionRows, entitlement] = await Promise.all([
-    prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        name: true,
-        firstName: true,
-        lastName: true,
-        displayName: true,
-        email: true,
-        country: true,
-        tier: true,
-        learnerPath: true,
-        studyGoal: true,
-        examFocus: true,
-        examDate: true,
-        examDatePlanType: true,
-        targetExamPathwayId: true,
-        studyCadencePreference: true,
-        dailyQuestionGoal: true,
-        measurementPreference: true,
-      },
-    }),
+    loadLearnerRequestUser(userId),
     prisma.subscription.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },

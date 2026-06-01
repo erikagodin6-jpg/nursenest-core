@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { contentItemTiersForUserTier, lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
 import { PATHWAY_CATALOG_LIST_HARD_CAP } from "@/lib/lessons/pathway-lesson-scale";
@@ -197,12 +198,7 @@ export async function buildVisibleLessonScopeForLearner(
   const learnerPath =
     options?.learnerPath !== undefined
       ? options.learnerPath ?? null
-      : (
-          await prisma.user.findUnique({
-            where: { id: userId },
-            select: { learnerPath: true },
-          })
-        )?.learnerPath ?? null;
+      : (await loadLearnerRequestUser(userId))?.learnerPath ?? null;
 
   const pathwayLessonRows =
     options?.pathwayLessonRows ??

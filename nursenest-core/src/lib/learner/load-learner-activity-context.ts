@@ -1,8 +1,9 @@
 import "server-only";
 
 import type { CountryCode, TierCode } from "@prisma/client";
-import { prisma } from "@/lib/db";
+import { cache } from "react";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import {
   parseMeasurementPreference,
   type MeasurementPreference,
@@ -51,7 +52,7 @@ function pruneLearnerActivityContextCache(now: number) {
   }
 }
 
-export async function loadLearnerActivityContext(
+async function loadLearnerActivityContextCore(
   userId: string,
 ): Promise<LearnerActivityContext> {
   if (!userId || !isDatabaseUrlConfigured()) {
@@ -63,16 +64,7 @@ export async function loadLearnerActivityContext(
   const cached = learnerActivityContextCache.get(userId);
   if (cached && cached.expiresAt > now) return cached.value;
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      alliedProfessionKey: true,
-      country: true,
-      learnerPath: true,
-      measurementPreference: true,
-      tier: true,
-    },
-  });
+  const user = await loadLearnerRequestUser(userId);
 
   const value: LearnerActivityContext = user
     ? {
@@ -93,3 +85,5 @@ export async function loadLearnerActivityContext(
   });
   return value;
 }
+
+export const loadLearnerActivityContext = cache(loadLearnerActivityContextCore);

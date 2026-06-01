@@ -1,6 +1,6 @@
 # Allied Dashboard Truthfulness Audit
 
-Generated: 2026-06-01T01:33:24.204Z
+Generated: 2026-06-01T12:00:37.987Z
 
 Scope: learner dashboard, study plan, readiness report, analytics, and account performance surfaces after an Allied learner signs in.
 

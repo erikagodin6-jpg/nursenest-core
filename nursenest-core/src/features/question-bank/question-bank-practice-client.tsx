@@ -946,7 +946,7 @@ export function QuestionBankPracticeClient({
     studyLinkDedupe,
   ]);
 
-  async function checkAnswer() {
+  const checkAnswer = useCallback(async () => {
     if (!current) return;
     if (isBowtie) {
       if (!isBowtieAnswerComplete(answer)) return;
@@ -1034,9 +1034,9 @@ export function QuestionBankPracticeClient({
     } finally {
       setGrading(false);
     }
-  }
+  }, [current, isBowtie, answer, pathwayIdFilter, studySettings.enableConfidenceTracking, confidence, t]);
 
-  function applySavedPreset(id: string) {
+  const applySavedPreset = useCallback((id: string) => {
     const p = savedPresets.find((x) => x.id === id);
     if (!p) return;
     setPreset(p.preset);
@@ -1049,7 +1049,7 @@ export function QuestionBankPracticeClient({
     setExamShell(p.examShell);
     setExamShowExplanation(!p.examShell);
     setEfficiencyMode(p.efficiencyMode);
-  }
+  }, [savedPresets]);
 
   function deleteSavedPreset(id: string) {
     const next = savedPresets.filter((x) => x.id !== id);
@@ -1092,15 +1092,15 @@ export function QuestionBankPracticeClient({
     setPresetNameDraft("");
   }
 
-  function next() {
+  const next = useCallback(() => {
     setAnswer(null);
     setIdx((i) => Math.min(total - 1, i + 1));
-  }
+  }, [total]);
 
-  function prev() {
+  const prev = useCallback(() => {
     setAnswer(null);
     setIdx((i) => Math.max(0, i - 1));
-  }
+  }, []);
 
   if (phase === "loading") {
     return (

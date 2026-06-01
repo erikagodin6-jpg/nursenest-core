@@ -19,6 +19,7 @@ import "server-only";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { loadCoachPageData } from "@/lib/study/coach-page-data";
 import type { CoachPageData } from "@/lib/study/coach-page-data";
 import { urgencyFromDays } from "@/lib/learner/exam-timeline";
@@ -58,14 +59,7 @@ export async function loadAdaptiveEngineData(
         take: 50,
       }),
 
-      // Just the time budget fields
-      prisma.user.findUnique({
-        where: { id: userId },
-        select: {
-          dailyStudyMinutes: true,
-          studyCadencePreference: true,
-        },
-      }),
+      loadLearnerRequestUser(userId),
 
       // Speed data from recent completed practice tests (bounded at 12)
       prisma.practiceTest.findMany({

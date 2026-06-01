@@ -1,6 +1,6 @@
 # Allied Pathway Feature Matrix
 
-Generated: 2026-06-01T01:33:24.204Z
+Generated: 2026-06-01T12:00:37.987Z
 
 Status key: Supported = demonstrable and near launch threshold; Partial = demonstrable but below threshold; Unsupported = no repository evidence in this audit; Risk = route/platform exists but profession-specific content evidence is insufficient.
 

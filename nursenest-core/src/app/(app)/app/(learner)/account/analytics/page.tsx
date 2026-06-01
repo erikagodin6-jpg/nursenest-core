@@ -7,7 +7,7 @@ import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { prisma } from "@/lib/db";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { loadAnalyticsPagePayload } from "@/lib/study/analytics-data";
 import { analyticsResolvedData } from "@/lib/study/analytics-load-result";
 import { PremiumNclexAnalyticsDashboard } from "@/components/study/premium-nclex-analytics-dashboard";
@@ -94,10 +94,7 @@ export default async function AccountAnalyticsPage() {
 
   const [payload, profile] = await Promise.all([
     loadAnalyticsPagePayload(userId),
-    prisma.user.findUnique({
-      where: { id: userId },
-      select: { name: true, examDate: true, examFocus: true, learnerPath: true, tier: true },
-    }),
+    loadLearnerRequestUser(userId),
   ]);
   const {
     summary,

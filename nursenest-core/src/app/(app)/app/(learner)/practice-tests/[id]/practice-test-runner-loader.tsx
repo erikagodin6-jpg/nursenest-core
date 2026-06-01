@@ -1,11 +1,28 @@
 "use client";
 
-import { NclexCatRunner } from "@/components/exam/nclex-cat-runner";
-import { NclexPracticeRunner } from "@/components/exam/nclex-practice-runner";
-import { PracticeTestRunnerClient } from "@/components/student/practice-test-runner-client";
+import dynamic from "next/dynamic";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
 import type { StudySettings } from "@/lib/learner/study-settings";
+import { PracticeTestRunPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
+
+const NclexCatRunner = dynamic(
+  () => import("@/components/exam/nclex-cat-runner").then((m) => ({ default: m.NclexCatRunner })),
+  { loading: () => <PracticeTestRunPageSkeleton />, ssr: false },
+);
+
+const NclexPracticeRunner = dynamic(
+  () => import("@/components/exam/nclex-practice-runner").then((m) => ({ default: m.NclexPracticeRunner })),
+  { loading: () => <PracticeTestRunPageSkeleton />, ssr: false },
+);
+
+const PracticeTestRunnerClient = dynamic(
+  () =>
+    import("@/components/student/practice-test-runner-client").then((m) => ({
+      default: m.PracticeTestRunnerClient,
+    })),
+  { loading: () => <PracticeTestRunPageSkeleton />, ssr: false },
+);
 
 export function PracticeTestRunnerLoader(props: {
   mode: "cat" | "practice" | "standard";

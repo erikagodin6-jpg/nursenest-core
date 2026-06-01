@@ -159,6 +159,158 @@ export async function setCatPool<T>(userId: string, pathwayId: string, value: T)
   return cacheSet(catPoolCacheKey(userId, pathwayId), value, TTL.cat);
 }
 
+// ─── Flashcard hub inventory snapshot ────────────────────────────────────────
+// Precomputed category counts + totals keyed by (pathway, tier, country).
+// User-independent: flashcard content and exam question metadata are shared
+// across all subscribers with the same entitlement profile.
+// TTL: 30 min (same cadence as practice pool).
+
+export type FlashcardHubInventorySnapshot = {
+  mergedCounts: Record<string, number>;
+  examTotal: number;
+  lessonVirtualTotal: number;
+  catalogLessonCount: number;
+  lessonsWithDerivedCards: number;
+  recallVirtualCount: number;
+  sectionDerivedVirtualCount: number;
+  genericFillerSectionCardHits: number;
+  poolInventoryDiagnostics: unknown;
+};
+
+export function flashcardHubInventoryCacheKey(
+  pathwayId: string,
+  tier: string,
+  country: string,
+): string {
+  return key("flashcard", "hub-inv", pathwayId, tier || "_", country || "_");
+}
+
+export async function getFlashcardHubInventory(
+  pathwayId: string,
+  tier: string,
+  country: string,
+): Promise<FlashcardHubInventorySnapshot | null> {
+  return cacheGet<FlashcardHubInventorySnapshot>(
+    flashcardHubInventoryCacheKey(pathwayId, tier, country),
+  );
+}
+
+export async function setFlashcardHubInventory(
+  pathwayId: string,
+  tier: string,
+  country: string,
+  value: FlashcardHubInventorySnapshot,
+): Promise<void> {
+  return cacheSet(
+    flashcardHubInventoryCacheKey(pathwayId, tier, country),
+    value,
+    TTL.cat,
+  );
+}
+
+// ─── CAT readiness summary cache ─────────────────────────────────────────────
+// Caches the pass/fail result of assessCatPracticeReadinessForPathway so the
+// expensive batch pool scan is not repeated on every session-create attempt.
+// Keyed by (userId, pathwayId) because readiness depends on user entitlement.
+// TTL: 10 min — short enough that entitlement changes land promptly.
+
+export type CatReadinessSummaryCache = {
+  ok: boolean;
+  code?: string;
+  message?: string;
+  availableQuestions?: number;
+  requiredQuestions?: number;
+  eligibleCatQuestions?: number;
+  completePracticeQuestions?: number;
+};
+
+export function catReadinessCacheKey(userId: string, pathwayId: string): string {
+  return key("cat", "readiness", userId, pathwayId);
+}
+
+export async function getCatReadiness(
+  userId: string,
+  pathwayId: string,
+): Promise<CatReadinessSummaryCache | null> {
+  return cacheGet<CatReadinessSummaryCache>(catReadinessCacheKey(userId, pathwayId));
+}
+
+export async function setCatReadiness(
+  userId: string,
+  pathwayId: string,
+  value: CatReadinessSummaryCache,
+): Promise<void> {
+  return cacheSet(catReadinessCacheKey(userId, pathwayId), value, 10 * 60);
+}
+
+// ─── Flashcard due-summary cache ─────────────────────────────────────────────
+// Per-user SRS queue snapshot: due/overdue/learning/lapsing counts.
+// TTL: 5 min — short enough that study activity lands promptly.
+
+export type FlashcardDueSummaryCache = {
+  dueToday: number;
+  overdue: number;
+  learning: number;
+  lapsingCards: number;
+  newCards: number;
+  totalReviewed: number;
+  asOf: string;
+};
+
+export function flashcardDueSummaryCacheKey(userId: string): string {
+  return key("count", "flashcard-due-summary", userId);
+}
+
+export async function getFlashcardDueSummary(userId: string): Promise<FlashcardDueSummaryCache | null> {
+  return cacheGet<FlashcardDueSummaryCache>(flashcardDueSummaryCacheKey(userId));
+}
+
+export async function setFlashcardDueSummary(userId: string, value: FlashcardDueSummaryCache): Promise<void> {
+  return cacheSet(flashcardDueSummaryCacheKey(userId), value, TTL.count);
+}
+
+export async function invalidateFlashcardDueSummary(userId: string): Promise<void> {
+  return cacheDelete(flashcardDueSummaryCacheKey(userId));
+}
+
+// ─── Study queue counts cache ─────────────────────────────────────────────────
+// Per-user+pathway SRS segment counts.
+// TTL: 5 min.
+
+export type StudyQueueCountsCache = {
+  newCards: number;
+  dueToday: number;
+  overdue: number;
+  lapsing: number;
+  totalReviewed: number;
+};
+
+export function studyQueueCountsCacheKey(userId: string, pathwayId: string | null | undefined): string {
+  return key("count", "study-queue-counts", userId, pathwayId ?? "_");
+}
+
+export async function getStudyQueueCounts(
+  userId: string,
+  pathwayId: string | null | undefined,
+): Promise<StudyQueueCountsCache | null> {
+  return cacheGet<StudyQueueCountsCache>(studyQueueCountsCacheKey(userId, pathwayId));
+}
+
+export async function setStudyQueueCounts(
+  userId: string,
+  pathwayId: string | null | undefined,
+  value: StudyQueueCountsCache,
+): Promise<void> {
+  return cacheSet(studyQueueCountsCacheKey(userId, pathwayId), value, TTL.count);
+}
+
+export async function invalidateStudyQueueCounts(
+  userId: string,
+  pathwayId: string | null | undefined,
+): Promise<void> {
+  return cacheDelete(studyQueueCountsCacheKey(userId, pathwayId));
+}
+
 // ─── Content publish invalidation ────────────────────────────────────────────
 
 /**

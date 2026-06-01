@@ -15,6 +15,11 @@ import {
 } from "@/lib/practice-tests/cat-pool";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
+import {
+  getCatReadiness,
+  setCatReadiness,
+  setCatPool,
+} from "@/lib/server/content-cache";
 
 export type CatPracticeReadinessStaffDiagnostics = {
   publishedCount: number | null;
@@ -164,18 +169,42 @@ export async function assessCatPracticeReadinessForPathway(
     const trimmed = pathwayId.trim();
     const now = Date.now();
     pruneCatReadinessSummaryCache(now);
-    const key = catReadinessSummaryCacheKey(userId, entitlement, trimmed);
-    const cached = catReadinessSummaryCache.get(key);
-    if (cached && cached.expiresAt > now) return cached.value;
+    const inProcKey = catReadinessSummaryCacheKey(userId, entitlement, trimmed);
+
+    // 1. In-process cache (60 s) — zero latency on warm instance.
+    const inProcHit = catReadinessSummaryCache.get(inProcKey);
+    if (inProcHit && inProcHit.expiresAt > now) return inProcHit.value;
+
+    // 2. Redis cache (10 min) — survives across instances / cold starts.
+    const redisHit = await getCatReadiness(userId, trimmed);
+    if (redisHit) {
+      const result = redisHit as CatPracticeReadinessResult;
+      catReadinessSummaryCache.set(inProcKey, {
+        expiresAt: now + CAT_READINESS_SUMMARY_CACHE_TTL_MS,
+        value: result,
+      });
+      return result;
+    }
+
+    // 3. Compute from DB, then populate both cache tiers.
     const value = await assessCatPracticeReadinessForPathwayUncached(
       userId,
       entitlement,
       trimmed,
       options,
     );
-    catReadinessSummaryCache.set(key, {
+    catReadinessSummaryCache.set(inProcKey, {
       expiresAt: now + CAT_READINESS_SUMMARY_CACHE_TTL_MS,
       value,
+    });
+    // Store a compact summary in Redis (omit staff-only diagnostics).
+    void setCatReadiness(userId, trimmed, {
+      ok: value.ok,
+      ...(!value.ok ? { code: value.code, message: value.message } : {}),
+      availableQuestions: value.availableQuestions,
+      requiredQuestions: value.requiredQuestions,
+      eligibleCatQuestions: value.eligibleCatQuestions,
+      completePracticeQuestions: value.completePracticeQuestions,
     });
     return value;
   }
@@ -286,6 +315,28 @@ async function assessCatPracticeReadinessForPathwayUncached(
       ...(staffDiagnostics ? { staffDiagnostics } : {}),
     };
   }
+
+  // Pre-warm the CAT pool cache so the subsequent session-create call
+  // (`fetchCatPracticePoolCached`) gets a cache hit instead of running a
+  // second full pool scan. Fire-and-forget — readiness result is independent.
+  void setCatPool(userId, trimmed, {
+    pool: pool.map((r) => ({
+      id: r.id,
+      difficulty:
+        typeof r.difficulty === "number" && Number.isFinite(r.difficulty)
+          ? Math.round(r.difficulty)
+          : 3,
+      bodySystem: r.bodySystem,
+      topic: r.topic,
+      nclexClientNeedsCategory: r.nclexClientNeedsCategory,
+      nclexClientNeedsSubcategory: r.nclexClientNeedsSubcategory,
+    })),
+    buildMeta: {
+      strictCompleteRowCount: diagnostics.completePracticeQuestions,
+      usedRelaxedFilters: false,
+      finalCompleteRowCount: pool.length,
+    },
+  });
 
   return {
     ok: true,

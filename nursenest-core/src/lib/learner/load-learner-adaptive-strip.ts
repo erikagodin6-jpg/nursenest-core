@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { buildCountdownCopy } from "@/lib/learner/exam-timeline";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
@@ -31,13 +31,7 @@ export async function loadLearnerAdaptiveStrip(
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        examDate: true,
-        examDatePlanType: true,
-      },
-    });
+    const user = await loadLearnerRequestUser(userId);
     if (!user) return null;
 
     const countdown = buildCountdownCopy({

@@ -37,11 +37,14 @@ import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
  */
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
-// 🧊 ISR: parent layout handles dynamic; child can set own revalidate
 export const dynamicParams = true;
 /**
- * Per-request render (no shared ISR snapshot). `maxDuration` allows cold DB + related queries under load.
+ * ISR: cache lesson pages for 1 hour. Cold-start with force-dynamic was causing 18–21 s TTFB
+ * due to remote DB connection pool warm-up on the first request. With revalidate=3600 the CDN
+ * serves the cached HTML on subsequent requests (< 50 ms) and revalidates in the background.
+ * maxDuration remains for the background revalidation pass.
  */
+export const revalidate = 3600;
 export const maxDuration = 60;
 
 type Props = {

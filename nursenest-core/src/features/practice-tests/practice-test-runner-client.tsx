@@ -1489,27 +1489,37 @@ export function PracticeTestRunnerClient({
     });
   }, [isExamStyle, current, logSessionEvent]);
 
-  function setConfidenceForQuestion(qid: string, level: ConfidenceLevel) {
-    const next = { ...confidence, [qid]: level };
-    setConfidence(next);
-    examToolsRef.current = {
-      ...examToolsRef.current,
-      confidence: next,
-      updatedAt: new Date().toISOString(),
-    };
-    void persistSave(answersRef.current, idxRef.current);
-  }
+  const setConfidenceForQuestion = useCallback(
+    (qid: string, level: ConfidenceLevel) => {
+      const next = { ...confidence, [qid]: level };
+      setConfidence(next);
+      examToolsRef.current = {
+        ...examToolsRef.current,
+        confidence: next,
+        updatedAt: new Date().toISOString(),
+      };
+      void persistSave(answersRef.current, idxRef.current);
+    },
+    // persistSave reads from refs internally — stable behavior across re-renders
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [confidence],
+  );
 
-  function toggleFlagForQuestion(qid: string) {
-    const next = { ...flagged, [qid]: !flagged[qid] };
-    setFlagged(next);
-    examToolsRef.current = {
-      ...examToolsRef.current,
-      flagged: next,
-      updatedAt: new Date().toISOString(),
-    };
-    void persistSave(answersRef.current, idxRef.current);
-  }
+  const toggleFlagForQuestion = useCallback(
+    (qid: string) => {
+      const next = { ...flagged, [qid]: !flagged[qid] };
+      setFlagged(next);
+      examToolsRef.current = {
+        ...examToolsRef.current,
+        flagged: next,
+        updatedAt: new Date().toISOString(),
+      };
+      void persistSave(answersRef.current, idxRef.current);
+    },
+    // persistSave reads from refs internally — stable behavior across re-renders
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [flagged],
+  );
 
   async function persistSave(
     nextAnswers: Record<string, unknown>,

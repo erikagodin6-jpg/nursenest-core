@@ -8,6 +8,10 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
+import {
+  getFlashcardDueSummary,
+  setFlashcardDueSummary,
+} from "@/lib/server/content-cache";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +51,9 @@ export async function GET(req: NextRequest) {
       { status: 503 },
     );
   }
+
+  const cached = await getFlashcardDueSummary(userId);
+  if (cached) return NextResponse.json(cached);
 
   const now = new Date();
   const { start: todayStart, end: todayEnd } = utcDayBounds(now);
@@ -114,15 +121,10 @@ export async function GET(req: NextRequest) {
       rowsReturned: dueToday + overdue + learning,
       matchingTotal: dueToday + overdue + learning,
     });
-    return NextResponse.json({
-      dueToday,
-      overdue,
-      learning,
-      lapsingCards,
-      newCards,
-      totalReviewed,
-      asOf: now.toISOString(),
-    });
+
+    const payload = { dueToday, overdue, learning, lapsingCards, newCards, totalReviewed, asOf: now.toISOString() };
+    await setFlashcardDueSummary(userId, payload);
+    return NextResponse.json(payload);
   } catch (e) {
     safeServerLogCritical("api_flashcards_due_summary", "query_failed", {}, e);
     logCoreApiStudyDiagnostic({

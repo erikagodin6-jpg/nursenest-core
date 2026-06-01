@@ -19,6 +19,7 @@ import "server-only";
 
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { logLearnerStudyLoadDiagnostics } from "@/lib/learner/learner-study-load-diagnostics";
 import { loadAnalyticsSummary } from "@/lib/study/analytics-data";
 import { analyticsResolvedData } from "@/lib/study/analytics-load-result";
@@ -422,10 +423,7 @@ export async function loadGuidedStudyPayload(userId: string): Promise<GuidedStud
         lastWrongAt: true,
       },
     }),
-    prisma.user.findUnique({
-      where: { id: userId },
-      select: { examFocus: true, studyGoal: true, dailyStudyMinutes: true },
-    }),
+    loadLearnerRequestUser(userId),
     prisma.userTopicStat.count({
       where: { userId, wrongStreak: { gt: 0 } },
     }),

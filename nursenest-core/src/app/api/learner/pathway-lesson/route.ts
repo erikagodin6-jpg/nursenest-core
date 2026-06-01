@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { pathwayLessonReadOmitArgs } from "@/lib/db/pathway-lesson-structural-column-runtime";
-import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
 import { resolveAppSubscriberPathwayLessonForDetail } from "@/lib/lessons/app-subscriber-lesson-detail-resolve";
 import { getRelatedPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
 import { loadPathwayLessonProgressForSlug } from "@/lib/lessons/pathway-lesson-progress";
@@ -28,25 +27,9 @@ const DETAIL_DB_TIMEOUT_MS = 2500;
  */
 export async function GET(req: Request) {
   return runWithApiTelemetry(req, "GET /api/learner/pathway-lesson", "content", async () => {
-    const session = await auth();
-    const userId = (session?.user as { id?: string } | undefined)?.id;
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    let entitlement;
-    try {
-      entitlement = await resolveEntitlement(userId);
-    } catch {
-      return NextResponse.json({ error: "Unable to verify access." }, { status: 503 });
-    }
-
-    if (!entitlement.hasAccess) {
-      return NextResponse.json({ error: "Subscription required", code: "not_subscribed" }, { status: 403 });
-    }
-
     const gate = await requireSubscriberSession();
     if (!gate.ok) return gate.response;
+    const { entitlement } = gate;
 
     setSentryServerContext({
       route: "/api/learner/pathway-lesson",
@@ -93,13 +76,13 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Lesson not found", code: "not_found" }, { status: 404 });
     }
 
-    const learnerPathRow = await withDatabaseFallbackTimeout(
-      async () => prisma.user.findUnique({ where: { id: gate.userId }, select: { learnerPath: true } }),
+    const learnerContext = await withDatabaseFallbackTimeout(
+      () => loadLearnerActivityContext(gate.userId),
       null,
       DETAIL_DB_TIMEOUT_MS,
-      { scope: "api_pathway_lesson_detail", label: "learner_path" },
+      { scope: "api_pathway_lesson_detail", label: "learner_context" },
     );
-    const learnerPath = learnerPathRow?.learnerPath ?? null;
+    const learnerPath = learnerContext?.learnerPath ?? null;
     const marketingLocale = await getMarketingLocaleForDefaultRoute();
 
     const resolution = await resolveAppSubscriberPathwayLessonForDetail({

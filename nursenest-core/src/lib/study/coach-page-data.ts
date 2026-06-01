@@ -19,9 +19,9 @@
 
 import "server-only";
 
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { buildGovernedAdaptiveRecommendations } from "@/lib/educational-cognition/adaptive-recommendation-cognition";
@@ -78,15 +78,7 @@ export async function loadCoachPageData(
     const [snapshot, topicPerf, userRow] = await Promise.all([
       loadPremiumDashboardSnapshot(userId, entitlement),
       loadUnifiedTopicPerformance(userId, entitlement, 12),
-      prisma.user.findUnique({
-        where: { id: userId },
-        select: {
-          examDate: true,
-          examDatePlanType: true,
-          studyCadencePreference: true,
-          tier: true,
-        },
-      }),
+      loadLearnerRequestUser(userId),
     ]);
 
     if (!snapshot || !topicPerf) return null;

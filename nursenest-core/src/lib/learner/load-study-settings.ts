@@ -1,11 +1,10 @@
 import "server-only";
 
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import {
   DEFAULT_STUDY_SETTINGS,
   rowToStudySettings,
-  studySettingsUserSelect,
   type StudySettings,
 } from "@/lib/learner/study-settings";
 
@@ -15,10 +14,7 @@ export async function loadStudySettings(userId: string): Promise<StudySettings> 
   }
 
   try {
-    const row = await prisma.user.findUnique({
-      where: { id: userId },
-      select: studySettingsUserSelect,
-    });
+    const row = await loadLearnerRequestUser(userId);
     return rowToStudySettings(row);
   } catch {
     return DEFAULT_STUDY_SETTINGS;

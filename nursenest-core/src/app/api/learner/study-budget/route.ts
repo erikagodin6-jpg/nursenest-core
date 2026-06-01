@@ -10,6 +10,7 @@
 import { NextResponse } from "next/server";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
@@ -29,10 +30,7 @@ export async function GET(req: Request) {
   });
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: gate.userId },
-      select: { dailyStudyMinutes: true, studyCadencePreference: true },
-    });
+    const user = await loadLearnerRequestUser(gate.userId);
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
     return NextResponse.json({

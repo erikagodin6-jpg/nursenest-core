@@ -1,7 +1,7 @@
 import "server-only";
 
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallback } from "@/lib/db/safe-database";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 
 /**
  * Soft preferences only — no new tables. Used for copy on the dashboard (daily goal + motivation).
@@ -15,10 +15,7 @@ export async function loadLearnerRetentionPreferences(userId: string): Promise<L
   if (!userId || !isDatabaseUrlConfigured()) return null;
   return withDatabaseFallback(
     async () => {
-      const row = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { studyGoal: true, dailyStudyMinutes: true },
-      });
+      const row = await loadLearnerRequestUser(userId);
       if (!row) return null;
       return {
         studyGoal: row.studyGoal?.trim() || null,

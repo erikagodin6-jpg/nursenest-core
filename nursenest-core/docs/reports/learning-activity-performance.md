@@ -9,16 +9,16 @@ Generated: 2026-06-01T11:13:49.619Z
 
 ## Slowest Risk Ranking
 
-| Rank | Activity | Route | Source Size | Prisma Call Sites | findMany | Transactions | Client fetches | Cold | Warm | Where users wait |
-| ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- | --- |
-| 1 | CAT session | `/app/practice-tests/[id]?mode=cat` | 332 KB | 22 | 8 | 0 | 8 | not measured | not measured | Users wait on CAT pool count/findMany, answer history, adaptive state persistence, and per-question adaptive selection/feedback queries. |
-| 2 | Flashcard session | `/app/flashcards/[deckRef]` | 97 KB | 26 | 12 | 1 | 0 | not measured | not measured | Users wait on custom pool generation: dedicated flashcards, virtual question-derived cards, progress filters, option hydration, and session persistence/hydration. |
-| 3 | Practice session | `/app/practice-tests/[id]` | 245 KB | 4 | 1 | 0 | 8 | not measured | not measured | Users wait on practice test bootstrap plus repeated client saves/question fetches during the session; runner is a large client component. |
-| 4 | Lesson launcher | `/app/lessons` | 66 KB | 11 | 4 | 0 | 3 | not measured | not measured | Users wait on entitlement/profile resolution, contentItem count, pathwayLesson sample/list pagination, then client-side filter fetches. |
-| 5 | Practice launcher | `/app/practice-tests` | 109 KB | 5 | 3 | 1 | 3 | not measured | not measured | Users wait mostly after shell render: discovery counts, weak-area/readiness/performance-summary calls, then practice test creation when launching. |
-| 6 | CAT launcher | `/app/practice-tests/cat-launch` | 87 KB | 4 | 3 | 1 | 2 | not measured | not measured | Users wait on cat-readiness and POST /api/practice-tests; route shell is light but launch API is heavy. |
-| 7 | Lesson detail | `/app/lessons/[id]` | 75 KB | 4 | 0 | 0 | 3 | not measured | not measured | Users wait on duplicated learnerPath/profile reads, pathwayLesson lookup, legacy ContentItem fallback checks, measurement preference lookup, and related/practice hydration. |
-| 8 | Flashcard launcher | `/app/flashcards` | 111 KB | 0 | 0 | 0 | 1 | not measured | not measured | Users wait on session + entitlement, compatible pathway bootstrap, profile lookup, and flashcard inventory aggregate transaction before the client can trust counts. |
+| Rank | Activity           | Route                               | Source Size | Prisma Call Sites | findMany | Transactions | Client fetches | Cold         | Warm         | Where users wait                                                                                                                                                             |
+| ---: | ------------------ | ----------------------------------- | ----------: | ----------------: | -------: | -----------: | -------------: | ------------ | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|    1 | CAT session        | `/app/practice-tests/[id]?mode=cat` |      332 KB |                22 |        8 |            0 |              8 | not measured | not measured | Users wait on CAT pool count/findMany, answer history, adaptive state persistence, and per-question adaptive selection/feedback queries.                                     |
+|    2 | Flashcard session  | `/app/flashcards/[deckRef]`         |       97 KB |                26 |       12 |            1 |              0 | not measured | not measured | Users wait on custom pool generation: dedicated flashcards, virtual question-derived cards, progress filters, option hydration, and session persistence/hydration.           |
+|    3 | Practice session   | `/app/practice-tests/[id]`          |      245 KB |                 4 |        1 |            0 |              8 | not measured | not measured | Users wait on practice test bootstrap plus repeated client saves/question fetches during the session; runner is a large client component.                                    |
+|    4 | Lesson launcher    | `/app/lessons`                      |       66 KB |                11 |        4 |            0 |              3 | not measured | not measured | Users wait on entitlement/profile resolution, contentItem count, pathwayLesson sample/list pagination, then client-side filter fetches.                                      |
+|    5 | Practice launcher  | `/app/practice-tests`               |      109 KB |                 5 |        3 |            1 |              3 | not measured | not measured | Users wait mostly after shell render: discovery counts, weak-area/readiness/performance-summary calls, then practice test creation when launching.                           |
+|    6 | CAT launcher       | `/app/practice-tests/cat-launch`    |       87 KB |                 4 |        3 |            1 |              2 | not measured | not measured | Users wait on cat-readiness and POST /api/practice-tests; route shell is light but launch API is heavy.                                                                      |
+|    7 | Lesson detail      | `/app/lessons/[id]`                 |       75 KB |                 4 |        0 |            0 |              3 | not measured | not measured | Users wait on duplicated learnerPath/profile reads, pathwayLesson lookup, legacy ContentItem fallback checks, measurement preference lookup, and related/practice hydration. |
+|    8 | Flashcard launcher | `/app/flashcards`                   |      111 KB |                 0 |        0 |            0 |              1 | not measured | not measured | Users wait on session + entitlement, compatible pathway bootstrap, profile lookup, and flashcard inventory aggregate transaction before the client can trust counts.         |
 
 ## Flow Details
 
@@ -34,11 +34,11 @@ Generated: 2026-06-01T11:13:49.619Z
 - Warm load: not measured.
 - Exact wait point: Users wait on entitlement/profile resolution, contentItem count, pathwayLesson sample/list pagination, then client-side filter fetches.
 
-| File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `src/app/(app)/app/(learner)/lessons/page.tsx` | 30 KB | 3 | 0 | 1 | 0 | 0 | 0 | 0 |
-| `src/components/student/learner-lessons-responsive-results.tsx` | 21 KB | 0 | 0 | 0 | 0 | 3 | 2 | 2 |
-| `src/app/api/lessons/route.ts` | 15 KB | 8 | 4 | 2 | 0 | 0 | 0 | 0 |
+| File                                                            |  Size | Prisma | findMany | count |  tx | fetch | useState | useEffect |
+| --------------------------------------------------------------- | ----: | -----: | -------: | ----: | --: | ----: | -------: | --------: |
+| `src/app/(app)/app/(learner)/lessons/page.tsx`                  | 30 KB |      3 |        0 |     1 |   0 |     0 |        0 |         0 |
+| `src/components/student/learner-lessons-responsive-results.tsx` | 21 KB |      0 |        0 |     0 |   0 |     3 |        2 |         2 |
+| `src/app/api/lessons/route.ts`                                  | 15 KB |      8 |        4 |     2 |   0 |     0 |        0 |         0 |
 
 ### Lesson detail
 
@@ -52,11 +52,11 @@ Generated: 2026-06-01T11:13:49.619Z
 - Warm load: not measured.
 - Exact wait point: Users wait on duplicated learnerPath/profile reads, pathwayLesson lookup, legacy ContentItem fallback checks, measurement preference lookup, and related/practice hydration.
 
-| File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `src/app/(app)/app/(learner)/lessons/[id]/page.tsx` | 51 KB | 4 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/components/lessons/pathway-lesson-study-loop-orchestrator.tsx` | 22 KB | 0 | 0 | 0 | 0 | 3 | 2 | 5 |
-| `src/app/api/learner/pathway-lesson-practice-questions/route.ts` | 2 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| File                                                                |  Size | Prisma | findMany | count |  tx | fetch | useState | useEffect |
+| ------------------------------------------------------------------- | ----: | -----: | -------: | ----: | --: | ----: | -------: | --------: |
+| `src/app/(app)/app/(learner)/lessons/[id]/page.tsx`                 | 51 KB |      4 |        0 |     0 |   0 |     0 |        0 |         0 |
+| `src/components/lessons/pathway-lesson-study-loop-orchestrator.tsx` | 22 KB |      0 |        0 |     0 |   0 |     3 |        2 |         5 |
+| `src/app/api/learner/pathway-lesson-practice-questions/route.ts`    |  2 KB |      0 |        0 |     0 |   0 |     0 |        0 |         0 |
 
 ### Flashcard launcher
 
@@ -70,12 +70,12 @@ Generated: 2026-06-01T11:13:49.619Z
 - Warm load: not measured.
 - Exact wait point: Users wait on session + entitlement, compatible pathway bootstrap, profile lookup, and flashcard inventory aggregate transaction before the client can trust counts.
 
-| File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `src/app/(app)/app/(learner)/flashcards/page.tsx` | 20 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/components/flashcards/flashcards-hub-client.tsx` | 60 KB | 0 | 0 | 0 | 0 | 1 | 9 | 6 |
-| `src/app/api/flashcards/inventory/route.ts` | 11 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/app/api/flashcards/custom-session/route.ts` | 19 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| File                                                  |  Size | Prisma | findMany | count |  tx | fetch | useState | useEffect |
+| ----------------------------------------------------- | ----: | -----: | -------: | ----: | --: | ----: | -------: | --------: |
+| `src/app/(app)/app/(learner)/flashcards/page.tsx`     | 20 KB |      0 |        0 |     0 |   0 |     0 |        0 |         0 |
+| `src/components/flashcards/flashcards-hub-client.tsx` | 60 KB |      0 |        0 |     0 |   0 |     1 |        9 |         6 |
+| `src/app/api/flashcards/inventory/route.ts`           | 11 KB |      0 |        0 |     0 |   0 |     0 |        0 |         0 |
+| `src/app/api/flashcards/custom-session/route.ts`      | 19 KB |      0 |        0 |     0 |   0 |     0 |        0 |         0 |
 
 ### Flashcard session
 
@@ -89,14 +89,14 @@ Generated: 2026-06-01T11:13:49.619Z
 - Warm load: not measured.
 - Exact wait point: Users wait on custom pool generation: dedicated flashcards, virtual question-derived cards, progress filters, option hydration, and session persistence/hydration.
 
-| File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `src/app/(app)/app/(learner)/flashcards/[deckRef]/page.tsx` | 1 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/lib/flashcards/build-flashcard-custom-session.ts` | 41 KB | 5 | 5 | 0 | 0 | 0 | 0 | 0 |
-| `src/lib/flashcards/flashcard-session-hydration.server.ts` | 5 KB | 2 | 1 | 0 | 0 | 0 | 0 | 0 |
-| `src/lib/flashcards/flashcard-session-dal.server.ts` | 8 KB | 11 | 1 | 2 | 1 | 0 | 0 | 0 |
-| `src/app/api/flashcards/custom-session/route.ts` | 19 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/app/api/flashcards/decks/[deckRef]/study/route.ts` | 24 KB | 8 | 5 | 1 | 0 | 0 | 0 | 0 |
+| File                                                        |  Size | Prisma | findMany | count |  tx | fetch | useState | useEffect |
+| ----------------------------------------------------------- | ----: | -----: | -------: | ----: | --: | ----: | -------: | --------: |
+| `src/app/(app)/app/(learner)/flashcards/[deckRef]/page.tsx` |  1 KB |      0 |        0 |     0 |   0 |     0 |        0 |         0 |
+| `src/lib/flashcards/build-flashcard-custom-session.ts`      | 41 KB |      5 |        5 |     0 |   0 |     0 |        0 |         0 |
+| `src/lib/flashcards/flashcard-session-hydration.server.ts`  |  5 KB |      2 |        1 |     0 |   0 |     0 |        0 |         0 |
+| `src/lib/flashcards/flashcard-session-dal.server.ts`        |  8 KB |     11 |        1 |     2 |   1 |     0 |        0 |         0 |
+| `src/app/api/flashcards/custom-session/route.ts`            | 19 KB |      0 |        0 |     0 |   0 |     0 |        0 |         0 |
+| `src/app/api/flashcards/decks/[deckRef]/study/route.ts`     | 24 KB |      8 |        5 |     1 |   0 |     0 |        0 |         0 |
 
 ### Practice launcher
 
@@ -110,13 +110,13 @@ Generated: 2026-06-01T11:13:49.619Z
 - Warm load: not measured.
 - Exact wait point: Users wait mostly after shell render: discovery counts, weak-area/readiness/performance-summary calls, then practice test creation when launching.
 
-| File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `src/app/(app)/app/(learner)/practice-tests/page.tsx` | 15 KB | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/components/student/practice-tests-hub-client.tsx` | 34 KB | 0 | 0 | 0 | 0 | 2 | 5 | 5 |
-| `src/components/student/practice-exam-launcher-client.tsx` | 8 KB | 0 | 0 | 0 | 0 | 1 | 1 | 0 |
-| `src/app/api/practice-tests/route.ts` | 42 KB | 4 | 3 | 0 | 1 | 0 | 0 | 0 |
-| `src/app/api/questions/discovery/route.ts` | 10 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| File                                                       |  Size | Prisma | findMany | count |  tx | fetch | useState | useEffect |
+| ---------------------------------------------------------- | ----: | -----: | -------: | ----: | --: | ----: | -------: | --------: |
+| `src/app/(app)/app/(learner)/practice-tests/page.tsx`      | 15 KB |      1 |        0 |     0 |   0 |     0 |        0 |         0 |
+| `src/components/student/practice-tests-hub-client.tsx`     | 34 KB |      0 |        0 |     0 |   0 |     2 |        5 |         5 |
+| `src/components/student/practice-exam-launcher-client.tsx` |  8 KB |      0 |        0 |     0 |   0 |     1 |        1 |         0 |
+| `src/app/api/practice-tests/route.ts`                      | 42 KB |      4 |        3 |     0 |   1 |     0 |        0 |         0 |
+| `src/app/api/questions/discovery/route.ts`                 | 10 KB |      0 |        0 |     0 |   0 |     0 |        0 |         0 |
 
 ### Practice session
 
@@ -130,13 +130,13 @@ Generated: 2026-06-01T11:13:49.619Z
 - Warm load: not measured.
 - Exact wait point: Users wait on practice test bootstrap plus repeated client saves/question fetches during the session; runner is a large client component.
 
-| File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `src/app/(app)/app/(learner)/practice-tests/[id]/page.tsx` | 5 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/components/student/practice-test-runner-client.tsx` | 195 KB | 0 | 0 | 0 | 0 | 8 | 10 | 24 |
-| `src/lib/practice-tests/load-practice-test-shell-bootstrap.ts` | 3 KB | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/app/api/practice-tests/[id]/route.ts` | 35 KB | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
-| `src/app/api/practice-tests/[id]/question/route.ts` | 8 KB | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
+| File                                                           |   Size | Prisma | findMany | count |  tx | fetch | useState | useEffect |
+| -------------------------------------------------------------- | -----: | -----: | -------: | ----: | --: | ----: | -------: | --------: |
+| `src/app/(app)/app/(learner)/practice-tests/[id]/page.tsx`     |   5 KB |      0 |        0 |     0 |   0 |     0 |        0 |         0 |
+| `src/components/student/practice-test-runner-client.tsx`       | 195 KB |      0 |        0 |     0 |   0 |     8 |       10 |        24 |
+| `src/lib/practice-tests/load-practice-test-shell-bootstrap.ts` |   3 KB |      1 |        0 |     0 |   0 |     0 |        0 |         0 |
+| `src/app/api/practice-tests/[id]/route.ts`                     |  35 KB |      1 |        1 |     0 |   0 |     0 |        0 |         0 |
+| `src/app/api/practice-tests/[id]/question/route.ts`            |   8 KB |      2 |        0 |     0 |   0 |     0 |        0 |         0 |
 
 ### CAT launcher
 
@@ -150,13 +150,13 @@ Generated: 2026-06-01T11:13:49.619Z
 - Warm load: not measured.
 - Exact wait point: Users wait on cat-readiness and POST /api/practice-tests; route shell is light but launch API is heavy.
 
-| File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `src/app/(app)/app/(learner)/practice-tests/cat-launch/page.tsx` | 2 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/app/(app)/app/(learner)/cat/page.tsx` | 1 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/components/student/pathway-cat-session-start-client.tsx` | 39 KB | 0 | 0 | 0 | 0 | 2 | 4 | 2 |
-| `src/app/api/practice-tests/cat-readiness/route.ts` | 3 KB | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/app/api/practice-tests/route.ts` | 42 KB | 4 | 3 | 0 | 1 | 0 | 0 | 0 |
+| File                                                             |  Size | Prisma | findMany | count |  tx | fetch | useState | useEffect |
+| ---------------------------------------------------------------- | ----: | -----: | -------: | ----: | --: | ----: | -------: | --------: |
+| `src/app/(app)/app/(learner)/practice-tests/cat-launch/page.tsx` |  2 KB |      0 |        0 |     0 |   0 |     0 |        0 |         0 |
+| `src/app/(app)/app/(learner)/cat/page.tsx`                       |  1 KB |      0 |        0 |     0 |   0 |     0 |        0 |         0 |
+| `src/components/student/pathway-cat-session-start-client.tsx`    | 39 KB |      0 |        0 |     0 |   0 |     2 |        4 |         2 |
+| `src/app/api/practice-tests/cat-readiness/route.ts`              |  3 KB |      0 |        0 |     0 |   0 |     0 |        0 |         0 |
+| `src/app/api/practice-tests/route.ts`                            | 42 KB |      4 |        3 |     0 |   1 |     0 |        0 |         0 |
 
 ### CAT session
 
@@ -170,15 +170,15 @@ Generated: 2026-06-01T11:13:49.619Z
 - Warm load: not measured.
 - Exact wait point: Users wait on CAT pool count/findMany, answer history, adaptive state persistence, and per-question adaptive selection/feedback queries.
 
-| File | Size | Prisma | findMany | count | tx | fetch | useState | useEffect |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `src/components/student/practice-test-runner-client.tsx` | 195 KB | 0 | 0 | 0 | 0 | 8 | 10 | 24 |
-| `src/lib/practice-tests/cat-pool.ts` | 22 KB | 5 | 3 | 2 | 0 | 0 | 0 | 0 |
-| `src/lib/practice-tests/cat-session.ts` | 48 KB | 3 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `src/lib/cat/answer-history.ts` | 7 KB | 4 | 3 | 0 | 0 | 0 | 0 | 0 |
-| `src/lib/cat/session-persistence.ts` | 18 KB | 7 | 1 | 0 | 0 | 0 | 0 | 0 |
-| `src/app/api/practice-tests/[id]/route.ts` | 35 KB | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
-| `src/app/api/practice-tests/[id]/question/route.ts` | 8 KB | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
+| File                                                     |   Size | Prisma | findMany | count |  tx | fetch | useState | useEffect |
+| -------------------------------------------------------- | -----: | -----: | -------: | ----: | --: | ----: | -------: | --------: |
+| `src/components/student/practice-test-runner-client.tsx` | 195 KB |      0 |        0 |     0 |   0 |     8 |       10 |        24 |
+| `src/lib/practice-tests/cat-pool.ts`                     |  22 KB |      5 |        3 |     2 |   0 |     0 |        0 |         0 |
+| `src/lib/practice-tests/cat-session.ts`                  |  48 KB |      3 |        0 |     0 |   0 |     0 |        0 |         0 |
+| `src/lib/cat/answer-history.ts`                          |   7 KB |      4 |        3 |     0 |   0 |     0 |        0 |         0 |
+| `src/lib/cat/session-persistence.ts`                     |  18 KB |      7 |        1 |     0 |   0 |     0 |        0 |         0 |
+| `src/app/api/practice-tests/[id]/route.ts`               |  35 KB |      1 |        1 |     0 |   0 |     0 |        0 |         0 |
+| `src/app/api/practice-tests/[id]/question/route.ts`      |   8 KB |      2 |        0 |     0 |   0 |     0 |        0 |         0 |
 
 ## Highest-Impact Fix Order
 

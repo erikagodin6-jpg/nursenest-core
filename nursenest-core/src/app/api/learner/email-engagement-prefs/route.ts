@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
@@ -21,10 +22,7 @@ export async function GET(req: Request) {
     });
 
     try {
-      const row = await prisma.user.findUnique({
-        where: { id: gate.userId },
-        select: { emailEngagementOptOut: true },
-      });
+      const row = await loadLearnerRequestUser(gate.userId);
       return NextResponse.json({ ok: true, emailEngagementOptOut: row?.emailEngagementOptOut ?? false });
     } catch {
       return NextResponse.json({ ok: false, error: "Unable to load preferences." }, { status: 503 });

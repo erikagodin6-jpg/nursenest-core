@@ -9,7 +9,15 @@ import {
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerPerformanceWorkspaceNav } from "@/components/student/learner-performance-workspace-nav";
-import { LearnerReportCardPremium } from "@/components/student/learner-report-card-premium";
+import dynamic from "next/dynamic";
+
+const LearnerReportCardPremium = dynamic(
+  () =>
+    import("@/components/student/learner-report-card-premium").then((m) => ({
+      default: m.LearnerReportCardPremium,
+    })),
+  { ssr: false },
+);
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { MedCalcReportCardInset } from "@/components/med-calculations/med-calc-report-card-inset";
 import { StudyToolsReportCardInset } from "@/components/study-tools/study-tools-report-card-inset";

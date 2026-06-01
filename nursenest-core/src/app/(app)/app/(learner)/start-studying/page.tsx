@@ -11,6 +11,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveDefaultPathwayIdForOnboarding } from "@/lib/onboarding/resolve-default-pathway-for-onboarding";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
@@ -42,16 +43,7 @@ export default async function StartStudyingPage() {
   }
 
   const user = await withDatabaseFallbackTimeout(
-    () =>
-      prisma.user.findUnique({
-        where: { id: userId },
-        select: {
-          onboardingCompletedAt: true,
-          learnerPath: true,
-          country: true,
-          examFocus: true,
-        },
-      }),
+    () => loadLearnerRequestUser(userId),
     null,
     START_STUDYING_DB_TIMEOUT_MS,
     { scope: "start_studying", label: "profile_user" },

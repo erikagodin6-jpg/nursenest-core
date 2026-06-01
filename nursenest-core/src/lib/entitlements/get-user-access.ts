@@ -28,6 +28,7 @@ import type {
 } from "./user-access-types";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { MODULE_ADD_ON_PLAN_CODE_PREFIX } from "@/lib/subscriptions/subscription-plan-codes";
@@ -275,22 +276,7 @@ async function getUserAccessCore(
   const base = emptyAccess(userId);
   if (!isDatabaseUrlConfigured()) return base;
 
-  const user = await withRetry(() =>
-    prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        role: true,
-        tier: true,
-        country: true,
-        trialStatus: true,
-        trialEndsAt: true,
-        alliedProfessionKey: true,
-        targetExamPathwayId: true,
-        credentialVersion: true,
-        email: true,
-      },
-    }),
-  );
+  const user = await loadLearnerRequestUser(userId);
 
   if (!user) return base;
   // Keep this hot entitlement read compatible with production databases that have

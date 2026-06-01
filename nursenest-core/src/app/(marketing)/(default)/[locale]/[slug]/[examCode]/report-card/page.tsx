@@ -9,8 +9,13 @@ import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { CnpleReportCard, CNPLE_DOMAIN_LABELS } from "@/components/cnple/cnple-report-card";
+import dynamic from "next/dynamic";
+import { CNPLE_DOMAIN_LABELS } from "@/components/cnple/cnple-report-card";
 import type { CnpleDomainResult } from "@/components/cnple/cnple-report-card";
+
+const CnpleReportCard = dynamic(
+  () => import("@/components/cnple/cnple-report-card").then((m) => ({ default: m.CnpleReportCard })),
+);
 import { CnpleProvisionalDisclaimer } from "@/components/cnple/cnple-provisional-disclaimer";
 
 export const dynamicParams = true;

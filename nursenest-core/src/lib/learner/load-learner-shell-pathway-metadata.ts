@@ -2,8 +2,8 @@ import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment"
 import { buildAlliedOccupationMarketingHubPath } from "@/lib/allied/allied-global-hub-path";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { CountryCode } from "@prisma/client";
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { learnerPathwayHubChromeHref } from "@/lib/learner/learner-pathway-hub-chrome-href";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -85,16 +85,7 @@ export async function loadLearnerPathwayNavMetadata(
     return { ...DEFAULT_LEARNER_PATHWAY_NAV_METADATA };
   }
 
-  const u = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      baselineAssessmentSkippedAt: true,
-      baselineAssessmentCompletedAt: true,
-      learnerPath: true,
-      alliedProfessionKey: true,
-      country: true,
-    },
-  });
+  const u = await loadLearnerRequestUser(userId);
 
   let showBaselinePrompt = false;
   let pathwayShortLabel: string | null = null;

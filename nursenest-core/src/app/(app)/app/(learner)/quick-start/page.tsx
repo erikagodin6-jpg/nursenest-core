@@ -2,8 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { QuickStartFlowClient } from "./quick-start-flow-client";
 
 export const dynamic = "force-dynamic";
@@ -29,14 +29,7 @@ export default async function QuickStartPage({ searchParams }: Props) {
   }
 
   const user = await withDatabaseFallbackTimeout(
-    () =>
-      prisma.user.findUnique({
-        where: { id: userId },
-        select: {
-          baselineAssessmentCompletedAt: true,
-          baselineAssessmentSummary: true,
-        },
-      }),
+    () => loadLearnerRequestUser(userId),
     null,
     QUICK_START_DB_TIMEOUT_MS,
     { scope: "quick_start", label: "baseline_user" },

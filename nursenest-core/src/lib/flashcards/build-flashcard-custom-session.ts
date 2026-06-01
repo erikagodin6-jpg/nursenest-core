@@ -17,7 +17,15 @@ import {
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
 import { loadLessonLinkedFlashcardVirtuals } from "@/lib/flashcards/lesson-linked-flashcards-for-pathway";
 import { FLASHCARD_PADDING_CARD_RATIONALE_MARKER } from "@/lib/flashcards/lesson-linked-virtual-flashcards-aggregator";
-import { loadFlashcardPoolSnapshotForPathway } from "@/lib/flashcards/flashcard-pool-snapshot.server";
+import {
+  loadFlashcardPoolSnapshotForPathway,
+  getExamTopicMetaForPathway,
+  setExamTopicMetaForPathway,
+} from "@/lib/flashcards/flashcard-pool-snapshot.server";
+import {
+  getFlashcardHubInventory,
+  setFlashcardHubInventory,
+} from "@/lib/server/content-cache";
 import {
   serializeFlashcardForCustomSession,
   type FlashcardStudySelectRow,
@@ -297,6 +305,92 @@ export async function buildFlashcardCustomSession(
     if (useExamForInventoryEarly && pathwayScopeId) {
       const pathwayForInventory = getExamPathwayById(pathwayScopeId);
       if (pathwayForInventory) {
+        // ── Fast path: serve from Redis hub-inventory snapshot ───────────────
+        const snapshotTier = String(entitlement.tier ?? "");
+        const snapshotCountry = String(entitlement.country ?? "");
+        const cachedHubInv = await getFlashcardHubInventory(
+          pathwayScopeId,
+          snapshotTier,
+          snapshotCountry,
+        );
+        if (cachedHubInv) {
+          const {
+            mergedCounts,
+            examTotal: cachedExamTotal,
+            lessonVirtualTotal: cachedLessonVirtualTotal,
+            poolInventoryDiagnostics: cachedPoolDiag,
+          } = cachedHubInv;
+          const cachedLessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics =
+            {
+              pathwayId: pathwayScopeId,
+              catalogLessonCount: cachedHubInv.catalogLessonCount,
+              lessonsWithDerivedCards: cachedHubInv.lessonsWithDerivedCards,
+              totalGeneratedVirtualCards: cachedLessonVirtualTotal,
+              recallVirtualCount: cachedHubInv.recallVirtualCount,
+              sectionDerivedVirtualCount: cachedHubInv.sectionDerivedVirtualCount,
+              genericFillerSectionCardHits:
+                cachedHubInv.genericFillerSectionCardHits,
+              selectedCategoryIds: [...selectedCategories],
+              filterModeLabel: describeCustomSessionFilterMode({
+                weakOnly,
+                incorrectOnly,
+                starredOnly,
+                notStudiedOnly,
+                savedOnly,
+                notesOnly,
+                revisitOnly,
+              }),
+            };
+          const selectedCategorySum = selectedCategoryCountSum(
+            pathwayScopeId,
+            mergedCounts,
+            selectedCategories,
+          );
+          const matchingCardsForSummary =
+            selectedCategories.length === 0
+              ? cachedExamTotal
+              : selectedCategorySum > 0
+                ? selectedCategorySum
+                : 0;
+          const sessionShuffleSalt = sessionSeed?.trim() || randomUUID();
+          return {
+            ok: true,
+            queryRelaxation,
+            summary: {
+              pathwayId: pathwayScopeId,
+              topicCode,
+              lessonId,
+              selectedCategories,
+              matchingCards: matchingCardsForSummary,
+              returnedCards: 0,
+              mode,
+              shuffle,
+              weakOnly,
+              incorrectOnly,
+              starredOnly,
+              savedOnly,
+              notesOnly,
+              revisitOnly,
+              notStudiedOnly,
+              recentStudiedOnly,
+              recentDays,
+              sourceKind,
+              cardLimit: cardLimitRaw ?? "20",
+              queryRelaxation,
+              sessionShuffleSalt,
+              lessonVirtualDiagnostics: cachedLessonVirtualDiagnostics,
+              poolInventoryDiagnostics:
+                cachedPoolDiag as FlashcardsPoolInventoryDiagnostics | null,
+            },
+            categoryOptions: applyCountsToBuilderCategories(
+              pathwayScopeId,
+              mergedCounts,
+            ),
+            cards: [],
+          };
+        }
+
+        // ── Slow path: query DB, then populate cache ──────────────────────────
         const inv = await loadFlashcardsExamInventoryForPathway({
           userId,
           entitlement,
@@ -376,6 +470,24 @@ export async function buildFlashcardCustomSession(
             }),
           };
           const examTotal = inv.total + lessonVirtualTotal;
+          // Populate Redis cache for subsequent requests (fire-and-forget).
+          void setFlashcardHubInventory(
+            pathwayScopeId,
+            snapshotTier,
+            snapshotCountry,
+            {
+              mergedCounts,
+              examTotal,
+              lessonVirtualTotal,
+              catalogLessonCount: lessonInv.catalogLessonCount,
+              lessonsWithDerivedCards: lessonInv.lessonsWithVirtualCards,
+              recallVirtualCount: lessonInv.recallVirtualCount,
+              sectionDerivedVirtualCount: lessonInv.sectionDerivedVirtualCount,
+              genericFillerSectionCardHits:
+                lessonInv.genericFillerSourcedSectionCards,
+              poolInventoryDiagnostics: inv.diagnostics,
+            },
+          );
           const selectedCategorySum = selectedCategoryCountSum(
             pathwayScopeId,
             mergedCounts,
@@ -526,13 +638,31 @@ export async function buildFlashcardCustomSession(
       if (typeof id === "string" && id.trim())
         examQuestionIdsForMeta.add(id.trim());
     }
+    // Use in-process exam-topic meta cache to skip chunked findMany on warm requests.
+    const cachedExamMeta = pathwayScopeId
+      ? getExamTopicMetaForPathway(pathwayScopeId)
+      : null;
     const examTopicMetaById = new Map<
       string,
       { bodySystem: string | null; topic: string | null }
     >();
     const examQIdList = [...examQuestionIdsForMeta];
-    for (let i = 0; i < examQIdList.length; i += PRISMA_ID_IN_CHUNK_SIZE) {
-      const chunk = examQIdList.slice(i, i + PRISMA_ID_IN_CHUNK_SIZE);
+    const uncachedIds: string[] = [];
+    if (cachedExamMeta) {
+      for (const qid of examQIdList) {
+        const hit = cachedExamMeta.get(qid);
+        if (hit) {
+          examTopicMetaById.set(qid, hit);
+        } else {
+          uncachedIds.push(qid);
+        }
+      }
+    } else {
+      uncachedIds.push(...examQIdList);
+    }
+    const newEntries: Array<[string, { bodySystem: string | null; topic: string | null }]> = [];
+    for (let i = 0; i < uncachedIds.length; i += PRISMA_ID_IN_CHUNK_SIZE) {
+      const chunk = uncachedIds.slice(i, i + PRISMA_ID_IN_CHUNK_SIZE);
       if (!chunk.length) break;
       const rows = await prisma.examQuestion.findMany({
         where: { id: { in: chunk } },
@@ -540,11 +670,13 @@ export async function buildFlashcardCustomSession(
         take: takeForIdIn(chunk, 5000),
       });
       for (const r of rows) {
-        examTopicMetaById.set(r.id, {
-          bodySystem: r.bodySystem,
-          topic: r.topic,
-        });
+        const meta = { bodySystem: r.bodySystem, topic: r.topic };
+        examTopicMetaById.set(r.id, meta);
+        newEntries.push([r.id, meta]);
       }
+    }
+    if (pathwayScopeId && newEntries.length > 0) {
+      setExamTopicMetaForPathway(pathwayScopeId, newEntries);
     }
 
     const categoryCounts: Record<string, number> = {};

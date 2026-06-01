@@ -1,6 +1,6 @@
 # Allied Landing Page Truthfulness Audit
 
-Generated: 2026-06-01T01:33:24.203Z
+Generated: 2026-06-01T12:00:37.986Z
 
 Scope: post-homepage Allied profession landing pages only. The homepage was not modified or audited for remediation in this pass.
 

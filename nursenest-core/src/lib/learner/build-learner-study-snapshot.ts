@@ -4,6 +4,7 @@ import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import {
   filterTopicRowsForAlliedEntitlement,
   filterWeakTopicsForAlliedEntitlement,
@@ -155,10 +156,7 @@ export async function buildLearnerStudySnapshotUncached(
         tier: options.studyBootstrap.tier,
         learnerPath: options.studyBootstrap.learnerPath,
       }
-    : await prisma.user.findUnique({
-        where: { id: userId },
-        select: { alliedProfessionKey: true, tier: true, learnerPath: true },
-      });
+    : await loadLearnerRequestUser(userId);
 
   const learnerPathResolved = (learnerPath ?? userRow?.learnerPath ?? null)?.trim() || null;
 
