@@ -49,12 +49,14 @@ export async function initPosthogClient(): Promise<void> {
   });
 }
 
-function scheduleIdleTask(run: () => void, timeoutMs: number): void {
+export function scheduleClientAnalyticsTask(run: () => void, timeoutMs = 2500): () => void {
+  if (typeof window === "undefined") return () => {};
   if (typeof requestIdleCallback === "function") {
-    requestIdleCallback(run, { timeout: timeoutMs });
-  } else {
-    window.setTimeout(run, Math.min(timeoutMs, 2500));
+    const id = requestIdleCallback(run, { timeout: timeoutMs });
+    return () => cancelIdleCallback(id);
   }
+  const id = window.setTimeout(run, Math.min(timeoutMs, 2500));
+  return () => window.clearTimeout(id);
 }
 
 async function captureClientEvent(
@@ -86,13 +88,16 @@ export async function trackClientEvent(
     await captureClientEvent(event, props);
     return;
   }
-  scheduleIdleTask(() => {
+  scheduleClientAnalyticsTask(() => {
     void captureClientEvent(event, props);
   }, 5000);
 }
 
 export async function identifyPosthogUser(distinctId: string): Promise<void> {
   if (typeof window === "undefined") return;
+  if (!initialized) {
+    await initPosthogClient();
+  }
   if (!initialized) return;
   try {
     const ph = await getPosthogClient();
@@ -104,7 +109,11 @@ export async function identifyPosthogUser(distinctId: string): Promise<void> {
 export async function capturePosthogPageview(path: string, currentUrl: string): Promise<void> {
   if (typeof window === "undefined") return;
   if (adminLearnerQaSessionSuppress) return;
-  if (!initialized || !process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim()) return;
+  if (!process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim()) return;
+  if (!initialized) {
+    await initPosthogClient();
+  }
+  if (!initialized) return;
   try {
     const posthog = await getPosthogClient();
     if (!posthog) return;

@@ -27,7 +27,7 @@
 
 [data-theme="mint"] {
   --theme-primary: #5cbdbd;
-  --theme-primary-foreground: #ffffff;
+  --theme-primary-foreground: #391226;
   --theme-secondary: #dff5f5;
   --theme-secondary-foreground: #2d7f7f;
   --theme-accent: #eefbf9;
@@ -1767,58 +1767,142 @@ html[data-theme="aurora"] {
   --theme-header-divider: color-mix(in srgb, #1a202c 12%, transparent);
 }
 
-/* Blossom — Spring Sky: sky blue foundation, aqua support, blush/yellow accents only. */
+/* Blossom 2.0 — Cherry Blossom: white-first spring sunrise with bright pastel accents. */
 html[data-theme="blossom"] {
-  --theme-primary: #9ec5fe;
-  --theme-primary-foreground: #0f2a44;
-  --theme-secondary: color-mix(in srgb, #a7f3d0 18%, #ffffff);
-  --theme-secondary-foreground: #0f2a44;
-  --theme-accent: color-mix(in srgb, #f8c8dc 10%, #ffffff);
-  --theme-accent-foreground: #1f5f86;
-  --theme-border: color-mix(in srgb, #9ec5fe 24%, #f8fafc);
-  --theme-ring: #9ec5fe;
-  --theme-page-bg: #f8fafc;
+  --blossom-primary: #ff5f9e;
+  --blossom-secondary: #ff8ab5;
+  --blossom-surface: #fff2f6;
+  --blossom-accent-blue: #74d0f4;
+  --blossom-accent-yellow: #ffd95a;
+  --blossom-accent-peach: #ffb56b;
+  --theme-primary: var(--blossom-primary);
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: color-mix(in srgb, var(--blossom-secondary) 14%, #ffffff);
+  --theme-secondary-foreground: #7f123f;
+  --theme-accent: color-mix(in srgb, var(--blossom-accent-blue) 12%, #ffffff);
+  --theme-accent-foreground: #075985;
+  --theme-border: color-mix(in srgb, var(--blossom-primary) 18%, #ffffff);
+  --theme-ring: var(--blossom-primary);
+  --theme-page-bg: #fffafd;
+  --theme-background: #ffffff;
+  --theme-background-subtle: var(--blossom-surface);
+  --theme-surface: #ffffff;
   --theme-surface-strong: #ffffff;
-  --theme-heading-text: #0f172a;
-  --theme-body-text: #334155;
-  --theme-muted-text: #64748b;
+  --theme-card-bg: rgba(255, 255, 255, 0.94);
+  --theme-card-border: color-mix(in srgb, var(--blossom-primary) 14%, #ffffff);
+  --theme-heading-text: #391226;
+  --theme-body-text: #4b3340;
+  --theme-muted-text: #775568;
+  --theme-text-on-brand: #391226;
 
-  --lesson-summary: color-mix(in srgb, #9ec5fe 13%, #ffffff);
-  --lesson-key-concepts: color-mix(in srgb, #9ec5fe 16%, #ffffff);
-  --lesson-signs-symptoms: color-mix(in srgb, #f8c8dc 9%, #ffffff);
-  --lesson-assessment: color-mix(in srgb, #a7f3d0 14%, #ffffff);
-  --lesson-diagnostics: color-mix(in srgb, #9ec5fe 14%, #ffffff);
-  --lesson-interventions: color-mix(in srgb, #a7f3d0 13%, #ffffff);
-  --lesson-medications: color-mix(in srgb, #fde68a 11%, #ffffff);
-  --lesson-patient-teaching: color-mix(in srgb, #a7f3d0 12%, #ffffff);
-  --lesson-exam-tips: color-mix(in srgb, #fde68a 10%, #ffffff);
-  --lesson-red-flags: color-mix(in srgb, #f8c8dc 10%, #ffffff);
-  --lesson-clinical-pearls: color-mix(in srgb, #9ec5fe 15%, #ffffff);
-  --lesson-notes: color-mix(in srgb, #f8fafc 80%, #ffffff);
+  --lesson-summary: color-mix(in srgb, var(--blossom-surface) 70%, #ffffff);
+  --lesson-key-concepts: color-mix(in srgb, var(--blossom-primary) 9%, #ffffff);
+  --lesson-signs-symptoms: color-mix(in srgb, var(--blossom-secondary) 8%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, var(--blossom-accent-blue) 11%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, var(--blossom-accent-blue) 10%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, var(--blossom-accent-peach) 10%, #ffffff);
+  --lesson-medications: color-mix(in srgb, var(--blossom-accent-yellow) 12%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, var(--blossom-secondary) 8%, #ffffff);
+  --lesson-exam-tips: color-mix(in srgb, var(--blossom-accent-yellow) 13%, #ffffff);
+  --lesson-red-flags: color-mix(in srgb, var(--blossom-primary) 10%, #ffffff);
+  --lesson-clinical-pearls: color-mix(in srgb, var(--blossom-accent-peach) 10%, #ffffff);
+  --lesson-notes: color-mix(in srgb, var(--blossom-surface) 58%, #ffffff);
 
-  --state-success: color-mix(in srgb, #a7f3d0 15%, #ffffff);
-  --state-warning: color-mix(in srgb, #fde68a 12%, #ffffff);
-  --state-info: color-mix(in srgb, #9ec5fe 14%, #ffffff);
-  --state-danger-soft: color-mix(in srgb, #f8c8dc 10%, #ffffff);
+  --state-success: color-mix(in srgb, var(--blossom-primary) 12%, #ffffff);
+  --state-warning: color-mix(in srgb, var(--blossom-accent-yellow) 15%, #ffffff);
+  --state-info: color-mix(in srgb, var(--blossom-accent-blue) 13%, #ffffff);
+  --state-danger-soft: color-mix(in srgb, var(--blossom-secondary) 12%, #ffffff);
 
-  --logo-primary: #1d7ed8;
-  --logo-accent: #63d7b1;
+  --semantic-brand: var(--blossom-primary);
+  --semantic-brand-strong: #e83f84;
+  --semantic-success: var(--blossom-primary);
+  --semantic-warning: #d58e00;
+  --semantic-info: #168ec5;
+  --semantic-danger: #d83272;
+  --semantic-surface: #ffffff;
+  --semantic-surface-elevated: #ffffff;
+  --semantic-panel-muted: color-mix(in srgb, var(--blossom-surface) 54%, #ffffff);
+  --semantic-border-soft: color-mix(in srgb, var(--blossom-primary) 16%, #ffffff);
+  --semantic-text-primary: var(--theme-heading-text);
+  --semantic-text-secondary: var(--theme-body-text);
+  --semantic-text-muted: var(--theme-muted-text);
+
+  --logo-primary: var(--blossom-primary);
+  --logo-accent: var(--blossom-accent-yellow);
   --logo-text: var(--theme-heading-text);
-  --theme-brand-accent: #a7f3d0;
-  --theme-brand-strong: #1d7ed8;
+  --theme-brand-accent: var(--blossom-secondary);
+  --theme-brand-strong: #e83f84;
   --theme-nav-background: color-mix(
     in srgb,
-    #9ec5fe 7%,
-    color-mix(in srgb, #ffffff 78%, color-mix(in srgb, #a7f3d0 8%, #f8fafc))
+    var(--blossom-surface) 54%,
+    #ffffff
   );
-  --theme-nav-foreground: #0f172a;
-  --theme-nav-hover: color-mix(in srgb, #a7f3d0 18%, transparent);
-  --theme-nav-hover-foreground: #0f172a;
+  --theme-nav-foreground: var(--theme-heading-text);
+  --theme-nav-hover: color-mix(in srgb, var(--blossom-primary) 10%, transparent);
+  --theme-nav-hover-foreground: var(--theme-heading-text);
   --theme-header-top-bg: #ffffff;
-  --theme-header-main-bg: color-mix(in srgb, #9ec5fe 5%, #ffffff);
-  --theme-header-secondary-bg: color-mix(in srgb, #9ec5fe 6%, #ffffff);
-  --theme-header-secondary-fg: #0f172a;
-  --theme-header-divider: color-mix(in srgb, #9ec5fe 18%, transparent);
+  --theme-header-main-bg: color-mix(in srgb, var(--blossom-surface) 42%, #ffffff);
+  --theme-header-secondary-bg: color-mix(in srgb, var(--blossom-primary) 5%, #ffffff);
+  --theme-header-secondary-fg: var(--theme-heading-text);
+  --theme-header-divider: color-mix(in srgb, var(--blossom-primary) 18%, transparent);
+
+  --theme-primary-button-bg: var(--blossom-primary);
+  --theme-primary-button-text: #391226;
+  --theme-primary-button-hover: #ff4f97;
+  --theme-secondary-button-bg: #ffffff;
+  --theme-secondary-button-text: #9d174d;
+  --theme-secondary-button-border: color-mix(in srgb, var(--blossom-primary) 36%, #ffffff);
+  --theme-secondary-button-hover: var(--blossom-surface);
+  --theme-pill-bg: var(--blossom-surface);
+  --theme-pill-text: #8b1748;
+  --theme-pill-border: color-mix(in srgb, var(--blossom-secondary) 32%, #ffffff);
+
+  --theme-hero-gradient: linear-gradient(135deg, #ffffff 0%, #fff2f6 38%, #fff8de 68%, #e6f7ff 100%);
+  --theme-surface-gradient: linear-gradient(135deg, #ffffff 0%, #fff2f6 56%, #ffffff 100%);
+  --theme-progress-gradient: linear-gradient(
+    90deg,
+    var(--blossom-primary) 0%,
+    var(--blossom-accent-peach) 34%,
+    var(--blossom-accent-yellow) 66%,
+    var(--blossom-accent-blue) 100%
+  );
+}
+
+html[data-theme="blossom"] :where(
+  .nn-progress-fill-semantic-brand,
+  .nn-lesson-reading-progress__fill,
+  .nn-cat-top-bar__progress-fill,
+  .nn-cat-exam-progress-fill,
+  .nn-practice-exam-progress__fill,
+  .nn-practice-session-progress-fill,
+  .nn-qs__progress-fill,
+  .nn-ui-progress__fill,
+  .nn-study-plan-progress-fill,
+  .nn-readiness-meter-fill,
+  .nn-flashcard-topbar-progress-fill,
+  .nn-mobile-fc-progress-fill
+) {
+  background: var(--theme-progress-gradient);
+}
+
+html[data-theme="blossom"] .nn-progress-fill-semantic-success {
+  background: linear-gradient(90deg, #ff5f9e 0%, #ff8ab5 100%);
+}
+
+html[data-theme="blossom"] .nn-progress-fill-semantic-info {
+  background: linear-gradient(90deg, #74d0f4 0%, #35b9e7 100%);
+}
+
+html[data-theme="blossom"] .nn-progress-fill-semantic-warning {
+  background: linear-gradient(90deg, #ffd95a 0%, #ffb56b 100%);
+}
+
+html[data-theme="blossom"] .nn-progress-fill-semantic-readiness {
+  background: linear-gradient(90deg, #ffb56b 0%, #ff5f9e 58%, #74d0f4 100%);
+}
+
+html[data-theme="blossom"] .nn-progress-fill-semantic-danger {
+  background: linear-gradient(90deg, #ff8ab5 0%, #d83272 100%);
 }
 
 /* Sea Glass — coastal wellness. */
@@ -2384,33 +2468,33 @@ html[data-theme="midnight"] {
   --theme-topbar-text: #111827;
 }
 
-/* Blossom — spring-sky shell (overrides neutral grey normalization above). */
+/* Blossom 2.0 — Cherry Blossom shell (overrides neutral grey normalization above). */
 html[data-theme="blossom"] {
-  --theme-secondary: color-mix(in srgb, #a7f3d0 18%, #ffffff);
-  --theme-secondary-foreground: #0f2a44;
-  --theme-accent: color-mix(in srgb, #f8c8dc 10%, #ffffff);
-  --theme-accent-foreground: #1f5f86;
-  --theme-border: color-mix(in srgb, #9ec5fe 22%, #f8fafc);
+  --theme-secondary: color-mix(in srgb, #ff8ab5 14%, #ffffff);
+  --theme-secondary-foreground: #7f123f;
+  --theme-accent: color-mix(in srgb, #74d0f4 12%, #ffffff);
+  --theme-accent-foreground: #075985;
+  --theme-border: color-mix(in srgb, #ff5f9e 18%, #ffffff);
   --theme-topbar-bg: #ffffff;
-  --theme-topbar-text: #0f172a;
-  --color-softgray: #334155;
-  --theme-card-border: color-mix(in srgb, #9ec5fe 14%, #ffffff);
-  --theme-input-border: color-mix(in srgb, #9ec5fe 16%, #f8fafc);
-  --theme-separator: color-mix(in srgb, #9ec5fe 12%, #f8fafc);
+  --theme-topbar-text: #391226;
+  --color-softgray: #4b3340;
+  --theme-card-border: color-mix(in srgb, #ff5f9e 14%, #ffffff);
+  --theme-input-border: color-mix(in srgb, #ff8ab5 20%, #ffffff);
+  --theme-separator: color-mix(in srgb, #ff8ab5 16%, #ffffff);
   --shadow-card:
-    0 1px 0 rgba(158, 197, 254, 0.12),
-    0 1px 3px rgba(158, 197, 254, 0.1),
-    0 14px 34px -16px rgba(29, 126, 216, 0.16);
+    0 1px 0 rgba(255, 95, 158, 0.1),
+    0 1px 3px rgba(255, 138, 181, 0.08),
+    0 14px 34px -18px rgba(255, 95, 158, 0.18);
   --shadow-card-hover:
-    0 1px 0 rgba(158, 197, 254, 0.14),
-    0 6px 18px -6px rgba(158, 197, 254, 0.16),
-    0 20px 44px -16px rgba(167, 243, 208, 0.18);
+    0 1px 0 rgba(255, 95, 158, 0.12),
+    0 6px 18px -8px rgba(255, 181, 107, 0.2),
+    0 20px 44px -18px rgba(255, 95, 158, 0.22);
   --shadow-elevated:
-    0 10px 30px -10px rgba(158, 197, 254, 0.22),
-    0 2px 8px -2px rgba(167, 243, 208, 0.12);
+    0 10px 30px -12px rgba(255, 95, 158, 0.24),
+    0 2px 8px -3px rgba(255, 217, 90, 0.16);
   --shadow-nav:
-    0 1px 2px rgba(158, 197, 254, 0.08),
-    0 4px 16px -4px rgba(29, 126, 216, 0.12);
+    0 1px 2px rgba(255, 95, 158, 0.06),
+    0 4px 16px -6px rgba(255, 138, 181, 0.14);
 }
 
 /* Sea Glass — coastal shell + light wellness shadows. */

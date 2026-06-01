@@ -5,7 +5,12 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { FrontendUxInit } from "@/components/observability/frontend-ux-init";
 import { recordNavigationMounted, touchUxNavigation } from "@/lib/observability/frontend-ux-tracking";
 import { addClientBreadcrumbIfEnabled } from "@/lib/observability/sentry-if-enabled";
-import { capturePosthogPageview, initPosthogClient, trackClientEvent } from "@/lib/observability/posthog-client";
+import {
+  capturePosthogPageview,
+  initPosthogClient,
+  scheduleClientAnalyticsTask,
+  trackClientEvent,
+} from "@/lib/observability/posthog-client";
 
 function PostHogPageViews() {
   const pathname = usePathname();
@@ -13,7 +18,9 @@ function PostHogPageViews() {
   const last = useRef<string | null>(null);
 
   useEffect(() => {
-    void initPosthogClient();
+    return scheduleClientAnalyticsTask(() => {
+      void initPosthogClient();
+    }, 3000);
   }, []);
 
   useEffect(() => {
@@ -22,13 +29,15 @@ function PostHogPageViews() {
     const url = qs ? `${pathname}?${qs}` : pathname;
     if (last.current === url) return;
     last.current = url;
+    if (typeof window === "undefined") return;
     touchUxNavigation();
     recordNavigationMounted(pathname);
-    if (typeof window === "undefined") return;
-    void capturePosthogPageview(pathname, window.location.href).catch(() => {
-      void trackClientEvent("page_view_fallback", { path: pathname });
-    });
     addClientBreadcrumbIfEnabled({ category: "navigation", message: pathname, level: "info" });
+    return scheduleClientAnalyticsTask(() => {
+      void capturePosthogPageview(pathname, window.location.href).catch(() => {
+        void trackClientEvent("page_view_fallback", { path: pathname });
+      });
+    }, 3500);
   }, [pathname, searchParams]);
 
   return null;

@@ -78,13 +78,13 @@ export const CLINICAL_THEME_META: Record<LaunchClinicalThemeId, ClinicalThemeMet
   blossom: {
     id: "blossom",
     label: "Blossom",
-    mood: "Soft, motivating, elegant",
+    mood: "Cheerful, premium, clinically bright",
     group: "light",
     swatches: {
-      primary: "#8E75FF",
-      secondary: "#7DD3FC",
-      accent: "#E8A87C",
-      surface: "#FAF7FC",
+      primary: "#FF5F9E",
+      secondary: "#FF8AB5",
+      accent: "#74D0F4",
+      surface: "#FFF2F6",
     },
   },
   "sea-glass": {

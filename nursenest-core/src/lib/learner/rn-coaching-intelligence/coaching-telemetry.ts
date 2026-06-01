@@ -29,9 +29,15 @@ export function recordCoachingTelemetry(
     if (typeof window === "undefined") return;
     const w = window as Window & {
       posthog?: { capture: (e: string, p: Record<string, unknown>) => void };
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
     };
     const eventName = props.graph_authoritative === true ? event : `rn_coaching_${event}`;
-    w.posthog?.capture(eventName, props);
+    const run = () => w.posthog?.capture(eventName, props);
+    if (typeof w.requestIdleCallback === "function") {
+      w.requestIdleCallback(run, { timeout: 2500 });
+    } else {
+      window.setTimeout(run, 500);
+    }
   } catch {
     /* analytics optional */
   }

@@ -29,6 +29,7 @@
 import Link from "next/link";
 import { Lock, CheckCircle2 } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { scheduleClientAnalyticsTask } from "@/lib/observability/posthog-client";
 
 // ── Analytics ────────────────────────────────────────────────────────────────
 
@@ -54,20 +55,24 @@ export function usePremiumGateImpression(
   useEffect(() => {
     if (isEntitled || firedRef.current) return;
     firedRef.current = true;
-    try {
-      window.posthog?.capture(eventName, { surface: eventName });
-    } catch {
-      // Analytics must never break the product
-    }
+    return scheduleClientAnalyticsTask(() => {
+      try {
+        window.posthog?.capture(eventName, { surface: eventName });
+      } catch {
+        // Analytics must never break the product
+      }
+    }, 2500);
   }, [isEntitled, eventName]);
 }
 
 function trackPaywallCta(surface: string, action: string) {
-  try {
-    window.posthog?.capture("paywall_cta_clicked", { surface, action });
-  } catch {
-    // silent
-  }
+  scheduleClientAnalyticsTask(() => {
+    try {
+      window.posthog?.capture("paywall_cta_clicked", { surface, action });
+    } catch {
+      // silent
+    }
+  }, 1500);
 }
 
 // ── Shared upgrade href ───────────────────────────────────────────────────────

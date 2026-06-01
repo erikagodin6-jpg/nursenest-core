@@ -9,6 +9,7 @@ import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill
 import { topicStrengthChipClass } from "@/lib/ui/learner-semantic-chips";
 import type { FlashcardSrsStats } from "@/components/flashcards/flashcard-srs-stats-strip";
 import { fetchLearnerActivityJson } from "@/lib/runtime/learner-activity-fetch";
+import { scheduleClientAnalyticsTask } from "@/lib/observability/posthog-client";
 
 type DueSummary = {
   dueToday: number;
@@ -141,8 +142,13 @@ export function FlashcardsHubAnalytics({ pathwayId, srsStats: srsOverride }: Pro
 
   useEffect(() => {
     const controller = new AbortController();
-    void refresh(controller.signal);
-    return () => controller.abort();
+    const cancel = scheduleClientAnalyticsTask(() => {
+      void refresh(controller.signal);
+    }, 2500);
+    return () => {
+      cancel();
+      controller.abort();
+    };
   }, [refresh]);
 
   const masteryPct = srsOverride?.masteryPct ?? 0;

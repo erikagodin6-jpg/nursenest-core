@@ -5932,9 +5932,9 @@ html[data-theme="midnight"] .nn-active-flashcard-session[data-nn-unified-exam-wo
 /* ── Theme-aware chip accents ──────────────────────────────────────────────── */
 html[data-theme="blossom"] .nn-flashcard-hero-surface .nn-flashcard-chip--mode,
 html[data-theme="mint-blossom"] .nn-flashcard-hero-surface .nn-flashcard-chip--mode {
-  background: color-mix(in srgb, #9ec5fe 18%, var(--semantic-surface));
-  border-color: #9ec5fe;
-  color: #155b8e;
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-brand) 38%, var(--semantic-border-soft));
+  color: var(--semantic-text-primary);
 }
 
 html[data-theme="ocean"] .nn-flashcard-hero-surface .nn-flashcard-chip--mode {

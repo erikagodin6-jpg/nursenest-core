@@ -8,6 +8,7 @@ import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill
 import { topicStrengthChipClass } from "@/lib/ui/learner-semantic-chips";
 import { appCatWeakFocusPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import type { UserPerformanceSummaryPayload } from "@/lib/study/performance-summary-load";
+import { scheduleClientAnalyticsTask } from "@/lib/observability/posthog-client";
 
 type CatReadinessSnapshot = {
   ok: boolean;
@@ -144,7 +145,9 @@ export function PracticeTestsHubAnalytics({ pathwayId, recentSessions }: Props) 
   }, [pathwayId]);
 
   useEffect(() => {
-    void refresh();
+    return scheduleClientAnalyticsTask(() => {
+      void refresh();
+    }, 2500);
   }, [refresh]);
 
   const completedRecent = useMemo(

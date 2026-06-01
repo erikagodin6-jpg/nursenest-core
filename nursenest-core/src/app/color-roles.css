@@ -11,7 +11,7 @@
 :root {
   /* First-paint defaults (ocean/clinical-blue) — replaced once [data-theme] hydrates */
   --role-cta: color-mix(in srgb, #1aaee0 78%, #ea580c);
-  --role-cta-foreground: #ffffff;
+  --role-cta-foreground: #391226;
   --role-cta-hover: color-mix(in srgb, var(--role-cta) 89%, #111827);
   --role-cta-pressed: color-mix(in srgb, var(--role-cta) 76%, #111827);
   --role-cta-shadow: color-mix(in srgb, var(--role-cta) 44%, transparent);
@@ -149,19 +149,19 @@ html[data-theme="multi-pastel"] {
   --role-cta-on-soft: color-mix(in srgb, #3a6e9e 78%, var(--theme-heading-text));
 }
 
-/* Blossom CTA: sky-blue foundation with aqua support; blush/yellow stay reserved for accents. */
+/* Blossom CTA: cherry blossom primary with peach/yellow/sky accents reserved for progress and highlights. */
 html[data-theme="blossom"] {
-  --role-cta: #1d7ed8;
+  --role-cta: #ff5f9e;
   --role-cta-foreground: #ffffff;
-  --role-cta-hover: #268ce8;
-  --role-cta-pressed: #1767b4;
+  --role-cta-hover: #ff4f97;
+  --role-cta-pressed: #e83f84;
   --role-cta-shadow:
-    0 8px 24px -8px rgba(29, 126, 216, 0.32),
-    0 4px 14px -6px rgba(167, 243, 208, 0.2);
-  --role-cta-soft: color-mix(in srgb, #9ec5fe 16%, var(--bg-card, var(--theme-card-bg)));
-  --role-cta-on-soft: color-mix(in srgb, #1d7ed8 74%, var(--theme-heading-text));
-  --semantic-progress-fill: linear-gradient(90deg, #9ec5fe, #a7f3d0);
-  --semantic-progress-fill-accent: linear-gradient(90deg, #9ec5fe, #a7f3d0);
+    0 8px 24px -8px rgba(255, 95, 158, 0.34),
+    0 4px 14px -6px rgba(255, 181, 107, 0.22);
+  --role-cta-soft: color-mix(in srgb, #fff2f6 72%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: #9d174d;
+  --semantic-progress-fill: linear-gradient(90deg, #ff5f9e 0%, #ffb56b 34%, #ffd95a 66%, #74d0f4 100%);
+  --semantic-progress-fill-accent: linear-gradient(90deg, #ff5f9e 0%, #ffb56b 34%, #ffd95a 66%, #74d0f4 100%);
 }
 
 html[data-theme="sea-glass"],

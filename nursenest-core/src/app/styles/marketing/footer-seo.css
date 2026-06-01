@@ -213,11 +213,11 @@
     );
 }
 
-/* Blossom: footer stays spring-sky light with readable ink. */
+/* Blossom: footer stays white-first with Cherry Blossom accents and readable ink. */
 [data-theme="blossom"] [data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface {
-  --footer-fg: #0f172a;
-  --footer-muted: #475569;
-  --footer-border: color-mix(in srgb, #9ec5fe 24%, var(--footer-bg));
+  --footer-fg: var(--theme-heading-text);
+  --footer-muted: var(--theme-muted-text);
+  --footer-border: color-mix(in srgb, var(--blossom-primary, var(--semantic-brand)) 18%, var(--footer-bg));
 }
 
 [data-theme="blossom"] [data-nn-footer-root][data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface {

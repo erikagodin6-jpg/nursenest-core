@@ -117,7 +117,7 @@ html[data-theme="mint-blossom"] {
   padding: var(--nn-blossom-space-card);
 }
 
-/* Buttons — sky primary, white secondary with spring-sky borders */
+/* Buttons — semantic primary, white secondary with theme-aware borders */
 :is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .btn-primary,
 :is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) [data-slot="button"].bg-primary,
 :is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-faq-redesign-cta,

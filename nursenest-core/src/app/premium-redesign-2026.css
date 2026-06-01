@@ -61,8 +61,7 @@ html[data-theme="aurora"] .nn-pre-nursing-marketing-hub {
    Tests read this file directly to guard against regressions.
    ─────────────────────────────────────────────────────────────────────────── */
 
-/* Blossom: wordmark must use the same semantic token as the CDN leaf raster.
-   --theme-primary = soft blossom pink (#ffa9cc) — matches the CDN leaf PNG.
+/* Blossom: wordmark follows the active semantic Cherry Blossom primary token.
    Do NOT use --logo-primary here: .nn-header-logo-row remaps it to
    --nn-header-primary-fg (near-black) inside the row4 header, breaking the match. */
 html[data-theme="blossom"] .nn-header-brand-lockup {
