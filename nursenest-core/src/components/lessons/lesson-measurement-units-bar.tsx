@@ -26,6 +26,7 @@ export function LessonMeasurementUnitsBar({
       fallbackSystem={fallbackSystem}
       initialPreference={initialPreference}
       compact={compact}
+      variant="lesson-utility"
       syncToProfile={syncToProfile}
       title="Units"
       description="Switch between SI (metric) and conventional (US customary) values. Your choice applies across lessons, practice, CAT, and flashcards."

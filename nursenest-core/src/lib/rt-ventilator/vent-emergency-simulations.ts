@@ -880,7 +880,180 @@ export const emerg_massive_aspiration: AdvancedSimulation = makeSimulation(
   ],
 );
 
-// ─── Full registry ─────────────────────────────────────────────────────────────
+// ─── 13. Massive Mucous Plug ──────────────────────────────────────────────────
+
+export const emerg_massive_mucous_plug: AdvancedSimulation = makeSimulation(
+  "massive_mucous_plug",
+  {
+    category: "emergency",
+    title: "Massive Mucous Plug — Lobar Collapse",
+    summary: "Complete lobar obstruction from inspissated secretions — suction fails, emergent bronchoscopy required.",
+    patient: "72 F, post-op thoracotomy day 2. Circuit humidifier failed 12 hours ago.",
+    difficulty: "intermediate",
+    estimatedMinutes: 7,
+    competencies: ["Mucous plug recognition", "Suction vs bronchoscopy", "Humidification", "Ppeak vs Pplat interpretation"],
+  },
+  [
+    step("recognize", {
+      context:
+        "High pressure alarm. Ppeak 44 cmH₂O (was 22), Pplat 38 cmH₂O (was 18). SpO₂ 84%. " +
+        "Left breath sounds absent. No hemodynamic instability. BP stable.",
+      waveformConfig: {
+        mode: "volume_control", flowPattern: "square",
+        peep: 5, tidalVolume: 500, rr: 14, ti: 1.0,
+        compliance: 22, resistance: 18, condition: "secretion_obstruction", asynchrony: "none",
+      },
+      question: "Both Ppeak AND Pplat elevated, absent left sounds, stable BP. This differs from tension PTX because…?",
+      choices: [
+        adv("a", "Stable hemodynamics — tension PTX always causes obstructive shock. Mucous plug atelectasis: rising pressures + hypoxemia + STABLE BP.", true,
+          "CORRECT. Tension PTX = hemodynamic collapse from mediastinal shift. Mucous plug = compliance loss from atelectasis but venous return is preserved. This single finding (BP stable) distinguishes the two — and changes management completely."),
+        adv("b", "The pressure rise is gradual — tension PTX rises instantly", false,
+          "Both can rise rapidly. Hemodynamic status is the reliable discriminator, not the rate of pressure rise."),
+        adv("c", "There is no tracheal deviation in mucous plug", false,
+          "Total atelectasis can cause tracheal deviation toward the collapsed side (late sign). Hemodynamic stability is more reliable."),
+        adv("d", "SpO₂ is lower in tension PTX than atelectasis", false,
+          "SpO₂ does not reliably discriminate. Both can cause severe hypoxemia."),
+      ],
+      nextKey: "bronchoscopy",
+      keyLearning: "Tension PTX = hemodynamic collapse. Mucous plug = stable hemodynamics. Never confuse the two — management is completely different.",
+      vitals: { hr: 118, spo2: 84, rr: 14, bp: "116/74", fio2: 65 },
+    }),
+    step("bronchoscopy", {
+      context:
+        "Suction catheter meets resistance at the ETT tip — cannot be advanced. Small amount of thick material retrieved. SpO₂ still 84%.",
+      question: "Failed suction against complete obstruction. Next step?",
+      choices: [
+        adv("a", "Instill 5 mL NS, retry suction once, then call for emergent bronchoscopy — complete obstruction requires direct extraction", true,
+          "CORRECT. Bronchoscopy is diagnostic AND therapeutic for complete mucous plugging. Saline instillation softens the plug for one more suction attempt. If still failed: bronchoscopy cannot be delayed. Time from obstruction to re-inflation matters for atelectatic injury."),
+        adv("b", "Increase Vt to 800 mL to blow plug distally and re-open the airway", false,
+          "Forcing ventilation against complete obstruction risks pneumothorax. Never increase pressure/volume against a blocked airway.", "harmful"),
+        adv("c", "Start heliox to reduce resistance and allow passive airway clearance", false,
+          "Heliox reduces turbulence in partial obstruction — it cannot dislodge a complete solid mucous plug."),
+        adv("d", "Wait 30 minutes for chest physiotherapy and postural drainage to work", false,
+          "Waiting 30 minutes with SpO₂ 84% and complete lobar obstruction is clinically unacceptable."),
+      ],
+      nextKey: "end",
+      keyLearning: "Catheter resistance + failed suction = emergent bronchoscopy. Fix humidification to prevent recurrence: heated humidifier at 37°C at Y-piece.",
+      vitals: { hr: 122, spo2: 84, rr: 14, bp: "112/72", fio2: 70 },
+    }),
+  ],
+);
+
+// ─── 14. ARDS Sudden Decompensation ───────────────────────────────────────────
+
+export const emerg_ards_decompensation: AdvancedSimulation = makeSimulation(
+  "ards_decompensation",
+  {
+    category: "emergency",
+    title: "ARDS Sudden Decompensation — DOPE Workup",
+    summary: "Systematic DOPE evaluation in rapidly deteriorating ARDS patient — identifies tension pneumothorax.",
+    patient: "52 F, severe ARDS day 4, PEEP 16, Vt 360 mL, FiO₂ 90%, P/F 82.",
+    difficulty: "advanced",
+    estimatedMinutes: 7,
+    competencies: ["DOPE algorithm", "Systematic workup", "Tension PTX in ARDS", "Post-decompression PEEP management"],
+  },
+  [
+    step("dope", {
+      context:
+        "Sudden decompensation: SpO₂ 76% (was 88%), Ppeak 58 (was 38), BP 72/40 (was 104/68). " +
+        "You apply DOPE: D=Displacement, O=Obstruction, P=Pneumothorax, E=Equipment.",
+      waveformConfig: {
+        mode: "volume_control", flowPattern: "square",
+        peep: 16, tidalVolume: 360, rr: 24, ti: 0.8,
+        compliance: 14, resistance: 10, condition: "pneumothorax", asynchrony: "none",
+      },
+      question: "DOPE evaluation: ETT depth correct. Catheter passes freely. Right breath sounds absent. Trachea deviated LEFT. BP 72/40. What does DOPE tell you?",
+      choices: [
+        adv("a", "P = Pneumothorax — tension physiology confirmed. Needle decompress RIGHT chest NOW (2nd ICS, MCL).", true,
+          "CORRECT. D (Displacement): ETT correct. O (Obstruction): catheter passes = no obstruction. P (Pneumothorax): absent right sounds + tracheal deviation + hemodynamic collapse = tension PTX. E (Equipment): intact. Act on P immediately."),
+        adv("b", "O = Obstruction — the absent sounds mean the ETT is obstructed on the right side", false,
+          "Catheter passing freely rules out ETT obstruction. Absent sounds with hemodynamic collapse and tracheal deviation = pneumothorax."),
+        adv("c", "D = Displacement — ETT has migrated to left mainstem", false,
+          "Left mainstem migration would cause absent RIGHT sounds but hemodynamic collapse would not occur at this magnitude. Tracheal deviation is not explained by ETT position."),
+        adv("d", "E = Equipment — the high PEEP is causing ventilator malfunction", false,
+          "Equipment failure would not cause unilateral absent sounds, tracheal deviation, and hemodynamic collapse simultaneously."),
+      ],
+      nextKey: "post_ptx",
+      keyLearning: "DOPE = Displacement, Obstruction, Pneumothorax, Equipment. Work through systematically. P (Pneumothorax) with hemodynamic collapse = needle decompress immediately.",
+      vitals: { hr: 142, spo2: 76, rr: 24, bp: "72/40", fio2: 90 },
+    }),
+    step("post_ptx", {
+      context:
+        "Needle decompression RIGHT chest — immediate hiss of air, BP recovers 94/62. Chest tube placed. " +
+        "Now: what PEEP adjustment do you make in this ARDS patient post-PTX?",
+      question: "ARDS with PEEP 16 caused tension PTX. After chest tube, what is your PEEP strategy?",
+      choices: [
+        adv("a", "Cautiously reduce PEEP from 16 to 10 — PEEP was contributory to barotrauma. Retitrate using FiO₂/PEEP table while monitoring SpO₂ and Pplat.", true,
+          "CORRECT. High PEEP in ARDS is a PTX risk factor. After decompression: reduce PEEP to minimum maintaining SpO₂ ≥ 90%. The remaining lung (left) cannot absorb full Vt at full PEEP without barotrauma risk. Re-titrate cautiously with close Pplat monitoring."),
+        adv("b", "Maintain PEEP 16 — ARDS needs high PEEP and the PTX is now drained", false,
+          "PEEP 16 caused this PTX. Maintaining it risks recurrence or overdistension of the remaining lung."),
+        adv("c", "Increase PEEP to 20 to recruit the partially collapsed right lung post-PTX", false,
+          "Increasing PEEP post-PTX risks re-tension if the chest tube becomes occluded. Do not increase PEEP.", "harmful"),
+        adv("d", "Set PEEP to 0 — eliminate all barotrauma risk until PTX resolves", false,
+          "PEEP 0 in severe ARDS causes complete de-recruitment and life-threatening hypoxemia."),
+      ],
+      nextKey: "end",
+      keyLearning: "ARDS + PTX: reduce PEEP after drainage — it was contributory. Re-titrate to minimum effective PEEP. Don't over-pressurize the remaining lung.",
+      vitals: { hr: 112, spo2: 89, rr: 24, bp: "94/62", fio2: 90 },
+    }),
+  ],
+);
+
+// ─── 15. Venous Air Embolism ──────────────────────────────────────────────────
+
+export const emerg_air_embolism: AdvancedSimulation = makeSimulation(
+  "venous_air_embolism",
+  {
+    category: "emergency",
+    title: "Massive Venous Air Embolism",
+    summary: "Air entrainment during central line insertion in a ventilated patient — Durant's maneuver and aspiration.",
+    patient: "67 F, ARDS on VC ventilation, PEEP 14. Right subclavian CVC insertion in progress.",
+    difficulty: "advanced",
+    estimatedMinutes: 6,
+    competencies: ["Air embolism recognition", "Durant's maneuver", "CVC aspiration technique", "ETCO₂ interpretation"],
+  },
+  [
+    step("recognition", {
+      context:
+        "During right subclavian line insertion: sudden hemodynamic collapse. BP 62/38, HR 142. " +
+        "Mill-wheel murmur heard on cardiac auscultation. ETCO₂ drops from 38 to 10 mmHg instantly. SpO₂ 72%.",
+      question: "Mill-wheel murmur + sudden ETCO₂ drop to 10 + hemodynamic collapse during CVC insertion. Diagnosis?",
+      choices: [
+        adv("a", "Massive venous air embolism — air entered venous system, blocking right heart outflow. ETCO₂ drop is the earliest finding.", true,
+          "CORRECT. Pathognomonic triad: mill-wheel murmur (air in RV) + ETCO₂ precipitous drop (dead space from air blocking pulmonary capillaries) + hemodynamic collapse. ETCO₂ is often the EARLIEST monitor change — before SpO₂ falls or BP drops fully."),
+        adv("b", "Tension pneumothorax from the needle — decompress immediately", false,
+          "PTX causes absent breath sounds and rising vent pressures. Mill-wheel murmur and ETCO₂ drop are specific to air embolism, not PTX."),
+        adv("c", "Cardiac tamponade from SVC perforation — pericardiocentesis", false,
+          "Tamponade causes muffled heart sounds, JVD, pulsus paradoxus. Mill-wheel murmur is NOT tamponade."),
+        adv("d", "Anaphylaxis to heparin flush — give epinephrine", false,
+          "Anaphylaxis causes urticaria and bronchospasm. The mill-wheel murmur and ETCO₂ drop are specific to air embolism."),
+      ],
+      nextKey: "treatment",
+      keyLearning: "ETCO₂ precipitous drop during CVC insertion = venous air embolism until proven otherwise. Mill-wheel murmur confirms it. Act immediately.",
+      vitals: { hr: 142, spo2: 72, rr: 16, bp: "62/38", etco2: 10, fio2: 100 },
+    }),
+    step("treatment", {
+      context:
+        "Air embolism confirmed. Introducer needle still in right subclavian position.",
+      question: "Correct immediate management sequence for massive venous air embolism?",
+      choices: [
+        adv("a", "Occlude needle hub → left lateral decubitus + Trendelenburg (Durant's maneuver) → aspirate air via any available CVC → FiO₂ 100% → CPR if pulseless", true,
+          "CORRECT. (1) Occlude the air entry point first. (2) Durant's maneuver: left lateral (air floats to RV apex, away from outflow) + Trendelenburg (hydrostatic barrier). (3) Aspirate air through CVC if placed. (4) 100% FiO₂ — nitrogen washout shrinks bubbles. (5) CPR if cardiac arrest."),
+        adv("b", "Immediately remove the needle and apply firm pressure to the puncture site", false,
+          "Removing without occluding first may worsen air entrainment. Occlude hub with finger FIRST, then remove."),
+        adv("c", "Increase PEEP to 24 cmH₂O to increase intrathoracic pressure and slow air entrainment", false,
+          "Increasing PEEP raises intrathoracic pressure but does not dislodge the air already in the right heart. Durant's maneuver + aspiration addresses the existing embolism.", "caution"),
+        adv("d", "Start norepinephrine — support blood pressure while air embolism resolves spontaneously", false,
+          "Vasopressors cannot overcome obstructive physiology from air in the RV. The air must be removed or repositioned first.", "harmful"),
+      ],
+      nextKey: "end",
+      keyLearning: "Air embolism: occlude entry → Durant's maneuver (left lateral + Trendelenburg) → aspirate → FiO₂ 100%. Prevention: avoid non-Trendelenburg for CVC insertion in PEEP patients.",
+      vitals: { hr: 138, spo2: 72, rr: 16, bp: "62/38", etco2: 10, fio2: 100 },
+    }),
+  ],
+);
+
+// ─── Full registry (15 simulations) ──────────────────────────────────────────
 
 export const EMERGENCY_SIMULATIONS: readonly AdvancedSimulation[] = [
   emerg_accidental_extubation,
@@ -895,6 +1068,9 @@ export const EMERGENCY_SIMULATIONS: readonly AdvancedSimulation[] = [
   emerg_oxygen_failure,
   emerg_anaphylaxis_vent,
   emerg_massive_aspiration,
+  emerg_massive_mucous_plug,
+  emerg_ards_decompensation,
+  emerg_air_embolism,
 ];
 
 export function getEmergencySimulation(id: string): AdvancedSimulation | undefined {

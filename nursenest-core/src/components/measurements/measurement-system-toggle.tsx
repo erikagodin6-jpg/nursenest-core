@@ -11,6 +11,7 @@ export function MeasurementSystemToggle({
   title = "Measurement units",
   description = "Switch between metric and imperial display without duplicating lessons.",
   compact = false,
+  variant = "default",
   onSystemChange,
   onPreferenceCommitted,
   syncToProfile = false,
@@ -20,6 +21,7 @@ export function MeasurementSystemToggle({
   title?: string;
   description?: string;
   compact?: boolean;
+  variant?: "default" | "lesson-utility";
   onSystemChange?: (system: MeasurementSystem) => void;
   /** Optional server sync (e.g. PATCH profile) after localStorage + cookie are updated. */
   onPreferenceCommitted?: (preference: MeasurementPreference) => void | Promise<void>;
@@ -33,6 +35,58 @@ export function MeasurementSystemToggle({
     onSystemChange?.(next === "imperial" ? "US" : "SI");
     if (syncToProfile) void commitMeasurementPreferenceToProfile(next);
     void onPreferenceCommitted?.(next);
+  }
+
+  if (variant === "lesson-utility") {
+    return (
+      <div
+        className="inline-flex h-9 max-w-full items-center gap-1.5 rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 text-[0.72rem] shadow-[var(--semantic-shadow-subtle)]"
+        title={description}
+        aria-label={`${title}. ${description}. Showing ${measurementSystem === "US" ? "conventional" : "SI"} values.`}
+      >
+        <span className="shrink-0 font-semibold text-[var(--semantic-text-secondary)]">Units:</span>
+        <select
+          value={preference}
+          onChange={(event) => update(event.target.value === "imperial" ? "imperial" : "metric")}
+          className="h-7 rounded border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-1.5 text-[0.72rem] font-semibold text-[var(--semantic-text-primary)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--semantic-focus-ring)] sm:hidden"
+          aria-label="Choose lesson unit display"
+        >
+          <option value="metric">SI</option>
+          <option value="imperial">Conventional</option>
+        </select>
+        <div className="hidden items-center gap-1 sm:inline-flex">
+          <button
+            type="button"
+            onClick={() => update("metric")}
+            className={`h-7 border-b-2 px-1.5 text-[0.72rem] font-semibold leading-none transition ${
+              preference === "metric"
+                ? "border-[var(--semantic-brand)] text-[var(--semantic-brand)]"
+                : "border-transparent text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-text-primary)]"
+            }`}
+            aria-pressed={preference === "metric"}
+            title="Show SI metric values"
+          >
+            SI
+          </button>
+          <span className="text-[var(--semantic-border-strong)]" aria-hidden="true">
+            |
+          </span>
+          <button
+            type="button"
+            onClick={() => update("imperial")}
+            className={`h-7 border-b-2 px-1.5 text-[0.72rem] font-semibold leading-none transition ${
+              preference === "imperial"
+                ? "border-[var(--semantic-brand)] text-[var(--semantic-brand)]"
+                : "border-transparent text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-text-primary)]"
+            }`}
+            aria-pressed={preference === "imperial"}
+            title="Show conventional US customary values"
+          >
+            Conventional
+          </button>
+        </div>
+      </div>
+    );
   }
 
   if (compact) {
