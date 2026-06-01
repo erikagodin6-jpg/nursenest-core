@@ -9,6 +9,10 @@ import {
   recordFlashcardAttempt,
   type RecordAttemptInput,
 } from "@/lib/flashcards/flashcard-session-dal.server";
+import {
+  invalidateFlashcardDueSummary,
+  invalidateStudyQueueCounts,
+} from "@/lib/server/content-cache";
 
 type ActionResult<T = void> = { ok: true; data: T } | { ok: false; error: string };
 
@@ -67,5 +71,10 @@ export async function completeSessionAction(sessionId: string): Promise<ActionRe
   if (!sessionId?.trim()) return { ok: false, error: "Invalid session" };
 
   await completeFlashcardSession(sessionId, uid);
+  // Invalidate SRS count caches so the dashboard reflects the updated due/reviewed state.
+  await Promise.all([
+    invalidateFlashcardDueSummary(uid),
+    invalidateStudyQueueCounts(uid, null),
+  ]);
   return { ok: true, data: undefined };
 }

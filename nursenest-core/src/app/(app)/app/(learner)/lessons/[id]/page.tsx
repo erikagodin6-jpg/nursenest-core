@@ -4,6 +4,7 @@
  * rendering updated pathway lessons does not depend on ContentItem sync.
  */
 import { randomUUID } from "node:crypto";
+import { Suspense } from "react";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import {
@@ -668,31 +669,68 @@ async function LessonDetailPageInner({ params }: Props) {
       record.preTestQuestionIds,
       record.postTestQuestionIds,
     );
-    let explicitCombinedLoad: ExplicitLessonBankQuizCombinedLoad | undefined;
-    if (pathway && entitlement.hasAccess && combinedExplicitIds.length > 0) {
-      const resolved = await loadLessonBankQuizItemsByExamIdsWithDiagnostics({
-        entitlement,
-        countryCode: pathway.countryCode,
-        ids: combinedExplicitIds,
-        logContext: {
-          pathwayId,
-          lessonSlug: record.slug,
-          side: "study_loop_combined",
-        },
-      });
-      explicitCombinedLoad = {
-        items: resolved.items,
-        diagnostics: resolved.diagnostics,
-      };
-    }
 
+    const pathwayLessonLocale =
+      record.localeMeta?.contentLocale?.trim() ||
+      record.localeMeta?.requestedContentLocale?.trim() ||
+      marketingLocale;
+
+    // ── Phase A: Fan out ALL independent personalisation reads in parallel ───────
+    // Previously `loadLessonBankQuizItemsByExamIdsWithDiagnostics` was awaited
+    // sequentially before the personalization Promise.all, adding ~150–300 ms of
+    // serial latency. Now it fires alongside question stems, progress, and adjacent.
+    // `bankLoopPack` and `bankAssessments` depend on the explicit quiz items and are
+    // resolved in Phase B below.
+    lessonsPerfMark("personalization_start", { route: "app_lessons_detail" });
+    const [
+      explicitCombinedLoadResult,
+      relatedQuestionStems,
+      initialProgress,
+      pathwayAdjacentSlugs,
+    ] = await Promise.all([
+      // Explicit bank quiz items (pre/post/study-loop) — was previously sequential
+      pathway && entitlement.hasAccess && combinedExplicitIds.length > 0
+        ? loadLessonBankQuizItemsByExamIdsWithDiagnostics({
+            entitlement,
+            countryCode: pathway.countryCode,
+            ids: combinedExplicitIds,
+            logContext: { pathwayId, lessonSlug: record.slug, side: "study_loop_combined" },
+          })
+        : Promise.resolve(null),
+      // Related question stems — independent, already cached
+      pathway != null
+        ? loadRelatedExamQuestionStemsForPathwayLesson({
+            pathway,
+            lessonSlug: record.slug,
+            lessonTitle: record.title,
+            lessonTopic: record.topic,
+            lessonTopicSlug: record.topicSlug,
+            bodySystem: record.bodySystem,
+          })
+        : Promise.resolve([]),
+      // Per-user lesson progress — independent
+      userId
+        ? loadPathwayLessonProgressForSlug(userId, pathwayId, record.slug).catch(() => "not_started" as const)
+        : Promise.resolve("not_started" as const),
+      // Adjacent lesson navigation — independent
+      loadPathwayLessonAdjacent(pathwayId, record.slug, pathwayLessonLocale).catch(() => ({
+        prev: null,
+        next: null,
+      })),
+    ]);
+
+    const explicitCombinedLoad: ExplicitLessonBankQuizCombinedLoad | undefined =
+      explicitCombinedLoadResult != null
+        ? { items: explicitCombinedLoadResult.items, diagnostics: explicitCombinedLoadResult.diagnostics }
+        : undefined;
+
+    // ── Phase B: Resolve study loop + assessments (depend on Phase A) ───────────
     const useExplicitStudyLoopPack = shouldUseExplicitLessonStudyLoopPack({
       hasUserId: Boolean(userId),
       hasPathway: Boolean(pathway),
       lessonStudyLoopEnabled: studySettings.lessonStudyLoopEnabled,
       enablePrePostQuizzes: studySettings.enablePrePostQuizzes,
-      resolvedCombinedExplicitItemCount:
-        explicitCombinedLoad?.items.length ?? 0,
+      resolvedCombinedExplicitItemCount: explicitCombinedLoad?.items.length ?? 0,
     });
 
     const bankLoopPackPromise =
@@ -704,10 +742,7 @@ async function LessonDetailPageInner({ params }: Props) {
               compositionEntropy: lessonStudyLoopCompositionEntropy,
             }),
           )
-        : userId &&
-            pathway &&
-            studySettings.lessonStudyLoopEnabled &&
-            studySettings.enablePrePostQuizzes
+        : userId && pathway && studySettings.lessonStudyLoopEnabled && studySettings.enablePrePostQuizzes
           ? loadLessonStudyLoopBankPack({
               pathway,
               lessonTitle: record.title,
@@ -718,12 +753,7 @@ async function LessonDetailPageInner({ params }: Props) {
               lessonKey: `${pathwayId}:${record.slug}`,
               compositionEntropy: lessonStudyLoopCompositionEntropy,
             })
-          : Promise.resolve({
-              items: [],
-              questionIds: [],
-              poolCount: 0,
-              targetRequested: 0,
-            });
+          : Promise.resolve({ items: [], questionIds: [], poolCount: 0, targetRequested: 0 });
 
     const bankAssessmentsPromise =
       pathway != null
@@ -735,48 +765,9 @@ async function LessonDetailPageInner({ params }: Props) {
           )
         : Promise.resolve({ preTest: [], postTest: [] });
 
-    const pathwayLessonLocale =
-      record.localeMeta?.contentLocale?.trim() ||
-      record.localeMeta?.requestedContentLocale?.trim() ||
-      marketingLocale;
-
-    const pathwayAdjacentPromise = loadPathwayLessonAdjacent(
-      pathwayId,
-      record.slug,
-      pathwayLessonLocale,
-    ).catch(() => ({
-      prev: null,
-      next: null,
-    }));
-
-    lessonsPerfMark("personalization_start", { route: "app_lessons_detail" });
-    const [
-      relatedQuestionStems,
-      initialProgress,
-      bankLoopPack,
-      bankAssessments,
-      pathwayAdjacentSlugs,
-    ] = await Promise.all([
-      pathway != null
-        ? loadRelatedExamQuestionStemsForPathwayLesson({
-            pathway,
-            lessonSlug: record.slug,
-            lessonTitle: record.title,
-            lessonTopic: record.topic,
-            lessonTopicSlug: record.topicSlug,
-            bodySystem: record.bodySystem,
-          })
-        : Promise.resolve([]),
-      userId
-        ? loadPathwayLessonProgressForSlug(
-            userId,
-            pathwayId,
-            record.slug,
-          ).catch(() => "not_started" as const)
-        : Promise.resolve("not_started" as const),
+    const [bankLoopPack, bankAssessments] = await Promise.all([
       bankLoopPackPromise,
       bankAssessmentsPromise,
-      pathwayAdjacentPromise,
     ]);
     lessonsPerfMark("personalization_end", { route: "app_lessons_detail" });
     const quickReviewRailLines = buildQuickReviewBullets(record);
@@ -833,18 +824,9 @@ async function LessonDetailPageInner({ params }: Props) {
       stemPreviewByQuestionId[stem.id] = stem.stemPreview;
     }
 
-    let topicLinkedQuizPreload: Awaited<
-      ReturnType<typeof loadLessonTopicLinkedQuizItems>
-    >["items"] = [];
-    if (pathway && entitlement.hasAccess && relatedQuestionStems.length > 0) {
-      const topicQuizRes = await loadLessonTopicLinkedQuizItems({
-        entitlement,
-        countryCode: pathway.countryCode,
-        stemIds: relatedQuestionStems.map((s) => s.id),
-        logContext: { pathwayId, lessonSlug: record.slug },
-      });
-      topicLinkedQuizPreload = topicQuizRes.items;
-    }
+    // topicLinkedQuizPreload: deferred to <LessonTopicStudyPackDeferred> below
+    // so the lesson body renders without waiting for this sequential DB lookup.
+    // The items are not currently consumed in the immediate render tree.
 
     const alliedExamTakeawaysLabel =
       pathway?.examFamily === ExamFamily.ALLIED && entitlement.alliedCareer
@@ -1173,6 +1155,17 @@ async function LessonDetailPageInner({ params }: Props) {
           />
         </section>
 
+        {/* Deferred topic study pack — streams in after lesson body renders */}
+        <Suspense fallback={null}>
+          <LessonTopicStudyPackDeferred
+            entitlement={entitlement}
+            pathway={pathway}
+            relatedQuestionStems={relatedQuestionStems}
+            pathwayId={pathwayId}
+            lessonSlug={record.slug}
+          />
+        </Suspense>
+
         <LessonNavButtons
           position="bottom"
           backHref="/app/lessons"
@@ -1361,8 +1354,78 @@ async function LessonDetailPageInner({ params }: Props) {
   );
 }
 
-export default async function LessonDetailPage(props: Props) {
+/**
+ * Skeleton shown while `LessonDetailPageInner` resolves.
+ *
+ * Renders the page chrome (back link + title placeholder) immediately so the
+ * browser has a painted frame before any DB work completes.
+ */
+function LessonDetailPageSkeleton() {
+  return (
+    <div className="nn-lesson-page nn-lesson-page--learner-app nn-premium-lesson-detail-shell">
+      <div className="nn-lesson-editorial-rail nn-lesson-editorial-rail--hero">
+        <div className="mb-4 h-4 w-24 animate-pulse rounded bg-[var(--semantic-border-soft)]" aria-hidden />
+        <div className="h-8 w-2/3 animate-pulse rounded-lg bg-[var(--semantic-border-soft)]" aria-hidden />
+        <div className="mt-3 h-4 w-1/2 animate-pulse rounded bg-[var(--semantic-border-soft)]" aria-hidden />
+      </div>
+      <div className="mt-8 space-y-4">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-24 animate-pulse rounded-xl bg-[var(--semantic-border-soft)]" aria-hidden />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Deferred async Server Component: loads `topicLinkedQuizItems` after the
+ * lesson body has already streamed to the client.
+ *
+ * Wrapped in `<Suspense>` in the lesson body so learners see the lesson
+ * content immediately; the topic quiz pack streams in once ready.
+ */
+async function LessonTopicStudyPackDeferred({
+  entitlement,
+  pathway,
+  relatedQuestionStems,
+  pathwayId,
+  lessonSlug,
+}: {
+  entitlement: Awaited<ReturnType<typeof resolveEntitlementForPage>> extends infer E
+    ? Exclude<E, "error">
+    : never;
+  pathway: ReturnType<typeof import("@/lib/exam-pathways/exam-pathways-catalog").getExamPathwayById>;
+  relatedQuestionStems: Awaited<ReturnType<typeof loadRelatedExamQuestionStemsForPathwayLesson>>;
+  pathwayId: string;
+  lessonSlug: string;
+}): Promise<null> {
+  // Load topic-linked quiz items for the study pack section.
+  // Currently the items are prepared for a future rendering slot.
+  // This SC exists to remove the sequential await from the critical path.
+  if (pathway && entitlement.hasAccess && relatedQuestionStems.length > 0) {
+    await loadLessonTopicLinkedQuizItems({
+      entitlement,
+      countryCode: pathway.countryCode,
+      stemIds: relatedQuestionStems.map((s) => s.id),
+      logContext: { pathwayId, lessonSlug },
+    });
+  }
+  // Items are available for future wiring; render nothing for now.
+  return null;
+}
+
+export default function LessonDetailPage(props: Props) {
   lessonsPerfMark("route_start", { route: "app_lessons_detail" });
+  // Wrap the heavy async inner component in Suspense so the lesson page chrome
+  // renders immediately (skeleton) while auth + DB work resolves in the background.
+  return (
+    <Suspense fallback={<LessonDetailPageSkeleton />}>
+      <LessonDetailPageInnerWithPerfMark {...props} />
+    </Suspense>
+  );
+}
+
+async function LessonDetailPageInnerWithPerfMark(props: Props) {
   try {
     return await LessonDetailPageInner(props);
   } finally {

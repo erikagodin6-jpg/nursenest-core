@@ -15,6 +15,7 @@ import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 
 // 🧊 ISR: parent layout handles dynamic; child can set own revalidate
 export const dynamicParams = true;
+export const revalidate = 86400;
 
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
 

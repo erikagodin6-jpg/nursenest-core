@@ -4,6 +4,11 @@ import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { PracticeQuestionAnswerMode, PracticeTestStatus } from "@prisma/client";
 import { z } from "zod";
 import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
+import {
+  invalidateCatReadiness,
+  invalidateStudyQueueCounts,
+} from "@/lib/server/content-cache";
+import { invalidateCatReadinessMemoForUser } from "@/lib/practice-tests/cat-practice-readiness";
 import { prisma } from "@/lib/db";
 import { SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
@@ -384,14 +389,27 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     surface: "practice_test_api_patch",
   });
   const nextExamToolsAdaptiveState = mergePracticeExamTools(row.adaptiveState, parsed.data.examTools);
-  const invalidateHeavyReads = async () =>
-    safeStudyOptional(
+  const invalidateHeavyReads = async () => {
+    await safeStudyOptional(
       "cache_invalidation",
       "practice_test_detail",
       () => invalidateLearnerPrivateReadCache(gate.userId).then(() => true),
       false,
       { timeoutMs: 500, label: "practice_test_cache_invalidation" },
     );
+    // Clear targeted count caches so the next readiness/queue check is a fresh DB read.
+    const pid = cfg.pathwayId?.trim();
+    invalidateCatReadinessMemoForUser(gate.userId);
+    if (pid) {
+      await Promise.all([
+        invalidateCatReadiness(gate.userId, pid),
+        invalidateStudyQueueCounts(gate.userId, pid),
+        invalidateStudyQueueCounts(gate.userId, null),
+      ]);
+    } else {
+      await invalidateStudyQueueCounts(gate.userId, null);
+    }
+  };
 
   const prePatchContract = practicePatchSessionContract({
     cfg,

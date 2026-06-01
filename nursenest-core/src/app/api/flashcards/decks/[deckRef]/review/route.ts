@@ -26,6 +26,10 @@ import { validateFlashcardsPostLaunchRequest } from "@/lib/learner/study-product
 import type { Prisma } from "@prisma/client";
 import { toSchedulerRating } from "@/lib/flashcards/map-study-rating";
 import { safeStudyOptional } from "@/lib/study-mode/study-mode-fallback";
+import {
+  invalidateFlashcardDueSummary,
+  invalidateStudyQueueCounts,
+} from "@/lib/server/content-cache";
 
 const bodySchema = z.object({
   flashcardId: z.string().min(4),
@@ -217,6 +221,14 @@ export async function POST(req: NextRequest, { params }: Props) {
       deckId: deck.id.slice(0, 12),
       rating: rawRating,
     });
+
+    // Invalidate SRS count caches so dashboard due-summary and study-queue reflect
+    // the new nextReviewAt/lapses values without waiting for TTL expiry.
+    await Promise.all([
+      invalidateFlashcardDueSummary(userId),
+      invalidateStudyQueueCounts(userId, deck.pathwayId ?? null),
+      ...(deck.pathwayId ? [invalidateStudyQueueCounts(userId, null)] : []),
+    ]);
 
     return NextResponse.json({
       ok: true,

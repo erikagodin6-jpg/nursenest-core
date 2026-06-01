@@ -122,6 +122,16 @@ const catReadinessSummaryCache = new Map<
   { expiresAt: number; value: CatPracticeReadinessResult }
 >();
 
+/**
+ * Clears all in-process readiness entries for a user across all pathways/entitlements.
+ * Call after CAT or practice test completion so the next readiness check is a fresh DB read.
+ */
+export function invalidateCatReadinessMemoForUser(userId: string): void {
+  for (const k of catReadinessSummaryCache.keys()) {
+    if (k.startsWith(`${userId}:`)) catReadinessSummaryCache.delete(k);
+  }
+}
+
 function pruneCatReadinessSummaryCache(now: number) {
   if (catReadinessSummaryCache.size <= CAT_READINESS_SUMMARY_CACHE_MAX) return;
   for (const [key, entry] of catReadinessSummaryCache) {

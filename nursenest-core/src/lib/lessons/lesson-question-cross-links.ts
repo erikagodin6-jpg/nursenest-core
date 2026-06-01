@@ -1,5 +1,6 @@
 import { ContentStatus } from "@prisma/client";
 import type { Prisma } from "@prisma/client";
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
@@ -8,6 +9,10 @@ import {
   getRnNclexLessonQuestionBankBridgeClauses,
   hasExplicitRnNclexLessonBridge,
 } from "@/lib/lessons/rn-nclex-lesson-question-bank-bridge";
+import {
+  cacheTagLessonQuestionStems,
+  LESSON_CONTENT_CACHE_TTL_SECONDS,
+} from "@/lib/cache/cache-tags";
 
 /** Minimum related questions we aim to surface from the bank for each lesson (coverage / completeness). */
 export const RELATED_EXAM_QUESTIONS_MIN_TARGET = 8;
@@ -272,7 +277,7 @@ export function buildRelatedExamQuestionWhereForPathwayLesson(
  * Published exam questions in the pathway’s marketing-scoped pool that match the lesson (topic labels/tokens
  * from title + slug, optional `bodySystem`, optional `tags` has `topicSlug`). Single bounded `findMany`; no in-memory fallbacks.
  */
-export async function loadRelatedExamQuestionStemsForPathwayLesson(
+async function loadRelatedExamQuestionStemsForPathwayLessonUncached(
   args: RelatedExamQuestionPathwayLessonArgs,
 ): Promise<RelatedExamQuestionStem[]> {
   const where = buildRelatedExamQuestionWhereForPathwayLesson(args);
@@ -290,6 +295,43 @@ export async function loadRelatedExamQuestionStemsForPathwayLesson(
     },
     [],
   );
+}
+
+/**
+ * 5-minute cached wrapper for lesson-related exam question stem loading.
+ *
+ * These stems are content-adjacent (which questions relate to this lesson?) and
+ * change only when questions are added/edited or the lesson content changes.
+ * A 5-minute TTL with lesson-publish tag invalidation provides near-instant
+ * freshness after admin edits while eliminating the `findMany` on every load.
+ *
+ * Tags: `lesson-question-stems:{pathwayId}:{lessonSlug}` — busted on lesson publish.
+ */
+export async function loadRelatedExamQuestionStemsForPathwayLesson(
+  args: RelatedExamQuestionPathwayLessonArgs,
+): Promise<RelatedExamQuestionStem[]> {
+  const pathwayId = args.pathway.id;
+  const lessonSlug = args.lessonSlug?.trim() ?? "";
+
+  if (!lessonSlug) {
+    return loadRelatedExamQuestionStemsForPathwayLessonUncached(args);
+  }
+
+  return unstable_cache(
+    () => loadRelatedExamQuestionStemsForPathwayLessonUncached(args),
+    [
+      "lesson-question-stems",
+      pathwayId,
+      lessonSlug,
+      args.lessonTopic ?? "",
+      args.lessonTopicSlug ?? "",
+      args.bodySystem ?? "",
+    ],
+    {
+      revalidate: LESSON_CONTENT_CACHE_TTL_SECONDS,
+      tags: [cacheTagLessonQuestionStems(pathwayId, lessonSlug)],
+    },
+  )();
 }
 
 /**

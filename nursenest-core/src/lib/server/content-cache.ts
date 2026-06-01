@@ -243,6 +243,10 @@ export async function setCatReadiness(
   return cacheSet(catReadinessCacheKey(userId, pathwayId), value, 10 * 60);
 }
 
+export async function invalidateCatReadiness(userId: string, pathwayId: string): Promise<void> {
+  return cacheDelete(catReadinessCacheKey(userId, pathwayId));
+}
+
 // ─── Flashcard due-summary cache ─────────────────────────────────────────────
 // Per-user SRS queue snapshot: due/overdue/learning/lapsing counts.
 // TTL: 5 min — short enough that study activity lands promptly.

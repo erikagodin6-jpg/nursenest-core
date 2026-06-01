@@ -17,6 +17,10 @@ import { toSchedulerRating } from "@/lib/flashcards/map-study-rating";
 import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { safeStudyOptional } from "@/lib/study-mode/study-mode-fallback";
+import {
+  invalidateFlashcardDueSummary,
+  invalidateStudyQueueCounts,
+} from "@/lib/server/content-cache";
 
 const bodySchema = z.object({
   rating: z.enum(["again", "hard", "good", "easy", "incorrect", "unsure", "known"]),
@@ -179,6 +183,12 @@ export async function POST(req: NextRequest, { params }: Props) {
         deckId: "custom-session",
         rating: rawRating,
       });
+
+      // Invalidate SRS count caches — no deck/pathway context for custom sessions, use null key.
+      await Promise.all([
+        invalidateFlashcardDueSummary(userId),
+        invalidateStudyQueueCounts(userId, null),
+      ]);
 
       await safeStudyOptional(
         "analytics",
