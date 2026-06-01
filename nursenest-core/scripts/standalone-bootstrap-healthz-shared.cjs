@@ -50,11 +50,7 @@ function isBootstrapHealthzRequest(req) {
   if (method !== "GET" && method !== "HEAD") return false;
   const raw = getNormalizedPathname(req);
   if (raw === CHILD_BOOTSTRAP_READY_PATH) return true;
-  const pn = trimTrailingSlash(raw || "") || "/";
-  if (pn === CHILD_BOOTSTRAP_READY_PATH && raw !== CHILD_BOOTSTRAP_READY_PATH) {
-    return false;
-  }
-  return pn === "/healthz" || pn === "/readyz";
+  return false;
 }
 
 function isReadinessProbeLikeRequest(rawUrl, normalizedPathname) {
@@ -141,38 +137,7 @@ function maybeServeBootstrapHealthz(req, res, state, logger) {
     flushEval({ matched: false, intercepted: false, outcome: "pathname_not_exact" });
   }
 
-  if (state?.handlersReady || !isBootstrapHealthzRequest(req)) {
-    return false;
-  }
-
-  if (res.writableEnded) {
-    return true;
-  }
-
-  const pathname = normalizeBootstrapProbePathname(req);
-
-  if (logger && typeof logger.logBootstrapHealthzIntercepted === "function") {
-    logger.logBootstrapHealthzIntercepted({
-      method,
-      url: rawUrl,
-      pathname,
-      handlersReady: false,
-    });
-  }
-
-  res.statusCode = 200;
-  if (typeof res.setHeader === "function") {
-    res.setHeader("content-type", "text/plain; charset=utf-8");
-    res.setHeader("cache-control", "no-store");
-  }
-  if (typeof res.end === "function") {
-    if (method === "HEAD") {
-      res.end();
-    } else {
-      res.end("ok");
-    }
-  }
-  return true;
+  return false;
 }
 
 module.exports = {

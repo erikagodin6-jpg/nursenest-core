@@ -164,6 +164,12 @@ function createBootstrapServer(state) {
 
     if (!state.handlersReady) {
       if ((method === "GET" || method === "HEAD") && pathname === "/healthz") {
+        logger.emit("route_readiness_check", {
+          route: "/healthz",
+          status: 200,
+          handlersReady: false,
+          source: "bootstrap_parent",
+        });
         res.statusCode = 200;
         res.setHeader("content-type", "text/plain; charset=utf-8");
         res.setHeader("cache-control", "no-store");
@@ -172,6 +178,12 @@ function createBootstrapServer(state) {
       }
 
       if ((method === "GET" || method === "HEAD") && pathname === "/readyz") {
+        logger.emit("route_readiness_check", {
+          route: "/readyz",
+          status: 503,
+          handlersReady: false,
+          source: "bootstrap_parent",
+        });
         res.statusCode = 503;
         res.setHeader("content-type", "text/plain; charset=utf-8");
         res.setHeader("cache-control", "no-store");
@@ -183,22 +195,27 @@ function createBootstrapServer(state) {
       return;
     }
 
-    if (state.forcedReady && (method === "GET" || method === "HEAD") && pathname === "/readyz") {
-      res.statusCode = 200;
-      res.setHeader("content-type", "text/plain; charset=utf-8");
-      res.setHeader("cache-control", "no-store");
-      res.end(method === "HEAD" ? undefined : "ready");
-      return;
-    }
-
     proxyToChild(req, res, state.internalPort);
+  });
+}
+
+function markHandlersReady(state, reason, meta = {}) {
+  const previous = Boolean(state.handlersReady);
+  state.handlersReady = true;
+  logger.emit("handlers_ready_transition", {
+    previous,
+    next: true,
+    reason,
+    childPid: state.child?.pid,
+    internalPort: state.internalPort,
+    ...meta,
   });
 }
 
 async function waitForChildReadiness(state) {
   if (state.readinessWatchdogBypass) {
     logger.emit("watchdog_bypass_enabled", { mode: state.mode });
-    state.handlersReady = true;
+    markHandlersReady(state, "watchdog_bypass", { bypass: true });
     logger.logHandlersReady({ mode: state.mode, bypass: true });
     return;
   }
@@ -239,11 +256,12 @@ async function waitForChildReadiness(state) {
 
     if (forceFallbackEnabled && !forced && elapsed >= forceFallbackDelayMs) {
       forced = true;
-      state.handlersReady = true;
-      state.forcedReady = true;
-      logger.emit("handlers_ready_forced", { viaEnv: true, delayMs: forceFallbackDelayMs, attempts });
-      logger.logHandlersReady({ forced: true, viaEnv: true, attempts });
-      return;
+      logger.emit("handlers_ready_forced_liveness_only", {
+        viaEnv: true,
+        delayMs: forceFallbackDelayMs,
+        attempts,
+        handlersReady: state.handlersReady,
+      });
     }
 
     logger.emit("internal_probe_attempt", { attempts, internalPort: state.internalPort });
@@ -251,7 +269,11 @@ async function waitForChildReadiness(state) {
       const response = await probeChild({ internalPort: state.internalPort });
       logger.emit("internal_probe_response", response);
       if (response.statusCode >= 200 && response.statusCode < 400) {
-        state.handlersReady = true;
+        markHandlersReady(state, "internal_probe", {
+          attempts,
+          statusCode: response.statusCode,
+          probeUrl: response.probeUrl,
+        });
         logger.logHandlersReady({ attempts, statusCode: response.statusCode, probeUrl: response.probeUrl });
         return;
       }
@@ -309,13 +331,18 @@ async function main() {
     mode: mode.mode,
     readinessWatchdogBypass: mode.readinessWatchdogBypass,
     handlersReady: false,
-    forcedReady: false,
     internalPort,
     child: null,
     childExited: false,
     childExitCode: null,
     childExitSignal: null,
   };
+  logger.emit("watchdog_state_initialized", {
+    mode: state.mode,
+    handlersReady: state.handlersReady,
+    readinessWatchdogBypass: state.readinessWatchdogBypass,
+    internalPort,
+  });
 
   const server = createBootstrapServer(state);
   await new Promise((resolve, reject) => {

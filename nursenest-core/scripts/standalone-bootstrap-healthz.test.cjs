@@ -29,12 +29,12 @@ function createFakeResponse() {
 }
 
 test("matches GET and HEAD bootstrap probe requests only", () => {
-  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/healthz" }), true);
-  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/healthz?check=1" }), true);
+  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/healthz" }), false);
+  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/healthz?check=1" }), false);
   assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/_nn_bootstrap_ready_check__" }), true);
   assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/_nn_bootstrap_ready_check__?check=1" }), true);
-  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/readyz" }), true);
-  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/readyz?check=1" }), true);
+  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/readyz" }), false);
+  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/readyz?check=1" }), false);
   assert.equal(isBootstrapHealthzRequest({ method: "POST", url: "/healthz" }), false);
   assert.equal(isBootstrapHealthzRequest({ method: "POST", url: "/_nn_bootstrap_ready_check__" }), false);
   assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/api/health" }), false);
@@ -77,7 +77,7 @@ test("normalizeBootstrapProbePathname: query and trailing slash (trimmed helper)
   );
 });
 
-test("serves /healthz directly while handlers are not ready", () => {
+test("does not intercept public /healthz while child handlers are not ready", () => {
   const res = createFakeResponse();
   const intercepted = [];
   const served = maybeServeBootstrapHealthz(
@@ -91,18 +91,12 @@ test("serves /healthz directly while handlers are not ready", () => {
     },
   );
 
-  assert.equal(served, true);
-  assert.equal(res.statusCode, 200);
-  assert.equal(res.headers["content-type"], "text/plain; charset=utf-8");
-  assert.equal(res.headers["cache-control"], "no-store");
-  assert.equal(res.body, "ok");
-  assert.equal(res.ended, true);
-  assert.deepEqual(intercepted, [
-    { method: "GET", url: "/healthz", pathname: "/healthz", handlersReady: false },
-  ]);
+  assert.equal(served, false);
+  assert.equal(res.ended, false);
+  assert.deepEqual(intercepted, []);
 });
 
-test("serves HEAD /healthz without a body while handlers are not ready", () => {
+test("does not intercept public HEAD /healthz while child handlers are not ready", () => {
   const res = createFakeResponse();
   const served = maybeServeBootstrapHealthz(
     { method: "HEAD", url: "/healthz" },
@@ -110,10 +104,9 @@ test("serves HEAD /healthz without a body while handlers are not ready", () => {
     { handlersReady: false },
   );
 
-  assert.equal(served, true);
-  assert.equal(res.statusCode, 200);
+  assert.equal(served, false);
   assert.equal(res.body, undefined);
-  assert.equal(res.ended, true);
+  assert.equal(res.ended, false);
 });
 
 test("serves the internal bootstrap ready probe directly while handlers are not ready", () => {

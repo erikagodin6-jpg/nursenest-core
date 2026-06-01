@@ -182,7 +182,7 @@ test("standalone runtime reaches ready without bypass via the internal bootstrap
 
   const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
   assert.equal(readyRes.status, 200);
-  assert.equal(await readyRes.text(), "ok");
+  assert.equal(await readyRes.text(), "ready");
 });
 
 test("standalone runtime can bypass bootstrap watchdog readiness gating after bind outside production", async (t) => {
@@ -249,10 +249,10 @@ test("standalone runtime can bypass bootstrap watchdog readiness gating after bi
 
   const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
   assert.equal(readyRes.status, 200);
-  assert.equal(await readyRes.text(), "ok");
+  assert.equal(await readyRes.text(), "ready");
 });
 
-test("standalone runtime can force readyz after five seconds only when forced fallback is enabled and child stays alive", async (t) => {
+test("standalone runtime logs forced fallback as liveness-only and does not flip readyz", async (t) => {
   const standaloneEntry = withTemporaryStandaloneEntry(
     t,
     [
@@ -317,16 +317,16 @@ test("standalone runtime can force readyz after five seconds only when forced fa
   assert.equal(await notReadyRes.text(), "bootstrap: request handlers not ready");
 
   await waitForLog("startup_watchdog internal_probe_error");
-  await waitForLog("startup_watchdog handlers_ready_forced", 10_000);
+  await waitForLog("startup_watchdog handlers_ready_forced_liveness_only", 10_000);
 
   const logsAfterForced = combined.join("");
-  assert.match(logsAfterForced, /startup_watchdog handlers_ready/);
+  assert.doesNotMatch(logsAfterForced, /startup_watchdog handlers_ready_transition/);
   assert.match(logsAfterForced, /"viaEnv":true/);
   assert.doesNotMatch(logsAfterForced, /startup_watchdog watchdog_bypass_enabled/);
 
   const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
-  assert.equal(readyRes.status, 200);
-  assert.equal(await readyRes.text(), "ready");
+  assert.equal(readyRes.status, 503);
+  assert.equal(await readyRes.text(), "bootstrap: request handlers not ready");
 });
 
 test("standalone runtime never forces readiness after the child exits", async (t) => {

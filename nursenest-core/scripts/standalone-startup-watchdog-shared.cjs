@@ -5,6 +5,19 @@ function formatStartupWatchdogLine(event, meta) {
   return `[nursenest-core] startup_watchdog ${event} ${JSON.stringify(meta)}`;
 }
 
+function getRuntimeSnapshot() {
+  const memory = process.memoryUsage();
+  const toMb = (bytes) => Math.round(bytes / 1024 / 1024);
+  return {
+    pid: process.pid,
+    ppid: typeof process.ppid === "number" ? process.ppid : undefined,
+    uptimeSec: Math.round(process.uptime()),
+    rssMb: toMb(memory.rss),
+    heapUsedMb: toMb(memory.heapUsed),
+    heapTotalMb: toMb(memory.heapTotal),
+  };
+}
+
 function resolveStandaloneNextModulePath(entryScript, moduleRelativePath) {
   if (typeof entryScript !== "string" || entryScript.length === 0) return null;
   return path.join(path.dirname(entryScript), "node_modules", "next", moduleRelativePath);
@@ -32,7 +45,7 @@ function createStartupWatchdogLogger({
   let listeningAt = null;
 
   function emit(event, meta = {}) {
-    write(formatStartupWatchdogLine(event, meta));
+    write(formatStartupWatchdogLine(event, { ...getRuntimeSnapshot(), ...meta }));
   }
 
   return {
@@ -100,5 +113,6 @@ module.exports = {
   createStartupWatchdogLogger,
   createStandaloneRequire,
   formatStartupWatchdogLine,
+  getRuntimeSnapshot,
   resolveStandaloneNextModulePath,
 };
