@@ -96,7 +96,10 @@ import {
   type SmartReviewItem,
 } from "@/components/study/smart-review-screen";
 import { StudyPlanFromResults } from "@/components/study/study-plan";
-import { QuestionCard, AnswerOptionRow } from "@/components/study/cat-question-card";
+import {
+  QuestionCard,
+  AnswerOptionRow,
+} from "@/components/study/cat-question-card";
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
 import { PostExamAdaptiveReport } from "@/components/student/post-exam-adaptive-report";
 import type { PostExamQuestionOutcome } from "@/lib/learner/post-exam-performance-report";
@@ -141,7 +144,14 @@ import {
   logUnknownCatalogQuestionTypeDev,
   practiceRunnerNeedsUnsupportedFallback,
 } from "@/lib/questions/practice-runner-question-support";
-import { ChevronLeft, ChevronRight, Flag, LayoutGrid, Send, Shield } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Flag,
+  LayoutGrid,
+  Send,
+  Shield,
+} from "lucide-react";
 
 const PRACTICE_RESUME_STORAGE_KEY = "nursenest.practiceTests.resume.v1";
 
@@ -201,7 +211,9 @@ function pruneQuestionCache(
 
 type ExamChromeVariant = "nclex" | "rex" | "np" | "default";
 
-function examChromeVariantFromSurface(pathway: PracticeTestPathwayClientShell | null): ExamChromeVariant {
+function examChromeVariantFromSurface(
+  pathway: PracticeTestPathwayClientShell | null,
+): ExamChromeVariant {
   if (!pathway) return "default";
   if (pathway.roleTrack === "np") return "np";
   if (pathway.examCode === "rex-pn") return "rex";
@@ -229,30 +241,49 @@ function parsePracticeExamToolState(raw: unknown): PracticeExamToolState {
   const empty = emptyPracticeExamToolState();
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return empty;
   const source = raw as Record<string, unknown>;
-  const tools = source.examTools && typeof source.examTools === "object" && !Array.isArray(source.examTools)
-    ? (source.examTools as Record<string, unknown>)
-    : source;
+  const tools =
+    source.examTools &&
+    typeof source.examTools === "object" &&
+    !Array.isArray(source.examTools)
+      ? (source.examTools as Record<string, unknown>)
+      : source;
   const readBooleanRecord = (value: unknown) => {
     const out: Record<string, boolean> = {};
     if (!value || typeof value !== "object" || Array.isArray(value)) return out;
-    for (const [key, flag] of Object.entries(value as Record<string, unknown>)) {
-      if (typeof key === "string" && key.length > 0 && typeof flag === "boolean") out[key] = flag;
+    for (const [key, flag] of Object.entries(
+      value as Record<string, unknown>,
+    )) {
+      if (
+        typeof key === "string" &&
+        key.length > 0 &&
+        typeof flag === "boolean"
+      )
+        out[key] = flag;
     }
     return out;
   };
   const confidence: Record<string, ConfidenceLevel> = {};
   const rawConfidence = tools.confidence;
-  if (rawConfidence && typeof rawConfidence === "object" && !Array.isArray(rawConfidence)) {
-    for (const [key, level] of Object.entries(rawConfidence as Record<string, unknown>)) {
-      if (level === "low" || level === "medium" || level === "high") confidence[key] = level;
+  if (
+    rawConfidence &&
+    typeof rawConfidence === "object" &&
+    !Array.isArray(rawConfidence)
+  ) {
+    for (const [key, level] of Object.entries(
+      rawConfidence as Record<string, unknown>,
+    )) {
+      if (level === "low" || level === "medium" || level === "high")
+        confidence[key] = level;
     }
   }
   return {
     flagged: readBooleanRecord(tools.flagged),
     confidence,
     crossedOut: readBooleanRecord(tools.crossedOut),
-    notesOpen: typeof tools.notesOpen === "boolean" ? tools.notesOpen : undefined,
-    updatedAt: typeof tools.updatedAt === "string" ? tools.updatedAt : undefined,
+    notesOpen:
+      typeof tools.notesOpen === "boolean" ? tools.notesOpen : undefined,
+    updatedAt:
+      typeof tools.updatedAt === "string" ? tools.updatedAt : undefined,
   };
 }
 
@@ -287,7 +318,11 @@ export function PracticeTestRunnerClient({
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
   const { t } = useMarketingI18n();
   const tx = useCallback(
-    (key: string, fallback: string, params?: Record<string, string | number | undefined>) => {
+    (
+      key: string,
+      fallback: string,
+      params?: Record<string, string | number | undefined>,
+    ) => {
       const resolved = t(key, params);
       return resolvePracticeTestRunCopy(resolved, key, fallback, params);
     },
@@ -309,8 +344,13 @@ export function PracticeTestRunnerClient({
   const [remainingSec, setRemainingSec] = useState<number | null>(null);
   const [sessionStartMs, setSessionStartMs] = useState<number | null>(null);
   const [savedElapsedMs, setSavedElapsedMs] = useState<number | null>(null);
-  const [testConfig, setTestConfig] = useState<PracticeTestConfigJson | null>(null);
-  const [pathwaySurface, setPathwaySurface] = useState<PracticeTestPathwayClientShell | null>(() => initialPathwaySurface ?? null);
+  const [testConfig, setTestConfig] = useState<PracticeTestConfigJson | null>(
+    null,
+  );
+  const [pathwaySurface, setPathwaySurface] =
+    useState<PracticeTestPathwayClientShell | null>(
+      () => initialPathwaySurface ?? null,
+    );
 
   useEffect(() => {
     if (status === "COMPLETED" || status === "ABANDONED") {
@@ -320,13 +360,16 @@ export function PracticeTestRunnerClient({
   const [catMode, setCatMode] = useState(false);
   const [adaptiveTheta, setAdaptiveTheta] = useState<number | null>(null);
   const [adaptiveSe, setAdaptiveSe] = useState<number | null>(null);
-  const [adaptiveDifficultyHistory, setAdaptiveDifficultyHistory] = useState<number[]>([]);
+  const [adaptiveDifficultyHistory, setAdaptiveDifficultyHistory] = useState<
+    number[]
+  >([]);
   const [catLiveTransparency, setCatLiveTransparency] = useState(false);
   /**
    * CAT exam (test) mode UI phase — explicit submit → lock → single `cat_advance` per transition.
    * Study mode ignores this; server contract is unchanged (`action: "cat_advance"`).
    */
-  const [catExamUiPhase, setCatExamUiPhase] = useState<CatExamUiPhase>("answering");
+  const [catExamUiPhase, setCatExamUiPhase] =
+    useState<CatExamUiPhase>("answering");
   const catExamUiPhaseRef = useRef<CatExamUiPhase>("answering");
   const catExamAdvanceButtonRef = useRef<HTMLButtonElement | null>(null);
   /** When true, after the next item loads we move focus to the first option (keyboard-driven flow). */
@@ -335,12 +378,22 @@ export function PracticeTestRunnerClient({
   const catExamPrimaryActionGateMsRef = useRef(0);
   const [saving, setSaving] = useState(false);
 
-  const activePathwayId = testConfig?.pathwayId ?? pathwaySurface?.id ?? initialPathwaySurface?.id ?? null;
-  const activePathwayDefinition = activePathwayId ? getExamPathwayById(activePathwayId) : undefined;
+  const activePathwayId =
+    testConfig?.pathwayId ??
+    pathwaySurface?.id ??
+    initialPathwaySurface?.id ??
+    null;
+  const activePathwayDefinition = useMemo(
+    () => (activePathwayId ? getExamPathwayById(activePathwayId) : undefined),
+    [activePathwayId],
+  );
   const tierPedagogyProfile = useMemo(
     () =>
       resolveTierPedagogyProfile({
-        roleTrack: pathwaySurface?.roleTrack ?? initialPathwaySurface?.roleTrack ?? activePathwayDefinition?.roleTrack,
+        roleTrack:
+          pathwaySurface?.roleTrack ??
+          initialPathwaySurface?.roleTrack ??
+          activePathwayDefinition?.roleTrack,
         stripeTier: activePathwayDefinition?.stripeTier,
       }),
     [
@@ -350,22 +403,35 @@ export function PracticeTestRunnerClient({
       pathwaySurface?.roleTrack,
     ],
   );
+  const pathwaySurfaceId = pathwaySurface?.id ?? null;
+  const initialPathwaySurfaceId = initialPathwaySurface?.id ?? null;
   const pathwayCountryByPathwayId = useMemo(() => {
     const map: Record<string, string> = {};
-    for (const surf of [pathwaySurface, initialPathwaySurface]) {
-      if (!surf) continue;
-      const pathway = getExamPathwayById(surf.id);
-      if (pathway) map[surf.id] = String(pathway.countryCode);
+    for (const id of [pathwaySurfaceId, initialPathwaySurfaceId]) {
+      if (!id) continue;
+      const pathway = getExamPathwayById(id);
+      if (pathway) map[id] = String(pathway.countryCode);
     }
     return map;
-  }, [pathwaySurface, initialPathwaySurface]);
+  }, [pathwaySurfaceId, initialPathwaySurfaceId]);
   const fallbackMeasurementSystem = useMemo(
-    () => resolveMeasurementSystemForLearnerPathway(activePathwayId, pathwayCountryByPathwayId),
+    () =>
+      resolveMeasurementSystemForLearnerPathway(
+        activePathwayId,
+        pathwayCountryByPathwayId,
+      ),
     [activePathwayId, pathwayCountryByPathwayId],
   );
-  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem, null, { locked: true });
+  const { measurementSystem } = useMeasurementPreference(
+    fallbackMeasurementSystem,
+    null,
+    { locked: true },
+  );
   const resolveMeasureText = useCallback(
-    (text: string) => resolveMeasurementTokens(text, measurementSystem, { pathwayId: activePathwayId }),
+    (text: string) =>
+      resolveMeasurementTokens(text, measurementSystem, {
+        pathwayId: activePathwayId,
+      }),
     [activePathwayId, measurementSystem],
   );
   const examUnitsToggle = (
@@ -376,7 +442,9 @@ export function PracticeTestRunnerClient({
       locked
     />
   );
-  const [teachingReviewItems, setTeachingReviewItems] = useState<PracticeTestTeachingItem[] | null>(null);
+  const [teachingReviewItems, setTeachingReviewItems] = useState<
+    PracticeTestTeachingItem[] | null
+  >(null);
   const [teachingReviewLoading, setTeachingReviewLoading] = useState(false);
   /** Bumps when user retries a failed per-question fetch (effect deps exclude full cache). */
   const [questionFetchNonce, setQuestionFetchNonce] = useState(0);
@@ -384,35 +452,43 @@ export function PracticeTestRunnerClient({
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
   const [crossedOut, setCrossedOut] = useState<Record<string, boolean>>({});
   /** Dismisses the “pool widened vs your filters” notice for this tab only; resets when `testId` changes. */
-  const [dismissedPoolRelaxBanner, setDismissedPoolRelaxBanner] = useState(false);
+  const [dismissedPoolRelaxBanner, setDismissedPoolRelaxBanner] =
+    useState(false);
   /** Linear exam engine: server-persisted committed items (`adaptiveState.linearEngine`). */
   const [linearCommittedIds, setLinearCommittedIds] = useState<string[]>([]);
   /** Practice-mode per-question feedback after commit (not fully restored on reload). */
   const [linearPracticeFeedback, setLinearPracticeFeedback] = useState<
-    Record<string, {
-      isCorrect: boolean;
-      topic?: string | null;
-      rationale: string | null;
-      correctKeys: string[];
-      correctAnswerExplanation?: string | null;
-      distractorRationalesMap?: Record<string, string> | null;
-      keyTakeaway?: string | null;
-      relatedLessons?: { title: string; href: string }[];
-      clinicalPearlDisplay?: string | null;
-      referenceSource?: string | null;
-      peerStats?: QuestionBankPeerStatsClient | null;
-    }>
+    Record<
+      string,
+      {
+        isCorrect: boolean;
+        topic?: string | null;
+        rationale: string | null;
+        correctKeys: string[];
+        correctAnswerExplanation?: string | null;
+        distractorRationalesMap?: Record<string, string> | null;
+        keyTakeaway?: string | null;
+        relatedLessons?: { title: string; href: string }[];
+        clinicalPearlDisplay?: string | null;
+        referenceSource?: string | null;
+        peerStats?: QuestionBankPeerStatsClient | null;
+      }
+    >
   >({});
   const [practiceAdaptivePostMiss, setPracticeAdaptivePostMiss] = useState<{
     questionId: string;
     payload: PracticeAdaptivePostMissPayload;
   } | null>(null);
   /** CAT Study Mode: rationale for the current item after scoring, before the next adaptive pick. */
-  const [catStudyFeedback, setCatStudyFeedback] = useState<CatStudyFeedbackPayload | null>(null);
+  const [catStudyFeedback, setCatStudyFeedback] =
+    useState<CatStudyFeedbackPayload | null>(null);
   /** CAT Study Mode: last item explanation before switching to the results layout. */
-  const [catFinalStudyFeedback, setCatFinalStudyFeedback] = useState<CatStudyFeedbackPayload | null>(null);
+  const [catFinalStudyFeedback, setCatFinalStudyFeedback] =
+    useState<CatStudyFeedbackPayload | null>(null);
   /** Confidence ratings per question: Map<questionId, ConfidenceLevel>. Client-only, not persisted. */
-  const [confidence, setConfidence] = useState<Record<string, ConfidenceLevel>>({});
+  const [confidence, setConfidence] = useState<Record<string, ConfidenceLevel>>(
+    {},
+  );
   const autoSubmitRef = useRef(false);
   /** Ensures timed auto-submit only fires after a real countdown (avoids mount-time `remainingSec === 0` completing CAT). */
   const timedCountdownEverPositiveRef = useRef(false);
@@ -437,7 +513,9 @@ export function PracticeTestRunnerClient({
     examTools: PracticeExamToolState;
   } | null>(null);
   const answersRef = useRef<Record<string, unknown>>({});
-  const examToolsRef = useRef<PracticeExamToolState>(emptyPracticeExamToolState());
+  const examToolsRef = useRef<PracticeExamToolState>(
+    emptyPracticeExamToolState(),
+  );
   const idxRef = useRef(0);
   const confidenceTrackingEnabled = studySettings.enableConfidenceTracking;
   const adaptivePlanEnabled = studySettings.enableAdaptivePlan;
@@ -482,7 +560,11 @@ export function PracticeTestRunnerClient({
         pathwayId,
         event,
         catSessionActive: catMode,
-        sessionKind: catMode ? "cat" : testConfig?.linearDeliveryMode ? "loft_simulation" : null,
+        sessionKind: catMode
+          ? "cat"
+          : testConfig?.linearDeliveryMode
+            ? "loft_simulation"
+            : null,
       });
       if (process.env.NODE_ENV === "development") {
         if (debugEventCapRef.current < 48) {
@@ -495,15 +577,21 @@ export function PracticeTestRunnerClient({
         }
       }
     },
-    [testId, testConfig?.pathwayId, testConfig?.linearDeliveryMode, activePathwayId, catMode],
+    [
+      testId,
+      testConfig?.pathwayId,
+      testConfig?.linearDeliveryMode,
+      activePathwayId,
+      catMode,
+    ],
   );
 
   const load = useCallback(async () => {
-      setPhase("loading");
-      setError(null);
-      autoSubmitRef.current = false;
-      timedCountdownEverPositiveRef.current = false;
-      setCatTimerHydrateRecovery(false);
+    setPhase("loading");
+    setError(null);
+    autoSubmitRef.current = false;
+    timedCountdownEverPositiveRef.current = false;
+    setCatTimerHydrateRecovery(false);
     try {
       const res = await fetchWithRetry(
         `/api/practice-tests/${testId}?hydrate=minimal`,
@@ -543,7 +631,9 @@ export function PracticeTestRunnerClient({
       const ids =
         Array.isArray(data.questionIds) && data.questionIds.length > 0
           ? normalizePracticeTestQuestionIds(data.questionIds)
-          : normalizePracticeTestQuestionIds((data.questions ?? []).map((q) => q.id));
+          : normalizePracticeTestQuestionIds(
+              (data.questions ?? []).map((q) => q.id),
+            );
       setQuestionIds(ids);
       const hydrateInv = assessPracticeTestSessionHydrateContract({
         catMode: Boolean(data.catMode),
@@ -551,11 +641,14 @@ export function PracticeTestRunnerClient({
         questionIds: ids,
         adaptiveState: data.adaptiveState,
         config: data.config ?? null,
-        cursorIndex: typeof data.cursorIndex === "number" ? data.cursorIndex : 0,
+        cursorIndex:
+          typeof data.cursorIndex === "number" ? data.cursorIndex : 0,
         results: data.results,
       });
       if (!hydrateInv.ok) {
-        logSessionEvent("cat_hydrate_invariant_block", { code: hydrateInv.violation.code });
+        logSessionEvent("cat_hydrate_invariant_block", {
+          code: hydrateInv.violation.code,
+        });
         setError(hydrateInv.violation.message);
         setPhase("error");
         return;
@@ -579,27 +672,37 @@ export function PracticeTestRunnerClient({
       );
       setTimedMode(Boolean(data.timedMode));
       setTimeLimitSec(data.timeLimitSec ?? null);
-      setSavedElapsedMs(typeof data.elapsedMs === "number" ? data.elapsedMs : null);
-      setSessionStartMs(data.startedAt ? new Date(data.startedAt).getTime() : Date.now());
+      setSavedElapsedMs(
+        typeof data.elapsedMs === "number" ? data.elapsedMs : null,
+      );
+      setSessionStartMs(
+        data.startedAt ? new Date(data.startedAt).getTime() : Date.now(),
+      );
       const nextCfg = data.config ?? null;
       setTestConfig(nextCfg);
       setPathwaySurface((prev) => {
         if (data.pathwaySurface) return data.pathwaySurface;
         const pid = nextCfg?.pathwayId?.trim();
         if (pid && prev?.id === pid) return prev;
-        if (pid && initialPathwaySurface?.id === pid) return initialPathwaySurface;
+        if (pid && initialPathwaySurface?.id === pid)
+          return initialPathwaySurface;
         return null;
       });
       setCatMode(Boolean(data.catMode));
       setTeachingReviewItems(null);
       const ast = data.adaptiveState;
-      const astObj = ast && typeof ast === "object" && !Array.isArray(ast) ? (ast as Record<string, unknown>) : null;
+      const astObj =
+        ast && typeof ast === "object" && !Array.isArray(ast)
+          ? (ast as Record<string, unknown>)
+          : null;
       const hydratedTools = parsePracticeExamToolState(astObj);
       setAdaptiveTheta(typeof astObj?.theta === "number" ? astObj.theta : null);
       setAdaptiveSe(typeof astObj?.se === "number" ? astObj.se : null);
       const dhRaw = astObj?.difficultyHistory;
       const dhParsed = Array.isArray(dhRaw)
-        ? dhRaw.filter((x): x is number => typeof x === "number" && Number.isFinite(x))
+        ? dhRaw.filter(
+            (x): x is number => typeof x === "number" && Number.isFinite(x),
+          )
         : [];
       setAdaptiveDifficultyHistory(dhParsed);
       setLinearCommittedIds(getLinearCommittedQuestionIds(ast));
@@ -625,8 +728,12 @@ export function PracticeTestRunnerClient({
                 timeoutMs: 20_000,
               },
             );
-            const fd = (await fr.json()) as { studyFeedback?: CatStudyFeedbackPayload; error?: string };
-            if (fr.ok && fd.studyFeedback) setCatStudyFeedback(fd.studyFeedback);
+            const fd = (await fr.json()) as {
+              studyFeedback?: CatStudyFeedbackPayload;
+              error?: string;
+            };
+            if (fr.ok && fd.studyFeedback)
+              setCatStudyFeedback(fd.studyFeedback);
           } catch {
             /* ignore — user can retry via reload */
           }
@@ -634,8 +741,13 @@ export function PracticeTestRunnerClient({
       } else {
         setCatStudyFeedback(null);
       }
-      if (data.status === "IN_PROGRESS" && data.timedMode && data.timeLimitSec) {
-        const usedSec = data.elapsedMs != null ? Math.floor(data.elapsedMs / 1000) : 0;
+      if (
+        data.status === "IN_PROGRESS" &&
+        data.timedMode &&
+        data.timeLimitSec
+      ) {
+        const usedSec =
+          data.elapsedMs != null ? Math.floor(data.elapsedMs / 1000) : 0;
         const serverRemaining = Math.max(0, data.timeLimitSec - usedSec);
         if (data.catMode && serverRemaining === 0) {
           logSessionEvent("cat_timer_zero_on_hydrate", {
@@ -655,11 +767,16 @@ export function PracticeTestRunnerClient({
       setPhase("ready");
     } catch (e) {
       captureClientException("practice_test_hydrate", e, { testId });
-      logDedupedClientDiagnostic("practice_runner", "hydrate_failed", String(testId), {
-        testId,
-        phase: "error",
-        surface: "hydrate",
-      });
+      logDedupedClientDiagnostic(
+        "practice_runner",
+        "hydrate_failed",
+        String(testId),
+        {
+          testId,
+          phase: "error",
+          surface: "hydrate",
+        },
+      );
       const message = e instanceof Error ? e.message : "Error";
       setError(message);
       setPhase("error");
@@ -685,16 +802,25 @@ export function PracticeTestRunnerClient({
       try {
         const res = await fetchWithRetry(
           `/api/practice-tests/${testId}/question?index=${idx}`,
-          { method: "GET", signal: ac.signal, credentials: "include", cache: "no-store" },
+          {
+            method: "GET",
+            signal: ac.signal,
+            credentials: "include",
+            cache: "no-store",
+          },
           {
             attempts: 2,
             baseDelayMs: 400,
             timeoutMs: 25_000,
           },
         );
-        const payload = (await res.json()) as { question?: QRow; error?: string };
+        const payload = (await res.json()) as {
+          question?: QRow;
+          error?: string;
+        };
         if (!res.ok) {
-          if (!ac.signal.aborted) setError(payload.error ?? "Could not load question.");
+          if (!ac.signal.aborted)
+            setError(payload.error ?? "Could not load question.");
           return;
         }
         if (payload.question && !ac.signal.aborted) {
@@ -720,7 +846,12 @@ export function PracticeTestRunnerClient({
   const prefetchQuestionAtIndex = useCallback(
     (targetIndex: number) => {
       const id = questionIds[targetIndex];
-      if (!id || cacheRef.current[id] || questionPrefetchInFlightRef.current.has(targetIndex)) return;
+      if (
+        !id ||
+        cacheRef.current[id] ||
+        questionPrefetchInFlightRef.current.has(targetIndex)
+      )
+        return;
       questionPrefetchInFlightRef.current.add(targetIndex);
       void fetchWithRetry(
         `/api/practice-tests/${testId}/question?index=${targetIndex}`,
@@ -734,8 +865,15 @@ export function PracticeTestRunnerClient({
         .then((payload: { question?: QRow } | null) => {
           if (!payload?.question || !runnerMountedRef.current) return;
           setQuestionCache((current) => {
-            const next = { ...current, [payload.question!.id]: payload.question! };
-            return pruneQuestionCache(next, questionIdsRef.current, idxRef.current);
+            const next = {
+              ...current,
+              [payload.question!.id]: payload.question!,
+            };
+            return pruneQuestionCache(
+              next,
+              questionIdsRef.current,
+              idxRef.current,
+            );
           });
         })
         .catch(() => {
@@ -784,7 +922,11 @@ export function PracticeTestRunnerClient({
       if (fromTimer && autoSubmitRef.current) return;
       if (fromTimer) autoSubmitRef.current = true;
       submitInFlightRef.current = true;
-      logSessionEvent("submit_start", { fromTimer, idx: idxRef.current, total: questionIds.length });
+      logSessionEvent("submit_start", {
+        fromTimer,
+        idx: idxRef.current,
+        total: questionIds.length,
+      });
       setSaving(true);
       try {
         const cfg = testConfig;
@@ -793,20 +935,30 @@ export function PracticeTestRunnerClient({
           setSaving(false);
           return;
         }
-        const linear = cfg && cfg.selectionMode !== "cat" && cfg.linearDeliveryMode;
+        const linear =
+          cfg && cfg.selectionMode !== "cat" && cfg.linearDeliveryMode;
         if (linear && questionIds.length > 0) {
-          const missing = questionIds.filter((id) => !linearCommittedIds.includes(id));
+          const missing = questionIds.filter(
+            (id) => !linearCommittedIds.includes(id),
+          );
           if (missing.length > 0) {
             if (fromTimer) autoSubmitRef.current = false;
             setSaving(false);
-            setError(`Submit all questions first (${missing.length} remaining).`);
+            setError(
+              `Submit all questions first (${missing.length} remaining).`,
+            );
             return;
           }
         }
-        if (cfg?.selectionMode === "cat" && (cfg.catAdaptiveSessionType ?? "cat") === "cat") {
+        if (
+          cfg?.selectionMode === "cat" &&
+          (cfg.catAdaptiveSessionType ?? "cat") === "cat"
+        ) {
           const ids = questionIdsRef.current;
           const ans = answersRef.current;
-          const answeredForComplete = ids.filter((qid) => ans[qid] !== undefined).length;
+          const answeredForComplete = ids.filter(
+            (qid) => ans[qid] !== undefined,
+          ).length;
           if (answeredForComplete < 2) {
             if (fromTimer) autoSubmitRef.current = false;
             setSaving(false);
@@ -820,7 +972,9 @@ export function PracticeTestRunnerClient({
           }
         }
         const elapsedMs =
-          sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
+          sessionStartMs != null
+            ? Math.max(0, Date.now() - sessionStartMs)
+            : undefined;
         const res = await fetch(`/api/practice-tests/${testId}`, {
           method: "PATCH",
           credentials: "include",
@@ -834,13 +988,19 @@ export function PracticeTestRunnerClient({
             ...(elapsedMs !== undefined ? { elapsedMs } : {}),
           }),
         });
-        const data = (await res.json()) as { results?: PracticeTestResultsJson; error?: string };
+        const data = (await res.json()) as {
+          results?: PracticeTestResultsJson;
+          error?: string;
+        };
         if (!res.ok) throw new Error(data.error ?? "Could not submit.");
         setResults(data.results ?? null);
         setStatus("COMPLETED");
         setSavedElapsedMs(elapsedMs ?? null);
         if (fromTimer) setRemainingSec(0);
-        logSessionEvent("submit_success", { fromTimer, elapsedMs: elapsedMs ?? null });
+        logSessionEvent("submit_success", {
+          fromTimer,
+          elapsedMs: elapsedMs ?? null,
+        });
         void captureClientOrchestratedAnalytics(
           testConfig?.pathwayId ?? activePathwayId,
           PH.learnerPracticeTestSessionCompleted,
@@ -892,17 +1052,21 @@ export function PracticeTestRunnerClient({
       : tx("learner.practiceTests.run.defaultExamName", "Practice Exam"));
   const chromeVariant = examChromeVariantFromSurface(pathwaySurface);
   const chromeClass = `nn-exam-variant--${chromeVariant}`;
-  const guidedPracticeCat = Boolean(catMode && (testConfig?.catAdaptiveSessionType ?? "cat") === "practice");
+  const guidedPracticeCat = Boolean(
+    catMode && (testConfig?.catAdaptiveSessionType ?? "cat") === "practice",
+  );
   /**
    * Study feedback during CAT — guided fixed-length runs and continuous review (`catExamFeedbackMode: "study"`).
    * Licensing CAT / exam simulation stays exam-like (no per-item rationale mid-session).
    */
-  const catFeedbackStudy = Boolean(catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study");
+  const catFeedbackStudy = Boolean(
+    catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study",
+  );
   const continuousAdaptivePractice = Boolean(
     testConfig?.studyLaunchPayload?.unlimited === true ||
-      (catFeedbackStudy &&
-        (testConfig?.catAdaptiveSessionType ?? "cat") === "cat" &&
-        testConfig?.catPresentationMode === "practice"),
+    (catFeedbackStudy &&
+      (testConfig?.catAdaptiveSessionType ?? "cat") === "cat" &&
+      testConfig?.catPresentationMode === "practice"),
   );
   /** Licensing-style CAT: single-column exam shell; submit → lock → next; phase machine matches `catAdvance`. */
   const isExamStyle = catMode && !catFeedbackStudy;
@@ -932,10 +1096,15 @@ export function PracticeTestRunnerClient({
     if (!ok) return;
     submitInFlightRef.current = true;
     setSaving(true);
-    logSessionEvent("end_session_early", { answered: answeredQuestionCount, total: questionIds.length });
+    logSessionEvent("end_session_early", {
+      answered: answeredQuestionCount,
+      total: questionIds.length,
+    });
     try {
       const elapsedMs =
-        sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
+        sessionStartMs != null
+          ? Math.max(0, Date.now() - sessionStartMs)
+          : undefined;
       const res = await fetch(`/api/practice-tests/${testId}`, {
         method: "PATCH",
         credentials: "include",
@@ -949,7 +1118,10 @@ export function PracticeTestRunnerClient({
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         }),
       });
-      const data = (await res.json()) as { results?: PracticeTestResultsJson; error?: string };
+      const data = (await res.json()) as {
+        results?: PracticeTestResultsJson;
+        error?: string;
+      };
       if (!res.ok) throw new Error(data.error ?? "Could not end session.");
       setResults(data.results ?? null);
       setStatus("COMPLETED");
@@ -1018,20 +1190,27 @@ export function PracticeTestRunnerClient({
   }, [isExamStyle, catMode, status, current?.id]);
 
   const catStudyLocked =
-    catFeedbackStudy && Boolean(catStudyFeedback && current && catStudyFeedback.questionId === current.id);
-  const optsCanonical = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
+    catFeedbackStudy &&
+    Boolean(
+      catStudyFeedback && current && catStudyFeedback.questionId === current.id,
+    );
+  const optsCanonical = useMemo(
+    () => (current ? parseOptions(current.options) : []),
+    [current],
+  );
   const optsDisplay = useMemo(() => {
     if (!current) return [];
     const d = current.displayOptions;
-    if (Array.isArray(d) && d.length === optsCanonical.length) return d.map((x) => String(x));
+    if (Array.isArray(d) && d.length === optsCanonical.length)
+      return d.map((x) => String(x));
     return optsCanonical;
   }, [current, optsCanonical]);
 
   const isSata = Boolean(
     current &&
-      typeof current.questionType === "string" &&
-      (current.questionType.toUpperCase() === "SATA" ||
-        current.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY"),
+    typeof current.questionType === "string" &&
+    (current.questionType.toUpperCase() === "SATA" ||
+      current.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY"),
   );
   const bowtiePayload = useMemo(
     () =>
@@ -1059,25 +1238,33 @@ export function PracticeTestRunnerClient({
     () =>
       Boolean(
         current &&
-          practiceRunnerNeedsUnsupportedFallback(
-            current.questionType,
-            current.options,
-            optsCanonical.length,
-            isBowtie,
-          ),
+        practiceRunnerNeedsUnsupportedFallback(
+          current.questionType,
+          current.options,
+          optsCanonical.length,
+          isBowtie,
+        ),
       ),
     [current, optsCanonical.length, isBowtie],
   );
 
   useEffect(() => {
     if (!current || !needsUnsupportedQuestionUi) return;
-    logPracticeRunnerUnsupportedQuestionDev(current.id, current.questionType, "unsupported_payload_shape");
+    logPracticeRunnerUnsupportedQuestionDev(
+      current.id,
+      current.questionType,
+      "unsupported_payload_shape",
+    );
     logPracticeRunnerUnsupportedQuestionProd(current.id, current.questionType);
   }, [current, needsUnsupportedQuestionUi]);
 
   useEffect(() => {
     if (!current || needsUnsupportedQuestionUi || isBowtie) return;
-    logUnknownCatalogQuestionTypeDev(current.id, current.questionType, optsCanonical.length);
+    logUnknownCatalogQuestionTypeDev(
+      current.id,
+      current.questionType,
+      optsCanonical.length,
+    );
   }, [current, needsUnsupportedQuestionUi, isBowtie, optsCanonical.length]);
 
   useEffect(() => {
@@ -1109,9 +1296,11 @@ export function PracticeTestRunnerClient({
 
   const linearDelivery = testConfig?.linearDeliveryMode;
   const linearRationaleVisibility =
-    testConfig?.linearRationaleVisibility ?? (linearDelivery === "exam" ? "end_of_exam" : "after_each");
+    testConfig?.linearRationaleVisibility ??
+    (linearDelivery === "exam" ? "end_of_exam" : "after_each");
   const isLinearEngine = Boolean(!catMode && linearDelivery);
-  const linearAllowReviewNavigation = testConfig?.linearAllowReviewNavigation === true;
+  const linearAllowReviewNavigation =
+    testConfig?.linearAllowReviewNavigation === true;
   const linearIsExamShell = isLinearEngine && linearDelivery === "exam";
   /**
    * Timed linear mock only — reuse CAT-style minimal board chrome (progress density, option strip).
@@ -1120,11 +1309,17 @@ export function PracticeTestRunnerClient({
   const linearCatShellPresentation = linearIsExamShell;
   /** Desktop/tablet split: question left, rationale right (mobile stacks). */
   const linearPracticeSplitReview =
-    isLinearEngine && linearDelivery === "practice" && linearRationaleVisibility === "after_each";
+    isLinearEngine &&
+    linearDelivery === "practice" &&
+    linearRationaleVisibility === "after_each";
   /** Linear practice exams (tutor / study-forward) — visually distinct from licensing CAT shells. */
-  const linearPracticeExamConvergence = Boolean(isLinearEngine && linearDelivery === "practice");
+  const linearPracticeExamConvergence = Boolean(
+    isLinearEngine && linearDelivery === "practice",
+  );
   const practiceQuestionLayoutMode = resolvePracticeQuestionLayoutMode({
-    splitRationale: Boolean(linearPracticeSplitReview || guidedPracticeCat || catFeedbackStudy),
+    splitRationale: Boolean(
+      linearPracticeSplitReview || guidedPracticeCat || catFeedbackStudy,
+    ),
     examStyle: Boolean(isExamStyle || linearCatShellPresentation),
   });
   /** Visual mode for `ExamSessionShell` — one shell, token-driven surfaces (not layout forks). */
@@ -1139,9 +1334,14 @@ export function PracticeTestRunnerClient({
     linearDeliveryMode: linearDelivery,
     linearAllowReviewNavigation,
   });
-  const committedSet = useMemo(() => new Set(linearCommittedIds), [linearCommittedIds]);
+  const committedSet = useMemo(
+    () => new Set(linearCommittedIds),
+    [linearCommittedIds],
+  );
   const currentCommitted = Boolean(current && committedSet.has(current.id));
-  const linearFeedback = current ? linearPracticeFeedback[current.id] : undefined;
+  const linearFeedback = current
+    ? linearPracticeFeedback[current.id]
+    : undefined;
   const committedCount = linearCommittedIds.length;
 
   const qTags = useMemo(() => {
@@ -1153,7 +1353,9 @@ export function PracticeTestRunnerClient({
     !Boolean(testConfig?.disableOptionShuffle) &&
     !isSata &&
     !isBowtie &&
-    (catFeedbackStudy || isExamStyle || (!catMode && testConfig?.linearDeliveryMode === "exam"));
+    (catFeedbackStudy ||
+      isExamStyle ||
+      (!catMode && testConfig?.linearDeliveryMode === "exam"));
 
   const optsOrderCanonical = useMemo(() => {
     if (optsCanonical.length <= 1) return optsCanonical;
@@ -1187,7 +1389,9 @@ export function PracticeTestRunnerClient({
   ]);
 
   const optsOrderDisplay = useMemo(() => {
-    const mapCanonToDisplay = new Map(optsCanonical.map((k, i) => [k, optsDisplay[i] ?? k]));
+    const mapCanonToDisplay = new Map(
+      optsCanonical.map((k, i) => [k, optsDisplay[i] ?? k]),
+    );
     return optsOrderCanonical.map((k) => mapCanonToDisplay.get(k) ?? k);
   }, [optsCanonical, optsDisplay, optsOrderCanonical]);
 
@@ -1207,7 +1411,13 @@ export function PracticeTestRunnerClient({
 
   const lockCatExamAnswer = useCallback(() => {
     if (!isExamStyle || !current) return;
-    if (!catExamCanLockAnswer(catExamUiPhaseRef.current, hasMeaningfulAnswer(current.id))) return;
+    if (
+      !catExamCanLockAnswer(
+        catExamUiPhaseRef.current,
+        hasMeaningfulAnswer(current.id),
+      )
+    )
+      return;
     const from = catExamUiPhaseRef.current;
     try {
       assertCatExamPhaseTransition(from, "submitted_locked");
@@ -1222,7 +1432,11 @@ export function PracticeTestRunnerClient({
     }
     catExamUiPhaseRef.current = "submitted_locked";
     setCatExamUiPhase("submitted_locked");
-    logSessionEvent("cat_exam_phase_transition", { phase_from: from, phase_to: "submitted_locked", reason: "lock_answer" });
+    logSessionEvent("cat_exam_phase_transition", {
+      phase_from: from,
+      phase_to: "submitted_locked",
+      reason: "lock_answer",
+    });
     queueMicrotask(() => {
       catExamAdvanceButtonRef.current?.focus();
     });
@@ -1250,7 +1464,10 @@ export function PracticeTestRunnerClient({
     void persistSave(answersRef.current, idxRef.current);
   }
 
-  async function persistSave(nextAnswers: Record<string, unknown>, nextIdx: number) {
+  async function persistSave(
+    nextAnswers: Record<string, unknown>,
+    nextIdx: number,
+  ) {
     pendingPersistRef.current = {
       answers: nextAnswers,
       cursorIndex: nextIdx,
@@ -1267,7 +1484,9 @@ export function PracticeTestRunnerClient({
         const payload = pendingPersistRef.current;
         pendingPersistRef.current = null;
         const elapsedMs =
-          sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
+          sessionStartMs != null
+            ? Math.max(0, Date.now() - sessionStartMs)
+            : undefined;
         const res = await fetch(`/api/practice-tests/${testId}`, {
           method: "PATCH",
           credentials: "include",
@@ -1294,7 +1513,8 @@ export function PracticeTestRunnerClient({
       }
       if (error) setError(null);
     } catch (e) {
-      const message = e instanceof Error ? e.message : "Could not save progress.";
+      const message =
+        e instanceof Error ? e.message : "Could not save progress.";
       setError(message);
     } finally {
       persistInFlightRef.current = false;
@@ -1304,13 +1524,20 @@ export function PracticeTestRunnerClient({
 
   async function abandon() {
     if (abandonInFlightRef.current || submitInFlightRef.current) return;
-    if (!window.confirm("Abandon this test? Progress is saved but marked abandoned.")) return;
+    if (
+      !window.confirm(
+        "Abandon this test? Progress is saved but marked abandoned.",
+      )
+    )
+      return;
     abandonInFlightRef.current = true;
     logSessionEvent("navigation_abandon", { idx, total });
     setSaving(true);
     try {
       const elapsedMs =
-        sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
+        sessionStartMs != null
+          ? Math.max(0, Date.now() - sessionStartMs)
+          : undefined;
       await fetch(`/api/practice-tests/${testId}`, {
         method: "PATCH",
         credentials: "include",
@@ -1334,8 +1561,17 @@ export function PracticeTestRunnerClient({
 
   function setAnswerForCurrent(next: unknown) {
     if (!current) return;
-    if (submitInFlightRef.current || catAdvanceInFlightRef.current || linearCommitInFlightRef.current) return;
-    if (catMode && isExamStyle && !catExamCanChangeAnswer(catExamUiPhaseRef.current)) {
+    if (
+      submitInFlightRef.current ||
+      catAdvanceInFlightRef.current ||
+      linearCommitInFlightRef.current
+    )
+      return;
+    if (
+      catMode &&
+      isExamStyle &&
+      !catExamCanChangeAnswer(catExamUiPhaseRef.current)
+    ) {
       return;
     }
     if (isLinearEngine && committedSet.has(current.id)) return;
@@ -1352,11 +1588,16 @@ export function PracticeTestRunnerClient({
     if (!current || !isLinearEngine || currentCommitted) return;
     if (!hasMeaningfulAnswer(current.id)) return;
     linearCommitInFlightRef.current = true;
-    logSessionEvent("submit_linear_commit_start", { idx, questionId: current.id });
+    logSessionEvent("submit_linear_commit_start", {
+      idx,
+      questionId: current.id,
+    });
     setSaving(true);
     try {
       const elapsedMs =
-        sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
+        sessionStartMs != null
+          ? Math.max(0, Date.now() - sessionStartMs)
+          : undefined;
       const res = await fetch(`/api/practice-tests/${testId}`, {
         method: "PATCH",
         credentials: "include",
@@ -1401,8 +1642,10 @@ export function PracticeTestRunnerClient({
             topic: data.feedback!.topic ?? null,
             rationale: data.feedback!.rationale,
             correctKeys: data.feedback!.correctKeys ?? [],
-            correctAnswerExplanation: data.feedback!.correctAnswerExplanation ?? null,
-            distractorRationalesMap: data.feedback!.distractorRationalesMap ?? null,
+            correctAnswerExplanation:
+              data.feedback!.correctAnswerExplanation ?? null,
+            distractorRationalesMap:
+              data.feedback!.distractorRationalesMap ?? null,
             keyTakeaway: data.feedback!.keyTakeaway ?? null,
             relatedLessons: data.feedback!.relatedLessons ?? [],
             clinicalPearlDisplay: data.feedback!.clinicalPearlDisplay ?? null,
@@ -1412,11 +1655,15 @@ export function PracticeTestRunnerClient({
         }));
       }
       if (data.feedback?.isCorrect) {
-        setPracticeAdaptivePostMiss((p) => (p?.questionId === current.id ? null : p));
+        setPracticeAdaptivePostMiss((p) =>
+          p?.questionId === current.id ? null : p,
+        );
       } else {
         const pathwayId = testConfig?.pathwayId ?? pathwaySurface?.id ?? "";
         const topicRaw =
-          [current.topic, current.subtopic].find((x) => typeof x === "string" && String(x).trim().length > 1) ?? null;
+          [current.topic, current.subtopic].find(
+            (x) => typeof x === "string" && String(x).trim().length > 1,
+          ) ?? null;
         if (
           adaptiveLearningEnabled &&
           isEntitled &&
@@ -1434,17 +1681,26 @@ export function PracticeTestRunnerClient({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                   pathwayId,
-                  missedTopicKey: typeof topicRaw === "string" ? topicRaw : null,
+                  missedTopicKey:
+                    typeof topicRaw === "string" ? topicRaw : null,
                 }),
               });
-              const payload = (await ar.json()) as PracticeAdaptivePostMissPayload & {
-                locked?: boolean;
-                code?: string;
-              };
+              const payload =
+                (await ar.json()) as PracticeAdaptivePostMissPayload & {
+                  locked?: boolean;
+                  code?: string;
+                };
               if (!runnerMountedRef.current) return;
-              if (idxRef.current !== idxAtCommit || questionIdsRef.current[idxAtCommit] !== qidAtCommit) return;
+              if (
+                idxRef.current !== idxAtCommit ||
+                questionIdsRef.current[idxAtCommit] !== qidAtCommit
+              )
+                return;
               if (ar.ok && payload && !payload.locked) {
-                setPracticeAdaptivePostMiss({ questionId: qidAtCommit, payload });
+                setPracticeAdaptivePostMiss({
+                  questionId: qidAtCommit,
+                  payload,
+                });
               }
             } catch {
               /* optional wiring — ignore */
@@ -1452,7 +1708,10 @@ export function PracticeTestRunnerClient({
           })();
         }
       }
-      logSessionEvent("submit_linear_commit_success", { idx, questionId: current.id });
+      logSessionEvent("submit_linear_commit_success", {
+        idx,
+        questionId: current.id,
+      });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Submit failed");
       logSessionEvent("submit_linear_commit_failed", {
@@ -1470,7 +1729,8 @@ export function PracticeTestRunnerClient({
     if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
     if (!current || !hasMeaningfulAnswer(current.id)) return;
 
-    const feedbackStudy = catMode && (testConfig?.catAdaptiveSessionType ?? "cat") === "practice";
+    const feedbackStudy =
+      catMode && (testConfig?.catAdaptiveSessionType ?? "cat") === "practice";
     const examStyle = catMode && !feedbackStudy;
     if (examStyle && !catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) {
       return;
@@ -1502,11 +1762,16 @@ export function PracticeTestRunnerClient({
         reason: "cat_advance_start",
       });
     }
-    logSessionEvent("submit_cat_advance_start", { idx, questionId: advanceQuestionId });
+    logSessionEvent("submit_cat_advance_start", {
+      idx,
+      questionId: advanceQuestionId,
+    });
     setSaving(true);
     try {
       const elapsedMs =
-        sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
+        sessionStartMs != null
+          ? Math.max(0, Date.now() - sessionStartMs)
+          : undefined;
       const patchBody = buildCatAdvancePatchBody({
         testId,
         answers: answersRef.current,
@@ -1514,7 +1779,10 @@ export function PracticeTestRunnerClient({
         examQuestionId: advanceQuestionId,
         ...(elapsedMs !== undefined ? { elapsedMs } : {}),
       });
-      const patchBodyWithTools = { ...patchBody, examTools: examToolsRef.current };
+      const patchBodyWithTools = {
+        ...patchBody,
+        examTools: examToolsRef.current,
+      };
       const res = await fetch(`/api/practice-tests/${testId}`, {
         method: "PATCH",
         credentials: "include",
@@ -1545,7 +1813,10 @@ export function PracticeTestRunnerClient({
           currentQuestionId: questionIdsRef.current[idxRef.current],
         })
       ) {
-        logSessionEvent("submit_cat_advance_stale_ignored", { advanceIdx, advanceQuestionId });
+        logSessionEvent("submit_cat_advance_stale_ignored", {
+          advanceIdx,
+          advanceQuestionId,
+        });
         if (examStyle) {
           const fromPhase = catExamUiPhaseRef.current;
           try {
@@ -1572,7 +1843,10 @@ export function PracticeTestRunnerClient({
       if (data.catStudyReveal) {
         await load();
         if (!runnerMountedRef.current) return;
-        logSessionEvent("submit_cat_advance_reveal", { idx: advanceIdx, questionId: advanceQuestionId });
+        logSessionEvent("submit_cat_advance_reveal", {
+          idx: advanceIdx,
+          questionId: advanceQuestionId,
+        });
         return;
       }
       if (data.catCompleted && data.results) {
@@ -1603,7 +1877,10 @@ export function PracticeTestRunnerClient({
           setCatFinalStudyFeedback(data.studyFeedback);
         }
         setStatus("COMPLETED");
-        logSessionEvent("submit_cat_advance_completed", { idx: advanceIdx, questionId: advanceQuestionId });
+        logSessionEvent("submit_cat_advance_completed", {
+          idx: advanceIdx,
+          questionId: advanceQuestionId,
+        });
         return;
       }
       if (data.catAdvanced) {
@@ -1630,7 +1907,10 @@ export function PracticeTestRunnerClient({
             reason: "cat_advanced_ok",
           });
         }
-        logSessionEvent("submit_cat_advance_next", { idx: advanceIdx, questionId: advanceQuestionId });
+        logSessionEvent("submit_cat_advance_next", {
+          idx: advanceIdx,
+          questionId: advanceQuestionId,
+        });
         return;
       }
       throw new Error(
@@ -1675,7 +1955,13 @@ export function PracticeTestRunnerClient({
   catAdvanceLatestRef.current = catAdvance;
 
   async function goNext() {
-    if (saving || navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
+    if (
+      saving ||
+      navInFlightRef.current ||
+      submitInFlightRef.current ||
+      catAdvanceInFlightRef.current
+    )
+      return;
     if (catMode) {
       if (guidedPracticeCat) {
         await catAdvance();
@@ -1699,7 +1985,13 @@ export function PracticeTestRunnerClient({
   }
 
   async function goPrev() {
-    if (saving || navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
+    if (
+      saving ||
+      navInFlightRef.current ||
+      submitInFlightRef.current ||
+      catAdvanceInFlightRef.current
+    )
+      return;
     if (catMode) return;
     if (isLinearEngine) {
       if (!linearAllowReviewNavigation || linearIsExamShell) return;
@@ -1731,19 +2023,37 @@ export function PracticeTestRunnerClient({
 
   /** CAT exam mode: keyboard shortcuts (letters / digits, Enter); deduped against double-fire. */
   useEffect(() => {
-    if (!isExamStyle || !catMode || status !== "IN_PROGRESS" || phase !== "ready" || !current || catTimerHydrateRecovery) {
+    if (
+      !isExamStyle ||
+      !catMode ||
+      status !== "IN_PROGRESS" ||
+      phase !== "ready" ||
+      !current ||
+      catTimerHydrateRecovery
+    ) {
       return;
     }
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
       const target = e.target as HTMLElement | null;
-      if (target?.closest?.("dialog[open]") || target?.closest?.('[role="dialog"]')) return;
-      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
+      if (
+        target?.closest?.("dialog[open]") ||
+        target?.closest?.('[role="dialog"]')
+      )
+        return;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
         return;
       }
       const root = target?.closest?.("[data-cat-exam-root]");
       if (e.key === " " && root) {
-        const interactive = target?.closest?.("button,label.nn-cat-opt,a[href],[role='menuitem']");
+        const interactive = target?.closest?.(
+          "button,label.nn-cat-opt,a[href],[role='menuitem']",
+        );
         if (!interactive) e.preventDefault();
       }
       const gate = () => {
@@ -1777,7 +2087,9 @@ export function PracticeTestRunnerClient({
           const prior = answersRef.current[current.id];
           const prev = Array.isArray(prior) ? [...prior] : [];
           const has = prev.includes(canonical);
-          setAnswerForCurrentRef.current(has ? prev.filter((x) => x !== canonical) : [...prev, canonical]);
+          setAnswerForCurrentRef.current(
+            has ? prev.filter((x) => x !== canonical) : [...prev, canonical],
+          );
         } else {
           setAnswerForCurrentRef.current(canonical);
         }
@@ -1830,7 +2142,9 @@ export function PracticeTestRunnerClient({
     catExamKeyboardAdvanceRef.current = false;
     queueMicrotask(() => {
       const wrap = document.querySelector("[data-cat-exam-root]");
-      const btn = wrap?.querySelector("button.nn-cat-opt") as HTMLButtonElement | null;
+      const btn = wrap?.querySelector(
+        "button.nn-cat-opt",
+      ) as HTMLButtonElement | null;
       btn?.focus();
     });
   }, [qid, isExamStyle]);
@@ -1869,7 +2183,10 @@ export function PracticeTestRunnerClient({
     <div role="alert">
       <LearnerStudyCard className="mb-4 border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--lv-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--lv-bg-surface))] text-sm text-[var(--semantic-text-primary)] shadow-sm">
         <p className="font-semibold text-[var(--semantic-text-primary)]">
-          {tx("learner.practiceTests.run.sessionIssueTitle", "We could not sync that step")}
+          {tx(
+            "learner.practiceTests.run.sessionIssueTitle",
+            "We could not sync that step",
+          )}
         </p>
         <p className="mt-1 text-[var(--semantic-text-secondary)]">{error}</p>
         <div className="mt-3 flex flex-wrap gap-2">
@@ -1907,9 +2224,14 @@ export function PracticeTestRunnerClient({
     <div role="status" className="mb-3">
       <LearnerStudyCard className="border-[color-mix(in_srgb,var(--semantic-info)_32%,var(--lv-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_28%,var(--lv-bg-surface))] text-sm text-[var(--semantic-text-primary)] shadow-sm">
         <p className="font-semibold text-[var(--semantic-text-primary)]">
-          {tx("learner.practiceTests.run.poolRelaxTitle", "How this session was built")}
+          {tx(
+            "learner.practiceTests.run.poolRelaxTitle",
+            "How this session was built",
+          )}
         </p>
-        <p className="mt-1 text-[var(--semantic-text-secondary)]">{catPoolRelaxNoticeCopy(appliedSelMeta!)}</p>
+        <p className="mt-1 text-[var(--semantic-text-secondary)]">
+          {catPoolRelaxNoticeCopy(appliedSelMeta!)}
+        </p>
         <div className="mt-3">
           <button
             type="button"
@@ -1930,7 +2252,10 @@ export function PracticeTestRunnerClient({
     return (
       <div className="nn-card space-y-4 p-6 text-sm text-muted-foreground">
         <p className="font-medium text-foreground">
-          {tx("learner.practiceTests.run.loadFailedTitle", "Could not load this practice test")}
+          {tx(
+            "learner.practiceTests.run.loadFailedTitle",
+            "Could not load this practice test",
+          )}
         </p>
         <p>{error ?? tx("learner.practiceTests.run.error", "Error")}</p>
         <p className="text-xs text-[var(--semantic-text-secondary)]">
@@ -1947,7 +2272,10 @@ export function PracticeTestRunnerClient({
           >
             {tx("learner.practiceTests.run.retryLoad", "Retry")}
           </button>
-          <Link className="inline-flex items-center font-medium text-primary underline" href="/app/practice-tests">
+          <Link
+            className="inline-flex items-center font-medium text-primary underline"
+            href="/app/practice-tests"
+          >
             {tx("learner.practiceTests.run.backToBank", "Back to test bank")}
           </Link>
         </div>
@@ -1966,7 +2294,10 @@ export function PracticeTestRunnerClient({
           timeoutMs: 30_000,
         },
       );
-      const data = (await res.json()) as { teachingReview?: { items: PracticeTestTeachingItem[] }; error?: string };
+      const data = (await res.json()) as {
+        teachingReview?: { items: PracticeTestTeachingItem[] };
+        error?: string;
+      };
       if (!res.ok) {
         setError(data.error ?? "Could not load teaching review.");
         return;
@@ -1992,7 +2323,10 @@ export function PracticeTestRunnerClient({
               Review before your summary
             </h2>
             <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">
-              {tx("learner.practiceTests.run.catFinalReviewLead", "Here is the last rationale before your summary.")}
+              {tx(
+                "learner.practiceTests.run.catFinalReviewLead",
+                "Here is the last rationale before your summary.",
+              )}
             </p>
             <div className="mt-6">
               <CatStudyFeedbackPanel
@@ -2018,7 +2352,10 @@ export function PracticeTestRunnerClient({
       correctnessMap[qid] = fb.isCorrect;
     }
     // Build question metadata map (index + topic) for review priority groups
-    const questionMetaMap: Record<string, { index: number; topic?: string | null }> = {};
+    const questionMetaMap: Record<
+      string,
+      { index: number; topic?: string | null }
+    > = {};
     for (let i = 0; i < questionIds.length; i++) {
       const qid = questionIds[i];
       if (qid) {
@@ -2030,10 +2367,14 @@ export function PracticeTestRunnerClient({
     }
 
     const linearFbCount = Object.keys(linearPracticeFeedback).length;
-    const linearFbCorrect = Object.values(linearPracticeFeedback).filter((f) => f.isCorrect).length;
+    const linearFbCorrect = Object.values(linearPracticeFeedback).filter(
+      (f) => f.isCorrect,
+    ).length;
     const linearFbMissed = linearFbCount - linearFbCorrect;
     const linearFbAccuracyPct =
-      linearFbCount > 0 ? Math.round((linearFbCorrect / linearFbCount) * 100) : 0;
+      linearFbCount > 0
+        ? Math.round((linearFbCorrect / linearFbCount) * 100)
+        : 0;
 
     const incorrectSet = new Set(results.incorrectQuestionIds ?? []);
     const postExamQuestionOutcomes: PostExamQuestionOutcome[] = [];
@@ -2078,7 +2419,9 @@ export function PracticeTestRunnerClient({
             learnerUserId={userId ?? null}
             isEntitled={isEntitled}
             onOpenTeachingReview={
-              teachingReviewItems === null ? () => void loadTeachingReview() : undefined
+              teachingReviewItems === null
+                ? () => void loadTeachingReview()
+                : undefined
             }
             teachingReviewLoading={teachingReviewLoading}
           />
@@ -2088,7 +2431,10 @@ export function PracticeTestRunnerClient({
           <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-6">
             <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))] p-5 sm:p-6">
               <p className="m-0 text-xs font-bold uppercase tracking-wide text-[var(--semantic-brand)]">
-                {tx("learner.practiceTests.run.sessionStudyPulseTitle", "Session study pulse")}
+                {tx(
+                  "learner.practiceTests.run.sessionStudyPulseTitle",
+                  "Session study pulse",
+                )}
               </p>
               <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">
                 {tx(
@@ -2104,7 +2450,11 @@ export function PracticeTestRunnerClient({
                 </span>
               </p>
               <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
-                {tx("learner.practiceTests.run.sessionStudyPulseMissed", "Missed items")}:{" "}
+                {tx(
+                  "learner.practiceTests.run.sessionStudyPulseMissed",
+                  "Missed items",
+                )}
+                :{" "}
                 <span className="font-semibold tabular-nums text-[var(--semantic-text-primary)]">
                   {linearFbMissed}
                 </span>
@@ -2131,87 +2481,104 @@ export function PracticeTestRunnerClient({
         ) : null}
 
         {/* ── Smart Review Screen (linear practice: always shown when feedback exists) ── */}
-        {Object.keys(linearPracticeFeedback).length > 0 ? (() => {
-          const smartReviewItems: SmartReviewItem[] = [];
-          for (let i = 0; i < questionIds.length; i++) {
-            const qid = questionIds[i];
-            if (!qid) continue;
-            const fb = linearPracticeFeedback[qid];
-            if (!fb) continue;
-            const q = questionCache[qid];
-            smartReviewItems.push({
-              id: qid,
-              index: i,
-              stem: q?.stem ?? "Question not available",
-              topic: q?.topic ?? null,
-              subtopic: q?.subtopic ?? null,
-              isCorrect: fb.isCorrect,
-              confidence: confidenceTrackingEnabled
-                ? ((confidence[qid] as (typeof confidence)[string] | undefined) ?? null)
-                : null,
-              rationale: fb.rationale,
-              correctAnswerExplanation: fb.correctAnswerExplanation ?? null,
-              relatedLessons: fb.relatedLessons ?? [],
-            });
-          }
-          return (
-            <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
-              <div className="nn-cat-question-card nn-premium-cat-results-panel border border-[color-mix(in_srgb,var(--semantic-chart-4)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_14%,var(--semantic-surface))] shadow-sm">
-                <h3 className="mb-5 font-semibold text-[var(--semantic-text-primary)]">
-                  Smart Review
-                </h3>
-                <SmartReviewLayout items={smartReviewItems} isEntitled={isEntitled} />
-              </div>
-            </div>
-          );
-        })() : null}
+        {Object.keys(linearPracticeFeedback).length > 0
+          ? (() => {
+              const smartReviewItems: SmartReviewItem[] = [];
+              for (let i = 0; i < questionIds.length; i++) {
+                const qid = questionIds[i];
+                if (!qid) continue;
+                const fb = linearPracticeFeedback[qid];
+                if (!fb) continue;
+                const q = questionCache[qid];
+                smartReviewItems.push({
+                  id: qid,
+                  index: i,
+                  stem: q?.stem ?? "Question not available",
+                  topic: q?.topic ?? null,
+                  subtopic: q?.subtopic ?? null,
+                  isCorrect: fb.isCorrect,
+                  confidence: confidenceTrackingEnabled
+                    ? ((confidence[qid] as
+                        | (typeof confidence)[string]
+                        | undefined) ?? null)
+                    : null,
+                  rationale: fb.rationale,
+                  correctAnswerExplanation: fb.correctAnswerExplanation ?? null,
+                  relatedLessons: fb.relatedLessons ?? [],
+                });
+              }
+              return (
+                <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
+                  <div className="nn-cat-question-card nn-premium-cat-results-panel border border-[color-mix(in_srgb,var(--semantic-chart-4)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_14%,var(--semantic-surface))] shadow-sm">
+                    <h3 className="mb-5 font-semibold text-[var(--semantic-text-primary)]">
+                      Smart Review
+                    </h3>
+                    <SmartReviewLayout
+                      items={smartReviewItems}
+                      isEntitled={isEntitled}
+                    />
+                  </div>
+                </div>
+              );
+            })()
+          : null}
 
         {/* ── Adaptive Study Plan (CAT or linear practice with results) ── */}
-        {adaptivePlanEnabled ? (() => {
-          const readinessScore = results.catReport?.readinessScore ?? results.accuracyPct;
-          const weakAreas = results.catReport?.weakAreas ?? results.weakAreas ?? [];
-          // Derive overconfidence signal from confidence + correctness maps
-          let overconfidentCount = 0;
-          let uncertainCorrectCount = 0;
-          for (const [qid, lvl] of Object.entries(confidence)) {
-            const isCorrect = correctnessMap[qid];
-            if (lvl === "high" && isCorrect === false) overconfidentCount++;
-            if ((lvl === "low" || lvl === "medium") && isCorrect === true)
-              uncertainCorrectCount++;
-          }
-          const totalRated = Object.keys(confidence).length;
-          const hasOverconfidence =
-            totalRated > 0 && overconfidentCount / totalRated >= 0.2;
-          const hasManyUncertainCorrect =
-            totalRated > 0 && uncertainCorrectCount / totalRated >= 0.25;
+        {adaptivePlanEnabled ? (
+          (() => {
+            const readinessScore =
+              results.catReport?.readinessScore ?? results.accuracyPct;
+            const weakAreas =
+              results.catReport?.weakAreas ?? results.weakAreas ?? [];
+            // Derive overconfidence signal from confidence + correctness maps
+            let overconfidentCount = 0;
+            let uncertainCorrectCount = 0;
+            for (const [qid, lvl] of Object.entries(confidence)) {
+              const isCorrect = correctnessMap[qid];
+              if (lvl === "high" && isCorrect === false) overconfidentCount++;
+              if ((lvl === "low" || lvl === "medium") && isCorrect === true)
+                uncertainCorrectCount++;
+            }
+            const totalRated = Object.keys(confidence).length;
+            const hasOverconfidence =
+              totalRated > 0 && overconfidentCount / totalRated >= 0.2;
+            const hasManyUncertainCorrect =
+              totalRated > 0 && uncertainCorrectCount / totalRated >= 0.25;
 
-          // Only render when there is something meaningful to plan from
-          if (weakAreas.length === 0 && Object.keys(results.byTopic).length === 0) return null;
+            // Only render when there is something meaningful to plan from
+            if (
+              weakAreas.length === 0 &&
+              Object.keys(results.byTopic).length === 0
+            )
+              return null;
 
-          return (
-            <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
-              <div className="nn-cat-question-card nn-premium-cat-results-panel border border-[color-mix(in_srgb,var(--semantic-chart-1)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--semantic-surface))] shadow-sm">
+            return (
+              <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
+                <div className="nn-cat-question-card nn-premium-cat-results-panel border border-[color-mix(in_srgb,var(--semantic-chart-1)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--semantic-surface))] shadow-sm">
                   <StudyPlanFromResults
-                  readinessScore={readinessScore}
-                  byTopic={results.byTopic}
-                  weakAreas={weakAreas}
-                  hasOverconfidence={hasOverconfidence}
-                  hasManyUncertainCorrect={hasManyUncertainCorrect}
-                  pathwayId={testConfig?.pathwayId ?? null}
-                  testId={testId}
-                  isEntitled={isEntitled}
-                />
+                    readinessScore={readinessScore}
+                    byTopic={results.byTopic}
+                    weakAreas={weakAreas}
+                    hasOverconfidence={hasOverconfidence}
+                    hasManyUncertainCorrect={hasManyUncertainCorrect}
+                    pathwayId={testConfig?.pathwayId ?? null}
+                    testId={testId}
+                    isEntitled={isEntitled}
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })() : (
+            );
+          })()
+        ) : (
           <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
             <div className="nn-cat-question-card space-y-3">
               <h3 className="font-semibold text-[var(--semantic-text-primary)]">
                 Continue your study your way
               </h3>
               <p className="text-sm text-[var(--semantic-text-secondary)]">
-                Adaptive planning is turned off in your study settings, so this session ends with neutral next steps instead of an auto-generated plan.
+                Adaptive planning is turned off in your study settings, so this
+                session ends with neutral next steps instead of an
+                auto-generated plan.
               </p>
               <div className="flex flex-wrap gap-2">
                 <Link
@@ -2234,20 +2601,28 @@ export function PracticeTestRunnerClient({
         {/* ── Study loop next card ─────────────────────────────────── */}
         {adaptivePlanEnabled ? (
           <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-6">
-            <PracticeTestStudyLoopNext results={results} pathwayId={testConfig?.pathwayId ?? null} coach={results.catCoach ?? null} />
+            <PracticeTestStudyLoopNext
+              results={results}
+              pathwayId={testConfig?.pathwayId ?? null}
+              coach={results.catCoach ?? null}
+            />
           </div>
         ) : null}
 
         {teachingReviewItems != null && teachingReviewItems.length > 0 ? (
           <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
             <div className="nn-cat-question-card nn-premium-cat-results-panel space-y-3 border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_14%,var(--semantic-surface))] shadow-sm">
-              <h3 className="font-semibold text-[var(--semantic-text-primary)]">Teaching review</h3>
+              <h3 className="font-semibold text-[var(--semantic-text-primary)]">
+                Teaching review
+              </h3>
               <PracticeTestTeachingReviewPanel items={teachingReviewItems} />
             </div>
           </div>
         ) : teachingReviewItems != null && teachingReviewItems.length === 0 ? (
           <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
-            <p className="text-sm text-[var(--semantic-text-muted)]">No review items available for this session.</p>
+            <p className="text-sm text-[var(--semantic-text-muted)]">
+              No review items available for this session.
+            </p>
           </div>
         ) : null}
 
@@ -2271,18 +2646,28 @@ export function PracticeTestRunnerClient({
     return (
       <p className="text-sm text-muted-foreground">
         {tx("learner.practiceTests.run.abandoned", "This test was abandoned.")}{" "}
-        <Link className="font-medium text-primary underline" href="/app/practice-tests">
+        <Link
+          className="font-medium text-primary underline"
+          href="/app/practice-tests"
+        >
           {tx("learner.practiceTests.run.backToBank", "Back to test bank")}
         </Link>
       </p>
     );
   }
 
-  if (phase === "ready" && status === "IN_PROGRESS" && questionIds.length === 0) {
+  if (
+    phase === "ready" &&
+    status === "IN_PROGRESS" &&
+    questionIds.length === 0
+  ) {
     return (
       <div className="nn-card space-y-3 p-6 text-sm">
         <p className="font-medium text-foreground">
-          {tx("learner.practiceTests.run.noQuestionsTitle", "No questions in this practice test.")}
+          {tx(
+            "learner.practiceTests.run.noQuestionsTitle",
+            "No questions in this practice test.",
+          )}
         </p>
         <p className="text-muted-foreground">
           {tx(
@@ -2290,8 +2675,14 @@ export function PracticeTestRunnerClient({
             "The pool may have been empty for your filters and tier, or the test was saved in an incomplete state. Start a new adaptive (CAT) or linear test from the list. Broaden topics or difficulty if you see this again.",
           )}
         </p>
-        <Link className="inline-block font-semibold text-primary underline" href="/app/practice-tests">
-          {tx("learner.practiceTests.run.backToPracticeTests", "Back to Practice Tests")}
+        <Link
+          className="inline-block font-semibold text-primary underline"
+          href="/app/practice-tests"
+        >
+          {tx(
+            "learner.practiceTests.run.backToPracticeTests",
+            "Back to Practice Tests",
+          )}
         </Link>
       </div>
     );
@@ -2300,8 +2691,14 @@ export function PracticeTestRunnerClient({
   if (status !== "IN_PROGRESS") {
     return (
       <p className="text-sm text-muted-foreground">
-        {tx("learner.practiceTests.run.notInProgress", "This test is not in progress.")}{" "}
-        <Link className="font-medium text-primary underline" href="/app/practice-tests">
+        {tx(
+          "learner.practiceTests.run.notInProgress",
+          "This test is not in progress.",
+        )}{" "}
+        <Link
+          className="font-medium text-primary underline"
+          href="/app/practice-tests"
+        >
           {tx("learner.practiceTests.run.back", "Back")}
         </Link>
       </p>
@@ -2316,7 +2713,10 @@ export function PracticeTestRunnerClient({
       return (
         <div className="nn-card space-y-3 p-6 text-sm text-muted-foreground">
           <p className="font-medium text-foreground">
-            {tx("learner.practiceTests.run.loadQuestionFailed", "Could not load this question.")}
+            {tx(
+              "learner.practiceTests.run.loadQuestionFailed",
+              "Could not load this question.",
+            )}
           </p>
           <p>{error}</p>
           <div className="flex flex-wrap gap-2 pt-1">
@@ -2344,7 +2744,10 @@ export function PracticeTestRunnerClient({
             >
               {tx("learner.practiceTests.run.reloadTest", "Reload test")}
             </button>
-            <Link className="inline-flex items-center font-medium text-primary underline" href="/app/practice-tests">
+            <Link
+              className="inline-flex items-center font-medium text-primary underline"
+              href="/app/practice-tests"
+            >
               {tx("learner.practiceTests.run.back", "Back")}
             </Link>
           </div>
@@ -2362,7 +2765,8 @@ export function PracticeTestRunnerClient({
           <ExamSessionTopBar
             left={
               <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                {tx("learner.practiceTests.run.item", "Item")} {idx + 1} {tx("learner.practiceTests.run.of", "of")} {total}
+                {tx("learner.practiceTests.run.item", "Item")} {idx + 1}{" "}
+                {tx("learner.practiceTests.run.of", "of")} {total}
               </p>
             }
             center={
@@ -2374,22 +2778,32 @@ export function PracticeTestRunnerClient({
               <div className="flex flex-wrap items-center justify-end gap-2">
                 {examUnitsToggle}
                 <ExamSessionThemeTrigger />
-                <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+                <ExamTimerReadout
+                  remainingSec={timedMode ? remainingSec : null}
+                />
               </div>
             }
           />
-          {total > 0 ? <ExamProgressBar current={idx + 1} total={total} /> : null}
+          {total > 0 ? (
+            <ExamProgressBar current={idx + 1} total={total} />
+          ) : null}
           <div className="nn-question-session min-h-[18rem] space-y-4">
             <div className="h-4 w-[75%] animate-pulse rounded-md bg-muted/60" />
             <div className="h-4 w-full animate-pulse rounded-md bg-muted/60" />
             <div className="h-4 w-[83%] animate-pulse rounded-md bg-muted/60" />
             <div className="mt-4 space-y-3">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-12 animate-pulse rounded-xl bg-muted/40" />
+                <div
+                  key={i}
+                  className="h-12 animate-pulse rounded-xl bg-muted/40"
+                />
               ))}
             </div>
             <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">
-              {tx("learner.practiceTests.run.loadingQuestion", "Loading question...")}
+              {tx(
+                "learner.practiceTests.run.loadingQuestion",
+                "Loading question...",
+              )}
             </p>
           </div>
         </ExamSessionShell>
@@ -2400,7 +2814,12 @@ export function PracticeTestRunnerClient({
   if (!current) {
     return (
       <div className="nn-card space-y-3 p-6 text-sm text-muted-foreground">
-        <p>{tx("learner.practiceTests.run.displayItemFailed", "Could not display this item.")}</p>
+        <p>
+          {tx(
+            "learner.practiceTests.run.displayItemFailed",
+            "Could not display this item.",
+          )}
+        </p>
         <button
           type="button"
           className="rounded-full border border-border px-4 py-2 text-sm font-semibold"
@@ -2408,7 +2827,10 @@ export function PracticeTestRunnerClient({
         >
           {tx("learner.practiceTests.run.retry", "Retry")}
         </button>
-        <Link className="ml-2 font-medium text-primary underline" href="/app/practice-tests">
+        <Link
+          className="ml-2 font-medium text-primary underline"
+          href="/app/practice-tests"
+        >
           {tx("learner.practiceTests.run.back", "Back")}
         </Link>
       </div>
@@ -2424,38 +2846,49 @@ export function PracticeTestRunnerClient({
     : linearEngineUiKind === "linear_exam"
       ? tx("learner.practiceTests.run.linearExamModeLabel", "Linear exam")
       : linearEngineUiKind === "linear_tutor_review_nav"
-        ? tx("learner.practiceTests.run.linearTutorReviewNavModeLabel", "Linear tutor · review navigation")
+        ? tx(
+            "learner.practiceTests.run.linearTutorReviewNavModeLabel",
+            "Linear tutor · review navigation",
+          )
         : linearEngineUiKind === "linear_tutor"
           ? tx("learner.practiceTests.run.linearTutorModeLabel", "Linear tutor")
-          : tx("learner.practiceTests.run.practiceTestModeLabel", "Practice Test");
+          : tx(
+              "learner.practiceTests.run.practiceTestModeLabel",
+              "Practice Test",
+            );
   const controlsBusy = saving || qLoading;
 
-  const sessionPct = total > 0 ? Math.min(100, Math.max(0, ((idx + 1) / total) * 100)) : 0;
+  const sessionPct =
+    total > 0 ? Math.min(100, Math.max(0, ((idx + 1) / total) * 100)) : 0;
 
   const optionDisplayMap = Object.fromEntries(
     optsOrderCanonical.map((k, i) => [k, optsOrderDisplayResolved[i] ?? k]),
   );
-  const linearInlineOptionTeachingMap = useMemo(() => {
-    if (!linearPracticeSplitReview || !currentCommitted || !linearFeedback?.distractorRationalesMap) {
+  const linearInlineOptionTeachingMap = (() => {
+    if (
+      !linearPracticeSplitReview ||
+      !currentCommitted ||
+      !linearFeedback?.distractorRationalesMap
+    ) {
       return null;
     }
 
     const correctSet = new Set(linearFeedback.correctKeys);
     const selectedWrongEntries = optsOrderCanonical.flatMap((canonical) => {
-      if (correctSet.has(canonical) || !mcqAnswerSelectsCanonical(raw, canonical)) return [];
-      const teaching = linearFeedback.distractorRationalesMap?.[canonical]?.trim();
+      if (
+        correctSet.has(canonical) ||
+        !mcqAnswerSelectsCanonical(raw, canonical)
+      )
+        return [];
+      const teaching =
+        linearFeedback.distractorRationalesMap?.[canonical]?.trim();
       return teaching ? ([[canonical, teaching]] as const) : [];
     });
 
-    return selectedWrongEntries.length > 0 ? Object.fromEntries(selectedWrongEntries) : null;
-  }, [
-    currentCommitted,
-    linearFeedback?.correctKeys,
-    linearFeedback?.distractorRationalesMap,
-    linearPracticeSplitReview,
-    optsOrderCanonical,
-    raw,
-  ]);
+    return selectedWrongEntries.length > 0
+      ? Object.fromEntries(selectedWrongEntries)
+      : null;
+  })();
 
   /** Shared empty state for CAT / linear / legacy MCQ lists (same copy + surfaces). */
   const mcqNoChoicesFallback = (
@@ -2488,7 +2921,11 @@ export function PracticeTestRunnerClient({
     // Determine option state per canonical key for CAT (no correct/incorrect during test mode)
     function catOptState(canonical: string): AnswerOptionState {
       const isSelected = mcqAnswerSelectsCanonical(raw, canonical);
-      if (catFeedbackStudy && catStudyFeedback && catStudyFeedback.questionId === current?.id) {
+      if (
+        catFeedbackStudy &&
+        catStudyFeedback &&
+        catStudyFeedback.questionId === current?.id
+      ) {
         const ck = new Set(catStudyFeedback.correctKeys);
         if (ck.has(canonical)) return "correct";
         if (isSelected) return "incorrect";
@@ -2503,7 +2940,8 @@ export function PracticeTestRunnerClient({
 
     const optLocked = catStudyLocked;
     const optionsInteractionLocked =
-      optLocked || Boolean(isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase));
+      optLocked ||
+      Boolean(isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase));
 
     const formatCatOptionText = (i: number, canonical: string) => {
       const rawT = optsOrderDisplayResolved[i] ?? canonical;
@@ -2511,109 +2949,124 @@ export function PracticeTestRunnerClient({
     };
 
     // Build CAT-specific option rows using AnswerOptionRow
-    const catOptions =
-      needsUnsupportedQuestionUi ? (
-        runnerUnsupportedQuestionFallback
-      ) : isBowtie && bowtiePayload ? (
-        <BowtieQuestionRenderer
-          payload={bowtiePayload}
-          value={raw}
-          showScenarioBanner={false}
-          disabled={optionsInteractionLocked}
-          onChange={(next) => setAnswerForCurrent(next)}
-          reveal={
-            catFeedbackStudy && catStudyFeedback && catStudyFeedback.questionId === current?.id
-              ? (() => {
-                  const ck = catStudyFeedback.correctKeys;
-                  if (ck.length < 3) return null;
-                  return {
-                    correct: {
-                      correctIds: [ck[0]!, ck[1]!, ck[2]!] as [string, string, string],
-                    },
-                    selectedIds: coerceBowtieDraftAnswer(raw),
-                  };
-                })()
-              : null
-          }
-        />
-      ) : optsCanonical.length === 0 ? (
-        mcqNoChoicesFallback
-      ) : isSata ? (
-        <ul
-          className="nn-cat-opt-list"
-          role="group"
-          aria-label={
-            isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)
-              ? tx(
-                  "learner.practiceTests.run.answerChoicesSataLockedAria",
-                  "Answer choices (select all that apply) — response submitted; use Submit answer when ready",
-                )
-              : tx(
-                  "learner.practiceTests.run.answerChoicesSataAria",
-                  "Answer choices (select all that apply)",
-                )
-          }
-        >
-          {optsCanonical.map((canonical, i) => {
-            const selected = mcqAnswerSelectsCanonical(raw, canonical);
-            return (
-              <li key={canonical}>
-                <AnswerOptionRow
-                  letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
-                  text={formatCatOptionText(i, canonical)}
-                  state={catOptState(canonical)}
-                  disabled={optionsInteractionLocked}
-                  isCheckbox
-                  checked={selected}
-                  onChange={(checked) => {
-                    const prior = answersRef.current[current.id];
-                    const prev = Array.isArray(prior) ? [...prior] : [];
-                    setAnswerForCurrent(
-                      checked ? [...prev, canonical] : prev.filter((x) => x !== canonical),
-                    );
-                  }}
-                />
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <ul
-          className="nn-cat-opt-list"
-          role="radiogroup"
-          aria-label={
-            isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)
-              ? tx(
-                  "learner.practiceTests.run.answerChoicesLockedAria",
-                  "Answer choices — response submitted; use Submit answer when ready",
-                )
-              : tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")
-          }
-        >
-          {optsOrderCanonical.map((canonical, i) => (
+    const catOptions = needsUnsupportedQuestionUi ? (
+      runnerUnsupportedQuestionFallback
+    ) : isBowtie && bowtiePayload ? (
+      <BowtieQuestionRenderer
+        payload={bowtiePayload}
+        value={raw}
+        showScenarioBanner={false}
+        disabled={optionsInteractionLocked}
+        onChange={(next) => setAnswerForCurrent(next)}
+        reveal={
+          catFeedbackStudy &&
+          catStudyFeedback &&
+          catStudyFeedback.questionId === current?.id
+            ? (() => {
+                const ck = catStudyFeedback.correctKeys;
+                if (ck.length < 3) return null;
+                return {
+                  correct: {
+                    correctIds: [ck[0]!, ck[1]!, ck[2]!] as [
+                      string,
+                      string,
+                      string,
+                    ],
+                  },
+                  selectedIds: coerceBowtieDraftAnswer(raw),
+                };
+              })()
+            : null
+        }
+      />
+    ) : optsCanonical.length === 0 ? (
+      mcqNoChoicesFallback
+    ) : isSata ? (
+      <ul
+        className="nn-cat-opt-list"
+        role="group"
+        aria-label={
+          isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)
+            ? tx(
+                "learner.practiceTests.run.answerChoicesSataLockedAria",
+                "Answer choices (select all that apply) — response submitted; use Submit answer when ready",
+              )
+            : tx(
+                "learner.practiceTests.run.answerChoicesSataAria",
+                "Answer choices (select all that apply)",
+              )
+        }
+      >
+        {optsCanonical.map((canonical, i) => {
+          const selected = mcqAnswerSelectsCanonical(raw, canonical);
+          return (
             <li key={canonical}>
               <AnswerOptionRow
                 letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
                 text={formatCatOptionText(i, canonical)}
                 state={catOptState(canonical)}
                 disabled={optionsInteractionLocked}
-                onClick={() => setAnswerForCurrent(canonical)}
+                isCheckbox
+                checked={selected}
+                onChange={(checked) => {
+                  const prior = answersRef.current[current.id];
+                  const prev = Array.isArray(prior) ? [...prior] : [];
+                  setAnswerForCurrent(
+                    checked
+                      ? [...prev, canonical]
+                      : prev.filter((x) => x !== canonical),
+                  );
+                }}
               />
             </li>
-          ))}
-        </ul>
-      );
+          );
+        })}
+      </ul>
+    ) : (
+      <ul
+        className="nn-cat-opt-list"
+        role="radiogroup"
+        aria-label={
+          isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)
+            ? tx(
+                "learner.practiceTests.run.answerChoicesLockedAria",
+                "Answer choices — response submitted; use Submit answer when ready",
+              )
+            : tx(
+                "learner.practiceTests.run.answerChoicesAria",
+                "Answer choices",
+              )
+        }
+      >
+        {optsOrderCanonical.map((canonical, i) => (
+          <li key={canonical}>
+            <AnswerOptionRow
+              letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
+              text={formatCatOptionText(i, canonical)}
+              state={catOptState(canonical)}
+              disabled={optionsInteractionLocked}
+              onClick={() => setAnswerForCurrent(canonical)}
+            />
+          </li>
+        ))}
+      </ul>
+    );
 
     // Right panel mode: "locked" for test mode, "feedback" when study feedback available
     const rationalePanelMode =
-      catFeedbackStudy && catStudyFeedback && catStudyFeedback.questionId === current?.id
+      catFeedbackStudy &&
+      catStudyFeedback &&
+      catStudyFeedback.questionId === current?.id
         ? "feedback"
         : catFeedbackStudy
           ? "waiting"
           : "locked";
 
     const catMaxQ = testConfig?.catMaxQuestions ?? null;
-    const examPrimaryBusy = catExamFooterPrimaryBusy(catExamUiPhase, controlsBusy);
+    const examPrimaryBusy = catExamFooterPrimaryBusy(
+      catExamUiPhase,
+      controlsBusy,
+    );
     const catExamAdvancePrimaryLabel =
       catExamUiPhase === "advancing" || saving
         ? tx("learner.practiceTests.run.working", "Working...")
@@ -2628,7 +3081,10 @@ export function PracticeTestRunnerClient({
         );
       }
       if (catExamUiPhase === "advancing" || catExamUiPhase === "completed") {
-        return tx("learner.practiceTests.run.catExamFooterPleaseWait", "Please wait…");
+        return tx(
+          "learner.practiceTests.run.catExamFooterPleaseWait",
+          "Please wait…",
+        );
       }
       if (catExamUiPhase === "submitted_locked") {
         return tx(
@@ -2642,13 +3098,23 @@ export function PracticeTestRunnerClient({
           "Answer selected — tap Submit to lock your choice.",
         );
       }
-      return tx("learner.practiceTests.run.catExamFooterNoSelection", "No answer selected for this item yet.");
+      return tx(
+        "learner.practiceTests.run.catExamFooterNoSelection",
+        "No answer selected for this item yet.",
+      );
     })();
 
-    const showCatExamStrictBadge = testConfig?.catPresentationMode === "exam_simulation";
+    const showCatExamStrictBadge =
+      testConfig?.catPresentationMode === "exam_simulation";
     const catExamCategoryLine =
-      [current.topic, current.subtopic].find((s) => typeof s === "string" && s.trim().length > 0)?.trim() ??
-      (qTags.find((t) => typeof t === "string" && t.trim().length > 0) as string | undefined)?.trim() ??
+      [current.topic, current.subtopic]
+        .find((s) => typeof s === "string" && s.trim().length > 0)
+        ?.trim() ??
+      (
+        qTags.find((t) => typeof t === "string" && t.trim().length > 0) as
+          | string
+          | undefined
+      )?.trim() ??
       null;
 
     return (
@@ -2681,11 +3147,17 @@ export function PracticeTestRunnerClient({
                 <header className="nn-cat-exam-board-top nn-cat-exam-board-top--adaptive nn-exam-session-topbar flex shrink-0 items-center justify-between gap-2 border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 sm:gap-3 sm:px-4 sm:py-2">
                   <p className="nn-cat-exam-board-top__progress nn-cat-exam-board-top__progress--adaptive nn-marketing-body-sm m-0 text-xs font-semibold leading-snug text-[var(--semantic-text-secondary)] sm:text-sm">
                     <span className="tabular-nums text-[var(--semantic-text-primary)]">
-                      {tx("learner.practiceTests.run.question", "Question")} {idx + 1}
+                      {tx("learner.practiceTests.run.question", "Question")}{" "}
+                      {idx + 1}
                     </span>
-                    <span className="mx-1.5 font-medium text-[var(--semantic-text-muted)]">·</span>
+                    <span className="mx-1.5 font-medium text-[var(--semantic-text-muted)]">
+                      ·
+                    </span>
                     <span className="font-medium">
-                      {tx("learner.practiceTests.run.adaptiveSessionShort", "Adaptive Test")}
+                      {tx(
+                        "learner.practiceTests.run.adaptiveSessionShort",
+                        "Adaptive Test",
+                      )}
                     </span>
                   </p>
                   <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
@@ -2697,8 +3169,14 @@ export function PracticeTestRunnerClient({
                           "Exam rules: no review of prior items after submit; timed session may end automatically.",
                         )}
                       >
-                        <Shield className="h-3 w-3 shrink-0 opacity-90" aria-hidden />
-                        {tx("learner.practiceTests.run.catExamStrictBadge", "Strict")}
+                        <Shield
+                          className="h-3 w-3 shrink-0 opacity-90"
+                          aria-hidden
+                        />
+                        {tx(
+                          "learner.practiceTests.run.catExamStrictBadge",
+                          "Strict",
+                        )}
                       </span>
                     ) : null}
                     {adaptiveSe != null &&
@@ -2711,19 +3189,29 @@ export function PracticeTestRunnerClient({
                           "The adaptive engine is refining your ability estimate as you progress. This is not a pass/fail prediction.",
                         )}
                       >
-                        {tx("learner.practiceTests.run.catExamAdaptivePrecisionShort", "Estimate updating")}
+                        {tx(
+                          "learner.practiceTests.run.catExamAdaptivePrecisionShort",
+                          "Estimate updating",
+                        )}
                       </span>
                     ) : null}
                     {examUnitsToggle}
                     <ExamSessionThemeTrigger variant="pill" />
-                    <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+                    <ExamTimerReadout
+                      remainingSec={timedMode ? remainingSec : null}
+                    />
                     <button
                       type="button"
                       ref={catExamNavigatorTriggerRef}
                       className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_42%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_58%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_55%,transparent)]"
-                      onClick={() => catExamNavigatorDialogRef.current?.showModal()}
+                      onClick={() =>
+                        catExamNavigatorDialogRef.current?.showModal()
+                      }
                     >
-                      <LayoutGrid className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                      <LayoutGrid
+                        className="h-3.5 w-3.5 shrink-0 opacity-80"
+                        aria-hidden
+                      />
                       {tx("learner.practiceTests.run.navigator", "Navigator")}
                     </button>
                     <button
@@ -2732,7 +3220,10 @@ export function PracticeTestRunnerClient({
                       className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_42%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_58%,var(--semantic-surface))] disabled:opacity-40"
                       onClick={() => void abandon()}
                     >
-                      <Send className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                      <Send
+                        className="h-3.5 w-3.5 shrink-0 opacity-80"
+                        aria-hidden
+                      />
                       {tx("learner.practiceTests.run.endExam", "End")}
                     </button>
                   </div>
@@ -2743,7 +3234,10 @@ export function PracticeTestRunnerClient({
                   total={Math.max(total, 1)}
                   variant="adaptive_item"
                   adaptiveMaxItems={catMaxQ}
-                  sessionLabel={tx("learner.practiceTests.run.adaptiveSessionShort", "Adaptive Test")}
+                  sessionLabel={tx(
+                    "learner.practiceTests.run.adaptiveSessionShort",
+                    "Adaptive Test",
+                  )}
                 />
                 {sessionRecoveryBanner}
                 {catPoolRelaxBanner}
@@ -2757,7 +3251,10 @@ export function PracticeTestRunnerClient({
                         className="nn-cat-question-card m-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] p-5 text-sm text-[var(--semantic-text-primary)] sm:m-4 sm:p-6"
                       >
                         <p className="m-0 font-semibold text-[var(--semantic-text-primary)]">
-                          {tx("learner.practiceTests.run.catTimerHydrateTitle", "Timed session needs a safe reload")}
+                          {tx(
+                            "learner.practiceTests.run.catTimerHydrateTitle",
+                            "Timed session needs a safe reload",
+                          )}
                         </p>
                         <p className="mt-2 text-[var(--semantic-text-secondary)]">
                           {tx(
@@ -2780,7 +3277,9 @@ export function PracticeTestRunnerClient({
                       </div>
                     ) : (
                       <QuestionCard
-                        stem={current.stem ? resolveMeasureText(current.stem) : ""}
+                        stem={
+                          current.stem ? resolveMeasureText(current.stem) : ""
+                        }
                         topic={null}
                         subtopic={null}
                         difficultyLabel={null}
@@ -2795,32 +3294,59 @@ export function PracticeTestRunnerClient({
                               defaultBookmarked={Boolean(flagged[current.id])}
                               sourceType="cat_exam"
                               sourceId={current.id}
-                              title={current.topic?.trim() ? `${current.topic} CAT question` : "CAT exam question"}
+                              title={
+                                current.topic?.trim()
+                                  ? `${current.topic} CAT question`
+                                  : "CAT exam question"
+                              }
                               topic={current.topic ?? current.subtopic ?? null}
-                              difficulty={current.difficulty != null ? difficultyBandLabel(current.difficulty) : null}
+                              difficulty={
+                                current.difficulty != null
+                                  ? difficultyBandLabel(current.difficulty)
+                                  : null
+                              }
                               pathwayId={activePathwayId}
                             />
                             <PracticeTestFlagForReviewButton
                               flagged={Boolean(flagged[current.id])}
                               disabled={examPrimaryBusy}
-                              titleFlagged={tx("learner.practiceTests.run.unflagForReview", "Remove flag")}
-                              titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
-                              srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
-                              srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
+                              titleFlagged={tx(
+                                "learner.practiceTests.run.unflagForReview",
+                                "Remove flag",
+                              )}
+                              titleUnflagged={tx(
+                                "learner.practiceTests.run.flagForReview",
+                                "Flag for review",
+                              )}
+                              srFlagged={tx(
+                                "learner.practiceTests.run.flagged",
+                                "Flagged",
+                              )}
+                              srUnflagged={tx(
+                                "learner.practiceTests.run.flag",
+                                "Flag",
+                              )}
                               onToggle={() => toggleFlagForQuestion(current.id)}
                             />
                           </div>
                         }
                         examLayoutMeasureKey={`${current.id}:${optsOrderCanonical.join("|")}`}
                       >
-                        <p className="sr-only" aria-live="polite" aria-atomic="true">
+                        <p
+                          className="sr-only"
+                          aria-live="polite"
+                          aria-atomic="true"
+                        >
                           {catExamUiPhase === "submitted_locked"
                             ? tx(
                                 "learner.practiceTests.run.catExamLockedLive",
                                 "Answer submitted. Your selection is locked until you go to the next item.",
                               )
                             : catExamUiPhase === "advancing"
-                              ? tx("learner.practiceTests.run.catExamAdvancingLive", "Saving your response…")
+                              ? tx(
+                                  "learner.practiceTests.run.catExamAdvancingLive",
+                                  "Saving your response…",
+                                )
                               : catExamUiPhase === "completed"
                                 ? tx(
                                     "learner.practiceTests.run.catExamCompletedLive",
@@ -2890,13 +3416,21 @@ export function PracticeTestRunnerClient({
                           type="button"
                           data-nn-qa-cat-exam-submit-answer
                           disabled={
-                            examPrimaryBusy || catTimerHydrateRecovery || !hasMeaningfulAnswer(current.id)
+                            examPrimaryBusy ||
+                            catTimerHydrateRecovery ||
+                            !hasMeaningfulAnswer(current.id)
                           }
                           className="inline-flex min-h-11 items-center justify-center gap-1 rounded-full bg-[var(--role-cta)] px-4 py-2.5 text-xs font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_8px_var(--role-cta-shadow)] transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-2"
                           onClick={lockCatExamAnswer}
                         >
-                          {tx("learner.practiceTests.run.submit", "Submit answer")}
-                          <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
+                          {tx(
+                            "learner.practiceTests.run.submit",
+                            "Submit answer",
+                          )}
+                          <ChevronRight
+                            className="h-4 w-4 opacity-80"
+                            aria-hidden
+                          />
                         </button>
                       ) : (
                         <button
@@ -2913,13 +3447,25 @@ export function PracticeTestRunnerClient({
                           }
                           className="inline-flex min-h-11 items-center justify-center gap-1 rounded-full bg-[var(--role-cta)] px-4 py-2.5 text-xs font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_8px_var(--role-cta-shadow)] transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-2"
                           onClick={() => {
-                            if (!catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
-                            if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
+                            if (
+                              !catExamCanRequestCatAdvance(
+                                catExamUiPhaseRef.current,
+                              )
+                            )
+                              return;
+                            if (
+                              catAdvanceInFlightRef.current ||
+                              submitInFlightRef.current
+                            )
+                              return;
                             void catAdvance();
                           }}
                         >
                           {catExamAdvancePrimaryLabel}
-                          <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
+                          <ChevronRight
+                            className="h-4 w-4 opacity-80"
+                            aria-hidden
+                          />
                         </button>
                       )}
                     </div>
@@ -2935,25 +3481,43 @@ export function PracticeTestRunnerClient({
                   }}
                 >
                   <div className="border-b border-[var(--semantic-border-soft)] px-4 py-3">
-                    <p id="nn-cat-exam-navigator-title" className="m-0 text-sm font-semibold">
-                      {tx("learner.practiceTests.run.navigatorTitle", "Session outline")}
+                    <p
+                      id="nn-cat-exam-navigator-title"
+                      className="m-0 text-sm font-semibold"
+                    >
+                      {tx(
+                        "learner.practiceTests.run.navigatorTitle",
+                        "Session outline",
+                      )}
                     </p>
-                    <p id="nn-cat-exam-navigator-status-hint" className="mt-1 text-xs text-[var(--semantic-text-muted)]">
+                    <p
+                      id="nn-cat-exam-navigator-status-hint"
+                      className="mt-1 text-xs text-[var(--semantic-text-muted)]"
+                    >
                       {tx(
                         "learner.practiceTests.run.navigatorSubtitleStatusOnly",
                         "Status only: items delivered in this run (most recent last). You cannot jump or open items from this list during this exam.",
                       )}
                     </p>
                   </div>
-                  <ol className="max-h-[min(50vh,20rem)] list-none space-y-0 overflow-y-auto p-2 text-sm" role="list">
+                  <ol
+                    className="max-h-[min(50vh,20rem)] list-none space-y-0 overflow-y-auto p-2 text-sm"
+                    role="list"
+                  >
                     {questionIds.map((id, i) => (
                       <li key={`${id}:${i}`}>
                         <span
                           className={`block rounded-md px-3 py-2 ${
-                            i === idx ? "bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] font-semibold" : ""
+                            i === idx
+                              ? "bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] font-semibold"
+                              : ""
                           }`}
                         >
-                          {tx("learner.practiceTests.run.navigatorItem", "Item {n}", { n: String(i + 1) })}
+                          {tx(
+                            "learner.practiceTests.run.navigatorItem",
+                            "Item {n}",
+                            { n: String(i + 1) },
+                          )}
                           {i === idx
                             ? ` · ${tx("learner.practiceTests.run.navigatorCurrent", "current")}`
                             : ""}
@@ -2979,8 +3543,9 @@ export function PracticeTestRunnerClient({
                   left={
                     <div className="space-y-1">
                       <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                        {tx("learner.practiceTests.run.question", "Question")} {idx + 1}{" "}
-                        {tx("learner.practiceTests.run.of", "of")} {total}
+                        {tx("learner.practiceTests.run.question", "Question")}{" "}
+                        {idx + 1} {tx("learner.practiceTests.run.of", "of")}{" "}
+                        {total}
                       </p>
                       {examName ? (
                         <p className="line-clamp-2 nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]">
@@ -2993,7 +3558,8 @@ export function PracticeTestRunnerClient({
                     <span className="nn-marketing-caption max-w-[min(100%,22rem)] text-center font-semibold leading-snug text-[var(--semantic-text-muted)]">
                       {modeLabel}
                       <span className="mt-0.5 block text-[11px] font-semibold tabular-nums text-[var(--semantic-text-muted)]">
-                        {Math.round(sessionPct)}% {tx("learner.practiceTests.run.complete", "complete")}
+                        {Math.round(sessionPct)}%{" "}
+                        {tx("learner.practiceTests.run.complete", "complete")}
                       </span>
                     </span>
                   }
@@ -3016,7 +3582,9 @@ export function PracticeTestRunnerClient({
                       ) : null}
                       {examUnitsToggle}
                       <ExamSessionThemeTrigger variant="pill" />
-                      <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+                      <ExamTimerReadout
+                        remainingSec={timedMode ? remainingSec : null}
+                      />
                     </div>
                   }
                 />
@@ -3036,15 +3604,20 @@ export function PracticeTestRunnerClient({
                     <div className="nn-question-session-primary min-h-0 overflow-x-auto overflow-y-auto">
                       <div className="min-h-0 min-w-0">
                         <QuestionCard
-                          stem={current.stem ? resolveMeasureText(current.stem) : ""}
+                          stem={
+                            current.stem ? resolveMeasureText(current.stem) : ""
+                          }
                           topic={current.topic}
                           subtopic={current.subtopic}
                           difficultyLabel={
-                            current.difficulty != null ? difficultyBandLabel(current.difficulty) : null
+                            current.difficulty != null
+                              ? difficultyBandLabel(current.difficulty)
+                              : null
                           }
                           examStackedLayout={false}
                         >
-                          {(catLiveTransparency || adaptiveDifficultyHistory.length > 0) && (
+                          {(catLiveTransparency ||
+                            adaptiveDifficultyHistory.length > 0) && (
                             <div className="mb-5">
                               <CatLiveTransparencyStrip
                                 difficultyTail={adaptiveDifficultyHistory}
@@ -3059,7 +3632,9 @@ export function PracticeTestRunnerClient({
                             exhibitData={current.exhibitData}
                             images={current.images}
                             mode={isExamStyle ? "cat" : "practice"}
-                            phase={catStudyFeedback ? "post_submit" : "pre_submit"}
+                            phase={
+                              catStudyFeedback ? "post_submit" : "pre_submit"
+                            }
                           />
                           {!isBowtie ? (
                             <PracticeTestMcqChoicesInstruction
@@ -3082,7 +3657,8 @@ export function PracticeTestRunnerClient({
                             />
                           )}
                           {catOptions}
-                          {confidenceTrackingEnabled && hasMeaningfulAnswer(current.id) ? (
+                          {confidenceTrackingEnabled &&
+                          hasMeaningfulAnswer(current.id) ? (
                             <div className="mt-4">
                               <ConfidenceSelector
                                 questionId={current.id}
@@ -3168,7 +3744,9 @@ export function PracticeTestRunnerClient({
                     const prior = answersRef.current[current.id];
                     const prev = Array.isArray(prior) ? [...prior] : [];
                     setAnswerForCurrent(
-                      checked ? [...prev, canonical] : prev.filter((x) => x !== canonical),
+                      checked
+                        ? [...prev, canonical]
+                        : prev.filter((x) => x !== canonical),
                     );
                   }}
                 />
@@ -3182,7 +3760,10 @@ export function PracticeTestRunnerClient({
           displayTexts={optsOrderDisplayResolved}
           rowState={legacyCatOptState}
           disabled={false}
-          ariaLabel={tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")}
+          ariaLabel={tx(
+            "learner.practiceTests.run.answerChoicesAria",
+            "Answer choices",
+          )}
           onSelectCanonical={(canonical) => setAnswerForCurrent(canonical)}
         />
       );
@@ -3191,7 +3772,9 @@ export function PracticeTestRunnerClient({
       typeof current.stem === "string" && current.stem.trim().length > 0
         ? resolveMeasureText(current.stem.trim())
         : "";
-    const legacyStemSplit = legacyStemTrimmed ? splitPromptLeadingImage(legacyStemTrimmed) : null;
+    const legacyStemSplit = legacyStemTrimmed
+      ? splitPromptLeadingImage(legacyStemTrimmed)
+      : null;
     const legacyClinicalSrc =
       legacyStemSplit?.imageHtml && legacyStemSplit.imageHtml.trim().length > 0
         ? legacyStemSplit.imageHtml.trim()
@@ -3207,8 +3790,14 @@ export function PracticeTestRunnerClient({
           ? legacyStemTrimmed
           : legacyStemUnavailable;
     const legacyExamCategoryLine =
-      [current.topic, current.subtopic].find((s) => typeof s === "string" && s.trim().length > 0)?.trim() ??
-      (qTags.find((t) => typeof t === "string" && t.trim().length > 0) as string | undefined)?.trim() ??
+      [current.topic, current.subtopic]
+        .find((s) => typeof s === "string" && s.trim().length > 0)
+        ?.trim() ??
+      (
+        qTags.find((t) => typeof t === "string" && t.trim().length > 0) as
+          | string
+          | undefined
+      )?.trim() ??
       null;
     const legacyExamFlagSlot = (
       <div className="flex items-center gap-2">
@@ -3217,16 +3806,30 @@ export function PracticeTestRunnerClient({
           defaultBookmarked={Boolean(flagged[current.id])}
           sourceType={catMode ? "cat_exam" : "practice_question"}
           sourceId={current.id}
-          title={current.topic?.trim() ? `${current.topic} question` : "Practice exam question"}
+          title={
+            current.topic?.trim()
+              ? `${current.topic} question`
+              : "Practice exam question"
+          }
           topic={current.topic ?? current.subtopic ?? null}
-          difficulty={current.difficulty != null ? difficultyBandLabel(current.difficulty) : null}
+          difficulty={
+            current.difficulty != null
+              ? difficultyBandLabel(current.difficulty)
+              : null
+          }
           pathwayId={activePathwayId}
         />
         <PracticeTestFlagForReviewButton
           flagged={Boolean(flagged[current.id])}
           disabled={controlsBusy}
-          titleFlagged={tx("learner.practiceTests.run.unflagForReview", "Remove flag")}
-          titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
+          titleFlagged={tx(
+            "learner.practiceTests.run.unflagForReview",
+            "Remove flag",
+          )}
+          titleUnflagged={tx(
+            "learner.practiceTests.run.flagForReview",
+            "Flag for review",
+          )}
           srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
           srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
           onToggle={() => toggleFlagForQuestion(current.id)}
@@ -3235,7 +3838,9 @@ export function PracticeTestRunnerClient({
     );
     const legacyQuestionCardInner = (
       <>
-        {legacyClinicalSrc ? <PracticeTestClinicalFigure src={legacyClinicalSrc} /> : null}
+        {legacyClinicalSrc ? (
+          <PracticeTestClinicalFigure src={legacyClinicalSrc} />
+        ) : null}
         <PracticeTestQuestionMediaBlock
           exhibitData={current.exhibitData}
           images={current.images}
@@ -3313,7 +3918,10 @@ export function PracticeTestRunnerClient({
                 className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
                 onClick={() => void goNext()}
               >
-                {tx("learner.practiceTests.run.nextQuestionPractice", "Next Question")}
+                {tx(
+                  "learner.practiceTests.run.nextQuestionPractice",
+                  "Next Question",
+                )}
                 <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
               </button>
             ) : (
@@ -3358,14 +3966,19 @@ export function PracticeTestRunnerClient({
               </p>
               <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
                 <ExamSessionThemeTrigger variant="pill" />
-                <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+                <ExamTimerReadout
+                  remainingSec={timedMode ? remainingSec : null}
+                />
                 <button
                   type="button"
                   disabled={controlsBusy}
                   className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
                   onClick={() => void abandon()}
                 >
-                  <Send className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                  <Send
+                    className="h-3.5 w-3.5 shrink-0 opacity-80"
+                    aria-hidden
+                  />
                   {tx("learner.practiceTests.run.endExam", "End")}
                 </button>
               </div>
@@ -3423,97 +4036,123 @@ export function PracticeTestRunnerClient({
   const optionsInteractionLocked = optIsLocked;
 
   const linearExamCategoryLine =
-    [current.topic, current.subtopic].find((s) => typeof s === "string" && s.trim().length > 0)?.trim() ??
-    (qTags.find((t) => typeof t === "string" && t.trim().length > 0) as string | undefined)?.trim() ??
+    [current.topic, current.subtopic]
+      .find((s) => typeof s === "string" && s.trim().length > 0)
+      ?.trim() ??
+    (
+      qTags.find((t) => typeof t === "string" && t.trim().length > 0) as
+        | string
+        | undefined
+    )?.trim() ??
     null;
 
   const formatLinearOptionText = (i: number, canonical: string) => {
     const rawT = optsOrderDisplay[i] ?? canonical;
-    return linearCatShellPresentation ? stripRedundantMcqLetterPrefix(rawT) : rawT;
+    return linearCatShellPresentation
+      ? stripRedundantMcqLetterPrefix(rawT)
+      : rawT;
   };
 
-  const linearCatOptions =
-    needsUnsupportedQuestionUi ? (
-      runnerUnsupportedQuestionFallback
-    ) : isBowtie && bowtiePayload ? (
-      <BowtieQuestionRenderer
-        payload={bowtiePayload}
-        value={raw}
-        showScenarioBanner={false}
-        disabled={optionsInteractionLocked}
-        onChange={(next) => setAnswerForCurrent(next)}
-        reveal={
-          linearFeedback && currentCommitted
-            ? (() => {
-                const ck = linearFeedback.correctKeys;
-                if (ck.length < 3) return null;
-                return {
-                  correct: {
-                    correctIds: [ck[0]!, ck[1]!, ck[2]!] as [string, string, string],
-                  },
-                  selectedIds: coerceBowtieDraftAnswer(raw),
-                };
-              })()
-            : null
-        }
-      />
-    ) : optsCanonical.length === 0 ? (
-      mcqNoChoicesFallback
-    ) : isSata ? (
-      <ul
-        className="nn-cat-opt-list"
-        role="group"
-        aria-label={tx(
-          "learner.practiceTests.run.answerChoicesSataAria",
-          "Answer choices (select all that apply)",
-        )}
-      >
-        {optsCanonical.map((canonical, i) => {
-          const selected = mcqAnswerSelectsCanonical(raw, canonical);
-          const rowText = linearCatShellPresentation
-            ? stripRedundantMcqLetterPrefix(optsDisplay[i] ?? canonical)
-            : optsDisplay[i] ?? canonical;
-          return (
-            <li key={canonical}>
-              <AnswerOptionRow
-                letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
-                text={rowText}
-                state={linearOptState(canonical)}
-                disabled={optionsInteractionLocked}
-                isCheckbox
-                checked={selected}
-                onChange={(checked) => {
-                  const prior = answersRef.current[current.id];
-                  const prev = Array.isArray(prior) ? [...prior] : [];
-                  setAnswerForCurrent(
-                    checked ? [...prev, canonical] : prev.filter((x) => x !== canonical),
-                  );
-                }}
-              />
-            </li>
-          );
-        })}
-      </ul>
-    ) : (
-      <PracticeTestMcqRadiogroupOptions
-        canonicalKeys={optsOrderCanonical}
-        displayTexts={optsOrderCanonical.map((canonical, i) => formatLinearOptionText(i, canonical))}
-        rowState={linearOptState}
-        disabled={optionsInteractionLocked}
-        ariaLabel={tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")}
-        onSelectCanonical={(canonical) => setAnswerForCurrent(canonical)}
-        optionTeachingMap={linearInlineOptionTeachingMap}
-        showOptionTeaching={Boolean(linearInlineOptionTeachingMap)}
-        teachingLabel={tx("learner.practiceTests.run.rationaleWhyNotShort", "Why not")}
-      />
-    );
+  const linearCatOptions = needsUnsupportedQuestionUi ? (
+    runnerUnsupportedQuestionFallback
+  ) : isBowtie && bowtiePayload ? (
+    <BowtieQuestionRenderer
+      payload={bowtiePayload}
+      value={raw}
+      showScenarioBanner={false}
+      disabled={optionsInteractionLocked}
+      onChange={(next) => setAnswerForCurrent(next)}
+      reveal={
+        linearFeedback && currentCommitted
+          ? (() => {
+              const ck = linearFeedback.correctKeys;
+              if (ck.length < 3) return null;
+              return {
+                correct: {
+                  correctIds: [ck[0]!, ck[1]!, ck[2]!] as [
+                    string,
+                    string,
+                    string,
+                  ],
+                },
+                selectedIds: coerceBowtieDraftAnswer(raw),
+              };
+            })()
+          : null
+      }
+    />
+  ) : optsCanonical.length === 0 ? (
+    mcqNoChoicesFallback
+  ) : isSata ? (
+    <ul
+      className="nn-cat-opt-list"
+      role="group"
+      aria-label={tx(
+        "learner.practiceTests.run.answerChoicesSataAria",
+        "Answer choices (select all that apply)",
+      )}
+    >
+      {optsCanonical.map((canonical, i) => {
+        const selected = mcqAnswerSelectsCanonical(raw, canonical);
+        const rowText = linearCatShellPresentation
+          ? stripRedundantMcqLetterPrefix(optsDisplay[i] ?? canonical)
+          : (optsDisplay[i] ?? canonical);
+        return (
+          <li key={canonical}>
+            <AnswerOptionRow
+              letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
+              text={rowText}
+              state={linearOptState(canonical)}
+              disabled={optionsInteractionLocked}
+              isCheckbox
+              checked={selected}
+              onChange={(checked) => {
+                const prior = answersRef.current[current.id];
+                const prev = Array.isArray(prior) ? [...prior] : [];
+                setAnswerForCurrent(
+                  checked
+                    ? [...prev, canonical]
+                    : prev.filter((x) => x !== canonical),
+                );
+              }}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  ) : (
+    <PracticeTestMcqRadiogroupOptions
+      canonicalKeys={optsOrderCanonical}
+      displayTexts={optsOrderCanonical.map((canonical, i) =>
+        formatLinearOptionText(i, canonical),
+      )}
+      rowState={linearOptState}
+      disabled={optionsInteractionLocked}
+      ariaLabel={tx(
+        "learner.practiceTests.run.answerChoicesAria",
+        "Answer choices",
+      )}
+      onSelectCanonical={(canonical) => setAnswerForCurrent(canonical)}
+      optionTeachingMap={linearInlineOptionTeachingMap}
+      showOptionTeaching={Boolean(linearInlineOptionTeachingMap)}
+      teachingLabel={tx(
+        "learner.practiceTests.run.rationaleWhyNotShort",
+        "Why not",
+      )}
+    />
+  );
 
   const rationaleFullStatus: import("@/components/study/practice-rationale-full-panel").PracticeRationaleFullPanelStatus =
-    isLinearEngine && linearRationaleVisibility === "after_each" && currentCommitted && linearFeedback
+    isLinearEngine &&
+    linearRationaleVisibility === "after_each" &&
+    currentCommitted &&
+    linearFeedback
       ? linearFeedback.isCorrect
         ? "correct"
         : "incorrect"
-      : isLinearEngine && linearRationaleVisibility === "end_of_exam" && currentCommitted
+      : isLinearEngine &&
+          linearRationaleVisibility === "end_of_exam" &&
+          currentCommitted
         ? "exam_locked"
         : "waiting";
 
@@ -3526,38 +4165,83 @@ export function PracticeTestRunnerClient({
   const linearAdvancePrimaryLabel = controlsBusy
     ? tx("learner.practiceTests.run.working", "Working...")
     : tx("learner.practiceTests.run.linearFooterRevealNext", "Next item");
-  const linearFooterSubmitLabel = tx("learner.practiceTests.run.linearFooterSubmitAnswer", "Submit answer");
-  const linearFooterFinishLabel = tx("learner.practiceTests.run.linearFooterFinishTest", "Finish test");
+  const linearFooterSubmitLabel = tx(
+    "learner.practiceTests.run.linearFooterSubmitAnswer",
+    "Submit answer",
+  );
+  const linearFooterFinishLabel = tx(
+    "learner.practiceTests.run.linearFooterFinishTest",
+    "Finish test",
+  );
 
   const linearRemediationCopy = {
-    title: tx("learner.practiceTests.run.remediationCardTitle", "Strengthen weak areas"),
-    topicLabel: tx("learner.practiceTests.run.remediationTopicLabel", "Focus topic"),
-    flashcardsCta: tx("learner.practiceTests.run.remediationFlashcardsCta", "Open flashcards hub"),
-    topicDrillCta: tx("learner.practiceTests.run.remediationTopicDrillCta", "Drill questions on this topic"),
-    weakFlashcardsCta: tx("learner.practiceTests.run.remediationWeakFlashcardsCta", "Weak-area flashcards"),
+    title: tx(
+      "learner.practiceTests.run.remediationCardTitle",
+      "Strengthen weak areas",
+    ),
+    topicLabel: tx(
+      "learner.practiceTests.run.remediationTopicLabel",
+      "Focus topic",
+    ),
+    flashcardsCta: tx(
+      "learner.practiceTests.run.remediationFlashcardsCta",
+      "Open flashcards hub",
+    ),
+    topicDrillCta: tx(
+      "learner.practiceTests.run.remediationTopicDrillCta",
+      "Drill questions on this topic",
+    ),
+    weakFlashcardsCta: tx(
+      "learner.practiceTests.run.remediationWeakFlashcardsCta",
+      "Weak-area flashcards",
+    ),
   };
 
   const linearRationalePanelCopy: PracticeRationaleFullPanelCopy = {
-    panelTitle: tx("learner.practiceTests.run.rationaleReviewHeading", "Rationale & Review"),
-    waitingPrimary: tx("learner.practiceTests.run.rationaleWaitingPrimary", "Review appears after you answer."),
+    panelTitle: tx(
+      "learner.practiceTests.run.rationaleReviewHeading",
+      "Rationale & Review",
+    ),
+    waitingPrimary: tx(
+      "learner.practiceTests.run.rationaleWaitingPrimary",
+      "Review appears after you answer.",
+    ),
     waitingSecondary: tx(
       "learner.practiceTests.run.rationaleWaitingSecondary",
       "Submit your response to see the correct answer, teaching rationale, distractor review, and optional references. Prioritize airway, breathing, and circulation when choosing the most urgent option.",
     ),
-    lockedTitle: tx("learner.practiceTests.run.rationaleLockedTitle", "Answer Locked"),
+    lockedTitle: tx(
+      "learner.practiceTests.run.rationaleLockedTitle",
+      "Answer Locked",
+    ),
     lockedBody: tx(
       "learner.practiceTests.run.rationaleLockedBody",
       "Your answer is submitted. Explanations and correct keys are revealed when you finish the full exam.",
     ),
-    correctAnswer: tx("learner.practiceTests.run.rationaleCorrectAnswer", "Correct Answer"),
-    whyCorrect: tx("learner.practiceTests.run.rationaleWhyCorrect", "Why This Is Correct"),
+    correctAnswer: tx(
+      "learner.practiceTests.run.rationaleCorrectAnswer",
+      "Correct Answer",
+    ),
+    whyCorrect: tx(
+      "learner.practiceTests.run.rationaleWhyCorrect",
+      "Why This Is Correct",
+    ),
     whyOthersIncorrect: tx(
       "learner.practiceTests.run.rationaleWhyOthersIncorrect",
       "Why The Other Options Are Incorrect",
     ),
-    clinicalPearl: tx("learner.practiceTests.run.rationaleClinicalPearl", "Clinical Pearl"),
-    keyTakeawayHeading: tx("learner.practiceTests.run.rationaleKeyTakeawayHeading", "Key Takeaway"),
-    referencesSource: tx("learner.practiceTests.run.rationaleReferencesSource", "References / Source"),
+    clinicalPearl: tx(
+      "learner.practiceTests.run.rationaleClinicalPearl",
+      "Clinical Pearl",
+    ),
+    keyTakeawayHeading: tx(
+      "learner.practiceTests.run.rationaleKeyTakeawayHeading",
+      "Key Takeaway",
+    ),
+    referencesSource: tx(
+      "learner.practiceTests.run.rationaleReferencesSource",
+      "References / Source",
+    ),
     relatedLessonsSection: tx(
       "learner.practiceTests.run.rationaleRelatedLessonsSection",
       "Related Lessons",
@@ -3580,13 +4264,17 @@ export function PracticeTestRunnerClient({
     typeof current.stem === "string" && current.stem.trim().length > 0
       ? resolveMeasureText(current.stem.trim())
       : "";
-  const linearStemClinicalSplit = rawStemTrimmed ? splitPromptLeadingImage(rawStemTrimmed) : null;
+  const linearStemClinicalSplit = rawStemTrimmed
+    ? splitPromptLeadingImage(rawStemTrimmed)
+    : null;
   const stemBodyForLinearCard =
-    linearStemClinicalSplit && linearStemClinicalSplit.remainingPrompt.trim().length > 0
+    linearStemClinicalSplit &&
+    linearStemClinicalSplit.remainingPrompt.trim().length > 0
       ? linearStemClinicalSplit.remainingPrompt
       : linearQuestionStem;
   const clinicalImageSrcLinear =
-    linearStemClinicalSplit?.imageHtml && linearStemClinicalSplit.imageHtml.trim().length > 0
+    linearStemClinicalSplit?.imageHtml &&
+    linearStemClinicalSplit.imageHtml.trim().length > 0
       ? linearStemClinicalSplit.imageHtml.trim()
       : null;
   const showLinearPerItemRationale = linearPracticeSplitReview
@@ -3601,7 +4289,9 @@ export function PracticeTestRunnerClient({
 
   const linearQuestionCardInner = (
     <>
-      {clinicalImageSrcLinear ? <PracticeTestClinicalFigure src={clinicalImageSrcLinear} /> : null}
+      {clinicalImageSrcLinear ? (
+        <PracticeTestClinicalFigure src={clinicalImageSrcLinear} />
+      ) : null}
       <PracticeTestQuestionMediaBlock
         exhibitData={current.exhibitData}
         images={current.images}
@@ -3653,12 +4343,15 @@ export function PracticeTestRunnerClient({
             sourceId: current.id,
             topic: linearFeedback.topic ?? current.topic ?? null,
             subtopic: current.subtopic ?? null,
-            clinicalConcept: current.subtopic ?? linearFeedback.topic ?? current.topic ?? null,
+            clinicalConcept:
+              current.subtopic ?? linearFeedback.topic ?? current.topic ?? null,
             pathwayId: testConfig?.pathwayId ?? pathwaySurface?.id ?? null,
             currentCorrect: linearFeedback.isCorrect,
             previouslyMissed: !linearFeedback.isCorrect,
             weakArea: !linearFeedback.isCorrect,
-            lowConfidence: confidenceTrackingEnabled ? confidence[current.id] === "low" : null,
+            lowConfidence: confidenceTrackingEnabled
+              ? confidence[current.id] === "low"
+              : null,
           }}
           compact
         />
@@ -3691,10 +4384,14 @@ export function PracticeTestRunnerClient({
           distractorRationalesMap={linearFeedback?.distractorRationalesMap}
           keyTakeaway={linearFeedback?.keyTakeaway}
           relatedLessons={linearFeedback?.relatedLessons ?? []}
-          confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
-          showDistractorFallback={
-            Boolean(currentCommitted && rationaleFullStatus !== "waiting" && rationaleFullStatus !== null)
+          confidenceLevel={
+            confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null
           }
+          showDistractorFallback={Boolean(
+            currentCommitted &&
+            rationaleFullStatus !== "waiting" &&
+            rationaleFullStatus !== null,
+          )}
           copy={linearRationalePanelCopy}
         />
       ) : null}
@@ -3708,16 +4405,30 @@ export function PracticeTestRunnerClient({
         defaultBookmarked={Boolean(flagged[current.id])}
         sourceType={catMode ? "cat_exam" : "practice_question"}
         sourceId={current.id}
-        title={current.topic?.trim() ? `${current.topic} question` : "Practice exam question"}
+        title={
+          current.topic?.trim()
+            ? `${current.topic} question`
+            : "Practice exam question"
+        }
         topic={current.topic ?? current.subtopic ?? null}
-        difficulty={current.difficulty != null ? difficultyBandLabel(current.difficulty) : null}
+        difficulty={
+          current.difficulty != null
+            ? difficultyBandLabel(current.difficulty)
+            : null
+        }
         pathwayId={activePathwayId}
       />
       <PracticeTestFlagForReviewButton
         flagged={Boolean(flagged[current.id])}
         disabled={controlsBusy}
-        titleFlagged={tx("learner.practiceTests.run.unflagForReview", "Remove flag")}
-        titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
+        titleFlagged={tx(
+          "learner.practiceTests.run.unflagForReview",
+          "Remove flag",
+        )}
+        titleUnflagged={tx(
+          "learner.practiceTests.run.flagForReview",
+          "Flag for review",
+        )}
         srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
         srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
         onToggle={() => toggleFlagForQuestion(current.id)}
@@ -3728,13 +4439,19 @@ export function PracticeTestRunnerClient({
   const linearPrimaryTutorLayout = Boolean(linearPracticeSplitReview);
   const linearExamQuestionCard = linearPrimaryTutorLayout ? (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-      <div className="flex shrink-0 justify-end pb-1 pt-0.5">{linearExamFlagSlot}</div>
+      <div className="flex shrink-0 justify-end pb-1 pt-0.5">
+        {linearExamFlagSlot}
+      </div>
       <div className="min-h-0 flex-1 overflow-hidden">
         <QuestionCard
           stem={stemBodyForLinearCard}
           topic={current.topic}
           subtopic={current.subtopic}
-          difficultyLabel={current.difficulty != null ? difficultyBandLabel(current.difficulty) : null}
+          difficultyLabel={
+            current.difficulty != null
+              ? difficultyBandLabel(current.difficulty)
+              : null
+          }
           examStackedLayout={false}
           examDetachedFooter={false}
           examStemScrollPartition={false}
@@ -3754,7 +4471,9 @@ export function PracticeTestRunnerClient({
       difficultyLabel={null}
       examStackedLayout
       examDetachedFooter
-      examStemScrollPartition={linearCatShellPresentation && !clinicalImageSrcLinear}
+      examStemScrollPartition={
+        linearCatShellPresentation && !clinicalImageSrcLinear
+      }
       examCategoryLabel={linearExamCategoryLine}
       examHeaderRightSlot={linearExamFlagSlot}
       examLayoutMeasureKey={`${current.id}:${optsOrderCanonical.join("|")}`}
@@ -3770,7 +4489,9 @@ export function PracticeTestRunnerClient({
       <div className="mx-auto flex w-full max-w-[48.75rem] items-center justify-between gap-3 px-3 py-2.5 sm:px-4">
         <button
           type="button"
-          disabled={controlsBusy || linearCatShellPresentation || !canLinearReviewPrev}
+          disabled={
+            controlsBusy || linearCatShellPresentation || !canLinearReviewPrev
+          }
           className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] disabled:opacity-40 sm:min-h-0 sm:px-2 sm:py-1.5"
           title={
             linearCatShellPresentation
@@ -3791,10 +4512,14 @@ export function PracticeTestRunnerClient({
           {tx("learner.practiceTests.run.previous", "Previous")}
         </button>
         <p className="m-0 text-center text-xs font-medium tabular-nums text-[var(--semantic-text-muted)] sm:text-sm">
-          {tx("learner.practiceTests.run.catExamAnsweredProgress", "{answered} of {total} answered", {
-            answered: String(Math.min(committedCount, total)),
-            total: String(Math.max(total, 1)),
-          })}
+          {tx(
+            "learner.practiceTests.run.catExamAnsweredProgress",
+            "{answered} of {total} answered",
+            {
+              answered: String(Math.min(committedCount, total)),
+              total: String(Math.max(total, 1)),
+            },
+          )}
         </p>
         <div className="min-w-0 shrink text-right sm:min-w-[5.5rem] sm:shrink-0">
           {!currentCommitted ? (
@@ -3846,14 +4571,22 @@ export function PracticeTestRunnerClient({
       <PracticeSessionLayout
         className={`flex min-h-0 flex-1 flex-col ${chromeClass}${linearPracticeSplitReview ? " nn-practice-exam-runner--rationale-dock" : ""}${linearPracticeExamConvergence ? " nn-practice-exam-convergence-layout" : ""}`}
         {...(linearCatShellPresentation ? { "data-cat-exam-root": true } : {})}
-        {...(linearPracticeExamConvergence ? { "data-nn-practice-exam-convergence": "" } : {})}
+        {...(linearPracticeExamConvergence
+          ? { "data-nn-practice-exam-convergence": "" }
+          : {})}
         data-nn-pedagogy-tier={tierPedagogyProfile.tier}
         data-nn-practice-question-layout={practiceQuestionLayoutMode}
         data-nn-practice-question-type={practiceQuestionType}
-        data-nn-practice-scoring-rule={practiceQuestionInteractionProfile.scoringRule}
-        data-nn-practice-partial-credit={practiceQuestionInteractionProfile.partialCredit ? "" : undefined}
+        data-nn-practice-scoring-rule={
+          practiceQuestionInteractionProfile.scoringRule
+        }
+        data-nn-practice-partial-credit={
+          practiceQuestionInteractionProfile.partialCredit ? "" : undefined
+        }
         data-nn-practice-structured-payload={
-          practiceQuestionInteractionProfile.requiresStructuredPayload ? "" : undefined
+          practiceQuestionInteractionProfile.requiresStructuredPayload
+            ? ""
+            : undefined
         }
       >
         <ExamSessionShell
@@ -3883,7 +4616,9 @@ export function PracticeTestRunnerClient({
                     total: String(Math.max(total, 1)),
                     pct: String(
                       Math.round(
-                        (Math.min(idx + 1, Math.max(total, 1)) / Math.max(total, 1)) * 100,
+                        (Math.min(idx + 1, Math.max(total, 1)) /
+                          Math.max(total, 1)) *
+                          100,
                       ),
                     ),
                   },
@@ -3896,7 +4631,9 @@ export function PracticeTestRunnerClient({
                 toolbar={
                   <div className="flex flex-wrap items-center justify-end gap-2">
                     <ExamSessionThemeTrigger variant="pill" />
-                    <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+                    <ExamTimerReadout
+                      remainingSec={timedMode ? remainingSec : null}
+                    />
                     {showEndPracticeSessionControl ? (
                       <button
                         type="button"
@@ -3914,7 +4651,10 @@ export function PracticeTestRunnerClient({
                         className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
                         onClick={() => void abandon()}
                       >
-                        <Send className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                        <Send
+                          className="h-3.5 w-3.5 shrink-0 opacity-80"
+                          aria-hidden
+                        />
                         {tx("learner.practiceTests.run.endExam", "End")}
                       </button>
                     )}
@@ -3930,30 +4670,57 @@ export function PracticeTestRunnerClient({
                     {linearExamQuestionCard}
                   </div>
                   <PracticeExamRationaleMobileDock
-                    openLabel={tx("learner.practiceTests.run.rationaleOpenMobile", "Rationale")}
-                    sheetTitle={tx("learner.practiceTests.run.rationaleReviewHeading", "Rationale & Review")}
+                    openLabel={tx(
+                      "learner.practiceTests.run.rationaleOpenMobile",
+                      "Rationale",
+                    )}
+                    sheetTitle={tx(
+                      "learner.practiceTests.run.rationaleReviewHeading",
+                      "Rationale & Review",
+                    )}
                   >
                     <PracticeExamRationalePanel
-                      ariaLabel={tx("learner.practiceTests.run.rationaleColumnAria", "Rationale and review")}
+                      ariaLabel={tx(
+                        "learner.practiceTests.run.rationaleColumnAria",
+                        "Rationale and review",
+                      )}
                     >
                       <PracticeRationaleFullPanel
                         status={rationaleFullStatus}
                         correctKeys={linearFeedback?.correctKeys}
                         optionDisplayMap={optionDisplayMap}
                         allOptionKeys={optsOrderCanonical}
-                        correctAnswerExplanation={linearFeedback?.correctAnswerExplanation}
+                        correctAnswerExplanation={
+                          linearFeedback?.correctAnswerExplanation
+                        }
                         rationale={linearFeedback?.rationale}
-                        distractorRationalesMap={linearFeedback?.distractorRationalesMap}
+                        distractorRationalesMap={
+                          linearFeedback?.distractorRationalesMap
+                        }
                         keyTakeaway={linearFeedback?.keyTakeaway}
                         relatedLessons={linearFeedback?.relatedLessons ?? []}
-                        confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
-                        clinicalPearlDisplay={linearFeedback?.clinicalPearlDisplay ?? null}
-                        referenceSource={linearFeedback?.referenceSource ?? null}
-                        showDistractorFallback={Boolean(currentCommitted && rationaleFullStatus !== "waiting" && rationaleFullStatus !== null)}
+                        confidenceLevel={
+                          confidenceTrackingEnabled
+                            ? (confidence[current.id] ?? null)
+                            : null
+                        }
+                        clinicalPearlDisplay={
+                          linearFeedback?.clinicalPearlDisplay ?? null
+                        }
+                        referenceSource={
+                          linearFeedback?.referenceSource ?? null
+                        }
+                        showDistractorFallback={Boolean(
+                          currentCommitted &&
+                          rationaleFullStatus !== "waiting" &&
+                          rationaleFullStatus !== null,
+                        )}
                         copy={linearRationalePanelCopy}
                       />
                       <PracticeExamRemediationLinks
-                        pathwayId={testConfig?.pathwayId ?? pathwaySurface?.id ?? null}
+                        pathwayId={
+                          testConfig?.pathwayId ?? pathwaySurface?.id ?? null
+                        }
                         topicLabel={linearFeedback?.topic ?? current.topic}
                         visible={Boolean(currentCommitted && linearFeedback)}
                         copy={linearRemediationCopy}
@@ -3962,12 +4729,22 @@ export function PracticeTestRunnerClient({
                         <div className="mt-3">
                           <ShowSimilarQuestions
                             context={{
-                              sourceType: catMode ? "cat_exam" : "practice_question",
+                              sourceType: catMode
+                                ? "cat_exam"
+                                : "practice_question",
                               sourceId: current.id,
-                              topic: linearFeedback.topic ?? current.topic ?? null,
+                              topic:
+                                linearFeedback.topic ?? current.topic ?? null,
                               subtopic: current.subtopic ?? null,
-                              clinicalConcept: current.subtopic ?? linearFeedback.topic ?? current.topic ?? null,
-                              pathwayId: testConfig?.pathwayId ?? pathwaySurface?.id ?? null,
+                              clinicalConcept:
+                                current.subtopic ??
+                                linearFeedback.topic ??
+                                current.topic ??
+                                null,
+                              pathwayId:
+                                testConfig?.pathwayId ??
+                                pathwaySurface?.id ??
+                                null,
                               currentCorrect: linearFeedback.isCorrect,
                               previouslyMissed: !linearFeedback.isCorrect,
                               weakArea: !linearFeedback.isCorrect,
@@ -3979,22 +4756,38 @@ export function PracticeTestRunnerClient({
                           />
                           <div className="mt-3">
                             <TeachMeThisPanel
-                              topic={linearFeedback.topic ?? current.topic ?? null}
+                              topic={
+                                linearFeedback.topic ?? current.topic ?? null
+                              }
                               subtopic={current.subtopic ?? null}
                               questionStem={current.stem}
                               correctAnswer={linearFeedback.correctKeys
                                 ?.map((key) => optionDisplayMap[key] ?? key)
                                 .join(", ")}
-                              rationale={linearFeedback.correctAnswerExplanation ?? linearFeedback.rationale ?? null}
-                              clinicalPearl={linearFeedback.clinicalPearlDisplay ?? null}
+                              rationale={
+                                linearFeedback.correctAnswerExplanation ??
+                                linearFeedback.rationale ??
+                                null
+                              }
+                              clinicalPearl={
+                                linearFeedback.clinicalPearlDisplay ?? null
+                              }
                               examTip={linearFeedback.keyTakeaway ?? null}
-                              lessonHref={linearFeedback.relatedLessons?.[0]?.href ?? null}
-                              lessonTitle={linearFeedback.relatedLessons?.[0]?.title ?? null}
-                              triggerReason={!linearFeedback.isCorrect
-                                ? "incorrect"
-                                : confidenceTrackingEnabled && confidence[current.id] === "low"
-                                  ? "low_confidence"
-                                  : "request"}
+                              lessonHref={
+                                linearFeedback.relatedLessons?.[0]?.href ?? null
+                              }
+                              lessonTitle={
+                                linearFeedback.relatedLessons?.[0]?.title ??
+                                null
+                              }
+                              triggerReason={
+                                !linearFeedback.isCorrect
+                                  ? "incorrect"
+                                  : confidenceTrackingEnabled &&
+                                      confidence[current.id] === "low"
+                                    ? "low_confidence"
+                                    : "request"
+                              }
                               compact
                             />
                           </div>
@@ -4003,9 +4796,17 @@ export function PracticeTestRunnerClient({
                               <MissedQuestionReflection
                                 questionId={current.id}
                                 questionText={current.stem}
-                                topic={linearFeedback.topic ?? current.topic ?? null}
-                                pathwayId={testConfig?.pathwayId ?? pathwaySurface?.id ?? null}
-                                sourceType={catMode ? "cat_exam" : "practice_question"}
+                                topic={
+                                  linearFeedback.topic ?? current.topic ?? null
+                                }
+                                pathwayId={
+                                  testConfig?.pathwayId ??
+                                  pathwaySurface?.id ??
+                                  null
+                                }
+                                sourceType={
+                                  catMode ? "cat_exam" : "practice_question"
+                                }
                                 questionType={current.questionType ?? null}
                                 compact
                               />
@@ -4034,19 +4835,27 @@ export function PracticeTestRunnerClient({
               >
                 <p className="nn-cat-exam-board-top__progress m-0 text-sm font-semibold leading-snug text-[var(--semantic-text-secondary)]">
                   {linearCatShellPresentation
-                    ? tx("learner.practiceTests.run.linearTimedItemLead", "Timed practice item")
+                    ? tx(
+                        "learner.practiceTests.run.linearTimedItemLead",
+                        "Timed practice item",
+                      )
                     : `${tx("learner.practiceTests.run.question", "Question")} ${idx + 1} ${tx("learner.practiceTests.run.of", "of")} ${total}`}
                 </p>
                 <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
                   <ExamSessionThemeTrigger variant="pill" />
-                  <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+                  <ExamTimerReadout
+                    remainingSec={timedMode ? remainingSec : null}
+                  />
                   <button
                     type="button"
                     disabled={controlsBusy}
                     className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
                     onClick={() => void abandon()}
                   >
-                    <Send className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                    <Send
+                      className="h-3.5 w-3.5 shrink-0 opacity-80"
+                      aria-hidden
+                    />
                     {tx("learner.practiceTests.run.endExam", "End")}
                   </button>
                 </div>
@@ -4055,7 +4864,9 @@ export function PracticeTestRunnerClient({
                 className={`nn-cat-exam-board-progress shrink-0${linearCatShellPresentation ? " nn-exam-progress--cat-exam-adaptive" : ""}`}
                 current={idx + 1}
                 total={Math.max(total, 1)}
-                variant={linearCatShellPresentation ? "adaptive_item" : "fixed_session"}
+                variant={
+                  linearCatShellPresentation ? "adaptive_item" : "fixed_session"
+                }
                 adaptiveMaxItems={linearCatShellPresentation ? null : undefined}
                 sessionLabel={modeLabel}
               />

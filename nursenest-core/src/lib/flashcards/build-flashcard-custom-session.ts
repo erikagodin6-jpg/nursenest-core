@@ -3,7 +3,10 @@ import { ContentStatus, type Prisma } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { prisma } from "@/lib/db";
-import { PRISMA_ID_IN_CHUNK_SIZE, takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
+import {
+  PRISMA_ID_IN_CHUNK_SIZE,
+  takeForIdIn,
+} from "@/lib/db/prisma-find-many-bounds";
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 import {
   applyCountsToBuilderCategories,
@@ -53,7 +56,10 @@ import {
 import { loadPublishedPathwayLessonsForStudyFromDb } from "@/lib/learner-study-hub/load-published-pathway-lessons-for-study-from-db";
 import { pathwayHubCategoryToCanonical } from "@/lib/learner-study-hub/body-system-data";
 
-export type CustomSessionStudyMode = "term_to_definition" | "definition_to_term" | "mixed";
+export type CustomSessionStudyMode =
+  | "term_to_definition"
+  | "definition_to_term"
+  | "mixed";
 
 export type BuildFlashcardCustomSessionInput = {
   userId: string;
@@ -83,7 +89,9 @@ export type BuildFlashcardCustomSessionInput = {
   cardLimitRaw?: string | null;
 };
 
-export type CustomSessionSerializedCard = ReturnType<typeof serializeFlashcardForCustomSession> & {
+export type CustomSessionSerializedCard = ReturnType<
+  typeof serializeFlashcardForCustomSession
+> & {
   lessonHref?: string;
   lessonTitle?: string;
   lessonSlug?: string;
@@ -104,7 +112,9 @@ export type BuildFlashcardCustomSessionFailure = {
   reason: string;
 };
 
-export type BuildFlashcardCustomSessionResult = BuildFlashcardCustomSessionSuccess | BuildFlashcardCustomSessionFailure;
+export type BuildFlashcardCustomSessionResult =
+  | BuildFlashcardCustomSessionSuccess
+  | BuildFlashcardCustomSessionFailure;
 
 const FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT = 800;
 const FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT = 800;
@@ -116,12 +126,12 @@ function serializedIsStudyReady(card: CustomSessionSerializedCard): boolean {
   if (!exam || isSataPayload(exam)) return true;
   return Boolean(
     typeof exam.questionStem === "string" &&
-      exam.questionStem.trim().length >= 10 &&
-      Array.isArray(exam.answerOptions) &&
-      exam.answerOptions.length === 4 &&
-      exam.answerOptions.every((option) => option.text.trim().length > 0) &&
-      typeof exam.correctLetter === "string" &&
-      exam.correctLetter.trim().length > 0,
+    exam.questionStem.trim().length >= 10 &&
+    Array.isArray(exam.answerOptions) &&
+    exam.answerOptions.length === 4 &&
+    exam.answerOptions.every((option) => option.text.trim().length > 0) &&
+    typeof exam.correctLetter === "string" &&
+    exam.correctLetter.trim().length > 0,
   );
 }
 
@@ -180,7 +190,9 @@ export function selectedCategoryMatchesBuilderCategory(
   builderCategoryId: string,
 ): boolean {
   if (selectedCategoryIds.has(builderCategoryId)) return true;
-  return selectedCanonicalIds.has(canonicalForBuilderCategory(pathwayId, builderCategoryId));
+  return selectedCanonicalIds.has(
+    canonicalForBuilderCategory(pathwayId, builderCategoryId),
+  );
 }
 
 export function selectedCategoryCountSum(
@@ -190,11 +202,20 @@ export function selectedCategoryCountSum(
 ): number {
   if (selectedCategoryIds.length === 0) return 0;
   const selectedRaw = new Set(selectedCategoryIds);
-  const selectedCanonical = new Set(selectedCategoryIds.map((id) => canonicalForBuilderCategory(pathwayId, id)));
+  const selectedCanonical = new Set(
+    selectedCategoryIds.map((id) => canonicalForBuilderCategory(pathwayId, id)),
+  );
   let total = 0;
   for (const [categoryId, count] of Object.entries(counts)) {
     if (!Number.isFinite(count) || count <= 0) continue;
-    if (selectedCategoryMatchesBuilderCategory(pathwayId, selectedRaw, selectedCanonical, categoryId)) {
+    if (
+      selectedCategoryMatchesBuilderCategory(
+        pathwayId,
+        selectedRaw,
+        selectedCanonical,
+        categoryId,
+      )
+    ) {
       total += count;
     }
   }
@@ -236,8 +257,13 @@ export async function buildFlashcardCustomSession(
 
   const sourceClause = prismaWhereForSourceKind(sourceKind);
 
-  const buildFlashcardWhere = (accessWhere: Prisma.FlashcardWhereInput): Prisma.FlashcardWhereInput => {
-    const clauses: Prisma.FlashcardWhereInput[] = [{ status: ContentStatus.PUBLISHED }, accessWhere];
+  const buildFlashcardWhere = (
+    accessWhere: Prisma.FlashcardWhereInput,
+  ): Prisma.FlashcardWhereInput => {
+    const clauses: Prisma.FlashcardWhereInput[] = [
+      { status: ContentStatus.PUBLISHED },
+      accessWhere,
+    ];
     if (topicCode) clauses.push({ category: { topicCode } });
     if (lessonId) clauses.push({ lessonId });
     if (sourceClause) clauses.push(sourceClause);
@@ -249,13 +275,21 @@ export async function buildFlashcardCustomSession(
   try {
     const canonicalPathwayId =
       pathwayId != null && pathwayId.trim().length > 0
-        ? normalizePathwayIdForStudySurfaces(pathwayId.trim(), entitlement.country)
+        ? normalizePathwayIdForStudySurfaces(
+            pathwayId.trim(),
+            entitlement.country,
+          )
         : null;
-    const examContext = canonicalPathwayId?.trim() ? buildGlobalExamContext(canonicalPathwayId.trim(), "en") : null;
-    const pathwayScopeId = canonicalPathwayId?.trim() || pathwayId?.trim() || null;
+    const examContext = canonicalPathwayId?.trim()
+      ? buildGlobalExamContext(canonicalPathwayId.trim(), "en")
+      : null;
+    const pathwayScopeId =
+      canonicalPathwayId?.trim() || pathwayId?.trim() || null;
 
-    const needsProgressEarly = weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
-    const persistenceFiltersEarly = starredOnly || savedOnly || notesOnly || revisitOnly;
+    const needsProgressEarly =
+      weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
+    const persistenceFiltersEarly =
+      starredOnly || savedOnly || notesOnly || revisitOnly;
     const useExamForInventoryEarly =
       Boolean(pathwayScopeId) &&
       !lessonId &&
@@ -273,17 +307,26 @@ export async function buildFlashcardCustomSession(
         });
         if (inv.ok) {
           const examInventoryCounts = inv.countsByBuilderId;
-          let lessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics | null = null;
+          let lessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics | null =
+            null;
           let lessonVirtualTotal = 0;
-          const pathwayLessonsForVirtuals = await loadPublishedPathwayLessonsForStudyFromDb(pathwayScopeId);
+          const pathwayLessonsForVirtuals =
+            await loadPublishedPathwayLessonsForStudyFromDb(pathwayScopeId);
           const { virtuals: mergedLessonVirtuals, diagnostics: lessonInv } =
             collectMergedLessonVirtualFlashcardsForPathway(
               pathwayScopeId,
-              pathwayLessonsForVirtuals.length > 0 ? pathwayLessonsForVirtuals : undefined,
+              pathwayLessonsForVirtuals.length > 0
+                ? pathwayLessonsForVirtuals
+                : undefined,
             );
-          const mergedCounts: Record<string, number> = { ...examInventoryCounts };
+          const mergedCounts: Record<string, number> = {
+            ...examInventoryCounts,
+          };
           const dedicatedRows = await prisma.flashcard.findMany({
-            where: { status: ContentStatus.PUBLISHED, deck: { pathwayId: pathwayScopeId } },
+            where: {
+              status: ContentStatus.PUBLISHED,
+              deck: { pathwayId: pathwayScopeId },
+            },
             select: {
               front: true,
               back: true,
@@ -306,8 +349,11 @@ export async function buildFlashcardCustomSession(
           for (const v of mergedLessonVirtuals) {
             if (
               v.sourceSectionKind === "padding" ||
-              (v.row.rationaleCorrect ?? "").includes(FLASHCARD_PADDING_CARD_RATIONALE_MARKER)
-            ) continue;
+              (v.row.rationaleCorrect ?? "").includes(
+                FLASHCARD_PADDING_CARD_RATIONALE_MARKER,
+              )
+            )
+              continue;
             const categoryId = resolveBuilderCategoryId({
               label: v.row.category.name,
               topicCode: v.row.category.topicCode,
@@ -326,7 +372,8 @@ export async function buildFlashcardCustomSession(
             totalGeneratedVirtualCards: lessonVirtualTotal,
             recallVirtualCount: lessonInv.recallVirtualCount,
             sectionDerivedVirtualCount: lessonInv.sectionDerivedVirtualCount,
-            genericFillerSectionCardHits: lessonInv.genericFillerSourcedSectionCards,
+            genericFillerSectionCardHits:
+              lessonInv.genericFillerSourcedSectionCards,
             selectedCategoryIds: [...selectedCategories],
             filterModeLabel: describeCustomSessionFilterMode({
               weakOnly,
@@ -339,7 +386,11 @@ export async function buildFlashcardCustomSession(
             }),
           };
           const examTotal = inv.total + lessonVirtualTotal;
-          const selectedCategorySum = selectedCategoryCountSum(pathwayScopeId, mergedCounts, selectedCategories);
+          const selectedCategorySum = selectedCategoryCountSum(
+            pathwayScopeId,
+            mergedCounts,
+            selectedCategories,
+          );
           const matchingCardsForSummary =
             selectedCategories.length === 0
               ? examTotal
@@ -376,7 +427,10 @@ export async function buildFlashcardCustomSession(
             ok: true,
             queryRelaxation,
             summary,
-            categoryOptions: applyCountsToBuilderCategories(pathwayScopeId, mergedCounts),
+            categoryOptions: applyCountsToBuilderCategories(
+              pathwayScopeId,
+              mergedCounts,
+            ),
             cards: [],
           };
         }
@@ -384,14 +438,20 @@ export async function buildFlashcardCustomSession(
     }
 
     const allowLessonQuestionVirtuals =
-      sourceKind === "all" || sourceKind === "lesson" || sourceKind === "question";
+      sourceKind === "all" ||
+      sourceKind === "lesson" ||
+      sourceKind === "question";
 
-    const pathwayOptsResolved = flashcardPathwayAccessOptionsFromPathwayId(pathwayScopeId ?? pathwayId);
+    const pathwayOptsResolved = flashcardPathwayAccessOptionsFromPathwayId(
+      pathwayScopeId ?? pathwayId,
+    );
 
     // Fire the exam-bank pool chain now so it overlaps with the sequential card queries below.
     // Savings: ~2-4s when the pool path is taken (resolveAccess + loadExamRows run in parallel).
-    const _needsProgressFilter = weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
-    const _needsPersistenceFilter = starredOnly || savedOnly || notesOnly || revisitOnly;
+    const _needsProgressFilter =
+      weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
+    const _needsPersistenceFilter =
+      starredOnly || savedOnly || notesOnly || revisitOnly;
     const _canEagerPool =
       Boolean(pathwayScopeId && !lessonId) &&
       (sourceKind === "all" || sourceKind === "question") &&
@@ -399,41 +459,64 @@ export async function buildFlashcardCustomSession(
       includeCards &&
       !_needsProgressFilter &&
       !_needsPersistenceFilter;
-    const _eagerPoolPathway = _canEagerPool && pathwayScopeId ? getExamPathwayById(pathwayScopeId) : null;
-    const _eagerPoolChain = _eagerPoolPathway != null
-      ? (async () => {
-          try {
-            const pw = _eagerPoolPathway;
-            const access = await resolveAccessScopeForPathwayExamQuestionPool(userId, entitlement, pw);
-            const scope = access?.scope ?? null;
-            const pool = scope != null
-              ? await loadExamQuestionRowsForFlashcardPool(
-                  scope, pw, topicCode?.trim() || null, Math.max(limit * 10, 200)
-                )
-              : ([] as Awaited<ReturnType<typeof loadExamQuestionRowsForFlashcardPool>>);
-            return { access, pool };
-          } catch {
-            return null;
-          }
-        })()
-      : null;
+    const _eagerPoolPathway =
+      _canEagerPool && pathwayScopeId
+        ? getExamPathwayById(pathwayScopeId)
+        : null;
+    const _eagerPoolChain =
+      _eagerPoolPathway != null
+        ? (async () => {
+            try {
+              const pw = _eagerPoolPathway;
+              const access = await resolveAccessScopeForPathwayExamQuestionPool(
+                userId,
+                entitlement,
+                pw,
+              );
+              const scope = access?.scope ?? null;
+              const pool =
+                scope != null
+                  ? await loadExamQuestionRowsForFlashcardPool(
+                      scope,
+                      pw,
+                      topicCode?.trim() || null,
+                      Math.max(limit * 10, 200),
+                    )
+                  : ([] as Awaited<
+                      ReturnType<typeof loadExamQuestionRowsForFlashcardPool>
+                    >);
+              return { access, pool };
+            } catch {
+              return null;
+            }
+          })()
+        : null;
 
     const cardScanLimit = includeCards
-      ? Math.min(FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT, Math.max((offset + limit) * 8, 80))
+      ? Math.min(
+          FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT,
+          Math.max((offset + limit) * 8, 80),
+        )
       : FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT;
     const cards = await prisma.flashcard.findMany({
-      where: buildFlashcardWhere(flashcardAccessWhere(entitlement, pathwayOptsResolved)),
+      where: buildFlashcardWhere(
+        flashcardAccessWhere(entitlement, pathwayOptsResolved),
+      ),
       select: flashcardSelect,
       orderBy: { updatedAt: "desc" },
       take: cardScanLimit,
     });
 
-    let lessonQuestionVirtuals: Awaited<ReturnType<typeof loadLessonLinkedFlashcardVirtuals>> = [];
+    let lessonQuestionVirtuals: Awaited<
+      ReturnType<typeof loadLessonLinkedFlashcardVirtuals>
+    > = [];
     if (pathwayScopeId && allowLessonQuestionVirtuals && !includeCards) {
       const existingExamQ = new Set(
         cards
           .map((c) => c.examQuestionId)
-          .filter((x): x is string => typeof x === "string" && x.trim().length > 0),
+          .filter(
+            (x): x is string => typeof x === "string" && x.trim().length > 0,
+          ),
       );
       lessonQuestionVirtuals = await loadLessonLinkedFlashcardVirtuals({
         pathwayId: pathwayScopeId,
@@ -445,13 +528,18 @@ export async function buildFlashcardCustomSession(
     const examQuestionIdsForMeta = new Set<string>();
     for (const c of cards) {
       const id = c.examQuestionId;
-      if (typeof id === "string" && id.trim()) examQuestionIdsForMeta.add(id.trim());
+      if (typeof id === "string" && id.trim())
+        examQuestionIdsForMeta.add(id.trim());
     }
     for (const v of lessonQuestionVirtuals) {
       const id = v.examQuestionId;
-      if (typeof id === "string" && id.trim()) examQuestionIdsForMeta.add(id.trim());
+      if (typeof id === "string" && id.trim())
+        examQuestionIdsForMeta.add(id.trim());
     }
-    const examTopicMetaById = new Map<string, { bodySystem: string | null; topic: string | null }>();
+    const examTopicMetaById = new Map<
+      string,
+      { bodySystem: string | null; topic: string | null }
+    >();
     const examQIdList = [...examQuestionIdsForMeta];
     for (let i = 0; i < examQIdList.length; i += PRISMA_ID_IN_CHUNK_SIZE) {
       const chunk = examQIdList.slice(i, i + PRISMA_ID_IN_CHUNK_SIZE);
@@ -462,7 +550,10 @@ export async function buildFlashcardCustomSession(
         take: takeForIdIn(chunk, 5000),
       });
       for (const r of rows) {
-        examTopicMetaById.set(r.id, { bodySystem: r.bodySystem, topic: r.topic });
+        examTopicMetaById.set(r.id, {
+          bodySystem: r.bodySystem,
+          topic: r.topic,
+        });
       }
     }
 
@@ -479,7 +570,9 @@ export async function buildFlashcardCustomSession(
     const cardWithCategory: WorkingCard[] = [];
 
     for (const card of cards) {
-      const qm = card.examQuestionId ? examTopicMetaById.get(card.examQuestionId) : undefined;
+      const qm = card.examQuestionId
+        ? examTopicMetaById.get(card.examQuestionId)
+        : undefined;
       const categoryId = resolveBuilderCategoryId({
         label: card.category.name,
         topicCode: card.category.topicCode,
@@ -517,13 +610,18 @@ export async function buildFlashcardCustomSession(
           ...synthetic,
           builderCategoryId: categoryId,
           linkedExamQuestionId: v.examQuestionId,
-          lessonMeta: { href: v.lessonHref, title: v.lessonTitle, slug: v.lessonSlug },
+          lessonMeta: {
+            href: v.lessonHref,
+            title: v.lessonTitle,
+            slug: v.lessonSlug,
+          },
         });
       }
     }
 
     const augmentExamBankPool =
-      Boolean(pathwayScopeId && !lessonId) && (sourceKind === "all" || sourceKind === "question");
+      Boolean(pathwayScopeId && !lessonId) &&
+      (sourceKind === "all" || sourceKind === "question");
     if (
       pathwayScopeId &&
       allowLessonQuestionVirtuals &&
@@ -534,23 +632,34 @@ export async function buildFlashcardCustomSession(
     ) {
       const pid = pathwayScopeId;
       // Await the pre-fired pool chain (access resolution + exam rows loaded in parallel above).
-      const _eagerResult = _eagerPoolChain ? (await _eagerPoolChain) : null;
+      const _eagerResult = _eagerPoolChain ? await _eagerPoolChain : null;
       const poolScopeForBank = _eagerResult?.access?.scope ?? null;
-      const pool = _eagerResult?.pool ?? ([] as Awaited<ReturnType<typeof loadExamQuestionRowsForFlashcardPool>>);
+      const pool =
+        _eagerResult?.pool ??
+        ([] as Awaited<
+          ReturnType<typeof loadExamQuestionRowsForFlashcardPool>
+        >);
       const takenExam = new Set(
         cardWithCategory
           .map((c) => c.examQuestionId)
-          .filter((x): x is string => typeof x === "string" && x.trim().length > 0)
+          .filter(
+            (x): x is string => typeof x === "string" && x.trim().length > 0,
+          )
           .map((x) => x.trim()),
       );
       for (const row of pool) {
         const qid = row.id.trim();
         if (!qid || takenExam.has(qid)) continue;
         takenExam.add(qid);
-        examTopicMetaById.set(qid, { bodySystem: row.bodySystem, topic: row.topic });
+        examTopicMetaById.set(qid, {
+          bodySystem: row.bodySystem,
+          topic: row.topic,
+        });
         const base = bankExamQuestionRowToFlashcardStudySelectRow(row);
         if (!base) continue;
-        const clinicalImageUrl = firstHttpsImageUrlFromExamQuestionImages(row.images);
+        const clinicalImageUrl = firstHttpsImageUrlFromExamQuestionImages(
+          row.images,
+        );
         const bankExtras: Partial<FlashcardStudySelectRow> = {
           clinicalPearl: row.clinicalPearl ?? null,
           keyTakeaway: row.keyTakeaway ?? null,
@@ -568,26 +677,36 @@ export async function buildFlashcardCustomSession(
         });
         categoryCounts[categoryId] = (categoryCounts[categoryId] ?? 0) + 1;
         const syntheticId = `exam_bank:${qid}`;
-        const mergedExamCard: FlashcardStudySelectRow = { ...base, ...bankExtras };
+        const mergedExamCard: FlashcardStudySelectRow = {
+          ...base,
+          ...bankExtras,
+        };
         const synthetic: DbFlashcardRow = {
           ...(mergedExamCard as unknown as DbFlashcardRow),
           id: syntheticId,
           examQuestionId: qid,
           deck: { pathwayId: pid, title: "Exam question bank" },
-          category: { name: row.bodySystem?.trim() || row.topic?.trim() || "General", topicCode: null },
+          category: {
+            name: row.bodySystem?.trim() || row.topic?.trim() || "General",
+            topicCode: null,
+          },
         };
         cardWithCategory.push({ ...synthetic, builderCategoryId: categoryId });
       }
     }
 
-    let lessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics | null = null;
+    let lessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics | null =
+      null;
     if (pathwayScopeId && allowLessonQuestionVirtuals) {
       const pid = pathwayScopeId;
-      const pathwayLessonsForVirtuals = await loadPublishedPathwayLessonsForStudyFromDb(pid);
+      const pathwayLessonsForVirtuals =
+        await loadPublishedPathwayLessonsForStudyFromDb(pid);
       const { virtuals: mergedLessonVirtuals, diagnostics: lessonInv } =
         collectMergedLessonVirtualFlashcardsForPathway(
           pid,
-          pathwayLessonsForVirtuals.length > 0 ? pathwayLessonsForVirtuals : undefined,
+          pathwayLessonsForVirtuals.length > 0
+            ? pathwayLessonsForVirtuals
+            : undefined,
         );
       const existingIds = new Set(cardWithCategory.map((c) => c.id));
       for (const v of mergedLessonVirtuals) {
@@ -595,8 +714,11 @@ export async function buildFlashcardCustomSession(
         // Never surface padding/filler cards to learners — they contain autogenerated placeholder rationales
         if (
           v.sourceSectionKind === "padding" ||
-          (v.row.rationaleCorrect ?? "").includes(FLASHCARD_PADDING_CARD_RATIONALE_MARKER)
-        ) continue;
+          (v.row.rationaleCorrect ?? "").includes(
+            FLASHCARD_PADDING_CARD_RATIONALE_MARKER,
+          )
+        )
+          continue;
         existingIds.add(v.id);
         const categoryId = resolveBuilderCategoryId({
           label: v.row.category.name,
@@ -615,7 +737,11 @@ export async function buildFlashcardCustomSession(
         cardWithCategory.push({
           ...synthetic,
           builderCategoryId: categoryId,
-          lessonMeta: { href: v.lessonHref, title: v.lessonTitle, slug: v.lessonSlug },
+          lessonMeta: {
+            href: v.lessonHref,
+            title: v.lessonTitle,
+            slug: v.lessonSlug,
+          },
         });
       }
       lessonVirtualDiagnostics = {
@@ -625,7 +751,8 @@ export async function buildFlashcardCustomSession(
         totalGeneratedVirtualCards: lessonInv.totalVirtualCards,
         recallVirtualCount: lessonInv.recallVirtualCount,
         sectionDerivedVirtualCount: lessonInv.sectionDerivedVirtualCount,
-        genericFillerSectionCardHits: lessonInv.genericFillerSourcedSectionCards,
+        genericFillerSectionCardHits:
+          lessonInv.genericFillerSourcedSectionCards,
         selectedCategoryIds: [...selectedCategories],
         filterModeLabel: describeCustomSessionFilterMode({
           weakOnly,
@@ -655,13 +782,19 @@ export async function buildFlashcardCustomSession(
     } else if (sourceKind === "question") {
       scoped = scoped.filter((c) => {
         const sk = c.sourceKey ?? "";
-        return Boolean(c.examQuestionId) || Boolean(c.linkedExamQuestionId) || sk.startsWith("lessonq:");
+        return (
+          Boolean(c.examQuestionId) ||
+          Boolean(c.linkedExamQuestionId) ||
+          sk.startsWith("lessonq:")
+        );
       });
     }
     if (selectedCategories.length > 0) {
       const selected = new Set(selectedCategories);
       const selectedCanonical = new Set(
-        selectedCategories.map((id) => canonicalForBuilderCategory(pathwayScopeId ?? pathwayId, id)),
+        selectedCategories.map((id) =>
+          canonicalForBuilderCategory(pathwayScopeId ?? pathwayId, id),
+        ),
       );
       scoped = scoped.filter((c) =>
         selectedCategoryMatchesBuilderCategory(
@@ -673,10 +806,15 @@ export async function buildFlashcardCustomSession(
       );
     }
 
-    const needsProgress = weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
+    const needsProgress =
+      weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
     let progressByScopedId = new Map<string, AdaptiveProgressLite>();
     if (needsProgress) {
-      const scopedIds = scoped.map((c) => c.id);
+      const scopedIds = [
+        ...new Set(
+          scoped.map((c) => c.id).filter((id) => !id.startsWith("exam_bank:")),
+        ),
+      ];
       const progress = await prisma.flashcardProgress.findMany({
         where: {
           userId,
@@ -690,7 +828,10 @@ export async function buildFlashcardCustomSession(
           nextReviewAt: true,
           lapses: true,
         },
-        take: takeForIdIn(scopedIds, FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT),
+        take: takeForIdIn(
+          scopedIds,
+          FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT,
+        ),
       });
       const map = new Map(progress.map((p) => [p.flashcardId, p]));
       progressByScopedId = new Map(
@@ -728,7 +869,11 @@ export async function buildFlashcardCustomSession(
     }
 
     if (!needsProgress && scoped.length > 0) {
-      const scopedIds = scoped.map((c) => c.id).filter((id) => !id.startsWith("exam_bank:"));
+      const scopedIds = [
+        ...new Set(
+          scoped.map((c) => c.id).filter((id) => !id.startsWith("exam_bank:")),
+        ),
+      ];
       if (scopedIds.length > 0) {
         const progress = await prisma.flashcardProgress.findMany({
           where: {
@@ -743,7 +888,10 @@ export async function buildFlashcardCustomSession(
             nextReviewAt: true,
             lapses: true,
           },
-          take: takeForIdIn(scopedIds, FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT),
+          take: takeForIdIn(
+            scopedIds,
+            FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT,
+          ),
         });
         progressByScopedId = new Map(
           progress.map((p) => [
@@ -760,7 +908,8 @@ export async function buildFlashcardCustomSession(
       }
     }
 
-    const persistenceFiltersActive = starredOnly || savedOnly || notesOnly || revisitOnly;
+    const persistenceFiltersActive =
+      starredOnly || savedOnly || notesOnly || revisitOnly;
     if (persistenceFiltersActive) {
       const allowedIds = new Set(stateIds);
       if (starredOnly) {
@@ -773,16 +922,25 @@ export async function buildFlashcardCustomSession(
 
     // Canonical inventory query — raw SQL with normalized exam keys (audit / discovery parity).
     const useExamForInventory =
-      Boolean(pathwayScopeId) && !lessonId && !includeCards && !needsProgress && !persistenceFiltersActive;
+      Boolean(pathwayScopeId) &&
+      !lessonId &&
+      !includeCards &&
+      !needsProgress &&
+      !persistenceFiltersActive;
 
     const examInventoryCounts: Record<string, number> = {};
     let examTotal = 0;
-    let poolInventoryDiagnostics: FlashcardsPoolInventoryDiagnostics | null = null;
+    let poolInventoryDiagnostics: FlashcardsPoolInventoryDiagnostics | null =
+      null;
 
     if (useExamForInventory && pathwayScopeId) {
       const pathway = getExamPathwayById(pathwayScopeId);
       if (pathway) {
-        const inv = await loadFlashcardsExamInventoryForPathway({ userId, entitlement, pathway });
+        const inv = await loadFlashcardsExamInventoryForPathway({
+          userId,
+          entitlement,
+          pathway,
+        });
         if (inv.ok) {
           examTotal = inv.total;
           Object.assign(examInventoryCounts, inv.countsByBuilderId);
@@ -810,14 +968,23 @@ export async function buildFlashcardCustomSession(
 
     const sessionShuffleSalt = sessionSeed?.trim() || randomUUID();
     const orderingSeed = shuffle
-      ? sessionSeed?.trim() || `${userId}:${sessionShuffleSalt}:${selectedCategories.join(",")}:${mode}`
+      ? sessionSeed?.trim() ||
+        `${userId}:${sessionShuffleSalt}:${selectedCategories.join(",")}:${mode}`
       : `${sessionShuffleSalt}:ordered`;
     const selectedRows = shuffle
-      ? orderFlashcardsForAdaptiveSession(scoped, progressByScopedId, new Date(), orderingSeed)
+      ? orderFlashcardsForAdaptiveSession(
+          scoped,
+          progressByScopedId,
+          new Date(),
+          orderingSeed,
+        )
       : scoped;
     const boundedOffset = Math.max(0, Math.floor(offset));
     const serializationScanLimit = includeCards
-      ? Math.min(selectedRows.length, boundedOffset + Math.max(limit * 8, limit + 80))
+      ? Math.min(
+          selectedRows.length,
+          boundedOffset + Math.max(limit * 8, limit + 80),
+        )
       : boundedOffset + limit;
     const limited = selectedRows.slice(boundedOffset, serializationScanLimit);
 
@@ -827,7 +994,10 @@ export async function buildFlashcardCustomSession(
         if (cardsForSession.length >= limit) break;
         const mixedSwap = mode === "mixed" && index % 2 === 1;
         const swap = mode === "definition_to_term" || mixedSwap;
-        const topic = builderCategoryTitleForId(pathwayScopeId ?? pathwayId, card.builderCategoryId);
+        const topic = builderCategoryTitleForId(
+          pathwayScopeId ?? pathwayId,
+          card.builderCategoryId,
+        );
         const {
           builderCategoryId: _bc,
           lessonMeta,
@@ -841,13 +1011,16 @@ export async function buildFlashcardCustomSession(
         void _lid;
         void _eqid;
         try {
-          const base = serializeFlashcardForCustomSession(dbRow as FlashcardStudySelectRow, {
-            swapFrontBack: swap,
-            topic,
-            pathwayId: card.deck?.pathwayId ?? pathwayScopeId,
-            examOptionShuffleSalt: sessionShuffleSalt,
-            allowInvalidExamBackedAsPlain: true,
-          });
+          const base = serializeFlashcardForCustomSession(
+            dbRow as FlashcardStudySelectRow,
+            {
+              swapFrontBack: swap,
+              topic,
+              pathwayId: card.deck?.pathwayId ?? pathwayScopeId,
+              examOptionShuffleSalt: sessionShuffleSalt,
+              allowInvalidExamBackedAsPlain: true,
+            },
+          );
           const serialized = lessonMeta
             ? {
                 ...base,
@@ -856,7 +1029,8 @@ export async function buildFlashcardCustomSession(
                 lessonSlug: lessonMeta.slug,
               }
             : base;
-          if (serializedIsStudyReady(serialized)) cardsForSession.push(serialized);
+          if (serializedIsStudyReady(serialized))
+            cardsForSession.push(serialized);
         } catch {
           // Invalid legacy/passive flashcards are skipped when they cannot render as front/back study cards.
           continue;
@@ -931,8 +1105,13 @@ export async function buildFlashcardCustomSession(
 
     // Use canonical inventory counts for hub display; fall back to DB flashcard counts
     // when in a card session (includeCards or filtered mode).
-    const categoryCountsForOptions = useEffectiveTotalForSummary ? examInventoryCounts : categoryCounts;
-    const categoryOptions = applyCountsToBuilderCategories(pathwayScopeId ?? pathwayId, categoryCountsForOptions);
+    const categoryCountsForOptions = useEffectiveTotalForSummary
+      ? examInventoryCounts
+      : categoryCounts;
+    const categoryOptions = applyCountsToBuilderCategories(
+      pathwayScopeId ?? pathwayId,
+      categoryCountsForOptions,
+    );
     if (matchingCardsForSummary === 0 || categoryOptions.length === 0) {
       safeServerLog("flashcards", "custom_session_zero_inventory", {
         loader_name: "build_flashcard_custom_session",
@@ -962,13 +1141,20 @@ export async function buildFlashcardCustomSession(
       for (const c of cardWithCategory) {
         if (c.examQuestionId) {
           const m = examTopicMetaById.get(c.examQuestionId);
-          if (m && ((m.bodySystem ?? "").trim().length > 0 || (m.topic ?? "").trim().length > 0)) {
+          if (
+            m &&
+            ((m.bodySystem ?? "").trim().length > 0 ||
+              (m.topic ?? "").trim().length > 0)
+          ) {
             cardsTaggedFromExamMeta += 1;
           }
         }
-        if (c.builderCategoryId === FLASHCARD_BUILDER_UNCATEGORIZED_ID) uncategorizedCardRows += 1;
+        if (c.builderCategoryId === FLASHCARD_BUILDER_UNCATEGORIZED_ID)
+          uncategorizedCardRows += 1;
       }
-      let poolDiag: Awaited<ReturnType<typeof getStudyQuestionPoolForPathway>> | null = null;
+      let poolDiag: Awaited<
+        ReturnType<typeof getStudyQuestionPoolForPathway>
+      > | null = null;
       if (pathwayScopeId) {
         try {
           poolDiag = await getStudyQuestionPoolForPathway({
@@ -984,7 +1170,9 @@ export async function buildFlashcardCustomSession(
       safeServerLog("flashcards", "hub_inventory_dev", {
         pathwayId: pathwayScopeId ?? pathwayId ?? "",
         studyQuestionPoolLoaded: poolDiag != null,
-        studyQuestionPoolSummary: poolDiag ? JSON.stringify(poolDiag).slice(0, 1200) : "",
+        studyQuestionPoolSummary: poolDiag
+          ? JSON.stringify(poolDiag).slice(0, 1200)
+          : "",
         topicRowCount: categoryOptions.length,
         workingCardCount: cardWithCategory.length,
         publishedDbFlashcards: cards.length,
@@ -994,7 +1182,8 @@ export async function buildFlashcardCustomSession(
         ...(useExamForInventory
           ? {
               canonicalInventoryTotal: examTotal,
-              canonicalInventoryBuckets: Object.keys(examInventoryCounts).length,
+              canonicalInventoryBuckets:
+                Object.keys(examInventoryCounts).length,
             }
           : {}),
       });
@@ -1027,27 +1216,38 @@ export async function buildFlashcardCustomSession(
   }
 }
 
-export function parseCustomSessionCategories(value: string | null | undefined): string[] {
+export function parseCustomSessionCategories(
+  value: string | null | undefined,
+): string[] {
   return (value ?? "")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
 }
 
-export function parseCustomSessionCardLimit(value: string | null | undefined): number {
+export function parseCustomSessionCardLimit(
+  value: string | null | undefined,
+): number {
   if (!value || value === "all") return FLASHCARD_CUSTOM_SESSION_RETURN_LIMIT;
   const n = Number(value);
   if (!Number.isFinite(n) || n < 1) return 20;
   return Math.min(FLASHCARD_CUSTOM_SESSION_RETURN_LIMIT, Math.max(1, n));
 }
 
-export function parseCustomSessionOffset(value: string | null | undefined): number {
+export function parseCustomSessionOffset(
+  value: string | null | undefined,
+): number {
   const n = Number(value);
   if (!Number.isFinite(n) || n < 0) return 0;
-  return Math.min(FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT - 1, Math.floor(n));
+  return Math.min(
+    FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT - 1,
+    Math.floor(n),
+  );
 }
 
-export function parseCustomSessionStudyMode(value: string | null | undefined): CustomSessionStudyMode {
+export function parseCustomSessionStudyMode(
+  value: string | null | undefined,
+): CustomSessionStudyMode {
   if (value === "definition_to_term") return value;
   if (value === "term_to_definition") return value;
   if (value === "mixed") return value;

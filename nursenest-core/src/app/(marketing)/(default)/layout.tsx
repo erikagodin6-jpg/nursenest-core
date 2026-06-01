@@ -97,6 +97,20 @@ function shouldLayerMainPageShards(pathname: string) {
   return pathname !== "/";
 }
 
+/** Auth pages own their full-screen layout — strip the site header and footer so
+ *  users see only the focused auth card, not the full marketing chrome. */
+function isAuthOnlyRoute(pathname: string): boolean {
+  const normalized = pathname.split("?")[0]?.replace(/\/+$/, "") ?? "";
+  const AUTH_PATHS = [
+    "/login", "/signup", "/signin", "/sign-up",
+    "/forgot-password", "/reset-password", "/verify-email",
+  ];
+  // Also handle locale-prefixed variants: /{locale}/login etc.
+  return AUTH_PATHS.some(
+    (p) => normalized === p || normalized.endsWith(p),
+  );
+}
+
 function getMarketingDefaultLayoutSentryRuntimePromise() {
   return import("@/lib/observability/sentry-runtime").catch((err) => {
     layoutStderrTrace("marketing_layout", "sentry_runtime_import_failed", {
@@ -455,6 +469,7 @@ const MarketingDefaultLocaleLayout = traceLayout(
         );
 
         const defaultLayoutSiteFooter = defaultMarketingSiteFooter();
+        const authOnly = isAuthOnlyRoute(marketingRequestPath);
 
         return (
           <MarketingI18nProvider
@@ -468,12 +483,25 @@ const MarketingDefaultLocaleLayout = traceLayout(
                 <MarketingFeedbackShell>
                   <div className="nn-marketing-surface nn-marketing-brand-root flex min-h-screen flex-col">
                     <PremiumLayoutVersionMarker surface="marketing-default" />
-                    <SiteHeaderServer serverHasStaffSession={staffSession != null} />
-                    {shouldLayerMainPageShards(marketingRequestPath) ? (
+                    {!authOnly && <SiteHeaderServer serverHasStaffSession={staffSession != null} />}
+                    {!authOnly && shouldLayerMainPageShards(marketingRequestPath) ? (
                       <MarketingMainI18nShards
                         locale={resolvedLocale}
                         publicContentOverrides={publicContentOverrides}
                         trailingChrome={defaultLayoutSiteFooter}
+                      >
+                        <main className="flex min-h-0 flex-1 flex-col">
+                          <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
+                            {children}
+                          </MarketingDefaultMainMotionSlot>
+                        </main>
+                      </MarketingMainI18nShards>
+                    ) : authOnly ? (
+                      // Auth-only: no site chrome — the auth shell owns the full viewport
+                      <MarketingMainI18nShards
+                        locale={resolvedLocale}
+                        publicContentOverrides={publicContentOverrides}
+                        trailingChrome={null}
                       >
                         <main className="flex min-h-0 flex-1 flex-col">
                           <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>

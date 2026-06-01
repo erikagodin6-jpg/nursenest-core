@@ -10,7 +10,11 @@ import {
   subscriptionLocksProfileRegionAndTier,
   type PathwayPickOption,
 } from "@/lib/learner/personal-profile-policy";
-import { parseMeasurementPreference, type MeasurementPreference } from "@/lib/measurements/measurement-preference";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import {
+  parseMeasurementPreference,
+  type MeasurementPreference,
+} from "@/lib/measurements/measurement-preference";
 import { pickLatestBaseSubscription } from "@/lib/subscriptions/subscription-plan-codes";
 
 export type PersonalProfilePathwayPreview = {
@@ -78,7 +82,12 @@ export async function loadPersonalProfilePayload(
       where: { userId },
       orderBy: { createdAt: "desc" },
       take: 12,
-      select: { status: true, planTier: true, planCountry: true, planCode: true },
+      select: {
+        status: true,
+        planTier: true,
+        planCountry: true,
+        planCode: true,
+      },
     }),
     resolveEntitlementForPage(userId),
   ]);
@@ -91,9 +100,17 @@ export async function loadPersonalProfilePayload(
   const scopeForPathways: AccessScope =
     entitlement !== "error"
       ? entitlement
-      : { hasAccess: false, reason: "no_access", tier: user.tier, country: user.country, alliedCareer: null };
+      : {
+          hasAccess: false,
+          reason: "no_access",
+          tier: user.tier,
+          country: user.country,
+          alliedCareer: null,
+        };
   const pathwayTierCountry =
-    !regionTierLocked && pathwayPreview ? pathwayPreview : { country: user.country, tier: user.tier };
+    !regionTierLocked && pathwayPreview
+      ? pathwayPreview
+      : { country: user.country, tier: user.tier };
   const pathwayOptions = await listPathwayPicksForProfile(
     scopeForPathways,
     pathwayTierCountry.tier,
@@ -107,13 +124,14 @@ export async function loadPersonalProfilePayload(
     const hit = pathwayOptions.find((o) => o.id === targetId);
     if (hit) targetExamPathwayLabel = hit.label;
     else {
-      const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-pathways-catalog");
       const p = getExamPathwayById(targetId);
-      targetExamPathwayLabel = p ? (p.shortName || p.displayName) : targetId;
+      targetExamPathwayLabel = p ? p.shortName || p.displayName : targetId;
     }
   }
 
-  const measurementPreference = parseMeasurementPreference(user.measurementPreference);
+  const measurementPreference = parseMeasurementPreference(
+    user.measurementPreference,
+  );
 
   return {
     name: user.name,
@@ -127,7 +145,9 @@ export async function loadPersonalProfilePayload(
     studyGoal: user.studyGoal,
     examFocus: user.examFocus,
     examDate: user.examDate?.toISOString() ?? null,
-    examDatePlanType: user.examDatePlanType ? user.examDatePlanType.toLowerCase() : null,
+    examDatePlanType: user.examDatePlanType
+      ? user.examDatePlanType.toLowerCase()
+      : null,
     targetExamPathwayId: user.targetExamPathwayId,
     studyCadencePreference: user.studyCadencePreference,
     dailyQuestionGoal: user.dailyQuestionGoal,

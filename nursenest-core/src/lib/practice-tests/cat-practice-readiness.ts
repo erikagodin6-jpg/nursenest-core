@@ -1,11 +1,18 @@
-import { buildCatCategoryDiversityDiagnostics, validatePracticeCatPool } from "@/lib/exams/cat-engine";
+import {
+  buildCatCategoryDiversityDiagnostics,
+  validatePracticeCatPool,
+} from "@/lib/exams/cat-engine";
 import {
   pathwayAllowsCatAdaptiveStart,
   subscriptionCoversPathwayBase,
 } from "@/lib/exam-pathways/pathway-entitlements-policy";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { catReadinessMinCompletePoolRows, fetchCatPracticePoolReadiness } from "@/lib/practice-tests/cat-pool";
+import {
+  catReadinessMinCompletePoolRows,
+  fetchCatPracticePoolReadiness,
+} from "@/lib/practice-tests/cat-pool";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
 
@@ -54,26 +61,41 @@ export function buildCatPracticeReadinessStaffDiagnostics(input: {
     publishedCount: input.publishedCount ?? null,
     practiceReadyCount: input.practiceReadyCount,
     catReadyCount: input.catReadyCount,
-    validationFailureReason: input.validation && !input.validation.ok ? input.validation.error : null,
-    categoryDiversityCounts: input.categoryDiversityCounts ?? input.validation?.diagnostics?.finalCategoryKeys ?? {},
+    validationFailureReason:
+      input.validation && !input.validation.ok ? input.validation.error : null,
+    categoryDiversityCounts:
+      input.categoryDiversityCounts ??
+      input.validation?.diagnostics?.finalCategoryKeys ??
+      {},
   };
 }
 
-function catReadinessDiagnosticsFromMeta(buildMeta: Awaited<ReturnType<typeof fetchCatPracticePoolReadiness>>["buildMeta"]) {
+function catReadinessDiagnosticsFromMeta(
+  buildMeta: Awaited<
+    ReturnType<typeof fetchCatPracticePoolReadiness>
+  >["buildMeta"],
+) {
   return {
-    eligibleCatQuestions: buildMeta.eligibleCatQuestions ?? buildMeta.finalCompleteRowCount,
-    completePracticeQuestions: buildMeta.completePracticeQuestions ?? buildMeta.strictCompleteRowCount,
-    excludedBecauseMissingCatMetadata: buildMeta.excludedBecauseMissingCatMetadata ?? 0,
+    eligibleCatQuestions:
+      buildMeta.eligibleCatQuestions ?? buildMeta.finalCompleteRowCount,
+    completePracticeQuestions:
+      buildMeta.completePracticeQuestions ?? buildMeta.strictCompleteRowCount,
+    excludedBecauseMissingCatMetadata:
+      buildMeta.excludedBecauseMissingCatMetadata ?? 0,
     excludedBecauseIncomplete: buildMeta.excludedBecauseIncomplete ?? 0,
-    excludedBecauseWrongPathwayOrExam: buildMeta.excludedBecauseWrongPathwayOrExam ?? 0,
+    excludedBecauseWrongPathwayOrExam:
+      buildMeta.excludedBecauseWrongPathwayOrExam ?? 0,
   };
 }
 
-export function catReadinessUnavailableMessage(diagnostics: {
-  eligibleCatQuestions: number;
-  completePracticeQuestions: number;
-  publishedQuestions?: number;
-}, minPool: number): string {
+export function catReadinessUnavailableMessage(
+  diagnostics: {
+    eligibleCatQuestions: number;
+    completePracticeQuestions: number;
+    publishedQuestions?: number;
+  },
+  minPool: number,
+): string {
   if (
     typeof diagnostics.publishedQuestions === "number" &&
     diagnostics.publishedQuestions > diagnostics.eligibleCatQuestions
@@ -96,7 +118,10 @@ export async function assessCatPracticeReadinessForPathway(
   userId: string,
   entitlement: AccessScope,
   pathwayId: string,
-  options: { includeStaffDiagnostics?: boolean; publishedCount?: number | null } = {},
+  options: {
+    includeStaffDiagnostics?: boolean;
+    publishedCount?: number | null;
+  } = {},
 ): Promise<CatPracticeReadinessResult> {
   const trimmed = pathwayId.trim();
   if (trimmed.length < 2) {
@@ -107,13 +132,13 @@ export async function assessCatPracticeReadinessForPathway(
     };
   }
 
-  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const pathway = getExamPathwayById(trimmed);
   if (!pathway) {
     return {
       ok: false,
       code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_found,
-      message: "That exam pathway is not recognized. Refresh the page or pick another track.",
+      message:
+        "That exam pathway is not recognized. Refresh the page or pick another track.",
     };
   }
 
@@ -147,7 +172,11 @@ export async function assessCatPracticeReadinessForPathway(
     pathwayId: trimmed,
   };
 
-  const { pool, buildMeta } = await fetchCatPracticePoolReadiness(userId, entitlement, poolInput);
+  const { pool, buildMeta } = await fetchCatPracticePoolReadiness(
+    userId,
+    entitlement,
+    poolInput,
+  );
   const diagnostics = catReadinessDiagnosticsFromMeta(buildMeta);
   const v = pool.length >= minPool ? validatePracticeCatPool(pool) : null;
   const staffDiagnostics = options.includeStaffDiagnostics
@@ -156,7 +185,8 @@ export async function assessCatPracticeReadinessForPathway(
         practiceReadyCount: diagnostics.completePracticeQuestions,
         catReadyCount: diagnostics.eligibleCatQuestions,
         validation: v,
-        categoryDiversityCounts: buildCatCategoryDiversityDiagnostics(pool).finalCategoryKeys,
+        categoryDiversityCounts:
+          buildCatCategoryDiversityDiagnostics(pool).finalCategoryKeys,
       })
     : undefined;
   if (pool.length < minPool) {

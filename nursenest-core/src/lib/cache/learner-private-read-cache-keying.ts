@@ -10,7 +10,16 @@ export type LearnerPrivateReadCacheSurface =
   | "progress-page"
   | "profile-activity"
   | "review-queue-initial"
-  | "motivation-payload";
+  | "motivation-payload"
+  // ── Dashboard analytics cache surfaces (TTL 15 min) ─────────────────────────
+  /** Weak-area list derived from topic-performance + recent session history. */
+  | "weak-area-summary"
+  /** Readiness index, streak, practice accuracy — the readiness tile data. */
+  | "readiness-summary"
+  /** Per-pathway lesson progress + overall accuracy — performance summary tile. */
+  | "performance-summary"
+  /** Smart study-next recommendations + adaptive wire bundle. */
+  | "study-plan-summary";
 
 export const LEARNER_PRIVATE_READ_CACHE_PREFIX = "learner-private-read";
 export const LEARNER_PRIVATE_TAG_PREFIX = "learner-private";
@@ -24,7 +33,22 @@ export const ALL_LEARNER_PRIVATE_READ_SURFACES: LearnerPrivateReadCacheSurface[]
   "profile-activity",
   "review-queue-initial",
   "motivation-payload",
+  "weak-area-summary",
+  "readiness-summary",
+  "performance-summary",
+  "study-plan-summary",
 ];
+
+/** The four dashboard analytics surfaces that share a 15-minute TTL. */
+export const DASHBOARD_ANALYTICS_SURFACES: LearnerPrivateReadCacheSurface[] = [
+  "weak-area-summary",
+  "readiness-summary",
+  "performance-summary",
+  "study-plan-summary",
+];
+
+/** Canonical 15-minute TTL for dashboard analytics caches. */
+export const DASHBOARD_ANALYTICS_TTL_SECONDS = 900;
 
 function cacheDeploymentRevision(): string {
   const v =

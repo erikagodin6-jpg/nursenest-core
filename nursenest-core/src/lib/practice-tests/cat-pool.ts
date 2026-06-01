@@ -4,10 +4,14 @@ import { prisma } from "@/lib/db";
 import { getCatPool, setCatPool } from "@/lib/server/content-cache";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { validatePracticeCatPool, type CatPoolRow } from "@/lib/exams/cat-engine";
+import {
+  validatePracticeCatPool,
+  type CatPoolRow,
+} from "@/lib/exams/cat-engine";
 import type { CatPracticePoolBuildMeta } from "@/lib/practice-tests/types";
 import {
   loadMissedQuestionIdsForPoolFilter,
@@ -16,7 +20,10 @@ import {
 import { getWeakTopicNamesForPractice } from "@/lib/learner/topic-performance";
 import { difficultyWhere } from "@/lib/practice-tests/practice-pool-shared";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
-import { seededIndexInRange, shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
+import {
+  seededIndexInRange,
+  shuffleSeeded,
+} from "@/lib/practice-tests/session-seeded-random";
 import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 import { rtVentilatorPremiumBankGateWhere } from "@/lib/rt-ventilator/rt-ventilator-bank-pool-gate";
@@ -32,8 +39,15 @@ import {
 
 import { catReadinessMinCompletePoolRows } from "./cat-readiness-floor";
 
-export { CAT_MIN_COMPLETE_POOL, catReadinessMinCompletePoolRows } from "./cat-readiness-floor";
-export { isCompleteCatQuestionRow, NON_ECG_PRACTICE_EXAM_WHERE, type CatQuestionCompletenessFields };
+export {
+  CAT_MIN_COMPLETE_POOL,
+  catReadinessMinCompletePoolRows,
+} from "./cat-readiness-floor";
+export {
+  isCompleteCatQuestionRow,
+  NON_ECG_PRACTICE_EXAM_WHERE,
+  type CatQuestionCompletenessFields,
+};
 
 const MAX_POOL = 600;
 /** Batched CAT readiness scans — metadata-only rows so we can scan larger ranges cheaply. */
@@ -121,7 +135,10 @@ async function buildSecondaryFilterParts(
     if (input.topicNames.length > 0) {
       const rows = await prisma.examQuestion.findMany({
         where: {
-          AND: [{ id: { in: missedIds } }, { OR: input.topicNames.map((t) => ({ topic: t })) }],
+          AND: [
+            { id: { in: missedIds } },
+            { OR: input.topicNames.map((t) => ({ topic: t })) },
+          ],
         },
         select: { id: true },
         take: 220,
@@ -136,7 +153,10 @@ async function buildSecondaryFilterParts(
   }
 
   if (input.selectionMode === "starred") {
-    const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(userId, 200);
+    const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(
+      userId,
+      200,
+    );
     if (starredIds.length > 0) {
       parts.push({ id: { in: starredIds } });
     }
@@ -156,7 +176,9 @@ async function queryShuffledCompletePool(
   // Merge DB-level completeness gate into the caller's WHERE so the DB only
   // transfers rows that are known-complete — stem/options/rationale/correctAnswer
   // are no longer fetched (they are large text blobs and were the main load-time bottleneck).
-  const completeWhere: Prisma.ExamQuestionWhereInput = { AND: [where, CAT_DB_COMPLETENESS_WHERE] };
+  const completeWhere: Prisma.ExamQuestionWhereInput = {
+    AND: [where, CAT_DB_COMPLETENESS_WHERE],
+  };
   const total = await prisma.examQuestion.count({ where: completeWhere });
   const takeN = Math.min(MAX_POOL, Math.max(1, total));
   let skip = 0;
@@ -195,9 +217,15 @@ async function queryShuffledCompletePool(
 async function accumulateCompleteCatPoolForReadiness(
   where: Prisma.ExamQuestionWhereInput,
   minCompleteRequired: number,
-): Promise<{ pool: CatPoolRow[]; scannedDbRows: number; completeRowCount: number }> {
+): Promise<{
+  pool: CatPoolRow[];
+  scannedDbRows: number;
+  completeRowCount: number;
+}> {
   // DB-level completeness gate — no content fields needed, no JS-side validation loop.
-  const completeWhere: Prisma.ExamQuestionWhereInput = { AND: [where, CAT_DB_COMPLETENESS_WHERE] };
+  const completeWhere: Prisma.ExamQuestionWhereInput = {
+    AND: [where, CAT_DB_COMPLETENESS_WHERE],
+  };
   const pool: CatPoolRow[] = [];
   let scannedDbRows = 0;
   let completeRowCount = 0;
@@ -226,7 +254,10 @@ async function accumulateCompleteCatPoolForReadiness(
       if (pool.length >= maxHeld) pool.shift();
       pool.push({
         id: r.id,
-        difficulty: typeof r.difficulty === "number" && Number.isFinite(r.difficulty) ? Math.round(r.difficulty) : 3,
+        difficulty:
+          typeof r.difficulty === "number" && Number.isFinite(r.difficulty)
+            ? Math.round(r.difficulty)
+            : 3,
         bodySystem: r.bodySystem,
         topic: r.topic,
         nclexClientNeedsCategory: r.nclexClientNeedsCategory,
@@ -234,7 +265,8 @@ async function accumulateCompleteCatPoolForReadiness(
       });
     }
     skip += batch.length;
-    if (pool.length >= minCompleteRequired && validatePracticeCatPool(pool).ok) break;
+    if (pool.length >= minCompleteRequired && validatePracticeCatPool(pool).ok)
+      break;
     if (batch.length < READINESS_SCAN_BATCH) break;
   }
   return { pool, scannedDbRows, completeRowCount };
@@ -242,17 +274,22 @@ async function accumulateCompleteCatPoolForReadiness(
 
 function catCalibratedPool(rows: CatPoolRow[]): CatPoolRow[] {
   return rows.filter((row) => {
-    const hasDifficulty = Number.isFinite(row.difficulty) && row.difficulty >= 1 && row.difficulty <= 5;
+    const hasDifficulty =
+      Number.isFinite(row.difficulty) &&
+      row.difficulty >= 1 &&
+      row.difficulty <= 5;
     const hasCategory = Boolean(
       row.nclexClientNeedsCategory?.trim() ||
-        row.bodySystem?.trim() ||
-        row.topic?.trim(),
+      row.bodySystem?.trim() ||
+      row.topic?.trim(),
     );
     return hasDifficulty && hasCategory;
   });
 }
 
-async function countRawRows(where: Prisma.ExamQuestionWhereInput): Promise<number> {
+async function countRawRows(
+  where: Prisma.ExamQuestionWhereInput,
+): Promise<number> {
   return prisma.examQuestion.count({ where });
 }
 
@@ -266,9 +303,10 @@ export async function fetchCatPracticePoolReadiness(
   entitlement: AccessScope,
   input: PickQuestionsInput,
 ): Promise<{ pool: CatPoolRow[]; buildMeta: CatPracticePoolBuildMeta }> {
-  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const pathwayIdTrim = input.pathwayId?.trim() ?? "";
-  let pathway: ExamPathwayDefinition | null = pathwayIdTrim ? getExamPathwayById(pathwayIdTrim) ?? null : null;
+  let pathway: ExamPathwayDefinition | null = pathwayIdTrim
+    ? (getExamPathwayById(pathwayIdTrim) ?? null)
+    : null;
   const emptyMeta = (strict = 0): CatPracticePoolBuildMeta => ({
     strictCompleteRowCount: strict,
     usedRelaxedFilters: false,
@@ -291,9 +329,10 @@ export async function fetchCatPracticePoolReadiness(
     ? questionAccessWhereWithPathway(entitlement, pathway)
     : questionAccessWhere(entitlement);
   const broadBase = questionAccessWhere(entitlement);
-  const scopeGate = pathway?.roleTrack === "np" || entitlement.tier === "NP"
-    ? npProviderQuestionScopeWhere()
-    : standardExamPrepQuestionScopeWhere();
+  const scopeGate =
+    pathway?.roleTrack === "np" || entitlement.tier === "NP"
+      ? npProviderQuestionScopeWhere()
+      : standardExamPrepQuestionScopeWhere();
 
   const strictness = input.selectionStrictness ?? "strict";
 
@@ -305,7 +344,10 @@ export async function fetchCatPracticePoolReadiness(
       }
     }
     if (input.selectionMode === "starred") {
-      const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(userId, 200);
+      const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(
+        userId,
+        200,
+      );
       if (starredIds.length === 0) {
         return { pool: [], buildMeta: emptyMeta() };
       }
@@ -313,7 +355,12 @@ export async function fetchCatPracticePoolReadiness(
   }
 
   const minNeed = catReadinessMinCompletePoolRows(pathwayIdTrim);
-  const secondaryStrict = await buildSecondaryFilterParts(userId, entitlement, input, false);
+  const secondaryStrict = await buildSecondaryFilterParts(
+    userId,
+    entitlement,
+    input,
+    false,
+  );
   const whereStrict: Prisma.ExamQuestionWhereInput = {
     AND: [
       base,
@@ -325,7 +372,10 @@ export async function fetchCatPracticePoolReadiness(
     ],
   };
   const rawStrictCount = await countRawRows(whereStrict);
-  let strictAccumulated = await accumulateCompleteCatPoolForReadiness(whereStrict, minNeed);
+  let strictAccumulated = await accumulateCompleteCatPoolForReadiness(
+    whereStrict,
+    minNeed,
+  );
   let { pool } = strictAccumulated;
   const strictCompleteRowCount = strictAccumulated.completeRowCount;
   let completePracticeQuestions = strictCompleteRowCount;
@@ -334,7 +384,12 @@ export async function fetchCatPracticePoolReadiness(
   let rawFinalCount = rawStrictCount;
 
   if (strictness === "soft" && pool.length < CAT_SOFT_MIN_COMPLETE_ROWS) {
-    const secondaryRelaxed = await buildSecondaryFilterParts(userId, entitlement, input, true);
+    const secondaryRelaxed = await buildSecondaryFilterParts(
+      userId,
+      entitlement,
+      input,
+      true,
+    );
     const whereRelaxed: Prisma.ExamQuestionWhereInput = {
       AND: [
         base,
@@ -346,29 +401,31 @@ export async function fetchCatPracticePoolReadiness(
       ],
     };
     rawFinalCount = await countRawRows(whereRelaxed);
-    const relaxed = await accumulateCompleteCatPoolForReadiness(whereRelaxed, minNeed);
+    const relaxed = await accumulateCompleteCatPoolForReadiness(
+      whereRelaxed,
+      minNeed,
+    );
     pool = relaxed.pool;
     completePracticeQuestions = relaxed.completeRowCount;
     eligiblePool = catCalibratedPool(pool);
     usedRelaxedFilters = true;
   }
 
-  const wrongPathwayOrExamCount =
-    pathway
-      ? Math.max(
-          0,
-          (await countRawRows({
-            AND: [
-              broadBase,
-              NON_ECG_PRACTICE_EXAM_WHERE,
-              generalStudyBankModuleSurfaceWhere(),
-              rtVentilatorPremiumBankGateWhere(entitlement),
-              scopeGate,
-              ...secondaryStrict,
-            ],
-          })) - rawStrictCount,
-        )
-      : 0;
+  const wrongPathwayOrExamCount = pathway
+    ? Math.max(
+        0,
+        (await countRawRows({
+          AND: [
+            broadBase,
+            NON_ECG_PRACTICE_EXAM_WHERE,
+            generalStudyBankModuleSurfaceWhere(),
+            rtVentilatorPremiumBankGateWhere(entitlement),
+            scopeGate,
+            ...secondaryStrict,
+          ],
+        })) - rawStrictCount,
+      )
+    : 0;
 
   const buildMeta: CatPracticePoolBuildMeta = {
     strictCompleteRowCount: strictCompleteRowCount,
@@ -376,8 +433,14 @@ export async function fetchCatPracticePoolReadiness(
     finalCompleteRowCount: eligiblePool.length,
     completePracticeQuestions,
     eligibleCatQuestions: eligiblePool.length,
-    excludedBecauseMissingCatMetadata: Math.max(0, completePracticeQuestions - eligiblePool.length),
-    excludedBecauseIncomplete: Math.max(0, rawFinalCount - completePracticeQuestions),
+    excludedBecauseMissingCatMetadata: Math.max(
+      0,
+      completePracticeQuestions - eligiblePool.length,
+    ),
+    excludedBecauseIncomplete: Math.max(
+      0,
+      rawFinalCount - completePracticeQuestions,
+    ),
     excludedBecauseWrongPathwayOrExam: wrongPathwayOrExamCount,
   };
 
@@ -394,9 +457,11 @@ export async function fetchCatPracticePoolReadiness(
     rowsReturned: eligiblePool.length,
     completePracticeQuestions,
     eligibleCatQuestions: eligiblePool.length,
-    excludedBecauseMissingCatMetadata: buildMeta.excludedBecauseMissingCatMetadata,
+    excludedBecauseMissingCatMetadata:
+      buildMeta.excludedBecauseMissingCatMetadata,
     excludedBecauseIncomplete: buildMeta.excludedBecauseIncomplete,
-    excludedBecauseWrongPathwayOrExam: buildMeta.excludedBecauseWrongPathwayOrExam,
+    excludedBecauseWrongPathwayOrExam:
+      buildMeta.excludedBecauseWrongPathwayOrExam,
     usedRelaxedFilters,
     reasonIfZero:
       eligiblePool.length === 0
@@ -405,7 +470,8 @@ export async function fetchCatPracticePoolReadiness(
           : pathway && !subscriptionCoversPathwayBase(entitlement, pathway)
             ? "pathway_not_covered_by_entitlement"
             : strictness !== "soft" &&
-                (input.selectionMode === "missed" || input.selectionMode === "starred")
+                (input.selectionMode === "missed" ||
+                  input.selectionMode === "starred")
               ? "empty_missed_or_starred_ids"
               : "readiness_scan_no_complete_rows"
         : undefined,
@@ -424,9 +490,10 @@ export async function fetchCatPracticePool(
   entitlement: AccessScope,
   input: PickQuestionsInput,
 ): Promise<{ pool: CatPoolRow[]; buildMeta: CatPracticePoolBuildMeta }> {
-  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const pathwayIdTrim = input.pathwayId?.trim() ?? "";
-  let pathway: ExamPathwayDefinition | null = pathwayIdTrim ? getExamPathwayById(pathwayIdTrim) ?? null : null;
+  let pathway: ExamPathwayDefinition | null = pathwayIdTrim
+    ? (getExamPathwayById(pathwayIdTrim) ?? null)
+    : null;
   const emptyMeta = (strict = 0): CatPracticePoolBuildMeta => ({
     strictCompleteRowCount: strict,
     usedRelaxedFilters: false,
@@ -444,9 +511,10 @@ export async function fetchCatPracticePool(
   const base: Prisma.ExamQuestionWhereInput = pathway
     ? questionAccessWhereWithPathway(entitlement, pathway)
     : questionAccessWhere(entitlement);
-  const scopeGate = pathway?.roleTrack === "np" || entitlement.tier === "NP"
-    ? npProviderQuestionScopeWhere()
-    : standardExamPrepQuestionScopeWhere();
+  const scopeGate =
+    pathway?.roleTrack === "np" || entitlement.tier === "NP"
+      ? npProviderQuestionScopeWhere()
+      : standardExamPrepQuestionScopeWhere();
 
   const strictness = input.selectionStrictness ?? "strict";
 
@@ -458,14 +526,22 @@ export async function fetchCatPracticePool(
       }
     }
     if (input.selectionMode === "starred") {
-      const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(userId, 200);
+      const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(
+        userId,
+        200,
+      );
       if (starredIds.length === 0) {
         return { pool: [], buildMeta: emptyMeta() };
       }
     }
   }
 
-  const secondaryStrict = await buildSecondaryFilterParts(userId, entitlement, input, false);
+  const secondaryStrict = await buildSecondaryFilterParts(
+    userId,
+    entitlement,
+    input,
+    false,
+  );
   const whereStrict: Prisma.ExamQuestionWhereInput = {
     AND: [
       base,
@@ -480,8 +556,16 @@ export async function fetchCatPracticePool(
   const strictCount = completeRows.length;
   let usedRelaxedFilters = false;
 
-  if (strictness === "soft" && completeRows.length < CAT_SOFT_MIN_COMPLETE_ROWS) {
-    const secondaryRelaxed = await buildSecondaryFilterParts(userId, entitlement, input, true);
+  if (
+    strictness === "soft" &&
+    completeRows.length < CAT_SOFT_MIN_COMPLETE_ROWS
+  ) {
+    const secondaryRelaxed = await buildSecondaryFilterParts(
+      userId,
+      entitlement,
+      input,
+      true,
+    );
     const whereRelaxed: Prisma.ExamQuestionWhereInput = {
       AND: [
         base,
@@ -521,7 +605,8 @@ export async function fetchCatPracticePool(
           : pathway && !subscriptionCoversPathwayBase(entitlement, pathway)
             ? "pathway_not_covered_by_entitlement"
             : strictness !== "soft" &&
-                (input.selectionMode === "missed" || input.selectionMode === "starred")
+                (input.selectionMode === "missed" ||
+                  input.selectionMode === "starred")
               ? "empty_missed_or_starred_ids"
               : "no_complete_non_ecg_rows_for_filters"
         : undefined,
@@ -530,7 +615,10 @@ export async function fetchCatPracticePool(
   return {
     pool: completeRows.map((r) => ({
       id: r.id,
-      difficulty: typeof r.difficulty === "number" && Number.isFinite(r.difficulty) ? Math.round(r.difficulty) : 3,
+      difficulty:
+        typeof r.difficulty === "number" && Number.isFinite(r.difficulty)
+          ? Math.round(r.difficulty)
+          : 3,
       bodySystem: r.bodySystem,
       topic: r.topic,
       nclexClientNeedsCategory: r.nclexClientNeedsCategory,
@@ -558,9 +646,16 @@ export async function fetchCatPracticePoolCached(
   userId: string,
   entitlement: AccessScope,
   input: PickQuestionsInput,
-): Promise<{ pool: CatPoolRow[]; buildMeta: CatPracticePoolBuildMeta; fromCache: boolean }> {
+): Promise<{
+  pool: CatPoolRow[];
+  buildMeta: CatPracticePoolBuildMeta;
+  fromCache: boolean;
+}> {
   const pathwayKey = input.pathwayId?.trim() ?? "_default";
-  const cached = await getCatPool<{ pool: CatPoolRow[]; buildMeta: CatPracticePoolBuildMeta }>(userId, pathwayKey);
+  const cached = await getCatPool<{
+    pool: CatPoolRow[];
+    buildMeta: CatPracticePoolBuildMeta;
+  }>(userId, pathwayKey);
   if (cached && Array.isArray(cached.pool) && cached.pool.length > 0) {
     return { ...cached, fromCache: true };
   }

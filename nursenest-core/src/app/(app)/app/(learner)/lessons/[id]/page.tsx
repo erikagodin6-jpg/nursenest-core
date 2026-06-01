@@ -6,7 +6,12 @@
 import { randomUUID } from "node:crypto";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
-import { ContentStatus, ExamFamily, LearnerNoteScope, type TierCode } from "@prisma/client";
+import {
+  ContentStatus,
+  ExamFamily,
+  LearnerNoteScope,
+  type TierCode,
+} from "@prisma/client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
@@ -42,6 +47,7 @@ import {
 } from "@/lib/lessons/legacy-content-map-lessons";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { LegacyMonolithLessonBody } from "@/components/lessons/legacy-monolith-lesson-body";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
 import {
@@ -310,28 +316,31 @@ async function LessonDetailPageInner({ params }: Props) {
   const email = (session?.user as { email?: string | null })?.email ?? null;
   const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
 
-  let learnerPath: string | null = null;
-  if (userId) {
-    const lpRow = await withDatabaseFallback(
-      () =>
-        prisma.user.findUnique({
-          where: { id: userId },
-          select: { learnerPath: true },
-        }),
-      null,
-    );
-    learnerPath = lpRow?.learnerPath ?? null;
-  }
+  const marketingLocalePromise = getMarketingLocaleForDefaultRoute();
+  const learnerPathPromise = userId
+    ? withDatabaseFallback(
+        () =>
+          prisma.user.findUnique({
+            where: { id: userId },
+            select: { learnerPath: true },
+          }),
+        null,
+      )
+    : Promise.resolve(null);
 
-  const { getExamPathwayById } =
-    await import("@/lib/exam-pathways/exam-pathways-catalog");
-
-  const marketingLocale = await getMarketingLocaleForDefaultRoute();
+  const [lpRow, marketingLocale] = await Promise.all([
+    learnerPathPromise,
+    marketingLocalePromise,
+  ]);
+  const learnerPath = lpRow?.learnerPath ?? null;
 
   const resolved = await withDatabaseFallback(async () => {
     const catalogRef = parseAppLessonCatalogFallbackId(id);
     if (catalogRef) {
-      const catalogLesson = getAppCatalogFallbackLesson(catalogRef.pathwayId, catalogRef.slug);
+      const catalogLesson = getAppCatalogFallbackLesson(
+        catalogRef.pathwayId,
+        catalogRef.slug,
+      );
       if (!catalogLesson) return { kind: "not_found" as const };
       const visible = await appPathwayLessonVisibleToSubscriber(
         entitlement,
@@ -351,14 +360,6 @@ async function LessonDetailPageInner({ params }: Props) {
         pathwayId: catalogRef.pathwayId,
       };
     }
-
-    const learnerPathRow = userId
-      ? await prisma.user.findUnique({
-          where: { id: userId },
-          select: { learnerPath: true },
-        })
-      : null;
-    const learnerPath = learnerPathRow?.learnerPath ?? null;
 
     const pathwayLessonReadOmit = await pathwayLessonReadOmitArgs();
     // Option B: pathway lesson detail body comes from `pathway_lessons` only — ContentItem is legacy app lessons + redirect when tagged.

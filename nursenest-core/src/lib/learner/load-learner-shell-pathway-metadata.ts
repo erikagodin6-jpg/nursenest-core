@@ -5,8 +5,12 @@ import { CountryCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { learnerPathwayHubChromeHref } from "@/lib/learner/learner-pathway-hub-chrome-href";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { countryLabelFromSlug, formatRoleTrackLabel } from "@/lib/seo/breadcrumb-utils";
+import {
+  countryLabelFromSlug,
+  formatRoleTrackLabel,
+} from "@/lib/seo/breadcrumb-utils";
 import {
   getLearnerExamsSurfaceLabel,
   type LearnerExamsSurfaceLabel,
@@ -53,7 +57,9 @@ export const DEFAULT_LEARNER_PATHWAY_NAV_METADATA: LearnerPathwayNavMetadata = {
   examsLabel: "Exams",
 };
 
-export function isLearnerPathwayNavMetadata(v: unknown): v is LearnerPathwayNavMetadata {
+export function isLearnerPathwayNavMetadata(
+  v: unknown,
+): v is LearnerPathwayNavMetadata {
   if (v === null || typeof v !== "object") return false;
   const o = v as Record<string, unknown>;
   return (
@@ -62,7 +68,9 @@ export function isLearnerPathwayNavMetadata(v: unknown): v is LearnerPathwayNavM
     (o.pathwayShortLabel === null || typeof o.pathwayShortLabel === "string") &&
     (o.pathwayHubHref === null || typeof o.pathwayHubHref === "string") &&
     (o.pathwayContextBar === null || typeof o.pathwayContextBar === "string") &&
-    (o.examsLabel === "CAT Exams" || o.examsLabel === "Exams" || o.examsLabel === "LOFT Simulation")
+    (o.examsLabel === "CAT Exams" ||
+      o.examsLabel === "Exams" ||
+      o.examsLabel === "LOFT Simulation")
   );
 }
 
@@ -70,7 +78,9 @@ export function isLearnerPathwayNavMetadata(v: unknown): v is LearnerPathwayNavM
  * Tier-1 pathway + baseline flags for learner chrome (DB-backed).
  * Callers should wrap with {@link safeOptional} — this function may throw on DB errors.
  */
-export async function loadLearnerPathwayNavMetadata(userId: string): Promise<LearnerPathwayNavMetadata> {
+export async function loadLearnerPathwayNavMetadata(
+  userId: string,
+): Promise<LearnerPathwayNavMetadata> {
   if (!userId || !isDatabaseUrlConfigured()) {
     return { ...DEFAULT_LEARNER_PATHWAY_NAV_METADATA };
   }
@@ -94,7 +104,6 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
   let examsLabel: LearnerExamsSurfaceLabel = "Exams";
 
   if (u != null) {
-    const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
     showBaselinePrompt = userShouldSeeBaselinePrompt(u);
     const lp = u.learnerPath?.trim();
     pathwayId = lp && lp.length > 0 ? lp : null;
@@ -102,29 +111,43 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
       const p = getExamPathwayById(lp);
       const visiblePathway = pathwayVisibleForLearnerChrome(p) ? p : null;
       pathwayId = visiblePathway ? lp : null;
-      pathwayShortLabel = visiblePathway ? pillLabelForRoleTrack(visiblePathway.roleTrack) : null;
+      pathwayShortLabel = visiblePathway
+        ? pillLabelForRoleTrack(visiblePathway.roleTrack)
+        : null;
       if (visiblePathway) {
         pathwayHubHref = learnerPathwayHubChromeHref(visiblePathway);
         pathwayContextBar = formatPathwayContextBar(visiblePathway);
         examsLabel = getLearnerExamsSurfaceLabel(visiblePathway.id);
       }
     } else if (u.alliedProfessionKey) {
-      const alliedId = u.country === CountryCode.CA ? "ca-allied-core" : "us-allied-core";
+      const alliedId =
+        u.country === CountryCode.CA ? "ca-allied-core" : "us-allied-core";
       pathwayId = alliedId;
       const prof = getAlliedProfessionByProfessionKey(u.alliedProfessionKey);
       const countrySlug = u.country === CountryCode.CA ? "canada" : "us";
       const country = countryLabelFromSlug(countrySlug);
       if (prof) {
         const acronymMatch = prof.h1.match(/\(([A-Z/]+)\)/);
-        pathwayShortLabel = acronymMatch ? acronymMatch[1] : prof.professionKey.slice(0, 8).toUpperCase();
-        pathwayHubHref = buildAlliedOccupationMarketingHubPath(prof.professionKey);
-        const shortName = prof.h1.replace(/ exam prep$/i, "").replace(/ \(.*\)$/, "").trim();
+        pathwayShortLabel = acronymMatch
+          ? acronymMatch[1]
+          : prof.professionKey.slice(0, 8).toUpperCase();
+        pathwayHubHref = buildAlliedOccupationMarketingHubPath(
+          prof.professionKey,
+        );
+        const shortName = prof.h1
+          .replace(/ exam prep$/i, "")
+          .replace(/ \(.*\)$/, "")
+          .trim();
         pathwayContextBar = `${pathwayShortLabel} • ${country} • ${shortName}`;
       } else {
         pathwayShortLabel = "Allied";
         const alliedPath = getExamPathwayById(alliedId);
-        pathwayHubHref = alliedPath ? learnerPathwayHubChromeHref(alliedPath) : "/allied/allied-health";
-        pathwayContextBar = alliedPath ? formatPathwayContextBar(alliedPath) : `Allied • ${country} • Allied health`;
+        pathwayHubHref = alliedPath
+          ? learnerPathwayHubChromeHref(alliedPath)
+          : "/allied/allied-health";
+        pathwayContextBar = alliedPath
+          ? formatPathwayContextBar(alliedPath)
+          : `Allied • ${country} • Allied health`;
       }
       examsLabel = "CAT Exams";
     }

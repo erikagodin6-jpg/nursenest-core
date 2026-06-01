@@ -17,7 +17,10 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { JSON_BODY_LEARNER_CAT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
+import {
+  JSON_BODY_LEARNER_CAT,
+  parseJsonBodyWithLimit,
+} from "@/lib/http/json-body-limit";
 import { prisma } from "@/lib/db";
 import { requireNpCatSubscriberSession } from "@/lib/entitlements/require-np-cat-subscriber-session";
 import {
@@ -29,11 +32,9 @@ import {
   loadAnswerHistory,
   recentlyAnsweredIds,
 } from "@/lib/cat/answer-history";
-import {
-  createCatSession,
-  selectNextQuestion,
-} from "@/lib/cat/cat-engine";
+import { createCatSession, selectNextQuestion } from "@/lib/cat/cat-engine";
 import { createNpCatSession } from "@/lib/cat/session-persistence";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-question-completeness";
 import type { CatSessionConfig } from "@/lib/cat/types";
 
@@ -46,104 +47,131 @@ const bodySchema = z.object({
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const NP_EXAM_KEYS = ["np-aanp", "np-aanpcnp", "np-canp", "np-fnp", "np-agpcnp", "np-pmhnp"];
+const NP_EXAM_KEYS = [
+  "np-aanp",
+  "np-aanpcnp",
+  "np-canp",
+  "np-fnp",
+  "np-agpcnp",
+  "np-pmhnp",
+];
 const POOL_SIZE = 200;
 
 // ─── Handler ──────────────────────────────────────────────────────────────────
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  const session = await requireNpCatSubscriberSession("np_cat_session_api");
-  if (!session.ok) return session.response;
-  const { userId } = session;
+export async function POST(req: NextRequest): Promise<Response> {
+  return runWithApiTelemetry(
+    req,
+    "POST /api/cat/np/session",
+    "content",
+    async () => {
+      const session = await requireNpCatSubscriberSession("np_cat_session_api");
+      if (!session.ok) return session.response;
+      const { userId } = session;
 
-  const rawParsed = await parseJsonBodyWithLimit(req, JSON_BODY_LEARNER_CAT);
-  if (!rawParsed.ok) return rawParsed.response;
+      const rawParsed = await parseJsonBodyWithLimit(
+        req,
+        JSON_BODY_LEARNER_CAT,
+      );
+      if (!rawParsed.ok) return rawParsed.response;
 
-  let body: z.infer<typeof bodySchema>;
-  try {
-    body = bodySchema.parse(rawParsed.value);
-  } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
-  }
+      let body: z.infer<typeof bodySchema>;
+      try {
+        body = bodySchema.parse(rawParsed.value);
+      } catch {
+        return NextResponse.json(
+          { error: "Invalid request body" },
+          { status: 400 },
+        );
+      }
 
-  const { pathwayId, maxQuestions } = body;
+      const { pathwayId, maxQuestions } = body;
 
-  // ── Load question pool ───────────────────────────────────────────────────
+      // ── Load question pool ───────────────────────────────────────────────────
 
-  const recentIds = await recentlyAnsweredIds(prisma, userId);
+      const historicalAnswersPromise = loadAnswerHistory(prisma, userId);
+      const recentIds = await recentlyAnsweredIds(prisma, userId);
 
-  const rows = await prisma.examQuestion.findMany({
-    where: {
-      AND: [
-        {
-          exam: { in: NP_EXAM_KEYS },
-          status: "published",
-          isAdaptiveEligible: true,
-          NOT: { id: { in: [...recentIds].slice(0, 500) } },
+      const rows = await prisma.examQuestion.findMany({
+        where: {
+          AND: [
+            {
+              exam: { in: NP_EXAM_KEYS },
+              status: "published",
+              isAdaptiveEligible: true,
+              NOT: { id: { in: [...recentIds].slice(0, 500) } },
+            },
+            NON_ECG_PRACTICE_EXAM_WHERE,
+          ],
         },
-        NON_ECG_PRACTICE_EXAM_WHERE,
-      ],
+        select: CAT_QUESTION_SELECT,
+        take: POOL_SIZE,
+        orderBy: { updatedAt: "desc" },
+      });
+
+      if (rows.length < 10) {
+        return NextResponse.json(
+          {
+            error:
+              "Insufficient question pool for this pathway. Try again later.",
+          },
+          { status: 503 },
+        );
+      }
+
+      const pool = dbRowsToCatQuestions(rows as unknown as DbQuestionRow[]);
+
+      // ── Load historical answer history ───────────────────────────────────────
+
+      const historicalAnswers = await historicalAnswersPromise;
+
+      // ── Create CAT session ───────────────────────────────────────────────────
+
+      const sessionConfig: CatSessionConfig = {
+        questionPool: pool,
+        historicalAnswers,
+        excludeIds: [...recentIds],
+        maxQuestions,
+        riskFloors: { low: 4, moderate: 8, high: 10 },
+        layerFloors: { L1: 4, L2: 12, L3: 10 },
+      };
+
+      const catState = createCatSession(sessionConfig);
+
+      // ── Persist to DB ────────────────────────────────────────────────────────
+
+      const practiceTestId = await createNpCatSession(prisma, {
+        userId,
+        pathwayId,
+        initialState: catState,
+        poolQuestionIds: pool.map((q) => q.id),
+        maxQuestions,
+      });
+
+      // ── Select first question ────────────────────────────────────────────────
+
+      const { question, selectionDiagnostics } = selectNextQuestion(
+        catState,
+        sessionConfig,
+      );
+
+      return NextResponse.json({
+        practiceTestId,
+        sessionId: catState.sessionId,
+        firstQuestion: question
+          ? {
+              id: question.id,
+              cognitiveLayer: question.cognitiveLayer,
+              riskLevel: question.riskLevel,
+              difficulty: question.difficulty,
+              populationTags: question.populationTags ?? [],
+              dispositionTag: question.dispositionTag ?? null,
+            }
+          : null,
+        poolSize: pool.length,
+        maxQuestions,
+        selectionDiagnostics,
+      });
     },
-    select: CAT_QUESTION_SELECT,
-    take: POOL_SIZE,
-    orderBy: { updatedAt: "desc" },
-  });
-
-  if (rows.length < 10) {
-    return NextResponse.json(
-      { error: "Insufficient question pool for this pathway. Try again later." },
-      { status: 503 },
-    );
-  }
-
-  const pool = dbRowsToCatQuestions(rows as unknown as DbQuestionRow[]);
-
-  // ── Load historical answer history ───────────────────────────────────────
-
-  const historicalAnswers = await loadAnswerHistory(prisma, userId);
-
-  // ── Create CAT session ───────────────────────────────────────────────────
-
-  const sessionConfig: CatSessionConfig = {
-    questionPool: pool,
-    historicalAnswers,
-    excludeIds: [...recentIds],
-    maxQuestions,
-    riskFloors: { low: 4, moderate: 8, high: 10 },
-    layerFloors: { L1: 4, L2: 12, L3: 10 },
-  };
-
-  const catState = createCatSession(sessionConfig);
-
-  // ── Persist to DB ────────────────────────────────────────────────────────
-
-  const practiceTestId = await createNpCatSession(prisma, {
-    userId,
-    pathwayId,
-    initialState: catState,
-    poolQuestionIds: pool.map((q) => q.id),
-    maxQuestions,
-  });
-
-  // ── Select first question ────────────────────────────────────────────────
-
-  const { question, selectionDiagnostics } = selectNextQuestion(catState, sessionConfig);
-
-  return NextResponse.json({
-    practiceTestId,
-    sessionId: catState.sessionId,
-    firstQuestion: question
-      ? {
-          id: question.id,
-          cognitiveLayer: question.cognitiveLayer,
-          riskLevel: question.riskLevel,
-          difficulty: question.difficulty,
-          populationTags: question.populationTags ?? [],
-          dispositionTag: question.dispositionTag ?? null,
-        }
-      : null,
-    poolSize: pool.length,
-    maxQuestions,
-    selectionDiagnostics,
-  });
+  );
 }
