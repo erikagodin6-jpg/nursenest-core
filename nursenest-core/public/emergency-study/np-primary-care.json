@@ -1,0 +1,41 @@
+{
+  "id": "np-primary-care",
+  "title": "NP Primary Care Emergency Study Set",
+  "pathway": "NP",
+  "system": "Primary Care",
+  "flashcards": [
+    {
+      "id": "emergency-np-primary-care-1",
+      "front": "An adult with diabetes has new chest pressure and diaphoresis. What is the safest first clinical priority?",
+      "back": "Treat as possible acute coronary syndrome: assess stability, obtain urgent evaluation, and escalate care.",
+      "rationale": "Diabetes can alter symptom presentation; chest pressure with autonomic symptoms requires urgent cardiac evaluation.",
+      "pearl": "Primary care triage starts by ruling out time-sensitive threats."
+    },
+    {
+      "id": "emergency-np-primary-care-2",
+      "front": "Which headache feature requires urgent evaluation?",
+      "back": "Thunderclap onset, neurologic deficit, fever/meningismus, pregnancy/postpartum state, cancer, immunosuppression, or worst headache of life.",
+      "rationale": "Red flags raise concern for secondary headache requiring urgent workup.",
+      "pearl": "Red flags change headache care from routine management to urgent evaluation."
+    },
+    {
+      "id": "emergency-np-primary-care-3",
+      "front": "Before intensifying antihypertensive therapy, what should be confirmed?",
+      "back": "Confirm accurate blood pressure technique, adherence, medications/substances that elevate BP, and evidence of end-organ symptoms.",
+      "rationale": "Treatment decisions require reliable measurement and assessment for urgency or secondary contributors.",
+      "pearl": "Do not intensify chronic therapy from a single unreliable reading."
+    }
+  ],
+  "questions": [
+    {
+      "id": "emergency-np-primary-care-q1",
+      "stem": "A patient has sudden severe headache described as maximal at onset. What is the best next step?",
+      "answer": "Arrange emergency evaluation for possible secondary life-threatening cause.",
+      "rationale": "Thunderclap headache is a red flag that requires urgent evaluation."
+    }
+  ],
+  "pearls": [
+    "Primary care safety depends on recognizing when a complaint is not routine.",
+    "Red flags should drive disposition before long-term management."
+  ]
+}

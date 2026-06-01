@@ -16,6 +16,9 @@ import { assertMarketingLayoutMessagesIntegrity } from "@/lib/marketing-i18n/mar
 import { mergeMinimalMarketingLayoutShellMessages } from "@/lib/marketing-i18n/minimal-marketing-layout-shell-fallback";
 import { getMarketingDefaultLayoutChromeMessages } from "@/lib/marketing-i18n/marketing-layout-chrome-messages.server";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
+import { CountryPreferenceRoot } from "@/lib/region/use-country-preference";
+import { readOptionalCountryPreferenceFromCookie } from "@/lib/region/read-optional-country-preference-cookie.server";
+import { countryPreferenceToNursenestRegion, type CountryPreference } from "@/lib/region/country-preference";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { MarketingMobileMotionShell } from "@/lib/ui/marketing-mobile-motion-shell";
 import { readMarketingNarrowViewportServerHint } from "@/lib/marketing/read-marketing-narrow-viewport-hint.server";
@@ -169,6 +172,7 @@ function marketingDefaultLayoutStaticShellForHome({
   serverRegion,
   trustClientPersistedRegion,
   serverGlobalRegion,
+  serverCountryPreference,
   marketingCountry,
   serverNarrowViewportHint,
 }: {
@@ -176,6 +180,7 @@ function marketingDefaultLayoutStaticShellForHome({
   serverRegion: MarketingRegionToggle;
   trustClientPersistedRegion: boolean;
   serverGlobalRegion: GlobalRegionSlug | null;
+  serverCountryPreference: CountryPreference | null;
   marketingCountry: CountryCode;
   serverNarrowViewportHint: boolean;
 }) {
@@ -189,20 +194,22 @@ function marketingDefaultLayoutStaticShellForHome({
       fallbackMessages={undefined}
     >
       <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
-        <MarketingCountryChromeProvider country={marketingCountry}>
-          <MarketingFeedbackShell>
-            <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegion}>
-              <CheckoutGlobalRegionContextPathStamp />
-              <MarketingDefaultLayoutChromeFailsafeShell>
-                <PremiumLayoutVersionMarker surface="marketing-default-static-home" />
-                <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
-                  {children}
-                </MarketingDefaultMainMotionSlot>
-                {defaultMarketingSiteFooter()}
-              </MarketingDefaultLayoutChromeFailsafeShell>
-            </MarketingHeaderGlobalRegionServerBridge>
-          </MarketingFeedbackShell>
-        </MarketingCountryChromeProvider>
+        <CountryPreferenceRoot serverCountry={serverCountryPreference}>
+          <MarketingCountryChromeProvider country={marketingCountry}>
+            <MarketingFeedbackShell>
+              <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegion}>
+                <CheckoutGlobalRegionContextPathStamp />
+                <MarketingDefaultLayoutChromeFailsafeShell>
+                  <PremiumLayoutVersionMarker surface="marketing-default-static-home" />
+                  <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
+                    {children}
+                  </MarketingDefaultMainMotionSlot>
+                  {defaultMarketingSiteFooter()}
+                </MarketingDefaultLayoutChromeFailsafeShell>
+              </MarketingHeaderGlobalRegionServerBridge>
+            </MarketingFeedbackShell>
+          </MarketingCountryChromeProvider>
+        </CountryPreferenceRoot>
       </NursenestRegionRoot>
     </MarketingI18nProvider>
   );
@@ -231,17 +238,22 @@ async function DeferredRegionShell({ children }: { children: ReactNode }) {
       }
     }
 
-    const [marketingRegionCookie, serverGlobalRegionCookie, serverNarrowViewportHint] = await Promise.all([
+    const [marketingRegionCookie, serverGlobalRegionCookie, serverNarrowViewportHint, serverCountryPreference] = await Promise.all([
       readOptionalMarketingRegionToggleForCountry().catch(() => undefined),
       readOptionalGlobalRegionSlugFromCookie().catch(() => null),
       readNarrowViewportHintSafe(),
+      readOptionalCountryPreferenceFromCookie().catch(() => null),
     ]);
 
-    const serverRegion: MarketingRegionToggle = resolveDefaultLayoutMarketingExamRegion({
-      marketingRegionCookie,
-      globalRegionSlug: serverGlobalRegionCookie,
-      detectedIpCountry,
-    });
+    const serverRegion: MarketingRegionToggle =
+      marketingRegionCookie
+      ?? (serverCountryPreference
+        ? countryPreferenceToNursenestRegion(serverCountryPreference)
+        : resolveDefaultLayoutMarketingExamRegion({
+          marketingRegionCookie,
+          globalRegionSlug: serverGlobalRegionCookie,
+          detectedIpCountry,
+        }));
 
     const trustClientPersistedRegion = marketingRegionCookie !== undefined;
 
@@ -252,23 +264,27 @@ async function DeferredRegionShell({ children }: { children: ReactNode }) {
 
     return (
       <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
-        <MarketingCountryChromeProvider country={marketingCountry}>
-          <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
-            <CheckoutGlobalRegionContextPathStamp />
-            {children}
-          </MarketingHeaderGlobalRegionServerBridge>
-        </MarketingCountryChromeProvider>
+        <CountryPreferenceRoot serverCountry={serverCountryPreference}>
+          <MarketingCountryChromeProvider country={marketingCountry}>
+            <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+              <CheckoutGlobalRegionContextPathStamp />
+              {children}
+            </MarketingHeaderGlobalRegionServerBridge>
+          </MarketingCountryChromeProvider>
+        </CountryPreferenceRoot>
       </NursenestRegionRoot>
     );
   } catch {
     // Fallback defaults — never crash the page
     return (
       <NursenestRegionRoot serverRegion={"CA"} trustClientPersistedRegion={false}>
-        <MarketingCountryChromeProvider country={"canada"}>
-          <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={null}>
-            {children}
-          </MarketingHeaderGlobalRegionServerBridge>
-        </MarketingCountryChromeProvider>
+        <CountryPreferenceRoot serverCountry={null}>
+          <MarketingCountryChromeProvider country={"canada"}>
+            <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={null}>
+              {children}
+            </MarketingHeaderGlobalRegionServerBridge>
+          </MarketingCountryChromeProvider>
+        </CountryPreferenceRoot>
       </NursenestRegionRoot>
     );
   }
@@ -327,11 +343,16 @@ const MarketingDefaultLocaleLayout = traceLayout(
             staticShellDetectedIp = null;
           }
 
-          const staticShellServerRegion: MarketingRegionToggle = resolveDefaultLayoutMarketingExamRegion({
-            marketingRegionCookie: staticShellRegionCookie,
-            globalRegionSlug: staticShellGlobalRegion,
-            detectedIpCountry: staticShellDetectedIp,
-          });
+          const staticShellCountryPreference = await readOptionalCountryPreferenceFromCookie().catch(() => null);
+          const staticShellServerRegion: MarketingRegionToggle =
+            staticShellRegionCookie
+            ?? (staticShellCountryPreference
+              ? countryPreferenceToNursenestRegion(staticShellCountryPreference)
+              : resolveDefaultLayoutMarketingExamRegion({
+                marketingRegionCookie: staticShellRegionCookie,
+                globalRegionSlug: staticShellGlobalRegion,
+                detectedIpCountry: staticShellDetectedIp,
+              }));
 
           const staticShellMarketingCountry = getEffectiveMarketingCountry(
             hpEarly || "/",
@@ -345,6 +366,7 @@ const MarketingDefaultLocaleLayout = traceLayout(
             serverRegion: staticShellServerRegion,
             trustClientPersistedRegion: staticShellRegionCookie !== undefined,
             serverGlobalRegion: staticShellGlobalRegion,
+            serverCountryPreference: staticShellCountryPreference,
             marketingCountry: staticShellMarketingCountry,
             serverNarrowViewportHint: staticShellNarrowHint,
           });

@@ -26,9 +26,9 @@ import { getRedisClient } from "@/lib/server/redis";
 const TTL = {
   lesson:     60 * 60,       // 60 minutes
   flashcard:  60 * 60,       // 60 minutes
-  practice:   30 * 60,       // 30 minutes
+  practice:   60 * 60,       // 60 minutes (question ID pools; stable between publishes)
   cat:        30 * 60,       // 30 minutes
-  count:      5  * 60,       // 5 minutes (for count-only queries)
+  count:      10 * 60,       // 10 minutes (for count-only queries: due-summary, study-queue counts)
 } as const;
 
 type CacheNamespace = keyof typeof TTL;

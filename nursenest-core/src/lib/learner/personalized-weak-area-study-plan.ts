@@ -14,8 +14,11 @@ import {
 } from "@/lib/learner/personalized-weak-area-study-plan-surface";
 import { loadMissedQuestionSignals } from "@/lib/learner/study-question-signals";
 import { recommendNextActions } from "@/lib/learner/recommend-next-actions";
+import type { StudyNextRecommendation } from "@/lib/learner/study-next-types";
 import type { TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
+import { validateEligiblePool } from "@/lib/content-inventory/validate-eligible-pool";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type {
   PersonalizedStudyPlanStep,
@@ -29,6 +32,68 @@ export { buildReviewSequence, toPublicWeakSummaries } from "@/lib/learner/person
 
 const MAX_STALE_IN_PROGRESS = 6;
 const STALE_MS = 36 * 3600 * 1000;
+
+/** Flashcard-surface recommendation types that require a non-empty flashcard pool. */
+const FLASHCARD_REC_TYPES: ReadonlySet<StudyNextRecommendation["type"]> = new Set([
+  "weak_topic_flashcards",
+]);
+
+/** Practice/CAT recommendation types that require a non-empty exam pool. */
+const PRACTICE_REC_TYPES: ReadonlySet<StudyNextRecommendation["type"]> = new Set([
+  "weak_topic_qbank",
+  "retest_topic",
+  "missed_review_session",
+]);
+
+/**
+ * Filter recommendations for which the content pool is empty, logging each suppression.
+ * Only fires pool validation when the pathway is known and entitlement is active — returns
+ * all recs unmodified when pool checks cannot run (no pathway, no access, DB unavailable).
+ */
+async function filterRecsWithEmptyPool(
+  recs: StudyNextRecommendation[],
+  entitlement: AccessScope,
+  pathwayId: string | null,
+): Promise<StudyNextRecommendation[]> {
+  if (!pathwayId || !entitlement.hasAccess) return recs;
+
+  const hasFlashcardRec = recs.some((r) => FLASHCARD_REC_TYPES.has(r.type));
+  const hasPracticeRec = recs.some((r) => PRACTICE_REC_TYPES.has(r.type));
+  if (!hasFlashcardRec && !hasPracticeRec) return recs;
+
+  const [fcPool, practicePool] = await Promise.all([
+    hasFlashcardRec
+      ? validateEligiblePool({ entitlement, pathwayId, surface: "flashcards", suppressLog: true })
+      : Promise.resolve(null),
+    hasPracticeRec
+      ? validateEligiblePool({ entitlement, pathwayId, surface: "practice", suppressLog: true })
+      : Promise.resolve(null),
+  ]);
+
+  return recs.filter((rec) => {
+    if (FLASHCARD_REC_TYPES.has(rec.type) && fcPool && !fcPool.canStudy) {
+      safeServerLog("study_plan", "recommendation_suppressed_empty_pool", {
+        recType: rec.type,
+        surface: "flashcards",
+        pathwayId,
+        eligibilityCode: fcPool.eligibilityCode,
+        poolCount: fcPool.poolCount,
+      });
+      return false;
+    }
+    if (PRACTICE_REC_TYPES.has(rec.type) && practicePool && !practicePool.canStudy) {
+      safeServerLog("study_plan", "recommendation_suppressed_empty_pool", {
+        recType: rec.type,
+        surface: "practice",
+        pathwayId,
+        eligibilityCode: practicePool.eligibilityCode,
+        poolCount: practicePool.poolCount,
+      });
+      return false;
+    }
+    return true;
+  });
+}
 
 function questionIdsLen(raw: unknown): number {
   if (!Array.isArray(raw)) return 0;
@@ -75,7 +140,8 @@ export async function buildPersonalizedWeakAreaStudyPlan(args: {
   });
   if (!snapshot) return null;
 
-  const recs = recommendNextActions(snapshot, { maxTotal: 6 });
+  const rawRecs = recommendNextActions(snapshot, { maxTotal: 6 });
+  const recs = await filterRecsWithEmptyPool(rawRecs, entitlement, learnerPath?.trim() || null);
 
   const missed = await loadMissedQuestionSignals(userId);
   let repeatIncorrect = false;

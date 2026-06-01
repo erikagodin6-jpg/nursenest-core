@@ -32,11 +32,11 @@ import {
   getExamsForRegionProfession,
 } from "@/lib/navigation/context-switch-helpers";
 import {
-  CountrySelector,
   LanguageSelector,
   ProfessionSelector,
   ExamSelector,
 } from "./global-context-switcher";
+import { CountrySelectorDropdown } from "./country-selector-dropdown";
 import { publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -135,15 +135,9 @@ export function MobileContextDrawer({
 
           {/* Country */}
           <section>
-            <SectionLabel>Country / Region</SectionLabel>
-            <CountrySelector
-              currentRegion={region}
-              onSelect={(r) => {
-                onRegionChange(r);
-                onClose();
-              }}
-              variant="inline"
-              includeUnpublishedRegions={countrySelectorIncludeUnpublished}
+            <CountrySelectorDropdown
+              variant="mobile"
+              onCountryChange={() => onClose()}
             />
           </section>
 

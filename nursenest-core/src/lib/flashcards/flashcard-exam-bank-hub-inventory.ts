@@ -34,6 +34,36 @@ const EXAM_HUB_GROUP_ROW_LIMIT = 320;
 /** Cap rows pulled when building learner sessions from the live exam bank (bounded query). */
 const EXAM_FLASHCARD_SESSION_POOL_CAP = 4000;
 
+// ─── Exam question pool row cache ─────────────────────────────────────────────
+// The exam bank pool rows for a session depend only on pathway + topic + row count
+// (NOT the user). Caching them for 60 seconds eliminates the parallel $transaction
+// (~30–80 ms) from every warm session build.  The eager pool chain fires this call
+// concurrently with the flashcard DB scan; on cache hit the chain resolves in < 1 ms,
+// reducing the critical-path latency by the full pool query cost.
+//
+// Key: "{pathwayId}:{topicFilter}:{cap}" — topology-only, no user data.
+// TTL: 60 s (matches lesson-virtual snapshot TTL in flashcard-pool-snapshot.server.ts).
+// Capacity: 128 entries (covers all pathways × common topic filters with headroom).
+const EXAM_POOL_ROW_CACHE_TTL_MS = 60_000;
+const EXAM_POOL_ROW_CACHE_MAX = 128;
+type ExamPoolCacheEntry = { rows: ExamQuestionFlashcardPoolRow[]; expiresAt: number };
+const examPoolRowCache = new Map<string, ExamPoolCacheEntry>();
+
+function examPoolCacheKey(pathway: ExamPathwayDefinition, topicFilter: string | null, cap: number): string {
+  return `${pathway.id}:${topicFilter ?? ""}:${cap}`;
+}
+
+function pruneExamPoolCache(now: number): void {
+  for (const [k, e] of examPoolRowCache) {
+    if (e.expiresAt <= now) examPoolRowCache.delete(k);
+  }
+  while (examPoolRowCache.size > EXAM_POOL_ROW_CACHE_MAX) {
+    const oldest = examPoolRowCache.keys().next().value;
+    if (!oldest) break;
+    examPoolRowCache.delete(oldest);
+  }
+}
+
 /**
  * RT ventilator gate SQL fragment — mirrors {@link rtVentilatorPremiumBankGateWhere} for raw SQL paths.
  * Returns Prisma.empty when the learner may access the RT ventilator module, otherwise excludes
@@ -125,12 +155,13 @@ async function runHubInventoryQuery(
   w: Prisma.Sql,
   contextScope: Prisma.Sql,
   topicScope: Prisma.Sql,
+  usabilitySql: Prisma.Sql,
 ): Promise<{ total: number; groupRows: GroupRow[] }> {
   const [totalRows, rows] = await Promise.all([
     tx.$queryRaw<[{ n: bigint }]>`
       SELECT COUNT(*)::bigint AS n
       FROM exam_questions
-      WHERE ${w}${contextScope}${topicScope}${FLASHCARD_USABILITY_SQL}
+      WHERE ${w}${contextScope}${topicScope}${usabilitySql}
     `,
     tx.$queryRaw<GroupRow[]>`
       SELECT
@@ -148,7 +179,7 @@ async function runHubInventoryQuery(
         END)::text AS grp_value,
         COUNT(*)::bigint AS cnt
       FROM exam_questions
-      WHERE ${w}${contextScope}${topicScope}${FLASHCARD_USABILITY_SQL}
+      WHERE ${w}${contextScope}${topicScope}${usabilitySql}
       GROUP BY 1, 2
       ORDER BY cnt DESC
       LIMIT ${EXAM_HUB_GROUP_ROW_LIMIT}
@@ -178,11 +209,13 @@ export async function loadExamQuestionHubInventoryForPathway(
   // the pathway has no contentExamKeys configured.
   const { sql: contextScope, hasScopeFilter } = discoveryExamContextScopeForFlashcardFallback(examContext);
 
+  const usabilitySql = buildFlashcardUsabilitySql(entitlement);
+
   const { total, groupRows } = await prisma.$transaction(
     async (tx) => {
       await tx.$executeRawUnsafe(`SET LOCAL statement_timeout = '${DISCOVERY_STATEMENT_TIMEOUT_MS}ms'`);
 
-      const result = await runHubInventoryQuery(tx, w, contextScope, topicScope);
+      const result = await runHubInventoryQuery(tx, w, contextScope, topicScope, usabilitySql);
 
       // Fallback: if the scoped query returned 0 rows but we had an active exam scope,
       // retry without the scope. This handles cases where ExamQuestion rows have exam/tier
@@ -193,7 +226,7 @@ export async function loadExamQuestionHubInventoryForPathway(
           topicFilter: topicFilter?.slice(0, 80) ?? "",
           reason: "scoped_query_returned_zero_retrying_without_exam_scope",
         });
-        const fallback = await runHubInventoryQuery(tx, w, Prisma.empty, topicScope);
+        const fallback = await runHubInventoryQuery(tx, w, Prisma.empty, topicScope, usabilitySql);
         if (fallback.total > 0) {
           safeServerLog("flashcards", "hub_inventory_exam_scope_fallback_success", {
             pathwayId: pid,
@@ -282,8 +315,19 @@ export async function loadExamQuestionRowsForFlashcardPool(
 
   const topicScope = topicOrBodySystemMatchSql(topicFilter);
   const cap = Math.min(Math.max(Math.floor(take), 1), EXAM_FLASHCARD_SESSION_POOL_CAP);
+
+  // Check in-process cache — exam pool rows depend only on topology (pathway + topic + count),
+  // not on the user. A 60-second in-process hit eliminates the $transaction entirely on warm calls.
+  const cacheKey = examPoolCacheKey(pathway, topicFilter, cap);
+  const now = Date.now();
+  pruneExamPoolCache(now);
+  const cached = examPoolRowCache.get(cacheKey);
+  if (cached && cached.expiresAt > now) return cached.rows;
+
   const hasStudyLinkCol = await getStudyLinkPathwayColumnExists();
   const candidateScopes = flashcardLearnerExamPoolCandidateScopes(poolScope, pathway);
+  // Build usability SQL once from poolScope so the same gates apply to all candidate scopes.
+  const usabilitySql = buildFlashcardUsabilitySql(poolScope);
 
   const rows = await prisma.$transaction(
     async (tx) => {
@@ -309,7 +353,7 @@ export async function loadExamQuestionRowsForFlashcardPool(
             q.topic,
             q.body_system AS "bodySystem"
           FROM exam_questions q
-          WHERE ${whereSql}${topicScope}${FLASHCARD_USABILITY_SQL}
+          WHERE ${whereSql}${topicScope}${usabilitySql}
           ORDER BY q.id
           LIMIT ${cap}
         `;
@@ -327,5 +371,10 @@ export async function loadExamQuestionRowsForFlashcardPool(
     { maxWait: 8_000, timeout: 12_000 },
   );
 
-  return Array.isArray(rows) ? rows : [];
+  const result = Array.isArray(rows) ? rows : [];
+  // Store in cache only if we got rows — avoids caching a transient empty response.
+  if (result.length > 0) {
+    examPoolRowCache.set(cacheKey, { rows: result, expiresAt: now + EXAM_POOL_ROW_CACHE_TTL_MS });
+  }
+  return result;
 }

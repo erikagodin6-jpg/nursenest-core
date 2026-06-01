@@ -16,6 +16,9 @@ import { ActivityPerformanceVitals } from "@/components/observability/activity-p
 import { LearnerCacheWarmer } from "@/components/observability/learner-cache-warmer";
 import { readOptionalMarketingRegionToggleForCountry } from "@/lib/marketing/read-optional-marketing-region-cookie.server";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import { readOptionalCountryPreferenceFromCookie } from "@/lib/region/read-optional-country-preference-cookie.server";
+import { countryPreferenceToNursenestRegion } from "@/lib/region/country-preference";
+import { CountryPreferenceRoot } from "@/lib/region/use-country-preference";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import { isBuildPhase } from "@/lib/runtime/is-build-phase";
 
@@ -111,17 +114,23 @@ const AppProviders = traceProvider(
     session: Awaited<ReturnType<typeof getSessionSafe>>;
     children: ReactNode;
   }) {
-    const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
-    const serverRegion: MarketingRegionToggle = marketingRegionCookie ?? "CA";
+    const [marketingRegionCookie, serverCountryPreference] = await Promise.all([
+      readOptionalMarketingRegionToggleForCountry(),
+      readOptionalCountryPreferenceFromCookie(),
+    ]);
+    const serverRegion: MarketingRegionToggle =
+      marketingRegionCookie ?? (serverCountryPreference ? countryPreferenceToNursenestRegion(serverCountryPreference) : "CA");
     const trustClientPersistedRegion = marketingRegionCookie !== undefined;
 
     return (
       <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
-        <AuthSessionProvider session={session}>
-          <ActivityPerformanceVitals />
-          <LearnerCacheWarmer enabled={Boolean(session?.user?.id)} />
-          {children}
-        </AuthSessionProvider>
+        <CountryPreferenceRoot serverCountry={serverCountryPreference}>
+          <AuthSessionProvider session={session}>
+            <ActivityPerformanceVitals />
+            <LearnerCacheWarmer enabled={Boolean(session?.user?.id)} />
+            {children}
+          </AuthSessionProvider>
+        </CountryPreferenceRoot>
       </NursenestRegionRoot>
     );
   },

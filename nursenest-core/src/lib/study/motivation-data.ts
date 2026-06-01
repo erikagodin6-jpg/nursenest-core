@@ -440,7 +440,7 @@ export async function loadMotivationPayload(userId: string): Promise<MotivationP
     {
       surface: "motivation-payload",
       userId,
-      ttlSeconds: 45,
+      ttlSeconds: 300,
     },
     () => loadMotivationPayloadUncached(userId),
   );

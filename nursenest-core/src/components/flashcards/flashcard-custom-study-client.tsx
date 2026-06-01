@@ -28,6 +28,10 @@ import {
 import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
+import {
+  emergencyInventoryToFlashcards,
+  loadEmergencyStudyInventory,
+} from "@/lib/reliability/emergency-study-inventory";
 
 type ApiCard = {
   id: string;
@@ -64,6 +68,78 @@ type SessionErrorState = {
   message: string;
   code?: string;
 };
+
+type RecoverySource = "fresh" | "browser" | "emergency";
+
+type FlashcardCustomSessionBackup = {
+  version: 1;
+  pathwayId: string;
+  queryString: string;
+  cards: ApiCard[];
+  summary: SessionSummary | null;
+  updatedAt: string;
+};
+
+const FLASHCARD_SESSION_BACKUP_PREFIX = "nn_flashcards_custom_session_backup:v1";
+const FLASHCARD_SESSION_BACKUP_TTL_MS = 1000 * 60 * 60 * 24;
+
+function flashcardSessionBackupKey(pathwayId: string, queryString: string): string {
+  const raw = `${pathwayId || "unknown"}:${queryString}`;
+  let encoded = "";
+  try {
+    encoded = btoa(raw).replace(/=+$/g, "").slice(0, 96);
+  } catch {
+    encoded = encodeURIComponent(raw).replace(/%/g, "").slice(0, 96);
+  }
+  return `${FLASHCARD_SESSION_BACKUP_PREFIX}:${encoded}`;
+}
+
+function saveFlashcardCustomSessionBackup(args: {
+  pathwayId: string;
+  queryString: string;
+  cards: ApiCard[];
+  summary: SessionSummary | null;
+}): void {
+  if (typeof window === "undefined" || args.cards.length === 0) return;
+  try {
+    const backup: FlashcardCustomSessionBackup = {
+      version: 1,
+      pathwayId: args.pathwayId,
+      queryString: args.queryString,
+      cards: args.cards.slice(0, 40),
+      summary: args.summary,
+      updatedAt: new Date().toISOString(),
+    };
+    window.localStorage.setItem(
+      flashcardSessionBackupKey(args.pathwayId, args.queryString),
+      JSON.stringify(backup),
+    );
+  } catch {
+    /* best-effort continuity backup */
+  }
+}
+
+function readFlashcardCustomSessionBackup(pathwayId: string, queryString: string): FlashcardCustomSessionBackup | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(flashcardSessionBackupKey(pathwayId, queryString));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<FlashcardCustomSessionBackup>;
+    if (parsed.version !== 1 || !Array.isArray(parsed.cards) || parsed.cards.length === 0) return null;
+    const updatedAt = parsed.updatedAt ? Date.parse(parsed.updatedAt) : 0;
+    if (!Number.isFinite(updatedAt) || Date.now() - updatedAt > FLASHCARD_SESSION_BACKUP_TTL_MS) return null;
+    return {
+      version: 1,
+      pathwayId: String(parsed.pathwayId ?? pathwayId),
+      queryString: String(parsed.queryString ?? queryString),
+      cards: parsed.cards as ApiCard[],
+      summary: (parsed.summary ?? null) as SessionSummary | null,
+      updatedAt: parsed.updatedAt ?? new Date(updatedAt).toISOString(),
+    };
+  } catch {
+    return null;
+  }
+}
 
 function isPlaceholderFlashcardStem(stem: string): boolean {
   const normalized = stem.trim().toLowerCase();
@@ -143,6 +219,7 @@ export function FlashcardCustomStudyClient() {
   const [summary, setSummary] = useState<SessionSummary | null>(null);
   const [retryNonce, setRetryNonce] = useState(0);
   const [loadingStage, setLoadingStage] = useState<"preparing" | "due" | "building" | "still">("preparing");
+  const [recoverySource, setRecoverySource] = useState<RecoverySource>("fresh");
   const prefetchedOffsets = useRef(new Set<number>());
   const sessionSeedRef = useRef<string>("");
   if (!sessionSeedRef.current) {
@@ -235,22 +312,105 @@ export function FlashcardCustomStudyClient() {
     (async () => {
       setLoading(true);
       setError(null);
+      setRecoverySource("fresh");
       setLoadingStage("preparing");
       prefetchedOffsets.current.clear();
       const fetchStart = Date.now();
+      const recoverOrError = async (
+        failureCopy: SessionErrorState,
+        recoveryReason: string,
+      ): Promise<void> => {
+        const backup = readFlashcardCustomSessionBackup(pathwayId, queryString);
+        const backupCards = backup?.cards.filter(
+          (c) => c && typeof c.id === "string" && c.id.length > 0 &&
+                 typeof c.front === "string" && typeof c.back === "string",
+        ).filter(hasRenderableFlashcard) ?? [];
+        if (backup && backupCards.length > 0) {
+          if (!cancelled) {
+            setCards(backupCards);
+            setSummary(backup.summary);
+            setRecoverySource("browser");
+            setError(null);
+          }
+          emitRuntimeEvent("learning_session_recovered", {
+            activity: "flashcards",
+            pathwayId,
+            source: "browser",
+            reason: recoveryReason,
+            cardCount: backupCards.length,
+          });
+          logDedupedClientDiagnostic("flashcard_custom_session", "recovered_from_browser_backup", `${pathwayId}:${recoveryReason}`, {
+            pathwayId,
+            recoveryReason,
+            cardCount: backupCards.length,
+          });
+          return;
+        }
+
+        try {
+          const inventory = await loadEmergencyStudyInventory({
+            pathwayId,
+            queryString,
+            signal: controller.signal,
+          });
+          const emergencyCards = inventory
+            ? emergencyInventoryToFlashcards(inventory, pathwayId).filter(hasRenderableFlashcard)
+            : [];
+          if (inventory && emergencyCards.length > 0) {
+            if (!cancelled) {
+              setCards(emergencyCards);
+              setSummary({
+                matchingCards: emergencyCards.length,
+                returnedCards: emergencyCards.length,
+                hasMore: false,
+                offset: 0,
+                weakOnly: false,
+                starredOnly: false,
+                selectedCategories: [inventory.system],
+              });
+              setRecoverySource("emergency");
+              setError(null);
+            }
+            emitRuntimeEvent("learning_session_recovered", {
+              activity: "flashcards",
+              pathwayId,
+              source: "emergency",
+              reason: recoveryReason,
+              inventoryId: inventory.id,
+              cardCount: emergencyCards.length,
+            });
+            logDedupedClientDiagnostic("flashcard_custom_session", "recovered_from_emergency_inventory", `${pathwayId}:${inventory.id}`, {
+              pathwayId,
+              recoveryReason,
+              inventoryId: inventory.id,
+              cardCount: emergencyCards.length,
+            });
+            return;
+          }
+        } catch (recoveryErr) {
+          if (controller.signal.aborted || cancelled) return;
+          logDedupedClientDiagnostic("flashcard_custom_session", "emergency_recovery_failed", `${pathwayId}:${recoveryReason}`, {
+            pathwayId,
+            recoveryReason,
+            message: recoveryErr instanceof Error ? recoveryErr.message.slice(0, 200) : "unknown",
+          });
+        }
+
+        if (!cancelled) setError(failureCopy);
+      };
       try {
-        // Per-attempt timeout is 5_500ms — slightly above the server's 5s withTimeout so we
+        // Per-attempt timeout is 6_500ms — above the server's 4.8s withTimeout so we
         // receive the server's 503 JSON (with error code + Retry-After) rather than our own
         // DOMException("TimeoutError") which would lose the structured error code.
-        // With attempts:2 + baseDelayMs:800 the worst-case wall-clock before we surface an
-        // error is ~12s — still better than the previous 16s window.
+        // With attempts:3 + baseDelayMs:800 the UI stays in the loading shell through transient
+        // DB pressure instead of rendering the player or surfacing a premature hydration error.
         const res = await fetchWithRetry(`/api/flashcards/custom-session?${queryString}`, {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
         }, {
-          attempts: 2,
-          timeoutMs: 5_500,
+          attempts: 3,
+          timeoutMs: 6_500,
           baseDelayMs: 800,
           // Honour the server's Retry-After header: if the 503 says wait 3s,
           // we should not immediately hammer the already-loaded server.
@@ -266,12 +426,12 @@ export function FlashcardCustomStudyClient() {
             message: jsonErr instanceof Error ? jsonErr.message : "unknown",
           });
           if (!cancelled) {
-            setError({
+            await recoverOrError({
               title: "Session data is invalid.",
               detail: "The study API returned data the flashcard player could not safely use.",
               message: "Refresh this session or return to the launcher and start a new one.",
               code: "invalid_json",
-            });
+            }, "invalid_json");
           }
           return;
         }
@@ -291,7 +451,7 @@ export function FlashcardCustomStudyClient() {
             finalCount: parsed.integrity?.finalCount,
             message: parsed.message,
           });
-          if (!cancelled) setError(failureCopy);
+          await recoverOrError(failureCopy, parsed.code ?? "payload_parse_failed");
           return;
         }
         const rawCards =
@@ -321,12 +481,11 @@ export function FlashcardCustomStudyClient() {
             returnedCards: parsed.summary.returnedCards,
             rawCards: rawCards.length,
           });
-          if (!cancelled) setError(failureCopy);
+          await recoverOrError(failureCopy, "renderable_cards_empty");
           return;
         }
         if (!cancelled) {
-          setCards(validCards);
-          setSummary(
+          const nextSummary =
             parsed.summary
               ? {
                   matchingCards: parsed.summary.matchingCards,
@@ -337,12 +496,21 @@ export function FlashcardCustomStudyClient() {
                   starredOnly: parsed.summary.starredOnly,
                   selectedCategories: parsed.summary.selectedCategories ?? [],
                 }
-              : null,
-          );
+              : null;
+          setCards(validCards);
+          setSummary(nextSummary);
+          saveFlashcardCustomSessionBackup({
+            pathwayId,
+            queryString,
+            cards: validCards,
+            summary: nextSummary,
+          });
           emitRuntimeEvent("flashcard_custom_session_bootstrap_complete", {
             pathwayId,
             cardCount: validCards.length,
             status: res.status,
+            buildMs: Number(res.headers.get("x-nn-session-build-ms") ?? "0") || undefined,
+            responseBytes: Number(res.headers.get("x-nn-session-response-bytes") ?? "0") || undefined,
           });
         }
       } catch (err) {
@@ -376,26 +544,26 @@ export function FlashcardCustomStudyClient() {
 
         if (!cancelled) {
           if (isTimeout) {
-            setError({
+            await recoverOrError({
               title: initialCardIndex > 0 ? "Unable to resume previous session." : "Your study session could not be created.",
               detail: "The flashcard session took longer than expected to start.",
               message: "This usually resolves on retry. If it keeps failing, try a smaller card selection.",
               code: "session_timeout_client",
-            });
+            }, "session_timeout_client");
           } else if (isNetwork) {
-            setError({
+            await recoverOrError({
               title: "Connection issue.",
               detail: "The flashcard player could not reach the study API.",
               message: "Check your network connection and retry. Your session setup is preserved.",
               code: "network_error",
-            });
+            }, "network_error");
           } else {
-            setError({
+            await recoverOrError({
               title: initialCardIndex > 0 ? "Unable to resume previous session." : "Your study session could not be created.",
               detail: "An unexpected error occurred during flashcard session startup.",
               message: "Retry the session. If it repeats, go back to the launcher and start from the same systems.",
               code: "unexpected_error",
-            });
+            }, "unexpected_error");
           }
         }
       } finally {
@@ -428,7 +596,7 @@ export function FlashcardCustomStudyClient() {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
-        }, { attempts: 1, timeoutMs: 6_000 });
+        }, { attempts: 2, timeoutMs: 6_500, baseDelayMs: 500 });
         if (!res.ok) return;
         const json = await res.json();
         const rawCards =
@@ -548,13 +716,13 @@ export function FlashcardCustomStudyClient() {
               : "RN Hub";
       return {
         sessionTitle: t("learner.flashcards.hub.title"),
-        modeLabel: "Study",
+        modeLabel: recoverySource === "fresh" ? "Study" : "Continuity Study",
         categoriesLabel,
         exitHref,
         hubLabel,
       };
     },
-    [exitHref, t, categoriesLabel, searchParamString],
+    [exitHref, t, categoriesLabel, searchParamString, recoverySource],
   );
 
   const sessionMeta = useMemo(() => {
@@ -719,6 +887,16 @@ export function FlashcardCustomStudyClient() {
           ← {t("flashcards.backToMyCards")}
         </Link>
       </div>
+
+      {recoverySource !== "fresh" ? (
+        <div
+          className="mb-4 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] px-4 py-3 text-sm font-medium text-[var(--semantic-text-primary)]"
+          role="status"
+          data-testid="flashcard-session-continuity-mode"
+        >
+          Continuing your study session.
+        </div>
+      ) : null}
 
       <ExamSessionShell examMode="practice" className="nn-premium-flashcard-session-root nn-flashcard-study-premium">
         <ActiveStudySession

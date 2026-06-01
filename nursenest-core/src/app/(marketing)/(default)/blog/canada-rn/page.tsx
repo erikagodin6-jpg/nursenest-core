@@ -1,14 +1,12 @@
-import type { Metadata } from "next";
-import { generateRegionalBlogIndexMetadata, RegionalBlogIndexPage } from "@/lib/blog/regional-blog-cluster-page";
+import { redirect } from "next/navigation";
 
-export const revalidate = 3600;
+/**
+ * Country selection is now a global preference (see CountryPreferenceRoot / country-selector-dropdown).
+ * This hub index redirects to the main blog; article detail pages under /blog/canada-rn/[slug]
+ * continue to serve their canonical URLs unchanged.
+ */
+export const revalidate = false;
 
-export async function generateMetadata(): Promise<Metadata> {
-  return generateRegionalBlogIndexMetadata("canada-rn");
-}
-
-type Props = { searchParams: Promise<{ page?: string }> };
-
-export default function BlogCanadaRnHubPage({ searchParams }: Props) {
-  return <RegionalBlogIndexPage clusterSlug="canada-rn" searchParams={searchParams} />;
+export default function BlogCanadaRnHubPage() {
+  redirect("/blog");
 }

@@ -15,11 +15,23 @@ import {
   EXAM_QUESTION_NON_ECG_TAG_SQL,
   EXAM_QUESTION_TOPIC_OR_BODY_SQL,
 } from "@/lib/questions/exam-question-bank-sql";
+import {
+  npProviderQuestionScopeSql,
+  standardExamPrepQuestionScopeSql,
+} from "@/lib/questions/difficulty-scope-filter";
 import { GENERAL_STUDY_BANK_MODULE_SCOPE_SQL } from "@/lib/study-question-pool/study-question-pool-gates";
+import {
+  canAccessRtVentilatorModuleForTierAndProfession,
+  isRtVentilatorLearnerModuleEnabled,
+} from "@/lib/rt-ventilator/rt-ventilator-module-config";
+import { RT_VENTILATOR_BANK_TAG } from "@/lib/rt-ventilator/rt-ventilator-content-taxonomy";
 
 /**
  * Flashcard-usability + teaching-minimum gates aligned with
  * {@link countCorePathwayPublishedPool} / hub SQL (non-ECG, stem, JSON answer, taxonomy signal).
+ *
+ * Intentionally does NOT include the RT ventilator gate or scope gate — those are
+ * entitlement-dependent and are appended by {@link flashcardLearnerExamPoolWhereSql}.
  */
 export function flashcardLearnerExamQualityGatesSql(): Prisma.Sql {
   return Prisma.sql`
@@ -30,6 +42,32 @@ export function flashcardLearnerExamQualityGatesSql(): Prisma.Sql {
     AND ${EXAM_QUESTION_NON_ECG_TAG_SQL}
     ${GENERAL_STUDY_BANK_MODULE_SCOPE_SQL}
   `;
+}
+
+/**
+ * RT ventilator gate SQL — mirrors {@link rtVentilatorPremiumBankGateWhere} for the inventory SQL path.
+ */
+function rtVentilatorGateSqlForPool(poolScope: AccessScope): Prisma.Sql {
+  if (!isRtVentilatorLearnerModuleEnabled()) {
+    return Prisma.sql`AND NOT (${RT_VENTILATOR_BANK_TAG} = ANY(tags))`;
+  }
+  if (accessScopeIsStaffLearnerEntitlementBypass(poolScope)) return Prisma.empty;
+  const allowed =
+    poolScope.hasAccess &&
+    canAccessRtVentilatorModuleForTierAndProfession({
+      tier: poolScope.tier ?? null,
+      alliedCareer: poolScope.alliedCareer,
+    });
+  return allowed ? Prisma.empty : Prisma.sql`AND NOT (${RT_VENTILATOR_BANK_TAG} = ANY(tags))`;
+}
+
+/**
+ * Scope gate SQL — NP tier uses the more permissive provider scope (excludes specialty only);
+ * all other tiers use standard exam prep scope (excludes specialty + advanced/provider).
+ * Mirrors CAT's scopeGate selection logic.
+ */
+function scopeGateSqlForPool(poolScope: AccessScope): Prisma.Sql {
+  return poolScope.tier === "NP" ? npProviderQuestionScopeSql() : standardExamPrepQuestionScopeSql();
 }
 
 /**
@@ -77,6 +115,9 @@ export function flashcardLearnerExamPoolWhereSql(
   const studyLinkOrClause = hasStudyLinkPathwayIdCol
     ? Prisma.sql`OR (coalesce(study_link_pathway_id, '') = ${pid})`
     : Prisma.empty;
+  // Parity gates: match CAT's scopeGate + rtVentilatorPremiumBankGateWhere.
+  const scopeGate = scopeGateSqlForPool(poolScope);
+  const rtGate = rtVentilatorGateSqlForPool(poolScope);
   return Prisma.sql`
     ${base}
     AND (
@@ -84,6 +125,8 @@ export function flashcardLearnerExamPoolWhereSql(
       ${studyLinkOrClause}
     )
     ${quality}
+    ${scopeGate}
+    ${rtGate}
     ${np}
   `;
 }

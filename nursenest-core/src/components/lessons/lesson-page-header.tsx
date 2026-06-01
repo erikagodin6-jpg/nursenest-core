@@ -1,4 +1,5 @@
 import { CheckCircle, Clock, BookMarked } from "lucide-react";
+import type { ReactNode } from "react";
 import type {
   PathwayLessonExamRelevance,
   PathwayLessonAudienceTier,
@@ -20,6 +21,8 @@ type Props = {
   purposeLine?: string | null;
   /** e.g. "Readiness check (4) · Retention (3)" */
   assessmentHint?: string | null;
+  /** Compact lesson controls such as previous/next, units, and progress. */
+  actions?: ReactNode;
 };
 
 const AUDIENCE_LABEL: Record<PathwayLessonAudienceTier, string> = {
@@ -88,6 +91,7 @@ export function LessonPageHeader({
   progress,
   purposeLine,
   assessmentHint,
+  actions,
 }: Props) {
   const pathwayLine =
     pathwayShortName?.trim() || examFramingLabel?.trim() || null;
@@ -100,8 +104,11 @@ export function LessonPageHeader({
   const bodyLabel = bodySystem ? bodySystem.replace(/_/g, " ") : null;
 
   return (
-    <header className="nn-lesson-page-header nn-premium-learner-lesson-hero">
-      <div className="flex flex-col gap-5">
+    <header
+      className="nn-lesson-page-header nn-premium-learner-lesson-hero"
+      data-nn-premium-lessons-reading-hero
+    >
+      <div className="nn-lesson-header-action-layout flex flex-col gap-5">
         <div className="min-w-0 flex-1">
           <p
             className="nn-lesson-hero-eyebrow"
@@ -112,7 +119,7 @@ export function LessonPageHeader({
               .join(" · ") || "Clinical lesson"}
           </p>
 
-          <h1 className="nn-lesson-hero-title mt-4 text-balance font-semibold tracking-tight text-[var(--semantic-text-primary)]">
+          <h1 className="nn-lesson-page-title nn-lesson-hero-title mt-4 text-balance font-semibold tracking-tight text-[var(--semantic-text-primary)]">
             {title}
           </h1>
 
@@ -158,6 +165,11 @@ export function LessonPageHeader({
             <ProgressPill progress={progress} />
           </div>
         </div>
+        {actions ? (
+          <div className="nn-lesson-header-actions flex shrink-0 flex-col gap-2">
+            {actions}
+          </div>
+        ) : null}
       </div>
     </header>
   );

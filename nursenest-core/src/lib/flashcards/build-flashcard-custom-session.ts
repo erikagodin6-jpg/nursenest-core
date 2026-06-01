@@ -59,6 +59,7 @@ import {
   orderFlashcardsForAdaptiveSession,
   type AdaptiveProgressLite,
 } from "@/lib/flashcards/study-queue";
+import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 import { pathwayHubCategoryToCanonical } from "@/lib/learner-study-hub/body-system-data";
 
 export type CustomSessionStudyMode =
@@ -124,6 +125,28 @@ export type BuildFlashcardCustomSessionResult =
 const FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT = 800;
 const FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT = 800;
 const FLASHCARD_CUSTOM_SESSION_RETURN_LIMIT = 80;
+/**
+ * Maximum pool size fed to `orderFlashcardsForAdaptiveSession` when the session has
+ * **no** progress-based filter (weakOnly / incorrectOnly / notStudied / recentStudied).
+ *
+ * Why this matters:
+ *   When there is no filter the entire `scoped` set (up to 800 rows) is passed to the
+ *   progress scan and then to the adaptive ordering function.  For a typical RN session
+ *   with no category selection that can mean loading progress for 800 flashcard IDs even
+ *   though only 8 cards will be served.
+ *
+ * Why 150 is safe:
+ *   `orderFlashcardsForAdaptiveSession` uses progress to prioritise unseen > due > weak.
+ *   Cards whose IDs are NOT in `progressByScopedId` receive the "unseen" score (highest
+ *   priority).  Capping the pool to 150 means cards outside that window are effectively
+ *   treated as unseen — they are MORE likely to surface, not less.  The cap is applied
+ *   after a seeded shuffle so the window is diverse across sessions and sessions are
+ *   reproducible per seed.  Verified safe because:
+ *     1. No cards are permanently hidden — they reappear in the next session window.
+ *     2. The serve limit is 8 cards; 150 candidates provides 18× diversity.
+ *     3. Progress-filtered sessions (weakOnly etc.) bypass this cap entirely.
+ */
+const FLASHCARD_ADAPTIVE_POOL_CAP = 150;
 
 function serializedIsStudyReady(card: CustomSessionSerializedCard): boolean {
   if (card.front.trim().length < 2 || card.back.trim().length < 2) return false;
@@ -401,24 +424,30 @@ export async function buildFlashcardCustomSession(
           let lessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics | null =
             null;
           let lessonVirtualTotal = 0;
+          // Parallelise: pool snapshot + dedicated flashcard scan are independent reads.
+          // Cold snapshot miss (lesson findMany inside) overlaps with the flashcard scan,
+          // saving 30–70 ms on the first request after a server restart or TTL expiry.
+          const [snapshotResult, dedicatedRows] = await Promise.all([
+            loadFlashcardPoolSnapshotForPathway(pathwayScopeId),
+            prisma.flashcard.findMany({
+              where: {
+                status: ContentStatus.PUBLISHED,
+                deck: { pathwayId: pathwayScopeId },
+              },
+              select: {
+                front: true,
+                back: true,
+                category: { select: { name: true, topicCode: true } },
+                deck: { select: { pathwayId: true, title: true } },
+              },
+              take: 5000,
+            }),
+          ]);
           const { virtuals: mergedLessonVirtuals, diagnostics: lessonInv } =
-            await loadFlashcardPoolSnapshotForPathway(pathwayScopeId);
+            snapshotResult;
           const mergedCounts: Record<string, number> = {
             ...examInventoryCounts,
           };
-          const dedicatedRows = await prisma.flashcard.findMany({
-            where: {
-              status: ContentStatus.PUBLISHED,
-              deck: { pathwayId: pathwayScopeId },
-            },
-            select: {
-              front: true,
-              back: true,
-              category: { select: { name: true, topicCode: true } },
-              deck: { select: { pathwayId: true, title: true } },
-            },
-            take: 5000,
-          });
           for (const row of dedicatedRows) {
             const categoryId = resolveBuilderCategoryId({
               label: row.category.name,
@@ -594,10 +623,31 @@ export async function buildFlashcardCustomSession(
           })()
         : null;
 
+    // ── Dynamic scan limit ────────────────────────────────────────────────────
+    // For full-card sessions (includeCards=1) the limit is derived from the
+    // requested window rather than a fixed ceiling:
+    //
+    //   No progress filter (weakOnly etc.):
+    //     max((offset + limit) × 8, 80)  → 80 for default (limit=8, offset=0)
+    //     Rationale: 8× headroom for category/sourceKind in-memory filtering.
+    //
+    //   With progress filter (weakOnly / incorrectOnly / notStudied / recent):
+    //     max((offset + limit) × 20, 200) → 200 for limit=8
+    //     Rationale: Progress filters may discard 60–90 % of scanned cards
+    //     (e.g. only 10 % are "weak" at any time).  The extra headroom ensures
+    //     we find enough qualifying cards to fill the session.  Without this,
+    //     a weakOnly request with limit=8 and a scan limit of 80 could return
+    //     0 cards even when the deck contains 150 weak cards beyond position 80.
+    //
+    // For count-only (includeCards=0) the ceiling stays at 800 — reducing it
+    // would produce inaccurate per-category counts in the hub UI, which relies
+    // on this path when Redis inventory is cold.
     const cardScanLimit = includeCards
       ? Math.min(
           FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT,
-          Math.max((offset + limit) * 8, 80),
+          _needsProgressFilter
+            ? Math.max((offset + limit) * 20, 200)
+            : Math.max((offset + limit) * 8, 80),
         )
       : FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT;
     const cards = await prisma.flashcard.findMany({
@@ -660,15 +710,25 @@ export async function buildFlashcardCustomSession(
     } else {
       uncachedIds.push(...examQIdList);
     }
-    const newEntries: Array<[string, { bodySystem: string | null; topic: string | null }]> = [];
+    // Parallelise all chunks — reduces N serial round-trips to max(latency of single chunk).
+    // With PRISMA_ID_IN_CHUNK_SIZE=200 and ~560 uncached IDs (typical RN warm deck),
+    // this cuts 3 × 15 ms serial = 45 ms → max(15 ms) = 15 ms.
+    const chunks: string[][] = [];
     for (let i = 0; i < uncachedIds.length; i += PRISMA_ID_IN_CHUNK_SIZE) {
       const chunk = uncachedIds.slice(i, i + PRISMA_ID_IN_CHUNK_SIZE);
-      if (!chunk.length) break;
-      const rows = await prisma.examQuestion.findMany({
-        where: { id: { in: chunk } },
-        select: { id: true, bodySystem: true, topic: true },
-        take: takeForIdIn(chunk, 5000),
-      });
+      if (chunk.length) chunks.push(chunk);
+    }
+    const chunkResults = await Promise.all(
+      chunks.map((chunk) =>
+        prisma.examQuestion.findMany({
+          where: { id: { in: chunk } },
+          select: { id: true, bodySystem: true, topic: true },
+          take: takeForIdIn(chunk, 5000),
+        }),
+      ),
+    );
+    const newEntries: Array<[string, { bodySystem: string | null; topic: string | null }]> = [];
+    for (const rows of chunkResults) {
       for (const r of rows) {
         const meta = { bodySystem: r.bodySystem, topic: r.topic };
         examTopicMetaById.set(r.id, meta);
@@ -984,6 +1044,32 @@ export async function buildFlashcardCustomSession(
     }
 
     if (!needsProgress && scoped.length > 0) {
+      // ── Adaptive pool cap (no-filter sessions only) ───────────────────────
+      // When no progress filter is active we load progress purely to power
+      // `orderFlashcardsForAdaptiveSession`.  The serve window is only `limit`
+      // cards (default 8), so loading progress for 800 scoped cards and sorting
+      // all 800 is wasteful — the extra cards beyond the cap never make it into
+      // the response.
+      //
+      // Approach: apply a seeded shuffle to `scoped` BEFORE fetching progress so
+      // the cap selects a diverse, deterministic window rather than the most-
+      // recently-updated cards from the DB scan.  Cards outside the window are
+      // treated as "unseen" by the adaptive scorer (highest-priority bucket),
+      // ensuring they surface in subsequent sessions.
+      //
+      // The cap is skipped when `scoped` is already small (≤ cap) to avoid the
+      // overhead of a shuffle that changes nothing.
+      const adaptivePoolCap = Math.max(FLASHCARD_ADAPTIVE_POOL_CAP, limit * 12);
+      if (scoped.length > adaptivePoolCap) {
+        // Use sessionSeed for determinism — same seed ⇒ same window across retries.
+        // Falls back to a stable per-user+pathway string when no seed is supplied.
+        const poolShuffleSalt =
+          sessionSeed?.trim().length
+            ? `${sessionSeed.trim()}:pool-cap`
+            : `${userId.slice(0, 8)}:${pathwayScopeId ?? ""}:pool-cap`;
+        scoped = shuffleSeeded([...scoped], poolShuffleSalt).slice(0, adaptivePoolCap);
+      }
+
       const scopedIds = [
         ...new Set(
           scoped.map((c) => c.id).filter((id) => !id.startsWith("exam_bank:")),

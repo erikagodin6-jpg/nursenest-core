@@ -61,7 +61,7 @@ describe("learner practice alias routes — redirect to canonical /app/practice-
         `${relPath} must not directly import or mount PracticeTestsPage — it is a redirect alias`,
       );
       if (relPath.endsWith("/cat/page.tsx")) {
-        assert.doesNotMatch(src, /q\.set\("catLaunch",\s*"1"\)/, `${relPath} must not force CAT mode`);
+        assert.match(src, /q\.set\("catLaunch",\s*"1"\)/, `${relPath} must preserve CAT intent`);
       }
     });
   }
@@ -99,7 +99,7 @@ describe("canonical learner practice hub — /app/practice-tests", () => {
     assert.doesNotMatch(src, /q\.set\("catLaunch",\s*"1"\)/, "practice-tests/start must not force CAT mode");
   });
 
-  it("practice-tests/cat-launch redirects to the shared launcher with pathway context", () => {
+  it("practice-tests/cat-launch redirects to the shared launcher with CAT intent and pathway context", () => {
     const launchPath = "src/app/(app)/app/(learner)/practice-tests/cat-launch/page.tsx";
     assert.ok(exists(launchPath), `missing canonical CAT launch shim: ${launchPath}`);
     const src = read(launchPath);
@@ -108,7 +108,7 @@ describe("canonical learner practice hub — /app/practice-tests", () => {
       `practice-tests/cat-launch must redirect to shared launcher`,
     );
     assert.doesNotMatch(src, /appPathwayCatSessionStartPath/, "cat-launch alias must not force inline CAT mode");
-    assert.doesNotMatch(src, /catLaunch=1/, "cat-launch alias must not bypass launcher mode selection");
+    assert.match(src, /catLaunch:\s*"1"/, "cat-launch alias must preserve CAT mode selection");
   });
 });
 

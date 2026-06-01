@@ -7,6 +7,9 @@ import { nclexTier2ClinicalJudgmentQuestions } from "@/content/questions/nclex-t
 import { nclexTier3AdvancedReviewQuestions } from "@/content/questions/nclex-tier3-advanced-review-questions";
 import { cnplePracticalNursingNgnExpansionQuestions } from "@/content/questions/cnple-practical-nursing-ngn-expansion";
 import { pharmacyTechnicianQuestions } from "@/content/questions/allied-pharmacy-technician";
+import { NCLEX_PN_GAP_QUESTIONS } from "@/content/questions/nclex-pn-gap-closure-questions";
+import { CNPLE_GAP_FLASHCARDS } from "@/content/flashcards/cnple-gap-closure-flashcards";
+import { NCLEX_PN_GAP_FLASHCARDS } from "@/content/flashcards/nclex-pn-gap-closure-flashcards";
 import { PRE_NURSING_QUESTION_BANK } from "@/lib/pre-nursing/pre-nursing-question-bank";
 import {
   scoreQuestionQuality,
@@ -408,6 +411,31 @@ function normalizeBasicQuestion(raw: any, pathwayIds: readonly string[], profess
   };
 }
 
+function normalizeGapQuestion(raw: { id: string; stem: string; options: readonly string[]; correct: readonly number[]; rationale: string; whyCorrect: string; whyIncorrect: Record<string, string>; topic: string; lessonSlug: string; exam: string; domain: string; blueprintCategory: string; difficulty: number; questionType: string; weakAreaTag: string }, pathwayIds: readonly string[], profession: string): QuestionEvidence {
+  return {
+    pathwayIds: [...pathwayIds],
+    questionType: raw.questionType,
+    domain: raw.domain,
+    topic: raw.topic,
+    question: {
+      id: raw.id,
+      stem: raw.stem,
+      options: [...raw.options],
+      correctAnswer: raw.options[raw.correct[0] ?? 0] ?? String(raw.correct[0] ?? 0),
+      rationale: raw.rationale,
+      whyCorrect: raw.whyCorrect,
+      whyIncorrect: raw.whyIncorrect,
+      clinicalPearl: null,
+      hint: null,
+      topic: raw.topic,
+      pathway: pathwayIds[0],
+      profession,
+      questionType: raw.questionType,
+      relatedTopics: [raw.domain, raw.topic, raw.blueprintCategory, raw.weakAreaTag].filter(Boolean),
+    },
+  };
+}
+
 function collectQuestionEvidence(): readonly QuestionEvidence[] {
   return [
     ...nclexTier1FoundationalQuestions.flatMap((q) => {
@@ -419,7 +447,19 @@ function collectQuestionEvidence(): readonly QuestionEvidence[] {
     ...cnplePracticalNursingNgnExpansionQuestions.map(normalizeCnpleQuestion),
     ...pharmacyTechnicianQuestions.map((q) => normalizeBasicQuestion(q, ["allied-pharmacy-technician"], "Allied Health")),
     ...PRE_NURSING_QUESTION_BANK.map((q) => normalizeBasicQuestion(q, ["pre-nursing"], "Pre-Nursing")),
+    // Blueprint gap-closure question banks
+    ...NCLEX_PN_GAP_QUESTIONS.map((q) => normalizeGapQuestion(q as any, ["pn-nclex-pn"], "RPN/LPN")),
   ];
+}
+
+/** Count gap-closure flashcards for a pathway target. */
+function gapFlashcardCount(targetId: string): number {
+  const pnIds = new Set(["pn-nclex-pn"]);
+  const cnpleIds = new Set(["np-cnple"]);
+  let count = 0;
+  if (pnIds.has(targetId)) count += NCLEX_PN_GAP_FLASHCARDS.length;
+  if (cnpleIds.has(targetId)) count += CNPLE_GAP_FLASHCARDS.length;
+  return count;
 }
 
 function questionTypeCounts(evidence: readonly QuestionEvidence[], targetId: string): Partial<CertificationInventoryCounts> {
@@ -511,6 +551,13 @@ function evidenceCountsForTarget(
   if ((questionCounts.questionBank ?? 0) > 0) {
     counts = addCounts(counts, questionCounts);
     sources.add("static question catalogs");
+  }
+
+  // Gap-closure flashcard banks (blueprint gap closure 2026)
+  const gapFlashcards = gapFlashcardCount(target.id);
+  if (gapFlashcards > 0) {
+    counts = addCounts(counts, { flashcards: gapFlashcards });
+    sources.add("gap-closure flashcard catalogs");
   }
 
   const blogMatches = countFilesByNeedle(rootDir, "src/content/blog-static-longtail", target.tags);

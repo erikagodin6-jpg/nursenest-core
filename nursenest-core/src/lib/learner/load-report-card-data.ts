@@ -720,7 +720,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     {
       surface: "report-card",
       userId,
-      ttlSeconds: 45,
+      ttlSeconds: 300,
       keyParts: [
         learnerPrivateReadAccessScopeKey(entitlement),
         { degraded: skipHeavy, peerBenchmarkSkipped: skipPeerBenchmark },

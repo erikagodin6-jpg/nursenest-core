@@ -2073,6 +2073,9 @@ model Flashcard {
   options         FlashcardOption[]
 
   @@index([status, country, tier])
+  /// Covers ORDER BY updatedAt DESC in buildFlashcardCustomSession — eliminates filesort
+  /// on the filtered result set for all card fetch paths (single/multi-system, RN/RPN/NP).
+  @@index([status, country, tier, updatedAt(sort: Desc)], map: "flashcards_status_country_tier_updated_idx")
   @@index([deckId, positionInDeck])
   @@index([deckId, status])
   @@index([lessonId])

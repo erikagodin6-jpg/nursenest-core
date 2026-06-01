@@ -136,7 +136,7 @@ export async function loadReadinessPagePayload(userId: string, entitlement: Acce
     {
       surface: "readiness-page",
       userId,
-      ttlSeconds: 45,
+      ttlSeconds: 300,
       keyParts: [learnerPrivateReadAccessScopeKey(entitlement)],
       bypass: !entitlement.hasAccess || entitlement.reason === "admin_override",
     },

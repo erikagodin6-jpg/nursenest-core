@@ -98,6 +98,7 @@ import { AdminInlinePathwayLessonSectionEditor } from "@/components/lessons/admi
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
 import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
 import { LessonReadingViewport } from "@/components/lessons/lesson-reading-viewport";
+import { LessonReadingProgressStrip } from "@/components/lessons/lesson-reading-progress-strip";
 import { extractClinicalPearlLines } from "@/lib/lessons/extract-clinical-pearl-lines";
 import { rnLessonSectionStackClass } from "@/lib/lessons/rn-reading-stack";
 import {
@@ -149,20 +150,17 @@ import { StaffEditLivePageBanner } from "@/components/staff/staff-edit-live-page
 import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesson-stable-edit-href";
 
 /**
- * ISR — 60-second stale-while-revalidate window.
+ * ISR — 5-minute stale-while-revalidate window.
  *
  * Admin publish calls `revalidateSurfacesAfterPathwayLessonMutation` which fires
  * `revalidatePath('/app/lessons/{id}', 'layout')`, busting this page immediately.
- * The 60s window covers background content changes; removes the per-request DB
- * cost on every load for all ~N concurrent learners on the same lesson.
+ * The 5-minute window is a safety net only — lesson content changes are rare and
+ * always paired with an explicit revalidate call.
  *
- * Auth, personalisation, and progress are all determined inside the page at
- * render time using `getProtectedRouteSession` — they are NOT affected by ISR
- * because Next.js App Router never caches per-user session data at the route level.
- * Each unique user gets a dynamically-rendered response; ISR only caches the
- * lesson content layer that is identical across users with the same entitlement.
+ * Auth, personalisation, and progress are resolved at render time inside the page
+ * using `getProtectedRouteSession` — not affected by ISR.
  */
-export const revalidate = 60;
+export const revalidate = 300;
 
 function LessonBody({
   content,
@@ -898,15 +896,6 @@ async function LessonDetailPageInner({ params }: Props) {
             className="mb-0 min-h-0"
           />
         ) : null}
-        <LessonNavButtons
-          position="top"
-          backHref="/app/lessons"
-          backLabel={t("learner.lessons.detail.allLessons")}
-          prevLesson={pathwayPrevApp}
-          nextLesson={pathwayNextApp}
-          previousLessonLabel={t("learner.lessons.detail.previousLesson")}
-          nextLessonLabel={t("learner.lessons.detail.nextLesson")}
-        />
 
         <LessonAssessmentFlow
           userId={userId}
@@ -1205,16 +1194,34 @@ async function LessonDetailPageInner({ params }: Props) {
             progress={initialProgress}
             purposeLine={purposeLine}
             assessmentHint={assessmentHint}
+            actions={
+              <>
+                <LessonNavButtons
+                  position="top"
+                  backHref="/app/lessons"
+                  backLabel={t("learner.lessons.detail.allLessons")}
+                  prevLesson={pathwayPrevApp}
+                  nextLesson={pathwayNextApp}
+                  previousLessonLabel={t("learner.lessons.detail.previousLesson")}
+                  nextLessonLabel={t("learner.lessons.detail.nextLesson")}
+                />
+                {usesReadingV2Layout ? (
+                  <LessonReadingProgressStrip sections={navSections} />
+                ) : (
+                  <LessonStudyPhaseProgress
+                    progress={initialProgress}
+                    persisted={Boolean(userId) && entitlement.hasAccess}
+                    compact
+                  />
+                )}
+                <LessonMeasurementUnitsBar
+                  fallbackSystem={lessonMeasurementSystem ?? "US"}
+                  initialPreference={measurementPreference}
+                  syncToProfile={Boolean(userId)}
+                />
+              </>
+            }
           />
-          {!usesReadingV2Layout ? (
-            <div className="mt-2">
-              <LessonStudyPhaseProgress
-                progress={initialProgress}
-                persisted={Boolean(userId) && entitlement.hasAccess}
-                compact
-              />
-            </div>
-          ) : null}
           {matchedLessonImage.url &&
           hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
             <div className="mt-4">
@@ -1230,14 +1237,6 @@ async function LessonDetailPageInner({ params }: Props) {
           ) : null}
         </div>
 
-        <div className="mt-2 flex justify-end">
-          <LessonMeasurementUnitsBar
-            fallbackSystem={lessonMeasurementSystem ?? "US"}
-            initialPreference={measurementPreference}
-            syncToProfile={Boolean(userId)}
-          />
-        </div>
-
         <div className="nn-lesson-layout nn-lesson-layout--premium-reading">
           <LessonReadingViewport
             sections={navSections}
@@ -1245,6 +1244,7 @@ async function LessonDetailPageInner({ params }: Props) {
             progressVisible={Boolean(userId) && entitlement.hasAccess}
             layout={usesReadingV2Layout ? "rn-v2" : "default"}
             clinicalPearls={clinicalPearlLines}
+            showReadingProgressStrip={!usesReadingV2Layout}
           >
             <div
               className="nn-lesson-main min-w-0"

@@ -188,7 +188,7 @@ export async function loadLearnerProfileActivity(
     {
       surface: "profile-activity",
       userId,
-      ttlSeconds: 60,
+      ttlSeconds: 300,
       keyParts: [
         {
           mocks: limits?.mocks ?? 5,

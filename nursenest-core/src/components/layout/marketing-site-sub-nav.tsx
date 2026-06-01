@@ -11,6 +11,8 @@ import { mapLegacyMarketingHref } from "@/lib/marketing/marketing-chrome-href";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { useCountryPreference } from "@/lib/region/use-country-preference";
+import { countryExamLabels } from "@/lib/region/country-preference";
 import { getExamNavStripItems } from "@/lib/marketing/country-exam-offerings";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { formatTitleCase } from "@/lib/format/text-case";
@@ -30,10 +32,13 @@ const LINK_BASE =
 /**
  * Pathway sub-navigation — text-first tabs with a single active underline.
  */
+type SubNavItem = { key: string; label: string; href: string };
+
 export function MarketingSiteSubNav() {
   const pathname = usePathname() ?? "/";
   const { t, locale } = useMarketingI18n();
   const { region } = useNursenestRegion();
+  const { country } = useCountryPreference();
   const { theme } = useTheme();
   const navChromeStyle = getNavChromeStyle(theme);
 
@@ -43,14 +48,27 @@ export function MarketingSiteSubNav() {
     return withMarketingLocale(locale, mapped);
   };
 
-  const items = useMemo(() => {
+  const items = useMemo((): SubNavItem[] => {
+    // Country-specific exam labels take precedence over the generic i18n keys.
+    const labels = countryExamLabels(country);
     const strip = getExamNavStripItems(region);
+    const examItems: SubNavItem[] = strip.map((s) => {
+      let label: string;
+      switch (s.id) {
+        case "rn":    label = labels.rn;     break;
+        case "pn":    label = labels.pn;     break;
+        case "np":    label = labels.np;     break;
+        case "allied":label = labels.allied; break;
+        default:      label = formatTitleCase(t(s.labelKey), locale);
+      }
+      return { key: s.id, label, href: s.href };
+    });
     return [
-      ...strip.map((s) => ({ key: s.id, labelKey: s.labelKey, href: s.href })),
-      { key: "pre-nursing", labelKey: "nav.preNursing" as const, href: "/pre-nursing" },
-      { key: "tools", labelKey: "nav.tools" as const, href: HUB.tools },
+      ...examItems,
+      { key: "pre-nursing", label: formatTitleCase(t("nav.preNursing"), locale), href: "/pre-nursing" },
+      { key: "tools",       label: formatTitleCase(t("nav.tools"), locale),      href: HUB.tools },
     ];
-  }, [region]);
+  }, [region, country, t, locale]);
 
   const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
 
@@ -82,7 +100,7 @@ export function MarketingSiteSubNav() {
                     })
                   }
                 >
-                  {formatTitleCase(t(item.labelKey), locale)}
+                  {item.label}
                 </Link>
               </li>
             );

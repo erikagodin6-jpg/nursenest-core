@@ -219,7 +219,7 @@ export async function loadReviewQueueInitialData(
     {
       surface: "review-queue-initial",
       userId,
-      ttlSeconds: 30,
+      ttlSeconds: 120,
     },
     () => loadReviewQueueInitialDataUncached(userId),
   );

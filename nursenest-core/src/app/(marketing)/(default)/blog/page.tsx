@@ -93,10 +93,10 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
 }
 
 /**
- * ISR backup window. On-demand revalidation runs on publish/approve/cron; keep this shorter so a missed
- * `revalidatePath` does not hide new posts for a full hour.
+ * ISR backup window. On-demand revalidation fires on publish/approve/cron; the passive window is a safety
+ * net only — 10 minutes is generous enough for any missed revalidatePath without over-hammering the DB.
  */
-export const revalidate = 180;
+export const revalidate = 600;
 
 type Props = { searchParams: Promise<{ page?: string; q?: string }> };
 

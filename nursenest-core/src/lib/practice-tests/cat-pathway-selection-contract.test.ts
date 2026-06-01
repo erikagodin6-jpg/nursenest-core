@@ -144,14 +144,14 @@ describe("ambiguity picker URLs: each eligible pathway gets a scoped start link"
     assert.equal(qNp.get("pathwayId"), "us-np-fnp");
   });
 
-  it("each pathway URL targets the shared setup launcher without forcing CAT mode", () => {
+  it("each pathway URL targets the shared setup launcher with CAT mode selected", () => {
     const ids = ["us-rn-nclex-rn", "ca-rn-nclex-rn", "us-np-fnp", "ca-np-cnple"];
     for (const id of ids) {
       const url = appPathwayCatSessionStartPath(id);
       assert.ok(url.startsWith("/app/practice-tests?"), `${id}: must target practice-tests hub`);
       const q = new URLSearchParams(url.slice("/app/practice-tests?".length));
       assert.equal(q.get("pathwayId"), id);
-      assert.equal(q.get("catLaunch"), null);
+      assert.equal(q.get("catLaunch"), "1");
     }
   });
 });
@@ -267,19 +267,19 @@ describe("ambiguity picker: empty catEligibleOptions contract", () => {
     const url = appPathwayCatSessionStartPath("some-unexpected-id");
     const q = new URLSearchParams(url.slice("/app/practice-tests?".length));
     assert.equal(q.get("pathwayId"), "some-unexpected-id");
-    assert.equal(q.get("catLaunch"), null);
+    assert.equal(q.get("catLaunch"), "1");
   });
 });
 
 // ─── 7. URL helper: pathwayId encoding (edge cases) ──────────────────────────
 
 describe("appPathwayCatSessionStartPath: pathway-scoped CAT start URL", () => {
-  it("produces a URL with the pathwayId query param", () => {
+  it("produces a URL with the pathwayId query param and CAT intent", () => {
     const url = appPathwayCatSessionStartPath("us-rn-nclex-rn");
     assert.ok(url.startsWith("/app/practice-tests?"), "must target shared setup launcher");
     const q = new URLSearchParams(url.slice("/app/practice-tests?".length));
     assert.equal(q.get("pathwayId"), "us-rn-nclex-rn");
-    assert.equal(q.get("catLaunch"), null);
+    assert.equal(q.get("catLaunch"), "1");
   });
 
   it("trims the pathwayId in the URL", () => {
@@ -288,11 +288,11 @@ describe("appPathwayCatSessionStartPath: pathway-scoped CAT start URL", () => {
     assert.equal(q.get("pathwayId"), "us-np-fnp");
   });
 
-  it("does not force catLaunch on the practice-tests launcher", () => {
+  it("selects CAT mode on the practice-tests launcher", () => {
     const url = appPathwayCatSessionStartPath("ca-rn-nclex-rn");
     assert.ok(url.startsWith("/app/practice-tests?"));
     const q = new URLSearchParams(url.slice("/app/practice-tests?".length));
-    assert.equal(q.get("catLaunch"), null);
+    assert.equal(q.get("catLaunch"), "1");
     assert.equal(q.get("pathwayId"), "ca-rn-nclex-rn");
   });
 });

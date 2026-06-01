@@ -520,7 +520,7 @@ export async function loadPremiumDashboardSnapshot(
     {
       surface: "premium-dashboard-snapshot",
       userId,
-      ttlSeconds: 45,
+      ttlSeconds: 300,
       keyParts: [
         learnerPrivateReadAccessScopeKey(entitlement),
         { degraded: shouldSkipNonCriticalLearnerWork() },

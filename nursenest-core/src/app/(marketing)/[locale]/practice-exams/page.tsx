@@ -16,7 +16,7 @@ import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 
-export const revalidate = 600;
+export const revalidate = 3600;
 
 type Props = { params: Promise<{ locale: string }> };
 

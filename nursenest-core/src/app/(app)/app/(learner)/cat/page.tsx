@@ -6,9 +6,9 @@ type PageProps = { searchParams: Promise<Record<string, string | string[] | unde
  * `/app/cat` is a redirect alias. CAT and adaptive flows live under the
  * shared `/app/practice-tests` launcher.
  *
- * Preserve query params so `pathwayId` deep links keep working, but do not
- * force CAT mode. The learner must still land on the setup surface where they
- * can choose systems, focus, mode, and question count.
+ * Preserve query params so `pathwayId` deep links keep working. Because this
+ * alias is specifically `/app/cat`, carry CAT intent into the unified setup
+ * surface instead of dropping the learner into generic practice exams.
  */
 export default async function CatAliasPage({ searchParams }: PageProps) {
   const sp = await searchParams;
@@ -21,6 +21,7 @@ export default async function CatAliasPage({ searchParams }: PageProps) {
       q.set(k, String(v));
     }
   }
+  q.set("catLaunch", "1");
   const suffix = q.toString();
   redirect(suffix ? `/app/practice-tests?${suffix}` : "/app/practice-tests");
 }

@@ -29,7 +29,7 @@ type InventoryCacheEntry = {
 };
 
 const inventoryCache = new Map<string, InventoryCacheEntry>();
-const INVENTORY_CACHE_TTL_MS = 30_000;
+const INVENTORY_CACHE_TTL_MS = 120_000; // 2 min — inventory counts change only on publish
 const INVENTORY_CACHE_MAX = 2000;
 
 function inventoryCacheKey(userId: string, pathwayId: string): string {

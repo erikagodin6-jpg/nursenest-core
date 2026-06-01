@@ -53,8 +53,8 @@ function isSafeAlliedProfession(
  * @deprecated Prefer `/app/practice-tests?pathwayId=...`.
  *
  * Direct CAT launch compatibility route. Non-CNPLE learners now land on the
- * shared practice-tests launcher so they can choose mode, systems, focus, and
- * question count before starting.
+ * shared practice-tests launcher with CAT mode selected, so they can choose
+ * systems, focus, and question count before starting.
  *
  * Routes:
  * - CNPLE → LOFT cases
@@ -88,7 +88,7 @@ export default async function CatDirectLaunchRedirectPage({
     ? sp.alliedProfession.trim()
     : null;
 
-  const q = new URLSearchParams({ pathwayId });
+  const q = new URLSearchParams({ pathwayId, catLaunch: "1" });
   if (allied) q.set("alliedProfession", allied);
   redirect(`/app/practice-tests?${q.toString()}`);
 }

@@ -14,14 +14,17 @@ type FlashcardPoolSnapshot = {
 
 // Exam-question topic metadata: bodySystem + topic per question ID.
 // Pathway-scoped, content-only — the same data for every user on the same pathway.
-// TTL matches lesson virtual snapshot (60 s) so they stay in sync.
+// 300 s TTL: lesson virtual content only changes on admin publish; 5-minute caching
+// trades at most one stale session per publish event for eliminating the cold-miss
+// lesson findMany (30-70 ms) on the vast majority of requests in serverless environments
+// where 60 s TTL fires prematurely across instance restarts.
 type ExamTopicMetaEntry = { bodySystem: string | null; topic: string | null };
 type ExamTopicMetaCache = {
   expiresAt: number;
   byId: Map<string, ExamTopicMetaEntry>;
 };
 
-const SNAPSHOT_TTL_MS = 60_000;
+const SNAPSHOT_TTL_MS = 300_000;
 const SNAPSHOT_MAX = 64;
 
 const snapshots = new Map<

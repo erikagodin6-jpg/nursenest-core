@@ -1,6 +1,6 @@
 # Lesson Normalization Coverage
 
-Generated at: 2026-06-01T20:35:36.291Z
+Generated at: 2026-06-01T21:18:58.567Z
 
 ## Pathway Coverage
 
@@ -27,11 +27,11 @@ Exclusions:
 
 ### `ca-np-cnple`
 
-- Raw lessons: 436
-- Normalized lessons: 436
-- Renderable lessons: 436
+- Raw lessons: 441
+- Normalized lessons: 441
+- Renderable lessons: 441
 - Excluded lessons: 0
-- Raw to renderable ratio: 436/436 (100%)
+- Raw to renderable ratio: 441/441 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /canada/np/cnple/lessons/{lessonSlug}
@@ -48,11 +48,11 @@ Exclusions:
 
 ### `ca-rn-nclex-rn`
 
-- Raw lessons: 797
-- Normalized lessons: 797
-- Renderable lessons: 797
+- Raw lessons: 800
+- Normalized lessons: 800
+- Renderable lessons: 800
 - Excluded lessons: 0
-- Raw to renderable ratio: 797/797 (100%)
+- Raw to renderable ratio: 800/800 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /canada/rn/nclex-rn/lessons/{lessonSlug}
@@ -69,11 +69,11 @@ Exclusions:
 
 ### `ca-rpn-rex-pn`
 
-- Raw lessons: 481
-- Normalized lessons: 481
-- Renderable lessons: 413
+- Raw lessons: 482
+- Normalized lessons: 482
+- Renderable lessons: 414
 - Excluded lessons: 68
-- Raw to renderable ratio: 413/481 (86%)
+- Raw to renderable ratio: 414/482 (86%)
 - Unexpected exclusions: 68 (14.1% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /canada/pn/rex-pn/lessons/{lessonSlug}
@@ -262,12 +262,12 @@ Exclusions:
 
 ### `us-np-fnp`
 
-- Raw lessons: 576
-- Normalized lessons: 576
-- Renderable lessons: 496
+- Raw lessons: 581
+- Normalized lessons: 581
+- Renderable lessons: 501
 - Excluded lessons: 80
-- Raw to renderable ratio: 496/576 (86%)
-- Unexpected exclusions: 80 (13.9% of raw)
+- Raw to renderable ratio: 501/581 (86%)
+- Unexpected exclusions: 80 (13.8% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /us/np/fnp/lessons/{lessonSlug}
 - Sample public lesson path: /us/np/fnp/lessons/np-acute-coronary-syndrome-recognition-and-initial-management
@@ -362,11 +362,11 @@ Exclusions:
 
 ### `us-rn-nclex-rn`
 
-- Raw lessons: 798
-- Normalized lessons: 798
-- Renderable lessons: 798
+- Raw lessons: 801
+- Normalized lessons: 801
+- Renderable lessons: 801
 - Excluded lessons: 0
-- Raw to renderable ratio: 798/798 (100%)
+- Raw to renderable ratio: 801/801 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /us/rn/nclex-rn/lessons/{lessonSlug}

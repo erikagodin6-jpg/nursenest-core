@@ -35,6 +35,7 @@ import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { jsonResponseGuarded } from "@/lib/server/response-guard";
 import { loadWithManifest, lessonManifestKey, lessonManifestSnapshotPath, type LessonManifestPayload } from "@/lib/server/manifest-loader";
+import { buildLessonsListCatalogFallback } from "@/lib/study-content-failover/lessons-list-catalog-fallback";
 
 export const dynamic = "force-dynamic";
 
@@ -200,6 +201,17 @@ export async function GET(req: NextRequest) {
         return jsonResponseGuarded("/api/lessons", subscriberCursorBody);
       } catch (e) {
         safeServerLogCritical("api_lessons", "prisma_find_failed_cursor", { pageSize }, e);
+        const catalogResult = buildLessonsListCatalogFallback({
+          tier: String(gate.entitlement.tier ?? ""),
+          country: String(gate.entitlement.country ?? ""),
+          page: 1,
+          pageSize,
+          reason: "subscriber_cursor_db_failed",
+        });
+        if (catalogResult) {
+          logLargeApiResponse("/api/lessons", estimateJsonUtf8Bytes(catalogResult));
+          return jsonResponseGuarded("/api/lessons", catalogResult);
+        }
         return NextResponse.json({ error: "Unable to load lessons. Try again shortly." }, { status: 503 });
       }
     }
@@ -293,6 +305,20 @@ export async function GET(req: NextRequest) {
         message: "subscriber lesson list failure",
       });
       safeServerLogCritical("api_lessons", "prisma_find_failed", { page }, e);
+
+      // ── Tertiary: catalog-derived lesson list ─────────────────────────────
+      const catalogResult = buildLessonsListCatalogFallback({
+        tier: String(gate.entitlement.tier ?? ""),
+        country: String(gate.entitlement.country ?? ""),
+        page,
+        pageSize,
+        reason: "subscriber_db_failed",
+      });
+      if (catalogResult) {
+        logLargeApiResponse("/api/lessons", estimateJsonUtf8Bytes(catalogResult));
+        return jsonResponseGuarded("/api/lessons", catalogResult);
+      }
+
       return NextResponse.json({ error: "Unable to load lessons. Try again shortly." }, { status: 503 });
     }
   }

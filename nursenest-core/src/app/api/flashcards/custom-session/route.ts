@@ -15,12 +15,18 @@ import { parseCustomSessionSourceKind } from "@/lib/flashcards/custom-session-ca
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 import { TimeoutError, withTimeout } from "@/lib/server/with-timeout";
+import {
+  buildSelfHealingCacheKey,
+  getSelfHealingSessionCache,
+  setSelfHealingSessionCache,
+} from "@/lib/study-content-failover/self-healing-flashcard-session-cache";
+import { buildFlashcardCatalogFallbackSession } from "@/lib/study-content-failover/build-flashcard-catalog-fallback-session";
 
 export const dynamic = "force-dynamic";
 
 type CustomSessionCountOnlyCacheEntry = { cachedAtMs: number; body: unknown };
 const customSessionCountOnlyCache = new Map<string, CustomSessionCountOnlyCacheEntry>();
-const CUSTOM_SESSION_COUNT_ONLY_CACHE_TTL_MS = 15_000;
+const CUSTOM_SESSION_COUNT_ONLY_CACHE_TTL_MS = 60_000; // 60 s — count-only results are stable across filter toggles
 const CUSTOM_SESSION_COUNT_ONLY_CACHE_MAX = 2000;
 
 type FlashcardSessionCreateLogContext = {
@@ -185,6 +191,25 @@ export async function GET(req: NextRequest) {
         offset: String(offset),
       };
 
+      const selfHealingKey = buildSelfHealingCacheKey({
+        pathwayId,
+        lessonId: lessonId ?? null,
+        tier: String(entitlement.tier ?? ""),
+        country: String(entitlement.country ?? ""),
+        selectedCategories,
+        sourceKind,
+        mode,
+        limit,
+        weakOnly,
+        incorrectOnly,
+        starredOnly,
+        savedOnly,
+        notesOnly,
+        revisitOnly,
+        notStudiedOnly,
+        recentStudiedOnly,
+      });
+
       const topicIdsForLog =
         selectedCategories.length > 0
           ? selectedCategories.slice(0, 24).join(",")
@@ -218,13 +243,10 @@ export async function GET(req: NextRequest) {
         failureReason: "",
       });
 
-      // Timeout budgets:
-      //   Full card fetch  (includeCards=1): 7 000 ms — allows the DB scan (up to 800 rows),
-      //     progress query, and serialization to complete. The client per-attempt timeout is
-      //     5 500 ms, so we MUST return the 503 before the client gives up and switches to the
-      //     generic catch-block "TimeoutError" path.
-      //   Count-only        (includeCards=0): 2 500 ms — only inventory counts, no card bodies.
-      const sessionBuildTimeoutMs = includeCards ? 7_000 : 2_500;
+      // Timeout budgets must be lower than the browser attempt timeout so the client receives
+      // structured JSON instead of aborting locally with the hydration-race timeout copy.
+      // Target warm path: <1s. Hard fallback: return retryable JSON before client timeout.
+      const sessionBuildTimeoutMs = includeCards ? 4_800 : 1_200;
       const sessionBuildStart = Date.now();
       const built = await withTimeout(
         buildFlashcardCustomSession({
@@ -278,15 +300,58 @@ export async function GET(req: NextRequest) {
           eligibleFlashcards: null,
           finalSessionPoolSize: 0,
           failureReason: `${built.code}:${kind}`.slice(0, 120),
-          // Root-cause timing: helps distinguish slow-DB from timeout vs genuine error.
           buildDurationMs: sessionBuildDurationMs,
           timeoutBudgetMs: sessionBuildTimeoutMs,
         });
+
+        // ── Secondary: in-memory session cache ───────────────────────────────
+        const cachedSession = getSelfHealingSessionCache(selfHealingKey);
+        if (cachedSession) {
+          const h = new Headers(headers);
+          h.set("x-nn-session-source", "secondary_cache");
+          h.set("x-nn-session-build-ms", String(sessionBuildDurationMs));
+          const healedBody = {
+            ok: true,
+            unsupportedFilters: [],
+            summary: cachedSession.summary,
+            categoryOptions: cachedSession.categoryOptions,
+            cards: cachedSession.cards,
+          };
+          h.set("x-nn-session-response-bytes", String(Buffer.byteLength(JSON.stringify(healedBody), "utf8")));
+          return NextResponse.json(healedBody, { status: 200, headers: h });
+        }
+
+        // ── Tertiary: catalog-derived virtual cards ───────────────────────────
+        if (pathwayId) {
+          const catalogSession = buildFlashcardCatalogFallbackSession({
+            pathwayId,
+            limit,
+            mode,
+            includeCards,
+            tier: String(entitlement.tier ?? ""),
+            country: String(entitlement.country ?? ""),
+          });
+          if (catalogSession) {
+            const h = new Headers(headers);
+            h.set("x-nn-session-source", "tertiary_catalog");
+            h.set("x-nn-session-build-ms", String(sessionBuildDurationMs));
+            const healedBody = {
+              ok: true,
+              unsupportedFilters: [],
+              summary: catalogSession.summary,
+              categoryOptions: catalogSession.categoryOptions,
+              cards: catalogSession.cards,
+            };
+            h.set("x-nn-session-response-bytes", String(Buffer.byteLength(JSON.stringify(healedBody), "utf8")));
+            return NextResponse.json(healedBody, { status: 200, headers: h });
+          }
+        }
+
+        // All tiers exhausted — only now surface an error
         const h = new Headers(headers);
         h.set("Retry-After", "3");
         h.set("x-nn-session-build-ms", String(sessionBuildDurationMs));
-        return NextResponse.json(
-          {
+        const errorBody = {
             ok: false,
             code: built.code,
             error: built.message,
@@ -299,9 +364,10 @@ export async function GET(req: NextRequest) {
               finalCount: 0,
               reasonFailed: `${kind}:${built.reason}`.slice(0, 500),
             },
-          },
-          { status: 503, headers: h },
-        );
+          };
+        const responseBytes = Buffer.byteLength(JSON.stringify(errorBody), "utf8");
+        h.set("x-nn-session-response-bytes", String(responseBytes));
+        return NextResponse.json(errorBody, { status: 503, headers: h });
       }
 
       if (includeCards && built.summary.matchingCards === 0) {
@@ -316,8 +382,8 @@ export async function GET(req: NextRequest) {
           finalSessionPoolSize: 0,
           failureReason: "empty_pool_after_filters",
         });
-        return NextResponse.json(
-          {
+        h.set("x-nn-session-build-ms", String(sessionBuildDurationMs));
+        const emptyBody = {
             ok: false,
             code: "empty_flashcard_pool",
             error: "No flashcards found for selected systems.",
@@ -330,9 +396,9 @@ export async function GET(req: NextRequest) {
               finalCount: 0,
               reasonFailed: "empty_pool_after_filters",
             },
-          },
-          { status: 404, headers: h },
-        );
+          };
+        h.set("x-nn-session-response-bytes", String(Buffer.byteLength(JSON.stringify(emptyBody), "utf8")));
+        return NextResponse.json(emptyBody, { status: 404, headers: h });
       }
 
       if (includeCards && built.summary.matchingCards > 0 && built.summary.returnedCards === 0) {
@@ -347,8 +413,8 @@ export async function GET(req: NextRequest) {
           finalSessionPoolSize: 0,
           failureReason: "serialized_session_window_empty",
         });
-        return NextResponse.json(
-          {
+        h.set("x-nn-session-build-ms", String(sessionBuildDurationMs));
+        const invalidBody = {
             ok: false,
             code: "session_data_invalid",
             error: "Session data is invalid.",
@@ -361,9 +427,9 @@ export async function GET(req: NextRequest) {
               finalCount: 0,
               reasonFailed: "serialized_session_window_empty",
             },
-          },
-          { status: 422, headers: h },
-        );
+          };
+        h.set("x-nn-session-response-bytes", String(Buffer.byteLength(JSON.stringify(invalidBody), "utf8")));
+        return NextResponse.json(invalidBody, { status: 422, headers: h });
       }
 
       safeServerLog("flashcards", "custom_session_query", {
@@ -414,6 +480,9 @@ export async function GET(req: NextRequest) {
         mode: built.summary.mode,
         cardLimit: built.summary.cardLimit,
         offset: String(built.summary.offset ?? 0),
+        buildDurationMs: sessionBuildDurationMs,
+        timeoutBudgetMs: sessionBuildTimeoutMs,
+        responseBytes: null,
       });
       logCoreApiStudyDiagnostic({
         endpoint: "GET /api/flashcards/custom-session",
@@ -429,6 +498,11 @@ export async function GET(req: NextRequest) {
             : undefined,
       });
 
+      // Populate secondary cache with successful full-card sessions for silent fallback.
+      if (includeCards && built.summary.returnedCards > 0) {
+        setSelfHealingSessionCache(selfHealingKey, built);
+      }
+
       const body = {
         ok: true,
         unsupportedFilters: [],
@@ -436,9 +510,21 @@ export async function GET(req: NextRequest) {
         categoryOptions: built.categoryOptions,
         cards: built.cards,
       };
+      const responseBytes = Buffer.byteLength(JSON.stringify(body), "utf8");
 
       // Expose build duration as a diagnostic header for client-side telemetry.
       headers.set("x-nn-session-build-ms", String(sessionBuildDurationMs));
+      headers.set("x-nn-session-response-bytes", String(responseBytes));
+      safeServerLog("flashcards", "FLASHCARD_SESSION_RESPONSE", {
+        userId: userId.slice(0, 8),
+        pathway: built.summary.pathwayId ?? pathwayId ?? "",
+        includeCards: includeCards ? "1" : "0",
+        buildDurationMs: sessionBuildDurationMs,
+        timeoutBudgetMs: sessionBuildTimeoutMs,
+        responseBytes,
+        returnedCards: built.summary.returnedCards,
+        matchingCards: built.summary.matchingCards,
+      });
 
       // Cache only count-only responses (includeCards=0); full card payloads can be large and user-state sensitive.
       if (!includeCards) {
@@ -453,6 +539,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(body, { headers });
     } catch (error) {
       safeServerLogCritical("flashcards", "custom_session_route_error", {}, error);
+      const isTimeout = error instanceof TimeoutError || (error instanceof Error && /timeout/i.test(error.message));
       if (launchLogContext) {
         safeServerLog("flashcards", "FLASHCARD_SESSION_CREATE", {
           stage: "failed",
@@ -461,16 +548,87 @@ export async function GET(req: NextRequest) {
           publishedFlashcards: null,
           eligibleFlashcards: null,
           finalSessionPoolSize: 0,
-          failureReason: error instanceof TimeoutError || (error instanceof Error && /timeout/i.test(error.message))
-            ? "session_timeout"
-            : "route_exception",
+          failureReason: isTimeout ? "session_timeout" : "route_exception",
         });
       }
+
+      // ── Secondary: in-memory session cache (on route-level exception / timeout) ──
+      if (launchLogContext) {
+        const sp = req.nextUrl.searchParams;
+        const catchPathwayId = sp.get("pathwayId")?.trim() || null;
+        const catchLessonId = sp.get("lessonId")?.trim() || null;
+        const catchCategories = parseCustomSessionCategories(sp.get("categories"));
+        const catchMode = parseCustomSessionStudyMode(sp.get("mode"));
+        const catchLimit = parseCustomSessionCardLimit(sp.get("cardLimit"));
+        const catchSourceKind = parseCustomSessionSourceKind(sp.get("sourceKind"));
+        const catchKey = buildSelfHealingCacheKey({
+          pathwayId: catchPathwayId,
+          lessonId: catchLessonId,
+          tier: launchLogContext.tier,
+          country: launchLogContext.country,
+          selectedCategories: catchCategories,
+          sourceKind: catchSourceKind,
+          mode: catchMode,
+          limit: catchLimit,
+          weakOnly: sp.get("weakOnly") === "1",
+          incorrectOnly: sp.get("incorrectOnly") === "1",
+          starredOnly: sp.get("starredOnly") === "1",
+          savedOnly: sp.get("savedOnly") === "1",
+          notesOnly: sp.get("notesOnly") === "1",
+          revisitOnly: sp.get("revisitOnly") === "1",
+          notStudiedOnly: sp.get("notStudiedOnly") === "1",
+          recentStudiedOnly: sp.get("recentStudiedOnly") === "1",
+        });
+        const cachedSession = getSelfHealingSessionCache(catchKey);
+        if (cachedSession) {
+          const h = mergeSubscriberPrivateCacheHeaders();
+          h.set("x-nn-session-source", "secondary_cache");
+          h.set("x-nn-session-timeout-ms", isTimeout ? "4800" : "0");
+          const healedBody = {
+            ok: true,
+            unsupportedFilters: [],
+            summary: cachedSession.summary,
+            categoryOptions: cachedSession.categoryOptions,
+            cards: cachedSession.cards,
+          };
+          h.set("x-nn-session-response-bytes", String(Buffer.byteLength(JSON.stringify(healedBody), "utf8")));
+          return NextResponse.json(healedBody, { status: 200, headers: h });
+        }
+
+        // ── Tertiary: catalog fallback on exception ──────────────────────────
+        if (catchPathwayId) {
+          const normalizedPathwayId = catchPathwayId;
+          const includeCardsParam = sp.get("includeCards");
+          const catchIncludeCards = includeCardsParam === "1";
+          const catalogSession = buildFlashcardCatalogFallbackSession({
+            pathwayId: normalizedPathwayId,
+            limit: catchLimit,
+            mode: catchMode,
+            includeCards: catchIncludeCards,
+            tier: launchLogContext.tier,
+            country: launchLogContext.country,
+          });
+          if (catalogSession) {
+            const h = mergeSubscriberPrivateCacheHeaders();
+            h.set("x-nn-session-source", "tertiary_catalog");
+            h.set("x-nn-session-timeout-ms", isTimeout ? "4800" : "0");
+            const healedBody = {
+              ok: true,
+              unsupportedFilters: [],
+              summary: catalogSession.summary,
+              categoryOptions: catalogSession.categoryOptions,
+              cards: catalogSession.cards,
+            };
+            h.set("x-nn-session-response-bytes", String(Buffer.byteLength(JSON.stringify(healedBody), "utf8")));
+            return NextResponse.json(healedBody, { status: 200, headers: h });
+          }
+        }
+      }
+
       const h = mergeSubscriberPrivateCacheHeaders();
       h.set("Retry-After", "3");
-      const isTimeout = error instanceof TimeoutError || (error instanceof Error && /timeout/i.test(error.message));
-      return NextResponse.json(
-        {
+      h.set("x-nn-session-timeout-ms", isTimeout ? "4800" : "0");
+      const errorBody = {
           ok: false,
           code: isTimeout ? "session_timeout" : "service_unavailable",
           error: isTimeout
@@ -485,9 +643,9 @@ export async function GET(req: NextRequest) {
             finalCount: 0,
             reasonFailed: error instanceof Error ? error.message.slice(0, 500) : "unknown",
           },
-        },
-        { status: 503, headers: h },
-      );
+        };
+      h.set("x-nn-session-response-bytes", String(Buffer.byteLength(JSON.stringify(errorBody), "utf8")));
+      return NextResponse.json(errorBody, { status: 503, headers: h });
     }
   });
 }

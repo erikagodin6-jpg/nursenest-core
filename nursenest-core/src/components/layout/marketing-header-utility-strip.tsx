@@ -1,25 +1,14 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
-import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
-import { CompactCountryTrigger } from "@/components/layout/compact-country-trigger";
-import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
-import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-region";
-import { effectiveMarketingHeaderGlobalRegion } from "@/lib/marketing/marketing-header-global-region";
-import { mapLegacyMarketingHref } from "@/lib/marketing/marketing-chrome-href";
-import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { isStaffRole } from "@/lib/auth/staff-roles";
 import { MarketingUtilityFloatingPanel } from "@/components/layout/marketing-utility-floating-panel";
 import { publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
 
-const CountrySelectorLazy = dynamic(
-  () => import("@/components/layout/global-context-switcher").then((m) => ({ default: m.CountrySelector })),
+const CountrySelectorDropdownLazy = dynamic(
+  () => import("@/components/layout/country-selector-dropdown").then((m) => ({ default: m.CountrySelectorDropdown })),
   { ssr: false },
 );
 
@@ -33,14 +22,12 @@ const ThemePickerLazy = dynamic(
   { ssr: false },
 );
 
-const COUNTRY_PANEL_WIDTH_PX = 288;
 const LANGUAGE_PANEL_WIDTH_PX = 208;
 
 export type MarketingHeaderUtilityChromeMode = "dark-bar" | "standard" | "row4" | "dark-marketing";
 
 export function MarketingHeaderUtilityCluster({
   chromeMode,
-  includeUnpublishedRegions,
   className,
 }: {
   chromeMode: MarketingHeaderUtilityChromeMode;
@@ -48,37 +35,18 @@ export function MarketingHeaderUtilityCluster({
   className?: string;
 }) {
   const { t, locale } = useMarketingI18n();
-  const pathname = usePathname() ?? "/";
-  const router = useRouter();
-  const sessionState = useSession();
-  const session = sessionState?.data ?? null;
-  const user = session?.user;
-  const { region, setRegion } = useNursenestRegion();
   const [langOpen, setLangOpen] = useState(false);
-  const [countryOpen, setCountryOpen] = useState(false);
-  const countryAnchorRef = useRef<HTMLDivElement>(null);
-  const countryPanelRef = useRef<HTMLDivElement>(null);
   const langAnchorRef = useRef<HTMLDivElement>(null);
   const langPanelRef = useRef<HTMLDivElement>(null);
-
-  const regionToggleAnalytics = useMemo(
-    () => ({ currentRegion: region, surface: "utility_strip" as const }),
-    [region],
-  );
-  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, regionToggleAnalytics);
 
   useEffect(() => {
     const close = (e: MouseEvent) => {
       const target = e.target as Node;
-      if (countryAnchorRef.current?.contains(target) || countryPanelRef.current?.contains(target)) return;
       if (langAnchorRef.current?.contains(target) || langPanelRef.current?.contains(target)) return;
       setLangOpen(false);
-      setCountryOpen(false);
     };
     const onEscape = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
-      setLangOpen(false);
-      setCountryOpen(false);
+      if (e.key === "Escape") setLangOpen(false);
     };
     document.addEventListener("click", close);
     document.addEventListener("keydown", onEscape);
@@ -88,55 +56,10 @@ export function MarketingHeaderUtilityCluster({
     };
   }, []);
 
-  const globalLocale: GlobalLocaleCode = (locale as GlobalLocaleCode) ?? "en";
-  const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
-  const clientGlobalRegion = useClientGlobalRegionCookie();
-  const effectiveGlobalRegion: GlobalRegionSlug = useMemo(
-    () =>
-      effectiveMarketingHeaderGlobalRegion({
-        strippedPathname: strippedPath,
-        globalRegionCookie: clientGlobalRegion,
-        marketingExamRegion: region,
-        sessionCountryCode: user?.country,
-      }),
-    [strippedPath, clientGlobalRegion, region, user?.country],
-  );
-
-  const countrySelectorIncludeUnpublished =
-    typeof includeUnpublishedRegions === "boolean"
-      ? includeUnpublishedRegions
-      : Boolean(user?.role && isStaffRole(user.role));
-
-  const buildLocalizedMarketingPath = useCallback((localeCode: string, path: string) => {
-    const mapped = mapLegacyMarketingHref(path);
-    if (mapped.startsWith("http://") || mapped.startsWith("https://")) return mapped;
-    return withMarketingLocale(localeCode, mapped);
-  }, []);
-
-  const handleCountrySelect = useCallback(
-    async (newRegion: GlobalRegionSlug) => {
-      const { applyGlobalRegionSelection } = await import("@/lib/marketing/apply-global-region-selection");
-      await applyGlobalRegionSelection(newRegion, {
-        marketingLocale: globalLocale,
-        setUsCaMarketingRegion: setRegionAndRefresh,
-        router,
-        buildLocalizedPath: buildLocalizedMarketingPath,
-      });
-      setCountryOpen(false);
-    },
-    [globalLocale, setRegionAndRefresh, router, buildLocalizedMarketingPath],
-  );
-
   const triggerBase =
     "inline-flex h-[32px] items-center rounded-full border px-3 text-[0.8125rem] font-medium leading-tight tracking-normal";
   const darkMarketingTrigger =
     `${triggerBase} max-w-[11rem] gap-1 border-[color-mix(in_srgb,var(--nav-fg)_20%,transparent)] bg-[color-mix(in_srgb,var(--nav-fg)_8%,transparent)] font-normal text-[var(--nav-fg)] shadow-none transition-colors hover:bg-[color-mix(in_srgb,var(--nav-fg)_14%,transparent)]`;
-  const countryTriggerClass =
-    chromeMode === "row4"
-      ? `${triggerBase} nn-header-utility-trigger-row4 max-w-[11rem] gap-1 font-medium`
-      : chromeMode === "dark-marketing"
-        ? darkMarketingTrigger
-        : `${triggerBase} max-w-[11rem] gap-1 bg-white font-normal text-[var(--theme-heading-text)]`;
   const langButtonClass =
     chromeMode === "row4"
       ? `${triggerBase} nn-header-utility-trigger-row4 gap-0.5 font-medium transition-colors`
@@ -154,29 +77,7 @@ export function MarketingHeaderUtilityCluster({
       data-nn-header-layer="utility-controls"
       className={`nn-header-utility-cluster--quiet flex min-w-0 shrink flex-wrap items-center justify-end gap-1.5 lg:gap-2 ${className ?? ""}`}
     >
-      <div className="shrink-0" ref={countryAnchorRef}>
-        <CompactCountryTrigger
-          region={effectiveGlobalRegion}
-          onClick={() => setCountryOpen((open) => !open)}
-          className={countryTriggerClass}
-        />
-      </div>
-      <MarketingUtilityFloatingPanel
-        open={countryOpen}
-        anchorRef={countryAnchorRef}
-        panelRef={countryPanelRef}
-        widthPx={COUNTRY_PANEL_WIDTH_PX}
-      >
-        {countryOpen ? (
-          <CountrySelectorLazy
-            currentRegion={effectiveGlobalRegion}
-            onSelect={handleCountrySelect}
-            onClose={() => setCountryOpen(false)}
-            variant="popover"
-            includeUnpublishedRegions={countrySelectorIncludeUnpublished}
-          />
-        ) : null}
-      </MarketingUtilityFloatingPanel>
+      <CountrySelectorDropdownLazy variant="header" />
 
       <div className="shrink-0" ref={langAnchorRef}>
         <button type="button" onClick={() => setLangOpen((open) => !open)} className={langButtonClass} aria-expanded={langOpen}>

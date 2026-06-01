@@ -20,6 +20,9 @@ import {
 import { mergeMinimalMarketingLayoutShellMessages } from "@/lib/marketing-i18n/minimal-marketing-layout-shell-fallback";
 import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
+import { CountryPreferenceRoot } from "@/lib/region/use-country-preference";
+import { readOptionalCountryPreferenceFromCookie } from "@/lib/region/read-optional-country-preference-cookie.server";
+import { countryPreferenceToNursenestRegion } from "@/lib/region/country-preference";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { resolveMarketingExamRegionToggle } from "@/lib/marketing/resolve-default-layout-marketing-exam-region";
 import { detectedIpCountryFromHeaders } from "@/lib/region/detected-ip-country.server";
@@ -162,13 +165,20 @@ const MarketingLocaleLayout = traceLayout(
   } catch {
     marketingRequestPath = "/";
   }
-  const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
-  const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
-  const examRegionToggle = resolveMarketingExamRegionToggle({
-    marketingRegionCookie,
-    globalRegionSlug: serverGlobalRegionCookie,
-    detectedIpCountry,
-  });
+  const [marketingRegionCookie, serverGlobalRegionCookie, serverCountryPreference] = await Promise.all([
+    readOptionalMarketingRegionToggleForCountry(),
+    readOptionalGlobalRegionSlugFromCookie(),
+    readOptionalCountryPreferenceFromCookie(),
+  ]);
+  const examRegionToggle: MarketingRegionToggle =
+    marketingRegionCookie
+    ?? (serverCountryPreference
+      ? countryPreferenceToNursenestRegion(serverCountryPreference)
+      : resolveMarketingExamRegionToggle({
+        marketingRegionCookie,
+        globalRegionSlug: serverGlobalRegionCookie,
+        detectedIpCountry,
+      }));
   /** When only `nn_global_region` is set to us|canada, keep chrome country aligned with exam region. */
   const marketingCountryToggle: MarketingRegionToggle =
     marketingRegionCookie ??
@@ -190,33 +200,35 @@ const MarketingLocaleLayout = traceLayout(
           serverRegion={examRegionToggle}
           trustClientPersistedRegion={marketingRegionCookie !== undefined}
         >
-          <MarketingCountryChromeProvider country={marketingCountry}>
-            <MarketingLocaleUrlSync locale={locale} />
-            <OrganizationJsonLd />
-            <WebSiteJsonLd />
-            <MarketingFeedbackShell>
-              <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
-                <CheckoutGlobalRegionContextPathStamp />
-                <div className="nn-marketing-surface nn-marketing-brand-root flex min-h-screen flex-col">
-                  <SiteHeader serverHasStaffSession={staffSession != null} />
-                  <MarketingMainI18nShards
-                    locale={locale}
-                    publicContentOverrides={publicContentOverrides}
-                    trailingChrome={<SiteFooter />}
-                  >
-                    <main className="flex min-h-0 flex-1 flex-col">
-                      <MarketingMainErrorBoundary name="marketing_locale_main">
-                        <PremiumLayoutVersionMarker surface="marketing-locale" />
-                        <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
-                          {children}
-                        </MarketingMobileMotionShell>
-                      </MarketingMainErrorBoundary>
-                    </main>
-                  </MarketingMainI18nShards>
-                </div>
-              </MarketingHeaderGlobalRegionServerBridge>
-            </MarketingFeedbackShell>
-          </MarketingCountryChromeProvider>
+          <CountryPreferenceRoot serverCountry={serverCountryPreference}>
+            <MarketingCountryChromeProvider country={marketingCountry}>
+              <MarketingLocaleUrlSync locale={locale} />
+              <OrganizationJsonLd />
+              <WebSiteJsonLd />
+              <MarketingFeedbackShell>
+                <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+                  <CheckoutGlobalRegionContextPathStamp />
+                  <div className="nn-marketing-surface nn-marketing-brand-root flex min-h-screen flex-col">
+                    <SiteHeader serverHasStaffSession={staffSession != null} />
+                    <MarketingMainI18nShards
+                      locale={locale}
+                      publicContentOverrides={publicContentOverrides}
+                      trailingChrome={<SiteFooter />}
+                    >
+                      <main className="flex min-h-0 flex-1 flex-col">
+                        <MarketingMainErrorBoundary name="marketing_locale_main">
+                          <PremiumLayoutVersionMarker surface="marketing-locale" />
+                          <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
+                            {children}
+                          </MarketingMobileMotionShell>
+                        </MarketingMainErrorBoundary>
+                      </main>
+                    </MarketingMainI18nShards>
+                  </div>
+                </MarketingHeaderGlobalRegionServerBridge>
+              </MarketingFeedbackShell>
+            </MarketingCountryChromeProvider>
+          </CountryPreferenceRoot>
         </NursenestRegionRoot>
       </MarketingPublicContentEditProvider>
     </MarketingI18nProvider>

@@ -22,6 +22,16 @@ function delay(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+function retryAfterDelayMs(res: Response): number | null {
+  const raw = res.headers.get("Retry-After")?.trim();
+  if (!raw) return null;
+  const seconds = Number(raw);
+  if (Number.isFinite(seconds) && seconds >= 0) return Math.min(10_000, seconds * 1000);
+  const dateMs = Date.parse(raw);
+  if (!Number.isFinite(dateMs)) return null;
+  return Math.min(10_000, Math.max(0, dateMs - Date.now()));
+}
+
 function isTransientFetchFailure(err: unknown, init: RequestInit | undefined): boolean {
   if (init?.signal?.aborted) return false;
   if (err instanceof TypeError) return true;
@@ -88,7 +98,7 @@ export async function fetchWithRetry(
 
       if (!shouldRetry) return res;
       if (attempt >= attempts) return res;
-      await delay(baseDelayMs * attempt);
+      await delay(retryAfterDelayMs(res) ?? baseDelayMs * attempt);
     } catch (err) {
       if (init?.signal?.aborted) throw err;
       if (!isTransientFetchFailure(err, init)) throw err;

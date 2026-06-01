@@ -30,6 +30,7 @@ export function LessonReadingViewport({
   progressVisible = false,
   layout = "default",
   clinicalPearls = [],
+  showReadingProgressStrip = true,
   children,
 }: {
   sections: SectionEntry[];
@@ -38,6 +39,7 @@ export function LessonReadingViewport({
   /** RN stream uses the v2.7 reading workspace (left rail + pearls, no right rail). */
   layout?: "default" | "rn-v2";
   clinicalPearls?: ClinicalPearlLine[];
+  showReadingProgressStrip?: boolean;
   children: ReactNode;
 }) {
   const { t } = useMarketingI18n();
@@ -68,10 +70,11 @@ export function LessonReadingViewport({
     <div
       className="nn-lesson-reading-viewport"
       data-nn-lesson-reading-viewport
+      data-nn-premium-lessons-reading-layout
       data-layout={rnLayout ? "rn-v2" : undefined}
       data-right-collapsed={rightCollapsed ? "true" : undefined}
     >
-      {rnLayout ? (
+      {rnLayout && showReadingProgressStrip ? (
         <LessonReadingProgressStrip sections={sections} />
       ) : null}
 

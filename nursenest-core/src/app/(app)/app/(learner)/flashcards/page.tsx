@@ -278,20 +278,27 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
   let pathwayBootstrapSource: "primary" | "secondary" = "primary";
   let learnerPath: string | null = null;
 
-  const compatible = await listPathwaysCompatibleWithSubscription(entitlement);
+  // listPathwaysCompatibleWithSubscription and loadLearnerActivityContext are independent —
+  // start both simultaneously and process once both settle.
+  const shouldLoadActivity = Boolean(userId && isDatabaseUrlConfigured());
+  const [compatible, u] = await Promise.all([
+    listPathwaysCompatibleWithSubscription(entitlement),
+    shouldLoadActivity
+      ? Promise.race([
+          loadLearnerActivityContext(userId),
+          timeoutAfter<{ learnerPath: string | null }>(FLASHCARDS_PROFILE_BOOTSTRAP_TIMEOUT_MS),
+        ])
+      : Promise.resolve(null),
+  ]);
+
   pathwayOptions = compatible.map((p) => ({
     id: p.id,
     label: p.displayName ?? p.shortName,
   }));
 
-  if (userId && isDatabaseUrlConfigured()) {
+  if (shouldLoadActivity) {
     try {
-      const u = await Promise.race([
-        loadLearnerActivityContext(userId),
-        timeoutAfter<{ learnerPath: string | null }>(
-          FLASHCARDS_PROFILE_BOOTSTRAP_TIMEOUT_MS,
-        ),
-      ]);
+      // `u` is already resolved from the parallel fetch above.
 
       const lp = u?.learnerPath?.trim() ?? null;
       learnerPath = lp;

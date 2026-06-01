@@ -118,6 +118,20 @@
   font-size: 0.85rem;
 }
 
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-header-actions {
+  width: min(100%, 25rem);
+}
+
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-header-actions > .mb-2 {
+  margin-bottom: 0;
+}
+
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-header-actions .nn-lesson-reading-progress-strip,
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-header-actions .nn-lesson-phase-strip--compact {
+  width: 100%;
+  margin: 0;
+}
+
 /* editorial sections */
 .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-section-card {
   width: 100%;

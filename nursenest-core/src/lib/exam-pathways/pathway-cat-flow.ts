@@ -20,14 +20,16 @@ export function isPracticeTestsHubCatLaunchParam(value: string | null | undefine
 }
 
 /**
- * Pathway-scoped practice-test launcher entry.
- * Learners choose mode, systems, weak areas, and question count on `/app/practice-tests`.
+ * Pathway-scoped CAT launcher entry.
+ * CAT uses the unified `/app/practice-tests` surface, but CAT-specific CTAs
+ * must preserve CAT intent so the learner does not land in the generic
+ * practice-exam builder.
  */
 export function appPathwayCatSessionStartPath(
   pathwayId: string,
   opts?: { alliedProfession?: string | null },
 ): string {
-  const q = new URLSearchParams({ pathwayId: pathwayId.trim() });
+  const q = new URLSearchParams({ pathwayId: pathwayId.trim(), catLaunch: "1" });
   const ap = opts?.alliedProfession?.trim();
   if (ap) q.set("alliedProfession", ap);
   return `/app/practice-tests?${q.toString()}`;

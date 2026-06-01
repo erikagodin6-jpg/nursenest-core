@@ -76,29 +76,33 @@ export default async function StudyPlanPage({ searchParams }: Props) {
       }
 
       if (premiumSnapshot && topicPerf) {
-        await warmDurableLearnerCognitionCache(userId);
         insightSnapshot = premiumSnapshot.insights;
-        adaptive = await buildGovernedAdaptiveRecommendations({
-          examDatePlanType: userExam?.examDatePlanType,
-          examDate: userExam?.examDate ?? null,
-          readiness: premiumSnapshot.readiness,
-          weakTopics: topicPerf.weakTopics,
-          topicTrends: topicPerf.trends,
-          streakDays: premiumSnapshot.studyStreakDays,
-          lessonPct: premiumSnapshot.overallLessons.pct,
-          lessonsCompleted: premiumSnapshot.overallLessons.completed,
-          lessonsTotal: premiumSnapshot.overallLessons.total,
-          studyCadencePreference: userExam?.studyCadencePreference,
-          continueLesson: premiumSnapshot.continueLesson,
-          recommendedQuizTopic: premiumSnapshot.recommendedQuizTopic,
-          mockCount: premiumSnapshot.mockCount,
-          practiceSessionCount: premiumSnapshot.practice.sessionCount,
-          subscriberCountry: entitlement.country,
-          preferredPathwayId: premiumSnapshot.cognition?.pathwayId ?? premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? premiumSnapshot.pathways[0]?.pathwayId ?? null,
-          availablePathwayIds: premiumSnapshot.pathways.map((p) => p.pathwayId),
-          userId,
-          entitlement,
-        });
+        // warmDurableLearnerCognitionCache has no output consumed by buildGovernedAdaptiveRecommendations —
+        // run both in parallel to eliminate a full cache-warm round-trip from the serial critical path.
+        [, adaptive] = await Promise.all([
+          warmDurableLearnerCognitionCache(userId),
+          buildGovernedAdaptiveRecommendations({
+            examDatePlanType: userExam?.examDatePlanType,
+            examDate: userExam?.examDate ?? null,
+            readiness: premiumSnapshot.readiness,
+            weakTopics: topicPerf.weakTopics,
+            topicTrends: topicPerf.trends,
+            streakDays: premiumSnapshot.studyStreakDays,
+            lessonPct: premiumSnapshot.overallLessons.pct,
+            lessonsCompleted: premiumSnapshot.overallLessons.completed,
+            lessonsTotal: premiumSnapshot.overallLessons.total,
+            studyCadencePreference: userExam?.studyCadencePreference,
+            continueLesson: premiumSnapshot.continueLesson,
+            recommendedQuizTopic: premiumSnapshot.recommendedQuizTopic,
+            mockCount: premiumSnapshot.mockCount,
+            practiceSessionCount: premiumSnapshot.practice.sessionCount,
+            subscriberCountry: entitlement.country,
+            preferredPathwayId: premiumSnapshot.cognition?.pathwayId ?? premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? premiumSnapshot.pathways[0]?.pathwayId ?? null,
+            availablePathwayIds: premiumSnapshot.pathways.map((p) => p.pathwayId),
+            userId,
+            entitlement,
+          }),
+        ]);
       }
 
       if (userExam) {

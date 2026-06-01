@@ -7435,6 +7435,51 @@ html[data-theme="deep-twilight"] {
   gap: 0.65rem;
 }
 
+.nn-premium-lesson-detail-shell .nn-lesson-header-action-layout {
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-header-actions {
+  width: min(100%, 25rem);
+  align-self: stretch;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-header-actions > .mb-2,
+.nn-premium-lesson-detail-shell .nn-lesson-header-sequence-nav {
+  margin-bottom: 0 !important;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-header-sequence-nav {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-header-actions .nn-lesson-reading-progress-strip,
+.nn-premium-lesson-detail-shell .nn-lesson-header-actions .nn-lesson-phase-strip--compact {
+  width: 100%;
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+  border-radius: 0.65rem;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-header-actions .nn-lesson-reading-progress-strip__top {
+  margin-bottom: 0.35rem;
+  font-size: 0.72rem;
+}
+
+@media (min-width: 1024px) {
+  .nn-premium-lesson-detail-shell .nn-lesson-header-action-layout {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .nn-premium-lesson-detail-shell .nn-lesson-header-actions {
+    align-items: stretch;
+    width: min(25rem, 34vw);
+  }
+}
+
 .nn-lesson-hero-chip,
 .nn-individual-lesson-study-meta > span {
   min-height: 2.125rem;
@@ -8365,7 +8410,7 @@ html[data-theme="deep-twilight"] {
   border-radius: 0.625rem;
   border: 1px solid color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
   background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface));
-  padding: 0.625rem 0.6875rem;
+  padding: 1rem 1.125rem;
   font-size: 0.71875rem;
   line-height: 1.5;
   overflow-wrap: anywhere;
@@ -8377,8 +8422,8 @@ html[data-theme="deep-twilight"] {
 
 .nn-lesson-clinical-pearls-rail__box b {
   display: block;
-  margin-bottom: 0.3125rem;
-  font-size: 0.5rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.625rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;

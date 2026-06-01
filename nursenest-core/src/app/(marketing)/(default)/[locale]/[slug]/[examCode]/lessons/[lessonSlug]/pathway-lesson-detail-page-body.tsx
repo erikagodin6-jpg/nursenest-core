@@ -70,6 +70,7 @@ import {
   extractSecondaryExamContextLines,
 } from "@/lib/lessons/pathway-lesson-study-extract";
 import { LessonReadingViewport } from "@/components/lessons/lesson-reading-viewport";
+import { LessonReadingProgressStrip } from "@/components/lessons/lesson-reading-progress-strip";
 import { extractClinicalPearlLines } from "@/lib/lessons/extract-clinical-pearl-lines";
 import { rnLessonSectionStackClass } from "@/lib/lessons/rn-reading-stack";
 import {
@@ -718,10 +719,6 @@ export async function PathwayLessonDetailPageBody({
             pathname={pathname}
             navClassName="nn-marketing-caption text-[var(--theme-muted-text)]"
           />
-          <PathwayLessonSequenceNavBar
-            adjacent={lessonAdjacentHrefs}
-            className="mb-2"
-          />
           <PathwayLessonProgressTracker
             pathwayId={pathway.id}
             lessonSlug={lesson.slug}
@@ -741,7 +738,14 @@ export async function PathwayLessonDetailPageBody({
             reviewedLabel={reviewedLabel}
             compactHero={usesReadingV2Layout}
             trailing={
-              <div className="flex flex-col items-end gap-2">
+              <div className="nn-lesson-header-actions flex flex-col items-stretch gap-2">
+                <PathwayLessonSequenceNavBar
+                  adjacent={lessonAdjacentHrefs}
+                  className="nn-lesson-header-sequence-nav"
+                />
+                {usesReadingV2Layout ? (
+                  <LessonReadingProgressStrip sections={tocNavSections} />
+                ) : null}
                 {userId && fullAccess ? (
                   <PathwayLessonProgressBadgeLive
                     pathwayId={pathway.id}
@@ -846,6 +850,7 @@ export async function PathwayLessonDetailPageBody({
               progressVisible={Boolean(userId) && fullAccess}
               layout={usesReadingV2Layout ? "rn-v2" : "default"}
               clinicalPearls={rnClinicalPearlLines}
+              showReadingProgressStrip={!usesReadingV2Layout}
             >
               <div
                 className="nn-lesson-main nn-lesson-main--blossom min-w-0"

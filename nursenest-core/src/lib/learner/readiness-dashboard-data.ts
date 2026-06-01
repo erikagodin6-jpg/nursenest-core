@@ -201,7 +201,7 @@ export async function loadReadinessDashboardData(
     {
       surface: "readiness-dashboard",
       userId,
-      ttlSeconds: 45,
+      ttlSeconds: 300,
       keyParts: [learnerPrivateReadAccessScopeKey(entitlement)],
       bypass: !entitlement.hasAccess || entitlement.reason === "admin_override",
     },
