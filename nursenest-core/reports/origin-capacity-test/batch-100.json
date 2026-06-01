@@ -3,22 +3,23 @@
     "requested": 100,
     "audited": 100,
     "concurrency": 12,
-    "startedAt": "2026-06-01T03:23:30.192Z",
-    "finishedAt": "2026-06-01T03:24:26.874Z",
-    "durationMs": 56681,
+    "startedAt": "2026-06-01T04:12:32.482Z",
+    "finishedAt": "2026-06-01T04:14:09.924Z",
+    "durationMs": 97441,
     "statusCounts": {
-      "200": 100
+      "200": 99,
+      "fetch_error": 1
     },
     "upstreamFailures": 0,
-    "fetchErrors": 0,
-    "p50Ms": 6617,
-    "p95Ms": 12125,
-    "maxMs": 20004,
+    "fetchErrors": 1,
+    "p50Ms": 10693,
+    "p95Ms": 20003,
+    "maxMs": 20005,
     "healthBefore": [
       {
         "url": "https://nursenest.ca/healthz",
         "status": 200,
-        "ms": 50,
+        "ms": 49,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": "200",
@@ -27,7 +28,7 @@
       {
         "url": "https://nursenest.ca/readyz",
         "status": 200,
-        "ms": 100,
+        "ms": 96,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": "200",
@@ -38,7 +39,7 @@
       {
         "url": "https://nursenest.ca/healthz",
         "status": 200,
-        "ms": 102,
+        "ms": 47,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": "200",
@@ -47,7 +48,7 @@
       {
         "url": "https://nursenest.ca/readyz",
         "status": 200,
-        "ms": 125,
+        "ms": 90,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": "200",
@@ -57,18 +58,18 @@
   },
   "rows": [
     {
-      "url": "https://nursenest.ca/question-bank",
+      "url": "https://nursenest.ca",
       "status": 200,
-      "ms": 1654,
+      "ms": 7930,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
       "error": null
     },
     {
-      "url": "https://nursenest.ca",
+      "url": "https://nursenest.ca/question-bank",
       "status": 200,
-      "ms": 4499,
+      "ms": 9043,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -77,25 +78,7 @@
     {
       "url": "https://nursenest.ca/",
       "status": 200,
-      "ms": 4854,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/faq",
-      "status": 200,
-      "ms": 4920,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/for-institutions",
-      "status": 200,
-      "ms": 5019,
+      "ms": 10801,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -104,7 +87,25 @@
     {
       "url": "https://nursenest.ca/acceptable-use",
       "status": 200,
-      "ms": 7996,
+      "ms": 10986,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/faq",
+      "status": 200,
+      "ms": 12228,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/for-institutions",
+      "status": 200,
+      "ms": 12312,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -113,25 +114,7 @@
     {
       "url": "https://nursenest.ca/practice-exams",
       "status": 200,
-      "ms": 8734,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/privacy",
-      "status": 200,
-      "ms": 9307,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/disclaimer",
-      "status": 200,
-      "ms": 7667,
+      "ms": 16265,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -140,16 +123,7 @@
     {
       "url": "https://nursenest.ca/refund-policy",
       "status": 200,
-      "ms": 11294,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/questions/heart-failure-nclex",
-      "status": 200,
-      "ms": 6296,
+      "ms": 17810,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -158,16 +132,7 @@
     {
       "url": "https://nursenest.ca/about",
       "status": 200,
-      "ms": 11488,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/editorial-policy",
-      "status": 200,
-      "ms": 15413,
+      "ms": 20005,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -176,7 +141,7 @@
     {
       "url": "https://nursenest.ca/pricing",
       "status": 200,
-      "ms": 20004,
+      "ms": 20005,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -185,7 +150,16 @@
     {
       "url": "https://nursenest.ca/terms",
       "status": 200,
-      "ms": 20003,
+      "ms": 20002,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/privacy",
+      "status": 200,
+      "ms": 20002,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -194,25 +168,34 @@
     {
       "url": "https://nursenest.ca/questions/infection-control-nursing",
       "status": 200,
-      "ms": 12125,
+      "ms": 10431,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
       "error": null
     },
     {
-      "url": "https://nursenest.ca/content-review-policy",
+      "url": "https://nursenest.ca/questions/heart-failure-nclex",
       "status": 200,
-      "ms": 15739,
+      "ms": 10518,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
       "error": null
     },
     {
-      "url": "https://nursenest.ca/contact",
+      "url": "https://nursenest.ca/disclaimer",
       "status": 200,
-      "ms": 15686,
+      "ms": 17409,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/editorial-policy",
+      "status": 200,
+      "ms": 20003,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -221,16 +204,25 @@
     {
       "url": "https://nursenest.ca/questions/dha-exam-practice",
       "status": 200,
-      "ms": 11904,
+      "ms": 14155,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
       "error": null
     },
     {
-      "url": "https://nursenest.ca/case-studies",
+      "url": "https://nursenest.ca/content-review-policy",
       "status": 200,
-      "ms": 11785,
+      "ms": 20003,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/contact",
+      "status": 200,
+      "ms": 20003,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -239,43 +231,7 @@
     {
       "url": "https://nursenest.ca/tools",
       "status": 200,
-      "ms": 11998,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/exams/canada",
-      "status": 200,
-      "ms": 10482,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/nclex-study-plan",
-      "status": 200,
-      "ms": 10333,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/nclex-question-bank",
-      "status": 200,
-      "ms": 10600,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/rex-pn-study-plan",
-      "status": 200,
-      "ms": 6511,
+      "ms": 16298,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -284,7 +240,25 @@
     {
       "url": "https://nursenest.ca/nclex-vs-rex-pn",
       "status": 200,
-      "ms": 6652,
+      "ms": 14220,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/rex-pn-study-plan",
+      "status": 200,
+      "ms": 14295,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/case-studies",
+      "status": 200,
+      "ms": 18256,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -293,7 +267,16 @@
     {
       "url": "https://nursenest.ca/nclex-next-gen-question-types",
       "status": 200,
-      "ms": 7497,
+      "ms": 12950,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/nclex-study-plan",
+      "status": 200,
+      "ms": 19534,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -302,52 +285,34 @@
     {
       "url": "https://nursenest.ca/free-nclex-practice-questions",
       "status": 200,
-      "ms": 7229,
+      "ms": 9146,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
       "error": null
     },
     {
-      "url": "https://nursenest.ca/best-nclex-prep-course",
+      "url": "https://nursenest.ca/exams/canada",
       "status": 200,
-      "ms": 7208,
+      "ms": 20002,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
       "error": null
     },
     {
-      "url": "https://nursenest.ca/lpn-nclex-prep",
-      "status": 200,
-      "ms": 7290,
+      "url": "https://nursenest.ca/nclex-question-bank",
+      "status": null,
+      "ms": 20003,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
+      "xDoOrigStatus": null,
+      "error": "The operation was aborted due to timeout"
     },
     {
       "url": "https://nursenest.ca/lvn-nclex-prep",
       "status": 200,
-      "ms": 6848,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/cat-nclex-simulator",
-      "status": 200,
-      "ms": 7981,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/adaptive-nclex-testing",
-      "status": 200,
-      "ms": 6810,
+      "ms": 7033,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -356,16 +321,16 @@
     {
       "url": "https://nursenest.ca/how-to-pass-nclex-2026",
       "status": 200,
-      "ms": 6928,
+      "ms": 8304,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
       "error": null
     },
     {
-      "url": "https://nursenest.ca/us/np/aanp-practice-test",
+      "url": "https://nursenest.ca/cat-nclex-simulator",
       "status": 200,
-      "ms": 6837,
+      "ms": 16504,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -374,7 +339,34 @@
     {
       "url": "https://nursenest.ca/canadian-nclex-guide",
       "status": 200,
-      "ms": 7495,
+      "ms": 8613,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/adaptive-nclex-testing",
+      "status": 200,
+      "ms": 8287,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/us/np/aanp-practice-test",
+      "status": 200,
+      "ms": 8339,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/best-nclex-prep-course",
+      "status": 200,
+      "ms": 15858,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -383,16 +375,16 @@
     {
       "url": "https://nursenest.ca/us/np/ancc-fnp-practice-test",
       "status": 200,
-      "ms": 4173,
+      "ms": 9006,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
       "error": null
     },
     {
-      "url": "https://nursenest.ca/blog/acc-injury-care-nursing-documentation-basics-nz-education",
+      "url": "https://nursenest.ca/lpn-nclex-prep",
       "status": 200,
-      "ms": 87,
+      "ms": 17669,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -401,79 +393,7 @@
     {
       "url": "https://nursenest.ca/us/np/agpcnp-practice-test",
       "status": 200,
-      "ms": 4029,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/ace-inhibitors-clinical-pharmacology-pharmacy-guide",
-      "status": 200,
-      "ms": 79,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/activity-analysis-ot-student-guide",
-      "status": 200,
-      "ms": 104,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/acute-care-ot-discharge-planning-basics",
-      "status": 200,
-      "ms": 113,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/acute-kidney-injury-fluid-electrolyte-nursing-review-australia",
-      "status": 200,
-      "ms": 102,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/pre-nursing",
-      "status": 200,
-      "ms": 4733,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/us/np/pnp-pc-practice-test",
-      "status": 200,
-      "ms": 4899,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/canada/np/cnple-practice-test",
-      "status": 200,
-      "ms": 4798,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/us/np/whnp-practice-test",
-      "status": 200,
-      "ms": 5231,
+      "ms": 9158,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -482,7 +402,43 @@
     {
       "url": "https://nursenest.ca/us/np/pmhnp-practice-test",
       "status": 200,
-      "ms": 4958,
+      "ms": 10962,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/us/np/pnp-pc-practice-test",
+      "status": 200,
+      "ms": 13667,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/pre-nursing",
+      "status": 200,
+      "ms": 9375,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/canada/np/cnple-practice-test",
+      "status": 200,
+      "ms": 9804,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/us/np/whnp-practice-test",
+      "status": 200,
+      "ms": 15289,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -491,34 +447,7 @@
     {
       "url": "https://nursenest.ca/pre-nursing/study-plan",
       "status": 200,
-      "ms": 4951,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/pre-nursing/lessons",
-      "status": 200,
-      "ms": 6332,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/adls-vs-iadls-ot-student-guide",
-      "status": 200,
-      "ms": 84,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/ahpra-nurse-registration-pathway-international-educational-overview",
-      "status": 200,
-      "ms": 79,
+      "ms": 9930,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -527,7 +456,16 @@
     {
       "url": "https://nursenest.ca/blog/abg-interpretation-advanced-review-np-certification",
       "status": 200,
-      "ms": 6626,
+      "ms": 13847,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/pre-nursing/lessons",
+      "status": 200,
+      "ms": 15164,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -536,7 +474,16 @@
     {
       "url": "https://nursenest.ca/blog/abo-rh-blood-group-typing-forward-reverse-mlt",
       "status": 200,
-      "ms": 6580,
+      "ms": 12873,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/acc-injury-care-nursing-documentation-basics-nz-education",
+      "status": 200,
+      "ms": 12761,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -545,7 +492,34 @@
     {
       "url": "https://nursenest.ca/blog",
       "status": 200,
-      "ms": 8458,
+      "ms": 15479,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/ace-inhibitors-clinical-pharmacology-pharmacy-guide",
+      "status": 200,
+      "ms": 13381,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/activity-analysis-ot-student-guide",
+      "status": 200,
+      "ms": 12117,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/acute-kidney-injury-fluid-electrolyte-nursing-review-australia",
+      "status": 200,
+      "ms": 10688,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -554,7 +528,16 @@
     {
       "url": "https://nursenest.ca/blog/acute-abdominal-pain-workup-np-certification",
       "status": 200,
-      "ms": 6536,
+      "ms": 12544,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/acute-care-ot-discharge-planning-basics",
+      "status": 200,
+      "ms": 11311,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -563,52 +546,7 @@
     {
       "url": "https://nursenest.ca/blog/acute-kidney-injury-nursing-priorities-licensing-exams-longtail",
       "status": 200,
-      "ms": 6819,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/acute-psychosis-agitation-prehospital-sedation-protocol-ems",
-      "status": 200,
-      "ms": 5418,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/acute-stroke-management-np-certification",
-      "status": 200,
-      "ms": 6617,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/adaptive-equipment-adls-ot",
-      "status": 200,
-      "ms": 6890,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/airway-adjuncts-ems-difficult-airway-communication-and-plan-b-ems",
-      "status": 200,
-      "ms": 5365,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/adhd-management-review-np-certification",
-      "status": 200,
-      "ms": 6403,
+      "ms": 11457,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -617,7 +555,34 @@
     {
       "url": "https://nursenest.ca/blog/acute-kidney-injury-prerenal-intrinsic-postrenal",
       "status": 200,
-      "ms": 7320,
+      "ms": 11891,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/acute-psychosis-agitation-prehospital-sedation-protocol-ems",
+      "status": 200,
+      "ms": 8305,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/adaptive-equipment-adls-ot",
+      "status": 200,
+      "ms": 8002,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/acute-stroke-management-np-certification",
+      "status": 200,
+      "ms": 8696,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -626,16 +591,43 @@
     {
       "url": "https://nursenest.ca/blog/adapting-to-nursing-work-australia-for-international-nurse-graduates",
       "status": 200,
-      "ms": 7270,
+      "ms": 8704,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
       "error": null
     },
     {
-      "url": "https://nursenest.ca/blog/airway-adjuncts-ems-post-intubation-confirmation-and-etco2-ems",
+      "url": "https://nursenest.ca/blog/adls-vs-iadls-ot-student-guide",
       "status": 200,
-      "ms": 6683,
+      "ms": 8907,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/ahpra-nurse-registration-pathway-international-educational-overview",
+      "status": 200,
+      "ms": 9284,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/adhd-management-review-np-certification",
+      "status": 200,
+      "ms": 11424,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/airway-adjuncts-ems-difficult-airway-communication-and-plan-b-ems",
+      "status": 200,
+      "ms": 8371,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -644,7 +636,7 @@
     {
       "url": "https://nursenest.ca/blog/airway-adjuncts-ems-op-vs-npa-indications-and-sizing-ems",
       "status": 200,
-      "ms": 6694,
+      "ms": 7991,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -653,7 +645,16 @@
     {
       "url": "https://nursenest.ca/blog/airway-adjuncts-ems-suction-bvm-and-two-person-ventilation-ems",
       "status": 200,
-      "ms": 5995,
+      "ms": 8075,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/airway-adjuncts-ems-post-intubation-confirmation-and-etco2-ems",
+      "status": 200,
+      "ms": 8871,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -662,7 +663,7 @@
     {
       "url": "https://nursenest.ca/blog/airway-adjuncts-ems-supraglottic-airway-selection-basics-ems",
       "status": 200,
-      "ms": 5884,
+      "ms": 8684,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -671,7 +672,7 @@
     {
       "url": "https://nursenest.ca/blog/altitude-illness-hape-hace-prehospital-recognition-ems",
       "status": 200,
-      "ms": 6765,
+      "ms": 10410,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -680,7 +681,7 @@
     {
       "url": "https://nursenest.ca/blog/anaphylaxis-prehospital-airway-edema-biphasic-return-precautions-ems",
       "status": 200,
-      "ms": 7274,
+      "ms": 10284,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -689,16 +690,7 @@
     {
       "url": "https://nursenest.ca/blog/aminoglycoside-toxicity-pharmacy-review",
       "status": 200,
-      "ms": 8487,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/anaphylaxis-prehospital-h1-h2-blockers-steroids-as-adjuncts-ems",
-      "status": 200,
-      "ms": 7115,
+      "ms": 10890,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -707,16 +699,16 @@
     {
       "url": "https://nursenest.ca/blog/anaphylaxis-prehospital-epinephrine-im-first-line-and-repeat-dosing-ems",
       "status": 200,
-      "ms": 7425,
+      "ms": 10693,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
       "error": null
     },
     {
-      "url": "https://nursenest.ca/blog/anaphylaxis-prehospital-protocol-epinephrine-ems",
+      "url": "https://nursenest.ca/blog/anaphylaxis-prehospital-h1-h2-blockers-steroids-as-adjuncts-ems",
       "status": 200,
-      "ms": 7465,
+      "ms": 10580,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -725,7 +717,7 @@
     {
       "url": "https://nursenest.ca/blog/anaphylaxis-prehospital-orthostatic-and-shock-presentation-ems",
       "status": 200,
-      "ms": 7469,
+      "ms": 8491,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -734,16 +726,7 @@
     {
       "url": "https://nursenest.ca/blog/anaphylaxis-prehospital-observation-and-refusal-documentation-ems",
       "status": 200,
-      "ms": 9634,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/ana-screening-autoimmune-serology-basics-mlt",
-      "status": 200,
-      "ms": 7599,
+      "ms": 8519,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -752,7 +735,25 @@
     {
       "url": "https://nursenest.ca/blog/anion-gap-metabolic-acidosis-laboratory-mlt",
       "status": 200,
-      "ms": 7599,
+      "ms": 7623,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/ana-screening-autoimmune-serology-basics-mlt",
+      "status": 200,
+      "ms": 8497,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/anaphylaxis-prehospital-protocol-epinephrine-ems",
+      "status": 200,
+      "ms": 8508,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -761,7 +762,7 @@
     {
       "url": "https://nursenest.ca/blog/antibiotic-classes-pharmacology-overview",
       "status": 200,
-      "ms": 6509,
+      "ms": 10799,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -770,7 +771,7 @@
     {
       "url": "https://nursenest.ca/blog/antibody-screen-unexpected-antibodies-blood-bank-mlt",
       "status": 200,
-      "ms": 6889,
+      "ms": 8858,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -779,34 +780,7 @@
     {
       "url": "https://nursenest.ca/blog/anticoagulant-prescribing-review-np-certification",
       "status": 200,
-      "ms": 7283,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/antipsychotic-side-effects-pharmacy-clinical-guide",
-      "status": 200,
-      "ms": 5256,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/arbs-vs-ace-inhibitors-pharmacy-comparison",
-      "status": 200,
-      "ms": 4722,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/anxiety-disorders-for-pmhnp-certification",
-      "status": 200,
-      "ms": 5136,
+      "ms": 7214,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -815,7 +789,25 @@
     {
       "url": "https://nursenest.ca/blog/anticoagulants-pharmacology-overview-pharmacy",
       "status": 200,
-      "ms": 5963,
+      "ms": 6703,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/antipsychotic-side-effects-pharmacy-clinical-guide",
+      "status": 200,
+      "ms": 7281,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/anxiety-disorders-for-pmhnp-certification",
+      "status": 200,
+      "ms": 8116,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -824,7 +816,16 @@
     {
       "url": "https://nursenest.ca/blog/aortic-dissection-suspicion-field-assessment-ems",
       "status": 200,
-      "ms": 5495,
+      "ms": 9540,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/arbs-vs-ace-inhibitors-pharmacy-comparison",
+      "status": 200,
+      "ms": 10144,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -833,7 +834,7 @@
     {
       "url": "https://nursenest.ca/blog/ar-intl-acid-base-arterial-blood-gas-intl-topic-007",
       "status": 200,
-      "ms": 6666,
+      "ms": 10793,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -842,16 +843,7 @@
     {
       "url": "https://nursenest.ca/blog/ar-intl-acid-base-arterial-blood-gas-intl-topic-035",
       "status": 200,
-      "ms": 4931,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/ar-intl-acid-base-arterial-blood-gas-intl-topic-091",
-      "status": 200,
-      "ms": 5051,
+      "ms": 11013,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -860,16 +852,16 @@
     {
       "url": "https://nursenest.ca/blog/ar-intl-acid-base-arterial-blood-gas-intl-topic-063",
       "status": 200,
-      "ms": 5058,
+      "ms": 12591,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
       "error": null
     },
     {
-      "url": "https://nursenest.ca/blog/ar-intl-acid-base-arterial-blood-gas-intl-topic-119",
+      "url": "https://nursenest.ca/blog/ar-intl-acid-base-arterial-blood-gas-intl-topic-091",
       "status": 200,
-      "ms": 5492,
+      "ms": 12587,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -878,7 +870,16 @@
     {
       "url": "https://nursenest.ca/blog/ar-intl-acs-nursing-first-hour-intl-topic-005",
       "status": 200,
-      "ms": 5647,
+      "ms": 10994,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/ar-intl-acid-base-arterial-blood-gas-intl-topic-119",
+      "status": 200,
+      "ms": 11030,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -887,7 +888,7 @@
     {
       "url": "https://nursenest.ca/blog/ar-intl-acs-nursing-first-hour-intl-topic-033",
       "status": 200,
-      "ms": 4255,
+      "ms": 10674,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -896,7 +897,7 @@
     {
       "url": "https://nursenest.ca/blog/ar-intl-acs-nursing-first-hour-intl-topic-089",
       "status": 200,
-      "ms": 4051,
+      "ms": 9642,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -905,7 +906,7 @@
     {
       "url": "https://nursenest.ca/blog/ar-intl-acs-nursing-first-hour-intl-topic-061",
       "status": 200,
-      "ms": 4376,
+      "ms": 10831,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -914,16 +915,7 @@
     {
       "url": "https://nursenest.ca/blog/ar-intl-acute-asthma-airway-intl-topic-016",
       "status": 200,
-      "ms": 3698,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": "200",
-      "error": null
-    },
-    {
-      "url": "https://nursenest.ca/blog/ar-intl-acs-nursing-first-hour-intl-topic-117",
-      "status": 200,
-      "ms": 4085,
+      "ms": 6172,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -932,7 +924,7 @@
     {
       "url": "https://nursenest.ca/blog/ar-intl-acute-asthma-airway-intl-topic-044",
       "status": 200,
-      "ms": 3815,
+      "ms": 5156,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -941,7 +933,7 @@
     {
       "url": "https://nursenest.ca/blog/ar-intl-acute-asthma-airway-intl-topic-072",
       "status": 200,
-      "ms": 2266,
+      "ms": 4494,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",
@@ -950,7 +942,16 @@
     {
       "url": "https://nursenest.ca/blog/ar-intl-acute-asthma-airway-intl-topic-100",
       "status": 200,
-      "ms": 1999,
+      "ms": 3869,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": "200",
+      "error": null
+    },
+    {
+      "url": "https://nursenest.ca/blog/ar-intl-acs-nursing-first-hour-intl-topic-117",
+      "status": 200,
+      "ms": 8397,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": "200",

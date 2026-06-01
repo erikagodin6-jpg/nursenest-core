@@ -2,30 +2,30 @@
   "origin": "https://nursenest.ca",
   "timeoutMs": 20000,
   "childSitemapLimit": 30,
-  "discoveredCount": 7871,
+  "discoveredCount": 7608,
   "summaries": [
     {
-      "requested": 1000,
-      "audited": 1000,
+      "requested": 500,
+      "audited": 500,
       "concurrency": 12,
-      "startedAt": "2026-06-01T03:34:02.268Z",
-      "finishedAt": "2026-06-01T03:41:04.979Z",
-      "durationMs": 422711,
+      "startedAt": "2026-06-01T04:14:55.518Z",
+      "finishedAt": "2026-06-01T04:18:58.721Z",
+      "durationMs": 243203,
       "statusCounts": {
-        "200": 367,
-        "504": 606,
-        "fetch_error": 27
+        "200": 94,
+        "504": 299,
+        "fetch_error": 107
       },
-      "upstreamFailures": 606,
-      "fetchErrors": 27,
-      "p50Ms": 151,
-      "p95Ms": 20001,
-      "maxMs": 20006,
+      "upstreamFailures": 173,
+      "fetchErrors": 107,
+      "p50Ms": 158,
+      "p95Ms": 20002,
+      "maxMs": 20011,
       "healthBefore": [
         {
           "url": "https://nursenest.ca/healthz",
           "status": 200,
-          "ms": 54,
+          "ms": 48,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": "200",
@@ -45,7 +45,7 @@
         {
           "url": "https://nursenest.ca/healthz",
           "status": 504,
-          "ms": 42,
+          "ms": 43,
           "xDoFailureCode": "UH",
           "xDoFailureMsg": "no_healthy_upstream",
           "xDoOrigStatus": "503",
@@ -54,7 +54,7 @@
         {
           "url": "https://nursenest.ca/readyz",
           "status": 504,
-          "ms": 65,
+          "ms": 104,
           "xDoFailureCode": "UH",
           "xDoFailureMsg": "no_healthy_upstream",
           "xDoOrigStatus": "503",
