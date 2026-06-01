@@ -4,6 +4,7 @@ import "@/app/learner-exam-shell.css";
 import "@/app/learner-exam-session-premium.css";
 import "@/app/learner-loft-simulation.css";
 import "@/app/learner-flashcard-layout-refinement-pass.css";
+import "@/app/styles/exam/nclex-exam.css";
 import "./exam-shell.css";
 
 /**

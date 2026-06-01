@@ -147,8 +147,21 @@ import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-im
 import { StaffEditLivePageBanner } from "@/components/staff/staff-edit-live-page-banner";
 import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesson-stable-edit-href";
 
-/** Bust data cache after admin publishes pathway or ContentItem lessons (see admin PATCH + revalidatePath). */
-export const dynamic = "force-dynamic";
+/**
+ * ISR — 60-second stale-while-revalidate window.
+ *
+ * Admin publish calls `revalidateSurfacesAfterPathwayLessonMutation` which fires
+ * `revalidatePath('/app/lessons/{id}', 'layout')`, busting this page immediately.
+ * The 60s window covers background content changes; removes the per-request DB
+ * cost on every load for all ~N concurrent learners on the same lesson.
+ *
+ * Auth, personalisation, and progress are all determined inside the page at
+ * render time using `getProtectedRouteSession` — they are NOT affected by ISR
+ * because Next.js App Router never caches per-user session data at the route level.
+ * Each unique user gets a dynamically-rendered response; ISR only caches the
+ * lesson content layer that is identical across users with the same entitlement.
+ */
+export const revalidate = 60;
 
 function LessonBody({
   content,

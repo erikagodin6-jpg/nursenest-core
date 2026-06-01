@@ -5,6 +5,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { BaselineAssessmentAttemptStatus } from "@prisma/client";
 import type { CountryCode, TierCode } from "@prisma/client";
 import { BASELINE_QUESTION_COUNT, pickRandomBaselineQuestionIds, userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
@@ -22,15 +23,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      country: true,
-      tier: true,
-      baselineAssessmentSkippedAt: true,
-      baselineAssessmentCompletedAt: true,
-    },
-  });
+  const user = await loadLearnerRequestUser(userId);
 
   if (!user || !userShouldSeeBaselinePrompt(user)) {
     return NextResponse.json({ error: "Baseline not available", code: "baseline_unavailable" }, { status: 400 });

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 
 export const dynamic = "force-dynamic";
@@ -15,10 +15,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ showPrompt: false, completed: false, skipped: false });
   }
 
-  const row = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { baselineAssessmentSkippedAt: true, baselineAssessmentCompletedAt: true },
-  });
+  const row = await loadLearnerRequestUser(userId);
   if (!row) {
     return NextResponse.json({ showPrompt: false, completed: false, skipped: false });
   }

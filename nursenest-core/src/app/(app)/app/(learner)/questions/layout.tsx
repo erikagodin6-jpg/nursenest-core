@@ -4,6 +4,7 @@ import "@/app/learner-exam-session-premium.css";
 import "@/app/learner-flashcard-premium.css";
 import "@/app/learner-flashcard-branding-revamp.css";
 import "@/app/learner-flashcard-layout-refinement-pass.css";
+import "@/app/learner-advanced-questions.css";
 
 /** Segment-level dynamic: question bank stays request-time (no static prerender at build). */
 export const dynamic = "force-dynamic";

@@ -1,5 +1,7 @@
 import {
   CACHE_TAG_PATHWAY_LESSON_INDEX,
+  cacheTagLessonBankQuiz,
+  cacheTagLessonQuestionStems,
   cacheTagPathwayLessonsHub,
 } from "@/lib/cache/cache-tags";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
@@ -36,9 +38,19 @@ export function pathwayLessonMutationRevalidationTargets(
   const prevTrim = input.previousSlug?.trim() ?? "";
 
   const hubTag = cacheTagPathwayLessonsHub(pathwayId);
-  const cacheTags = [hubTag, `pathway-lesson:${pathwayId}:${slugTrim}`];
+  const cacheTags = [
+    hubTag,
+    `pathway-lesson:${pathwayId}:${slugTrim}`,
+    // Bust per-lesson content caches (bank quiz items + question stems) on publish.
+    cacheTagLessonBankQuiz(pathwayId, slugTrim),
+    cacheTagLessonQuestionStems(pathwayId, slugTrim),
+  ];
   if (prevTrim && prevTrim !== slugTrim) {
-    cacheTags.push(`pathway-lesson:${pathwayId}:${prevTrim}`);
+    cacheTags.push(
+      `pathway-lesson:${pathwayId}:${prevTrim}`,
+      cacheTagLessonBankQuiz(pathwayId, prevTrim),
+      cacheTagLessonQuestionStems(pathwayId, prevTrim),
+    );
   }
   if (input.indexingImpact) {
     cacheTags.push(CACHE_TAG_PATHWAY_LESSON_INDEX);

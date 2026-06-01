@@ -1,4 +1,3 @@
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";

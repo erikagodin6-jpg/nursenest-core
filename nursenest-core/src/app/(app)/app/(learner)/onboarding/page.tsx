@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { OnboardingPageClient } from "./onboarding-page-client";
 
 export const metadata = {
@@ -36,10 +36,7 @@ export default async function OnboardingPage({
     );
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { onboardingCompletedAt: true, country: true },
-  });
+  const user = await loadLearnerRequestUser(userId);
 
   if (!user) {
     return (

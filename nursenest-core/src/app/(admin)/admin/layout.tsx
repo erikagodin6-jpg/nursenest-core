@@ -1,3 +1,5 @@
+import "@/app/admin-responsive-containment.css";
+import "@/app/admin-happy-dashboard.css";
 import { AdminNavClient } from "@/components/admin/admin-nav-client";
 import { AdminAiGenerationBanner } from "@/components/admin/admin-ai-generation-banner";
 import { AdminAiGenerationProvider } from "@/components/admin/admin-ai-generation-context";

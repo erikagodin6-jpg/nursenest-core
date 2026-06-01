@@ -1,10 +1,16 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
 import type { CountryCode, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
+import {
+  cacheTagLessonBankQuiz,
+  LESSON_CONTENT_CACHE_TTL_SECONDS,
+} from "@/lib/cache/cache-tags";
+import { learnerPrivateReadAccessScopeKey } from "@/lib/cache/learner-private-read-cache-keying";
 import {
   npProviderQuestionScopeWhere,
   standardExamPrepQuestionScopeWhere,
@@ -207,10 +213,7 @@ export function toLessonExplicitDiagnostics(d: ExplicitExamQuestionIdLoadDiagnos
   };
 }
 
-/**
- * Same as {@link loadLessonBankQuizItemsByExamIds} with diagnostics shaped for assessment logging.
- */
-export async function loadLessonBankQuizItemsByExamIdsWithDiagnostics(args: {
+async function loadLessonBankQuizItemsByExamIdsWithDiagnosticsUncached(args: {
   entitlement: AccessScope;
   countryCode: CountryCode;
   ids: string[];
@@ -229,6 +232,40 @@ export async function loadLessonBankQuizItemsByExamIdsWithDiagnostics(args: {
       : undefined,
   });
   return { items: res.items, diagnostics: toLessonExplicitDiagnostics(res.diagnostics) };
+}
+
+/**
+ * 5-minute cached wrapper for explicit lesson bank quiz item loading (pre/post/study-loop).
+ *
+ * Cache key: entitlement scope + countryCode + sorted question IDs.
+ * Tags: `lesson-bank-quiz:{pathwayId}:{lessonSlug}` — busted automatically when
+ * the admin publishes the lesson via `revalidateSurfacesAfterPathwayLessonMutation`.
+ *
+ * Bypass: when logContext is absent (no pathway+slug to key on) the loader runs uncached.
+ */
+export async function loadLessonBankQuizItemsByExamIdsWithDiagnostics(args: {
+  entitlement: AccessScope;
+  countryCode: CountryCode;
+  ids: string[];
+  logContext?: { pathwayId: string; lessonSlug: string; side: "pre" | "post" | "study_loop_combined" };
+}): Promise<{ items: LessonBankQuizItem[]; diagnostics: LessonExplicitExamQuestionLoadDiagnostics }> {
+  const { pathwayId = "", lessonSlug = "" } = args.logContext ?? {};
+
+  if (!pathwayId || !lessonSlug || args.ids.length === 0) {
+    return loadLessonBankQuizItemsByExamIdsWithDiagnosticsUncached(args);
+  }
+
+  const scopeKey = learnerPrivateReadAccessScopeKey(args.entitlement);
+  const sortedIds = [...args.ids].sort().join(",");
+
+  return unstable_cache(
+    () => loadLessonBankQuizItemsByExamIdsWithDiagnosticsUncached(args),
+    ["lesson-bank-quiz", pathwayId, lessonSlug, args.countryCode, scopeKey, sortedIds],
+    {
+      revalidate: LESSON_CONTENT_CACHE_TTL_SECONDS,
+      tags: [cacheTagLessonBankQuiz(pathwayId, lessonSlug)],
+    },
+  )();
 }
 
 export {

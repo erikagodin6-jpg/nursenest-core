@@ -17,3 +17,26 @@ export const CACHE_TAG_PATHWAY_LESSON_INDEX = "pathway-lesson-index";
 export function cacheTagPathwayLessonsHub(pathwayId: string): string {
   return `pathway-lessons:${pathwayId}`;
 }
+
+// ─── Lesson detail analytics cache tags ─────────────────────────────────────
+// Revalidated by `revalidateSurfacesAfterPathwayLessonMutation` via
+// `pathway-lesson:{pathwayId}:{slug}`.  Both tags below match that shape.
+
+/**
+ * Tag for lesson-scoped explicit bank quiz item loads (pre/post/study-loop questions).
+ * TTL: 5 min. Busted on lesson publish via admin PATCH.
+ */
+export function cacheTagLessonBankQuiz(pathwayId: string, lessonSlug: string): string {
+  return `lesson-bank-quiz:${pathwayId}:${lessonSlug}`;
+}
+
+/**
+ * Tag for lesson-scoped related exam question stem loads.
+ * TTL: 5 min. Busted on lesson publish via admin PATCH.
+ */
+export function cacheTagLessonQuestionStems(pathwayId: string, lessonSlug: string): string {
+  return `lesson-question-stems:${pathwayId}:${lessonSlug}`;
+}
+
+/** Shared TTL for per-lesson content-adjacent caches (bank quiz items, question stems). */
+export const LESSON_CONTENT_CACHE_TTL_SECONDS = 300; // 5 minutes

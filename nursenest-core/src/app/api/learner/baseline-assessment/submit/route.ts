@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
+import { loadLearnerRequestUser } from "@/lib/learner/load-learner-request-user";
 import { formatTopicLabelForDisplay } from "@/lib/learner/topic-normalize";
 import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
 import { withRetry } from "@/lib/resilience/with-retry";
@@ -50,10 +51,7 @@ export async function POST(req: Request) {
   }
   const ids = questionIds as string[];
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { baselineAssessmentCompletedAt: true },
-  });
+  const user = await loadLearnerRequestUser(userId);
   if (user?.baselineAssessmentCompletedAt) {
     return NextResponse.json({ error: "Baseline already completed", code: "already_done" }, { status: 400 });
   }
