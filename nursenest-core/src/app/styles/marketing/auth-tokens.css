@@ -1,7 +1,7 @@
 /* ==========================================================================
    auth-tokens.css — Semantic auth surfaces (theme-scalable)
 
-   Blossom + light is the current baseline; maps to --theme-* / --semantic-*.
+   Sea Glass + light is the current baseline; maps to --theme-* / --semantic-*.
    Ocean, Midnight, and dark modes inherit via theme-palettes.css overrides.
    ========================================================================== */
 
@@ -32,18 +32,18 @@
   --auth-input-min-height: var(--nn-auth-input-height, 3.25rem);
 }
 
-html[data-theme="mint-blossom"] .nn-premium-auth-system {
-  --auth-bg: #fffcfa;
-  --auth-surface: color-mix(in srgb, #fffefe 96%, #ffffff);
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-system {
+  --auth-bg: #ffffff;
+  --auth-surface: color-mix(in srgb, #f8fffe 96%, #ffffff);
   --auth-surface-elevated: #ffffff;
   --auth-input-bg: linear-gradient(
     180deg,
-    color-mix(in srgb, #ffffff 98%, #d9f8e7),
-    color-mix(in srgb, #fffefe 92%, #ffffff)
+    color-mix(in srgb, #ffffff 98%, #f8fffe),
+    color-mix(in srgb, #fcfffe 92%, #ffffff)
   );
-  --auth-input-border: color-mix(in srgb, #b7efd1 22%, var(--semantic-border-soft));
-  --auth-primary: var(--theme-brand-strong, #e88cab);
-  --auth-focus: color-mix(in srgb, #5eb8f0 38%, #e88cab);
+  --auth-input-border: color-mix(in srgb, #a6e9d7 22%, var(--semantic-border-soft));
+  --auth-primary: var(--theme-brand-strong, #69b8ad);
+  --auth-focus: color-mix(in srgb, #99c6df 38%, #69b8ad);
 }
 
 /* Form field rhythm — shared across all auth routes */

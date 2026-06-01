@@ -104,7 +104,7 @@ export async function MarketingLoginPage({
         termsHref={withMarketingLocale(resolved, "/terms")}
         privacyHref={withMarketingLocale(resolved, "/privacy")}
         contactHref={contactHref}
-        mobileEyebrow="NurseNest · Blossom"
+        mobileEyebrow="NurseNest · Sea Glass"
         stateSurface={
           <Suspense>
             <AuthStateSurface />

@@ -102,7 +102,7 @@ export const THEME_LOGO_CDN_BY_THEME_ID: Readonly<Record<string, string>> = {
   "midnight-indigo": CDN_LEAF_URLS["deep-twilight"],
   "midnight-ink": CDN_LEAF_URLS["midnight-ink"],
   mint: CDN_LEAF_URLS.teal,
-  "mint-blossom": NURSENEST_BLOSSOM_LEAF_LOGO_URL,
+  "sea-glass": CDN_LEAF_URLS.teal,
   "mint-breeze": CDN_LEAF_URLS.teal,
   "multi-pastel": CDN_LEAF_URLS["rainbow-sherbet"],
   "neutral-sand": CDN_LEAF_URLS["neutral-sand"],

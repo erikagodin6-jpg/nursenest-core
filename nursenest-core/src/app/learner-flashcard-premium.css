@@ -5637,6 +5637,10 @@ html[data-theme="mint-blossom"] .nn-flashcard-topbar-progress-fill {
   background: linear-gradient(90deg, #9ec5fe, #a7f3d0);
 }
 
+html[data-theme="sea-glass"] .nn-flashcard-topbar-progress-fill {
+  background: linear-gradient(90deg, #99c6df 0%, #a6e9d7 50%, #7cc9be 100%);
+}
+
 html[data-theme="ocean"] .nn-flashcard-topbar-progress-fill {
   background: linear-gradient(90deg, #1D9BD7, #14B8A6);
 }
@@ -8069,6 +8073,9 @@ html[data-theme="sunset"] .nn-flashcard-study-premium .nn-flashcard-rationale-ke
 html[data-theme="blossom"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill,
 html[data-theme="mint-blossom"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
   background: linear-gradient(90deg, #9ec5fe, #a7f3d0);
+}
+html[data-theme="sea-glass"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
+  background: linear-gradient(90deg, #99c6df 0%, #a6e9d7 50%, #7cc9be 100%);
 }
 html[data-theme="ocean"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
   background: linear-gradient(90deg, #1D9BD7, #14B8A6);

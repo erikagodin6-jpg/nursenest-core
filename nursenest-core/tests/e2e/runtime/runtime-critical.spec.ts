@@ -86,7 +86,7 @@ test.describe("autonomous runtime critical gate", () => {
       await page.goto("/login", { waitUntil: "domcontentloaded" });
       await page.waitForLoadState("networkidle", { timeout: 30_000 }).catch(() => undefined);
       await expect(page.locator("html")).toHaveAttribute("data-theme", "midnight", { timeout: 15_000 });
-      await expect(page.locator('[data-theme="mint-blossom"]').first()).toHaveCount(1, { timeout: 15_000 });
+      await expect(page.locator('[data-theme="sea-glass"]').first()).toHaveCount(1, { timeout: 15_000 });
       await expectRuntimeHealthy(page, observer);
     } finally {
       observer.dispose();

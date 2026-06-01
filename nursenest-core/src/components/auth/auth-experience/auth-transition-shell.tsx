@@ -69,7 +69,7 @@ export function AuthTransitionShell({
           ) : null}
           <div className="nn-premium-auth-verified__brand">
             <SiteBrandLogoMark variant="auth" logoVariant="leaf" className="!h-10 !max-h-10" />
-            <span className="nn-premium-auth-theme-pill">Mint Blossom · Premium study</span>
+            <span className="nn-premium-auth-theme-pill">Sea Glass · Premium study</span>
           </div>
           <section className="nn-premium-auth-verified__layout">
             <div className="nn-premium-auth-verified__celebrate">

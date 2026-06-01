@@ -2,7 +2,7 @@ export type LaunchClinicalThemeId =
   | "ocean"
   | "midnight"
   | "blossom"
-  | "mint-blossom"
+  | "sea-glass"
   | "aurora"
   | "sunset"
   | "alpine"
@@ -17,7 +17,8 @@ export type ClinicalThemeMood =
   | "Grounded, focused, calm"
   | "Professional, clinical, calming"
   | "Cheerful, premium, clinically bright"
-  | "Warm, optimistic, uplifting";
+  | "Warm, optimistic, uplifting"
+  | "Coastal, airy, wellness-focused";
 
 export type ClinicalThemeMeta = {
   id: LaunchClinicalThemeId;
@@ -36,7 +37,7 @@ export const LAUNCH_CLINICAL_THEME_IDS = [
   "ocean",
   "midnight",
   "blossom",
-  "mint-blossom",
+  "sea-glass",
   "aurora",
   "sunset",
   "alpine",
@@ -86,16 +87,16 @@ export const CLINICAL_THEME_META: Record<LaunchClinicalThemeId, ClinicalThemeMet
       surface: "#FAF7FC",
     },
   },
-  "mint-blossom": {
-    id: "mint-blossom",
-    label: "Mint Blossom",
-    mood: "Soft, motivating, elegant",
+  "sea-glass": {
+    id: "sea-glass",
+    label: "Sea Glass",
+    mood: "Coastal, airy, wellness-focused",
     group: "light",
     swatches: {
-      primary: "#FFB7D5",
-      secondary: "#B7EFD1",
-      accent: "#D6F0FF",
-      surface: "#FAF7FC",
+      primary: "#7CC9BE",
+      secondary: "#A6E9D7",
+      accent: "#99C6DF",
+      surface: "#F8FFFE",
     },
   },
   aurora: {

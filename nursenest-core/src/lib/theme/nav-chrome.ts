@@ -130,13 +130,13 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
     hoverFg: "#3a3142",
     panel: "color-mix(in srgb, #bfe7ff 8%, transparent)",
   },
-  "mint-blossom": {
-    chrome: "color-mix(in srgb, #c8f2dc 12%, color-mix(in srgb, #fff9fb 48%, color-mix(in srgb, #d6f0ff 8%, #ffffff)))",
-    foreground: "#3a3142",
-    border: "color-mix(in srgb, #b7efd1 18%, #fff9fb)",
-    hoverBg: "color-mix(in srgb, #b7efd1 12%, transparent)",
-    hoverFg: "#3a3142",
-    panel: "color-mix(in srgb, #d9f8e7 10%, transparent)",
+  "sea-glass": {
+    chrome: "rgba(255,255,255,0.9)",
+    foreground: "#4B5563",
+    border: "rgba(221,236,245,0.84)",
+    hoverBg: "rgba(166,233,215,0.18)",
+    hoverFg: "#4B5563",
+    panel: "rgba(248,255,254,0.82)",
   },
   aurora: {
     /* Fallback when semantic tokens absent — pastel wash + ink (matches theme-palettes Aurora). */

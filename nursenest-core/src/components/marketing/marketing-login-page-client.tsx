@@ -12,7 +12,7 @@ function LoginRouteBody({ children }: { children: ReactNode }) {
 }
 
 /**
- * Client gate: email verification success uses the full Mint Blossom celebration layout;
+ * Client gate: email verification success uses the full Sea Glass celebration layout;
  * otherwise renders the standard login shell children.
  */
 export function MarketingLoginPageClient({ children }: { children: ReactNode }) {

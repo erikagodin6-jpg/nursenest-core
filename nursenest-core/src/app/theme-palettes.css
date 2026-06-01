@@ -679,6 +679,7 @@
   [data-theme="berry"],
   [data-theme="berry-bonbon"],
   [data-theme="blossom"],
+  [data-theme="sea-glass"],
   [data-theme="mint-blossom"],
   [data-theme="blueberry-sherbet"],
   [data-theme="bluebird"],
@@ -1820,55 +1821,112 @@ html[data-theme="blossom"] {
   --theme-header-divider: color-mix(in srgb, #9ec5fe 18%, transparent);
 }
 
-/* Mint Blossom — legacy alias kept spring-sky compatible with a slightly aqua-forward balance. */
-html[data-theme="mint-blossom"] {
-  --theme-primary: #9ec5fe;
-  --theme-primary-foreground: #0f2a44;
-  --theme-secondary: color-mix(in srgb, #a7f3d0 22%, #ffffff);
-  --theme-secondary-foreground: #0f2a44;
-  --theme-accent: color-mix(in srgb, #f8c8dc 8%, #ffffff);
-  --theme-accent-foreground: #1f5f86;
-  --theme-border: color-mix(in srgb, #a7f3d0 24%, #f8fafc);
-  --theme-ring: #9ec5fe;
-  --theme-page-bg: #f8fafc;
-  --theme-surface-strong: #ffffff;
-  --theme-heading-text: #0f172a;
-  --theme-body-text: #334155;
-  --theme-muted-text: #64748b;
+/* Sea Glass — coastal wellness. */
+html[data-theme="sea-glass"] {
+  --theme-primary: #7cc9be;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #a6e9d7;
+  --theme-secondary-foreground: #4b5563;
+  --theme-accent: #99c6df;
+  --theme-accent-foreground: #4b5563;
+  --theme-border: #ddecf5;
+  --theme-ring: #7cc9be;
+  --theme-page-bg: #ffffff;
+  --theme-background: #ffffff;
+  --theme-background-subtle: #f8fffe;
+  --theme-surface: #f8fffe;
+  --theme-surface-strong: #fcfffe;
+  --theme-card-bg: rgba(255, 255, 255, 0.92);
+  --theme-card-border: rgba(166, 233, 215, 0.35);
+  --theme-heading-text: #4b5563;
+  --theme-body-text: #4b5563;
+  --theme-muted-text: #6b7280;
+  --theme-brand-accent: #a6e9d7;
+  --theme-brand-strong: #69b8ad;
+  --theme-text-on-brand: #ffffff;
 
-  --lesson-summary: color-mix(in srgb, #9ec5fe 12%, #ffffff);
-  --lesson-key-concepts: color-mix(in srgb, #9ec5fe 14%, #ffffff);
-  --lesson-signs-symptoms: color-mix(in srgb, #f8c8dc 8%, #ffffff);
-  --lesson-assessment: color-mix(in srgb, #a7f3d0 14%, #ffffff);
-  --lesson-diagnostics: color-mix(in srgb, #9ec5fe 13%, #ffffff);
-  --lesson-interventions: color-mix(in srgb, #a7f3d0 14%, #ffffff);
-  --lesson-medications: color-mix(in srgb, #fde68a 10%, #ffffff);
-  --lesson-patient-teaching: color-mix(in srgb, #a7f3d0 12%, #ffffff);
-  --lesson-exam-tips: color-mix(in srgb, #fde68a 10%, #ffffff);
-  --lesson-red-flags: color-mix(in srgb, #f8c8dc 8%, #ffffff);
-  --lesson-clinical-pearls: color-mix(in srgb, #9ec5fe 12%, #ffffff);
-  --lesson-notes: color-mix(in srgb, #f8fafc 70%, #ffffff);
+  --lesson-summary: color-mix(in srgb, #99c6df 13%, #ffffff);
+  --lesson-key-concepts: color-mix(in srgb, #7cc9be 13%, #ffffff);
+  --lesson-signs-symptoms: color-mix(in srgb, #f18b8b 8%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #a6e9d7 14%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, #99c6df 14%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, #a6e9d7 13%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #f4c67a 10%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, #a6e9d7 12%, #ffffff);
+  --lesson-exam-tips: color-mix(in srgb, #f4c67a 9%, #ffffff);
+  --lesson-red-flags: color-mix(in srgb, #f18b8b 10%, #ffffff);
+  --lesson-clinical-pearls: color-mix(in srgb, #99c6df 12%, #ffffff);
+  --lesson-notes: #f8fffe;
 
-  --state-success: color-mix(in srgb, #a7f3d0 14%, #ffffff);
-  --state-warning: color-mix(in srgb, #fde68a 10%, #ffffff);
-  --state-info: color-mix(in srgb, #9ec5fe 13%, #ffffff);
-  --state-danger-soft: color-mix(in srgb, #f8c8dc 8%, #ffffff);
+  --state-success: #5cbf9b;
+  --state-warning: #f4c67a;
+  --state-info: #99c6df;
+  --state-danger-soft: #f18b8b;
 
-  --theme-brand-accent: #a7f3d0;
-  --theme-brand-strong: #1d7ed8;
-  --theme-nav-background: color-mix(
-    in srgb,
-    #a7f3d0 12%,
-    color-mix(in srgb, #ffffff 74%, color-mix(in srgb, #9ec5fe 8%, #f8fafc))
-  );
-  --theme-nav-foreground: #0f172a;
-  --theme-nav-hover: color-mix(in srgb, #a7f3d0 16%, transparent);
-  --theme-nav-hover-foreground: #0f172a;
-  --theme-header-top-bg: #ffffff;
-  --theme-header-main-bg: color-mix(in srgb, #a7f3d0 5%, #ffffff);
-  --theme-header-secondary-bg: color-mix(in srgb, #9ec5fe 5%, #ffffff);
-  --theme-header-secondary-fg: #0f172a;
-  --theme-header-divider: color-mix(in srgb, #9ec5fe 16%, transparent);
+  --theme-nav-background: rgba(255, 255, 255, 0.86);
+  --theme-nav-foreground: #4b5563;
+  --theme-nav-hover: color-mix(in srgb, #a6e9d7 18%, transparent);
+  --theme-nav-hover-foreground: #4b5563;
+  --theme-nav-border-strong: rgba(221, 236, 245, 0.78);
+  --theme-header-top-bg: rgba(255, 255, 255, 0.92);
+  --theme-header-main-bg: rgba(255, 255, 255, 0.9);
+  --theme-header-secondary-bg: color-mix(in srgb, #f8fffe 85%, #ddecf5);
+  --theme-header-secondary-fg: #4b5563;
+  --theme-header-divider: rgba(221, 236, 245, 0.84);
+
+  --theme-primary-button-bg: #7cc9be;
+  --theme-primary-button-text: #ffffff;
+  --theme-primary-button-hover: #69b8ad;
+  --theme-secondary-button-bg: #a6e9d7;
+  --theme-secondary-button-text: #4b5563;
+  --theme-secondary-button-border: rgba(124, 201, 190, 0.26);
+  --theme-secondary-button-hover: #94dcc8;
+  --theme-pill-bg: rgba(248, 255, 254, 0.92);
+  --theme-pill-text: #4b5563;
+  --theme-pill-border: rgba(166, 233, 215, 0.4);
+
+  --logo-primary: #7cc9be;
+  --logo-accent: #99c6df;
+  --logo-text: #4b5563;
+
+  --theme-hero-gradient: linear-gradient(135deg, #f8fafc 0%, #ddecf5 35%, #c6e7e0 70%, #7cc9be 100%);
+  --theme-surface-gradient: linear-gradient(135deg, #ffffff 0%, #f8fffe 50%, #ddecf5 100%);
+  --theme-progress-gradient: linear-gradient(90deg, #99c6df 0%, #a6e9d7 50%, #7cc9be 100%);
+}
+
+html[data-theme="sea-glass"] :where(
+  .nn-progress-fill-semantic-brand,
+  .nn-progress-fill-semantic-success,
+  .nn-progress-fill-semantic-readiness,
+  .nn-lesson-reading-progress__fill,
+  .nn-cat-top-bar__progress-fill,
+  .nn-cat-exam-progress-fill,
+  .nn-practice-exam-progress__fill,
+  .nn-practice-session-progress-fill,
+  .nn-qs__progress-fill,
+  .nn-ui-progress__fill,
+  .nn-study-plan-progress-fill,
+  .nn-readiness-meter-fill,
+  .nn-flashcard-topbar-progress-fill,
+  .nn-mobile-fc-progress-fill
+) {
+  background: var(--theme-progress-gradient);
+}
+
+html[data-theme="sea-glass"] :where(
+  .nn-learner-surface-card,
+  .nn-lesson-reading-shell,
+  .nn-premium-depth-card,
+  .nn-premium-flow-card,
+  .nn-lesson-system-card,
+  .nn-flashcards-hub-setup-panel,
+  .nn-practice-exam-card,
+  .nn-cat-dashboard-card
+) {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(166, 233, 215, 0.35);
+  box-shadow: 0 8px 30px rgba(124, 201, 190, 0.12);
+  backdrop-filter: blur(12px);
 }
 
 html[data-theme="sunset"] {
@@ -2267,6 +2325,7 @@ html[data-theme="midnight"] {
   [data-theme="berry"],
   [data-theme="berry-bonbon"],
   [data-theme="blossom"],
+  [data-theme="sea-glass"],
   [data-theme="mint-blossom"],
   [data-theme="blueberry-sherbet"],
   [data-theme="bluebird"],
@@ -2354,33 +2413,32 @@ html[data-theme="blossom"] {
     0 4px 16px -4px rgba(29, 126, 216, 0.12);
 }
 
-/* Mint Blossom — aqua-forward spring-sky shell + luminous card shadows. */
-html[data-theme="mint-blossom"] {
-  --theme-secondary: color-mix(in srgb, #a7f3d0 22%, #ffffff);
-  --theme-secondary-foreground: #0f2a44;
-  --theme-accent: color-mix(in srgb, #f8c8dc 8%, #ffffff);
-  --theme-accent-foreground: #1f5f86;
-  --theme-border: color-mix(in srgb, #a7f3d0 22%, #f8fafc);
+/* Sea Glass — coastal shell + light wellness shadows. */
+html[data-theme="sea-glass"] {
+  --theme-secondary: #a6e9d7;
+  --theme-secondary-foreground: #4b5563;
+  --theme-accent: #99c6df;
+  --theme-accent-foreground: #4b5563;
+  --theme-border: #ddecf5;
   --theme-topbar-bg: #ffffff;
-  --theme-topbar-text: #0f172a;
-  --color-softgray: #334155;
-  --theme-card-border: color-mix(in srgb, #a7f3d0 14%, #ffffff);
-  --theme-input-border: color-mix(in srgb, #9ec5fe 16%, #f8fafc);
-  --theme-separator: color-mix(in srgb, #9ec5fe 12%, #f8fafc);
+  --theme-topbar-text: #4b5563;
+  --color-softgray: #4b5563;
+  --theme-card-bg: rgba(255, 255, 255, 0.92);
+  --theme-card-border: rgba(166, 233, 215, 0.35);
+  --theme-input-border: rgba(153, 198, 223, 0.42);
+  --theme-separator: rgba(221, 236, 245, 0.88);
   --shadow-card:
-    0 1px 0 rgba(183, 239, 209, 0.1),
-    0 1px 3px rgba(191, 231, 255, 0.1),
-    0 16px 36px -18px rgba(214, 240, 255, 0.14);
+    0 1px 0 rgba(166, 233, 215, 0.12),
+    0 8px 30px rgba(124, 201, 190, 0.12);
   --shadow-card-hover:
-    0 1px 0 rgba(183, 239, 209, 0.12),
-    0 6px 18px -6px rgba(191, 231, 255, 0.12),
-    0 22px 48px -18px rgba(255, 183, 213, 0.12);
+    0 1px 0 rgba(166, 233, 215, 0.14),
+    0 10px 34px rgba(124, 201, 190, 0.16);
   --shadow-elevated:
-    0 10px 30px -10px rgba(183, 239, 209, 0.16),
-    0 2px 8px -2px rgba(191, 231, 255, 0.1);
+    0 12px 34px -12px rgba(124, 201, 190, 0.22),
+    0 2px 8px -2px rgba(153, 198, 223, 0.12);
   --shadow-nav:
-    0 1px 2px rgba(183, 239, 209, 0.08),
-    0 4px 16px -4px rgba(214, 240, 255, 0.12);
+    0 1px 2px rgba(124, 201, 190, 0.08),
+    0 4px 16px -4px rgba(153, 198, 223, 0.12);
 }
 
 /* ============================================================

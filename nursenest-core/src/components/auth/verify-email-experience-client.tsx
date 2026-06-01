@@ -82,7 +82,7 @@ function VerifyEmailExperienceInner({
       termsHref={termsHref}
       privacyHref={privacyHref}
       contactHref={contactHref}
-      mobileEyebrow="NurseNest · Blossom"
+      mobileEyebrow="NurseNest · Sea Glass"
     >
       <AuthVerifyEmailPending email={email} loginHref={loginHref} callbackUrl={callbackUrl} />
       {!sent && !status ? (

@@ -74,13 +74,13 @@ export const THEME_OPTIONS: ThemeOption[] = [
     named: true,
   },
   {
-    id: "mint-blossom",
-    label: "Mint Blossom",
-    color: "#FFB7D5",
-    swatchSecondary: "#B7EFD1",
-    swatchAccent: "#D6F0FF",
+    id: "sea-glass",
+    label: "Sea Glass",
+    color: "#7CC9BE",
+    swatchSecondary: "#A6E9D7",
+    swatchAccent: "#99C6DF",
     group: "light",
-    logoVariant: "rose",
+    logoVariant: "mint",
     named: true,
   },
   {
@@ -227,12 +227,26 @@ export const PUBLIC_MARKETING_THEME_ALLOWLIST = [
   NURSENEST_DEFAULT_THEME,
   "midnight",
   "blossom",
-  "mint-blossom",
+  "sea-glass",
   "aurora",
   "sunset",
   "alpine",
   "sage",
 ] as const;
+
+export const THEME_ID_ALIASES: Readonly<Record<string, string>> = {
+  "mint-blossom": "sea-glass",
+  mintblossom: "sea-glass",
+  "mint blossom": "sea-glass",
+  seaglass: "sea-glass",
+  "sea glass": "sea-glass",
+} as const;
+
+export function normalizeThemeId(raw: string | null | undefined): string {
+  const slug = String(raw ?? "").trim().toLowerCase();
+  if (!slug) return NURSENEST_DEFAULT_THEME;
+  return THEME_ID_ALIASES[slug] ?? slug;
+}
 
 export function themeOptionsForPublicMarketingPicker(all: ThemeOption[] = THEME_OPTIONS): ThemeOption[] {
   const allow = new Set<string>(PUBLIC_MARKETING_THEME_ALLOWLIST);

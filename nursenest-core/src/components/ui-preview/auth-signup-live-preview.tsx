@@ -6,14 +6,15 @@ import { AuthSignupPathwayPanel } from "@/components/auth/auth-experience/auth-s
 import { AuthExperienceShell } from "@/components/auth/auth-experience/auth-experience-shell";
 import { AuthPreviewSignupForm } from "@/components/ui-preview/auth-preview-mock-forms";
 import type { SignupTierValue } from "@/lib/marketing/signup-exam-focus-options";
-import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS, normalizeThemeId } from "@/lib/theme/theme-registry";
 
 const THEME_IDS = new Set(THEME_OPTIONS.map((o) => o.id));
 
 function resolveThemeParam(raw: string | null): string {
   const t = raw?.trim() ?? "";
-  if (t === "blossom") return "mint-blossom";
-  return THEME_IDS.has(t) ? t : "mint-blossom";
+  const normalized = normalizeThemeId(t || "sea-glass");
+  if (t === "blossom") return "sea-glass";
+  return THEME_IDS.has(normalized) ? normalized : "sea-glass";
 }
 
 function AuthSignupLivePreviewInner() {
@@ -30,7 +31,7 @@ function AuthSignupLivePreviewInner() {
     };
   }, [theme]);
 
-  const themeLabel = theme === "mint-blossom" ? "Mint Blossom" : theme === "ocean" ? "Ocean" : theme;
+  const themeLabel = theme === "sea-glass" ? "Sea Glass" : theme === "ocean" ? "Ocean" : theme;
 
   return (
     <div className="min-h-0 min-w-0 px-4 py-6 sm:px-6">

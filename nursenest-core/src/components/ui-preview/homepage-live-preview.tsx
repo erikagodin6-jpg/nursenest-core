@@ -2,13 +2,14 @@
 
 import { Suspense, useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS, normalizeThemeId } from "@/lib/theme/theme-registry";
 
 const THEME_IDS = new Set(THEME_OPTIONS.map((o) => o.id));
 
 function resolveThemeParam(raw: string | null): string {
   const t = raw?.trim() ?? "";
-  return THEME_IDS.has(t) ? t : NURSENEST_DEFAULT_THEME;
+  const normalized = normalizeThemeId(t);
+  return THEME_IDS.has(normalized) ? normalized : NURSENEST_DEFAULT_THEME;
 }
 
 function HomepageLivePreviewInner() {
@@ -25,13 +26,12 @@ function HomepageLivePreviewInner() {
   }, [theme]);
 
   const themeLabel =
-    theme === "mint-blossom" || theme === "blossom"
-      ? "Mint Blossom"
-      : theme === "ocean"
-        ? "Ocean"
-        : theme === "midnight"
-          ? "Midnight"
-          : theme;
+    {
+      "sea-glass": "Sea Glass",
+      blossom: "Blossom",
+      ocean: "Ocean",
+      midnight: "Midnight",
+    }[theme] ?? theme;
 
   return (
     <div className="min-h-0 min-w-0">

@@ -49,6 +49,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 try {
   var key = "nursenest-theme";
   var theme = localStorage.getItem(key) || document.cookie.replace(/(?:(?:^|.*;\\s*)nn-theme\\s*\\=\\s*([^;]*).*$)|^.*$/, "$1") || "ocean";
+  var aliases = { "mint-blossom": "sea-glass", "mintblossom": "sea-glass", "mint blossom": "sea-glass", "seaglass": "sea-glass", "sea glass": "sea-glass" };
+  theme = aliases[String(theme || "").trim().toLowerCase()] || theme;
+  try { if (theme === "sea-glass") localStorage.setItem(key, theme); } catch (_) {}
   if (theme) {
     document.documentElement.setAttribute("data-theme", theme);
     document.documentElement.style.colorScheme = /(midnight|dark|twilight|apex|storm|ink)/i.test(theme) ? "dark" : "light";

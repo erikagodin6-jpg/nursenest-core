@@ -27,7 +27,7 @@ export function SignupExperienceClient({
   privacyHref,
   contactHref,
   forgotPasswordHref,
-  mobileEyebrow = "NurseNest · Blossom",
+  mobileEyebrow = "NurseNest · Sea Glass",
 }: SignupExperienceClientProps) {
   const [tier, setTier] = useState<SignupTierValue>("RN");
 

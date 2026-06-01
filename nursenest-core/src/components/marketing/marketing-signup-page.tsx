@@ -20,7 +20,7 @@ export async function MarketingSignupPage({ locale }: { locale: string }) {
       privacyHref={privacyHref}
       contactHref={contactHref}
       forgotPasswordHref={withMarketingLocale(locale, "/forgot-password")}
-      mobileEyebrow="NurseNest · Blossom"
+      mobileEyebrow="NurseNest · Sea Glass"
     />
   );
 }

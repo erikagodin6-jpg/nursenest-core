@@ -10,7 +10,7 @@ export function AuthStoryPanelLegacy() {
     <aside className="nn-premium-auth-story" data-nn-premium-auth-story aria-label="NurseNest Study Ecosystem">
       <div className="nn-premium-auth-brand-row">
         <SiteBrandLogoMark variant="auth" logoVariant="leaf" className="!h-11 !max-h-11 sm:!h-12 sm:!max-h-12" />
-        <span className="nn-premium-auth-theme-pill">Mint Blossom · Premium study</span>
+        <span className="nn-premium-auth-theme-pill">Sea Glass · Premium study</span>
       </div>
       <div className="nn-premium-auth-story-copy">
         <p className="nn-premium-auth-eyebrow">Trusted by nursing students</p>

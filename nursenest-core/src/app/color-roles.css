@@ -164,18 +164,19 @@ html[data-theme="blossom"] {
   --semantic-progress-fill-accent: linear-gradient(90deg, #9ec5fe, #a7f3d0);
 }
 
+html[data-theme="sea-glass"],
 html[data-theme="mint-blossom"] {
-  --role-cta: #1d7ed8;
+  --role-cta: #7cc9be;
   --role-cta-foreground: #ffffff;
-  --role-cta-hover: #268ce8;
-  --role-cta-pressed: #1767b4;
+  --role-cta-hover: #69b8ad;
+  --role-cta-pressed: #5aa79d;
   --role-cta-shadow:
-    0 8px 24px -8px rgba(29, 126, 216, 0.3),
-    0 4px 14px -6px rgba(167, 243, 208, 0.22);
-  --role-cta-soft: color-mix(in srgb, #a7f3d0 18%, var(--bg-card, var(--theme-card-bg)));
-  --role-cta-on-soft: color-mix(in srgb, #1d7ed8 72%, var(--theme-heading-text));
-  --semantic-progress-fill: linear-gradient(90deg, #9ec5fe, #a7f3d0);
-  --semantic-progress-fill-accent: linear-gradient(90deg, #9ec5fe, #a7f3d0);
+    0 8px 24px -8px rgba(124, 201, 190, 0.3),
+    0 4px 14px -6px rgba(153, 198, 223, 0.18);
+  --role-cta-soft: color-mix(in srgb, #a6e9d7 18%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: #4b5563;
+  --semantic-progress-fill: linear-gradient(90deg, #99c6df 0%, #a6e9d7 50%, #7cc9be 100%);
+  --semantic-progress-fill-accent: linear-gradient(90deg, #99c6df 0%, #a6e9d7 50%, #7cc9be 100%);
 }
 
 html[data-theme="aurora"] {

@@ -707,6 +707,7 @@ html[data-theme="ocean"] {
 }
 
 html[data-theme="blossom"],
+html[data-theme="sea-glass"],
 html[data-theme="mint-blossom"] {
   --nn-marketing-surface-secondary: var(--semantic-panel-mint);
   --nn-marketing-surface-tertiary: var(--semantic-panel-cool);
@@ -727,6 +728,18 @@ html[data-theme="mint-blossom"] {
     var(--semantic-bg-base) 45%,
     color-mix(in srgb, var(--semantic-chart-4) 8%, var(--semantic-bg-base)) 100%
   );
+}
+
+html[data-theme="sea-glass"],
+html[data-theme="mint-blossom"] {
+  --nn-marketing-surface-secondary: #f8fffe;
+  --nn-marketing-surface-tertiary: #fcfffe;
+  --nn-premium-meter-brand: linear-gradient(90deg, #99c6df 0%, #a6e9d7 50%, #7cc9be 100%);
+  --nn-premium-meter-info: linear-gradient(90deg, #99c6df 0%, #a6e9d7 50%, #7cc9be 100%);
+  --nn-premium-meter-success: linear-gradient(90deg, #a6e9d7 0%, #7cc9be 100%);
+  --nn-premium-meter-warning: linear-gradient(90deg, #f4c67a 0%, #a6e9d7 100%);
+  --nn-premium-meter-danger: linear-gradient(90deg, #f18b8b 0%, #99c6df 100%);
+  --nn-marketing-gradient-hero: linear-gradient(135deg, #f8fafc 0%, #ddecf5 35%, #c6e7e0 70%, #7cc9be 100%);
 }
 
 html[data-theme="aurora"] {

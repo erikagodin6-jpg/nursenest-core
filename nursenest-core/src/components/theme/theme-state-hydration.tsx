@@ -8,6 +8,7 @@ import {
   NURSENEST_DEFAULT_THEME,
   THEME_OPTIONS,
   THEME_STORAGE_KEY,
+  normalizeThemeId,
 } from "@/lib/theme/theme-registry";
 import {
   getThemePaletteTokens,
@@ -131,9 +132,8 @@ function clearThemeHydrationInlineSlots(root: HTMLElement) {
   }
 }
 
-/** Persists the user’s chosen theme id as-is (no alias remap; invalid ids fall back elsewhere). */
 function normalizeStoredThemeId(raw: string): string {
-  return raw.trim();
+  return normalizeThemeId(raw);
 }
 
 function parseHexColor(value: string): { r: number; g: number; b: number } | null {
@@ -392,6 +392,11 @@ export function ThemeStateHydration() {
       }
     })();
     if (fromStorage && fromStorage !== "unavailable" && normalizeStoredThemeId(fromStorage) !== resolved) {
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, resolved);
+      } catch {
+        /* ignore */
+      }
       emitRuntimeEvent("theme_storage_mismatch", {
         theme: resolved,
         fromStorage,
