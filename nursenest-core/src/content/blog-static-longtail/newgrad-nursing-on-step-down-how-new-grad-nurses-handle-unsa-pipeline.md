@@ -1,5 +1,5 @@
 ---
-slug: newgrad-nursing-on-step-down-how-new-grad-nurses-handle-unsa
+slug: newgrad-nursing-on-step-down-how-new-grad-nurses-handle-unsa-pipeline
 title: "On Step-Down: How New Grad Nurses Handle Unsafe Staffing"
 excerpt: "Production HTML for this topic lives in `data/blog-content/newgrad-prod-batch-03/body-30.html.html`."
 category: New graduate nursing
@@ -23,3 +23,51 @@ updatedAt: 2026-05-27
 </ul>
 
 <p>This markdown file is a lightweight pipeline pointer (batch 03). The canonical published body is HTML in the batch folder.</p>
+
+## Study Resources
+
+Strengthen your understanding with these NurseNest study tools:
+
+- [Practice Questions](/app/practice-tests) — Test your knowledge with adaptive CAT practice exams
+- [Flashcard Decks](/app/flashcards) — Reinforce key concepts with spaced-repetition flashcards
+- [Lesson Hub](/app/lessons) — Structured lessons organized by body system and exam blueprint
+- [Question Bank](/app/question-bank) — Thousands of NCLEX-style questions with full rationales
+
+**Ready to put this into practice?** [Start a free practice session →](/app/practice-tests)
+
+## Key Concepts for NCLEX Success
+
+Understanding On Step-Down: How New Grad Nurses Handle Unsafe Staffing is essential for both the NCLEX exam and clinical practice. Here are the high-yield points every nursing student must know:
+
+**Assessment Priorities**
+- Conduct a thorough baseline assessment before initiating any intervention
+- Monitor vital signs and document trends rather than isolated values
+- Apply Maslow's hierarchy: airway, breathing, and circulation take priority
+
+**Clinical Decision Making**
+- Use the nursing process (ASSESS → DIAGNOSE → PLAN → IMPLEMENT → EVALUATE) systematically
+- Recognize early warning signs and escalate appropriately
+- Apply safety principles: the right patient, drug, dose, route, and time
+
+**Patient Education**
+- Teach back is the gold standard for confirming patient understanding
+- Include family caregivers when the patient consents
+- Document all education provided and the patient's response
+
+**NCLEX Exam Strategy**
+- Eliminate options that harm the patient or delay care
+- Choose the most therapeutic communication response
+- Prioritize interventions that address actual over potential problems
+
+Mastering these fundamentals ensures you are prepared for both the exam and real clinical scenarios.
+
+## Study Resources
+
+Strengthen your understanding with these NurseNest study tools:
+
+- [Practice Questions](/app/practice-tests) — Test your knowledge with adaptive CAT practice exams
+- [Flashcard Decks](/app/flashcards) — Reinforce key concepts with spaced-repetition flashcards
+- [Lesson Hub](/app/lessons) — Structured lessons organized by body system and exam blueprint
+
+**Ready to put this into practice?** [Start a free practice session →](/app/practice-tests)
+

@@ -74,3 +74,15 @@ disclaimer: This article supports exam preparation and clinical reasoning practi
 <p>Gennari, F. J. (1998). Hypokalemia. <em>New England Journal of Medicine</em>, 339(7), 451–458. <a href="https://doi.org/10.1056/NEJM199808133390707">https://doi.org/10.1056/NEJM199808133390707</a></p>
 <p>Weiner, I. D., Wingo, C. S., & Cain, B. D. (2020). Renal potassium physiology: Importance of regulation. <em>Comprehensive Physiology</em>, 10(1), 269–301. <a href="https://doi.org/10.1002/cphy.c190022">https://doi.org/10.1002/cphy.c190022</a></p>
 <p>WHO. (2012). <em>Guideline: Potassium intake for adults and children</em>. World Health Organization. (Use for population intake teaching; not a replacement order set.)</p>
+
+## Study Resources
+
+Strengthen your understanding with these NurseNest study tools:
+
+- [Practice Questions](/app/practice-tests) — Test your knowledge with adaptive CAT practice exams
+- [Flashcard Decks](/app/flashcards) — Reinforce key concepts with spaced-repetition flashcards
+- [Lesson Hub](/app/lessons) — Structured lessons organized by body system and exam blueprint
+- [Question Bank](/app/question-bank) — Thousands of NCLEX-style questions with full rationales
+
+**Ready to put this into practice?** [Start a free practice session →](/app/practice-tests)
+

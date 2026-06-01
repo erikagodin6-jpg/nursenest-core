@@ -1,5 +1,5 @@
 ---
-slug: nclex-patho-siadh-csw
+slug: nclex-patho-siadh-csw-pipeline
 title: "SIADH vs Cerebral Salt Wasting: Volume Status Forks Without Nephrology Fellowship Jargon"
 excerpt: "SIADH vs cerebral salt wasting nursing volume comparisons appear on NCLEX-RN and advanced exams because both syndromes can produce hyponatremia, yet volume status and management priorities diverge sha"
 category: Clinical reasoning
@@ -109,3 +109,15 @@ updatedAt: 2026-05-27
 <p>Verbalis, J. G., Goldsmith, S. R., Greenberg, A., Korzelius, C., Schrier, R. W., Sterns, R. H., & Thompson, C. J. (2013). Diagnosis, evaluation, and treatment of hyponatremia: Expert panel recommendations. <em>American Journal of Medicine</em>, <em>126</em>(10), S1-S42. https://doi.org/10.1016/j.amjmed.2013.07.006</p>
 
 <p>Sterns, R. H., Nigwekar, S. U., & Hix, J. K. (2015). The treatment of hyponatremia. <em>Seminars in Nephrology</em>, <em>35</em>(6), 510-530. https://doi.org/10.1016/j.semnephrol.2015.08.006</p>
+
+## Study Resources
+
+Strengthen your understanding with these NurseNest study tools:
+
+- [Practice Questions](/app/practice-tests) — Test your knowledge with adaptive CAT practice exams
+- [Flashcard Decks](/app/flashcards) — Reinforce key concepts with spaced-repetition flashcards
+- [Lesson Hub](/app/lessons) — Structured lessons organized by body system and exam blueprint
+- [Question Bank](/app/question-bank) — Thousands of NCLEX-style questions with full rationales
+
+**Ready to put this into practice?** [Start a free practice session →](/app/practice-tests)
+

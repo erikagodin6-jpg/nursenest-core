@@ -105,3 +105,60 @@ disclaimer: "Educational exam preparation support; not individualized medical ad
 <p>World Health Organization. (2022). <em>Global strategic directions for nursing and midwifery</em>. WHO.</p>
 <p>International Council of Nurses. (2021). <em>Guidelines on patient safety and quality of care</em> (policy and position statements). ICN.</p>
 <p>Nursing and Midwifery Council. (2024). <em>The Code: Professional standards of practice and behaviour for nurses, midwives and nursing associates</em>. NMC.</p>
+
+## 考试成功的关键概念
+
+深入理解这一领域对于护理考试和临床实践都至关重要。
+
+**评估优先事项**
+- 在开始任何干预之前进行全面的基线评估
+- 监测生命体征并记录趋势而非孤立数值
+- 应用马斯洛层次：气道、呼吸和循环优先
+
+**临床决策**
+- 系统地使用护理程序（评估→诊断→计划→实施→评价）
+- 识别早期预警信号并适当升级处理
+- 应用安全原则：正确的患者、药物、剂量、途径和时间
+
+**患者教育**
+- 回述法是确认患者理解的黄金标准
+- 在患者同意的情况下纳入家庭照护者
+- 记录所有提供的教育及患者的反应
+
+**学习资源**
+
+- [练习题](/app/practice-tests) — 适应性CAT练习考试
+- [闪卡](/app/flashcards) — 间隔重复闪卡
+- [课程中心](/app/lessons) — 系统化课程
+
+**准备好练习了吗？** [开始免费课程 →](/app/practice-tests)
+
+## NCLEX式重点学习要点 / Key Study Points
+
+The following concepts are high-yield for international nursing licensing examinations.
+以下概念对国际护理执照考试至关重要。
+
+**优先评估 Priority Assessment**
+1. Airway / 气道 — 始终是第一优先级
+2. Breathing / 呼吸 — 频率、深度、努力程度、血氧饱和度
+3. Circulation / 循环 — 脉搏质量、血压、毛细血管充盈时间
+4. Disability / 神经系统 — 意识水平、瞳孔、运动反应
+5. Exposure / 暴露 — 体温管理、皮肤评估
+
+**安全干预 Safety Interventions**
+- 每次干预前使用两种标识符核实患者身份
+- 实时记录评估结果
+- 及时向责任护士或医生汇报异常发现
+- 每次患者接触时应用标准预防措施
+
+**患者教育要点 Patient Education**
+- 使用简单语言并通过回述法确认理解
+- 提供书面材料作为口头指导的补充
+- 积极解决文化和语言障碍
+
+Key pharmacology reminders: check allergies, verify dose against weight, monitor for adverse effects, document administration time and route.
+药理学要点：检查过敏史、按体重核实剂量、监测不良反应、记录给药时间和途径。
+
+Clinical reasoning: Gather data → Identify problems → Set priorities → Act → Evaluate outcomes.
+临床推理：收集数据→识别问题→设定优先级→采取行动→评估结果。
+

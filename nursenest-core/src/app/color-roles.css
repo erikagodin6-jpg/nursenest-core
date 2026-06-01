@@ -149,19 +149,21 @@ html[data-theme="multi-pastel"] {
   --role-cta-on-soft: color-mix(in srgb, #3a6e9e 78%, var(--theme-heading-text));
 }
 
-/* Blossom CTA: cherry blossom primary with peach/yellow/sky accents reserved for progress and highlights. */
+/* Blossom 2.0 CTA: cherry blossom primary, white text, vivid shadow for airy elevation. */
 html[data-theme="blossom"] {
   --role-cta: #ff5f9e;
   --role-cta-foreground: #ffffff;
-  --role-cta-hover: #ff4f97;
-  --role-cta-pressed: #e83f84;
+  --role-cta-hover: #ff4090;
+  --role-cta-pressed: #e02f7a;
   --role-cta-shadow:
-    0 8px 24px -8px rgba(255, 95, 158, 0.34),
-    0 4px 14px -6px rgba(255, 181, 107, 0.22);
-  --role-cta-soft: color-mix(in srgb, #fff2f6 72%, var(--bg-card, var(--theme-card-bg)));
+    0 8px 28px -6px rgba(255, 95, 158, 0.44),
+    0 4px 16px -6px rgba(255, 181, 107, 0.30),
+    0 0 0 0 rgba(255, 95, 158, 0);
+  --role-cta-soft: color-mix(in srgb, #ff5f9e 16%, var(--bg-card, var(--theme-card-bg)));
   --role-cta-on-soft: #9d174d;
+  /* Rotated accent progress: pink → peach → yellow → sky — four distinct vivid bands */
   --semantic-progress-fill: linear-gradient(90deg, #ff5f9e 0%, #ffb56b 34%, #ffd95a 66%, #74d0f4 100%);
-  --semantic-progress-fill-accent: linear-gradient(90deg, #ff5f9e 0%, #ffb56b 34%, #ffd95a 66%, #74d0f4 100%);
+  --semantic-progress-fill-accent: linear-gradient(90deg, #ff8ab5 0%, #ffd95a 50%, #74d0f4 100%);
 }
 
 html[data-theme="sea-glass"],

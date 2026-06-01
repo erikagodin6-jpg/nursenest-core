@@ -1,5 +1,5 @@
 ---
-slug: nclex-patho-qsofa-sirs
+slug: nclex-patho-qsofa-sirs-pipeline
 title: "qSOFA vs SIRS: Screening vs Diagnosis for Sepsis Pathophysiology on NCLEX"
 excerpt: "qSOFA vs SIRS screening sepsis nursing questions test whether you understand that screening tools and syndrome definitions serve different purposes."
 category: Pathophysiology
@@ -109,3 +109,15 @@ updatedAt: 2026-05-27
 <p>Rhodes, A., Evans, L. E., Alhazzani, W., et al. (2017). Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock: 2016. <em>Intensive Care Medicine</em>, <em>43</em>(3), 304-377. https://doi.org/10.1007/s00134-017-4683-6</p>
 
 <p>Singer, M., Deutschman, C. S., Seymour, C. W., et al. (2016). The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3). <em>JAMA</em>, <em>315</em>(8), 801-810. https://doi.org/10.1001/jama.2016.0287</p>
+
+## Study Resources
+
+Strengthen your understanding with these NurseNest study tools:
+
+- [Practice Questions](/app/practice-tests) — Test your knowledge with adaptive CAT practice exams
+- [Flashcard Decks](/app/flashcards) — Reinforce key concepts with spaced-repetition flashcards
+- [Lesson Hub](/app/lessons) — Structured lessons organized by body system and exam blueprint
+- [Question Bank](/app/question-bank) — Thousands of NCLEX-style questions with full rationales
+
+**Ready to put this into practice?** [Start a free practice session →](/app/practice-tests)
+

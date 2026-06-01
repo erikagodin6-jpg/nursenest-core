@@ -74,3 +74,15 @@ disclaimer: This article supports exam preparation and clinical reasoning practi
 <p>Vilstrup, H., et al. (2014). Hepatic encephalopathy in chronic liver disease: 2014 practice guideline by the European Association for the Study of the Liver and the American Association for the Study of Liver Diseases. <em>Hepatology</em>, 60(2), 715–735. <a href="https://doi.org/10.1002/hep.27210">https://doi.org/10.1002/hep.27210</a></p>
 
 <p><em>Follow your program’s citation requirements; links are for educational traceability.</em></p>
+
+## Study Resources
+
+Strengthen your understanding with these NurseNest study tools:
+
+- [Practice Questions](/app/practice-tests) — Test your knowledge with adaptive CAT practice exams
+- [Flashcard Decks](/app/flashcards) — Reinforce key concepts with spaced-repetition flashcards
+- [Lesson Hub](/app/lessons) — Structured lessons organized by body system and exam blueprint
+- [Question Bank](/app/question-bank) — Thousands of NCLEX-style questions with full rationales
+
+**Ready to put this into practice?** [Start a free practice session →](/app/practice-tests)
+

@@ -179,14 +179,14 @@ html[data-theme="midnight"] .nn-cockpit-mastery-key {
   background: color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface));
 }
 
-/* Aurora / Blossom: slightly warmer panel seams (uses existing semantic chart tokens) */
+/* Blossom: vivid cherry blossom panel seams on dashboard hero and mastery key */
 :is(html[data-theme="blossom"], html[data-theme="aurora"])
   .nn-learner-cockpit-hero.nn-learner-dashboard-hero.nn-dash-page-header--learner-hub {
-  border-color: color-mix(in srgb, var(--semantic-chart-5) 10%, var(--semantic-border-soft));
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 28%, var(--semantic-border-soft));
 }
 
 :is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-cockpit-mastery-key {
-  border-color: color-mix(in srgb, var(--semantic-chart-5) 12%, var(--semantic-border-soft));
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 32%, var(--semantic-border-soft));
 }
 
 /* ── /app study hub: Ocean-canonical priority matrix (Blossom/Midnight inherit same DOM) ── */
@@ -344,7 +344,20 @@ html[data-theme="apex"] .nn-learner-report-card-convergence::before {
   opacity: 0.22;
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-learner-dashboard-convergence::before {
+/* Blossom 2.0: vivid spring dashboard ambient — pink top-left, peach top-right, yellow bottom */
+html[data-theme="blossom"] .nn-learner-dashboard-convergence::before {
+  opacity: 0.72;
+  background:
+    radial-gradient(130% 75% at 10% -14%, color-mix(in srgb, var(--semantic-chart-1) 36%, transparent), transparent 56%),
+    radial-gradient(95% 60% at 96% 12%, color-mix(in srgb, var(--semantic-chart-2) 30%, transparent), transparent 54%),
+    radial-gradient(90% 55% at 50% 108%, color-mix(in srgb, var(--semantic-chart-3) 24%, transparent), transparent 58%);
+}
+
+html[data-theme="blossom"] .nn-learner-report-card-convergence::before {
+  opacity: 0.62;
+}
+
+html[data-theme="aurora"] .nn-learner-dashboard-convergence::before {
   opacity: 0.42;
   background:
     radial-gradient(130% 75% at 10% -14%, color-mix(in srgb, var(--semantic-chart-5) 18%, transparent), transparent 56%),
@@ -352,7 +365,7 @@ html[data-theme="apex"] .nn-learner-report-card-convergence::before {
     radial-gradient(90% 55% at 50% 108%, color-mix(in srgb, var(--semantic-chart-3) 11%, transparent), transparent 58%);
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-learner-report-card-convergence::before {
+html[data-theme="aurora"] .nn-learner-report-card-convergence::before {
   opacity: 0.38;
 }
 

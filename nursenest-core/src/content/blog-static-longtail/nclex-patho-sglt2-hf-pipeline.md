@@ -1,5 +1,5 @@
 ---
-slug: nclex-patho-sglt2-hf
+slug: nclex-patho-sglt2-hf-pipeline
 title: "Why SGLT2 Inhibitors Expanded Beyond Diabetes in Heart Failure Teaching: Mechanisms for NP and NCLEX Reasoning"
 excerpt: "SGLT2 heart failure mechanism NP nursing content now appears across cardiology teaching because sodium-glucose cotransporter-2 (SGLT2) inhibitors demonstrated outcome benefits in heart failure with re"
 category: Pathophysiology
@@ -109,3 +109,15 @@ updatedAt: 2026-05-27
 <p>Heidenreich, P. A., Bozkurt, B., Aguilar, D., Allen, L. A., Byun, J. J., Colvin, M. M., Deswal, A., Drazner, M. H., Dunlay, S. M., Evers, L. R., Fang, J. C., Fedson, S. E., Fonarow, G. C., Hayek, S. S., Hernandez, A. F., Khazanie, P., Kittleson, M. M., Lee, C. S., Link, M. S., Milano, C. A., ... & American Heart Association. (2022). 2022 AHA/ACC/HFSA guideline for the management of heart failure: A report of the American College of Cardiology/American Heart Association Joint Committee on Clinical Practice Guidelines. <em>Circulation</em>, <em>146</em>(18), e185-e313. https://doi.org/10.1161/CIR.0000000000001063</p>
 
 <p>Zinman, B., Wanner, C., Lachin, J. M., Fitchett, D., Bluhmki, E., Hantel, S., Mattheus, M., Woerle, H. J., Broedl, U. C., Inzucchi, S. E., & EMPA-REG OUTCOME Investigators. (2015). Empagliflozin, cardiovascular outcomes, and mortality in type 2 diabetes. <em>New England Journal of Medicine</em>, <em>373</em>(22), 2117-2128. https://doi.org/10.1056/NEJMoa1504720</p>
+
+## Study Resources
+
+Strengthen your understanding with these NurseNest study tools:
+
+- [Practice Questions](/app/practice-tests) — Test your knowledge with adaptive CAT practice exams
+- [Flashcard Decks](/app/flashcards) — Reinforce key concepts with spaced-repetition flashcards
+- [Lesson Hub](/app/lessons) — Structured lessons organized by body system and exam blueprint
+- [Question Bank](/app/question-bank) — Thousands of NCLEX-style questions with full rationales
+
+**Ready to put this into practice?** [Start a free practice session →](/app/practice-tests)
+

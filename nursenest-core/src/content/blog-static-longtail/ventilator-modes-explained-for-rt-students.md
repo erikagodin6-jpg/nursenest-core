@@ -48,3 +48,15 @@ medicalReviewerName: "NurseNest Clinical Review"
 
 <h2>Key Takeaway</h2>
 <p>Ventilator modes are best learned through physiology and clinical reasoning. Understanding how each mode affects breathing support, oxygenation, and patient workload helps RT students perform better on exams and in clinical placements.</p>
+
+## Study Resources
+
+Strengthen your understanding with these NurseNest study tools:
+
+- [Practice Questions](/app/practice-tests) — Test your knowledge with adaptive CAT practice exams
+- [Flashcard Decks](/app/flashcards) — Reinforce key concepts with spaced-repetition flashcards
+- [Lesson Hub](/app/lessons) — Structured lessons organized by body system and exam blueprint
+- [Question Bank](/app/question-bank) — Thousands of NCLEX-style questions with full rationales
+
+**Ready to put this into practice?** [Start a free practice session →](/app/practice-tests)
+

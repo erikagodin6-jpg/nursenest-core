@@ -62,3 +62,15 @@ medicalReviewerName: "NurseNest Clinical Review"
 <h2>Key Takeaway</h2>
 <p>NCLEX prioritization questions are asking one core question: who is most likely to be harmed if the nurse delays care? Use ABCs, stability, acute change, trends, and nursing scope to choose the safest first action.</p>
 <p>Next steps: practice prioritization questions, review rationales carefully, and connect weak areas back to lessons, flashcards, and CAT-style exams.</p>
+
+## Study Resources
+
+Strengthen your understanding with these NurseNest study tools:
+
+- [Practice Questions](/app/practice-tests) — Test your knowledge with adaptive CAT practice exams
+- [Flashcard Decks](/app/flashcards) — Reinforce key concepts with spaced-repetition flashcards
+- [Lesson Hub](/app/lessons) — Structured lessons organized by body system and exam blueprint
+- [Question Bank](/app/question-bank) — Thousands of NCLEX-style questions with full rationales
+
+**Ready to put this into practice?** [Start a free practice session →](/app/practice-tests)
+

@@ -51,9 +51,10 @@ html[data-theme="ocean"] {
 }
 
 html[data-theme="blossom"] {
-  --nn-depth-glow-a: color-mix(in srgb, var(--semantic-chart-1) 20%, transparent);
-  --nn-depth-glow-b: color-mix(in srgb, var(--semantic-chart-2) 16%, transparent);
-  --nn-depth-glow-c: color-mix(in srgb, var(--semantic-chart-4) 12%, transparent);
+  /* Raised from 12–20% to 28–40% — glows actually visible against white backgrounds */
+  --nn-depth-glow-a: color-mix(in srgb, var(--semantic-chart-1) 38%, transparent);
+  --nn-depth-glow-b: color-mix(in srgb, var(--semantic-chart-2) 28%, transparent);
+  --nn-depth-glow-c: color-mix(in srgb, var(--semantic-chart-4) 24%, transparent);
 }
 
 html[data-theme="mint-blossom"] {

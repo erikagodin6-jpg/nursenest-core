@@ -105,3 +105,60 @@ disclaimer: "Educational exam preparation support; not individualized medical ad
 <p>World Health Organization. (2022). <em>Global strategic directions for nursing and midwifery</em>. WHO.</p>
 <p>International Council of Nurses. (2021). <em>Guidelines on patient safety and quality of care</em> (policy and position statements). ICN.</p>
 <p>Nursing and Midwifery Council. (2024). <em>The Code: Professional standards of practice and behaviour for nurses, midwives and nursing associates</em>. NMC.</p>
+
+## 試験合格のための重要概念
+
+この分野を深く理解することは、看護師試験と臨床実践の両方において不可欠です。
+
+**評価の優先事項**
+- 介入を開始する前に、十分なベースライン評価を実施してください
+- バイタルサインを監視し、孤立した値ではなくトレンドを記録してください
+- マズローの階層を適用する：気道、呼吸、循環を優先
+
+**臨床的意思決定**
+- 看護プロセス（評価→診断→計画→実施→評価）を体系的に使用する
+- 早期警告サインを認識し、適切にエスカレーションする
+- 安全原則を適用：正しい患者、薬物、投与量、経路、時間
+
+**患者教育**
+- ティーチバックは患者の理解を確認するためのゴールドスタンダード
+- 患者の同意を得て家族介護者を含める
+- 提供されたすべての教育と患者の反応を記録する
+
+**学習リソース**
+
+- [練習問題](/app/practice-tests) — 適応型CAT練習試験
+- [フラッシュカード](/app/flashcards) — 間隔反復学習
+- [レッスンハブ](/app/lessons) — 体系的なレッスン
+
+**練習を始めましょう** [無料セッションを開始 →](/app/practice-tests)
+
+## NCLEX-Style Key Points / 重要ポイント
+
+The following concepts are high-yield for international nursing licensing examinations.
+以下の概念は、国際看護師ライセンス試験において重要です。
+
+**Priority Assessment / 優先評価**
+1. Airway / 気道管理 — always the first priority
+2. Breathing / 呼吸 — rate, depth, effort, oxygen saturation
+3. Circulation / 循環 — pulse quality, blood pressure, capillary refill
+4. Disability / 神経学的評価 — level of consciousness, pupils, motor response
+5. Exposure / 体温と環境 — temperature management, skin assessment
+
+**Safety Interventions / 安全介入**
+- Verify patient identity before every intervention using two identifiers
+- Document assessment findings immediately in real time
+- Escalate abnormal findings to the charge nurse or physician promptly
+- Apply standard precautions for every patient encounter
+
+**Patient Education Essentials / 患者教育の基本**
+- Use simple language and confirm understanding via teach-back method
+- Provide written materials as a supplement to verbal instructions
+- Address cultural and language barriers proactively
+
+Key pharmacology reminders: check allergies, verify dose against weight, monitor for adverse effects, and document administration time and route.
+薬理学の重要点：アレルギー確認、体重比での用量確認、副作用モニタリング、投与時間と経路の記録。
+
+Clinical reasoning framework: Gather data → Identify problems → Set priorities → Act → Evaluate outcomes.
+臨床推論の枠組み：データ収集→問題識別→優先順位設定→実施→アウトカム評価。
+

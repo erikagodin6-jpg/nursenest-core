@@ -60,7 +60,14 @@ html[data-theme="ocean"] .nn-active-flashcard-session[data-nn-unified-exam-works
     );
 }
 
-html[data-theme="blossom"] .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp],
+html[data-theme="blossom"] .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp] {
+  /* Blossom 2.0: vivid spring ambient — pink top-left, yellow top-right, sky bottom */
+  background:
+    radial-gradient(ellipse 88% 68% at 8% 0%, color-mix(in srgb, var(--semantic-chart-1) 26%, transparent), transparent 56%),
+    radial-gradient(ellipse 76% 58% at 96% 6%, color-mix(in srgb, var(--semantic-chart-3) 22%, transparent), transparent 54%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, color-mix(in srgb, var(--semantic-chart-4) 20%, transparent), transparent 58%),
+    linear-gradient(180deg, var(--semantic-bg-base), color-mix(in srgb, var(--semantic-panel-mint) 38%, var(--semantic-bg-base)));
+}
 html[data-theme="mint-blossom"] .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp] {
   background:
     radial-gradient(ellipse 88% 68% at 8% 0%, color-mix(in srgb, var(--semantic-chart-1) 12%, transparent), transparent 56%),
@@ -108,7 +115,18 @@ html[data-theme="aurora"] .nn-active-flashcard-session[data-nn-unified-exam-work
     var(--semantic-shadow-soft);
 }
 
-html[data-theme="blossom"] .nn-flashcard-hero-surface[data-nn-flashcard-branding-revamp],
+html[data-theme="blossom"] .nn-flashcard-hero-surface[data-nn-flashcard-branding-revamp] {
+  /* Blossom 2.0: vivid yellow + sky radials on white card — spring card depth */
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 38%, #ffffff);
+  background:
+    radial-gradient(560px 220px at 100% 0%, color-mix(in srgb, var(--semantic-chart-3) 30%, transparent), transparent 62%),
+    radial-gradient(480px 180px at 0% 100%, color-mix(in srgb, var(--semantic-chart-4) 26%, transparent), transparent 66%),
+    radial-gradient(360px 120px at 12% 0%, color-mix(in srgb, var(--semantic-chart-8) 20%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-warm));
+  box-shadow:
+    0 2px 18px -6px rgba(255, 95, 158, 0.22),
+    0 1px 6px -3px rgba(255, 217, 90, 0.16);
+}
 html[data-theme="mint-blossom"] .nn-flashcard-hero-surface[data-nn-flashcard-branding-revamp] {
   border-color: color-mix(in srgb, var(--semantic-border-soft) 55%, var(--semantic-chart-1) 20%);
   background:

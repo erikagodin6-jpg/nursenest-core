@@ -601,8 +601,40 @@ html[data-theme="ocean"] .nn-flashcard-session-ambient {
   );
 }
 
-/* Aurora / Blossom — muted rose / lilac / mint accents (no neon pink blocks). */
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-session-ambient {
+/* Blossom 2.0 — vivid cherry blossom spring wash (separated from Aurora for clarity). */
+html[data-theme="blossom"] .nn-flashcard-session-ambient {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-1) 26%, transparent),
+    color-mix(in srgb, var(--semantic-chart-2) 22%, transparent) 50%,
+    color-mix(in srgb, var(--semantic-chart-4) 18%, transparent)
+  );
+}
+
+html[data-theme="blossom"] .nn-flashcard-layered-stack__underlay {
+  background: color-mix(in srgb, var(--semantic-chart-1) 28%, var(--semantic-panel-warm));
+}
+
+html[data-theme="blossom"] .nn-flashcard-hero-surface {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 40%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-warm) 36%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-panel-muted))
+  );
+}
+
+html[data-theme="blossom"] .nn-flashcard-rail-utility {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 30%, var(--semantic-border-soft));
+  background: linear-gradient(
+    185deg,
+    color-mix(in srgb, var(--semantic-chart-3) 18%, var(--semantic-panel-muted)),
+    color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted))
+  );
+}
+
+/* Aurora — muted lilac / mint accents */
+html[data-theme="aurora"] .nn-flashcard-session-ambient {
   background: linear-gradient(
     90deg,
     color-mix(in srgb, var(--semantic-chart-1) 11%, transparent),
@@ -611,11 +643,11 @@ html[data-theme="ocean"] .nn-flashcard-session-ambient {
   );
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-layered-stack__underlay {
+html[data-theme="aurora"] .nn-flashcard-layered-stack__underlay {
   background: color-mix(in srgb, var(--semantic-chart-1) 12%, var(--semantic-panel-warm));
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-hero-surface {
+html[data-theme="aurora"] .nn-flashcard-hero-surface {
   border-color: color-mix(in srgb, var(--semantic-chart-1) 22%, var(--semantic-border-soft));
   background: linear-gradient(
     165deg,
@@ -624,7 +656,7 @@ html[data-theme="ocean"] .nn-flashcard-session-ambient {
   );
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-rail-utility {
+html[data-theme="aurora"] .nn-flashcard-rail-utility {
   border-color: color-mix(in srgb, var(--semantic-chart-1) 14%, var(--semantic-border-soft));
   background: linear-gradient(
     185deg,

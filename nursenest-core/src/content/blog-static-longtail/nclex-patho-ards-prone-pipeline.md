@@ -1,5 +1,5 @@
 ---
-slug: nclex-patho-ards-prone
+slug: nclex-patho-ards-prone-pipeline
 title: "ARDS Prone Positioning: Who Benefits Most in NCLEX-Style Recruitable Lung Framing"
 excerpt: "Prone positioning ARDS recruitable lung nursing items reward mechanistic reasoning, not memorizing a single SpO2 threshold."
 category: NCLEX exam prep
@@ -105,3 +105,15 @@ updatedAt: 2026-05-27
 <p>Singer, M., Deutschman, C. S., Seymour, C. W., Shankar-Hari, M., Annane, D., Bauer, M., Bellomo, R., Bernard, G. R., Chiche, J.-D., Coopersmith, C. M., Hotchkiss, R. S., Levy, M. M., Marshall, J. C., Martin, G. S., Opal, S. M., Rubenfeld, G. D., van der Poll, T., Vincent, J.-L., & Angus, D. C. (2016). The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3). <em>JAMA</em>, <em>315</em>(8), 801-810. https://doi.org/10.1001/jama.2016.0287</p>
 
 <p>Thompson, B. T., Chambers, R. C., & Liu, K. D. (2017). Acute respiratory distress syndrome. <em>New England Journal of Medicine</em>, <em>377</em>(6), 562-572. https://doi.org/10.1056/NEJMra1608837</p>
+
+## Study Resources
+
+Strengthen your understanding with these NurseNest study tools:
+
+- [Practice Questions](/app/practice-tests) — Test your knowledge with adaptive CAT practice exams
+- [Flashcard Decks](/app/flashcards) — Reinforce key concepts with spaced-repetition flashcards
+- [Lesson Hub](/app/lessons) — Structured lessons organized by body system and exam blueprint
+- [Question Bank](/app/question-bank) — Thousands of NCLEX-style questions with full rationales
+
+**Ready to put this into practice?** [Start a free practice session →](/app/practice-tests)
+

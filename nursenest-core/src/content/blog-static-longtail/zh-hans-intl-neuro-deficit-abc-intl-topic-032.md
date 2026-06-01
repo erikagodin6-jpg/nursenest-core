@@ -105,3 +105,31 @@ disclaimer: "Educational exam preparation support; not individualized medical ad
 <p>World Health Organization. (2022). <em>Global strategic directions for nursing and midwifery</em>. WHO.</p>
 <p>International Council of Nurses. (2021). <em>Guidelines on patient safety and quality of care</em> (policy and position statements). ICN.</p>
 <p>Nursing and Midwifery Council. (2024). <em>The Code: Professional standards of practice and behaviour for nurses, midwives and nursing associates</em>. NMC.</p>
+
+## 考试成功的关键概念
+
+深入理解这一领域对于护理考试和临床实践都至关重要。
+
+**评估优先事项**
+- 在开始任何干预之前进行全面的基线评估
+- 监测生命体征并记录趋势而非孤立数值
+- 应用马斯洛层次：气道、呼吸和循环优先
+
+**临床决策**
+- 系统地使用护理程序（评估→诊断→计划→实施→评价）
+- 识别早期预警信号并适当升级处理
+- 应用安全原则：正确的患者、药物、剂量、途径和时间
+
+**患者教育**
+- 回述法是确认患者理解的黄金标准
+- 在患者同意的情况下纳入家庭照护者
+- 记录所有提供的教育及患者的反应
+
+**学习资源**
+
+- [练习题](/app/practice-tests) — 适应性CAT练习考试
+- [闪卡](/app/flashcards) — 间隔重复闪卡
+- [课程中心](/app/lessons) — 系统化课程
+
+**准备好练习了吗？** [开始免费课程 →](/app/practice-tests)
+

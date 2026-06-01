@@ -1,5 +1,5 @@
 ---
-slug: nclex-patho-abg-post-arrest
+slug: nclex-patho-abg-post-arrest-pipeline
 title: "ABG After Cardiac Arrest: Mixed Respiratory and Metabolic Patterns for NP and NCLEX Reasoning"
 excerpt: "ABG after cardiac arrest mixed acid-base nursing stems appear frequently because return of spontaneous circulation (ROSC) creates a high-stakes physiology sandwich: simultaneous respiratory carbon dio"
 category: NCLEX exam prep
@@ -109,3 +109,15 @@ updatedAt: 2026-05-27
 <p>Palmer, B. F. (2015). Evaluation and treatment of chronic metabolic acidosis. <em>Advances in Chronic Kidney Disease</em>, <em>22</em>(6), 412-419. https://doi.org/10.1053/j.ackd.2015.08.004</p>
 
 <p>Kellum, J. A., Song, M., & Li, J. (2004). Science review: Lactate and acute kidney injury. <em>Critical Care</em>, <em>8</em>(4), 322-326. https://doi.org/10.1186/cc3000</p>
+
+## Study Resources
+
+Strengthen your understanding with these NurseNest study tools:
+
+- [Practice Questions](/app/practice-tests) — Test your knowledge with adaptive CAT practice exams
+- [Flashcard Decks](/app/flashcards) — Reinforce key concepts with spaced-repetition flashcards
+- [Lesson Hub](/app/lessons) — Structured lessons organized by body system and exam blueprint
+- [Question Bank](/app/question-bank) — Thousands of NCLEX-style questions with full rationales
+
+**Ready to put this into practice?** [Start a free practice session →](/app/practice-tests)
+

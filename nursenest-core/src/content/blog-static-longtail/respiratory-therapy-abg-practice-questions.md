@@ -89,3 +89,15 @@ medicalReviewerName: "NurseNest Clinical Review"
 <h2>Key Takeaway</h2>
 <p>ABG interpretation is a pattern-recognition skill. Respiratory therapy students should practice repeatedly with rationales until pH, PaCO2, HCO3, and PaO2 trends become clinically meaningful rather than isolated numbers.</p>
 <p>Use ABG questions alongside ventilator, COPD, oxygen therapy, and critical-care practice to strengthen exam readiness.</p>
+
+## Study Resources
+
+Strengthen your understanding with these NurseNest study tools:
+
+- [Practice Questions](/app/practice-tests) — Test your knowledge with adaptive CAT practice exams
+- [Flashcard Decks](/app/flashcards) — Reinforce key concepts with spaced-repetition flashcards
+- [Lesson Hub](/app/lessons) — Structured lessons organized by body system and exam blueprint
+- [Question Bank](/app/question-bank) — Thousands of NCLEX-style questions with full rationales
+
+**Ready to put this into practice?** [Start a free practice session →](/app/practice-tests)
+
