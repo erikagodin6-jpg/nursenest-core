@@ -42,10 +42,31 @@ function logWithTimestamp(method, ...args) {
   console[method](`[ts_local=${local} ts_utc=${utc}]`, ...args);
 }
 
+function applyRuntimeHeapLimit() {
+  const rawLimit = process.env.NODE_MAX_OLD_SPACE_SIZE_MB?.trim();
+  if (!rawLimit) return;
+  const limit = Number.parseInt(rawLimit, 10);
+  if (!Number.isFinite(limit) || limit < 256) {
+    logWithTimestamp("error", `[runtime_env] ignoring invalid NODE_MAX_OLD_SPACE_SIZE_MB=${JSON.stringify(rawLimit)}`);
+    return;
+  }
+
+  const current = process.env.NODE_OPTIONS ?? "";
+  const next = current.match(/--max-old-space-size=\d+/)
+    ? current.replace(/--max-old-space-size=\d+/g, `--max-old-space-size=${limit}`)
+    : `${current} --max-old-space-size=${limit}`.trim();
+  if (next !== current) {
+    process.env.NODE_OPTIONS = next;
+    logWithTimestamp("log", `[runtime_env] clamped NODE_OPTIONS max-old-space-size to ${limit} MB`);
+  }
+}
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexAbs = path.join(root, "dist", "index.cjs");
 const nestedStandaloneStart = path.join(root, "nursenest-core", "scripts", "start-standalone.mjs");
 const nestedStandaloneServer = path.join(root, "nursenest-core", ".next", "standalone", "server.js");
+
+applyRuntimeHeapLimit();
 
 logWithTimestamp("log", "STARTING WEB PROCESS");
 logWithTimestamp("log", `NODE_ENV=${process.env.NODE_ENV ?? "(unset)"}`);
