@@ -1,6 +1,6 @@
 # Noindex Audit
 
-Generated: 2026-05-31T22:26:52.433Z
+Generated: 2026-06-01T01:26:47.645Z
 
 ## Search Console Signal
 
@@ -21,6 +21,7 @@ _No Search Console URL export rows were available for this issue._
 - /admin/referrals (src/app/(admin)/admin/referrals/page.tsx)
 - /admin/users/[userId]/view-as (src/app/(admin)/admin/users/[userId]/view-as/page.tsx)
 - / (src/app/(admin)/layout.tsx)
+- /app/academic-success-toolkit (src/app/(app)/app/(learner)/academic-success-toolkit/page.tsx)
 - /app/account/activity (src/app/(app)/app/(learner)/account/activity/page.tsx)
 - /app/account/analytics (src/app/(app)/app/(learner)/account/analytics/page.tsx)
 - /app/account/beta (src/app/(app)/app/(learner)/account/beta/page.tsx)
@@ -52,10 +53,12 @@ _No Search Console URL export rows were available for this issue._
 - /app/cases/cnple (src/app/(app)/app/(learner)/cases/cnple/page.tsx)
 - /app/clinical-assignments (src/app/(app)/app/(learner)/clinical-assignments/page.tsx)
 - /app/clinical-day-survival (src/app/(app)/app/(learner)/clinical-day-survival/page.tsx)
+- /app/clinical-education-suite (src/app/(app)/app/(learner)/clinical-education-suite/page.tsx)
 - /app/clinical-image-library (src/app/(app)/app/(learner)/clinical-image-library/page.tsx)
 - /app/clinical-reasoning (src/app/(app)/app/(learner)/clinical-reasoning/page.tsx)
 - /app/clinical-skills/[slug] (src/app/(app)/app/(learner)/clinical-skills/[slug]/page.tsx)
 - /app/clinical-skills (src/app/(app)/app/(learner)/clinical-skills/page.tsx)
+- /app/clinical-worksheet-builder (src/app/(app)/app/(learner)/clinical-worksheet-builder/page.tsx)
 - /app/coach (src/app/(app)/app/(learner)/coach/page.tsx)
 - /app/exam-day (src/app/(app)/app/(learner)/exam-day/page.tsx)
 - /app/exam-plan (src/app/(app)/app/(learner)/exam-plan/page.tsx)
@@ -63,6 +66,7 @@ _No Search Console URL export rows were available for this issue._
 - /app/flashcards (src/app/(app)/app/(learner)/flashcards/layout.tsx)
 - /app/flashcards (src/app/(app)/app/(learner)/flashcards/page.tsx)
 - /app/guided (src/app/(app)/app/(learner)/guided/page.tsx)
+- /app/interprofessional-cases (src/app/(app)/app/(learner)/interprofessional-cases/page.tsx)
 - /app/labs/[category]/[slug] (src/app/(app)/app/(learner)/labs/[category]/[slug]/page.tsx)
 - /app/labs (src/app/(app)/app/(learner)/labs/page.tsx)
 - /app/learning-ecosystem (src/app/(app)/app/(learner)/learning-ecosystem/page.tsx)
@@ -129,11 +133,7 @@ _No Search Console URL export rows were available for this issue._
 - /questions/[slug] (src/app/(marketing)/(default)/questions/[slug]/page.tsx)
 - /reset-password (src/app/(marketing)/(default)/reset-password/page.tsx)
 - /signup (src/app/(marketing)/(default)/signup/page.tsx)
-- /verify-email (src/app/(marketing)/(default)/verify-email/page.tsx)
-- /[locale]/forgot-password (src/app/(marketing)/[locale]/forgot-password/page.tsx)
-- /[locale]/login (src/app/(marketing)/[locale]/login/page.tsx)
-- /[locale]/pre-nursing/lessons/[slug] (src/app/(marketing)/[locale]/pre-nursing/lessons/[slug]/page.tsx)
-- ... 47 more
+- ... 51 more
 
 ## Classification
 

@@ -1,6 +1,6 @@
 # SEO 5xx Audit
 
-Generated: 2026-05-31T22:26:52.433Z
+Generated: 2026-06-01T01:26:47.645Z
 
 ## Search Console Signal
 
@@ -83,6 +83,7 @@ _No Search Console URL export rows were available for this issue._
 - /admin/users/[userId] (src/app/(admin)/admin/users/[userId]/page.tsx)
 - /admin/users/[userId]/view-as (src/app/(admin)/admin/users/[userId]/view-as/page.tsx)
 - / (src/app/(admin)/layout.tsx)
+- /app/academic-success-toolkit (src/app/(app)/app/(learner)/academic-success-toolkit/page.tsx)
 - /app/account/beta (src/app/(app)/app/(learner)/account/beta/page.tsx)
 - /app/account/mistakes (src/app/(app)/app/(learner)/account/mistakes/page.tsx)
 - /app/account/motivation (src/app/(app)/app/(learner)/account/motivation/page.tsx)
@@ -94,8 +95,10 @@ _No Search Console URL export rows were available for this issue._
 - /app/baseline-assessment (src/app/(app)/app/(learner)/baseline-assessment/page.tsx)
 - /app/clinical-assignments (src/app/(app)/app/(learner)/clinical-assignments/page.tsx)
 - /app/clinical-day-survival (src/app/(app)/app/(learner)/clinical-day-survival/page.tsx)
+- /app/clinical-education-suite (src/app/(app)/app/(learner)/clinical-education-suite/page.tsx)
 - /app/clinical-reasoning (src/app/(app)/app/(learner)/clinical-reasoning/page.tsx)
 - /app/clinical-skills (src/app/(app)/app/(learner)/clinical-skills/page.tsx)
+- /app/clinical-worksheet-builder (src/app/(app)/app/(learner)/clinical-worksheet-builder/page.tsx)
 - /app/command-center (src/app/(app)/app/(learner)/command-center/page.tsx)
 - /app/exam-day (src/app/(app)/app/(learner)/exam-day/page.tsx)
 - /app/exam-plan (src/app/(app)/app/(learner)/exam-plan/page.tsx)
@@ -103,6 +106,7 @@ _No Search Console URL export rows were available for this issue._
 - /app/flashcards (src/app/(app)/app/(learner)/flashcards/layout.tsx)
 - /app/flashcards (src/app/(app)/app/(learner)/flashcards/page.tsx)
 - /app/guided (src/app/(app)/app/(learner)/guided/page.tsx)
+- /app/interprofessional-cases (src/app/(app)/app/(learner)/interprofessional-cases/page.tsx)
 - /app/labs (src/app/(app)/app/(learner)/labs/page.tsx)
 - /app (src/app/(app)/app/(learner)/layout.tsx)
 - /app/learning-ecosystem (src/app/(app)/app/(learner)/learning-ecosystem/page.tsx)
@@ -126,11 +130,7 @@ _No Search Console URL export rows were available for this issue._
 - /app (src/app/(app)/app/layout.tsx)
 - / (src/app/(app)/layout.tsx)
 - /modules/ecg-advanced (src/app/(app)/modules/ecg-advanced/layout.tsx)
-- /modules/ecg-interpretation (src/app/(app)/modules/ecg-interpretation/layout.tsx)
-- /modules/ecg (src/app/(app)/modules/ecg/layout.tsx)
-- /modules/ecg/pediatric/cases (src/app/(app)/modules/ecg/pediatric/cases/page.tsx)
-- /modules/ecg/pediatric (src/app/(app)/modules/ecg/pediatric/page.tsx)
-- ... 118 more
+- ... 122 more
 
 ## P0 Remediation Plan
 

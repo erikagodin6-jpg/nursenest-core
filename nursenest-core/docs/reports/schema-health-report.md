@@ -1,16 +1,16 @@
 # Schema Health Report
 
-Generated: 2026-05-31T22:26:52.433Z
+Generated: 2026-06-01T01:26:47.645Z
 
 ## Source-Level Schema Coverage
 
 | Schema Type | Local Source File Count | Notes |
 | --- | --- | --- |
-| Article | 3925 | Blog and article-like authority surfaces. |
+| Article | 3926 | Blog and article-like authority surfaces. |
 | FAQ | 4814 | FAQ blocks on blogs, exam pages, advanced ECG, and long-tail authority content. |
-| Breadcrumb | 336 | Breadcrumb JSON-LD/components and route hierarchy helpers. |
+| Breadcrumb | 340 | Breadcrumb JSON-LD/components and route hierarchy helpers. |
 | Course | 662 | Exam preparation and education-program landing pages. |
-| MedicalCondition / MedicalWebPage | 4741 | Clinical/medical educational entity helpers and clinical content pages. |
+| MedicalCondition / MedicalWebPage | 4742 | Clinical/medical educational entity helpers and clinical content pages. |
 | Organization / WebSite | 2822 | Sitewide brand and search schema helpers. |
 | EducationalOccupationalProgram | 719 | Program-oriented exam/pathway structured data. |
 

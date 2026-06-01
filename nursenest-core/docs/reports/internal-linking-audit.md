@@ -1,6 +1,6 @@
 # Internal Linking Audit
 
-Generated: 2026-05-31T22:26:52.433Z
+Generated: 2026-06-01T01:26:47.645Z
 
 ## Scope
 

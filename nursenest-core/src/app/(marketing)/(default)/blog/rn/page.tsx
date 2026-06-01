@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { BLOG_LIST_PAGE_SIZE, getPublishedBlogPostsPage } from "@/lib/blog/safe-blog-queries";
@@ -52,6 +51,8 @@ export default async function BlogRnHubPage({ searchParams }: Props) {
     sourceLocale: "en",
     careerSlug: CAREER,
     allowSourceLocaleFallback: true,
+  }, {
+    includeTotal: false,
   });
   if (process.env.BLOG_INDEX_ROUTE_LIST_LOAD === "1") {
     safeServerLog("blog", "BLOG_INDEX_ROUTE_LIST_LOAD", {
@@ -76,10 +77,6 @@ export default async function BlogRnHubPage({ searchParams }: Props) {
     { name: `${labels.short} NCLEX articles`, item: absoluteUrl("/blog/rn") },
   ];
 
-  if (!listLoad.querySucceeded && posts.length === 0) {
-    notFound();
-  }
-
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <BreadcrumbJsonLd items={schemaItems} />
@@ -102,11 +99,8 @@ export default async function BlogRnHubPage({ searchParams }: Props) {
         >
           <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Blog list could not load</h2>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-            We could not reach the article database. Please refresh or try again shortly.
+            We’re updating our article library. Please try again in a moment.
           </p>
-          {listLoad.reasonFailed ? (
-            <p className="mt-2 text-xs text-[var(--theme-muted-text)]">Details: {listLoad.reasonFailed}</p>
-          ) : null}
         </section>
       ) : posts.length === 0 ? (
         <p className="text-sm text-[var(--theme-muted-text)]">No published RN articles yet. Check back soon.</p>

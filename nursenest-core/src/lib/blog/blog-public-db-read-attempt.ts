@@ -17,6 +17,7 @@ export async function blogPublicDbReadAttempt<T>(
   if (!isDatabaseUrlConfigured()) {
     return { ok: false, kind: "db_missing_url", reason: "DATABASE_URL is not configured" };
   }
+  const startedAt = Date.now();
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     const value = await Promise.race([
@@ -25,6 +26,13 @@ export async function blogPublicDbReadAttempt<T>(
         timer = setTimeout(() => reject(new Error("database_timeout")), timeoutMs);
       }),
     ]);
+    if (process.env.BLOG_INDEX_QUERY_TIMINGS === "1") {
+      safeServerLog("blog", "blog_public_db_read_succeeded", {
+        label,
+        elapsedMs: String(Date.now() - startedAt),
+        timeoutMs: String(timeoutMs),
+      });
+    }
     return { ok: true, value };
   } catch (e) {
     const kind = classifyDatabaseFallbackKind(e);
@@ -32,6 +40,8 @@ export async function blogPublicDbReadAttempt<T>(
     safeServerLog("blog", "blog_public_db_read_failed", {
       label,
       kind,
+      elapsedMs: String(Date.now() - startedAt),
+      timeoutMs: String(timeoutMs),
       message: message.slice(0, 500),
     });
     return { ok: false, kind, reason: message.slice(0, 400) };

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import {
   BookOpenCheck,
   Brain,
@@ -18,7 +19,6 @@ import { BlogMarketingPostListClient } from "@/components/blog/blog-marketing-po
 import {
   BLOG_LIST_PAGE_SIZE,
   PATHOPHYSIOLOGY_HUB_PRIMARY_TAG,
-  getPathophysiologyBlogHubPosts,
   getPublishedBlogPostsPage,
 } from "@/lib/blog/safe-blog-queries";
 import { logPublicContentSurfaceFailure } from "@/lib/observability/public-content-surface-failure-log";
@@ -41,6 +41,8 @@ const BLOG_INLINE_KEYS = [
   "inline.marketing.blog.index.lead",
   "inline.marketing.blog.index.emptyState",
 ] as const;
+
+const BLOG_PUBLIC_MAX_PAGE = 250;
 
 const pathwayCards = [
   { label: "NCLEX-RN", href: "/blog/category/NCLEX-RN", count: "RN exam articles", icon: Stethoscope },
@@ -70,7 +72,7 @@ export const dynamicParams = true;
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ page?: string }> }): Promise<Metadata> {
   const sp = await searchParams;
   const rawPage = Number(sp.page ?? "1");
-  const page = Number.isFinite(rawPage) && rawPage >= 1 ? Math.floor(rawPage) : 1;
+  const page = Number.isFinite(rawPage) && rawPage >= 1 && rawPage <= BLOG_PUBLIC_MAX_PAGE ? Math.floor(rawPage) : 1;
   const canonicalPath = page <= 1 ? "/blog" : `/blog?page=${page}`;
   return safeGenerateMetadata(
     async () => {
@@ -101,12 +103,13 @@ type Props = { searchParams: Promise<{ page?: string; q?: string }> };
 export default async function BlogIndexPage({ searchParams }: Props) {
   const sp = await searchParams;
   const raw = Number(sp.page ?? "1");
-  const page = Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 1;
+  if (!Number.isFinite(raw) || raw < 1 || raw > BLOG_PUBLIC_MAX_PAGE) notFound();
+  const page = Math.floor(raw);
   const initialQuery = typeof sp.q === "string" ? sp.q.trim().slice(0, 80) : "";
-  const [{ posts, total, pageSize, listLoad }, pathophysiologyHub] = await Promise.all([
-    getPublishedBlogPostsPage(page, BLOG_LIST_PAGE_SIZE),
-    page === 1 ? getPathophysiologyBlogHubPosts(12) : Promise.resolve([]),
-  ]);
+  const { posts, total, pageSize, listLoad } = await getPublishedBlogPostsPage(page, BLOG_LIST_PAGE_SIZE, undefined, {
+    includeTotal: false,
+  });
+  const pathophysiologyHub: typeof posts = [];
   if (process.env.BLOG_INDEX_ROUTE_LIST_LOAD === "1") {
     safeServerLog("blog", "BLOG_INDEX_ROUTE_LIST_LOAD", {
       pathname: "/blog",
@@ -171,11 +174,7 @@ export default async function BlogIndexPage({ searchParams }: Props) {
           >
             <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Blog list could not load</h2>
             <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-              We could not reach the article database. This is usually temporary — refresh the page or try again in a
-              moment.
-            </p>
-            <p className="mt-3 text-xs text-[var(--theme-muted-text)]">
-              {listLoad.reasonFailed ? `Details: ${listLoad.reasonFailed}` : null}
+              We’re updating our article library. Please try again in a moment.
             </p>
           </section>
           <MarketingStudyCrossLinks className="mt-10" />

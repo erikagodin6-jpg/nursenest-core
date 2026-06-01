@@ -76,6 +76,8 @@ export async function RegionalBlogIndexPage({ clusterSlug, searchParams }: Index
     sourceLocale: "en",
     careerSlug: clusterSlug,
     allowSourceLocaleFallback: true,
+  }, {
+    includeTotal: false,
   });
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -87,8 +89,6 @@ export async function RegionalBlogIndexPage({ clusterSlug, searchParams }: Index
     { name: "Blog", item: absoluteUrl("/blog") },
     { name: `${labels.short} articles`, item: absoluteUrl(base) },
   ];
-
-  if (!listLoad.querySucceeded && posts.length === 0) notFound();
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -110,7 +110,7 @@ export async function RegionalBlogIndexPage({ clusterSlug, searchParams }: Index
         >
           <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Articles could not load</h2>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-            We could not reach the article database. Please refresh or try again shortly.
+            We’re updating our article library. Please try again in a moment.
           </p>
         </section>
       ) : posts.length === 0 ? (

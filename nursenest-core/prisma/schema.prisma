@@ -1168,6 +1168,10 @@ model BlogPost {
   localizedVariants          LocalizedBlogArticle[]
 
   @@index([postStatus, publishAt])
+  @@index([postStatus, workflowStatus, publishAt, updatedAt(sort: Desc), createdAt(sort: Desc), slug], map: "BlogPost_public_status_workflow_publish_sort_idx")
+  @@index([locale, postStatus, workflowStatus, publishAt, updatedAt(sort: Desc), createdAt(sort: Desc), slug], map: "BlogPost_public_locale_status_workflow_publish_sort_idx")
+  @@index([careerSlug, locale, postStatus, workflowStatus, publishAt, updatedAt(sort: Desc), createdAt(sort: Desc), slug], map: "BlogPost_public_career_locale_status_workflow_sort_idx")
+  @@index([category, postStatus, workflowStatus, publishAt, updatedAt(sort: Desc), createdAt(sort: Desc), slug], map: "BlogPost_public_category_status_workflow_sort_idx")
   @@index([careerSlug, locale, postStatus, publishAt])
   @@index([translationGroupId, locale])
   @@index([canonicalPostId])

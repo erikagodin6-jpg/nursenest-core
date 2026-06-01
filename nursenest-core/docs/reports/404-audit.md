@@ -1,6 +1,6 @@
 # 404 Audit
 
-Generated: 2026-05-31T22:26:52.433Z
+Generated: 2026-06-01T01:26:47.645Z
 
 ## Search Console Signal
 
@@ -85,8 +85,8 @@ These route files call `notFound()` and should be checked against sitemap/intern
 - /australia/[topic] (src/app/(marketing)/(default)/australia/[topic]/page.tsx)
 - /blog/[slug] (src/app/(marketing)/(default)/blog/[slug]/page.tsx)
 - /blog/category/[category] (src/app/(marketing)/(default)/blog/category/[category]/page.tsx)
+- /blog (src/app/(marketing)/(default)/blog/page.tsx)
 - /blog/rn/[slug] (src/app/(marketing)/(default)/blog/rn/[slug]/page.tsx)
-- /blog/rn (src/app/(marketing)/(default)/blog/rn/page.tsx)
 - /blog/tag/[tag] (src/app/(marketing)/(default)/blog/tag/[tag]/page.tsx)
 - /canada/new-grad/[workArea] (src/app/(marketing)/(default)/canada/new-grad/[workArea]/page.tsx)
 - /canada/np/cnple/[topic] (src/app/(marketing)/(default)/canada/np/cnple/[topic]/page.tsx)

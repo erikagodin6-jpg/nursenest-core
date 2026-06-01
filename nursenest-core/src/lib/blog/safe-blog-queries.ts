@@ -324,6 +324,7 @@ export type BlogIndexListLoadMeta = {
   /** Rows in the returned page slice (before pathophysiology de-dup on the page). */
   filteredCount: number | null;
   finalCount: number;
+  hasMore?: boolean;
   reasonFailed?: string;
   reasonDropped?: string;
 };
@@ -332,7 +333,7 @@ export type BlogIndexListLoadMeta = {
  * Default page size for `/blog` and `/blog/tag/*` lists.
  * Uses {@link API_LIST_PAGE_SIZE_HARD_MAX} as ceiling (defense-in-depth for list APIs).
  */
-export const BLOG_LIST_PAGE_SIZE = 50;
+export const BLOG_LIST_PAGE_SIZE = 24;
 
 /** Matches `import-pathophysiology-nursing-blog-seeds.mts` upserts. */
 export const PATHOPHYSIOLOGY_SEED_LEGACY_SOURCE = "pathophysiology-nursing-blog-seed" as const;
@@ -464,6 +465,7 @@ async function loadBlogIndexWhereSlice(
   postsAttempt: BlogPublicDbReadAttemptResult<BlogIndexPost[]>;
   totalAttempt: BlogPublicDbReadAttemptResult<number>;
 }> {
+  const take = includeTotal ? safeSize : safeSize + 1;
   const postsAttempt = await blogPublicDbReadAttempt(
     `${labelPrefix}.posts`,
     () =>
@@ -472,7 +474,7 @@ async function loadBlogIndexWhereSlice(
         orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }, { slug: "asc" }],
         select: indexSelect,
         skip: (safePage - 1) * safeSize,
-        take: safeSize,
+        take,
       }),
     timeoutMs,
   );
@@ -544,6 +546,13 @@ async function loadBlogIndexPageFromDb(
   }
   let posts = postsAttempt.value;
   let total = totalAttempt.value;
+  if (!includeTotal) {
+    const inferredHasMore = posts.length > safeSize;
+    posts = posts.slice(0, safeSize);
+    total = inferredHasMore
+      ? safePage * safeSize + 1
+      : (safePage - 1) * safeSize + posts.length;
+  }
   if (
     shouldRetryBlogIndexAfterTransientEmpty() &&
     posts.length === 0 &&
@@ -562,13 +571,22 @@ async function loadBlogIndexPageFromDb(
       return { ok: false, listLoad: blogIndexListLoadFromAttempts(r2.postsAttempt, r2.totalAttempt, `${labelPrefix}_empty_retry`) };
     }
     if (r2.postsAttempt.value.length > 0 || (includeTotal && r2.totalAttempt.value > 0)) {
+      let recoveredPosts = r2.postsAttempt.value;
+      let recoveredTotal = r2.totalAttempt.value;
+      if (!includeTotal) {
+        const inferredHasMore = recoveredPosts.length > safeSize;
+        recoveredPosts = recoveredPosts.slice(0, safeSize);
+        recoveredTotal = inferredHasMore
+          ? safePage * safeSize + 1
+          : (safePage - 1) * safeSize + recoveredPosts.length;
+      }
       safeServerLog("blog", "blog_index_page_recovered_after_timeout_retry", {
-        recoveredPosts: String(r2.postsAttempt.value.length),
-        recoveredTotal: String(r2.totalAttempt.value),
+        recoveredPosts: String(recoveredPosts.length),
+        recoveredTotal: String(recoveredTotal),
         retryTimeoutMs: String(BLOG_INDEX_EMPTY_RETRY_TIMEOUT_MS),
       });
-      posts = r2.postsAttempt.value;
-      total = r2.totalAttempt.value;
+      posts = recoveredPosts;
+      total = recoveredTotal;
     } else {
       logRouteDataPipeline({
         route: "/blog",
@@ -619,8 +637,10 @@ export async function getPublishedBlogPostsPage(
   pageSize: number;
   listLoad: BlogIndexListLoadMeta;
 }> {
-  const safePage = Math.max(1, page);
-  const safeSize = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, Math.floor(pageSize)));
+  const normalizedPage = Number.isFinite(page) ? Math.floor(page) : 1;
+  const normalizedPageSize = Number.isFinite(pageSize) ? Math.floor(pageSize) : BLOG_LIST_PAGE_SIZE;
+  const safePage = Math.max(1, normalizedPage);
+  const safeSize = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, normalizedPageSize));
   const includeTotal = options?.includeTotal !== false;
 
   if (shouldSkipBlogDbForProductionBuild()) {
@@ -849,10 +869,15 @@ export async function getPublishedBlogPostsPage(
    * Sort: {@link mergeBlogIndexRows} (newest primary timestamp first, then slug asc).
    * Above {@link BLOG_INDEX_MERGE_DB_MAX} live rows, pagination stays DB-only (static still resolves at `/blog/[slug]`).
    */
-  const overlap = isGlobalUnscopedBlogIndexScope(scope)
+  const shouldMergeStaticIndexRows =
+    includeTotal &&
+    isGlobalUnscopedBlogIndexScope(scope) &&
+    process.env.BLOG_INDEX_MERGE_STATIC_ON_DB_SUCCESS === "1";
+
+  const overlap = shouldMergeStaticIndexRows
     ? await fetchLiveBlogSlugsOverlappingSupplementSlugs(now)
     : new Set<string>();
-  const staticOnlyRows = isGlobalUnscopedBlogIndexScope(scope)
+  const staticOnlyRows = shouldMergeStaticIndexRows
     ? buildSupplementBlogIndexRowsExcludingLiveSlugs(overlap)
     : [];
 
@@ -861,7 +886,7 @@ export async function getPublishedBlogPostsPage(
   let listLoadOut: BlogIndexListLoadMeta;
   let usedStaticFallbackDiag = false;
 
-  if (isGlobalUnscopedBlogIndexScope(scope) && dbTotal <= BLOG_INDEX_MERGE_DB_MAX) {
+  if (shouldMergeStaticIndexRows && dbTotal <= BLOG_INDEX_MERGE_DB_MAX) {
     const fullAttempt = await blogPublicDbReadAttempt(
       "blog_posts_page.merge_fetch_all_live",
       () =>
@@ -933,7 +958,7 @@ export async function getPublishedBlogPostsPage(
         },
       });
     }
-  } else if (isGlobalUnscopedBlogIndexScope(scope) && dbTotal > BLOG_INDEX_MERGE_DB_MAX) {
+  } else if (shouldMergeStaticIndexRows && dbTotal > BLOG_INDEX_MERGE_DB_MAX) {
     postsOut = blogIndexPostsWithDbSource(dbPosts);
     totalOut = dbTotal;
     listLoadOut = {
@@ -964,6 +989,10 @@ export async function getPublishedBlogPostsPage(
       rawCount: dbTotal,
       filteredCount: dbPosts.length,
       finalCount: dbPosts.length,
+      ...(!includeTotal ? { hasMore: dbTotal > safePage * safeSize } : {}),
+      ...(!includeTotal && isGlobalUnscopedBlogIndexScope(scope)
+        ? { reasonDropped: "db_page_only_static_merge_disabled_for_public_index_performance" }
+        : {}),
     };
     logRouteDataPipeline({
       route: "/blog",

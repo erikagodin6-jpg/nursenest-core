@@ -57,6 +57,8 @@ export default async function NursingCareerBlogIndexPage({ params, searchParams 
     sourceLocale: "en",
     careerSlug: career,
     allowSourceLocaleFallback: true,
+  }, {
+    includeTotal: false,
   });
   if (process.env.BLOG_INDEX_ROUTE_LIST_LOAD === "1") {
     safeServerLog("blog", "BLOG_INDEX_ROUTE_LIST_LOAD", {
@@ -103,11 +105,8 @@ export default async function NursingCareerBlogIndexPage({ params, searchParams 
         >
           <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Blog list could not load</h2>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-            We could not reach the article database. Please refresh or try again shortly.
+            We’re updating our article library. Please try again in a moment.
           </p>
-          {listLoad.reasonFailed ? (
-            <p className="mt-2 text-xs text-[var(--theme-muted-text)]">Details: {listLoad.reasonFailed}</p>
-          ) : null}
         </section>
       ) : posts.length === 0 ? (
         <p className="text-sm text-[var(--theme-muted-text)]">No published posts yet for this audience. Check back soon.</p>
