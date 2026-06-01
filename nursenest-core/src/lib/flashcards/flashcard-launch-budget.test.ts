@@ -7,6 +7,7 @@ import test from "node:test";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const flashcardsPagePath = join(__dirname, "../../app/(app)/app/(learner)/flashcards/page.tsx");
 const flashcardsHubClientPath = join(__dirname, "../../components/flashcards/flashcards-hub-client.tsx");
+const flashcardsLayoutCssPath = join(__dirname, "../../app/learner-flashcard-layout-refinement-pass.css");
 
 function read(path: string): string {
   return readFileSync(path, "utf8");
@@ -34,8 +35,11 @@ test("flashcard hub: count failures stay studyable instead of rendering false ze
   const client = read(flashcardsHubClientPath);
   assert.match(client, /type InventoryStatus = "loading" \| "ready" \| "degraded"/);
   assert.match(client, /const countsReliable = inventoryStatus === "ready"/);
-  assert.match(client, /if \(!countsReliable\) return "Available"/);
-  assert.match(client, /return count > 0 \? `\$\{flashcardCountFormatter\.format\(count\)\} Flashcards` : "Ready to study"/);
+  assert.match(client, /if \(!countsReliable \|\| count <= 0\) return null/);
+  assert.match(client, /return `\$\{flashcardCountFormatter\.format\(count\)\} Flashcards`/);
+  assert.doesNotMatch(client, />Available</);
+  assert.doesNotMatch(client, />Ready to study</);
+  assert.doesNotMatch(client, /nn-flashcards-system-card-v2__badge/);
 });
 
 test("flashcard hub: exposes explicit all-systems control while preserving additive system selection", () => {
@@ -43,6 +47,19 @@ test("flashcard hub: exposes explicit all-systems control while preserving addit
   assert.match(client, /data-nn-e2e-flashcards-system-actions/);
   assert.match(client, /All Systems/);
   assert.match(client, /toggleFlashcardsHubSystemSelection\(current, system\.id\)/);
+});
+
+test("flashcard hub: system cards keep stable geometry during selection", () => {
+  const client = read(flashcardsHubClientPath);
+  const css = read(flashcardsLayoutCssPath);
+  assert.match(client, /nn-flashcards-system-actions/);
+  assert.match(client, /pointer-events-none invisible/);
+  assert.match(client, /<span className="block min-h-7" aria-hidden \/>/);
+  assert.doesNotMatch(client, /className="nn-flashcards-system-card-v2[\s\S]*transition focus-visible/);
+  assert.match(css, /\.nn-flashcards-system-grid \{[\s\S]*grid-auto-rows: 10\.75rem;[\s\S]*contain: layout;/);
+  assert.match(css, /\.nn-flashcards-system-actions \{[\s\S]*min-height: 2\.5rem;[\s\S]*contain: layout;/);
+  assert.match(css, /\.nn-flashcards-system-card-v2 \{[\s\S]*max-height: 10\.75rem;[\s\S]*contain: layout paint;/);
+  assert.doesNotMatch(css, /transition:[^;]*(height|width|margin|padding)/);
 });
 
 test("flashcard launch budget: hub does not block startup on analytics or readiness components", () => {

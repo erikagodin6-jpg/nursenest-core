@@ -719,9 +719,9 @@ export function FlashcardsHubClient({
       : `${selectedCanonicalIds.length} ${selectedCanonicalIds.length === 1 ? "system" : "systems"}`;
 
   const countsReliable = inventoryStatus === "ready";
-  const systemCountLabel = (count: number): string => {
-    if (!countsReliable) return "Available";
-    return count > 0 ? `${flashcardCountFormatter.format(count)} Flashcards` : "Ready to study";
+  const systemCountLabel = (count: number): string | null => {
+    if (!countsReliable || count <= 0) return null;
+    return `${flashcardCountFormatter.format(count)} Flashcards`;
   };
 
   const visibleCardCountLabel = cardLimit === "all" ? "All matched cards" : `${effectiveCardCount} cards selected`;
@@ -1022,7 +1022,10 @@ export function FlashcardsHubClient({
               <p className="text-sm font-medium text-[var(--semantic-text-secondary)]">{selectedSystemLabel}</p>
             </div>
 
-            <div className="mb-4 flex flex-wrap justify-center gap-2 sm:justify-start" data-nn-e2e-flashcards-system-actions>
+            <div
+              className="nn-flashcards-system-actions mb-4 flex flex-wrap justify-center gap-2 sm:justify-start"
+              data-nn-e2e-flashcards-system-actions
+            >
               <button
                 type="button"
                 aria-pressed={selectedCanonicalIds.length === 0}
@@ -1033,15 +1036,18 @@ export function FlashcardsHubClient({
                 <Check className="h-3.5 w-3.5 text-[var(--semantic-brand)]" aria-hidden />
                 All Systems
               </button>
-              {selectedCanonicalIds.length > 0 ? (
-                <button
-                  type="button"
-                  className="nn-flashcards-study-chip inline-flex min-h-10 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_82%,var(--semantic-panel-muted))] px-4 text-xs font-bold text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-text-primary)]"
-                  onClick={() => setSelectedCanonicalIds([])}
-                >
-                  Clear system picks
-                </button>
-              ) : null}
+              <button
+                type="button"
+                aria-hidden={selectedCanonicalIds.length === 0}
+                disabled={selectedCanonicalIds.length === 0}
+                tabIndex={selectedCanonicalIds.length === 0 ? -1 : undefined}
+                className={`nn-flashcards-study-chip inline-flex min-h-10 min-w-[9.75rem] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_82%,var(--semantic-panel-muted))] px-4 text-xs font-bold text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-text-primary)] ${
+                  selectedCanonicalIds.length === 0 ? "pointer-events-none invisible" : ""
+                }`}
+                onClick={() => setSelectedCanonicalIds([])}
+              >
+                Clear system picks
+              </button>
             </div>
 
             <div
@@ -1051,15 +1057,17 @@ export function FlashcardsHubClient({
               {CANONICAL_STUDY_CATEGORIES.map((system) => {
                 const active = selectedCanonicalIds.includes(system.id);
                 const count = countsByCanonical[system.id] ?? 0;
+                const countLabel = systemCountLabel(Math.max(0, count));
                 const accentIndex = CANONICAL_STUDY_CATEGORIES.findIndex((category) => category.id === system.id) % 4;
                 return (
                   <button
                     key={system.id}
                     type="button"
                     aria-pressed={active}
+                    aria-label={`${active ? "Remove" : "Add"} ${system.label}${countLabel ? `, ${countLabel}` : ""}`}
                     data-selected={active}
                     data-accent={accentIndex}
-                    className="nn-flashcards-system-card-v2 group flex h-[10.75rem] min-h-[10.75rem] flex-col justify-between rounded-[1.25rem] border-2 p-4 text-left text-sm font-semibold transition focus-visible:outline-none"
+                    className="nn-flashcards-system-card-v2 group flex h-[10.75rem] min-h-[10.75rem] flex-col justify-between rounded-[1.25rem] border-2 p-4 text-left text-sm font-semibold focus-visible:outline-none"
                     data-nn-e2e-flashcards-system-card={system.id}
                     onClick={() => {
                       setSelectedCanonicalIds((current) => {
@@ -1082,13 +1090,12 @@ export function FlashcardsHubClient({
                       <span
                         className="mt-2 block min-h-[1rem] text-sm font-semibold leading-none text-[var(--semantic-text-secondary)]"
                         data-nn-e2e-flashcards-system-count
+                        aria-hidden={countLabel ? undefined : true}
                       >
-                        {systemCountLabel(Math.max(0, count))}
+                        {countLabel}
                       </span>
                     </span>
-                    <span className="nn-flashcards-system-card-v2__badge inline-flex min-h-7 min-w-[6.75rem] items-center justify-center rounded-full px-3 text-xs font-semibold">
-                      {active ? "Selected" : "Add system"}
-                    </span>
+                    <span className="block min-h-7" aria-hidden />
                   </button>
                 );
               })}

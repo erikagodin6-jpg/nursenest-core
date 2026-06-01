@@ -1422,12 +1422,20 @@ html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-deck
 
 [data-nn-flashcards-premium-hub] .nn-flashcards-system-grid {
   align-items: stretch;
+  grid-auto-rows: 10.75rem;
+  contain: layout;
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-actions {
+  min-height: 2.5rem;
+  contain: layout;
 }
 
 [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2 {
   min-width: 0;
   height: 10.75rem;
   min-height: 10.75rem;
+  max-height: 10.75rem;
   border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-brand));
   background: color-mix(in srgb, var(--semantic-surface) 95%, var(--semantic-panel-muted));
   color: var(--semantic-text-primary);
@@ -1435,6 +1443,11 @@ html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-deck
   text-decoration: none;
   transform: translateY(0);
   contain: layout paint;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease;
 }
 
 html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2 {
@@ -1454,6 +1467,14 @@ html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-syst
   outline: 0.18rem solid color-mix(in srgb, var(--semantic-brand) 42%, transparent);
   outline-offset: 0.2rem;
   border-color: color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft));
+}
+
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2[data-selected="true"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 58%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  box-shadow:
+    0 1rem 2.6rem color-mix(in srgb, var(--semantic-text-primary) 9%, transparent),
+    0 0 0 0.2rem color-mix(in srgb, var(--semantic-brand) 13%, transparent);
 }
 
 [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2__icon {
@@ -1478,9 +1499,9 @@ html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-syst
   transform: none;
 }
 
-[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2__badge {
-  background: color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface));
-  color: color-mix(in srgb, var(--semantic-success) 72%, var(--semantic-text-primary));
+[data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2[data-selected="true"] .nn-flashcards-system-card-v2__arrow {
+  background: color-mix(in srgb, var(--semantic-brand) 16%, var(--semantic-surface));
+  color: var(--semantic-brand);
 }
 
 [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2[data-accent="1"] .nn-flashcards-system-card-v2__icon {
@@ -1509,5 +1530,10 @@ html[data-theme="midnight"] [data-nn-flashcards-premium-hub] .nn-flashcards-syst
   [data-nn-flashcards-premium-hub] .nn-flashcards-system-card-v2 {
     height: 9.5rem;
     min-height: 9.5rem;
+    max-height: 9.5rem;
+  }
+
+  [data-nn-flashcards-premium-hub] .nn-flashcards-system-grid {
+    grid-auto-rows: 9.5rem;
   }
 }

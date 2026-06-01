@@ -1624,7 +1624,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                         <HeaderNavAnchor
                           href={localizeHref(flowPractice.href)}
                           aria-current={isActivePath(strippedPath, flowPractice.matchBase) ? "page" : undefined}
-                          className={`nav-item ${HEADER_NAV_PRIMARY_CTA} mb-2 flex min-h-11 w-full touch-manipulation items-center justify-center rounded-xl px-4 py-2.5 text-[15px] font-semibold`}
+                          className={`nav-item ${HEADER_NAV_PRIMARY_CTA} mb-2 flex min-h-11 w-full touch-manipulation items-center justify-center px-4 py-2.5 text-[15px] font-semibold`}
                           onClick={() => { trackClientEvent(PH.marketingNavClick, { actor: navActor, nav_id: flowPractice.key, surface: "site_header_mobile_drawer", marketing_region: region }); scheduleMobileDrawerClose(); }}
                           data-nn-mobile-brand-link
                         >
@@ -1637,7 +1637,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                             key={item.key}
                             href={localizeHref(item.href)}
                             aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                            className={`nav-item flex min-h-11 touch-manipulation items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2.5 text-center text-sm font-medium leading-snug text-[var(--nav-muted)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)] ${isActivePath(strippedPath, item.matchBase) ? "border-[var(--text-accent)] text-[var(--nav-link-active)]" : ""}`}
+                            className={`nav-item flex min-h-11 touch-manipulation items-center justify-center border-b-2 border-transparent px-3 py-2.5 text-center text-sm font-medium leading-snug text-[var(--nav-muted)] transition-colors hover:border-[var(--nav-border)] hover:text-[var(--nav-fg)] ${isActivePath(strippedPath, item.matchBase) ? "border-[var(--text-accent)] font-semibold text-[var(--nav-link-active)]" : ""}`}
                             onClick={() => { trackClientEvent(PH.marketingNavClick, { actor: navActor, nav_id: item.key, surface: "site_header_mobile_drawer", marketing_region: region }); scheduleMobileDrawerClose(); }}
                             data-nn-mobile-brand-link
                           >
@@ -1653,7 +1653,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                     key={item.key}
                     href={localizeHref(item.href)}
                     aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                    className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                    className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 border-b-2 border-transparent px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${isActivePath(strippedPath, item.matchBase) ? "border-[var(--text-accent)] font-semibold text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:border-[var(--nav-border)] hover:text-[var(--nav-fg)]"}`}
                     data-nn-mobile-brand-link
                     onClick={() => { trackClientEvent(PH.marketingNavClick, { actor: navActor, nav_id: item.key, surface: "site_header_mobile_drawer", marketing_region: region }); scheduleMobileDrawerClose(); }}
                   >
@@ -1678,7 +1678,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                     href={localizeHref(menu.hubHref)}
                     aria-current={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) ? "page" : undefined}
                     data-active={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) || undefined}
-                    className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${strippedPathActivatesMegaMenuKey(menu.key, strippedPath) ? "font-semibold text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                    className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 border-b-2 border-transparent px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${strippedPathActivatesMegaMenuKey(menu.key, strippedPath) ? "border-[var(--text-accent)] font-semibold text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:border-[var(--nav-border)] hover:text-[var(--nav-fg)]"}`}
                     data-nn-mobile-tier-link
                     onClick={() => { trackClientEvent(PH.marketingNavClick, { actor: navActor, nav_id: `${menu.key}_tier_hub`, surface: "site_header_mobile_drawer", marketing_region: region }); scheduleMobileDrawerClose(); }}
                   >
@@ -1691,7 +1691,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                     key={item.key}
                     href={localizeHref(item.href)}
                     aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                    className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                    className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 border-b-2 border-transparent px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${isActivePath(strippedPath, item.matchBase) ? "border-[var(--text-accent)] font-semibold text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:border-[var(--nav-border)] hover:text-[var(--nav-fg)]"}`}
                     data-nn-mobile-pathway-link
                     onClick={() => { trackClientEvent(PH.marketingNavClick, { actor: navActor, nav_id: item.key, surface: "site_header_mobile_drawer", marketing_region: region }); scheduleMobileDrawerClose(); }}
                   >
