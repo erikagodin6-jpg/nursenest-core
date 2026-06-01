@@ -237,12 +237,25 @@ export function FlashcardCustomStudyClient() {
       setError(null);
       setLoadingStage("preparing");
       prefetchedOffsets.current.clear();
+      const fetchStart = Date.now();
       try {
+        // Per-attempt timeout is 5_500ms — slightly above the server's 5s withTimeout so we
+        // receive the server's 503 JSON (with error code + Retry-After) rather than our own
+        // DOMException("TimeoutError") which would lose the structured error code.
+        // With attempts:2 + baseDelayMs:800 the worst-case wall-clock before we surface an
+        // error is ~12s — still better than the previous 16s window.
         const res = await fetchWithRetry(`/api/flashcards/custom-session?${queryString}`, {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
-        }, { attempts: 2, timeoutMs: 8_000 });
+        }, {
+          attempts: 2,
+          timeoutMs: 5_500,
+          baseDelayMs: 800,
+          // Honour the server's Retry-After header: if the 503 says wait 3s,
+          // we should not immediately hammer the already-loaded server.
+          shouldRetryResponse: (r) => r.status === 503 || r.status === 502 || r.status === 504,
+        });
         let json: unknown;
         try {
           json = await res.json();
@@ -333,24 +346,57 @@ export function FlashcardCustomStudyClient() {
           });
         }
       } catch (err) {
+        // AbortError from component unmount → discard silently (user navigated away).
         if (cancelled) return;
         if (controller.signal.aborted) return;
+        if (err instanceof DOMException && err.name === "AbortError") return;
+
+        const durationMs = Date.now() - fetchStart;
+        const isTimeout =
+          (err instanceof DOMException && err.name === "TimeoutError") ||
+          (err instanceof Error && /timeout|timed out/i.test(err.message));
+        const isNetwork = err instanceof TypeError;
+        const errorCode = isTimeout ? "session_timeout_client" : isNetwork ? "network_error" : "unexpected_error";
+
         emitRuntimeEvent("activity_bootstrap_failure", {
           activity: "flashcards",
           pathwayId,
-          errorCode: "flashcard_custom_session_network_error",
+          errorCode,
+          durationMs,
         });
-        logDedupedClientDiagnostic("flashcard_custom_session", "network_error", pathwayId || "unknown", {
+        // Structured server log: includes error type, duration, and full message for root-cause analysis.
+        logDedupedClientDiagnostic("flashcard_custom_session", errorCode, pathwayId || "unknown", {
           pathwayId,
-          message: err instanceof Error ? err.message : "unknown",
+          durationMs,
+          isTimeout,
+          isNetwork,
+          message: err instanceof Error ? err.message.slice(0, 200) : "unknown",
+          retryNonce,
         });
+
         if (!cancelled) {
-          setError({
-            title: initialCardIndex > 0 ? "Unable to resume previous session." : "Your study session could not be created.",
-            detail: "The request did not complete before the flashcard player could hydrate.",
-            message: "Retry the session. If it repeats, go back to the launcher and start from the same systems.",
-            code: "network_error",
-          });
+          if (isTimeout) {
+            setError({
+              title: initialCardIndex > 0 ? "Unable to resume previous session." : "Your study session could not be created.",
+              detail: "The flashcard session took longer than expected to start.",
+              message: "This usually resolves on retry. If it keeps failing, try a smaller card selection.",
+              code: "session_timeout_client",
+            });
+          } else if (isNetwork) {
+            setError({
+              title: "Connection issue.",
+              detail: "The flashcard player could not reach the study API.",
+              message: "Check your network connection and retry. Your session setup is preserved.",
+              code: "network_error",
+            });
+          } else {
+            setError({
+              title: initialCardIndex > 0 ? "Unable to resume previous session." : "Your study session could not be created.",
+              detail: "An unexpected error occurred during flashcard session startup.",
+              message: "Retry the session. If it repeats, go back to the launcher and start from the same systems.",
+              code: "unexpected_error",
+            });
+          }
         }
       } finally {
         stageTimers.forEach(window.clearTimeout);
@@ -558,20 +604,31 @@ export function FlashcardCustomStudyClient() {
     if (pathwayId) clearFlashcardsCustomSessionCheckpoint(pathwayId);
   }, [pathwayId]);
 
+  // INVARIANT: Never render the player while loading.
+  // The player (ActiveStudySession) has no empty-cards guard — it would crash or show
+  // a broken frame if rendered with 0 cards. This gate is the last line of defense
+  // before hydration. data-loading is used by E2E tests to wait for session readiness.
   if (loading) {
     return (
-      <FlashcardStudySessionSkeleton
-        message={loadingCopy.message}
-        detail={loadingCopy.detail}
-        showRetry={loadingCopy.showRetry}
-        onRetry={() => setRetryNonce((n) => n + 1)}
-      />
+      <div data-testid="flashcard-session-loading" data-loading="true">
+        <FlashcardStudySessionSkeleton
+          message={loadingCopy.message}
+          detail={loadingCopy.detail}
+          showRetry={loadingCopy.showRetry}
+          onRetry={() => setRetryNonce((n) => n + 1)}
+        />
+      </div>
     );
   }
 
   if (error) {
     return (
-      <section className="nn-flashcard-session-error-shell" aria-labelledby="flashcard-session-error-title">
+      <section
+        className="nn-flashcard-session-error-shell"
+        aria-labelledby="flashcard-session-error-title"
+        data-testid="flashcard-session-error"
+        data-error-code={error.code ?? "unknown"}
+      >
         <div className="nn-flashcard-session-error-card">
           <div className="nn-flashcard-session-error-icon" aria-hidden>
             <AlertCircle className="h-5 w-5" />
@@ -589,11 +646,12 @@ export function FlashcardCustomStudyClient() {
               type="button"
               onClick={() => setRetryNonce((n) => n + 1)}
               className="nn-flashcard-session-error-primary"
+              data-testid="flashcard-session-retry"
             >
               <RefreshCw className="h-4 w-4" aria-hidden />
               Retry Session
             </button>
-            <Link href={exitHref} className="nn-flashcard-session-error-secondary">
+            <Link href={exitHref} className="nn-flashcard-session-error-secondary" data-testid="flashcard-session-back">
               <ArrowLeft className="h-4 w-4" aria-hidden />
               Back to Decks
             </Link>

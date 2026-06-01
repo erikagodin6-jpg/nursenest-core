@@ -344,17 +344,17 @@ html[data-theme="apex"] .nn-learner-report-card-convergence::before {
   opacity: 0.22;
 }
 
-/* Blossom 2.0: vivid spring dashboard ambient — pink top-left, peach top-right, yellow bottom */
+/* Blossom 2.0: white-first spring dashboard ambient — soft blush, peach, and sunshine */
 html[data-theme="blossom"] .nn-learner-dashboard-convergence::before {
-  opacity: 0.72;
+  opacity: 0.28;
   background:
-    radial-gradient(130% 75% at 10% -14%, color-mix(in srgb, var(--semantic-chart-1) 36%, transparent), transparent 56%),
-    radial-gradient(95% 60% at 96% 12%, color-mix(in srgb, var(--semantic-chart-2) 30%, transparent), transparent 54%),
-    radial-gradient(90% 55% at 50% 108%, color-mix(in srgb, var(--semantic-chart-3) 24%, transparent), transparent 58%);
+    radial-gradient(130% 75% at 10% -14%, color-mix(in srgb, var(--semantic-chart-1) 14%, transparent), transparent 58%),
+    radial-gradient(95% 60% at 96% 12%, color-mix(in srgb, var(--semantic-chart-2) 12%, transparent), transparent 56%),
+    radial-gradient(90% 55% at 50% 108%, color-mix(in srgb, var(--semantic-chart-3) 10%, transparent), transparent 60%);
 }
 
 html[data-theme="blossom"] .nn-learner-report-card-convergence::before {
-  opacity: 0.62;
+  opacity: 0.24;
 }
 
 html[data-theme="aurora"] .nn-learner-dashboard-convergence::before {

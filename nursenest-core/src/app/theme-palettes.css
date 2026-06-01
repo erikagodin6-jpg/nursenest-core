@@ -1767,69 +1767,67 @@ html[data-theme="aurora"] {
   --theme-header-divider: color-mix(in srgb, #1a202c 12%, transparent);
 }
 
-/* Blossom 2.0 — Cherry Blossom: bright spring sunrise, white-first with vivid pastel accents.
-   Key upgrade from original: color-mix percentages raised from 8–16% to 20–38% so panels,
-   borders, and lesson sections look vibrant instead of washed-out. */
+/* Blossom 2.0 — Cherry Blossom: premium white-first spring palette with restrained accents. */
 html[data-theme="blossom"] {
-  --blossom-primary: #ff5f9e;
-  --blossom-secondary: #ff8ab5;
-  --blossom-surface: #fff2f6;
-  --blossom-accent-blue: #74d0f4;
-  --blossom-accent-yellow: #ffd95a;
-  --blossom-accent-peach: #ffb56b;
-  --theme-primary: var(--blossom-primary);
+  --blossom-primary: #e94f82;
+  --blossom-secondary: #f7a9c2;
+  --blossom-surface: #fff8fa;
+  --blossom-accent-blue: #65c4e9;
+  --blossom-accent-yellow: #f8c84f;
+  --blossom-accent-peach: #ffb978;
+  --theme-primary: #e94f82;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: color-mix(in srgb, var(--blossom-secondary) 26%, #ffffff);
+  --theme-secondary: color-mix(in srgb, var(--blossom-accent-peach) 12%, #ffffff);
   --theme-secondary-foreground: #7f123f;
-  --theme-accent: color-mix(in srgb, var(--blossom-accent-blue) 24%, #ffffff);
+  --theme-accent: color-mix(in srgb, var(--blossom-accent-blue) 12%, #ffffff);
   --theme-accent-foreground: #075985;
-  --theme-border: color-mix(in srgb, var(--blossom-primary) 28%, #ffffff);
+  --theme-border: color-mix(in srgb, var(--blossom-primary) 14%, #ffffff);
   --theme-ring: var(--blossom-primary);
-  --theme-page-bg: #fff5f9;
+  --theme-page-bg: #ffffff;
   --theme-background: #ffffff;
   --theme-background-subtle: var(--blossom-surface);
   --theme-surface: #ffffff;
   --theme-surface-strong: #ffffff;
-  --theme-card-bg: rgba(255, 255, 255, 0.97);
-  --theme-card-border: color-mix(in srgb, var(--blossom-primary) 24%, #ffffff);
+  --theme-card-bg: #ffffff;
+  --theme-card-border: color-mix(in srgb, var(--blossom-primary) 10%, #ffffff);
   --theme-heading-text: #2d0f1e;
   --theme-body-text: #3e2130;
   --theme-muted-text: #6b4256;
   --theme-text-on-brand: #ffffff;
 
-  /* Lesson section tints — raised from 8–13% to 22–32% for vivid section colour coding */
-  --lesson-summary: color-mix(in srgb, var(--blossom-surface) 88%, #ffffff);
-  --lesson-key-concepts: color-mix(in srgb, var(--blossom-primary) 22%, #ffffff);
-  --lesson-signs-symptoms: color-mix(in srgb, var(--blossom-secondary) 20%, #ffffff);
-  --lesson-assessment: color-mix(in srgb, var(--blossom-accent-blue) 26%, #ffffff);
-  --lesson-diagnostics: color-mix(in srgb, var(--blossom-accent-blue) 24%, #ffffff);
-  --lesson-interventions: color-mix(in srgb, var(--blossom-accent-peach) 24%, #ffffff);
-  --lesson-medications: color-mix(in srgb, var(--blossom-accent-yellow) 28%, #ffffff);
-  --lesson-patient-teaching: color-mix(in srgb, var(--blossom-secondary) 20%, #ffffff);
-  --lesson-exam-tips: color-mix(in srgb, var(--blossom-accent-yellow) 30%, #ffffff);
-  --lesson-red-flags: color-mix(in srgb, var(--blossom-primary) 24%, #ffffff);
-  --lesson-clinical-pearls: color-mix(in srgb, var(--blossom-accent-peach) 24%, #ffffff);
-  --lesson-notes: color-mix(in srgb, var(--blossom-surface) 88%, #ffffff);
+  /* Lesson section tints stay white-first; color is a classification accent, not the reading surface. */
+  --lesson-summary: color-mix(in srgb, var(--blossom-surface) 0%, #ffffff);
+  --lesson-key-concepts: color-mix(in srgb, var(--blossom-primary) 8%, #ffffff);
+  --lesson-signs-symptoms: color-mix(in srgb, var(--blossom-secondary) 7%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, var(--blossom-accent-blue) 9%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, var(--blossom-accent-blue) 9%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, var(--blossom-accent-peach) 10%, #ffffff);
+  --lesson-medications: color-mix(in srgb, var(--blossom-accent-yellow) 11%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, var(--blossom-secondary) 7%, #ffffff);
+  --lesson-exam-tips: color-mix(in srgb, var(--blossom-accent-yellow) 11%, #ffffff);
+  --lesson-red-flags: color-mix(in srgb, var(--blossom-primary) 8%, #ffffff);
+  --lesson-clinical-pearls: color-mix(in srgb, var(--blossom-accent-peach) 10%, #ffffff);
+  --lesson-notes: #ffffff;
 
-  /* State backgrounds — raised from 12–15% to 24–30% */
-  --state-success: color-mix(in srgb, var(--blossom-primary) 24%, #ffffff);
-  --state-warning: color-mix(in srgb, var(--blossom-accent-yellow) 28%, #ffffff);
-  --state-info: color-mix(in srgb, var(--blossom-accent-blue) 26%, #ffffff);
-  --state-danger-soft: color-mix(in srgb, var(--blossom-secondary) 24%, #ffffff);
+  /* State backgrounds use low-chroma fills so cards and question surfaces remain white. */
+  --state-success: color-mix(in srgb, var(--blossom-primary) 9%, #ffffff);
+  --state-warning: color-mix(in srgb, var(--blossom-accent-yellow) 12%, #ffffff);
+  --state-info: color-mix(in srgb, var(--blossom-accent-blue) 10%, #ffffff);
+  --state-danger-soft: color-mix(in srgb, var(--blossom-secondary) 9%, #ffffff);
 
   --semantic-brand: var(--blossom-primary);
-  --semantic-brand-strong: #e83f84;
+  --semantic-brand-strong: #c83a6a;
   --semantic-success: var(--blossom-primary);
   --semantic-warning: #c07800;
   --semantic-info: #0b7db5;
-  --semantic-danger: #d83272;
+  --semantic-danger: #c83a6a;
   --semantic-surface: #ffffff;
   --semantic-surface-elevated: #ffffff;
-  --semantic-panel-muted: color-mix(in srgb, var(--blossom-surface) 80%, #ffffff);
-  --semantic-border-soft: color-mix(in srgb, var(--blossom-primary) 28%, #ffffff);
+  --semantic-panel-muted: color-mix(in srgb, var(--blossom-surface) 42%, #ffffff);
+  --semantic-border-soft: color-mix(in srgb, var(--blossom-primary) 12%, #ffffff);
   --semantic-shadow-soft:
-    0 2px 12px -4px rgba(255, 95, 158, 0.18),
-    0 1px 4px -2px rgba(255, 181, 107, 0.12);
+    0 2px 12px -4px rgba(233, 79, 130, 0.11),
+    0 1px 4px -2px rgba(255, 185, 120, 0.10);
   --semantic-text-primary: var(--theme-heading-text);
   --semantic-text-secondary: var(--theme-body-text);
   --semantic-text-muted: var(--theme-muted-text);
@@ -1838,42 +1836,42 @@ html[data-theme="blossom"] {
   --logo-accent: var(--blossom-accent-yellow);
   --logo-text: var(--theme-heading-text);
   --theme-brand-accent: var(--blossom-secondary);
-  --theme-brand-strong: #e83f84;
-  /* Nav: stronger blush so the nav strip reads as cherry blossom, not plain white */
-  --theme-nav-background: color-mix(in srgb, var(--blossom-surface) 78%, #ffffff);
+  --theme-brand-strong: #c83a6a;
+  /* Nav stays white; active and hover states carry the Blossom accent. */
+  --theme-nav-background: #ffffff;
   --theme-nav-foreground: var(--theme-heading-text);
-  --theme-nav-hover: color-mix(in srgb, var(--blossom-primary) 18%, transparent);
+  --theme-nav-hover: color-mix(in srgb, var(--blossom-primary) 8%, transparent);
   --theme-nav-hover-foreground: var(--theme-heading-text);
   --theme-header-top-bg: #ffffff;
-  --theme-header-main-bg: color-mix(in srgb, var(--blossom-surface) 68%, #ffffff);
-  --theme-header-secondary-bg: color-mix(in srgb, var(--blossom-primary) 12%, #ffffff);
+  --theme-header-main-bg: #ffffff;
+  --theme-header-secondary-bg: color-mix(in srgb, var(--blossom-accent-peach) 7%, #ffffff);
   --theme-header-secondary-fg: var(--theme-heading-text);
-  --theme-header-divider: color-mix(in srgb, var(--blossom-primary) 30%, transparent);
+  --theme-header-divider: color-mix(in srgb, var(--blossom-primary) 12%, transparent);
 
   /* Primary button: white text on cherry blossom pink for crisp contrast */
   --theme-primary-button-bg: var(--blossom-primary);
   --theme-primary-button-text: #ffffff;
-  --theme-primary-button-hover: #ff4090;
+  --theme-primary-button-hover: #df477a;
   --theme-secondary-button-bg: #ffffff;
   --theme-secondary-button-text: #9d174d;
-  --theme-secondary-button-border: color-mix(in srgb, var(--blossom-primary) 48%, #ffffff);
-  --theme-secondary-button-hover: color-mix(in srgb, var(--blossom-surface) 90%, #ffffff);
-  --theme-pill-bg: color-mix(in srgb, var(--blossom-surface) 90%, #ffffff);
+  --theme-secondary-button-border: color-mix(in srgb, var(--blossom-accent-peach) 30%, #ffffff);
+  --theme-secondary-button-hover: color-mix(in srgb, var(--blossom-accent-peach) 8%, #ffffff);
+  --theme-pill-bg: color-mix(in srgb, var(--blossom-surface) 55%, #ffffff);
   --theme-pill-text: #8b1748;
-  --theme-pill-border: color-mix(in srgb, var(--blossom-secondary) 44%, #ffffff);
+  --theme-pill-border: color-mix(in srgb, var(--blossom-secondary) 18%, #ffffff);
 
-  /* Gradients: vivid spring sunrise sweep */
+  /* Gradients: mostly white with a light spring lift. */
   --theme-hero-gradient: linear-gradient(
     135deg,
     #ffffff 0%,
-    color-mix(in srgb, var(--blossom-surface) 82%, #ffffff) 32%,
-    color-mix(in srgb, var(--blossom-accent-yellow) 18%, #ffffff) 62%,
-    color-mix(in srgb, var(--blossom-accent-blue) 16%, #ffffff) 100%
+    color-mix(in srgb, var(--blossom-surface) 36%, #ffffff) 34%,
+    color-mix(in srgb, var(--blossom-accent-yellow) 7%, #ffffff) 66%,
+    color-mix(in srgb, var(--blossom-accent-blue) 7%, #ffffff) 100%
   );
   --theme-surface-gradient: linear-gradient(
     135deg,
     #ffffff 0%,
-    color-mix(in srgb, var(--blossom-surface) 70%, #ffffff) 52%,
+    color-mix(in srgb, var(--blossom-surface) 28%, #ffffff) 52%,
     #ffffff 100%
   );
   --theme-progress-gradient: linear-gradient(
@@ -1903,23 +1901,23 @@ html[data-theme="blossom"] :where(
 }
 
 html[data-theme="blossom"] .nn-progress-fill-semantic-success {
-  background: linear-gradient(90deg, #ff5f9e 0%, #ff8ab5 100%);
+  background: linear-gradient(90deg, #e94f82 0%, #f7a9c2 100%);
 }
 
 html[data-theme="blossom"] .nn-progress-fill-semantic-info {
-  background: linear-gradient(90deg, #74d0f4 0%, #35b9e7 100%);
+  background: linear-gradient(90deg, #65c4e9 0%, #35b9e7 100%);
 }
 
 html[data-theme="blossom"] .nn-progress-fill-semantic-warning {
-  background: linear-gradient(90deg, #ffd95a 0%, #ffb56b 100%);
+  background: linear-gradient(90deg, #f8c84f 0%, #ffb978 100%);
 }
 
 html[data-theme="blossom"] .nn-progress-fill-semantic-readiness {
-  background: linear-gradient(90deg, #ffb56b 0%, #ff5f9e 58%, #74d0f4 100%);
+  background: linear-gradient(90deg, #ffb978 0%, #e94f82 54%, #65c4e9 100%);
 }
 
 html[data-theme="blossom"] .nn-progress-fill-semantic-danger {
-  background: linear-gradient(90deg, #ff8ab5 0%, #d83272 100%);
+  background: linear-gradient(90deg, #f7a9c2 0%, #c83a6a 100%);
 }
 
 /* Sea Glass — coastal wellness. */
@@ -2487,31 +2485,31 @@ html[data-theme="midnight"] {
 
 /* Blossom 2.0 — Cherry Blossom shell (overrides neutral grey normalization above). */
 html[data-theme="blossom"] {
-  --theme-secondary: color-mix(in srgb, #ff8ab5 14%, #ffffff);
+  --theme-secondary: color-mix(in srgb, #ffb978 9%, #ffffff);
   --theme-secondary-foreground: #7f123f;
-  --theme-accent: color-mix(in srgb, #74d0f4 12%, #ffffff);
+  --theme-accent: color-mix(in srgb, #65c4e9 9%, #ffffff);
   --theme-accent-foreground: #075985;
-  --theme-border: color-mix(in srgb, #ff5f9e 18%, #ffffff);
+  --theme-border: color-mix(in srgb, #e94f82 10%, #ffffff);
   --theme-topbar-bg: #ffffff;
   --theme-topbar-text: #391226;
   --color-softgray: #4b3340;
-  --theme-card-border: color-mix(in srgb, #ff5f9e 14%, #ffffff);
-  --theme-input-border: color-mix(in srgb, #ff8ab5 20%, #ffffff);
-  --theme-separator: color-mix(in srgb, #ff8ab5 16%, #ffffff);
+  --theme-card-border: color-mix(in srgb, #e94f82 8%, #ffffff);
+  --theme-input-border: color-mix(in srgb, #f7a9c2 12%, #ffffff);
+  --theme-separator: color-mix(in srgb, #f7a9c2 10%, #ffffff);
   --shadow-card:
-    0 1px 0 rgba(255, 95, 158, 0.1),
-    0 1px 3px rgba(255, 138, 181, 0.08),
-    0 14px 34px -18px rgba(255, 95, 158, 0.18);
+    0 1px 0 rgba(233, 79, 130, 0.06),
+    0 1px 3px rgba(247, 169, 194, 0.06),
+    0 14px 34px -18px rgba(233, 79, 130, 0.11);
   --shadow-card-hover:
-    0 1px 0 rgba(255, 95, 158, 0.12),
-    0 6px 18px -8px rgba(255, 181, 107, 0.2),
-    0 20px 44px -18px rgba(255, 95, 158, 0.22);
+    0 1px 0 rgba(233, 79, 130, 0.08),
+    0 6px 18px -8px rgba(255, 185, 120, 0.14),
+    0 20px 44px -18px rgba(233, 79, 130, 0.14);
   --shadow-elevated:
-    0 10px 30px -12px rgba(255, 95, 158, 0.24),
-    0 2px 8px -3px rgba(255, 217, 90, 0.16);
+    0 10px 30px -12px rgba(233, 79, 130, 0.16),
+    0 2px 8px -3px rgba(248, 200, 79, 0.10);
   --shadow-nav:
-    0 1px 2px rgba(255, 95, 158, 0.06),
-    0 4px 16px -6px rgba(255, 138, 181, 0.14);
+    0 1px 2px rgba(233, 79, 130, 0.04),
+    0 4px 16px -6px rgba(247, 169, 194, 0.09);
 }
 
 /* Sea Glass — coastal shell + light wellness shadows. */

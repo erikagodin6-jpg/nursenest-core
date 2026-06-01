@@ -3,116 +3,116 @@
     "requested": 100,
     "audited": 100,
     "concurrency": 4,
-    "startedAt": "2026-06-01T18:56:38.002Z",
-    "finishedAt": "2026-06-01T18:56:56.845Z",
-    "durationMs": 18842,
+    "startedAt": "2026-06-01T19:53:55.959Z",
+    "finishedAt": "2026-06-01T19:54:24.130Z",
+    "durationMs": 28170,
     "statusCounts": {
       "200": 100
     },
     "errorCount": 0,
     "fetchErrors": 0,
     "upstreamFailures": 0,
-    "avgMs": 709,
-    "p50Ms": 804,
-    "p95Ms": 1097,
-    "p99Ms": 1199,
-    "maxMs": 1392,
+    "avgMs": 1078,
+    "p50Ms": 944,
+    "p95Ms": 1816,
+    "p99Ms": 2200,
+    "maxMs": 2208,
     "slowest": [
       {
-        "url": "http://127.0.0.1:3000/",
+        "url": "http://127.0.0.1:3000/practice-exams",
         "status": 200,
         "ok": true,
-        "ms": 1392,
+        "ms": 2208,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": null,
         "error": null
       },
       {
-        "url": "http://127.0.0.1:3000/",
+        "url": "http://127.0.0.1:3000/blog",
         "status": 200,
         "ok": true,
-        "ms": 1199,
+        "ms": 2200,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": null,
         "error": null
       },
       {
-        "url": "http://127.0.0.1:3000/",
+        "url": "http://127.0.0.1:3000/es/blog",
         "status": 200,
         "ok": true,
-        "ms": 1114,
+        "ms": 2015,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": null,
         "error": null
       },
       {
-        "url": "http://127.0.0.1:3000/",
+        "url": "http://127.0.0.1:3000/pricing",
         "status": 200,
         "ok": true,
-        "ms": 1113,
+        "ms": 1930,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": null,
         "error": null
       },
       {
-        "url": "http://127.0.0.1:3000/",
+        "url": "http://127.0.0.1:3000/question-bank",
         "status": 200,
         "ok": true,
-        "ms": 1103,
+        "ms": 1869,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": null,
         "error": null
       },
       {
-        "url": "http://127.0.0.1:3000/",
+        "url": "http://127.0.0.1:3000/us/np/whnp/questions",
         "status": 200,
         "ok": true,
-        "ms": 1097,
+        "ms": 1816,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": null,
         "error": null
       },
       {
-        "url": "http://127.0.0.1:3000/",
+        "url": "http://127.0.0.1:3000/us/pn/nclex-pn/questions",
         "status": 200,
         "ok": true,
-        "ms": 1085,
+        "ms": 1771,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": null,
         "error": null
       },
       {
-        "url": "http://127.0.0.1:3000/",
+        "url": "http://127.0.0.1:3000/about",
         "status": 200,
         "ok": true,
-        "ms": 1075,
+        "ms": 1696,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": null,
         "error": null
       },
       {
-        "url": "http://127.0.0.1:3000/lessons",
+        "url": "http://127.0.0.1:3000/us/np/pnp-pc/questions",
         "status": 200,
         "ok": true,
-        "ms": 1063,
+        "ms": 1636,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": null,
         "error": null
       },
       {
-        "url": "http://127.0.0.1:3000/",
+        "url": "http://127.0.0.1:3000/us/np/pmhnp/questions",
         "status": 200,
         "ok": true,
-        "ms": 1039,
+        "ms": 1633,
         "xDoFailureCode": null,
         "xDoFailureMsg": null,
         "xDoOrigStatus": null,
@@ -120,25 +120,25 @@
       }
     ],
     "memory": {
-      "maxRssMb": 1119.9,
-      "avgRssMb": 894.3
+      "maxRssMb": 1075.9,
+      "avgRssMb": 902.1
     },
     "cpu": {
-      "maxPct": 73.1,
-      "avgPct": 64.7
+      "maxPct": 91.3,
+      "avgPct": 86.5
     },
     "restartEvents": 0,
     "readiness": {
-      "samples": 15,
-      "readyzNon200": 15,
+      "samples": 20,
+      "readyzNon200": 20,
       "healthzNon200": 0,
       "before": {
-        "at": "2026-06-01T18:56:38.314Z",
+        "at": "2026-06-01T19:53:56.124Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 27,
+          "ms": 12,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -148,7 +148,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 279,
+          "ms": 134,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -156,12 +156,12 @@
         }
       },
       "after": {
-        "at": "2026-06-01T18:56:56.844Z",
+        "at": "2026-06-01T19:54:24.130Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 11,
+          "ms": 10,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -171,7 +171,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 146,
+          "ms": 98,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -182,20 +182,20 @@
   },
   "rows": [
     {
-      "url": "http://127.0.0.1:3000/lessons",
+      "url": "http://127.0.0.1:3000/",
       "status": 200,
       "ok": true,
-      "ms": 969,
+      "ms": 888,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/blog",
+      "url": "http://127.0.0.1:3000/about",
       "status": 200,
       "ok": true,
-      "ms": 975,
+      "ms": 1696,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
@@ -205,574 +205,74 @@
       "url": "http://127.0.0.1:3000/question-bank",
       "status": 200,
       "ok": true,
-      "ms": 1008,
+      "ms": 1869,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
+      "url": "http://127.0.0.1:3000/practice-exams",
       "status": 200,
       "ok": true,
-      "ms": 46,
+      "ms": 2208,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/",
+      "url": "http://127.0.0.1:3000/for-institutions",
       "status": 200,
       "ok": true,
-      "ms": 1024,
+      "ms": 1115,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/flashcards",
+      "url": "http://127.0.0.1:3000/pricing",
       "status": 200,
       "ok": true,
-      "ms": 798,
+      "ms": 1930,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/lessons",
+      "url": "http://127.0.0.1:3000/faq",
       "status": 200,
       "ok": true,
-      "ms": 852,
+      "ms": 1427,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/blog",
+      "url": "http://127.0.0.1:3000/terms",
       "status": 200,
       "ok": true,
-      "ms": 856,
+      "ms": 1359,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
+      "url": "http://127.0.0.1:3000/privacy",
       "status": 200,
       "ok": true,
-      "ms": 167,
+      "ms": 770,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 1035,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 502,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 604,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
-      "status": 200,
-      "ok": true,
-      "ms": 867,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/lessons",
-      "status": 200,
-      "ok": true,
-      "ms": 799,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 1097,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
-      "status": 200,
-      "ok": true,
-      "ms": 184,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 836,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 515,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/lessons",
-      "status": 200,
-      "ok": true,
-      "ms": 810,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
-      "status": 200,
-      "ok": true,
-      "ms": 873,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 747,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
-      "status": 200,
-      "ok": true,
-      "ms": 50,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 1037,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 672,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/lessons",
-      "status": 200,
-      "ok": true,
-      "ms": 1001,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
-      "status": 200,
-      "ok": true,
-      "ms": 1004,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 423,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
-      "status": 200,
-      "ok": true,
-      "ms": 44,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 1113,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 708,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/lessons",
-      "status": 200,
-      "ok": true,
-      "ms": 960,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
-      "status": 200,
-      "ok": true,
-      "ms": 1025,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
-      "status": 200,
-      "ok": true,
-      "ms": 12,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 1114,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 478,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 640,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/lessons",
-      "status": 200,
-      "ok": true,
-      "ms": 949,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
-      "status": 200,
-      "ok": true,
-      "ms": 981,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 464,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
-      "status": 200,
-      "ok": true,
-      "ms": 50,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 1103,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 727,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
-      "status": 200,
-      "ok": true,
-      "ms": 821,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/lessons",
-      "status": 200,
-      "ok": true,
-      "ms": 827,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
-      "status": 200,
-      "ok": true,
-      "ms": 116,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 1039,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 498,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 830,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
-      "status": 200,
-      "ok": true,
-      "ms": 993,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/lessons",
-      "status": 200,
-      "ok": true,
-      "ms": 1063,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 1392,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
-      "status": 200,
-      "ok": true,
-      "ms": 213,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 833,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 576,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/lessons",
-      "status": 200,
-      "ok": true,
-      "ms": 824,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
-      "status": 200,
-      "ok": true,
-      "ms": 860,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 782,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
-      "status": 200,
-      "ok": true,
-      "ms": 70,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 1085,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
+      "url": "http://127.0.0.1:3000/refund-policy",
       "status": 200,
       "ok": true,
       "ms": 768,
@@ -782,87 +282,37 @@
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/lessons",
+      "url": "http://127.0.0.1:3000/acceptable-use",
       "status": 200,
       "ok": true,
-      "ms": 804,
+      "ms": 1050,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/blog",
+      "url": "http://127.0.0.1:3000/disclaimer",
       "status": 200,
       "ok": true,
-      "ms": 847,
+      "ms": 976,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
+      "url": "http://127.0.0.1:3000/editorial-policy",
       "status": 200,
       "ok": true,
-      "ms": 102,
+      "ms": 1193,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 1025,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 507,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 736,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
-      "status": 200,
-      "ok": true,
-      "ms": 831,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/lessons",
-      "status": 200,
-      "ok": true,
-      "ms": 867,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/",
+      "url": "http://127.0.0.1:3000/content-review-policy",
       "status": 200,
       "ok": true,
       "ms": 1199,
@@ -872,217 +322,7 @@
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
-      "status": 200,
-      "ok": true,
-      "ms": 199,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 721,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 553,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/lessons",
-      "status": 200,
-      "ok": true,
-      "ms": 804,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
-      "status": 200,
-      "ok": true,
-      "ms": 841,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 747,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
-      "status": 200,
-      "ok": true,
-      "ms": 113,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 1075,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 643,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/lessons",
-      "status": 200,
-      "ok": true,
-      "ms": 924,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
-      "status": 200,
-      "ok": true,
-      "ms": 928,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 425,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
-      "status": 200,
-      "ok": true,
-      "ms": 40,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 1038,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 714,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
-      "status": 200,
-      "ok": true,
-      "ms": 812,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/lessons",
-      "status": 200,
-      "ok": true,
-      "ms": 812,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
-      "status": 200,
-      "ok": true,
-      "ms": 111,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/",
-      "status": 200,
-      "ok": true,
-      "ms": 941,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/question-bank",
-      "status": 200,
-      "ok": true,
-      "ms": 547,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/flashcards",
-      "status": 200,
-      "ok": true,
-      "ms": 697,
-      "xDoFailureCode": null,
-      "xDoFailureMsg": null,
-      "xDoOrigStatus": null,
-      "error": null
-    },
-    {
-      "url": "http://127.0.0.1:3000/blog",
+      "url": "http://127.0.0.1:3000/questions/heart-failure-nclex",
       "status": 200,
       "ok": true,
       "ms": 823,
@@ -1092,50 +332,310 @@
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/lessons",
+      "url": "http://127.0.0.1:3000/questions/dha-exam-practice",
       "status": 200,
       "ok": true,
-      "ms": 665,
+      "ms": 717,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/sitemap.xml",
+      "url": "http://127.0.0.1:3000/contact",
       "status": 200,
       "ok": true,
-      "ms": 70,
+      "ms": 1160,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/",
+      "url": "http://127.0.0.1:3000/questions/infection-control-nursing",
       "status": 200,
       "ok": true,
-      "ms": 1029,
+      "ms": 736,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/question-bank",
+      "url": "http://127.0.0.1:3000/tools",
       "status": 200,
       "ok": true,
-      "ms": 574,
+      "ms": 1221,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/flashcards",
+      "url": "http://127.0.0.1:3000/case-studies",
       "status": 200,
       "ok": true,
-      "ms": 535,
+      "ms": 1203,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/exams/canada",
+      "status": 200,
+      "ok": true,
+      "ms": 1239,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/nclex-question-bank",
+      "status": 200,
+      "ok": true,
+      "ms": 1265,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/nclex-study-plan",
+      "status": 200,
+      "ok": true,
+      "ms": 929,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/rex-pn-study-plan",
+      "status": 200,
+      "ok": true,
+      "ms": 858,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/nclex-vs-rex-pn",
+      "status": 200,
+      "ok": true,
+      "ms": 855,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/nclex-next-gen-question-types",
+      "status": 200,
+      "ok": true,
+      "ms": 855,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/cat-nclex-simulator",
+      "status": 200,
+      "ok": true,
+      "ms": 928,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/free-nclex-practice-questions",
+      "status": 200,
+      "ok": true,
+      "ms": 932,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/best-nclex-prep-course",
+      "status": 200,
+      "ok": true,
+      "ms": 922,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/lpn-nclex-prep",
+      "status": 200,
+      "ok": true,
+      "ms": 998,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/lvn-nclex-prep",
+      "status": 200,
+      "ok": true,
+      "ms": 899,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canadian-nclex-guide",
+      "status": 200,
+      "ok": true,
+      "ms": 890,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/how-to-pass-nclex-2026",
+      "status": 200,
+      "ok": true,
+      "ms": 901,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/adaptive-nclex-testing",
+      "status": 200,
+      "ok": true,
+      "ms": 823,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/aanp-practice-test",
+      "status": 200,
+      "ok": true,
+      "ms": 883,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/ancc-fnp-practice-test",
+      "status": 200,
+      "ok": true,
+      "ms": 890,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/agpcnp-practice-test",
+      "status": 200,
+      "ok": true,
+      "ms": 882,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/whnp-practice-test",
+      "status": 200,
+      "ok": true,
+      "ms": 960,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/pnp-pc-practice-test",
+      "status": 200,
+      "ok": true,
+      "ms": 876,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/pmhnp-practice-test",
+      "status": 200,
+      "ok": true,
+      "ms": 877,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/np/cnple-practice-test",
+      "status": 200,
+      "ok": true,
+      "ms": 867,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/pre-nursing",
+      "status": 200,
+      "ok": true,
+      "ms": 892,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/pre-nursing/study-plan",
+      "status": 200,
+      "ok": true,
+      "ms": 939,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/pre-nursing/lessons",
+      "status": 200,
+      "ok": true,
+      "ms": 992,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/fr/blog",
+      "status": 200,
+      "ok": true,
+      "ms": 1498,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn",
+      "status": 200,
+      "ok": true,
+      "ms": 1059,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
@@ -1145,24 +645,234 @@
       "url": "http://127.0.0.1:3000/blog",
       "status": 200,
       "ok": true,
-      "ms": 743,
+      "ms": 2200,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/lessons",
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/pricing",
       "status": 200,
       "ok": true,
-      "ms": 733,
+      "ms": 1073,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/",
+      "url": "http://127.0.0.1:3000/es/blog",
+      "status": 200,
+      "ok": true,
+      "ms": 2015,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/rn/nclex-rn",
+      "status": 200,
+      "ok": true,
+      "ms": 1172,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/questions",
+      "status": 200,
+      "ok": true,
+      "ms": 1394,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/rn/nclex-rn/pricing",
+      "status": 200,
+      "ok": true,
+      "ms": 997,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/np/cnple/pricing",
+      "status": 200,
+      "ok": true,
+      "ms": 926,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/np/cnple",
+      "status": 200,
+      "ok": true,
+      "ms": 933,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/rn/nclex-rn/questions",
+      "status": 200,
+      "ok": true,
+      "ms": 1377,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/np/cnple/questions",
+      "status": 200,
+      "ok": true,
+      "ms": 655,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/pn/nclex-pn/pricing",
+      "status": 200,
+      "ok": true,
+      "ms": 1057,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/pn/nclex-pn",
+      "status": 200,
+      "ok": true,
+      "ms": 1063,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/rn/nclex-rn",
+      "status": 200,
+      "ok": true,
+      "ms": 1324,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/pn/nclex-pn/questions",
+      "status": 200,
+      "ok": true,
+      "ms": 1771,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/rn/nclex-rn/pricing",
+      "status": 200,
+      "ok": true,
+      "ms": 882,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/fnp",
+      "status": 200,
+      "ok": true,
+      "ms": 1028,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/rn/nclex-rn/questions",
+      "status": 200,
+      "ok": true,
+      "ms": 1481,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/fnp/pricing",
+      "status": 200,
+      "ok": true,
+      "ms": 874,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/agpcnp",
+      "status": 200,
+      "ok": true,
+      "ms": 986,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/fnp/questions",
+      "status": 200,
+      "ok": true,
+      "ms": 1449,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/agpcnp/pricing",
+      "status": 200,
+      "ok": true,
+      "ms": 950,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/pmhnp",
+      "status": 200,
+      "ok": true,
+      "ms": 816,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/agpcnp/questions",
+      "status": 200,
+      "ok": true,
+      "ms": 1556,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/pmhnp/pricing",
       "status": 200,
       "ok": true,
       "ms": 865,
@@ -1172,10 +882,300 @@
       "error": null
     },
     {
-      "url": "http://127.0.0.1:3000/question-bank",
+      "url": "http://127.0.0.1:3000/us/np/pmhnp/questions",
       "status": 200,
       "ok": true,
-      "ms": 570,
+      "ms": 1633,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/whnp",
+      "status": 200,
+      "ok": true,
+      "ms": 961,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/whnp/pricing",
+      "status": 200,
+      "ok": true,
+      "ms": 1006,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/whnp/questions",
+      "status": 200,
+      "ok": true,
+      "ms": 1816,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/pnp-pc",
+      "status": 200,
+      "ok": true,
+      "ms": 996,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/pnp-pc/pricing",
+      "status": 200,
+      "ok": true,
+      "ms": 1002,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/rn/nclex-rn/test-bank",
+      "status": 200,
+      "ok": true,
+      "ms": 755,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/pnp-pc/questions",
+      "status": 200,
+      "ok": true,
+      "ms": 1636,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/rpn/rex-pn/test-bank",
+      "status": 200,
+      "ok": true,
+      "ms": 836,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/np/cnple/test-bank",
+      "status": 200,
+      "ok": true,
+      "ms": 826,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/fnp/test-bank",
+      "status": 200,
+      "ok": true,
+      "ms": 948,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/us/np/agpcnp/test-bank",
+      "status": 200,
+      "ok": true,
+      "ms": 1050,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/rex-pn-practice-questions-cardiovascular",
+      "status": 200,
+      "ok": true,
+      "ms": 981,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/rex-pn-practice-questions-respiratory",
+      "status": 200,
+      "ok": true,
+      "ms": 997,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/rex-pn-practice-questions-renal-and-fluid",
+      "status": 200,
+      "ok": true,
+      "ms": 884,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/rex-pn-practice-questions-gastrointestinal",
+      "status": 200,
+      "ok": true,
+      "ms": 876,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/rex-pn-practice-questions-neurological",
+      "status": 200,
+      "ok": true,
+      "ms": 868,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/rex-pn-practice-questions-endocrine",
+      "status": 200,
+      "ok": true,
+      "ms": 847,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/rex-pn-practice-questions-musculoskeletal",
+      "status": 200,
+      "ok": true,
+      "ms": 859,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/rex-pn-practice-questions-immune-and-infection",
+      "status": 200,
+      "ok": true,
+      "ms": 860,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/pn-lessons-cardiovascular",
+      "status": 200,
+      "ok": true,
+      "ms": 859,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/pn-lessons-respiratory",
+      "status": 200,
+      "ok": true,
+      "ms": 860,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/pn-lessons-renal-and-fluid",
+      "status": 200,
+      "ok": true,
+      "ms": 927,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/pn-lessons-gastrointestinal",
+      "status": 200,
+      "ok": true,
+      "ms": 922,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/pn-lessons-neurological",
+      "status": 200,
+      "ok": true,
+      "ms": 939,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/pn-lessons-endocrine",
+      "status": 200,
+      "ok": true,
+      "ms": 944,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/pn-lessons-musculoskeletal",
+      "status": 200,
+      "ok": true,
+      "ms": 962,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/pn-lessons-immune-and-infection",
+      "status": 200,
+      "ok": true,
+      "ms": 907,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/pharmacology-nursing-cardiac-meds",
+      "status": 200,
+      "ok": true,
+      "ms": 893,
+      "xDoFailureCode": null,
+      "xDoFailureMsg": null,
+      "xDoOrigStatus": null,
+      "error": null
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/pn/rex-pn/pharmacology-nursing-diabetes-meds",
+      "status": 200,
+      "ok": true,
+      "ms": 890,
       "xDoFailureCode": null,
       "xDoFailureMsg": null,
       "xDoOrigStatus": null,
@@ -1185,179 +1185,234 @@
   "monitor": {
     "resources": [
       {
-        "at": "2026-06-01T18:56:38.032Z",
+        "at": "2026-06-01T19:53:55.989Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 53.1,
-        "rssMb": 674.2
+        "cpuPct": 79.9,
+        "rssMb": 640.4
       },
       {
-        "at": "2026-06-01T18:56:39.343Z",
+        "at": "2026-06-01T19:53:57.151Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 55.4,
-        "rssMb": 708.1
+        "cpuPct": 80.7,
+        "rssMb": 674.6
       },
       {
-        "at": "2026-06-01T18:56:40.989Z",
+        "at": "2026-06-01T19:53:58.714Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 57.8,
-        "rssMb": 763.2
+        "cpuPct": 81.7,
+        "rssMb": 691.6
       },
       {
-        "at": "2026-06-01T18:56:42.205Z",
+        "at": "2026-06-01T19:54:00.109Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 59.1,
-        "rssMb": 810.6
+        "cpuPct": 82.3,
+        "rssMb": 741.6
       },
       {
-        "at": "2026-06-01T18:56:43.435Z",
+        "at": "2026-06-01T19:54:01.485Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 60.7,
-        "rssMb": 857.4
+        "cpuPct": 83.1,
+        "rssMb": 791.9
       },
       {
-        "at": "2026-06-01T18:56:44.918Z",
+        "at": "2026-06-01T19:54:03.186Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 62.4,
-        "rssMb": 913.5
+        "cpuPct": 83.8,
+        "rssMb": 847.5
       },
       {
-        "at": "2026-06-01T18:56:46.211Z",
+        "at": "2026-06-01T19:54:04.724Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 64,
-        "rssMb": 979.5
+        "cpuPct": 84.4,
+        "rssMb": 921.5
       },
       {
-        "at": "2026-06-01T18:56:47.453Z",
+        "at": "2026-06-01T19:54:06.333Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 65.3,
-        "rssMb": 1016.7
+        "cpuPct": 85,
+        "rssMb": 977.8
       },
       {
-        "at": "2026-06-01T18:56:48.774Z",
+        "at": "2026-06-01T19:54:07.974Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 66.5,
-        "rssMb": 1062.4
+        "cpuPct": 85.7,
+        "rssMb": 1029.9
       },
       {
-        "at": "2026-06-01T18:56:50.132Z",
+        "at": "2026-06-01T19:54:09.530Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 67.9,
-        "rssMb": 1119.9
+        "cpuPct": 86.8,
+        "rssMb": 874.4
       },
       {
-        "at": "2026-06-01T18:56:51.539Z",
+        "at": "2026-06-01T19:54:11.126Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 69.6,
-        "rssMb": 861.3
+        "cpuPct": 87.5,
+        "rssMb": 927.3
       },
       {
-        "at": "2026-06-01T18:56:52.924Z",
+        "at": "2026-06-01T19:54:12.418Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 70.9,
-        "rssMb": 890.9
+        "cpuPct": 88,
+        "rssMb": 943.3
       },
       {
-        "at": "2026-06-01T18:56:54.183Z",
+        "at": "2026-06-01T19:54:13.836Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 71.9,
-        "rssMb": 916
+        "cpuPct": 88.5,
+        "rssMb": 962.9
       },
       {
-        "at": "2026-06-01T18:56:55.481Z",
+        "at": "2026-06-01T19:54:15.279Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 73.1,
-        "rssMb": 914.1
+        "cpuPct": 89,
+        "rssMb": 1003.6
       },
       {
-        "at": "2026-06-01T18:56:56.697Z",
+        "at": "2026-06-01T19:54:16.673Z",
         "processCount": 3,
         "pids": [
           1119633,
-          1905918,
-          1905931
+          1933335,
+          1933347
         ],
-        "cpuPct": 72.6,
-        "rssMb": 927.4
+        "cpuPct": 89.5,
+        "rssMb": 1028
+      },
+      {
+        "at": "2026-06-01T19:54:18.400Z",
+        "processCount": 3,
+        "pids": [
+          1119633,
+          1933335,
+          1933347
+        ],
+        "cpuPct": 90,
+        "rssMb": 1075.9
+      },
+      {
+        "at": "2026-06-01T19:54:19.823Z",
+        "processCount": 3,
+        "pids": [
+          1119633,
+          1933335,
+          1933347
+        ],
+        "cpuPct": 90.7,
+        "rssMb": 929.4
+      },
+      {
+        "at": "2026-06-01T19:54:21.247Z",
+        "processCount": 3,
+        "pids": [
+          1119633,
+          1933335,
+          1933347
+        ],
+        "cpuPct": 91,
+        "rssMb": 961.2
+      },
+      {
+        "at": "2026-06-01T19:54:22.550Z",
+        "processCount": 3,
+        "pids": [
+          1119633,
+          1933335,
+          1933347
+        ],
+        "cpuPct": 91.3,
+        "rssMb": 996.1
+      },
+      {
+        "at": "2026-06-01T19:54:24.031Z",
+        "processCount": 3,
+        "pids": [
+          1119633,
+          1933335,
+          1933347
+        ],
+        "cpuPct": 90.9,
+        "rssMb": 1022.3
       }
     ],
     "readiness": [
       {
-        "at": "2026-06-01T18:56:38.314Z",
+        "at": "2026-06-01T19:53:56.124Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 27,
+          "ms": 12,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1367,7 +1422,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 279,
+          "ms": 134,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1375,12 +1430,150 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:39.961Z",
+        "at": "2026-06-01T19:53:57.681Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 421,
+          "ms": 348,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        },
+        "readyz": {
+          "url": "http://127.0.0.1:3000/readyz",
+          "status": 503,
+          "ok": false,
+          "ms": 529,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        }
+      },
+      {
+        "at": "2026-06-01T19:53:59.036Z",
+        "healthz": {
+          "url": "http://127.0.0.1:3000/healthz",
+          "status": 200,
+          "ok": true,
+          "ms": 39,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        },
+        "readyz": {
+          "url": "http://127.0.0.1:3000/readyz",
+          "status": 503,
+          "ok": false,
+          "ms": 320,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        }
+      },
+      {
+        "at": "2026-06-01T19:54:00.433Z",
+        "healthz": {
+          "url": "http://127.0.0.1:3000/healthz",
+          "status": 200,
+          "ok": true,
+          "ms": 161,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        },
+        "readyz": {
+          "url": "http://127.0.0.1:3000/readyz",
+          "status": 503,
+          "ok": false,
+          "ms": 321,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        }
+      },
+      {
+        "at": "2026-06-01T19:54:02.154Z",
+        "healthz": {
+          "url": "http://127.0.0.1:3000/healthz",
+          "status": 200,
+          "ok": true,
+          "ms": 333,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        },
+        "readyz": {
+          "url": "http://127.0.0.1:3000/readyz",
+          "status": 503,
+          "ok": false,
+          "ms": 668,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        }
+      },
+      {
+        "at": "2026-06-01T19:54:03.689Z",
+        "healthz": {
+          "url": "http://127.0.0.1:3000/healthz",
+          "status": 200,
+          "ok": true,
+          "ms": 278,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        },
+        "readyz": {
+          "url": "http://127.0.0.1:3000/readyz",
+          "status": 503,
+          "ok": false,
+          "ms": 503,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        }
+      },
+      {
+        "at": "2026-06-01T19:54:05.304Z",
+        "healthz": {
+          "url": "http://127.0.0.1:3000/healthz",
+          "status": 200,
+          "ok": true,
+          "ms": 325,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        },
+        "readyz": {
+          "url": "http://127.0.0.1:3000/readyz",
+          "status": 503,
+          "ok": false,
+          "ms": 580,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        }
+      },
+      {
+        "at": "2026-06-01T19:54:06.946Z",
+        "healthz": {
+          "url": "http://127.0.0.1:3000/healthz",
+          "status": 200,
+          "ok": true,
+          "ms": 294,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1398,12 +1591,12 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:41.177Z",
+        "at": "2026-06-01T19:54:08.488Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 69,
+          "ms": 70,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1413,7 +1606,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 187,
+          "ms": 513,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1421,12 +1614,12 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:42.406Z",
+        "at": "2026-06-01T19:54:10.090Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 78,
+          "ms": 287,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1436,7 +1629,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 201,
+          "ms": 560,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1444,12 +1637,12 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:43.884Z",
+        "at": "2026-06-01T19:54:11.388Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 188,
+          "ms": 99,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1459,7 +1652,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 448,
+          "ms": 260,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1467,12 +1660,12 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:45.184Z",
+        "at": "2026-06-01T19:54:12.803Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 11,
+          "ms": 21,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1482,7 +1675,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 265,
+          "ms": 384,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1490,12 +1683,12 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:46.426Z",
+        "at": "2026-06-01T19:54:14.248Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 121,
+          "ms": 165,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1505,7 +1698,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 214,
+          "ms": 410,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1513,12 +1706,12 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:47.737Z",
+        "at": "2026-06-01T19:54:15.640Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 134,
+          "ms": 226,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1528,7 +1721,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 283,
+          "ms": 360,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1536,12 +1729,12 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:49.104Z",
+        "at": "2026-06-01T19:54:17.361Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 157,
+          "ms": 298,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1551,7 +1744,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 330,
+          "ms": 686,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1559,12 +1752,12 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:50.511Z",
+        "at": "2026-06-01T19:54:18.791Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 192,
+          "ms": 160,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1574,7 +1767,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 378,
+          "ms": 390,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1582,12 +1775,12 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:51.895Z",
+        "at": "2026-06-01T19:54:20.212Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 241,
+          "ms": 268,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1597,7 +1790,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 355,
+          "ms": 388,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1605,12 +1798,12 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:53.155Z",
+        "at": "2026-06-01T19:54:21.518Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 37,
+          "ms": 52,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1620,7 +1813,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 230,
+          "ms": 270,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1628,12 +1821,12 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:54.451Z",
+        "at": "2026-06-01T19:54:23.001Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 101,
+          "ms": 268,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1643,7 +1836,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 267,
+          "ms": 451,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1651,12 +1844,12 @@
         }
       },
       {
-        "at": "2026-06-01T18:56:55.667Z",
+        "at": "2026-06-01T19:54:24.130Z",
         "healthz": {
           "url": "http://127.0.0.1:3000/healthz",
           "status": 200,
           "ok": true,
-          "ms": 77,
+          "ms": 10,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,
@@ -1666,30 +1859,7 @@
           "url": "http://127.0.0.1:3000/readyz",
           "status": 503,
           "ok": false,
-          "ms": 185,
-          "xDoFailureCode": null,
-          "xDoFailureMsg": null,
-          "xDoOrigStatus": null,
-          "error": null
-        }
-      },
-      {
-        "at": "2026-06-01T18:56:56.844Z",
-        "healthz": {
-          "url": "http://127.0.0.1:3000/healthz",
-          "status": 200,
-          "ok": true,
-          "ms": 11,
-          "xDoFailureCode": null,
-          "xDoFailureMsg": null,
-          "xDoOrigStatus": null,
-          "error": null
-        },
-        "readyz": {
-          "url": "http://127.0.0.1:3000/readyz",
-          "status": 503,
-          "ok": false,
-          "ms": 146,
+          "ms": 98,
           "xDoFailureCode": null,
           "xDoFailureMsg": null,
           "xDoOrigStatus": null,

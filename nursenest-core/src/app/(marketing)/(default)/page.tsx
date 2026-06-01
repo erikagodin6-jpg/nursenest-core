@@ -75,12 +75,11 @@ async function safeStats(props: HomeRestoredWithDeferredStatsProps) {
 
 async function safeBlog() {
   try {
-    // 1000ms timeout: blog posts are a below-fold enhancement. If the DB query
-    // takes longer than 1s, render the empty shell and skip the teaser section
-    // rather than holding the entire page render hostage.
+    // Below-fold enhancement only: keep the homepage critical path inside the
+    // render budget during crawl pressure. Slow blog reads fall back to shell.
     const withTimeout = Promise.race([
       HomeBlogTeaserSectionAsync({ m: {} }),
-      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("blog_timeout")), 1000)),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("blog_timeout")), 150)),
     ]);
     return await withTimeout;
   } catch {

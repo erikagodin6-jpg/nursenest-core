@@ -218,6 +218,14 @@ export async function GET(req: NextRequest) {
         failureReason: "",
       });
 
+      // Timeout budgets:
+      //   Full card fetch  (includeCards=1): 7 000 ms — allows the DB scan (up to 800 rows),
+      //     progress query, and serialization to complete. The client per-attempt timeout is
+      //     5 500 ms, so we MUST return the 503 before the client gives up and switches to the
+      //     generic catch-block "TimeoutError" path.
+      //   Count-only        (includeCards=0): 2 500 ms — only inventory counts, no card bodies.
+      const sessionBuildTimeoutMs = includeCards ? 7_000 : 2_500;
+      const sessionBuildStart = Date.now();
       const built = await withTimeout(
         buildFlashcardCustomSession({
           userId,
@@ -245,9 +253,10 @@ export async function GET(req: NextRequest) {
           sessionSeed,
           cardLimitRaw: sp.get("cardLimit"),
         }),
-        includeCards ? 5_000 : 2_000,
+        sessionBuildTimeoutMs,
         { label: "flashcards_custom_session_startup" },
       );
+      const sessionBuildDurationMs = Date.now() - sessionBuildStart;
 
       if (!built.ok) {
         const kind = classifyDatabaseFallbackKind(new Error(built.reason));
@@ -269,9 +278,13 @@ export async function GET(req: NextRequest) {
           eligibleFlashcards: null,
           finalSessionPoolSize: 0,
           failureReason: `${built.code}:${kind}`.slice(0, 120),
+          // Root-cause timing: helps distinguish slow-DB from timeout vs genuine error.
+          buildDurationMs: sessionBuildDurationMs,
+          timeoutBudgetMs: sessionBuildTimeoutMs,
         });
         const h = new Headers(headers);
         h.set("Retry-After", "3");
+        h.set("x-nn-session-build-ms", String(sessionBuildDurationMs));
         return NextResponse.json(
           {
             ok: false,
@@ -423,6 +436,9 @@ export async function GET(req: NextRequest) {
         categoryOptions: built.categoryOptions,
         cards: built.cards,
       };
+
+      // Expose build duration as a diagnostic header for client-side telemetry.
+      headers.set("x-nn-session-build-ms", String(sessionBuildDurationMs));
 
       // Cache only count-only responses (includeCards=0); full card payloads can be large and user-state sensitive.
       if (!includeCards) {

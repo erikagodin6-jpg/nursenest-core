@@ -44,8 +44,11 @@ html[data-theme="aurora"] .nn-pre-nursing-marketing-hub {
   --nn-prenursing-contract-practice: var(--nn-module-practice, var(--semantic-success));
   --nn-prenursing-contract-safety: var(--nn-module-safety, var(--semantic-warning));
   --nn-prenursing-contract-flashcards: var(--nn-module-flashcards, var(--semantic-chart-3));
+  --nn-prenursing-contract-chart-6: var(--semantic-chart-6);
   --nn-prenursing-contract-chart-7: var(--semantic-chart-7);
   --nn-prenursing-contract-chart-8: var(--semantic-chart-8);
+  --nn-prenursing-contract-chart-9: var(--semantic-chart-9);
+  --nn-prenursing-contract-premium-card-glow: var(--premium-card-glow, var(--semantic-chart-6));
   scroll-padding-bottom: env(safe-area-inset-bottom);
 }
 

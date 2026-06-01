@@ -61,12 +61,12 @@ html[data-theme="ocean"] .nn-active-flashcard-session[data-nn-unified-exam-works
 }
 
 html[data-theme="blossom"] .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp] {
-  /* Blossom 2.0: vivid spring ambient — pink top-left, yellow top-right, sky bottom */
+  /* Blossom 2.0: white-first spring ambient — flashcard faces remain white. */
   background:
-    radial-gradient(ellipse 88% 68% at 8% 0%, color-mix(in srgb, var(--semantic-chart-1) 26%, transparent), transparent 56%),
-    radial-gradient(ellipse 76% 58% at 96% 6%, color-mix(in srgb, var(--semantic-chart-3) 22%, transparent), transparent 54%),
-    radial-gradient(ellipse 70% 50% at 50% 100%, color-mix(in srgb, var(--semantic-chart-4) 20%, transparent), transparent 58%),
-    linear-gradient(180deg, var(--semantic-bg-base), color-mix(in srgb, var(--semantic-panel-mint) 38%, var(--semantic-bg-base)));
+    radial-gradient(ellipse 88% 68% at 8% 0%, color-mix(in srgb, var(--semantic-chart-1) 10%, transparent), transparent 58%),
+    radial-gradient(ellipse 76% 58% at 96% 6%, color-mix(in srgb, var(--semantic-chart-3) 8%, transparent), transparent 56%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, color-mix(in srgb, var(--semantic-chart-4) 8%, transparent), transparent 60%),
+    linear-gradient(180deg, var(--semantic-bg-base), color-mix(in srgb, var(--semantic-panel-mint) 12%, var(--semantic-bg-base)));
 }
 html[data-theme="mint-blossom"] .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp] {
   background:

@@ -58,14 +58,14 @@ html[data-theme="ocean"] {
   --nn-atmosphere-plum: var(--semantic-accent-periwinkle);
 }
 
-/* Blossom 2.0 — vivid spring atmosphere: pink/peach/yellow/sky directly from the palette. */
+/* Blossom 2.0 — white-first spring atmosphere: soft pink/peach/yellow/sky accents. */
 html[data-theme="blossom"] {
   --nn-atmosphere-mint: #ffdce8;
-  --nn-atmosphere-aqua: #74d0f4;
-  --nn-atmosphere-lavender: #ffc2d7;
-  --nn-atmosphere-peach: #ffb56b;
-  --nn-atmosphere-gold: #ffd95a;
-  --nn-atmosphere-plum: #ff5f9e;
+  --nn-atmosphere-aqua: #65c4e9;
+  --nn-atmosphere-lavender: #ffd9e4;
+  --nn-atmosphere-peach: #ffb978;
+  --nn-atmosphere-gold: #f8c84f;
+  --nn-atmosphere-plum: #e94f82;
 }
 
 html[data-theme="mint-blossom"] {

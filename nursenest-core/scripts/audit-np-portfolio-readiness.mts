@@ -292,6 +292,7 @@ function roadmapFor(config: TrackConfig, row: AuditRow): string[] {
 }
 
 type AuditRow = {
+  inventorySource: "database" | "static";
   pathwayId: string;
   label: string;
   registryStatus: string;
@@ -319,10 +320,80 @@ type AuditRow = {
   roadmap: string[];
 };
 
+function loadStaticLessonCounts(): Map<string, number> {
+  const files = [
+    resolve(process.cwd(), "src/content/pathway-lessons/catalog.json"),
+    resolve(process.cwd(), "src/content/pathway-lessons/np-core-catalog.json"),
+    resolve(process.cwd(), "src/content/pathway-lessons/np-parity-expansion-catalog.json"),
+  ];
+  const counts = new Map<string, number>();
+  for (const file of files) {
+    if (!existsSync(file)) continue;
+    const parsed = JSON.parse(readFileSync(file, "utf8")) as { pathways?: Record<string, { lessons?: unknown[] }> };
+    for (const [pathwayId, payload] of Object.entries(parsed.pathways ?? {})) {
+      counts.set(pathwayId, Math.max(counts.get(pathwayId) ?? 0, payload.lessons?.length ?? 0));
+    }
+  }
+  return counts;
+}
+
+function staticAuditRows(): AuditRow[] {
+  const lessonCounts = loadStaticLessonCounts();
+  return TRACKS.map((config) => {
+    const pathway = EXAM_PATHWAYS.find((p) => p.id === config.id);
+    const lessons = lessonCounts.get(config.id) ?? 0;
+    const staticCnpleCaseCount = config.id === "ca-np-cnple" ? CNPLE_LOFT_CASES.length : 0;
+    const staticCnpleSteps = config.id === "ca-np-cnple" ? CNPLE_LOFT_CASES.reduce((sum, c) => sum + c.steps.length, 0) : 0;
+    const lessonPct = pct(lessons, config.targetLessons);
+    const clinicalPct = pct(staticCnpleCaseCount + staticCnpleSteps, config.targetClinicalReasoningCases);
+    const readinessScore = scoreReadiness({
+      questions: 0,
+      lessons: lessonPct,
+      flashcards: 0,
+      clinicalReasoning: clinicalPct,
+      blueprint: 0,
+    });
+    const row: AuditRow = {
+      inventorySource: "static",
+      pathwayId: config.id,
+      label: config.label,
+      registryStatus: pathway?.status ?? "missing",
+      lessons,
+      questions: 0,
+      specialtyTaggedQuestions: 0,
+      activeQuestions: 0,
+      catEligibleQuestions: 0,
+      flashcards: 0,
+      caseStudies: 0,
+      clinicalScenarios: staticCnpleCaseCount,
+      soapNoteCases: 0,
+      diagnosticReasoningCases: 0,
+      clinicalReasoningCases: staticCnpleCaseCount + staticCnpleSteps,
+      pharmacologyQuestions: 0,
+      pharmacologyLessons: 0,
+      differentialQuestions: 0,
+      differentialLessons: 0,
+      blueprintReadiness: 0,
+      missingBlueprintDomains: config.expectedBlueprintDomains,
+      readinessScore,
+      monetizationScore: scoreMonetization(readinessScore, 0, 0, clinicalPct),
+      competitiveScore: scoreCompetitive(readinessScore, 0, clinicalPct),
+      below90Blueprint: true,
+      roadmap: [],
+    };
+    row.roadmap = [
+      "Live database inventory was not available in this run; rerun with production DATABASE_URL before monetization certification.",
+      ...roadmapFor(config, row),
+    ];
+    return row;
+  });
+}
+
 async function auditTrack(prisma: PrismaClient, config: TrackConfig): Promise<AuditRow> {
   const pathway = EXAM_PATHWAYS.find((p) => p.id === config.id);
   if (!pathway) {
     return {
+      inventorySource: "database",
       pathwayId: config.id,
       label: config.label,
       registryStatus: "missing",
@@ -441,6 +512,7 @@ async function auditTrack(prisma: PrismaClient, config: TrackConfig): Promise<Au
   const competitiveScore = scoreCompetitive(readinessScore, blueprintReadiness, clinicalPct);
 
   const row: AuditRow = {
+    inventorySource: "database",
     pathwayId: config.id,
     label: config.label,
     registryStatus: pathway.status,
@@ -522,6 +594,7 @@ function buildMarkdown(rows: AuditRow[]): string {
     "## Executive Summary",
     "",
     `- Pathways audited: ${rows.length}`,
+    `- Inventory source: ${rows.every((row) => row.inventorySource === "database") ? "database" : "static fallback / database blocked"}`,
     `- Pathways at or above 90% readiness: ${readyEnough.length}`,
     `- Pathways below 90% blueprint readiness: ${below90.length}`,
     `- Strongest pathway: ${rows.slice().sort((a, b) => b.readinessScore - a.readinessScore)[0]?.label ?? "n/a"}`,
@@ -620,7 +693,12 @@ async function main(): Promise<void> {
   const outDir = resolve(process.cwd(), "docs/reports");
   mkdirSync(outDir, { recursive: true });
   if (!process.env.DATABASE_URL?.trim()) {
-    throw new Error("DATABASE_URL is required for the NP portfolio audit.");
+    const rows = staticAuditRows();
+    writeFileSync(resolve(outDir, "np-portfolio-audit.md"), `${buildMarkdown(rows)}\n`, "utf8");
+    writeFileSync(resolve(outDir, "np-portfolio-audit.json"), `${JSON.stringify({ generatedAt: new Date().toISOString(), inventorySource: "static", rows }, null, 2)}\n`, "utf8");
+    writeCsv(rows, resolve(outDir, "np-portfolio-audit.csv"));
+    console.log(`[np-portfolio-audit] DATABASE_URL unavailable; wrote static fallback ${resolve(outDir, "np-portfolio-audit.md")}`);
+    return;
   }
 
   const prisma = new PrismaClient();

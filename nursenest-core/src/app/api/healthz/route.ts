@@ -1,9 +1,15 @@
-import { GET as readyGet } from "../health/ready/route";
+import { GET as readyGet, HEAD as readyHead } from "../health/ready/route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  // 🔒 FIX: do not pass req
+/**
+ * Backward-compatible cheap readiness alias. DB diagnostics moved to `/healthz/deep`.
+ */
+export function GET() {
   return readyGet();
+}
+
+export function HEAD() {
+  return readyHead();
 }

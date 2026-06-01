@@ -52,15 +52,22 @@ async function getText(url) {
 async function discoverUrls() {
   const urls = new Set();
   const sitemapIndex = await getText(`${baseUrl}/sitemap.xml`);
-  const children = xmlLocs(sitemapIndex)
-    .filter((url) => url.startsWith(baseUrl))
-    .slice(0, childSitemapLimit);
+  const toBaseUrl = (loc) => {
+    try {
+      const parsed = new URL(loc);
+      return `${baseUrl}${parsed.pathname}${parsed.search}`;
+    } catch {
+      return loc.startsWith("/") ? `${baseUrl}${loc}` : null;
+    }
+  };
+  const children = xmlLocs(sitemapIndex).map(toBaseUrl).filter(Boolean).slice(0, childSitemapLimit);
 
   for (const child of children) {
     try {
       const xml = await getText(child);
       for (const loc of xmlLocs(xml)) {
-        if (loc.startsWith(baseUrl)) urls.add(loc);
+        const url = toBaseUrl(loc);
+        if (url) urls.add(url);
       }
     } catch (error) {
       console.error(`[googlebot-load] child sitemap failed ${child}: ${error instanceof Error ? error.message : error}`);

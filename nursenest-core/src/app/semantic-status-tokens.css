@@ -560,52 +560,51 @@ html[data-theme="ocean"] {
 }
 
 html[data-theme="blossom"] {
-  /* Soft fills raised from 9–16% to 22–28% — vivid without overloading */
-  --semantic-brand-soft: color-mix(in srgb, #ff5f9e 22%, var(--bg-card));
-  --semantic-brand: #ff5f9e;
-  --semantic-success: #ff5f9e;
-  --semantic-success-soft: color-mix(in srgb, #ff5f9e 22%, var(--bg-card));
+  /* Blossom stays white-first; semantic color is used as accent and data signal. */
+  --semantic-brand-soft: color-mix(in srgb, #e94f82 9%, var(--bg-card));
+  --semantic-brand: #e94f82;
+  --semantic-success: #e94f82;
+  --semantic-success-soft: color-mix(in srgb, #e94f82 9%, var(--bg-card));
   --semantic-success-contrast: #7f123f;
   --semantic-info: #0b7db5;
-  --semantic-info-soft: color-mix(in srgb, #74d0f4 28%, var(--bg-card));
+  --semantic-info-soft: color-mix(in srgb, #65c4e9 10%, var(--bg-card));
   --semantic-info-contrast: #065078;
   --semantic-warning: #c07800;
-  --semantic-warning-soft: color-mix(in srgb, #ffd95a 30%, var(--bg-card));
+  --semantic-warning-soft: color-mix(in srgb, #f8c84f 12%, var(--bg-card));
   --semantic-warning-contrast: #5a3a00;
-  --semantic-danger: #d83272;
-  --semantic-danger-soft: color-mix(in srgb, #ff8ab5 24%, var(--bg-card));
+  --semantic-danger: #c83a6a;
+  --semantic-danger-soft: color-mix(in srgb, #f7a9c2 9%, var(--bg-card));
   --semantic-danger-contrast: #8b1748;
-  /* Chart palette stays vivid — these are used for data vis accents */
-  --semantic-chart-1: #ff5f9e;
-  --semantic-chart-2: #ffb56b;
-  --semantic-chart-3: #ffd95a;
-  --semantic-chart-4: #74d0f4;
-  --semantic-chart-5: #ff8ab5;
-  --semantic-chart-6: #ffc2d7;
+  /* Chart palette: pink, peach, sunshine, and sky are distinct accents on white surfaces. */
+  --semantic-chart-1: #e94f82;
+  --semantic-chart-2: #ffb978;
+  --semantic-chart-3: #f8c84f;
+  --semantic-chart-4: #65c4e9;
+  --semantic-chart-5: #f7a9c2;
+  --semantic-chart-6: #ffd9e4;
   --semantic-chart-7: #ff9f73;
   --semantic-chart-8: #ffe27a;
-  --semantic-chart-9: #5cc7ed;
-  --semantic-accent-turquoise: #74d0f4;
+  --semantic-chart-9: #42b7df;
+  --semantic-accent-turquoise: #65c4e9;
   --semantic-accent-seafoam: #b8f0ff;
   --semantic-accent-mint: #ffdce8;
-  --semantic-accent-periwinkle: #74d0f4;
-  --semantic-accent-peach: #ffb56b;
-  --semantic-accent-gold: #ffd95a;
-  --semantic-accent-plum: #d83272;
+  --semantic-accent-periwinkle: #65c4e9;
+  --semantic-accent-peach: #ffb978;
+  --semantic-accent-gold: #f8c84f;
+  --semantic-accent-plum: #c83a6a;
   --semantic-accent-indigo: #0b7db5;
-  --semantic-accent-lavender: #ffc2d7;
-  /* Panel fills: raised from 9–12% to 22–30% for visible spring-tinted cards */
-  --semantic-panel-muted: color-mix(in srgb, #fff2f6 82%, var(--bg-section-alt, var(--bg-card)));
-  --semantic-panel-warm: color-mix(in srgb, #ffb56b 22%, var(--bg-card));
-  --semantic-panel-cool: color-mix(in srgb, #74d0f4 24%, var(--bg-card));
-  --semantic-panel-positive: color-mix(in srgb, #ff5f9e 22%, var(--bg-card));
-  --semantic-panel-aqua: color-mix(in srgb, #74d0f4 26%, var(--bg-card));
-  --semantic-panel-mint: color-mix(in srgb, #ff8ab5 20%, var(--bg-card));
-  --semantic-panel-lavender: color-mix(in srgb, #ffc2d7 24%, var(--bg-card));
-  --semantic-panel-peach: color-mix(in srgb, #ffb56b 24%, var(--bg-card));
-  --semantic-panel-gold: color-mix(in srgb, #ffd95a 28%, var(--bg-card));
-  --semantic-violet: #d83272;
-  --semantic-violet-soft: color-mix(in srgb, #ff8ab5 22%, var(--bg-card));
+  --semantic-accent-lavender: #ffd9e4;
+  --semantic-panel-muted: color-mix(in srgb, #fff8fa 42%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #ffb978 9%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #65c4e9 9%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #e94f82 8%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #65c4e9 10%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #f7a9c2 7%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #ffd9e4 9%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #ffb978 10%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #f8c84f 11%, var(--bg-card));
+  --semantic-violet: #c83a6a;
+  --semantic-violet-soft: color-mix(in srgb, #f7a9c2 8%, var(--bg-card));
   --semantic-violet-contrast: #8b1748;
 }
 

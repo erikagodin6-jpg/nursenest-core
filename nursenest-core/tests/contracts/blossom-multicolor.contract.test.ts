@@ -37,10 +37,10 @@ describe("blossom multicolor clinical spectrum", () => {
       assert.ok(!hues.includes(hex), `chart-${i} duplicates another chart slot: ${hex}`);
       hues.push(hex);
     }
-    assert.equal(hues[0], "#ff5f9e", "chart-1 should use Cherry Blossom pink");
-    assert.equal(hues[1], "#ffb56b", "chart-2 should use warm peach");
-    assert.equal(hues[2], "#ffd95a", "chart-3 should use sunshine yellow");
-    assert.equal(hues[3], "#74d0f4", "chart-4 should use sky blue");
+    assert.equal(hues[0], "#e94f82", "chart-1 should use restrained Cherry Blossom pink");
+    assert.equal(hues[1], "#ffb978", "chart-2 should use warm peach");
+    assert.equal(hues[2], "#f8c84f", "chart-3 should use sunshine yellow");
+    assert.equal(hues[3], "#65c4e9", "chart-4 should use sky blue");
     assert.notEqual(hues[4], hues[0], "chart-5 rose must differ from chart-1 pink");
   });
 

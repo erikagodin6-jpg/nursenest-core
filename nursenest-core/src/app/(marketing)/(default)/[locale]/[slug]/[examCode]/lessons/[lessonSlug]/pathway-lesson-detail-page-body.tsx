@@ -76,7 +76,6 @@ import {
   PREMIUM_LESSON_READING_V2_SHELL_CLASS,
   usesPremiumLessonReadingV2Layout,
 } from "@/lib/lessons/premium-lesson-reading-v2";
-import { LessonStudyPhaseProgress } from "@/components/lessons/lesson-study-phase-progress";
 import { PathwayLessonQuickClinicalSummary } from "@/components/lessons/pathway-lesson-quick-clinical-summary";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { hasRenderableLessonImageUrl } from "@/lib/lessons/has-renderable-lesson-image";
@@ -742,26 +741,24 @@ export async function PathwayLessonDetailPageBody({
             reviewedLabel={reviewedLabel}
             compactHero={usesReadingV2Layout}
             trailing={
-              userId && fullAccess ? (
-                <PathwayLessonProgressBadgeLive
-                  pathwayId={pathway.id}
-                  lessonSlug={lesson.slug}
-                  initial={lessonProgress}
-                  className="shrink-0"
+              <div className="flex flex-col items-end gap-2">
+                {userId && fullAccess ? (
+                  <PathwayLessonProgressBadgeLive
+                    pathwayId={pathway.id}
+                    lessonSlug={lesson.slug}
+                    initial={lessonProgress}
+                    className="shrink-0"
+                  />
+                ) : null}
+                <LessonMeasurementUnitsBar
+                  fallbackSystem={lessonMeasurementSystem}
+                  initialPreference={measurementPreference}
+                  syncToProfile={Boolean(userId)}
                 />
-              ) : null
+              </div>
             }
           />
           <LessonReadingScrollProgress />
-          {!usesReadingV2Layout ? (
-            <div className="mt-2">
-              <LessonStudyPhaseProgress
-                progress={lessonProgress}
-                persisted={Boolean(userId) && fullAccess}
-                compact
-              />
-            </div>
-          ) : null}
           {showLocaleFallbackNotice ? (
             <aside
               className="nn-card mt-4 border-border bg-[var(--theme-muted-surface)] p-3 text-sm text-[var(--theme-body-text)]"
@@ -801,7 +798,7 @@ export async function PathwayLessonDetailPageBody({
             entitlementError ? (
               <>
                 <aside
-                  className="nn-card mt-6 border p-4 text-sm text-[var(--theme-body-text)]"
+                  className="nn-card mt-3 border p-4 text-sm text-[var(--theme-body-text)]"
                   style={{
                     borderColor:
                       "color-mix(in srgb, var(--semantic-warning) 35%, var(--semantic-border-soft))",
@@ -839,16 +836,8 @@ export async function PathwayLessonDetailPageBody({
             )
           ) : null}
 
-          <div className="mt-2 flex justify-end">
-            <LessonMeasurementUnitsBar
-              fallbackSystem={lessonMeasurementSystem}
-              initialPreference={measurementPreference}
-              syncToProfile={Boolean(userId)}
-            />
-          </div>
-
           <div
-            className={`nn-lesson-layout nn-lesson-layout--premium-reading ${usesReadingV2Layout ? "mt-2" : "mt-5"}`}
+            className={`nn-lesson-layout nn-lesson-layout--premium-reading ${usesReadingV2Layout ? "mt-2" : "mt-3"}`}
             data-nn-premium-lessons-reading-layout
           >
             <LessonReadingViewport

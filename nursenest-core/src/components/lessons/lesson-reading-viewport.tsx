@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
-import { ListTree, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
+import { ListTree, X } from "lucide-react";
 import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
 import { LessonCompactProgressRail } from "@/components/lessons/lesson-compact-progress-rail";
 import { LessonClinicalPearlsRail } from "@/components/lessons/lesson-clinical-pearls-rail";
@@ -42,7 +42,6 @@ export function LessonReadingViewport({
 }) {
   const { t } = useMarketingI18n();
   const rnLayout = layout === "rn-v2";
-  const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const safeClinicalPearls = normalizeClinicalPearlLines(clinicalPearls, {
@@ -70,7 +69,6 @@ export function LessonReadingViewport({
       className="nn-lesson-reading-viewport"
       data-nn-lesson-reading-viewport
       data-layout={rnLayout ? "rn-v2" : undefined}
-      data-left-collapsed={leftCollapsed ? "true" : undefined}
       data-right-collapsed={rightCollapsed ? "true" : undefined}
     >
       {rnLayout ? (
@@ -98,35 +96,14 @@ export function LessonReadingViewport({
         aria-label={t("learner.lessons.nav.ariaSectionsNav")}
       >
         <div className="nn-lesson-reading-viewport__left-inner">
-          <button
-            type="button"
-            className="nn-lesson-reading-viewport__collapse"
-            onClick={() => setLeftCollapsed((value) => !value)}
-            aria-expanded={!leftCollapsed}
-            aria-label={
-              leftCollapsed
-                ? t("learner.lessons.nav.expandSections")
-                : t("learner.lessons.nav.collapseSections")
-            }
-          >
-            {leftCollapsed ? (
-              <PanelLeftOpen className="h-4 w-4" aria-hidden />
-            ) : (
-              <PanelLeftClose className="h-4 w-4" aria-hidden />
-            )}
-          </button>
           <LessonSectionNav
             layout="rail"
-            collapsed={leftCollapsed}
             sections={sections}
             progress={progress}
             progressVisible={progressVisible}
           />
           {safeClinicalPearls.length > 0 ? (
-            <LessonClinicalPearlsRail
-              pearls={safeClinicalPearls}
-              collapsed={leftCollapsed}
-            />
+            <LessonClinicalPearlsRail pearls={safeClinicalPearls} />
           ) : null}
         </div>
       </aside>
