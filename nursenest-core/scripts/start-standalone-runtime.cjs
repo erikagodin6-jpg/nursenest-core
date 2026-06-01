@@ -2,6 +2,7 @@ const path = require("node:path");
 const http = require("node:http");
 const https = require("node:https");
 const { monitorEventLoopDelay } = require("node:perf_hooks");
+const { createOriginBlackBoxRecorder } = require("./origin-black-box-recorder.cjs");
 
 const entry = typeof process.argv[2] === "string" ? path.resolve(process.argv[2]) : "";
 
@@ -54,9 +55,20 @@ function installActiveRequestTelemetry() {
 }
 
 function startRuntimeResourceTelemetry() {
-  if (/^(0|false|off|no)$/i.test(String(process.env.NN_RUNTIME_RESOURCE_TELEMETRY || "").trim())) return;
-
   const requestState = installActiveRequestTelemetry();
+  const runtimeState = {
+    readinessState: "child_runtime_booting",
+    watchdogState: "preload_not_loaded",
+    childProcessState: "running",
+  };
+  const blackBox = createOriginBlackBoxRecorder({
+    component: "child-next-runtime",
+    requestState,
+    getState: () => runtimeState,
+  });
+  const emitRuntimeResourceTelemetry = !/^(0|false|off|no)$/i.test(
+    String(process.env.NN_RUNTIME_RESOURCE_TELEMETRY || "").trim(),
+  );
   const intervalMs = Math.max(5_000, Number(process.env.NN_RUNTIME_RESOURCE_TELEMETRY_INTERVAL_MS || "15000"));
   const histogram = monitorEventLoopDelay({ resolution: 20 });
   histogram.enable();
@@ -66,31 +78,35 @@ function startRuntimeResourceTelemetry() {
     const cpu = process.cpuUsage();
     const toMb = (bytes) => Math.round(bytes / 1024 / 1024);
     const toMs = (nanos) => Math.round(nanos / 1_000_000);
-    console.error(
-      `[nursenest-core] runtime_resource ${event} ${JSON.stringify({
-        pid: process.pid,
-        rssMb: toMb(memory.rss),
-        heapUsedMb: toMb(memory.heapUsed),
-        heapTotalMb: toMb(memory.heapTotal),
-        externalMb: toMb(memory.external),
-        arrayBuffersMb: toMb(memory.arrayBuffers),
-        cpuUserMs: Math.round(cpu.user / 1000),
-        cpuSystemMs: Math.round(cpu.system / 1000),
-        eventLoopLagMeanMs: toMs(histogram.mean),
-        eventLoopLagP95Ms: toMs(histogram.percentile(95)),
-        eventLoopLagMaxMs: toMs(histogram.max),
-        activeRequests: requestState.activeRequests,
-        totalRequests: requestState.totalRequests,
-        maxActiveRequests: requestState.maxActiveRequests,
-        ...extra,
-      })}`,
-    );
+    if (emitRuntimeResourceTelemetry) {
+      console.error(
+        `[nursenest-core] runtime_resource ${event} ${JSON.stringify({
+          pid: process.pid,
+          rssMb: toMb(memory.rss),
+          heapUsedMb: toMb(memory.heapUsed),
+          heapTotalMb: toMb(memory.heapTotal),
+          externalMb: toMb(memory.external),
+          arrayBuffersMb: toMb(memory.arrayBuffers),
+          cpuUserMs: Math.round(cpu.user / 1000),
+          cpuSystemMs: Math.round(cpu.system / 1000),
+          eventLoopLagMeanMs: toMs(histogram.mean),
+          eventLoopLagP95Ms: toMs(histogram.percentile(95)),
+          eventLoopLagMaxMs: toMs(histogram.max),
+          activeRequests: requestState.activeRequests,
+          totalRequests: requestState.totalRequests,
+          maxActiveRequests: requestState.maxActiveRequests,
+          ...extra,
+        })}`,
+      );
+    }
     histogram.reset();
   };
 
   logSnapshot("startup");
-  const timer = setInterval(() => logSnapshot("sample"), intervalMs);
-  timer.unref();
+  if (emitRuntimeResourceTelemetry) {
+    const timer = setInterval(() => logSnapshot("sample"), intervalMs);
+    timer.unref();
+  }
 
   process.once("beforeExit", (code) => logSnapshot("before_exit", { code }));
   process.once("exit", (code) => {
@@ -103,23 +119,53 @@ function startRuntimeResourceTelemetry() {
   for (const signal of ["SIGTERM", "SIGINT", "SIGHUP"]) {
     process.once(signal, () => {
       logSnapshot("signal", { signal });
+      runtimeState.childProcessState = "signal_received";
+      blackBox.record("shutdown_signal", { signal });
       process.kill(process.pid, signal);
     });
   }
+
+  return {
+    markPreloadInstalled() {
+      runtimeState.watchdogState = "preload_installed";
+      blackBox.record("child_preload_installed");
+    },
+    markEntryLoaded() {
+      runtimeState.readinessState = "child_entry_loaded";
+      blackBox.record("child_entry_loaded");
+    },
+    markEntryLoadFailed(error) {
+      runtimeState.readinessState = "child_entry_load_failed";
+      runtimeState.childProcessState = "failing";
+      blackBox.record("child_entry_load_failed", {
+        error: error instanceof Error ? error.message : String(error),
+        code: error?.code,
+      });
+    },
+  };
 }
 
-startRuntimeResourceTelemetry();
+const runtimeTelemetry = startRuntimeResourceTelemetry();
 
 require("./standalone-startup-watchdog-preload.cjs");
+runtimeTelemetry?.markPreloadInstalled();
 
 try {
   require(entry);
+  runtimeTelemetry?.markEntryLoaded();
 } catch (err) {
   // Next.js 16+ standalone `server.js` is ESM (`import …`); `require()` throws ERR_REQUIRE_ESM.
-  if (!err || err.code !== "ERR_REQUIRE_ESM") throw err;
+  if (!err || err.code !== "ERR_REQUIRE_ESM") {
+    runtimeTelemetry?.markEntryLoadFailed(err);
+    throw err;
+  }
   const { pathToFileURL } = require("node:url");
-  void import(pathToFileURL(entry).href).catch((e) => {
-    console.error(e);
-    process.exit(1);
-  });
+  void import(pathToFileURL(entry).href).then(
+    () => runtimeTelemetry?.markEntryLoaded(),
+    (e) => {
+      runtimeTelemetry?.markEntryLoadFailed(e);
+      console.error(e);
+      process.exit(1);
+    },
+  );
 }

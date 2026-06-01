@@ -186,10 +186,20 @@ export function serializeFlashcardForCustomSession(
     pathwayId: string | null;
     /** Per-request salt so option positions vary each session while staying reproducible with a fixed salt. */
     examOptionShuffleSalt?: string | null;
+    /** Custom sessions may study legacy/incomplete exam-backed rows as plain front/back flashcards. */
+    allowInvalidExamBackedAsPlain?: boolean;
   },
 ): Omit<FlashcardStudyApiCard, "fullBackAvailable"> & { rawTopic: string } {
-  const { payload: exam, source: optionSource } = resolveExamPayload(card, opts.examOptionShuffleSalt);
-  assertValidExamBackedPayload(card, exam);
+  const { payload: resolvedExam, source: resolvedOptionSource } = resolveExamPayload(card, opts.examOptionShuffleSalt);
+  let exam = resolvedExam;
+  let optionSource = resolvedOptionSource;
+  try {
+    assertValidExamBackedPayload(card, exam);
+  } catch (err) {
+    if (!opts.allowInvalidExamBackedAsPlain) throw err;
+    exam = null;
+    optionSource = null;
+  }
   const isMcq = exam && "correctLetter" in exam;
   let front = opts.swapFrontBack ? card.back : card.front;
   let back = opts.swapFrontBack ? card.front : card.back;

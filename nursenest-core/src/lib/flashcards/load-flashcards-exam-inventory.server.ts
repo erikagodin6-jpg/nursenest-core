@@ -190,7 +190,7 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
   const txResult = await prisma.$transaction(
     async (tx) => {
       // Bound aggregate queries so a single slow exam_questions scan doesn't wedge learner study surfaces.
-      await tx.$executeRaw(Prisma.sql`SET LOCAL statement_timeout = ${statementTimeoutMs}`);
+      await tx.$executeRawUnsafe(`SET LOCAL statement_timeout = ${statementTimeoutMs}`);
 
       let selectedTotalRow: [{ n: bigint }] = [{ n: BigInt(0) }];
       let selectedGroupRows: GroupRow[] = [];
@@ -231,31 +231,11 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
         });
       }
 
-      const [dedicatedFlashcardCount, legacyCanonicalPrismaPoolCount] =
-        await Promise.all([
-          tx.flashcard.count({
-            where: {
-              status: ContentStatus.PUBLISHED,
-              AND: [
-                flashcardAccessWhere(poolScope, pathwayOpts),
-                { deck: { pathwayId: pathway.id } },
-              ],
-            },
-          }),
-          legacyWhereForPrisma
-            ? tx.examQuestion
-                .count({ where: legacyWhereForPrisma })
-                .catch(() => null)
-            : Promise.resolve(null),
-        ]);
-
       return {
         totalRow: selectedTotalRow,
         groupRows: selectedGroupRows,
         selectedPoolScope,
         regionalFallbackUsed,
-        dedicatedFlashcardCount,
-        legacyCanonicalPrismaPoolCount,
       };
     },
     {
@@ -268,9 +248,39 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
 
   const total = bn(txResult.totalRow[0]?.n);
   const groupRows = txResult.groupRows;
-  const dedicatedFlashcardCount = txResult.dedicatedFlashcardCount;
-
-  const legacyCanonicalPrismaPoolCount = txResult.legacyCanonicalPrismaPoolCount;
+  const loadDiagnosticCounts = process.env.FLASHCARD_INVENTORY_DIAGNOSTIC_COUNTS === "1";
+  const [dedicatedFlashcardCount, legacyCanonicalPrismaPoolCount] = loadDiagnosticCounts
+    ? await Promise.all([
+        prisma.flashcard
+          .count({
+            where: {
+              status: ContentStatus.PUBLISHED,
+              AND: [
+                flashcardAccessWhere(poolScope, pathwayOpts),
+                { deck: { pathwayId: pathway.id } },
+              ],
+            },
+          })
+          .catch((error) => {
+            safeServerLog("flashcards", "exam_inventory_dedicated_flashcard_count_failed", {
+              pathwayId: pathway.id,
+              error: error instanceof Error ? error.message.slice(0, 240) : "unknown",
+            });
+            return 0;
+          }),
+        legacyWhereForPrisma
+          ? prisma.examQuestion
+              .count({ where: legacyWhereForPrisma })
+              .catch((error) => {
+                safeServerLog("flashcards", "exam_inventory_legacy_prisma_count_failed", {
+                  pathwayId: pathway.id,
+                  error: error instanceof Error ? error.message.slice(0, 240) : "unknown",
+                });
+                return null;
+              })
+          : Promise.resolve(null),
+      ])
+    : [0, null];
   const legacyCanonicalPrismaCountMs = 0;
 
   const groups = groupRows.map((g) => ({

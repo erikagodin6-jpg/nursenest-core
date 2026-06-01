@@ -51,6 +51,7 @@ import {
   type AdaptiveProgressLite,
 } from "@/lib/flashcards/study-queue";
 import { loadPublishedPathwayLessonsForStudyFromDb } from "@/lib/learner-study-hub/load-published-pathway-lessons-for-study-from-db";
+import { pathwayHubCategoryToCanonical } from "@/lib/learner-study-hub/body-system-data";
 
 export type CustomSessionStudyMode = "term_to_definition" | "definition_to_term" | "mixed";
 
@@ -109,9 +110,10 @@ const FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT = 800;
 const FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT = 800;
 const FLASHCARD_CUSTOM_SESSION_RETURN_LIMIT = 80;
 
-function serializedHasUsableMcq(card: CustomSessionSerializedCard): boolean {
+function serializedIsStudyReady(card: CustomSessionSerializedCard): boolean {
+  if (card.front.trim().length < 2 || card.back.trim().length < 2) return false;
   const exam = card.examMicroQuestion;
-  if (!exam || isSataPayload(exam)) return false;
+  if (!exam || isSataPayload(exam)) return true;
   return Boolean(
     typeof exam.questionStem === "string" &&
       exam.questionStem.trim().length >= 10 &&
@@ -158,6 +160,45 @@ function describeCustomSessionFilterMode(flags: {
   if (flags.notesOnly) parts.push("notes");
   if (flags.revisitOnly) parts.push("revisit");
   return parts.length > 0 ? parts.join(" + ") : "all cards";
+}
+
+export function canonicalForBuilderCategory(
+  pathwayId: string | null | undefined,
+  categoryId: string,
+): string {
+  return pathwayHubCategoryToCanonical(
+    pathwayId ?? undefined,
+    categoryId,
+    builderCategoryTitleForId(pathwayId, categoryId),
+  );
+}
+
+export function selectedCategoryMatchesBuilderCategory(
+  pathwayId: string | null | undefined,
+  selectedCategoryIds: ReadonlySet<string>,
+  selectedCanonicalIds: ReadonlySet<string>,
+  builderCategoryId: string,
+): boolean {
+  if (selectedCategoryIds.has(builderCategoryId)) return true;
+  return selectedCanonicalIds.has(canonicalForBuilderCategory(pathwayId, builderCategoryId));
+}
+
+export function selectedCategoryCountSum(
+  pathwayId: string | null | undefined,
+  counts: Record<string, number>,
+  selectedCategoryIds: readonly string[],
+): number {
+  if (selectedCategoryIds.length === 0) return 0;
+  const selectedRaw = new Set(selectedCategoryIds);
+  const selectedCanonical = new Set(selectedCategoryIds.map((id) => canonicalForBuilderCategory(pathwayId, id)));
+  let total = 0;
+  for (const [categoryId, count] of Object.entries(counts)) {
+    if (!Number.isFinite(count) || count <= 0) continue;
+    if (selectedCategoryMatchesBuilderCategory(pathwayId, selectedRaw, selectedCanonical, categoryId)) {
+      total += count;
+    }
+  }
+  return total;
 }
 
 /**
@@ -298,10 +339,7 @@ export async function buildFlashcardCustomSession(
             }),
           };
           const examTotal = inv.total + lessonVirtualTotal;
-          const selectedCategorySum = selectedCategories.reduce(
-            (s, id) => s + (mergedCounts[id] ?? 0),
-            0,
-          );
+          const selectedCategorySum = selectedCategoryCountSum(pathwayScopeId, mergedCounts, selectedCategories);
           const matchingCardsForSummary =
             selectedCategories.length === 0
               ? examTotal
@@ -622,7 +660,17 @@ export async function buildFlashcardCustomSession(
     }
     if (selectedCategories.length > 0) {
       const selected = new Set(selectedCategories);
-      scoped = scoped.filter((c) => selected.has(c.builderCategoryId));
+      const selectedCanonical = new Set(
+        selectedCategories.map((id) => canonicalForBuilderCategory(pathwayScopeId ?? pathwayId, id)),
+      );
+      scoped = scoped.filter((c) =>
+        selectedCategoryMatchesBuilderCategory(
+          pathwayScopeId ?? pathwayId,
+          selected,
+          selectedCanonical,
+          c.builderCategoryId,
+        ),
+      );
     }
 
     const needsProgress = weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
@@ -745,7 +793,11 @@ export async function buildFlashcardCustomSession(
 
     const useEffectiveTotalForSummary = useExamForInventory && examTotal > 0;
 
-    const selectedCategorySum = selectedCategories.reduce((s, id) => s + (examInventoryCounts[id] ?? 0), 0);
+    const selectedCategorySum = selectedCategoryCountSum(
+      pathwayScopeId ?? pathwayId,
+      examInventoryCounts,
+      selectedCategories,
+    );
     const matchingCardsForSummary = includeCards
       ? scoped.length
       : useEffectiveTotalForSummary
@@ -764,7 +816,10 @@ export async function buildFlashcardCustomSession(
       ? orderFlashcardsForAdaptiveSession(scoped, progressByScopedId, new Date(), orderingSeed)
       : scoped;
     const boundedOffset = Math.max(0, Math.floor(offset));
-    const limited = selectedRows.slice(boundedOffset, boundedOffset + limit);
+    const serializationScanLimit = includeCards
+      ? Math.min(selectedRows.length, boundedOffset + Math.max(limit * 8, limit + 80))
+      : boundedOffset + limit;
+    const limited = selectedRows.slice(boundedOffset, serializationScanLimit);
 
     const cardsForSession: CustomSessionSerializedCard[] = [];
     if (includeCards) {
@@ -791,6 +846,7 @@ export async function buildFlashcardCustomSession(
             topic,
             pathwayId: card.deck?.pathwayId ?? pathwayScopeId,
             examOptionShuffleSalt: sessionShuffleSalt,
+            allowInvalidExamBackedAsPlain: true,
           });
           const serialized = lessonMeta
             ? {
@@ -800,9 +856,9 @@ export async function buildFlashcardCustomSession(
                 lessonSlug: lessonMeta.slug,
               }
             : base;
-          if (serializedHasUsableMcq(serialized)) cardsForSession.push(serialized);
+          if (serializedIsStudyReady(serialized)) cardsForSession.push(serialized);
         } catch {
-          // Invalid legacy/passive flashcards are skipped; study mode is MCQ-only.
+          // Invalid legacy/passive flashcards are skipped when they cannot render as front/back study cards.
           continue;
         }
       }

@@ -16,6 +16,9 @@ const require = createRequire(import.meta.url);
 const {
   createStartupWatchdogLogger,
 } = require("./standalone-startup-watchdog-shared.cjs");
+const {
+  createOriginBlackBoxRecorder,
+} = require("./origin-black-box-recorder.cjs");
 
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const logger = createStartupWatchdogLogger();
@@ -149,6 +152,24 @@ function proxyToChild(req, res, internalPort) {
 
 function createBootstrapServer(state) {
   return http.createServer((req, res) => {
+    if (state.requestState) {
+      state.requestState.activeRequests += 1;
+      state.requestState.totalRequests += 1;
+      state.requestState.maxActiveRequests = Math.max(
+        state.requestState.maxActiveRequests,
+        state.requestState.activeRequests,
+      );
+      let completed = false;
+      const complete = () => {
+        if (completed) return;
+        completed = true;
+        state.requestState.activeRequests = Math.max(0, state.requestState.activeRequests - 1);
+      };
+      res.once("finish", complete);
+      res.once("close", complete);
+      res.once("error", complete);
+    }
+
     const method = (req.method || "GET").toUpperCase();
     let pathname = "/";
     try {
@@ -170,6 +191,12 @@ function createBootstrapServer(state) {
           handlersReady: false,
           source: "bootstrap_parent",
         });
+        state.blackBox?.record("route_readiness_check", {
+          route: "/healthz",
+          status: 200,
+          handlersReady: false,
+          watchdogState: "not_ready",
+        });
         res.statusCode = 200;
         res.setHeader("content-type", "text/plain; charset=utf-8");
         res.setHeader("cache-control", "no-store");
@@ -183,6 +210,12 @@ function createBootstrapServer(state) {
           status: 503,
           handlersReady: false,
           source: "bootstrap_parent",
+        });
+        state.blackBox?.record("route_readiness_check", {
+          route: "/readyz",
+          status: 503,
+          handlersReady: false,
+          watchdogState: "not_ready",
         });
         res.statusCode = 503;
         res.setHeader("content-type", "text/plain; charset=utf-8");
@@ -208,6 +241,16 @@ function markHandlersReady(state, reason, meta = {}) {
     reason,
     childPid: state.child?.pid,
     internalPort: state.internalPort,
+    ...meta,
+  });
+  state.blackBox?.record("handlers_ready_transition", {
+    previous,
+    next: true,
+    reason,
+    childPid: state.child?.pid,
+    internalPort: state.internalPort,
+    readinessState: "ready",
+    watchdogState: "ready",
     ...meta,
   });
 }
@@ -336,7 +379,31 @@ async function main() {
     childExited: false,
     childExitCode: null,
     childExitSignal: null,
+    requestState: {
+      activeRequests: 0,
+      totalRequests: 0,
+      maxActiveRequests: 0,
+    },
+    blackBox: null,
   };
+  state.blackBox = createOriginBlackBoxRecorder({
+    component: "parent-bootstrap",
+    requestState: state.requestState,
+    getState: () => ({
+      readinessState: state.handlersReady ? "ready" : "not_ready",
+      watchdogState: state.readinessWatchdogBypass
+        ? "bypass"
+        : state.handlersReady
+          ? "ready"
+          : "probing",
+      childProcessState: state.childExited ? "exited" : state.child ? "running" : "not_spawned",
+      childPid: state.child?.pid ?? null,
+      childExited: state.childExited,
+      childExitCode: state.childExitCode,
+      childExitSignal: state.childExitSignal,
+      internalPort: state.internalPort,
+    }),
+  });
   logger.emit("watchdog_state_initialized", {
     mode: state.mode,
     handlersReady: state.handlersReady,
@@ -394,17 +461,25 @@ async function main() {
     state.childExitCode = code;
     state.childExitSignal = signal;
     logger.emit("watchdog_child_process_exit", { code, signal, childPid: child.pid });
+    state.blackBox?.record("child_process_exit", { code, signal, childPid: child.pid });
     if (signal) process.exit(exitCodeFromSignal(signal));
     process.exit(code ?? 1);
   });
 
   child.on("error", (error) => {
     logger.emit("watchdog_child_process_error", { error: error.message, childPid: child.pid });
+    state.blackBox?.record("child_process_error", { error: error.message, childPid: child.pid });
     process.exit(1);
   });
 
-  process.on("SIGTERM", () => child.kill("SIGTERM"));
-  process.on("SIGINT", () => child.kill("SIGINT"));
+  process.on("SIGTERM", () => {
+    state.blackBox?.record("parent_signal", { signal: "SIGTERM" });
+    child.kill("SIGTERM");
+  });
+  process.on("SIGINT", () => {
+    state.blackBox?.record("parent_signal", { signal: "SIGINT" });
+    child.kill("SIGINT");
+  });
 
   setTimeout(() => {
     void waitForChildReadiness(state);
