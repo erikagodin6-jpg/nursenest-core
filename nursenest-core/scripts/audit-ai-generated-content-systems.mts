@@ -28,6 +28,8 @@ if (!databaseUrl) {
   throw new Error("DATABASE_URL is required.");
 }
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 const pool = new Pool({
   connectionString: databaseUrl,
   ssl: { rejectUnauthorized: false },
@@ -678,4 +680,3 @@ main()
   .finally(async () => {
     await pool.end();
   });
-

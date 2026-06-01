@@ -26,6 +26,8 @@ const I18N_DIR = ENV_I18N_DIR ? path.resolve(ENV_I18N_DIR) : path.join(process.c
 
 /** Cached existence check so repeated lookups avoid touching the filesystem. */
 let _resolvedI18nDir: string | null | undefined = undefined;
+const shardCache = new Map<string, Record<string, string>>();
+const mergedShardCache = new Map<string, MarketingMessages>();
 
 function resolveI18nDir(): string | null {
   if (_resolvedI18nDir !== undefined) return _resolvedI18nDir;
@@ -59,14 +61,22 @@ function readShard(
   locale: string,
   shard: I18nShardFilename
 ): Record<string, string> {
+  const cacheKey = `${baseDir}:${locale}:${shard}`;
+  const cached = shardCache.get(cacheKey);
+  if (cached) return cached;
+
   try {
     const file = path.join(baseDir, locale, `${shard}.json`);
     const parsed = JSON.parse(readFileSync(file, "utf8"));
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+    const data = parsed && typeof parsed === "object" && !Array.isArray(parsed)
       ? (parsed as Record<string, string>)
       : {};
+    shardCache.set(cacheKey, data);
+    return data;
   } catch {
-    return {};
+    const empty: Record<string, string> = {};
+    shardCache.set(cacheKey, empty);
+    return empty;
   }
 }
 
@@ -78,11 +88,16 @@ function mergeShards(
   locale: string,
   shards: readonly I18nShardFilename[]
 ): MarketingMessages {
+  const cacheKey = `${baseDir}:${locale}:${shards.join("|")}`;
+  const cached = mergedShardCache.get(cacheKey);
+  if (cached) return cached;
+
   const result: MarketingMessages = {};
   for (const shard of shards) {
     const data = readShard(baseDir, locale, shard);
     Object.assign(result, data);
   }
+  mergedShardCache.set(cacheKey, result);
   return result;
 }
 

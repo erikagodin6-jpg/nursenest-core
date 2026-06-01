@@ -62,18 +62,10 @@ import { isAdaptiveLearningEnabled } from "@/lib/learner/adaptive-learning-env";
 import { loadLearnerAdaptiveWireBundle } from "@/lib/learner/build-learner-adaptive-wire-bundle";
 import { emitLearnerDashboardGraphTelemetry } from "@/lib/educational-cognition/emit-learner-dashboard-graph-telemetry";
 import { LearnerAdaptiveRecommendationsSection } from "@/components/student/learner-adaptive-recommendations-section";
-import dynamic from "next/dynamic";
-
-const SocialStudyDashboardCard = dynamic(
-  () =>
-    import("@/components/student/social-study-dashboard-card").then((m) => ({
-      default: m.SocialStudyDashboardCard,
-    })),
-  { ssr: false },
-);
 import { NpCertificationSelector } from "@/components/np/np-certification-selector";
 import { listNpCertificationPathways } from "@/lib/np/np-certification-pathways";
 import { resolveNpCertificationPathwayId } from "@/lib/np/np-certification-selection";
+import { SocialStudyDashboardCardClient } from "./_components/social-study-dashboard-card-client";
 
 type DashboardSessionLike = {
   user?: {
@@ -422,7 +414,7 @@ async function LearnerDashboardHeavyContent({
             }
           />
           <section className="nn-dash-band">
-            <SocialStudyDashboardCard
+            <SocialStudyDashboardCardClient
               initialCode={socialInviteCode?.enabled ? socialInviteCode.displayCode : null}
               socialEnabled={socialPrivacy?.socialEnabled ?? false}
               statsHidden={socialPrivacy?.statsHidden ?? true}

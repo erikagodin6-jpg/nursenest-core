@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "6786e5ded611507121e6f62d0f870c6405aef99392d9e3f73596e7f5bd456338",
-  "generatedAt": "2026-06-01T01:53:59.608Z",
+  "fingerprint": "ae56c3d6357974203cff2fb48aaf5f4e6915b2b37b0af73623b3a6563f3b9332",
+  "generatedAt": "2026-06-01T18:25:53.672Z",
   "inputs": [
     {
       "type": "file",
@@ -522,6 +522,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/_components/social-study-dashboard-card-client.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/(study-tools)/fill-in-the-blank/page.tsx"
     },
     {
@@ -591,6 +595,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/academic-success-toolkit/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/_lib/learner-report-card-premium-client.tsx"
     },
     {
       "type": "file",
@@ -783,6 +791,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/cases/cnple/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/cat/loading.tsx"
     },
     {
       "type": "file",
@@ -1078,6 +1090,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/pharmacology/layout.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/pharmacology/page.tsx"
     },
     {
@@ -1122,6 +1138,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-tests/cat-launch/loading.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/practice-tests/cat-launch/page.tsx"
     },
     {
@@ -1151,6 +1171,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/printables/printables-learner-hub.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/prioritization-delegation/layout.tsx"
     },
     {
       "type": "file",
@@ -1267,6 +1291,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/study-coach/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/study-plan/loading.tsx"
     },
     {
       "type": "file",
@@ -6182,6 +6210,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/load-lesson-detail-user-context.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/load-lesson-study-loop-bank-pack.ts"
     },
     {
@@ -7997,6 +8029,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 21858
+    "durationMs": 22569
   }
 }

@@ -67,7 +67,7 @@ async function buildSmartStudyNextRecommendationsUncached(
   snapshot: LearnerStudySnapshot,
   opts?: {
     maxTotal?: number;
-    afterActivity?: “lesson” | “quiz” | “flashcards” | “practice_test” | “blog”;
+    afterActivity?: "lesson" | "quiz" | "flashcards" | "practice_test" | "blog";
     suppressHrefs?: string[];
   },
 ): Promise<StudyNextRecommendation[]> {
@@ -96,7 +96,7 @@ async function buildSmartStudyNextRecommendationsUncached(
 }
 
 /**
- * Smart “Study next” list — 15-minute cached.
+ * Smart "Study next" list - 15-minute cached.
  *
  * Recommendations are derived from the study snapshot (which is itself cached)
  * and a suppression list. Caching here removes a DB round-trip and the
@@ -105,14 +105,14 @@ async function buildSmartStudyNextRecommendationsUncached(
  * Bypass: when `afterActivity` is set (post-answer context) we skip the cache
  * so the learner gets fresh recs after completing an activity.
  *
- * Invalidated by `invalidateLearnerPrivateReadCache(userId, [“study-plan-summary”])`.
+ * Invalidated by `invalidateLearnerPrivateReadCache(userId, ["study-plan-summary"])`.
  */
 export async function buildSmartStudyNextRecommendations(
   userId: string,
   snapshot: LearnerStudySnapshot,
   opts?: {
     maxTotal?: number;
-    afterActivity?: “lesson” | “quiz” | “flashcards” | “practice_test” | “blog”;
+    afterActivity?: "lesson" | "quiz" | "flashcards" | "practice_test" | "blog";
     suppressHrefs?: string[];
   },
 ): Promise<StudyNextRecommendation[]> {
@@ -121,7 +121,7 @@ export async function buildSmartStudyNextRecommendations(
 
   return loadWithLearnerPrivateReadCache(
     {
-      surface: “study-plan-summary”,
+      surface: "study-plan-summary",
       userId,
       ttlSeconds: DASHBOARD_ANALYTICS_TTL_SECONDS,
       keyParts: [opts?.maxTotal ?? 3, snapshot.weakTopics.slice(0, 3).map((w) => w.topic)],

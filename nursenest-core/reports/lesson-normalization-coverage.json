@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-31T22:04:11.373Z",
+  "generatedAt": "2026-06-01T18:11:27.903Z",
   "pathways": [
     {
       "pathwayId": "ca-allied-core",
@@ -645,11 +645,11 @@
       "pathwayId": "us-lpn-nclex-pn",
       "publicLessonsPath": null,
       "publicUrlPattern": "/us/pn/nclex-pn/lessons/{lessonSlug}",
-      "rawCount": 150,
-      "normalizedCount": 150,
-      "renderableCount": 86,
+      "rawCount": 153,
+      "normalizedCount": 153,
+      "renderableCount": 89,
       "excludedCount": 64,
-      "rawToRenderableRatio": "86/150 (57%)",
+      "rawToRenderableRatio": "89/153 (58%)",
       "unexpectedExclusionRate": 0,
       "passesExclusionQualityGate": true,
       "topExclusionReasons": [

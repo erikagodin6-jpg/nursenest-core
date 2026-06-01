@@ -1,0 +1,183 @@
+{
+  "generatedAt": "2026-06-01T18:07:04.013542+00:00",
+  "dataSource": "static-audit (no live DB \u2014 values from question-inventory-us-rn-nclex-rn.json + certification-readiness-dashboard.json)",
+  "launchReady": false,
+  "passCount": 5,
+  "totalGates": 19,
+  "criticalFails": 8,
+  "verdict": "NOT_READY",
+  "gates": [
+    {
+      "gate": "total_questions",
+      "label": "Total published questions",
+      "actual": 12838,
+      "min": 10000,
+      "target": 20000,
+      "pass": true,
+      "critical": true
+    },
+    {
+      "gate": "cat_pool",
+      "label": "CAT-eligible questions",
+      "actual": 11660,
+      "min": 3000,
+      "target": 5000,
+      "pass": true,
+      "critical": true
+    },
+    {
+      "gate": "flashcards",
+      "label": "Flashcards (published)",
+      "actual": 0,
+      "min": 15000,
+      "target": 25000,
+      "pass": false,
+      "critical": true
+    },
+    {
+      "gate": "practice_exams",
+      "label": "Practice exam sets",
+      "actual": 0,
+      "min": 100,
+      "target": 500,
+      "pass": false,
+      "critical": true
+    },
+    {
+      "gate": "missing_rationale",
+      "label": "Questions missing rationale (= 0)",
+      "actual": 638,
+      "min": 0,
+      "target": 0,
+      "pass": false,
+      "critical": true
+    },
+    {
+      "gate": "invalid_bowtie",
+      "label": "Invalid bowtie payloads (= 0)",
+      "actual": 392,
+      "min": 0,
+      "target": 0,
+      "pass": false,
+      "critical": true
+    },
+    {
+      "gate": "missing_options",
+      "label": "Questions missing options (= 0)",
+      "actual": 97,
+      "min": 0,
+      "target": 0,
+      "pass": false,
+      "critical": true
+    },
+    {
+      "gate": "format_tagged_pct",
+      "label": "questionFormat tagged (\u2265 90%)",
+      "actual": 0,
+      "min": 90,
+      "target": 100,
+      "pass": false,
+      "critical": true
+    },
+    {
+      "gate": "fmt_mcq",
+      "label": "MCQ questions (\u2265 3,500)",
+      "actual": 0,
+      "min": 3500,
+      "target": 7000,
+      "pass": false,
+      "critical": false
+    },
+    {
+      "gate": "fmt_sata",
+      "label": "SATA questions (\u2265 1,500)",
+      "actual": 0,
+      "min": 1500,
+      "target": 3000,
+      "pass": false,
+      "critical": true
+    },
+    {
+      "gate": "fmt_bowtie",
+      "label": "Bowtie questions (\u2265 1,000)",
+      "actual": 392,
+      "min": 1000,
+      "target": 2000,
+      "pass": false,
+      "critical": true
+    },
+    {
+      "gate": "fmt_matrix",
+      "label": "Matrix questions (\u2265 1,000)",
+      "actual": 0,
+      "min": 1000,
+      "target": 2000,
+      "pass": false,
+      "critical": false
+    },
+    {
+      "gate": "fmt_ordering",
+      "label": "Ordering/prioritization (\u2265 150)",
+      "actual": 0,
+      "min": 150,
+      "target": 500,
+      "pass": false,
+      "critical": false
+    },
+    {
+      "gate": "fmt_hotspot",
+      "label": "Hotspot questions (\u2265 100)",
+      "actual": 0,
+      "min": 100,
+      "target": 500,
+      "pass": false,
+      "critical": false
+    },
+    {
+      "gate": "diff_l1",
+      "label": "L1 Easy (\u2265 3%)",
+      "actual": 0.3,
+      "min": 3,
+      "target": 10,
+      "pass": false,
+      "critical": false
+    },
+    {
+      "gate": "diff_l2",
+      "label": "L2 Moderate-Easy (\u2265 10%)",
+      "actual": 11.9,
+      "min": 10,
+      "target": 20,
+      "pass": true,
+      "critical": false
+    },
+    {
+      "gate": "diff_l4",
+      "label": "L4 Hard (\u2265 15%)",
+      "actual": 23.4,
+      "min": 15,
+      "target": 25,
+      "pass": true,
+      "critical": false
+    },
+    {
+      "gate": "diff_l5",
+      "label": "L5 Very Hard (\u2265 3%)",
+      "actual": 0.4,
+      "min": 3,
+      "target": 5,
+      "pass": false,
+      "critical": false
+    },
+    {
+      "gate": "lessons",
+      "label": "Production-ready lessons (\u2265 100)",
+      "actual": 132,
+      "min": 100,
+      "target": 500,
+      "pass": true,
+      "critical": false
+    }
+  ],
+  "note": "Run sprint-6-launch-certification.mts with a live DATABASE_URL for authoritative results after sprint completion."
+}

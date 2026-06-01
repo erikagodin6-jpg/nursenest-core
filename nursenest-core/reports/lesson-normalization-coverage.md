@@ -1,6 +1,6 @@
 # Lesson Normalization Coverage
 
-Generated at: 2026-05-31T22:04:11.373Z
+Generated at: 2026-06-01T18:11:27.903Z
 
 ## Pathway Coverage
 
@@ -178,11 +178,11 @@ Exclusions:
 
 ### `us-lpn-nclex-pn`
 
-- Raw lessons: 150
-- Normalized lessons: 150
-- Renderable lessons: 86
+- Raw lessons: 153
+- Normalized lessons: 153
+- Renderable lessons: 89
 - Excluded lessons: 64
-- Raw to renderable ratio: 86/150 (57%)
+- Raw to renderable ratio: 89/153 (58%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /us/pn/nclex-pn/lessons/{lessonSlug}

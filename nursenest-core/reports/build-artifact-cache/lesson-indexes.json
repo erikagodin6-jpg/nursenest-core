@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "lesson_indexes",
-  "fingerprint": "6dc47bb36a0f18b1dba3f9dd2c78bf68db6777c5470f5b6312c282eec51d08a5",
-  "generatedAt": "2026-05-31T22:05:36.935Z",
+  "fingerprint": "f3314b6ab286b8d249444188e68583688c84b54eaaf6a733b12914523e1ea90c",
+  "generatedAt": "2026-06-01T18:12:59.358Z",
   "inputs": [
     {
       "type": "file",
@@ -899,6 +899,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/lessons-route-import-guard.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/load-lesson-detail-user-context.ts"
     },
     {
       "type": "file",
@@ -1835,7 +1839,7 @@
   ],
   "metadata": {
     "verifyMode": "deep",
-    "buildLessonIndexesMs": 75728,
-    "verifyLessonIndexesMs": 85386
+    "buildLessonIndexesMs": 94423,
+    "verifyLessonIndexesMs": 91268
   }
 }

@@ -88,9 +88,7 @@ function sendPlain(res, status, body) {
 }
 
 function childProbePath() {
-  return forceFallbackEnabled
-    ? "/_nn_bootstrap_forced_readiness_check__"
-    : "/_nn_bootstrap_ready_check__";
+  return "/_nn_bootstrap_ready_check__";
 }
 
 function childProbeUrl(internalPort) {

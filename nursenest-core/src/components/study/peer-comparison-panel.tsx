@@ -23,7 +23,8 @@ import type {
   PeerComparisonResult,
   PeerComparisonContext,
 } from "@/lib/study/benchmarking/peer-comparison-service";
-import { PEER_THRESHOLD } from "@/lib/study/benchmarking/peer-comparison-service";
+
+const PEER_THRESHOLD = 100;
 
 // ── Context display strings ───────────────────────────────────────────────────
 

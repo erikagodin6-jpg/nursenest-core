@@ -1,0 +1,3427 @@
+{
+  "generatedAt": "2026-06-01T18:01:35.336Z",
+  "database": {
+    "protocol": "postgresql",
+    "hostHash": "587a4cd342",
+    "database": "defaultdb"
+  },
+  "tables": [
+    {
+      "schema": "public",
+      "tableName": "blog_article_generation_jobs",
+      "rowCount": 51,
+      "contentType": "article-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": true,
+      "titleFields": [
+        "resultTitle"
+      ],
+      "slugFields": [
+        "resultSlug"
+      ],
+      "bodyFields": [
+        "bodyHtmlSnapshot"
+      ],
+      "seoFields": [],
+      "articleFields": [
+        "bodyHtmlSnapshot",
+        "resultSlug",
+        "resultTitle"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "BlogCampaignItem",
+      "rowCount": 0,
+      "contentType": "article-like",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "plannedTitle"
+      ],
+      "slugFields": [
+        "plannedSlug"
+      ],
+      "bodyFields": [],
+      "seoFields": [
+        "plannedKeyword"
+      ],
+      "articleFields": [
+        "plannedKeyword",
+        "plannedTitle",
+        "plannedSlug"
+      ],
+      "visibilityFields": [
+        "status",
+        "plannedPublishAt"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "BlogPost",
+      "rowCount": 4366,
+      "contentType": "article-like",
+      "publicCount": 4217,
+      "hiddenCount": 149,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "title",
+        "seoTitle",
+        "titleAlternates",
+        "clickTitle",
+        "metaTitleVariant"
+      ],
+      "slugFields": [
+        "slug",
+        "careerSlug"
+      ],
+      "bodyFields": [
+        "body",
+        "faqBlock",
+        "checklistBlock",
+        "quickReferenceBlock"
+      ],
+      "seoFields": [
+        "excerpt",
+        "seoTitle",
+        "seoDescription",
+        "targetKeyword",
+        "keywordCluster",
+        "keywordPlan",
+        "metaTitleVariant",
+        "metaDescriptionVariant",
+        "shortSummary",
+        "schemaSummary"
+      ],
+      "articleFields": [
+        "slug",
+        "title",
+        "excerpt",
+        "body",
+        "seoTitle",
+        "seoDescription",
+        "targetKeyword",
+        "keywordCluster",
+        "keywordPlan",
+        "titleAlternates",
+        "clickTitle",
+        "metaTitleVariant",
+        "metaDescriptionVariant",
+        "shortSummary",
+        "schemaSummary",
+        "careerSlug"
+      ],
+      "visibilityFields": [
+        "postStatus",
+        "publishAt",
+        "workflowStatus",
+        "scheduledAt"
+      ],
+      "visibilityValues": {
+        "postStatus": "PUBLISHED:4220; NEEDS_REVIEW:142; DRAFT:3; FAILED:1",
+        "workflowStatus": "PUBLISHED:4220; NEEDS_SEO_REVIEW:142; GENERATED:2; FAILED_GENERATION:1; NEEDS_MEDICAL_REVIEW:1"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "canonical_topic_shared_sections",
+      "rowCount": 0,
+      "contentType": "article-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": true,
+      "titleFields": [
+        "heading"
+      ],
+      "slugFields": [],
+      "bodyFields": [
+        "body",
+        "content_version"
+      ],
+      "seoFields": [],
+      "articleFields": [
+        "body",
+        "content_version"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "content_items",
+      "rowCount": 52,
+      "contentType": "article-like",
+      "publicCount": 0,
+      "hiddenCount": 52,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "title",
+        "seo_title"
+      ],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [
+        "content"
+      ],
+      "seoFields": [
+        "summary",
+        "seo_title",
+        "seo_description",
+        "seo_keywords",
+        "primary_keyword",
+        "secondary_keywords"
+      ],
+      "articleFields": [
+        "title",
+        "slug",
+        "summary",
+        "content",
+        "seo_title",
+        "seo_description",
+        "seo_keywords",
+        "primary_keyword",
+        "secondary_keywords"
+      ],
+      "visibilityFields": [
+        "status",
+        "scheduled_at",
+        "published_at"
+      ],
+      "visibilityValues": {
+        "status": "quarantined:52"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "digital_products",
+      "rowCount": 0,
+      "contentType": "article-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": true,
+      "titleFields": [
+        "title",
+        "seo_title"
+      ],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [
+        "description",
+        "short_description",
+        "seo_title",
+        "seo_description",
+        "seo_keywords"
+      ],
+      "articleFields": [
+        "slug",
+        "title",
+        "description",
+        "short_description",
+        "seo_title",
+        "seo_description",
+        "seo_keywords"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "ecg_worksheets",
+      "rowCount": 0,
+      "contentType": "article-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": true,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "description"
+      ],
+      "articleFields": [
+        "title",
+        "description"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_decks",
+      "rowCount": 177,
+      "contentType": "flashcard-like",
+      "publicCount": 171,
+      "hiddenCount": 6,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [
+        "description"
+      ],
+      "articleFields": [
+        "slug",
+        "title",
+        "description"
+      ],
+      "visibilityFields": [
+        "visibility",
+        "status"
+      ],
+      "visibilityValues": {
+        "visibility": "PUBLIC_PREVIEW:171; SUBSCRIBER:6",
+        "status": "PUBLISHED:177"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "generated_courses",
+      "rowCount": 0,
+      "contentType": "article-like",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "description",
+        "seo_pages"
+      ],
+      "articleFields": [
+        "title",
+        "description",
+        "seo_pages"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "internal_course_modules",
+      "rowCount": 0,
+      "contentType": "lesson-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": true,
+      "titleFields": [],
+      "slugFields": [
+        "lesson_slug"
+      ],
+      "bodyFields": [
+        "content"
+      ],
+      "seoFields": [],
+      "articleFields": [
+        "content",
+        "lesson_slug"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "internal_courses",
+      "rowCount": 2,
+      "contentType": "article-like",
+      "publicCount": 2,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "description"
+      ],
+      "articleFields": [
+        "title",
+        "description"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": "published:2"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "LearnerNote",
+      "rowCount": 2,
+      "contentType": "article-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": true,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [],
+      "bodyFields": [
+        "body"
+      ],
+      "seoFields": [],
+      "articleFields": [
+        "title",
+        "body"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "Lesson",
+      "rowCount": 0,
+      "contentType": "article-like",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [
+        "body"
+      ],
+      "seoFields": [
+        "summary"
+      ],
+      "articleFields": [
+        "title",
+        "slug",
+        "summary",
+        "body"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "LocalizedBlogArticle",
+      "rowCount": 2,
+      "contentType": "article-like",
+      "publicCount": 2,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "localizedTitle",
+        "localizedMetaTitle"
+      ],
+      "slugFields": [
+        "canonicalSlug",
+        "localizedSlug"
+      ],
+      "bodyFields": [
+        "contentStatus",
+        "localizedBody"
+      ],
+      "seoFields": [
+        "localizedExcerpt",
+        "canonicalSlug",
+        "localizedMetaTitle",
+        "localizedMetaDescription",
+        "seoKeywordPrimary",
+        "seoKeywordSecondary",
+        "canonicalUrl"
+      ],
+      "articleFields": [
+        "contentStatus",
+        "localizedTitle",
+        "localizedExcerpt",
+        "localizedBody",
+        "canonicalSlug",
+        "localizedSlug",
+        "localizedMetaTitle",
+        "localizedMetaDescription",
+        "seoKeywordPrimary",
+        "seoKeywordSecondary",
+        "canonicalUrl"
+      ],
+      "visibilityFields": [
+        "contentStatus",
+        "publishedAt",
+        "scheduledAt"
+      ],
+      "visibilityValues": {
+        "contentStatus": "PUBLISHED:2"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "mastery_lessons",
+      "rowCount": 0,
+      "contentType": "article-like",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [
+        "content"
+      ],
+      "seoFields": [],
+      "articleFields": [
+        "title",
+        "slug",
+        "content"
+      ],
+      "visibilityFields": [
+        "is_public"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "mastery_modules",
+      "rowCount": 0,
+      "contentType": "lesson-like",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [
+        "description"
+      ],
+      "articleFields": [
+        "slug",
+        "title",
+        "description"
+      ],
+      "visibilityFields": [
+        "is_public"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "osce_stations",
+      "rowCount": 1,
+      "contentType": "article-like",
+      "publicCount": 1,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [
+        "description"
+      ],
+      "articleFields": [
+        "slug",
+        "title",
+        "description"
+      ],
+      "visibilityFields": [
+        "is_published"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "pathway_lessons",
+      "rowCount": 13040,
+      "contentType": "lesson-like",
+      "publicCount": 13040,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "title",
+        "seo_title"
+      ],
+      "slugFields": [
+        "slug",
+        "topic_slug",
+        "redirect_to_slug"
+      ],
+      "bodyFields": [
+        "preview_section_count",
+        "sections",
+        "content_version"
+      ],
+      "seoFields": [
+        "seo_title",
+        "seo_description",
+        "exam_meta"
+      ],
+      "articleFields": [
+        "slug",
+        "title",
+        "topic_slug",
+        "seo_title",
+        "seo_description",
+        "exam_meta",
+        "content_version",
+        "redirect_to_slug"
+      ],
+      "visibilityFields": [
+        "status",
+        "published_at"
+      ],
+      "visibilityValues": {
+        "status": "PUBLISHED:13040"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "printable_products",
+      "rowCount": 0,
+      "contentType": "article-like",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [
+        "description"
+      ],
+      "articleFields": [
+        "slug",
+        "title",
+        "description"
+      ],
+      "visibilityFields": [
+        "is_published"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "study_milestones",
+      "rowCount": 0,
+      "contentType": "article-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": true,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "description"
+      ],
+      "articleFields": [
+        "title",
+        "description"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "test_bank_collections",
+      "rowCount": 0,
+      "contentType": "article-like",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [
+        "description"
+      ],
+      "articleFields": [
+        "slug",
+        "description"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "verified_study_decks",
+      "rowCount": 0,
+      "contentType": "article-like",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": true,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [
+        "unlisted_slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [
+        "description"
+      ],
+      "articleFields": [
+        "title",
+        "description",
+        "unlisted_slug"
+      ],
+      "visibilityFields": [
+        "visibility",
+        "published_at"
+      ],
+      "visibilityValues": {
+        "visibility": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "_prisma_migrations",
+      "rowCount": 128,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "_prisma_migrations_backup_20260413",
+      "rowCount": 68,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "accuracy_trends",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "AiGenerationJob",
+      "rowCount": 0,
+      "contentType": "auth/user/system",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "resultSummary"
+      ],
+      "articleFields": [
+        "resultSummary"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "AiGenerationLog",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "allied_blueprints",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "analytics_events",
+      "rowCount": 0,
+      "contentType": "auth/user/system",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "app_login_lockout",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "app_rate_limit_bucket",
+      "rowCount": 81,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "BackgroundJob",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "BaselineAssessmentAttempt",
+      "rowCount": 12,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 12,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": "OPEN:12"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "benchmark_profiles",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "BlogBatchSchedule",
+      "rowCount": 4,
+      "contentType": "non-article/operational",
+      "publicCount": 4,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": "ACTIVE:4"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "BlogBatchScheduleItem",
+      "rowCount": 4481,
+      "contentType": "non-article/operational",
+      "publicCount": 7,
+      "hiddenCount": 4474,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "plannedPublishAt",
+        "status"
+      ],
+      "visibilityValues": {
+        "status": "PENDING:4474; PUBLISHED:7"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "BlogCampaign",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "keywordCluster"
+      ],
+      "articleFields": [
+        "keywordCluster"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "BlogDraftGenerationBatch",
+      "rowCount": 32,
+      "contentType": "non-article/operational",
+      "publicCount": 30,
+      "hiddenCount": 2,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "keywords",
+        "keywordCluster",
+        "allowDuplicateCanonicalTopic"
+      ],
+      "articleFields": [
+        "keywords",
+        "keywordCluster",
+        "allowDuplicateCanonicalTopic"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": "ACTIVE:30; COMPLETED:2"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "BlogDraftGenerationBatchItem",
+      "rowCount": 248,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 248,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": "PENDING:234; FAILED:12; COMPLETED:2"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "canonical_topics",
+      "rowCount": 50,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "cat_emergency_fallback_banks",
+      "rowCount": 1,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "Category",
+      "rowCount": 38,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "slug"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "clinical_nursing_scenario_stages",
+      "rowCount": 0,
+      "contentType": "question-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "clinical_nursing_scenarios",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [
+        "study_link_lesson_slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "title",
+        "study_link_lesson_slug"
+      ],
+      "visibilityFields": [
+        "publish_status"
+      ],
+      "visibilityValues": {
+        "publish_status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "clinical_scenario_simulation_runs",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "summary"
+      ],
+      "articleFields": [
+        "summary"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "content_entity_revisions",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "content_import_runs",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "content_quality_corpus_snapshots",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "content_translations",
+      "rowCount": 2,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "content_versions",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "ContentAutomationLog",
+      "rowCount": 52,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 52,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "summary"
+      ],
+      "articleFields": [
+        "summary"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": "FAILED:50; SUCCEEDED:2"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "critical_route_errors",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "cross_section_events",
+      "rowCount": 0,
+      "contentType": "lesson-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [
+        "source_section",
+        "destination_section"
+      ],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "custom_practice_sessions",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "ecg_video_question_answer_option_aggregates",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "ecg_video_question_performance_aggregates",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "ecg_video_question_practice_answer_attempts",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "ecg_video_questions",
+      "rowCount": 242,
+      "contentType": "question-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "educational_translation_overlays",
+      "rowCount": 36,
+      "contentType": "non-article/operational",
+      "publicCount": 36,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status",
+        "published_at"
+      ],
+      "visibilityValues": {
+        "status": "PUBLISHED:36"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "EmailNotificationLog",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "meta"
+      ],
+      "articleFields": [
+        "meta"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "EmailVerificationToken",
+      "rowCount": 39,
+      "contentType": "auth/user/system",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "Exam",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "title"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "exam_attempts",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "exam_followup_responses",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "exam_load_incidents",
+      "rowCount": 0,
+      "contentType": "auth/user/system",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "request_summary"
+      ],
+      "articleFields": [
+        "request_summary"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "exam_planner_settings",
+      "rowCount": 2,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "exam_question_answer_option_aggregates",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "exam_question_performance_aggregates",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "exam_question_practice_answer_attempts",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "exam_questions",
+      "rowCount": 72881,
+      "contentType": "question-like",
+      "publicCount": 72828,
+      "hiddenCount": 53,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [
+        "study_link_lesson_slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "study_link_lesson_slug"
+      ],
+      "visibilityFields": [
+        "status",
+        "publish_at",
+        "published_at"
+      ],
+      "visibilityValues": {
+        "status": "published:72828; quarantined:53"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "ExamAttempt",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "ExamSession",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "fallback_delivery_events",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "Flashcard",
+      "rowCount": 6216,
+      "contentType": "question-like",
+      "publicCount": 6216,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": "PUBLISHED:6216"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_attempts",
+      "rowCount": 0,
+      "contentType": "auth/user/system",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_bank",
+      "rowCount": 12549,
+      "contentType": "question-like",
+      "publicCount": 11076,
+      "hiddenCount": 1473,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": "published:11076; needs_review:1473"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_deck_tags",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_mastery",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_option_responses",
+      "rowCount": 0,
+      "contentType": "auth/user/system",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_options",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [
+        "content"
+      ],
+      "seoFields": [],
+      "articleFields": [
+        "content"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_preview_config",
+      "rowCount": 1,
+      "contentType": "auth/user/system",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [
+        "upgrade_body"
+      ],
+      "seoFields": [],
+      "articleFields": [
+        "upgrade_body"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_preview_usage",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_progress",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_sessions",
+      "rowCount": 0,
+      "contentType": "flashcard-like",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_study_sessions",
+      "rowCount": 1,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_tags",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "slug"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "flashcard_user_stats",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "generated_questions",
+      "rowCount": 0,
+      "contentType": "question-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "GeneratedFlashcardDraft",
+      "rowCount": 0,
+      "contentType": "flashcard-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "GeneratedLessonDraft",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [
+        "titlePreview"
+      ],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "titlePreview"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "GeneratedQuestionDraft",
+      "rowCount": 0,
+      "contentType": "question-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "inbound_email_autoreply_events",
+      "rowCount": 0,
+      "contentType": "auth/user/system",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "inline_content_entries",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [
+        "body"
+      ],
+      "seoFields": [],
+      "articleFields": [
+        "body"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "kill_switches",
+      "rowCount": 8,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 8,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "enabled"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "language_enforcement_events",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "learner_session_activities",
+      "rowCount": 0,
+      "contentType": "auth/user/system",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "learner_session_ip_observations",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "LearningMemoryState",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "LearningMisconceptionEvent",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "LearningRetentionEvent",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "LearningReviewQueueItem",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "lesson_batch_queue_item",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [
+        "generatedDraftTitle"
+      ],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "generatedDraftTitle"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "lesson_bookmarks",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "longitudinal_case_sessions",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "manual_fulfillment_queue",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "marketing_public_content_override_revisions",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "marketing_public_content_overrides",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "is_published",
+        "published_at"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "mastery_case_scenarios",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "title",
+        "slug"
+      ],
+      "visibilityFields": [
+        "is_public"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "mastery_pattern_maps",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [
+        "slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "title",
+        "slug"
+      ],
+      "visibilityFields": [
+        "is_public"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "mastery_questions",
+      "rowCount": 0,
+      "contentType": "question-like",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "is_public"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "media_assets",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "PasswordResetToken",
+      "rowCount": 2,
+      "contentType": "auth/user/system",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "pathway_launch_workflows",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "practice_recommendations",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "practice_tests",
+      "rowCount": 14,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 14,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "title"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": "IN_PROGRESS:10; COMPLETED:2; ABANDONED:2"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "premium_protection_rollups",
+      "rowCount": 6,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "premium_protection_user_days",
+      "rowCount": 6,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "pricing_plans",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "description"
+      ],
+      "articleFields": [
+        "description"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "printable_accesses",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "printable_download_events",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "Progress",
+      "rowCount": 26,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "protection_abuse_reviews",
+      "rowCount": 3,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "provisional_access_log",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "quarantine_log",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "Question",
+      "rowCount": 0,
+      "contentType": "question-like",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "readiness_history",
+      "rowCount": 2,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "social_challenge_participants",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "completion_summary"
+      ],
+      "articleFields": [
+        "completion_summary"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "social_challenges",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [
+        "title"
+      ],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "title"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "social_connections",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status",
+        "removed_at"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "social_group_memberships",
+      "rowCount": 0,
+      "contentType": "auth/user/system",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "active"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "social_groups",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "description"
+      ],
+      "articleFields": [
+        "description"
+      ],
+      "visibilityFields": [
+        "active"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "social_invite_codes",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "enabled"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "social_privacy_settings",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "social_stat_snapshots",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "spaced_repetition_cards",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "StripeOwnerPaidSubscriptionNotify",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "StripeWebhookEvent",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "student_study_profiles",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "study_plan_schedule",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "Subscription",
+      "rowCount": 17,
+      "contentType": "non-article/operational",
+      "publicCount": 17,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [
+        "billingRegionSlug"
+      ],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "billingRegionSlug"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": "ACTIVE:17"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "test_bank_progress",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "topic_mastery_scores",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "TrialDeviceBinding",
+      "rowCount": 0,
+      "contentType": "join/config",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "unified_question_history",
+      "rowCount": 0,
+      "contentType": "question-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "User",
+      "rowCount": 71,
+      "contentType": "question-like",
+      "publicCount": 71,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "baselineAssessmentSummary"
+      ],
+      "articleFields": [
+        "baselineAssessmentSummary"
+      ],
+      "visibilityFields": [
+        "deleted_at"
+      ],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "UserFeedbackReport",
+      "rowCount": 2,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 2,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "summary",
+        "clientMetaJson"
+      ],
+      "articleFields": [
+        "summary",
+        "clientMetaJson"
+      ],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": "NEW:2"
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "UserRemediationEvent",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [
+        "examMeta"
+      ],
+      "articleFields": [
+        "examMeta"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "UserRemediationQueue",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "UserTopicStat",
+      "rowCount": 9,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "verified_study_card_progress",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "verified_study_cards",
+      "rowCount": 0,
+      "contentType": "question-like",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [
+        "related_lesson_slug"
+      ],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [
+        "related_lesson_slug"
+      ],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "verified_study_deck_reports",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": 0,
+      "hiddenCount": 0,
+      "classification": "visibility_classified",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [
+        "status"
+      ],
+      "visibilityValues": {
+        "status": ""
+      },
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "verified_study_deck_shares",
+      "rowCount": 0,
+      "contentType": "auth/user/system",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    },
+    {
+      "schema": "public",
+      "tableName": "weak_area_alerts",
+      "rowCount": 0,
+      "contentType": "non-article/operational",
+      "publicCount": null,
+      "hiddenCount": null,
+      "classification": "visibility_unknown",
+      "articleLike": false,
+      "titleFields": [],
+      "slugFields": [],
+      "bodyFields": [],
+      "seoFields": [],
+      "articleFields": [],
+      "visibilityFields": [],
+      "visibilityValues": {},
+      "countError": ""
+    }
+  ]
+}
