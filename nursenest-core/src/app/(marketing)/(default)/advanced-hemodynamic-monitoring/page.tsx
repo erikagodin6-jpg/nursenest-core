@@ -4,8 +4,7 @@ import { Activity, ArrowRight, BookOpen, Heart, Lock, Zap } from "lucide-react";
 import { AcademyBreadcrumbBar } from "@/components/clinical-academy/clinical-academy-chrome";
 import { labsClinicalModuleLeafBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
-import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { marketingAlternatesEnglishOnly } from "@/lib/seo/marketing-alternates";
 
 export const revalidate = 86400;
 
@@ -68,7 +67,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
     url: `${SITE_ORIGIN}${PATH}`,
-    alternates: marketingAlternatesSharedPage(PATH, DEFAULT_MARKETING_LOCALE),
+    alternates: marketingAlternatesEnglishOnly(PATH),
     structuredData: [
       {
         "@context": "https://schema.org",

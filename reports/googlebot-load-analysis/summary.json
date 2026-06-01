@@ -1,0 +1,137 @@
+{
+  "baseUrl": "http://127.0.0.1:3000",
+  "discoveredCount": 6,
+  "summaries": [
+    {
+      "requested": 5,
+      "audited": 5,
+      "concurrency": 2,
+      "startedAt": "2026-06-01T18:55:48.084Z",
+      "finishedAt": "2026-06-01T18:56:11.594Z",
+      "durationMs": 23510,
+      "statusCounts": {
+        "200": 5
+      },
+      "errorCount": 0,
+      "fetchErrors": 0,
+      "upstreamFailures": 0,
+      "avgMs": 9080,
+      "p50Ms": 1784,
+      "p95Ms": 21331,
+      "p99Ms": 21331,
+      "maxMs": 21331,
+      "slowest": [
+        {
+          "url": "http://127.0.0.1:3000/lessons",
+          "status": 200,
+          "ok": true,
+          "ms": 21331,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        },
+        {
+          "url": "http://127.0.0.1:3000/question-bank",
+          "status": 200,
+          "ok": true,
+          "ms": 20625,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        },
+        {
+          "url": "http://127.0.0.1:3000/blog",
+          "status": 200,
+          "ok": true,
+          "ms": 1784,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        },
+        {
+          "url": "http://127.0.0.1:3000/",
+          "status": 200,
+          "ok": true,
+          "ms": 1390,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        },
+        {
+          "url": "http://127.0.0.1:3000/flashcards",
+          "status": 200,
+          "ok": true,
+          "ms": 270,
+          "xDoFailureCode": null,
+          "xDoFailureMsg": null,
+          "xDoOrigStatus": null,
+          "error": null
+        }
+      ],
+      "memory": {
+        "maxRssMb": 674.7,
+        "avgRssMb": 576.5
+      },
+      "cpu": {
+        "maxPct": 90.9,
+        "avgPct": 72.6
+      },
+      "restartEvents": 0,
+      "readiness": {
+        "samples": 4,
+        "readyzNon200": 4,
+        "healthzNon200": 1,
+        "before": {
+          "at": "2026-06-01T18:55:48.293Z",
+          "healthz": {
+            "url": "http://127.0.0.1:3000/healthz",
+            "status": 200,
+            "ok": true,
+            "ms": 32,
+            "xDoFailureCode": null,
+            "xDoFailureMsg": null,
+            "xDoOrigStatus": null,
+            "error": null
+          },
+          "readyz": {
+            "url": "http://127.0.0.1:3000/readyz",
+            "status": 503,
+            "ok": false,
+            "ms": 177,
+            "xDoFailureCode": null,
+            "xDoFailureMsg": null,
+            "xDoOrigStatus": null,
+            "error": null
+          }
+        },
+        "after": {
+          "at": "2026-06-01T18:56:11.594Z",
+          "healthz": {
+            "url": "http://127.0.0.1:3000/healthz",
+            "status": 200,
+            "ok": true,
+            "ms": 14,
+            "xDoFailureCode": null,
+            "xDoFailureMsg": null,
+            "xDoOrigStatus": null,
+            "error": null
+          },
+          "readyz": {
+            "url": "http://127.0.0.1:3000/readyz",
+            "status": 503,
+            "ok": false,
+            "ms": 103,
+            "xDoFailureCode": null,
+            "xDoFailureMsg": null,
+            "xDoOrigStatus": null,
+            "error": null
+          }
+        }
+      }
+    }
+  ]
+}

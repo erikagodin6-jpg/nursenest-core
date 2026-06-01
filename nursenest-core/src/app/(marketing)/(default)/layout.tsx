@@ -286,17 +286,21 @@ const MarketingDefaultLocaleLayout = traceLayout(
     void loadMarketingLayoutObservability().catch(() => {});
     void getMarketingDefaultLayoutSentryRuntimePromise().catch(() => {});
 
-    // Early short-circuit for homepage: use minimal shell when NN_HOME_STATIC_MARKETING_LAYOUT is enabled
+    // Early short-circuit for homepage: always use the minimal shell on `/`.
+    // During crawl-load incidents the full marketing chrome can become the
+    // shared bottleneck for the origin. The homepage must remain a 200 shell
+    // even when optional chrome, staff, override, or message dependencies slow
+    // down. The env flag still allows forcing the same path in targeted probes.
     try {
-      if (nnHomeStaticMarketingLayoutEnabled()) {
-        const headerList = await getHeadersSafe();
-        const hpEarly = headerList?.get("x-nn-request-pathname")?.trim() ?? "/";
+      const headerList = await getHeadersSafe();
+      const hpEarly = headerList?.get("x-nn-request-pathname")?.trim() ?? "/";
 
+      if (hpEarly === "/" || nnHomeStaticMarketingLayoutEnabled()) {
         if (hpEarly === "/") {
           try {
             layoutStderrTrace(
               "marketing_layout",
-              "NN_HOME_STATIC_MARKETING_LAYOUT minimal shell for /",
+              "minimal static marketing shell for /",
               { note: "no Sentry span, no chrome shards" },
             );
           } catch {}

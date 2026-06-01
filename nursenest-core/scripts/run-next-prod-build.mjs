@@ -218,9 +218,11 @@ for (const key of BUNDLER_ENV_KEYS) {
 }
 
 const forcedWebpackRequested = /^(1|true|yes)$/i.test(String(process.env.NN_FORCE_WEBPACK_BUILD ?? "").trim());
+const forcedTurbopackRequested = /^(1|true|yes)$/i.test(String(process.env.NN_FORCE_TURBOPACK_BUILD ?? "").trim());
 const THROTTLE_ENV_KEYS = [
   "NN_FORCE_SINGLE_BUILD_WORKER",
   "NN_FORCE_WEBPACK_BUILD",
+  "NN_FORCE_TURBOPACK_BUILD",
   "NN_LOW_MEMORY_BUILD",
   "BUILD_WEBPACK_PARALLELISM",
   "NEXT_DISABLE_TURBOPACK",
@@ -231,8 +233,15 @@ for (const key of THROTTLE_ENV_KEYS) {
   delete process.env[key];
 }
 
-process.env.TURBOPACK = "1";
-process.env.NEXT_TURBOPACK = "1";
+if (forcedTurbopackRequested && !forcedWebpackRequested) {
+  process.env.TURBOPACK = "1";
+  process.env.NEXT_TURBOPACK = "1";
+  delete process.env.NEXT_DISABLE_TURBOPACK;
+} else {
+  delete process.env.TURBOPACK;
+  delete process.env.NEXT_TURBOPACK;
+  process.env.NEXT_DISABLE_TURBOPACK = "1";
+}
 process.env.NN_FORCE_MULTI_WORKER = "1";
 process.env.NN_LOW_MEMORY_BUILD = "0";
 process.env.NN_FORCE_SINGLE_BUILD_WORKER = "0";
@@ -336,11 +345,11 @@ console.log(
     GITHUB_ACTIONS: process.env.GITHUB_ACTIONS ?? null,
     NN_APP_PLATFORM_BUILD: process.env.NN_APP_PLATFORM_BUILD ?? null,
     NODE_OPTIONS_has_heap: /--max-old-space-size=\d+/.test(String(process.env.NODE_OPTIONS ?? "")),
-    preferredBundler: forceWebpackEnv ? "webpack" : "turbopack",
+    preferredBundler: forceWebpackEnv || !forcedTurbopackRequested ? "webpack" : "turbopack",
   }),
 );
 
-const useWebpackBuild = forceWebpackEnv;
+const useWebpackBuild = forceWebpackEnv || !forcedTurbopackRequested;
 
 if (useWebpackBuild) {
   process.env.NEXT_DISABLE_TURBOPACK = "1";

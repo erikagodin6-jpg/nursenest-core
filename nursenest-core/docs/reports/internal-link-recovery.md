@@ -1,6 +1,6 @@
 # Internal Link Recovery
 
-Generated: 2026-06-01T02:26:23.690Z
+Generated: 2026-06-01T19:01:59.229Z
 
 This run verified sitemap-discovered URLs and exported placeholder orphan/missing sitemap CSVs. A full hub-link graph crawl was not run because the current production sitemap index is stale relative to the local 25-child segmented build.
 

@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import {
   HomeRestoredWithDeferredStats,
   type HomeRestoredWithDeferredStatsProps,
@@ -15,6 +17,7 @@ import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketin
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
+import { absoluteUrl } from "@/lib/seo/site-origin";
 
 /**
  * 🧊 ISR window for homepage: revalidates every 5 minutes.
@@ -25,6 +28,28 @@ import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-js
  */
 export const revalidate = 300;
 const STATIC_LOCALE = DEFAULT_MARKETING_LOCALE;
+
+export function generateMetadata(): Metadata {
+  const title = defaultHomeMetaTitle("CA");
+  const description = defaultHomeMetaDescription("CA");
+  const canonical = absoluteUrl("/");
+  return {
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 function safeRegionCards(): string[] {
   try {
@@ -37,7 +62,11 @@ function safeRegionCards(): string[] {
 
 async function safeStats(props: HomeRestoredWithDeferredStatsProps) {
   try {
-    return await HomeRestoredWithDeferredStats(props);
+    const withTimeout = Promise.race([
+      HomeRestoredWithDeferredStats(props),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("homepage_stats_timeout")), 1200)),
+    ]);
+    return await withTimeout;
   } catch (err) {
     console.error("[homepage] stats failed", err);
     return <MarketingHomeEmergencyFallback />;
@@ -99,7 +128,7 @@ export default async function HomePage() {
           })}
         />
         {await safeStats({
-          skipOptionalDbReads: false,
+          skipOptionalDbReads: true,
           publishedGlobalRegionCardIds: cards,
         })}
 
