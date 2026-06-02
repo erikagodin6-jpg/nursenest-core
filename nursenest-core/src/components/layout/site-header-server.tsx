@@ -77,21 +77,11 @@ function buildPrecomputedNavData(
     homeAriaLabel: tr("brand.homeAriaLabel", "NurseNest home"),
     loginLabel: formatTitleCase(tr("nav.logIn", "Log In"), locale),
     signupLabel: formatTitleCase(tr("nav.signup", "Start Free"), locale),
-    // Brand/company links → Row 1 center nav (NurseNest brand nav row).
+    // Brand/company links → Row 1 center nav.
+    // Order: About (discovery) → Tools (feature) → FAQ (support) → Pricing (conversion).
+    // Blog is intentionally excluded — accessible via mobile drawer and footer.
     // These must NOT appear in the class/pathway row.
     brandNavLinks: [
-      {
-        key: "tools",
-        href: localizeHref(locale, HUB.tools),
-        matchBase: HUB.tools,
-        label: formatTitleCase(tr("nav.tools", "Tools"), locale),
-      },
-      {
-        key: "pricing",
-        href: localizeHref(locale, HUB.pricing),
-        matchBase: "/pricing",
-        label: formatTitleCase(tr("nav.pricing", "Pricing"), locale),
-      },
       {
         key: "about",
         href: localizeHref(locale, "/about"),
@@ -99,10 +89,10 @@ function buildPrecomputedNavData(
         label: formatTitleCase(tr("nav.about", "About"), locale),
       },
       {
-        key: "blog",
-        href: localizeHref(locale, "/blog"),
-        matchBase: "/blog",
-        label: formatTitleCase(tr("footer.blog", "Blog"), locale),
+        key: "tools",
+        href: localizeHref(locale, HUB.tools),
+        matchBase: HUB.tools,
+        label: formatTitleCase(tr("nav.tools", "Tools"), locale),
       },
       {
         key: "faq",
@@ -110,16 +100,17 @@ function buildPrecomputedNavData(
         matchBase: "/faq",
         label: formatTitleCase(tr("footer.faq", "FAQ"), locale),
       },
+      {
+        key: "pricing",
+        href: localizeHref(locale, HUB.pricing),
+        matchBase: "/pricing",
+        label: formatTitleCase(tr("nav.pricing", "Pricing"), locale),
+      },
     ],
     // Class/pathway links → Row 2 tier rail (alongside RN/RPN/NP/New Grad/Allied chips).
-    // Admissions-prep links route to explicit first-class product surfaces.
+    // Individual exam/admissions items only — "Pre-Nursing" parent category excluded
+    // because its children (HESI, TEAS, CASPer) are already present as individual items.
     pathwayNavLinks: [
-      {
-        key: "pre-nursing",
-        href: localizeHref(locale, "/pre-nursing"),
-        matchBase: "/pre-nursing",
-        label: formatTitleCase(tr("nav.preNursing", "Pre-Nursing"), locale),
-      },
       {
         key: "ecg",
         href: localizeHref(locale, "/ecg-interpretation"),

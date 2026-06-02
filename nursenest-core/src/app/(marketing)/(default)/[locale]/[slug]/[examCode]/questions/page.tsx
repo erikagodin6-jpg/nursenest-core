@@ -19,7 +19,7 @@ import {
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { isAlliedMarketingCorePathwayId, ALLIED_PROFESSION_QUERY_PARAM } from "@/lib/lessons/canonical-lessons-hubs";
 import { resolveTopicSlugForPathwayTopicLabel } from "@/lib/lessons/lesson-question-cross-links";
-import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import {
   getRelatedPathwayLessons,
@@ -110,17 +110,26 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
       : null;
   const alliedProfessionKey = alliedProfessionResolved?.professionKey ?? "";
 
-  const { questionSnapshot } = await loadMarketingExamHubOptionalBlocks(pathway, {
-    pathname: `${pathname}/questions`,
-    locale,
-    country: locale,
-    examCode,
-    pathwayId: pathway.id,
-    roleTrack: slug,
-  });
-
   const topicFilterTrim = topicFilter.trim();
-  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
+  const isTopicNarrowedEarly = Boolean(topicFilterTrim || topicSlugFromUrl);
+
+  // Run snapshot and (when not topic-narrowed) body-system aggregates in parallel —
+  // they are fully independent and each has its own DB timeout.
+  const [{ questionSnapshot }, hubAggregatesParallel] = await Promise.all([
+    loadMarketingExamHubOptionalBlocks(pathway, {
+      pathname: `${pathname}/questions`,
+      locale,
+      country: locale,
+      examCode,
+      pathwayId: pathway.id,
+      roleTrack: slug,
+    }),
+    isTopicNarrowedEarly ? Promise.resolve([]) : loadPathwayPracticeBodySystemHubAggregates(pathway.id),
+  ]);
+
+  // Use the default marketing locale directly — reading from a locale cookie would force
+  // this ISR page into dynamic rendering on every request, bypassing the 24-hour cache.
+  const lessonContentLocale = DEFAULT_MARKETING_LOCALE;
   let relatedLessonsForTopic: Awaited<ReturnType<typeof getRelatedPathwayLessons>> = [];
 
   let clusterSlugForLessons: string | null = topicSlugFromUrl || null;
@@ -185,7 +194,8 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   }
 
   const displayTopicLabel = topicFilterTrim || (topicSlugFromUrl ? humanizeTopicSlug(topicSlugFromUrl) : "");
-  const isTopicNarrowed = Boolean(topicFilterTrim || topicSlugFromUrl);
+  const isTopicNarrowed = isTopicNarrowedEarly;
+  const hubAggregates = hubAggregatesParallel;
 
   const hubBase = marketingExamHubBasePath(pathway);
   const { crumbs, schemaItems } = pathwayQuestionsHubBreadcrumbs(pathway);
@@ -202,7 +212,6 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
     ? withAlliedProfessionMarketingQuery(questionsHubPath, alliedProfessionKey)
     : questionsHubPath;
 
-  const hubAggregates = isTopicNarrowed ? [] : await loadPathwayPracticeBodySystemHubAggregates(pathway.id);
   if (process.env.NODE_ENV === "development" && !isTopicNarrowed) {
     const totalQ = hubAggregates.reduce((s, a) => s + a.questionCount, 0);
     const unc = hubAggregates.find((a) => a.id === "uncategorized")?.questionCount ?? 0;

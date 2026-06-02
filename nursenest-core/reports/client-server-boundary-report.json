@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-01T23:20:59.249Z",
+  "generatedAt": "2026-06-01T23:44:10.287Z",
   "scope": "all",
   "clientEntrypoints": [
     "src/app/(admin)/admin/modules/ecg/publish-button.tsx",

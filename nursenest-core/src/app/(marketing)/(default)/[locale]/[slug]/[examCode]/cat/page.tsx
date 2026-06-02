@@ -25,7 +25,6 @@ import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-li
 import { pathwayCatPracticeBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { MarketingPathwayCatViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
-import { getAuthSessionWithJwtCookieFallback } from "@/lib/auth/server-session-jwt-fallback";
 export const dynamicParams = true;
 export const revalidate = 86400;
 
@@ -123,8 +122,11 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
     pathway.id,
     alliedProfessionKey ? { alliedProfession: alliedProfessionKey } : undefined,
   );
-  const viewerSession = await getAuthSessionWithJwtCookieFallback().catch(() => null);
-  const viewerSignedIn = Boolean((viewerSession?.user as { id?: string } | undefined)?.id);
+  // Auth state is not needed for the static CAT hub shell. Reading cookies here would force
+  // this ISR page into dynamic rendering on every request and bypass the 24-hour cache.
+  // The "Start CAT" vs "Sign In" CTA distinction is a client-side concern handled in
+  // <PathwayLiveInventoryStrip> via the learner chrome auth state.
+  const viewerSignedIn = false;
 
   const assessment = assessMarketingCatSurfaceWithoutAuth(pathway, questionSnapshot);
 

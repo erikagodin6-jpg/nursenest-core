@@ -12,9 +12,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.types";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { catReadinessMinCompletePoolRows } from "@/lib/practice-tests/cat-readiness-floor";
-import { isCompleteCatQuestionRow, NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
-import { validatePracticeCatPool, type CatPoolRow } from "@/lib/exams/cat-engine";
+import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 import { RT_VENTILATOR_BANK_TAG } from "@/lib/rt-ventilator/rt-ventilator-content-taxonomy";
 import {
@@ -24,8 +22,6 @@ import {
 
 const SNAPSHOT_TIMEOUT_MS = 1000;
 const REVALIDATE_SECONDS = 3600;
-const SNAPSHOT_ADAPTIVE_BATCH = 280;
-const SNAPSHOT_ADAPTIVE_SCAN_CAP = 8000;
 
 /**
  * Route-scoped marketing/question-bank aggregate.
@@ -77,7 +73,6 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
     async (): Promise<PathwayQuestionBankSnapshot> => {
       const publishedWhere = pathwayExamQuestionMarketingWhere(pathway);
       const inventoryWhere = pathwayExamQuestionMarketingHubInventoryWhere(pathway);
-      const minCatReady = catReadinessMinCompletePoolRows(pathway.id);
       const counts = await Promise.allSettled([
         withDatabaseFallbackTimeout(
           () => prisma.examQuestion.count({ where: publishedWhere }),
@@ -91,51 +86,17 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
           SNAPSHOT_TIMEOUT_MS,
           { scope: "exam_pathway_hub", label: `question_snapshot_count:${pathway.id}` },
         ),
-        withDatabaseFallbackTimeout(async () => {
-          const adaptiveWhere: Prisma.ExamQuestionWhereInput = {
-            AND: [inventoryWhere, { isAdaptiveEligible: true }],
-          };
-          const pool: CatPoolRow[] = [];
-          const maxHeld = Math.min(512, Math.max(minCatReady + 120, 200));
-          let skip = 0;
-          while (skip < SNAPSHOT_ADAPTIVE_SCAN_CAP) {
-            const batch = await prisma.examQuestion.findMany({
-              where: adaptiveWhere,
-              select: {
-                id: true,
-                difficulty: true,
-                bodySystem: true,
-                topic: true,
-                stem: true,
-                options: true,
-                correctAnswer: true,
-                rationale: true,
-                nclexClientNeedsCategory: true,
-                nclexClientNeedsSubcategory: true,
-              },
-              orderBy: { id: "asc" },
-              skip,
-              take: SNAPSHOT_ADAPTIVE_BATCH,
-            });
-            if (batch.length === 0) break;
-            for (const r of batch) {
-              if (!isCompleteCatQuestionRow(r)) continue;
-              if (pool.length >= maxHeld) pool.shift();
-              pool.push({
-                id: r.id,
-                difficulty: typeof r.difficulty === "number" && Number.isFinite(r.difficulty) ? Math.round(r.difficulty) : 3,
-                bodySystem: r.bodySystem,
-                topic: r.topic,
-                nclexClientNeedsCategory: r.nclexClientNeedsCategory,
-                nclexClientNeedsSubcategory: r.nclexClientNeedsSubcategory,
-              });
-            }
-            skip += batch.length;
-            if (pool.length >= minCatReady && validatePracticeCatPool(pool).ok) break;
-            if (batch.length < SNAPSHOT_ADAPTIVE_BATCH) break;
-          }
-          return pool.length;
-        }, 0, SNAPSHOT_TIMEOUT_MS, { scope: "exam_pathway_hub", label: `question_snapshot_adaptive:${pathway.id}` }),
+        // O(1) count query replaces the O(n) row-scan loop.
+        // The old loop fetched up to 8,000 rows in batches of 280 to run quality validation;
+        // for marketing surfaces the count alone is sufficient to gate the CAT CTA.
+        withDatabaseFallbackTimeout(
+          () => prisma.examQuestion.count({
+            where: { AND: [inventoryWhere, { isAdaptiveEligible: true }] },
+          }),
+          0 as number,
+          SNAPSHOT_TIMEOUT_MS,
+          { scope: "exam_pathway_hub", label: `question_snapshot_adaptive:${pathway.id}` },
+        ),
       ]);
       const publishedQuestionCount =
         counts[0]?.status === "fulfilled" && typeof counts[0].value === "number" ? counts[0].value : null;

@@ -897,31 +897,30 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
     ],
     [marketingFlowDestinations, t, locale],
   );
-  // Brand/company links → Row 1 center nav (Tools, Pricing, About, Blog, FAQ).
-  // These must NOT appear in the class/pathway row.
+  // Brand/company links → Row 1 center nav.
+  // Order: About → Tools → FAQ → Pricing (discovery → feature → support → conversion).
+  // Blog excluded from desktop main nav; accessible via mobile drawer and footer.
   const brandNavLinks: HeaderNavLink[] = useMemo(
     () =>
       precomputedNavData?.brandNavLinks
         ? [...precomputedNavData.brandNavLinks]
         : [
-            { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
-            { key: "pricing", href: HUB.pricing, matchBase: "/pricing", label: formatTitleCase(t("nav.pricing"), locale) },
             { key: "about", href: "/about", matchBase: "/about", label: formatTitleCase(t("nav.about"), locale) },
-            { key: "blog", href: "/blog", matchBase: "/blog", label: formatTitleCase(t("footer.blog"), locale) },
+            { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
             { key: "faq", href: "/faq", matchBase: "/faq", label: formatTitleCase(t("footer.faq"), locale) },
+            { key: "pricing", href: HUB.pricing, matchBase: "/pricing", label: formatTitleCase(t("nav.pricing"), locale) },
           ],
     [precomputedNavData?.brandNavLinks, t, locale],
   );
 
-  // Class/pathway links → Row 2 tier rail (Pre-Nursing, ECG, HESI, TEAS, CASPER).
+  // Class/pathway links → Row 2 tier rail (individual exam items only).
   // Rendered alongside RN/RPN/NP/New Grad/Allied tier hub chips.
-  // Admissions-prep links route to explicit first-class product surfaces.
+  // "Pre-Nursing" parent category removed — children (HESI, TEAS, CASPer) are already present.
   const pathwayMoreLinks: HeaderNavLink[] = useMemo(
     () =>
       precomputedNavData?.pathwayNavLinks
         ? [...precomputedNavData.pathwayNavLinks]
         : [
-            { key: "pre-nursing", href: "/pre-nursing", matchBase: "/pre-nursing", label: formatTitleCase(t("nav.preNursing"), locale) },
             { key: "ecg", href: "/ecg-interpretation", matchBase: "/ecg-interpretation", label: "ECG" },
             { key: "hesi", href: "/pre-nursing/hesi-a2", matchBase: "/pre-nursing/hesi-a2", label: "HESI A2" },
             { key: "teas", href: "/pre-nursing/ati-teas", matchBase: "/pre-nursing/ati-teas", label: "ATI TEAS" },

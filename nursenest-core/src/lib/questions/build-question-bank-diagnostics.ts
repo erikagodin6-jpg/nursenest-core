@@ -133,9 +133,16 @@ export async function buildQuestionBankCoverageReport(): Promise<QuestionBankCov
         const rows = await Promise.all(
           batch.map(async (p) => {
             const keys = [...new Set(p.contentExamKeys)];
-            const publishedCount = await prisma.examQuestion.count({
-              where: { status: DB_PUBLISHED, exam: { in: keys } },
+            // Prefer studyLinkPathwayId count when available — it is exact and avoids
+            // over-counting shared exam keys (e.g. CNPLE shares "NP" with other pathways).
+            const studyLinkCount = await prisma.examQuestion.count({
+              where: { status: DB_PUBLISHED, studyLinkPathwayId: p.id },
             });
+            const publishedCount = studyLinkCount > 0
+              ? studyLinkCount
+              : await prisma.examQuestion.count({
+                  where: { status: DB_PUBLISHED, exam: { in: keys } },
+                });
             return {
               pathwayId: p.id,
               displayName: p.displayName,
