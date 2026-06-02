@@ -208,6 +208,10 @@ let rnExamNotesIntegrationBatch4ExpansionPathwaysCache: Record<string, CatalogSh
 let rpnParityExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 /** NP parity expansion rows (merged for Canadian NP and US NP pathways; deduped by slug). */
 let npParityExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+/** Nursing-wide professional practice expansion rows for RN/RPN/PN/NP. */
+let nursingProfessionalPracticeExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+/** Nursing-wide fundamentals expansion rows for RN/RPN/PN/NP. */
+let nursingFundamentalsExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> | null = null;
 
 function getCatalogData(): CatalogShape {
@@ -519,6 +523,34 @@ function getRpnParityExpansionPathways(): Record<string, CatalogShape["pathways"
 
 function rpnParityExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
   const rows = getRpnParityExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+function getNursingProfessionalPracticeExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (nursingProfessionalPracticeExpansionPathwaysCache) return nursingProfessionalPracticeExpansionPathwaysCache;
+  nursingProfessionalPracticeExpansionPathwaysCache =
+    (readCatalogJsonSync("src/content/pathway-lessons/nursing-professional-practice-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return nursingProfessionalPracticeExpansionPathwaysCache;
+}
+
+function nursingProfessionalPracticeExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getNursingProfessionalPracticeExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+function getNursingFundamentalsExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (nursingFundamentalsExpansionPathwaysCache) return nursingFundamentalsExpansionPathwaysCache;
+  nursingFundamentalsExpansionPathwaysCache =
+    (readCatalogJsonSync("src/content/pathway-lessons/nursing-fundamentals-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return nursingFundamentalsExpansionPathwaysCache;
+}
+
+function nursingFundamentalsExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getNursingFundamentalsExpansionPathways()[pathwayId];
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
 
@@ -1809,6 +1841,16 @@ const RPN_PATHWAY_IDS = new Set(["ca-rpn-rex-pn"]);
 /** NP core + parity lessons only apply to NP pathways. */
 const NP_PATHWAY_IDS = new Set(["ca-np-cnple", "us-np-fnp"]);
 
+/** Nursing-wide expansion catalogs cover launch-priority nursing pathways. */
+const NURSING_FOUNDATION_PATHWAY_IDS = new Set([
+  "ca-rn-nclex-rn",
+  "us-rn-nclex-rn",
+  "ca-rpn-rex-pn",
+  "us-lpn-nclex-pn",
+  "ca-np-cnple",
+  "us-np-fnp",
+]);
+
 /** Allied bundled catalog only has entries for allied core pathways. */
 const ALLIED_CORE_PATHWAY_IDS = new Set(["us-allied-core", "ca-allied-core"]);
 
@@ -1818,6 +1860,7 @@ const NEW_GRAD_PATHWAY_IDS = new Set(["us-rn-new-grad-transition"]);
 function isRnNclexPathway(id: string): boolean { return RN_NCLEX_PATHWAY_IDS.has(id); }
 function isRpnPathway(id: string): boolean { return RPN_PATHWAY_IDS.has(id); }
 function isNpPathway(id: string): boolean { return NP_PATHWAY_IDS.has(id); }
+function isNursingFoundationPathway(id: string): boolean { return NURSING_FOUNDATION_PATHWAY_IDS.has(id); }
 function isAlliedCorePathway(id: string): boolean { return ALLIED_CORE_PATHWAY_IDS.has(id); }
 function isNewGradPathway(id: string): boolean { return NEW_GRAD_PATHWAY_IDS.has(id); }
 
@@ -1863,6 +1906,14 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
   // NP parity — only for NP pathways
   const npParityExpansion = isNpPathway(pathwayId) ? npParityExpansionLessonsForPathway(pathwayId) : [];
 
+  // Nursing-wide foundations — only for RN/RPN/PN/NP launch-priority pathways.
+  const professionalPracticeExpansion = isNursingFoundationPathway(pathwayId)
+    ? nursingProfessionalPracticeExpansionLessonsForPathway(pathwayId)
+    : [];
+  const nursingFundamentalsExpansion = isNursingFoundationPathway(pathwayId)
+    ? nursingFundamentalsExpansionLessonsForPathway(pathwayId)
+    : [];
+
   // New-grad transition — only for the dedicated new-grad pathway
   const newGrad = isNewGradPathway(pathwayId) ? newGradTransitionLessonsForPathway(pathwayId) : [];
 
@@ -1892,6 +1943,8 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
     ...examNotesIntegrationBatch4Expansion,
     ...rpnParityExpansion,
     ...npParityExpansion,
+    ...professionalPracticeExpansion,
+    ...nursingFundamentalsExpansion,
     ...newGrad,
   ]) {
     if (seen.has(l.slug)) continue;

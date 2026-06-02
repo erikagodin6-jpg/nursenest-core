@@ -36,6 +36,33 @@ function fallbackLimitRatio(): number {
 type FallbackBucket = { count: number; resetsAt: number };
 const fallbackStore = new Map<string, FallbackBucket>();
 
+// Rolling count of fallback activations since process start (read by dashboard)
+let fallbackEventCount = 0;
+let fallbackLastActivatedAt: number | null = null;
+
+/** Snapshot of process-local fallback limiter state — safe to expose to admin dashboard. */
+export type FallbackLimiterStats = {
+  active: boolean;
+  bucketCount: number;
+  bucketCapacity: number;
+  eventCountSinceStart: number;
+  lastActivatedAt: string | null;
+  limitRatio: number;
+};
+
+export function getFallbackLimiterStats(): FallbackLimiterStats {
+  return {
+    active: fallbackEventCount > 0 || fallbackStore.size > 0,
+    bucketCount: fallbackStore.size,
+    bucketCapacity: FALLBACK_MAX_BUCKETS,
+    eventCountSinceStart: fallbackEventCount,
+    lastActivatedAt: fallbackLastActivatedAt
+      ? new Date(fallbackLastActivatedAt).toISOString()
+      : null,
+    limitRatio: fallbackLimitRatio(),
+  };
+}
+
 function fallbackEvictOldestIfNeeded(): void {
   if (fallbackStore.size < FALLBACK_MAX_BUCKETS) return;
   // Map iterates in insertion order — first key is the oldest
@@ -51,6 +78,9 @@ function checkFallbackFixedWindow(
   const now = Date.now();
   const effectiveMax = Math.max(1, Math.floor(max * fallbackLimitRatio()));
   const existing = fallbackStore.get(key);
+
+  fallbackEventCount += 1;
+  fallbackLastActivatedAt = now;
 
   if (existing && now < existing.resetsAt) {
     existing.count += 1;

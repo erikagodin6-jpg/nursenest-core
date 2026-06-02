@@ -1,0 +1,586 @@
+{
+  "slug": "end-of-life-care-older-adults",
+  "title": "End-of-Life Care in Older Adults",
+  "packageId": "standalone-gero-2026",
+  "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+  "tier": ["RPN", "RN", "NP"],
+  "sections": [
+    {
+      "id": "learning_objectives",
+      "title": "Learning Objectives",
+      "content": [
+        "1. Distinguish palliative care from hospice care and end-of-life care, articulating the WHO definition of palliative care and identifying when each level of care is appropriate across the illness trajectory.",
+        "2. Apply evidence-based symptom management principles for pain, dyspnea, death rattle, terminal agitation, nausea, and constipation in the dying patient, including appropriate pharmacological and non-pharmacological interventions.",
+        "3. Facilitate advance care planning (ACP) conversations by explaining the legal and practical distinctions among advance directives, MOST/POLST, DNR/DNI orders, and healthcare power of attorney.",
+        "4. Apply the substitute decision-maker (SDM) hierarchy and role definition to clinical scenarios, differentiating the 'known wishes' standard from the 'best interests' standard in decision-making for incapacitated patients.",
+        "5. Recognize the clinical signs of the active dying process — including Cheyne-Stokes respirations, mottling, decreased urine output, and altered consciousness — and communicate these findings accurately to families.",
+        "6. Provide evidence-based family education and emotional support throughout the dying process, including the normal physiology of reduced oral intake, the non-distressing nature of the death rattle, and the value of presence at the bedside."
+      ]
+    },
+    {
+      "id": "blueprint_mapping",
+      "title": "Blueprint Mapping",
+      "examTargets": {
+        "NCLEX_clientNeeds": [
+          "Psychosocial Integrity: End-of-Life Care, Grief and Loss, Therapeutic Communication, Coping Mechanisms, Cultural Awareness and Influences on Health",
+          "Physiological Integrity: Pharmacological Therapies — opioid titration, symptom management; Basic Care and Comfort — palliative and hospice care; Reduction of Risk Potential — advance directives, goals-of-care documentation",
+          "Safe and Effective Care Environment: Management of Care — substitute decision-making, DNR orders, advance care planning, ethics consultations; Coordinated Care — interprofessional palliative team"
+        ],
+        "CNPLE_domains": [
+          "Domain 1: Professional Responsibility — ethical end-of-life practice, documentation standards",
+          "Domain 2: Clinical Judgment — symptom assessment, recognition of dying process",
+          "Domain 3: Communication and Relationship-Centered Care — goals-of-care conversations, family education, SDM coaching",
+          "Domain 4: Health and Wellness — ACP as a health promotion activity across the lifespan",
+          "Domain 5: Quality Improvement — hospice appropriateness, comfort-focused care planning"
+        ],
+        "FNP_AGPCNP_scope": [
+          "Initiating and signing MOST/POLST orders",
+          "Prescribing comfort-focused medications (opioids, anxiolytics, antiemetics, antisecretory agents)",
+          "Prognostic assessment and hospice referral eligibility determination",
+          "Leading goals-of-care conversations across care settings",
+          "Managing palliative sedation in refractory suffering (under appropriate protocols)"
+        ],
+        "highYieldTopics": [
+          "Palliative vs hospice vs EOL care — three distinct concepts",
+          "Opioid titration for pain AND dyspnea — legal and ethical basis",
+          "Death rattle management — glycopyrrolate, NOT suctioning",
+          "SDM hierarchy and role — 'known wishes' not personal preference",
+          "Advance directive vs MOST/POLST — immediacy of implementation",
+          "DNR does not mean do not treat — clarify treatment goals separately",
+          "Signs of active dying — Cheyne-Stokes, mottling, oliguria, altered consciousness",
+          "SPIKES framework for goals-of-care conversations"
+        ]
+      }
+    },
+    {
+      "id": "core_content",
+      "title": "Core Clinical Content",
+      "subsections": [
+        {
+          "title": "Definitions — Palliative, Hospice, and End-of-Life Care",
+          "content": "PALLIATIVE CARE (WHO Definition, 2020): 'An approach that improves the quality of life of patients and families facing the problem associated with life-threatening illness, through the prevention and relief of suffering by means of early identification and impeccable assessment and treatment of pain and other problems, physical, psychosocial and spiritual.' Critical distinguishing features: (1) Applicable at ANY stage of illness, including alongside curative or disease-modifying treatment. (2) Does NOT require a prognosis of ≤6 months. (3) Is NOT synonymous with giving up or dying. (4) Can be initiated at diagnosis of a serious illness (cancer, heart failure, COPD, dementia, renal failure). Palliative care teams include physicians, nurses, social workers, chaplains, and pharmacists. Specialty palliative care is a consultation service; primary palliative care skills (symptom management, goals-of-care conversations) are expected of all nurses.\n\nHOSPICE: A specific model of palliative care for patients whose illness is expected to result in death within 6 months if the disease follows its natural course, and who have chosen to forgo life-prolonging treatment in favor of comfort-focused care. In Canada, hospice philosophy underlies most end-of-life programs but funding structures vary by province. In the US, Medicare Hospice Benefit requires physician certification of prognosis ≤6 months. Key features: (1) Goals are exclusively comfort and quality of life. (2) Life-prolonging interventions (chemotherapy for cure, dialysis, aggressive resuscitation) are discontinued. (3) Available in home, dedicated hospice facility, hospital inpatient unit, or long-term care setting. (4) Provides 24/7 nursing support, medications, equipment (hospital bed, wheelchair), and bereavement services for family. Hospice requires a formal enrollment decision and a willing primary caregiver if home-based.\n\nEND-OF-LIFE (EOL) CARE: The care provided during the final hours, days, or weeks of life. EOL care is a subset of palliative care focused on the imminence of death. Priorities: (1) aggressive symptom management; (2) patient comfort and dignity; (3) family presence and support; (4) spiritual and cultural care; (5) clear communication about what to expect. EOL care can occur inside or outside of a formal hospice program. A patient may receive excellent EOL care in an ICU or emergency department if a clear comfort-focused plan is in place."
+        },
+        {
+          "title": "Symptom Management at End of Life",
+          "content": "PAIN:\nPain is the most feared symptom at end of life and is highly prevalent. Adequate pain control is a core ethical obligation of nursing practice. Approach: (1) Assess using validated tools — NRS (0–10 scale) for cognitively intact patients; PAINAD (Pain Assessment in Advanced Dementia) for patients with cognitive impairment. (2) Titrate opioids to comfort — there is no ceiling dose when titrating for comfort in a dying patient. (3) Route: oral preferred while patient can swallow; subcutaneous (SC) infusion or intermittent SC injection when oral route fails (SC is preferred over IV at home and in LTC); avoid IM (painful, unreliable absorption). (4) Scheduled dosing: opioids around the clock (e.g., Q4h morphine) prevents pain from returning; do not rely solely on PRN dosing. (5) Breakthrough dosing: PRN dose = 10% of the total 24-hour opioid dose; offered Q1h for breakthrough pain. Example: patient on morphine 10 mg SC Q4h = 60 mg/24h; breakthrough dose = 6 mg SC Q1h PRN. (6) Do NOT withhold opioids for fear of hastening death. Properly titrated opioids relieve pain and dyspnea. The doctrine of double effect supports opioid use when the intent is to relieve suffering, even if a secondary effect could theoretically shorten life. Evidence consistently shows properly titrated palliative opioids do NOT hasten death.\n\nDYSPNEA:\nDyspnea (subjective sensation of breathlessness) is distinct from objective respiratory rate and oxygen saturation. Assessment tool: Respiratory Distress Observation Scale (RDOS) for non-verbal patients. Interventions: (1) Opioids: low-dose morphine (2–5 mg SC Q4h) is the most evidence-based treatment for dyspnea at EOL — reduces the central nervous system's perception of air hunger; do not withhold out of fear of respiratory depression at palliative doses. (2) Anxiolytics: lorazepam 0.5–1 mg SL/SC Q4h PRN or midazolam SC infusion if significant anxiety component to dyspnea. (3) Positioning: semi-Fowler's (30–45 degrees) or lateral decubitus; elevate head of bed. (4) Fan: direct a small fan toward the patient's face — stimulates trigeminal nerve receptors, reduces perceived breathlessness; evidence-based, non-pharmacological. (5) Supplemental oxygen: appropriate ONLY if patient is hypoxic (SpO2 <88%); does NOT reduce dyspnea in non-hypoxic patients and may cause discomfort (dry mouth, nasal irritation, tethering to equipment). In actively dying patients, do not apply oxygen for normalizing a number — treat the patient's symptom experience.\n\nDEATH RATTLE (TERMINAL SECRETIONS):\nDefinition: audible gurgling or rattling sound produced by pooled secretions in the posterior pharynx and upper airway in a patient with decreased level of consciousness and inability to swallow. Mechanism: not drowning, not choking — the patient is typically deeply unresponsive and does not experience distress. The sound is produced passively by air moving through pooled secretions. Timing: usually in final 24–48 hours of life. Management: (1) Antisecretory medications to reduce new secretion production: glycopyrrolate 0.2 mg SC Q4h (preferred — does not cross blood-brain barrier, fewer CNS side effects) or hyoscine hydrobromide (scopolamine) 0.4 mg SC Q4h. Note: these medications do NOT clear existing secretions; they prevent new secretions and may reduce volume over time. (2) Repositioning: lateral decubitus (side-lying) position promotes postural drainage of secretions — effective and non-invasive. (3) Suctioning: NOT recommended. Deep pharyngeal suctioning is uncomfortable, stimulates secretion production, causes patient distress, and does not improve the death rattle. (4) Family education: the single most important intervention. Families are often more distressed by the sound than the patient is. Explain: 'This sound is caused by fluid in the throat. Your [family member] is not choking or drowning and is not in distress. They are deeply peaceful. This is a normal part of the dying process.'\n\nTERMINAL AGITATION AND DELIRIUM:\nTerminal delirium is an organic brain syndrome that occurs in 80–90% of patients in the final hours to days of life. It is characterized by fluctuating consciousness, disorientation, agitation, moaning, restlessness, and sometimes purposeless motor activity. CRITICAL: Before labeling behavior as terminal delirium, rule out and treat reversible causes: (1) Uncontrolled pain — assess with behavioral tools (PAINAD); treat with opioids. (2) Urinary retention — palpate bladder, consider straight catheterization. (3) Constipation/fecal impaction — assess rectally. (4) Respiratory distress — treat dyspnea. (5) Medication toxicity — opioid metabolite accumulation (consider opioid rotation), benzodiazepine withdrawal, steroid psychosis. (6) Unresolved spiritual or relational distress — chaplain referral, facilitate goodbyes. Management of refractory terminal agitation: (1) Haloperidol 0.5–2 mg SC Q4–8h: first-line antipsychotic for terminal delirium; reduces agitation without causing excessive sedation in most patients. (2) Midazolam 2.5–5 mg SC PRN or infusion: for severe agitation not responsive to haloperidol. (3) Palliative sedation: intentional reduction of consciousness using sedating medications (usually midazolam infusion) for the relief of refractory, intractable suffering that cannot be controlled by other means. Palliative sedation is ethically distinct from euthanasia — the intent is to relieve suffering, not to hasten death. Requires a documented refractory symptom, patient/SDM consent, and interprofessional team agreement.\n\nNAUSEA:\nAt EOL, nausea may be caused by opioids (common early in treatment, usually resolves within 3–5 days), bowel obstruction, constipation, metabolic derangements, or medications. Management: (1) Metoclopramide 10 mg SC/SL Q6–8h: pro-motility; effective for gastroparesis-related nausea. (2) Haloperidol 0.5–2 mg SC Q6–8h: potent antiemetic via dopamine blockade at the chemoreceptor trigger zone; useful when metoclopramide inadequate. (3) Dexamethasone 4–8 mg SC/IV: useful for bowel obstruction (reduces bowel wall edema), malignant nausea, and refractory cases. (4) Ondansetron 4–8 mg for serotonin-mediated nausea. (5) Environmental: remove offensive odors (food smells, wound odors), keep room cool, small amounts of preferred foods only.\n\nCONSTIPATION:\nConstipation does not resolve as a patient approaches death — in fact, decreased mobility, opioid use, and reduced oral intake worsen it. Bowel obstruction and fecal impaction cause pain, nausea, and agitation. Continue laxatives throughout the dying process unless patient is within hours of death. First-line: senna + docusate. If impaction suspected: digital rectal examination; glycerin suppository or mineral oil enema. At EOL, rectal routes are preferred over oral when oral intake is absent."
+        },
+        {
+          "title": "Comfort-Focused Care Principles",
+          "content": "NUTRITION AND HYDRATION AT END OF LIFE:\nArtificial nutrition and hydration (ANH) — tube feeding (NG, PEG) and IV/SC hydration — in the actively dying patient rarely provides benefit and may cause harm. Evidence: (1) Dying patients typically have absent hunger and minimal thirst as part of the normal dying process — this is physiological, not starvation. (2) ANH in the final weeks of life can increase respiratory secretions, peripheral edema, and ascites — worsening dyspnea and comfort. (3) No evidence that ANH extends life or improves quality of life in the final weeks. The nurse's role: educate families that reduced oral intake is a normal and expected part of the dying process, not abandonment. 'The body is shutting down — it no longer needs or can use food and fluids the way it did. Forcing fluids can actually make breathing more difficult.' Oral comfort feeding: always appropriate even when ANH is not being used. Small amounts of food or drink the patient desires (ice chips, sips of favorite beverage, a spoonful of ice cream) provide pleasure, connection, and dignity without requiring large volume intake. Family members can participate in comfort feeding — this is a valuable act of care and connection.\n\nORAL CARE:\nThe most important comfort measure for any patient who is not drinking adequately. Decreased oral intake leads to dry, cracked lips, coated tongue, and oral discomfort. Protocol: (1) Moistened oral swabs (glycerin swabs — use sparingly as glycerin is hygroscopic; saline-moistened sponge swabs preferred) every 2–4 hours. (2) Lip balm or petroleum jelly to lips Q2–4h. (3) Artificial saliva spray PRN. (4) Soft toothbrush for gentle tooth and gum cleaning if patient can safely open mouth. (5) Educate family how to perform oral care — it is a meaningful comfort task for families to contribute to.\n\nDISCONTINUING NON-BENEFICIAL MEDICATIONS:\nA critical and compassionate act at EOL is deprescribing medications that no longer serve the patient's comfort goals. Medications to DISCONTINUE at EOL (no benefit in final weeks, may cause discomfort): statins (e.g., atorvastatin, rosuvastatin), antihypertensives (beta-blockers, ACE inhibitors, ARBs, calcium channel blockers), oral hypoglycemics (metformin, sulfonylureas, SGLT2 inhibitors), preventive medications (aspirin for primary prevention, osteoporosis medications, vitamins), diuretics (unless specifically for comfort — e.g., furosemide for symptomatic fluid overload), thyroid medications, antidementia medications (donepezil, memantine).\n\nMedications to CONTINUE at EOL (comfort-focused): opioid analgesics (pain, dyspnea), anxiolytics (lorazepam, midazolam), antiemetics (haloperidol, metoclopramide), antisecretory agents (glycopyrrolate), anticonvulsants (discontinuing suddenly risks breakthrough seizures), corticosteroids if managing nausea, appetite, or inflammation, insulin (maintain blood glucose <15 mmol/L to prevent symptomatic hyperglycemia — but tight control is not necessary).\n\nPOSITIONING AND SKIN CARE:\nDying patients are at extremely high risk for pressure injuries due to immobility, malnutrition, incontinence, and reduced tissue perfusion. Repositioning every 2 hours minimum using gentle technique. Use pressure-redistribution mattress. Moisture management: incontinence products, barrier creams. Maintain dignity: exposure only as necessary during care. Clean mouth, eyes, and perineum regularly. These measures serve both comfort and dignity — the patient is not able to advocate for themselves; the nurse is their protector."
+        },
+        {
+          "title": "Advance Care Planning",
+          "content": "ACP DEFINITION (Sudore et al., 2017): 'A process that supports adults at any age or stage of health in understanding and sharing their personal values, life goals, and preferences regarding future medical care.' ACP is an ONGOING PROCESS — not a one-time event or a document to be filed. It involves conversations over months and years with the patient, family, and healthcare team.\n\nADVANCE DIRECTIVES:\nLegal documents that express a person's wishes regarding healthcare if they become incapacitated. Two main types: (1) Living Will: documents specific treatment preferences (e.g., 'I do not want CPR,' 'I do not want artificial nutrition,' 'I want pain relief even if it shortens my life'). Describes VALUES and PREFERENCES — not medical orders. Provides guidance to the SDM and healthcare team. (2) Healthcare Power of Attorney (HPOA) / Healthcare Proxy / Substitute Decision-Maker Designation: a legal document designating a specific person to make healthcare decisions on the patient's behalf if they lose capacity. This person is often called the HPOA, healthcare agent, or proxy. CRITICAL: An advance directive must be INTERPRETED by the healthcare team — it does not automatically become a medical order. A clinician must read it and translate the expressed wishes into specific medical orders.\n\nMOST (MEDICAL ORDERS FOR SCOPE OF TREATMENT) / POLST (PHYSICIAN ORDERS FOR LIFE-SUSTAINING TREATMENT):\nKey distinction from advance directives: MOST/POLST ARE medical orders — signed by a physician or NP — that become immediately actionable. They travel with the patient across all care settings (home, ambulance, ER, hospital, LTC). They specify: CPR status, level of medical intervention (comfort measures only vs. limited interventions vs. full interventions), artificial nutrition preferences. MOST/POLST is appropriate for patients with advanced illness, frailty, or limited life expectancy — not a routine tool for healthy adults. An advance directive requires interpretation; MOST/POLST is immediately actionable.\n\nDNR/DNI ORDERS:\nDo Not Resuscitate (DNR): CPR — chest compressions, defibrillation — will not be initiated. Do Not Intubate (DNI): endotracheal intubation and mechanical ventilation will not be initiated. CRITICAL CLINICAL POINT: DNR/DNI does NOT mean 'do not treat.' A patient with a DNR order should receive: full pain and symptom management, antibiotics if they relieve discomfort, blood transfusions if they improve comfort, IV fluids if indicated, surgical or procedural interventions for comfort purposes. The DNR order addresses only resuscitation — ALL OTHER treatment decisions must be made separately, guided by the goals-of-care conversation. Nurses must proactively clarify: 'This patient has a DNR. What are the goals of care for this hospitalization? What treatments are aligned with those goals?'\n\nGOALS-OF-CARE CONVERSATIONS — SPIKES FRAMEWORK:\nSPIKES is a structured protocol for delivering serious news and conducting goals-of-care conversations in complex medical situations. S — SETTING: Create the optimal environment. Private room; ensure key family members and SDM are present; turn off pagers/phones; sit at eye level; allow enough time (not between admissions). P — PERCEPTION: Assess what the patient/family already understands. 'What have the doctors told you about what's happening?' 'What is your understanding of how serious this illness is?' This prevents information overload and tailors communication to their level of understanding. I — INVITATION: Ask how much information they want. 'Some people want all the details, others prefer I speak mainly to your family. What works best for you?' 'How much do you want to know about what might happen?' K — KNOWLEDGE: Deliver the clinical information clearly, compassionately, and without jargon. 'I have some difficult news to share.' Use a warning shot. Speak plainly: 'The cancer has spread and is not responding to treatment' — not 'the situation has evolved.' Pause frequently. E — EMOTION/EMPATHY: This is the most important step and the most commonly skipped. When emotion is expressed (crying, anger, silence), STOP delivering information and RESPOND to the emotion first. 'I can see this is really hard to hear.' 'It's okay to cry.' 'What are you feeling right now?' Empathic statements: naming (I can see you're frightened), legitimizing (anyone in this situation would feel this way), exploring (tell me more about what you're worried about), respecting, supporting, partnering. S — STRATEGY/SUMMARY: Transition to a treatment plan aligned with the patient's values and goals. 'Based on what you've told me about what matters most to [patient] — being comfortable and at home — here's what we can do...' Summarize the plan. Confirm understanding. Arrange follow-up conversation.\n\nTRIGGERS FOR GOALS-OF-CARE CONVERSATIONS: Unexpected hospital admission or ICU transfer; functional decline over the past year; recurrent hospitalizations (≥2 in 6 months); diagnosis of life-limiting illness; patient or family asks about prognosis; clinical intuition that 'I would not be surprised if this patient died in the next year' (Surprise Question)."
+        },
+        {
+          "title": "Substitute Decision-Making",
+          "content": "LEGAL FRAMEWORK: When a patient lacks decision-making capacity, a Substitute Decision-Maker (SDM) makes healthcare decisions on their behalf. Capacity is decision-specific and time-specific — a patient may have capacity for some decisions (choosing a meal) but not others (consenting to surgery). Capacity assessment: can the patient (1) understand the information, (2) appreciate how it applies to their situation, (3) reason through options, and (4) communicate a choice?\n\nSDM HIERARCHY (Ontario model as exemplar; varies by jurisdiction):\n1. Guardian of the person (if appointed by the courts)\n2. Attorney for personal care (named in a HPOA/POA for personal care document)\n3. Representative designated by the Consent and Capacity Board\n4. Spouse or partner\n5. Adult child\n6. Parent\n7. Adult sibling\n8. Any other relative\n9. Office of the Public Guardian and Trustee (government-appointed guardian of last resort)\n\nFor children at steps 5–8: the first available member at the highest applicable level serves as SDM. If multiple people at the same level disagree, majority decision-making applies (e.g., multiple adult children). Important: the nurse cannot assume the spouse automatically has legal authority — verify HPOA document if one exists, as it may name a different person.\n\nSDM'S ROLE AND STANDARD:\nPrimary standard — KNOWN WISHES: The SDM must represent the PATIENT'S expressed wishes when capable, not their own preferences. This is a legal and ethical obligation in most Canadian jurisdictions (Health Care Consent Act, Ontario). The SDM asks: 'What would [patient] want in this situation?' not 'What do I want for them?' or 'What would I want if I were them?' Prior expressed wishes of a capable adult bind the SDM legally. Example: if a patient stated 'I would never want to be kept alive on a machine' — the SDM must honor this even if they personally want aggressive treatment. Secondary standard — BEST INTERESTS: Applied only if no prior expressed wishes are known. The SDM considers: (1) values and beliefs the patient held; (2) which option is least restrictive/intrusive while meeting goals; (3) quality of life with and without treatment.\n\nWHEN FAMILIES DISAGREE:\nFamily conflict about EOL decisions is common and must be addressed proactively. Nursing role: (1) Clarify the legal SDM and document; (2) ensure family members understand the SDM's role (to represent the patient, not themselves); (3) offer a family meeting with the interprofessional team; (4) request ethics consultation early — do not wait for crisis. The nurse should avoid 'taking sides' but must advocate for the patient's known wishes."
+        }
+      ]
+    },
+    {
+      "id": "normal_aging_changes",
+      "title": "Normal Aging Changes Affecting End-of-Life Care",
+      "content": "Understanding age-related physiological changes is essential for providing safe and appropriate EOL care to older adults:\n\nREDUCED ORGAN RESERVE: Older adults have decreased physiological reserve across all organ systems. The kidney, liver, and heart have less capacity to handle medication load. Drug metabolism (hepatic first-pass, renal clearance) is reduced — opioids and benzodiazepines accumulate more rapidly; start doses lower and titrate more gradually than in younger adults. Creatinine clearance declines with age — calculate GFR before prescribing renally-cleared medications (e.g., morphine-6-glucuronide accumulates in renal impairment — consider hydromorphone).\n\nPOLYPHARMACY: The average older adult takes 5–10 medications. At EOL, many of these no longer serve a comfort purpose and may contribute to delirium, falls, or drug interactions. Systematic medication review and deprescribing is an active nursing advocacy role. Nurse responsibility: question any new medication order and ask 'Does this medication serve this patient's comfort goals?'\n\nCOGNITIVE IMPAIRMENT AND ACP CAPACITY: Mild to moderate dementia may impair a patient's ability to complete formal ACP documents but does NOT necessarily eliminate capacity for certain decisions. Assess capacity for each decision individually. A patient with dementia may not have legal capacity to sign a new HPOA but may be able to express clear preferences about specific interventions ('I don't want a feeding tube'). Document all expressed wishes even when formal legal capacity is uncertain — these constitute verbal advance directives and should guide SDM decisions. If dementia was diagnosed before an HPOA was completed, a Public Guardian may need to be appointed. Nurses must be alert for ACP documents completed earlier in the illness — review the chart and ask the family.\n\nFRAILTY AND FUNCTIONAL TRAJECTORY: The Clinical Frailty Scale (CFS) provides a useful framework for prognostic assessment in older adults. Severe frailty (CFS 7–9) combined with acute illness often indicates a prognosis of weeks to months. This framing supports goals-of-care conversations focused on comfort. Malnutrition, deconditioning, and reduced immune function in frail older adults mean that 'aggressive' treatments (ICU care, CPR, aggressive hydration) carry higher complication rates and lower success rates — this information belongs in goals-of-care conversations.\n\nSENSORY IMPAIRMENT: Hearing and visual loss are common in older adults. At EOL, ensure: speaking clearly toward the patient's better ear, adequate room lighting, presence of hearing aids or glasses if patient uses them, gentle touch when approaching from the side to avoid startle reflex. Patients with aphasia or advanced dementia may still hear and comprehend at a higher level than they can express — speak to them with the assumption they understand; always announce yourself before touching."
+    },
+    {
+      "id": "abnormal_findings",
+      "title": "Signs of Approaching Death and Active Dying",
+      "content": "DAYS TO WEEKS BEFORE DEATH (Pre-active dying):\n- Increased sleep and withdrawal from the environment — sleeping 18–22 hours/day\n- Reduced oral intake — disinterest in food and fluids\n- Reduced urine output — concentrated, dark amber/brown urine\n- Emotional and spiritual review — reminiscing, saying goodbye, unfinished business\n- Visioning phenomena — patients may report seeing deceased relatives or spiritual figures (not a sign of confusion — do not medicate; validate and support)\n- Withdrawal from activities and conversations previously enjoyed\n\nHOURS TO DAYS BEFORE DEATH (Active dying — clinical recognition is essential for family preparation):\n\nRESPIRATORY CHANGES:\n- Cheyne-Stokes breathing: cyclical breathing pattern of gradual waxing and waning respiratory depth/rate separated by periods of apnea (no breathing for 10–60 seconds). Mechanism: decreased sensitivity of respiratory center to CO2 as perfusion decreases. The patient does not experience air hunger during apneic periods. Families must be educated proactively: 'You may notice your [family member] seems to stop breathing for a moment, then breathe again. This is called Cheyne-Stokes breathing and is a normal part of the dying process.'\n- Mandibular breathing (jaw movement with each breath) — final hours\n- Death rattle (terminal secretions) — gurgling from secretions in posterior pharynx\n- Agonal breathing — final gasps; widely spaced, irregular breaths; can occur after patient has appeared to stop breathing; not distress\n\nCARDIOVASCULAR AND PERIPHERAL CHANGES:\n- Mottling (livedo reticularis): blotchy, purplish/red-blue skin discoloration beginning in the knees and feet, progressing centrally toward trunk and trunk. Mechanism: peripheral vasoconstriction as cardiac output falls. Mottling that reaches above the knees suggests death within hours.\n- Cooling and cyanosis of extremities: hands, feet, fingers, toes become cool, mottled, and cyanotic while trunk remains warm\n- Peripheral pulses weak or absent — may palpate only carotid or femoral\n- Blood pressure may be unmeasurable in final hours\n- Capillary refill time >3 seconds peripherally\n\nNEUROLOGICAL CHANGES:\n- Decreased level of consciousness — unresponsive to voice or name, may respond only to painful stimuli, then becomes completely unresponsive\n- Non-reactive, fixed pupils — occurs as brainstem perfusion ceases\n- Jaw relaxation — mouth hangs open\n- Loss of protective gag and swallowing reflexes — aspiration risk; patient cannot safely receive oral medications\n- Eyes partially open with glazed appearance (half-mast eyes)\n- Terminal delirium/agitation — restlessness, moaning, purposeless movements in final hours\n\nRENAL CHANGES:\n- Oliguria: <30 mL/hour; urine dark and concentrated\n- Anuria: no urine output — typically final hours\n- If catheterized: note output and communicate trend to family and team\n\nFACIAL CHANGES:\n- Temporal wasting, sunken cheeks\n- Nasolabial fold deepening — Hippocratic facies\n- Pale or ashen skin coloration\n\nMNEMONIC — CAMDF (Active Dying Signs):\nC — Cheyne-Stokes breathing\nA — Altered consciousness (unresponsive)\nM — Mottling of extremities (progressing centrally)\nD — Decreased/absent urine output\nF — Fixed, non-reactive pupils\n\nAfter confirming death: call physician/NP to pronounce; notify family (if not present); offer private time with the body; ensure respectful and dignified post-mortem care; complete required documentation; notify funeral home per family instruction."
+    },
+    {
+      "id": "assessment",
+      "title": "Assessment at End of Life",
+      "content": "SYSTEMATIC EOL ASSESSMENT — minimum Q4h in actively dying patient:\n\nPAIN ASSESSMENT:\n- Cognitively intact: Numerical Rating Scale (NRS) 0–10\n- Cognitively impaired or unresponsive: PAINAD Scale (Pain Assessment in Advanced Dementia) — 5 domains: breathing, vocalization, facial expression, body language, consolability; score 0–10\n- Behavioral indicators of pain: furrowed brow, grimacing, clenched teeth, guarding, restlessness, resistance to care, moaning, crying\n\nDYSPNEA ASSESSMENT:\n- Cognitively intact: NRS 0–10 for breathlessness\n- Cognitively impaired or unresponsive: Respiratory Distress Observation Scale (RDOS) — assesses heart rate, accessory muscle use, paradoxical breathing, nasal flaring, end-expiratory grunting, look of fear, facial expression\n- NOTE: Oxygen saturation and respiratory rate do NOT reliably reflect dyspnea — assess patient experience, not numbers\n\nAGITATION ASSESSMENT:\n- Pittsburgh Agitation Scale: scored 0–4 on vocalizations, motor agitation, pulling at tubes/restraints, overall agitation. Use to quantify and track terminal agitation.\n- Differentiate: Is agitation new? Is it worsening? What time of day? (Sundowning pattern vs. continuous)\n\nSWALLOWING SAFETY:\n- Can the patient safely receive oral medications? Sip of water test — does patient cough, pocket fluid, have wet voice quality after swallowing?\n- If swallowing is unsafe: convert medications to subcutaneous or sublingual route; hold oral medications\n- Do NOT force oral medications in a patient with unsafe swallowing — aspiration risk\n\nACP AND DOCUMENTATION STATUS:\n- Is there a DNR/DNI order in the chart?\n- Has a MOST/POLST form been completed and scanned?\n- Is the Goals of Care documented — what IS the goal: comfort only? Limited interventions? Full treatment?\n- Has the SDM been identified, documented, and contacted?\n- Is there an advance directive in the chart? Has it been reviewed?\n- Is there a plan for after-death care (funeral home, religious rites)?\n\nFAMILY ASSESSMENT:\n- Level of anxiety and distress — who in the family needs additional support?\n- Understanding of the dying process — have they been educated about what to expect?\n- Presence of conflict or disagreement among family members\n- Cultural and religious needs — are there specific practices required at the time of death? (e.g., religious rites, specific prayers, body preparation traditions)\n- Is there a family member who will be the primary contact for after-death notification?\n- Is bereavement support needed (social worker, chaplain referral)?"
+    },
+    {
+      "id": "nursing_interventions",
+      "title": "Nursing Interventions at End of Life",
+      "content": "SYMPTOM MANAGEMENT:\n- Assess pain and dyspnea using validated tools every 4 hours minimum and PRN with any change\n- Administer scheduled opioids on time — do not delay or skip doses\n- Offer breakthrough opioid doses proactively at Q1h if patient showing behavioral signs of distress (even if unable to verbally rate pain)\n- Administer antisecretory medications (glycopyrrolate) as ordered for death rattle\n- Administer anxiolytics as ordered for terminal agitation or anxiety component of dyspnea\n- Position patient for comfort — semi-Fowler's for dyspnea; lateral decubitus to reduce death rattle and prevent aspiration of secretions\n- Direct a fan toward patient's face if dyspneic\n- Do NOT routinely apply supplemental oxygen in non-hypoxic dying patients\n\nCOMFORT AND DIGNITY CARE:\n- Oral care every 2–4 hours: moistened swabs, lip balm, artificial saliva\n- Reposition every 2 hours using gentle technique with pressure-redistribution mattress\n- Perineal care after each incontinent episode; moisture barrier cream applied\n- Eye care if eyes partially open: instill artificial tears or apply moist gauze to prevent corneal drying\n- Maintain patient's dignity: minimize unnecessary exposure, close curtains, knock before entering, explain care before proceeding even if patient appears unresponsive\n\nCOMMUNICATION AND FAMILY SUPPORT:\n- Proactively educate family about signs of dying: Cheyne-Stokes breathing, mottling, cooling of extremities, death rattle — BEFORE these occur, not in the moment of crisis\n- Reassure family that their loved one is not in pain or choking during these normal dying events\n- Encourage family presence at the bedside — 'Your presence matters and is a gift to them'\n- Facilitate meaningful connection: 'It's okay to talk to them — hearing is believed to be one of the last senses to go'\n- Support family in saying goodbye: 'Is there anything you need to say to them? Now is the time'\n- Ensure family knows who to call at any time (24/7 palliative line, unit nurse) and what will happen at the moment of death\n\nSPIRITUAL AND CULTURAL CARE:\n- Ask patient (while able) and family about spiritual or religious needs\n- Offer chaplain or spiritual care referral — do not assume patient's religious affiliation\n- Coordinate any required cultural practices: specific prayers, rituals, body preparation, who may and may not be present\n- Respect cultural practices around the time of death: some cultures require that specific family members perform care; others prohibit discussion of death directly with the patient\n\nINTERPROFESSIONAL COORDINATION:\n- Communicate current symptom burden and dying trajectory to physician/NP on each contact — advocate for medication orders that allow adequate symptom management\n- Notify palliative care team, social worker, and chaplain of patient's active dying status\n- Ensure all team members are aware of DNR/DNI status and goals of care\n- Document all interventions, symptoms, family communication, and SDM contacts in real time"
+    },
+    {
+      "id": "patient_teaching",
+      "title": "Patient and Family Teaching",
+      "content": "WHAT FAMILIES NEED TO KNOW ABOUT THE DYING PROCESS:\n\n'Why is my family member not eating or drinking?'\n'As the body approaches death, it naturally stops requiring food and water. The organs that process food and fluid are shutting down, and forcing food or fluids can actually cause discomfort — it can cause fluid to build up in the lungs and make breathing harder. This is not starvation — your [family member] is not suffering from hunger or thirst the way a healthy person would be. If they want small sips or bites of something they enjoy, that is always okay — we call that comfort feeding.'\n\n'Why are they breathing so strangely?'\n'The breathing pattern that looks like fast breathing followed by a pause — sometimes a long pause — is called Cheyne-Stokes breathing. It happens because the brain's breathing center is receiving less blood. The pauses can feel frightening to watch, but [patient] is not aware of them and is not struggling. This is a normal part of dying.'\n\n'Why does their breathing sound like gurgling?'\n'The sound you're hearing is from fluid in the back of the throat. When someone is in this state of deep rest and cannot swallow, fluid pools there. [Patient] is not choking or drowning and cannot feel this. We have given them a medication to help reduce the fluid. The sound can be very hard to listen to — it's okay to talk to them, touch them, and be there with them.'\n\n'Are they in pain? They look like they're struggling.'\n'We are watching very carefully for any signs of pain or discomfort, and we are giving pain and comfort medications regularly. The [restlessness/breathing sounds/facial expression] you see is part of the natural dying process, not a sign of pain. If at any time I think they need more comfort medication, I will give it immediately.'\n\n'Should we be here? Are we doing the right thing by staying?'\n'Your presence is one of the most important things you can do. Hearing is believed to be one of the last senses to go — even when someone appears deeply unconscious, they may still be able to hear you. Talk to them, hold their hand, tell them anything you need to say. Many families find it very meaningful to have said goodbye.'\n\nPERMISSION TO SAY GOODBYE:\nNurses play a unique role in facilitating final conversations. When appropriate: 'Sometimes people seem to hold on until they feel it's okay to let go. If there's anything you want to say — or if they need to hear that you'll be okay — now is a good time.' This is not empty reassurance; it reflects real clinical observations that patients sometimes die shortly after family grants permission.\n\nWHAT HAPPENS AT THE MOMENT OF DEATH:\nPrepare families in advance. 'At some point, [patient] will take their last breath. Breathing may have long pauses before that happens. After the last breath, the heart continues briefly, then stops. Their face will relax. It is a peaceful process. We will be right here to support you, and there is no rush after — you can take as much time as you need with them.'\n\nAFTER-DEATH CARE ACCESS:\nEnsure families have: the name of their funeral home (discuss in advance); knowledge of who to call at the time of death if they are at home (hospice 24/7 line; do NOT call 911 if DNR is in place — this triggers resuscitation); information about bereavement resources (hospice bereavement counselor, grief groups, community supports)."
+    },
+    {
+      "id": "documentation",
+      "title": "Documentation at End of Life",
+      "content": "REQUIRED DOCUMENTATION — ALL SETTINGS:\n\nADMISSION AND ONGOING:\n- Identification and verification of SDM: name, relationship, contact phone number(s); document that SDM has been notified of patient's condition and goals of care\n- ACP review: document whether advance directive/HPOA/MOST/POLST/DNR exists, was reviewed, and is consistent with current orders; note if documents are on file and where\n- Goals of Care: document the documented goals (comfort/limited intervention/full treatment) using specific language — not 'palliative' alone, but 'patient wishes comfort measures only including opioids for pain and dyspnea, no CPR, no intubation, no artificial nutrition'\n- DNR/DNI order: confirm in chart; flag to incoming staff on each shift handover\n\nSYMPTOM ASSESSMENT AND MANAGEMENT:\n- Record pain assessment tool and score Q4h minimum, and PRN with each intervention\n- Record dyspnea assessment Q4h minimum\n- Document each medication administration: drug, dose, route, time, indication, patient response within 30–60 minutes\n- Document repositioning, oral care, skin care performed\n\nFAMILY COMMUNICATION:\n- Date, time, and content of each significant family communication (not just 'family updated')\n- Specific: 'SDM [name] notified by phone at [time] that patient's condition has changed. Reported patient is actively dying. SDM and family members will arrive within the hour. Discussed signs of death, death rattle, and what to expect. SDM expressed understanding and gratitude. Chaplain and social worker notified.'\n- Document any family conflict, disagreements, or requests that differ from the patient's known wishes — note what action was taken (ethics referral, team meeting, education provided)\n\nGOALS-OF-CARE CONVERSATIONS:\n- Document who was present, what information was shared, what values and wishes the patient/SDM expressed, and what decisions were made — use direct quotes where possible ('SDM stated, \"Mom always said she never wanted to be kept alive by machines.\"')\n\nAT TIME OF DEATH:\n- Time of last assessment showing signs of life\n- Time physician/NP notified to pronounce death\n- Time of death as pronounced\n- Family notification: time called, who was notified, response\n- Post-mortem care provided\n- Personal effects inventoried and disposition documented"
+    },
+    {
+      "id": "clinical_pearls",
+      "title": "Clinical Pearls",
+      "content": [
+        "1. Opioids properly titrated to comfort do NOT hasten death. This is supported by the doctrine of double effect, decades of palliative care evidence, and standard nursing ethics. Inadequately treated pain and dyspnea — not morphine — causes suffering at the end of life. A dying patient who is moaning, grimacing, or gasping for air is in distress that the nurse has both the right and the obligation to treat aggressively.",
+        "2. 'Hunger and thirst' at EOL: dying patients rarely experience suffering from reduced oral intake — the physiology of dying reduces hunger and thirst drive. The suffering around reduced eating is almost always experienced by the FAMILY, who interpret it through a healthy person's hunger experience. Proactive family education is the intervention — not IV hydration or tube feeding.",
+        "3. The death rattle is more distressing to families than to the patient. Families often need repeated reassurance that the sound does not indicate suffering. Proactive, calm, repeated education — starting before the death rattle begins, if possible — dramatically reduces family trauma around this symptom.",
+        "4. DNR does NOT mean comfort-only. Nurses frequently need to clarify this for families AND colleagues. A DNR patient may still receive: surgery, blood transfusions, antibiotics, IV medications, and any other treatment consistent with their goals. The goals-of-care conversation is separate from — and more important than — the DNR order.",
+        "5. ACP is a process, not a document. A single signed HPOA or living will is the beginning, not the end, of advance care planning. Patients' wishes evolve; values change after diagnosis, treatment, and life events. Nurses should revisit ACP regularly — especially at transitions: new diagnosis, functional decline, hospitalization, and care setting changes.",
+        "6. Family presence may be a clinical intervention. Evidence suggests that familiar voices, touch, and presence reduce agitation and distress in dying patients. Never restrict family at EOL without compelling clinical reason. The family member who holds their loved one's hand is not 'in the way' — they are part of the care team.",
+        "7. Hearing is likely the last sense to go. Even when a patient appears deeply unresponsive, assume they can hear. Speak to them before touching. Announce yourself. Speak words of comfort. Encourage families to continue talking to their loved one throughout the dying process. Never speak about a patient as if they are not present."
+      ]
+    },
+    {
+      "id": "memory_anchors",
+      "title": "Memory Anchors and Mnemonics",
+      "content": {
+        "SPIKES_framework": {
+          "mnemonic": "SPIKES — Goals-of-Care Conversation Protocol",
+          "steps": [
+            "S — Setting (private, unhurried, seated, key people present)",
+            "P — Perception (what does the patient/family already understand?)",
+            "I — Invitation (how much information do they want?)",
+            "K — Knowledge (share clearly, no jargon, pause frequently)",
+            "E — Emotion/Empathy (respond to emotion FIRST before moving on)",
+            "S — Strategy/Summary (care plan aligned with values and goals)"
+          ]
+        },
+        "CAMDF_active_dying": {
+          "mnemonic": "CAMDF — Signs of Active Dying (hours to days)",
+          "steps": [
+            "C — Cheyne-Stokes breathing (cyclical breathing with apneic pauses)",
+            "A — Altered/lost consciousness (unresponsive)",
+            "M — Mottling of extremities (progressing centrally toward trunk)",
+            "D — Decreased/absent urine output (oliguria → anuria)",
+            "F — Fixed, non-reactive pupils"
+          ]
+        },
+        "MOST_vs_DNR_vs_AD": {
+          "title": "Three-Way Distinction",
+          "advance_directive": "Legal document expressing wishes; requires interpretation by clinician to become orders; not automatically actionable",
+          "MOST_POLST": "Physician/NP-signed medical orders; immediately actionable; travels with patient across all settings",
+          "DNR": "Addresses CPR only; does NOT determine goals of care; does NOT mean comfort-only unless goals of care conversation separately establishes this"
+        },
+        "SDM_role_anchor": "SDM = Voice of the Patient, Not Their Own Voice. The SDM asks: 'What would [patient] want?' Not: 'What do I want for them?'",
+        "opioid_breakthrough_anchor": "Breakthrough dose = 10% of total 24-hour opioid dose, offered Q1h PRN. Example: morphine 10 mg SC Q4h = 60 mg/day; breakthrough = 6 mg SC Q1h PRN.",
+        "death_rattle_anchor": "Death rattle = glycopyrrolate + repositioning + family education. NOT suctioning."
+      }
+    },
+    {
+      "id": "safety_alerts",
+      "title": "Safety Alerts",
+      "content": [
+        "ALERT: Never withhold opioids from a dying patient for fear of hastening death. Inadequately treated pain causes both suffering AND physiological stress that accelerates dying. The legal, ethical, and clinical standard is to titrate to comfort. A nurse who withholds ordered opioids from a dying patient in pain is causing harm, not preventing it.",
+        "ALERT: Always identify and document the SDM on admission. Do not assume the spouse has legal authority without verifying — a named HPOA may supersede the spouse. If no SDM is identified and the patient loses capacity without documented wishes, the Public Guardian may need to be appointed — a process that takes time and can create crisis delays. Identify the SDM on day one.",
+        "ALERT: Family disagreements about EOL care decisions require early ethics consultation. Do not allow a situation to deteriorate into crisis before involving ethics. Request an ethics consultation as soon as a pattern of conflict emerges — when family members express wishes that contradict the patient's known wishes, or when there is sustained family disagreement that prevents implementation of the care plan.",
+        "ALERT: Aggressive care (CPR, ICU admission, mechanical ventilation) in frail, actively dying older adults causes significant harm — broken ribs, bruising, hypoxic injury, prolonged dying process in an ICU — with minimal probability of survival to discharge. Goals-of-care conversations must occur before crisis, not in the code room. If a nurse cares for a patient with advanced illness and no documented goals of care, this is an urgent gap that must be raised with the physician/NP immediately.",
+        "ALERT: Never perform suctioning for death rattle. Pharyngeal suctioning stimulates secretion production, causes pain and distress in patients who may still have intact protective reflexes (gag, cough), and does not effectively clear pooled posterior pharyngeal secretions. The intervention is glycopyrrolate + repositioning + family education."
+      ]
+    },
+    {
+      "id": "exam_tips",
+      "title": "Exam Tips",
+      "content": [
+        "Know the three-way distinction: Palliative care ≠ Hospice ≠ EOL care. Palliative can start at diagnosis; hospice requires prognosis ≤6 months and comfort-only goals; EOL care is the final hours/days/weeks specifically.",
+        "On any question about DNR: DNR = no CPR only. Unless the question specifies a separate comfort-only order, assume ALL other treatment continues. 'Do not resuscitate' does not mean 'do not treat.'",
+        "The SDM's role is ALWAYS to represent the patient's known wishes — not the family member's own preferences and not 'best interests' unless no wishes are known. If a question describes an SDM choosing based on their own values: that is wrong practice.",
+        "Opioids for dyspnea in EOL = always appropriate and evidence-based. If a question asks about family concern about morphine causing death, the correct nursing response is to educate — properly titrated palliative opioids do not hasten death.",
+        "Comfort feeding (small amounts patient desires) is always appropriate and cannot be withheld, even from patients on hospice or patients who cannot eat large volumes. It is distinct from artificial nutrition, which may or may not be consistent with goals.",
+        "SPIKES — know the order and what each letter means. Exam questions often test: 'What is the FIRST step when beginning a goals-of-care conversation?' Answer: Setting (S).",
+        "Death rattle: the contraindicated intervention is SUCTIONING. The appropriate response is glycopyrrolate + repositioning + family education.",
+        "Advance directive = legal document = requires interpretation to become orders. MOST/POLST = physician/NP-signed orders = immediately actionable. Know which is which.",
+        "Signs of active dying: Cheyne-Stokes breathing, mottling progressing centrally, cooling/cyanosis of extremities, non-reactive pupils, absent urine output, decreased consciousness, jaw relaxation. Know these for SATA questions.",
+        "When asked about 'the most important comfort measure' for a dying patient who is not eating: ORAL CARE — mouth care Q2–4h is the answer, not IV fluids or tube feeding."
+      ]
+    },
+    {
+      "id": "references",
+      "title": "References and Evidence Base",
+      "content": [
+        "World Health Organization (WHO). Palliative Care. Fact Sheet. August 2020. Available at: https://www.who.int/news-room/fact-sheets/detail/palliative-care. Defines palliative care as applicable to all stages of illness alongside curative treatment.",
+        "Canadian Hospice Palliative Care Association (CHPCA). A Model to Guide Hospice Palliative Care: Based on National Principles and Norms of Practice. Revised and Condensed Edition: 2013. Ottawa: CHPCA.",
+        "Sudore RL, Lum HD, You JJ, et al. Defining Advance Care Planning for Adults: A Consensus Definition From a Multidisciplinary Delphi Panel. Journal of Pain and Symptom Management. 2017;53(5):821–832. Consensus definition of ACP as a process.",
+        "Arends J, Baracos V, Bertz H, et al. ESPEN expert group recommendations for action against cancer-related malnutrition. Clinical Nutrition. 2017;36(5):1187–1196.",
+        "Registered Nurses' Association of Ontario (RNAO). End-of-Life Care During the Last Days and Hours. Best Practice Guideline. Toronto: RNAO; 2011 (updated guidance ongoing). Covers symptom management, family support, and nursing standards.",
+        "Steinhauser KE, Christakis NA, Clipp EC, et al. Factors Considered Important at the End of Life by Patients, Family, Physicians, and Other Care Providers. JAMA. 2000;284(19):2476–2482. Foundational evidence for patient and family priorities at EOL.",
+        "Bickel KE, Arnold RM, Tulsky JA. Delivering serious news. UpToDate. Wolters Kluwer. Basis for SPIKES framework clinical application.",
+        "Morita T, Tsunoda J, Inoue S, Chihara S. Effects of high dose opioids and sedatives on survival in terminally ill cancer patients. Journal of Pain and Symptom Management. 2001;21(4):282–289. Evidence that palliative opioids do not hasten death.",
+        "Health Care Consent Act, 1996, S.O. 1996, c. 2, Sched. A. Ontario's SDM hierarchy and consent standards.",
+        "Blinderman CD, Billings JA. Comfort Care for Patients Dying in the Hospital. New England Journal of Medicine. 2015;373:2549–2561. Comprehensive clinical guidance for hospital-based EOL care."
+      ]
+    },
+    {
+      "id": "key_takeaways",
+      "title": "Key Takeaways",
+      "content": [
+        "Palliative care is not the same as hospice — palliative care is appropriate at any stage of serious illness alongside curative treatment; hospice is a specific program for patients with prognosis ≤6 months who have chosen comfort-only goals.",
+        "Properly titrated opioids relieve pain and dyspnea at EOL and do not hasten death — withholding them causes suffering and is ethically indefensible.",
+        "The death rattle is more distressing to families than to the patient — the nurse's most important intervention is proactive, repeated family education, not suctioning.",
+        "DNR means no CPR only — it does not mean comfort-only, and it does not mean withdrawing all other treatment. Goals-of-care conversations must establish the full treatment plan separately.",
+        "The substitute decision-maker's legal and ethical obligation is to represent the patient's known wishes, not their own preferences — the nurse's role is to educate and support the SDM in this role.",
+        "Reduced oral intake at EOL is physiological and does not cause suffering — artificial nutrition and hydration rarely benefit and may cause harm; comfort feeding is always appropriate.",
+        "Signs of active dying — Cheyne-Stokes breathing, mottling, cooling extremities, oliguria, non-reactive pupils — must be recognized early so families can be prepared, not surprised.",
+        "Advance care planning is an ongoing process, not a document — nurses should initiate and revisit ACP conversations at every transition in a patient's illness trajectory."
+      ]
+    }
+  ],
+  "pretest": [
+    {
+      "id": "pretest_q1",
+      "question": "A nurse is orienting a new graduate nurse to the oncology unit. The new nurse states, 'I thought hospice and palliative care were the same thing.' Which of the following is the MOST accurate response?",
+      "type": "mcq",
+      "options": [
+        "A. 'You are correct — both focus on comfort and are used only when a patient is dying.'",
+        "B. 'Palliative care is for patients with a prognosis of ≤6 months, while hospice is for patients at any stage of illness.'",
+        "C. 'Palliative care can be provided alongside curative treatment at any stage of illness, while hospice is for patients with a prognosis of ≤6 months who have chosen comfort-only goals.'",
+        "D. 'Hospice is provided in the community only, while palliative care is provided in hospitals.'"
+      ],
+      "correct": "C",
+      "rationale": "Palliative care (WHO definition) applies to any stage of life-threatening illness alongside curative or disease-modifying treatment — it is not time-limited. Hospice is a specific form of palliative care for patients with a prognosis ≤6 months who have elected to forgo life-prolonging treatment in favor of comfort goals. Option A incorrectly equates the two. Option B reverses the definitions. Option D incorrectly limits settings.",
+      "category": "Definitions"
+    },
+    {
+      "id": "pretest_q2",
+      "question": "A terminally ill 82-year-old patient with advanced pancreatic cancer tells the nurse, 'I don't want any tubes or IVs for feeding — I just want to eat what I feel like eating.' The patient's adult children are insisting on nasogastric tube feeding, stating their mother is 'starving to death.' Which nursing action is MOST appropriate?",
+      "type": "mcq",
+      "options": [
+        "A. Support the patient's autonomy by reinforcing her wishes and educating the family that reduced oral intake is a normal physiological process at end of life.",
+        "B. Insert a nasogastric tube as the family requests because they have the right to make decisions for their mother.",
+        "C. Consult with the physician to determine whether tube feeding is medically indicated before responding to either party.",
+        "D. Encourage the patient to reconsider her decision given her family's distress."
+      ],
+      "correct": "A",
+      "rationale": "A cognitively intact patient with decision-making capacity has the absolute right to refuse medical interventions including artificial nutrition. The nurse's primary obligation is to the patient's autonomy. Equally important is educating the family that reduced oral intake at EOL is physiological — the dying body does not process nutrition, and forcing fluids/feeding can increase secretions and worsen dyspnea. Comfort feeding (small amounts the patient desires) should be supported. Option B violates patient autonomy — the adult children do not have authority over a capable adult. Option C delays an urgent advocacy response. Option D is coercive.",
+      "category": "Nutrition/Autonomy"
+    },
+    {
+      "id": "pretest_q3",
+      "question": "A nurse is caring for a patient with a documented DNR order. The patient's adult son approaches the nurse and states, 'I don't care what that paper says — if my dad stops breathing, you need to do everything. Start CPR.' What is the MOST appropriate nursing response?",
+      "type": "mcq",
+      "options": [
+        "A. Agree to perform CPR to maintain the family's trust.",
+        "B. Explain that a DNR is a physician order and that CPR will not be performed, but that all other comfort-focused treatment will continue and you are there to support his father and family.",
+        "C. Remove the DNR order from the chart until a family meeting can be arranged.",
+        "D. Contact the physician to rescind the DNR order based on the family's request."
+      ],
+      "correct": "B",
+      "rationale": "A DNR is a valid physician order reflecting the patient's expressed wishes. The nurse is legally and ethically obligated to follow it. The nurse must compassionately but clearly explain that CPR will not be performed, and that this reflects what the patient decided for himself. Critically, the nurse should also reassure the family that all other care — pain management, symptom control, presence, support — will continue fully. Option A violates the patient's rights and the DNR order. Option C and D would require a formal capacity reassessment and goals-of-care conversation with the patient (if able) or the legal SDM — not an override at a family member's demand.",
+      "category": "DNR/Advocacy"
+    },
+    {
+      "id": "pretest_q4",
+      "question": "A family member of an actively dying patient runs to the nursing station in distress stating, 'My mother is making a horrible gurgling sound. She sounds like she's choking! Please do something!' Which nursing action is MOST appropriate?",
+      "type": "mcq",
+      "options": [
+        "A. Immediately perform deep pharyngeal suctioning to clear the secretions.",
+        "B. Administer IV normal saline at 125 mL/hr to thin the secretions.",
+        "C. Calmly accompany the family member to the room, reassure them that their mother is not choking or in distress, provide education about terminal secretions, reposition the patient to lateral decubitus, and administer glycopyrrolate as ordered.",
+        "D. Apply a non-rebreather mask at 15 L/min to improve oxygenation and reduce respiratory distress."
+      ],
+      "correct": "C",
+      "rationale": "The sound described is the death rattle (terminal secretions) — audible gurgling from pooled secretions in the posterior pharynx of a deeply unconscious patient. The patient is not choking or in distress. The most important intervention is family education (the family is the one experiencing distress). Positioning to lateral decubitus facilitates postural drainage. Glycopyrrolate reduces new secretion production. Suctioning (Option A) is contraindicated — it is ineffective for posterior pharyngeal secretions, stimulates further production, and causes distress. IV fluids (Option B) would increase secretion production. Non-rebreather mask (Option D) does not address secretions and is not comfort-focused.",
+      "category": "Symptom Management — Death Rattle"
+    },
+    {
+      "id": "pretest_q5",
+      "question": "A nurse is preparing to have a goals-of-care conversation with a patient who was just informed her metastatic lung cancer is no longer responding to treatment. According to the SPIKES framework, which action should the nurse take FIRST?",
+      "type": "mcq",
+      "options": [
+        "A. Ask the patient how much information she wants to receive about her prognosis.",
+        "B. Assess what the patient already understands about her illness and current situation.",
+        "C. Ensure the conversation is held in a private, unhurried setting with key people present, and that pagers and phones are silenced.",
+        "D. Deliver the key clinical information clearly and without medical jargon."
+      ],
+      "correct": "C",
+      "rationale": "The first step of the SPIKES framework is S — Setting. Before any information is exchanged, the nurse must create an optimal environment: a private room, adequate time, key family members or SDM present (if patient wishes), the provider seated at eye level, and phones/pagers silenced. This establishes trust and signals the importance of the conversation. Option B describes P (Perception) — the second step. Option A describes I (Invitation) — the third step. Option D describes K (Knowledge) — the fourth step.",
+      "category": "SPIKES/Communication"
+    },
+    {
+      "id": "pretest_q6",
+      "question": "A patient with late-stage ALS who now lacks decision-making capacity has a designated substitute decision-maker (SDM), his adult daughter. The daughter tells the nurse, 'I know Dad said he didn't want a ventilator, but I can't stand the thought of losing him. I think we should put him on one.' What is the MOST appropriate nursing response?",
+      "type": "mcq",
+      "options": [
+        "A. Support the daughter's request as she is the legal SDM and has the authority to make this decision.",
+        "B. Acknowledge the daughter's grief and gently explain that her role as SDM is to represent her father's known wishes — and that he expressed clearly he did not want mechanical ventilation.",
+        "C. Refer the decision to the ethics committee because the SDM's request conflicts with the patient's wishes.",
+        "D. Contact the physician to order intubation per the SDM's request."
+      ],
+      "correct": "B",
+      "rationale": "The SDM's legal obligation is to implement the patient's known expressed wishes, not their own preferences. This patient clearly stated he did not want a ventilator — that wish is legally binding on the SDM in most Canadian jurisdictions. The nurse should acknowledge the daughter's grief with compassion (this is an empathic intervention, not a legal lecture) and then clearly explain the SDM's role. Option A misrepresents the SDM's authority — SDMs do not have unilateral authority to override the patient's known wishes. Option C is premature; clarifying the SDM's role is the first step. Option D directly contradicts the patient's known wishes.",
+      "category": "Substitute Decision-Making"
+    },
+    {
+      "id": "pretest_q7",
+      "question": "A nurse is administering morphine 4 mg SC to an actively dying patient for severe dyspnea. The patient's family member states, 'Are you sure that morphine won't kill him faster? I heard opioids stop breathing.' What is the MOST appropriate nursing response?",
+      "type": "mcq",
+      "options": [
+        "A. Explain that there is a small risk morphine could shorten his life, but that his comfort is the priority.",
+        "B. Hold the morphine dose and contact the physician to discuss the family's concern before administering.",
+        "C. Reassure the family that morphine given at carefully titrated doses to relieve breathlessness does not hasten death, and that his comfort is our primary goal — untreated breathlessness causes far more suffering.",
+        "D. Agree with the family's concern and switch to a non-opioid medication for dyspnea."
+      ],
+      "correct": "C",
+      "rationale": "This is a critical teaching moment. Properly titrated opioids for dyspnea at EOL do not hasten death — this is supported by decades of palliative care evidence (Morita et al., 2001, among others) and the doctrine of double effect. The family's fear is common and must be compassionately corrected to prevent the nurse from withholding a comfort medication the patient urgently needs. Option A incorrectly implies risk that evidence does not support for properly titrated doses. Option B delays a necessary comfort intervention. Option D is incorrect — low-dose opioids (particularly morphine) are the most evidence-based treatment for dyspnea at EOL; there is no equivalent non-opioid alternative.",
+      "category": "Opioids/Family Education"
+    },
+    {
+      "id": "pretest_q8",
+      "question": "A 78-year-old patient on a home hospice program with end-stage heart failure asks the hospice nurse if she can have some chocolate ice cream. Her family says, 'She's on hospice — should she really be eating that?' What is the MOST appropriate nursing response?",
+      "type": "mcq",
+      "options": [
+        "A. Explain to the family that the patient is on a cardiac diet and should avoid high-fat foods.",
+        "B. Support the patient in having the ice cream and explain to the family that comfort feeding — small amounts of food or drink the patient desires — is always appropriate and is distinct from medically prescribed nutrition.",
+        "C. Consult the dietitian before allowing any food that is not part of a prescribed diet.",
+        "D. Explain that the patient cannot have food since she is on hospice."
+      ],
+      "correct": "B",
+      "rationale": "Comfort feeding is a core principle of palliative and hospice care. Small amounts of food or beverage that bring the patient pleasure are always appropriate — they provide comfort, dignity, and connection. Hospice does NOT restrict food choices, and dietary restrictions aimed at disease modification (cardiac diet, diabetic diet) are generally discontinued as they serve preventive rather than comfort goals. Options A and C apply disease-management frameworks where only comfort matters. Option D is entirely false — hospice does not prohibit eating.",
+      "category": "Comfort Feeding/Hospice"
+    },
+    {
+      "id": "pretest_q9",
+      "question": "A nurse is caring for a patient who is expected to die within hours. Select ALL signs that are consistent with active dying. (Select all that apply.)",
+      "type": "sata",
+      "options": [
+        "A. Cheyne-Stokes breathing pattern with periods of apnea",
+        "B. Mottling of the knees and lower extremities",
+        "C. Urine output of 400 mL over the past 8 hours",
+        "D. Fixed, non-reactive pupils",
+        "E. Jaw relaxation with mouth hanging open",
+        "F. Patient asking for water and reporting thirst",
+        "G. Cooling and cyanosis of the hands and feet"
+      ],
+      "correct": ["A", "B", "D", "E", "G"],
+      "rationale": "Signs of active dying (hours to days): Cheyne-Stokes breathing (A) — cyclical breathing with apneic pauses from decreased brainstem perfusion. Mottling of lower extremities (B) — blotchy purplish discoloration from peripheral vasoconstriction. Fixed non-reactive pupils (D) — brainstem perfusion ceasing. Jaw relaxation (E) — loss of muscle tone in final hours. Cooling/cyanosis of hands and feet (G) — peripheral circulatory shutdown. Option C (400 mL/8h = ~50 mL/hr) is within normal range — oliguria at EOL is <30 mL/hr. Option F (patient awake and asking for water) indicates the patient is NOT in the final active dying hours — a patient actively dying is typically unconscious or minimally responsive.",
+      "category": "Active Dying Recognition"
+    },
+    {
+      "id": "pretest_q10",
+      "question": "A 64-year-old patient with newly diagnosed stage IV lung cancer has just received her diagnosis and is cognitively intact. She has not previously completed any advance care planning documents. When is the MOST appropriate time to initiate advance care planning?",
+      "type": "mcq",
+      "options": [
+        "A. Only when the patient's condition deteriorates significantly and death is expected within weeks.",
+        "B. After the patient has completed at least one course of chemotherapy to see if treatment will be effective.",
+        "C. Now, while the patient has decision-making capacity, as ACP is appropriate at any time a person has capacity, and is especially important when facing a life-threatening illness.",
+        "D. ACP should be deferred until the patient raises the subject, to avoid causing distress."
+      ],
+      "correct": "C",
+      "rationale": "Advance care planning is appropriate at any time a person has decision-making capacity — it is not reserved for the final stages of illness. Initiating ACP at diagnosis of a life-threatening illness is ideal: the patient has full capacity, the diagnosis provides a meaningful trigger for reflection, and completing documents now ensures they exist if the patient later loses capacity. Waiting (Options A, B) risks the patient losing capacity before documents are completed. Option D incorrectly places full responsibility on the patient — nurses and providers have an obligation to proactively offer ACP as part of comprehensive care.",
+      "category": "Advance Care Planning"
+    }
+  ],
+  "posttest": [
+    {
+      "id": "posttest_p1",
+      "question": "A patient on a palliative care unit is receiving morphine 15 mg SC every 4 hours for pain management. The nurse calculates the breakthrough dose for PRN administration. What is the correct breakthrough dose and frequency?",
+      "type": "mcq",
+      "options": [
+        "A. 15 mg SC every 2 hours PRN",
+        "B. 7.5 mg SC every 4 hours PRN",
+        "C. 9 mg SC every 1 hour PRN",
+        "D. 5 mg SC every 6 hours PRN"
+      ],
+      "correct": "C",
+      "rationale": "Breakthrough opioid dosing = 10% of the total 24-hour opioid dose, offered every 1 hour PRN. Total 24-hour dose: 15 mg × 6 doses (Q4h) = 90 mg. Breakthrough dose: 90 mg × 10% = 9 mg SC Q1h PRN. This is a high-yield calculation for NCLEX, CNPLE, and NP exams. Option A uses the scheduled dose without calculating 24-hour total. Option B is 50% of the scheduled dose (not the correct formula). Option D uses an arbitrary lower dose without clinical basis.",
+      "category": "Opioid Titration Calculation"
+    },
+    {
+      "id": "posttest_p2",
+      "question": "A nurse is caring for a patient in the final hours of life who has developed a loud, gurgling breathing sound. The patient's family is distressed. Which nursing intervention is CONTRAINDICATED for this patient?",
+      "type": "mcq",
+      "options": [
+        "A. Administering glycopyrrolate 0.2 mg SC as ordered",
+        "B. Repositioning the patient to a lateral decubitus position",
+        "C. Educating the family that this sound does not indicate choking or suffering",
+        "D. Performing deep pharyngeal suctioning to remove secretions"
+      ],
+      "correct": "D",
+      "rationale": "Deep pharyngeal suctioning is CONTRAINDICATED for death rattle (terminal secretions). It does not effectively clear secretions in the posterior pharynx, stimulates the production of more secretions, and may cause pain and distress in patients who retain protective reflexes. It is ineffective and harmful. The appropriate interventions are: (A) glycopyrrolate (antisecretory), (B) lateral positioning for postural drainage, and (C) family education to address distress. These are all correct actions.",
+      "category": "Death Rattle/Contraindicated Interventions"
+    },
+    {
+      "id": "posttest_p3",
+      "question": "A nurse is assessing a patient who is actively dying and notes the patient moaning and making repetitive, purposeless movements. Before documenting this as terminal agitation, which action should the nurse take FIRST?",
+      "type": "mcq",
+      "options": [
+        "A. Administer haloperidol 1 mg SC immediately as ordered PRN for agitation.",
+        "B. Assess for and treat reversible causes including pain, urinary retention, constipation, and spiritual distress before attributing the behavior to terminal delirium.",
+        "C. Contact the family to inform them the patient is now experiencing terminal agitation.",
+        "D. Apply bilateral wrist restraints to prevent the patient from pulling at lines and tubes."
+      ],
+      "correct": "B",
+      "rationale": "Terminal delirium is a diagnosis of exclusion at EOL. Before labeling restlessness as terminal delirium, the nurse must assess for and treat reversible causes: uncontrolled pain (assess with PAINAD, administer PRN opioid), urinary retention (palpate bladder, consider catheterization), fecal impaction, medication toxicity, and unresolved spiritual or relational distress. Only after reversible causes are addressed or excluded should terminal delirium medications (haloperidol, midazolam) be used. Option A skips the reversible cause assessment. Option C is premature. Option D — restraints are harmful, contraindicated, and inappropriate in a palliative context.",
+      "category": "Terminal Agitation Assessment"
+    },
+    {
+      "id": "posttest_p4",
+      "question": "A patient is brought to the emergency department by ambulance following a fall at home. Paramedics bring both an advance directive (living will) and a MOST form, both signed by the patient. Both documents indicate the patient does not want CPR. Upon assessment, the nurse finds the patient has no pulse. Which document guides immediate resuscitation decisions?",
+      "type": "mcq",
+      "options": [
+        "A. The advance directive, because it was the first document completed and reflects the patient's original wishes.",
+        "B. The MOST form, because it is a physician/NP-signed medical order that is immediately actionable across all care settings.",
+        "C. Neither document is valid in the emergency department — a new physician order must be obtained.",
+        "D. Both documents carry equal weight, and the physician must review both before any decision is made."
+      ],
+      "correct": "B",
+      "rationale": "The MOST (Medical Orders for Scope of Treatment) form is a physician/NP-signed medical order that is valid and immediately actionable across all care settings, including the emergency department. It does not require interpretation or physician review to implement — it IS the order. An advance directive (living will) is a legal document that expresses wishes but must be reviewed and interpreted by a clinician to translate into medical orders — it cannot directly guide emergency care without a corresponding order. In this case, the MOST form governs. Option C is incorrect — a valid MOST form is recognized in emergency settings. Option D mischaracterizes the MOST form as requiring additional physician review.",
+      "category": "Advance Directive vs MOST/POLST"
+    },
+    {
+      "id": "posttest_p5",
+      "question": "A nurse is providing EOL care to an 88-year-old Korean-Canadian patient who is actively dying. The patient's adult children inform the nurse that in their cultural tradition, the eldest son must be present when their mother takes her last breath, and that a Buddhist monk will come to pray at the bedside. They ask that no one disturb their mother during the prayers. Which nursing response BEST demonstrates cultural competence?",
+      "type": "mcq",
+      "options": [
+        "A. Explain that vital signs and medications cannot be interrupted regardless of cultural practices.",
+        "B. Acknowledge the family's needs, coordinate with the care team to accommodate the presence of the eldest son and the monk, temporarily adjust the timing of routine (non-urgent) assessments during prayers, and document the family's cultural and spiritual care preferences in the chart.",
+        "C. Ask the family to speak with the hospital chaplain instead, as the unit does not accommodate outside clergy.",
+        "D. Continue all routine nursing assessments on schedule to ensure continuity of care."
+      ],
+      "correct": "B",
+      "rationale": "Cultural competence in EOL care requires acknowledging, respecting, and accommodating cultural and spiritual practices within safe clinical boundaries. The presence of a Buddhist monk, priority given to the eldest son's presence, and requests to minimize interruption during prayers are all reasonable accommodations that can be made. Non-urgent assessments (vital signs taken purely for documentation in an actively dying patient on comfort-only goals) can be timed around spiritual care. This must be documented so all team members respect the plan. Option A rigidly prioritizes routine over dignity. Option C is dismissive and incorrect. Option D fails to honor cultural and spiritual needs.",
+      "category": "Cultural Sensitivity/EOL"
+    },
+    {
+      "id": "posttest_p6",
+      "question": "A patient with severe Alzheimer's dementia (Stage 7, non-verbal, bedbound) is admitted to a long-term care facility. The family reports the patient never completed any formal advance directives. The patient now develops aspiration pneumonia. The physician is discussing treatment options with the SDM (the patient's adult daughter). Which standard guides the SDM's decision-making in this case?",
+      "type": "mcq",
+      "options": [
+        "A. The SDM's personal beliefs about what is most important in end-of-life care.",
+        "B. The best interests standard — the SDM chooses the option that a reasonable person in this patient's situation would consider most beneficial, considering the patient's values and beliefs.",
+        "C. Full aggressive treatment, because dementia patients cannot advocate for themselves.",
+        "D. The family consensus standard — all family members must agree before any decision is made."
+      ],
+      "correct": "B",
+      "rationale": "When no known prior expressed wishes exist (no advance directive, no documented statements from the patient), the SDM uses the BEST INTERESTS standard. This requires the SDM to consider: (1) what a reasonable person in this patient's situation would value; (2) the patient's known values, beliefs, and life narrative; (3) which option is least restrictive while meeting the patient's needs; (4) quality of life with and without treatment. Option A incorrectly substitutes the SDM's personal beliefs for an objective standard. Option C is factually and ethically wrong — dementia does not justify default aggressive treatment. Option D — while family input is valuable, legal decision-making authority rests with the designated SDM, not family consensus.",
+      "category": "SDM/Best Interests Standard"
+    },
+    {
+      "id": "posttest_p7",
+      "question": "A nurse is reviewing the medication administration record for a patient with advanced COPD who was just transitioned to comfort-focused care with a prognosis of days to weeks. Which medications should the nurse recommend for DISCONTINUATION? (Select all that apply.)",
+      "type": "sata",
+      "options": [
+        "A. Atorvastatin 40 mg oral daily",
+        "B. Morphine 5 mg SC Q4h scheduled",
+        "C. Ramipril 10 mg oral daily",
+        "D. Lorazepam 0.5 mg SL Q6h PRN for anxiety/dyspnea",
+        "E. Metformin 1000 mg oral twice daily",
+        "F. Senna 2 tablets oral twice daily",
+        "G. Donepezil 10 mg oral daily"
+      ],
+      "correct": ["A", "C", "E", "G"],
+      "rationale": "Medications to DISCONTINUE at EOL (serve preventive/disease-modifying goals, no comfort benefit): Atorvastatin (A) — statin for cardiovascular prevention; no benefit in final weeks. Ramipril (C) — ACE inhibitor for BP/cardiac protection; no benefit in final days; may cause symptomatic hypotension. Metformin (E) — oral hypoglycemic for glucose control; no comfort benefit, may cause GI side effects. Donepezil (G) — antidementia medication; no comfort benefit in final days. Medications to CONTINUE: Morphine (B) — essential for pain and dyspnea relief. Lorazepam (D) — essential for anxiety and dyspnea management. Senna (F) — continue laxatives throughout the dying process; constipation causes pain and agitation.",
+      "category": "Medication Discontinuation at EOL"
+    },
+    {
+      "id": "posttest_p8",
+      "question": "A patient's family member calls the nurse urgently to report that her father 'suddenly started breathing really strangely — fast and then he stopped breathing for almost 30 seconds and now he's breathing again.' The patient is on a comfort-focused palliative care plan with a prognosis of hours to days. What is the MOST appropriate nursing response?",
+      "type": "mcq",
+      "options": [
+        "A. Apply supplemental oxygen at 6 L/min via nasal cannula to improve the breathing pattern.",
+        "B. Call a rapid response to assess the patient for respiratory distress.",
+        "C. Go to the bedside, assess the patient, then sit with the family and explain that Cheyne-Stokes breathing is a normal part of the dying process — the patient is not aware of the pauses and is not experiencing air hunger; this pattern indicates death may be approaching in the coming hours.",
+        "D. Administer a bolus dose of IV normal saline to improve perfusion to the respiratory center."
+      ],
+      "correct": "C",
+      "rationale": "Cheyne-Stokes breathing is an expected, normal sign of the active dying process caused by decreased sensitivity of the respiratory center to CO2 as cerebral perfusion diminishes. The patient is not experiencing distress during the apneic pauses. The most important nursing intervention is: (1) bedside assessment to confirm comfort, and (2) calm, compassionate family education about what they are seeing and what it means. Families who understand Cheyne-Stokes is normal are significantly less traumatized by it. Supplemental oxygen (A) does not reverse Cheyne-Stokes and is not comfort-indicated in a non-hypoxic patient. Rapid response (B) is inappropriate — this is an expected finding on a comfort plan. IV fluids (D) are not indicated and may increase secretions and edema.",
+      "category": "Family Education/Cheyne-Stokes"
+    },
+    {
+      "id": "posttest_p9",
+      "question": "A patient is in the final 24–48 hours of life on a hospital palliative unit. Select ALL interventions that represent appropriate comfort-focused nursing care for this patient. (Select all that apply.)",
+      "type": "sata",
+      "options": [
+        "A. Administer scheduled subcutaneous morphine doses every 4 hours",
+        "B. Perform oral care with moistened swabs every 2–4 hours",
+        "C. Reposition patient every 2 hours with gentle technique",
+        "D. Obtain and document daily weights to monitor fluid balance",
+        "E. Apply artificial tears to eyes if partially open",
+        "F. Administer glycopyrrolate SC as ordered if death rattle is present",
+        "G. Direct a small fan toward the patient's face if dyspneic",
+        "H. Insert a urinary catheter if severe urinary incontinence or skin breakdown risk"
+      ],
+      "correct": ["A", "B", "C", "E", "F", "G", "H"],
+      "rationale": "All options are appropriate comfort care EXCEPT D — daily weights. In the final 24–48 hours, monitoring fluid balance via daily weights is a non-beneficial intervention that does not serve comfort goals, requires patient movement, and is burdensome. The goal is not to manage fluid balance but to manage symptoms and dignity. A (scheduled opioids) — essential for pain/dyspnea. B (oral care Q2-4h) — most important comfort measure. C (repositioning) — prevents pressure injury and discomfort. E (artificial tears) — prevents corneal drying in patients with eyes partially open. F (glycopyrrolate) — manages death rattle. G (fan) — evidence-based non-pharmacological dyspnea management. H (urinary catheter) — appropriate if incontinence is causing skin breakdown or significant discomfort, consistent with comfort goals.",
+      "category": "Comfort Interventions SATA"
+    },
+    {
+      "id": "posttest_p10",
+      "question": "A 71-year-old patient with New York Heart Association Class IV heart failure has been hospitalized 3 times in the past 5 months and has had significant functional decline over the past year. The patient's physician asks the nurse what communication framework to use when approaching a goals-of-care conversation with this patient and family. What is the MOST appropriate response?",
+      "type": "mcq",
+      "options": [
+        "A. 'I would suggest the PAINAD scale — it assesses pain non-verbally and can guide the conversation about symptom management.'",
+        "B. 'I would recommend using the SPIKES framework — begin by creating a private, unhurried Setting, then explore what the patient already understands about his illness, invite his preferences about information, then share clinical information clearly, respond to emotion first, and finally co-develop a care plan aligned with his goals.'",
+        "C. 'I would suggest the FAST staging scale to determine the patient's functional level before having any conversation.'",
+        "D. 'I would recommend waiting until the next admission to initiate this conversation, as the patient may be too fatigued right now.'"
+      ],
+      "correct": "B",
+      "rationale": "SPIKES (Setting, Perception, Invitation, Knowledge, Emotion/Empathy, Strategy/Summary) is the evidence-based framework specifically designed for goals-of-care and serious illness conversations. This patient meets multiple triggers for a goals-of-care conversation: recurrent hospitalizations (≥2 in 6 months), functional decline, advanced progressive disease. Option A (PAINAD) assesses pain in non-verbal dementia patients — not a communication framework. Option C (FAST scale) is for staging Alzheimer's disease. Option D — deferring the conversation risks another crisis admission without a care plan; this is exactly when goals-of-care conversations must occur.",
+      "category": "SPIKES/Goals of Care Triggers"
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "fc_01",
+      "front": "What are the key distinctions between palliative care, hospice, and end-of-life care?",
+      "back": "PALLIATIVE CARE (WHO): 'An approach that improves quality of life of patients and families facing life-threatening illness through prevention and relief of suffering.' Applicable at ANY stage of illness, alongside curative treatment. Not time-limited. Not synonymous with dying.\n\nHOSPICE: A specific palliative care program for patients with prognosis ≤6 months who have CHOSEN comfort-only goals and discontinued life-prolonging treatment. Available: home, hospital, LTC. Provides 24/7 nursing, medications, equipment, bereavement support.\n\nEND-OF-LIFE (EOL) CARE: Care in the final hours, days, or weeks of life. A subset of palliative care focused on imminence of death. Can occur within or outside of hospice.\n\nKey distinction: Palliative ≠ Hospice ≠ EOL care — these are nested but distinct concepts on a continuum.",
+      "tags": ["definitions", "palliative", "hospice", "EOL", "exam-priority"]
+    },
+    {
+      "id": "fc_02",
+      "front": "What is the SPIKES framework and what does each letter stand for?",
+      "back": "SPIKES is a structured protocol for goals-of-care and serious illness conversations:\n\nS — SETTING: Private room, key people present, seated at eye level, phones silenced, adequate time. Create the optimal environment FIRST.\n\nP — PERCEPTION: 'What have the doctors told you about what's happening?' Assess existing understanding before delivering new information.\n\nI — INVITATION: 'How much do you want to know?' Establish the patient's/family's information preferences.\n\nK — KNOWLEDGE: Share clinical information clearly, without jargon. Use a warning shot. Pause frequently.\n\nE — EMOTION/EMPATHY: When emotion is expressed — STOP. Respond to the feeling BEFORE continuing with information. Name, legitimize, explore, support, partner.\n\nS — STRATEGY/SUMMARY: Co-develop a care plan aligned with patient's values. Summarize, confirm understanding, arrange follow-up.\n\nRemember: E (Empathy) is the step most commonly skipped and the most important.",
+      "tags": ["SPIKES", "communication", "goals-of-care", "exam-priority"]
+    },
+    {
+      "id": "fc_03",
+      "front": "What is the death rattle? What is the mechanism, management, and key family teaching point?",
+      "back": "MECHANISM: Audible gurgling/rattling from pooled secretions in the posterior pharynx of a deeply unconscious dying patient. Occurs because the patient can no longer swallow. The patient is NOT choking, NOT drowning, and NOT in distress — they are too deeply unconscious to perceive the secretions. Typically occurs in final 24–48 hours.\n\nMANAGEMENT:\n1. Glycopyrrolate 0.2 mg SC Q4h (preferred — does NOT cross blood-brain barrier, fewer CNS effects) OR hyoscine hydrobromide 0.4 mg SC Q4h. These reduce NEW secretion production — they do not clear existing secretions.\n2. Lateral decubitus positioning — promotes postural drainage.\n3. Family education — most important intervention.\n\nCONTRAINDICATED: Pharyngeal suctioning — ineffective, stimulates more secretions, causes distress.\n\nFAMILY TEACHING: 'This sound is from fluid in the throat. [Patient] is not choking or aware of this sound. They are deeply peaceful. This is normal.'",
+      "tags": ["death-rattle", "symptom-management", "family-education", "exam-priority"]
+    },
+    {
+      "id": "fc_04",
+      "front": "What are the signs of active dying (hours to days before death)?",
+      "back": "MNEMONIC — CAMDF:\nC — Cheyne-Stokes breathing: cyclical waxing/waning respirations with apneic pauses (10–60 seconds). Normal. Patient does not experience air hunger during pauses.\nA — Altered/absent consciousness: unresponsive to voice, then to touch. Eyes partially open with glazed appearance.\nM — Mottling: blotchy purplish/blue discoloration beginning in knees/feet, progressing centrally. Mottling above the knees = death within hours.\nD — Decreased/absent urine output: oliguria (<30 mL/hr) → anuria. Urine dark and concentrated.\nF — Fixed non-reactive pupils: brainstem perfusion ceasing.\n\nADDITIONAL SIGNS:\n- Cooling and cyanosis of extremities (hands, feet)\n- Jaw relaxation, mouth open\n- Agonal breathing (final gasps, widely spaced)\n- Death rattle (terminal secretions)\n- Peripheral pulses absent; only carotid/femoral palpable\n- Hippocratic facies (temporal wasting, sunken cheeks)",
+      "tags": ["active-dying", "signs", "recognition", "family-education", "exam-priority"]
+    },
+    {
+      "id": "fc_05",
+      "front": "What is the substitute decision-maker (SDM) hierarchy and what standard must the SDM apply?",
+      "back": "SDM HIERARCHY (Ontario model; varies by jurisdiction):\n1. Court-appointed guardian of the person\n2. Attorney for personal care (named in HPOA document)\n3. Consent and Capacity Board representative\n4. Spouse or partner\n5. Adult child\n6. Parent\n7. Adult sibling\n8. Any other relative\n9. Public Guardian and Trustee (last resort)\n\nSDM DECISION STANDARD:\nPRIMARY: KNOWN WISHES — What did the patient say they wanted when capable? This BINDS the SDM legally in most Canadian jurisdictions.\nSECONDARY (only if NO known wishes): BEST INTERESTS — What would a reasonable person in this situation value? Consider the patient's beliefs, values, and life narrative.\n\nCRITICAL: The SDM asks 'What would [patient] want?' NOT 'What do I want for them?' or 'What would I want?'\n\nNURSING ROLE: Identify SDM on admission; document; educate on their role; involve early in goals-of-care conversations.",
+      "tags": ["SDM", "decision-making", "advance-care-planning", "exam-priority"]
+    },
+    {
+      "id": "fc_06",
+      "front": "DNR does NOT mean 'do not treat.' Explain what a DNR order does and does not cover.",
+      "back": "WHAT A DNR ORDER COVERS:\nCPR only — chest compressions and defibrillation will NOT be initiated when the heart stops.\nDNI (Do Not Intubate) if separately ordered — endotracheal intubation and mechanical ventilation will NOT be initiated.\n\nWHAT A DNR ORDER DOES NOT COVER:\nA DNR patient MAY still receive:\n- Full opioid pain and dyspnea management\n- Antibiotics (if aligned with comfort goals)\n- Blood transfusions (if they improve comfort)\n- IV or SC medications\n- Surgical or procedural interventions for comfort\n- ICU admission (unless goals of care specify comfort-only)\n- ALL other treatments not specifically addressed by the DNR\n\nCLINICAL PEARL: Goals of care (comfort-only vs. limited intervention vs. full treatment) are determined by a SEPARATE goals-of-care conversation — NOT by the DNR order alone.\n\nNURSING ACTION: When a patient has a DNR, proactively clarify: 'What are the goals of care? What treatments are consistent with those goals?' Document clearly.",
+      "tags": ["DNR", "DNI", "goals-of-care", "exam-priority"]
+    },
+    {
+      "id": "fc_07",
+      "front": "How is a breakthrough opioid dose calculated at end of life?",
+      "back": "FORMULA: Breakthrough dose = 10% of the total 24-hour opioid dose\nFrequency: offered every 1 hour PRN\n\nSTEPS:\n1. Determine the scheduled opioid dose and frequency\n2. Calculate total 24-hour dose (scheduled dose × number of doses per 24 hours)\n3. Calculate 10% of that total\n4. That is the PRN breakthrough dose, offered Q1h\n\nEXAMPLE:\nMorphine 10 mg SC Q4h (scheduled)\nTotal 24-hour dose: 10 mg × 6 doses = 60 mg\nBreakthrough dose: 60 mg × 10% = 6 mg SC Q1h PRN\n\nANOTHER EXAMPLE:\nMorphine 15 mg SC Q4h\nTotal 24-hour: 15 × 6 = 90 mg\nBreakthrough: 90 × 10% = 9 mg SC Q1h PRN\n\nPRACTICAL NOTE: If the patient requires ≥3 breakthrough doses in 24 hours, the scheduled dose should be titrated upward. Contact the physician/NP to adjust the prescription.",
+      "tags": ["opioid-calculation", "breakthrough-dosing", "pharmacology", "exam-priority"]
+    },
+    {
+      "id": "fc_08",
+      "front": "Which medications should be DISCONTINUED and which should be CONTINUED at end of life?",
+      "back": "DISCONTINUE (no comfort benefit; may cause harm):\n- Statins (atorvastatin, rosuvastatin) — cardiovascular prevention\n- Antihypertensives (beta-blockers, ACE inhibitors, ARBs, CCBs) — BP control; risk symptomatic hypotension\n- Oral hypoglycemics (metformin, sulfonylureas, SGLT2 inhibitors) — glucose control\n- Diuretics (unless specifically controlling symptomatic fluid overload)\n- Antiplatelet/anticoagulant therapy (unless specific comfort indication)\n- Vitamins and supplements\n- Antidementia drugs (donepezil, memantine)\n- Disease-modifying agents (DMARDs, anti-cancer agents)\n\nCONTINUE (serve comfort and symptom management):\n- Opioid analgesics (pain, dyspnea)\n- Anxiolytics (lorazepam, midazolam)\n- Antiemetics (haloperidol, metoclopramide, ondansetron)\n- Antisecretory (glycopyrrolate for death rattle)\n- Anticonvulsants (stopping abruptly risks breakthrough seizures)\n- Corticosteroids (if managing nausea, dyspnea, appetite, or inflammation for comfort)\n- Insulin (titrate to prevent symptomatic hyperglycemia — not for tight control)",
+      "tags": ["deprescribing", "medications-EOL", "pharmacology", "exam-priority"]
+    },
+    {
+      "id": "fc_09",
+      "front": "Why is oral care the most important comfort measure at end of life, and how is it performed?",
+      "back": "WHY IT MATTERS: Dying patients who are not drinking develop profound oral dryness, cracked lips, coated tongue, and discomfort that is continuous and distressing. The mouth is a major source of suffering if neglected. Opioids and anticholinergic medications (glycopyrrolate) worsen mouth dryness. Oral care is the single most reliably effective comfort measure for this problem — more effective than IV fluids for oral dryness at EOL.\n\nFREQUENCY: Every 2–4 hours minimum, and more frequently if patient appears uncomfortable.\n\nHOW TO PERFORM:\n1. Moistened oral swabs (saline-moistened foam swabs preferred over glycerin swabs — glycerin is hygroscopic and can worsen dryness long-term)\n2. Lip balm or petroleum jelly applied to lips Q2–4h\n3. Artificial saliva spray PRN for comfort\n4. Soft toothbrush for gentle tooth and gum cleaning if patient can open mouth safely\n5. Assess for oral candidiasis (white plaques, red erosions) — treat with nystatin swish-and-swallow if patient can swallow\n\nFAMILY INVOLVEMENT: Teach family members to perform oral care — it is a meaningful, accessible comfort task that gives families a way to actively participate in care.",
+      "tags": ["oral-care", "comfort-measures", "nursing-interventions"]
+    },
+    {
+      "id": "fc_10",
+      "front": "What is the key difference between an advance directive and a MOST/POLST form?",
+      "back": "ADVANCE DIRECTIVE (Living Will / Healthcare POA):\n- A LEGAL DOCUMENT expressing patient's wishes and/or designating a decision-maker\n- Completed by the patient (with capacity)\n- NOT automatically a medical order — must be interpreted by a clinician to translate wishes into specific orders\n- Does not travel with the patient as an actionable order without clinician review\n- Most useful for guiding SDM decisions and long-term care planning\n- Can be completed at any age, by any adult with capacity, regardless of health status\n\nMOST (Medical Orders for Scope of Treatment) / POLST (Physician Orders for Life-Sustaining Treatment):\n- A PHYSICIAN/NP-SIGNED MEDICAL ORDER\n- Immediately actionable — does NOT require interpretation or review before implementation\n- Travels with the patient across all care settings (home → ambulance → ER → hospital → LTC)\n- Specifies: CPR status, level of medical intervention, artificial nutrition preferences\n- Appropriate for patients with advanced illness, frailty, or limited life expectancy\n- Can be changed at any time by the patient (with capacity) or SDM\n\nKEY DIFFERENCE: Advance directive = wishes (requires interpretation). MOST/POLST = active order (immediately actionable).",
+      "tags": ["advance-directive", "MOST", "POLST", "ACP", "exam-priority"]
+    },
+    {
+      "id": "fc_11",
+      "front": "How is dyspnea managed at end of life?",
+      "back": "ASSESSMENT: Dyspnea is a SUBJECTIVE symptom — it does not correlate reliably with respiratory rate or SpO2. Use NRS (0–10) for verbal patients; RDOS (Respiratory Distress Observation Scale) for non-verbal.\n\nFIRST-LINE PHARMACOLOGICAL:\n- Opioids: Low-dose morphine (2–5 mg SC Q4h) is the most evidence-based treatment. Reduces CNS perception of air hunger. Works at doses below those that suppress respiration. DO NOT withhold — properly titrated palliative opioids do not hasten death.\n- Anxiolytics: Lorazepam 0.5–1 mg SL/SC Q4h PRN or midazolam SC infusion if significant anxiety component.\n\nNON-PHARMACOLOGICAL:\n- Fan directed toward patient's face — stimulates trigeminal nerve receptors; reduces perceived breathlessness; evidence-based.\n- Positioning: Semi-Fowler's (30–45 degrees) or lateral decubitus.\n- Cool, calm environment; reduce room stimuli.\n\nSUPPLEMENTAL OXYGEN:\n- Only if patient is HYPOXIC (SpO2 <88%) and oxygen improves symptom experience.\n- Does NOT reduce dyspnea in non-hypoxic patients.\n- In actively dying non-hypoxic patients: oxygen causes discomfort (nasal dryness, tethering) without benefit. TREAT THE PATIENT'S SYMPTOM EXPERIENCE, not the number.",
+      "tags": ["dyspnea", "symptom-management", "opioids", "exam-priority"]
+    },
+    {
+      "id": "fc_12",
+      "front": "How should the nurse educate family members about a dying patient who is no longer eating or drinking?",
+      "back": "WHAT THE FAMILY FEARS: 'Our family member is starving and thirsty — we are letting them suffer.'\n\nWHAT IS ACTUALLY HAPPENING: Reduced appetite and thirst at EOL is physiological — the dying body's organs are shutting down and can no longer process nutrition and fluid. This is a normal part of dying, not an act of abandonment.\n\nKEY TEACHING POINTS:\n1. 'Dying patients typically do not experience hunger and thirst the same way healthy people do — the brain's hunger and thirst centers receive less blood as the body shuts down.'\n2. 'Forcing fluids or tube feeding can actually cause harm — fluid builds up in the lungs (increasing secretions and dyspnea), and in the abdomen and legs (worsening swelling).'\n3. 'The suffering about not eating is most often felt by the family — we project our own experience of hunger onto our loved one. But [patient] is not suffering from this.'\n4. 'Comfort feeding — small sips or bites of things they enjoy — is always appropriate and encouraged. It provides connection and pleasure without requiring large volumes.'\n5. 'Not eating is how the body prepares for death — it is a kindness, not a failure.'\n\nNURSING ROLE: Proactive education BEFORE the family asks — normalize reduced intake early, before crisis. Involve family in comfort feeding and oral care as meaningful acts of love.",
+      "tags": ["nutrition-EOL", "family-education", "comfort-feeding", "artificial-nutrition"]
+    }
+  ]
+}

@@ -5,6 +5,8 @@ import { prisma } from "@/lib/db";
 import { isRemediationEngineEnabled } from "@/lib/remediation/remediation-flag";
 import { buildStudyPlanForUser } from "@/lib/remediation/build-study-plan";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
+import { learnerPrivateReadAccessScopeKey } from "@/lib/cache/learner-private-read-cache-keying";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +27,15 @@ export async function GET(req: Request) {
     }
 
     try {
-      const plan = await buildStudyPlanForUser(prisma, gate.userId, gate.entitlement);
+      const plan = await loadWithLearnerPrivateReadCache(
+        {
+          surface: "study-plan-summary",
+          userId: gate.userId,
+          ttlSeconds: 300,
+          keyParts: [learnerPrivateReadAccessScopeKey(gate.entitlement)],
+        },
+        () => buildStudyPlanForUser(prisma, gate.userId, gate.entitlement),
+      );
       return NextResponse.json(plan);
     } catch {
       return NextResponse.json(

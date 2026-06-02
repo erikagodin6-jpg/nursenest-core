@@ -1,0 +1,545 @@
+{
+  "version": 1,
+  "generatedAt": "2026-06-02",
+  "source": "pediatric-nursing-sprint-package2-section5c",
+  "section": "Family-Centred Care",
+  "pathways": {
+    "ca-rpn-rex-pn": [
+      {
+        "slug": "supporting-families-during-hospitalization",
+        "title": "Supporting Families During Hospitalization",
+        "topic": "Family-Centred Care",
+        "topicSlug": "family-centred-care",
+        "bodySystem": "Child health",
+        "previewSectionCount": 1,
+        "seoTitle": "Supporting Families During Hospitalization | REx-PN Pediatric Nursing | NurseNest",
+        "seoDescription": "REx-PN lesson: supporting families during pediatric hospitalization — Robertson's phases, rooming-in, sibling visits, discharge planning, and family communication.",
+        "exams": ["REX_PN"],
+        "countries": ["CA"],
+        "priority": "high",
+        "audienceTiers": ["RPN"],
+        "examBlueprintDomain": "Child and Family Health",
+        "examBlueprintCompetency": "Applies family-centred care principles to support children and families throughout hospitalization",
+        "studyTakeaways": [
+          "Robertson's phases — protest, despair, detachment — mean a quiet child during parental absence is NOT a settled child; detachment is an emotional shutdown, not adjustment.",
+          "Parental presence during resuscitation and procedures is supported by evidence and Canadian Paediatric Society guidelines — do NOT routinely exclude parents.",
+          "Discharge planning begins at admission and requires family involvement from day one — education cannot be left until the day of discharge.",
+          "Siblings of hospitalized children need age-appropriate preparation, permission to visit, and explicit acknowledgment of their feelings."
+        ],
+        "studyCommonTraps": [
+          "Interpreting the 'quiet, settled' child during parental absence as evidence of adaptation — it may be Robertson's phase of detachment.",
+          "Excluding parents from resuscitation or painful procedures as a default policy — evidence supports family presence.",
+          "Providing all education on the day of discharge — overwhelmed parents cannot absorb information under discharge pressure."
+        ],
+        "memoryAnchor": "Robertson = Protest → Despair → Detachment. DETACHMENT = danger sign, not settling. Keep parents IN the room.",
+        "sections": [
+          {
+            "id": "learning-objectives",
+            "kind": "learning_objectives",
+            "heading": "Learning objectives",
+            "body": "After completing this lesson, you will be able to:\n- Describe Robertson's three phases of separation and their clinical significance for hospitalized children\n- Apply family-centred care principles to minimize separation and support the parent-child bond during hospitalization\n- Explain the evidence base for family presence during resuscitation and invasive procedures\n- Identify nursing strategies to support siblings of hospitalized children\n- Develop an age-appropriate approach to preparation for sibling visits\n- Outline the components of effective discharge planning that begins at admission\n- Use SBAR to communicate effectively with families during hospitalization"
+          },
+          {
+            "id": "introduction",
+            "kind": "introduction",
+            "heading": "Overview and exam relevance",
+            "body": "Hospitalization of a child is one of the most stressful experiences a family can face. The child experiences pain, unfamiliarity, loss of control, and separation from home. Parents experience fear, helplessness, guilt, and exhaustion. Siblings — too often overlooked — experience confusion, fear, and displacement. The RPN's role extends beyond technical care: it includes creating an environment in which the family can remain present, participating, and supported.\n\nFor the REx-PN examination, hospitalization scenarios test the candidate's ability to apply family-centred care principles in real-time clinical situations: distinguishing normal distress from concerning phases of separation, knowing when to involve parents, preparing for discharge, and supporting sibling wellbeing. These questions test nursing judgment, not just policy recall."
+          },
+          {
+            "id": "core-content",
+            "kind": "core_content",
+            "heading": "Core clinical content",
+            "body": "**Robertson's Phases of Separation:**\nJames Robertson's observational research identified three phases experienced by young children (approximately 6 months to 4 years) separated from their primary caregiver:\n\n**Phase 1 — Protest:** Loud, inconsolable crying; calling out for parent; reaching; refusing comfort from anyone else; clearly distressed and aware of the separation. Duration: hours to days.\n\n**Phase 2 — Despair:** Child becomes quieter; withdraws; less active; may appear 'settled'; stops seeking the parent but remains sad and passive; may reject comfort but accept it without responding. Duration: days. This phase is frequently MISINTERPRETED as adaptation — it is actually grief.\n\n**Phase 3 — Detachment:** Child appears calm; accepts care from nurses and strangers; becomes interested in environment and toys; superficially 'normal.' This is the MOST DANGEROUS phase — it represents emotional shutdown and psychological self-protection, NOT true adjustment. A child in detachment may fail to react when the parent returns.\n\n**Clinical significance:** Nurses should recognize detachment as a warning sign. When parents return after absence, a child who ignores them or shows no reaction may be in Phase 3. Prevention through minimizing separation is the goal.\n\n**Minimizing separation:**\n- Rooming-in: provide parents with sleeping facilities (recliner, cot); this is standard in pediatric care\n- Unrestricted open visiting hours including nights\n- 24-hour telephone access for parents who cannot stay (provide direct unit number)\n- Flexible care scheduling around parent presence\n- Photo and audio of parent when separation unavoidable (young infants)\n\n**Family presence during procedures and resuscitation:**\nThe Canadian Paediatric Society supports family presence during resuscitation. Evidence consistently shows:\n- Family members are NOT distressed by being present at resuscitation when supported by a designated nurse\n- Family presence does NOT interfere with team performance\n- Bereaved families who were present during resuscitation have better grief outcomes\n- Family presence during procedures reduces child distress\nAction: When family presence during resuscitation is possible, assign a dedicated support nurse to the family member. Do NOT exclude routinely; exclusion requires specific individualized clinical justification.\n\n**Sibling preparation and visits:**\nSiblings are often not considered during hospitalization, but they also experience significant stress:\n- Fear (is my sibling going to die?)\n- Jealousy and resentment (parents spending all time at hospital)\n- Guilt (did I cause this?)\n- Loneliness (significant disruption to normal routines)\n\nPreparing siblings for a visit:\n- Explain in age-appropriate terms what they will see: 'Your brother has tubes in his arm to give him medicine, and he has a machine that beeps. He looks different but it's still him.'\n- Allow the sibling to choose whether to visit\n- Keep visits age-appropriate in length\n- Have the sibling bring something from home for the ill child\n- Child life specialists can provide sibling preparation\n\n**Discharge planning:**\nBegin at admission. Components:\n- Assess family's home situation, learning readiness, and support network from day 1\n- Identify all skills and knowledge the family will need before discharge\n- Schedule teaching progressively throughout admission — not in one overwhelming session on discharge day\n- Coordinate with community nursing, home care, equipment suppliers, and specialist follow-up\n- Ensure family has 24/7 after-hours contact for questions\n- Follow-up appointment booked before discharge\n\n**Child life specialists:**\nCLS are experts in developmental care, therapeutic play, procedural preparation, and psychosocial support. They are available in most pediatric hospitals and should be consulted for procedure preparation, coping strategies, sibling support, and grief/loss. Not available 24/7 in all settings — nurses must be prepared to provide basic child life support when CLS is unavailable."
+          },
+          {
+            "id": "nursing-assessment",
+            "kind": "nursing_assessment",
+            "heading": "Nursing assessment",
+            "body": "**Assess the child's response to hospitalization:**\n- Current phase of separation response: Is the child protesting (distressed, calling for parent), in despair (withdrawn, passive), or detached (superficially calm without parent connection)?\n- Baseline behaviour: ask parents what is normal for their child at home — compare admission behaviour to baseline\n- Pain and symptom control: is uncontrolled pain contributing to distress? Use age-appropriate pain assessment tool\n- Developmental regression: toilet accidents, baby talk, thumb-sucking — document as regression, expected, not as loss of skill\n- Sleep pattern: is the child sleeping? Sleep deprivation worsens distress and impairs immune function\n\n**Assess the family:**\n- Parental presence: can they stay overnight? Are there barriers (other children at home, employment obligations, transportation)?\n- Family support network: is there someone who can relieve the parent at the bedside?\n- Parental coping: are parents overwhelmed, in shock, managing? Do they need social work or counselling support?\n- Sibling status: where are siblings? Are they being cared for? Have they been told about the hospitalization in age-appropriate terms?\n- Financial strain: income loss during hospitalization; parking and meal costs; need for social work referral\n\n**Assess readiness for discharge:**\n- What does the family need to manage the child's care at home?\n- Which skills require return demonstration before discharge?\n- What community supports need to be in place?\n- Is the home environment ready (equipment, medications, follow-up booked)?"
+          },
+          {
+            "id": "nursing-interventions",
+            "kind": "nursing_interventions",
+            "heading": "Nursing interventions",
+            "body": "**Support parent-child bond:**\n- Orient family to the unit at admission: visiting hours, sleeping facilities, parent participation in care, available resources\n- Actively invite parents to participate in care (bathing, feeding, medication administration if appropriate)\n- Encourage skin-to-skin contact for infants even with IV lines and monitoring — show parents how to safely hold their baby with equipment in place\n- When a child is in Phase 2 (despair) or Phase 3 (detachment): do not mistake quiet for OK — reach the family, encourage their return, provide comfort\n\n**During procedures:**\n- Offer parent the choice to be present — explain what they will see and hear\n- Assign a team member to support the parent during the procedure (not part of the procedure team)\n- If the parent cannot be present: ensure someone known to the child (familiar nurse) provides comfort; contact parent immediately after\n- Never tell a parent 'you don't want to see this' — this devalues their role\n\n**Support siblings:**\n- Acknowledge siblings directly during family meetings and conversations\n- Help parents have age-appropriate conversations with siblings about the hospitalization\n- Facilitate visits when clinically appropriate\n- Connect with child life for sibling preparation and support\n\n**Discharge teaching (progressive approach):**\n- Day 1-2: assess what the family already knows and identify teaching gaps\n- Mid-admission: begin teaching priority skills (medication administration, wound care, equipment use); confirm with return demonstration\n- Pre-discharge: complete teaching; ensure all equipment and prescriptions are in place; review written materials; confirm follow-up appointments\n- Day of discharge: brief review only — not time for new teaching\n- Follow-up call: consider a 24-48h follow-up call after discharge for complex cases"
+          },
+          {
+            "id": "parent-teaching",
+            "kind": "parent_teaching",
+            "heading": "Parent and family teaching",
+            "body": "**Preparing parents for Robertson's phases:**\n'While your child is in hospital without you, they may go through some normal phases of separation. At first, your child may cry a lot and call for you — that's called protest and it shows they know you're gone. If they get quiet, that might seem better, but it is actually a phase called despair — they've gone quiet because they miss you but have given up calling. If you see your child seeming very calm and not reacting to you when you return — that can be a phase called detachment, and we want to know about it. The best thing you can do is be here as much as you can.'\n\n**Teaching about family presence during procedures:**\n'You are allowed to stay with your child during most procedures and we encourage it. Your presence makes a real difference to your child's experience. If there is a procedure where we need extra space or where you would prefer to wait outside, we will let you know and will always have someone with your child.'\n\n**Sibling teaching:**\n'It is important for your other children to know what's happening in age-appropriate terms. You might say: \"Your sister is in the hospital because she is sick and the doctors and nurses are helping her get better. You can call and visit — it might look a little scary with tubes and machines, but that's all helping her get better.\"'\n\n**Discharge preparation:**\nBy the day of discharge, the family should be able to:\n- Administer all required medications at home\n- Recognize signs of the condition worsening and know when to call or return to the ED\n- Operate any home equipment\n- Know the follow-up appointment date and location\n- Have a 24/7 contact for questions"
+          },
+          {
+            "id": "safety-considerations",
+            "kind": "safety_considerations",
+            "heading": "Safety considerations",
+            "body": "**Safe parent presence:**\n- When parents perform care (suction, tube feeding, dressing changes), ensure they are trained and supervised before doing so independently\n- Document return demonstration and competency before parents manage care independently\n- Parents should never be asked to physically restrain their child against the child's will — this damages the parent-child trust relationship\n\n**Handover and handoff safety:**\n- When transferring a child's care from one nurse to another, include family members in verbal handover when possible\n- Ensure families know who their nurse is at all times and how to call for help\n- Bedside handover (SBAR) at the family bedside improves communication and reduces errors\n\n**Visitor safety:**\n- Sibling visitors should be screened for illness (fever, respiratory symptoms, rash) before visiting an immunocompromised child\n- Establish clear guidelines about number of visitors and hygiene expectations (hand hygiene)\n- Document visitor restrictions in care plan when clinically indicated\n\n**Discharge safety:**\n- A family who is not ready for discharge should NOT be discharged — communicate concerns to the responsible provider\n- Home medication safety: ensure all medications are in child-resistant containers, properly stored, and correctly labeled\n- If there is any concern about home safety (domestic violence, substance use, unsafe living conditions), refer to social work BEFORE discharge"
+          },
+          {
+            "id": "documentation",
+            "kind": "documentation",
+            "heading": "Documentation",
+            "body": "**Hospitalization documentation:**\n- Document parental presence: 'Mother at bedside throughout day, father present evenings; parents participating in all care activities'\n- Document separation response phase if concerning: 'Child withdrawn and unresponsive to parent on return from cafeteria break — consistent with Phase 2/despair response — parents notified and encouraged to increase bedside presence'\n- Document sibling preparation and visits: 'Sibling (age 8) visited today; prepared with age-appropriate explanation of medical equipment; child life specialist involved'\n- Document family presence during procedures: 'Mother present and supported during IV insertion by primary nurse'\n- Document discharge teaching: for each teaching topic record: content taught, method (verbal/demonstration), learner's response, return demonstration completed Y/N, follow-up plan\n- Document follow-up appointments booked, prescriptions given, equipment arranged, community nursing referrals made"
+          },
+          {
+            "id": "clinical-pearls",
+            "kind": "clinical_pearls",
+            "heading": "Clinical pearls and exam tips",
+            "body": "**Pearl 1:** A quiet child during parental absence is NOT a settled child. Robertson's detachment phase looks like calm but represents emotional shutdown. The exam may present this as 'the child seems better now that they've stopped crying' — recognize this as a concerning sign, not a positive one.\n\n**Pearl 2:** Family presence during resuscitation — the Canadian Paediatric Society supports this. An exam answer that excludes parents from resuscitation as a default is incorrect. The correct answer acknowledges parental choice and assigns a support nurse.\n\n**Pearl 3:** Discharge planning begins on the day of ADMISSION, not on the day of discharge. Exam scenarios that mention a family 'not ready to go home' should prompt you to identify that teaching and planning should have been occurring throughout the admission.\n\n**Pearl 4:** Siblings need explicit attention — do not focus exclusively on the ill child and the parents. An exam scenario asking 'who else in the family needs support?' should prompt you to consider siblings.\n\n**Pearl 5:** Never ask parents to hold a child down as a restraint method — parents are there as comfort providers, not restrainers. Therapeutic holding (parent holding the child in an embrace from behind during a procedure) is appropriate; physically restraining a struggling child is a different category that requires clinical justification and proper staff support."
+          }
+        ],
+        "preTest": [
+          {
+            "question": "A 2-year-old is hospitalized for pneumonia. The parents have been at the bedside continuously for 48 hours. They go to the cafeteria for 30 minutes. When they return, the child, who had been crying when they left, is now lying quietly, staring at the ceiling, and does not react when the parents re-enter. Which nursing interpretation is most accurate?",
+            "options": [
+              "The child has self-settled and is resting comfortably — this is a positive sign",
+              "The child may be in Robertson's phase of detachment — the apparent calm represents emotional shutdown and should be communicated to parents",
+              "The child is showing signs of respiratory deterioration and needs immediate assessment",
+              "The child's behaviour indicates resolution of separation anxiety at this developmental stage"
+            ],
+            "correct": 1,
+            "rationale": "Robertson's Phase 3 (Detachment) is characterized by apparent calm, reduced crying, acceptance of care from strangers, and failure to react to the returning parent. This is NOT improvement — it is emotional shutdown and psychological withdrawal. The nurse should recognize this as a concerning sign, explain it to parents, and encourage sustained bedside presence.",
+            "distractorRationales": {
+              "A": "Apparent calm after protest is NOT settling — it is the progression to despair and then detachment, which represents increasing psychological harm, not improvement.",
+              "C": "While respiratory assessment should always be considered, the presentation (lying quietly, not engaging) in the context of recent parental absence is more consistent with Robertson's separation phases than acute respiratory deterioration without other supporting signs.",
+              "D": "Separation anxiety does not 'resolve' between 6 months and 4 years — it is developmentally expected. The sudden calm represents detachment, not resolution of anxiety."
+            }
+          },
+          {
+            "question": "A nurse is caring for a 4-year-old undergoing IV insertion. The parent asks if they can stay in the room. What is the most appropriate nursing response?",
+            "options": [
+              "Ask the parent to wait outside — the procedure will be quicker without distraction",
+              "Offer the parent the choice to stay, explain what they will see, and assign a team member to support the parent during the procedure",
+              "Allow the parent to hold the child firmly to assist with restraint during the procedure",
+              "Invite the parent in only if the procedure is expected to be brief"
+            ],
+            "correct": 1,
+            "rationale": "Family presence during procedures is supported by evidence and professional guidelines. The nurse should offer the parent a choice (not make it mandatory), prepare them for what they will see and hear, and designate a team member whose role is to support the parent — separate from the team performing the procedure. This approach respects parental autonomy and supports the child.",
+            "distractorRationales": {
+              "A": "Excluding parents from procedures without clinical justification is contrary to family-centred care principles. Evidence shows parental presence reduces child distress and does not interfere with most procedures.",
+              "C": "Parents should NEVER be asked to restrain a child physically during a procedure. This damages the parent-child trust relationship and is not a therapeutic use of parental presence. Therapeutic holding (gentle embrace) is different from restraint.",
+              "D": "The length of the procedure is not a valid criterion for family presence. Parents should be offered the choice for procedures of any expected duration."
+            }
+          },
+          {
+            "question": "A 7-year-old is admitted for a planned appendectomy. The child has a 5-year-old sibling at home. The parents ask whether the sibling should be told about the hospitalization. Which response is best?",
+            "options": [
+              "Advise parents to keep the information from the 5-year-old since preschool children cannot understand hospitalization",
+              "Advise parents to tell the 5-year-old in age-appropriate terms that the sibling is sick and being helped by doctors and nurses, and that they can visit if they choose",
+              "Recommend that the 5-year-old not visit the hospital since medical environments are too stressful for preschoolers",
+              "Advise parents to wait until the child is home before explaining what happened"
+            ],
+            "correct": 1,
+            "rationale": "Preschool children are cognitively capable of understanding hospitalization when explained in simple, concrete, age-appropriate language. Excluding them from information creates fear and fantasy that is usually worse than reality. Siblings should be told in age-appropriate terms, and visits (with preparation) should be offered. Preparation and choice reduce sibling distress.",
+            "distractorRationales": {
+              "A": "Preschoolers can understand hospitalization when explained concretely ('Your sister is sick; doctors and nurses are helping her get better'). Withholding information creates anxiety and magical thinking (they may believe they caused the illness).",
+              "C": "Sibling visits to pediatric hospitals are routinely supported and beneficial for both siblings and the hospitalized child. The sibling should be prepared for what they will see — not excluded by default.",
+              "D": "Waiting until after the hospitalization deprives the sibling of the opportunity to process information and maintain connection with the family during a frightening time."
+            }
+          },
+          {
+            "question": "A child is to be discharged tomorrow after a 5-day admission for a newly diagnosed condition requiring complex home management including multiple medications and daily wound care. The family has received no teaching yet. What is the priority nursing action?",
+            "options": [
+              "Arrange comprehensive discharge teaching today and tomorrow morning to ensure the family is prepared before leaving",
+              "Document that discharge teaching was delayed and communicate this concern to the charge nurse and physician — this family is not yet ready for safe discharge",
+              "Provide written instructions only since there is insufficient time for verbal teaching",
+              "Have the family watch educational videos about the condition tonight to make the most of the available time"
+            ],
+            "correct": 1,
+            "rationale": "Discharge teaching must begin at or near admission and be distributed throughout the hospital stay — attempting to teach all critical skills in 1-2 days before discharge, especially for a complex new condition, is unsafe. The correct nursing action is to identify this as an unsafe discharge readiness situation and escalate to the charge nurse and physician to ensure adequate preparation time.",
+            "distractorRationales": {
+              "A": "While some teaching in the remaining time is better than none, 'comprehensive discharge teaching' in 24 hours for a complex new condition with multiple skills required is inadequate and unsafe. This does not address the systemic failure of delayed teaching initiation.",
+              "C": "Written instructions alone are insufficient for skills-based teaching (wound care, medication administration). Return demonstration is required to confirm competency.",
+              "D": "Videos may supplement teaching but cannot replace hands-on skill demonstration and return demonstration for complex care requirements."
+            }
+          },
+          {
+            "question": "Which statement about family presence during resuscitation is most consistent with current evidence and Canadian Paediatric Society guidelines?",
+            "options": [
+              "Families should not be present during resuscitation as it is distressing and interferes with the team's performance",
+              "Family presence during resuscitation is supported — it does not interfere with team performance, and families who are present have better grief outcomes",
+              "Family presence should only be allowed if the resuscitation is expected to be successful",
+              "Family presence is acceptable only in adult ICUs, not in pediatric settings where children are more vulnerable"
+            ],
+            "correct": 1,
+            "rationale": "Evidence consistently demonstrates that family presence during resuscitation does not interfere with team performance, is not harmful to families, and is associated with better grief outcomes for bereaved families who were present. The Canadian Paediatric Society supports offering family presence, with a designated support nurse assigned to the family member during the resuscitation.",
+            "distractorRationales": {
+              "A": "This reflects a common but evidence-contradicted assumption. Multiple studies show team performance is not impaired by family presence, and family distress is well-managed when a support nurse is assigned.",
+              "C": "Outcomes should not be predicted before a resuscitation is complete. Restricting family presence to predicted successes is not clinically or ethically sound.",
+              "D": "Family presence during resuscitation is specifically evidence-based in pediatric settings — the research base is particularly strong for pediatric family-centred care environments."
+            }
+          },
+          {
+            "question": "The nurse notices that a 10-month-old admitted 5 days ago has become very quiet and accepts care from all staff with no protest, despite the parents being away for the past 24 hours. The parents visit briefly each day but cannot stay overnight. Which action is the nurse's priority?",
+            "options": [
+              "Document that the infant is settling well and adapting to the hospital environment",
+              "Recognize potential detachment (Robertson's Phase 3); contact the family to encourage increased presence and discuss strategies to minimize separation",
+              "Decrease visit frequency to help the infant establish a new routine with nursing staff",
+              "Request a developmental assessment since the infant may have an underlying social communication disorder"
+            ],
+            "correct": 1,
+            "rationale": "An infant who previously showed distress at parental absence and is now accepting all staff equally with no protest is showing signs of Robertson's Phase 3 (Detachment) — an emotional shutdown, not adaptive coping. The priority is to recognize this as a concerning developmental response and actively work to restore the parent-infant relationship through increased parental presence and consistency of care.",
+            "distractorRationales": {
+              "A": "Documenting 'settling well' when the infant is showing signs of detachment is a misinterpretation that misses an important concern. Detachment is NOT adaptation.",
+              "C": "Decreasing visits would accelerate detachment and is the opposite of the recommended intervention. Increasing parental presence is the goal.",
+              "D": "A social communication disorder assessment is not indicated for what is a clearly contextually explained response (5 days of hospitalization with minimal parental presence). Developmental assessment would be premature before addressing the environmental factor."
+            }
+          },
+          {
+            "question": "A child is preparing for discharge to home with a gastrostomy tube. The parent says they are comfortable managing the tube since they watched the nurse do it twice. What is the appropriate next step before discharge?",
+            "options": [
+              "Discharge the family since parental observation is a recognized learning method",
+              "Require the parent to perform a supervised return demonstration of all G-tube care procedures before discharge is authorized",
+              "Provide written instructions and contact information for the home care nurse who will follow up",
+              "Schedule a home nursing visit for the following day and discharge with written materials"
+            ],
+            "correct": 1,
+            "rationale": "For skills-based discharge teaching involving complex equipment (gastrostomy tube care), return demonstration by the learner is the required standard before discharge. Watching the nurse perform the procedure twice is observational learning only — it does not confirm the parent's ability to perform the skill independently and safely at home.",
+            "distractorRationales": {
+              "A": "Observation alone is insufficient for skills-based discharge teaching. The parent may understand the procedure conceptually but be unable to execute it safely without supervised practice.",
+              "C": "Written instructions and a contact number are supplementary to, not replacements for, return demonstration. The home care nurse cannot be expected to provide first-time skills teaching in the home.",
+              "D": "A next-day nursing visit is a valuable safety net but does not address the gap: the parent has not demonstrated competency before discharge. Return demonstration must occur before the child goes home with this equipment."
+            }
+          },
+          {
+            "question": "A 3-year-old has been admitted for 10 days. The child has progressively stopped calling for her parents when they leave, stopped playing, and now lies in bed staring at the ceiling and accepts care passively. A new nurse says 'She's been great — so easy now!' What is the experienced nurse's best response?",
+            "options": [
+              "Agree — some children are more adaptable to hospitalization than others",
+              "Explain that this behaviour is concerning — the child may be in Robertson's phase of detachment and the team should work to maximize parental presence",
+              "Suggest requesting a psychology consult since the child may be depressed",
+              "Document the child's improved cooperation and plan to involve her in activities to stimulate engagement"
+            ],
+            "correct": 1,
+            "rationale": "The new nurse is interpreting detachment as cooperation. The experienced nurse should educate: the child who progresses from protest through despair to passive acceptance and emotional blunting is in Robertson's Phase 3 (Detachment) — a serious psychological response to prolonged separation. The priority intervention is maximizing parental presence. This should be communicated clearly to the team and the family.",
+            "distractorRationales": {
+              "A": "This response validates a dangerous misinterpretation. Detachment is not 'adaptability' — it is psychological harm that requires intervention.",
+              "C": "While monitoring for depression is reasonable over time, the immediate clinical picture is consistent with Robertson's detachment secondary to prolonged hospitalization and separation. Psychology consultation may eventually be appropriate but addressing parental presence is the priority.",
+              "D": "Documentation of 'improved cooperation' when the child is showing detachment would be inaccurate and could normalize an unsafe situation. Activities alone will not address the underlying separation issue."
+            }
+          },
+          {
+            "question": "When should discharge planning begin for a child admitted to hospital?",
+            "options": [
+              "When the physician determines the child is ready for discharge, typically 24-48 hours before planned discharge",
+              "At or near the time of admission, with education and planning occurring progressively throughout the hospital stay",
+              "Discharge planning is the responsibility of the social worker and begins only when a social work referral is made",
+              "When the family asks about going home"
+            ],
+            "correct": 1,
+            "rationale": "Discharge planning begins at or near admission as a proactive process. By identifying at admission what the family will need to manage the child's care at home, the nurse can distribute teaching across the entire admission, ensure equipment and referrals are arranged in time, and confirm family readiness before the discharge date — not in a rushed session on the final day.",
+            "distractorRationales": {
+              "A": "Beginning discharge planning 24-48 hours before discharge is too late for complex cases requiring skill-based teaching, equipment arrangement, or community nursing coordination.",
+              "C": "While social workers are important partners in discharge planning, discharge planning is a nursing responsibility for all patients — not only those requiring social work.",
+              "D": "Discharge planning is a proactive, nurse-initiated process — not reactive to family requests."
+            }
+          },
+          {
+            "question": "A nurse is preparing a 6-year-old sibling to visit their 4-year-old sister who is in hospital with a serious illness and has IV lines, a nasogastric tube, and is on a heart monitor. Which approach is most appropriate?",
+            "options": [
+              "Advise the parents not to allow the visit since the sight of equipment is too traumatic for a 6-year-old",
+              "Prepare the 6-year-old in advance using simple concrete language: explain what they will see, allow them to choose whether to visit, and have a nurse or CLS present during the visit",
+              "Allow the visit without preparation since children are resilient and do not need special accommodation",
+              "Have the parents prepare the sibling at home without involving the nursing team, since they know the child best"
+            ],
+            "correct": 1,
+            "rationale": "Sibling visits are beneficial and should be facilitated with appropriate preparation. A 6-year-old is a school-age child who can understand concrete explanations: 'Your sister has a tube in her arm to give her medicine; a tube in her nose to help her get food; and a machine that checks her heart — all of these things are helping her get better.' Preparation reduces fear, and allowing the child to choose respects their autonomy. Child life specialist support is ideal.",
+            "distractorRationales": {
+              "A": "Excluding a sibling from visiting to 'protect' them from the sight of medical equipment typically increases fear and anxiety — imagination is usually worse than reality when the child has no preparation.",
+              "C": "Children are resilient but preparation significantly reduces visit-related distress. The nurse has a clinical responsibility to facilitate age-appropriate preparation for sibling visits.",
+              "D": "While parents know their child best, the nursing team has expertise in preparing children for medical environments. Collaboration is the most effective approach."
+            }
+          }
+        ],
+        "postTest": [
+          {
+            "question": "An 18-month-old on a pediatric unit is separated from parents during the day while they work. Over 3 days, the toddler has progressed from loud crying to quiet withdrawal. The toddler now lies in the crib watching the mobile with no expression. Which is the correct nursing interpretation?",
+            "options": [
+              "The toddler is comfortable and has adapted to the hospital routine",
+              "The toddler is displaying Robertson's Phase 3 detachment — this represents a concerning psychological response requiring immediate family communication and intervention",
+              "The toddler likely has an underlying developmental disorder affecting emotional expression",
+              "This is normal behaviour for a toddler experiencing illness and hospitalization"
+            ],
+            "correct": 1,
+            "rationale": "Progression from protest (crying, calling for parent) to despair (quiet, withdrawn) to detachment (flat affect, no response to environment or caregivers) represents Robertson's three phases of separation. The emotionally flat toddler watching the mobile without expression is in detachment — an emotional shutdown that requires urgent attention, family contact, and strategies to restore consistent parental presence.",
+            "distractorRationales": {
+              "A": "The progression described represents psychological harm, not adaptation. Adaptation would involve the child continuing to interact with the environment and accept comfort from consistent caregivers — not emotional flatness.",
+              "C": "This interpretation incorrectly pathologizes a contextually explained response. The developmental context (18-month-old separated from parents for 3 days) fully explains the behaviour without a developmental disorder.",
+              "D": "While distress is normal during hospitalization, detachment is NOT a 'normal' part of illness — it is a specific, concerning phase of prolonged separation that the nurse has a responsibility to address."
+            }
+          },
+          {
+            "question": "A family requests to be present during their child's bone marrow aspirate under conscious sedation. The procedure nurse says 'parents never stay for this — it's too distressing.' How should the charge nurse respond?",
+            "options": [
+              "Support the procedure nurse's judgment — the nurse with experience in the procedure is the most qualified to make this decision",
+              "Advise that the family should be offered the choice, with support provided: the family's preference is the primary consideration, not the nurse's comfort level",
+              "Allow the family to observe from the hallway through a window as a compromise",
+              "Have the physician make the final decision about family presence"
+            ],
+            "correct": 1,
+            "rationale": "Family presence during procedures is a component of family-centred care. 'Nurses never let parents stay' reflects individual nurse discomfort rather than evidence-based policy. The family should be offered a genuine choice with preparation for what they will see, and a designated support nurse should be present with the family. The nurse's comfort with family presence is a matter for education and professional development — not a basis for exclusion.",
+            "distractorRationales": {
+              "A": "Experience with a procedure does not authorize exclusion of families against evidence and policy. Nurse discomfort is not a valid reason for exclusion.",
+              "C": "Observation from a hallway window is a poor compromise that provides neither the comfort of genuine presence nor the preparation needed. It creates distance without the support the family needs.",
+              "D": "While physicians may have input, family presence during procedures is a nursing care and family-centred care issue — not solely a physician decision."
+            }
+          },
+          {
+            "question": "A nurse is performing bedside handover at the end of the shift for a 5-year-old. The parents are present at the bedside. How should the nurse approach the handover?",
+            "options": [
+              "Complete the handover at the nursing station to protect confidentiality, then brief the family separately",
+              "Conduct the bedside handover with parents present, actively inviting them to contribute and clarify the child's status and care plan",
+              "Ask parents to step outside during the clinical handover and invite them back afterward for questions",
+              "Provide the incoming nurse with written notes only to minimize disruption at the bedside"
+            ],
+            "correct": 1,
+            "rationale": "Bedside handover with family present is an evidence-based practice in family-centred care. It improves communication accuracy, reduces errors, and engages families as active participants in the care plan. Parents who hear the handover can correct errors, add important information, and feel included in the care team. Privacy concerns should be managed thoughtfully (avoid unnecessary identifying information in shared rooms) without excluding families from their child's care discussion.",
+            "distractorRationales": {
+              "A": "Conducting handover at the station and briefing families separately creates information gaps and loses the error-correcting benefit of family participation.",
+              "C": "Asking parents to step outside for clinical handover excludes them from information about their own child. This is contrary to family-centred care principles.",
+              "D": "Written notes alone do not constitute an effective clinical handover for patient safety and do not address family engagement."
+            }
+          },
+          {
+            "question": "A family of a 9-month-old is unable to stay overnight due to other family obligations. Which nursing strategy best minimizes the impact of separation on the infant?",
+            "options": [
+              "Sedate the infant lightly at night to reduce distress during parental absence",
+              "Assign a consistent primary nurse for each shift, maintain the infant's home routine as much as possible, use familiar objects from home, and coordinate maximum daily parental visits",
+              "Advise parents to visit as infrequently as possible to prevent repeated protest-despair cycles",
+              "Move the infant to the quietest part of the unit to minimize environmental stimulation during parental absence"
+            ],
+            "correct": 1,
+            "rationale": "When full-time parental presence is not possible, the nursing goal is to minimize harm from separation. Primary nursing (consistent assigned nurse) builds familiarity; maintaining home routines (feeding schedule, sleep routine) provides structure; familiar objects (home blanket, comfort toy, parent's clothing) provide sensory comfort; maximizing daily visits maintains the parent-child bond. These are evidence-based strategies from Robertson's and attachment theory.",
+            "distractorRationales": {
+              "A": "Sedation is not an appropriate intervention for separation-related distress — it does not address the underlying separation and carries medication risks.",
+              "C": "Advising infrequent visits to avoid 'protest-despair cycles' is the opposite of the recommended approach. Protest followed by reunion and comfort is adaptive — sustained separation without reunion leads to detachment.",
+              "D": "Minimizing stimulation alone does not address separation. A quiet environment may be useful but is not the priority intervention for separation-related distress."
+            }
+          },
+          {
+            "question": "A parent of a hospitalized 3-year-old says they want to hold the child still during IV insertion to help the nurse. What is the appropriate nursing response?",
+            "options": [
+              "Accept the parent's offer — parental restraint is the most effective way to ensure the child remains still",
+              "Thank the parent and explain their role: they should hold the child in a comforting embrace from the front (therapeutic holding) to provide reassurance — not physical restraint — while nurses manage the procedure",
+              "Ask the parent to wait outside and use trained nursing staff for restraint",
+              "Allow the parent to choose any method of holding that they feel comfortable with"
+            ],
+            "correct": 1,
+            "rationale": "Parents' role during procedures is as comfort providers, not restrainers. Therapeutic holding — the parent holding the child in an embrace from the front or back, providing warmth and verbal reassurance — is appropriate and beneficial. Asking a parent to physically restrain a struggling child damages the trust relationship and is harmful to both the parent and child. Clear role delineation preserves the parent as a safe, comforting presence.",
+            "distractorRationales": {
+              "A": "Parental restraint (physically holding down a struggling child) is harmful to the parent-child relationship and not the appropriate nursing response to offers of parental help during procedures.",
+              "C": "Excluding the parent entirely misses the opportunity to use their presence therapeutically and is contrary to family-centred care.",
+              "D": "Allowing any method without guidance may result in inappropriate restraint. Clear explanation of therapeutic holding gives the parent a constructive role."
+            }
+          },
+          {
+            "question": "A school-age child's 8-year-old sibling visits the hospital for the first time. The sibling is quiet and wide-eyed looking at the monitoring equipment. What is the most appropriate nursing action?",
+            "options": [
+              "Remove the sibling from the room since their distress may upset the hospitalized child",
+              "Acknowledge the sibling's reaction, provide a simple concrete explanation of what each piece of equipment does, and check in about how the sibling is feeling",
+              "Reassure the sibling that everything is fine and encourage them to talk to their hospitalized brother or sister",
+              "Ask the parents to manage the sibling so the nurse can focus on the patient"
+            ],
+            "correct": 1,
+            "rationale": "An 8-year-old sibling demonstrating wide-eyed quiet is likely experiencing fear or uncertainty about what they are seeing. The nurse should acknowledge this reaction directly, use concrete age-appropriate language to explain each device ('This machine is like an alarm that tells us if your brother needs help breathing'), and create a welcoming rather than frightening experience. Including the sibling as a recognized person — not just an observer — supports sibling wellbeing.",
+            "distractorRationales": {
+              "A": "Removing a sibling because of their reaction to equipment deprives them of the opportunity to understand and connect with their hospitalized sibling. Preparation resolves fear, not removal.",
+              "C": "Generic reassurance ('everything is fine') without explanation does not address the sibling's obvious uncertainty about what they are seeing. Concrete explanation is more effective.",
+              "D": "Delegating the sibling entirely to parents may miss an important nursing opportunity and implies the sibling is an afterthought in the care environment."
+            }
+          },
+          {
+            "question": "What is the key distinction between Robertson's Phase 2 (Despair) and Phase 3 (Detachment)?",
+            "options": [
+              "Phase 2 involves crying and calling for parents; Phase 3 involves quieter passive acceptance while still showing distress",
+              "Phase 2 involves quiet withdrawal and sadness; Phase 3 involves apparent calm, acceptance of all caregivers, and muted response to the returning parent — representing emotional shutdown",
+              "Phase 2 is seen in toddlers only; Phase 3 can occur at any age",
+              "Phase 2 indicates the child has adapted; Phase 3 indicates the child is sick and requires medical evaluation"
+            ],
+            "correct": 1,
+            "rationale": "In Phase 2 (Despair), the child becomes quiet and passive but remains sad — they have given up active protest but have not shut down emotionally. In Phase 3 (Detachment), the apparent calm represents emotional withdrawal — the child accepts care from anyone, shows no preference for the parent, and may not react when the parent returns. This muted response to the parent is the key distinguishing feature of detachment and the most clinically concerning sign.",
+            "distractorRationales": {
+              "A": "This describes Phase 1 (Protest) and Phase 2 (Despair), not Phase 2 and Phase 3.",
+              "C": "Both phases can occur across the age range of children vulnerable to Robertson's separation (approximately 6 months to 4 years) — they are not age-restricted in this way.",
+              "D": "Neither phase indicates adaptation or medical illness. Both represent psychological responses to separation, with Phase 3 being the more concerning phase requiring urgent intervention."
+            }
+          },
+          {
+            "question": "A parent has been present for all of their child's dressing changes during the admission. The day before discharge, the parent performs the dressing change independently for the first time. They complete it correctly. What documentation is most appropriate?",
+            "options": [
+              "'Family observed dressing changes throughout admission; discharge teaching complete'",
+              "'Parent performed return demonstration of dressing change procedure on [date]; technique correct; procedure completed independently without prompting; ready for home management'",
+              "'Parent capable of dressing change; discharge authorized'",
+              "'Dressing change education provided; written instructions given'"
+            ],
+            "correct": 1,
+            "rationale": "Return demonstration documentation must be specific: it should record that the parent performed the procedure (not just observed), the date, assessment of technique (correct/with guidance/incorrect), and the conclusion about readiness for home management. This level of documentation provides legal and clinical evidence of safe discharge teaching and is an accurate record of the educational interaction.",
+            "distractorRationales": {
+              "A": "Documenting observation throughout the admission without a return demonstration is insufficient — observation does not equal competency. This documentation may be inaccurate if a return demonstration was not performed.",
+              "C": "This documentation is too brief and vague. It does not specify what was demonstrated, when, or the quality of the technique assessed.",
+              "D": "Documenting 'education provided' without specifying a return demonstration does not confirm the parent's ability to perform the skill safely."
+            }
+          },
+          {
+            "question": "A nurse is providing bedside care to a 14-month-old. The parents mention they cannot stay overnight because of a 4-year-old sibling at home who needs them. The nurse's best response is to:",
+            "options": [
+              "Advise the parents to make arrangements for the 4-year-old sibling and prioritize staying with the hospitalized child",
+              "Acknowledge the competing family demands, discuss strategies to maximize the hospitalized child's comfort during their absence (familiar objects, consistent nursing, routine), and offer resources for the sibling at home",
+              "Suggest the 4-year-old sibling come to the hospital to stay with the family in the parent room",
+              "Reassure the parents that the 14-month-old will be fine and tell them not to feel guilty"
+            ],
+            "correct": 1,
+            "rationale": "A non-judgmental acknowledgment of the family's competing demands (hospitalized child vs sibling at home) respects family realities. The nurse's role is to minimize harm by offering practical strategies for both children: familiar objects and consistent care for the hospitalized child, and acknowledgment of the sibling's needs at home. Telling parents how to prioritize or dismissing their guilt ('don't feel guilty') is unhelpful.",
+            "distractorRationales": {
+              "A": "Telling parents to make arrangements and prioritize the hospitalized child is judgmental and ignores the legitimate needs of the child at home. Many families cannot leave all other children unattended.",
+              "C": "Bringing the 4-year-old sibling to the hospital overnight is not a practical or clinically recommended solution for a family needing to care for both children.",
+              "D": "Telling parents 'not to feel guilty' dismisses a genuine emotional response. Validating their feelings while offering practical support is more therapeutic."
+            }
+          },
+          {
+            "question": "Which statement most accurately describes the correct approach to discharge teaching for a family managing a new insulin-dependent diabetes diagnosis in their 8-year-old?",
+            "options": [
+              "Provide comprehensive diabetes education in a single 3-hour session on the day of discharge",
+              "Begin teaching core concepts on day 1, add skills progressively over the admission, require return demonstration of insulin administration and glucometer use before discharge, and ensure follow-up is arranged",
+              "Provide written materials and diabetes education videos; arrange a diabetes educator appointment within 2 weeks of discharge",
+              "Discharge when medically stable and arrange all teaching through the outpatient diabetes team"
+            ],
+            "correct": 1,
+            "rationale": "A new diabetes diagnosis in a child requires intensive structured inpatient education: beginning immediately at diagnosis, covering survival skills first (insulin administration, glucometer use, hypoglycaemia management), progressing to more complex management across the admission, requiring return demonstration of all hands-on skills, and arranging outpatient follow-up. This approach is the standard of care for new pediatric diabetes.",
+            "distractorRationales": {
+              "A": "A 3-hour marathon session on the day of discharge is the opposite of effective adult learning — overwhelmed, stressed families cannot retain complex information presented in one sitting, especially on the day they are trying to get home.",
+              "C": "Videos and written materials are supplementary tools. Return demonstration of injection technique and glucometer use is essential and cannot be replaced by self-directed learning alone.",
+              "D": "Discharging a family with a new insulin-dependent diabetes diagnosis without inpatient survival skills teaching is unsafe and does not represent standard of care."
+            }
+          }
+        ],
+        "flashcards": [
+          {
+            "id": "supporting-families-hosp-fc-01",
+            "front": "Describe Robertson's three phases of separation and the clinical significance of each.",
+            "back": "Phase 1 — PROTEST: Loud crying, calling for parent, refusing comfort from strangers. Child is aware of and expressing distress.\nPhase 2 — DESPAIR: Quiet, passive, sad, accepts care but does not engage. Often mistaken for 'settling' — it is grief.\nPhase 3 — DETACHMENT: Appears calm, accepts care from anyone, does NOT react to returning parent. This is EMOTIONAL SHUTDOWN — the most dangerous phase, NOT improvement.",
+            "clinicalPearl": "Detachment is frequently misinterpreted as adaptation by new nurses. The key clinical clue is the muted or absent reaction to the returning parent — this is the red flag.",
+            "memoryAnchor": "P-D-D = Protest → Despair → Detachment. Each phase looks calmer than the last but represents increasing harm."
+          },
+          {
+            "id": "supporting-families-hosp-fc-02",
+            "front": "What is the evidence-based position on family presence during pediatric resuscitation?",
+            "back": "Evidence: Family presence does NOT impair team performance; families are NOT harmed by being present; bereaved families who were present during resuscitation have BETTER grief outcomes than those who were excluded.\nCanadian Paediatric Society position: SUPPORTS family presence during resuscitation.\nHow to implement: offer family the choice; assign a designated SUPPORT NURSE (not part of the resuscitation team) to accompany and support the family member.",
+            "clinicalPearl": "The nurse's discomfort with family presence during resuscitation is a professional development issue, not a reason to exclude families. Evidence consistently supports the practice.",
+            "memoryAnchor": "FP during resuscitation = CPS-supported, evidence-based, assign a SUPPORT nurse. Offer choice, don't decide for them."
+          },
+          {
+            "id": "supporting-families-hosp-fc-03",
+            "front": "When should discharge planning begin for a hospitalized child?",
+            "back": "At or near the time of ADMISSION.\nRationale: Discharge planning is a progressive process — identifying what the family needs, distributing teaching throughout the stay, arranging equipment and referrals in advance, confirming competency before discharge day.\nThe day of discharge is for REVIEW ONLY — not for new teaching.\nException: same-day procedures with no home care needs = limited planning. For any complex needs, planning begins at admission.",
+            "clinicalPearl": "An exam question asking about a family 'not ready for discharge' should prompt you to ask: when did discharge planning begin? If the answer is 'the day of discharge,' the system failed.",
+            "memoryAnchor": "DPisDA = Discharge Planning is Done at Admission. Start at 'hello,' finish at 'goodbye.'"
+          },
+          {
+            "id": "supporting-families-hosp-fc-04",
+            "front": "What is therapeutic holding during pediatric procedures, and how does it differ from restraint?",
+            "back": "Therapeutic holding: parent holds child in a comforting EMBRACE (from front or back) providing warmth, eye contact, and verbal reassurance during a procedure. The child feels safe and connected to the parent.\nRestraint: physically holding a child down against their will to prevent movement. HARMS the parent-child trust relationship.\nParental role during procedures: COMFORT PROVIDER — not restrainer. Nurses and procedure team manage positioning; parent provides comfort.",
+            "clinicalPearl": "Never ask a parent to physically restrain their child. This is harmful to both parent and child and is contrary to family-centred care. The exam will test this distinction.",
+            "memoryAnchor": "Therapeutic = embrace + reassure. Restraint = force + harm. Parent = COMFORT, not constraint."
+          },
+          {
+            "id": "supporting-families-hosp-fc-05",
+            "front": "What are key nursing strategies to minimize separation harm when parents cannot stay overnight with a hospitalized infant/toddler?",
+            "back": "1. Primary nursing: assign the SAME nurse consistently so the child develops familiarity\n2. Maintain HOME routines: same feeding schedule, sleep ritual, familiar songs\n3. Familiar objects: home blanket, comfort toy, item that smells like parent (worn clothing)\n4. Maximize daily parental visits: schedule around parents' availability\n5. Photo/recording of parent voice for times they cannot be present\n6. Document the child's separation response and trend; alert family if detachment emerges",
+            "clinicalPearl": "When you cannot prevent separation, your goal is to minimize harm by creating as much familiarity and continuity as possible within the hospital environment.",
+            "memoryAnchor": "PRFMP = Primary nurse, Routines, Familiar objects, Maximize visits, Photo/recording. All minimize separation harm."
+          },
+          {
+            "id": "supporting-families-hosp-fc-06",
+            "front": "What are the key components of sibling preparation for a hospital visit?",
+            "back": "1. Tell the sibling what they will SEE in simple concrete language: IV lines, tubes, monitoring, equipment, and how the child looks different from normal\n2. Explain what each piece of equipment DOES: 'This is giving medicine; this is counting heartbeats'\n3. ALLOW the sibling to choose whether to visit — do not force\n4. Keep the visit to an AGE-APPROPRIATE length\n5. Invite the sibling to bring something FROM HOME for the ill child\n6. Have a nurse or Child Life Specialist present\n7. Acknowledge the sibling's FEELINGS before and after the visit",
+            "clinicalPearl": "Imagination is worse than reality for most children when they have no information. Preparation with concrete description dramatically reduces fear during sibling visits.",
+            "memoryAnchor": "See + Explain + Choose + Bring + Acknowledge = SECBA. Prepare siblings, don't protect them from reality."
+          },
+          {
+            "id": "supporting-families-hosp-fc-07",
+            "front": "What are the phases of discharge planning and what should occur at each stage?",
+            "back": "Day 1-2 (ASSESS): What does the family already know? What will they need to manage at home? What skills require teaching? What equipment or referrals are needed?\nMid-admission (TEACH): Begin priority skill teaching; confirm comprehension; return demonstration for hands-on skills\nPre-discharge (CONFIRM): All skills demonstrated; equipment arranged; prescriptions filled; follow-up booked; written materials provided; after-hours contact given\nDay of discharge (REVIEW): Brief summary only; last questions answered; no new teaching",
+            "clinicalPearl": "If new teaching is occurring on discharge day, discharge planning was not done properly. The exam will test whether you recognize that day-of-discharge teaching is a system failure.",
+            "memoryAnchor": "ATCR = Assess (admission) → Teach (mid) → Confirm (pre-d/c) → Review (discharge day). A–T–C–R."
+          },
+          {
+            "id": "supporting-families-hosp-fc-08",
+            "front": "What is the role of a Child Life Specialist (CLS) in pediatric hospitalization and how does the RPN collaborate?",
+            "back": "CLS expertise: child development, therapeutic play, procedural preparation, psychosocial coping strategies, bereavement support, sibling preparation\nCLS services: individualized procedure preparation plans, medical play, coping toolkits, sibling visits, advocacy for developmental needs\nRPN collaboration: consult CLS for procedure preparation, sibling support, complex coping needs; implement CLS recommendations; ensure CLS's developmental focus is incorporated into care plan\nWhen CLS unavailable: nurse provides basic preparation using developmental principles (least invasive last, concrete explanations, play-based approach)",
+            "clinicalPearl": "CLS are not available 24/7 in most settings. The RPN must be able to provide basic developmental and psychosocial support in the absence of CLS.",
+            "memoryAnchor": "CLS = specialized developmental and psychosocial support. RPN = primary implementer + collaborator + CLS replacement when unavailable."
+          },
+          {
+            "id": "supporting-families-hosp-fc-09",
+            "front": "What documentation is required when a parent completes a return demonstration of a discharge skill?",
+            "back": "Required elements:\n1. Date and time\n2. Specific skill demonstrated (name the skill exactly)\n3. Who performed the demonstration (parent's name or 'mother/father')\n4. Assessment of technique: correct, with minor prompting, with major prompting, incorrect\n5. Outcome: competent / requires repeat demonstration / referred for follow-up teaching\n6. Plan: if not yet competent, what is the plan before discharge?\nExample: 'Father performed return demonstration of NG tube feeding on [date]; technique correct; completed independently without prompting; ready for home management.'",
+            "clinicalPearl": "Return demonstration documentation must show the parent PERFORMED the skill — not just observed it. 'Education provided' is insufficient. The documentation is your legal evidence of safe discharge.",
+            "memoryAnchor": "Date + Skill + Who + How well + Plan = complete return demonstration documentation. WHO did WHAT, HOW WELL, and WHAT NEXT."
+          },
+          {
+            "id": "supporting-families-hosp-fc-10",
+            "front": "What are the psychosocial impacts of hospitalization on siblings and what nursing interventions address them?",
+            "back": "Sibling impacts: Fear (is my sibling going to die?), Guilt (did I cause this?), Jealousy/resentment (parents away, attention elsewhere), Loneliness, Role reversal (older sibling becomes caregiver), Pride and maturity\nNursing interventions:\n- Acknowledge siblings directly by name during family discussions\n- Help parents give age-appropriate explanations to siblings\n- Facilitate prepared visits\n- Connect with child life for sibling support programs\n- Encourage parents to schedule one-on-one time with siblings\n- Refer to sibling support groups when available",
+            "clinicalPearl": "Siblings are the most commonly overlooked family members during pediatric hospitalization. The exam will test whether you identify sibling needs as a nursing priority.",
+            "memoryAnchor": "FGJLRP = Fear, Guilt, Jealousy, Loneliness, Role reversal, Pride. Siblings feel them all — acknowledge and address."
+          }
+        ],
+        "imagePlaceholders": [
+          {
+            "id": "supporting-families-hosp-img-01",
+            "alt": "Diagram of Robertson's three phases of separation with clinical descriptions",
+            "caption": "Robertson's phases of separation (Protest → Despair → Detachment) with nursing implications for each phase",
+            "kind": "diagram",
+            "suggestedContent": "Three-panel diagram showing the progression: Panel 1 (Protest): crying child reaching for absent parent, label 'Distress = awareness of separation'; Panel 2 (Despair): quiet, withdrawn child, label 'Quiet = grief, often mistaken for settling'; Panel 3 (Detachment): calm child accepting strangers, label 'Apparent calm = emotional shutdown — most dangerous'. Red warning marker on Panel 3.",
+            "placement": "after section: core-content"
+          },
+          {
+            "id": "supporting-families-hosp-img-02",
+            "alt": "Discharge planning timeline from admission to discharge",
+            "caption": "Progressive discharge planning framework: assessment at admission through confirmation before discharge day",
+            "kind": "chart",
+            "suggestedContent": "Horizontal timeline from 'Day of Admission' to 'Discharge Day' with four labeled phases: Assess (day 1-2), Teach (mid-admission), Confirm (day before discharge), Review (discharge day). Color-coded teaching activities listed under each phase. 'No new teaching on discharge day' highlighted.",
+            "placement": "after section: nursing-interventions"
+          }
+        ],
+        "documentationConsiderations": [
+          "Document parental presence and participation in care at each shift (e.g., 'mother at bedside throughout, participated in all personal care and feeding')",
+          "Document separation response phase if concerning, with specific behavioural observations and family notification",
+          "For discharge teaching: record each skill, who performed the return demonstration, quality of technique, and readiness determination",
+          "Document sibling visits including preparation provided and sibling response"
+        ],
+        "references": [
+          "Robertson, J. & Robertson, J. (1989). Separation and the Very Young. Free Association Books.",
+          "Canadian Paediatric Society. (2022). Family presence during resuscitation. CPS Statement.",
+          "Hockenberry, M. J., et al. (2022). Wong's Nursing Care of Infants and Children (12th ed.). Elsevier."
+        ],
+        "relatedLessons": [
+          "principles-of-family-centred-care",
+          "caring-for-children-chronic-illness",
+          "cultural-considerations-pediatric-care",
+          "erikson-trust-vs-mistrust-rpn"
+        ],
+        "linked_flashcard_prompts": [
+          "Describe Robertson's three phases of separation and the clinical significance of each.",
+          "What is the evidence-based position on family presence during pediatric resuscitation?",
+          "When should discharge planning begin for a hospitalized child?",
+          "What is therapeutic holding during pediatric procedures, and how does it differ from restraint?",
+          "What are key nursing strategies to minimize separation harm when parents cannot stay overnight?",
+          "What are the key components of sibling preparation for a hospital visit?",
+          "What are the phases of discharge planning and what should occur at each stage?",
+          "What is the role of a Child Life Specialist and how does the RPN collaborate?",
+          "What documentation is required when a parent completes a return demonstration?",
+          "What are the psychosocial impacts of hospitalization on siblings and what nursing interventions address them?"
+        ],
+        "examMeta": [
+          {
+            "exam": "REX_PN",
+            "domain": "Child and Family Health",
+            "competency": "Applies family-centred care principles to support children and families throughout hospitalization"
+          }
+        ],
+        "premiumOmittedSections": []
+      }
+    ]
+  }
+}

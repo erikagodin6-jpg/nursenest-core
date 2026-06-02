@@ -1,0 +1,752 @@
+{
+  "slug": "lewy-body-dementia-comprehensive",
+  "title": "Lewy Body Dementia: Comprehensive Clinical Nursing Guide",
+  "packageId": "standalone-gero",
+  "examTargets": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","FNP","AGPCNP"],
+  "sections": [
+    {
+      "id": "learning_objectives",
+      "title": "Learning Objectives",
+      "content": [
+        "1. Describe the four core clinical features of Lewy body dementia (LBD) including cognitive fluctuation, visual hallucinations, parkinsonism, and REM sleep behaviour disorder.",
+        "2. Apply the 1-year rule to distinguish Dementia with Lewy Bodies (DLB) from Parkinson's Disease Dementia (PDD).",
+        "3. Identify the CRITICAL medication contraindication in LBD: explain why antipsychotic neuroleptics carry a life-threatening risk and which medications are considered safer alternatives.",
+        "4. Develop a nursing care plan that addresses the triple safety challenge of LBD: fall prevention, medication safety, and aspiration risk.",
+        "5. Explain the role of REM sleep behaviour disorder as a prodromal feature of LBD and its implications for early diagnosis.",
+        "6. Implement evidence-based non-pharmacological interventions for managing visual hallucinations in LBD.",
+        "7. Educate family members on the unique clinical features, unpredictable course, and safety requirements of LBD compared to Alzheimer's disease."
+      ]
+    },
+    {
+      "id": "blueprint_mapping",
+      "title": "Blueprint Mapping",
+      "examTargets": {
+        "NCLEX_clientNeeds": [
+          "Physiological Integrity: Pharmacological Therapies (CRITICAL — antipsychotic contraindication)",
+          "Physiological Integrity: Reduction of Risk Potential",
+          "Safe and Effective Care Environment: Safety and Infection Control",
+          "Psychosocial Integrity: Mental Health Concepts"
+        ],
+        "CNPLE_domains": [
+          "Domain 1: Professional Responsibility",
+          "Domain 2: Clinical Judgment",
+          "Domain 3: Communication and Relationship-Centered Care"
+        ],
+        "highYieldTopics": [
+          "Antipsychotic CONTRAINDICATION — most tested LBD concept",
+          "1-year rule: DLB vs Parkinson's Disease Dementia",
+          "Quetiapine as safer (but not safe) antipsychotic",
+          "REM sleep behaviour disorder as prodrome",
+          "Rivastigmine evidence in LBD",
+          "Visual hallucinations: non-threatening initially, vivid, detailed"
+        ]
+      }
+    },
+    {
+      "id": "core_content",
+      "title": "Core Clinical Content",
+      "subsections": [
+        {
+          "title": "Pathophysiology — Alpha-Synuclein and Lewy Bodies",
+          "content": "Lewy body dementia (LBD) is the second most common neurodegenerative dementia after Alzheimer's disease, accounting for 10–15% of all dementia cases. LBD is a spectrum disorder encompassing two clinical diagnoses: Dementia with Lewy Bodies (DLB) and Parkinson's Disease Dementia (PDD).\n\nNeuropathology: LBD is characterized by the abnormal accumulation of alpha-synuclein protein within neurons, forming eosinophilic intraneuronal inclusions called Lewy bodies and Lewy neurites. Alpha-synuclein is normally involved in synaptic vesicle regulation; in LBD, it misfolds, aggregates, and becomes toxic to neurons. Lewy bodies are found in the cortex (causing dementia), brainstem (causing parkinsonism — affecting dopaminergic neurons of the substantia nigra), and autonomic nervous system (causing orthostatic hypotension, constipation, urinary dysfunction).\n\nCholinergic deficit in LBD is MORE PROFOUND than in Alzheimer's disease — the cortical cholinergic deficit explains why rivastigmine (AChEI) has particularly robust evidence in LBD.\n\nLBD is a synucleinopathy (same pathological protein as Parkinson's disease and multiple system atrophy) — this places it in the Parkinson's disease spectrum neuropathologically, even when dementia is the presenting feature."
+        },
+        {
+          "title": "The 1-Year Rule — DLB vs Parkinson's Disease Dementia",
+          "content": "The single most important diagnostic distinction in the LBD spectrum:\n\nDementia with Lewy Bodies (DLB):\n- Dementia is the PRIMARY presenting symptom\n- Motor (parkinsonian) symptoms appear WITHIN 1 YEAR of dementia onset, OR dementia precedes motor symptoms\n- TIMING: Dementia FIRST (or concurrent with motor onset within 12 months)\n\nParkinson's Disease Dementia (PDD):\n- Motor symptoms (tremor, rigidity, bradykinesia) occur FIRST\n- Dementia develops MORE THAN 1 YEAR AFTER Parkinson's disease diagnosis\n- TIMING: Motor FIRST, then dementia >1 year later\n\nClinical implication: The 1-year rule is the standard used in research and clinical practice. Both conditions share the same underlying neuropathology (alpha-synuclein Lewy bodies) and the same critical medication contraindication (antipsychotic neuroleptics). The distinction affects prognosis (DLB often has a more rapid and unpredictable course than PDD) and drug metabolism (levodopa causes more psychiatric side effects in DLB than PDD).\n\nMemory anchor: '1 year' — if motor symptoms arrive within 1 year of the dementia, it's DLB. If motor symptoms have been present for more than 1 year before dementia, it's PDD."
+        },
+        {
+          "title": "Core Clinical Features of Lewy Body Dementia",
+          "content": "Consortium on Dementia with Lewy Bodies (CDLB) Diagnostic Criteria (2017):\n\nDIAGNOSIS requires dementia PLUS:\nProbable DLB: 2 core features, OR 1 core + 1 or more indicative biomarker\nPossible DLB: 1 core feature, OR 1 or more indicative biomarker\n\nCORE CLINICAL FEATURES (4):\n\n1. FLUCTUATING COGNITION with variations in attention and alertness:\n- Most specific feature of DLB. Dramatic variation in cognitive ability and consciousness level — ranging from near-normal function to severe confusion — within hours or days.\n- May appear 'delirious' without a medical cause. Unlike delirium, there is no acute precipitant; it is intrinsic to the disease.\n- Episodes: patient may be unresponsive for minutes-hours, then return to near-baseline.\n- Clinical challenge: appears as delirium → may trigger antipsychotic use → DANGEROUS in LBD.\n\n2. RECURRENT VISUAL HALLUCINATIONS:\n- Present in 60–80% of DLB patients.\n- Typically WELL-FORMED, DETAILED, VIVID: people, animals, children. NOT vague shapes.\n- Often NON-THREATENING initially — patient may find them interesting or describe them calmly.\n- Patient often has INSIGHT early: 'I know these aren't real, but I keep seeing a cat.'\n- Later in disease: may become threatening and distressing.\n- Key differentiator from AD: visual hallucinations in early-mid LBD are characteristic; in AD they occur only in late stages.\n\n3. REM SLEEP BEHAVIOUR DISORDER (RBD):\n- Normally during REM sleep, the body is atonic (paralyzed). In RBD, this atonia fails — patients PHYSICALLY ACT OUT their dreams: punching, kicking, shouting, falling out of bed.\n- RBD may begin DECADES before cognitive symptoms — it is the most important prodromal marker of LBD.\n- Patient (or bed partner) reports: 'He punched me in his sleep' 'She fell out of bed yelling' 'He was fighting with someone in his dream.'\n- Diagnosis: overnight polysomnography (sleep study); clinically diagnosed by history.\n- RBD is present in >80% of confirmed LBD cases.\n\n4. ONE OR MORE FEATURES OF PARKINSONISM:\n- Spontaneous (not drug-induced) motor features\n- Bradykinesia (slowness of movement)\n- Rest tremor (pill-rolling: less prominent than idiopathic PD)\n- Rigidity (cogwheel or lead-pipe)\n- Postural instability (impaired balance)\n- NOTE: Parkinsonism in LBD responds poorly to levodopa compared to idiopathic PD\n\nSUPPORTIVE FEATURES:\n- Severe neuroleptic sensitivity (see safety alerts)\n- Postural instability, repeated falls\n- Syncope or transient loss of consciousness\n- Severe autonomic dysfunction: orthostatic hypotension, urinary incontinence, constipation\n- Hypersomnia (excessive daytime sleepiness)\n- Hyposmia (loss of smell)\n- Depression\n- Anxiety"
+        },
+        {
+          "title": "CRITICAL: Antipsychotic Neuroleptic Sensitivity in LBD",
+          "content": "This is the MOST CLINICALLY IMPORTANT and MOST EXAMINED feature of LBD.\n\nThe Problem: Antipsychotic medications (BOTH typical and most atypical antipsychotics) can cause SEVERE, POTENTIALLY FATAL reactions in patients with LBD. This is called neuroleptic sensitivity or neuroleptic malignant-like syndrome in LBD.\n\nSeverity: Approximately 50% of LBD patients who receive standard antipsychotics experience severe reactions. This is not a rare side effect — it is a predictable, drug-class-related response.\n\nWhat happens: Antipsychotics block dopamine D2 receptors in the already dopamine-deficient basal ganglia of LBD patients, causing:\n- Severe worsening of parkinsonism (profound rigidity)\n- Impaired consciousness (ranging from sedation to coma)\n- High fever (hyperthermia)\n- Autonomic instability (labile BP, tachycardia)\n- Aspiration pneumonia (due to profound rigidity and loss of protective reflexes)\n- Death — 2–3× increased mortality compared to LBD patients not given antipsychotics\n\nCONTRAINDICATED antipsychotics in LBD:\n- ALL first-generation (typical) antipsychotics: haloperidol, chlorpromazine, fluphenazine, loxapine\n- Most second-generation (atypical) antipsychotics: olanzapine, risperidone, aripiprazole, ziprasidone, amisulpride\n\nRELATIVELY SAFER options (lowest D2 receptor affinity):\n- Quetiapine: LOWEST D2 binding affinity of all antipsychotics; preferred if antipsychotic is absolutely necessary. STILL carries risk — informed consent required.\n- Clozapine: Also low D2 affinity; evidence in PD psychosis; requires weekly blood monitoring (agranulocytosis risk).\n\nFor HALLUCINATIONS in LBD:\n- Non-pharmacological first (see nursing interventions)\n- If pharmacological treatment needed: rivastigmine (AChEI) — may reduce hallucinations\n- Pimavanserin (Nuplazid): FDA-approved for Parkinson's disease psychosis; serotonin inverse agonist (no D2 activity) — emerging evidence in LBD\n- Quetiapine: lowest-risk antipsychotic option if absolutely necessary; lowest effective dose\n- NEVER haloperidol or standard antipsychotics"
+        },
+        {
+          "title": "Pharmacotherapy — Evidence-Based Treatment",
+          "content": "1. Rivastigmine (Exelon) — EVIDENCE-BASED for LBD:\n- AChEI specifically studied in DLB — a randomized controlled trial (McKeith 2000) showed significant improvement in cognitive fluctuations, attention, and visual hallucinations.\n- LBD has a more profound cholinergic deficit than AD — AChEI effect is robust.\n- Transdermal patch preferred for compliance and GI tolerance.\n- Nursing: rotate patch sites; remove old patch before applying new; do not cut patch; monitor GI symptoms, heart rate.\n\n2. Levodopa for Parkinsonism:\n- Used cautiously in DLB (better tolerated in PDD).\n- May WORSEN visual hallucinations and psychiatric symptoms in DLB.\n- Start at lowest possible dose; titrate slowly.\n- If benefit for mobility without psychiatric worsening: continue.\n- Never stop abruptly (risk of neuroleptic malignant syndrome-like reaction).\n\n3. Clonazepam for REM Sleep Behaviour Disorder:\n- First-line for RBD: 0.5 mg at bedtime; titrate cautiously.\n- Reduces injury during RBD episodes.\n- Monitor: sedation, fall risk (benzodiazepine in older adults — use carefully, lowest effective dose).\n- Alternative: melatonin 3–12 mg at bedtime (emerging evidence, safer profile).\n\n4. Management of Orthostatic Hypotension:\n- Non-pharmacological: rise slowly, compression stockings, elevate head of bed 30°, salt/fluid intake, avoid large meals.\n- Pharmacological: fludrocortisone (mineralocorticoid), midodrine (alpha-1 agonist).\n- Avoid: antihypertensives at bedtime (worsen nocturnal hypotension).\n\n5. Depression in LBD:\n- SSRIs: use with caution (may worsen parkinsonism in some patients)\n- Sertraline, citalopram: generally better tolerated\n- AVOID: TCAs (anticholinergic burden, cardiac risk, fall risk)"
+        }
+      ]
+    },
+    {
+      "id": "normal_aging_changes",
+      "title": "Normal Aging vs LBD Features",
+      "content": "Normal aging does not cause:\n- Vivid, detailed visual hallucinations\n- Significant day-to-day fluctuation in consciousness level\n- REM sleep behaviour disorder (acting out dreams physically)\n- Parkinsonism (tremor, rigidity, bradykinesia)\n- Orthostatic hypotension causing repeated falls\n\nNormal aging DOES cause:\n- Some slowing of processing speed\n- Mild reduction in recall speed\n- Some sleep architecture changes (more frequent awakenings, less deep sleep)\n- Mild balance reduction\n\nKey insight: When a family member reports 'He seems fine one day and barely knows where he is the next' — this is NOT normal aging. This dramatic fluctuation is pathological and characteristic of LBD until proven otherwise."
+    },
+    {
+      "id": "abnormal_findings",
+      "title": "Abnormal Findings and Red Flags",
+      "content": "LBD-Specific Red Flags Requiring Urgent Action:\n\n1. Antipsychotic prescription in a patient with known or suspected LBD:\n- NEVER administer haloperidol, risperidone, olanzapine, or aripiprazole to a patient with LBD\n- Medical emergency if these are prescribed: notify prescriber BEFORE administering\n\n2. Sudden severe rigidity + fever + decreased consciousness in LBD patient:\n- Suspect neuroleptic sensitivity reaction (even to quetiapine)\n- OR levodopa-related complication\n- Medical emergency: stop suspected agent, supportive care, ICU transfer\n\n3. Fall with injury:\n- LBD has BOTH parkinsonism (gait instability) AND cognitive fluctuation (sudden periods of reduced alertness) — this combination creates extreme fall risk\n- Head injury (subdural hematoma) can precipitate acute-on-chronic cognitive deterioration\n\n4. Sudden loss of consciousness / syncope:\n- Autonomic dysfunction in LBD causes orthostatic hypotension → syncope → fall → head injury\n- Cardiac monitoring may be required\n\n5. New dysphagia:\n- Parkinsonism impairs swallowing coordination — aspiration pneumonia is common cause of death in LBD\n- Immediate SLP referral"
+    },
+    {
+      "id": "assessment",
+      "title": "Assessment Tools and Clinical Approach",
+      "content": "Cognitive Assessment:\n- MoCA (preferred over MMSE): captures executive function and attention deficits characteristic of LBD\n- The fluctuating cognition of LBD means test scores vary dramatically day-to-day — document date and patient's apparent alertness level at time of testing\n- A patient may score 26 on a good day and 18 on a bad day — this fluctuation itself is diagnostic information\n\nMotor Assessment:\n- UPDRS (Unified Parkinson's Disease Rating Scale): motor examination component for quantifying parkinsonism\n- Document: tremor (rest vs. action), rigidity (cogwheel), bradykinesia, gait (shuffling, freezing), posture (stooped), postural instability (pull test)\n\nSleep Assessment:\n- RBD Screen Questionnaire: validated 10-item caregiver questionnaire for RBD symptoms\n- Ask specifically: 'Does your partner move, kick, punch, or shout during sleep? Have they injured themselves or you during sleep?'\n\nAutonomic Assessment:\n- Orthostatic vital signs: lying → sitting → standing BP and HR at 1 minute and 3 minutes\n- Orthostatic hypotension: systolic BP drop ≥20 mmHg or diastolic drop ≥10 mmHg\n- Document: dizziness, near-syncope, falls related to position changes\n\nHallucination Assessment:\n- Ask directly and non-judgmentally: 'Some people with this type of memory problem see things that others around them don't see. Has that happened to you?'\n- Document: frequency, content (detailed people/animals vs. vague shapes), emotional response (calm vs. frightened), insight (knows it's not real vs. believes it's real), safety impact\n\nFall Risk Assessment:\n- Timed Up and Go (TUG) test: >12 seconds = elevated fall risk\n- Berg Balance Scale\n- Environmental hazard assessment\n- History of falls (number, circumstances, injuries)\n- Orthostatic hypotension contribution"
+    },
+    {
+      "id": "nursing_interventions",
+      "title": "Nursing Interventions",
+      "content": "MEDICATION SAFETY (Priority #1):\n- Every admission: identify LBD diagnosis in medication reconciliation\n- Flag chart: 'ANTIPSYCHOTIC CONTRAINDICATED — LBD DIAGNOSIS'\n- Never administer haloperidol PRN for behavioral management in LBD patients\n- If antipsychotic is ordered by prescriber: question the order, clarify LBD diagnosis, document the concern, escalate if necessary\n- Educate all team members (aides, PSWs, transport staff, on-call physicians) about this contraindication\n\nFALL PREVENTION (Priority #2):\n- Fall risk is extreme in LBD: parkinsonism + cognitive fluctuation + orthostatic hypotension = triple risk\n- Environment: remove rugs, clear pathways, grab bars, handheld shower, non-skid footwear\n- Bed: low position, call bell accessible, bed alarm if appropriate\n- Orthostatism: stand slowly, supervise all position changes, recheck BP standing before ambulation\n- Footwear: well-fitting, rubber-soled, closed-toe; no slippers without grip\n- Assistive devices: walker or cane appropriate to gait pattern; physiotherapy referral\n- Supervision: increased monitoring during cognitive fluctuation episodes — the patient who was alert 30 minutes ago may now be too confused to call for help\n\nASPIRATION PRECAUTIONS:\n- Assess swallowing at every stage of care\n- Position: seated upright (90°) for all meals and 30 minutes after\n- Modified texture diet if dysphagia identified (SLP to specify)\n- Chin tuck technique for thin liquids if appropriate\n- Oral care: post-meal to prevent aspiration of food particles\n- Signs of aspiration: coughing, gurgling voice, wet breath sounds, recurrent pneumonia\n\nVISUAL HALLUCINATION MANAGEMENT (Non-Pharmacological):\n- Do NOT argue that the hallucination is not real — this is distressing without therapeutic benefit\n- Assess emotional response: 'How does seeing that make you feel?'\n- If non-distressing: no intervention needed; acknowledge calmly\n- If distressing: reassure the patient they are safe; redirect attention; increase lighting (dim lighting worsens visual hallucinations); check vision (glasses in, lighting adequate)\n- Reduce triggers: shadows, curtains, dark rooms, patterned wallpaper, mirrors\n- Validate feelings, not the hallucination: 'That sounds frightening — you're safe here, I'm with you'\n\nCOGNITIVE FLUCTUATION MANAGEMENT:\n- Document periods of lucidity vs. severe confusion with time stamps\n- During lucid periods: important conversations, assessments, care planning\n- During confused periods: reassurance, simplification, ensure safety\n- Educate family: 'The fluctuation is part of the disease — do not assume the worst period is the baseline'\n- Educate family: 'Do not make major decisions (e.g., long-term care placement) based solely on the worst day'\n\nRBD SAFETY:\n- Lower the bed to the lowest position at night\n- Place mattress on the floor or use padded rails\n- Remove sharp or hard objects from the bedside\n- Consider bed partner sleeping in separate bed if injury risk is high\n- Clonazepam 0.5 mg at bedtime (ordered) to reduce acting-out behaviors\n\nAUTONOMIC MANAGEMENT:\n- Compression stockings: put on before getting out of bed\n- Adequate hydration and sodium intake\n- Avoid large, high-carbohydrate meals (postprandial hypotension)\n- BP medication review: antihypertensives may need dose reduction"
+    },
+    {
+      "id": "patient_teaching",
+      "title": "Patient and Family Teaching",
+      "content": "Critical Family Education Points:\n\n1. The Antipsychotic Warning — MUST TEACH:\n'The most important thing I need you to know: if your family member ever needs to go to the emergency room or is admitted to hospital, you MUST tell every doctor, nurse, and paramedic: They have Lewy body dementia. They CANNOT receive haloperidol, olanzapine, risperidone, or most other antipsychotics. These medications can cause a severe reaction that can be life-threatening. Carry a medication alert card with you.'\n\n2. Understanding Cognitive Fluctuation:\n'The dramatic changes in your family member's alertness and awareness from day to day — or even hour to hour — are a symptom of the disease, not a sign that they are getting much worse or suddenly recovering. Both extremes are part of Lewy body dementia.'\n\n3. Visual Hallucinations:\n'Your family member may describe seeing people or animals that aren't there. These are a hallucination from the disease. In the early stages, they are usually calm and clear — your family member may have good insight that these aren't real. If the hallucinations become frightening, contact the care team. Do not argue or say they're imagining it — this causes distress without helping.'\n\n4. Fall Prevention at Home:\n'Your family member has a much higher fall risk than most people with memory problems — because of both the brain changes from Lewy body disease AND the movement problems (parkinsonism). Please: remove rugs, ensure good lighting in all rooms, use grab bars in the bathroom, ensure appropriate footwear at all times.'\n\n5. Sleep Safety for RBD:\n'Your family member may physically act out their dreams — punching, kicking, or shouting during sleep. This is called REM sleep behaviour disorder. It is not dangerous intent — they are dreaming. For safety: lower the bed, remove objects from the bedside, and consider separate sleeping arrangements if you have been injured.'\n\n6. Prognosis:\n'Lewy body dementia tends to have a more fluctuating and unpredictable course than Alzheimer's disease. Life expectancy after diagnosis is typically 5–8 years, but varies considerably. The rate of decline can be uneven — good periods and difficult periods.'"
+    },
+    {
+      "id": "documentation",
+      "title": "Documentation Requirements",
+      "content": "Medication Safety Documentation:\n- Document LBD diagnosis prominently in medication administration record, care plan, and allergy/alert section\n- Document 'Antipsychotic contraindicated — Lewy body dementia diagnosis' in clinical notes and discharge summaries\n- If antipsychotic is ordered against the contraindication: document prescriber contacted, reason given, nurse's concern expressed, outcome of discussion\n\nFluctuation Documentation:\n- Time-stamp all behavioral observations — fluctuation pattern must be documented to distinguish LBD from delirium\n- Example: '0800: Patient alert, oriented ×3, joking with staff, scored 24/30 on MoCA. 1400: Patient unarousable except to sternal rub, incoherent when responding. 1700: Patient alert again, eating dinner independently.'\n\nFall Documentation:\n- Circumstances of fall: activity, time, witnesses, immediate response\n- Injury assessment with neurological check (if head involved)\n- Pre-fall neurological status if known\n- Post-fall interventions implemented\n- Physician and family notification with time\n\nHallucination Documentation:\n- Frequency, content, patient's emotional response, insight level\n- Safety assessment: are hallucinations causing the patient to take dangerous action?\n- Interventions implemented and effectiveness\n\nRBD Documentation:\n- Frequency, description, injuries, bed partner involvement\n- Safety measures in place\n- Clonazepam effectiveness if prescribed"
+    },
+    {
+      "id": "clinical_pearls",
+      "title": "Clinical Pearls",
+      "content": [
+        "The most lethal nursing error in LBD: administering haloperidol PRN for agitation. In LBD, haloperidol is not a calming agent — it is a trigger for a potentially fatal rigidity syndrome. Always check for LBD diagnosis before administering any antipsychotic.",
+        "Cognitive fluctuation in LBD is intrinsic to the disease — it mimics delirium but has no acute medical precipitant. The key question: 'Has the patient been like this episodically for months (LBD fluctuation) or is this a NEW acute change (delirium)?' Both can coexist.",
+        "Visual hallucinations in LBD are characteristically detailed and formed (people, animals, scenes) — vague shapes and shadows suggest delirium or medication effect. The calmness with which early LBD patients describe their hallucinations ('I know it isn't real, but there's a small girl in the corner') is pathognomonic.",
+        "REM sleep behaviour disorder is the most sensitive prodromal marker of LBD — it may precede dementia by 20+ years. When an older patient presents with a new dementia and their spouse reports 'they've been hitting me in their sleep for years' — think LBD.",
+        "Rivastigmine is the only AChEI with an RCT specifically in DLB, showing robust reduction in cognitive fluctuation, attention, and hallucinations — the cholinergic deficit in LBD is more severe than in AD, making the treatment response stronger.",
+        "The 1-year rule is a clinical rule, not a biological boundary — neuropathologically, DLB and PDD are the same disease. A patient initially diagnosed with Parkinson's disease who develops dementia >1 year after motor onset is reclassified as PDD, with the SAME antipsychotic contraindication."
+      ]
+    },
+    {
+      "id": "memory_anchors",
+      "title": "Memory Anchors and Mnemonics",
+      "content": {
+        "mnemonics": [
+          {
+            "name": "4 Core Features of LBD — FVPR",
+            "breakdown": "F=Fluctuating cognition, V=Visual hallucinations (vivid, detailed), P=Parkinsonism (spontaneous), R=REM sleep behaviour disorder"
+          },
+          {
+            "name": "1-Year Rule",
+            "breakdown": "DLB = Dementia FIRST (or within 1 year of motor); PDD = Parkinson's Motor FIRST, then dementia >1 year later"
+          },
+          {
+            "name": "SAFE Medications in LBD",
+            "breakdown": "S=Sertraline (depression), A=AChEI Rivastigmine, F=Few antipsychotics acceptable (Quetiapine only, cautiously), E=Excessive antipsychotics CONTRAINDICATED"
+          }
+        ],
+        "patternRules": [
+          "Vivid, detailed hallucinations (people, animals) + cognitive fluctuation + parkinsonism = LBD until proven otherwise",
+          "RBD history in a patient presenting with dementia = STRONGLY suggests LBD",
+          "Antipsychotic + LBD = NEVER (except quetiapine/clozapine in extremis, with consent)",
+          "Parkinsonism that responds POORLY to levodopa = think LBD",
+          "Motor symptoms <1 year of dementia onset = DLB; motor >1 year before dementia = PDD"
+        ]
+      }
+    },
+    {
+      "id": "safety_alerts",
+      "title": "Safety Alerts",
+      "content": [
+        "🚨 ANTIPSYCHOTICS ARE POTENTIALLY FATAL IN LBD: This is not a relative contraindication — it is a CRITICAL safety issue. 50% of LBD patients experience severe, potentially fatal reactions (rigidity, coma, hyperthermia, death) with haloperidol, risperidone, olanzapine, and most antipsychotics. NEVER administer these without confirming no LBD diagnosis. Flag LBD diagnosis in every clinical encounter.",
+        "🚨 EXTREME FALL RISK: LBD patients have THREE simultaneous fall risk factors: (1) parkinsonism impairing gait and balance; (2) cognitive fluctuation causing sudden periods of impaired judgment; (3) orthostatic hypotension causing position-change syncope. Comprehensive fall prevention is mandatory.",
+        "🚨 ASPIRATION RISK: Parkinsonism impairs the oropharyngeal phase of swallowing. Aspiration pneumonia is one of the leading causes of death in LBD. Formal SLP dysphagia assessment is required when any swallowing difficulty is noted. Never rush mealtimes in LBD.",
+        "🚨 RBD INJURY RISK: Patients and BED PARTNERS are at injury risk from RBD. Assess specifically for this. The patient who is 'fine in the daytime' may be assaulting their spouse every night while asleep. Environmental safety modifications and clonazepam are essential.",
+        "🚨 EMERGENCY DEPARTMENT RISK: In an acute care or ED setting, the greatest risk to an LBD patient is an on-call physician who does not know their diagnosis prescribing haloperidol for 'agitation.' Ensure LBD diagnosis is VISIBLE on the chart, wristband alert or allergy documentation, and that family members carry a medication alert card."
+      ]
+    },
+    {
+      "id": "exam_tips",
+      "title": "Exam Tips",
+      "content": [
+        "The single highest-yield LBD exam point: antipsychotic CONTRAINDICATION. When any question describes a patient with LBD who is agitated and asks what to do — the answer NEVER involves haloperidol, olanzapine, or risperidone. Non-pharmacological management is first; if pharmacological is required, quetiapine is the least dangerous option.",
+        "The 1-year rule appears consistently on NCLEX, CNPLE, and FNP exams: dementia before or within 1 year of motor symptoms = DLB; motor symptoms >1 year before dementia = PDD. The antipsychotic contraindication applies to BOTH.",
+        "Visual hallucination questions in LBD: features that suggest LBD over delirium — (1) VIVID, FORMED (people, animals, not vague); (2) early in the dementia course; (3) patient often has insight; (4) non-threatening initially; (5) no acute medical precipitant.",
+        "RBD is high-yield as a prodromal marker: a question describing a history of 'acting out dreams physically' in a patient who THEN develops dementia is pointing to LBD as the diagnosis.",
+        "Rivastigmine in LBD: when a question asks which medication has specific evidence for treating hallucinations and cognitive fluctuation in LBD (not just AD) — the answer is rivastigmine (AChEI with LBD-specific RCT evidence).",
+        "Quetiapine vs. haloperidol in LBD: quetiapine is the LEAST dangerous (lowest D2 binding), but STILL carries risk and requires consent. It is 'safer' not 'safe'. This distinction matters for exam answers."
+      ]
+    },
+    {
+      "id": "references",
+      "title": "References",
+      "content": [
+        "McKeith IG, Boeve BF, Dickson DW, et al. Diagnosis and management of dementia with Lewy bodies: fourth consensus report of the DLB Consortium. Neurology. 2017;89(1):88–100.",
+        "McKeith I, Del Ser T, Spano P, et al. Efficacy of rivastigmine in dementia with Lewy bodies: a randomised, double-blind, placebo-controlled international study. Lancet. 2000;356(9247):2031–2036.",
+        "Boeve BF, Silber MH, Ferman TJ, et al. REM sleep behavior disorder and degenerative dementia: an association likely reflecting Lewy body disease. Neurology. 1998;51(2):363–370.",
+        "Walker Z, Possin KL, Boeve BF, Aarsland D. Lewy body dementias. Lancet. 2015;386(10004):1683–1697.",
+        "Emre M, Aarsland D, Albanese A, et al. Rivastigmine for dementia associated with Parkinson's disease. N Engl J Med. 2004;351(24):2509–2518."
+      ]
+    },
+    {
+      "id": "key_takeaways",
+      "title": "Key Takeaways",
+      "content": [
+        "LBD is characterized by four core features: fluctuating cognition, vivid visual hallucinations, spontaneous parkinsonism, and REM sleep behaviour disorder.",
+        "The 1-year rule: dementia within 1 year of motor onset = DLB; motor symptoms >1 year before dementia = PDD. Both carry the same antipsychotic contraindication.",
+        "Antipsychotic neuroleptics (haloperidol, risperidone, olanzapine) cause severe, potentially fatal reactions in LBD — this is the highest-priority medication safety issue in LBD nursing.",
+        "Quetiapine is the least-dangerous antipsychotic option in LBD when pharmacological treatment is absolutely necessary, but it is NOT safe and requires informed consent.",
+        "Rivastigmine is the evidence-based AChEI of choice in LBD, with RCT evidence for reducing hallucinations and cognitive fluctuation.",
+        "REM sleep behaviour disorder (physically acting out dreams) is the earliest prodromal marker of LBD and may precede dementia by decades.",
+        "LBD presents a triple safety challenge: fall prevention (parkinsonism + orthostasis + fluctuation), aspiration (parkinsonism), and medication safety (antipsychotic contraindication).",
+        "Visual hallucinations in LBD are initially vivid, detailed, non-threatening, and the patient often retains insight — management is reassurance and environmental optimization, not antipsychotics."
+      ]
+    }
+  ],
+  "pretest": [
+    {
+      "id": "lbd-pre-01",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "An 80-year-old man is admitted to the medical unit with confusion and agitation. His wife reports he was diagnosed with Lewy body dementia 2 years ago. The night shift nurse documents: 'Patient is agitated and combative, attempting to climb out of bed. Administered haloperidol 1 mg IM as per PRN order.' The following morning, the patient is found unresponsive, with bilateral rigidity, temperature of 39.8°C, and BP of 80/50. Which event BEST explains this clinical picture?",
+      "options": {
+        "A": "The patient has developed a urinary tract infection causing septic shock",
+        "B": "The patient is experiencing a neuroleptic sensitivity reaction secondary to haloperidol administration in a patient with Lewy body dementia",
+        "C": "The patient has had a massive ischemic stroke overnight",
+        "D": "The patient is experiencing serotonin syndrome from a new medication interaction"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is a classic presentation of neuroleptic sensitivity reaction in Lewy body dementia following haloperidol administration. Features: profound rigidity, hyperthermia, hemodynamic instability (hypotension), and impaired consciousness developing after antipsychotic administration. Haloperidol is CONTRAINDICATED in LBD — it blocks dopamine D2 receptors in the already dopamine-deficient basal ganglia of LBD patients, causing severe motor and autonomic collapse. This reaction occurs in approximately 50% of LBD patients given standard antipsychotics and carries significant mortality. The administration error (haloperidol in an LBD patient) should have been prevented.",
+      "distractorRationales": {
+        "A": "UTI-sepsis is possible but does not explain the acute onset following a specific medication administration or the characteristic rigidity and hyperthermia.",
+        "C": "Stroke does not explain the bilateral rigidity and hyperthermia following medication administration.",
+        "D": "Serotonin syndrome requires two serotonergic agents; haloperidol is a dopamine antagonist, not a serotonergic agent."
+      },
+      "hint": "Haloperidol + LBD = the most dangerous nursing medication error in geriatric care.",
+      "clinicalPearl": "Every LBD patient's chart should prominently flag 'Antipsychotic contraindicated — Lewy body dementia.' This flag should be visible to all providers including on-call physicians who may not know the patient.",
+      "examStrategy": "When a question presents rigidity, hyperthermia, and impaired consciousness after antipsychotic administration in a patient with LBD — the answer is neuroleptic sensitivity reaction. This is a high-priority safety question.",
+      "keyTakeaway": "Haloperidol in LBD = potentially fatal neuroleptic sensitivity reaction. Rigidity + hyperthermia + impaired consciousness after antipsychotic = this diagnosis."
+    },
+    {
+      "id": "lbd-pre-02",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "Which set of findings is MOST consistent with a diagnosis of Dementia with Lewy Bodies (DLB)?",
+      "options": {
+        "A": "Progressive short-term memory loss over 5 years; APOE4 positive; no motor symptoms",
+        "B": "Fluctuating alertness, vivid visual hallucinations of small children, rest tremor and rigidity, and history of acting out dreams physically for the past 3 years",
+        "C": "Stepwise cognitive decline following two TIAs; gait disturbance; controlled hypertension",
+        "D": "Personality change; loss of social inhibitions; normal memory; prominent frontal behavioral syndrome"
+      },
+      "correctAnswer": "B",
+      "rationale": "This presentation contains all four core clinical features of DLB: (1) Fluctuating cognition (fluctuating alertness); (2) Visual hallucinations (vivid hallucinations of children — formed and detailed); (3) Parkinsonism (rest tremor and rigidity); (4) REM sleep behaviour disorder (acting out dreams physically — RBD). The 3-year history of RBD preceding the current cognitive symptoms is consistent with RBD as a prodromal marker of LBD. Option A describes Alzheimer's disease. Option C describes vascular dementia. Option D describes frontotemporal dementia.",
+      "distractorRationales": {
+        "A": "Progressive short-term memory loss + APOE4 + no motor symptoms = Alzheimer's disease profile.",
+        "C": "Stepwise decline + post-TIA + vascular risk factors = vascular dementia.",
+        "D": "Personality change + disinhibition + behavioral syndrome before memory loss = frontotemporal dementia."
+      },
+      "hint": "4 core features: Fluctuation + Vivid VH + Parkinsonism + RBD = LBD.",
+      "clinicalPearl": "All four core features together is almost pathognomonic for LBD. Even two core features plus clinical judgment strongly suggests the diagnosis.",
+      "examStrategy": "LBD recognition questions: look for the combination of fluctuation + formed visual hallucinations + parkinsonism + RBD history. Any two core features = probable DLB.",
+      "keyTakeaway": "DLB core features: FVPR — Fluctuation, Vivid hallucinations, Parkinsonism, RBD."
+    },
+    {
+      "id": "lbd-pre-03",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "Applying the 1-year rule, which patient would be diagnosed with Parkinson's Disease Dementia (PDD) rather than Dementia with Lewy Bodies (DLB)?",
+      "options": {
+        "A": "A 76-year-old who developed memory impairment and visual hallucinations, then developed tremor and rigidity 6 months later",
+        "B": "A 78-year-old diagnosed with Parkinson's disease 8 years ago, who recently began showing significant memory impairment and hallucinations",
+        "C": "A 72-year-old who developed dementia and parkinsonism simultaneously over the past year",
+        "D": "A 80-year-old with dementia for 2 years who developed a rest tremor this month"
+      },
+      "correctAnswer": "B",
+      "rationale": "PDD diagnosis requires: established Parkinson's disease diagnosis (motor symptoms present first) with dementia developing MORE THAN 1 YEAR after the Parkinson's diagnosis. This patient had Parkinson's disease for 8 years before developing dementia — clearly >1 year motor-first. Options A and D: dementia first or within 1 year of motor onset = DLB. Option C: concurrent onset within 1 year = DLB.",
+      "distractorRationales": {
+        "A": "Dementia first, motor within 6 months = DLB (within 1 year of dementia onset).",
+        "C": "Simultaneous onset = within 1 year = DLB.",
+        "D": "Dementia 2 years before motor symptoms = dementia first = DLB."
+      },
+      "hint": "PDD = motor symptoms for >1 year BEFORE dementia develops.",
+      "clinicalPearl": "The 1-year rule is clinically useful but biologically arbitrary — DLB and PDD are the same neuropathological disease. The antipsychotic contraindication applies to BOTH equally.",
+      "examStrategy": "1-year rule: motor first and >1 year before dementia = PDD. Everything else = DLB. Memorize and apply mechanically.",
+      "keyTakeaway": "PDD = Parkinson's motor symptoms >1 year BEFORE dementia. DLB = dementia within 1 year of motor symptoms or dementia first."
+    },
+    {
+      "id": "lbd-pre-04",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 77-year-old woman with known DLB is experiencing distressing visual hallucinations — she sees menacing figures at her bedside each evening. Non-pharmacological interventions including increased lighting, familiar photos, and reassurance have been tried without success. The physician is considering pharmacological management. Which medication is MOST appropriate to discuss with the prescriber?",
+      "options": {
+        "A": "Haloperidol 0.5 mg PO at bedtime",
+        "B": "Risperidone 0.5 mg PO twice daily",
+        "C": "Quetiapine 12.5–25 mg PO at bedtime",
+        "D": "Olanzapine 2.5 mg PO at bedtime"
+      },
+      "correctAnswer": "C",
+      "rationale": "In LBD, when antipsychotic medication is absolutely necessary for distressing, refractory hallucinations after all non-pharmacological measures have failed, quetiapine is the LEAST DANGEROUS option due to its lowest D2 receptor binding affinity among antipsychotics. Start at the lowest effective dose (12.5–25 mg). However, quetiapine is NOT safe — it still carries risk in LBD; informed consent must be obtained. Haloperidol and risperidone are CONTRAINDICATED in LBD (high D2 blockade → severe neuroleptic sensitivity). Olanzapine has intermediate D2 affinity and is also contraindicated in LBD.",
+      "distractorRationales": {
+        "A": "Haloperidol is CONTRAINDICATED in LBD — high D2 affinity; severe neuroleptic sensitivity risk; potentially fatal.",
+        "B": "Risperidone is CONTRAINDICATED in LBD — intermediate-high D2 affinity; severe neuroleptic sensitivity reported.",
+        "D": "Olanzapine is CONTRAINDICATED in LBD — intermediate D2 affinity and high anticholinergic burden; not safe in LBD."
+      },
+      "hint": "When antipsychotic is unavoidable in LBD: lowest D2 binding = least dangerous.",
+      "clinicalPearl": "Quetiapine and clozapine are the only antipsychotics considered when pharmacological treatment is absolutely required in LBD. Rivastigmine may reduce hallucinations through cholinergic mechanisms and should be considered first.",
+      "examStrategy": "LBD antipsychotic question: quetiapine = least dangerous. Haloperidol, risperidone, olanzapine = contraindicated. This distinction is high-yield on every nursing exam.",
+      "keyTakeaway": "LBD + antipsychotic unavoidable = quetiapine only (lowest D2 affinity); haloperidol, risperidone, olanzapine are contraindicated."
+    },
+    {
+      "id": "lbd-pre-05",
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is providing education to the family of a 79-year-old man newly diagnosed with Dementia with Lewy Bodies. Which of the following statements should be included in the teaching? Select all that apply.",
+      "options": {
+        "A": "If your family member is ever hospitalized, tell every healthcare provider that he has Lewy body dementia and that most antipsychotic medications are dangerous for him",
+        "B": "The dramatic swings in his alertness — from near-normal to severely confused — are a characteristic feature of his disease, not a sign of rapid deterioration",
+        "C": "Visual hallucinations, such as seeing people or animals, may occur — if he seems calm and describes them without fear, no immediate intervention is needed",
+        "D": "Physical exercise and walking should be completely avoided to prevent falls",
+        "E": "He may physically act out his dreams at night — his bed should be kept at the lowest position and hard objects removed from the bedside",
+        "F": "Lewy body dementia always progresses at the same rate as Alzheimer's disease"
+      },
+      "correctAnswer": "A, B, C, E",
+      "rationale": "(A) Emergency antipsychotic warning is the single most important family education point — a family member who can verbalize this may save the patient's life. (B) Cognitive fluctuation is a defining feature of LBD; family must understand this to avoid repeated emergency calls or unnecessary care escalations. (C) Non-distressing hallucinations in early LBD do not require intervention; reassurance to family that this is expected reduces anxiety. (E) RBD safety: lowering the bed and removing bedside hazards are essential safety interventions for RBD. Exercise should NOT be completely avoided (D) — structured supervised exercise reduces fall risk and maintains motor function. LBD does NOT progress at the same rate as AD (F) — it is often faster and more unpredictable.",
+      "distractorRationales": {
+        "D": "Exercise should be encouraged (with appropriate supervision) — it improves balance, strength, and functional ability. Complete avoidance of activity accelerates deconditioning.",
+        "F": "LBD often progresses more rapidly and unpredictably than AD; this statement is inaccurate."
+      },
+      "hint": "Priority education: medication safety, understanding fluctuation, hallucination management, RBD safety.",
+      "clinicalPearl": "Carry-a-card programs (medication alert card listing LBD diagnosis and antipsychotic contraindications) for LBD patients have been promoted by the Lewy Body Dementia Association.",
+      "examStrategy": "Family teaching SATA for LBD: antipsychotic warning + fluctuation education + hallucination approach + RBD safety = always correct. Exercise avoidance and false equivalence to AD = incorrect.",
+      "keyTakeaway": "LBD family teaching priorities: antipsychotic danger, fluctuation is normal, calm hallucinations need no intervention, RBD bed safety."
+    },
+    {
+      "id": "lbd-pre-06",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 74-year-old woman with Dementia with Lewy Bodies tells her nurse: 'There are two little girls playing in the corner of my room. They've been there every evening this week. I know they can't really be there, but they look very real.' The nurse's BEST response is:",
+      "options": {
+        "A": "Immediately call the physician to request an antipsychotic medication",
+        "B": "'There are no children in your room — you are experiencing a hallucination from your disease. Try to ignore them.'",
+        "C": "'It sounds like you're seeing the girls again. It sounds like you're doing okay with it — you seem to understand they're part of your condition. Is there anything that would help you feel more comfortable?'",
+        "D": "'Those girls aren't real, so they can't hurt you. I'll turn the lights off so you can sleep.'"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient has intact insight (she acknowledges the hallucinations are not real), and is not in distress — the hallucinations are non-threatening. The appropriate nursing response: (1) acknowledge her experience without arguing or confirming the hallucinations are real; (2) assess her emotional response; (3) offer comfort and ensure she feels safe. Antipsychotics are not indicated — she is not distressed, and antipsychotics carry severe risks in LBD. Telling her to 'ignore them' invalidates her experience. Turning off lights worsens visual hallucinations (darkness increases them).",
+      "distractorRationales": {
+        "A": "Non-distressing hallucinations with intact insight do not require pharmacological intervention, especially given the severe antipsychotic risk in LBD.",
+        "B": "Telling a patient to ignore their hallucinations is dismissive and unhelpful; the patient already knows they may not be real.",
+        "D": "Dim lighting and darkness worsen visual hallucinations in LBD — this would increase the severity of hallucinations."
+      },
+      "hint": "Non-distressing + insight intact = validate experience, assess, ensure safety. No medication needed.",
+      "clinicalPearl": "Increase lighting as a non-pharmacological intervention for LBD visual hallucinations — bright environments reduce hallucinatory activity. Darkness is a trigger.",
+      "examStrategy": "LBD hallucination management: non-distressing + insight = therapeutic communication + comfort. Distressing + no insight = reassurance + lighting + consider rivastigmine. Never antipsychotics first.",
+      "keyTakeaway": "Non-distressing visual hallucinations with insight in LBD: validate, assess, increase lighting — no antipsychotic needed."
+    },
+    {
+      "id": "lbd-pre-07",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "An 81-year-old man with DLB has been prescribed rivastigmine transdermal patch 9.5 mg/24h. The nurse is providing medication teaching. Which instruction is MOST important?",
+      "options": {
+        "A": "Apply the patch to the same site each day to ensure consistent absorption",
+        "B": "Oral rivastigmine capsules should be taken at the same time as the patch to ensure adequate dosing",
+        "C": "Rotate patch application sites (upper arm, chest, back); remove the old patch before applying the new one; check heart rate before applying",
+        "D": "The patch can be cut in half if the patient experiences side effects"
+      },
+      "correctAnswer": "C",
+      "rationale": "Correct rivastigmine patch administration: (1) Rotate sites: same site daily causes skin irritation; rotate among upper arm, upper back, chest; (2) Remove old patch BEFORE applying new one — overlapping causes double-dosing and cholinergic toxicity (nausea, vomiting, bradycardia); (3) Monitor heart rate — AChEIs can cause bradycardia; check HR before each application. Oral and transdermal rivastigmine should NEVER be used simultaneously (double dose). Patches should NEVER be cut — this disrupts the membrane system and causes unpredictable drug release.",
+      "distractorRationales": {
+        "A": "The same site daily causes skin irritation and reduced absorption — rotation is mandatory.",
+        "B": "Never use both oral and transdermal rivastigmine simultaneously — this causes dangerous double-dosing.",
+        "D": "Patches must not be cut — this destroys the controlled-release membrane and causes unpredictable, potentially toxic drug delivery."
+      },
+      "hint": "Patch teaching: rotate sites, remove old patch first, never cut, never combine with oral form.",
+      "clinicalPearl": "Rivastigmine patch is preferred over oral form in LBD for GI tolerability and adherence. The most common patch administration error is applying a new patch without removing the old one.",
+      "examStrategy": "Rivastigmine patch teaching: rotate sites + remove old patch = the two most common exam points. Never cut, never combine oral + patch.",
+      "keyTakeaway": "Rivastigmine patch: rotate sites, remove old patch before new, never cut, never use with oral form simultaneously."
+    },
+    {
+      "id": "lbd-pre-08",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "The wife of an 82-year-old man with DLB calls the nursing home to report: 'My husband woke up last night and attacked me — he punched me twice in the face. He was clearly dreaming and didn't even know I was there. This has been happening more and more.' Which nursing response is MOST appropriate?",
+      "options": {
+        "A": "Tell the wife her husband has become aggressive and should be transferred to a psychiatric unit",
+        "B": "Advise the wife to sleep in a separate room; document and report to the physician; review PRN clonazepam order effectiveness; implement environmental safety modifications",
+        "C": "Reassure the wife that punching during sleep is normal in older adults and no action is needed",
+        "D": "Prescribe haloperidol to reduce nighttime aggression"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is REM sleep behaviour disorder (RBD) — the patient is physically acting out his dreams, assaulting his wife during REM sleep without conscious intent. This is not volitional aggression. Interventions: (1) Immediate safety: wife should sleep separately until bed safety modifications are in place; (2) Report to physician: document frequency and injury; review clonazepam PRN effectiveness (first-line RBD treatment); (3) Environmental: lower bed position, padded rails or mattress on floor, remove hard objects from bedside; (4) Melatonin 3–12 mg at bedtime: emerging as safe alternative. Haloperidol is CONTRAINDICATED in LBD regardless of the indication.",
+      "distractorRationales": {
+        "A": "Psychiatric transfer is inappropriate — RBD is a neurological symptom of LBD, not volitional psychiatric aggression.",
+        "C": "RBD is not normal aging — it requires assessment, safety intervention, and treatment.",
+        "D": "Haloperidol is CONTRAINDICATED in LBD — categorically wrong answer regardless of the clinical scenario."
+      },
+      "hint": "Acting out dreams + injuring bed partner = RBD. Not aggression, not psychiatric — it's sleep neurology.",
+      "clinicalPearl": "RBD is dangerous to bed partners. In LBD, this is one of the most common reasons for care partner injury. Separate sleeping arrangements plus clonazepam/melatonin is the standard approach.",
+      "examStrategy": "When a question describes physical behavior during sleep (hitting, kicking, yelling) in an LBD patient — it's RBD. Safety modifications + clonazepam = correct answer. Haloperidol = wrong answer (ALWAYS).",
+      "keyTakeaway": "RBD = acting out dreams during sleep; injury risk to patient and partner. Clonazepam + environmental safety. Haloperidol: always contraindicated."
+    },
+    {
+      "id": "lbd-pre-09",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse obtains vital signs on a 78-year-old patient with DLB. Lying BP: 138/82, HR 76. Sitting BP: 120/74, HR 84. Standing BP: 98/62, HR 90. Which assessment finding and nursing action are MOST appropriate?",
+      "options": {
+        "A": "Vital signs are within normal limits; no action required",
+        "B": "Orthostatic hypotension identified (systolic drop of 40 mmHg); implement fall precautions, educate patient to rise slowly, notify physician, review contributing medications",
+        "C": "The increase in heart rate is the primary concern; notify cardiology immediately",
+        "D": "The sitting blood pressure is too low; administer a fluid bolus"
+      },
+      "correctAnswer": "B",
+      "rationale": "Orthostatic hypotension is defined as a drop in systolic BP ≥20 mmHg or diastolic BP ≥10 mmHg upon standing. This patient shows a systolic drop from 138 (lying) to 98 (standing) = 40 mmHg drop — significant orthostatic hypotension. In LBD, this is caused by autonomic nervous system dysfunction. Actions: (1) Fall precautions (highest fall risk during positional changes); (2) Educate: rise slowly using graduated position changes (lie → sit → stand, pause at each); (3) Notify physician for medication review (antihypertensives, alpha-blockers that may worsen orthostasis); (4) Non-pharmacological: compression stockings, head of bed elevation 30°, adequate hydration.",
+      "distractorRationales": {
+        "A": "A 40 mmHg systolic drop on standing is significant orthostatic hypotension — not within normal limits.",
+        "C": "The heart rate increase is a compensatory reflex response to hypotension — the hypotension, not the heart rate, is the primary problem.",
+        "D": "Sitting BP of 120/74 does not require a fluid bolus; it is the standing drop that is the clinical concern."
+      },
+      "hint": "Systolic drop ≥20 = orthostatic hypotension. LBD + orthostasis = extreme fall risk.",
+      "clinicalPearl": "Orthostatic hypotension in LBD is due to autonomic nervous system degeneration (not dehydration or medication alone). Baseline autonomic dysfunction makes any antihypertensive medication a significant fall risk.",
+      "examStrategy": "Calculate BP change from lying to standing. ≥20 mmHg systolic or ≥10 diastolic = orthostatic hypotension = fall precautions + slow position changes + medication review.",
+      "keyTakeaway": "Orthostatic hypotension in LBD: systolic drop ≥20 mmHg = fall precautions, slow position changes, medication review."
+    },
+    {
+      "id": "lbd-pre-10",
+      "type": "SATA",
+      "difficulty": "hard",
+      "stem": "A nurse is completing a fall risk assessment for a 75-year-old woman with DLB in a long-term care facility. Which factors SPECIFIC to LBD contribute to her elevated fall risk compared to a patient with Alzheimer's disease alone? Select all that apply.",
+      "options": {
+        "A": "Parkinsonism causing gait instability, shuffling gait, and postural instability",
+        "B": "Cognitive fluctuation causing sudden periods of impaired judgment and unsteadiness",
+        "C": "Autonomic dysfunction causing orthostatic hypotension and positional syncope",
+        "D": "Intact procedural memory for walking",
+        "E": "Visual hallucinations causing the patient to reach or move toward non-existent objects",
+        "F": "Neuroleptic sensitivity risk if antipsychotics have been prescribed for behavioral symptoms"
+      },
+      "correctAnswer": "A, B, C, E, F",
+      "rationale": "(A) Parkinsonism is a core feature of LBD — bradykinesia, shuffling gait, reduced arm swing, postural instability, freezing of gait all directly increase fall risk. (B) Cognitive fluctuation in LBD causes sudden, dramatic decreases in alertness — a patient who was independently ambulating may become suddenly confused and fall without warning. (C) Autonomic dysfunction causes orthostatic hypotension — the most common physiological trigger for syncope and falls in LBD. (E) Visual hallucinations can cause the patient to reach toward or move away from perceived objects, disrupting balance. (F) If antipsychotics have been prescribed (even quetiapine), the sedation and worsened parkinsonism further increase fall risk. Intact procedural memory (D) is not a risk factor — it is a preserved function.",
+      "distractorRationales": {
+        "D": "Preserved procedural memory is a protective factor (the patient retains how to walk), not a fall risk factor."
+      },
+      "hint": "LBD has 4 sources of fall risk: motor (parkinsonism), cognitive (fluctuation), autonomic (orthostasis), and perceptual (hallucinations).",
+      "clinicalPearl": "LBD fall risk is multiplicative — parkinsonism + fluctuation + orthostasis + hallucinations = one of the highest fall risk profiles in geriatric care. Prevention requires a comprehensive, multi-pronged approach.",
+      "examStrategy": "LBD-specific fall risk SATA: select parkinsonism, cognitive fluctuation, orthostatic hypotension, visual hallucinations = all correct. Any protective factor (intact memory) = incorrect.",
+      "keyTakeaway": "LBD has quadruple fall risk: parkinsonism + cognitive fluctuation + orthostatic hypotension + visual hallucinations."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "lbd-post-01",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "Which of the following is the MOST important nursing priority when admitting a patient with known Lewy body dementia to a medical unit?",
+      "options": {
+        "A": "Initiate physical restraints to prevent falls",
+        "B": "Ensure the LBD diagnosis is prominently flagged in the chart and that all team members are aware that antipsychotic medications are contraindicated",
+        "C": "Begin a PRN haloperidol order for potential agitation",
+        "D": "Administer the MMSE to establish current cognitive baseline"
+      },
+      "correctAnswer": "B",
+      "rationale": "The priority nursing action for admitting an LBD patient is medication safety: prominently flagging the LBD diagnosis and antipsychotic contraindication in the chart, wristband, medication administration record, and communicating to all team members. This prevents the most dangerous error in LBD care — inadvertent antipsychotic administration by an on-call physician or nurse unfamiliar with the patient.",
+      "distractorRationales": {
+        "A": "Physical restraints are never the first-line safety intervention and worsen agitation in dementia patients.",
+        "C": "PRN haloperidol is CONTRAINDICATED in LBD — writing this order would be a medication safety error.",
+        "D": "MMSE is not the priority; medication safety is. MMSE can be completed later and is not urgent on admission."
+      },
+      "hint": "First priority in LBD admission: prevent the lethal medication error.",
+      "clinicalPearl": "Many LBD medication deaths occur when patients are admitted with 'altered mental status' and an on-call physician writes a haloperidol order without knowing the LBD diagnosis. Proactive communication prevents this.",
+      "examStrategy": "Priority-setting in LBD: medication safety (antipsychotic contraindication) is always the highest priority on admission. This is the most clinically consequential action.",
+      "keyTakeaway": "LBD admission priority: flag antipsychotic contraindication prominently to prevent iatrogenic harm."
+    },
+    {
+      "id": "lbd-post-02",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 76-year-old man with DLB is prescribed levodopa/carbidopa for his parkinsonism. After 2 weeks, his wife reports that his 'hallucinations have gotten much worse — he's now frightened of what he sees.' What is the MOST likely explanation?",
+      "options": {
+        "A": "His DLB is progressing rapidly and the hallucinations are unrelated to the new medication",
+        "B": "Levodopa increases dopamine in the brain and can worsen psychotic symptoms including visual hallucinations in DLB",
+        "C": "Levodopa causes anticholinergic effects that precipitate hallucinations",
+        "D": "The carbidopa component of the combination is responsible for hallucination worsening"
+      },
+      "correctAnswer": "B",
+      "rationale": "Levodopa increases dopamine availability in the brain — this is its therapeutic mechanism for parkinsonism. However, excess dopaminergic activity in the mesolimbic system can trigger or worsen psychotic symptoms including visual hallucinations. In DLB, patients are particularly sensitive to this effect (compared to idiopathic PD) because cognitive networks are already affected. Worsening hallucinations after starting levodopa require dose reduction or careful reassessment of risks vs. benefits. The prescriber should be notified.",
+      "distractorRationales": {
+        "A": "The temporal relationship between starting levodopa and worsening hallucinations strongly suggests a medication effect, not coincidental rapid progression.",
+        "C": "Levodopa is not anticholinergic — it is a dopamine precursor.",
+        "D": "Carbidopa inhibits peripheral decarboxylation of levodopa — it prevents peripheral side effects and does not cause hallucinations."
+      },
+      "hint": "What does levodopa do in the brain? What happens when dopamine increases in limbic circuits?",
+      "clinicalPearl": "In DLB, the therapeutic window for levodopa is narrow: motor benefit (substantia nigra) can be achieved at doses that also worsen psychosis (mesolimbic system). Careful titration and regular reassessment are essential.",
+      "examStrategy": "Levodopa side effects in LBD: worsened visual hallucinations is the most important neuropsychiatric side effect. Know this for clinical reasoning questions about LBD pharmacotherapy.",
+      "keyTakeaway": "Levodopa can worsen visual hallucinations in LBD — dopaminergic stimulation of mesolimbic circuits triggers psychosis."
+    },
+    {
+      "id": "lbd-post-03",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "Which of the following statements CORRECTLY describes the neuropathology of Lewy body dementia?",
+      "options": {
+        "A": "LBD is caused by accumulation of beta-amyloid plaques and tau tangles in the hippocampus",
+        "B": "LBD is caused by abnormal accumulation of alpha-synuclein protein forming Lewy bodies in cortical and subcortical neurons",
+        "C": "LBD results from ischemic infarctions in the white matter and basal ganglia",
+        "D": "LBD is caused by TDP-43 protein inclusions predominantly in frontal and temporal lobes"
+      },
+      "correctAnswer": "B",
+      "rationale": "LBD neuropathology: abnormal misfolding and aggregation of alpha-synuclein protein forms eosinophilic intraneuronal inclusions called Lewy bodies. Found in: cortex (causing dementia), brainstem substantia nigra (causing parkinsonism), and autonomic nervous system (causing orthostasis). Beta-amyloid and tau are Alzheimer's pathology. Vascular white matter/basal ganglia infarctions cause vascular dementia. TDP-43 inclusions cause frontotemporal dementia.",
+      "distractorRationales": {
+        "A": "Beta-amyloid plaques and tau tangles are Alzheimer's disease neuropathology.",
+        "C": "Ischemic white matter and basal ganglia lesions are the pathological basis of vascular dementia.",
+        "D": "TDP-43 inclusions characterize frontotemporal dementia (FTD) with FTLD-TDP pathology."
+      },
+      "hint": "LBD = synucleinopathy. Alpha-synuclein = the protein.",
+      "clinicalPearl": "Alpha-synuclein is the shared pathological protein of LBD, Parkinson's disease, and multiple system atrophy — the 'synucleinopathy' family. All share similar clinical features: parkinsonism, autonomic dysfunction, and cognitive decline.",
+      "examStrategy": "Know the neuropathology of each dementia type: AD = beta-amyloid + tau; LBD = alpha-synuclein; VaD = ischemia; FTD = TDP-43 or tau.",
+      "keyTakeaway": "LBD = alpha-synuclein Lewy bodies; AD = beta-amyloid + tau; VaD = ischemia; FTD = TDP-43."
+    },
+    {
+      "id": "lbd-post-04",
+      "type": "SATA",
+      "difficulty": "hard",
+      "stem": "A nurse is implementing fall prevention interventions for an 81-year-old woman with DLB in a long-term care facility. Which interventions specifically address the LBD-related fall risk factors? Select all that apply.",
+      "options": {
+        "A": "Monitor for cognitive fluctuation and increase supervision during low-alertness periods",
+        "B": "Obtain orthostatic vital signs; supervise all position changes from lying to standing",
+        "C": "Place the call bell within reach and ensure the patient understands it is always safe to call for help",
+        "D": "Apply a bed alarm that activates when the patient attempts to get up unassisted",
+        "E": "Recommend the patient wear compression stockings before arising in the morning",
+        "F": "Request a referral to physiotherapy for gait training and balance exercises"
+      },
+      "correctAnswer": "A, B, D, E, F",
+      "rationale": "(A) Cognitive fluctuation periods = highest fall risk; increased monitoring is essential. (B) Orthostatic hypotension assessment and supervised position changes prevent syncope-related falls. (D) Bed alarm alerts staff when patient attempts to transfer without assistance — appropriate for a patient with both parkinsonism and cognitive fluctuation. (E) Compression stockings reduce orthostatic hypotension. (F) Physiotherapy for gait training and balance is evidence-based for parkinsonism management. Option C is valid general practice but not LBD-specific — in moderate LBD, the patient may not have reliable enough judgment to use the call bell during a fluctuation episode, making the other interventions more critical.",
+      "distractorRationales": {
+        "C": "While providing the call bell is standard practice, patients with cognitive fluctuation may not reliably use it during confused periods — other interventions more directly address LBD-specific risks."
+      },
+      "hint": "LBD fall risk: target parkinsonism (physio), orthostasis (compression stockings, position supervision), fluctuation (monitoring), and transfer safety (bed alarm).",
+      "clinicalPearl": "During cognitive fluctuation episodes, LBD patients may have impaired judgment but retained physical ability to stand — this is a particularly dangerous combination requiring proactive supervision.",
+      "examStrategy": "LBD fall prevention SATA: cognitive monitoring, orthostatic precautions, bed alarm, compression stockings, physiotherapy = LBD-specific. General fall measures = less specific but not wrong.",
+      "keyTakeaway": "LBD fall prevention targets all four mechanisms: parkinsonism (physio), orthostasis (stockings, slow positioning), fluctuation (monitoring), and transfer (bed alarm)."
+    },
+    {
+      "id": "lbd-post-05",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "An 83-year-old man with confirmed DLB is admitted to hospital with aspiration pneumonia. On admission, the nurse reviews his home medications: rivastigmine patch 9.5 mg/24h, clonazepam 0.5 mg at bedtime, low-dose levodopa/carbidopa 100/25 mg three times daily, and lisinopril 5 mg daily. The ER physician writes an order for haloperidol 1 mg IM PRN for agitation. What is the nurse's MOST appropriate action?",
+      "options": {
+        "A": "Administer the haloperidol as ordered — it is a PRN medication at the physician's discretion",
+        "B": "Hold the haloperidol; immediately contact the ER physician to clarify the LBD diagnosis and explain the contraindication; document the interaction",
+        "C": "Administer a reduced dose of 0.5 mg haloperidol IM instead of the ordered 1 mg",
+        "D": "Replace the haloperidol order with a PRN lorazepam order without physician notification"
+      },
+      "correctAnswer": "B",
+      "rationale": "The nurse has a professional and legal duty to HOLD the haloperidol order and immediately communicate the critical contraindication to the prescriber. In LBD, haloperidol is potentially life-threatening — this is not a matter of clinical discretion; it is a medication safety emergency. The nurse must: (1) withhold the medication; (2) contact the prescriber immediately with the LBD diagnosis information; (3) explain the contraindication and the severe reaction risk; (4) suggest an alternative (quetiapine if antipsychotic absolutely needed) or non-pharmacological management; (5) document the full interaction. Administering any dose of haloperidol in LBD is inappropriate. Unilaterally replacing one controlled medication with another is outside nursing scope.",
+      "distractorRationales": {
+        "A": "Following an order that will cause patient harm is a professional and ethical violation — the nurse has a duty to question unsafe orders.",
+        "C": "ANY dose of haloperidol is contraindicated in LBD — reducing the dose does not eliminate the risk.",
+        "D": "Replacing one PRN order with another controlled substance without physician involvement is outside nursing scope of practice."
+      },
+      "hint": "Unsafe medication order + nurse awareness = hold, communicate, document. Never administer a medication you know will cause harm.",
+      "clinicalPearl": "Questioning unsafe medication orders is one of the most fundamental patient safety responsibilities of a registered nurse. Blindly following orders that will cause harm violates professional standards.",
+      "examStrategy": "This type of question (physician ordered something contraindicated) always has the same answer structure: HOLD + communicate to prescriber + document. Never administer a known harmful medication because it was ordered.",
+      "keyTakeaway": "Unsafe medication order (haloperidol in LBD): hold, contact prescriber immediately, document — never administer."
+    },
+    {
+      "id": "lbd-post-06",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is explaining REM sleep behaviour disorder (RBD) to the family of a patient with DLB. Which statement is MOST accurate?",
+      "options": {
+        "A": "RBD is a form of volitional nighttime aggression that indicates psychotic decompensation",
+        "B": "RBD involves physically acting out dream content due to failure of normal REM sleep atonia; it is a neurological symptom of LBD and may precede dementia by decades",
+        "C": "RBD is caused by nocturnal seizure activity and requires urgent EEG",
+        "D": "RBD is normal in older adults and does not require any specific intervention"
+      },
+      "correctAnswer": "B",
+      "rationale": "REM sleep behaviour disorder is a parasomnia in which normal REM sleep muscle atonia fails — the patient physically acts out dream content (punching, kicking, yelling, falling out of bed). It is a neurological symptom of alpha-synuclein pathology (LBD/PD/MSA) and is NOT volitional, NOT seizure activity, and NOT normal aging. It is one of the earliest prodromal markers of LBD, often preceding cognitive symptoms by years or decades. First-line treatment: clonazepam 0.5 mg at bedtime; melatonin is an emerging safe alternative.",
+      "distractorRationales": {
+        "A": "RBD is not volitional behavior — the patient is asleep and acting out a dream without conscious intent. It is neurological, not psychiatric.",
+        "C": "RBD is not seizure activity — EEG is normal during RBD episodes. Diagnosis is by polysomnography showing preserved EMG activity (no atonia) during REM sleep.",
+        "D": "RBD is not normal aging and carries significant injury risk — it requires intervention."
+      },
+      "hint": "RBD = no atonia during REM = physically acts out dreams. Neurological, not behavioral.",
+      "clinicalPearl": "RBD has been identified up to 20 years before dementia onset in longitudinal studies — it is the most specific prodromal biomarker of the synucleinopathies (LBD, PD, MSA).",
+      "examStrategy": "RBD knowledge questions: physically acts out dreams during sleep = neurological (alpha-synuclein) = LBD prodrome = clonazepam treatment. Not seizure, not psychiatric.",
+      "keyTakeaway": "RBD = physically acting out dreams due to absent REM atonia; LBD prodrome; treat with clonazepam or melatonin."
+    },
+    {
+      "id": "lbd-post-07",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "What is the CORRECT neuropathological finding that distinguishes Lewy body dementia from Alzheimer's disease?",
+      "options": {
+        "A": "LBD: beta-amyloid plaques; AD: alpha-synuclein Lewy bodies",
+        "B": "LBD: alpha-synuclein Lewy bodies in cortical and subcortical neurons; AD: beta-amyloid plaques and tau neurofibrillary tangles",
+        "C": "LBD and AD have identical neuropathology — the clinical diagnosis differentiates them",
+        "D": "LBD: ischemic cortical infarctions; AD: beta-amyloid plaques"
+      },
+      "correctAnswer": "B",
+      "rationale": "LBD neuropathology: alpha-synuclein Lewy bodies distributed in cortex (causing dementia) and brainstem (causing parkinsonism). AD neuropathology: extracellular beta-amyloid plaques and intracellular tau neurofibrillary tangles. These are distinct protein pathologies — though co-pathology (both Lewy bodies AND amyloid/tau) is common in older adults, which can create clinical overlap.",
+      "distractorRationales": {
+        "A": "The proteins are reversed — alpha-synuclein is LBD; beta-amyloid is AD.",
+        "C": "LBD and AD have distinct neuropathology — they are not identical.",
+        "D": "Ischemic infarctions cause vascular dementia, not LBD."
+      },
+      "hint": "LBD = alpha-synuclein. AD = beta-amyloid + tau.",
+      "clinicalPearl": "Alpha-synuclein immunohistochemistry is required for definitive post-mortem diagnosis of LBD — Lewy bodies are not visible on standard H&E staining.",
+      "examStrategy": "Pathology differentiation: memorize protein-disease pairs: alpha-synuclein = LBD/PD; beta-amyloid + tau = AD; TDP-43 = FTD.",
+      "keyTakeaway": "LBD = alpha-synuclein Lewy bodies. AD = beta-amyloid plaques + tau tangles. Different proteins, different diseases."
+    },
+    {
+      "id": "lbd-post-08",
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is creating an individualized care plan for a 78-year-old man with moderately severe DLB in a long-term care facility. Which nursing interventions should be included? Select all that apply.",
+      "options": {
+        "A": "Prominently document antipsychotic contraindication; educate all staff caring for this patient",
+        "B": "Implement fall prevention program: orthostatic vital signs, compression stockings, physiotherapy for balance, supervised transfers",
+        "C": "Assess swallowing; implement aspiration precautions; upright positioning for all meals",
+        "D": "Administer PRN dimenhydrinate for nausea related to rivastigmine if needed",
+        "E": "Assess and document cognitive fluctuation patterns with time-stamped observations",
+        "F": "Assess for RBD; implement environmental bed safety modifications"
+      },
+      "correctAnswer": "A, B, C, E, F",
+      "rationale": "(A) Medication safety is the highest priority nursing care plan element. (B) LBD-specific comprehensive fall prevention. (C) Parkinsonism causes dysphagia — aspiration precautions are mandatory. (E) Documenting fluctuation patterns guides care planning and helps distinguish LBD fluctuation from delirium. (F) RBD assessment and safety modification protects patient and caregivers. Dimenhydrinate (D) is a first-generation antihistamine with anticholinergic properties — it should not be used in LBD patients on rivastigmine (opposes mechanism). For rivastigmine nausea: ondansetron or domperidone are safer alternatives.",
+      "distractorRationales": {
+        "D": "Dimenhydrinate has anticholinergic activity — contraindicated in LBD patients on rivastigmine. It would worsen cognition and negate AChEI therapy."
+      },
+      "hint": "LBD care plan: medication safety, falls, aspiration, fluctuation monitoring, RBD safety. Watch for anticholinergic drugs.",
+      "clinicalPearl": "Every antiemetic used in LBD patients should be checked for anticholinergic activity. Ondansetron (serotonin antagonist) is generally safe; dimenhydrinate and promethazine are not.",
+      "examStrategy": "LBD care plan SATA: always select medication safety, fall prevention, aspiration precautions, RBD safety. Always reject anticholinergic agents.",
+      "keyTakeaway": "LBD care plan must address: medication safety, triple fall risk, aspiration, fluctuation monitoring, RBD safety — and avoid anticholinergics."
+    },
+    {
+      "id": "lbd-post-09",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "An 84-year-old woman with DLB experiences dramatic daily cognitive fluctuations — she is 'fully herself' for several hours, then becomes unresponsive and appears to be asleep for 1–2 hours mid-afternoon, then becomes alert again. Her CAM assessment during the unresponsive period yields: Feature 1 (acute onset + fluctuating) = YES. Feature 2 (inattention) = YES. Feature 3 (disorganized thinking) = unable to assess. Feature 4 (altered consciousness) = YES. Which interpretation is MOST accurate?",
+      "options": {
+        "A": "This is delirium superimposed on LBD and requires urgent investigation for a medical precipitant",
+        "B": "This is intrinsic cognitive fluctuation of LBD and no investigation is required",
+        "C": "This is the expected clinical course of LBD; CAM cannot be applied and should not be used",
+        "D": "This pattern indicates the patient needs permanent sedation to manage her episodes"
+      },
+      "correctAnswer": "A",
+      "rationale": "This is a clinically complex and very important question. Although cognitive fluctuation is intrinsic to LBD, the CAM criteria can still be positive in LBD fluctuation — making it impossible to clinically distinguish LBD fluctuation from superimposed delirium on clinical assessment alone. In practice: BOTH must be considered. LBD fluctuation does not typically cause complete unresponsiveness (stupor-level) — this degree of altered consciousness suggests a precipitant (infection, metabolic, medication, pain). The safest clinical approach is to INVESTIGATE FOR A DELIRIUM PRECIPITANT even in a known LBD patient presenting with altered consciousness. Failure to investigate risks missing a treatable cause.",
+      "distractorRationales": {
+        "B": "Assuming the fluctuation is purely intrinsic LBD without investigation risks missing a superimposed delirium with a treatable cause.",
+        "C": "CAM can and should be applied to detect superimposed delirium in LBD patients — the fluctuation of LBD does not preclude CAM use.",
+        "D": "Permanent sedation is never an appropriate clinical response and would cause harm."
+      },
+      "hint": "LBD + CAM positive: cannot distinguish intrinsic fluctuation from superimposed delirium. Investigate.",
+      "clinicalPearl": "Superimposed delirium in LBD is common and treatable. The clinical error is attributing all behavioral changes to 'their LBD.' Always investigate for a medical cause when the fluctuation seems worse or different than baseline.",
+      "examStrategy": "Delirium-on-LBD questions: always investigate for precipitant. LBD fluctuation does not protect against delirium — it makes it harder to detect. When in doubt, investigate.",
+      "keyTakeaway": "In LBD, positive CAM requires investigation for delirium precipitant — cannot assume all fluctuation is intrinsic disease without ruling out treatable causes."
+    },
+    {
+      "id": "lbd-post-10",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "Which medication has the BEST evidence for treating both cognitive fluctuation and visual hallucinations specifically in Dementia with Lewy Bodies?",
+      "options": {
+        "A": "Memantine",
+        "B": "Donepezil",
+        "C": "Rivastigmine",
+        "D": "Quetiapine"
+      },
+      "correctAnswer": "C",
+      "rationale": "Rivastigmine is the acetylcholinesterase inhibitor with the strongest evidence base specifically for DLB. A landmark RCT (McKeith et al., 2000, Lancet) demonstrated significant improvements in cognitive fluctuation, attention, and visual hallucinations compared to placebo in DLB. The cholinergic deficit in LBD is more profound than in AD, making AChEI treatment particularly effective. Rivastigmine is approved for both DLB-type dementia and Parkinson's Disease Dementia. Donepezil is primarily studied in AD. Memantine has been studied in AD but evidence in LBD is limited. Quetiapine is an antipsychotic — it does not improve cognition or reduce hallucinations safely in LBD.",
+      "distractorRationales": {
+        "A": "Memantine's primary evidence base is in AD. Limited and less consistent evidence in LBD.",
+        "B": "Donepezil is the primary AChEI for AD. Rivastigmine has the DLB-specific RCT evidence.",
+        "D": "Quetiapine is the least-dangerous antipsychotic for LBD (not evidence-based for cognitive fluctuation or hallucinations) — it does not treat the underlying LBD features."
+      },
+      "hint": "Which AChEI has a DLB-specific randomized controlled trial?",
+      "clinicalPearl": "The Lancet 2000 rivastigmine DLB trial remains one of the pivotal studies in LBD pharmacotherapy — it established rivastigmine as the first-line pharmacological treatment.",
+      "examStrategy": "AChEI for LBD: rivastigmine has LBD-specific RCT evidence. When asked which AChEI is best for LBD, rivastigmine is always the correct answer.",
+      "keyTakeaway": "Rivastigmine has the strongest specific evidence for treating cognitive fluctuation and visual hallucinations in DLB — the preferred AChEI for LBD."
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "lbd-fc-01",
+      "front": "4 Core Clinical Features of Lewy Body Dementia — FVPR",
+      "back": "F — Fluctuating Cognition: dramatic variation in alertness/awareness within hours-days\nV — Vivid Visual Hallucinations: detailed, formed, people/animals; non-threatening initially; early insight\nP — Parkinsonism: bradykinesia, rigidity, rest tremor, postural instability (spontaneous, not drug-induced)\nR — REM Sleep Behaviour Disorder: physically acts out dreams; prodromal marker",
+      "hint": "FVPR — all four core features must be considered.",
+      "explanation": "Probable DLB requires 2 core features. Possible DLB requires 1. The combination is highly specific for LBD.",
+      "clinicalPearl": "RBD is often the first feature to appear — decades before cognitive symptoms. Inquire about sleep behavior in all older patients presenting with new dementia."
+    },
+    {
+      "id": "lbd-fc-02",
+      "front": "1-Year Rule — DLB vs Parkinson's Disease Dementia (PDD)",
+      "back": "DLB: Dementia FIRST (or within 1 year of motor symptoms)\n→ Dementia before or simultaneous with parkinsonism\n\nPDD: Motor symptoms (Parkinson's disease) for MORE THAN 1 YEAR before dementia develops\n→ Well-established PD, then cognition declines years later\n\nBoth share: same neuropathology (alpha-synuclein), same antipsychotic contraindication",
+      "hint": "1 year is the dividing line. Motor >1 year before dementia = PDD.",
+      "explanation": "The 1-year rule is a clinical convention. Biologically, DLB and PDD are the same disease. The distinction affects clinical classification but not the critical safety information.",
+      "clinicalPearl": "A patient initially followed as 'Parkinson's disease' who develops dementia >1 year later is recategorized as PDD — but retains the exact same antipsychotic contraindication."
+    },
+    {
+      "id": "lbd-fc-03",
+      "front": "Antipsychotic Contraindication in LBD — Safe vs Unsafe",
+      "back": "CONTRAINDICATED (HIGH D2 blockade — potentially FATAL):\n• Haloperidol (first-generation)\n• Risperidone\n• Olanzapine\n• Aripiprazole\n• Loxapine\n• Chlorpromazine\n\nRELATIVELY SAFER (lowest D2 affinity — use with caution + consent):\n• Quetiapine (FIRST CHOICE if unavoidable)\n• Clozapine (requires weekly blood monitoring)\n\nFor hallucinations: try rivastigmine first",
+      "hint": "D2 affinity = danger in LBD. Quetiapine = least D2 binding = least dangerous.",
+      "explanation": "50% of LBD patients given standard antipsychotics develop severe, potentially fatal reactions (profound rigidity, fever, impaired consciousness, autonomic instability). This is not rare — it is a class effect.",
+      "clinicalPearl": "Flag every LBD patient chart with 'Antipsychotic contraindicated — DLB/LBD diagnosis' in allergy field, medication record, and care plan. Family members should carry a medication alert card."
+    },
+    {
+      "id": "lbd-fc-04",
+      "front": "Neuroleptic Sensitivity Reaction in LBD — Clinical Features",
+      "back": "Occurs after antipsychotic administration (even low doses) in LBD patients\nFeatures (severity varies):\n• Profound muscle rigidity (bilateral)\n• Impaired consciousness (sedation to coma)\n• Hyperthermia (fever)\n• Autonomic instability: hypotension, tachycardia\n• Worsening parkinsonism\n• Aspiration pneumonia (from rigidity)\nMortality: significantly elevated; 2–3× baseline LBD mortality\nManagement: STOP antipsychotic, supportive care, ICU-level care may be required",
+      "hint": "Rigidity + fever + impaired consciousness after antipsychotic in LBD = neuroleptic sensitivity.",
+      "explanation": "This reaction is distinct from neuroleptic malignant syndrome (NMS) in that it occurs at standard doses in LBD patients, not just with overdose or idiosyncratic NMS.",
+      "clinicalPearl": "The nurse who holds a haloperidol order in a patient with LBD and calls the physician is practicing evidence-based, life-saving nursing care — not defying authority."
+    },
+    {
+      "id": "lbd-fc-05",
+      "front": "REM Sleep Behaviour Disorder (RBD) — Clinical Profile and Management",
+      "back": "Mechanism: failure of normal REM muscle atonia → patient physically acts out dreams\nFeatures: punching, kicking, shouting, falling out of bed; no memory of behavior on waking\nNot: volitional aggression, seizures, sleepwalking (which occurs in NREM sleep)\nProdrome: RBD may precede dementia by 5–25 years in synucleinopathies\nDiagnosis: polysomnography (gold standard); clinical history adequate for diagnosis\n\nManagement:\n• Clonazepam 0.5 mg at bedtime (first-line)\n• Melatonin 3–12 mg at bedtime (emerging, safer in older adults)\n• Environmental: lower bed, remove bedside hazards, separate sleeping if partner at injury risk",
+      "hint": "RBD = acting out REM dreams. Prodrome. Clonazepam + bed safety.",
+      "explanation": "The bed partner is often the most affected person in RBD — they report being punched, kicked, or pushed. Their safety must be addressed.",
+      "clinicalPearl": "Ask every older patient or caregiver presenting with new dementia: 'Does your family member ever act out their dreams physically — punching, kicking, yelling while asleep?' A positive answer strongly suggests LBD."
+    },
+    {
+      "id": "lbd-fc-06",
+      "front": "Visual Hallucinations in LBD — Management Algorithm",
+      "back": "ASSESS: distressing or non-distressing? Insight present or absent?\n\nNon-distressing + insight preserved:\n→ No medication needed\n→ Validate experience without confirming reality\n→ Increase lighting (darkness worsens VH)\n→ Educate family: expected feature of LBD\n\nDistressing hallucinations:\n→ Increase lighting\n→ Reassurance: 'You're safe, I'm here'\n→ Remove triggers (shadows, mirrors, patterned surfaces)\n→ Consider rivastigmine (reduces VH)\n→ If pharmacological: quetiapine 12.5 mg (LAST RESORT)\n→ NEVER haloperidol, risperidone, olanzapine",
+      "hint": "Non-distressing + insight = reassure + lighting. Distressing = safety + rivastigmine → quetiapine if needed.",
+      "explanation": "Early LBD hallucinations are characteristically non-threatening and the patient has insight. The appropriate response is therapeutic communication, not medication. Medication is a last resort.",
+      "clinicalPearl": "Darkness is the most common environmental trigger for worsening visual hallucinations in LBD. Ensuring nightlights and adequate evening lighting reduces hallucination frequency."
+    },
+    {
+      "id": "lbd-fc-07",
+      "front": "Cognitive Fluctuation in LBD — Clinical Assessment",
+      "back": "Definition: dramatic, spontaneous variation in cognition, attention, and consciousness — from near-normal to severely confused — within hours or days\n\nAssessment:\n• Time-stamp all cognitive observations\n• Compare periods of alertness vs. confusion\n• Interview family: 'Does he/she seem 'with it' sometimes and completely lost at other times?'\n• CAM is STILL useful to detect SUPERIMPOSED delirium\n\nKey challenge: Distinguish intrinsic LBD fluctuation from superimposed delirium\n• Both can be CAM-positive\n• If fluctuation is WORSE or DIFFERENT than baseline → investigate for delirium precipitant\n• NEVER assume all fluctuation is intrinsic LBD",
+      "hint": "Fluctuation = LBD OR delirium. Always investigate when in doubt.",
+      "explanation": "LBD fluctuation and delirium can coexist — the presence of intrinsic fluctuation does not immunize against superimposed delirium.",
+      "clinicalPearl": "Families often describe LBD fluctuation as 'she was totally fine yesterday and completely out of it today.' This is not a psychiatric emergency — it is the disease. Education prevents unnecessary hospitalizations and unnecessary antipsychotic prescriptions."
+    },
+    {
+      "id": "lbd-fc-08",
+      "front": "Rivastigmine in LBD — Evidence and Administration",
+      "back": "Evidence: Landmark McKeith RCT (Lancet 2000) — rivastigmine improved attention, cognitive fluctuation, visual hallucinations compared to placebo in DLB\nMechanism: AChEI (inhibits acetylcholinesterase) + also inhibits butyrylcholinesterase\nWhy strong in LBD: cholinergic deficit MORE PROFOUND than in AD\n\nFormulations:\n• PO capsule: twice daily with food\n• Transdermal patch (preferred): 4.6 → 9.5 → 13.3 mg/24h; rotate sites; remove old patch first; do not cut\n\nSide effects: nausea, vomiting, bradycardia, vivid dreams, weight loss",
+      "hint": "Rivastigmine = best AChEI for LBD; patch preferred for GI tolerance.",
+      "explanation": "The cholinergic deficit in LBD is more severe than in AD because Lewy bodies damage the basal forebrain cholinergic neurons more profoundly. This explains the robust clinical response to rivastigmine in LBD.",
+      "clinicalPearl": "Patch application error: applying a new patch without removing the old one is the most common rivastigmine administration error — causes double-dosing and cholinergic toxicity."
+    },
+    {
+      "id": "lbd-fc-09",
+      "front": "LBD Triple Safety Challenge",
+      "back": "1. MEDICATION SAFETY:\n• Antipsychotic contraindication\n• Anticholinergic avoidance\n• Levodopa caution (may worsen hallucinations)\n\n2. FALL PREVENTION (4 mechanisms):\n• Parkinsonism → gait instability\n• Cognitive fluctuation → sudden impaired judgment\n• Orthostatic hypotension → syncope on rising\n• Visual hallucinations → reaching for non-existent objects\n\n3. ASPIRATION PREVENTION:\n• Parkinsonism impairs swallowing\n• SLP referral when dysphagia suspected\n• Upright positioning, modified textures, aspiration precautions",
+      "hint": "Medication safety + Falls + Aspiration = the three pillars of LBD nursing safety.",
+      "explanation": "Each of the three safety challenges has multiple contributing factors unique to LBD. A comprehensive nursing care plan must address all three simultaneously.",
+      "clinicalPearl": "Aspiration pneumonia is one of the leading causes of death in LBD — the parkinsonism that affects mobility also affects swallowing."
+    },
+    {
+      "id": "lbd-fc-10",
+      "front": "Orthostatic Hypotension in LBD — Assessment and Management",
+      "back": "Definition: systolic BP drop ≥20 mmHg or diastolic drop ≥10 mmHg upon standing\nCause in LBD: autonomic nervous system Lewy body deposition → failure of cardiovascular reflex\n\nAssessment: orthostatic vitals — lying → sitting (1 min) → standing (1 min, 3 min)\n\nManagement:\nNon-pharmacological (first):\n• Rise SLOWLY: lie → sit → stand (pause 30 sec each)\n• Compression stockings (don before rising)\n• Elevate HOB 30° at night\n• Small, frequent meals (avoid large carbohydrate meals)\n• Adequate hydration\n• Review antihypertensives (may need dose reduction)\n\nPharmacological:\n• Fludrocortisone (mineralocorticoid)\n• Midodrine (alpha-1 agonist)",
+      "hint": "Orthostatic hypotension in LBD = autonomic failure + falls. Slow, gradual position changes.",
+      "explanation": "Orthostatic hypotension in LBD is structural (autonomic Lewy body pathology), not functional (dehydration). It does not fully resolve with hydration alone.",
+      "clinicalPearl": "Measuring orthostatic vitals is the first step — many LBD falls are syncope-related, not gait-related. Identifying orthostatic hypotension changes the fall prevention approach."
+    },
+    {
+      "id": "lbd-fc-11",
+      "front": "LBD vs Parkinson's Disease — Key Differences",
+      "back": "LBD (DLB):\n• Dementia EARLY or CONCURRENT with motor symptoms\n• Cognitive fluctuation prominent from early stages\n• Visual hallucinations in 60–80%\n• Parkinsonism responds POORLY to levodopa\n• Antipsychotics: CONTRAINDICATED\n\nParkinson's Disease (without dementia):\n• Motor symptoms for >1 year before any cognitive change\n• No/minimal hallucinations initially\n• Parkinsonism responds WELL to levodopa\n• Antipsychotics: still risky (prefer quetiapine)\n\nParkinson's Disease Dementia (PDD):\n• Motor >1 year before dementia\n• Same antipsychotic contraindication as DLB",
+      "hint": "LBD = poor levodopa response; PD = good levodopa response.",
+      "explanation": "The differential response to levodopa reflects different degrees and distributions of Lewy body pathology — in LBD, dopaminergic pathways are more diffusely affected.",
+      "clinicalPearl": "When a Parkinson's patient's levodopa is 'not working well' and they've developed dementia + hallucinations — consider whether this represents PDD rather than idiopathic PD."
+    },
+    {
+      "id": "lbd-fc-12",
+      "front": "Alpha-Synuclein Synucleinopathies — The LBD Disease Family",
+      "back": "All share: abnormal alpha-synuclein aggregation → Lewy bodies\n\nLewy Body Dementia (LBD spectrum):\n• DLB: dementia ≤1 year of motor onset\n• PDD: motor >1 year before dementia\n\nParkinson's Disease:\n• Primarily motor; dementia develops in 80% over 20 years\n\nMultiple System Atrophy (MSA):\n• Severe autonomic failure + parkinsonism + cerebellar signs\n• Glial cytoplasmic inclusions (GCIs) of alpha-synuclein\n• Most rapid progression\n\nAll: antipsychotics risky; autonomic dysfunction; RBD common",
+      "hint": "Alpha-synuclein = the shared pathological protein across LBD, PD, and MSA.",
+      "explanation": "Understanding LBD as part of the synucleinopathy spectrum helps explain why LBD patients share features with PD patients and why the same safety rules (antipsychotic avoidance) apply across the spectrum.",
+      "clinicalPearl": "MSA patients also demonstrate neuroleptic sensitivity — the antipsychotic precaution is not unique to LBD/PDD but extends to all synucleinopathies."
+    }
+  ]
+}

@@ -1,14 +1,26 @@
 import "server-only";
 
 import { revalidateTag, unstable_cache } from "next/cache";
+import { cacheGet, cacheSet, isCacheConfigured } from "@/lib/server/content-cache";
 import {
   ALL_LEARNER_PRIVATE_READ_SURFACES,
   buildLearnerPrivateReadCacheKeyParts,
+  DASHBOARD_ANALYTICS_SURFACES,
   learnerPrivateReadSurfaceTag,
   learnerPrivateReadUserTag,
   shouldBypassLearnerPrivateReadCache,
   type LearnerPrivateReadCacheSurface,
 } from "@/lib/cache/learner-private-read-cache-keying";
+
+const LEARNER_PRIVATE_REDIS_VERSION_TTL_SECONDS = 7 * 24 * 60 * 60;
+
+function redisVersionKey(userId: string, surface: LearnerPrivateReadCacheSurface): string {
+  return `${learnerPrivateReadSurfaceTag(userId, surface)}:version`;
+}
+
+function redisPayloadKey(userId: string, surface: LearnerPrivateReadCacheSurface, keyParts: unknown[], version: string): string {
+  return buildLearnerPrivateReadCacheKeyParts(surface, userId, [...keyParts, { version }]).join(":");
+}
 
 async function expireTag(tag: string): Promise<void> {
   try {
@@ -25,6 +37,11 @@ export async function invalidateLearnerPrivateReadCache(
   if (!userId || shouldBypassLearnerPrivateReadCache()) return;
 
   const tags = [learnerPrivateReadUserTag(userId), ...surfaces.map((surface) => learnerPrivateReadSurfaceTag(userId, surface))];
+  await Promise.all(
+    surfaces.map((surface) =>
+      cacheSet(redisVersionKey(userId, surface), String(Date.now()), LEARNER_PRIVATE_REDIS_VERSION_TTL_SECONDS),
+    ),
+  ).catch(() => {});
   for (const tag of tags) {
     await expireTag(tag);
   }
@@ -42,6 +59,17 @@ export async function loadWithLearnerPrivateReadCache<T>(
 ): Promise<T> {
   if (!options.userId || options.bypass || shouldBypassLearnerPrivateReadCache()) {
     return loader();
+  }
+
+  if (isCacheConfigured() && DASHBOARD_ANALYTICS_SURFACES.includes(options.surface)) {
+    const version =
+      (await cacheGet<string>(redisVersionKey(options.userId, options.surface)).catch(() => null)) ?? "1";
+    const key = redisPayloadKey(options.userId, options.surface, options.keyParts ?? [], version);
+    const cached = await cacheGet<T>(key).catch(() => null);
+    if (cached !== null && cached !== undefined) return cached;
+    const value = await loader();
+    await cacheSet(key, value, options.ttlSeconds).catch(() => {});
+    return value;
   }
 
   return unstable_cache(

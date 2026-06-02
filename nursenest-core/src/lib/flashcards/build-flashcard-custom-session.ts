@@ -733,9 +733,9 @@ export async function buildFlashcardCustomSession(
       if (typeof id === "string" && id.trim())
         examQuestionIdsForMeta.add(id.trim());
     }
-    // Use in-process exam-topic meta cache to skip chunked findMany on warm requests.
+    // Use Redis-backed exam-topic meta cache to skip chunked findMany on warm requests.
     const cachedExamMeta = pathwayScopeId
-      ? getExamTopicMetaForPathway(pathwayScopeId)
+      ? await getExamTopicMetaForPathway(pathwayScopeId)
       : null;
     const examTopicMetaById = new Map<
       string,
@@ -781,7 +781,7 @@ export async function buildFlashcardCustomSession(
       }
     }
     if (pathwayScopeId && newEntries.length > 0) {
-      setExamTopicMetaForPathway(pathwayScopeId, newEntries);
+      void setExamTopicMetaForPathway(pathwayScopeId, newEntries);
     }
 
     const categoryCounts: Record<string, number> = {};

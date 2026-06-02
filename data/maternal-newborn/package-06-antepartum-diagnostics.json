@@ -1,0 +1,586 @@
+{
+  "version": 1,
+  "packageId": "maternal-newborn-pkg-06",
+  "label": "Antepartum Diagnostics — Lessons, Questions, Flashcards & Case Studies",
+  "generatedDate": "2026-06-02",
+  "targetExams": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","PNP-PC","FNP"],
+  "domain": "Maternal Newborn",
+  "subdomain": "Antepartum Diagnostics",
+  "lessons": [
+    {
+      "lessonId": "mn-pkg06-L01",
+      "topicSlug": "blood-type-rh-status",
+      "title": "Blood Type, Rh Status & Rh Sensitization",
+      "learningObjectives": [
+        "Explain ABO and Rh blood typing in the obstetric context",
+        "Describe the mechanism of Rh sensitization and its consequences",
+        "Identify when RhoGAM is indicated",
+        "Apply Rh status knowledge to antepartum and postpartum care",
+        "Recognize Rh isoimmunization and its fetal effects"
+      ],
+      "sections": [
+        {
+          "id": "rh_overview",
+          "heading": "Rh Factor & Sensitization",
+          "kind": "pathophysiology_overview",
+          "body": "**Rh factor:** The D antigen on red blood cells. Rh-positive (D+): antigen present (85% of population). Rh-negative (D−): antigen absent (15%).\n\n**Rh sensitization mechanism:**\n1. Rh-negative mother carries Rh-positive fetus (D antigen from father)\n2. Fetal RBCs enter maternal circulation (at delivery, trauma, bleeding, procedures)\n3. Maternal immune system recognizes D antigen as foreign → produces anti-D IgG antibodies\n4. In subsequent Rh-positive pregnancies: maternal anti-D IgG crosses placenta → attacks fetal RBCs → hemolysis\n5. Results: hemolytic disease of the fetus and newborn (HDFN), erythroblastosis fetalis, hydrops fetalis, fetal death\n\n**Indirect Coombs test (indirect antiglobulin test/IAT):**\n- Screens maternal blood for circulating antibodies to Rh antigens\n- Performed at initial prenatal visit on all women\n- Negative: no sensitization — RhoGAM prophylaxis indicated at key points\n- Positive: sensitization has occurred → fetal surveillance (MCA Doppler peak systolic velocity — elevated = fetal anemia → intrauterine transfusion or delivery)\n\n**RhoGAM (Rh immune globulin — anti-D):**\n- 300 mcg IM (covers 30 mL fetal blood or 15 mL fetal RBCs)\n- Prevents sensitization by clearing fetal RBCs before maternal immune response occurs\n- Indications (ALL events where fetal-maternal hemorrhage may occur):\n  * 28 weeks gestation (antepartum prophylaxis)\n  * Within 72 hours of delivery (if baby is Rh-positive)\n  * After any procedure: amniocentesis, CVS, external cephalic version\n  * After any pregnancy loss: miscarriage, ectopic pregnancy, therapeutic abortion\n  * After trauma (MVC, fall, assault)\n  * Any significant antepartum bleeding episode\n- NOT needed if: father is confirmed Rh-negative (baby cannot be Rh-positive)\n- Kleihauer-Betke test: quantifies fetal-maternal hemorrhage — determines if additional RhoGAM needed (>30 mL fetal blood)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Rh sensitization: Rh-negative mother + Rh-positive fetus → maternal anti-D antibodies → HDFN in subsequent pregnancies\n- RhoGAM 300 mcg given at 28 weeks, within 72h of delivery, and after any bleeding/procedure/loss\n- Indirect Coombs: screens for maternal anti-D antibodies; negative = no sensitization\n- If sensitized (positive Coombs): MCA Doppler to assess fetal anemia severity\n- Kleihauer-Betke: quantifies FMH to determine if additional RhoGAM needed\n- Never need RhoGAM if confirmed Rh-negative father"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L02",
+      "topicSlug": "prenatal-lab-testing",
+      "title": "Prenatal Laboratory Testing: Complete Screening Panel",
+      "learningObjectives": [
+        "Identify all standard prenatal laboratory tests by trimester",
+        "Explain the rationale and normal values for each test",
+        "Recognize abnormal results requiring follow-up",
+        "Apply lab knowledge to client education",
+        "Interpret prenatal lab panels in clinical scenarios"
+      ],
+      "sections": [
+        {
+          "id": "first_trimester_labs",
+          "heading": "First Visit & First Trimester Labs",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Initial prenatal visit labs (8–10 weeks):**\n\n**CBC (Complete Blood Count):**\n- Hgb/Hct: baseline anemia assessment\n- Platelets: thrombocytopenia baseline\n- WBC: baseline leukocyte count\n\n**Blood type and Rh factor + antibody screen (Indirect Coombs)**\n\n**Rubella immunity (IgG titer):**\n- Immune: titer ≥1:10 or positive IgG — no action needed\n- Non-immune: document; vaccinate POSTPARTUM (MMR is live vaccine — contraindicated in pregnancy)\n\n**Hepatitis B surface antigen (HBsAg):**\n- Positive: baby receives HBIG + Hepatitis B vaccine within 12 hours of birth\n- Screen all pregnant women regardless of prior vaccination status\n\n**Syphilis (RPR or VDRL):**\n- Positive screening: confirm with FTA-ABS or TPPA\n- Treat: Benzathine penicillin G IM (penicillin allergy → desensitize, still use penicillin in pregnancy)\n\n**HIV (4th generation Ag/Ab combo):**\n- Universal opt-out screening at first prenatal visit\n- HIV-positive: ART initiated immediately; aim for undetectable viral load by delivery\n- VL <200 copies/mL at 36 weeks: vaginal delivery option; VL ≥200: recommend C-section\n\n**Chlamydia and gonorrhea (NAAT):**\n- Screen all pregnant women <25 years; all at-risk women regardless of age\n- Treat per NAAT result; re-test in 3rd trimester in high-risk\n\n**Urine culture:**\n- Screen for asymptomatic bacteriuria (ASB) — treat even if asymptomatic (prevents pyelonephritis)\n\n**Varicella (if no history of chickenpox or vaccination):**\n- Non-immune: avoid exposure; vaccinate postpartum (live vaccine)\n\n**TB (PPD or IGRA):**\n- Screen high-risk women (immigrant, incarcerated, healthcare worker)\n\n**Pap smear:**\n- If due per cervical cancer screening guidelines\n\n**2nd/3rd trimester additional labs:**\n- 15–20 weeks: Quad screen (MS-AFP, hCG, estriol, inhibin A) for Down syndrome/trisomy 18/NTD\n- 24–28 weeks: 1-hour 50g OGTT (GDM screen); CBC repeat; Hgb electrophoresis if at risk for sickle cell\n- 28 weeks: RhoGAM if Rh-negative\n- 35–37 weeks: GBS vaginal-rectal culture; repeat RPR if high-risk; repeat HIV if high-risk"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Initial labs: CBC, type/Rh/antibody screen, rubella, HBsAg, syphilis (RPR), HIV, GC/chlamydia, urine culture, varicella\n- Rubella/varicella non-immune: NO vaccine in pregnancy; vaccinate POSTPARTUM\n- HBsAg positive: HBIG + Hep B vaccine to neonate within 12h\n- ASB: treat even without symptoms (prevents pyelonephritis)\n- Syphilis: always treat with penicillin G even if allergic (desensitize first)\n- GBS: 35–37 week culture; positive → IV penicillin G in labor"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L03",
+      "topicSlug": "ultrasound-obstetric",
+      "title": "Obstetric Ultrasound: Indications, Findings & Interpretation",
+      "learningObjectives": [
+        "Identify the different types of obstetric ultrasound and their indications",
+        "Describe key findings assessed at each gestational age",
+        "Explain nuchal translucency and its significance",
+        "Recognize abnormal ultrasound findings requiring intervention",
+        "Apply ultrasound knowledge to antepartum counseling"
+      ],
+      "sections": [
+        {
+          "id": "ultrasound_types",
+          "heading": "Types & Timing of Obstetric Ultrasound",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Transabdominal vs transvaginal:**\n- Transabdominal (TAS): standard approach; requires full bladder (not always); good from 10 weeks\n- Transvaginal (TVS): superior resolution for early pregnancy; no full bladder required; best for 4–10 weeks\n\n**First trimester ultrasound (6–13+6 weeks):**\n- Confirm intrauterine location (gestational sac)\n- Confirm fetal cardiac activity (6+ weeks)\n- Establish gestational age (CRL measurement, most accurate dating)\n- Determine chorionicity/amnionicity in multiples\n- NT scan (11–13+6 weeks): nuchal translucency measurement\n\n**Nuchal translucency (NT):**\n- NT = fluid-filled space at back of fetal neck\n- Normal: <3 mm (or <95th percentile for CRL)\n- Increased NT (≥3 mm): associated with trisomy 21 (Down), 18, 13, Turner syndrome, cardiac defects, other anomalies\n- NT alone not diagnostic — combined with maternal serum markers (PAPP-A, free β-hCG) and maternal age for 1st trimester combined screening\n- Detection rate: ~85–90% for Down syndrome with 5% false positive\n\n**Anatomy scan (18–20 weeks) — Level II:**\n- Systematic evaluation of all fetal structures:\n  - Head: BPD, HC, posterior fossa (Dandy-Walker), neural tube closure\n  - Face: orbits, nasal bone (absent = Down risk), lips (cleft lip), palate (cleft palate)\n  - Spine: sagittal view for NTDs (spina bifida), vertebral count\n  - Heart: four-chamber view + outflow tracts (detects 70–90% of major CHD)\n  - Abdominal organs: stomach (absent = EA, low = CDH), kidneys, bladder, bowel\n  - Limbs: 4 limbs, hands, feet, bone lengths\n  - Placenta: location (previa?), cord insertion, texture\n  - AFI: amniotic fluid volume\n  - Cervical length (TV if preterm risk)\n\n**Third trimester growth scan (28–36 weeks):**\n- Estimated fetal weight (EFW) from BPD, HC, AC, FL measurements\n- Placenta location: late-diagnosed previa\n- AFI (oligohydramnios, polyhydramnios)\n- Fetal presentation (vertex, breech, transverse)\n- Doppler assessment of umbilical artery, MCA in high-risk"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- CRL at 7–14 weeks = most accurate dating; TVS superior in early pregnancy\n- NT ≥3 mm = increased risk for chromosomal anomalies and cardiac defects\n- Anatomy scan at 18–20 weeks: systematic review of head, face, spine, heart (4 chambers + outflow), abdomen, limbs, placenta\n- 'Four-chamber view' detects most CHD; outflow tracts add sensitivity\n- Absent nasal bone + thickened NT = Down syndrome markers\n- Growth scan EFW from BPD + HC + AC + FL; AC is most sensitive for IUGR"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L04",
+      "topicSlug": "amniocentesis",
+      "title": "Amniocentesis: Procedure, Indications & Nursing Care",
+      "learningObjectives": [
+        "Describe the amniocentesis procedure and its indications",
+        "Explain the information obtained from amniotic fluid analysis",
+        "Identify procedural risks and complications",
+        "Apply nursing care principles before, during, and after amniocentesis",
+        "Counsel clients regarding amniocentesis decision-making"
+      ],
+      "sections": [
+        {
+          "id": "amnio",
+          "heading": "Amniocentesis: Procedure & Analysis",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Definition:** Ultrasound-guided needle insertion through maternal abdomen and uterine wall into the amniotic sac to withdraw 15–20 mL amniotic fluid for analysis.\n\n**Timing:** Genetic: 15–20 weeks. Lung maturity: 32–36 weeks (declining use with corticosteroids).\n\n**Indications:**\n- Advanced maternal age (≥35) or elevated risk on screening\n- Abnormal NT/1st trimester screening or quad screen\n- Prior child with chromosomal abnormality\n- Known parental chromosomal rearrangement\n- Elevated MSAFP (for NTD diagnosis via acetylcholinesterase)\n- Lung maturity assessment (L:S ratio, PG)\n- Diagnosis of fetal infection (TORCH)\n- Polyhydramnios relief (therapeutic amniocentesis)\n\n**Information obtained:**\n- Karyotype (46,XX or 46,XY; trisomies; deletions/duplications) — 2–3 weeks for standard culture\n- FISH: rapid result (24–48 hours) for chromosomes 13, 18, 21, X, Y\n- Chromosomal microarray: detects submicroscopic deletions/duplications\n- MSAFP + acetylcholinesterase: NTD diagnosis\n- L:S ratio ≥2:1 + presence of PG = fetal lung maturity\n- Fetal DNA: genetic disorders\n\n**Procedural risks:**\n- Pregnancy loss: 0.1–0.3% (1 in 300–500) — less than historically cited 0.5%\n- PPROM\n- Fetal injury (rare — ultrasound guidance)\n- Chorioamnionitis\n- Rh sensitization (RhoGAM if Rh-negative)\n\n**Nursing care:**\n- Pre-procedure: informed consent, anxiety assessment, bladder status (full vs empty per gestational age)\n- During: ultrasound guidance confirmation, sterile technique, maternal vital signs, fetal monitoring\n- Post-procedure: FHR assessment, monitor for cramping/bleeding/leaking fluid (PPROM)\n- Teach: rest 24 hours, pelvic rest 24 hours, report cramping, bleeding, fluid loss, fever, decreased fetal movement\n- RhoGAM administration if Rh-negative\n- Results counseling: timeframes, support resources, referral to genetic counselor"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Amniocentesis at 15–20 weeks: genetic diagnosis; ultrasound-guided, 15–20 mL amniotic fluid\n- Loss risk: 0.1–0.3% (1 in 300–500)\n- Information: karyotype (2–3 weeks), FISH (24–48h for chromosomes 13/18/21/X/Y), lung maturity (L:S ratio)\n- RhoGAM: ALWAYS give to Rh-negative women after amniocentesis\n- Post-procedure: rest 24h, report cramping/bleeding/fluid/fever/decreased movement\n- Elevated MSAFP + acetylcholinesterase in AF = NTD diagnosis"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L05",
+      "topicSlug": "chorionic-villus-sampling",
+      "title": "Chorionic Villus Sampling (CVS): Procedure & Clinical Use",
+      "learningObjectives": [
+        "Describe CVS procedure and compare it to amniocentesis",
+        "Identify advantages and limitations of CVS",
+        "Recognize CVS-specific complications",
+        "Apply nursing care principles to CVS patients",
+        "Explain CVS results and their limitations to clients"
+      ],
+      "sections": [
+        {
+          "id": "cvs",
+          "heading": "CVS: Procedure, Indications & Risks",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Definition:** Biopsy of chorionic villi (placental tissue of fetal origin) via transcervical or transabdominal approach under ultrasound guidance.\n\n**Timing:** 10–13+6 weeks (EARLIER than amniocentesis — allows earlier results and pregnancy termination decisions if desired)\n\n**Advantages over amniocentesis:**\n- Earlier diagnosis (10–13 weeks vs 15–20 weeks)\n- Results available 1–2 weeks earlier → earlier decision-making\n\n**Limitations of CVS:**\n- Cannot diagnose NTDs (no amniotic fluid — acetylcholinesterase test not possible)\n- Cannot assess lung maturity\n- Confined placental mosaicism (placental cells ≠ fetal cells in ~1–2% → ambiguous result, may require confirmatory amniocentesis)\n\n**Procedure approaches:**\n- **Transcervical CVS:** catheter passed through cervix under ultrasound guidance; biopsy from placenta\n- **Transabdominal CVS:** needle through abdomen (similar to amniocentesis approach); used when placenta is posterior or inaccessible transcervically\n\n**Risks:**\n- Pregnancy loss: 0.5–1% (slightly higher than amniocentesis)\n- Limb reduction defects: ONLY if performed before 9 weeks (very rare); not a risk at 10–13 weeks\n- Rh sensitization (give RhoGAM if Rh-negative)\n- PPROM, infection, spotting/cramping\n- Confined placental mosaicism: requires genetic counseling\n\n**Nursing care:**\n- Pre-procedure: informed consent, anxiety support, empty bladder vs full (depends on approach)\n- During: ultrasound guidance, maternal monitoring\n- Post-procedure: FHR monitoring, spotting is expected and normal; heavy bleeding is not\n- Teach: report heavy bleeding, fever, fluid loss, decreased fetal movement\n- Results counseling: 10–14 day timeframe for culture; FISH available in 24–48h"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- CVS: 10–13 weeks; earlier than amniocentesis → earlier genetic results\n- Cannot diagnose NTDs (no amniotic fluid needed for acetylcholinesterase)\n- Loss risk: 0.5–1% (slightly higher than amniocentesis)\n- Confined placental mosaicism: placental ≠ fetal genotype in ~1% → may need confirmatory amnio\n- Limb reduction defects: only if performed <9 weeks (not done before 10 weeks)\n- RhoGAM: Rh-negative women after CVS"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L06",
+      "topicSlug": "nipt-cell-free-dna",
+      "title": "NIPT (Cell-Free DNA Screening)",
+      "learningObjectives": [
+        "Explain how NIPT works as a screening test",
+        "Identify what conditions NIPT screens for",
+        "Differentiate NIPT from diagnostic tests",
+        "Identify appropriate candidates for NIPT",
+        "Counsel clients on NIPT results and limitations"
+      ],
+      "sections": [
+        {
+          "id": "nipt",
+          "heading": "NIPT: Mechanism, Targets & Interpretation",
+          "kind": "nursing_assessment_interventions",
+          "body": "**NIPT (Non-Invasive Prenatal Testing / Cell-Free DNA Testing):**\n- Maternal blood test analyzing cell-free fetal DNA (cfDNA) circulating in maternal plasma\n- cfDNA comes from placental trophoblast cells (not fetal cells directly)\n- Available from 10 weeks gestation\n\n**What NIPT screens for:**\n- Trisomy 21 (Down syndrome): detection rate ~99%, false positive 0.1–0.2%\n- Trisomy 18 (Edwards syndrome): detection rate ~97–99%\n- Trisomy 13 (Patau syndrome): detection rate ~97–99%\n- Sex chromosome aneuploidies (Turner 45,X; Klinefelter 47,XXY; 47,XXX; 47,XYY)\n- Fetal sex (upon request)\n- Microdeletion syndromes (22q11.2/DiGeorge, 5p/Cri-du-chat — expanded panels, lower accuracy)\n\n**NIPT vs. Diagnostic tests (critical distinction):**\n- NIPT = SCREENING test: high sensitivity and specificity but not definitive\n- Positive NIPT → requires confirmation with diagnostic test (amniocentesis or CVS) before any irreversible decisions\n- NIPT does NOT diagnose — it risk-stratifies\n- Applies even for high-risk populations (advanced maternal age)\n\n**False positives/negatives:**\n- Confined placental mosaicism: placenta chromosomally abnormal → positive NIPT, normal fetus\n- Vanishing twin: deceased co-twin contributes abnormal cfDNA\n- Maternal chromosomal abnormality: NIPT detects maternal cancer (unexpected finding)\n- Low fetal fraction (<4%): insufficient fetal DNA → no-call result; repeat or alternative testing\n\n**Counseling points:**\n- NIPT is optional — not mandatory\n- Does not screen for all chromosomal or genetic conditions\n- Positive result requires diagnostic confirmation before action\n- Negative result does not guarantee a healthy baby — does not screen for structural defects (anatomy scan still needed)\n- Consider: privacy (sex reveal), implications of findings, emotional preparedness"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- NIPT = screening (not diagnostic). Available from 10 weeks. Uses maternal blood (cfDNA from placenta)\n- Screens: trisomy 21/18/13, sex chromosome aneuploidies, fetal sex\n- Detection rate: ~99% for trisomy 21 with <0.2% FP\n- Positive NIPT → confirm with amniocentesis or CVS before any irreversible decision\n- Negative NIPT ≠ healthy baby (doesn't screen all conditions or structural defects)\n- Low fetal fraction (<4%) = no-call result; repeat or alternative testing"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L07",
+      "topicSlug": "non-stress-test",
+      "title": "Non-Stress Test (NST): Performance, Interpretation & Response",
+      "learningObjectives": [
+        "Explain the physiology behind NST reactivity",
+        "Set up and perform an NST",
+        "Interpret reactive versus non-reactive NST results",
+        "Describe the appropriate response to a non-reactive NST",
+        "Identify factors that affect NST interpretation"
+      ],
+      "sections": [
+        {
+          "id": "nst_detail",
+          "heading": "NST: Setup, Criteria & Response",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Physiological basis:** FHR accelerations occur when the fetus moves — reflects intact CNS/autonomic function. Healthy fetuses produce FHR accelerations in response to movement. Hypoxic/compromised fetuses lose this ability (CNS depression).\n\n**NST setup:**\n1. Position: semi-recumbent, left lateral tilt (avoid supine)\n2. Apply tocotransducer (contractions) and Doppler ultrasound transducer (FHR) externally\n3. Standard monitoring period: 20 minutes (extend to 40 minutes for fetal sleep)\n4. May offer food or glucose drink to wake fetus\n5. Vibroacoustic stimulator (VAS/laryngeal mask buzzer) if no accelerations in 20 min\n\n**Reactive NST criteria (normal):**\n- At ≥32 weeks: ≥2 accelerations peak ≥15 bpm above baseline, duration ≥15 seconds, within 20–40 minutes\n- At <32 weeks: ≥2 accelerations peak ≥10 bpm above baseline, duration ≥10 seconds (immature criteria)\n\n**Non-reactive NST:**\n- <2 adequate accelerations in 40 minutes\n- Step 1: Vibroacoustic stimulation (VAS) — buzzer to maternal abdomen to awaken fetus\n- VAS reactive response: reassuring (sleep was cause)\n- VAS still non-reactive: proceed to full BPP\n\n**Variables affecting NST:**\n- Fetal sleep cycle (most common benign cause — last 20–40 min)\n- Gestational age <28 weeks: fewer accelerations (immature CNS)\n- Maternal medications: narcotics, magnesium sulfate, barbiturates, beta-blockers all reduce FHR variability and accelerations\n- Cigarette smoking within 30 min of test: transient fetal hypoxia\n- Maternal hypoglycemia: fetal lethargy\n\n**Indications for NST:**\n- GDM, chronic HTN, pre-existing diabetes\n- Preeclampsia, SLE, renal disease\n- IUGR, oligohydramnios, polyhydramnios\n- Multiple gestation\n- Prior stillbirth\n- Post-term (≥41 weeks)\n- Decreased fetal movement\n- Initiating at 32–36 weeks for most high-risk conditions"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Reactive NST: ≥2 accelerations (≥15 bpm × ≥15 sec) in 20–40 min (at ≥32 weeks)\n- Non-reactive NST → VAS → if still non-reactive → full BPP → if BPP ≤4 → deliver\n- Fetal sleep most common benign cause of non-reactive NST\n- Medications (narcotics, MgSO4) reduce FHR variability and accelerations (not compromise)\n- Immature criteria (<32 weeks): 10 bpm × 10 sec\n- NST is a screening test — reassuring when reactive; further assessment needed when non-reactive"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L08",
+      "topicSlug": "contraction-stress-test",
+      "title": "Contraction Stress Test (CST) & Oxytocin Challenge Test",
+      "learningObjectives": [
+        "Explain the rationale for the contraction stress test",
+        "Describe methods to induce contractions for the CST",
+        "Interpret CST results: negative, positive, equivocal, unsatisfactory",
+        "Identify clinical indications and contraindications for CST",
+        "Apply CST findings to clinical decision-making"
+      ],
+      "sections": [
+        {
+          "id": "cst",
+          "heading": "CST: Rationale & Interpretation",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Rationale:** Uterine contractions transiently reduce uteroplacental blood flow. A placenta with adequate reserve can maintain fetal oxygenation during contractions. A compromised placenta cannot → late decelerations appear.\n\n**Method:**\n1. Nipple stimulation (preferred, non-pharmacological): nipple stimulated to release endogenous oxytocin\n2. Oxytocin challenge test (OCT): IV oxytocin infused at low rates until 3 contractions of ≥40 seconds occur within 10 minutes\n\n**Goal:** Achieve ≥3 contractions within 10 minutes lasting ≥40 seconds\n\n**Interpretation:**\n- **Negative (normal/reassuring):** No late decelerations; no significant variable decelerations. Suggests placental reserve is adequate. Continue pregnancy.\n- **Positive (abnormal):** Late decelerations with ≥50% of contractions (even if <3 contractions occur). Suggests uteroplacental insufficiency. Proceed to delivery (depending on gestational age and clinical context).\n- **Equivocal-suspicious:** Intermittent late decelerations or significant variable decelerations. Not clearly negative or positive. Repeat or proceed to BPP.\n- **Equivocal-hyperstimulation:** Late/significant variable decelerations during hyperstimulation (>5 contractions/10 min). Result not interpretable — repeat when uterus not hyperstimulated.\n- **Unsatisfactory:** Cannot achieve adequate contraction frequency; tracing inadequate for interpretation.\n\n**Contraindications to CST:**\n- Preterm labor risk\n- History of preterm birth\n- PPROM\n- Placenta previa or vasa previa\n- Prior classical uterine incision\n- Multiple gestation (relative)\n\n**Comparison to NST:**\n- CST takes longer and is more complex than NST\n- Rarely used in modern practice — modified BPP (NST + AFI) has largely replaced CST\n- CST is the 'gold standard' for placental reserve — a negative CST is highly reassuring"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- CST: 3 contractions/10 min; look for late decelerations\n- Negative CST: NO late decelerations = reassuring (adequate placental reserve)\n- Positive CST: late decelerations in ≥50% of contractions = uteroplacental insufficiency\n- Contraindications: preterm labor, PPROM, placenta previa, prior classical C-section\n- CST largely replaced by modified BPP in modern obstetric practice\n- Late deceleration = uteroplacental insufficiency (never a normal finding)"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L09",
+      "topicSlug": "group-b-strep-screening",
+      "title": "Group B Streptococcus (GBS) Screening & Management",
+      "learningObjectives": [
+        "Describe the GBS screening protocol",
+        "Identify indications for intrapartum antibiotic prophylaxis",
+        "Explain the antibiotic regimens for GBS prophylaxis",
+        "Recognize the consequences of neonatal GBS disease",
+        "Apply GBS knowledge to intrapartum nursing care"
+      ],
+      "sections": [
+        {
+          "id": "gbs",
+          "heading": "GBS Screening, Prophylaxis & Neonatal Impact",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Group B Streptococcus (Streptococcus agalactiae):**\n- Normal colonizer of GI tract and genital tract in 10–30% of pregnant women\n- Does not cause maternal illness in healthy carrier (asymptomatic)\n- Neonatal GBS disease: early-onset (≤7 days, from intrapartum transmission) and late-onset (>7 days, community acquisition)\n- Early-onset: pneumonia, sepsis, meningitis — 4–6% mortality with treatment; higher without\n\n**Screening protocol:**\n- Universal vaginal AND rectal swab at 35–37 weeks\n- Culture result valid for 5 weeks (if delivery at 42 weeks, culture still valid from 37 weeks)\n\n**Indications for intrapartum antibiotic prophylaxis (IAP):**\n1. Positive GBS culture at 35–37 weeks\n2. GBS bacteriuria any time this pregnancy\n3. Prior infant with invasive GBS disease (regardless of current culture)\n4. Unknown GBS status AND any of: delivery <37 weeks; ROM ≥18 hours; intrapartum fever ≥38°C\n\n**IAP NOT indicated:** GBS-negative culture at 35–37 weeks (even if risk factors present)\n\n**Antibiotic regimen:**\n- **1st line:** Penicillin G 5 million units IV loading dose → 2.5–3 million units IV every 4 hours until delivery\n- **Alternative:** Ampicillin 2g IV loading → 1g every 4 hours\n- **Penicillin allergic, low-risk anaphylaxis:** Cefazolin 2g IV loading → 1g every 8 hours\n- **Penicillin allergic, high-risk anaphylaxis:** Based on GBS susceptibility testing:\n  - Clindamycin-susceptible: Clindamycin 900 mg IV every 8 hours\n  - Clindamycin-resistant or susceptibility unknown: Vancomycin 20 mg/kg IV every 8 hours\n\n**Key nursing responsibilities:**\n- Confirm GBS culture result in prenatal record before intrapartum antibiotics\n- Administer antibiotics ≥4 hours before delivery for maximum efficacy\n- <4 hours of prophylaxis: still administered (partial protection); neonatal team notified\n- Monitor for anaphylaxis after first dose\n- Document IAP timing in delivery record"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- GBS screen: vaginal AND rectal swab at 35–37 weeks\n- IAP indications: GBS+, prior GBS infant, GBS bacteriuria, unknown status with PTL/<37w/ROM≥18h/fever\n- 1st line IAP: Penicillin G IV (not oral). Penicillin allergy + low risk: cefazolin. High risk: clindamycin or vancomycin\n- Optimal: ≥4 hours of IAP before delivery\n- GBS-NEGATIVE: no IAP, even if other risk factors present\n- Neonatal early-onset GBS: pneumonia, sepsis, meningitis → high mortality without treatment"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L10",
+      "topicSlug": "nitrazine-fern-SROM",
+      "title": "ROM Assessment: Nitrazine, Fern Test & PAMG-1",
+      "learningObjectives": [
+        "Describe the clinical assessment of rupture of membranes",
+        "Explain the mechanism and interpretation of the nitrazine test",
+        "Describe the fern test and its basis",
+        "Identify the role of PAMG-1 testing",
+        "Apply ROM assessment findings to clinical decision-making"
+      ],
+      "sections": [
+        {
+          "id": "rom_assessment",
+          "heading": "SROM Assessment: Three-Method Approach",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Clinical assessment of rupture of membranes:**\n\n**History:**\n- Sudden gush vs constant trickle vs incontinence (urinary vs amniotic)\n- Onset time (duration of ROM matters for infection risk)\n- Color (clear vs meconium-stained vs bloody)\n- Odor (normal amniotic fluid is odorless/slightly musky)\n\n**Sterile speculum exam (no digital exam if not in active labor — infection risk):**\n\n**1. Nitrazine test:**\n- Swab fluid from posterior fornix with cotton-tipped applicator\n- Apply to nitrazine paper: turns yellow-green → blue color indicates alkaline pH ≥6.5\n- Amniotic fluid pH: 7.0–7.5 (alkaline → POSITIVE result)\n- Normal vaginal pH: 3.8–4.5 (acidic → NEGATIVE/yellow)\n- Sensitivity: ~90%, Specificity: ~70%\n- **False positives (alkaline sources):** Blood, semen, BV, Trichomonas, antiseptic solutions (mnemonic: BASK)\n- **False negatives:** Prolonged ROM with drying of vaginal fluid; low fluid volume\n\n**2. Ferning (Arborization):**\n- Collect vaginal pool fluid on glass slide; air dry 10 minutes\n- Microscope: amniotic fluid dries in fern-like (arborization) pattern from NaCl crystallization\n- High specificity; less affected by contamination than nitrazine\n- False negative: contamination with blood or infection\n- False positive: cervical mucus also ferns (high-estrogen state)\n\n**3. Pooling:**\n- Visual inspection of posterior fornix with speculum\n- Amniotic fluid pools in the posterior vaginal fornix (gravity-dependent collection)\n- Ask client to Valsalva/cough to demonstrate fluid leaking from cervical os\n\n**4. PAMG-1 (AmniSure / IGFBP-1 test):**\n- Detects placental alpha-microglobulin-1 (concentration in AF 1,000–10,000× higher than in vaginal secretions)\n- Rapid bedside immunoassay (5–10 minutes)\n- Sensitivity: >98%, Specificity: >99%\n- Not affected by blood, semen, urine, or BV\n- Gold standard for ROM diagnosis when traditional tests are equivocal\n- NEGATIVE PAMG-1 effectively rules out ROM\n\n**Management of confirmed SROM:**\n- Assess gestational age: management differs significantly\n- Term SROM (≥37 weeks): labor typically begins within 24 hours; induction if not in labor\n- PPROM (<37 weeks): expectant management if not infected/not in labor + corticosteroids + GBS prophylaxis + antibiotics (latency antibiotics — azithromycin + ampicillin)\n- PPROM + chorioamnionitis: deliver regardless of gestational age"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- ROM assessment: nitrazine (pH ≥6.5 = positive) + ferning + pooling\n- Nitrazine false positives: BASK — Blood, Antiseptics, Semen, KOH/BV\n- Ferning: amniotic fluid arborization on dried slide; less affected by contamination\n- PAMG-1 (AmniSure): >98% sensitive, >99% specific; gold standard; not affected by contamination\n- Never do digital vaginal exam if SROM suspected and not in active labor\n- Term SROM → labor or induction. PPROM → latency antibiotics + betamethasone + close monitoring"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L11",
+      "topicSlug": "fetal-fibronectin",
+      "title": "Fetal Fibronectin (fFN) & Preterm Labor Assessment",
+      "learningObjectives": [
+        "Explain the role of fetal fibronectin in preterm labor prediction",
+        "Describe collection technique and interpretation",
+        "Distinguish what fFN does and does not tell the clinician",
+        "Integrate fFN with cervical length in preterm risk assessment",
+        "Apply fFN results to nursing care decisions"
+      ],
+      "sections": [
+        {
+          "id": "ffn",
+          "heading": "Fetal Fibronectin: Testing & Clinical Use",
+          "kind": "nursing_assessment_interventions",
+          "body": "**What is fFN?** Glycoprotein produced by the chorioamnion at the interface between fetal membranes and decidua. Normally absent from cervicovaginal secretions between 22–34 weeks (fibronectin is 'sealed in' by the amnio-decidual junction). Its presence in cervicovaginal secretions during this period suggests disruption of the chorioamnion-decidual interface — a precursor to preterm labor.\n\n**Collection:**\n- Cervicovaginal swab from posterior fornix/external cervical os\n- Collected between 22 0/7 and 34 6/7 weeks\n- Collection must occur BEFORE digital vaginal exam (digital exam disrupts the collection)\n- After collection, digital exam can proceed\n\n**Contraindications to collection:**\n- ROM already confirmed\n- Vaginal bleeding in past 24 hours\n- Sexual intercourse within 24 hours\n- Cervical dilation ≥3 cm\n\n**Interpretation:**\n- Positive (≥50 ng/mL): suggests increased risk for delivery within 7–14 days; use this to guide intervention\n- Negative (<50 ng/mL): VERY reassuring — probability of delivery within 7 days is <1%; allows safe discharge from hospital\n\n**Clinical utility — KEY PRINCIPLE:** The NEGATIVE fFN test is more clinically useful than a positive:\n- Negative fFN + no ROM → very low risk of delivery in next 7 days → avoid unnecessary interventions (hospitalization, corticosteroids, tocolytics) if not otherwise indicated\n- Positive fFN: modestly predictive (many women with positive fFN do NOT deliver within 7 days — ~30% PPV)\n\n**Cervical length + fFN integration:**\n- Cervical length <25 mm (TV ultrasound) + positive fFN = highest risk for preterm delivery\n- Cervical length ≥30 mm + negative fFN = very low risk → safe discharge\n\n**Clinical impact on management:**\n- Guides decision on betamethasone (give if positive + preterm symptoms)\n- Guides decision on tocolysis (treat if positive + contracting)\n- Guides hospital admission vs discharge"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- fFN: absent from cervicovaginal secretions 22–34 weeks normally; presence = chorioamnion disruption\n- Collect BEFORE digital exam. Contraindicated: ROM, bleeding <24h, sex <24h, dilation ≥3 cm\n- Negative fFN: <1% chance of delivery in 7 days → most clinically useful result\n- Positive fFN: increased risk but poor positive predictive value (~30%)\n- Cervical length <25 mm + positive fFN = highest preterm birth risk\n- Use negative fFN to safely discharge and avoid unnecessary interventions"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L12",
+      "topicSlug": "kick-counts-maternal-assessment",
+      "title": "Kick Counts & Decreased Fetal Movement Assessment",
+      "learningObjectives": [
+        "Teach clients the Cardiff Count-to-Ten method",
+        "Identify when decreased fetal movement requires evaluation",
+        "Describe the nursing response to reported decreased fetal movement",
+        "Recognize conditions associated with decreased fetal movement",
+        "Apply kick count interpretation to clinical decision-making"
+      ],
+      "sections": [
+        {
+          "id": "kick_counts_detail",
+          "heading": "Fetal Movement Counting: Protocol & Response",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Purpose:** Decreased fetal movement is an early warning sign of fetal compromise. Self-monitoring by pregnant clients provides daily fetal assessment at no cost.\n\n**Cardiff Count-to-Ten:**\n- Begin at 28 weeks gestation\n- Count fetal movements during an active period (after meals, evening hours — peak activity)\n- Goal: 10 movements in ≤2 hours\n- Normal: 10 movements achieved within 2 hours\n- Abnormal: <10 movements in 2 hours OR subjectively decreased from usual pattern\n\n**Alternative: Sadovsky method:**\n- Count movements for 1 hour, 3× daily\n- Normal: ≥4 movements in 1 hour\n\n**What counts as a movement:**\n- Kick, roll, jab, flutter (not hiccups — typically regular rhythmic movements)\n\n**Client teaching:**\n- Best time: after a meal, lying in left lateral position\n- If fetus is quiet: wake-up strategies — cool drink, light snack, move to different position\n- Keep a daily log\n- Call if: <10 movements in 2 hours OR felt less active than usual for the day\n\n**Risk factors for decreased fetal movement:**\n- Fetal compromise (hypoxia, IUGR, placental insufficiency)\n- Fetal sleep cycle (benign — 20–40 min cycles)\n- Medications (narcotics, antihistamines, alcohol)\n- Maternal obesity (may feel less movement through adipose tissue)\n- Anterior placenta (cushioning effect)\n- Fetal anomaly affecting movement\n\n**Nursing response to decreased fetal movement:**\n1. Obtain NST immediately\n2. Reactive NST: reassure, maintain outpatient follow-up, continue kick counts daily\n3. Non-reactive NST: VAS → full BPP\n4. BPP ≤4: delivery\n5. Oligohydramnios on BPP: consider delivery depending on GA\n\n**Red flag:** Absence of movement for several hours (in a previously active fetus) → immediate evaluation regardless of gestational age. Fetal demise may occur hours before maternal awareness of complete absence."
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Cardiff: 10 movements in ≤2 hours starting at 28 weeks. <10 in 2h OR decreased = report\n- Best time: after meal, left lateral position, evening\n- Decreased movement → NST immediately → if non-reactive → BPP → if ≤4 → deliver\n- Fetal sleep (20–40 min), anterior placenta, maternal obesity may reduce movement perception\n- Even a 'normal' movement count with a noticeably changed pattern warrants evaluation\n- Kick count logs: empower client participation in fetal surveillance"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L13",
+      "topicSlug": "rubella-screening",
+      "title": "Rubella Screening & Congenital Rubella Syndrome",
+      "learningObjectives": [
+        "Describe rubella immunity testing in pregnancy",
+        "Identify consequences of rubella infection in each trimester",
+        "Explain nursing actions for non-immune clients",
+        "Recognize congenital rubella syndrome manifestations",
+        "Apply rubella knowledge to postpartum vaccination planning"
+      ],
+      "sections": [
+        {
+          "id": "rubella",
+          "heading": "Rubella Immunity & Congenital Rubella",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Rubella (German measles):** RNA togavirus. Mild illness in adults; devastating to fetus.\n\n**Screening:** Rubella IgG antibody titer at initial prenatal visit.\n- Immune: IgG titer ≥1:10 (or equivalent positive by qualitative test)\n- Non-immune: requires counseling and postpartum vaccination\n\n**Rubella infection in pregnancy:**\n- **1st trimester (most critical):** Congenital rubella syndrome (CRS) rate ~85% with maternal infection ≤12 weeks\n  - Classic triad: Cataracts + Congenital heart disease (PDA, pulmonary artery stenosis) + Sensorineural deafness\n  - Additional: microcephaly, intellectual disability, hepatosplenomegaly, thrombocytopenic purpura ('blueberry muffin' rash), IUGR\n- **2nd trimester (13–20 weeks):** CRS rate 25–35%; primarily deafness\n- **After 20 weeks:** CRS risk minimal\n\n**Management of non-immune client:**\n- Avoid exposure to confirmed or suspected rubella cases\n- MMR vaccine is LIVE attenuated — CONTRAINDICATED during pregnancy\n- Administer MMR postpartum before discharge (even if breastfeeding)\n- Advise avoiding pregnancy for 4 weeks post-vaccination\n- Partners and household contacts should be immunized\n\n**Postpartum vaccination:**\n- Non-immune to rubella AND/OR varicella → MMR and/or varicella vaccine given at hospital discharge postpartum\n- Safe to administer simultaneously\n- Safe while breastfeeding"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Rubella non-immune: NO vaccine in pregnancy (live virus). Vaccinate postpartum.\n- CRS classic triad: cataracts + CHD (PDA/PA stenosis) + sensorineural deafness\n- Risk of CRS: ≤12 weeks ~85%; 13–20 weeks ~25%; >20 weeks minimal\n- Teach non-immune clients to avoid rubella exposure; notify all contacts\n- MMR vaccine postpartum: give before discharge; wait 4 weeks before conception\n- 'Blueberry muffin' rash in neonate = thrombocytopenic purpura from CRS"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L14",
+      "topicSlug": "biophysical-profile-detailed",
+      "title": "Biophysical Profile (BPP): Components & Clinical Response",
+      "learningObjectives": [
+        "List the five BPP components with their criteria",
+        "Calculate BPP scores from clinical descriptions",
+        "Interpret BPP scores and determine appropriate clinical response",
+        "Explain the physiological basis for each BPP component",
+        "Integrate BPP findings with other surveillance data"
+      ],
+      "sections": [
+        {
+          "id": "bpp_detail",
+          "heading": "BPP: Full Component Criteria & Management",
+          "kind": "nursing_assessment_interventions",
+          "body": "**BPP Components and Criteria:**\n\n| Component | Normal = 2 pts | Abnormal = 0 pts | CNS level |\n|---|---|---|---|\n| NST | ≥2 accels ≥15 bpm × ≥15 sec in 40 min | <2 accels | Cortex (highest) |\n| Fetal breathing | ≥1 episode ≥30 sec in 30 min | None or <30 sec | Brainstem |\n| Fetal movement | ≥3 distinct limb/body movements in 30 min | <3 movements | Cortex |\n| Fetal tone | ≥1 extension + return to flexion (limb or trunk) in 30 min | Absent; limb extended without flexion | Brainstem (lowest) |\n| AFI (amniotic fluid) | ≥1 vertical pocket >2 cm × 1 cm | No pocket >2 cm | Placental reserve (chronic) |\n\n**Score interpretation and management:**\n| Score | Interpretation | Action |\n|---|---|---|\n| 8–10/10 | Normal | Routine surveillance; repeat per indication |\n| 8/10 with low AFI | Oligohydramnios concerning | Delivery at ≥37 weeks; assess at earlier GA |\n| 6/10 | Equivocal | At ≥37 weeks: deliver. At <37 weeks: repeat in 24h |\n| 4/10 | Abnormal | Deliver, regardless of GA (except extreme prematurity — individualize) |\n| 2/10 | Severely abnormal | Deliver immediately |\n| 0/10 | Severely abnormal | Deliver immediately |\n\n**Order of loss with progressive hypoxia:**\n1. NST becomes non-reactive (first to go — acute hypoxia)\n2. Fetal breathing movements cease\n3. Fetal movements decrease\n4. Fetal tone lost (last to go — most primitive brainstem function)\n\n**Modified BPP:** NST + AFI only. Advantages: faster (~20 min vs 30 min), simpler. Disadvantage: misses breathing/movement/tone. Standard first-line in most centers."
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- 5 components: NST + Breathing + Movement + Tone + AFI. 2 pts each = 10 max\n- Score 8–10 = normal. Score 6 = equivocal (repeat or deliver if term). Score ≤4 = deliver\n- CNS hierarchy: tone is most primitive (lost last with hypoxia); NST is most sensitive (lost first)\n- AFI <1 pocket >2 cm = 0 pts (oligohydramnios) even if NST is reactive\n- Modified BPP: NST + AFI (faster first-line surveillance test)\n- Score 8/10 with normal NST but abnormal AFI → delivery at term"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg06-L15",
+      "topicSlug": "quad-screen-maternal-serum",
+      "title": "Maternal Serum Screening: Quad Screen & First-Trimester Screening",
+      "learningObjectives": [
+        "Identify the components of the quad screen and their normal directions",
+        "Explain the pattern of markers for each condition screened",
+        "Distinguish screening from diagnostic testing",
+        "Identify appropriate follow-up for abnormal screening results",
+        "Counsel clients on the meaning of screening test results"
+      ],
+      "sections": [
+        {
+          "id": "serum_screening",
+          "heading": "Maternal Serum Screening: Markers & Patterns",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Quad Screen (15–20 weeks) — four maternal serum markers:**\n1. **MS-AFP (alpha-fetoprotein):** Produced by yolk sac and fetal liver; peaks at 13 weeks, then declines\n2. **hCG (total or free β-hCG)**\n3. **Unconjugated estriol (uE3):** From fetal adrenal + placental aromatase\n4. **Inhibin A:** From placenta and corpus luteum\n\n**Marker patterns by condition (MoM = multiples of median):**\n\n| Condition | AFP | hCG | uE3 | Inhibin A |\n|---|---|---|---|---|\n| Trisomy 21 (Down) | LOW | HIGH | LOW | HIGH |\n| Trisomy 18 (Edwards) | LOW | LOW | LOW | LOW |\n| Open NTD (spina bifida, anencephaly) | HIGH | Normal | Normal | Normal |\n| Ventral wall defect (omphalocele/gastroschisis) | HIGH | — | — | — |\n| Abdominal pregnancy | HIGH | — | — | — |\n| Twin pregnancy | HIGH (both fetuses contributing) | — | — | — |\n\n**Elevated MSAFP:** Requires further workup:\n1. Confirm gestational age (wrong dates = most common cause of elevated AFP)\n2. Repeat MSAFP (if >2.5 MoM)\n3. Ultrasound: rule out twins, wrong dates, fetal demise\n4. If still elevated: amniocentesis for AF-AFP + acetylcholinesterase (confirms NTD)\n\n**First trimester combined screening (11–13+6 weeks):**\n- Nuchal translucency (US measurement) + PAPP-A (low in Down) + free β-hCG (high in Down)\n- Detection rate: ~85–90% for trisomy 21 with <5% FP\n\n**Sequential screening:** First trimester combined + quad screen in second trimester; highest detection rates (≥95% for trisomy 21)\n\n**Key counseling points:**\n- Screening tests report RISK (e.g., 1:100 for Down syndrome) not diagnosis\n- Abnormal screening → offer diagnostic testing (amnio or CVS) — not mandatory\n- Low-risk result does not guarantee normal chromosomes\n- Patient does not need to fast for quad screen; no special preparation"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Quad screen: AFP + hCG + uE3 + Inhibin A (15–20 weeks)\n- Down syndrome: LOW AFP + HIGH hCG + LOW uE3 + HIGH Inhibin A\n- Trisomy 18: ALL LOW (AFP, hCG, uE3) — 'triple low'\n- Open NTD: HIGH AFP alone (anencephaly, spina bifida)\n- Elevated AFP → confirm dates → ultrasound → amniocentesis for acetylcholinesterase\n- Screening = risk assessment. Positive screen → offer amniocentesis/CVS for diagnosis"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "mn-p06-001",
+      "topicSlug": "blood-type-rh-status",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "RhoGAM-after-ectopic-pregnancy-rh-negative",
+      "stem": "A client who is Rh-negative is treated with methotrexate for an unruptured ectopic pregnancy at 7 weeks gestation. Which action is essential in her care?",
+      "options": {"A": "RhoGAM is not needed because the pregnancy was too early for significant fetal-maternal hemorrhage","B": "RhoGAM 300 mcg IM should be administered within 72 hours of the diagnosis","C": "RhoGAM is given only after surgical procedures, not after medical treatment","D": "RhoGAM is indicated only if the partner is confirmed Rh-positive"},
+      "correctAnswer": "B",
+      "rationale": "RhoGAM is indicated after ANY event where fetal-maternal hemorrhage may occur in an Rh-negative woman. An ectopic pregnancy — regardless of gestational age or treatment method (medical or surgical) — is an indication for RhoGAM because trophoblastic tissue carries fetal D antigens. The 300 mcg dose is given within 72 hours to prevent maternal sensitization.",
+      "incorrectRationales": {"A": "Even at 7 weeks, trophoblastic cells express the D antigen. Sensitization can occur with minimal fetal-maternal hemorrhage (as little as 0.1 mL of D-positive cells).", "C": "Medical treatment (methotrexate) does not eliminate the risk of fetal-maternal hemorrhage — the indication is any pregnancy loss or ectopic, regardless of treatment method.", "D": "Even if the partner's Rh status is unknown, RhoGAM should be given. It is only omitted if the father is CONFIRMED Rh-negative (the baby cannot be Rh-positive)."},
+      "hint": "RhoGAM: ANY pregnancy loss in Rh-negative woman, regardless of gestational age or treatment type.",
+      "clinicalPearl": "The Kleihauer-Betke (KB) test is used when significant fetal-maternal hemorrhage is suspected (>15 mL) — such as after trauma or third-trimester bleeding — to quantify fetal blood in maternal circulation and determine if additional RhoGAM is needed (>30 mL requires additional doses).",
+      "examStrategy": "RhoGAM questions: the trigger is any Rh-negative woman with any pregnancy loss, bleeding, procedure, or trauma. Don't overthink gestational age — early ectopics require RhoGAM too.",
+      "keyTakeaway": "RhoGAM: ANY Rh-negative woman with ectopic pregnancy, miscarriage, trauma, or bleeding event → 300 mcg IM within 72 hours. Required regardless of treatment method."
+    },
+    {
+      "questionId": "mn-p06-002",
+      "topicSlug": "group-b-strep-screening",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "GBS-positive-penicillin-allergy-clindamycin-susceptibility",
+      "stem": "A client at 38 weeks gestation presents in active labor. Her chart shows a GBS-positive culture from 36 weeks. She reports a severe penicillin allergy (anaphylaxis with tongue swelling on a prior exposure). GBS susceptibility testing shows: resistant to clindamycin and erythromycin. Which antibiotic should the nurse prepare to administer?",
+      "options": {"A": "Amoxicillin 500 mg oral every 8 hours","B": "Cefazolin 2g IV loading dose","C": "Vancomycin 20 mg/kg IV every 8 hours","D": "Clindamycin 900 mg IV every 8 hours"},
+      "correctAnswer": "C",
+      "rationale": "GBS IAP algorithm for penicillin allergy: High-risk penicillin allergy (anaphylaxis, urticaria, angioedema) → check GBS susceptibility to clindamycin. If clindamycin-susceptible → clindamycin 900 mg IV q8h. If clindamycin-RESISTANT or susceptibility unknown → VANCOMYCIN 20 mg/kg IV every 8 hours (max 3g/dose; not to exceed 6g/24h). This patient has clindamycin resistance → vancomycin is required.",
+      "incorrectRationales": {"A": "Oral antibiotics are inadequate for intrapartum GBS prophylaxis — IV dosing is required for adequate serum and fetal tissue levels.", "B": "Cefazolin is used for LOW-RISK penicillin allergy (e.g., rash without systemic reaction). High-risk anaphylaxis history requires avoidance of all beta-lactams including cephalosporins.", "D": "Clindamycin is appropriate for high-risk allergy ONLY if the GBS is clindamycin-susceptible. This patient's GBS is clindamycin-resistant → clindamycin will not work."},
+      "hint": "High-risk pen allergy + GBS resistant to clindamycin = VANCOMYCIN. This is the algorithm endpoint.",
+      "clinicalPearl": "GBS susceptibility testing (D-zone test for inducible clindamycin resistance) must be specifically ordered on the prenatal GBS culture for patients with penicillin allergy. Without this result, vancomycin must be used for high-risk allergy patients.",
+      "examStrategy": "GBS allergy algorithm: Low-risk allergy → cefazolin. High-risk allergy + clindamycin-susceptible → clindamycin. High-risk allergy + resistant/unknown → vancomycin. The algorithm hinges on allergy risk level and susceptibility testing.",
+      "keyTakeaway": "GBS IAP: penicillin allergy anaphylaxis + clindamycin-resistant GBS → vancomycin 20 mg/kg IV q8h. Clindamycin only if susceptible AND high-risk allergy."
+    },
+    {
+      "questionId": "mn-p06-003",
+      "topicSlug": "quad-screen-maternal-serum",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "quad-screen-low-AFP-high-hCG-low-estriol-high-inhibin",
+      "stem": "A client's 17-week quad screen results show: AFP 0.4 MoM (low), hCG 2.8 MoM (high), unconjugated estriol 0.4 MoM (low), inhibin A 2.4 MoM (high). What does this pattern most likely indicate?",
+      "options": {"A": "Open neural tube defect — elevated MSAFP is the expected finding","B": "Trisomy 18 (Edwards syndrome) — all values are low","C": "Trisomy 21 (Down syndrome) — characteristic pattern of low AFP, high hCG, low uE3, high inhibin A","D": "Normal result — all values are within acceptable range"},
+      "correctAnswer": "C",
+      "rationale": "The quad screen pattern for trisomy 21 (Down syndrome): LOW AFP + HIGH hCG + LOW unconjugated estriol + HIGH inhibin A. The mnemonic: Down's is 'Down-Up-Down-Up' for AFP-hCG-uE3-inhibin A. This pattern risk-stratifies the patient for Down syndrome and warrants counseling about diagnostic testing (amniocentesis or NIPT if not already done).",
+      "incorrectRationales": {"A": "Open NTD shows ELEVATED (not low) MSAFP, with other markers normal. The pattern described is opposite to NTD.", "B": "Trisomy 18 shows ALL LOW values (AFP low, hCG low, uE3 low, inhibin A low) — a 'triple/quad low' pattern. This patient has high hCG and high inhibin A, inconsistent with trisomy 18.", "D": "These values are significantly outside the normal range (MoM should be ~1.0 for each marker). A low AFP + high hCG + low uE3 + high inhibin A pattern is the classic Down syndrome risk signal."},
+      "hint": "Down syndrome quad pattern: Low AFP, High hCG, Low uE3, High Inhibin A. 'Down-Up-Down-Up.'",
+      "clinicalPearl": "After an abnormal quad screen, the next step is NOT immediate amniocentesis — first confirm gestational age by ultrasound (wrong dates are the most common cause of abnormal results), then offer NIPT for further risk stratification or go directly to amniocentesis for definitive diagnosis.",
+      "examStrategy": "Memorize quad screen patterns by condition: Down = low-high-low-high. Trisomy 18 = all low. NTD = high AFP only (others normal). Practice recognizing the patterns from MoM values.",
+      "keyTakeaway": "Trisomy 21 quad screen: AFP LOW + hCG HIGH + uE3 LOW + Inhibin A HIGH. Trisomy 18: ALL LOW. NTD: AFP HIGH only."
+    },
+    {
+      "questionId": "mn-p06-004",
+      "topicSlug": "non-stress-test",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "non-reactive-NST-fetal-sleep-VAS",
+      "stem": "A client at 35 weeks gestation with gestational diabetes has a non-reactive NST after 20 minutes of monitoring. The nurse administers vibroacoustic stimulation (VAS). Within 10 minutes, two accelerations of 18 bpm for 18 seconds each are noted. What does this result indicate?",
+      "options": {"A": "The NST remains non-reactive and the client should proceed immediately to cesarean delivery","B": "The NST is now reactive following VAS — fetal sleep was the likely cause; the result is reassuring","C": "The NST result is equivocal — proceed to full BPP","D": "The accelerations after VAS are artifact and should not be counted toward reactivity"},
+      "correctAnswer": "B",
+      "rationale": "Post-VAS reactivity confirms that the initial non-reactive result was due to fetal sleep rather than compromise. Two accelerations of 18 bpm for 18 seconds each both exceed the criteria (≥15 bpm × ≥15 sec at ≥32 weeks). The NST is now reactive — a reassuring result. No further escalation to BPP or delivery is needed; routine surveillance continues as indicated.",
+      "incorrectRationales": {"A": "Cesarean delivery is not indicated — the NST became reactive after VAS, which is exactly the expected response to fetal sleep.", "C": "Full BPP is reserved for when the NST remains non-reactive after VAS. This NST is now reactive.", "D": "Accelerations after VAS are counted and are clinically meaningful — VAS is specifically designed to elicit a response from a sleeping fetus."},
+      "hint": "Non-reactive NST → VAS → reactive after VAS = fetal sleep was the cause. Result is NOW reassuring.",
+      "clinicalPearl": "VAS works by eliciting a startle response in the fetus (auditory/tactile stimulus). If the fetus responds with accelerations, the CNS is intact and the prior non-reactivity was from a sleep cycle. If the fetus does NOT respond to VAS → CNS compromise possible → BPP.",
+      "examStrategy": "NST pathway: non-reactive → VAS → reactive after VAS = reassuring (stop). Still non-reactive after VAS → BPP. BPP ≤4 → deliver.",
+      "keyTakeaway": "Non-reactive NST + VAS → reactive = fetal sleep was cause → reassuring. Still non-reactive after VAS → full BPP."
+    },
+    {
+      "questionId": "mn-p06-005",
+      "topicSlug": "nitrazine-fern-SROM",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "PPROM-management-latency-antibiotics-betamethasone",
+      "stem": "A client at 29 weeks gestation presents with a sudden gush of fluid from her vagina. Nitrazine testing turns blue, and arborization is seen on the slide. PAMG-1 is positive. She has no contractions and no signs of infection. The fetus is vertex, FHR is 145 bpm with moderate variability. What is the most appropriate management?",
+      "options": {"A": "Proceed to immediate cesarean delivery due to risk of infection","B": "Expectant management with latency antibiotics (ampicillin + azithromycin), betamethasone, GBS prophylaxis, and fetal surveillance","C": "Administer prostaglandin gel to ripen cervix and induce labor","D": "Discharge home with pelvic rest instructions and follow-up in 24 hours"},
+      "correctAnswer": "B",
+      "rationale": "This is PPROM (preterm premature rupture of membranes) at 29 weeks with no infection or labor. Management for PPROM at 24–33+6 weeks without infection/labor: (1) latency antibiotics (ampicillin 2g IV then 1g q6h × 48h + azithromycin 1g PO × 1 dose, then amoxicillin PO × 5 days) to prolong latency period; (2) betamethasone 12 mg IM × 2 doses for fetal lung maturity; (3) GBS prophylaxis per culture result; (4) continuous fetal surveillance; (5) hospitalization for monitoring. Delivery indicated if: infection develops (chorioamnionitis), fetal compromise, or if ≥34 weeks reached.",
+      "incorrectRationales": {"A": "Immediate C-section is not indicated without signs of infection or fetal compromise. Expectant management prolongs gestation and allows corticosteroids to work.", "C": "Cervical ripening for induction is inappropriate at 29 weeks without indication — this risks preterm delivery without allowing corticosteroids to mature the lungs.", "D": "PPROM requires hospitalization for close monitoring of infection signs, fetal wellbeing, and preterm labor — discharge is unsafe."},
+      "hint": "PPROM without infection/labor at <34 weeks: expectant management = latency antibiotics + betamethasone + hospitalization.",
+      "clinicalPearl": "Infection is the #1 complication of PPROM. Signs of chorioamnionitis: maternal fever ≥38°C, maternal tachycardia, fetal tachycardia, uterine tenderness, foul-smelling fluid. Any of these triggers immediate delivery regardless of gestational age.",
+      "examStrategy": "PPROM management framework: <24 weeks = discuss viability/risks. 24–33+6 = expectant management (latency abx + betamethasone + monitoring). ≥34 weeks = deliver. ALWAYS: hospitalize, monitor for infection.",
+      "keyTakeaway": "PPROM at 24–33+6 weeks without infection/labor: latency antibiotics (ampicillin + azithromycin) + betamethasone + hospitalization + fetal surveillance."
+    },
+    {
+      "questionId": "mn-p06-006",
+      "topicSlug": "nipt-cell-free-dna",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "NIPT-positive-Down-confirmation-amniocentesis",
+      "stem": "A 38-year-old client receives NIPT results indicating a high probability of trisomy 21. She asks the nurse if she has to have an abortion now. Which response is most appropriate?",
+      "options": {"A": "Yes, a positive NIPT confirms trisomy 21 and action must be taken promptly","B": "NIPT is a screening test — this result increases the probability of trisomy 21 but is not diagnostic. Amniocentesis or CVS is needed to confirm the diagnosis before any decisions are made","C": "NIPT at your age is very reliable and essentially diagnostic — you can proceed with decisions based on this result","D": "The result will resolve itself — repeat the test in 4 weeks for confirmation"},
+      "correctAnswer": "B",
+      "rationale": "NIPT is a highly accurate screening test but NOT a diagnostic test. A positive NIPT result means the probability of trisomy 21 is high (positive predictive value varies based on maternal age and prior risk), but false positives occur from confined placental mosaicism, vanishing twin, or maternal chromosomal abnormality. Amniocentesis or CVS is required for definitive diagnosis before any irreversible decisions (including termination). Additionally, no time pressure to terminate exists until a confirmed diagnosis.",
+      "incorrectRationales": {"A": "NIPT is not diagnostic. A positive NIPT requires confirmatory invasive testing before any decision about pregnancy continuation.", "C": "Even in a 38-year-old with a positive NIPT, the positive predictive value is high (~90%) but not 100%. Confirmatory testing is still required for certainty.", "D": "Repeating NIPT does not provide diagnostic confirmation — the test is inherently a screening tool. Invasive testing is required for diagnosis."},
+      "hint": "NIPT positive = high risk, not confirmed diagnosis. Amniocentesis or CVS = confirmatory diagnostic test.",
+      "clinicalPearl": "Positive predictive value (PPV) of NIPT for trisomy 21 varies greatly with background risk: at 40 years (~1:100 risk): PPV ~90%. At 25 years (~1:1,400 risk): PPV ~30–40%. A 'positive' NIPT in a low-risk young woman is less likely to represent true trisomy 21 than in an older woman.",
+      "examStrategy": "NIPT is ALWAYS screening, never diagnostic. Positive NIPT → offer confirmatory amniocentesis or CVS → then decisions. This concept is consistently tested.",
+      "keyTakeaway": "NIPT positive = high probability, NOT diagnosis. Confirm with amniocentesis or CVS before irreversible decisions. No action should be taken on NIPT result alone."
+    },
+    {
+      "questionId": "mn-p06-007",
+      "topicSlug": "amniocentesis",
+      "difficulty": "easy",
+      "type": "MCQ",
+      "stemAnchor": "amniocentesis-post-procedure-teaching",
+      "stem": "A client at 17 weeks gestation underwent amniocentesis this afternoon for genetic testing. Which post-procedure instruction is most important?",
+      "options": {"A": "Resume all activities including exercise immediately; the procedure is very low risk","B": "Report immediately if you experience fever, increasing cramping, vaginal bleeding, or fluid leaking from the vagina","C": "The fetal heart tones will be checked only at your next prenatal visit","D": "You may experience severe pain for several weeks post-procedure"},
+      "correctAnswer": "B",
+      "rationale": "Post-amniocentesis teaching must emphasize reporting symptoms that may indicate complications: fever (infection/chorioamnionitis), increasing cramping (labor or PPROM), vaginal bleeding, and fluid leaking from the vagina (PPROM). These require immediate evaluation because PPROM or chorioamnionitis after amniocentesis could be life-threatening to the pregnancy.",
+      "incorrectRationales": {"A": "Rest for 24 hours and pelvic rest are recommended after amniocentesis. Vigorous activity is not immediately resumed.", "C": "FHR assessment occurs before and after the procedure in the clinic/hospital setting — not deferred to the next prenatal visit.", "D": "Mild cramping and spotting for 24–48 hours is expected. Severe prolonged pain is NOT normal and warrants evaluation."},
+      "hint": "Post-amnio warning signs: fever + cramping + bleeding + fluid leaking. Report immediately.",
+      "clinicalPearl": "The standard post-amniocentesis period of activity restriction is 24 hours of reduced activity, avoidance of strenuous exercise, and pelvic rest. RhoGAM must be administered within this period if the client is Rh-negative.",
+      "examStrategy": "Post-procedure teaching questions: focus on what to REPORT (danger signs). The danger signs for invasive procedures are: infection signs (fever), membrane rupture (fluid leaking), hemorrhage (heavy bleeding), fetal compromise (no movement).",
+      "keyTakeaway": "Post-amniocentesis: report fever, increasing cramping, vaginal bleeding, fluid leaking (PPROM). Rest 24h, pelvic rest. RhoGAM if Rh-negative."
+    }
+  ],
+  "caseStudies": [
+    {
+      "caseId": "mn-cs-p06-001",
+      "title": "Case 1: GBS-Positive Client in Labor with Penicillin Allergy",
+      "scenario": "A 29-year-old G2P1 client at 39+3 weeks presents in active labor with GBS-positive culture from 36 weeks. She reports a history of throat tightness and hives after amoxicillin two years ago. GBS susceptibility testing shows clindamycin-susceptible, erythromycin-susceptible.",
+      "questions": [
+        {
+          "question": "What allergy risk level does this client represent?",
+          "answer": "High-risk penicillin allergy (throat tightness = respiratory symptoms = anaphylaxis risk category). Hives also suggest IgE-mediated reaction."
+        },
+        {
+          "question": "What antibiotic should be used for GBS prophylaxis?",
+          "answer": "Clindamycin 900 mg IV every 8 hours. Rationale: high-risk penicillin allergy → cannot use penicillin or cefazolin → check susceptibility. GBS is clindamycin-susceptible → clindamycin is appropriate."
+        },
+        {
+          "question": "If GBS susceptibility testing had not been performed on the culture, what would the appropriate antibiotic be?",
+          "answer": "Vancomycin 20 mg/kg IV every 8 hours (max 3g/dose). When susceptibility is unknown and allergy is high-risk, vancomycin is required."
+        },
+        {
+          "question": "What nursing actions are priority after administering the first dose?",
+          "answer": "Monitor for anaphylaxis (throat tightness, urticaria, angioedema, hypotension, bronchospasm) for 30–60 minutes after first dose. Have epinephrine and anaphylaxis kit at bedside. Document time of first dose and expected optimal window (≥4 hours before delivery)."
+        }
+      ]
+    },
+    {
+      "caseId": "mn-cs-p06-002",
+      "title": "Case 2: Decreased Fetal Movement at 36 Weeks",
+      "scenario": "A 34-year-old G3P2 with gestational diabetes (diet-controlled) calls at 7 PM stating she has not felt her baby move all afternoon — approximately 4 hours. She normally feels the baby moving constantly. Last prenatal visit 5 days ago: all normal, BPP 10/10.",
+      "questions": [
+        {
+          "question": "What is the priority nursing response on the phone?",
+          "answer": "Instruct the client to come to labor and delivery immediately for NST evaluation. Absence of fetal movement for 4 hours in a previously active fetus at 36 weeks in a diabetic pregnancy requires immediate evaluation — do not reassure on phone without assessment."
+        },
+        {
+          "question": "What is performed on arrival?",
+          "answer": "Electronic fetal monitoring (NST) immediately. Also: maternal vital signs, blood glucose check (hypoglycemia can cause fetal lethargy), urine dipstick, IV access."
+        },
+        {
+          "question": "The NST is non-reactive after 40 minutes. VAS is applied — still non-reactive. What is the next step?",
+          "answer": "Full biophysical profile (BPP). Ultrasound assessment of fetal breathing, movement, tone, and amniotic fluid index."
+        },
+        {
+          "question": "BPP results: NST non-reactive (0), fetal breathing present ≥30 sec (2), 2 fetal movements (0), flexion-extension present (2), AFI 4 cm (0). Score = 4/10. What action is indicated?",
+          "answer": "Delivery is indicated. BPP ≤4 = significant fetal compromise. At 36 weeks gestation (late preterm), delivery is appropriate. Prepare for induction or cesarean delivery per clinical assessment (cervical exam, presentation, clinical context). Notify provider immediately for delivery plan."
+        }
+      ]
+    },
+    {
+      "caseId": "mn-cs-p06-003",
+      "title": "Case 3: Positive NIPT — Counseling a Client",
+      "scenario": "A 27-year-old G1P0 at 13 weeks returns for her prenatal visit. NIPT results (ordered at 11 weeks) show: trisomy 21 high probability, fetal sex female. She and her partner are anxious and ask what this means and what they need to do.",
+      "questions": [
+        {
+          "question": "How should the nurse explain what a positive NIPT means?",
+          "answer": "NIPT is a screening test that analyzes fetal DNA from maternal blood. A high probability result for trisomy 21 means the test detected chromosomal patterns consistent with Down syndrome, but this is not a diagnosis. The test has a very low false positive rate but is not 100% accurate. Definitive diagnosis requires an invasive test (amniocentesis or CVS)."
+        },
+        {
+          "question": "What diagnostic options should be offered?",
+          "answer": "CVS now (10–13 weeks) — provides earliest diagnosis; or amniocentesis (from 15 weeks) — standard genetic diagnosis. Both carry a small procedural risk. Results are definitive. The couple may also choose to continue pregnancy without invasive testing if they decide the diagnosis will not change their management."
+        },
+        {
+          "question": "What resources should be offered?",
+          "answer": "Referral to genetic counselor (standard of care for all abnormal prenatal screening results), maternal-fetal medicine specialist, and Down syndrome patient advocacy resources. Emotional/psychological support; reassure the couple there is no immediate pressure for decisions."
+        },
+        {
+          "question": "The couple asks if the baby will definitely have Down syndrome since NIPT was positive. What is the most accurate response?",
+          "answer": "At 27 years old with a positive NIPT, the probability is higher than before the test, but it is not 100%. In younger women, the positive predictive value (PPV) of NIPT is lower (~40–70%) than in women ≥35 years (~90%). Only amniocentesis or CVS can provide a definitive answer."
+        }
+      ]
+    }
+  ]
+}

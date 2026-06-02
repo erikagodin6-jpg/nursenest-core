@@ -147,19 +147,22 @@ describe("tier-scoped app hrefs", () => {
     assert.match(pathwayHubAppFlashcardsHref(RN), /^\/app\/flashcards\?pathwayId=us-rn-nclex-rn$/);
   });
 
-  it("RN hub CAT start href carries pathwayId only", () => {
-    assert.match(
-      appPathwayCatSessionStartPath(RN),
-      /^\/app\/practice-tests\?pathwayId=us-rn-nclex-rn$/,
-    );
+  it("RN hub CAT start href carries pathwayId and catLaunch param", () => {
+    // appPathwayCatSessionStartPath intentionally adds catLaunch=1 to open the
+    // inline CAT launch overlay on the practice-tests hub.
+    const href = appPathwayCatSessionStartPath(RN);
+    assert.ok(href.includes("pathwayId=us-rn-nclex-rn"), "must carry pathwayId");
+    assert.ok(href.startsWith("/app/practice-tests"), "must route to practice-tests hub");
   });
 
-  it("learner nav practice-tests + CAT stay on same pathwayId when shell provides it", () => {
+  it("learner nav practice-tests carries pathwayId when shell provides it (cat is accessed via practice item)", () => {
+    // The 'cat' key was merged into 'practice'; CAT is launched from the practice-tests hub.
     const items = buildLearnerPrimaryNavItems(RN, { examsLabel: "CAT Exams" });
     const practice = items.find((i) => i.key === "practice");
+    assert.ok(practice?.href.includes("pathwayId=us-rn-nclex-rn"), "practice href must carry pathwayId");
+    // No standalone 'cat' nav item — CAT is reached through the practice hub.
     const cat = items.find((i) => i.key === "cat");
-    assert.ok(practice?.href.includes("pathwayId=us-rn-nclex-rn"));
-    assert.ok(cat?.href.includes("pathwayId=us-rn-nclex-rn"));
+    assert.equal(cat, undefined, "cat is no longer a standalone nav item");
   });
 
   it("without shell pathwayId, practice nav href is the shared practice-tests launcher", () => {

@@ -17,26 +17,6 @@ import {
   type FlashcardInventoryManifestPayload,
 } from "@/lib/server/manifest-loader";
 
-type InventoryCacheEntry = {
-  cachedAtMs: number;
-  body: {
-    success: true;
-    total: number;
-    categoryOptions: unknown[];
-    categories: unknown[];
-    diagnostics?: unknown;
-    lessonVirtualDiagnostics?: unknown;
-  };
-};
-
-const inventoryCache = new Map<string, InventoryCacheEntry>();
-const INVENTORY_CACHE_TTL_MS = 120_000; // 2 min — inventory counts change only on publish
-const INVENTORY_CACHE_MAX = 2000;
-
-function inventoryCacheKey(userId: string, pathwayId: string): string {
-  return `${userId}::${pathwayId}`;
-}
-
 export const dynamic = "force-dynamic";
 
 type InventoryTimingSegment = { name: string; durationMs: number };
@@ -126,22 +106,6 @@ export async function GET(req: NextRequest) {
         );
       }
 
-      const cacheKey = inventoryCacheKey(gate.userId, pathway.id);
-      const memoryCacheStarted = performance.now();
-      const cached = inventoryCache.get(cacheKey);
-      mark("memory_cache", memoryCacheStarted);
-      if (cached && Date.now() - cached.cachedAtMs < INVENTORY_CACHE_TTL_MS) {
-        const h = new Headers(headers);
-        h.set("x-nn-inventory-cache", "hit");
-        return jsonWithInventoryTiming(cached.body, {
-          status: 200,
-          headers: h,
-          startedAt: routeStarted,
-          segments: timings,
-          cacheDisposition: "hit",
-        });
-      }
-
       // ── Phase 2.5: manifest-loader — Redis → snapshot → live ──────────────
       const tier = String(gate.entitlement.tier ?? "");
       const country = String(gate.entitlement.country ?? "");
@@ -182,10 +146,8 @@ export async function GET(req: NextRequest) {
             lessonVirtualDiagnostics: mp.lessonVirtualDiagnostics,
           };
           const h = new Headers(headers);
-          h.set("x-nn-inventory-cache", "miss");
+          h.set("x-nn-inventory-cache", manifestResult.source === "redis" ? "redis-hit" : "redis-backfill");
           h.set("x-nn-inventory-manifest", manifestResult.source);
-          if (inventoryCache.size > INVENTORY_CACHE_MAX) inventoryCache.clear();
-          inventoryCache.set(cacheKey, { cachedAtMs: Date.now(), body: inventoryBody });
           return jsonWithInventoryTiming(inventoryBody, {
             status: 200,
             headers: h,
@@ -273,11 +235,8 @@ export async function GET(req: NextRequest) {
         lessonVirtualDiagnostics: inv.payload.lessonVirtualDiagnostics,
       };
 
-      if (inventoryCache.size > INVENTORY_CACHE_MAX) inventoryCache.clear();
-      inventoryCache.set(cacheKey, { cachedAtMs: Date.now(), body });
-
       const h = new Headers(headers);
-      h.set("x-nn-inventory-cache", "miss");
+      h.set("x-nn-inventory-cache", "live-no-memory-fallback");
 
       return jsonWithInventoryTiming(body, {
         status: 200,

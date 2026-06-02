@@ -1,6 +1,6 @@
 # Lesson Normalization Coverage
 
-Generated at: 2026-06-02T02:01:54.898Z
+Generated at: 2026-06-02T02:59:03.583Z
 
 ## Pathway Coverage
 
@@ -27,11 +27,11 @@ Exclusions:
 
 ### `ca-np-cnple`
 
-- Raw lessons: 447
-- Normalized lessons: 447
-- Renderable lessons: 447
+- Raw lessons: 705
+- Normalized lessons: 705
+- Renderable lessons: 705
 - Excluded lessons: 0
-- Raw to renderable ratio: 447/447 (100%)
+- Raw to renderable ratio: 705/705 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /canada/np/cnple/lessons/{lessonSlug}
@@ -48,11 +48,11 @@ Exclusions:
 
 ### `ca-rn-nclex-rn`
 
-- Raw lessons: 805
-- Normalized lessons: 805
-- Renderable lessons: 805
+- Raw lessons: 1068
+- Normalized lessons: 1068
+- Renderable lessons: 1068
 - Excluded lessons: 0
-- Raw to renderable ratio: 805/805 (100%)
+- Raw to renderable ratio: 1068/1068 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /canada/rn/nclex-rn/lessons/{lessonSlug}
@@ -69,12 +69,12 @@ Exclusions:
 
 ### `ca-rpn-rex-pn`
 
-- Raw lessons: 487
-- Normalized lessons: 487
-- Renderable lessons: 419
+- Raw lessons: 749
+- Normalized lessons: 749
+- Renderable lessons: 681
 - Excluded lessons: 68
-- Raw to renderable ratio: 419/487 (86%)
-- Unexpected exclusions: 68 (14.0% of raw)
+- Raw to renderable ratio: 681/749 (91%)
+- Unexpected exclusions: 68 (9.1% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /canada/pn/rex-pn/lessons/{lessonSlug}
 - Sample public lesson path: /canada/pn/rex-pn/lessons/rpn-anticoagulant-safety-teaching
@@ -178,11 +178,11 @@ Exclusions:
 
 ### `us-lpn-nclex-pn`
 
-- Raw lessons: 175
-- Normalized lessons: 175
-- Renderable lessons: 111
+- Raw lessons: 423
+- Normalized lessons: 423
+- Renderable lessons: 359
 - Excluded lessons: 64
-- Raw to renderable ratio: 111/175 (63%)
+- Raw to renderable ratio: 359/423 (85%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /us/pn/nclex-pn/lessons/{lessonSlug}
@@ -262,12 +262,12 @@ Exclusions:
 
 ### `us-np-fnp`
 
-- Raw lessons: 587
-- Normalized lessons: 587
-- Renderable lessons: 507
+- Raw lessons: 835
+- Normalized lessons: 835
+- Renderable lessons: 755
 - Excluded lessons: 80
-- Raw to renderable ratio: 507/587 (86%)
-- Unexpected exclusions: 80 (13.6% of raw)
+- Raw to renderable ratio: 755/835 (90%)
+- Unexpected exclusions: 80 (9.6% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /us/np/fnp/lessons/{lessonSlug}
 - Sample public lesson path: /us/np/fnp/lessons/np-acute-coronary-syndrome-recognition-and-initial-management
@@ -362,11 +362,11 @@ Exclusions:
 
 ### `us-rn-nclex-rn`
 
-- Raw lessons: 806
-- Normalized lessons: 806
-- Renderable lessons: 806
+- Raw lessons: 1059
+- Normalized lessons: 1059
+- Renderable lessons: 1059
 - Excluded lessons: 0
-- Raw to renderable ratio: 806/806 (100%)
+- Raw to renderable ratio: 1059/1059 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /us/rn/nclex-rn/lessons/{lessonSlug}

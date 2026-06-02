@@ -1,5 +1,6 @@
 import "server-only";
 
+import { createHash } from "node:crypto";
 import { ContentStatus, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -22,6 +23,7 @@ import { foldExamQuestionTopicBodyGroupsIntoBuilderCounts } from "@/lib/flashcar
 import type { FlashcardsPoolInventoryDiagnostics } from "@/lib/flashcards/flashcards-hub-types";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { getCanonicalExamQuestionWhereForPathway } from "@/lib/study-question-pool/canonical-exam-question-where";
+import { cacheGet, cacheSet } from "@/lib/server/content-cache";
 
 export type FlashcardsExamInventoryLoadResult =
   | {
@@ -109,12 +111,11 @@ function buildDenialDetail(args: {
  * called from the eager pool chain AND from loadFlashcardsExamInventoryForPathway.
  * Caching the result eliminates the duplicate User row lookup.
  */
-type AccessMemoEntry = { result: ResolvedFlashcardPoolAccess; expiresAt: number };
-const _accessMemoMap = new Map<string, AccessMemoEntry>();
-const ACCESS_MEMO_TTL_MS = 30_000;
+const ACCESS_MEMO_TTL_SECONDS = 30;
 
 function accessMemoKey(userId: string, entitlement: AccessScope, pathwayId: string): string {
-  return `${userId}:${String(entitlement.tier)}:${String(entitlement.country)}:${pathwayId}`;
+  const userKey = createHash("sha256").update(userId).digest("hex").slice(0, 32);
+  return `flashcards:exam-pool-access:${userKey}:${String(entitlement.tier)}:${String(entitlement.country)}:${pathwayId}:v2`;
 }
 
 export async function resolveAccessScopeForPathwayExamQuestionPool(
@@ -124,9 +125,8 @@ export async function resolveAccessScopeForPathwayExamQuestionPool(
 ): Promise<ResolvedFlashcardPoolAccess> {
   // Phase 3C: return cached result if still fresh (avoids User row DB lookup on repeated calls).
   const memoKey = accessMemoKey(userId, entitlement, pathway.id);
-  const now = Date.now();
-  const memoHit = _accessMemoMap.get(memoKey);
-  if (memoHit && memoHit.expiresAt > now) return memoHit.result;
+  const memoHit = await cacheGet<ResolvedFlashcardPoolAccess>(memoKey);
+  if (memoHit) return memoHit;
 
   function denied(
     code: ScopeResolutionDenialCode,
@@ -231,9 +231,8 @@ export async function resolveAccessScopeForPathwayExamQuestionPool(
     countryResolutionSource: countrySrc,
     entitlementTierCountryUserRowCoalesce,
   };
-  // Memoize successful access resolution — avoids redundant User row lookup within TTL window.
-  if (_accessMemoMap.size > 500) _accessMemoMap.clear(); // Prevent unbounded growth across long-lived processes.
-  _accessMemoMap.set(memoKey, { result, expiresAt: Date.now() + ACCESS_MEMO_TTL_MS });
+  // Memoize successful access resolution in Redis — avoids redundant User row lookup without retaining per-user heap.
+  await cacheSet(memoKey, result, ACCESS_MEMO_TTL_SECONDS).catch(() => {});
   return result;
 }
 

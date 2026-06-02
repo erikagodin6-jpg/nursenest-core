@@ -27,6 +27,12 @@ import { builderCategoryOptionsForPathway } from "@/lib/flashcards/flashcard-bui
 import { loadSharedFlashcardsHubInventoryForPathway } from "@/lib/flashcards/load-shared-flashcards-hub-inventory.server";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import {
+  flashcardInventoryManifestKey,
+  flashcardInventorySnapshotPath,
+  loadWithManifest,
+  type FlashcardInventoryManifestPayload,
+} from "@/lib/server/manifest-loader";
+import {
   pathwayFlashcardsHubH1,
   pathwayFlashcardsHubLead,
   tryResolveExamPathwayForFlashcardsMetadataQuery,
@@ -471,12 +477,35 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
 
   if (catalogPathwayForInventory && userId && isDatabaseUrlConfigured()) {
     try {
+      const tier = String(entitlement.tier ?? "");
+      const country = String(entitlement.country ?? "");
       const timedInventory = await Promise.race([
-        loadSharedFlashcardsHubInventoryForPathway({
-          userId,
-          entitlement,
-          pathway: catalogPathwayForInventory,
-        }),
+        tier && country
+          ? loadWithManifest<FlashcardInventoryManifestPayload>({
+              redisKey: flashcardInventoryManifestKey(tier, country, catalogPathwayForInventory.id),
+              redisTtl: 60 * 60,
+              snapshotPath: flashcardInventorySnapshotPath(tier, country, catalogPathwayForInventory.id),
+              buildLive: async () => {
+                const inv = await loadSharedFlashcardsHubInventoryForPathway({
+                  userId,
+                  entitlement,
+                  pathway: catalogPathwayForInventory,
+                });
+                if (!inv.ok) throw new Error(inv.code);
+                return {
+                  tier,
+                  country,
+                  pathwayId: catalogPathwayForInventory.id,
+                  total: inv.payload.matchingTotal,
+                  categoryOptions: inv.payload.categoryOptions,
+                  categories: inv.categories,
+                  diagnostics: inv.payload.poolDiagnostics ?? undefined,
+                  lessonVirtualDiagnostics: inv.payload.lessonVirtualDiagnostics ?? undefined,
+                };
+              },
+              isValid: (d) => d.total > 0,
+            })
+          : null,
         new Promise<null>((resolve) => {
           setTimeout(
             () => resolve(null),
@@ -485,8 +514,15 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
         }),
       ]);
 
-      if (timedInventory?.ok) {
-        initialHub = timedInventory.payload;
+      if (timedInventory?.data) {
+        initialHub = {
+          categoryOptions: timedInventory.data.categoryOptions as FlashcardsHubServerPayload["categoryOptions"],
+          matchingTotal: timedInventory.data.total,
+          lessonVirtualDiagnostics:
+            (timedInventory.data.lessonVirtualDiagnostics as FlashcardsHubServerPayload["lessonVirtualDiagnostics"]) ?? null,
+          poolDiagnostics:
+            (timedInventory.data.diagnostics as FlashcardsHubServerPayload["poolDiagnostics"]) ?? null,
+        };
         inventorySource = "server_inventory";
       } else if (timedInventory === null) {
         inventorySource = "server_inventory_timeout";

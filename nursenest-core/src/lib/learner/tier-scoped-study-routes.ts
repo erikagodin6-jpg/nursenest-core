@@ -39,16 +39,18 @@ export function resolveSubscribedQuestionBankPathways(args: {
     return { state: "scoped", defaultPathwayId: hit.id, pathwayOptions: [hit] };
   }
 
-  // learnerPath overrides the explicit-pathwayId gate — if the user has a profile pathway
-  // that matches the entitlement, use it directly rather than forcing a picker.
+  // When the caller requires the learner to make an explicit URL selection (e.g., the
+  // question-bank hub picker), learnerPath must NOT silently override that gate.
+  // Return no_pathway_context so the UI can render a pathway picker.
+  if (requireExplicitRequestedPathwayId) {
+    return { state: "no_pathway_context" };
+  }
+
+  // Infer from profile learnerPath only when explicit selection is not required.
   const lp = learnerPath?.trim() || null;
   if (lp && byId.has(lp)) {
     const hit = byId.get(lp)!;
     return { state: "scoped", defaultPathwayId: hit.id, pathwayOptions: [hit] };
-  }
-
-  if (requireExplicitRequestedPathwayId) {
-    return { state: "no_pathway_context" };
   }
 
   if (compatible.length === 1) {

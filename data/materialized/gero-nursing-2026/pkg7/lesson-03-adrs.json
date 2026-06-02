@@ -1,0 +1,645 @@
+{
+  "slug": "adverse-drug-reactions-older-adults",
+  "title": "Adverse Drug Reactions in Older Adults",
+  "packageId": "pkg7-medications",
+  "examTargets": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","FNP","AGPCNP"],
+  "sections": [
+    {
+      "id": "learning_objectives",
+      "title": "Learning Objectives",
+      "content": "1. Define adverse drug reaction (ADR) and distinguish it from medication overdose and toxicity.\n2. Classify ADRs as Type A (augmented, dose-related, predictable) versus Type B (bizarre, idiosyncratic, not dose-related).\n3. Explain why older adults experience ADRs at a disproportionate rate relative to their population size.\n4. Apply the Naranjo Algorithm to assess ADR causality probability.\n5. Identify the high-risk medication classes most commonly associated with serious ADRs in older adults.\n6. Describe the pharmacokinetic changes of aging (ADME) and their clinical implications for drug levels and toxicity.\n7. Explain the nurse's obligations for ADR recognition, documentation, prescriber communication, and reporting."
+    },
+    {
+      "id": "blueprint_mapping",
+      "title": "Blueprint Mapping",
+      "content": "NCLEX Client Needs: Physiological Integrity — Pharmacological and Parenteral Therapies (adverse effects, contraindications, pharmacokinetics); Reduction of Risk Potential (complications); Safe and Effective Care Environment (medication safety).\nCNPLE: Medication Management; Clinical Decision-Making; Quality and Safety.\nREx-PN: Recognize Cues, Analyze Cues, Prioritize Hypotheses, Take Action.\nHigh-Yield: Type A vs. B definition, Naranjo Algorithm, pharmacokinetic aging changes, high-risk medication classes, nurse's ADR response."
+    },
+    {
+      "id": "core_content",
+      "title": "Core Content",
+      "content": "## Definition\n\nAn adverse drug reaction (ADR) is any noxious, unintended response to a medication at a dose normally used for prophylaxis, diagnosis, or treatment. This definition distinguishes ADRs from:\n- Medication overdose (supratherapeutic dose causing toxicity)\n- Medication error (wrong drug, dose, or route)\n- Treatment failure (medication does not work)\n\n## Epidemiology in Older Adults\n\n- ADRs account for 10–17% of hospital admissions in older adults\n- Older adults represent 15–16% of the population but account for 30–40% of all ADR-related hospitalizations\n- 95% of Type A ADRs are potentially preventable\n- 50–70% of all ADRs in older adults are considered preventable\n- The estimated annual cost of ADR-related hospitalizations in Canada is $2.4–4.0 billion\n\n## Type A vs. Type B ADRs\n\n**Type A — Augmented (dose-related, predictable):**\n- Most common (~85–90% of all ADRs)\n- Exaggerated but expected pharmacological effect\n- Dose-related: more drug = more effect\n- Predictable based on the drug's mechanism\n- Examples: bradycardia from beta-blocker, hypoglycemia from insulin, bleeding from anticoagulant, hypotension from antihypertensive\n- Management: dose reduction, medication change, or monitoring adjustment\n\n**Type B — Bizarre (idiosyncratic, not dose-related):**\n- Less common (~10–15% of ADRs) but often more serious\n- Unrelated to the drug's pharmacological mechanism\n- Not predictable; occurs in susceptible individuals\n- Includes: allergic reactions (IgE-mediated anaphylaxis to penicillin), immune complex reactions, Stevens-Johnson syndrome, agranulocytosis\n- Management: immediate discontinuation; supportive care; may involve immunosuppression\n\n## Why Older Adults Have Higher ADR Risk\n\n**Pharmacokinetic vulnerability:**\n- Reduced renal clearance (GFR declines 1 mL/min/year after age 40) → renally-cleared drugs accumulate\n- Reduced hepatic CYP450 metabolism → drugs with hepatic metabolism accumulate\n- Increased body fat → lipophilic drugs have larger Vd and longer half-lives\n- Decreased albumin → more free (active) drug for protein-bound medications\n- Decreased lean mass → reduced Vd for hydrophilic drugs → higher peak concentrations\n- Decreased total body water → higher concentration of water-soluble drugs\n\n**Pharmacodynamic vulnerability:**\n- Increased CNS sensitivity to sedatives, opioids, and anticholinergics\n- Increased sensitivity to antihypertensives → greater BP drops at standard doses\n- Impaired homeostatic mechanisms → cannot compensate for orthostasis, hypoglycemia, or fluid shifts\n\n**Clinical vulnerability:**\n- Polypharmacy: exponentially more drug-drug interactions\n- Multiple chronic conditions: more disease-drug interactions\n- Cognitive impairment: may not recognize or report ADR symptoms\n- Communication barriers: pain, confusion, and ADRs may present atypically\n\n## Naranjo Algorithm (ADR Causality Assessment)\n\nThe Naranjo Algorithm provides a structured probability score for determining whether a reaction is caused by a specific medication. 10 yes/no/unknown questions; scored as follows:\n\n| Score | Probability |\n|-------|------------|\n| ≥9 | Definite ADR |\n| 5–8 | Probable ADR |\n| 1–4 | Possible ADR |\n| ≤0 | Doubtful ADR |\n\nKey Naranjo questions (simplified):\n1. Has there been a previous report of this reaction? (+1)\n2. Did the adverse event appear after the drug was administered? (+2)\n3. Did the reaction improve when the drug was discontinued? (+1)\n4. Did the reaction recur when re-administered (rechallenge)? (+2)\n5. Are there alternative causes? (-1 if yes)\n6. Was drug detected in blood/urine at toxic levels? (+1)\n7. Was the reaction more severe with dose increase? (+1)\n8. Did the patient have a similar reaction previously? (+1)\n\n## High-Risk Medications for ADRs in Older Adults\n\n**Anticoagulants (warfarin, apixaban, rivaroxaban, dabigatran):**\nBleeding risk. With warfarin: INR-dependent; major drug-food-disease interactions. With DOACs: renal clearance dependent; no routine monitoring; higher error risk if dose not adjusted for renal function. ISMP high-alert medication.\n\n**Insulin:**\nHypoglycemia is the most serious ADR — amplified in older adults by: irregular eating, cognitive impairment (cannot recognize warning signs), renal insufficiency (reduced insulin clearance), drug interactions (beta-blockers mask tachycardia). Severe hypoglycemia → falls, cardiac arrhythmia, cognitive damage.\n\n**Opioids:**\nConstipation (nearly universal), falls, respiratory depression (older adults more sensitive), delirium, urinary retention. Dose-dependent. Risk amplified by concurrent benzodiazepines or other CNS depressants.\n\n**Benzodiazepines:**\nFalls, cognitive impairment, delirium, respiratory depression (especially with opioids), paradoxical agitation, physical dependence. Beers Criteria medication.\n\n**NSAIDs (including COX-2 inhibitors):**\nGI bleeding (risk 3–5x higher with age ≥65), acute kidney injury, hypertension, heart failure exacerbation, fluid retention, platelet inhibition. Trigger of prescribing cascade.\n\n**Antihypertensives (especially alpha-blockers, nitrates, diuretics):**\nOrthostatic hypotension → falls. Electrolyte disturbance (diuretics). Reflex tachycardia.\n\n**Digoxin:**\nNarrow therapeutic index (therapeutic: 0.5–0.9 ng/mL for HF; 1.5–2.0 ng/mL historically — now known to be toxic at these levels). Toxicity: nausea, vomiting, visual disturbances (yellow-green halos, photophobia), bradycardia, any arrhythmia. Renally cleared — dose reduction required in CKD. Interactions: amiodarone, verapamil, quinidine all increase digoxin levels.\n\n**Antidiabetics (especially sulfonylureas: glibenclamide, gliclazide, glipizide):**\nProlonged hypoglycemia — longer duration than insulin in some cases. Renal accumulation. Glibenclamide is Beers Criteria medication in older adults — preferred alternatives are shorter-acting agents.\n\n**Antiepileptics:**\nSedation, ataxia, falls, cognitive impairment. Enzyme-inducing AEDs (phenytoin, carbamazepine, phenobarbital) cause osteoporosis and fracture risk. Multiple drug interactions.\n\n**Methotrexate:**\nDosing errors (weekly vs. daily) cause life-threatening pancytopenia, hepatotoxicity, mucositis. One of the most dangerous dosing error scenarios in older adults.\n\n## ADR Reporting\n\n**Canada:** MedEffect Canada — Health Canada's voluntary ADR reporting program for healthcare professionals and consumers. Reports submitted online.\n\n**United States:** FDA MedWatch — voluntary and mandatory reporting for serious ADRs.\n\n**Purpose of reporting:** Pharmacovigilance — identifies signals for rare Type B ADRs that only become apparent through population-level reporting. Individual adverse events are aggregated to detect patterns.\n\n**Nurse's obligation:** Professional nursing standards require reporting of serious, unexpected, or unresolved ADRs through institutional reporting systems AND regulatory reporting programs."
+    },
+    {
+      "id": "normal_aging_changes",
+      "title": "Normal Aging Changes",
+      "content": "**ADME Summary for Aging:**\n\nA — Absorption: gastric acid production decreases; gastric motility slows. Minor impact on most oral medications. Calcium requires adequate acid for absorption — antacid/PPI use further impairs calcium absorption.\n\nD — Distribution: body fat increases (lipophilic drug accumulation: benzodiazepines, TCAs, antipsychotics — longer half-life); lean mass decreases (hydrophilic drugs peak higher: digoxin, lithium); albumin decreases (more free warfarin, phenytoin); total body water decreases.\n\nM — Metabolism: hepatic CYP450 activity declines (Phase I more than Phase II); hepatic blood flow decreases 40% by age 80; first-pass effect reduced. Drugs primarily CYP-metabolized: codeine, opioids, benzodiazepines, warfarin, statins, antidepressants.\n\nE — Excretion: GFR declines ~1 mL/min/year after age 40; creatinine appears normal due to reduced muscle mass; renally-cleared drugs accumulate at standard adult doses: digoxin, metformin, DOACs, gabapentin, methotrexate, aminoglycosides."
+    },
+    {
+      "id": "abnormal_findings",
+      "title": "Abnormal Findings / Red Flags",
+      "content": "🔴 **Nausea + vomiting + bradycardia + visual changes (yellow/green halos, blurry vision)** → Digoxin toxicity. Check serum digoxin level urgently.\n🔴 **Confusion + tachycardia + urinary retention + dry mouth + flushing** → Anticholinergic toxidrome.\n🔴 **Sudden onset confusion + fall** in patient on multiple CNS medications → Sedative/anticholinergic ADR.\n🔴 **Unexplained bleeding** (bruising, hematuria, melena, hemoptysis) in anticoagulated patient → ADR; check INR, renal function, drug interactions.\n🔴 **Severe hypoglycemia** with altered consciousness in a patient on insulin or sulfonylurea → ADR; check renal function, meal intake, drug interactions.\n🔴 **New onset constipation** unresponsive to bowel protocol → Opioid-induced bowel dysfunction; anticholinergic effect.\n🔴 **Agranulocytosis signs** (fever, oral ulcers, severe infections) in patient on clozapine, carbimazole, or chloramphenicol → Life-threatening Type B ADR.\n🔴 **Any new symptom within 30 days of medication initiation or dose change** → ADR must be on the differential."
+    },
+    {
+      "id": "assessment",
+      "title": "Assessment",
+      "content": "## ADR Assessment Framework\n\n**Step 1: Identify the suspected ADR**\nDescribe the reaction precisely: onset, nature, severity, duration, associated findings.\n\n**Step 2: Temporal relationship**\nDid the symptom begin after the medication was started or dose was changed? How many days after initiation?\n\n**Step 3: Apply Naranjo Algorithm**\nScore the causality probability. Document the score.\n\n**Step 4: Identify mechanism**\nIs this Type A (expected pharmacological effect) or Type B (idiosyncratic)? Type A → consider dose reduction or alternative. Type B → discontinue immediately.\n\n**Step 5: Identify risk amplifiers**\nRenal impairment, drug interactions, pharmacokinetic vulnerability, recent dose change.\n\n**Step 6: Check relevant drug levels or labs**\nDigoxin level, INR, blood glucose, electrolytes, CBC depending on the suspected ADR.\n\n**Step 7: Assess functional impact**\nHas the ADR caused a fall, cognitive decline, or functional loss? Document severity (mild/moderate/severe/life-threatening)."
+    },
+    {
+      "id": "nursing_interventions",
+      "title": "Nursing Interventions",
+      "content": "1. **Recognize ADR early** — maintain high suspicion for any new symptom in an older adult on multiple medications. Never attribute new symptoms purely to aging without ruling out ADR.\n2. **Perform focused assessment** — vital signs, LOC, symptom description, onset timeline, recent medication changes.\n3. **Hold the suspected medication** — for serious or life-threatening ADRs, withhold the dose and notify the prescriber immediately. For less urgent concerns, notify and document.\n4. **Notify prescriber** — provide: patient name, suspected ADR, suspected medication, onset, relevant labs. Document: prescriber name, time, response, and plan.\n5. **Apply antidote or reversal if available** — warfarin → vitamin K ± PCC; opioid → naloxone; benzodiazepine → flumazenil (rarely used due to seizure risk); digoxin → digoxin-specific antibody fragments (Digibind).\n6. **Monitor and reassess** — vital signs, LOC, symptom progression or improvement following intervention.\n7. **Document ADR thoroughly** — suspected medication, reaction description, onset, severity, Naranjo score, prescriber notification, actions taken, patient outcome.\n8. **Report through institutional system** — complete incident/occurrence report.\n9. **Report to MedEffect/MedWatch** — for serious, unexpected, or unlabeled ADRs.\n10. **Educate the patient** — what the reaction was, which medication is suspected, what was done, and what to tell future healthcare providers (medication allergy/ADR documentation)."
+    },
+    {
+      "id": "patient_teaching",
+      "title": "Patient Teaching",
+      "content": "**What Is an ADR?**\n'An adverse drug reaction means your body had an unexpected response to a medication. This is different from an allergy — it means the drug affected your body in a way that wasn't intended.'\n\n**What to Watch for With Your Medications:**\nProvide specific teaching based on high-risk medications (e.g., 'If you take warfarin and notice unusual bruising, blood in your urine, or stool that looks black or tarry, contact your doctor immediately or go to emergency.')\n\n**Report New Symptoms Promptly:**\n'Any new symptom that appears within the first few weeks of starting a medication, or after a dose change, should be reported to your nurse or doctor — it could be a reaction to the medication.'\n\n**Medication Allergy/ADR Card:**\n'Keep a list of any medications that have caused you problems. Include: the medication name, what happened, and the date. Show this to every healthcare provider.'\n\n**Do Not Rechallenge Without Medical Advice:**\n'Do not restart a medication that caused a reaction without first checking with your doctor — some reactions can be more severe the second time.'"
+    },
+    {
+      "id": "documentation",
+      "title": "Documentation",
+      "content": "**ADR Documentation Must Include:**\n- Suspected medication (name, dose, route, frequency, duration of use)\n- Reaction description (onset, nature, severity, duration)\n- Naranjo probability score\n- ADR type (A or B)\n- Labs obtained and results\n- Actions taken: medication held/discontinued, antidote given, supportive measures\n- Prescriber notification: name, time, method, response\n- Patient outcome\n- Whether ADR was added to the allergy/ADR section of the health record\n- Institutional occurrence/incident report number\n- Whether reported to MedEffect Canada or FDA MedWatch\n\n**Legal and Ethical Considerations:**\n- Failure to recognize and document an ADR that causes patient harm creates medicolegal liability\n- Healthcare professionals have a professional obligation to report serious ADRs to national pharmacovigilance programs — this is both an ethical and a professional standards requirement\n- Patients have a right to know which medication caused their adverse reaction and to have it documented in their health record"
+    },
+    {
+      "id": "clinical_pearls",
+      "title": "Clinical Pearls",
+      "content": "1. **'New symptom = new medication until proven otherwise' in older adults.** The most common missed ADR presentation is a new symptom attributed to aging or a new disease when it is actually a medication side effect.\n2. **Digoxin toxicity can present with any arrhythmia.** The classic teaching of 'bradycardia and heart block' is incomplete — digoxin toxicity can cause PAT with block, ventricular ectopy, or any rhythm disturbance. Visual changes (yellow-green halos, photophobia) are pathognomonic when present.\n3. **The Naranjo Algorithm is clinically useful even when informally applied.** Even asking 'Did the symptom start after the medication? Would it improve if we stopped the medication?' gives you the core Naranjo reasoning without formally scoring it.\n4. **Methotrexate weekly dosing errors are catastrophic.** Methotrexate for rheumatoid arthritis is dosed WEEKLY, not daily. Daily methotrexate causes fatal pancytopenia and mucositis. This is one of the ISMP highest-priority medication errors.\n5. **Anticholinergic toxidrome is often missed in older adults because the individual components are attributed to existing conditions.** Confusion → dementia, urinary retention → prostate, constipation → IBS, blurred vision → cataracts. The cumulative picture is the clue.\n6. **Sulfonylurea hypoglycemia outlasts insulin hypoglycemia.** Sulfonylureas have long half-lives (glibenclamide up to 24 hours) — hypoglycemia after a sulfonylurea requires prolonged monitoring and may need IV glucose infusion even after a single glucose correction."
+    },
+    {
+      "id": "memory_anchors",
+      "title": "Memory Anchors",
+      "content": "**Type A vs. Type B:**\nA = Augmented, dose-related, predictable, most common (85–90%), manageable with dose adjustment\nB = Bizarre, idiosyncratic, not dose-related, rare (10–15%), requires discontinuation\n\n**Naranjo Score:**\n1–4 = Possible | 5–8 = Probable | ≥9 = Definite | ≤0 = Doubtful\n\n**Digoxin Toxicity Triad:**\nNausea/vomiting + visual changes (yellow-green halos) + bradycardia/arrhythmia\nDigoxin therapeutic range for HF: 0.5–0.9 ng/mL\n\n**Anticholinergic Toxidrome Mnemonic:**\n'Dry as a bone' (dry skin/mouth)\n'Hot as a hare' (hyperthermia)\n'Blind as a bat' (blurred vision, mydriasis)\n'Mad as a hatter' (delirium, agitation)\n'Red as a beet' (flushing)\n'Full as a flask' (urinary retention, constipation)\n'Slow as a sloth' (reduced bowel sounds)\n\n**ADME Aging Changes:**\nAbsorption: minor changes\nDistribution: ↑ fat (lipophilic drugs ↑ half-life), ↓ albumin (↑ free drug), ↓ water\nMetabolism: ↓ CYP450 and hepatic blood flow\nExcretion: ↓ GFR (renally-cleared drugs accumulate)"
+    },
+    {
+      "id": "safety_alerts",
+      "title": "Safety Alerts",
+      "content": "🚨 **Methotrexate is dosed WEEKLY for rheumatoid arthritis and psoriasis — NEVER daily.** Daily methotrexate causes fatal bone marrow suppression and mucositis. Verify dosing frequency and document the rationale at every medication review.\n🚨 **Digoxin toxicity requires urgent drug level — do not wait for multiple signs to develop.** A patient with nausea, vomiting, and bradycardia on digoxin requires an immediate digoxin level, potassium level, and ECG. Hypokalemia potentiates digoxin toxicity.\n🚨 **Beta-blockers MASK the tachycardia warning sign of hypoglycemia.** Patients on beta-blockers may present with sweating and confusion without tachycardia during hypoglycemia — clinical vigilance and glucose monitoring are essential.\n🚨 **Benzodiazepine + opioid = respiratory depression risk is exponentially greater than either drug alone.** This combination requires close monitoring of respiratory rate and SpO2.\n🚨 **Any fever, oral ulcers, or severe infection in a patient on clozapine requires immediate CBC for agranulocytosis.** This Type B ADR is potentially fatal and requires immediate discontinuation."
+    },
+    {
+      "id": "exam_tips",
+      "title": "Exam Tips",
+      "content": "**Most Commonly Tested:**\n- Type A = dose-related, predictable, most common\n- Type B = idiosyncratic, not dose-related, less common\n- Naranjo score thresholds: 1–4 possible, 5–8 probable, ≥9 definite\n- Digoxin toxicity signs: nausea + visual changes + arrhythmia; therapeutic range 0.5–0.9 ng/mL\n- Anticholinergic toxidrome: dry, hot, blind, mad, red, full, slow\n- ADR nursing response: assess → hold suspected medication → notify prescriber → document\n- ADRs cause 10–17% of older adult hospitalizations\n\n**Distractor Patterns:**\n- 'ADR = medication overdose' — FALSE. ADR occurs at normal therapeutic doses.\n- 'Type B ADRs respond to dose reduction' — FALSE. Type B requires discontinuation.\n- 'Normal creatinine means no renal impairment' — FALSE in older adults with low muscle mass.\n\n**CNPLE Focus:**\nMedEffect Canada = Canadian ADR reporting. Know this is voluntary for healthcare professionals but professionally obligated by nursing standards."
+    },
+    {
+      "id": "references",
+      "title": "References",
+      "content": "1. Naranjo, C. A., Busto, U., Sellers, E. M., et al. (1981). A method for estimating the probability of adverse drug reactions. *Clinical Pharmacology & Therapeutics*, 30(2), 239–245.\n\n2. Alhawassi, T. M., Krass, I., Bajorek, B. V., & Pont, L. G. (2014). A systematic review of the prevalence and risk factors for adverse drug reactions in the elderly in the acute care setting. *Clinical Interventions in Aging*, 9, 2079–2086.\n\n3. Gallagher, P. F., O'Connor, M. N., & O'Mahony, D. (2011). Prevention of potentially inappropriate prescribing for elderly patients: A randomized controlled trial using STOPP/START criteria. *Clinical Pharmacology & Therapeutics*, 89(6), 845–854.\n\n4. Health Canada. (2022). *MedEffect Canada: Adverse reaction reporting*. Health Canada. https://www.canada.ca/en/health-canada/services/drugs-health-products/medeffect-canada.html\n\n5. Maher, R. L., Hanlon, J., & Hajjar, E. R. (2014). Clinical consequences of polypharmacy in elderly. *Expert Opinion on Drug Safety*, 13(1), 57–65."
+    },
+    {
+      "id": "key_takeaways",
+      "title": "Key Takeaways",
+      "content": "- An ADR is any noxious, unintended effect at a normal therapeutic dose — distinct from overdose or medication error\n- ADRs cause 10–17% of hospital admissions in older adults; 50–70% are preventable\n- Type A ADRs are dose-related and predictable (85–90% of all ADRs); Type B are idiosyncratic and not dose-related\n- Pharmacokinetic aging changes (reduced GFR, reduced CYP450 metabolism, increased body fat, decreased albumin) cause drug accumulation at standard adult doses\n- High-risk medications: anticoagulants, insulin, opioids, benzodiazepines, NSAIDs, digoxin, antiepileptics, methotrexate\n- Digoxin toxicity: nausea/vomiting + visual changes (yellow-green halos) + bradycardia/arrhythmia; therapeutic range 0.5–0.9 ng/mL\n- The Naranjo Algorithm scores ADR causality: 1–4 possible, 5–8 probable, ≥9 definite\n- Nurse's response to ADR: assess, hold suspected medication, notify prescriber, document, report through institutional system and MedEffect/MedWatch for serious reactions"
+    }
+  ],
+  "pretest": [
+    {
+      "id": "pkg7-l3-pre-01",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "An adverse drug reaction (ADR) is best defined as:",
+      "options": {
+        "A": "Any response to a medication that occurs at a supratherapeutic (overdose) dose",
+        "B": "Any noxious, unintended response to a medication at a dose normally used for treatment",
+        "C": "A medication error resulting in patient harm",
+        "D": "Treatment failure due to a medication being ineffective"
+      },
+      "correctAnswer": "B",
+      "rationale": "An ADR is defined as any noxious (harmful) and unintended effect occurring at a NORMAL THERAPEUTIC dose. This distinguishes ADRs from overdose toxicity (supratherapeutic dose), medication errors (wrong drug/dose/route), and treatment failures (medication doesn't work).",
+      "distractorRationales": {
+        "A": "Overdose toxicity is a different category — it occurs at supratherapeutic doses. ADRs occur at normal doses.",
+        "C": "Medication errors may cause harm but are classified separately from ADRs, which occur at normal doses correctly administered.",
+        "D": "Treatment failure (inefficacy) is the absence of intended benefit, not an adverse (harmful) response."
+      },
+      "hint": "ADR = noxious + unintended + normal therapeutic dose",
+      "clinicalPearl": "The definition excludes overdose and errors — this is why 'ADR' and 'medication error' are not interchangeable terms in clinical documentation.",
+      "examStrategy": "ADR definition questions: look for 'normal dose' as the key distinguishing element.",
+      "keyTakeaway": "ADR = harmful, unintended response at a normal therapeutic dose. NOT overdose. NOT error."
+    },
+    {
+      "id": "pkg7-l3-pre-02",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 75-year-old man on warfarin 5 mg daily presents with INR of 8.2 and significant GI bleeding. His dose was recently doubled after an inadequate INR result. This ADR is BEST classified as:",
+      "options": {
+        "A": "Type B — idiosyncratic, unpredictable",
+        "B": "Type A — augmented, dose-related, predictable",
+        "C": "Type B — allergic (IgE-mediated)",
+        "D": "Neither — this is a medication error, not an ADR"
+      },
+      "correctAnswer": "B",
+      "rationale": "Bleeding from an elevated INR after a warfarin dose increase is a Type A ADR — it is an augmented pharmacological effect (expected anticoagulant action, amplified by dose increase). It is dose-related, predictable, and represents an exaggeration of the drug's known mechanism. Type A ADRs are the most common (85–90%) and are manageable through dose adjustment.",
+      "distractorRationales": {
+        "A": "Type B ADRs are idiosyncratic, not dose-related, and not predictable from the drug's pharmacological action. Warfarin-induced bleeding is directly predicted by warfarin's mechanism of action.",
+        "C": "IgE-mediated allergy is a Type B subtype — it involves immune sensitization, not pharmacological excess. Warfarin does not cause IgE-mediated reactions.",
+        "D": "A therapeutic dose doubling authorized by a prescriber that causes a pharmacological effect at the new dose is an ADR, not a medication error."
+      },
+      "hint": "If the ADR is an exaggerated pharmacological effect, it's Type A.",
+      "clinicalPearl": "Most serious ADRs in older adults are Type A — they are preventable through careful dose titration, therapeutic drug monitoring, and pharmacokinetic awareness.",
+      "examStrategy": "Type A = expected + dose-related. Ask: 'Is this the drug's normal mechanism, just too much?' → Type A.",
+      "keyTakeaway": "Warfarin bleeding from INR elevation = Type A ADR (augmented pharmacological effect, dose-related)."
+    },
+    {
+      "id": "pkg7-l3-pre-03",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 68-year-old woman develops Stevens-Johnson syndrome after starting trimethoprim-sulfamethoxazole. This ADR is classified as:",
+      "options": {
+        "A": "Type A — dose-related, predictable",
+        "B": "Type B — idiosyncratic, immune-mediated",
+        "C": "Type A — an expected extension of the antibiotic's antimicrobial effect",
+        "D": "Treatment failure"
+      },
+      "correctAnswer": "B",
+      "rationale": "Stevens-Johnson syndrome (SJS) is a severe mucocutaneous immune-mediated reaction. It is a Type B ADR — it is not predicted by the drug's pharmacological mechanism (antibacterial activity), is not dose-related, and occurs in genetically susceptible individuals. SJS requires immediate discontinuation of the causative drug and intensive supportive care.",
+      "distractorRationales": {
+        "A": "Type A ADRs are dose-related extensions of the drug's pharmacological effect. SJS is not a predictable consequence of trimethoprim-sulfamethoxazole's antibacterial mechanism.",
+        "C": "SJS is in no way related to the antibiotic's intended mechanism of action.",
+        "D": "Treatment failure means the drug didn't work — SJS is not treatment failure, it is a serious adverse immune reaction."
+      },
+      "hint": "SJS = immune-mediated, not dose-related, severe skin reaction = Type B",
+      "clinicalPearl": "Stevens-Johnson syndrome occurs most commonly with sulfonamides, antiepileptics (carbamazepine, phenytoin, lamotrigine), allopurinol, and NSAIDs. It is a medical emergency requiring hospital admission.",
+      "examStrategy": "Immune/allergic reactions, agranulocytosis, and SJS = Type B (idiosyncratic).",
+      "keyTakeaway": "Stevens-Johnson syndrome = Type B ADR — immune-mediated, idiosyncratic, requires immediate drug discontinuation."
+    },
+    {
+      "id": "pkg7-l3-pre-04",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is applying the Naranjo Algorithm to assess whether a patient's acute bradycardia is caused by metoprolol. The algorithm score is 6. How should this be interpreted?",
+      "options": {
+        "A": "Definite ADR — the bradycardia is definitely caused by metoprolol",
+        "B": "Probable ADR — the bradycardia is probably caused by metoprolol",
+        "C": "Possible ADR — there is a weak likelihood",
+        "D": "Doubtful ADR — other causes are more likely"
+      },
+      "correctAnswer": "B",
+      "rationale": "The Naranjo Algorithm scoring: ≤0 = doubtful, 1–4 = possible, 5–8 = probable, ≥9 = definite. A score of 6 falls in the 5–8 range = probable ADR.",
+      "distractorRationales": {
+        "A": "Definite ADR requires a score ≥9.",
+        "C": "Possible ADR is 1–4. A score of 6 exceeds the possible threshold.",
+        "D": "Doubtful is ≤0. A score of 6 is clearly above doubtful."
+      },
+      "hint": "Naranjo: 1-4=possible, 5-8=probable, ≥9=definite",
+      "clinicalPearl": "In clinical practice, a 'probable' Naranjo score (5–8) is sufficient to act on — hold the suspected medication, notify the prescriber, and document.",
+      "examStrategy": "Memorize the four Naranjo thresholds. Exam questions test whether you know which category a given score falls in.",
+      "keyTakeaway": "Naranjo score 6 = probable ADR (5–8 range)."
+    },
+    {
+      "id": "pkg7-l3-pre-05",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "An 80-year-old man is taking digoxin 0.125 mg daily for heart failure. His serum creatinine is 115 μmol/L and he weighs 60 kg. He presents with nausea, vomiting, and a heart rate of 46 bpm. His digoxin level is 2.3 ng/mL. Which factor MOST contributed to this toxicity?",
+      "options": {
+        "A": "The digoxin dose of 0.125 mg daily is too high for all older adults",
+        "B": "Reduced renal clearance in this older adult with low muscle mass resulted in digoxin accumulation at a dose that would be therapeutic in a younger patient with normal renal function",
+        "C": "Digoxin should not be used for heart failure under any circumstances",
+        "D": "The patient's heart rate of 46 is a normal response to digoxin therapy"
+      },
+      "correctAnswer": "B",
+      "rationale": "Digoxin is renally cleared. Serum creatinine of 115 μmol/L in a 60 kg 80-year-old man corresponds to an estimated eGFR of approximately 35–40 mL/min (CKD Stage 3) — far below the 'normal' range. At reduced renal function, digoxin clearance is impaired and it accumulates. The therapeutic range for heart failure is 0.5–0.9 ng/mL; a level of 2.3 ng/mL is clearly toxic. The 'normal' creatinine masked the significant renal impairment.",
+      "distractorRationales": {
+        "A": "0.125 mg is actually a low dose of digoxin — it is the most common starting dose in older adults with renal impairment. The issue is accumulation due to unrecognized CKD.",
+        "C": "Digoxin has evidence-based indications in HFrEF for rate control and symptom management, though it requires careful monitoring.",
+        "D": "A heart rate of 46 bpm is bradycardia and a sign of digoxin toxicity — it is not a normal therapeutic response."
+      },
+      "hint": "Creatinine 115 in an 80-year-old + low weight = significant renal impairment despite seemingly 'normal' creatinine.",
+      "clinicalPearl": "Digoxin therapeutic range for heart failure: 0.5–0.9 ng/mL. Levels above 1.2 ng/mL are associated with increased mortality. Always check eGFR before initiating or continuing digoxin.",
+      "examStrategy": "Digoxin toxicity questions: check the eGFR, look for the accumulation mechanism, and know the therapeutic range (0.5–0.9 ng/mL for HF).",
+      "keyTakeaway": "Digoxin toxicity in older adults = reduced renal clearance → accumulation; therapeutic range 0.5–0.9 ng/mL; toxicity: nausea + visual changes + bradycardia."
+    },
+    {
+      "id": "pkg7-l3-pre-06",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse notes a 78-year-old patient on methotrexate has been receiving it daily for 5 days rather than the prescribed weekly schedule. What is the most serious potential consequence?",
+      "options": {
+        "A": "Subtherapeutic levels due to overdosing beyond the body's capacity to use the drug",
+        "B": "Life-threatening bone marrow suppression (pancytopenia), mucositis, and hepatotoxicity",
+        "C": "Increased risk of falls due to sedation",
+        "D": "Rebound arthritis flare"
+      },
+      "correctAnswer": "B",
+      "rationale": "Methotrexate for rheumatoid arthritis and psoriasis is dosed WEEKLY. Daily dosing at the same dose causes accumulation resulting in life-threatening toxicity: bone marrow suppression (pancytopenia with fatal infections and bleeding), severe mucositis (oral ulcers, GI ulceration), and hepatotoxicity. This is one of the ISMP highest-priority high-alert medication errors. This patient requires immediate assessment (CBC, renal function, liver enzymes, mouth examination), prescriber notification, and likely medical toxicology consultation.",
+      "distractorRationales": {
+        "A": "This does not describe methotrexate toxicity mechanism or presentation.",
+        "C": "Methotrexate is not associated with sedation or falls via CNS effects.",
+        "D": "Rebound arthritis is not an acute complication of methotrexate overdose."
+      },
+      "hint": "Methotrexate for RA = WEEKLY dose. Daily = fatal bone marrow suppression.",
+      "clinicalPearl": "Methotrexate weekly dosing errors are one of the ISMP's top 10 medication safety priorities. Every patient on methotrexate must have the frequency (weekly, not daily) explicitly confirmed with every refill, administration, and medication review.",
+      "examStrategy": "Methotrexate dosing frequency error = ALWAYS fatal/serious. Know it is weekly for RA/psoriasis.",
+      "keyTakeaway": "Methotrexate = weekly dose for RA. Daily dosing = pancytopenia + mucositis = life-threatening. ISMP high-alert."
+    },
+    {
+      "id": "pkg7-l3-pre-07",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 76-year-old woman on insulin glargine 20 units at bedtime is found unresponsive in the morning with a blood glucose of 1.8 mmol/L. She was started on ramipril 10 mg last week. Which pharmacological mechanism explains why the ACE inhibitor may have worsened her hypoglycemia risk?",
+      "options": {
+        "A": "Ramipril directly causes insulin secretion",
+        "B": "ACE inhibitors enhance insulin sensitivity, reducing glucose requirements and increasing hypoglycemia risk at the existing insulin dose",
+        "C": "Ramipril causes renal failure that reduces glucose excretion",
+        "D": "ACE inhibitors cause hyperkalemia which triggers insulin release"
+      },
+      "correctAnswer": "B",
+      "rationale": "ACE inhibitors (including ramipril) improve insulin sensitivity through increased peripheral glucose uptake and reduced insulin resistance. This pharmacodynamic effect means that an existing insulin dose may become relatively 'too much' — resulting in hypoglycemia at doses that were previously appropriate. The nurse should assess for signs of hypoglycemia, administer glucose per protocol, notify the prescriber, and recommend blood glucose monitoring and possible insulin dose adjustment after ACE inhibitor initiation.",
+      "distractorRationales": {
+        "A": "ACE inhibitors do not directly cause insulin secretion from the pancreas.",
+        "C": "Ramipril at therapeutic doses does not cause acute renal failure in most patients, and this mechanism is not how it relates to hypoglycemia.",
+        "D": "While ACE inhibitors can cause hyperkalemia, this is not the mechanism by which they increase hypoglycemia risk."
+      },
+      "hint": "ACE inhibitors → increased insulin sensitivity → existing insulin dose may cause relative overdose.",
+      "clinicalPearl": "When starting an ACE inhibitor in an insulin-dependent diabetic patient, counsel about increased hypoglycemia risk and the need for closer blood glucose monitoring.",
+      "examStrategy": "Drug-drug interactions affecting glucose: know that ACE inhibitors, beta-blockers (mask symptoms), and NSAIDs (affect glucose regulation) all interact with diabetic medications.",
+      "keyTakeaway": "ACE inhibitors increase insulin sensitivity → existing insulin dose may cause hypoglycemia. Monitor glucose after ACE inhibitor initiation in diabetic patients."
+    },
+    {
+      "id": "pkg7-l3-pre-08",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse assesses an 82-year-old patient and notes: dry mouth, urinary retention, acute confusion, flushing, dilated pupils, and a temperature of 38.4°C. The patient takes oxybutynin, amitriptyline, and hydroxyzine. The nurse should recognize these findings as consistent with:",
+      "options": {
+        "A": "Serotonin syndrome",
+        "B": "Anticholinergic toxidrome",
+        "C": "Opioid toxicity",
+        "D": "Digoxin toxicity"
+      },
+      "correctAnswer": "B",
+      "rationale": "This presentation is the anticholinergic toxidrome: dry mouth (dry as a bone), hyperthermia (hot as a hare), mydriasis/blurred vision (blind as a bat), confusion/agitation (mad as a hatter), flushing (red as a beet), urinary retention (full as a flask). The three medications are all high ACB anticholinergics: oxybutynin (ACB 3), amitriptyline (ACB 3), hydroxyzine (ACB 3) — cumulative ACB score of 9.",
+      "distractorRationales": {
+        "A": "Serotonin syndrome presents with hyperthermia + autonomic instability + clonus/hyperreflexia. It requires serotonergic drugs (SSRIs, MAOIs, fentanyl, tramadol) — none of which are present here.",
+        "C": "Opioid toxicity: miosis (pinpoint pupils), respiratory depression, decreased LOC. Pupils here are dilated.",
+        "D": "Digoxin toxicity: nausea, visual changes (yellow-green halos), bradycardia/arrhythmia. No anticholinergic component."
+      },
+      "hint": "Dry, hot, blind, mad, red, full, slow = anticholinergic toxidrome.",
+      "clinicalPearl": "Anticholinergic toxidrome is treated with physostigmine (a reversible cholinesterase inhibitor) in severe cases — but its use requires intensive monitoring due to its own toxicity risk.",
+      "examStrategy": "Recognize the anticholinergic toxidrome by its constellation. Mydriasis (dilated pupils) differentiates from opioid toxicity (miosis).",
+      "keyTakeaway": "Oxybutynin + amitriptyline + hydroxyzine = ACB 9 = anticholinergic toxidrome. Key signs: dry + hot + blind + mad + red + full + slow."
+    },
+    {
+      "id": "pkg7-l3-pre-09",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "ADRs account for what percentage of hospital admissions in older adults?",
+      "options": {
+        "A": "2–5%",
+        "B": "10–17%",
+        "C": "25–30%",
+        "D": "40–50%"
+      },
+      "correctAnswer": "B",
+      "rationale": "ADRs account for 10–17% of hospital admissions in older adults — a significantly higher rate than in younger adults. This figure drives the clinical and policy emphasis on medication safety in geriatric care.",
+      "distractorRationales": {
+        "A": "2–5% significantly underestimates the burden of ADR-related hospitalizations.",
+        "C": "25–30% overestimates — though ADRs are common, this figure exceeds the available evidence.",
+        "D": "40–50% significantly overestimates."
+      },
+      "hint": "ADRs = 10–17% of older adult hospital admissions",
+      "clinicalPearl": "If 10–17% of hospital admissions are ADR-related and 50–70% are preventable, medication safety interventions have enormous healthcare system impact.",
+      "examStrategy": "Epidemiology statistics for exams: ADRs = 10–17% of hospitalizations. Polypharmacy ADR risk: 7+ drugs = >80%.",
+      "keyTakeaway": "ADRs cause 10–17% of older adult hospitalizations; 50–70% are preventable."
+    },
+    {
+      "id": "pkg7-l3-pre-10",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 79-year-old woman on a beta-blocker (metoprolol) for heart failure presents with diaphoresis and mild confusion. Her blood glucose is 2.1 mmol/L. Her caregiver notes she is on insulin. The nurse recognizes that beta-blockers affect hypoglycemia presentation by:",
+      "options": {
+        "A": "Causing hypoglycemia directly by stimulating insulin release",
+        "B": "Masking the tachycardia that normally signals hypoglycemia, making early recognition harder",
+        "C": "Reversing the sweating response, so the patient appears dry during hypoglycemia",
+        "D": "Causing confusion directly, independent of blood glucose level"
+      },
+      "correctAnswer": "B",
+      "rationale": "Beta-blockers block beta-1 (and non-selective: beta-2) adrenergic receptors. Tachycardia is the primary warning symptom of hypoglycemia that prompts patients and caregivers to check glucose and treat. By blocking the adrenergic response, beta-blockers suppress this tachycardia warning sign — patients progress from mild hypoglycemia to severe hypoglycemia without the normal warning sign. Note: sweating (mediated by cholinergic, not adrenergic pathways) is PRESERVED — the patient in this scenario appropriately has diaphoresis.",
+      "distractorRationales": {
+        "A": "Beta-blockers do not directly cause insulin release from the pancreas. Hypoglycemia is caused by excess insulin relative to glucose availability.",
+        "C": "Sweating is cholinergic-mediated and is NOT blocked by beta-blockers. Diaphoresis remains a preserved warning sign in beta-blocked patients.",
+        "D": "Confusion is caused by cerebral glucose deprivation (neuroglycopenia), not a direct beta-blocker effect."
+      },
+      "hint": "Beta-blockers mask tachycardia warning sign of hypoglycemia. Sweating is preserved (cholinergic).",
+      "clinicalPearl": "Educate diabetic patients on beta-blockers: 'You may not feel your heart racing when your sugar is low. Trust the sweating sign, and check your sugar more frequently.'",
+      "examStrategy": "Beta-blocker + hypoglycemia: masks tachycardia but sweating is preserved. High-yield pharmacology concept.",
+      "keyTakeaway": "Beta-blockers mask tachycardia during hypoglycemia. Diaphoresis is preserved. Increases risk of unrecognized severe hypoglycemia."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "pkg7-l3-post-01",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "Which pharmacokinetic change of aging MOST directly explains why benzodiazepines have a prolonged duration of action in older adults?",
+      "options": {
+        "A": "Decreased gastric motility reducing absorption",
+        "B": "Increased body fat content, which increases the volume of distribution and half-life of lipophilic drugs",
+        "C": "Decreased total body water reducing peak concentration",
+        "D": "Reduced serum albumin increasing free drug fraction"
+      },
+      "correctAnswer": "B",
+      "rationale": "Benzodiazepines are highly lipophilic. With aging, body fat increases (from ~15% to ~36% in older men; ~33% to ~45% in older women). Lipophilic drugs distribute into fat stores, creating a larger volume of distribution and a longer elimination half-life. A benzodiazepine that has a half-life of 8 hours in a young adult may have a half-life of 20–36 hours in an older adult — leading to drug accumulation with regular dosing.",
+      "distractorRationales": {
+        "A": "Gastric motility affects absorption timing, not the overall half-life or duration of action.",
+        "C": "Decreased total body water increases peak concentrations of hydrophilic drugs. Benzodiazepines are lipophilic — this mechanism doesn't primarily apply.",
+        "D": "Reduced albumin increases free fraction of protein-bound drugs. While benzodiazepines are protein-bound, the primary mechanism of prolonged duration is the lipid distribution/accumulation."
+      },
+      "hint": "Lipophilic drug + increased body fat = larger Vd = longer half-life.",
+      "clinicalPearl": "Diazepam (a highly lipophilic benzodiazepine) has a half-life of 20–100 hours in older adults vs. 20–50 hours in younger adults. With daily dosing, severe accumulation causes falls, delirium, and cognitive impairment.",
+      "examStrategy": "Pharmacokinetics of aging: lipophilic drugs → increased Vd → longer half-life. Hydrophilic drugs → decreased Vd → higher peak.",
+      "keyTakeaway": "Benzodiazepine prolonged action in aging = increased body fat → larger Vd → longer half-life → accumulation."
+    },
+    {
+      "id": "pkg7-l3-post-02",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is caring for a patient on digoxin who develops hypokalemia (K+ 2.9 mmol/L) after aggressive diuresis. Why does hypokalemia increase digoxin toxicity risk?",
+      "options": {
+        "A": "Hypokalemia increases digoxin absorption from the gut",
+        "B": "Hypokalemia competes with digoxin at the Na+/K+-ATPase receptor, reducing digoxin binding",
+        "C": "Hypokalemia decreases the threshold for digoxin toxicity by potentiating digoxin's inhibition of Na+/K+-ATPase, increasing intracellular calcium",
+        "D": "Hypokalemia reduces renal excretion of digoxin"
+      },
+      "correctAnswer": "C",
+      "rationale": "Digoxin inhibits Na+/K+-ATPase, causing intracellular sodium and calcium accumulation (positive inotropy). Potassium normally competes with digoxin for binding at Na+/K+-ATPase. When potassium is LOW, there is less competition — digoxin binds more avidly, causing more complete Na+/K+-ATPase inhibition and greater calcium accumulation. This potentiates digoxin's toxic effects (arrhythmias) at any given serum digoxin level. Digoxin toxicity can occur at 'therapeutic' levels in the presence of hypokalemia.",
+      "distractorRationales": {
+        "A": "Hypokalemia does not increase oral digoxin absorption.",
+        "B": "This is the opposite of the mechanism — less potassium means LESS competition, allowing MORE digoxin to bind.",
+        "D": "Hypokalemia does not directly affect renal digoxin excretion in this way."
+      },
+      "hint": "Low K+ → less competition at Na+/K+-ATPase → more digoxin binding → more toxicity.",
+      "clinicalPearl": "Always check serum potassium with digoxin levels. Digoxin toxicity at 'therapeutic' levels requires investigation for hypokalemia, hypomagnesemia, or hypercalcemia — all potentiate toxicity.",
+      "examStrategy": "Digoxin + diuretic + hypokalemia = increased toxicity risk even at normal digoxin levels.",
+      "keyTakeaway": "Hypokalemia potentiates digoxin toxicity by increasing Na+/K+-ATPase inhibition. Monitor electrolytes in digoxin patients on diuretics."
+    },
+    {
+      "id": "pkg7-l3-post-03",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 77-year-old man is prescribed amiodarone for persistent atrial fibrillation. He is currently taking digoxin 0.125 mg daily and warfarin. The nurse anticipates which TWO drug interactions?",
+      "options": {
+        "A": "Amiodarone reduces warfarin effect and reduces digoxin levels",
+        "B": "Amiodarone increases both warfarin effect (elevated INR) and digoxin levels (toxicity risk)",
+        "C": "Amiodarone reduces warfarin effect but has no impact on digoxin",
+        "D": "Amiodarone only affects digoxin levels, not warfarin"
+      },
+      "correctAnswer": "B",
+      "rationale": "Amiodarone is a potent CYP2C9 inhibitor — CYP2C9 is the primary metabolizing enzyme for warfarin (S-warfarin). Amiodarone inhibits warfarin metabolism, causing INR to rise significantly (typically 30–50% INR increase). Amiodarone also inhibits P-glycoprotein, which is involved in renal digoxin elimination. This causes digoxin levels to rise by 50–70%. Both interactions require proactive management: warfarin dose reduction (typically 30–50%) and digoxin dose reduction or closer monitoring.",
+      "distractorRationales": {
+        "A": "Amiodarone INCREASES both warfarin effect and digoxin levels — it inhibits their metabolism/elimination. It does not reduce either.",
+        "C": "Amiodarone significantly increases digoxin levels via P-gp inhibition.",
+        "D": "Amiodarone has a major interaction with both digoxin and warfarin."
+      },
+      "hint": "Amiodarone inhibits CYP2C9 (warfarin ↑ INR) and P-gp (digoxin accumulation).",
+      "clinicalPearl": "When amiodarone is added to warfarin therapy, a proactive warfarin dose reduction of ~30–50% is typically made immediately. INR monitoring must be increased to weekly until stable. Digoxin levels should be checked 1–2 weeks after amiodarone initiation.",
+      "examStrategy": "Amiodarone interactions are high-yield: it increases warfarin effect (CYP2C9) AND increases digoxin levels (P-gp). Know both.",
+      "keyTakeaway": "Amiodarone + warfarin = ↑ INR (CYP2C9 inhibition). Amiodarone + digoxin = ↑ digoxin levels (P-gp inhibition). Both require dose adjustment."
+    },
+    {
+      "id": "pkg7-l3-post-04",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse discovers a patient experienced a serious unexpected ADR to a newly approved medication. After notifying the prescriber and completing the incident report, the nurse should also:",
+      "options": {
+        "A": "Contact the pharmaceutical manufacturer directly to demand a product recall",
+        "B": "Report the ADR to Health Canada through the MedEffect Canada voluntary reporting program",
+        "C": "Post the ADR details on a professional nursing social media forum",
+        "D": "File a complaint with the provincial nursing regulatory body against the prescriber"
+      },
+      "correctAnswer": "B",
+      "rationale": "MedEffect Canada is Health Canada's voluntary ADR reporting program for healthcare professionals. Reporting serious, unexpected, or unlabeled ADRs contributes to pharmacovigilance — the ongoing monitoring of medication safety in the real-world population. Individual case reports can identify signals for rare Type B reactions that were not detected in clinical trials. Nurses have a professional obligation under nursing standards to report serious ADRs.",
+      "distractorRationales": {
+        "A": "A product recall is a regulatory decision — nurses report ADRs through official reporting channels; they do not demand recalls.",
+        "C": "Posting patient ADR details on social media violates patient confidentiality regardless of whether identifying information is included.",
+        "D": "A prescriber complaint is not appropriate in this scenario — the prescriber is not at fault for an unexpected ADR to a new medication."
+      },
+      "hint": "Canadian ADR reporting = MedEffect Canada (Health Canada).",
+      "clinicalPearl": "Healthcare professional ADR reporting to MedEffect/MedWatch is the foundation of post-market drug safety surveillance. Without reporting, rare serious ADRs (like SJS with a new drug) take years longer to detect.",
+      "examStrategy": "Canadian context questions about ADR reporting: MedEffect Canada = Health Canada. US = FDA MedWatch.",
+      "keyTakeaway": "Serious/unexpected ADRs → MedEffect Canada (Health Canada) reporting. This supports pharmacovigilance and post-market safety surveillance."
+    },
+    {
+      "id": "pkg7-l3-post-05",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "What is the therapeutic serum digoxin level for management of heart failure with reduced ejection fraction (HFrEF)?",
+      "options": {
+        "A": "1.5–2.5 ng/mL",
+        "B": "0.5–0.9 ng/mL",
+        "C": "2.0–3.0 ng/mL (same as INR target for atrial fibrillation)",
+        "D": "Below 0.5 ng/mL for maximum safety"
+      },
+      "correctAnswer": "B",
+      "rationale": "The current evidence-based therapeutic range for digoxin in HFrEF is 0.5–0.9 ng/mL. The previously used range of 0.8–2.0 ng/mL has been shown to be associated with increased mortality at higher levels (>1.2 ng/mL) in the DIG trial. Lower digoxin levels (0.5–0.9 ng/mL) achieve the neurohormonal benefits without excessive toxicity. For atrial fibrillation rate control, levels up to 1.0–1.2 ng/mL may be acceptable but higher levels are not evidence-based.",
+      "distractorRationales": {
+        "A": "1.5–2.5 ng/mL represents historical, now-outdated teaching. Levels above 1.2 ng/mL increase mortality risk in HFrEF.",
+        "C": "2.0–3.0 is a warfarin INR target, not a digoxin level. These are completely different measurements.",
+        "D": "Below 0.5 ng/mL is likely subtherapeutic and would not achieve meaningful clinical benefit."
+      },
+      "hint": "Current evidence-based digoxin range for HF: 0.5–0.9 ng/mL (not the old 1.5–2.0).",
+      "clinicalPearl": "The DIG Trial (1997) established that digoxin reduces HF hospitalizations but doesn't reduce mortality. Subsequent analyses showed that higher digoxin levels (>1.0 ng/mL) paradoxically increase mortality — particularly in women.",
+      "examStrategy": "Digoxin therapeutic range: know the CURRENT (lower) target: 0.5–0.9 ng/mL. The old 'normal range' of 0.8–2.0 is outdated.",
+      "keyTakeaway": "Digoxin therapeutic range for HFrEF: 0.5–0.9 ng/mL. Levels >1.2 ng/mL associated with increased mortality."
+    },
+    {
+      "id": "pkg7-l3-post-06",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 72-year-old woman with rheumatoid arthritis is prescribed methotrexate 15 mg weekly and folic acid 5 mg weekly. She asks why she is taking folic acid with her methotrexate. The nurse's best response is:",
+      "options": {
+        "A": "Folic acid enhances the antirheumatic effect of methotrexate",
+        "B": "Folic acid replenishes folate depleted by methotrexate, reducing side effects like mouth sores, nausea, and hair loss",
+        "C": "Folic acid prevents drug interactions between methotrexate and NSAIDs",
+        "D": "Folic acid is prescribed for bone health in patients taking methotrexate"
+      },
+      "correctAnswer": "B",
+      "rationale": "Methotrexate inhibits dihydrofolate reductase (DHFR), depleting the body's active folate. This folate deficiency causes the common side effects of methotrexate: stomatitis (oral ulcers), nausea, fatigue, and alopecia. Folic acid supplementation replenishes folate, significantly reducing these side effects without meaningfully reducing methotrexate's antirheumatic efficacy. Folic acid is given on a different day than methotrexate (typically not the same day) in many protocols.",
+      "distractorRationales": {
+        "A": "Folic acid does not enhance methotrexate's therapeutic effect — it reduces side effects.",
+        "C": "Folic acid does not prevent drug interactions. The NSAID + methotrexate interaction (NSAIDs reduce methotrexate renal clearance → toxicity) is not addressed by folic acid.",
+        "D": "Folic acid is not a bone health supplement. Calcium and vitamin D serve that function."
+      },
+      "hint": "Methotrexate depletes folate → folic acid repletes it → reduces stomatitis and GI side effects.",
+      "clinicalPearl": "Despite folic acid supplementation, the nurse must still monitor for signs of methotrexate toxicity: oral ulcers, CBC for pancytopenia, LFTs for hepatotoxicity, and most critically — confirm the dose is WEEKLY not daily.",
+      "examStrategy": "Methotrexate + folic acid rationale: folic acid prevents side effects (NOT drug interaction, NOT bone health).",
+      "keyTakeaway": "Folic acid with methotrexate = replenishes DHFR-depleted folate → reduces stomatitis, nausea, alopecia. Not therapeutic enhancement."
+    },
+    {
+      "id": "pkg7-l3-post-07",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 84-year-old woman with severe frailty and dementia is on morphine PRN for cancer pain. She is found with a respiratory rate of 6 breaths/minute, SpO2 of 84%, and is unresponsive. The most recent morphine dose was given 2 hours ago. The nurse's priority action is:",
+      "options": {
+        "A": "Withhold future morphine doses and document",
+        "B": "Call the prescriber to discuss the opioid dose",
+        "C": "Administer naloxone per protocol, provide airway support, call for emergency assistance, and notify the prescriber immediately",
+        "D": "Reassess in 30 minutes as this may be normal sleep in a frail older adult"
+      },
+      "correctAnswer": "C",
+      "rationale": "Respiratory rate of 6/min + SpO2 84% + unresponsive after opioid dose = opioid-induced respiratory depression. This is a life-threatening Type A ADR requiring immediate intervention: naloxone (opioid receptor antagonist) per protocol, airway support (jaw thrust, positioning, supplemental O2), and emergency assistance. This is a medical emergency — delay causes hypoxic brain injury and death.",
+      "distractorRationales": {
+        "A": "Withholding future doses is important but does not address the current life-threatening emergency.",
+        "B": "Calling the prescriber is necessary but NOT the first priority when the patient is in respiratory failure.",
+        "D": "RR of 6 + SpO2 84% + unresponsive = never normal sleep. Delayed recognition of opioid toxicity in older adults is a documented patient safety failure."
+      },
+      "hint": "RR <10 + SpO2 <90% + opioid = respiratory depression = EMERGENCY → naloxone NOW.",
+      "clinicalPearl": "Naloxone dosing in opioid-dependent patients (chronic pain): use lower doses (0.04–0.1 mg IV) to reverse respiratory depression without precipitating complete opioid withdrawal and severe pain. Titrate to adequate respiration.",
+      "examStrategy": "Priority action in opioid respiratory depression: naloxone administration + airway support is ALWAYS first — before calling the prescriber.",
+      "keyTakeaway": "Opioid respiratory depression (RR<10, SpO2<90%) = immediate naloxone + airway support + emergency assistance. Life-threatening Type A ADR."
+    },
+    {
+      "id": "pkg7-l3-post-08",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "Which of the following best explains why sulfonylureas (e.g., glibenclamide) carry higher hypoglycemia risk than rapid-acting insulin analogues in frail older adults?",
+      "options": {
+        "A": "Sulfonylureas have a shorter half-life and clear faster, causing reactive hypoglycemia",
+        "B": "Sulfonylureas cause prolonged, difficult-to-treat hypoglycemia due to long half-lives and active metabolites that accumulate in renal impairment",
+        "C": "Sulfonylureas cause hypoglycemia only when the patient is fasting",
+        "D": "Sulfonylureas require more frequent monitoring than insulin analogues"
+      },
+      "correctAnswer": "B",
+      "rationale": "Sulfonylureas stimulate continuous, glucose-independent insulin secretion. Glibenclamide (glyburide) has a long half-life (up to 24 hours) and active metabolites that are renally cleared. In frail older adults with reduced renal function, these metabolites accumulate, causing prolonged hypoglycemia that outlasts a simple glucose correction — patients may re-hypoglycemize hours after initial treatment. Rapid-acting insulin analogues have predictable, short duration of action and no active metabolites.",
+      "distractorRationales": {
+        "A": "Sulfonylureas have LONG half-lives — the opposite of this answer. Short action → brief hypoglycemia; long action → prolonged hypoglycemia.",
+        "C": "Sulfonylureas cause hypoglycemia regardless of fasting status because they stimulate insulin release independently of blood glucose levels.",
+        "D": "While monitoring frequency matters, it does not explain why sulfonylurea hypoglycemia is more dangerous than insulin-induced hypoglycemia."
+      },
+      "hint": "Glibenclamide = long half-life + active renal metabolites = prolonged hypoglycemia in CKD.",
+      "clinicalPearl": "Glibenclamide is a Beers Criteria medication in older adults. Preferred alternatives: gliclazide or glipizide (shorter half-lives, no active metabolites). Even better: SGLT2 inhibitors, GLP-1 agonists, or DPP-4 inhibitors have lower hypoglycemia risk.",
+      "examStrategy": "Sulfonylurea hypoglycemia in older adults = prolonged because of long half-life + renal metabolite accumulation. Beers Criteria: glibenclamide is listed.",
+      "keyTakeaway": "Glibenclamide = Beers Criteria medication. Long half-life + renal metabolites = prolonged hypoglycemia that outlasts glucose treatment in CKD."
+    },
+    {
+      "id": "pkg7-l3-post-09",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A patient on long-term phenytoin therapy for epilepsy has a DEXA scan showing significant osteoporosis. The nurse is aware that phenytoin may contribute to bone loss through which mechanism?",
+      "options": {
+        "A": "Phenytoin causes hypercalciuria by directly stimulating renal calcium excretion",
+        "B": "Phenytoin is a potent CYP enzyme inducer that increases metabolism of vitamin D, reducing calcium absorption and bone mineralization",
+        "C": "Phenytoin causes hyperparathyroidism by elevating PTH levels",
+        "D": "Phenytoin interferes with osteoblast differentiation directly"
+      },
+      "correctAnswer": "B",
+      "rationale": "Phenytoin (and other enzyme-inducing antiepileptics: carbamazepine, phenobarbital, primidone) strongly induce hepatic CYP enzymes, including CYP3A4, which metabolizes vitamin D to inactive metabolites. Vitamin D deficiency → reduced intestinal calcium absorption → hypocalcemia → secondary hyperparathyroidism → bone resorption → osteoporosis. This is an enzyme induction ADR — a predictable Type A adverse effect of long-term use.",
+      "distractorRationales": {
+        "A": "Phenytoin does not directly stimulate renal calcium excretion — the mechanism is through vitamin D metabolism impairment.",
+        "C": "Secondary hyperparathyroidism occurs as a consequence of hypocalcemia from vitamin D depletion — it is an effect, not a direct cause.",
+        "D": "Phenytoin's bone effects are mediated through vitamin D deficiency, not direct osteoblast interference."
+      },
+      "hint": "Enzyme-inducing AEDs → metabolize vitamin D faster → deficiency → secondary hyperparathyroidism → osteoporosis.",
+      "clinicalPearl": "All patients on long-term enzyme-inducing antiepileptics (phenytoin, carbamazepine, phenobarbital) should receive vitamin D and calcium supplementation and regular bone density monitoring.",
+      "examStrategy": "AED + osteoporosis: the mechanism is CYP3A4 induction → vitamin D catabolism. Know this pathway.",
+      "keyTakeaway": "Enzyme-inducing AEDs (phenytoin, carbamazepine) induce CYP3A4 → vitamin D catabolism → osteoporosis. Screen and supplement accordingly."
+    },
+    {
+      "id": "pkg7-l3-post-10",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is writing a nursing note after identifying a probable ADR in a 77-year-old patient. Which documentation is MOST legally and clinically complete?",
+      "options": {
+        "A": "'Patient had a bad reaction to medication. Doctor was called.'",
+        "B": "'Furosemide appears to be causing excessive diuresis. Nurse concerned.'",
+        "C": "'Patient developed acute urinary retention after starting oxybutynin 5 mg TID on [date]. Naranjo score = 6 (probable ADR). Prescriber Dr. [name] notified at [time] by telephone. Order received to hold oxybutynin and initiate bladder scan. Incident report #[number] completed. MedEffect Canada report initiated for this unexpected ADR in context of Beers Criteria medication use.'",
+        "D": "'Patient on multiple medications. Side effects noted. Family informed.'"
+      },
+      "correctAnswer": "C",
+      "rationale": "Complete ADR documentation requires: specific medication, specific reaction, onset date, causality assessment (Naranjo score), prescriber notification (name, time, method, response), specific orders received, incident report number, and whether regulatory reporting was initiated. Vague documentation (options A, B, D) fails to meet medicolegal standards, does not support continuity of care, and does not demonstrate that the nurse took appropriate action.",
+      "distractorRationales": {
+        "A": "'Bad reaction' is vague and does not describe the reaction, the medication, causality assessment, or complete prescriber communication.",
+        "B": "'Appears to be causing' and 'nurse concerned' are vague and not action-oriented. No prescriber notification documented.",
+        "D": Completely inadequate — no specific medication, reaction, prescriber communication, or action documented."
+      },
+      "hint": "ADR documentation: specific drug + specific reaction + onset + Naranjo score + prescriber name/time/response + incident report.",
+      "clinicalPearl": "In a medicolegal review, the quality of ADR documentation determines whether the nurse is protected. Vague documentation suggests no assessment was done. Specific, objective, action-oriented documentation demonstrates professional practice.",
+      "examStrategy": "Documentation questions: always choose the most specific, complete, action-oriented answer.",
+      "keyTakeaway": "ADR documentation must include: drug, reaction, onset, Naranjo score, prescriber notification details, orders received, incident report, regulatory reporting."
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "pkg7-l3-fc-01",
+      "front": "Type A vs. Type B ADRs: key differences",
+      "back": "Type A (Augmented):\n- Dose-related, predictable\n- Exaggerated pharmacological effect\n- 85–90% of all ADRs\n- Manageable with dose reduction\n- Examples: warfarin → bleeding, insulin → hypoglycemia, beta-blocker → bradycardia\n\nType B (Bizarre):\n- NOT dose-related, idiosyncratic\n- Not predicted by mechanism\n- 10–15% of ADRs, often severe\n- Requires discontinuation\n- Examples: Stevens-Johnson syndrome, penicillin anaphylaxis, agranulocytosis from clozapine",
+      "hint": "A = Augmented = dose-related. B = Bizarre = idiosyncratic.",
+      "explanation": "Type A ADRs cause the most overall harm due to their frequency. Type B ADRs cause disproportionate mortality due to their severity.",
+      "clinicalPearl": "95% of Type A ADRs are potentially preventable with appropriate dosing, monitoring, and pharmacokinetic awareness."
+    },
+    {
+      "id": "pkg7-l3-fc-02",
+      "front": "Anticholinergic Toxidrome — 7 Signs",
+      "back": "1. 'Dry as a bone' — dry skin, dry mouth, decreased secretions\n2. 'Hot as a hare' — hyperthermia (reduced sweating)\n3. 'Blind as a bat' — mydriasis, blurred vision, photophobia\n4. 'Mad as a hatter' — delirium, confusion, agitation\n5. 'Red as a beet' — flushing (peripheral vasodilation)\n6. 'Full as a flask' — urinary retention, ileus, constipation\n7. 'Slow as a sloth' — decreased bowel sounds\n\nCaused by: oxybutynin, amitriptyline, diphenhydramine, promethazine, scopolamine",
+      "hint": "Dry, Hot, Blind, Mad, Red, Full, Slow",
+      "explanation": "The anticholinergic toxidrome results from excess blockade of muscarinic acetylcholine receptors — causing dry secretions, hyperthermia, mydriasis, delirium, flushing, urinary retention, and decreased GI motility.",
+      "clinicalPearl": "Differentiate from opioid toxicity: anticholinergic = dilated pupils (mydriasis); opioid = pinpoint pupils (miosis). Both cause altered LOC."
+    },
+    {
+      "id": "pkg7-l3-fc-03",
+      "front": "Naranjo Algorithm — probability scores",
+      "back": "≤0 = Doubtful ADR\n1–4 = Possible ADR\n5–8 = Probable ADR\n≥9 = Definite ADR\n\nKey questions scored:\n- Did reaction appear after drug given? (+2)\n- Did reaction improve when drug stopped? (+1)\n- Did reaction recur on rechallenge? (+2)\n- Are there alternative explanations? (-1 if yes)",
+      "hint": "0=doubtful, 1-4=possible, 5-8=probable, ≥9=definite",
+      "explanation": "The Naranjo Algorithm provides a standardized, documented approach to ADR causality that supports clinical decision-making and medicolegal documentation.",
+      "clinicalPearl": "In clinical practice, a Naranjo score of 5 (probable) is sufficient to act on — hold the medication, notify the prescriber."
+    },
+    {
+      "id": "pkg7-l3-fc-04",
+      "front": "Digoxin toxicity: signs, therapeutic range, and interactions",
+      "back": "Signs of toxicity:\n- Nausea, vomiting, anorexia\n- Visual disturbances: yellow-green halos, photophobia, blurred vision\n- Bradycardia or ANY arrhythmia\n\nTherapeutic range for HF: 0.5–0.9 ng/mL (not the old 1.5–2.0)\n\nToxicity potentiated by: hypokalemia, hypomagnesemia, hypercalcemia\n\nMajor interactions (↑ digoxin levels):\n- Amiodarone (P-gp inhibitor)\n- Verapamil (P-gp inhibitor)\n- Quinidine (P-gp inhibitor)\n\nClearance: renal — dose reduce in CKD",
+      "hint": "Nausea + yellow-green vision + bradycardia + arrhythmia = digoxin toxicity. Range 0.5–0.9.",
+      "explanation": "The triad of GI symptoms + visual disturbances + cardiac arrhythmia is pathognomonic for digoxin toxicity. Any arrhythmia in a digoxin patient must prompt digoxin level measurement.",
+      "clinicalPearl": "Treatment of severe digoxin toxicity: digoxin-specific antibody fragments (Digibind/DigiFab). Also correct hypokalemia."
+    },
+    {
+      "id": "pkg7-l3-fc-05",
+      "front": "ADME pharmacokinetic aging changes",
+      "back": "A — Absorption: minor changes; reduced gastric acid (affects calcium)\nD — Distribution:\n  • ↑ body fat → ↑ Vd for lipophilic drugs → ↑ half-life (benzodiazepines, TCAs)\n  • ↓ albumin → ↑ free drug for protein-bound drugs (warfarin, phenytoin)\n  • ↓ lean mass → ↓ Vd for hydrophilic drugs → ↑ peak (digoxin, lithium)\n  • ↓ total body water → ↑ concentration of water-soluble drugs\nM — Metabolism: ↓ CYP450 (Phase I) and hepatic blood flow\nE — Excretion: ↓ GFR (1 mL/min/year after age 40); creatinine misleadingly normal",
+      "hint": "ADME: Absorption minor, Distribution changes, Metabolism slows, Excretion decreases",
+      "explanation": "Every pharmacokinetic domain is affected by aging. Together, these changes explain why standard adult doses frequently cause toxicity in older adults.",
+      "clinicalPearl": "'Start low, go slow' is the geriatric prescribing principle derived directly from these predictable pharmacokinetic changes."
+    },
+    {
+      "id": "pkg7-l3-fc-06",
+      "front": "High-risk medications for ADRs in older adults — top 8",
+      "back": "1. Anticoagulants (warfarin, DOACs) — bleeding\n2. Insulin — hypoglycemia (amplified by cognitive impairment, renal failure, beta-blockers)\n3. Opioids — constipation, falls, respiratory depression, delirium\n4. Benzodiazepines — falls, cognitive impairment, delirium (Beers)\n5. NSAIDs — GI bleeding, AKI, HTN, HF exacerbation\n6. Digoxin — narrow TI; renal clearance; arrhythmias\n7. Sulfonylureas — prolonged hypoglycemia (especially glibenclamide; Beers)\n8. Methotrexate — weekly dose ONLY; daily = fatal pancytopenia",
+      "hint": "AIOBNDGS: Anticoagulants, Insulin, Opioids, Benzodiazepines, NSAIDs, Digoxin, Glibenclamide, Sulfonylureas/MTX",
+      "explanation": "These medications are responsible for the majority of serious, preventable ADR-related hospitalizations in older adults.",
+      "clinicalPearl": "Anticoagulants + insulin + opioids = the 'triple threat' — responsible for >60% of emergency department visits for ADRs in older adults."
+    },
+    {
+      "id": "pkg7-l3-fc-07",
+      "front": "Why does beta-blocker use complicate hypoglycemia management?",
+      "back": "Beta-blockers block beta-1 adrenergic receptors:\n→ Suppress tachycardia (primary warning sign of hypoglycemia)\n→ Patient doesn't feel heart racing\n→ Hypoglycemia progresses unrecognized\n\nSweating is PRESERVED (cholinergic, not adrenergic) — the only warning that remains intact\n\nManagement: educate patient to monitor glucose more frequently; teach family to watch for behavior change and diaphoresis; use glucometer, not symptom awareness, as primary monitoring tool",
+      "hint": "Beta-blocker masks tachycardia. Sweating preserved. Monitor glucose — don't rely on symptoms.",
+      "explanation": "This is a pharmacodynamic drug-disease interaction — the beta-blocker's mechanism of action directly impairs the patient's ability to recognize hypoglycemia.",
+      "clinicalPearl": "Non-selective beta-blockers (propranolol) additionally block beta-2 receptors involved in glycogenolysis — they can also impair the hyperglycemic recovery response to hypoglycemia."
+    },
+    {
+      "id": "pkg7-l3-fc-08",
+      "front": "Methotrexate ADR profile — critical safety facts",
+      "back": "Indication-specific dosing:\n- RA/psoriasis: WEEKLY dose (e.g., 15–25 mg once weekly)\n- Cancer: daily high-dose protocols\n\nDosing error (daily instead of weekly) → FATAL:\n- Bone marrow suppression (pancytopenia)\n- Mucositis (oral ulcers, GI ulceration)\n- Hepatotoxicity\n\nMonitoring: CBC, LFTs, renal function\nFolic acid co-prescription: reduces side effects (stomatitis, nausea, alopecia)\nNSAID interaction: NSAIDs reduce methotrexate renal clearance → toxicity\n\nReversal: Leucovorin (folinic acid rescue)",
+      "hint": "MTX for RA = weekly. Daily = fatal. Always verify frequency.",
+      "explanation": "Methotrexate dosing frequency errors are an ISMP top safety priority. Nursing verification of frequency at every administration is a professional obligation.",
+      "clinicalPearl": "When dispensing or administering methotrexate: explicitly state 'This is a WEEKLY medication — taken ONCE PER WEEK, not every day.' Document this teaching in every medication review."
+    },
+    {
+      "id": "pkg7-l3-fc-09",
+      "front": "What is the Canadian ADR reporting system and when should nurses report?",
+      "back": "Canadian System: MedEffect Canada (Health Canada)\n- Voluntary for healthcare professionals\n- Mandatory for pharmaceutical manufacturers\n- Online reporting: www.canada.ca/health-canada/medeffect\n\nWhen to report:\n- Serious ADRs (life-threatening, hospitalization, disability, death)\n- Unexpected ADRs (not in product monograph)\n- ADRs to new medications (first 2 years post-approval)\n- ADRs suggesting misuse, abuse, overdose error\n\nNursing professional obligation: nursing standards require reporting serious/unexpected ADRs\n\nUS equivalent: FDA MedWatch",
+      "hint": "Canada = MedEffect Canada. US = FDA MedWatch. Report serious + unexpected ADRs.",
+      "explanation": "Pharmacovigilance relies on healthcare professional reporting to identify rare, serious ADRs that are not detectable in clinical trials. Nurses see the patient outcomes — their reports are clinically essential.",
+      "clinicalPearl": "MedEffect Canada accepts reports from patients and families as well as healthcare professionals. Encouraging patients to report their own ADR experiences increases surveillance coverage."
+    },
+    {
+      "id": "pkg7-l3-fc-10",
+      "front": "Enzyme-inducing antiepileptics and osteoporosis — mechanism and management",
+      "back": "Enzyme-inducing AEDs:\n- Phenytoin, carbamazepine, phenobarbital, primidone\n\nMechanism:\n↑ CYP3A4 activity → ↑ vitamin D catabolism → ↓ active vitamin D → ↓ intestinal calcium absorption → hypocalcemia → ↑ PTH (secondary hyperparathyroidism) → ↑ bone resorption → osteoporosis\n\nManagement:\n- Vitamin D supplementation (1000–2000 IU/day)\n- Calcium supplementation\n- Regular DEXA scanning (every 2 years)\n- Consider non-enzyme-inducing alternatives (levetiracetam, lamotrigine)\n\nNewer, safer AEDs: levetiracetam, lamotrigine (no enzyme induction)",
+      "hint": "Enzyme-inducing AEDs → ↑ vitamin D catabolism → osteoporosis",
+      "explanation": "This Type A ADR is frequently missed because the mechanism is indirect — the bone effect doesn't become apparent for years to decades of treatment.",
+      "clinicalPearl": "Patients on enzyme-inducing AEDs for ≥5 years who have not had a DEXA scan are at high fracture risk. This is a common clinical oversight."
+    },
+    {
+      "id": "pkg7-l3-fc-11",
+      "front": "Amiodarone drug interactions with warfarin and digoxin",
+      "back": "Amiodarone + Warfarin:\n- Mechanism: CYP2C9 inhibition → ↓ warfarin (S-enantiomer) metabolism → ↑ warfarin effect → ↑ INR\n- Risk: bleeding\n- Management: proactive warfarin dose reduction 30–50%; weekly INR monitoring until stable\n\nAmiodarone + Digoxin:\n- Mechanism: P-glycoprotein inhibition → ↓ renal digoxin elimination → ↑ digoxin levels (by 50–70%)\n- Risk: digoxin toxicity\n- Management: reduce digoxin dose 50% when starting amiodarone; check digoxin level 1–2 weeks after initiation",
+      "hint": "Amiodarone: CYP2C9 inhibitor (warfarin ↑) + P-gp inhibitor (digoxin ↑). Both require dose adjustment.",
+      "explanation": "Amiodarone has a 50+ day half-life — interactions persist for weeks to months after discontinuation. Warfarin and digoxin dose adjustments must be maintained for this entire period.",
+      "clinicalPearl": "When amiodarone is discontinued, the CYP and P-gp inhibition reverses over weeks — warfarin dose may need to be re-increased as amiodarone washes out."
+    },
+    {
+      "id": "pkg7-l3-fc-12",
+      "front": "What are the nursing steps when an ADR is identified?",
+      "back": "1. Assess: focused assessment of the reaction (severity, onset, associated findings)\n2. Hold: withhold the next dose of the suspected medication for serious/life-threatening ADRs (check before holding for less urgent concerns)\n3. Notify prescriber: name, time, method, response — document ALL\n4. Antidote/reversal: naloxone for opioids, vitamin K/PCC for warfarin, Digibind for digoxin\n5. Monitor: vital signs, LOC, symptom progression/improvement\n6. Document: drug + reaction + onset + Naranjo score + notification + orders + outcome\n7. Incident report: institutional reporting\n8. Regulatory report: MedEffect Canada for serious/unexpected\n9. Educate patient: what happened, which drug, what to tell future providers",
+      "hint": "Assess → Hold → Notify → Antidote → Monitor → Document → Report × 2",
+      "explanation": "This sequence covers the nursing scope of practice for ADR management — assessment, safety actions, communication, documentation, and reporting.",
+      "clinicalPearl": "Never hold a critical medication (anticonvulsant, cardiac medication) without prescriber guidance — the ADR risk must be weighed against the risk of abrupt discontinuation."
+    }
+  ]
+}

@@ -1,0 +1,362 @@
+{
+  "version": 1,
+  "label": "Maternal-Newborn Packages 11–15: Infections, STI, Multiple Gestation, Placental Disorders & Prioritization",
+  "generatedDate": "2026-06-02",
+  "targetExams": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","PNP-PC","FNP"],
+
+  "package11": {
+    "packageId": "maternal-newborn-pkg-11",
+    "label": "Maternal Infections (TORCH + Additional)",
+    "lessons": [
+      {
+        "lessonId": "mn-pkg11-L01",
+        "topicSlug": "torch-infections-overview",
+        "title": "TORCH Infections: Overview & Fetal Impact",
+        "sections": [
+          {
+            "id": "torch_overview",
+            "heading": "TORCH Overview",
+            "kind": "introduction",
+            "body": "TORCH = Toxoplasmosis, Other (syphilis, varicella, parvovirus B19), Rubella, Cytomegalovirus (CMV), Herpes simplex virus (HSV). These infections share the ability to cross the placenta and cause congenital infection with significant fetal harm, particularly in the first trimester.\n\n**General principles:**\n- Primary infection in pregnancy = highest risk to fetus (no prior immunity)\n- 1st trimester infection = worst outcomes (organogenesis ongoing)\n- Congenital infections may be asymptomatic at birth but present with delayed sequelae\n- Diagnosis: maternal serology (IgG/IgM) + PCR; neonatal: culture, PCR, IgM (cannot cross placenta — neonatal IgM = fetal infection)"
+          },
+          {
+            "id": "toxoplasmosis",
+            "heading": "Toxoplasmosis",
+            "kind": "pathophysiology_overview",
+            "body": "**Organism:** Toxoplasma gondii (intracellular parasite; definitive host = cat)\n**Transmission:** Undercooked meat (pork, lamb, venison), cat feces (oocysts from litter box), contaminated soil/water\n\n**Classic tetrad of congenital toxoplasmosis:**\n1. Chorioretinitis (eye inflammation — can cause blindness)\n2. Hydrocephalus (CSF obstruction)\n3. Intracranial calcifications (diffuse — periventricular in toxo, vs CMV which is periventricular)\n4. Psychomotor retardation\n\n**Maternal screening:** Not universally screened in US (screen if immunocompromised or exposure history)\n**Treatment in pregnancy:** Spiramycin (reduces vertical transmission); if fetal infection confirmed: pyrimethamine + sulfadiazine + leucovorin\n\n**Prevention nursing teaching:**\n- Avoid raw/undercooked meat\n- Wear gloves for gardening (soil contamination)\n- Have another person change cat litter; if must do it — wear gloves, change daily (oocysts need 1–3 days to sporulate)\n- Wash hands after handling raw meat/soil"
+          },
+          {
+            "id": "cmv",
+            "heading": "CMV (Cytomegalovirus)",
+            "kind": "pathophysiology_overview",
+            "body": "**Most common congenital viral infection** in developed countries (0.5–1% of all live births)\n**Transmission:** Body fluids (saliva, urine, breast milk, sexual contact); most often from young children (daycare workers at highest risk)\n\n**Congenital CMV:**\n- 90% are ASYMPTOMATIC at birth; 10–15% of asymptomatic develop sensorineural hearing loss (SNHL) — leading cause of non-hereditary SNHL\n- Symptomatic at birth (worst 10%): SNHL, microcephaly, periventricular calcifications (distinguish from toxo: periventricular in CMV; diffuse in toxo), chorioretinitis, hepatosplenomegaly, 'blueberry muffin' rash (extramedullary hematopoiesis), jaundice\n- Periventricular calcifications + SNHL + chorioretinitis = classic symptomatic CMV\n\n**No vaccine available; no reliably effective treatment in pregnancy**\n**Prevention:** Handwashing (especially around children's secretions), avoid kissing children on mouth, avoid sharing food/utensils with children\n**Neonatal treatment:** Valganciclovir for 6 months (reduces progression of hearing loss in symptomatic)"
+          },
+          {
+            "id": "hsv",
+            "heading": "Herpes Simplex Virus (HSV)",
+            "kind": "pathophysiology_overview",
+            "body": "**Types:** HSV-1 (oral herpes); HSV-2 (genital herpes — primary concern in obstetrics)\n**Transmission to neonate:** Contact with active lesions or viral shedding during vaginal delivery (intrapartum transmission — not transplacental)\n\n**Clinical considerations:**\n- **Primary infection in pregnancy:** risk of neonatal transmission highest (primary has high viral load + no maternal IgG yet)\n- **Recurrent infection at delivery:** lower risk but still significant with active lesions\n\n**Neonatal herpes:** Most common with primary maternal infection near delivery\n- Neonatal presentation: SEM (skin-eye-mouth — most common), CNS disease, disseminated disease (worst — mortality >30%)\n- Treatment: IV acyclovir × 14–21 days\n\n**Obstetric management:**\n- Active genital herpes lesions at labor onset → cesarean delivery\n- Suppressive acyclovir/valacyclovir from 36 weeks for women with recurrent herpes → reduces recurrence at delivery\n- Primary outbreak: delay delivery if possible (IV acyclovir for mother)\n- Ruptured membranes + active lesions: C-section as soon as possible (duration of ROM matters — each hour increases risk)"
+          }
+        ],
+        "keyTakeaways": {
+          "toxoplasmosis": "TORCH: congenital tetrad of toxo = chorioretinitis + hydrocephalus + intracranial calcifications + psychomotor delay. Prevent: no raw meat, gloves for litter/garden.",
+          "cmv": "CMV: most common congenital infection. Periventricular calcifications + SNHL. 90% asymptomatic at birth → late SNHL. No reliable treatment.",
+          "hsv": "HSV: intrapartum transmission (not transplacental). Active lesions at delivery → C-section. Suppressive therapy from 36 weeks. Neonatal: IV acyclovir."
+        }
+      },
+      {
+        "lessonId": "mn-pkg11-L02",
+        "topicSlug": "hiv-pregnancy",
+        "title": "HIV in Pregnancy",
+        "sections": [
+          {
+            "id": "hiv_overview",
+            "heading": "HIV in Pregnancy: Prevention of Vertical Transmission",
+            "kind": "nursing_assessment_interventions",
+            "body": "**Screening:** Universal opt-out HIV testing at first prenatal visit + repeat in 3rd trimester in high-risk areas\n\n**Vertical transmission routes:**\n1. Transplacental (in utero — primarily in 3rd trimester)\n2. Intrapartum (most common route — 50–80% of transmissions)\n3. Postpartum (breastfeeding — risk 14–22% without intervention)\n\n**Goal:** Undetectable viral load (<50 copies/mL) by delivery — reduces transmission to <1%\n\n**Antiretroviral therapy (ART):**\n- Start ART immediately after diagnosis in pregnancy (regardless of CD4 or VL)\n- Continue throughout pregnancy\n- Preferred regimens: tenofovir + emtricitabine (NRTI backbone) + raltegravir (integrase inhibitor) or dolutegravir\n\n**Delivery planning:**\n- Viral load <200 copies/mL at 36 weeks: vaginal delivery option\n- Viral load ≥200 copies/mL at 36 weeks: schedule C-section at 38 weeks (reduces intrapartum transmission)\n- Rupture of membranes: cesarean delivery if VL elevated; if low and membranes just ruptured → vaginal delivery may proceed\n- Avoid scalp electrode, IUPC, fetal blood sampling (invasive intrapartum procedures increase transmission risk)\n\n**Zidovudine (ZDV/AZT) intrapartum:**\n- IV ZDV during labor: still recommended for VL >1,000 copies/mL or unknown VL\n- Dramatically reduces perinatal transmission when VL not suppressed\n\n**Postpartum:**\n- Breastfeeding: CONTRAINDICATED in US (formula is safe and available; HIV transmitted through breast milk)\n- Neonatal prophylaxis: ZDV × 6 weeks to neonate; add additional agents if maternal VL not suppressed\n- Neonatal testing: HIV PCR at birth, 14–21 days, 1–2 months, 4–6 months"
+          }
+        ]
+      },
+      {
+        "lessonId": "mn-pkg11-L03",
+        "topicSlug": "syphilis-pregnancy",
+        "title": "Syphilis in Pregnancy",
+        "sections": [
+          {
+            "id": "syphilis_overview",
+            "heading": "Syphilis: Rising Incidence & Congenital Disease",
+            "kind": "nursing_assessment_interventions",
+            "body": "**Organism:** Treponema pallidum (spirochete)\n**Incidence:** Dramatically rising in the US — congenital syphilis cases increased >10× from 2012–2022\n**Screening:** RPR or VDRL at first prenatal visit; repeat at 28 weeks and at delivery in high-risk areas\n\n**Congenital syphilis manifestations:**\n- Stillbirth, hydrops fetalis (most severe)\n- Hepatosplenomegaly, jaundice\n- Skeletal: saber shins, Hutchinson teeth (notched central incisors), saddle nose deformity\n- Interstitial keratitis (corneal scarring)\n- Sensorineural hearing loss\n- 'Snuffles' (persistent rhinitis — highly infectious)\n\n**Treatment:**\n- **Penicillin G benzathine is the ONLY approved treatment in pregnancy**\n- Penicillin allergy: DESENSITIZE and give penicillin (no alternative is as effective against syphilis in pregnancy)\n- Jarisch-Herxheimer reaction: fever, chills, headache, myalgia within 24h of first penicillin dose (from spirochete lysis); self-limited; uterine contractions may worsen — monitor fetus\n- Treat partner(s)\n\n**Staging and treatment doses:**\n- Primary, secondary, early latent: Benzathine PCN G 2.4 million units IM × 1\n- Late latent, unknown duration: Benzathine PCN G 2.4 million units IM × 3 doses (weekly)"
+          }
+        ]
+      },
+      {
+        "lessonId": "mn-pkg11-L04",
+        "topicSlug": "hepatitis-b-pregnancy",
+        "title": "Hepatitis B in Pregnancy",
+        "sections": [
+          {
+            "id": "hepB_overview",
+            "heading": "Hepatitis B: Screening, Management & Neonatal Prophylaxis",
+            "kind": "nursing_assessment_interventions",
+            "body": "**Screening:** HBsAg at every prenatal visit (per ACOG 2021 — screen all women at first visit; re-screen in 3rd trimester if at risk)\n\n**Vertical transmission risk:**\n- HBsAg positive + HBeAg positive (high viral load): 85–90% neonatal transmission without prophylaxis\n- HBsAg positive + HBeAg negative: 15–30% transmission without prophylaxis\n\n**Neonatal prophylaxis:**\n- Hepatitis B surface antibody (HBIG) 0.5 mL IM + Hepatitis B vaccine within 12 hours of birth (different sites)\n- Complete vaccine series: doses at 1 month and 6 months\n- Efficacy: 85–95% prevention of perinatal transmission\n\n**High viral load management:**\n- HBV DNA >200,000 IU/mL or HBeAg positive: antiviral therapy (tenofovir disoproxil fumarate from 28–32 weeks) reduces neonatal prophylaxis failure\n\n**Breastfeeding:** PERMITTED with HBsAg-positive mothers if neonate has received HBIG and vaccine\n\n**Nursing education:**\n- Baby will receive HBIG and vaccine at birth — explain to parents\n- Complete vaccine series is essential\n- Mother should avoid alcohol, hepatotoxic medications\n- Partner/household contacts: test and vaccinate if susceptible"
+          }
+        ]
+      },
+      {
+        "lessonId": "mn-pkg11-L05",
+        "topicSlug": "gonorrhea-chlamydia-pregnancy",
+        "title": "Gonorrhea & Chlamydia in Pregnancy",
+        "sections": [
+          {
+            "id": "gc_chlamydia",
+            "heading": "GC & Chlamydia: Screening & Neonatal Effects",
+            "kind": "nursing_assessment_interventions",
+            "body": "**Screening:** NAAT (nucleic acid amplification test) for both GC and chlamydia at first prenatal visit for all women <25 years and all at-risk older women; re-test in 3rd trimester if high-risk\n\n**Neisseria gonorrhoeae:**\n- Maternal complications: PID (if untreated), disseminated gonococcal infection\n- Neonatal: ophthalmia neonatorum (purulent eye infection — onset 2–5 days after birth, can cause blindness)\n- Neonatal prevention: erythromycin 0.5% ophthalmic ointment to both eyes at birth (prophylaxis)\n- Treatment in pregnancy: ceftriaxone 500 mg IM × 1 dose\n\n**Chlamydia trachomatis:**\n- Most common STI in pregnancy\n- Maternal: preterm labor, PPROM\n- Neonatal: inclusion conjunctivitis (onset 5–14 days — distinguish from GC by timing and character), pneumonia (afebrile, staccato cough, at 2–12 weeks of age)\n- Treatment in pregnancy: azithromycin 1g PO × 1 dose OR amoxicillin 500 mg TID × 7 days\n- Test of cure 3–4 weeks after treatment + re-screen in 3rd trimester\n- Doxycycline: effective for chlamydia but CONTRAINDICATED in pregnancy (teeth/bone effects)"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "questionId": "mn-p11-001",
+        "topicSlug": "hiv-pregnancy",
+        "difficulty": "hard",
+        "type": "MCQ",
+        "stemAnchor": "HIV-breastfeeding-contraindicated-US",
+        "stem": "A client with HIV who is well-controlled on antiretroviral therapy (viral load undetectable) has just delivered and asks if she can breastfeed her newborn. Which response is most accurate?",
+        "options": {"A": "Yes — with an undetectable viral load, breastfeeding is safe and encouraged","B": "Breastfeeding is contraindicated in the US regardless of maternal viral load; formula feeding is recommended","C": "Breastfeeding is acceptable if the neonate also takes antiretroviral prophylaxis","D": "Breastfeed for 6 weeks only, then transition to formula"},
+        "correctAnswer": "B",
+        "rationale": "In the United States, breastfeeding is CONTRAINDICATED for all HIV-positive mothers, regardless of viral load or ART status. Safe, affordable, clean formula is available, making the risk of HIV transmission through breast milk unacceptable when alternatives exist. This recommendation differs from low-resource settings (WHO recommends breastfeeding with ART in settings where formula feeding poses greater risks from contaminated water/malnutrition).",
+        "incorrectRationales": {"A": "Even undetectable VL does not eliminate HIV in breast milk entirely — some viral reservoirs persist in breast tissue. US guidelines do not permit breastfeeding.", "C": "Neonatal antiretroviral prophylaxis does not provide sufficient protection to allow breastfeeding in the US context.", "D": "There is no approved 'limited breastfeeding' recommendation for HIV-positive women in the US."},
+        "hint": "US: HIV + breastfeeding = CONTRAINDICATED (safe formula available). Different from low-resource countries.",
+        "clinicalPearl": "In low-resource countries where clean water is unavailable and formula is unaffordable, WHO recommends exclusive breastfeeding WITH ART for HIV-positive women (benefits outweigh risks). The US and resource-rich country recommendation is the opposite because the risks of formula are negligible.",
+        "examStrategy": "US HIV breastfeeding question: contraindicated regardless of VL. This is testable because it contradicts the general 'breastfeeding is always best' messaging.",
+        "keyTakeaway": "HIV in US: breastfeeding CONTRAINDICATED regardless of viral load. Formula is the recommended feeding method."
+      },
+      {
+        "questionId": "mn-p11-002",
+        "topicSlug": "syphilis-pregnancy",
+        "difficulty": "moderate",
+        "type": "MCQ",
+        "stemAnchor": "syphilis-penicillin-only-treatment-desensitize",
+        "stem": "A client at 22 weeks with syphilis reports a severe penicillin allergy (anaphylaxis as a child). She asks if she can receive doxycycline instead. Which nursing response is most appropriate?",
+        "options": {"A": "Yes, doxycycline is an acceptable alternative for syphilis treatment in pregnancy","B": "She should be desensitized to penicillin and then receive benzathine penicillin G — penicillin is the only approved treatment for syphilis in pregnancy","C": "Azithromycin 2g PO single dose is an effective alternative in penicillin-allergic pregnant women","D": "She should defer treatment until after delivery to avoid fetal exposure to medications"},
+        "correctAnswer": "B",
+        "rationale": "Benzathine penicillin G is the ONLY approved treatment for syphilis in pregnancy. No alternative antibiotic has demonstrated equivalent efficacy for preventing congenital syphilis. Doxycycline is contraindicated in pregnancy (teeth and bone effects). Azithromycin has shown emerging resistance and treatment failure in syphilis. For penicillin-allergic pregnant women, penicillin desensitization (supervised graded dose challenge) is required, followed by standard penicillin treatment.",
+        "incorrectRationales": {"A": "Doxycycline is contraindicated in pregnancy — causes dental enamel hypoplasia and bone growth inhibition in the fetus.", "C": "Azithromycin is NOT an approved alternative for syphilis in pregnancy — resistance is common and treatment failures have occurred. Desensitization to penicillin is required.", "D": "Deferring treatment allows syphilis to progress and allows ongoing fetal infection — deferral is not appropriate."},
+        "hint": "Syphilis treatment: penicillin G ONLY in pregnancy. Allergic? Desensitize. Never doxycycline (teratogenic).",
+        "clinicalPearl": "Jarisch-Herxheimer reaction: occurs 2–8 hours after first penicillin dose for syphilis from rapid spirochete lysis. Symptoms: fever, chills, headache, myalgia, transient hypotension. Can cause uterine contractions and transient fetal heart rate changes — monitor fetus for 24 hours after treatment.",
+        "examStrategy": "Syphilis in pregnancy: the ONLY correct treatment is penicillin G. Penicillin allergy = desensitize (not substitute). This is one of the most important 'single drug only' rules in obstetrics.",
+        "keyTakeaway": "Syphilis in pregnancy: Benzathine Penicillin G is the ONLY approved treatment. Penicillin allergy → desensitize, then treat with penicillin. Never doxycycline or azithromycin."
+      }
+    ],
+    "flashcards": [
+      {"id":"mn-fc-p11-001","front":"What is the classic tetrad of congenital toxoplasmosis?","back":"1. Chorioretinitis (eye inflammation → blindness). 2. Hydrocephalus (CSF obstruction). 3. Intracranial calcifications (diffuse — throughout brain). 4. Psychomotor retardation.","hint":"Toxo: Eyes + Brain (big) + Calcium deposits + Delayed development.","explanation":"Contrast with CMV: CMV has PERIVENTRICULAR calcifications (around the ventricles). Toxoplasmosis has DIFFUSE/scattered calcifications throughout the brain. Both can cause chorioretinitis and SNHL. The distribution of calcifications helps differentiate on neuroimaging.","clinicalPearl":"Toxoplasmosis prevention: the key nursing teaching is cat litter box management. Have someone else change the litter; if unavoidable — wear gloves and change DAILY (oocysts require 1–3 days to sporulate and become infectious)."},
+      {"id":"mn-fc-p11-002","front":"What distinguishes CMV calcifications from toxoplasmosis calcifications on neuroimaging?","back":"CMV: PERIVENTRICULAR calcifications (around the lateral ventricles). Toxoplasmosis: DIFFUSE/scattered calcifications throughout the brain parenchyma.","hint":"CMV = periventricular (near the ventricles). Toxo = diffuse (everywhere).","explanation":"This distinction is important for NCLEX and clinical exams. Both are TORCH infections causing intracranial calcifications. Other CMV features: SNHL, microcephaly, blueberry muffin rash. Other toxo features: hydrocephalus, chorioretinitis.","clinicalPearl":"CMV is the most common congenital infection in developed countries. 90% of infected neonates are asymptomatic at birth but 15% of asymptomatic will develop sensorineural hearing loss — universal hearing screening misses some CMV-related SNHL (which may be delayed onset)."},
+      {"id":"mn-fc-p11-003","front":"What neonatal prophylaxis is given to infants born to HBsAg-positive mothers?","back":"HBIG (hepatitis B immune globulin) 0.5 mL IM + Hepatitis B vaccine, both given within 12 hours of birth at DIFFERENT injection sites. Complete vaccine series at 1 and 6 months.","hint":"Within 12 hours: HBIG + Hep B vaccine at birth. Same day, different sites.","explanation":"This combination is 85–95% effective in preventing perinatal HBV transmission. If the neonate's prophylaxis is delayed >12 hours, effectiveness decreases significantly. HBIG provides passive immediate immunity while the vaccine induces active immunity over weeks.","clinicalPearl":"Breastfeeding is PERMITTED for HBsAg-positive mothers if the neonate has received HBIG and vaccine at birth. Breast milk does not significantly increase HBV transmission risk when prophylaxis is given."},
+      {"id":"mn-fc-p11-004","front":"What is the difference between neonatal GC conjunctivitis and chlamydia conjunctivitis by onset timing?","back":"GC (Neisseria gonorrhoeae): onset 2–5 days after birth (early, acute, severe purulent discharge). Chlamydia (C. trachomatis): onset 5–14 days after birth (later, mucopurulent, milder). Both prevented with erythromycin ophthalmic ointment at birth.","hint":"GC = 2–5 days (early, purulent). Chlamydia = 5–14 days (later, milder).","explanation":"GC ophthalmia neonatorum was historically a leading cause of neonatal blindness. Credé prophylaxis (silver nitrate, now erythromycin) prevents it. Chlamydial conjunctivitis also responds to oral azithromycin (treat systemically because chlamydia may also cause pneumonia). Note: neonatal chlamydial pneumonia presents at 2–12 weeks with afebrile, staccato cough, tachypnea.","clinicalPearl":"Chemical conjunctivitis from erythromycin ointment is also common (occurs within first 24 hours, self-resolving) — this is a third cause of neonatal eye discharge that must be distinguished from infectious causes."}
+    ]
+  },
+
+  "package12": {
+    "packageId": "maternal-newborn-pkg-12",
+    "label": "STI & Reproductive Health",
+    "questions": [
+      {
+        "questionId": "mn-p12-001",
+        "topicSlug": "sti-assessment-pregnancy",
+        "difficulty": "moderate",
+        "type": "MCQ",
+        "stemAnchor": "chlamydia-doxycycline-contraindicated-pregnancy",
+        "stem": "A client at 24 weeks gestation is diagnosed with chlamydia by NAAT. Which treatment is most appropriate?",
+        "options": {"A": "Doxycycline 100 mg twice daily × 7 days","B": "Azithromycin 1g orally × single dose or amoxicillin 500 mg three times daily × 7 days","C": "Metronidazole 500 mg twice daily × 7 days","D": "Penicillin G 2.4 million units IM × 1"},
+        "correctAnswer": "B",
+        "rationale": "Chlamydia treatment in pregnancy: azithromycin 1g single oral dose or amoxicillin 500 mg TID × 7 days are first-line safe choices. Doxycycline is contraindicated in pregnancy (causes teeth staining, bone growth inhibition in fetus — especially relevant in 2nd/3rd trimester). Test of cure 3–4 weeks after treatment.",
+        "incorrectRationales": {"A": "Doxycycline is contraindicated in pregnancy (all trimesters).", "C": "Metronidazole treats bacterial vaginosis and trichomoniasis, not chlamydia.", "D": "Penicillin treats syphilis, not chlamydia."},
+        "hint": "Chlamydia in pregnancy: azithromycin or amoxicillin. NEVER doxycycline.",
+        "clinicalPearl": "Doxycycline avoidance in pregnancy: during 2nd and 3rd trimester, tetracyclines concentrate in developing dental enamel and bone, causing yellow-gray-brown tooth discoloration (reversible with primary dentition) and potential skeletal effects.",
+        "examStrategy": "Chlamydia treatment: normally doxycycline or azithromycin. In pregnancy: azithromycin or amoxicillin (doxycycline eliminated).",
+        "keyTakeaway": "Chlamydia in pregnancy: azithromycin 1g PO × 1 OR amoxicillin 500 mg TID × 7 days. Doxycycline CONTRAINDICATED."
+      }
+    ],
+    "flashcards": [
+      {"id":"mn-fc-p12-001","front":"What STIs are screened for at the initial prenatal visit?","back":"Chlamydia + gonorrhea (NAAT), syphilis (RPR/VDRL), HIV (4th gen Ag/Ab), Hepatitis B (HBsAg), Hepatitis C (anti-HCV — now recommended for all). Also: rubella IgG, varicella IgG, CBC, blood type, Rh factor.","hint":"Initial prenatal STI screen: chlamydia, GC, syphilis, HIV, Hep B, Hep C.","explanation":"USPSTF and ACOG recommend universal STI screening at first prenatal visit. All STI screens should be repeated in the 3rd trimester for high-risk women (new partner, symptoms, prior STI). Early diagnosis and treatment prevent vertical transmission, preterm birth, and neonatal complications.","clinicalPearl":"Hepatitis C (anti-HCV) screening is now recommended universally in pregnancy (added to routine prenatal labs in 2020). Approximately 0.7% of pregnant women have chronic HCV. Direct-acting antiviral therapy is under study in pregnancy."},
+      {"id":"mn-fc-p12-002","front":"What neonatal prophylaxis is given at birth to prevent gonococcal ophthalmia neonatorum?","back":"Erythromycin 0.5% ophthalmic ointment applied to both eyes within 1–2 hours of birth. Routine prophylaxis regardless of maternal GC status.","hint":"Erythromycin eye ointment to both eyes within 2 hours of birth = standard GC prevention.","explanation":"This replaced silver nitrate (Credé prophylaxis) which caused chemical conjunctivitis. Erythromycin also has some activity against chlamydia (though less effective). The ointment may be delayed briefly to allow eye contact during immediate skin-to-skin bonding.","clinicalPearl":"Some states have removed mandated eye prophylaxis from law, citing adequate prenatal STI screening. However, ACOG still recommends erythromycin eye prophylaxis at birth due to missed/untreated maternal infections and risk of perinatal transmission."}
+    ]
+  },
+
+  "package13": {
+    "packageId": "maternal-newborn-pkg-13",
+    "label": "Multiple Gestation",
+    "questions": [
+      {
+        "questionId": "mn-p13-001",
+        "topicSlug": "twin-pregnancy-TTTS",
+        "difficulty": "hard",
+        "type": "MCQ",
+        "stemAnchor": "TTTS-donor-recipient-oligohydramnios-polyhydramnios",
+        "stem": "Monochorionic diamniotic (MCDA) twins are diagnosed with twin-to-twin transfusion syndrome (TTTS). Twin A (donor) has an AFI of 2 cm. Twin B (recipient) has an AFI of 32 cm and appears hydropic. Which description of TTTS pathophysiology is most accurate?",
+        "options": {"A": "Donor receives too much blood causing polycythemia and cardiac overload; recipient has too little blood causing anemia","B": "Unbalanced arteriovenous placental anastomoses transfer blood from donor to recipient; donor develops oligohydramnios and IUGR; recipient develops polyhydramnios, polycythemia, and hydrops","C": "TTTS is caused by genetic factors; both twins have equal blood volumes but different genetic expressions","D": "TTTS develops only after 32 weeks when placental anastomoses become functional"},
+        "correctAnswer": "B",
+        "rationale": "TTTS is caused by unbalanced net blood flow through arteriovenous anastomoses from the donor twin to the recipient twin. Donor: loses blood → hypovolemia → oliguria → oligohydramnios → IUGR + anemia. Recipient: receives excess blood → hypervolemia → polyuria → polyhydramnios + polycythemia → cardiac overload → hydrops fetalis (fetal heart failure).",
+        "incorrectRationales": {"A": "This is reversed — donor loses blood (anemia/oligo); recipient gains excess blood (polycythemia/polyhydramnios).", "C": "TTTS is a hemodynamic condition from placental anastomoses, not primarily genetic.", "D": "TTTS can develop at any gestational age in MCDA twins, typically presenting at 16–26 weeks."},
+        "hint": "TTTS: donor → loses blood → oligo + IUGR. Recipient → gains blood → poly + hydrops.",
+        "clinicalPearl": "TTTS treatment: laser ablation of placental anastomoses is the gold standard for Stage II–IV TTTS before 26 weeks (available at specialized fetoscopy centers). Serial amnioreduction (draining excess fluid from recipient's sac) is palliative. Without treatment: mortality >80% in severe TTTS.",
+        "examStrategy": "TTTS question: donor = small (oligo, IUGR, anemia); recipient = large (poly, polycythemia, hydrops). Know which twin is which.",
+        "keyTakeaway": "TTTS: donor loses blood → oligohydramnios + IUGR. Recipient gains blood → polyhydramnios + polycythemia + hydrops. Treatment: fetoscopic laser ablation."
+      }
+    ],
+    "flashcards": [
+      {"id":"mn-fc-p13-001","front":"What are the risks of monochorionic monoamniotic (MCMA) twins?","back":"MCMA twins share one placenta AND one amniotic sac. Main risks: umbilical cord entanglement (leading cause of death — 50–70% cord entanglement rate), TTTS, preterm birth. Management: weekly/biweekly fetal surveillance; admission at 24–28 weeks; elective delivery at 34 weeks.","hint":"MCMA = shared sac = cords can tangle. Most dangerous twin type.","explanation":"Because MCMA twins are in the same fluid space, their cords can become intertwined, especially with fetal movements. Doppler surveillance can detect signs of cord compromise. The high morbidity and mortality of MCMA pregnancies necessitates specialized care at maternal-fetal medicine centers.","clinicalPearl":"MCMA twins develop from monozygotic splitting at 8–13 days after fertilization. Beyond 13 days: conjoined twins. The timing of embryo splitting determines chorionicity and amnionicity."},
+      {"id":"mn-fc-p13-002","front":"What is the lambda (twin peak) sign versus the T-sign on ultrasound?","back":"Lambda sign (Λ or twin peak): triangular placental tissue wedging between the dividing membrane layers → DICHORIONIC twins (two placentas). T-sign: membrane inserts perpendicularly to placenta without placental tissue → MONOCHORIONIC twins (one shared placenta).","hint":"Lambda/twin peak = Dichorionic. T-sign = Monochorionic. First trimester US is most accurate.","explanation":"Chorionicity determination at 10–14 weeks is the most prognostically important assessment in twin pregnancy. DCDA: lowest risk (independent blood supplies). MCDA: TTTS risk (10–15%), requires surveillance every 2 weeks from 16 weeks. MCMA: cord entanglement risk.","clinicalPearl":"After 14 weeks, the distinction between lambda and T-sign becomes less reliable. Chorionicity established in the first trimester should not be 'overridden' by later findings. If chorionicity was not established in 1st trimester, MFM consultation for management decisions is recommended."}
+    ]
+  },
+
+  "package14": {
+    "packageId": "maternal-newborn-pkg-14",
+    "label": "Placental Disorders",
+    "questions": [
+      {
+        "questionId": "mn-p14-001",
+        "topicSlug": "placenta-accreta-spectrum",
+        "difficulty": "hard",
+        "type": "MCQ",
+        "stemAnchor": "placenta-accreta-prior-csection-hysterectomy",
+        "stem": "A client with 3 prior cesarean deliveries and a current complete placenta previa is scheduled for her 4th cesarean at 36 weeks. Antenatal MRI and Doppler ultrasound suggest placenta accreta. Which nursing preparation is most appropriate for this delivery?",
+        "options": {"A": "Standard C-section preparation with anesthesia and general surgical team","B": "Multidisciplinary team preparation including MFM, urology, interventional radiology, blood bank, anesthesia, and neonatal team; consent for hysterectomy; massive transfusion protocol","C": "Vaginal delivery attempt with oxytocin augmentation","D": "Emergency C-section plan only if hemorrhage occurs intraoperatively"},
+        "correctAnswer": "B",
+        "rationale": "Placenta accreta spectrum (PAS) — including accreta, increta, percreta — occurs when decidualization is absent (from prior uterine surgery) and trophoblast invades myometrium. With 3 prior C-sections + placenta previa, PAS risk is ~50–67%. This is an extremely high-risk delivery requiring multidisciplinary preparation: MFM, urology (bladder involvement), IR (balloon catheters for hemorrhage control), blood bank (massive transfusion), dedicated anesthesia team, and neonatal team. Hysterectomy is planned if PAS is confirmed. Attempting vaginal delivery or planning for 'standard' C-section without PAS preparation could be fatal.",
+        "incorrectRationales": {"A": "Standard C-section preparation is grossly insufficient for confirmed PAS — mortality risk from uncontrolled hemorrhage is catastrophic without specialized preparation.", "C": "Vaginal delivery with placenta previa is contraindicated.", "D": "Reactive 'wait and see' approach to PAS hemorrhage leads to preventable maternal deaths. Planned multidisciplinary delivery at a specialized center dramatically reduces mortality."},
+        "hint": "Prior C-sections + placenta previa + PAS = planned hysterectomy at specialized center with massive transfusion protocol ready.",
+        "clinicalPearl": "Placenta accreta spectrum grading: Accreta (adherent, no invasion into myometrium — most common, best prognosis), Increta (invades into myometrium), Percreta (invades through myometrium into bladder/bowel — worst). MRI and Doppler are complementary — Doppler is first-line, MRI adds value for posterior placenta or percreta with bowel involvement.",
+        "examStrategy": "PAS preparation: multidisciplinary team + hysterectomy consent + blood bank + IR + urology. Never standard preparation. Never vaginal delivery.",
+        "keyTakeaway": "Placenta accreta spectrum: prior C-sections + previa = highest risk. Delivery planning: multidisciplinary team, hysterectomy consent, massive transfusion protocol, specialized center."
+      }
+    ],
+    "flashcards": [
+      {"id":"mn-fc-p14-001","front":"What is placenta accreta spectrum (PAS) and what are its three grades?","back":"PAS: abnormal trophoblast invasion beyond the decidua basalis due to absent/deficient decidualization. Grades: (1) Accreta: adherent to myometrium (no invasion); (2) Increta: invades into myometrium; (3) Percreta: penetrates through myometrium (into bladder, bowel).","hint":"Accreta = adherent. Increta = into myometrium. Percreta = penetrates through.","explanation":"PAS results from defects in the decidua basalis, most commonly from prior C-section scars or other uterine surgery. With each additional C-section, PAS risk rises: 1 prior C-section = 0.3%; 2 = 0.6%; 3 = 2.1%; 4 = 2.3%; 5 = 6.7%; ≥6 = 6.7–67%. With concurrent placenta previa, all risks multiply 10-fold.","clinicalPearl":"Undiagnosed PAS at delivery causes catastrophic hemorrhage when the provider attempts manual placental removal. The hallmark sign: placenta does not separate — repeated attempts to remove it cause increasing hemorrhage. Emergency hysterectomy is the life-saving intervention."},
+      {"id":"mn-fc-p14-002","front":"What is placental insufficiency and what does Doppler show?","back":"Placental insufficiency: impaired uteroplacental blood flow from inadequate trophoblast invasion of spiral arteries → reduced fetal oxygen/nutrient delivery → asymmetric IUGR. Umbilical artery Doppler: elevated resistance (high S/D ratio) → absent end-diastolic flow (AEDF) → reversed end-diastolic flow (REDF). Progressive worsening = deliver.","hint":"Placental insufficiency → Doppler shows high resistance → AEDF → REDF. Each step worsens prognosis.","explanation":"Doppler waveform progression reflects progressive fetal compensation: elevated S/D ratio (early, expect for GA) → absent EDF (serious compromise) → reversed EDF (critical — elevated intrauterine pressure, impending fetal death). Combined with BPP and growth parameters guides delivery timing decisions.","clinicalPearl":"Doppler of the middle cerebral artery (MCA) shows 'brain-sparing' effect in IUGR: elevated MCA flow (low resistance) as the fetus preferentially perfuses the brain at the expense of other organs. MCA Doppler >95th percentile for gestational age = redistribution present."}
+    ]
+  },
+
+  "package15": {
+    "packageId": "maternal-newborn-pkg-15",
+    "label": "Obstetric Prioritization & Clinical Judgment",
+    "description": "750 prioritization questions + 300 delegation questions covering bleeding, hypertension, infection, fetal compromise, preterm labor, placental disorders, ectopic pregnancy, and maternal deterioration.",
+    "questions": [
+      {
+        "questionId": "mn-p15-001",
+        "topicSlug": "obstetric-prioritization",
+        "difficulty": "hard",
+        "type": "Priority",
+        "stemAnchor": "four-clients-priority-assessment",
+        "stem": "A nurse working on a labor and delivery unit has four clients simultaneously. Which client should the nurse assess FIRST?",
+        "options": {
+          "A": "36-week client with GDM who is having NST; reactive after 10 minutes",
+          "B": "38-week client with mild preeclampsia who reports a new severe headache not relieved by acetaminophen",
+          "C": "34-week client requesting an epidural who has cervical dilation at 3 cm",
+          "D": "40-week client in active labor at 7 cm who reports increased discomfort with contractions"
+        },
+        "correctAnswer": "B",
+        "rationale": "New severe headache unresponsive to acetaminophen in a preeclamptic patient at 38 weeks is a severe feature of preeclampsia and a neurological warning sign (impending eclampsia or hypertensive crisis). This requires IMMEDIATE assessment: BP check, neurological assessment, and provider notification. The other clients have needs but none are immediately life-threatening: reactive NST = normal fetal status; epidural request at 3 cm = important but not emergent; active labor discomfort = expected and manageable.",
+        "incorrectRationales": {
+          "A": "Reactive NST is a reassuring finding — this client does not require immediate assessment.",
+          "C": "Epidural placement is important for comfort but is not an emergency. Another nurse or the provider can be notified to arrange.",
+          "D": "Discomfort in active labor is expected. Unless FHR abnormalities or rapid change in dilation is occurring, this is not the highest priority."
+        },
+        "hint": "Preeclampsia + severe headache = potential eclampsia warning. ALWAYS priority.",
+        "clinicalPearl": "In preeclampsia, a persistent severe headache not relieved by acetaminophen (or other common analgesics) is classified as a severe feature. It may precede eclampsia by minutes to hours. This symptom mandates immediate blood pressure assessment and neurological evaluation.",
+        "examStrategy": "Prioritization: always identify the client at greatest immediate risk of deterioration/death. A new severe headache in preeclampsia = impending eclampsia = highest priority.",
+        "keyTakeaway": "Preeclampsia + new severe headache unresponsive to medication = severe feature → assess FIRST before other stable clients."
+      },
+      {
+        "questionId": "mn-p15-002",
+        "topicSlug": "obstetric-prioritization",
+        "difficulty": "hard",
+        "type": "Priority",
+        "stemAnchor": "five-clients-most-urgent-ectopic-vs-bleeding",
+        "stem": "A nurse receives report on five patients in the obstetric triage area. Which should be assessed FIRST?",
+        "options": {
+          "A": "G1P0 at 8 weeks gestation with light spotting and a positive pregnancy test; vitals stable; β-hCG 1,800 mIU/mL pending TVUS",
+          "B": "G2P1 at 36 weeks with 3+ contractions per hour for 2 hours; no vaginal bleeding; Bishop Score 2",
+          "C": "G3P2 at 7 weeks, Rh-negative, who had a spontaneous abortion 2 hours ago at home; currently lightheaded, HR 122, BP 88/54",
+          "D": "G1P0 at 32 weeks with gestational HTN; BP 148/92 on two readings; no protein; mild edema",
+          "E": "G2P1 at 38 weeks in active labor at 5 cm dilation; epidural in place; FHR 145 with good variability"
+        },
+        "correctAnswer": "C",
+        "rationale": "Client C has hemorrhagic shock: tachycardia (HR 122), hypotension (BP 88/54), and lightheadedness after a spontaneous abortion. She is hemodynamically unstable — this represents an obstetric hemorrhagic emergency (incomplete abortion, ectopic pregnancy, or significant uterine bleeding from abortion). She requires immediate assessment, IV access, fluid resuscitation, and urgent evaluation for retained products vs ectopic pregnancy. The others have concerning but non-life-threatening presentations at this moment.",
+        "incorrectRationales": {
+          "A": "Stable vitals + early pregnancy + pending ultrasound = needs evaluation but is not unstable.",
+          "B": "Preterm contractions without bleeding or cervical change = concerning but not emergent.",
+          "D": "Gestational HTN with BP 148/92 = concerning but not in severe range (not ≥160/110); no severe features; needs close monitoring.",
+          "E": "Active labor at 5 cm with reactive FHR and epidural = stable, expected progression."
+        },
+        "hint": "Hemodynamic instability (BP 88/54, HR 122) = FIRST. Everything else is secondary when a patient is in shock.",
+        "clinicalPearl": "Hemodynamic instability always takes priority in prioritization questions. Regardless of the other clinical details, a patient in shock (tachycardia + hypotension + altered perfusion) needs immediate intervention.",
+        "examStrategy": "Prioritization principle: unstable vital signs (hypotension, severe tachycardia) = immediate priority above all stable patients, regardless of other diagnoses.",
+        "keyTakeaway": "Hemodynamic instability (shock) = always prioritize first. HR 122 + BP 88/54 after hemorrhage = emergent."
+      },
+      {
+        "questionId": "mn-p15-003",
+        "topicSlug": "obstetric-delegation",
+        "difficulty": "moderate",
+        "type": "Priority",
+        "stemAnchor": "delegation-UAP-stable-client",
+        "stem": "A busy labor and delivery nurse has multiple tasks to complete. Which task is appropriate to delegate to an unlicensed assistive personnel (UAP)?",
+        "options": {
+          "A": "Assessing fetal heart tones and uterine activity on a preeclamptic client receiving magnesium sulfate",
+          "B": "Administering oral erythromycin to a client with PPROM",
+          "C": "Obtaining and recording vital signs on a stable postpartum client on day 2 at 6 hours after delivery",
+          "D": "Educating a client about signs and symptoms of preterm labor at 28 weeks gestation"
+        },
+        "correctAnswer": "C",
+        "rationale": "UAPs (nursing assistants, PCTs) may obtain and record vital signs on stable patients — this is within their competency scope. The nurse must review and interpret the findings. The other tasks require nursing judgment: assessing FHTs in a high-risk patient requires RN interpretation; medication administration requires nursing assessment and verification; patient education is a nursing function requiring professional judgment.",
+        "incorrectRationales": {
+          "A": "Assessment of a preeclamptic client on MgSO4 requires RN-level clinical judgment — toxicity monitoring cannot be delegated.",
+          "B": "Medication administration is a nursing function (or per facility policy — some UAPs can administer oral meds with supervision, but it is not typically delegated in most settings).",
+          "D": "Patient education is a professional nursing function that requires assessment, teaching, and evaluation — cannot be delegated to UAP."
+        },
+        "hint": "UAP can: obtain vitals, assist with ADLs, transport stable clients. Cannot: assess, medicate, educate independently.",
+        "clinicalPearl": "Delegation 5 rights: Right task, Right circumstance, Right person, Right direction/communication, Right supervision/evaluation. The key question: is the task within the UAP's scope and does it require professional nursing judgment? If nursing judgment is required = keep it.",
+        "examStrategy": "Delegation questions: identify what requires nursing assessment/judgment (cannot delegate) vs. routine tasks (can delegate with supervision). Vital signs on STABLE patients = common delegatable task.",
+        "keyTakeaway": "Delegating to UAP: routine tasks like vital signs on stable patients. Never delegate: assessment, high-risk monitoring, medication administration, or patient education."
+      },
+      {
+        "questionId": "mn-p15-004",
+        "topicSlug": "obstetric-prioritization",
+        "difficulty": "hard",
+        "type": "Priority",
+        "stemAnchor": "prioritization-cord-prolapse-vs-other",
+        "stem": "A nurse caring for four laboring clients receives simultaneous calls. Which client should receive IMMEDIATE bedside assessment?",
+        "options": {
+          "A": "39-week client requesting pain medication rated 7/10; epidural catheter in place",
+          "B": "37-week client whose membranes just ruptured spontaneously and the fetal heart rate dropped from 145 to 70 bpm",
+          "C": "35-week preeclamptic client whose BP is 154/96 and requests water",
+          "D": "38-week client who wants to change positions because her back is hurting"
+        },
+        "correctAnswer": "B",
+        "rationale": "Sudden profound fetal bradycardia (70 bpm from baseline 145) immediately after membrane rupture = cord prolapse until proven otherwise. This is a life-threatening obstetric emergency. The nurse must immediately go to the bedside to assess for cord prolapse, elevate the presenting part if felt, and prepare for emergency delivery. All other requests are non-emergent by comparison.",
+        "incorrectRationales": {
+          "A": "Pain management with an in-place epidural catheter is important but not immediately life-threatening.",
+          "C": "BP 154/96 is elevated but not in the severe range (not ≥160/110); not an immediate emergency requiring leaving other urgent situations.",
+          "D": "Position change is a comfort measure that can be addressed after the true emergency is managed."
+        },
+        "hint": "Sudden profound FHR drop after ROM = cord prolapse. IMMEDIATE bedside assessment and intervention.",
+        "clinicalPearl": "Umbilical cord prolapse management: the nurse must perform a vaginal examination to check for cord in the vagina, and if found, must maintain a hand elevating the presenting part until delivery. This is a one-person nursing intervention that cannot be left.",
+        "examStrategy": "Any scenario with sudden profound FHR drop (especially after ROM) = possible cord prolapse = go FIRST. Cord prolapse is the most time-sensitive obstetric emergency in these scenarios.",
+        "keyTakeaway": "Sudden profound bradycardia after ROM = cord prolapse emergency → IMMEDIATE bedside assessment."
+      },
+      {
+        "questionId": "mn-p15-005",
+        "topicSlug": "obstetric-prioritization",
+        "difficulty": "hard",
+        "type": "Priority",
+        "stemAnchor": "postpartum-hemorrhage-vs-stable-clients",
+        "stem": "A postpartum nurse has just completed the assessment round. Which client requires the most urgent reassessment and intervention?",
+        "options": {
+          "A": "G3P3 client 1 hour postpartum; just soaked through her second pad in 30 minutes; uterus is boggy and displaced to the right of midline",
+          "B": "G1P1 client day 2 postpartum who is breastfeeding and complains of moderate afterpains rated 5/10",
+          "C": "G2P2 client 12 hours postpartum who reports fatigue and is having difficulty sleeping",
+          "D": "G4P4 client 6 hours postpartum who asks for ambulation assistance to the bathroom"
+        },
+        "correctAnswer": "A",
+        "rationale": "Client A has postpartum hemorrhage warning signs: soaking 2 pads in 30 minutes (excessive blood loss), boggy uterus (atony — #1 cause of PPH), AND uterus displaced to the right (full bladder preventing contraction). Priority interventions: (1) have patient void or catheterize (full bladder displacing uterus), (2) fundal massage, (3) notify provider for oxytocin order. This is an active PPH situation requiring immediate intervention.",
+        "incorrectRationales": {
+          "B": "Afterpains are expected postpartum, especially in multiparas during breastfeeding (oxytocin release). Pain 5/10 is manageable with analgesics — not urgent.",
+          "C": "Fatigue and difficulty sleeping are expected postpartum experiences — not urgent.",
+          "D": "Ambulation assistance is a safety need but not emergent — can be addressed after the hemorrhagic client."
+        },
+        "hint": "Boggy + displaced uterus + soaking 2 pads in 30 min = active PPH. URGENT: assess bladder, massage, oxytocin.",
+        "clinicalPearl": "Two pads in 30 minutes (>1 pad/15 min) = hemorrhage. Boggy + displaced uterus = bladder first. After emptying bladder → massage → oxytocin. If still boggy: provider notification + uterotonic escalation.",
+        "examStrategy": "PPH prioritization: identify the patient with hemorrhage signs (pad saturation rate + fundal findings) + atony cause. Always the highest priority on postpartum floor.",
+        "keyTakeaway": "Boggy uterus + excessive bleeding = PPH emergency. Empty bladder (if displaced) → massage → oxytocin. Highest postpartum priority."
+      }
+    ],
+    "flashcards": [
+      {"id":"mn-fc-p15-001","front":"What are the five general principles for obstetric prioritization questions?","back":"1. Hemodynamic instability = ALWAYS first (BP <90 systolic, HR >120). 2. Acute fetal compromise (cord prolapse, profound bradycardia) = second. 3. Seizure/eclampsia = third. 4. Active hemorrhage with instability = fourth. 5. Stable but concerning (elevated BP, preterm contractions) = monitor but not immediate emergency.","hint":"Priority hierarchy: Shock → Fetal emergency → Seizure → Hemorrhage → Stable-but-concerned.","explanation":"Obstetric prioritization follows the principle of immediate life threat. Maternal hemodynamic instability (cardiovascular collapse) represents the most urgent threat because it affects both mother and fetus. Acute fetal compromise from cord prolapse or abruption is nearly as urgent because fetal brain damage begins within minutes of severe hypoxia.","clinicalPearl":"When all clients appear to be in danger, ask: 'Who will die or have permanent harm in the next 5 minutes without intervention?' That patient goes first."},
+      {"id":"mn-fc-p15-002","front":"What tasks CANNOT be delegated by an RN to a UAP in obstetric nursing?","back":"Cannot delegate: (1) Initial and ongoing nursing assessments (FHR interpretation, maternal assessment). (2) Medication administration. (3) IV insertion or management. (4) Patient/family education. (5) Nursing diagnosis and care planning. (6) Discharge teaching. Can delegate: vital sign collection (stable patients), assisting with ADLs, transporting stable clients, restocking supplies.","hint":"Cannot delegate: assess, medicate, educate, plan care. Can delegate: physical tasks, vital signs on stable patients.","explanation":"Delegation requires the RN to match the task to the person's scope of practice and the patient's stability. A UAP is not trained to interpret clinical data or exercise nursing judgment. They can collect data, but the RN must still assess and interpret.","clinicalPearl":"In high-risk obstetrics (MgSO4 drip, eclampsia management, active labor, hemorrhage), virtually no assessment task should be delegated to a UAP. The RN must be the primary assessor."},
+      {"id":"mn-fc-p15-003","front":"What is the 'which client should be seen first' decision framework for obstetric prioritization?","back":"Step 1: Is anyone hemodynamically unstable (shock)? → Go there first. Step 2: Is there acute fetal compromise (cord prolapse, sustained bradycardia)? → Go there. Step 3: Are there neurological warning signs (severe headache, visual changes in preeclampsia, seizure)? → Go there. Step 4: Is there active significant bleeding? Step 5: Which client has the least stable potential (most likely to deteriorate fastest)?","hint":"Hemodynamically unstable → fetal emergency → neurological → bleeding → most at risk of deterioration.","explanation":"NCLEX prioritization questions require applying this framework systematically. Read all four options before deciding. Look for: vital sign abnormalities (objective, hard data), acute symptoms with life-threatening potential, and conditions that can change rapidly.","clinicalPearl":"'Unchanged from yesterday' or 'routine' complaints (fatigue, mild pain, expected symptoms) = last priority in multiple-client scenarios. 'Sudden change' or 'new onset severe symptom' = first priority."}
+    ]
+  }
+}

@@ -1,0 +1,755 @@
+{
+  "slug": "vascular-dementia-comprehensive",
+  "title": "Vascular Dementia and Vascular Cognitive Impairment: Comprehensive Clinical Nursing Guide",
+  "packageId": "standalone-gero",
+  "examTargets": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","FNP","AGPCNP"],
+  "sections": [
+    {
+      "id": "learning_objectives",
+      "title": "Learning Objectives",
+      "content": [
+        "1. Describe the pathophysiological mechanisms of vascular dementia including large vessel, small vessel (lacunar), strategic infarct, and hemorrhagic subtypes.",
+        "2. Distinguish the clinical features of vascular dementia from Alzheimer's disease using onset pattern, cognitive profile, neurological examination findings, and neuroimaging characteristics.",
+        "3. Identify and prioritize modifiable vascular risk factors for prevention and secondary prevention of vascular cognitive impairment.",
+        "4. Develop a nursing care plan that addresses the cardinal features of vascular dementia: executive dysfunction, gait disturbance, depression, and vascular risk factor management.",
+        "5. Explain the Vascular Cognitive Impairment (VCI) spectrum from mild VCI through major vascular neurocognitive disorder.",
+        "6. Implement evidence-based secondary prevention strategies including blood pressure management, antiplatelet therapy, anticoagulation for atrial fibrillation, and lifestyle modification.",
+        "7. Provide evidence-based patient and family education regarding prognosis, risk factor modification, stroke recognition (FAST), and caregiver support."
+      ]
+    },
+    {
+      "id": "blueprint_mapping",
+      "title": "Blueprint Mapping",
+      "examTargets": {
+        "NCLEX_clientNeeds": [
+          "Physiological Integrity: Reduction of Risk Potential — secondary stroke prevention",
+          "Physiological Integrity: Basic Care and Comfort — fall prevention, gait disturbance",
+          "Safe and Effective Care Environment: Safety and Infection Control",
+          "Health Promotion and Maintenance: Prevention and Health Promotion"
+        ],
+        "CNPLE_domains": [
+          "Domain 2: Clinical Judgment",
+          "Domain 4: Population Health",
+          "Domain 5: Quality Improvement"
+        ],
+        "highYieldTopics": [
+          "Stepwise vs. gradual decline — key differentiator from AD",
+          "Executive function disproportionately affected",
+          "Hypertension as strongest modifiable risk factor",
+          "Anticoagulation for atrial fibrillation",
+          "FAST stroke recognition",
+          "Post-stroke depression prevalence and treatment"
+        ]
+      }
+    },
+    {
+      "id": "core_content",
+      "title": "Core Clinical Content",
+      "subsections": [
+        {
+          "title": "Pathophysiology — Mechanisms of Vascular Brain Injury",
+          "content": "Vascular Dementia (VaD) is dementia caused by cerebrovascular disease — brain injury from reduced or absent blood flow affecting neurons essential for memory, cognition, and function. It is the second most common cause of dementia (10–20% of cases), though mixed AD + VaD pathology is found at autopsy in up to 40% of dementia patients.\n\nMechanisms of Vascular Injury:\n\n1. LARGE VESSEL DISEASE (Cortical Stroke-Related Dementia):\n- Embolic or thrombotic occlusion of major cerebral arteries (MCA, ACA, PCA)\n- Infarction of large cortical territories\n- Dementia follows a LARGE cortical stroke or multiple strokes\n- Cognitive deficits reflect the specific territory infarcted (e.g., left MCA stroke → aphasia + memory; right MCA → visuospatial)\n- Classic presentation: ACUTE ONSET of cognitive deficit immediately post-stroke\n\n2. SMALL VESSEL DISEASE (Subcortical/Lacunar):\n- Lipohyalinosis of deep perforating arteries (caused by chronic hypertension and diabetes)\n- Multiple small infarcts (lacunes) in white matter, basal ganglia, thalamus, internal capsule\n- White matter hyperintensities (leukoaraiosis) on MRI T2/FLAIR\n- Accumulation of subcortical damage causes GRADUAL STEPWISE DECLINE over years\n- Most common subtype of VaD; most closely linked to hypertension\n- Clinical features: executive dysfunction, psychomotor slowing, gait disturbance, urinary incontinence EARLY\n\n3. STRATEGIC INFARCT DEMENTIA:\n- Single small stroke in a STRATEGIC location — disproportionate cognitive effect\n- Common strategic locations: thalamus (bilateral thalamic infarction → profound amnestic syndrome), hippocampus, angular gyrus, basal forebrain, anterior thalamic nuclei\n- ACUTE ONSET of significant cognitive impairment after a small, focal stroke\n\n4. HEMORRHAGIC MECHANISMS:\n- Intracerebral hemorrhage (ICH): basal ganglia, thalamus, white matter — from hypertension or amyloid angiopathy\n- Cerebral amyloid angiopathy (CAA): amyloid deposits in vessel walls → lobar hemorrhages + white matter disease\n- Chronic subdural hematoma: cognitive impairment from compression\n- Subarachnoid hemorrhage: post-SAH cognitive impairment\n\n5. HYPOPERFUSION:\n- Global cerebral hypoperfusion: cardiac arrest, severe hypotension, carotid stenosis\n- Watershed infarctions in territory between major vascular distributions\n- Causes diffuse cognitive impairment particularly affecting complex attention and processing speed"
+        },
+        {
+          "title": "Clinical Features — Distinguishing Vascular Dementia from Alzheimer's Disease",
+          "content": "ONSET:\n- VaD: ABRUPT or STEPWISE — distinct deterioration episodes often corresponding to recognizable strokes or TIAs; family often identifies 'something happened and they were never the same'\n- AD: Insidious, gradual, almost imperceptible onset over years\n\nCOURSE:\n- VaD: STEPWISE DECLINE — a period of relative stability, then a step down (with each vascular event), then stabilization, then another decline with the next event\n- AD: Gradual, continuous progressive decline\n\nCOGNITIVE PROFILE:\n- VaD: EXECUTIVE FUNCTION disproportionately impaired: planning, organizing, problem-solving, abstract reasoning, task initiation\n- VaD: PROCESSING SPEED markedly slowed\n- VaD: ATTENTION and WORKING MEMORY impaired\n- VaD: Memory is affected, but LESS SEVERELY than in AD (especially encoding; retrieval cued recall is relatively preserved)\n- AD: EPISODIC MEMORY (hippocampal) is most severely affected earliest\n\nNEUROLOGICAL EXAMINATION:\n- VaD: FOCAL NEUROLOGICAL SIGNS common — asymmetric reflexes, extensor plantar response (Babinski), pseudobulbar palsy (emotional lability, dysarthria, dysphagia), primitive reflexes (grasp, snout), hemisensory loss\n- AD: Neurological examination often NORMAL until late stages\n\nGAIT:\n- VaD: GAIT DISTURBANCE EARLY — wide-based, slow, 'magnetic' gait (feet barely lifting), may have frontal release signs\n- AD: Gait relatively preserved until late stages (Stage 7)\n\nURINARY SYMPTOMS:\n- VaD: URGE INCONTINENCE and urgency early in the disease (white matter disease disrupts bladder control circuits)\n- AD: Incontinence occurs late (Stage 6D)\n\nAFFECT:\n- VaD: DEPRESSION very common (30–50% of VaD patients); emotional lability (pseudobulbar affect — sudden uncontrollable crying or laughing disproportionate to stimulus)\n- AD: Depression in 20%; emotional blunting more common\n\nNEUROIMAGING:\n- VaD: MRI shows white matter hyperintensities (T2/FLAIR), lacunar infarcts (T1 signal voids), cortical infarcts, periventricular leukoaraiosis\n- AD: MRI shows hippocampal and entorhinal cortex atrophy (medial temporal atrophy); diffuse cortical atrophy late\n\nVASCULAR RISK FACTOR BURDEN:\n- VaD: High vascular risk factor burden (hypertension, diabetes, hyperlipidemia, atrial fibrillation, smoking, prior stroke)\n- AD: Vascular risk factors contribute but less prominently"
+        },
+        {
+          "title": "VCI Spectrum and DSM-5 Classification",
+          "content": "Vascular Cognitive Impairment (VCI) encompasses the full spectrum of cognitive impairment attributable to cerebrovascular disease:\n\nMild VCI (Minor Neurocognitive Disorder due to Vascular Disease):\n- Modest cognitive decline in one or more domains (typically executive function, processing speed)\n- Does NOT interfere with independence (may use compensatory strategies)\n- MoCA score often 18–25\n- Significant clinical importance: 10–15% convert to major VCI per year; aggressive risk factor management may prevent progression\n\nMajor VCI (Major Neurocognitive Disorder due to Vascular Disease = Vascular Dementia):\n- Significant cognitive decline from previous level\n- Cognitive deficits INTERFERE with daily independence\n- Evidence of cerebrovascular disease on neuroimaging or history of stroke clinically correlating with onset\n- Not better explained by another condition\n\nDSM-5 specifiers: Major or Minor NCD due to vascular disease; with or without behavioral disturbance.\n\nMixed Dementia:\n- Most common pathological finding at autopsy in older adults with dementia\n- Both AD (beta-amyloid + tau) AND vascular pathology contribute\n- Often clinically indistinguishable from pure AD or pure VaD\n- Treatment: manage both AD (AChEIs — controversial but sometimes used) and vascular risk factors"
+        },
+        {
+          "title": "Risk Factors — Primary and Secondary Prevention",
+          "content": "MODIFIABLE RISK FACTORS for VCI (order of clinical importance):\n\n1. HYPERTENSION — single strongest modifiable risk factor\n- Chronic HTN causes lipohyalinosis of small cerebral arteries → lacunar infarction and white matter disease\n- Target BP: SBP < 130 mmHg in most adults (ACC/AHA guidelines); HOWEVER, in older frail adults with significant orthostatic hypotension, individualized targets needed\n- Note: In established VaD, over-aggressive BP lowering may worsen cerebral perfusion — avoid rapid drops or excessive lowering in patients with established stenoses\n- Nursing priority: consistent BP monitoring, medication adherence, sodium restriction, lifestyle modification\n\n2. ATRIAL FIBRILLATION\n- Most common cardioembolic source for ischemic stroke\n- AF increases stroke risk 5× (adjusted); dementia risk 2–3×\n- Secondary prevention: anticoagulation (DOACs preferred: apixaban, rivaroxaban, dabigatran) reduces stroke risk 60–70%\n- Nursing: educate on anticoagulation adherence, INR monitoring if warfarin, fall risk assessment, bleeding precaution education\n\n3. DIABETES MELLITUS\n- Accelerates microvascular disease → promotes small vessel disease in the brain\n- Target HbA1c: individualized in older adults (may be 7.5–8.0% rather than <7% to avoid hypoglycemia)\n- Hypoglycemia itself causes acute cognitive impairment and can cause permanent brain injury\n\n4. SMOKING\n- Accelerates atherosclerosis; prothrombotic; reduces cerebral blood flow\n- Cessation at any age reduces stroke risk\n- Nursing: offer NRT, smoking cessation program referral, counseling\n\n5. HYPERLIPIDEMIA\n- High LDL promotes carotid and intracranial atherosclerosis\n- Statins: reduce stroke risk by 20–30%; potential pleiotropic neuroprotective effects\n- Target LDL: < 1.8 mmol/L (< 70 mg/dL) for high vascular risk patients\n\n6. OBESITY AND PHYSICAL INACTIVITY\n- BMI > 30 and sedentary lifestyle independently increase vascular dementia risk\n- Aerobic exercise: 150 minutes/week of moderate activity reduces vascular risk and may improve cerebral blood flow\n\n7. CAROTID ARTERY STENOSIS\n- Symptomatic stenosis (TIA/stroke + stenosis 50–99%): carotid endarterectomy or stenting reduces stroke recurrence\n- Asymptomatic high-grade stenosis: individualized management\n\nNon-Modifiable Risk Factors:\n- Age (strongest non-modifiable)\n- Male sex (slightly higher risk)\n- Family history\n- Genetic: CADASIL (Cerebral Autosomal Dominant Arteriopathy with Subcortical Infarcts and Leukoencephalopathy) — rare hereditary small vessel disease; NOTCH3 gene mutation"
+        },
+        {
+          "title": "Pharmacotherapy in Vascular Dementia",
+          "content": "Secondary Stroke/TIA Prevention (most important pharmacological priority):\n\n1. ANTIPLATELET THERAPY:\n- First-line for non-cardioembolic ischemic stroke/TIA\n- Aspirin 81–325 mg daily OR clopidogrel 75 mg daily\n- Dual antiplatelet (aspirin + clopidogrel): for 21–90 days after minor ischemic stroke/high-risk TIA (POINT/CHANCE trial evidence)\n- NOT if atrial fibrillation (anticoagulate instead)\n\n2. ANTICOAGULATION:\n- Atrial fibrillation: DOACs (apixaban, rivaroxaban, dabigatran, edoxaban) preferred over warfarin for stroke prevention\n- INR 2.0–3.0 if warfarin is used\n- Nursing: fall risk assessment, anticoagulation education, bleeding signs and symptoms\n\n3. STATIN THERAPY:\n- Atorvastatin 40–80 mg: first-line post-stroke for secondary prevention\n- Also addresses hyperlipidemia risk factor\n\n4. ANTIHYPERTENSIVES:\n- Post-stroke: BP < 130/80 target (with individualization for older adults)\n- ACE inhibitors/ARBs preferred (cardiovascular and potential renal-protective benefit)\n- Nursing: BP monitoring, orthostatic hypotension assessment (ESPECIALLY in older patients)\n\nSymptommatic Cognitive Treatment:\n- AChEIs (donepezil, galantamine) in VaD: limited and inconsistent evidence; not routinely recommended but sometimes used off-label in mixed AD/VaD\n- Memantine: similarly limited evidence in pure VaD\n- Currently NO approved pharmacological treatment for the cognitive symptoms of pure VaD\n\nDepression Treatment:\n- SSRIs: sertraline, escitalopram — first-line\n- Venlafaxine: also evidence-based for post-stroke depression\n- If pseudobulbar affect (emotional lability separate from depression): dextromethorphan/quinidine (Nuedexta) — FDA approved\n- AVOID: TCAs in post-stroke patients (seizure threshold lowering, anticholinergic, cardiac effects)"
+        }
+      ]
+    },
+    {
+      "id": "normal_aging_changes",
+      "title": "Normal Aging vs Vascular Cognitive Changes",
+      "content": "Normal aging causes mild slowing of processing speed and mild declines in complex attention — but these are gradual and do not significantly impair daily function or independence.\n\nVCI features that are NOT normal aging:\n- Executive function impairment: difficulty planning, problem-solving, decision-making\n- Prominent gait disturbance (magnetic gait, falling backward)\n- Early urge incontinence without urological cause\n- Focal neurological signs on examination\n- Stepwise cognitive decline following a stroke or TIA\n- Emotional lability (crying or laughing suddenly without appropriate cause)\n\nNormal aging DOES NOT cause:\n- Hemiparesis, hemisensory loss, dysarthria, aphasia — these are neurological, not aging\n- Stepwise cognitive decline — any discrete decline event requires investigation\n- Uncontrollable emotional outbursts (pseudobulbar affect)"
+    },
+    {
+      "id": "abnormal_findings",
+      "title": "Abnormal Findings and Red Flags",
+      "content": "ACUTE STROKE RECOGNITION — FAST Acronym (patient/family teaching):\n- F — Face drooping (asymmetric smile)\n- A — Arm weakness (arm drifts down when both raised)\n- S — Speech difficulty (slurred, wrong words, unable to speak)\n- T — Time to call 911 — IMMEDIATELY. Time is brain.\n\nAdditional stroke symptoms: sudden severe headache ('worst headache of my life'), sudden vision loss (one or both eyes), sudden balance/coordination problems, sudden severe vertigo.\n\nTIA (Transient Ischemic Attack) Red Flag:\n- Focal neurological symptoms that RESOLVE within 24 hours\n- 10–15% risk of stroke within 90 days (highest risk in first 48 hours)\n- Every TIA requires URGENT evaluation — ABCD2 score; non-contrast CT head; vascular imaging; cardiac monitoring for AF\n- Nursing: TIA is NOT 'a small stroke that resolved' — it is a MEDICAL EMERGENCY with high short-term stroke risk\n\nBlood Pressure Red Flags in VaD:\n- Hypertensive urgency (BP > 180/120 without end-organ damage): gradual reduction over hours-days\n- Hypertensive emergency (BP > 180/120 WITH end-organ damage): ICU-level care\n- Hypotension in established VaD: may worsen cerebral perfusion — report SBP < 100 in a VaD patient\n\nAnticoagulation Red Flags:\n- Any signs of bleeding: unusual bruising, blood in urine/stool, prolonged bleeding from cuts\n- Fall with head injury in a patient on anticoagulation: URGENT CT head (intracranial hemorrhage risk)\n- Signs of intracranial hemorrhage: sudden severe headache, vomiting, one-sided weakness or numbness, altered consciousness"
+    },
+    {
+      "id": "assessment",
+      "title": "Assessment Tools and Clinical Approach",
+      "content": "Cognitive Assessment in Suspected VaD:\n\nMoCA (Montreal Cognitive Assessment):\n- Preferred: better at detecting executive function deficits characteristic of VaD vs MMSE\n- VaD patterns: Trails B (executive), clock drawing (executive), digit span (attention), letter fluency — all disproportionately impaired\n- Delayed recall affected but relatively less impaired than in AD\n- Cutoff < 26 = abnormal\n\nMMSE: Less sensitive for executive function; VaD patients may score relatively well on orientation and recall items but fail on serial 7s and spelling 'world' backwards.\n\nNeuropsychological testing: Formally documents domain-specific profile — executive function batteries (DKEFS, WCST), processing speed (TMT-A), attention (PASAT)\n\nVascular Risk Factor Assessment:\n- BP: seated after 5 minutes; both arms on first visit; orthostatic assessment\n- Fasting lipid panel: LDL target review\n- Fasting glucose / HbA1c: diabetes control\n- ECG or Holter: atrial fibrillation detection\n- Carotid ultrasound: stenosis assessment\n- Brain MRI with FLAIR: white matter hyperintensities, lacunar infarcts, acute/chronic ischemic changes\n\nFunctional Assessment:\n- IADL impairment predominantly in executive-function-dependent tasks (finances, medication management, meal planning)\n- ADLs relatively preserved in early VaD\n- Gait assessment (TUG test, gait speed): gait disturbance is a major functional and safety concern\n\nDepression Assessment:\n- PHQ-9 or GDS-15 at each visit — depression affects 30–50% of VaD patients\n- Post-stroke depression screen at 1 month, 3 months, and 6 months post-stroke\n\nFall Risk Assessment:\n- Timed Up and Go (TUG): > 12 seconds = elevated risk\n- Berg Balance Scale\n- Gait speed (4-meter walk test): < 0.8 m/s = high fall risk\n- Neurological examination: assessment of gait pattern, postural stability, focal motor signs"
+    },
+    {
+      "id": "nursing_interventions",
+      "title": "Nursing Interventions",
+      "content": "VASCULAR RISK FACTOR MANAGEMENT (Primary Nursing Priority):\n1. Blood Pressure Management:\n- Consistent monitoring schedule (same time, same arm, seated, after 5 min rest)\n- Adherence support: pillbox, calendar reminders, blister packs, family support\n- Patient education: sodium restriction (<2000 mg/day), DASH diet, smoking cessation, exercise, alcohol moderation\n- Monitor for hypotension: especially in elderly, especially on position changes (orthostatic precautions)\n- Report: SBP > 180 mmHg or any signs of end-organ damage\n\n2. Anticoagulation Management (for AF patients):\n- Educate patient and family on purpose of anticoagulation (stroke prevention)\n- DOAC adherence: specific teaching for each agent (apixaban twice daily, rivaroxaban with evening meal, dabigatran twice daily)\n- Bleeding precautions: soft toothbrush, electric razor, avoid NSAIDs, watch for bruising/blood\n- Fall risk modification: this is the most common reason anticoagulation is withheld — educate that fall risk from NOT anticoagulating (stroke) is usually greater than fall risk from anticoagulating\n- Document any falls in anticoagulated patients; document neurological checks post-fall\n\n3. Diabetes Management:\n- Glucose monitoring if applicable; document trends\n- Hypoglycemia prevention: regular meal timing, education on symptoms (shakiness, sweating, confusion)\n- Hypoglycemia management: 15g fast-acting carbohydrate, recheck in 15 min (15/15 rule)\n- Foot care education (peripheral neuropathy risk)\n\nFALL PREVENTION:\n- Gait disturbance in VaD is early and prominent — fall risk is high even in mild disease\n- Environment: remove rugs, grab bars, adequate lighting, non-skid footwear\n- Assistive device: referral to physiotherapy for appropriate walking aid (cane, walker) and gait training\n- Orthostatic precautions: antihypertensives may cause postural drops — assess standing BP\n- Medication review: sedatives, alpha-blockers, diuretics increase fall risk\n- Bed alarm, call bell accessibility if hospitalized\n\nDEPRESSION MANAGEMENT:\n- Screen at every visit (GDS-15 or PHQ-9)\n- Therapeutic communication: validation, active listening, non-judgmental\n- Physical activity prescription (30 minutes aerobic activity, 5 days/week) — proven antidepressant effect\n- Social engagement: community programs, volunteer activities, religious/spiritual support\n- SSRI initiation: sertraline first-line; monitor for orthostatic hypotension with initiation\n- For pseudobulbar affect: educate family that sudden crying/laughing is not always grief or mania; Nuedexta may be prescribed\n\nCOGNITIVE SUPPORT FOR EXECUTIVE DYSFUNCTION:\n- External memory and planning aids: daily schedule board, electronic reminders, structured routine\n- Simplify decisions: reduce choices, provide structured options rather than open-ended questions\n- Task simplification: break complex tasks (medication management, meal preparation) into single steps\n- Financial management support: POA for property, automatic bill payment, banking safeguards\n\nEMOTIONAL LABILITY (PSEUDOBULBAR AFFECT):\n- Educate family: 'The sudden crying or laughing is a neurological symptom — it doesn't mean he is necessarily sad or happy. It is the wiring in the brain being affected.'\n- Calm, brief acknowledgment; avoid prolonging the episode by engaging with it\n- Environmental: reduce stimulation triggers\n- Document episodes: frequency, triggers, duration"
+    },
+    {
+      "id": "patient_teaching",
+      "title": "Patient and Family Teaching",
+      "content": "Stroke/TIA Education — FAST (Every patient with known VaD and family must know this):\n'If you see sudden face drooping, arm weakness, or speech problems, call 911 IMMEDIATELY. Do not wait. Do not drive to the hospital. Time is brain — for every minute a stroke is untreated, 1.9 million brain cells die. Clot-busting treatment (tPA) works if given within 4.5 hours. Call 911.'\n\nBlood Pressure Education:\n- 'Your blood pressure is one of the most important things you control to protect your brain. Target less than 130/80.'\n- Correct monitoring technique (seated, rested, same arm)\n- Sodium content of foods; DASH diet principles\n- Medication adherence: 'Missing your BP medication is the same as missing your brain protection'\n\nAtrial Fibrillation + Anticoagulation Education:\n- 'Your AFib makes blood pool in your heart and form clots. Those clots can travel to your brain and cause a stroke. Your blood thinner (anticoagulant) prevents those clots.'\n- How to take DOAC (specific timing with/without food for each agent)\n- 'Do not stop this medication on your own — the stroke risk returns immediately'\n- Bleeding signs to report: blood in urine, black tarry stools, vomiting blood, unusual bruising\n- Fall with head injury: 'Call 911 even if you feel fine — internal bleeding in the head can develop slowly'\n\nAntiplatelet Education (for non-AF ischemic stroke/TIA):\n- Purpose: 'Aspirin/clopidogrel prevents blood clots from forming on the blood vessel plaques in your brain'\n- 'Take every day, even when you feel well — missing doses increases stroke risk'\n- Avoid NSAIDs (ibuprofen, naproxen) — increase GI bleeding risk; use acetaminophen for pain instead\n\nSmoking Cessation:\n- 'Every cigarette you smoke narrows your blood vessels and thickens your blood. Stopping smoking is the single most powerful thing you can do to reduce your next stroke risk.'\n- Offer NRT, varenicline/bupropion, behavioral counseling; use the 5A's approach\n\nFamily Education on Prognosis:\n- 'Vascular dementia often progresses in a stepwise pattern — relatively stable periods, then a decline with each vascular event. Aggressive risk factor control can prevent or delay the next step down.'\n- 'Unlike Alzheimer's, where we cannot modify the disease course, in vascular dementia, YOU CAN ACTUALLY PREVENT FURTHER DECLINE by controlling blood pressure, blood sugar, cholesterol, and taking anticoagulation.'\n- Executive dysfunction: 'Your family member may struggle with planning, problem-solving, and managing finances even when they seem alert and aware. This is the disease, not stubbornness.'"
+    },
+    {
+      "id": "documentation",
+      "title": "Documentation Requirements",
+      "content": "Vascular Risk Factor Documentation:\n- Blood pressure readings: date, time, arm used, position, pre-medication or post-medication\n- Document ALL antihypertensive medications, doses, adherence pattern\n- Document patient and family education on FAST stroke signs with verbalization of understanding\n- Document TIA events: onset time, symptoms, duration, resolution, physician notified\n\nAnticoagulation Documentation:\n- DOAC agent, dose, frequency, indication (AF, VTE, etc.)\n- Adherence assessment at each visit\n- INR results if warfarin (with date; therapeutic range 2.0–3.0 for AF)\n- Bleeding events: description, severity, management, physician notification\n- Fall events: circumstances, neurological assessment, head injury evaluation, physician notification\n\nCognitive Assessment Documentation:\n- MoCA/MMSE score with date and patient's alertness level\n- Functional assessment: specific IADL and ADL changes\n- Executive function changes: specific examples (e.g., 'Patient can no longer manage own medications; gets confused with multiple pill bottles')\n- Compare to documented prior baseline\n\nGait and Fall Documentation:\n- TUG time, gait quality, assistive device used\n- Falls: date, time, circumstances, injuries, neurological assessment, physician notification, interventions\n- Orthostatic vital signs when relevant\n\nDepression Documentation:\n- GDS-15/PHQ-9 score with date\n- Specific statements of hopelessness or self-harm — quote directly\n- Suicidal ideation: intent, plan, means, timeline; safety plan documented\n- Response to antidepressant therapy: document medication, dose, start date, reported changes"
+    },
+    {
+      "id": "clinical_pearls",
+      "title": "Clinical Pearls",
+      "content": [
+        "Vascular dementia is the only major dementia type where aggressive risk factor management can actually PREVENT FURTHER PROGRESSION — this is the most important clinical distinction from AD. Every BP reading, every anticoagulation pill, and every smoking cessation conversation is a neuroprotective intervention.",
+        "Executive dysfunction in VaD is often more disabling than memory impairment: the patient may remember that they need to take their medications but cannot organize the process to do so. ADL assessment must account for the planning-and-execution gap that is characteristic of executive dysfunction.",
+        "Post-stroke depression is one of the most underdiagnosed conditions in stroke rehabilitation: 30–50% of VaD patients have clinically significant depression. The depression is not 'just a reaction' — it reflects structural injury to frontal-limbic circuits. It requires active treatment (SSRI) and is highly treatment-responsive.",
+        "Gait disturbance in VaD is often described as 'magnetic gait' — the feet appear glued to the floor, steps are small, shuffling, with minimal clearance. This is caused by subcortical white matter disease disrupting motor programming. It appears EARLY in VaD (unlike AD) and is a major fall risk.",
+        "Anticoagulation for atrial fibrillation should not be withheld from a dementia patient purely because of dementia — the cognitive impairment does not increase hemorrhagic stroke risk, and the thromboembolic stroke risk from AF continues. Assess actual fall risk and decide based on evidence, not assumption.",
+        "Stepwise decline following TIA: a patient with VaD who had 'sudden worsening' should be evaluated for a new TIA or stroke, not simply accepted as disease progression. A new CT or MRI and vascular event workup may identify a treatable or preventable cause of the step."
+      ]
+    },
+    {
+      "id": "memory_anchors",
+      "title": "Memory Anchors and Mnemonics",
+      "content": {
+        "mnemonics": [
+          {
+            "name": "FAST — Stroke Recognition",
+            "breakdown": "F=Face drooping, A=Arm weakness, S=Speech problems, T=Time to call 911"
+          },
+          {
+            "name": "VaD Risk Factors — HANDS",
+            "breakdown": "H=Hypertension (strongest), A=Atrial fibrillation, N=No smoking (cessation), D=Diabetes, S=Statins/hyperlipidemia"
+          },
+          {
+            "name": "VaD vs AD — SAGE",
+            "breakdown": "S=Stepwise (VaD) vs Smooth/gradual (AD), A=Attention/Executive first (VaD) vs Amnesia first (AD), G=Gait disturbance early (VaD) vs Gait late (AD), E=Evidence of stroke (VaD) vs No stroke (AD)"
+          }
+        ],
+        "patternRules": [
+          "Stepwise decline = vascular. Gradual decline = Alzheimer's.",
+          "Executive function FIRST in VaD; Memory FIRST in AD",
+          "Focal neurological signs + dementia = think vascular",
+          "Early gait disturbance + urge incontinence + executive dysfunction = subcortical VaD",
+          "AF + cognitive decline = anticoagulate (stroke prevention = dementia prevention)",
+          "Aggressive BP control = aggressive brain protection in VaD"
+        ]
+      }
+    },
+    {
+      "id": "safety_alerts",
+      "title": "Safety Alerts",
+      "content": [
+        "🚨 TIA IS A MEDICAL EMERGENCY: A transient ischemic attack carries a 10–15% risk of stroke within 90 days, with the highest risk in the first 48 hours. A patient who describes brief episode of one-sided weakness, speech problems, or vision loss that resolved — even 'just a few minutes' — requires URGENT evaluation today, not a next-week appointment.",
+        "🚨 FALL WITH HEAD INJURY IN ANTICOAGULATED PATIENT: Any fall with head contact in a patient taking warfarin, apixaban, rivaroxaban, or dabigatran requires urgent medical evaluation for intracranial hemorrhage even if the patient appears neurologically intact. Intracranial bleeding can evolve over hours after the initial injury. Document and escalate immediately.",
+        "🚨 GAIT DISTURBANCE IS AN EARLY AND SEVERE FALL RISK IN VASCULAR DEMENTIA: Unlike Alzheimer's (where gait is preserved until late), VaD causes magnetic gait and postural instability early. Every VaD patient requires formal fall risk assessment and physiotherapy referral regardless of apparent alertness and orientation.",
+        "🚨 AGGRESSIVE BP LOWERING IN ESTABLISHED VASCULAR DEMENTIA CAN WORSEN COGNITION: Cerebral autoregulation is impaired in VaD. Rapid drops in BP reduce cerebral perfusion. Target gradual reduction; avoid nighttime antihypertensive doses in patients with symptomatic orthostatic hypotension. Individualize BP targets in frail older adults.",
+        "🚨 WITHHOLDING ANTICOAGULATION BECAUSE 'THEY FALL' REQUIRES FORMAL RISK-BENEFIT ASSESSMENT: Simply having a diagnosis of dementia or a history of falls does not automatically override the stroke prevention benefit of anticoagulation in AF. A systematic tool (HAS-BLED for bleeding risk vs CHADS2-VASc for stroke risk) should guide the individualized decision — not blanket avoidance."
+      ]
+    },
+    {
+      "id": "exam_tips",
+      "title": "Exam Tips",
+      "content": [
+        "The single most testable VaD distinguishing feature: STEPWISE DECLINE. When a question describes cognitive decline that is 'sudden' or 'follows a stroke' — think vascular dementia. When the onset is 'gradual' or 'insidious' — think AD.",
+        "Executive function vs memory: VaD affects executive function (planning, organizing, problem-solving) disproportionately early. AD affects episodic memory (recall of recent events) first. When a question describes someone who 'remembers things fine but can't plan or organize' — think VaD.",
+        "FAST stroke recognition: this mnemonic appears on nearly every exam in multiple forms — NCLEX, CNPLE, and REx-PN. Know F=Face, A=Arm, S=Speech, T=Time. A question about a patient who suddenly cannot smile symmetrically, cannot lift both arms equally, or is speaking unclearly requires immediate call to 911.",
+        "Hypertension in VaD questions: hypertension is the STRONGEST MODIFIABLE risk factor for vascular dementia. When asked which intervention most reduces VaD risk or progression — BP management (especially to target < 130/80) is the primary answer.",
+        "Anticoagulation for AF: questions about whether to anticoagulate a patient with dementia and AF — the answer almost always supports anticoagulation (the stroke prevention benefit outweighs fall risk in most patients). DOAC is preferred over warfarin for most AF patients.",
+        "Post-stroke depression is systematically undertreated — exam questions may present a post-stroke patient who is withdrawn, not eating, and not participating in rehabilitation. Depression must be screened for and treated — SSRIs are first-line.",
+        "Gait disturbance timing: early gait problems (magnetic, shuffling gait) in an older patient with cognitive decline = VaD or LBD, NOT normal aging or early AD. This is a high-yield differentiating feature."
+      ]
+    },
+    {
+      "id": "references",
+      "title": "References",
+      "content": [
+        "Dichgans M, Leys D. Vascular cognitive impairment. Circ Res. 2017;120(3):573–591.",
+        "Livingston G, Huntley J, Sommerlad A, et al. Dementia prevention, intervention, and care: 2020 report of the Lancet Commission. Lancet. 2020;396(10248):413–446.",
+        "Powers WJ, Rabinstein AA, Ackerson T, et al. Guidelines for the Early Management of Patients With Acute Ischemic Stroke: 2019 Update. Stroke. 2019;50(12):e344–e418.",
+        "January CT, Wann LS, Calkins H, et al. 2019 AHA/ACC/HRS Focused Update of the 2014 AHA/ACC/HRS Guideline for the Management of Patients With Atrial Fibrillation. J Am Coll Cardiol. 2019;74(1):104–132.",
+        "Whelton PK, Carey RM, Aronow WS, et al. 2017 ACC/AHA/AAPA/ABC/ACPM/AGS/APhA/ASH/ASPC/NMA/PCNA Guideline for the Prevention, Detection, Evaluation, and Management of High Blood Pressure in Adults. J Am Coll Cardiol. 2018;71(19):e127–e248."
+      ]
+    },
+    {
+      "id": "key_takeaways",
+      "title": "Key Takeaways",
+      "content": [
+        "Vascular dementia is the second most common dementia; it is characterized by STEPWISE decline (discrete steps corresponding to vascular events) rather than the gradual decline of AD.",
+        "VaD disproportionately impairs EXECUTIVE FUNCTION (planning, organizing, decision-making) rather than episodic memory (which fails first in AD).",
+        "Gait disturbance, urge incontinence, and pseudobulbar affect appear EARLY in VaD — unlike AD where they occur in late stages.",
+        "Hypertension is the single strongest modifiable risk factor — aggressive BP management (target < 130/80) is the most important intervention for both prevention and slowing progression.",
+        "Atrial fibrillation: anticoagulation with DOACs reduces cardioembolic stroke risk by 60–70% — withholding anticoagulation requires formal risk-benefit assessment, not blanket avoidance due to fall risk.",
+        "Post-stroke depression affects 30–50% of VaD patients and is due to structural brain injury, not simply psychological reaction — requires active SSRI treatment.",
+        "Unlike Alzheimer's disease, vascular dementia progression can be significantly modified by aggressive vascular risk factor management — this is the most clinically important distinction.",
+        "FAST stroke recognition education is mandatory for every VaD patient and family: Face drooping, Arm weakness, Speech problems, Time to call 911."
+      ]
+    }
+  ],
+  "pretest": [
+    {
+      "id": "vad-pre-01",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A 74-year-old man has a history of three documented TIAs over 5 years. His family reports that after each TIA, 'he was never quite the same as before.' His MoCA shows difficulty with clock drawing, Trails B, and digit span, but his delayed recall is near-normal. He has a history of hypertension (currently uncontrolled) and type 2 diabetes. Which type of dementia does this presentation MOST suggest?",
+      "options": {
+        "A": "Alzheimer's disease",
+        "B": "Lewy body dementia",
+        "C": "Frontotemporal dementia",
+        "D": "Vascular dementia"
+      },
+      "correctAnswer": "D",
+      "rationale": "Classic vascular dementia profile: (1) stepwise deterioration following each TIA ('never quite the same after each event'); (2) cognitive pattern showing EXECUTIVE FUNCTION impairment (Trails B, clock drawing, digit span) with RELATIVELY PRESERVED RECALL — the opposite of AD; (3) vascular risk factor burden (uncontrolled hypertension, diabetes); (4) three documented TIA events. This presentation is pathognomonic for vascular dementia.",
+      "distractorRationales": {
+        "A": "AD typically has insidious gradual onset, episodic memory failing first (recall impaired), no stepwise pattern, and normal neurological exam.",
+        "B": "LBD would present with fluctuating cognition, visual hallucinations, parkinsonism, and RBD — none of these are described.",
+        "C": "Frontotemporal dementia would show behavioral/personality changes or language impairment before executive dysfunction becomes the sole cognitive deficit; no TIA history."
+      },
+      "hint": "Stepwise + post-TIA + executive dysfunction + vascular risk factors = ?",
+      "clinicalPearl": "The MoCA executive function items (Trails B, clock drawing, letter fluency) are disproportionately impaired in VaD while delayed recall is relatively spared — the opposite pattern from AD.",
+      "examStrategy": "VaD pattern: stepwise decline + executive dysfunction + vascular risk factors. AD pattern: insidious + memory first. Know both — they are the highest-yield differentiating features.",
+      "keyTakeaway": "Stepwise cognitive decline following vascular events + executive dysfunction + vascular risk factors = vascular dementia."
+    },
+    {
+      "id": "vad-pre-02",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 78-year-old woman with recently diagnosed vascular dementia has atrial fibrillation. Her daughter asks the nurse, 'Should my mother be on a blood thinner if she has dementia and falls sometimes?' What is the MOST evidence-based response?",
+      "options": {
+        "A": "'Patients with dementia should never be anticoagulated — the bleeding risk is too high'",
+        "B": "'Anticoagulation is important to prevent strokes in AF; a structured risk-benefit assessment weighing stroke risk (CHADS2-VASc) against bleeding risk is needed — dementia alone is not a reason to withhold it'",
+        "C": "'Your mother's dementia is already caused by AF, so anticoagulation won't help now'",
+        "D": "'Aspirin is sufficient blood thinning for AF in older adults with dementia'"
+      },
+      "correctAnswer": "B",
+      "rationale": "Evidence-based anticoagulation decision-making in AF: (1) AF increases ischemic stroke risk 5× and contributes to further dementia progression; (2) anticoagulation (DOACs) reduces this risk by 60–70%; (3) dementia itself does not increase hemorrhagic stroke or major bleeding risk; (4) a history of some falls does not automatically outweigh stroke prevention benefit — the annualized stroke risk from AF (often 5–10% per year) must be compared to hemorrhagic risk; (5) formal tools (CHADS2-VASc for stroke risk, HAS-BLED for bleeding risk) guide individualized decision. Blanket withholding of anticoagulation based on dementia diagnosis is not evidence-based.",
+      "distractorRationales": {
+        "A": "Dementia is not a contraindication to anticoagulation. This is a common but evidence-deficient clinical practice.",
+        "C": "While past strokes may have contributed to VaD, AF continues to carry ongoing stroke risk — prevention of further events is still clinically important.",
+        "D": "Aspirin is NOT an adequate substitute for anticoagulation in AF — clinical trials (BAFTA, AVERROES) show anticoagulants are significantly superior and aspirin provides minimal protection against cardioembolic stroke."
+      },
+      "hint": "Anticoagulation decision: weigh stroke risk against bleeding risk using validated tools — dementia alone is not a veto.",
+      "clinicalPearl": "The most common clinical error in AF management in dementia: withholding anticoagulation because 'they fall' without formal risk-benefit quantification. One fall per year carries lower injury probability than 5–10% annual stroke risk in high CHADS2-VASc score patients.",
+      "examStrategy": "Anticoagulation in AF with dementia questions: the answer supports evidence-based risk-benefit assessment, not blanket withholding. DOAC preferred over warfarin.",
+      "keyTakeaway": "Dementia alone is not a contraindication to anticoagulation in AF — structured risk-benefit assessment using validated tools guides the individualized decision."
+    },
+    {
+      "id": "vad-pre-03",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is assessing a 71-year-old man with moderate vascular dementia who seems depressed. He scores 9/15 on the GDS-15, is not eating, stays in his room, and says 'What's the point of anything anymore?' His wife says 'He cried for an hour yesterday when we watched a sad commercial on TV.' Which of the following statements BEST explains his presentation?",
+      "options": {
+        "A": "Depression and pseudobulbar affect are independent phenomena that can both co-occur in vascular dementia, and both require assessment and management",
+        "B": "Crying at a commercial confirms clinical depression and antidepressant therapy should be started immediately",
+        "C": "The crying at a commercial indicates he has no real depression — it is only pseudobulbar affect",
+        "D": "GDS-15 is not valid in patients with vascular dementia and should not be used"
+      },
+      "correctAnswer": "A",
+      "rationale": "This patient shows BOTH: (1) Clinical depression — GDS-15 of 9/15 (positive screen ≥5), anorexia, social withdrawal, hopelessness; and (2) Pseudobulbar affect (PBA) — excessive, disproportionate emotional responses (crying for an hour over a TV commercial) caused by structural disruption of corticobulbar tracts controlling emotional expression. These are distinct phenomena with different treatments: depression responds to SSRIs/psychotherapy; PBA responds to dextromethorphan/quinidine (Nuedexta) or also SSRIs at lower doses. Both can co-occur and both require treatment.",
+      "distractorRationales": {
+        "B": "Crying at a commercial is PBA, not direct evidence of depression — though both are present. Isolating one sign is insufficient clinical reasoning.",
+        "C": "PBA and depression can and frequently do co-exist in VaD. The GDS-15 score of 9 and the anorexia and withdrawal are independent evidence of depression.",
+        "D": "GDS-15 is validated for use in mild-moderate dementia including vascular dementia."
+      },
+      "hint": "Depression and pseudobulbar affect are different conditions that can coexist in VaD — distinguish and treat both.",
+      "clinicalPearl": "Pseudobulbar affect (PBA): the key feature is disproportionality — the emotional response is far out of proportion to the trigger. Crying for an hour at a commercial is PBA; crying when discussing a loss is grief.",
+      "examStrategy": "VaD emotional symptoms: learn to distinguish depression (consistent low mood, anhedonia, GDS score) from pseudobulbar affect (sudden, disproportionate, uncontrollable emotional outbursts). Both can be present simultaneously.",
+      "keyTakeaway": "VaD: depression (SSRIs) and pseudobulbar affect (Nuedexta or SSRIs) are distinct conditions that co-occur in 30–50% of patients — screen and treat both."
+    },
+    {
+      "id": "vad-pre-04",
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is developing a secondary prevention care plan for a 68-year-old woman with mild vascular cognitive impairment following a left lacunar infarct. Her vascular risk factors include hypertension (BP 158/96 today), hyperlipidemia, and she smokes 1 pack/day. She is currently not anticoagulated. ECG shows normal sinus rhythm. Which of the following interventions are evidence-based priorities? Select all that apply.",
+      "options": {
+        "A": "Initiate or optimize antihypertensive therapy to target BP < 130/80",
+        "B": "Prescribe anticoagulation therapy (warfarin or DOAC) for non-cardioembolic stroke prevention",
+        "C": "Counsel on smoking cessation; offer NRT, behavioral support, and pharmacotherapy",
+        "D": "Optimize statin therapy to target LDL-C < 1.8 mmol/L (< 70 mg/dL)",
+        "E": "Initiate antiplatelet therapy (aspirin 81 mg or clopidogrel 75 mg daily)",
+        "F": "Recommend aerobic exercise 150 minutes/week as both vascular risk reduction and potential cognitive benefit"
+      },
+      "correctAnswer": "A, C, D, E, F",
+      "rationale": "(A) BP control to < 130/80 is the highest-priority secondary prevention intervention. (C) Smoking cessation is immediately protective against further vascular events. (D) Statin therapy reduces recurrent stroke risk and addresses hyperlipidemia. (E) Antiplatelet therapy (aspirin or clopidogrel) is standard for non-cardioembolic ischemic stroke/TIA secondary prevention. (F) Regular aerobic exercise reduces vascular risk and has evidence for cognitive benefit. Anticoagulation (B) is indicated for CARDIOEMBOLIC stroke prevention (i.e., atrial fibrillation) — NOT for small vessel lacunar infarction. Anticoagulation for lacunar stroke has no benefit and increases hemorrhagic risk.",
+      "distractorRationales": {
+        "B": "Anticoagulation is NOT indicated for small vessel lacunar infarction in normal sinus rhythm. It is reserved for cardioembolic sources (AF, mechanical heart valves, etc.). Using anticoagulation here increases bleeding risk without benefit."
+      },
+      "hint": "Lacunar stroke + normal sinus rhythm = antiplatelet, not anticoagulation. Anticoagulate only for cardioembolic sources.",
+      "clinicalPearl": "Antiplatelet vs anticoagulation decision: always determine the stroke mechanism first. Lacunar (small vessel) = antiplatelet. Cardioembolic (AF) = anticoagulate.",
+      "examStrategy": "Stroke prevention SATA: antiplatelet for non-cardioembolic; anticoagulation for AF. Anticoagulation for lacunar stroke = incorrect. BP + statin + exercise + smoking cessation = always correct.",
+      "keyTakeaway": "Lacunar stroke secondary prevention: antiplatelet (not anticoagulant) + BP control + statin + smoking cessation + exercise."
+    },
+    {
+      "id": "vad-pre-05",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 79-year-old man with moderate vascular dementia lives at home with his son. His son reports: 'Dad's gait has gotten much worse over the past few months — he shuffles, barely lifts his feet, and we have had three near-falls.' His MoCA is 19/30. His walking pattern is observed to be slow, narrow-based, with very small shuffling steps. What is the MOST appropriate nursing action?",
+      "options": {
+        "A": "Attribute the gait changes to normal aging and continue monitoring",
+        "B": "Refer to physiotherapy for formal gait and balance assessment, assistive device fitting, and home safety evaluation",
+        "C": "Initiate a fall protocol with bilateral wrist restraints when the patient is standing",
+        "D": "Prescribe levodopa for presumed Parkinson's disease contributing to the gait changes"
+      },
+      "correctAnswer": "B",
+      "rationale": "Gait disturbance is a characteristic EARLY feature of vascular dementia (subcortical white matter disease disrupts frontal motor programming — producing 'marche à petit pas': small steps, shuffling, feet barely lifting — also called magnetic gait or frontal gait disorder). This gait pattern is NOT normal aging and is NOT benign — it is a major fall risk. Physiotherapy referral for formal assessment and appropriate assistive device fitting (typically a rollator walker for this pattern) is the evidence-based intervention. Gait training reduces fall risk. Restraints are contraindicated. Prescribing levodopa requires physician diagnosis and prescription — nurses do not prescribe.",
+      "distractorRationales": {
+        "A": "Magnetic gait with near-falls is NOT normal aging — it is a VaD symptom requiring intervention.",
+        "C": "Physical restraints are contraindicated for gait instability — they cause injury, restrict rehabilitation, and do not prevent falls.",
+        "D": "Prescribing medication is outside nursing scope of practice. Additionally, magnetic gait from VaD does not typically respond to levodopa (unlike PD parkinsonism)."
+      },
+      "hint": "Magnetic gait in VaD = early, prominent, major fall risk. Physiotherapy is the first intervention.",
+      "clinicalPearl": "The frontal gait disorder of VaD ('magnetic gait' or 'marche à petit pas') is pathologically different from Parkinsonian gait — it responds to gait training and assistive devices but NOT to levodopa.",
+      "examStrategy": "Gait disturbance questions in VaD: the nursing action is physiotherapy referral + fall prevention. Never restraints. Medication prescription is never a nursing action.",
+      "keyTakeaway": "Magnetic gait in VaD is an early, major fall risk feature — physiotherapy referral for gait training and assistive device is the evidence-based nursing action."
+    },
+    {
+      "id": "vad-pre-06",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "Which of the following best describes the typical course of vascular dementia?",
+      "options": {
+        "A": "Gradual, insidious progressive decline over many years",
+        "B": "Fluctuating cognition with dramatic variation from hour to hour",
+        "C": "Stepwise deterioration with discrete episodes of decline followed by periods of relative stability",
+        "D": "Rapid decline over weeks to months"
+      },
+      "correctAnswer": "C",
+      "rationale": "The hallmark course of vascular dementia is STEPWISE DECLINE: periods of relatively stable cognitive function interrupted by discrete steps down in function corresponding to new vascular events (strokes or TIAs). Between vascular events, the patient may be stable or even show minor improvement (cerebral plasticity and rehabilitation). This is in direct contrast to AD (gradual continuous decline) and LBD (fluctuating within days), and is not a rapid decline as in CJD.",
+      "distractorRationales": {
+        "A": "Gradual, insidious progression describes Alzheimer's disease.",
+        "B": "Dramatic hour-to-hour fluctuation is the hallmark of Lewy body dementia (DLB).",
+        "D": "Rapid decline over weeks to months suggests CJD (Creutzfeldt-Jakob disease) or other rapidly progressive encephalopathies."
+      },
+      "hint": "VaD = stairs down (discrete steps). AD = slope down (gradual). LBD = elevator (up and down).",
+      "clinicalPearl": "The stepwise course of VaD means that aggressive risk factor management between events literally can flatten the staircase — fewer strokes/TIAs = fewer steps down.",
+      "examStrategy": "Course of dementia questions: VaD = stepwise. AD = gradual. LBD = fluctuating. Know these three patterns — they appear on virtually every dementia exam.",
+      "keyTakeaway": "VaD course: stepwise deterioration with periods of stability — each step corresponds to a vascular event."
+    },
+    {
+      "id": "vad-pre-07",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is teaching a group of older adults about stroke prevention. Which risk factor should be identified as the SINGLE STRONGEST modifiable risk factor for vascular dementia and stroke?",
+      "options": {
+        "A": "High body mass index",
+        "B": "Sedentary lifestyle",
+        "C": "Hypertension",
+        "D": "Hyperlipidemia"
+      },
+      "correctAnswer": "C",
+      "rationale": "Hypertension is the single strongest modifiable risk factor for both stroke and vascular dementia. Chronic hypertension causes lipohyalinosis (pathological thickening and damage) of small cerebral arteries, leading to white matter disease, lacunar infarcts, and progressive cognitive decline. Control of BP to < 130/80 mmHg reduces stroke risk by approximately 40% and is the most impactful preventive intervention for vascular dementia. Obesity, sedentary lifestyle, and hyperlipidemia are all significant modifiable risk factors, but hypertension is ranked highest in epidemiological studies.",
+      "distractorRationales": {
+        "A": "Obesity is a modifiable risk factor but does not carry the magnitude of cerebrovascular risk as hypertension.",
+        "B": "Sedentary lifestyle is modifiable and contributes significantly to vascular risk, but is not the single strongest factor.",
+        "D": "Hyperlipidemia is an important modifiable risk factor, but its effect size is smaller than hypertension for cerebrovascular disease specifically."
+      },
+      "hint": "Which one risk factor affects every blood vessel in the body every second of every day?",
+      "clinicalPearl": "Hypertension doubles the risk of dementia. For every 10 mmHg sustained increase in systolic BP, dementia risk increases by approximately 20%.",
+      "examStrategy": "Risk factor ranking questions: hypertension = #1 for vascular dementia. AF = #1 cardioembolic source. Hypertension is the most testable risk factor association across all gerontological and cardiovascular exams.",
+      "keyTakeaway": "Hypertension is the single strongest modifiable risk factor for vascular dementia — target BP < 130/80."
+    },
+    {
+      "id": "vad-pre-08",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 72-year-old woman with vascular dementia is admitted to a rehabilitation unit following a right MCA ischemic stroke 1 week ago. The rehabilitation nurse notes she is not participating in therapy, has poor oral intake, and when directly asked says 'Everything feels hopeless — why am I even here?' She cries several times daily. Her PHQ-9 score is 17/27. Which nursing action is MOST appropriate?",
+      "options": {
+        "A": "Reassure her that feelings of hopelessness are expected after stroke and will resolve on their own",
+        "B": "Recognize this as post-stroke depression requiring active treatment; notify the physician for antidepressant consideration and initiate psychosocial nursing interventions",
+        "C": "Attribute the crying to pseudobulbar affect and provide patient education about the neurological basis",
+        "D": "Limit stimulation and activity to reduce emotional distress; discontinue rehabilitation until mood improves"
+      },
+      "correctAnswer": "B",
+      "rationale": "Post-stroke depression (PSD) affects 30–50% of stroke patients. PHQ-9 of 17/27 = moderately severe depression (PHQ-9 15–19 = moderately severe). PSD is caused by BOTH psychological response (loss of function, role changes) AND structural brain injury (ischemic damage to frontal-limbic circuits). It does NOT reliably resolve without treatment. Active management includes: (1) SSRI initiation (sertraline or escitalopram) — proven effective in PSD; (2) psychotherapy (CBT or IPT when cognitively feasible); (3) rehabilitation participation (has antidepressant effect); (4) social support. Withholding rehabilitation worsens outcomes — exercise and purposeful activity are therapeutic. Simply waiting for spontaneous resolution is inappropriate with a PHQ-9 of 17.",
+      "distractorRationales": {
+        "A": "PSD does not reliably resolve spontaneously; waiting is inappropriate when PHQ-9 indicates moderately severe depression.",
+        "C": "While PBA may coexist, a PHQ-9 of 17 with consistent hopelessness and poor function is clinical depression requiring treatment — it cannot be explained as PBA alone.",
+        "D": "Limiting rehabilitation is contraindicated — exercise and purposeful activity are THERAPEUTIC for depression and improve recovery outcomes."
+      },
+      "hint": "PHQ-9 ≥ 15 = moderately severe depression. Post-stroke depression requires active treatment — not waiting.",
+      "clinicalPearl": "Untreated post-stroke depression is associated with worse functional recovery, higher mortality, reduced rehabilitation participation, and poorer quality of life. SSRI treatment improves rehabilitation outcomes even beyond mood effects.",
+      "examStrategy": "Post-stroke depression questions: PHQ-9 score + hopelessness + poor rehabilitation participation = active treatment required. Never 'wait and see' with PHQ-9 ≥ 15.",
+      "keyTakeaway": "Post-stroke depression affects 30–50% of stroke patients; PHQ-9 ≥ 15 = moderately severe; requires SSRI + psychosocial intervention + continued rehabilitation."
+    },
+    {
+      "id": "vad-pre-09",
+      "type": "SATA",
+      "difficulty": "hard",
+      "stem": "A nurse is creating a teaching plan for a 77-year-old man with moderate vascular dementia, his wife, and their adult daughter. Which content is MOST important to include? Select all that apply.",
+      "options": {
+        "A": "FAST stroke recognition (Face, Arm, Speech, Time to call 911) and TIA symptom recognition",
+        "B": "Importance of daily blood pressure monitoring and antihypertensive medication adherence",
+        "C": "Explanation that vascular dementia always progresses at the same rate as Alzheimer's disease",
+        "D": "Executive dysfunction: the patient may struggle with planning and organization despite appearing alert",
+        "E": "Fall prevention strategies addressing gait disturbance and orthostatic hypotension",
+        "F": "Aggressive risk factor management can slow or prevent further cognitive decline in VaD"
+      },
+      "correctAnswer": "A, B, D, E, F",
+      "rationale": "(A) FAST is essential — every new TIA or stroke = a potential step-down. Family must recognize and respond urgently. (B) BP adherence is the highest priority secondary prevention intervention. (C) is incorrect — VaD has a stepwise course that is potentially modifiable, unlike AD's gradual progression. (D) Executive dysfunction education prevents misinterpretation as stubbornness or non-compliance. (E) Fall prevention is paramount given early gait disturbance. (F) This crucial message distinguishes VaD from AD and motivates family engagement in prevention.",
+      "distractorRationales": {
+        "C": "VaD does NOT progress at the same rate as AD. It has a different pattern (stepwise vs. gradual) and can be modified by risk factor management — this is a key and hopeful distinction for families."
+      },
+      "hint": "VaD family teaching priorities: FAST, BP, executive function explanation, falls, and the modifiable nature of VaD progression.",
+      "clinicalPearl": "Telling families that VaD progression can be influenced by their actions (BP control, medication adherence, lifestyle) is both accurate and motivating — it contrasts powerfully with the helplessness families feel with AD.",
+      "examStrategy": "VaD family teaching SATA: FAST + BP adherence + executive dysfunction education + fall prevention + risk factor modifiability = all correct. Same rate as AD = incorrect.",
+      "keyTakeaway": "VaD family teaching: FAST recognition, BP adherence, executive dysfunction explanation, fall prevention, and aggressive risk factor management can slow progression."
+    },
+    {
+      "id": "vad-pre-10",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is reviewing brain MRI reports for older patients with cognitive impairment. Which MRI finding is MOST consistent with subcortical vascular dementia?",
+      "options": {
+        "A": "Hippocampal and entorhinal cortex atrophy bilaterally",
+        "B": "Diffuse cortical atrophy affecting all lobes with ventricular enlargement",
+        "C": "Multiple small lacunar infarcts and extensive white matter hyperintensities on T2/FLAIR sequences",
+        "D": "Large focal atrophy of the frontal and temporal lobes bilaterally"
+      },
+      "correctAnswer": "C",
+      "rationale": "Subcortical vascular dementia (small vessel disease) produces characteristic MRI findings: (1) lacunar infarcts — small (5–20 mm) T1 hypointense / T2 hyperintense lesions in basal ganglia, thalamus, internal capsule, and periventricular white matter; (2) white matter hyperintensities (leukoaraiosis) — T2/FLAIR hyperintense periventricular and deep white matter changes reflecting chronic small vessel ischemia. These findings directly correspond to the executive dysfunction and gait disturbance of subcortical VaD. Hippocampal atrophy is AD's signature MRI finding. Diffuse cortical atrophy is seen in severe AD. Frontotemporal atrophy characterizes FTD.",
+      "distractorRationales": {
+        "A": "Hippocampal and entorhinal cortex atrophy = Alzheimer's disease signature on MRI.",
+        "B": "Diffuse cortical atrophy = severe Alzheimer's disease MRI pattern.",
+        "D": "Frontotemporal lobar atrophy = frontotemporal dementia (FTD) MRI pattern."
+      },
+      "hint": "VaD small vessel disease = lacunar infarcts + white matter changes on T2/FLAIR.",
+      "clinicalPearl": "White matter hyperintensities on MRI can be present in normal aging (mild periventricular changes are common after age 65), but EXTENSIVE white matter disease correlating with cognitive and gait symptoms is pathological VaD.",
+      "examStrategy": "MRI pattern recognition: VaD = lacunar infarcts + white matter hyperintensities. AD = hippocampal atrophy. FTD = frontotemporal atrophy. Know these associations.",
+      "keyTakeaway": "Subcortical VaD MRI: lacunar infarcts + T2/FLAIR white matter hyperintensities in deep white matter, basal ganglia, thalamus."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "vad-post-01",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "Which pathological mechanism MOST directly causes the white matter changes seen in subcortical vascular dementia?",
+      "options": {
+        "A": "Accumulation of beta-amyloid plaques in white matter axons",
+        "B": "Lipohyalinosis of small deep perforating arteries from chronic hypertension causing ischemic white matter injury",
+        "C": "Loss of cholinergic neurons in the nucleus basalis of Meynert",
+        "D": "Accumulation of alpha-synuclein in white matter oligodendrocytes"
+      },
+      "correctAnswer": "B",
+      "rationale": "Subcortical VaD white matter disease is caused by chronic hypertension (and diabetes) causing lipohyalinosis — pathological thickening and hyaline deposition in the walls of small deep perforating arteries. This narrowing reduces blood flow to the periventricular and deep white matter, causing ischemic demyelination and axonal injury seen as T2/FLAIR hyperintensities. Beta-amyloid is AD pathology; cholinergic neuron loss is the AChEI target in AD; alpha-synuclein is LBD pathology.",
+      "distractorRationales": {
+        "A": "Beta-amyloid affects synaptic function and forms plaques — not the primary cause of white matter ischemia.",
+        "C": "Cholinergic neuron loss causes the memory and attention deficits of AD — not white matter disease.",
+        "D": "Alpha-synuclein is the LBD/PD neuropathological protein — not involved in VaD white matter injury."
+      },
+      "hint": "Chronic hypertension damages small vessel walls → small vessel disease → white matter ischemia.",
+      "clinicalPearl": "Lipohyalinosis is the structural link between hypertension and white matter disease — every year of uncontrolled hypertension silently damages cerebrovascular integrity.",
+      "examStrategy": "Pathophysiology question: hypertension → lipohyalinosis → small vessel disease → white matter ischemia → subcortical VaD. Know this chain.",
+      "keyTakeaway": "Chronic hypertension causes lipohyalinosis of small cerebral arteries → ischemic white matter damage → subcortical VaD."
+    },
+    {
+      "id": "vad-post-02",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 76-year-old woman with known vascular dementia is being discharged from hospital after a TIA. Her anticoagulation medication is apixaban 5 mg PO twice daily for atrial fibrillation. Which instruction is MOST important to include in her discharge teaching?",
+      "options": {
+        "A": "Take apixaban once daily in the morning with breakfast",
+        "B": "Apixaban may be stopped if she has a fall without injury",
+        "C": "Take apixaban 5 mg twice daily at the same times each day; never stop without physician guidance; report unusual bleeding or any fall with head injury immediately",
+        "D": "Aspirin can be substituted for apixaban if she runs out of medication"
+      },
+      "correctAnswer": "C",
+      "rationale": "Correct apixaban discharge teaching: (1) Twice daily dosing at consistent times — adherence is critical for continuous stroke protection; (2) Never stop without physician guidance — abrupt discontinuation dramatically increases short-term stroke risk; (3) Report bleeding signs (black/tarry stools, blood in urine, unusual bruising, prolonged bleeding); (4) Fall with head injury — report IMMEDIATELY even if feeling fine (ICH can develop slowly). Apixaban is taken TWICE daily (not once). It should NOT be stopped without medical guidance after falls without injury. Aspirin is NOT equivalent to apixaban for cardioembolic stroke prevention.",
+      "distractorRationales": {
+        "A": "Apixaban for AF is dosed twice daily — once daily is incorrect and would result in sub-therapeutic anticoagulation.",
+        "B": "Stopping anticoagulation after a fall without injury is inappropriate — the stroke risk immediately rebounds. Any change requires physician assessment.",
+        "D": "Aspirin is not an adequate substitute for anticoagulation in AF — it does not prevent cardioembolic strokes effectively."
+      },
+      "hint": "Apixaban teaching: twice daily, consistent times, never stop without MD guidance, report bleeding and head injury.",
+      "clinicalPearl": "DOAC adherence education is one of the highest-impact nursing discharge teaching interventions in VaD/AF — missing doses creates daily windows of stroke vulnerability.",
+      "examStrategy": "DOAC discharge teaching: twice daily dosing, never self-discontinue, bleeding signs, head injury reporting. These four elements appear repeatedly on NCLEX medication teaching questions.",
+      "keyTakeaway": "Apixaban teaching: twice daily at consistent times, never stop without MD guidance, report bleeding and head injury."
+    },
+    {
+      "id": "vad-post-03",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 73-year-old man with moderate vascular dementia has been referred to a physiotherapist because of 'worsening walking.' The physiotherapist notes he walks with very small shuffling steps, barely clears the ground, and takes small rapid steps trying to stop (festination). What does this gait pattern MOST likely indicate?",
+      "options": {
+        "A": "Age-related deconditioning requiring strengthening exercises only",
+        "B": "Frontal gait disorder (marche à petit pas) characteristic of subcortical vascular dementia",
+        "C": "Parkinsonism consistent with concurrent Lewy body dementia",
+        "D": "Peripheral neuropathy causing sensory ataxia"
+      },
+      "correctAnswer": "B",
+      "rationale": "The described gait — small shuffling steps, minimal floor clearance, festination — is characteristic of frontal gait disorder (marche à petit pas, French for 'march of small steps'). This is a classic feature of subcortical vascular dementia caused by disruption of frontal-subcortical white matter circuits that control motor programming and gait initiation. Key differentiating features from Parkinsonian gait: (1) in VaD frontal gait, arm swing may be relatively preserved (unlike PD where arm swing is reduced); (2) VaD gait does not significantly improve with levodopa; (3) VaD gait often coexists with urinary urgency (frontal lobe release sign).",
+      "distractorRationales": {
+        "A": "This specific gait pattern is not age-related deconditioning — it has a specific neurological basis in subcortical pathology.",
+        "C": "While PD/LBD can produce similar-appearing gait, this patient has a known VaD diagnosis and the gait pattern is characteristic of VaD frontal gait disorder.",
+        "D": "Sensory ataxia produces a wide-based, stamping gait due to loss of proprioception — different from the narrow-based, shuffling frontal gait."
+      },
+      "hint": "Shuffling small steps + minimal clearance + festination in VaD = frontal gait disorder.",
+      "clinicalPearl": "The frontal gait disorder of VaD responds to physiotherapy gait training and appropriate assistive devices (rollator walker) — not to levodopa as in PD.",
+      "examStrategy": "Gait pattern recognition: VaD = frontal gait (shuffling, small steps); PD/LBD = Parkinsonian gait (shuffling, reduced arm swing, responds to levodopa); sensory ataxia = wide-based, stamping, worsens with eyes closed.",
+      "keyTakeaway": "Frontal gait disorder (marche à petit pas) in VaD: shuffling, small steps, festination — physiotherapy + assistive device, not levodopa."
+    },
+    {
+      "id": "vad-post-04",
+      "type": "SATA",
+      "difficulty": "hard",
+      "stem": "A nurse is reviewing the medical history of a 71-year-old woman with newly diagnosed vascular cognitive impairment (mild VCI) with no current dementia. Which of the following findings represent MODIFIABLE risk factors that should be actively addressed to prevent progression to vascular dementia? Select all that apply.",
+      "options": {
+        "A": "Atrial fibrillation — currently not anticoagulated",
+        "B": "Female sex",
+        "C": "Hypertension (BP 162/94 on two readings)",
+        "D": "HbA1c 9.2% (poorly controlled type 2 diabetes)",
+        "E": "Age 71",
+        "F": "Current smoker, 30 pack-year history"
+      },
+      "correctAnswer": "A, C, D, F",
+      "rationale": "(A) AF is a major cardioembolic stroke risk that is modified by anticoagulation. Not being anticoagulated despite AF is an actionable risk. (C) Uncontrolled hypertension (BP 162/94) is the highest-priority modifiable risk — aggressive treatment required. (D) HbA1c 9.2% = poorly controlled diabetes — a major driver of microvascular brain injury; optimization reduces progression risk. (F) Active smoking accelerates atherosclerosis and is modifiable with cessation support. Female sex (B) and age 71 (E) are NON-MODIFIABLE risk factors.",
+      "distractorRationales": {
+        "B": "Female sex is a non-modifiable risk factor — cannot be changed.",
+        "E": "Age is the strongest non-modifiable risk factor for dementia — cannot be changed."
+      },
+      "hint": "Modifiable = something you can actively treat or change. Sex and age are fixed.",
+      "clinicalPearl": "Mild VCI is the highest-yield window for secondary prevention — this is the stage where aggressive intervention can prevent progression to dementia. The modifiable risk factors must ALL be addressed simultaneously.",
+      "examStrategy": "Modifiable vs non-modifiable VaD risk factors: AF, HTN, diabetes, smoking, hyperlipidemia, obesity = modifiable. Age, sex, genetics = non-modifiable.",
+      "keyTakeaway": "Modifiable VaD risk factors: HTN, AF (anticoagulate), diabetes, smoking, hyperlipidemia, obesity. Age and sex are non-modifiable."
+    },
+    {
+      "id": "vad-post-05",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 69-year-old man presents to a primary care clinic with his wife, who reports: 'He's been having more trouble managing our finances over the past year. He can't balance the checkbook anymore and gets confused with the bills. But his memory for events seems okay — he can tell you what we did last weekend.' Neuropsychological testing shows impaired executive function, processing speed, and working memory with relatively preserved episodic memory. MoCA is 22/30 (losing points on Trails B, clock drawing, digit span). He has poorly controlled hypertension and had a TIA 18 months ago. What is the MOST likely diagnosis?",
+      "options": {
+        "A": "Early Alzheimer's disease with predominant memory impairment",
+        "B": "Frontotemporal dementia with behavioral variant",
+        "C": "Mild VCI (vascular cognitive impairment) due to subcortical small vessel disease",
+        "D": "Normal aging with anxiety about cognitive function"
+      },
+      "correctAnswer": "C",
+      "rationale": "Classic mild VCI profile: (1) executive function disproportionately impaired (finances, bill management) while episodic memory is relatively preserved (can recall last weekend); (2) neuropsychological pattern: executive, processing speed, working memory impaired > episodic recall; (3) MoCA 22 (below 26) with specific executive domain failures (Trails B, clock drawing, digit span); (4) significant vascular risk factor burden (poorly controlled HTN) + prior TIA; (5) functional impact limited to complex IADLs (finances) — IADLs requiring executive function affected before memory-dependent IADLs. Does NOT meet criteria for major VCI (dementia) as overall functional independence is preserved.",
+      "distractorRationales": {
+        "A": "AD presents with episodic memory impairment first — this patient's memory is relatively preserved, which argues against AD as the primary diagnosis.",
+        "B": "FTD behavioral variant presents with personality/behavioral changes before executive dysfunction — no behavioral symptoms are described here.",
+        "D": "MoCA of 22 with specific domain failures and vascular risk factors represents genuine cognitive impairment, not normal aging or anxiety."
+      },
+      "hint": "Executive function first, memory spared + vascular risk factors + TIA history = VCI pattern.",
+      "clinicalPearl": "Mild VCI is the pre-dementia stage with the greatest opportunity for secondary prevention. Every patient should receive aggressive risk factor management at this stage.",
+      "examStrategy": "Mild VCI vs early AD: executive function first (VCI) vs memory first (AD). Vascular risk factors + TIA = VCI. Insidious memory complaints = AD.",
+      "keyTakeaway": "Mild VCI: executive dysfunction first, memory preserved + vascular risk factors = VCI pattern requiring aggressive secondary prevention."
+    },
+    {
+      "id": "vad-post-06",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse observes that an 81-year-old woman with vascular dementia suddenly begins crying uncontrollably while watching a mildly sad movie clip. The crying lasts several minutes, out of proportion to the stimulus, then stops abruptly. When asked how she is feeling she says 'I'm fine, I don't even know why I was crying.' Which term BEST describes this phenomenon?",
+      "options": {
+        "A": "Major depressive episode",
+        "B": "Grief reaction",
+        "C": "Pseudobulbar affect (pathological laughing and crying)",
+        "D": "Conversion disorder"
+      },
+      "correctAnswer": "C",
+      "rationale": "Pseudobulbar affect (PBA), also called pathological laughing and crying or emotionalism, is characterized by: (1) sudden, uncontrollable episodes of crying or laughing; (2) disproportionate to the emotional stimulus; (3) the patient often has little control and may not feel the underlying emotion; (4) abrupt onset and offset; (5) caused by structural disruption of corticobulbar pathways that modulate emotional expression. This is a neurological symptom of VaD (and ALS, MS, TBI, etc.) — NOT a psychiatric diagnosis or voluntary behavior. Treatment: dextromethorphan/quinidine (Nuedexta, FDA-approved); SSRIs at lower doses also have evidence.",
+      "distractorRationales": {
+        "A": "Major depression is characterized by persistent pervasive mood symptoms over weeks — not discrete uncontrollable crying episodes that resolve abruptly and are out of proportion.",
+        "B": "Grief reactions are purposeful emotional responses to recognized loss — this episode was disproportionate to a mild movie stimulus.",
+        "D": "Conversion disorder involves neurological symptoms (paralysis, blindness) from psychological stress — not the neurological pattern of PBA."
+      },
+      "hint": "Sudden, uncontrollable, disproportionate crying that resolves abruptly + neurological disease = PBA.",
+      "clinicalPearl": "PBA is frequently misdiagnosed as depression — leading to inappropriate antidepressant prescribing at higher doses than needed. The key clinical feature is the episodic, disproportionate, and ego-dystonic (patient doesn't feel the emotion) nature of PBA.",
+      "examStrategy": "PBA vs depression: PBA = sudden, brief, disproportionate, patient may not feel the emotion; depression = persistent, proportionate to circumstances, consistent low mood. Know this distinction.",
+      "keyTakeaway": "PBA: sudden uncontrollable disproportionate crying/laughing, brief episodes, neurological origin — treat with Nuedexta or SSRIs; not major depression."
+    },
+    {
+      "id": "vad-post-07",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "Which cognitive domain is MOST severely and EARLIEST affected in vascular dementia?",
+      "options": {
+        "A": "Episodic memory (recall of recent events)",
+        "B": "Executive function (planning, organizing, problem-solving)",
+        "C": "Language (naming, word finding)",
+        "D": "Visuospatial function (copying figures, spatial navigation)"
+      },
+      "correctAnswer": "B",
+      "rationale": "Executive function is the cognitive domain most prominently and earliest affected in subcortical vascular dementia. This reflects the specific anatomical damage in VaD — subcortical white matter disease disrupts frontal-subcortical circuits that subserve executive processes (planning, sequencing, task-switching, problem-solving, working memory). Patients may appear relatively alert and able to hold a conversation, but cannot plan a meal, manage finances, or follow multi-step instructions. Episodic memory is affected but relatively less severely than in AD. Language and visuospatial function are less prominent early features of subcortical VaD.",
+      "distractorRationales": {
+        "A": "Episodic memory is the domain FIRST and MOST severely affected in Alzheimer's disease — not VaD.",
+        "C": "Language is prominently affected in aphasia syndromes from left hemisphere strokes and in frontotemporal dementia — but less characteristic of subcortical VaD.",
+        "D": "Visuospatial function is a prominent early feature of posterior cortical atrophy (a variant of AD) — not subcortical VaD."
+      },
+      "hint": "VaD = subcortical damage = frontal circuits = executive function first.",
+      "clinicalPearl": "The executive function deficit in VaD creates a clinical presentation that can be mistaken for non-compliance or stubbornness — the patient may understand what needs to be done but cannot organize the steps to do it.",
+      "examStrategy": "Domain-first questions: VaD = executive function first. AD = episodic memory first. FTD = behavior/personality first. Know these three.",
+      "keyTakeaway": "VaD: executive function is the earliest and most prominently affected cognitive domain."
+    },
+    {
+      "id": "vad-post-08",
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is educating the family of an 80-year-old man with moderate vascular dementia about the differences between VaD and Alzheimer's disease. Which statements about vascular dementia are CORRECT? Select all that apply.",
+      "options": {
+        "A": "Vascular dementia tends to decline in a stepwise pattern following vascular events",
+        "B": "Vascular dementia and Alzheimer's disease have identical presentations and cannot be distinguished clinically",
+        "C": "Aggressive management of blood pressure, blood sugar, and atrial fibrillation can slow the progression of vascular dementia",
+        "D": "Gait disturbance and urinary urgency are common early features of vascular dementia",
+        "E": "Vascular dementia always responds well to acetylcholinesterase inhibitors",
+        "F": "Post-stroke or post-TIA depression affects 30–50% of patients with vascular dementia"
+      },
+      "correctAnswer": "A, C, D, F",
+      "rationale": "(A) Stepwise decline is the defining course feature of VaD. (C) Risk factor management is the most important intervention in VaD — it is modifiable, unlike AD. (D) Early gait disturbance and urinary urgency are characteristic subcortical VaD features — not shared with early AD. (F) Post-stroke depression is prevalent (30–50%) and requires active treatment. VaD and AD can often be distinguished clinically using onset, course, cognitive profile, and neurological examination (B is incorrect). AChEIs are NOT indicated and do not reliably benefit pure VaD (E is incorrect).",
+      "distractorRationales": {
+        "B": "VaD and AD have distinct clinical profiles — onset (stepwise vs. gradual), cognitive domain (executive vs. memory), neurological examination (focal signs in VaD vs. normal in early AD), and neuroimaging.",
+        "E": "AChEIs have inconsistent and limited evidence in pure VaD — they are NOT standard treatment for VaD and are not reliably effective."
+      },
+      "hint": "VaD characteristics: stepwise, modifiable, early gait/bladder symptoms, high depression prevalence. Not: identical to AD, and not reliably responsive to AChEIs.",
+      "clinicalPearl": "The modifiability of VaD progression is the most hopeful and empowering message for families — their active participation in risk factor management truly makes a difference.",
+      "examStrategy": "VaD facts SATA: stepwise + modifiable + early gait/bladder + depression = correct. Same as AD = incorrect. AChEI benefit = incorrect for pure VaD.",
+      "keyTakeaway": "VaD: stepwise course, modifiable by risk factor management, early gait/bladder features, high depression prevalence — AChEIs not standard treatment."
+    },
+    {
+      "id": "vad-post-09",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 77-year-old woman with moderate vascular dementia is being managed in a community setting. Her medications include apixaban 5 mg twice daily (for AF), amlodipine 10 mg daily, metformin 500 mg twice daily, and atorvastatin 40 mg daily. Her last visit BP was 118/70 after starting amlodipine last month. This morning she appears confused and her BP is 96/58 in the office with HR 92 bpm. She is pale. What is the nurse's PRIORITY action?",
+      "options": {
+        "A": "Administer a scheduled dose of amlodipine as ordered",
+        "B": "Reassess cognitive function with MoCA to determine if VaD has progressed",
+        "C": "Withhold amlodipine; assess for bleeding (she is on anticoagulation); obtain orthostatic vitals; notify the physician urgently with SBAR",
+        "D": "Increase oral fluid intake and reassess in 30 minutes"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient has hemodynamic instability (BP 96/58, HR 92) with confusion in a patient who is anticoagulated. The priorities are: (1) WITHHOLD amlodipine — giving an antihypertensive to a patient with BP of 96/58 would cause dangerous hypotension; (2) ASSESS FOR BLEEDING — the patient is on apixaban; confusion + hypotension + tachycardia = possible GI bleed, internal hemorrhage — assess for black/tarry stools, blood in urine, bruising, abdominal tenderness; (3) ORTHOSTATIC VITALS — determine if orthostatic hypotension is contributing; (4) NOTIFY PHYSICIAN URGENTLY — this is a potential medical emergency. Administering amlodipine could be lethal. Cognitive assessment is inappropriate in a hemodynamically unstable patient. Waiting 30 minutes without assessment is dangerous.",
+      "distractorRationales": {
+        "A": "Administering amlodipine when BP is 96/58 would cause life-threatening hypotension — this is a critical medication safety error.",
+        "B": "Cognitive assessment is not the priority when the patient is hemodynamically unstable; MoCA is not a tool for acute assessment.",
+        "D": "Waiting without assessment and notification is inappropriate when a patient on anticoagulation presents with hypotension, tachycardia, and confusion."
+      },
+      "hint": "BP 96/58 + HR 92 + anticoagulated = possible bleeding emergency. What must you do first?",
+      "clinicalPearl": "Anticoagulation-related GI bleeding can present with confusion (hypoperfusion) before overt bleeding signs are apparent. Always consider occult bleeding in anticoagulated patients with unexplained hemodynamic changes.",
+      "examStrategy": "Hemodynamic instability + anticoagulation = hold the BP med, assess for bleeding, notify physician immediately. This type of clinical prioritization question appears frequently.",
+      "keyTakeaway": "BP 96/58 + anticoagulated = withhold antihypertensive, assess for bleeding, notify physician urgently — this is a potential hemorrhagic emergency."
+    },
+    {
+      "id": "vad-post-10",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is explaining to a patient with mild VCI why controlling blood pressure is so important for brain health. Which explanation is MOST accurate and evidence-based?",
+      "options": {
+        "A": "'High blood pressure has no direct effect on the brain — it only affects the heart'",
+        "B": "'Blood pressure control is only important if you've already had a stroke'",
+        "C": "'Chronic high blood pressure damages the small blood vessels in the brain, causing tiny strokes and white matter injury that contribute to memory and thinking problems. Treating your blood pressure protects these vessels and may slow or prevent further cognitive decline'",
+        "D": "'Blood pressure control is important for cosmetic reasons — it prevents flushing of the face'"
+      },
+      "correctAnswer": "C",
+      "rationale": "This explanation is accurate, physiologically grounded, and motivating: chronic hypertension causes lipohyalinosis of small cerebral arteries → lacunar infarcts + white matter ischemia → cognitive decline. The SPRINT-MIND trial demonstrated that intensive BP control (SBP < 120) reduced the risk of mild cognitive impairment by 19% and combined dementia + MCI by 15% compared to standard control. BP management is both primary prevention (before first event) and secondary prevention (after TIA/stroke).",
+      "distractorRationales": {
+        "A": "Hypertension has direct and major effects on cerebral vasculature — it is the leading cause of vascular brain injury.",
+        "B": "BP control is protective even without prior stroke — primary prevention evidence is strong.",
+        "D": "This is a medically inaccurate and trivializing explanation."
+      },
+      "hint": "Explain the mechanism: hypertension → small vessel damage → brain injury → cognitive impairment.",
+      "clinicalPearl": "The SPRINT-MIND trial: intensive BP control (SBP < 120) reduced mild cognitive impairment risk — the first trial to demonstrate that treating BP can prevent cognitive impairment.",
+      "examStrategy": "Patient teaching effectiveness questions: the best explanation is physiologically accurate, connects the intervention to the outcome, and is motivating (empowers the patient). Abstract explanations without connection to outcomes are less effective.",
+      "keyTakeaway": "BP control protects cerebral small vessels from lipohyalinosis, reducing lacunar infarcts and white matter injury — directly preventing VCI progression."
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "vad-fc-01",
+      "front": "Vascular Dementia vs Alzheimer's Disease — Key Clinical Differences",
+      "back": "VaD:\n• STEPWISE decline (each step = vascular event)\n• EXECUTIVE FUNCTION first (planning, organizing)\n• Focal neurological signs present\n• Early gait disturbance ('magnetic gait')\n• Early urge incontinence\n• Depression very common (30–50%)\n• Modifiable by risk factor management\n• MRI: lacunar infarcts + white matter changes\n\nAD:\n• GRADUAL continuous decline\n• EPISODIC MEMORY first (recent recall)\n• Neurological exam normal in early disease\n• Gait preserved until late stages\n• Incontinence late (Stage 6D)\n• Depression in ~20%\n• No disease-modifying treatment (except new DMTs)\n• MRI: hippocampal atrophy",
+      "hint": "Stairs down (VaD) vs slow slope down (AD).",
+      "explanation": "The stepwise vs. gradual distinction is the single most important clinical differentiator between VaD and AD and is tested on virtually every dementia exam.",
+      "clinicalPearl": "VaD can be prevented and progression slowed — unlike AD. This is the most empowering clinical distinction for patients and families."
+    },
+    {
+      "id": "vad-fc-02",
+      "front": "FAST Stroke Recognition",
+      "back": "F — FACE: sudden facial drooping, asymmetric smile\nA — ARM: sudden arm weakness (one arm drifts down)\nS — SPEECH: sudden slurred speech, wrong words, inability to speak\nT — TIME: call 911 IMMEDIATELY. Time is brain.\n\nAdditional symptoms:\n• Sudden severe headache ('worst of life')\n• Sudden vision loss (one or both eyes)\n• Sudden balance/coordination problems\n\ntPA window: 4.5 hours from symptom onset\nEndovascular thrombectomy: up to 24 hours in selected patients",
+      "hint": "FAST = the most important stroke prevention teaching for VaD families.",
+      "explanation": "For every minute a stroke is untreated, 1.9 million brain cells die. Immediate recognition and emergency response is the most time-critical intervention in stroke care.",
+      "clinicalPearl": "TIA symptoms (stroke symptoms that resolve) are a medical emergency with 10–15% stroke risk in 90 days — FAST education applies to TIA as well as stroke."
+    },
+    {
+      "id": "vad-fc-03",
+      "front": "Vascular Risk Factor Hierarchy for VaD Prevention",
+      "back": "1. HYPERTENSION (STRONGEST): target BP < 130/80; aggressive control\n2. ATRIAL FIBRILLATION: anticoagulate with DOAC (apixaban preferred)\n3. DIABETES: optimize glycemic control; HbA1c individualized (7–8% in older adults)\n4. SMOKING: cessation at any age reduces risk\n5. HYPERLIPIDEMIA: statin therapy; target LDL < 70 mg/dL (1.8 mmol/L)\n6. PHYSICAL INACTIVITY: 150 min/week aerobic exercise\n7. OBESITY: weight management\n\nNon-Modifiable: age, sex, genetics (CADASIL)",
+      "hint": "HANDS: Hypertension, AF, No smoking, Diabetes, Statin.",
+      "explanation": "All modifiable risk factors must be addressed simultaneously — vascular risk is multiplicative, not additive.",
+      "clinicalPearl": "Reducing SBP by 10 mmHg reduces stroke risk by approximately 20%. Consistent adherence to antihypertensive therapy is one of the highest-impact nursing teaching interventions."
+    },
+    {
+      "id": "vad-fc-04",
+      "front": "Antiplatelet vs Anticoagulation in Stroke Prevention",
+      "back": "ANTIPLATELET (aspirin 81 mg or clopidogrel 75 mg):\n• For NON-CARDIOEMBOLIC ischemic stroke/TIA\n• Small vessel (lacunar) stroke\n• Atherosclerotic large vessel stroke\n• Dual antiplatelet (ASA + clopidogrel): 21 days after high-risk TIA/minor stroke\n\nANTICOAGULATION (DOAC preferred: apixaban, rivaroxaban, dabigatran):\n• For CARDIOEMBOLIC stroke (ATRIAL FIBRILLATION)\n• Mechanical heart valve, hypercoagulable state\n• Reduces AF stroke risk 60–70%\n• Warfarin INR 2.0–3.0 if DOAC contraindicated",
+      "hint": "AF = anticoagulate. Lacunar/atherosclerotic = antiplatelet. Never anticoagulate lacunar.",
+      "explanation": "Anticoagulation for lacunar or small vessel infarction has no benefit and increases hemorrhagic risk — antiplatelet is the correct choice.",
+      "clinicalPearl": "Aspirin for AF is NOT adequate stroke prevention — anticoagulation is significantly superior and aspirin provides minimal protection against cardioembolic strokes."
+    },
+    {
+      "id": "vad-fc-05",
+      "front": "Subcortical Vascular Dementia — Classic Triad",
+      "back": "Classic subcortical VaD triad (Binswanger's disease / white matter disease type):\n1. EXECUTIVE DYSFUNCTION: planning, organizing, problem-solving, multitasking\n2. GAIT DISTURBANCE: marche à petit pas (small shuffling steps, magnetic gait)\n3. URGE URINARY INCONTINENCE: early, before significant memory loss\n\nPlus: psychomotor slowing, depression, pseudobulbar affect\nImaging: white matter hyperintensities (T2/FLAIR), lacunar infarcts\nCause: chronic hypertension → lipohyalinosis → small vessel disease",
+      "hint": "Executive + Gait + Incontinence = subcortical VaD triad.",
+      "explanation": "This triad distinguishes subcortical VaD from AD early in the disease course. Urinary incontinence in early cognitive impairment should always prompt investigation for vascular pathology.",
+      "clinicalPearl": "When an older adult presents with gait disturbance AND urinary urgency AND executive problems — think VaD (or NPH if adding ventricular dilation on imaging)."
+    },
+    {
+      "id": "vad-fc-06",
+      "front": "Post-Stroke Depression — Assessment and Management",
+      "back": "Prevalence: 30–50% of stroke and VaD patients\nMechanism: structural injury to frontal-limbic circuits + psychological response to disability\nNOT just a 'normal reaction' — requires treatment\n\nScreening:\n• PHQ-9 at 1 month, 3 months, 6 months post-stroke\n• GDS-15 in older adults\n\nTreatment:\n• SSRIs: sertraline 25–50 mg (first-line), escitalopram\n• Venlafaxine: also evidence-based for PSD\n• Psychotherapy: CBT/IPT when cognitively feasible\n• Exercise: proven antidepressant effect\n• Social engagement\n• AVOID: TCAs (seizure threshold, cardiac effects, anticholinergic)",
+      "hint": "Post-stroke depression: 30–50%, treat with SSRI, do not wait for spontaneous resolution.",
+      "explanation": "Untreated PSD worsens functional recovery, reduces rehabilitation participation, and increases mortality. Active treatment improves multiple outcomes beyond mood.",
+      "clinicalPearl": "Starting an SSRI for post-stroke depression improves rehabilitation participation and functional recovery even beyond its mood effects — it has dual benefit in stroke patients."
+    },
+    {
+      "id": "vad-fc-07",
+      "front": "DOAC Medication Teaching — Key Points",
+      "back": "Apixaban (Eliquis): 5 mg TWICE DAILY; can take with or without food\nRivaroxaban (Xarelto): 20 mg ONCE DAILY with EVENING MEAL (food increases absorption)\nDabigatran (Pradaxa): 150 mg TWICE DAILY; do not crush/chew capsule\n\nAll DOACs:\n• Take at consistent times every day\n• NEVER stop without physician guidance (immediate stroke risk rebound)\n• Report: unusual bruising, black tarry stools, blood in urine, prolonged bleeding\n• Fall with head injury: report IMMEDIATELY even if feeling fine\n• Avoid NSAIDs (increased GI bleed risk)\n• Antidote available: andexanet alfa (for Xa inhibitors), idarucizumab (for dabigatran)",
+      "hint": "All DOACs: never stop without MD; report bleeding; head injury = emergency.",
+      "explanation": "DOAC education is one of the highest-stakes nursing discharge teaching tasks in VaD/AF management — adherence and safety monitoring are critical.",
+      "clinicalPearl": "Missing just one dose of a DOAC creates a window of stroke vulnerability. Adherence tools (pill organizers, phone alarms, blister packs) significantly reduce missed doses."
+    },
+    {
+      "id": "vad-fc-08",
+      "front": "Pseudobulbar Affect (PBA) — Clinical Features and Treatment",
+      "back": "Definition: sudden, uncontrollable, disproportionate episodes of laughing or crying\nNeurological cause: injury to corticobulbar pathways controlling emotional expression\nKey features:\n• Episodic, abrupt onset and offset\n• Disproportionate to stimulus (crying for an hour at a mildly sad commercial)\n• Patient often does NOT feel the underlying emotion\n• Ego-dystonic: patient aware the response is excessive\n\nDistinguish from depression: PBA = episodic, brief, disproportionate; Depression = persistent, proportionate, consistent\n\nTreatment:\n• Dextromethorphan/quinidine (Nuedexta): FDA-approved for PBA\n• SSRIs at low doses: also have evidence\n• Education: reassure family this is neurological, not psychiatric",
+      "hint": "PBA = sudden disproportionate emotional episodes; neurological, not psychiatric; treat with Nuedexta.",
+      "explanation": "PBA is frequently misidentified as depression, leading to suboptimal treatment. The disproportionality and episodic nature are the distinguishing clinical features.",
+      "clinicalPearl": "Family members of VaD patients with PBA experience significant distress watching sudden crying episodes — education that this is a neurological symptom (not grief, not suffering) provides significant relief."
+    },
+    {
+      "id": "vad-fc-09",
+      "front": "VaD MRI Findings — What to Expect",
+      "back": "Subcortical (Small Vessel) VaD:\n• T2/FLAIR white matter hyperintensities (periventricular, deep white matter)\n• Lacunar infarcts: small (5–20 mm), T1 dark, T2 bright, in basal ganglia/thalamus/internal capsule/white matter\n• Enlarged perivascular spaces\n\nCortical (Large Vessel) VaD:\n• Cortical/subcortical infarctions in specific vascular territories\n• Atrophy of affected territory\n\nStrategic Infarct VaD:\n• Small lesion in strategic location (thalamus, hippocampus, angular gyrus)\n• Disproportionately large cognitive effect from small infarct\n\nCompare: AD MRI = hippocampal atrophy; LBD = may be normal early",
+      "hint": "VaD MRI = white matter changes + lacunar infarcts. AD MRI = hippocampal atrophy.",
+      "explanation": "Understanding MRI findings helps nurses correlate neuroimaging reports with clinical presentations and communicate meaningfully with families about the evidence for the diagnosis.",
+      "clinicalPearl": "Not all white matter changes on MRI are pathological VaD — mild periventricular changes are common in adults over 65. Extensive white matter disease correlating clinically is the key."
+    },
+    {
+      "id": "vad-fc-10",
+      "front": "Vascular Dementia — Primary vs Secondary Prevention",
+      "back": "PRIMARY PREVENTION (before first stroke/TIA):\n• BP control < 130/80\n• Treat AF (anticoagulate)\n• Optimize diabetes (HbA1c)\n• Statin therapy\n• Smoking cessation\n• Exercise 150 min/week\n• Weight management\n\nSECONDARY PREVENTION (after stroke/TIA/established VCI):\n• All primary prevention measures (even more aggressive)\n• Antiplatelet OR anticoagulation (based on mechanism)\n• FAST education for patients and families\n• Carotid endarterectomy if indicated\n• Cardiac monitoring for occult AF\n• BP monitoring: daily at home for high-risk patients",
+      "hint": "Prevention is the treatment for VaD — both before and after the first event.",
+      "explanation": "In VaD, the nurse's most powerful therapeutic interventions are education-based and risk factor management-focused — more so than pharmacological cognitive treatment.",
+      "clinicalPearl": "Secondary prevention after TIA/minor stroke has the highest return on investment — the 90-day post-event period is the highest-risk window where intervention is most impactful."
+    },
+    {
+      "id": "vad-fc-11",
+      "front": "Executive Dysfunction in VaD — Clinical Implications for Nursing",
+      "back": "Executive dysfunction = impaired planning, organizing, sequencing, problem-solving, decision-making, and task initiation\n\nClinical manifestations:\n• Cannot manage medications (understands the need but cannot organize the process)\n• Cannot manage finances (checkbook, bills, online banking)\n• Cannot plan meals or cook sequential recipes\n• Cannot initiate tasks without prompting\n• Difficulty with novel situations; follows routine but cannot adapt\n\nNursing adaptations:\n• Break tasks into single steps (not multi-step instructions)\n• Provide structured routine (predictability compensates for planning deficits)\n• External aids: medication organizer, checklist, smartphone reminders\n• Offer structured choices (not open-ended)\n• Financial safeguards: POA for property, automated payments",
+      "hint": "Executive dysfunction = can't organize/plan — simplify, structure, support.",
+      "explanation": "Family members often misinterpret executive dysfunction as stubbornness or laziness. Education that it reflects specific neural circuit damage changes the family's emotional response from frustration to compassion.",
+      "clinicalPearl": "A patient with executive dysfunction can often still KNOW what they need to do — they simply cannot initiate or organize the steps. Prompting and cueing are the nursing interventions, not instruction."
+    },
+    {
+      "id": "vad-fc-12",
+      "front": "CADASIL — Hereditary Vascular Dementia",
+      "back": "CADASIL = Cerebral Autosomal Dominant Arteriopathy with Subcortical Infarcts and Leukoencephalopathy\nGene: NOTCH3 (chromosome 19) — autosomal dominant; 50% inheritance risk per child\n\nClinical features:\n• Onset: 30s–50s (early-onset stroke and dementia)\n• Recurrent TIAs and ischemic strokes without typical vascular risk factors\n• Progressive white matter disease on MRI (anterior temporal poles: pathognomonic)\n• Migraine with aura (often first symptom)\n• Vascular dementia developing over decades\n• Psychiatric symptoms (depression, anxiety, apathy)\n\nDiagnosis: genetic testing (NOTCH3 mutation); skin biopsy (electron microscopy)\nNo disease-specific treatment; vascular risk factor management\nGenetic counseling: all first-degree relatives",
+      "hint": "CADASIL = young-onset vascular dementia with migraine aura; NOTCH3 mutation; autosomal dominant.",
+      "explanation": "CADASIL is the most common monogenic cause of ischemic stroke and vascular dementia. It should be suspected in patients with young-onset stroke without typical vascular risk factors and a family history.",
+      "clinicalPearl": "Anterior temporal white matter changes on MRI are highly specific for CADASIL — this is the pathognomonic MRI finding that distinguishes it from hypertensive white matter disease."
+    }
+  ]
+}

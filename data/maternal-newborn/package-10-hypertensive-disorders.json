@@ -1,0 +1,324 @@
+{
+  "version": 1,
+  "packageId": "maternal-newborn-pkg-10",
+  "label": "Hypertensive Disorders of Pregnancy — Lessons, Questions, Flashcards & Emergency Scenarios",
+  "generatedDate": "2026-06-02",
+  "targetExams": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","PNP-PC","FNP"],
+  "domain": "Maternal Newborn",
+  "subdomain": "Hypertensive Disorders",
+  "lessons": [
+    {
+      "lessonId": "mn-pkg10-L01",
+      "topicSlug": "gestational-hypertension",
+      "title": "Gestational Hypertension",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Diagnostic Criteria",
+          "kind": "introduction",
+          "body": "**Gestational hypertension:** New-onset hypertension (BP ≥140/90 mmHg on two occasions ≥4 hours apart) arising at ≥20 weeks gestation WITHOUT proteinuria or other findings of preeclampsia. Resolves within 12 weeks postpartum (if persistent beyond 12 weeks = chronic hypertension in disguise).\n\n**Incidence:** 6–8% of pregnancies. Approximately 50% will progress to preeclampsia, especially if BP continues to rise.\n\n**Diagnostic criteria:**\n- SBP ≥140 OR DBP ≥90 mmHg on ≥2 readings, ≥4 hours apart\n- Onset ≥20 weeks gestation\n- No proteinuria\n- No other preeclampsia features (thrombocytopenia, renal insufficiency, impaired liver function, new-onset headache, visual disturbances, pulmonary edema)"
+        },
+        {
+          "id": "management",
+          "heading": "Management",
+          "kind": "nursing_assessment_interventions",
+          "body": "**BP thresholds for treatment:**\n- SBP ≥160 or DBP ≥110: requires acute treatment (severe-range hypertension)\n- SBP 140–159 or DBP 90–109: management depends on gestational age and clinical picture\n\n**Antihypertensive agents in pregnancy:**\n- **Labetalol (preferred):** Alpha and beta blocker; IV or oral; rapid onset; first-line for severe-range acute BP\n- **Nifedipine (CCB):** Oral; second-line acute (not sublingual — too rapid); also used for oral outpatient treatment\n- **Hydralazine:** IV; historically first-line; now third-line (less predictable BP response)\n- **Methyldopa:** Oral; safe; older agent; second-line for chronic/outpatient management\n- **AVOID:** ACE inhibitors/ARBs/aldosterone antagonists (fetal renal toxicity), diuretics (reduce placental blood flow)\n\n**Delivery timing:**\n- Severe-range BP not controlled: deliver\n- Gestational HTN ≥37 weeks: deliver\n- Gestational HTN <37 weeks with mild BP and stable: expectant management with close surveillance\n\n**Monitoring:**\n- BP every 4–6 hours inpatient or twice weekly outpatient\n- Urine protein at each visit (watch for preeclampsia development)\n- Fetal: NST twice weekly, growth scan every 3–4 weeks\n- Labs: CBC, CMP, uric acid (baseline), LFTs (baseline)\n- Patient teaching: danger signs to report immediately"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Gestational HTN: BP ≥140/90 at ≥20 weeks, NO proteinuria, NO other preeclampsia features\n- 50% progress to preeclampsia — monitor closely\n- Treat BP ≥160/110 acutely: labetalol IV or nifedipine PO (NOT sublingual nifedipine — too rapid)\n- Avoid: ACE inhibitors, ARBs, diuretics\n- Delivery at ≥37 weeks with gestational HTN; deliver sooner if severe or not controlled\n- Resolves within 12 weeks postpartum (if persists = chronic HTN)"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg10-L02",
+      "topicSlug": "preeclampsia",
+      "title": "Preeclampsia: Pathophysiology, Diagnosis & Nursing Management",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Diagnostic Criteria",
+          "kind": "introduction",
+          "body": "**Preeclampsia:** Hypertension arising at ≥20 weeks gestation PLUS either: proteinuria (≥300 mg/24h or spot P:Cr ≥0.3) OR severe features (in absence of proteinuria). Leading cause of maternal and perinatal morbidity and mortality worldwide. Affects 3–5% of pregnancies.\n\n**Pathophysiology:** Failure of spiral artery remodeling → high-resistance uteroplacental blood flow → placental ischemia → release of anti-angiogenic factors (sFlt-1 — soluble FMS-like tyrosine kinase 1, inhibits VEGF/PlGF) → widespread maternal endothelial dysfunction → hypertension, proteinuria, edema, organ dysfunction."
+        },
+        {
+          "id": "diagnostic",
+          "heading": "Diagnostic Criteria (ACOG 2013)",
+          "kind": "pathophysiology_overview",
+          "body": "**Preeclampsia diagnostic criteria:**\nNew onset BP ≥140/90 at ≥20 weeks PLUS:\n- **Proteinuria:** ≥300 mg/24h OR spot urine P:Cr ≥0.3 OR dipstick ≥2+\n\nOR in absence of proteinuria, any ONE of:\n- Thrombocytopenia (platelets <100,000/mm³)\n- Renal insufficiency (creatinine >1.1 mg/dL or doubling from baseline)\n- Impaired liver function (LFTs >2× normal + right upper quadrant or epigastric pain)\n- New-onset headache unresponsive to medication\n- Pulmonary edema\n- Visual disturbances (blurring, scotomata, photopsia)\n\n**Severe features of preeclampsia (any ONE = severe):**\n- SBP ≥160 OR DBP ≥110 mmHg on two readings ≥4 hours apart (or ≥15 min if acutely severe)\n- Thrombocytopenia: platelets <100,000\n- Creatinine >1.1 mg/dL or doubling\n- LFTs >2× ULN + right upper quadrant or epigastric pain\n- Pulmonary edema\n- New-onset headache unresponsive to medication\n- Visual disturbances\n- Severe growth restriction (EFW <5th percentile)\n\n**Note:** Proteinuria level alone does not define severity (removing severe proteinuria from criteria in 2013 revision)"
+        },
+        {
+          "id": "management",
+          "heading": "Management by Gestational Age",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Nursing assessment priorities:**\n- BP: initially q4–6h (stable); q15–30 min if acutely severe\n- Assess for: headache, visual symptoms, RUQ/epigastric pain, edema pattern\n- Deep tendon reflexes (DTRs): baseline and serial (MgSO4 toxicity monitoring)\n- I&O: oliguria <30 mL/hr × 2h = concerning sign of end-organ compromise\n- Fetal monitoring: continuous if contracting or symptomatic\n- Weight: daily for fluid retention assessment\n- Urine protein: 24h or P:Cr ratio\n- Labs: CBC, CMP, LFTs, uric acid, coagulation studies (if DIC concern)\n\n**Management without severe features (mild preeclampsia):**\n- ≥37 weeks: deliver\n- 34–36+6 weeks: deliver (outweighs prematurity risk)\n- <34 weeks: expectant with close inpatient or outpatient monitoring; consider antenatal steroids\n\n**Management with severe features:**\n- Hospitalization required (regardless of gestational age)\n- ≥34 weeks: deliver\n- <34 weeks: may attempt 24–48 hours stabilization + corticosteroids, then deliver\n- MAGNESIUM SULFATE: seizure prophylaxis (not blood pressure treatment)\n\n**Antihypertensive treatment for severe-range BP:**\n- Goal: BP <160/110 (prevent maternal stroke — NOT to normalize)\n- Labetalol 20 mg IV → repeat 40 mg → 80 mg (max 300 mg cumulative)\n- Hydralazine 5–10 mg IV every 20 minutes\n- Nifedipine 10–20 mg oral every 20–30 minutes (max 50 mg acute dose)\n- If BP not controlled in 1 hour: notify provider immediately\n\n**Postpartum preeclampsia:**\n- BP may worsen in first 5 days postpartum (fluid mobilization)\n- Continue MgSO4 24–48h postpartum\n- Antihypertensive medications post-delivery: labetalol or nifedipine oral\n- Discharge: home BP monitoring, follow-up within 1–3 days, red flag education"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Preeclampsia: BP ≥140/90 at ≥20 weeks + proteinuria OR severe features\n- Severe: BP ≥160/110 + any end-organ damage sign\n- ONLY cure is delivery\n- Magnesium sulfate: seizure prophylaxis (NOT antihypertensive). Continue 24–48h postpartum\n- Acute severe BP treatment: labetalol IV (first-line), hydralazine, oral nifedipine\n- Goal BP treatment: <160/110 (not normalize) — prevent maternal intracerebral hemorrhage"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg10-L03",
+      "topicSlug": "severe-preeclampsia",
+      "title": "Severe Preeclampsia: Magnesium Sulfate & Critical Nursing Care",
+      "sections": [
+        {
+          "id": "magnesium",
+          "heading": "Magnesium Sulfate: Administration, Monitoring & Toxicity",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Magnesium sulfate (MgSO4):**\n- **Mechanism:** CNS depressant — reduces acetylcholine at neuromuscular junctions; decreases seizure threshold excitability; vasodilator; NOT antihypertensive\n- **Indication:** Seizure prophylaxis in severe preeclampsia/eclampsia; neonatal neuroprotection for preterm birth <32 weeks\n- **Route:** IV only (never IM in modern practice except in resource-limited settings)\n\n**Standard protocol:**\n- Loading dose: 4–6g IV over 15–20 minutes\n- Maintenance infusion: 1–2g/hour continuous IV\n- Continue intrapartum + 24–48h postpartum\n\n**Therapeutic serum level:** 4–7 mEq/L\n\n**Toxicity monitoring — the 'MgSO4 Ladder' (CHECK BEFORE EVERY DOSE/ASSESSMENT):**\n| Serum Level | Clinical Signs |\n|---|---|\n| 4–7 mEq/L | Therapeutic: flushing, warmth, N/V (early side effects — expected) |\n| 7–10 mEq/L | **Loss of deep tendon reflexes (DTRs)** — FIRST sign of toxicity |\n| 10–13 mEq/L | Respiratory depression (RR <12/min) |\n| 15+ mEq/L | Cardiac arrest |\n\n**NURSING MONITORING REQUIREMENTS — MgSO4 must be HELD if ANY of:**\n- DTRs absent or diminished\n- Respiratory rate <12 per minute\n- Urine output <30 mL/hr (magnesium excreted by kidneys → decreases output = toxicity risk)\n- SpO2 <95%\n\n**Three prerequisites MUST be present before each dose/hour of MgSO4:**\n1. DTRs present\n2. Respirations ≥12/min\n3. Urine output ≥30 mL/hr (or ≥25 mL/hr × 4h at minimum)\n\n**MgSO4 toxicity treatment:**\n- Stop infusion immediately\n- Calcium gluconate 1g IV over 3 minutes — ANTIDOTE (competes with magnesium at neuromuscular junction)\n- Oxygen/airway support as needed\n- Monitor continuously\n\n**Fetal effects of MgSO4:**\n- Decreased FHR variability (decreased FHR variability on MgSO4 is expected — NOT a sign of fetal compromise)\n- Neonatal effects: hypotonia (floppy baby), poor feeding, respiratory depression — NICU team notified"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- MgSO4: seizure prophylaxis NOT blood pressure treatment\n- Loading: 4–6g over 15–20 min. Maintenance: 1–2g/hr IV\n- HOLD MgSO4 if: DTRs absent + RR <12 + UO <30 mL/hr\n- First sign of toxicity: LOSS OF DTRs\n- Antidote: CALCIUM GLUCONATE 1g IV (not calcium chloride at bedside)\n- Continue 24–48h postpartum\n- Fetal: decreased variability expected (MgSO4 crosses placenta) — not concerning"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg10-L04",
+      "topicSlug": "eclampsia",
+      "title": "Eclampsia: Seizure Management & Emergency Response",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Eclampsia:** New-onset grand mal (tonic-clonic) seizures in a woman with preeclampsia, not explained by another neurological disorder. Occurs in 1–2% of preeclampsia cases. Can occur antepartum (most common), intrapartum, or postpartum (up to 4–6 weeks post-delivery). 20% of eclampsia occurs WITHOUT preceding hypertension > 140/90 on admission."
+        },
+        {
+          "id": "management",
+          "heading": "Eclamptic Seizure: Emergency Management",
+          "kind": "nursing_assessment_interventions",
+          "body": "**DURING the seizure (do NOT leave the patient):**\n1. Note the time — duration of seizure (if >5 min: status eclampticus)\n2. Side-lying position (prevent aspiration; maintain airway)\n3. Protect from injury — pad side rails, do NOT restrain (injury risk), do NOT insert anything in mouth\n4. Oxygen 8–10 L/min via face mask (maternal/fetal hypoxia during seizure)\n5. Suction available (secretions/vomit)\n6. Continue monitoring fetal heart rate\n\n**AFTER the seizure (post-ictal period):**\n1. Assess: airway, breathing, circulation\n2. Check vital signs, SpO2, consciousness level\n3. IV magnesium sulfate: 4–6g IV bolus over 5–10 min (if not on MgSO4) OR 2g additional bolus (if already on MgSO4 maintenance) to stop seizure activity\n4. Correct hypoxia (supplemental O2, airway management)\n5. Left lateral position\n6. Reassess fetal wellbeing: prolonged bradycardia is common post-seizure (transient, usually resolves in 3–5 min with maternal recovery)\n7. Notify provider immediately\n8. Prepare for delivery (eclampsia = indication for delivery after stabilization)\n\n**Second-line treatment if MgSO4 insufficient:**\n- Diazepam, lorazepam, or levetiracetam for refractory eclampsia\n\n**Recurrence prevention:**\n- Continue MgSO4 IV 24–48h after seizure (and postpartum)\n- Once stabilized, deliver (vaginal or C-section based on clinical status)\n\n**Fetal monitoring post-seizure:**\n- Prolonged bradycardia (60–90 bpm for 3–5 min) = common from maternal hypoxia\n- Usually self-resolves with maternal recovery (O2, positioning, MgSO4)\n- If bradycardia >10 min or not improving: emergency delivery"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Eclampsia = seizure in preeclampsia (can occur antepartum, intrapartum, or up to 6 weeks postpartum)\n- During seizure: side-lying, protect, O2, do NOT restrain, do NOT insert in mouth, note time\n- After seizure: MgSO4 bolus + fetal assessment + notify provider + prepare for delivery\n- Fetal bradycardia post-seizure = expected and usually transient — reassess before emergency C-section\n- Continue MgSO4 24–48h post-seizure\n- Eclampsia can occur without preceding high BP readings"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg10-L05",
+      "topicSlug": "hellp-syndrome",
+      "title": "HELLP Syndrome: Recognition, Emergency Management & Delivery",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Diagnostic Criteria",
+          "kind": "introduction",
+          "body": "**HELLP syndrome:** A variant/complication of severe preeclampsia characterized by:\n- **H**emolysis (microangiopathic hemolytic anemia)\n- **EL**evated Liver enzymes\n- **LP** Low Platelets (thrombocytopenia)\n\nOccurs in 0.5–0.9% of pregnancies; 10–20% of severe preeclampsia cases. Maternal mortality: 1–3%; perinatal mortality: 10–60% (from preterm birth and associated complications). Can occur without hypertension or proteinuria in 10–20% of cases."
+        },
+        {
+          "id": "diagnostic",
+          "heading": "Diagnostic Criteria & Presentation",
+          "kind": "pathophysiology_overview",
+          "body": "**Laboratory diagnostic criteria:**\n- **H (Hemolysis):** LDH ≥600 IU/L OR bilirubin >1.2 mg/dL OR schistocytes/burr cells on peripheral blood smear\n- **EL (Elevated Liver enzymes):** AST ≥70 IU/L (>2× ULN) AND/OR LDH >600\n- **LP (Low Platelets):** <100,000/mm³\n\n**Tennessee classification:**\n- Class I (complete/severe): Platelets <50,000; AST ≥70; LDH ≥600\n- Class II (incomplete): Platelets 50,000–100,000\n- Class III (mild): Platelets 100,000–150,000\n\n**Clinical presentation:**\n- Malaise, nausea/vomiting (flu-like)\n- Right upper quadrant or epigastric pain (liver capsule distension from hepatic edema/hematoma)\n- Headache, visual disturbances\n- BP may be normal in 10–20% of cases\n- Rapid clinical deterioration possible\n\n**Complications:**\n- Hepatic rupture (rare, catastrophic — sudden severe RUQ pain + hypotension)\n- DIC (most common serious complication)\n- Acute renal failure\n- Pulmonary edema\n- Placental abruption\n- Cerebral edema"
+        },
+        {
+          "id": "management",
+          "heading": "Emergency Management",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Management priorities:**\n1. Stabilize maternal status: MgSO4 (seizure prophylaxis), treat severe-range BP, blood products for coagulopathy\n2. DELIVER (HELLP is an indication for delivery; only cure)\n3. Gestational age determines timing:\n   - ≥34 weeks: deliver immediately\n   - <34 weeks: corticosteroids (betamethasone) for 24–48h stabilization, then deliver; if deterioration or DIC/hepatic rupture: deliver immediately regardless of GA\n\n**Blood product management:**\n- Platelets <50,000 before vaginal delivery: transfuse\n- Platelets <100,000 before C-section: consider transfusion\n- DIC: FFP + cryoprecipitate + platelets\n\n**Nursing assessments:**\n- Platelet trend: rising is reassuring; falling (especially <50,000) = emergency\n- Pain assessment: RUQ pain intensity (worsening = hepatic capsule distension → rupture risk)\n- VS: q15–30 min in acute phase\n- Urine output: q1h (Foley catheter required)\n- Neurological: headache, visual changes, AMS\n- Fetal monitoring: continuous\n\n**Hepatic rupture:**\n- Sudden, catastrophic, severe RUQ or shoulder pain → hemodynamic collapse\n- Emergency: massive transfusion + emergency laparotomy/hepatic packing\n- Mortality: 59% maternal, near-100% fetal\n\n**Postpartum resolution:**\n- Platelet nadir: typically 24–48h postpartum\n- Resolution: 3–7 days postpartum (HELLP typically resolves)\n- If not improving by day 3–5 post-delivery: consider TTP/HUS (thrombotic thrombocytopenic purpura / hemolytic-uremic syndrome)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- HELLP: Hemolysis + Elevated Liver enzymes + Low Platelets\n- Can occur WITHOUT hypertension or proteinuria (atypical presentation = dangerous)\n- RUQ/epigastric pain = liver capsule distension — danger sign\n- Hepatic rupture: catastrophic → massive transfusion + emergency surgery\n- Deliver ≥34 weeks immediately. <34 weeks: 24–48h stabilization + betamethasone → then deliver\n- Platelet nadir at 24–48h postpartum; resolution by day 3–7"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg10-L06",
+      "topicSlug": "chronic-hypertension-pregnancy",
+      "title": "Chronic Hypertension in Pregnancy",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Superimposed Preeclampsia",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Chronic hypertension in pregnancy:** Hypertension diagnosed before pregnancy OR before 20 weeks gestation OR persisting >12 weeks postpartum.\n\n**Superimposed preeclampsia:** Preeclampsia occurring in a woman with pre-existing chronic hypertension. Most dangerous combination — 25% risk in chronic HTN.\n\n**Diagnostic challenge:** Physiological BP decrease in 1st/2nd trimester may mask chronic HTN; BP rises again in 3rd trimester — may appear as new-onset gestational HTN.\n\n**Superimposed preeclampsia criteria:**\n- New-onset proteinuria (in a patient previously proteinuria-free)\n- Sudden worsening of hypertension\n- Thrombocytopenia\n- Elevated liver enzymes\n- New neurological symptoms\n\n**Management:**\n- Treat BP ≥160/110 acutely\n- Chronic oral antihypertensives: labetalol, nifedipine, methyldopa\n- Avoid: ACE inhibitors, ARBs, diuretics (reduce placental perfusion, fetal renal teratogenicity)\n- Low-dose aspirin (81 mg/day) starting at 12–16 weeks: reduces preeclampsia risk 10–24% in high-risk women\n- NST/BPP from 32 weeks\n- Delivery: ≥37 weeks (sooner if superimposed preeclampsia develops)"
+        },
+        {
+          "id": "aspirin_prophylaxis",
+          "heading": "Low-Dose Aspirin for Preeclampsia Prevention",
+          "kind": "nursing_assessment_interventions",
+          "body": "**USPTF/ACOG recommendation:** Low-dose aspirin (81 mg/day) starting at 12–16 weeks for women at HIGH risk for preeclampsia.\n\n**High-risk indications (≥1 high-risk or ≥2 moderate-risk factors):**\n- Prior preeclampsia (highest risk)\n- Multiple gestation\n- Chronic hypertension\n- Diabetes (pre-existing T1 or T2)\n- Renal disease\n- Autoimmune disease (SLE, antiphospholipid syndrome)\n\n**Moderate-risk factors (need ≥2):**\n- Nulliparity\n- Obesity (BMI >30)\n- Family history of preeclampsia (first-degree)\n- AMA ≥35\n- Personal history of adverse pregnancy outcome\n\n**Mechanism:** Aspirin inhibits thromboxane A2 (promotes platelet aggregation and vasoconstriction) while sparing prostacyclin (vasodilator) → improves trophoblast invasion and uteroplacental blood flow.\n\n**Timing:** Start at 12–16 weeks (before incomplete spiral artery remodeling causes irreversible changes). Take at bedtime (maximizes bioavailability; reduces fetal risk from circadian variations)."
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Chronic HTN: diagnosed before 20 weeks or before pregnancy\n- Superimposed preeclampsia: 25% risk with chronic HTN\n- Low-dose aspirin 81 mg/day from 12–16 weeks: reduces preeclampsia in high-risk women\n- Oral antihypertensives: labetalol, nifedipine, methyldopa. AVOID ACE/ARBs/diuretics\n- Physiological BP decrease in 1st/2nd trimester: may mask chronic HTN → reappears in 3rd trimester\n- Superimposed preeclampsia: sudden BP worsening + new proteinuria/end-organ damage"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "mn-p10-001",
+      "topicSlug": "severe-preeclampsia",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "MgSO4-toxicity-DTR-absent-hold",
+      "stem": "A nurse is administering magnesium sulfate at 2g/hour to a client with severe preeclampsia. During assessment, the nurse notes the patellar deep tendon reflex is absent bilaterally. Respiratory rate is 10/min. Urine output for the past 2 hours is 20 mL/hr. What is the priority action?",
+      "options": {"A": "Slow the infusion rate to 1g/hour and reassess in 30 minutes","B": "Discontinue the MgSO4 infusion immediately and administer calcium gluconate 1g IV","C": "Continue the infusion but increase monitoring frequency to every 15 minutes","D": "Obtain a stat serum magnesium level before making any changes"},
+      "correctAnswer": "B",
+      "rationale": "Three signs of MgSO4 toxicity are ALL present: (1) absent DTRs — first sign of toxicity at levels 7–10 mEq/L, (2) respiratory rate 10/min (<12 = respiratory depression threshold), (3) urine output <30 mL/hr (<25 mL/hr indicates magnesium retention). With ALL THREE criteria met, this represents serious magnesium toxicity with respiratory compromise. Priority: STOP infusion immediately AND administer calcium gluconate 1g IV (magnesium antidote — reverses neuromuscular blockade). Do not wait for a magnesium level to act.",
+      "incorrectRationales": {"A": "Slowing the infusion is insufficient — respiratory depression is present (RR 10) and the antidote is needed immediately.", "C": "Continuing any dose of MgSO4 with absent DTRs + respiratory depression is dangerous and contraindicated.", "D": "Waiting for a lab level wastes critical time when clinical toxicity is clinically evident. Act on the clinical signs."},
+      "hint": "MgSO4 toxicity triad: absent DTRs + RR <12 + UO <25–30 mL/hr. Stop infusion + calcium gluconate 1g IV.",
+      "clinicalPearl": "Calcium gluconate 1g IV (not calcium chloride) is the antidote for MgSO4 toxicity. Calcium chloride is 3× more concentrated and can cause tissue necrosis if extravasated. Calcium gluconate is the safer bedside option. Both should be readily available in any room where MgSO4 is being infused.",
+      "examStrategy": "MgSO4 toxicity questions: identify the toxicity signs (absent DTRs = first sign; RR <12 = second; then cardiac arrest). Stop infusion → calcium gluconate. Never slow, never wait for levels when clinical signs are present.",
+      "keyTakeaway": "MgSO4 toxicity: absent DTRs + RR <12 + UO <30 mL/hr → STOP infusion + calcium gluconate 1g IV IMMEDIATELY."
+    },
+    {
+      "questionId": "mn-p10-002",
+      "topicSlug": "eclampsia",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "eclampsia-seizure-position-O2-do-not-restrain",
+      "stem": "A client at 36 weeks with preeclampsia suddenly begins a generalized tonic-clonic seizure. She is lying in the hospital bed with side rails up. Which action should the nurse take FIRST?",
+      "options": {"A": "Insert a padded tongue blade to prevent tongue biting","B": "Administer IV lorazepam 4 mg as the first-line treatment for eclampsia","C": "Position the client in left lateral decubitus, ensure the airway is clear, and administer oxygen","D": "Perform an emergency cesarean section immediately"},
+      "correctAnswer": "C",
+      "rationale": "During an eclamptic seizure, immediate priorities are airway safety and oxygenation: (1) position in left lateral to protect airway from aspiration and relieve aortocaval compression, (2) ensure airway is clear (turn head to allow drainage of secretions), (3) administer oxygen 8–10 L/min via face mask (maternal/fetal hypoxia occurs during seizure). Do NOT insert anything in the mouth (tongue blades are contraindicated — risk of oral trauma, broken teeth, aspiration). Do NOT restrain.",
+      "incorrectRationales": {"A": "Inserting ANYTHING in the mouth during a seizure is absolutely contraindicated in modern seizure management. Risk: oral/dental trauma, aspiration of broken objects, nurse injury.", "B": "MgSO4 (not lorazepam) is the first-line treatment for eclampsia. Lorazepam/diazepam are used for refractory seizures not controlled by MgSO4.", "D": "C-section is NOT performed during an active seizure — the seizure must be managed and maternal status stabilized first. C-section is considered after stabilization."},
+      "hint": "Eclamptic seizure: left lateral + airway + O2. NO mouth insertion. NO restraint. MgSO4 after seizure stops.",
+      "clinicalPearl": "The mnemonic for seizure management: STOP — Side position, Timer, Open airway, Protect. After the seizure: MOVE — Magnesium bolus, O2 adjust, Vital signs + fetal assessment, Evaluate for delivery.",
+      "examStrategy": "Eclampsia during seizure questions: position (left lateral) + O2 + protect airway is ALWAYS the first action. MgSO4 is given AFTER the seizure stops. C-section comes later. Never mouth insertion.",
+      "keyTakeaway": "Eclampsia: during seizure → left lateral + O2 + clear airway (no tongue blades). After seizure → MgSO4 bolus + fetal assessment + prepare for delivery."
+    },
+    {
+      "questionId": "mn-p10-003",
+      "topicSlug": "hellp-syndrome",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "HELLP-RUQ-pain-platelets-falling-urgent-delivery",
+      "stem": "A client at 31 weeks with preeclampsia develops worsening right upper quadrant pain, nausea, and headache. Lab results: Hgb 10.1 g/dL, platelets 42,000/mm³, LDH 890 IU/L, AST 112 IU/L, ALT 98 IU/L, creatinine 1.3 mg/dL. BP 162/108. Which nursing priority is most critical?",
+      "options": {"A": "Administer oral iron supplementation for the anemia","B": "Notify the provider of HELLP syndrome findings and prepare for expedited delivery and blood product administration","C": "Increase IV fluid rate to correct the apparent dehydration causing elevated creatinine","D": "Begin antihypertensive therapy only and monitor labs in 6 hours"},
+      "correctAnswer": "B",
+      "rationale": "This is Class I HELLP syndrome (complete): hemolysis (LDH 890, Hgb falling), elevated liver enzymes (AST >70, LDH >600), low platelets (<50,000). Combined with severe-range BP (162/108) and rising creatinine (>1.1 mg/dL = severe preeclampsia feature). Priorities: (1) notify provider urgently, (2) prepare for delivery (HELLP at 31 weeks with platelets <50,000 and severe features = deliver), (3) prepare blood products (platelets, FFP, cryoprecipitate), (4) MgSO4 seizure prophylaxis, (5) treat severe BP.",
+      "incorrectRationales": {"A": "The low hemoglobin is from microangiopathic hemolysis (destruction), not iron deficiency — iron supplementation will not help and is not the priority.", "C": "Increasing IV fluids in a preeclampsia patient risks pulmonary edema (compromised oncotic pressure + endothelial dysfunction). The creatinine is elevated from renal involvement of severe preeclampsia.", "D": "Antihypertensive therapy alone is insufficient for HELLP syndrome — delivery is needed. Observation for 6 hours with falling platelets and HELLP is dangerous."},
+      "hint": "HELLP + platelets <50,000 + severe BP + 31 weeks = immediate delivery + blood products + MgSO4. Urgent intervention needed.",
+      "clinicalPearl": "Platelet nadir in HELLP occurs at 24–48 hours postpartum. Transfuse platelets: <50,000 before vaginal delivery; <100,000 before C-section. Platelet transfusions in HELLP are rapidly consumed — may need multiple units.",
+      "examStrategy": "HELLP syndrome recognition: Hemolysis (LDH >600, low Hgb) + elevated AST/LDH + platelets <100,000. Severe = <50,000. Management = delivery + blood products. Do not delay.",
+      "keyTakeaway": "HELLP (H=Hemolysis, EL=Elevated LFTs, LP=Low Platelets): deliver + blood products + MgSO4. Platelets <50,000 = emergency transfusion; <100,000 pre-C-section."
+    },
+    {
+      "questionId": "mn-p10-004",
+      "topicSlug": "preeclampsia",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "preeclampsia-goal-BP-treatment-not-normalize",
+      "stem": "A client with severe preeclampsia has a blood pressure of 168/112 mmHg. The provider orders labetalol IV for blood pressure management. What is the appropriate BP goal for acute treatment?",
+      "options": {"A": "Normalize BP to <120/80 mmHg within 30 minutes","B": "Lower BP to <160/110 mmHg while avoiding a sudden large drop that could cause uteroplacental insufficiency","C": "Lower BP to 140/90 mmHg or below over 4–6 hours","D": "Hold antihypertensive treatment unless BP exceeds 180/120 mmHg"},
+      "correctAnswer": "B",
+      "rationale": "Acute treatment goal in severe-range hypertension in pregnancy: lower BP to <160/110 mmHg (not normalize). Reason: (1) too rapid BP reduction can cause uteroplacental insufficiency (fetal bradycardia) because the fetus is dependent on the higher maternal BP to maintain placental perfusion; (2) these women have autoregulated to higher BP — sudden reduction causes maternal cerebral ischemia. Target: SBP 130–150 and DBP 80–100 (controlled but not low).",
+      "incorrectRationales": {"A": "Normalizing to <120/80 is inappropriate — too rapid and too low; risks uteroplacental insufficiency and maternal cerebral ischemia.", "C": "4–6 hours is too slow for severe-range BP (≥160/110) — acute treatment should occur within 30–60 minutes to prevent maternal stroke.", "D": "Waiting until 180/120 is dangerous — severe-range BP starts at 160/110 and should be treated within 30–60 minutes to prevent intracerebral hemorrhage (most common cause of maternal death in preeclampsia)."},
+      "hint": "BP goal in acute preeclampsia: <160/110 (NOT normal). Avoid over-correction — protect uteroplacental perfusion.",
+      "clinicalPearl": "The most common cause of maternal death in preeclampsia/eclampsia is hypertensive intracerebral hemorrhage, not seizure. Treating severe-range BP acutely within 30–60 minutes is a patient safety imperative.",
+      "examStrategy": "Preeclampsia BP goal: <160/110 (not <120/80). This is the range that prevents stroke without causing uteroplacental insufficiency. This distinction is frequently tested.",
+      "keyTakeaway": "Preeclampsia acute BP goal: lower to <160/110 (not normalize). Too rapid reduction → uteroplacental insufficiency. Use labetalol, hydralazine, or oral nifedipine for acute treatment."
+    },
+    {
+      "questionId": "mn-p10-005",
+      "topicSlug": "chronic-hypertension-pregnancy",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "low-dose-aspirin-preeclampsia-prevention-timing",
+      "stem": "A nulliparous client at 14 weeks with chronic hypertension asks her nurse why she is being started on aspirin 81 mg/day. Which explanation is most accurate?",
+      "options": {"A": "Aspirin prevents blood clots from forming in the legs during pregnancy","B": "Low-dose aspirin started at 12–16 weeks reduces the risk of developing preeclampsia in high-risk women by improving placental blood flow","C": "Aspirin is given to all pregnant women to prevent placenta previa","D": "Aspirin lowers blood pressure directly and replaces the need for antihypertensive medications in mild chronic hypertension"},
+      "correctAnswer": "B",
+      "rationale": "Low-dose aspirin (81 mg/day) initiated at 12–16 weeks is recommended for women at high risk for preeclampsia (including those with chronic hypertension). Mechanism: aspirin inhibits thromboxane A2 (platelet aggregation, vasoconstriction) while sparing prostacyclin (vasodilation) → improves trophoblast invasion of spiral arteries → reduces the incomplete spiral artery remodeling that underlies preeclampsia pathogenesis. USPTF and ACOG both recommend it for high-risk patients.",
+      "incorrectRationales": {"A": "Low-dose aspirin for preeclampsia prevention is not primarily about DVT — LMWH is used for VTE prophylaxis in pregnancy.", "C": "Low-dose aspirin is not given universally to all pregnant women and does not prevent placenta previa.", "D": "Aspirin does not have significant antihypertensive effects — its mechanism is anti-platelet and anti-thrombotic for improving placental blood flow, not for BP reduction."},
+      "hint": "Low-dose aspirin 12–16 weeks: reduces preeclampsia risk in high-risk women by improving spiral artery remodeling.",
+      "clinicalPearl": "The NNT (number needed to treat) for aspirin preventing one case of preterm preeclampsia is approximately 77. The medication is inexpensive, safe, and effective — major guidelines now recommend offering it to all women with ≥1 high-risk factor.",
+      "examStrategy": "Aspirin questions in pregnancy: dose 81 mg/day, start 12–16 weeks, indication = high-risk for preeclampsia. Mechanism = improves uteroplacental blood flow (not DVT prevention, not BP lowering, not universal).",
+      "keyTakeaway": "Low-dose aspirin 81 mg/day from 12–16 weeks: reduces preeclampsia risk 10–24% in high-risk women (chronic HTN, prior preeclampsia, diabetes, multiples, CKD, autoimmune)."
+    }
+  ],
+  "emergencyScenarios": [
+    {
+      "scenarioId": "mn-emerg-p10-001",
+      "title": "Emergency Scenario 1: Eclamptic Seizure in Labor",
+      "setup": "A client at 38 weeks with severe preeclampsia on MgSO4 suddenly develops tonic-clonic activity at 1415 while being monitored on the labor and delivery unit. She had been complaining of worsening headache for 30 minutes prior.",
+      "criticalActions": [
+        "Note seizure start time; do NOT leave bedside",
+        "Turn to left lateral position immediately — protect airway",
+        "Lower bed rails gently — do NOT restrain limbs",
+        "Apply face mask oxygen 10 L/min",
+        "Suction available at bedside; clear oral secretions as needed",
+        "Call for help/code button — alert charge RN + provider",
+        "Document seizure duration, characteristics (tonic, clonic, generalized/focal)",
+        "AFTER seizure: reassess airway, apply continuous O2",
+        "MgSO4 bolus: if already on maintenance → give 2g IV bolus over 5 min; if not on MgSO4 → 4–6g over 15–20 min",
+        "Assess BP (often transiently elevated during/after seizure)",
+        "Fetal monitoring: document any bradycardia (usually transient); do not immediately section for seizure-related bradycardia",
+        "Calcium gluconate at bedside ready (MgSO4 antidote)",
+        "Notify NICU, anesthesia, provider",
+        "Prepare for delivery after maternal stabilization"
+      ],
+      "keyPoints": "Eclampsia management: protect during seizure, oxygen, no mouth insertion, MgSO4 after. Fetal bradycardia post-seizure is usually transient — reassess before emergency C-section."
+    },
+    {
+      "scenarioId": "mn-emerg-p10-002",
+      "title": "Emergency Scenario 2: MgSO4 Overdose/Toxicity",
+      "setup": "A client on MgSO4 2g/hr for severe preeclampsia develops complaints of difficulty breathing. Assessment: RR 8/min, DTRs absent bilaterally, BP 156/104, O2 sat 88%, urine output 10 mL in the past hour.",
+      "criticalActions": [
+        "STOP MgSO4 infusion immediately — clamp the line",
+        "Call for help — emergency response",
+        "Apply 100% O2 via non-rebreather mask",
+        "Calcium gluconate 1g (10 mL of 10% solution) IV over 3 minutes — ANTIDOTE",
+        "Prepare for potential assisted ventilation (bag-valve mask, intubation)",
+        "Notify provider STAT",
+        "Stat serum magnesium level (draw, but do NOT wait for results before giving antidote)",
+        "Continuous monitoring: vital signs q5 min, pulse oximetry, FHR",
+        "ABG and airway assessment",
+        "If SpO2 remains low after calcium gluconate + O2 — anesthesia for intubation",
+        "Continue to monitor BP (MgSO4 has vasodilatory effect — BP may rise when stopped)",
+        "Reassess need for BP treatment with antihypertensives"
+      ],
+      "keyPoints": "MgSO4 toxicity: STOP infusion + CALCIUM GLUCONATE 1g IV. RR <12 + absent DTRs = act immediately without waiting for lab levels."
+    },
+    {
+      "scenarioId": "mn-emerg-p10-003",
+      "title": "Emergency Scenario 3: Postpartum Preeclampsia Presentation",
+      "setup": "Day 3 postpartum client who had a normal delivery calls from home. She reports severe headache 9/10, seeing 'flashing lights,' and her face looks puffy. At home BP monitor shows 168/112 mmHg. She had been discharged without antihypertensives and denied preeclampsia during her hospitalization.",
+      "criticalActions": [
+        "Instruct to call 911 or come immediately — this is a postpartum preeclampsia emergency",
+        "On arrival: IV access × 2, CBC, CMP, uric acid, LFTs, urine protein",
+        "Continuous BP monitoring q15 min",
+        "MgSO4 loading dose 4–6g + maintenance 1–2g/hr",
+        "Antihypertensive for BP ≥160/110: labetalol IV, hydralazine IV, or nifedipine oral",
+        "Foley catheter + urine output monitoring",
+        "Continuous neurological assessment",
+        "Fetal/neonatal team not needed (postpartum) — focus on maternal management",
+        "Continue MgSO4 24–48h after BP controlled",
+        "Discharge plan: antihypertensive medication, home BP monitoring, follow-up 1–3 days"
+      ],
+      "keyPoints": "Postpartum preeclampsia peaks in first 5 days. Severe headache + visual changes + elevated BP postpartum = emergency. MgSO4 + antihypertensives. Patient must not be sent home without treatment."
+    }
+  ],
+  "flashcards": [
+    {"id":"mn-fc-p10-001","front":"What are the three nursing prerequisites before each dose/assessment of magnesium sulfate?","back":"1. Deep tendon reflexes (DTRs) PRESENT. 2. Respiratory rate ≥12/min. 3. Urine output ≥30 mL/hr (or ≥25 mL/hr × 4h). If ANY of these three is absent/below threshold: HOLD MgSO4 and notify provider.","hint":"3 prerequisites: DTRs present + RR ≥12 + UO ≥30. If any absent = HOLD.","explanation":"Magnesium is renally cleared — decreased urine output leads to accumulation and toxicity. DTRs are the earliest clinical sign of toxicity. RR depression occurs at higher levels. All three must be verified before continuing therapy.","clinicalPearl":"The antidote for MgSO4 toxicity — calcium gluconate 1g IV — should ALWAYS be at the bedside when MgSO4 is running. This is a safety standard. Calcium chloride is NOT used at the bedside (irritating, vesicant, more concentrated)."},
+    {"id":"mn-fc-p10-002","front":"What is the difference between gestational hypertension and preeclampsia?","back":"Gestational HTN: BP ≥140/90 at ≥20 weeks WITHOUT proteinuria or other preeclampsia features. Preeclampsia: BP ≥140/90 at ≥20 weeks WITH proteinuria (≥300 mg/24h) OR severe features (thrombocytopenia, renal/hepatic impairment, pulmonary edema, severe neurological symptoms).","hint":"Gestational HTN = BP alone. Preeclampsia = BP + proteinuria OR end-organ damage.","explanation":"The 2013 ACOG guidelines allow diagnosis of preeclampsia WITHOUT proteinuria if severe features are present (thrombocytopenia, renal insufficiency, elevated LFTs, pulmonary edema, new headache, visual disturbances). This was a major revision — no longer requires proteinuria for diagnosis.","clinicalPearl":"50% of gestational hypertension cases progress to preeclampsia. Close monitoring at each prenatal visit is essential. Rising uric acid levels are an early warning sign of impending preeclampsia."},
+    {"id":"mn-fc-p10-003","front":"What is the first sign of MgSO4 toxicity?","back":"Loss of deep tendon reflexes (DTRs) — occurs at serum magnesium 7–10 mEq/L (therapeutic range is 4–7 mEq/L). This precedes respiratory depression (10–13 mEq/L) and cardiac arrest (>15 mEq/L).","hint":"DTRs lost first. Then respiratory depression. Then cardiac arrest. Detect early = DTRs.",
+"explanation":"This is why DTR assessment before each MgSO4 dose is a nursing safety standard. If DTRs are diminished (not yet absent) with normal RR and UO, the nurse may reduce infusion rate and notify provider. If absent = stop infusion + antidote.","clinicalPearl":"The patellar (knee-jerk) reflex is easiest to assess and most reliable. Biceps and triceps can also be used. Rate DTRs: 0 (absent) to 4+ (hyperactive). Therapeutic goal in preeclampsia: DTRs should be 1–2+. Document before each dose."},
+    {"id":"mn-fc-p10-004","front":"What is HELLP syndrome?","back":"H = Hemolysis (microangiopathic hemolytic anemia: LDH ≥600, burr cells). EL = Elevated Liver enzymes (AST ≥70). LP = Low Platelets (<100,000/mm³). A severe variant of preeclampsia associated with high maternal and perinatal mortality.","hint":"HELLP: H-hemolysis, EL-elevated LFTs, LP-low platelets. All three together = HELLP.",
+"explanation":"HELLP can occur WITHOUT classic preeclampsia (no HTN or proteinuria in 10–20%). Presentation: RUQ/epigastric pain, malaise, nausea/vomiting, flu-like symptoms. Management: deliver (only cure) + MgSO4 + blood products as needed.","clinicalPearl":"The MOST specific sign of HELLP is RUQ pain combined with elevated LFTs — this reflects hepatic capsule distension from hepatic edema or infarction. Severe RUQ pain + sudden hemodynamic deterioration = hepatic rupture (surgical emergency with 59% maternal mortality)."},
+    {"id":"mn-fc-p10-005","front":"What are the severe features of preeclampsia?","back":"Any ONE of: SBP ≥160 or DBP ≥110; platelets <100,000; creatinine >1.1 mg/dL or doubling; LFTs >2× ULN + RUQ/epigastric pain; pulmonary edema; new onset headache unresponsive to medication; visual disturbances; EFW <5th percentile (severe growth restriction).","hint":"7 severe features: BP ≥160/110, low platelets, high creatinine, elevated LFTs+pain, pulmonary edema, headache, visual changes.","explanation":"Previously, 'severe preeclampsia' required proteinuria >5g/24h — this criterion was removed in 2013 because proteinuria quantity does not predict outcome. Any ONE severe feature defines severe preeclampsia regardless of proteinuria level.","clinicalPearl":"'Persistent headache unresponsive to medications' is the most subjective criterion but also clinically significant. A frontal/occipital headache that does not respond to 1g acetaminophen in a preeclamptic woman warrants urgent evaluation and likely escalation to magnesium sulfate."},
+    {"id":"mn-fc-p10-006","front":"What are the safe antihypertensive medications for use in pregnancy?","back":"Safe: Labetalol (alpha/beta blocker — first-line IV), Nifedipine (CCB — oral), Hydralazine (vasodilator — IV), Methyldopa (alpha-2 agonist — oral). AVOID: ACE inhibitors (renal agenesis, oligohydramnios), ARBs, diuretics (↓ placental perfusion).","hint":"Safe: Labetalol, Nifedipine, Hydralazine, Methyldopa. AVOID: ACE inhibitors, ARBs, diuretics.","explanation":"ACE inhibitors and ARBs cause fetal renal tubular dysplasia → oligohydramnios + renal agenesis + pulmonary hypoplasia (fetal ACE inhibitor syndrome). This is teratogenic in 2nd/3rd trimesters (less so in 1st trimester but still avoid). Diuretics reduce plasma volume that has expanded appropriately in pregnancy, potentially harming placental perfusion.","clinicalPearl":"Sublingual nifedipine (biting the capsule) was historically used for acute BP management — it is NOW CONTRAINDICATED due to uncontrolled rapid BP drop causing fetal bradycardia and maternal cerebral ischemia. Only ORAL nifedipine (swallowed) is used in obstetric care."},
+    {"id":"mn-fc-p10-007","front":"What is low-dose aspirin and when is it indicated for preeclampsia prevention?","back":"Aspirin 81 mg/day from 12–16 weeks gestation. Indicated for women with ≥1 high-risk factor: prior preeclampsia, multiple gestation, chronic HTN, DM1/2, renal disease, autoimmune disease (SLE, APS). Reduces preeclampsia risk by 10–24%.","hint":"81 mg/day from 12–16 weeks for high-risk women. Not for everyone.",
+"explanation":"Mechanism: aspirin suppresses thromboxane A2 (vasoconstrictor/platelet aggregant) while sparing prostacyclin (vasodilator) → improves trophoblast invasion and spiral artery remodeling → reduces uteroplacental dysfunction. Must be started before 20 weeks when spiral artery remodeling is still ongoing.","clinicalPearl":"Aspirin has the greatest efficacy when started at ≤16 weeks AND when used in women with highest-risk profiles (prior preterm preeclampsia has 10–15% recurrence risk reduced to ~3% with aspirin + close monitoring)."},
+    {"id":"mn-fc-p10-008","front":"What is the postpartum risk of preeclampsia?","back":"Preeclampsia most commonly presents antepartum or intrapartum, but up to 25% of eclampsia and postpartum preeclampsia present AFTER delivery — typically within the first 5 days, but can occur up to 6 weeks postpartum. BP may paradoxically worsen in the first 2–5 days postpartum.","hint":"Preeclampsia/eclampsia can present AFTER delivery — up to 6 weeks postpartum. Discharge education is critical.","explanation":"Postpartum fluid mobilization (autotransfusion of up to 500–1,000 mL from uteroplacental circulation after placental delivery) increases cardiac preload → BP rise. Women with mild preeclampsia during labor may develop severe preeclampsia in the first 48–72 hours postpartum.","clinicalPearl":"Postpartum hypertension is increasingly recognized as a cause of delayed maternal morbidity. All postpartum women should receive standardized education about danger signs: severe headache, visual changes, RUQ pain, swelling of face/hands. Some hospitals now provide home BP cuffs with standardized remote monitoring."}
+  ]
+}

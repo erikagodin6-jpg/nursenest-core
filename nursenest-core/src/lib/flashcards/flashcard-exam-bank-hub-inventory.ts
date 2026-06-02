@@ -22,6 +22,7 @@ import {
 } from "@/lib/questions/difficulty-scope-filter";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { GENERAL_STUDY_BANK_MODULE_SCOPE_SQL } from "@/lib/study-question-pool/study-question-pool-gates";
+import { cacheGet, cacheSet } from "@/lib/server/content-cache";
 import {
   canAccessRtVentilatorModuleForTierAndProfession,
   isRtVentilatorLearnerModuleEnabled,
@@ -34,34 +35,11 @@ const EXAM_HUB_GROUP_ROW_LIMIT = 320;
 /** Cap rows pulled when building learner sessions from the live exam bank (bounded query). */
 const EXAM_FLASHCARD_SESSION_POOL_CAP = 4000;
 
-// ─── Exam question pool row cache ─────────────────────────────────────────────
-// The exam bank pool rows for a session depend only on pathway + topic + row count
-// (NOT the user). Caching them for 60 seconds eliminates the parallel $transaction
-// (~30–80 ms) from every warm session build.  The eager pool chain fires this call
-// concurrently with the flashcard DB scan; on cache hit the chain resolves in < 1 ms,
-// reducing the critical-path latency by the full pool query cost.
-//
-// Key: "{pathwayId}:{topicFilter}:{cap}" — topology-only, no user data.
-// TTL: 60 s (matches lesson-virtual snapshot TTL in flashcard-pool-snapshot.server.ts).
-// Capacity: 128 entries (covers all pathways × common topic filters with headroom).
-const EXAM_POOL_ROW_CACHE_TTL_MS = 60_000;
-const EXAM_POOL_ROW_CACHE_MAX = 128;
-type ExamPoolCacheEntry = { rows: ExamQuestionFlashcardPoolRow[]; expiresAt: number };
-const examPoolRowCache = new Map<string, ExamPoolCacheEntry>();
+const EXAM_POOL_ROW_CACHE_TTL_SECONDS = 60;
 
 function examPoolCacheKey(pathway: ExamPathwayDefinition, topicFilter: string | null, cap: number): string {
-  return `${pathway.id}:${topicFilter ?? ""}:${cap}`;
-}
-
-function pruneExamPoolCache(now: number): void {
-  for (const [k, e] of examPoolRowCache) {
-    if (e.expiresAt <= now) examPoolRowCache.delete(k);
-  }
-  while (examPoolRowCache.size > EXAM_POOL_ROW_CACHE_MAX) {
-    const oldest = examPoolRowCache.keys().next().value;
-    if (!oldest) break;
-    examPoolRowCache.delete(oldest);
-  }
+  const topic = (topicFilter ?? "").trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "_").slice(0, 120);
+  return `flashcards:exam-pool-rows:${pathway.id}:${topic}:${cap}:v2`;
 }
 
 /**
@@ -316,13 +294,11 @@ export async function loadExamQuestionRowsForFlashcardPool(
   const topicScope = topicOrBodySystemMatchSql(topicFilter);
   const cap = Math.min(Math.max(Math.floor(take), 1), EXAM_FLASHCARD_SESSION_POOL_CAP);
 
-  // Check in-process cache — exam pool rows depend only on topology (pathway + topic + count),
-  // not on the user. A 60-second in-process hit eliminates the $transaction entirely on warm calls.
+  // Check Redis cache — exam pool rows depend only on topology (pathway + topic + count),
+  // not on the user. A warm hit eliminates the $transaction without retaining rows in process heap.
   const cacheKey = examPoolCacheKey(pathway, topicFilter, cap);
-  const now = Date.now();
-  pruneExamPoolCache(now);
-  const cached = examPoolRowCache.get(cacheKey);
-  if (cached && cached.expiresAt > now) return cached.rows;
+  const cached = await cacheGet<ExamQuestionFlashcardPoolRow[]>(cacheKey);
+  if (cached && cached.length > 0) return cached;
 
   const hasStudyLinkCol = await getStudyLinkPathwayColumnExists();
   const candidateScopes = flashcardLearnerExamPoolCandidateScopes(poolScope, pathway);
@@ -374,7 +350,7 @@ export async function loadExamQuestionRowsForFlashcardPool(
   const result = Array.isArray(rows) ? rows : [];
   // Store in cache only if we got rows — avoids caching a transient empty response.
   if (result.length > 0) {
-    examPoolRowCache.set(cacheKey, { rows: result, expiresAt: now + EXAM_POOL_ROW_CACHE_TTL_MS });
+    await cacheSet(cacheKey, result, EXAM_POOL_ROW_CACHE_TTL_SECONDS).catch(() => {});
   }
   return result;
 }
