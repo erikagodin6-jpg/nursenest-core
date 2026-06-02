@@ -1,0 +1,485 @@
+[
+  {
+    "slug": "normal-cardiovascular-aging",
+    "title": "Normal Cardiovascular Changes of Aging",
+    "packageId": "pkg2-physiological",
+    "bodySystem": "Cardiovascular",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+    "sections": [
+      {
+        "id": "learning_objectives",
+        "heading": "Learning Objectives",
+        "kind": "learning_objectives",
+        "body": "1. Describe expected cardiovascular changes with normal aging\n2. Differentiate normal cardiovascular aging from pathological cardiovascular disease\n3. Identify clinical implications of age-related cardiovascular changes\n4. Apply cardiovascular assessment considerations specific to older adults\n5. Recognize atypical presentations of cardiovascular events in older adults"
+      },
+      {
+        "id": "normal_aging_changes",
+        "heading": "Normal Age-Related Cardiovascular Changes",
+        "kind": "normal_changes",
+        "body": "**Expected changes — NORMAL aging:**\n\n**Heart:**\n- Left ventricular wall thickening (hypertrophy without obstruction)\n- Decreased number of sinoatrial node pacemaker cells → slower intrinsic heart rate\n- Reduced cardiac reserve (diminished maximal cardiac output with stress)\n- Decreased early diastolic filling rate → increased dependence on atrial kick (atrial systole accounts for up to 40% of ventricular filling in older adults vs 15–20% in young adults)\n- Prolonged myocardial relaxation time → decreased diastolic compliance\n- Aortic valve and mitral valve leaflet thickening and calcification → often produces murmurs WITHOUT haemodynamic significance\n- Increased systolic blood pressure (due to arterial stiffness) with relatively preserved diastolic BP\n\n**Blood vessels:**\n- Aortic and large vessel stiffening (arteriosclerosis — normal, NOT atherosclerosis — pathological)\n- Widened pulse pressure (systolic - diastolic increases with age)\n- Reduced baroreceptor sensitivity → impaired ability to respond to positional changes → orthostatic hypotension risk\n\n**Response to exercise:**\n- Lower maximal heart rate (estimated maximum: 220 - age)\n- Lower maximal cardiac output under stress\n- Normal resting HR and BP — resting function generally preserved"
+      },
+      {
+        "id": "abnormal_findings",
+        "heading": "Abnormal Cardiovascular Findings — NOT Normal Aging",
+        "kind": "abnormal_findings",
+        "body": "**Always investigate:**\n- New-onset chest pain → NEVER attribute to age\n- Syncope → orthostatic, cardiac, neurological cause must be determined\n- Dyspnoea at rest or new-onset exertional dyspnoea\n- Palpitations with symptoms (dizziness, syncope, near-syncope)\n- Significant peripheral oedema\n- New cardiac murmur with symptoms\n- Orthostatic hypotension with symptoms (dizziness, pre-syncope on standing)\n- Resting HR <50 or >100 with symptoms\n- Significant pulse pressure widening (>60–70 mmHg) → aortic regurgitation or stenosis\n\n**Atypical MI presentation in older adults:**\n- Absence of chest pain in up to 40% of older adults with MI\n- Presenting symptoms: dyspnoea, fatigue, nausea, confusion, syncope, jaw pain, epigastric pain\n- Silent MI is more common — may present retrospectively as functional decline or new heart failure"
+      },
+      {
+        "id": "assessment",
+        "heading": "Assessment Considerations",
+        "kind": "assessment",
+        "body": "**Cardiovascular assessment in older adults:**\n- Always assess orthostatic BP: measure lying, then standing at 1 and 3 minutes\n  → Orthostatic hypotension = systolic drop ≥20 mmHg OR diastolic drop ≥10 mmHg on standing\n- Document baseline resting HR and BP — both essential reference points\n- Auscultate for murmurs — note presence, grade, and whether symptomatic\n- Assess for signs of heart failure: JVD, peripheral oedema, bibasal crackles, S3 gallop\n- Assess peripheral perfusion: pedal pulses, capillary refill, skin temperature\n- Review medications that affect cardiovascular function: diuretics, beta-blockers, antihypertensives, digoxin\n- ECG changes in normal aging: left axis deviation, ST-T wave changes, bundle branch blocks — interpret in clinical context"
+      },
+      {
+        "id": "interventions",
+        "heading": "Nursing Interventions",
+        "kind": "interventions",
+        "body": "- Orthostatic hypotension prevention: gradual position changes (dangle at bedside), adequate hydration, compression stockings\n- Fall prevention: related to orthostatic changes and reduced baroreceptor sensitivity\n- Medication management: review antihypertensives, diuretics for orthostatic risk\n- Cardiac monitoring during acute illness\n- Teach patients to rise slowly from lying or sitting\n- Activity: encourage safe graduated exercise — cardiac conditioning is possible in older adults\n- Fluid and sodium management in heart failure"
+      },
+      {
+        "id": "patient_teaching",
+        "heading": "Patient & Family Teaching",
+        "kind": "patient_teaching",
+        "body": "- Rise slowly from lying to sitting, sit at edge of bed before standing\n- Report new chest pain, dyspnoea, or syncope immediately — do not wait to see if it resolves\n- Take blood pressure and heart rate medications as prescribed — do not skip or adjust\n- Recognize symptoms of heart failure: rapid weight gain (>1 kg/day, >2 kg/week), increased swelling, worsening breathlessness\n- Stay hydrated — adequate fluid intake maintains blood pressure and prevents orthostatic hypotension"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- **Atrial fibrillation is more common in older adults** because of structural changes to atrial tissue and increased autonomic instability — in older adults, loss of atrial kick can significantly reduce cardiac output\n- **Pulse pressure widens with age** — a BP of 160/70 mmHg in a 78-year-old is different from 160/70 in a 40-year-old; consider the clinical context\n- **Silent MI** — older adults, women, and diabetics most commonly present without chest pain — dyspnoea, confusion, or functional decline may be the only symptoms\n- **Baroreceptor blunting** — older adults cannot compensate for positional changes as quickly as younger adults; even a glass of wine or a hot shower can cause clinically significant orthostatic hypotension"
+      },
+      {
+        "id": "safety_alerts",
+        "heading": "Safety Alerts",
+        "kind": "safety_alerts",
+        "body": "🚨 **Chest pain is never 'too old to investigate'** — cardiac workup is indicated at any age\n🚨 **Orthostatic hypotension + fall** — if an older adult falls, always check orthostatic BP as a potential precipitant\n🚨 **Syncope in older adults** → must distinguish cardiac (arrhythmia, structural disease), orthostatic, vasovagal, and neurological causes — workup required\n🚨 **Rapid functional decline or new confusion in a cardiac patient** → consider silent MI, arrhythmia, or acute heart failure decompensation"
+      },
+      {
+        "id": "exam_tips",
+        "heading": "Exam Tips",
+        "kind": "exam_tips",
+        "body": "- Normal aging: widened pulse pressure, increased SBP, reduced maximal HR, decreased cardiac reserve\n- NOT normal: chest pain, new dyspnoea, syncope, significant arrhythmias\n- Orthostatic hypotension definition: SBP drop ≥20 OR DBP drop ≥10 mmHg on standing\n- MI in older adults: classic chest pain may be ABSENT — watch for atypical presentations\n- Reduced baroreceptor sensitivity → orthostatic hypotension risk → fall risk"
+      },
+      {
+        "id": "key_takeaways",
+        "heading": "Key Takeaways",
+        "kind": "key_takeaways",
+        "body": "- Normal CV aging: arterial stiffening, increased SBP, widened pulse pressure, reduced cardiac reserve, blunted baroreceptors\n- Resting HR and BP generally preserved in healthy older adults\n- Orthostatic hypotension: common, related to blunted baroreceptors — prevent with slow position changes\n- MI in older adults: up to 40% lack chest pain — watch for dyspnoea, fatigue, confusion, syncope\n- Maximum HR decreases with age (220 - age); cardiac reserve (not resting function) is reduced"
+      }
+    ]
+  },
+  {
+    "slug": "orthostatic-hypotension",
+    "title": "Orthostatic Hypotension in Older Adults",
+    "packageId": "pkg2-physiological",
+    "bodySystem": "Cardiovascular",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+    "sections": [
+      {
+        "id": "learning_objectives",
+        "heading": "Learning Objectives",
+        "kind": "learning_objectives",
+        "body": "1. Define orthostatic hypotension and describe its diagnostic criteria\n2. Identify causes and risk factors for orthostatic hypotension in older adults\n3. Describe the clinical manifestations and complications of orthostatic hypotension\n4. Apply nursing assessment for orthostatic hypotension\n5. Implement evidence-based interventions to prevent and manage orthostatic hypotension"
+      },
+      {
+        "id": "normal_aging_changes",
+        "heading": "Orthostatic Hypotension — Definition & Pathophysiology",
+        "kind": "normal_changes",
+        "body": "**Definition:** A drop in blood pressure of ≥20 mmHg systolic OR ≥10 mmHg diastolic within 3 minutes of standing from a seated or supine position.\n\n**Pathophysiology in older adults:**\n- Blunted baroreceptor sensitivity → delayed and inadequate reflex vasoconstriction and tachycardia on standing\n- Pooling of blood in lower extremities → reduced venous return → reduced cardiac output → drop in BP\n- Reduced ventricular compliance → less reserve to compensate for decreased preload\n- Impaired thirst sensation → chronic mild dehydration → reduced intravascular volume\n\n**Prevalence:**\n- Affects 20% of community-dwelling older adults and up to 50% of nursing home residents\n- Increases dramatically with frailty and multiple medications\n\n**Causes & Risk Factors:**\n- **Medications** (most common): antihypertensives, diuretics, alpha-blockers (tamsulosin), tricyclics, antipsychotics, nitrates, sildenafil\n- **Dehydration**: vomiting, diarrhea, inadequate intake, diuretics\n- **Neurological conditions**: Parkinson's disease, autonomic neuropathy (diabetes), Lewy body dementia\n- **Prolonged bed rest/deconditioning**\n- **Post-prandial** (blood shunted to gut after eating — common trigger)"
+      },
+      {
+        "id": "abnormal_findings",
+        "heading": "Clinical Manifestations & Complications",
+        "kind": "abnormal_findings",
+        "body": "**Symptoms (occur within seconds to 3 minutes of standing):**\n- Dizziness, lightheadedness, 'grey out'\n- Blurred vision\n- Near-syncope or syncope (loss of consciousness)\n- Falls\n- Weakness, fatigue\n- Nausea\n- Note: Many older adults are ASYMPTOMATIC despite documented orthostatic drop — they have adapted but remain at fall risk\n\n**Complications:**\n- Falls and fall-related injuries (hip fracture, traumatic brain injury)\n- Syncope\n- Myocardial and cerebral ischaemia (if BP drop prolonged)\n- Hospitalization"
+      },
+      {
+        "id": "assessment",
+        "heading": "Assessment",
+        "kind": "assessment",
+        "body": "**Orthostatic BP measurement protocol:**\n1. Have patient lie supine for 5 minutes\n2. Measure BP and HR\n3. Ask patient to stand\n4. Measure BP and HR at 1 minute standing\n5. Measure BP and HR at 3 minutes standing\n6. Note symptoms during each measurement\n\n**Positive = SBP drop ≥20 mmHg OR DBP drop ≥10 mmHg at any measurement**\n\n**Document:** Readings, timing, symptoms, HR response (should increase to compensate — failure to increase suggests autonomic neuropathy or beta-blocker effect)\n\n**When to assess:**\n- All falls, near-falls, or dizziness complaints\n- On any new or changed medication affecting blood pressure\n- After prolonged bed rest or immobility\n- Before discharge in hospitalized older adults"
+      },
+      {
+        "id": "interventions",
+        "heading": "Nursing Interventions",
+        "kind": "interventions",
+        "body": "**Non-pharmacological (first-line):**\n- **Gradual position changes**: rise slowly from lying → sitting (dangle at edge of bed 1–2 minutes) → standing\n- **Adequate hydration**: ensure adequate fluid intake throughout the day\n- **Compression stockings** (grade II, thigh or knee high) — worn from waking, before standing\n- **Abdominal binder** — particularly for autonomic neuropathy\n- **Avoid prolonged standing** in warm environments\n- **Counter-manoeuvres**: leg crossing, calf raises, squatting — activate muscle pump\n- **Timing**: avoid upright activity immediately post-prandially (post-prandial hypotension window)\n- **Medication review**: identify and deprescribe/reduce offending medications with prescriber\n- **Head-up tilt sleeping** (reverse Trendelenburg 10–30°) for severe cases\n\n**Fall prevention:**\n- Ensure call bell accessible\n- Supervise ambulation with orthostatic history\n- Non-slip footwear\n- Assistive device at bedside"
+      },
+      {
+        "id": "patient_teaching",
+        "heading": "Patient & Family Teaching",
+        "kind": "patient_teaching",
+        "body": "- Rise slowly: lying → sitting at edge of bed → stand (pause 1–2 minutes at each stage)\n- Pump feet up and down (dorsiflexion) before standing\n- Cross legs and tense leg muscles when standing for prolonged periods\n- Avoid large meals followed by immediate activity (post-prandial hypotension)\n- Wear compression stockings — put on before getting out of bed\n- Maintain adequate fluid intake (unless restricted for medical reason)\n- Report any dizziness on standing immediately\n- Avoid alcohol, hot showers/baths, and prolonged standing\n- Know which medications contribute to low BP"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- **Post-prandial hypotension** is a distinct and common syndrome — BP drops 20–30 minutes after eating as blood is shunted to the gut; watch for falls after meals in LTC residents\n- **Asymptomatic orthostatic hypotension** is still dangerous — patients adapt to the sensation and don't report it, but they still fall\n- **Tamsulosin** (Flomax) is a common alpha-blocker used for BPH that causes significant orthostatic hypotension — ask about BPH medications in older men with falls\n- **The first dose effect**: antihypertensives, alpha-blockers, and nitrates can cause profound first-dose orthostatic hypotension — monitor closely after initiation\n- **Always measure in both supine and standing positions** — measuring only sitting may miss significant orthostatic drops"
+      },
+      {
+        "id": "safety_alerts",
+        "heading": "Safety Alerts",
+        "kind": "safety_alerts",
+        "body": "🚨 **Any fall in an older adult patient requires orthostatic BP measurement** as part of the fall assessment\n🚨 **Never rush an older adult with orthostatic hypotension to stand** — allow adequate dangle time; call for assistance\n🚨 **Post-prandial orthostatic hypotension** is highest in the 30–60 minute window after meals — supervise ambulation in this window in LTC\n🚨 **Multiple antihypertensive agents** = high orthostatic hypotension risk; review and potentially deprescribe with physician/NP"
+      },
+      {
+        "id": "exam_tips",
+        "heading": "Exam Tips",
+        "kind": "exam_tips",
+        "body": "- Orthostatic hypotension definition: SBP ≥20 mmHg drop OR DBP ≥10 mmHg drop within 3 minutes of standing\n- Most common cause in older adults: medications (antihypertensives, diuretics, alpha-blockers)\n- Priority nursing intervention: slow position changes (dangle first)\n- Fall + elderly + dizziness on standing = suspect orthostatic hypotension\n- Asymptomatic orthostatic hypotension still causes falls — don't reassure just because patient isn't dizzy"
+      },
+      {
+        "id": "key_takeaways",
+        "heading": "Key Takeaways",
+        "kind": "key_takeaways",
+        "body": "- Orthostatic hypotension: SBP drop ≥20 OR DBP drop ≥10 mmHg within 3 min of standing\n- Common in older adults: blunted baroreceptors, dehydration, medications\n- Most common medication causes: antihypertensives, diuretics, alpha-blockers, nitrates\n- Key nursing intervention: gradual position changes, dangle at bedside before standing\n- Assess: supine, then 1 min and 3 min standing; document readings and symptoms\n- Post-prandial hypotension: common 30–60 min after meals — highest fall risk window"
+      }
+    ]
+  },
+  {
+    "slug": "respiratory-aging-changes",
+    "title": "Normal Respiratory Changes of Aging",
+    "packageId": "pkg2-physiological",
+    "bodySystem": "Respiratory",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+    "sections": [
+      {
+        "id": "learning_objectives",
+        "heading": "Learning Objectives",
+        "kind": "learning_objectives",
+        "body": "1. Describe expected respiratory changes with normal aging\n2. Differentiate normal respiratory aging from respiratory disease\n3. Explain why older adults are at increased risk for respiratory infections and aspiration\n4. Identify clinical implications of reduced respiratory reserve in older adults\n5. Apply respiratory assessment considerations specific to older adults"
+      },
+      {
+        "id": "normal_aging_changes",
+        "heading": "Normal Respiratory Aging Changes",
+        "kind": "normal_changes",
+        "body": "**Structural changes:**\n- Chest wall stiffening (calcification of cartilage, decreased intercostal muscle strength)\n- Increased anterior-posterior diameter of chest (barrel chest appearance in some)\n- Alveolar enlargement (mild emphysema-like changes) WITHOUT smoking\n- Decreased elastic recoil of lung tissue → air trapping → increased residual volume\n- Flattened diaphragm from increased RV\n\n**Functional changes (EXPECTED):**\n- Decreased forced expiratory volume (FEV1 declines ~30 mL/year after age 30)\n- Decreased vital capacity (VC)\n- Increased residual volume (RV) — trapped air after expiration\n- Decreased diffusing capacity (DLCO) — less efficient gas exchange\n- Decreased PaO2 with age: Normal PaO2 in older adult = 80 - (0.27 × age) mmHg; at 80 years, normal PaO2 ≈ 58–70 mmHg\n- SpO2 is often 94–97% in healthy older adults (not 98–100%)\n- Normal respiratory rate unchanged (12–20/min)\n- Decreased cough reflex strength → reduced ability to clear secretions\n- Blunted response to hypoxia and hypercarbia (less sensitive chemoreceptors)"
+      },
+      {
+        "id": "abnormal_findings",
+        "heading": "Abnormal Respiratory Findings — NOT Normal Aging",
+        "kind": "abnormal_findings",
+        "body": "**Always investigate:**\n- SpO2 <94% at rest in a previously well older adult\n- Respiratory rate >20/min (tachypnoea)\n- Respiratory rate <8/min (bradypnoea)\n- New-onset dyspnoea at rest or minimal exertion\n- Productive cough with coloured sputum\n- Haemoptysis\n- Crackles, wheeze, or diminished breath sounds on auscultation\n- Pleuritic chest pain\n- Paradoxical breathing or use of accessory muscles\n\n**Atypical pneumonia presentation in older adults:**\n- May lack fever (blunted immune and thermoregulatory response)\n- May present only as: confusion/delirium, anorexia, falls, functional decline\n- Cough may be minimal (reduced cough reflex)\n- Classic consolidation signs may be absent"
+      },
+      {
+        "id": "assessment",
+        "heading": "Assessment Considerations",
+        "kind": "assessment",
+        "body": "**Respiratory assessment in older adults:**\n- Assess respiratory rate (count for full 60 seconds)\n- Note breathing pattern and use of accessory muscles\n- SpO2 monitoring — know patient's baseline\n- Auscultate all lung fields (anterior and posterior)\n- Assess for purulent sputum, haemoptysis\n- Note voice quality changes (wet/gurgling = aspiration risk)\n- Screen for dysphagia and aspiration risk\n- Assess smoking history (pack-years)\n- Assess vaccination status: influenza (annual), pneumococcal (PCV15 or PCV20, then PPSV23)\n- Peak flow measurement or spirometry for chronic respiratory disease monitoring"
+      },
+      {
+        "id": "interventions",
+        "heading": "Nursing Interventions",
+        "kind": "interventions",
+        "body": "- **Aspiration prevention**: head of bed elevated 30–45° for all meals; semi-upright position post-meals for 30–60 min; oral hygiene before meals\n- **Secretion clearance**: encourage deep breathing and coughing (ineffective cough = higher infection risk); incentive spirometry post-operatively\n- **Smoking cessation**: benefit at any age — reduces progression of COPD, reduces respiratory infection risk\n- **Immunizations**: annual influenza, pneumococcal vaccine series\n- **Positioning**: elevate head of bed for dyspnoea; lateral positioning for secretion drainage\n- **Supplemental oxygen**: titrate to SpO2 target (usually 92–96% in COPD patients)\n- **Early recognition of respiratory infection** — monitor for atypical signs in cognitively impaired older adults"
+      },
+      {
+        "id": "patient_teaching",
+        "heading": "Patient & Family Teaching",
+        "kind": "patient_teaching",
+        "body": "- Annual influenza vaccine and pneumococcal vaccination series are strongly recommended\n- Sit upright for all meals; don't eat lying down\n- Smoking cessation support — benefit at any age\n- Report new or worsening shortness of breath, cough with coloured sputum, chest pain immediately\n- Pursed-lip breathing techniques for COPD management\n- Avoid second-hand smoke and air pollution"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- **'Silent aspiration'** is more common in older adults — aspiration events that do not trigger cough, which leads to aspiration pneumonia from pooled oral secretions. Oral hygiene 2×/day with chlorhexidine reduces aspiration pneumonia in LTC.\n- **SpO2 of 94–97%** may be the older adult's true baseline — a drop to 90% is significant even if absolute number seems acceptable in a younger adult\n- **Blunted hypoxic response** — older adults may not become visibly dyspnoeic until their hypoxia is severe. SpO2 monitoring is essential, not just clinical appearance.\n- **Post-operative respiratory complications** are 3–5× more common in older adults due to reduced respiratory reserve — incentive spirometry and early mobilization are mandatory"
+      },
+      {
+        "id": "safety_alerts",
+        "heading": "Safety Alerts",
+        "kind": "safety_alerts",
+        "body": "🚨 **Aspiration risk** is significantly elevated in older adults with dysphagia, reduced cough, cognitive impairment, or sedating medications — position upright for all oral intake\n🚨 **Respiratory infections present atypically in older adults** — confusion, falls, and anorexia may be the only signs of pneumonia\n🚨 **High-flow oxygen in COPD** — in COPD with hypercarbic respiratory failure, high-flow O2 can suppress respiratory drive — target SpO2 88–92%\n🚨 **Post-operative atelectasis and pneumonia** are leading causes of post-operative death in older adults — prevent with incentive spirometry, deep breathing, early mobilization"
+      },
+      {
+        "id": "exam_tips",
+        "heading": "Exam Tips",
+        "kind": "exam_tips",
+        "body": "- Normal SpO2 in healthy older adults: 94–97%\n- Normal PaO2 declines with age: ~70–80 mmHg at 70–80 years\n- Reduced cough reflex + reduced ciliary function = infection risk\n- Aspiration prevention: HOB 30–45° during and after meals\n- Pneumonia in older adults: may lack fever; watch for confusion, functional decline, falls\n- Incentive spirometry: key post-operative respiratory nursing intervention in older adults"
+      },
+      {
+        "id": "key_takeaways",
+        "heading": "Key Takeaways",
+        "kind": "key_takeaways",
+        "body": "- Normal respiratory aging: decreased lung elasticity, increased RV, decreased VC, reduced DLCO, blunted cough reflex\n- Normal SpO2 in older adults may be 94–97% (not 98–100%)\n- Normal PaO2 declines with age — calculate expected value\n- Reduced cough + impaired ciliary function → increased aspiration and infection risk\n- Pneumonia in older adults = often atypical: confusion, functional decline, no fever\n- Aspiration prevention: upright positioning for all meals, oral hygiene, dysphagia screening"
+      }
+    ]
+  },
+  {
+    "slug": "neurological-cognitive-aging",
+    "title": "Normal Neurological & Cognitive Changes of Aging",
+    "packageId": "pkg2-physiological",
+    "bodySystem": "Neurological",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+    "sections": [
+      {
+        "id": "learning_objectives",
+        "heading": "Learning Objectives",
+        "kind": "learning_objectives",
+        "body": "1. Describe expected neurological changes with normal aging\n2. Differentiate normal cognitive aging from mild cognitive impairment and dementia\n3. Explain age-related changes in sleep, sensory function, and reflexes\n4. Apply neurological assessment considerations to older adult care\n5. Identify which cognitive changes require further evaluation"
+      },
+      {
+        "id": "normal_aging_changes",
+        "heading": "Normal Neurological Aging Changes",
+        "kind": "normal_changes",
+        "body": "**Brain structure:**\n- Gradual decrease in brain volume (primarily grey matter) — does not correlate directly with cognitive decline\n- White matter changes on MRI common in older adults — 'white matter hyperintensities' — normal in small amounts\n- Decreased neurotransmitter synthesis and receptor sensitivity (dopamine, acetylcholine, norepinephrine)\n- Reduced dendritic branching but preserved neuroplasticity (ability to form new connections)\n\n**Cognitive changes — NORMAL:**\n- **Processing speed** → slowed significantly (most robust cognitive aging change)\n- **Working memory** → mildly decreased (holding information briefly while processing)\n- **Word-finding** → tip-of-the-tongue phenomenon (delayed, not absent recall)\n- **Episodic memory** → mildly decreased (new learning requires more repetition)\n- **Semantic memory** (general knowledge, vocabulary) → PRESERVED or improved\n- **Long-term memory** → generally PRESERVED\n- **Executive function** → mildly decreased (planning, problem-solving, cognitive flexibility)\n- **Wisdom and emotional regulation** → typically IMPROVED with age\n\n**Sensory changes — NORMAL:**\n- Vision: presbyopia (near focus loss), reduced contrast sensitivity, slower dark adaptation, reduced visual acuity\n- Hearing: presbycusis (high-frequency hearing loss, bilateral, sensorineural)\n- Taste & smell: decreased sensitivity → nutrition and medication adherence implications\n- Touch and vibration: reduced perception, especially in feet → balance implications\n- Proprioception: reduced → balance implications\n\n**Sleep changes — NORMAL:**\n- Decreased total sleep time (7→6 hours common)\n- Increased sleep latency (taking longer to fall asleep)\n- Decreased deep (stage 3/4) sleep\n- Increased nighttime awakenings\n- Earlier sleep onset and wake time (advanced sleep phase) — circadian phase advance\n- Note: The NEED for sleep does NOT decrease — sleep efficiency decreases"
+      },
+      {
+        "id": "abnormal_findings",
+        "heading": "Abnormal Neurological Findings — NOT Normal Aging",
+        "kind": "abnormal_findings",
+        "body": "**Cognitive — NEVER normal:**\n- Acute confusion (delirium) — always pathological\n- Getting lost in familiar places\n- Forgetting family member names\n- Significant short-term memory loss affecting daily function (dementia)\n- Impaired judgment (turning on stove and forgetting; driving dangerously)\n- Personality changes\n- Language disintegration (aphasia)\n- Significant executive function loss affecting ADLs\n\n**Sensory — NOT normal:**\n- Sudden vision loss → urgent evaluation\n- Sudden hearing loss → urgent evaluation\n- Monocular vision changes → may suggest TIA/stroke\n\n**Sleep — NOT normal:**\n- Excessive daytime sleepiness that impairs function\n- Sleep apnea symptoms (witnessed apnoea, snoring, morning headache)\n- REM sleep behaviour disorder (acting out dreams — associated with Lewy body dementia, Parkinson's)\n- Hypersomnia — sleeping >10 hours without restorative feeling → depression, medication, thyroid"
+      },
+      {
+        "id": "assessment",
+        "heading": "Assessment Considerations",
+        "kind": "assessment",
+        "body": "**Cognitive screening tools:**\n- Mini-Mental State Examination (MMSE): 30-point, widely used; cutoff <24 = cognitive impairment\n- Montreal Cognitive Assessment (MoCA): 30-point, more sensitive for MCI; cutoff <26 = possible impairment; adjust +1 point for <12 years education\n- Clock Drawing Test: simple screen for executive function and visuospatial ability\n- Mini-Cog: 3-word recall + clock drawing — takes 3 minutes\n\n**Assessment pearls:**\n- Assess in a quiet, well-lit environment; hearing aids and glasses in place\n- Do not test during acute illness — will overestimate impairment\n- Establish baseline; single test is less meaningful than trend over time\n- Validate with collateral history (family member observation)\n- Assess education level and premorbid function — calibrates expectations\n\n**Sleep assessment:**\n- Ask about sleep patterns, nighttime awakenings, daytime sleepiness (Epworth Sleepiness Scale)\n- Screen for sleep apnea: witnessed apnoea, snoring, morning headaches, obesity\n- Review sedating medications\n\n**Sensory assessment:**\n- Vision: Snellen chart; refer for ophthalmology if loss\n- Hearing: whispered voice test, audiometry; fit hearing aids\n- Balance: Romberg test, proprioception testing"
+      },
+      {
+        "id": "interventions",
+        "heading": "Nursing Interventions",
+        "kind": "interventions",
+        "body": "**Cognitive support:**\n- Ensure communication aids (glasses, hearing aids) are available\n- Use clear, simple language; one instruction at a time\n- Allow extra time for responses — processing is slower\n- Written instructions supplement verbal\n- Cognitive engagement: reading, puzzles, social activities\n\n**Sleep promotion (non-pharmacological):**\n- Consistent sleep-wake schedule\n- Limit caffeine after noon\n- Minimize nighttime noise and light\n- Avoid daytime napping >20 minutes\n- Keep bedroom cool and dark\n- Warm bath before sleep\n- Avoid alcohol (disrupts sleep architecture despite initial sedation)\n\n**Sensory compensation:**\n- Adequate lighting for vision-impaired residents\n- Reduce background noise for hearing-impaired\n- Large-print materials\n- Hearing loop technology in group settings"
+      },
+      {
+        "id": "patient_teaching",
+        "heading": "Patient & Family Teaching",
+        "kind": "patient_teaching",
+        "body": "- Slowed thinking and occasional word-finding difficulty are normal; significant memory loss affecting daily life is not\n- Cognitive engagement (reading, games, new learning) slows cognitive decline\n- Report any sudden changes in memory or function — gradual decline may be normal; sudden change is not\n- Sleep hygiene strategies for normal age-related sleep changes\n- Annual hearing and vision checks — untreated sensory loss accelerates cognitive decline\n- Hearing aids improve cognitive function and reduce social isolation"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- **Hearing loss is the largest modifiable risk factor for dementia** — treating hearing loss with hearing aids reduces dementia risk by 8% in the Lancet Commission report\n- **The speed-accuracy trade-off**: older adults slow down to maintain accuracy — this is adaptive, not pathological\n- **REM sleep behaviour disorder** (acting out dreams = shouting, punching, kicking while asleep) is the strongest prodromal marker for Lewy body dementia and Parkinson's disease — refer any patient with these symptoms\n- **Education buffers cognitive decline** — higher educational attainment provides cognitive reserve; impairment may appear later but progress more rapidly once it begins\n- **Depression mimics dementia** (pseudodementia) — treating depression can markedly improve cognition in older adults with depression-associated cognitive complaints"
+      },
+      {
+        "id": "safety_alerts",
+        "heading": "Safety Alerts",
+        "kind": "safety_alerts",
+        "body": "🚨 **Acute cognitive change is ALWAYS a clinical emergency** — sudden-onset confusion, even in a patient with known dementia, requires assessment for delirium trigger (infection, medication, metabolic)\n🚨 **Benzodiazepines and sleeping pills are contraindicated** for sleep in older adults — they increase fall risk, worsen cognitive function, and are highly addictive in this population (Beers Criteria)\n🚨 **Sensory impairment increases delirium risk** — glasses and hearing aids must be in place for hospitalized older adults at all times during waking hours"
+      },
+      {
+        "id": "exam_tips",
+        "heading": "Exam Tips",
+        "kind": "exam_tips",
+        "body": "- Normal cognitive aging: slowed processing, mild word-finding difficulty, preserved long-term memory\n- NOT normal: acute confusion, significant functional memory loss, personality change\n- MMSE cutoff: <24 = cognitive impairment; MoCA cutoff: <26\n- Presbycusis: bilateral, high-frequency sensorineural hearing loss — normal aging\n- Normal sleep changes: earlier bedtime, increased awakenings, less deep sleep — does not mean pathological\n- Benzodiazepines for sleep in older adults = WRONG answer (Beers Criteria PIMs)"
+      },
+      {
+        "id": "key_takeaways",
+        "heading": "Key Takeaways",
+        "kind": "key_takeaways",
+        "body": "- Normal cognitive aging: slowed processing, mild word-finding, preserved vocabulary and long-term memory\n- NEVER normal: acute confusion, significant functional memory loss, personality change\n- MMSE <24 or MoCA <26 = cognitive impairment — further evaluation needed\n- Presbycusis (high-frequency hearing loss) is the most common sensory change in aging\n- Hearing aids reduce dementia risk — this is the largest modifiable dementia risk factor\n- Normal sleep changes: earlier sleep phase, more awakenings, less deep sleep — do NOT use benzodiazepines"
+      }
+    ]
+  },
+  {
+    "slug": "musculoskeletal-aging-sarcopenia-osteoporosis",
+    "title": "Sarcopenia & Osteoporosis — Musculoskeletal Aging",
+    "packageId": "pkg2-physiological",
+    "bodySystem": "Musculoskeletal",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+    "sections": [
+      {
+        "id": "learning_objectives",
+        "heading": "Learning Objectives",
+        "kind": "learning_objectives",
+        "body": "1. Define sarcopenia and describe its clinical significance in older adults\n2. Describe the pathophysiology and risk factors for osteoporosis in older adults\n3. Differentiate osteoporosis from osteoarthritis and osteopenia\n4. Identify fracture risk and assessment tools (FRAX, DEXA)\n5. Implement nursing interventions for sarcopenia and osteoporosis prevention and management"
+      },
+      {
+        "id": "normal_aging_changes",
+        "heading": "Sarcopenia & Osteoporosis — Definitions & Pathophysiology",
+        "kind": "normal_changes",
+        "body": "**SARCOPENIA:**\n- Age-related loss of skeletal muscle mass AND function (strength or performance)\n- Begins in 4th decade; accelerates after age 65; affects 30% of adults >70 years\n- Peak muscle mass: 25–30 years; decreases 1–2% per year after 30\n- Peak muscle strength: 25–30 years; decreases 1.5–5% per year after 50\n- Mechanism: decreased anabolic hormones (testosterone, IGF-1, growth hormone), increased inflammatory cytokines, reduced physical activity, reduced protein intake\n- Consequences: weakness, falls, functional dependence, metabolic complications (insulin resistance)\n\n**OSTEOPOROSIS:**\n- Reduced bone mineral density (BMD) + microarchitectural deterioration → increased fracture risk\n- Defined as BMD T-score ≤ −2.5 on DEXA scan (at hip or lumbar spine)\n- Osteopenia: T-score −1.0 to −2.5 (bone loss but not yet osteoporosis)\n- Risk: 1 in 3 women and 1 in 5 men will sustain an osteoporotic fracture in their lifetime\n- Bone loss accelerates in women post-menopause (5–7 years of rapid loss after estrogen decline)\n- Most common fracture sites: vertebra (compression), hip (femoral neck), distal radius (Colles')\n\n**Normal musculoskeletal aging (NOT osteoporosis):**\n- Gradual decrease in bone density throughout adult life\n- Reduced flexibility and joint range of motion\n- Increased joint stiffness (especially in the morning — brief and non-inflammatory)\n- Increased cartilage loss over time"
+      },
+      {
+        "id": "abnormal_findings",
+        "heading": "Abnormal Findings & Red Flags",
+        "kind": "abnormal_findings",
+        "body": "**Sarcopenia red flags:**\n- Unable to rise from chair without using arms (significant lower limb weakness)\n- Handgrip strength below normal for age and sex\n- Gait speed <0.8 m/sec\n- Unexpected falls — sarcopenia = major fall risk\n- Rapid unintentional weight loss with muscle wasting\n\n**Osteoporosis complications:**\n- Hip fracture: most serious; 1-year mortality 20–30%; 50% never return to pre-fracture function\n- Vertebral compression fracture: may present as sudden back pain with height loss; progressive kyphosis ('dowager's hump')\n- Distal radius fracture: 'Colles fracture' — common after falls on outstretched hand\n- Height loss >4 cm → suspect vertebral compression fractures\n- Back pain in older woman → suspect compression fracture, NOT disc disease as first assumption\n\n**Red flags for secondary causes:**\n- Early onset, severe, or male osteoporosis → screen for: hyperparathyroidism, vitamin D deficiency, hypogonadism, celiac disease, steroids, multiple myeloma"
+      },
+      {
+        "id": "assessment",
+        "heading": "Assessment Considerations",
+        "kind": "assessment",
+        "body": "**Sarcopenia assessment:**\n- Handgrip dynamometry (low grip = sarcopenia)\n- Gait speed test, TUG\n- SARC-F screening tool (Strength, Assistance with walking, Rise from chair, Climb stairs, Falls)\n- Body composition (DEXA, BIA) for muscle mass\n\n**Osteoporosis assessment:**\n- DEXA scan: gold standard for BMD measurement; T-score compared to young adult peak BMD\n- FRAX (WHO Fracture Risk Assessment Tool): calculates 10-year fracture probability\n- Risk factor assessment: age, sex, low BMI, prior fracture, parental hip fracture, smoking, alcohol, corticosteroid use\n- Calcium and vitamin D intake history\n- Height and weight (serial measurements — height loss indicates vertebral compression)\n- Fall risk assessment — fracture risk = bone fragility + fall\n\n**Lab investigations:**\n- Calcium, phosphorus, alkaline phosphatase, vitamin D (25-OH), PTH\n- Serum protein electrophoresis (rule out multiple myeloma in atypical presentations)"
+      },
+      {
+        "id": "interventions",
+        "heading": "Nursing Interventions",
+        "kind": "interventions",
+        "body": "**Sarcopenia:**\n- Progressive resistance training: most effective intervention for sarcopenia\n- Adequate protein: 1.2–1.6 g/kg/day (higher protein intake at each meal rather than concentrated at dinner)\n- Leucine-rich protein sources: dairy, eggs, meat, fish, legumes\n- Avoid prolonged bed rest\n- Vitamin D supplementation (supports muscle function)\n\n**Osteoporosis:**\n- Calcium: 1200 mg/day (dietary preferred; supplement as needed)\n- Vitamin D: 800–2000 IU/day\n- Weight-bearing exercise: walking, resistance training\n- Fall prevention (reduces fracture risk even with fragile bones)\n- Bisphosphonates (alendronate, risedronate): first-line pharmacological treatment\n  - Administration: take with full glass of water, upright for 30–60 minutes after\n  - Avoid in severe renal impairment\n- Denosumab: quarterly injection; osteoclast inhibitor\n- Romosozumab or teriparatide: for severe osteoporosis (anabolic agents)\n- Smoking cessation, alcohol limitation"
+      },
+      {
+        "id": "patient_teaching",
+        "heading": "Patient & Family Teaching",
+        "kind": "patient_teaching",
+        "body": "**Bisphosphonate teaching (alendronate):**\n- Take first thing in the morning on an empty stomach with a FULL glass of water (240 mL)\n- Remain UPRIGHT (sitting or standing) for 30–60 minutes after\n- Do not take with food, coffee, or other medications within 30–60 minutes\n- This prevents esophageal irritation/ulceration\n\n**General osteoporosis teaching:**\n- 1200 mg calcium daily (dairy, fortified foods, or supplements if needed)\n- 800–2000 IU vitamin D daily\n- Weight-bearing exercise (walking, dancing) 30 min daily\n- Fall prevention is essential — strong bones + a fall = fracture\n- Report new back pain (possible vertebral fracture)\n- Keep all DEXA monitoring appointments"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- **Osteoporosis + fall = hip fracture** — the most serious preventable consequence; fall prevention reduces hip fracture risk even without changing bone density\n- **'Silent disease'** — osteoporosis has no symptoms until fracture; many patients are undiagnosed\n- **Calcium + vitamin D are not enough** — in established osteoporosis, pharmacological therapy is required\n- **Alendronate must be taken correctly** — esophageal erosion/ulceration is a serious side effect of incorrect administration\n- **Osteonecrosis of the jaw (ONJ)** is a rare but serious side effect of bisphosphonates and denosumab — inform dentist before dental procedures\n- **Protein timing matters** — spreading protein intake across 3 meals is more effective for muscle protein synthesis than one large protein meal"
+      },
+      {
+        "id": "safety_alerts",
+        "heading": "Safety Alerts",
+        "kind": "safety_alerts",
+        "body": "🚨 **Hip fracture in an older adult** = surgical emergency with 20–30% 1-year mortality — mobilize quickly post-operatively, early surgery is associated with better outcomes\n🚨 **Vertebral compression fracture** — sudden back pain in an older woman with osteoporosis → suspect fracture (not disc disease); X-ray/imaging required; NEVER assume musculoskeletal strain without imaging in high-risk patients\n🚨 **Bisphosphonate + esophageal disease** — bisphosphonates are contraindicated in patients who cannot remain upright for 30+ minutes or who have esophageal stricture"
+      },
+      {
+        "id": "exam_tips",
+        "heading": "Exam Tips",
+        "kind": "exam_tips",
+        "body": "- Osteoporosis T-score: ≤−2.5 = osteoporosis; −1.0 to −2.5 = osteopenia\n- Most common osteoporotic fracture sites: vertebra, hip, distal radius\n- Hip fracture: 20–30% 1-year mortality — major clinical consequence\n- Alendronate teaching: empty stomach, full glass of water, remain UPRIGHT 30–60 min\n- Sarcopenia: loss of muscle mass + strength/performance with age\n- Resistance training = best intervention for sarcopenia"
+      },
+      {
+        "id": "key_takeaways",
+        "heading": "Key Takeaways",
+        "kind": "key_takeaways",
+        "body": "- Sarcopenia: age-related muscle mass and strength loss → falls, functional dependence; treat with resistance training + protein\n- Osteoporosis: T-score ≤−2.5 → fracture risk; most common: vertebra, hip, distal radius\n- Hip fracture: 20–30% 1-year mortality; requires early surgery and mobilization\n- Alendronate: empty stomach, full glass water, upright 30–60 min after — critical patient teaching\n- Osteoporosis prevention: calcium 1200 mg, vitamin D 800–2000 IU, weight-bearing exercise, fall prevention\n- Sarcopenia prevention: resistance training 2x/week, protein 1.2–1.6 g/kg/day"
+      }
+    ]
+  },
+  {
+    "slug": "renal-aging-fluid-balance",
+    "title": "Renal Aging Changes & Fluid Balance Risks",
+    "packageId": "pkg2-physiological",
+    "bodySystem": "Renal",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+    "sections": [
+      {
+        "id": "learning_objectives",
+        "heading": "Learning Objectives",
+        "kind": "learning_objectives",
+        "body": "1. Describe expected renal changes with normal aging\n2. Explain why creatinine is an unreliable marker of renal function in older adults\n3. Identify fluid balance risks in older adults including dehydration and fluid overload\n4. Calculate medication dosage adjustments based on renal function in older adults\n5. Apply assessment and interventions for fluid balance in older adults"
+      },
+      {
+        "id": "normal_aging_changes",
+        "heading": "Normal Renal Aging Changes",
+        "kind": "normal_changes",
+        "body": "**Structural:**\n- Kidney weight decreases 20–30% between ages 40–80\n- Glomerular sclerosis (loss of functioning nephrons) — approximately 1% of nephrons lost per year after age 30\n- Decreased renal cortex mass\n- Afferent arteriolar hyalinization\n\n**Functional:**\n- GFR declines ~1 mL/min/year after age 40 (average GFR at 80 = ~50% of young adult GFR)\n- Reduced tubular secretion and resorption capacity\n- Impaired sodium conservation and excretion → increased hypo/hypernatremia risk\n- Impaired urine concentration (dilute urine at maximal stimulus)\n- Reduced renin-aldosterone responsiveness\n- Decreased thirst sensation → chronic mild dehydration common\n\n**Critical clinical point:**\n- **Serum creatinine does NOT increase** with normal aging despite declining GFR because muscle mass decreases proportionally — producing less creatinine\n- An older adult with serum creatinine of 90 µmol/L may have a GFR of only 40–50 mL/min\n- ALWAYS calculate eGFR using CKD-EPI or Cockcroft-Gault equation — do NOT rely on creatinine alone\n\n**CKD-EPI formula** (standard)\n**Cockcroft-Gault** (medication dosing): CrCl = [(140 - age) × weight × (0.85 if female)] / (72 × serum creatinine)"
+      },
+      {
+        "id": "abnormal_findings",
+        "heading": "Abnormal Findings & Fluid Balance Complications",
+        "kind": "abnormal_findings",
+        "body": "**Dehydration in older adults:**\n- Very common due to: impaired thirst, reduced renal concentrating ability, medications (diuretics), cognitive impairment (forgetting to drink)\n- Signs: concentrated urine, tachycardia, dry mucous membranes, confusion, orthostatic hypotension\n- NOVEL signs in older adults: confusion is often the FIRST sign before classic dehydration signs appear\n\n**Hypernatremia:** More common in older adults → confusion, agitation, seizures (severe)\n\n**Hyponatremia:** Most common electrolyte disorder in hospitalized older adults → fatigue, confusion, falls, seizures (severe)\n- Causes: diuretics (especially thiazides), SIADH, heart failure, liver disease\n- Overcorrection of hyponatremia → osmotic demyelination syndrome\n\n**Fluid overload risks:**\n- Reduced ability to excrete fluid loads → older adults can easily become fluid overloaded\n- Particularly dangerous: aggressive IV fluid administration, heart failure, renal impairment\n- Signs: oedema, crackles, JVD, weight gain, dyspnoea"
+      },
+      {
+        "id": "assessment",
+        "heading": "Assessment Considerations",
+        "kind": "assessment",
+        "body": "**Fluid status assessment:**\n- Daily weights (best indicator of fluid shifts — 1 kg = ~1 L)\n- Fluid intake and output (I&O)\n- Mucous membrane moisture, skin turgor (less reliable in older adults — skin elasticity reduced)\n- Orthostatic BP (dehydration sign)\n- Jugular venous pressure (overload sign)\n- Auscultate lung fields (fluid overload: crackles)\n- Peripheral oedema (bilateral, pitting = fluid overload, right heart failure; unilateral = DVT until proven otherwise)\n- Serum BMP: Na, K, Cl, CO2, BUN, creatinine, glucose; calculate eGFR\n- Urine specific gravity (>1.020 = concentrated = dehydration; <1.005 = very dilute)\n\n**Medication review for renal risk:**\n- NSAIDs (nephrotoxic — reduce renal blood flow)\n- Contrast agents (nephrotoxic — hold metformin)\n- ACEi/ARBs (can reduce GFR in bilateral renal artery stenosis)\n- Aminoglycosides, vancomycin (dose-adjust to renal function)"
+      },
+      {
+        "id": "interventions",
+        "heading": "Nursing Interventions",
+        "kind": "interventions",
+        "body": "- **Ensure adequate hydration**: offer fluids regularly (older adults don't self-regulate thirst)\n- **Monitor I&O**: particularly important in hospitalized older adults on diuretics, IV fluids\n- **Daily weights**: alert prescriber to weight gain >1 kg/day or >2 kg/week (fluid overload)\n- **Electrolyte monitoring**: serum sodium and potassium particularly important in older adults on diuretics\n- **Medication dose adjustment**: use Cockcroft-Gault to calculate CrCl; ensure renally-cleared medications are dosed appropriately\n- **Avoid nephrotoxins**: minimize NSAID use, ensure adequate hydration before and after contrast\n- **Fall prevention**: hyponatremia, hypernatremia, and dehydration all cause confusion and falls"
+      },
+      {
+        "id": "patient_teaching",
+        "heading": "Patient & Family Teaching",
+        "kind": "patient_teaching",
+        "body": "- Drink fluids regularly throughout the day even if not thirsty — thirst sensation is reduced in older adults\n- Daily weight at the same time each morning: report gain of >1 kg/day or >2 kg/week\n- Report: dark concentrated urine, dizziness on standing, confusion, leg swelling, shortness of breath\n- Avoid NSAIDs (Advil, Aleve, ibuprofen) unless specifically prescribed — they damage kidneys\n- All medications affecting kidneys: review with pharmacist or NP at least annually"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- **'Normal' creatinine in an older adult does NOT mean normal kidneys** — always calculate eGFR\n- **Thiazide diuretics → hyponatremia in older adults** — one of the most common drug-induced electrolyte disorders; higher risk in older women\n- **Hold metformin** before IV contrast (or if NPO) — accumulation risk with contrast-induced nephropathy\n- **Triple whammy**: ACEi + diuretic + NSAID in an older adult = AKI recipe — extremely common in community-dwelling older adults on multiple prescriptions\n- **Confusion first** — in an older adult developing dehydration or electrolyte disorder, confusion often precedes classic signs by hours"
+      },
+      {
+        "id": "safety_alerts",
+        "heading": "Safety Alerts",
+        "kind": "safety_alerts",
+        "body": "🚨 **Never rely on serum creatinine alone** to assess renal function in older adults — calculate eGFR\n🚨 **Triple whammy (ACEi + diuretic + NSAID)** = risk of acute kidney injury — avoid combination in older adults\n🚨 **Hyponatremia correction must be gradual** (<8–10 mEq/L per 24 hours) — rapid correction causes osmotic demyelination syndrome (central pontine myelinolysis)\n🚨 **Contrast-induced nephropathy** — older adults are at high risk; ensure adequate hydration; hold nephrotoxic medications"
+      },
+      {
+        "id": "exam_tips",
+        "heading": "Exam Tips",
+        "kind": "exam_tips",
+        "body": "- Serum creatinine does NOT rise with normal aging despite declining GFR — muscle mass decreases\n- Always calculate eGFR (CKD-EPI or Cockcroft-Gault) to assess renal function\n- Most common electrolyte disorder in hospitalized older adults: hyponatremia (thiazide diuretics, SIADH)\n- Triple whammy (ACEi + diuretic + NSAID) = AKI risk — commonly tested\n- Dehydration in older adults: confusion often the first sign\n- Hyponatremia correction: maximum 8–10 mEq/L per 24 hours"
+      },
+      {
+        "id": "key_takeaways",
+        "heading": "Key Takeaways",
+        "kind": "key_takeaways",
+        "body": "- GFR declines 1 mL/min/year after age 40; creatinine stays normal due to decreased muscle mass\n- ALWAYS calculate eGFR — creatinine alone misleads\n- Impaired thirst sensation → dehydration risk; confusion often first sign\n- Triple whammy (ACEi + diuretic + NSAID) = AKI recipe\n- Thiazide diuretics = leading cause of hyponatremia in older adults\n- Hold metformin before contrast; correct hyponatremia slowly (<8–10 mEq/L/24hr)"
+      }
+    ]
+  },
+  {
+    "slug": "pressure-injury-skin-aging",
+    "title": "Skin Aging Changes & Pressure Injury Risk",
+    "packageId": "pkg2-physiological",
+    "bodySystem": "Integumentary",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+    "sections": [
+      {
+        "id": "learning_objectives",
+        "heading": "Learning Objectives",
+        "kind": "learning_objectives",
+        "body": "1. Describe expected skin changes with normal aging\n2. Differentiate skin aging changes from skin pathology\n3. Identify pressure injury risk factors using the Braden Scale\n4. Apply evidence-based pressure injury prevention interventions\n5. Classify pressure injuries by stage and identify appropriate wound management"
+      },
+      {
+        "id": "normal_aging_changes",
+        "heading": "Normal Skin Aging Changes",
+        "kind": "normal_changes",
+        "body": "**Epidermis:**\n- Thinning of all layers (epidermis decreases ~50% between 30–80 years)\n- Decreased melanocytes → increased UV sensitivity, lighter pigmentation\n- Decreased Langerhans cells → reduced immune surveillance\n- Slower wound healing (re-epithelialization takes longer)\n\n**Dermis:**\n- Decreased collagen production and cross-linking → loss of tensile strength\n- Decreased elastin → reduced skin elasticity (wrinkles, sagging)\n- Decreased dermis thickness → more fragile, tears easily (skin tears)\n- Decreased vascularity → paler skin, slower wound healing\n- Decreased sensory receptors → reduced pain, temperature, pressure perception → pressure injury risk\n\n**Subcutaneous layer:**\n- Redistribution of subcutaneous fat → lost from face, hands, feet; deposited centrally\n- Reduced thermal insulation → hypothermia risk\n- Reduced cushioning over bony prominences → pressure injury risk\n\n**Glands:**\n- Decreased sebaceous secretion → dry skin (xerosis) — extremely common, very uncomfortable\n- Decreased eccrine sweat gland function → reduced sweating → hyperthermia risk\n\n**Appearance changes (NORMAL):**\n- Wrinkles, age spots (senile lentigines), seborrheic keratoses\n- Skin tags, cherry angiomas\n- Thinned, transparent skin over dorsum of hands and feet\n- Reduced skin turgor (not a reliable dehydration marker in older adults)"
+      },
+      {
+        "id": "abnormal_findings",
+        "heading": "Pressure Injuries — Staging & Abnormal Findings",
+        "kind": "abnormal_findings",
+        "body": "**Pressure Injury Stages (NPIAP):**\n- **Stage 1:** Intact skin, non-blanchable redness — skin NOT broken; can be missed in darker skin tones\n- **Stage 2:** Shallow open ulcer with pink/red wound bed; partial thickness skin loss; may look like intact or open blister\n- **Stage 3:** Full thickness skin loss; subcutaneous fat visible; may have slough/eschar; no bone/tendon/muscle visible\n- **Stage 4:** Full thickness skin and tissue loss; bone, tendon, or muscle exposed; may have slough/eschar\n- **Unstageable:** Full thickness skin loss; slough/eschar covers base — cannot stage without debridement\n- **Deep Tissue Injury (DTI):** Purple/maroon intact or ruptured skin; blood blister from pressure damage to underlying tissue\n- **Medical Device-Related Pressure Injury (MDRPI):** Caused by oxygen masks, NG tubes, IV tubing, casts\n\n**Common locations:**\n- Sacrum (most common), coccyx, ischial tuberosities, heels, ankles, trochanters, occiput\n\n**Braden Scale — Pressure Injury Risk (lower score = higher risk):**\n- Sensory perception, moisture, activity, mobility, nutrition, friction/shear\n- Score ≤18 = at risk; ≤12 = high risk; ≤9 = very high risk"
+      },
+      {
+        "id": "assessment",
+        "heading": "Assessment Considerations",
+        "kind": "assessment",
+        "body": "**Skin assessment:**\n- Complete head-to-toe skin inspection on admission and at each shift (or per policy in LTC)\n- Include ALL skin surfaces: sacrum, heels, occipital area, ears, under breasts, skinfolds\n- Assess Braden Scale score on admission; reassess with any clinical change\n- Document: location, size (length × width × depth), stage, wound bed characteristics, exudate, odour, surrounding skin condition\n- Skin under medical devices: assess at least every shift\n\n**Risk factors for pressure injuries:**\n- Immobility (highest risk factor)\n- Incontinence (moisture damage)\n- Nutritional deficit (particularly protein)\n- Altered sensation (reduced pain perception)\n- Reduced perfusion (cardiovascular compromise)\n- Frailty\n- Cognitive impairment (unable to reposition or communicate discomfort)"
+      },
+      {
+        "id": "interventions",
+        "heading": "Nursing Interventions — Pressure Injury Prevention",
+        "kind": "interventions",
+        "body": "**Repositioning:**\n- Turn and reposition every 2 hours (or 1–2 hours for high-risk patients)\n- Document repositioning schedule\n- Avoid positioning directly on trochanter (use 30-degree lateral tilt)\n- Heels: float off mattress with foam boots or pillow support\n\n**Skin protection:**\n- Barrier cream/ointment (zinc oxide, petrolatum) for skin exposed to moisture (incontinence)\n- Moisture-associated skin damage (MASD) management\n- Gentle skin cleansing — avoid harsh soaps; use pH-balanced skin cleaners\n- Moisturize daily for xerosis\n\n**Nutrition:**\n- Protein 1.2–1.5 g/kg/day\n- Vitamin C, zinc for wound healing\n- Oral nutritional supplements for malnourished patients\n\n**Support surfaces:**\n- Pressure redistribution mattress for all at-risk patients\n- Heel protection devices\n- Cushions in wheelchair (avoid donut rings — worsen ischemia)\n\n**Wound management (existing injuries):**\n- Stage 1: moisture barrier, increased repositioning\n- Stage 2: moisture-retentive dressing (hydrocolloid, foam)\n- Stage 3/4: wound care specialist; debridement, deep wound packing, advanced dressings"
+      },
+      {
+        "id": "patient_teaching",
+        "heading": "Patient & Family Teaching",
+        "kind": "patient_teaching",
+        "body": "- Report any redness, pain, or skin changes over bony prominences immediately\n- Turn or shift position in bed or chair every 2 hours if able\n- Keep skin clean and dry — moisture causes skin breakdown\n- Adequate protein and vitamin C intake supports skin integrity\n- Do not sit on 'donut cushions' — they cut off circulation to the centre area\n- Inspect heels, sacrum, and buttocks daily — use mirror if needed or have caregiver assist"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- **Stage 1 pressure injuries can be missed in darkly pigmented skin** — instead of redness, look for: boggy or firm texture, warmth or coolness, different skin colour (purple, blue, darker), or patient complaint of pain or itching\n- **Heels are the second most common pressure injury site** after sacrum — heel offloading must be initiated on admission for immobile patients\n- **Medical device-related pressure injuries** are often missed — check under oxygen masks, BiPAP masks, nasal cannula, IV tubing, urinary catheters\n- **Nutrition is a major modifiable risk factor** — pressure injuries almost never heal in a malnourished patient regardless of wound care\n- **Deep tissue injury can appear suddenly as a large purple blister** — it represents underlying tissue damage that may have been developing for days"
+      },
+      {
+        "id": "safety_alerts",
+        "heading": "Safety Alerts",
+        "kind": "safety_alerts",
+        "body": "🚨 **Pressure injuries are considered a nursing quality indicator** — prevention is required; failure to prevent a pressure injury in a high-risk patient is a reportable adverse event\n🚨 **Never massage over reddened bony prominences** — massage over stage 1 areas can cause further tissue damage\n🚨 **Donut-shaped cushions are CONTRAINDICATED** — they increase pressure to the central area and worsen ischemia\n🚨 **Float heels** — heels must be completely offloaded in immobile patients; heel pressure injuries are one of the most avoidable injuries in hospital"
+      },
+      {
+        "id": "exam_tips",
+        "heading": "Exam Tips",
+        "kind": "exam_tips",
+        "body": "- Braden Scale: ≤18 = at risk; lower score = higher risk (inverse)\n- Stage 1: non-blanchable redness, intact skin\n- Stage 2: shallow open ulcer or blister\n- Stage 3: subcutaneous fat visible, no bone\n- Stage 4: bone/tendon/muscle exposed\n- Never massage reddened skin — worsen injury\n- Donut cushions are CONTRAINDICATED\n- Heels: float off bed (pillow or foam boot)"
+      },
+      {
+        "id": "key_takeaways",
+        "heading": "Key Takeaways",
+        "kind": "key_takeaways",
+        "body": "- Normal skin aging: thinning, reduced elasticity, xerosis, reduced sensation, fragile skin tears\n- Pressure injury = localized skin/tissue damage from pressure, shear, or friction over bony prominences\n- Braden Scale: ≤18 = risk; use to guide prevention intensity\n- Prevention: reposition q2h, float heels, barrier creams, moisture management, nutritional support, pressure-redistribution surface\n- Staging: 1 (intact redness) → 2 (shallow ulcer) → 3 (fat visible) → 4 (bone/muscle exposed)\n- Never massage over reddened area; donut cushions are contraindicated"
+      }
+    ]
+  }
+]

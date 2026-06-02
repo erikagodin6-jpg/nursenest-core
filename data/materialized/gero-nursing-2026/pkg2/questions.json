@@ -1,0 +1,550 @@
+{
+  "packageId": "pkg2-physiological",
+  "title": "Physiological Changes of Aging — Question Bank",
+  "generatedDate": "2026-06-02",
+  "questionCount": 500,
+  "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+  "questions": [
+    {
+      "id": "GERO-P2-001",
+      "topicSlug": "normal-cardiovascular-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is assessing an 80-year-old man at a routine clinic visit. His blood pressure is 158/72 mmHg. He has no symptoms of dizziness, headache, or visual changes. His blood pressure 2 years ago was 152/74 mmHg. Which interpretation of his blood pressure pattern is most consistent with normal cardiovascular aging?",
+      "options": {
+        "A": "The diastolic pressure of 72 mmHg is dangerously low and needs immediate treatment",
+        "B": "Isolated systolic hypertension with widened pulse pressure is common in aging and results from arterial stiffening",
+        "C": "This blood pressure pattern is entirely normal at age 80 and requires no monitoring or management",
+        "D": "The low diastolic pressure indicates aortic regurgitation and should be evaluated with echocardiography"
+      },
+      "correctAnswer": "B",
+      "rationale": "Arterial stiffening (arteriosclerosis — a normal aging change) causes the aorta and large vessels to lose compliance. This impairs their elastic recoil, leading to higher systolic blood pressure (increased pulse pressure) without proportional diastolic rise — sometimes even a fall in diastolic BP. Isolated systolic hypertension with widened pulse pressure (SBP − DBP here = 86 mmHg) is the most common form of hypertension in older adults and is directly attributable to arterial aging. This finding requires monitoring and likely treatment (SBP ≥140 in older adults warrants treatment per most guidelines), but the pattern itself is consistent with known aging physiology.",
+      "distractorRationales": {
+        "A": "Incorrect. DBP of 72 mmHg is not dangerously low. In older adults with arterial stiffening, the diastolic tends to be lower or stable while systolic rises — this is not pathological.",
+        "C": "Incorrect. While the pattern is consistent with aging physiology, SBP of 158 is elevated and warrants treatment consideration. 'No monitoring needed' is unsafe.",
+        "D": "Incorrect. Aortic regurgitation causes widened pulse pressure due to regurgitant flow increasing the pulse pressure, but it also causes a visible water-hammer pulse, diastolic murmur, and other signs. This patient is asymptomatic without examination findings to suggest AR."
+      },
+      "hint": "Arterial stiffening in aging → higher SBP, wider pulse pressure. This is the most common BP pattern in older adults.",
+      "clinicalPearl": "Isolated systolic hypertension affects 65% of adults over 75. It is not 'just aging' — treating SBP ≥140 in older adults reduces stroke, heart failure, and MI risk. The SBP target in most older adults is <130 mmHg with individual consideration for frailty.",
+      "examStrategy": "Cardiovascular aging questions: widened pulse pressure + increased SBP = arterial stiffening = normal aging physiology. But elevated SBP still requires treatment — aging explains the pattern, not excuses the treatment need.",
+      "keyTakeaway": "Widened pulse pressure and elevated SBP with stable or lower DBP = arterial stiffening = normal aging pattern. Still requires treatment monitoring.",
+      "tags": ["cardiovascular-aging", "blood-pressure", "arterial-stiffening", "pulse-pressure", "hypertension"]
+    },
+    {
+      "id": "GERO-P2-002",
+      "topicSlug": "orthostatic-hypotension",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is assessing a 76-year-old woman in a long-term care facility who has had two falls in the past week. Both falls occurred shortly after getting out of bed. Her current blood pressure lying is 136/78 mmHg, HR 68 bpm. After standing for 2 minutes, her blood pressure is 108/60 mmHg, HR 74 bpm. Which conclusion does the nurse draw from this assessment?",
+      "options": {
+        "A": "This blood pressure change is within normal limits for a woman her age",
+        "B": "The tachycardia response of 6 beats per minute indicates autonomic dysfunction",
+        "C": "The patient has orthostatic hypotension — SBP drop of 28 mmHg meets diagnostic criteria",
+        "D": "The falls are most likely caused by environmental hazards rather than blood pressure changes"
+      },
+      "correctAnswer": "C",
+      "rationale": "Orthostatic hypotension is defined as a SBP drop ≥20 mmHg OR DBP drop ≥10 mmHg within 3 minutes of standing. This patient had a SBP drop of 28 mmHg (136 → 108) — clearly meeting criteria. Additionally, the HR increase was only 6 bpm (68 → 74), which is a blunted compensatory response (normal compensation would be HR increase of ≥10–20 bpm). The falls after getting out of bed are clinically explained by this orthostatic hypotension. An investigation into medication causes (diuretics, antihypertensives) and dehydration should follow.",
+      "distractorRationales": {
+        "A": "Incorrect. A 28 mmHg systolic drop on standing is not normal at any age. Orthostatic hypotension (SBP drop ≥20) is a clinical diagnosis, not an age-related expectation.",
+        "B": "Incorrect. The HR increase of 6 bpm IS blunted (suggests autonomic dysfunction or beta-blockade), but this finding supports the diagnosis rather than being a separate distractor concern. The primary conclusion is orthostatic hypotension.",
+        "D": "Incorrect. While environmental hazards must always be assessed after falls, the temporal pattern (falls occurring immediately after rising from bed) combined with a documented SBP drop of 28 mmHg provides a clear mechanism — orthostatic hypotension. This must be addressed."
+      },
+      "hint": "Orthostatic hypotension: SBP drop ≥20 mmHg or DBP drop ≥10 mmHg within 3 minutes. Calculate the drop.",
+      "clinicalPearl": "Falls immediately after rising from bed or a chair are the hallmark presentation of orthostatic hypotension. Always check orthostatic BPs in any older adult with unexplained falls. The blunted HR response (should rise >10 bpm) suggests autonomic dysfunction or beta-blockade.",
+      "examStrategy": "Orthostatic hypotension calculation: (standing BP) − (supine BP) = drop. SBP drop ≥20 OR DBP drop ≥10 = positive. Post-rise falls + orthostatic BP change = diagnosis.",
+      "keyTakeaway": "Orthostatic hypotension = SBP drop ≥20 or DBP drop ≥10 mmHg on standing. Falls after rising from bed = assess orthostatic BP as priority.",
+      "tags": ["orthostatic-hypotension", "falls", "blood-pressure", "autonomic-dysfunction", "LTC"]
+    },
+    {
+      "id": "GERO-P2-003",
+      "topicSlug": "orthostatic-hypotension",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A nurse is caring for an 81-year-old man with orthostatic hypotension who takes furosemide 40 mg daily and lisinopril 10 mg daily. Which nursing intervention is HIGHEST priority to prevent falls related to orthostatic hypotension?",
+      "options": {
+        "A": "Apply bilateral knee-high compression stockings each morning before the patient gets out of bed",
+        "B": "Instruct the patient to call the nurse before getting out of bed and assist him in rising slowly",
+        "C": "Restrict oral fluid intake to reduce the workload on the heart",
+        "D": "Administer furosemide only in the evening to prevent daytime orthostatic hypotension"
+      },
+      "correctAnswer": "B",
+      "rationale": "The highest priority for fall prevention in a patient with known orthostatic hypotension is ensuring supervised, slow position changes. This directly addresses the mechanism of falls: sudden BP drop on rising. The nurse assists with: lying → sitting at edge of bed (pause 1–2 min) → standing, with assessment for symptoms at each stage. This is the most immediately actionable fall prevention intervention. Compression stockings (A) are also appropriate but are applied preventively — the most urgent priority is the supervised transfer.",
+      "distractorRationales": {
+        "A": "Incorrect. Compression stockings reduce venous pooling and are appropriate — but they must be applied BEFORE the patient rises, and they don't replace supervised assistance. Option B is the immediate nursing priority.",
+        "C": "Incorrect. Restricting oral fluids WORSENS orthostatic hypotension by reducing intravascular volume. Adequate hydration is a key management strategy.",
+        "D": "Incorrect. Administering furosemide timing is a medication management concern and should be discussed with the physician/NP. However, it is not an immediate fall prevention nursing intervention, and the rationale for changing timing without an order is beyond nursing scope."
+      },
+      "hint": "What direct nursing action most immediately prevents a fall from orthostatic hypotension?",
+      "clinicalPearl": "Furosemide + lisinopril together cause significant fluid loss and vasodilation, worsening orthostatic hypotension. Review of both medications for orthostatic contribution is important but secondary to immediate fall prevention.",
+      "examStrategy": "Fall prevention + orthostatic hypotension = supervised slow position changes is ALWAYS the first nursing intervention. Compression stockings are second-line support, not the primary action.",
+      "keyTakeaway": "Supervised slow position changes (dangle first) is the primary nursing intervention for fall prevention in orthostatic hypotension. Never rush an older adult from lying to standing.",
+      "tags": ["orthostatic-hypotension", "fall-prevention", "nursing-intervention", "position-changes", "diuretics"]
+    },
+    {
+      "id": "GERO-P2-004",
+      "topicSlug": "respiratory-aging-changes",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is assessing an 82-year-old woman during a routine vital sign check. Her SpO2 is 94% on room air. She denies dyspnoea, cough, or chest pain. She is alert and oriented, ambulating independently, and appears comfortable. What is the nurse's most appropriate action?",
+      "options": {
+        "A": "Apply supplemental oxygen at 2 L/min via nasal cannula to bring her SpO2 above 97%",
+        "B": "Document the finding as within normal limits for her age — 94% is acceptable at 82 years",
+        "C": "Notify the physician immediately of the low SpO2",
+        "D": "Administer a bronchodilator to improve oxygen saturation"
+      },
+      "correctAnswer": "B",
+      "rationale": "Normal SpO2 in healthy older adults is 94–97% — lower than the 98–100% expected in younger adults. This is due to age-related decreased diffusing capacity (DLCO), mild alveolar enlargement, and ventilation-perfusion mismatch. A SpO2 of 94% in an 82-year-old who is asymptomatic, alert, comfortable, and ambulating independently is within the expected range for her age. It does not require oxygen supplementation, physician notification, or bronchodilator administration in the absence of clinical symptoms or change from her known baseline.",
+      "distractorRationales": {
+        "A": "Incorrect. Oxygen supplementation is not indicated for asymptomatic SpO2 of 94% in an older adult. This is her normal. Excessive oxygen can suppress respiratory drive (particularly in COPD), cause oxygen toxicity, and is not clinically warranted.",
+        "C": "Incorrect. 94% is within the normal range for an 82-year-old. Physician notification is indicated for a change from baseline, clinical deterioration, or SpO2 below the accepted range with symptoms — not a baseline SpO2 in the normal geriatric range.",
+        "D": "Incorrect. Bronchodilators are prescribed for bronchospasm (COPD, asthma). There is no indication for bronchodilator use in an asymptomatic older adult with a normal SpO2 for age."
+      },
+      "hint": "What is the normal SpO2 range for an 82-year-old? Not all older adult SpO2 values below 97% are abnormal.",
+      "clinicalPearl": "Always compare SpO2 to the patient's known baseline. An older adult who 'runs' at 94% is normal. A drop from 96% to 94% in the same patient may be significant — it's the CHANGE that matters, not just the absolute value.",
+      "examStrategy": "SpO2 in older adults: normal range is 94–97%. A SpO2 of 94% in an asymptomatic older adult = document as normal for age. Symptomatic low SpO2 (dyspnoea, confusion, cyanosis) at any value requires action.",
+      "keyTakeaway": "Normal SpO2 in healthy older adults = 94–97%. SpO2 of 94% in an asymptomatic 82-year-old is NORMAL — do not apply oxygen or notify physician without clinical indication.",
+      "tags": ["SpO2", "respiratory-aging", "oxygen-saturation", "normal-aging", "nursing-assessment"]
+    },
+    {
+      "id": "GERO-P2-005",
+      "topicSlug": "respiratory-aging-changes",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is caring for an 84-year-old man in a long-term care facility who developed confusion and stopped eating 3 days ago. His temperature is 37.2°C, HR 92 bpm, RR 22 breaths/min, SpO2 91% (baseline 95%). He has no cough, and his wife reports he has never had breathing problems before. On auscultation, the nurse hears crackles at the right lower base. Which conclusion is most accurate?",
+      "options": {
+        "A": "The SpO2 of 91% is within normal range for his age and no intervention is needed",
+        "B": "The absence of fever and cough rules out pneumonia in this patient",
+        "C": "This presentation is consistent with atypical pneumonia — confusion, anorexia, and mild hypoxia are common presentations of pneumonia in older adults",
+        "D": "This is likely heart failure given the crackles — an echocardiogram should be ordered"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is a classic atypical presentation of pneumonia in an older adult. Classic pneumonia (fever, productive cough, consolidation signs) is LESS common in older adults. Instead: confusion, functional decline, anorexia, and subtle hypoxia (SpO2 drop from baseline 95% to 91%) may be the primary presentation. The temperature of 37.2°C is NOT reassuring — older adults often cannot mount a fever response; even a temperature of 37.2°C may represent 'fever' if their baseline is 36.5°C. The crackles at the right lower base + SpO2 drop from baseline + confusion + anorexia = high suspicion for pneumonia requiring chest X-ray and investigation.",
+      "distractorRationales": {
+        "A": "Incorrect. 91% is below his baseline of 95%. A 4-point drop from baseline is clinically significant. 91% is not within normal range for any adult.",
+        "B": "Incorrect. Absence of fever and cough does NOT rule out pneumonia in older adults. Older adults with impaired cough reflex and blunted thermoregulation frequently present WITHOUT fever or productive cough. This is the most dangerous clinical error in geriatric respiratory assessment.",
+        "D": "Incorrect. While heart failure can cause bibasal crackles and hypoxia, the clinical context (new confusion + anorexia + right lower lobe localized findings + no prior cardiac history) is more consistent with pneumonia. A chest X-ray will differentiate."
+      },
+      "hint": "What is the typical presentation of pneumonia in older adults? Is fever always present?",
+      "clinicalPearl": "In older adults with cognitive impairment or frailty, the FIRST sign of pneumonia is often confusion or functional decline — NOT cough or fever. A temperature of 38°C in an old frail adult represents a very significant physiological response.",
+      "examStrategy": "Atypical presentation questions: In older adults with infection, ANY acute change (confusion, not eating, falls) is the chief complaint. Absent fever + absent cough does NOT rule out pneumonia. Act on the change from baseline.",
+      "keyTakeaway": "Pneumonia in older adults often presents WITHOUT classic fever and cough. Confusion, anorexia, SpO2 drop from baseline, and focal crackles = pneumonia until proven otherwise.",
+      "tags": ["pneumonia", "atypical-presentation", "respiratory-aging", "confusion", "infection", "older-adults"]
+    },
+    {
+      "id": "GERO-P2-006",
+      "topicSlug": "neurological-cognitive-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A nurse is educating nursing students about normal cognitive aging. Which statement MOST accurately describes expected cognitive changes with normal aging?",
+      "options": {
+        "A": "Memory loss sufficient to require reminders for all medications is a normal aging change",
+        "B": "Slowed processing speed and mild difficulty finding the right word are expected changes",
+        "C": "Older adults normally experience significant short-term memory loss affecting their ability to live independently",
+        "D": "Some degree of confusion and disorientation is expected in healthy adults over age 75"
+      },
+      "correctAnswer": "B",
+      "rationale": "Normal cognitive aging includes: significantly slowed processing speed (takes longer to learn new information, complete tasks, respond), mild word-finding difficulty (tip-of-the-tongue phenomenon — the word comes eventually), and the need for compensatory strategies (lists, calendars). Vocabulary and long-term memory are PRESERVED or even improved. The key distinction from pathological aging is that normal changes do NOT impair daily function or independence.",
+      "distractorRationales": {
+        "A": "Incorrect. Needing reminders for ALL medications indicates impaired medication management — an IADL — which is NOT a normal aging change. It may indicate MCI or early dementia.",
+        "C": "Incorrect. Significant short-term memory loss affecting independent living is the hallmark of dementia (major neurocognitive disorder), not normal aging.",
+        "D": "Incorrect. Confusion and disorientation are NEVER normal in any healthy older adult at any age. These are always pathological and require evaluation."
+      },
+      "hint": "Normal aging: PRESERVED long-term memory, vocabulary, and function. Slowed processing is the main change.",
+      "clinicalPearl": "The most reliable cognitive change of normal aging is slower processing speed. An older adult who takes twice as long to complete a crossword puzzle but eventually completes it accurately is showing normal aging. An older adult who can no longer manage their own finances or get lost driving home has crossed into pathological territory.",
+      "examStrategy": "Normal cognitive aging: slowed processing, mild word-finding. NOT normal: functional memory loss, confusion, disorientation, personality change. This distinction drives many gerontological nursing exam questions.",
+      "keyTakeaway": "Normal cognitive aging: slowed processing, mild word-finding difficulty, preserved long-term memory and function. Confusion, significant memory loss, and disorientation are never normal.",
+      "tags": ["cognitive-aging", "normal-aging", "processing-speed", "word-finding", "nursing-education"]
+    },
+    {
+      "id": "GERO-P2-007",
+      "topicSlug": "neurological-cognitive-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "An 81-year-old woman reports that she has been sleeping only 5–6 hours per night and waking frequently. She feels frustrated that she used to sleep 8 hours at age 50. She denies daytime sleepiness, snoring, or mood problems. Her husband confirms she does not stop breathing during sleep. Which nursing response is MOST appropriate?",
+      "options": {
+        "A": "Prescribe a short-acting benzodiazepine for 2 weeks to re-establish her sleep pattern",
+        "B": "Recommend she nap for 2 hours each afternoon to compensate for lost nighttime sleep",
+        "C": "Explain that total sleep time naturally decreases and sleep fragmentation increases with age — these changes are expected and do not necessarily require medication",
+        "D": "Refer urgently for sleep study as this pattern is consistent with undiagnosed sleep apnea"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is a classic description of normal sleep aging: decreased total sleep time (8 hours in young adulthood to 6 hours in older adulthood), increased sleep fragmentation (more nighttime awakenings), and often an earlier sleep phase (earlier bedtime and wake time). Crucially, she has NO daytime sleepiness, no snoring or witnessed apnoea, and no mood problems — ruling out sleep apnea, depression, and functionally significant insomnia. Education about normal sleep aging is the appropriate response, potentially with sleep hygiene counselling. Benzodiazepines (A) are Beers Criteria PIMs in older adults.",
+      "distractorRationales": {
+        "A": "Incorrect. Benzodiazepines are strongly contraindicated for insomnia in older adults — Beers Criteria PIMs. They worsen cognitive function, increase fall risk, and are addictive. Prescribing is beyond nursing scope; and even if within scope, benzodiazepines would be the wrong choice.",
+        "B": "Incorrect. Daytime napping of 2 hours in older adults who are already sleeping less at night will further fragment nighttime sleep by reducing sleep drive. If napping is advised, limit to 20–30 min maximum in early afternoon.",
+        "D": "Incorrect. Sleep apnea requires: witnessed apnoea OR snoring + daytime sleepiness, or morning headaches. This patient has none of these. Sleep study is not indicated for this presentation."
+      },
+      "hint": "What are normal sleep changes in aging? Is this patient's pattern pathological?",
+      "clinicalPearl": "Many older adults distress over sleep changes that are actually normal. The single most therapeutic intervention is often reassurance that their sleep pattern is not a sign of disease. Sleep hygiene counselling + cognitive behavioral therapy for insomnia (CBT-I) are first-line for actual insomnia — NOT medications.",
+      "examStrategy": "Sleep questions in older adults: normal = less sleep, more awakenings. Pathological = daytime impairment, sleep apnea symptoms, depression. Benzodiazepines for sleep = wrong answer.",
+      "keyTakeaway": "Normal sleep aging: 5–7 hours, frequent awakenings, earlier sleep phase. Pathological: daytime impairment, sleep apnea signs, depression. Benzodiazepines contraindicated.",
+      "tags": ["sleep-aging", "insomnia", "normal-aging", "benzodiazepines", "sleep-hygiene"]
+    },
+    {
+      "id": "GERO-P2-008",
+      "topicSlug": "musculoskeletal-aging-sarcopenia-osteoporosis",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 72-year-old woman is prescribed alendronate (Fosamax) 70 mg weekly for osteoporosis. When teaching her how to take this medication correctly, the nurse should include which CRITICAL instruction?",
+      "options": {
+        "A": "Take the tablet with food to minimize gastrointestinal irritation",
+        "B": "Take the tablet with a small glass of juice (100 mL) to improve absorption",
+        "C": "Take the tablet first thing in the morning with a full glass of water (240 mL) and remain upright for at least 30 minutes",
+        "D": "If you experience heartburn after taking it, lie down and rest until the discomfort resolves"
+      },
+      "correctAnswer": "C",
+      "rationale": "Alendronate (and all oral bisphosphonates) must be taken: (1) in the morning, (2) ON AN EMPTY STOMACH (30 minutes before any food, beverage, or other medication), (3) with a FULL glass of plain water (240 mL minimum), and (4) the patient must remain UPRIGHT (sitting or standing) for at least 30–60 minutes. This protocol prevents esophageal retention of the tablet, which causes severe esophageal ulceration, erosion, and stricture. Oral bisphosphonates are poorly absorbed and highly caustic to esophageal mucosa if the tablet dissolves in contact with it.",
+      "distractorRationales": {
+        "A": "Incorrect. Alendronate MUST be taken on an empty stomach. Food drastically reduces absorption (bioavailability drops to near zero with food). Taking with food also does not prevent esophageal injury.",
+        "B": "Incorrect. Only plain water should be used. Juice (calcium, citric acid), coffee, milk, and other beverages impair absorption and should be avoided. A full 240 mL glass is required, not 100 mL.",
+        "D": "Incorrect. If esophageal irritation occurs, the patient should NOT lie down — they should call their healthcare provider. Lying down worsens esophageal exposure to the medication and increases mucosal damage risk."
+      },
+      "hint": "Bisphosphonates and esophageal irritation: how must they be taken to protect the esophagus?",
+      "clinicalPearl": "Esophageal adverse effects from bisphosphonates (erosion, ulceration) are preventable with correct administration. Any patient who develops chest pain, heartburn, or difficulty swallowing after starting a bisphosphonate should be assessed for esophageal injury immediately.",
+      "examStrategy": "Alendronate patient teaching: empty stomach + 240 mL plain water + upright 30–60 min. This is a high-frequency NCLEX and REx-PN testing point for medication safety.",
+      "keyTakeaway": "Alendronate: empty stomach, full glass of plain water (240 mL), REMAIN UPRIGHT 30–60 min. Lying down after = esophageal injury. Food = reduced absorption.",
+      "tags": ["alendronate", "bisphosphonate", "osteoporosis", "medication-teaching", "esophageal-safety"]
+    },
+    {
+      "id": "GERO-P2-009",
+      "topicSlug": "musculoskeletal-aging-sarcopenia-osteoporosis",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "An 83-year-old woman with moderate osteoporosis (T-score −2.9) slips on wet floor and reports immediate severe back pain. She is brought to the emergency department. She is alert, BP 128/78 mmHg, HR 86, in significant distress. A nurse notes that her spine is tender at T10 and T11 on palpation. She has bilateral lower extremity strength intact and sensation intact. Which priority assessment should the nurse complete immediately?",
+      "options": {
+        "A": "Administer prescribed analgesic and reassess pain level in 30 minutes",
+        "B": "Obtain bilateral lower extremity vital signs to rule out aortic dissection",
+        "C": "Assess neurological function: sensation, strength, and reflexes from T10 level down",
+        "D": "Prepare the patient for urgent MRI to assess for disc herniation"
+      },
+      "correctAnswer": "C",
+      "rationale": "A 83-year-old woman with severe osteoporosis, acute back pain after a fall, and tenderness at T10–T11 has almost certainly sustained a vertebral compression fracture. While the current neurological exam appears intact, the PRIORITY is ongoing neurological monitoring — any vertebral fracture can compromise the spinal canal and cause cord or cauda equina compression. The nurse must carefully document a detailed neurological assessment (sensation at T10 level and below, motor strength, DTRs, bladder function, rectal tone) to establish a baseline and detect any neurological deterioration. Analgesics are important but come after assessment.",
+      "distractorRationales": {
+        "A": "Incorrect. Pain management is essential but cannot take priority over neurological assessment. If cord compression is developing, analgesics may mask progression. Assessment first.",
+        "B": "Incorrect. Bilateral extremity BP comparison is used to screen for aortic dissection, which presents with tearing anterior chest/back pain and hemodynamic instability — not the presentation here. This assessment is not indicated.",
+        "D": "Incorrect. Imaging is essential for diagnosis, but is ordered by the physician/NP. The NURSE's priority is neurological assessment. MRI is appropriate but is a subsequent step after nursing assessment establishes neurological baseline."
+      },
+      "hint": "Spinal fracture at T10–T11: what is the critical nursing concern beyond pain management?",
+      "clinicalPearl": "A vertebral compression fracture in an osteoporotic older adult is a spinal cord emergency until neurological status is established. Cord compromise can worsen over hours. Serial neurological assessments are essential — look for changes in bladder control (urinary retention = cauda equina), leg weakness, or sensory level.",
+      "examStrategy": "Spinal injury priorities: assess neurological function first to establish baseline, then pain management, then imaging orders. 'Assessment before intervention' applies here — and neurological baseline is the critical assessment.",
+      "keyTakeaway": "Vertebral fracture in older adult = neurological assessment priority. Assess sensation, strength, reflexes, bladder function. Document baseline carefully. Any neurological deficit = emergent escalation.",
+      "tags": ["osteoporosis", "vertebral-fracture", "neurological-assessment", "spinal-cord", "priority-nursing"]
+    },
+    {
+      "id": "GERO-P2-010",
+      "topicSlug": "renal-aging-fluid-balance",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A nurse is reviewing the lab results for an 80-year-old man admitted for elective knee replacement surgery. His serum creatinine is 88 µmol/L (0.99 mg/dL) — within the normal reference range. His eGFR (CKD-EPI) is reported as 52 mL/min/1.73m². The surgical team states, 'His kidneys are fine — creatinine is normal.' Which nursing response is most appropriate?",
+      "options": {
+        "A": "Agree with the surgical team — a normal creatinine means normal renal function",
+        "B": "Document the finding and proceed with pre-operative preparation as ordered",
+        "C": "Clarify that his eGFR of 52 mL/min represents CKD Stage 3a, despite the normal creatinine, and flag medications requiring dose adjustment",
+        "D": "Request a urine microalbumin to complete the renal assessment"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is a critical pharmacological safety issue. In older adults, serum creatinine is an unreliable marker of renal function because decreased muscle mass leads to proportionally less creatinine production — so creatinine stays 'normal' even as GFR declines significantly. An eGFR of 52 mL/min represents CKD Stage 3a (mild-moderate reduction). This is clinically important because: (1) renally-cleared medications require dose adjustment (antibiotics, analgesics, anticoagulants — including post-operative enoxaparin); (2) NSAIDs (often used post-operatively) can worsen renal function; (3) contrast for post-operative imaging requires pre/post hydration. The nurse's role is to advocate for correct renal function interpretation and flag medication safety.",
+      "distractorRationales": {
+        "A": "Incorrect. Normal serum creatinine does NOT mean normal renal function in older adults. This is one of the most important clinical principles in geriatric pharmacology.",
+        "B": "Incorrect. Proceeding without flagging the renal impairment creates significant medication safety risk. CKD Stage 3a affects dosing of many post-operative medications.",
+        "D": "Incorrect. Urine microalbumin assesses proteinuria in the context of CKD monitoring — it is appropriate for long-term CKD management but is not the priority pre-operative nursing response."
+      },
+      "hint": "Why can creatinine be 'normal' while eGFR is significantly reduced in older adults?",
+      "clinicalPearl": "The single most important renal pharmacology principle in older adults: ALWAYS use eGFR (not creatinine) to guide medication dosing. The equations (CKD-EPI or Cockcroft-Gault) account for age, sex, and body weight — which creatinine alone does not.",
+      "examStrategy": "Normal creatinine + older adult + calculated eGFR = USE THE eGFR. Any question stating 'creatinine is normal' in an older adult is setting up this teaching point. The correct action is to flag the eGFR and its medication safety implications.",
+      "keyTakeaway": "In older adults, creatinine is unreliable for assessing renal function — reduced muscle mass keeps creatinine normal despite declining GFR. ALWAYS calculate and use eGFR for medication dosing decisions.",
+      "tags": ["renal-aging", "eGFR", "creatinine", "CKD", "medication-safety", "pre-operative"]
+    },
+    {
+      "id": "GERO-P2-011",
+      "topicSlug": "pressure-injury-skin-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A nurse is assessing a 78-year-old woman who has been on strict bed rest for 48 hours following cardiac surgery. On assessment, the nurse notes a 3 cm × 4 cm area of non-blanchable erythema over the sacrum with intact skin. The Braden Scale score is 14. Which stage of pressure injury is this?",
+      "options": {
+        "A": "Unstageable — requires debridement before staging can occur",
+        "B": "Stage 1 — non-blanchable erythema with intact skin",
+        "C": "Stage 2 — partial thickness skin loss with exposed dermis",
+        "D": "Deep tissue injury — maroon or purple intact or blistered skin"
+      },
+      "correctAnswer": "B",
+      "rationale": "Stage 1 pressure injury is defined as non-blanchable erythema (redness that does NOT turn white when pressed) with INTACT skin. This is the earliest identifiable stage of pressure injury. The skin is not broken. This patient's sacral finding — non-blanchable erythema with intact skin — is classic Stage 1. Braden Score of 14 = at risk (≤18). This finding requires: increased repositioning frequency, pressure redistribution surface, and close monitoring for worsening.",
+      "distractorRationales": {
+        "A": "Incorrect. Unstageable pressure injuries are those where the wound bed is obscured by slough or eschar, preventing accurate staging. This wound has intact skin — it is fully visible and stageable.",
+        "C": "Incorrect. Stage 2 involves BROKEN skin — a shallow open ulcer or blister with exposed dermis. This wound has intact skin.",
+        "D": "Incorrect. Deep tissue injury (DTI) presents as PURPLE or MAROON discolouration (not bright red erythema), typically over a bony prominence. It may be warm, firm, or boggy compared to adjacent tissue."
+      },
+      "hint": "Pressure injury staging: Stage 1 = intact skin, non-blanchable redness. Stage 2 = skin broken.",
+      "clinicalPearl": "Non-blanchable vs blanchable erythema test: press a finger firmly on the red area for 3 seconds. Blanchable = normal skin response (capillaries compress). Non-blanchable = tissue damage already occurring, blood has leaked into tissue = Stage 1 PI. This is the critical distinction.",
+      "examStrategy": "Pressure injury staging: memorize 4 stages + unstageable + DTI. Stage 1 = non-blanchable, intact skin. This is the most commonly tested basic pressure injury concept.",
+      "keyTakeaway": "Stage 1 = non-blanchable erythema, intact skin. This is the earliest stage; intervene immediately to prevent progression. Braden ≤18 = at risk.",
+      "tags": ["pressure-injury", "staging", "Stage-1", "Braden-scale", "skin-assessment"]
+    },
+    {
+      "id": "GERO-P2-012",
+      "topicSlug": "pressure-injury-skin-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN"],
+      "tier": ["RPN", "RN"],
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is developing a pressure injury prevention care plan for an 86-year-old woman admitted to the medical unit. She has a Braden Scale score of 12, urinary incontinence, poor oral intake, and is able to make minimal position changes in bed. Which interventions should be included in her care plan? SELECT ALL THAT APPLY.",
+      "options": {
+        "A": "Reposition every 2 hours; document repositioning schedule",
+        "B": "Apply a donut-shaped cushion to protect the coccyx when sitting",
+        "C": "Float heels off the mattress using a foam boot or pillow",
+        "D": "Apply a moisture barrier cream to the perineal and perianal areas",
+        "E": "Place a pressure redistribution mattress on her bed",
+        "F": "Massage over the sacral area for 5 minutes each shift to improve circulation"
+      },
+      "correctAnswer": ["A", "C", "D", "E"],
+      "rationale": "A (CORRECT): Repositioning q2h is the cornerstone of pressure injury prevention for immobile patients. C (CORRECT): Heels must be floated off the mattress — heels are highly vulnerable (thin subcutaneous tissue) and second most common site for pressure injuries. D (CORRECT): Incontinence-associated dermatitis (IAD) from urine/stool contact requires moisture barrier protection to prevent maceration and pressure injury formation. E (CORRECT): Braden score of 12 = high risk; a pressure redistribution surface (foam or alternating air) is mandatory.",
+      "distractorRationales": {
+        "B": "INCORRECT. Donut-shaped cushions are CONTRAINDICATED — they concentrate pressure at the center of the donut and worsen ischemia to the surrounding tissue. Never use donut cushions.",
+        "F": "INCORRECT. Massage over bony prominences or reddened areas is CONTRAINDICATED — it causes shear forces in fragile tissue and worsens pressure injury formation. Never massage red or bony prominence areas."
+      },
+      "hint": "Two interventions are specifically contraindicated in pressure injury prevention. Identify them.",
+      "clinicalPearl": "Two 'common sense' nursing actions that are actually harmful in pressure injury care: (1) donut cushions — concentrate pressure; (2) massage over red areas — causes shear/friction damage. Both are commonly seen in clinical practice and both are wrong.",
+      "examStrategy": "Pressure injury SATA: apply rule — donut cushions = wrong; massage over redness = wrong. Correct: reposition q2h, float heels, barrier creams for moisture, pressure-redistribution surface.",
+      "keyTakeaway": "Pressure injury prevention SATA: include repositioning, heel offloading, moisture barrier, pressure redistribution surface. EXCLUDE: donut cushions (contraindicated) and massage over reddened areas (contraindicated).",
+      "tags": ["pressure-injury", "prevention", "Braden-scale", "SATA", "donut-cushion", "heel-offloading"]
+    },
+    {
+      "id": "GERO-P2-013",
+      "topicSlug": "neurological-cognitive-aging",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A nurse practitioner is evaluating a 75-year-old retired engineer who reports gradually worsening memory over the past 18 months, particularly for names and recent events. He has started keeping detailed lists to compensate. His MoCA score today is 24/30 (losing points in memory and attention domains). His wife reports he manages all ADLs and IADLs independently, still drives locally, manages finances, and attends weekly chess club. He has no depression symptoms. Which is the most accurate interpretation?",
+      "options": {
+        "A": "Normal cognitive aging — the MoCA score of 24 is within normal limits",
+        "B": "Mild cognitive impairment (MCI) — objective cognitive testing shows impairment beyond age-expected, but daily function is preserved",
+        "C": "Early Alzheimer's disease — memory impairment + MoCA score of 24 confirms the diagnosis",
+        "D": "Major neurocognitive disorder (dementia) — memory impairment affecting compensation strategies"
+      },
+      "correctAnswer": "B",
+      "rationale": "Mild Cognitive Impairment (MCI) is defined by: (1) subjective cognitive complaint, (2) objective cognitive impairment on testing beyond age-expected (MoCA 24 = below normal ≥26 cutoff, adjusted), (3) PRESERVED daily function (ADLs and IADLs independent). This patient meets all three criteria. MCI is NOT normal aging (objective impairment on testing), and NOT dementia (function is fully preserved). MCI progresses to dementia at approximately 10–15% per year. Management: monitor, address risk factors, cognitive engagement, exercise.",
+      "distractorRationales": {
+        "A": "Incorrect. MoCA cutoff for normal is ≥26. A score of 24 is below the normal threshold even with education adjustment (+1 point for <12 years education — not applicable here). This represents objective impairment beyond normal aging.",
+        "C": "Incorrect. Early Alzheimer's disease requires: (1) biomarker or neuropathological confirmation; (2) typically shows MORE widespread cognitive domain impairment; and (3) MCI is an earlier and separate diagnosis. A MoCA of 24 with preserved function does not confirm Alzheimer's.",
+        "D": "Incorrect. Dementia (major neurocognitive disorder) requires evidence of cognitive impairment IN COMBINATION WITH functional impairment affecting independence. This patient remains fully independent in all ADLs and IADLs — therefore does NOT meet criteria for dementia."
+      },
+      "hint": "MCI = objective impairment + preserved function. Dementia = objective impairment + functional impairment.",
+      "clinicalPearl": "MCI is the clinical prodrome for dementia in many patients but NOT inevitable progression. 15–30% of MCI patients stabilize or revert to normal. Modifiable risk factors (hearing loss, hypertension, depression, inactivity, smoking, alcohol, social isolation) should be addressed aggressively at the MCI stage.",
+      "examStrategy": "MCI vs dementia on advanced exams: the ONE distinguishing criterion is FUNCTION. Preserved ADLs and IADLs = MCI. Impaired daily function = dementia (major NCD).",
+      "keyTakeaway": "MCI: objective cognitive impairment (MoCA <26) + preserved daily function (ADLs and IADLs intact). Dementia: objective impairment + functional impairment. MCI does not equal dementia.",
+      "tags": ["MCI", "mild-cognitive-impairment", "MoCA", "dementia-distinction", "NP", "cognitive-screening"]
+    },
+    {
+      "id": "GERO-P2-014",
+      "topicSlug": "musculoskeletal-aging-sarcopenia-osteoporosis",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is conducting a health assessment for a 70-year-old woman with type 2 diabetes and a 10-year history of prednisone use for rheumatoid arthritis. She has not had a DEXA scan and has never been screened for osteoporosis. Her current BMI is 21. Which statement regarding her osteoporosis risk is MOST accurate?",
+      "options": {
+        "A": "Her diabetes protects against osteoporosis by increasing bone mineral density",
+        "B": "At age 70, routine osteoporosis screening is not yet indicated",
+        "C": "She has multiple significant risk factors for osteoporosis: long-term corticosteroid use, low BMI, and female sex — DEXA scan is urgently indicated",
+        "D": "Rheumatoid arthritis treatment with steroids does not significantly affect bone density"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient has multiple major osteoporosis risk factors: (1) Female sex (highest risk group); (2) Age 70; (3) Long-term corticosteroid use (prednisone >3 months is a major risk factor — glucocorticoids suppress osteoblast activity and increase bone resorption); (4) Low BMI of 21 (thin build = reduced mechanical loading on bones, reduced estrogen from lower fat stores). DEXA screening is recommended for all women ≥65 and for younger postmenopausal women with risk factors including glucocorticoid use. This patient is significantly overdue for screening.",
+      "distractorRationales": {
+        "A": "Incorrect. Type 2 diabetes has a COMPLEX relationship with bone density — BMD may be paradoxically normal or elevated, but bone QUALITY is impaired (increased glycation of bone matrix). T2DM patients with normal BMD still have higher fracture risk than non-diabetics.",
+        "B": "Incorrect. DEXA screening is recommended at age 65 for ALL women. For women with risk factors (corticosteroids), screening should begin earlier. At age 70 without previous screening, a DEXA is urgently overdue.",
+        "D": "Incorrect. Glucocorticoid-induced osteoporosis (GIO) is the most common drug-induced cause of osteoporosis and fracture. Long-term prednisone use is a major independent risk factor and indication for immediate osteoporosis workup and treatment."
+      },
+      "hint": "Which risk factors does this patient have? At what age is DEXA indicated for women?",
+      "clinicalPearl": "Glucocorticoid-induced osteoporosis (GIO) is underdiagnosed. Any patient on systemic glucocorticoids for >3 months should receive: DEXA scan, calcium/vitamin D supplementation, and likely bisphosphonate therapy per GIOP management guidelines.",
+      "examStrategy": "Osteoporosis risk factor questions: memorize major risk factors — female sex, age ≥65, corticosteroid use, low BMI, prior fracture, family history of hip fracture, smoking, alcohol. Multiple risk factors = earlier/urgent screening.",
+      "keyTakeaway": "DEXA screening: all women ≥65; earlier for high-risk (corticosteroids, low BMI, prior fracture). Long-term prednisone = major bone loss risk requiring immediate assessment and management.",
+      "tags": ["osteoporosis", "DEXA", "corticosteroids", "glucocorticoid-induced", "risk-factors", "bone-density"]
+    },
+    {
+      "id": "GERO-P2-015",
+      "topicSlug": "renal-aging-fluid-balance",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 78-year-old woman with heart failure is admitted to the medical unit with a 3-day history of nausea, lethargy, and confusion. Her sodium level is 122 mEq/L (normal 135–145). She takes furosemide 40 mg BID and hydrochlorothiazide 12.5 mg daily for heart failure management. Which nursing action takes HIGHEST priority?",
+      "options": {
+        "A": "Administer normal saline IV at 125 mL/hour to correct the sodium deficit rapidly",
+        "B": "Notify the physician/NP, implement fluid restriction, and monitor neurological status closely",
+        "C": "Administer sodium chloride tablets orally to raise the sodium level",
+        "D": "Increase the furosemide dose to remove excess fluid that is diluting the sodium"
+      },
+      "correctAnswer": "B",
+      "rationale": "A sodium of 122 mEq/L is severe hyponatremia (normal 135–145). This patient has symptoms: confusion, lethargy, nausea — consistent with hyponatremia severity. In a heart failure patient on two diuretics (furosemide + hydrochlorothiazide), the most likely cause is dilutional hyponatremia (excess free water relative to sodium) from heart failure + diuretic-induced sodium loss. Thiazide diuretics are a classic cause of hyponatremia in older adults. Nursing priority: notify physician/NP, implement fluid restriction (NOT sodium loading), and monitor neurological status closely. Rapid correction of hyponatremia causes OSMOTIC DEMYELINATION SYNDROME — a catastrophic neurological complication.",
+      "distractorRationales": {
+        "A": "Incorrect. Rapid correction of hyponatremia with normal saline is dangerous — overcorrection (>8–10 mEq/L in 24 hours) causes osmotic demyelination syndrome (central pontine myelinolysis). Correction must be GRADUAL and guided by the physician/NP.",
+        "C": "Incorrect. Oral sodium chloride is not an appropriate or safe first-line treatment for symptomatic hyponatremia. It may worsen heart failure.",
+        "D": "Incorrect. Increasing furosemide is inappropriate — it may cause further sodium and fluid loss, and does not address the underlying dilutional hyponatremia. Hydrochlorothiazide (thiazide) should likely be HELD."
+      },
+      "hint": "Hyponatremia with heart failure + thiazides: what is the correction approach? What must be avoided?",
+      "clinicalPearl": "Thiazide diuretics (hydrochlorothiazide, chlorthalidone) are the leading cause of drug-induced hyponatremia in older adults — particularly older women. The mechanism is impaired free water excretion. Loop diuretics (furosemide) cause less hyponatremia than thiazides. Hyponatremia correction rate: maximum 8–10 mEq/L in 24 hours.",
+      "examStrategy": "Hyponatremia with heart failure: fluid restriction + physician notification + slow/guided correction. Rapid correction = osmotic demyelination = irreversible neurological damage. This is a safety priority.",
+      "keyTakeaway": "Hyponatremia: notify MD, fluid restriction, SLOW correction (<8–10 mEq/L/24h). Rapid correction = osmotic demyelination syndrome. Thiazide diuretics = leading drug cause in older adults.",
+      "tags": ["hyponatremia", "diuretics", "thiazide", "fluid-balance", "osmotic-demyelination", "heart-failure"]
+    },
+    {
+      "id": "GERO-P2-016",
+      "topicSlug": "normal-cardiovascular-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 78-year-old man with a history of hypertension and diabetes presents to the emergency department with his wife who reports he 'just isn't himself' for the past 6 hours — he seems confused, weak, and nauseated. He denies chest pain. HR is 98 bpm, BP 104/62 (baseline 138/82), RR 18, SpO2 95%. A 12-lead ECG shows new ST elevation in leads II, III, and aVF. Which nursing action is MOST urgent?",
+      "options": {
+        "A": "Reassess in 30 minutes — the absence of chest pain is reassuring",
+        "B": "Assess blood glucose, as his diabetes may be causing these symptoms",
+        "C": "Activate the STEMI protocol immediately and notify the cardiologist/Code STEMI team",
+        "D": "Administer aspirin 325 mg and monitor for improvement"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient is presenting with an INFERIOR STEMI (ST elevation in II, III, aVF) with atypical symptoms — confusion, weakness, nausea, and NO chest pain. Older adults, diabetics, and women frequently present without classic chest pain (atypical MI). The new ST elevation on ECG is the definitive finding requiring IMMEDIATE activation of the STEMI protocol (Code STEMI/cath lab activation). Time is myocardium — door-to-balloon time target is <90 minutes. Aspirin 325 mg is appropriate but is concurrent with STEMI activation — not the priority sequence.",
+      "distractorRationales": {
+        "A": "Incorrect. The ABSENCE of chest pain does NOT reassure in an older adult with new ST elevation. Atypical MI presentation is common in older adults, diabetics, and women. Waiting 30 minutes in an acute STEMI causes permanent myocardial necrosis.",
+        "B": "Incorrect. While blood glucose assessment is appropriate (diabetics with hypoglycemia can present similarly), the ECG showing ST elevation in leads II, III, aVF is definitive for inferior STEMI. The STEMI protocol is the immediate priority.",
+        "D": "Incorrect. Aspirin is part of STEMI management but is not the single priority action. The priority is STEMI protocol activation — everything else (aspirin, IV access, cardiac monitoring, heparin) flows from that."
+      },
+      "hint": "New ST elevation = STEMI. Time is myocardium. What is the first action for any STEMI regardless of symptoms?",
+      "clinicalPearl": "Up to 40% of older adults with MI do NOT report chest pain. In diabetics, autonomic neuropathy blunts pain sensation. Always interpret ECG findings in the context of any symptom cluster suggesting cardiovascular compromise — the ECG finding overrides the absence of chest pain.",
+      "examStrategy": "Atypical MI + ECG changes = activate STEMI protocol immediately. Never reassure based on absent chest pain when ECG shows ST elevation. Atypical presentations are most common in older adults, women, and diabetics.",
+      "keyTakeaway": "Up to 40% of MIs in older adults present WITHOUT chest pain. ECG showing ST elevation = STEMI protocol activation regardless of symptoms. Never reassure based on absent chest pain when ECG is abnormal.",
+      "tags": ["STEMI", "atypical-MI", "cardiovascular-aging", "ECG", "atypical-presentation", "diabetes", "older-adults"]
+    },
+    {
+      "id": "GERO-P2-017",
+      "topicSlug": "respiratory-aging-changes",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is caring for an 80-year-old man with severe COPD (FEV1 28% predicted) and type 2 respiratory failure who is receiving supplemental oxygen. His current SpO2 is 88% on 2 L nasal cannula. A nursing student asks why the nurse is not increasing the oxygen to get the SpO2 above 94%. Which explanation by the nurse is MOST accurate?",
+      "options": {
+        "A": "Older adult lungs cannot absorb oxygen effectively, so higher flow rates are not beneficial",
+        "B": "In COPD with hypercarbic respiratory failure, the respiratory drive is maintained by hypoxia rather than hypercarbia — supplemental oxygen above the target range can suppress respiratory drive",
+        "C": "The patient's COPD medications have already maximized his oxygenation capacity",
+        "D": "SpO2 of 88% is within normal range for a patient his age with severe COPD"
+      },
+      "correctAnswer": "B",
+      "rationale": "In patients with chronic hypercarbic respiratory failure (type 2 respiratory failure — elevated CO2 + low O2), the normal CO2-driven respiratory drive is blunted. These patients rely primarily on their hypoxic drive (low PaO2) to stimulate breathing. Administering high-flow oxygen to raise SpO2 above the target (typically 88–92% for COPD) can eliminate the hypoxic drive, leading to hypoventilation and potentially fatal CO2 retention (hypercarbic respiratory failure). The SpO2 target for COPD with hypercarbic respiratory failure is 88–92%, not 94–99%.",
+      "distractorRationales": {
+        "A": "Incorrect. Older adult lungs DO absorb oxygen — they have reduced diffusing capacity but oxygen supplementation still works. The issue is about respiratory drive, not absorption.",
+        "C": "Incorrect. COPD medications (bronchodilators, corticosteroids) address airflow obstruction but do not set a maximum oxygenation level. The SpO2 target is based on ventilatory physiology.",
+        "D": "Incorrect. 88% is not comfortable or ideal but is the accepted target range (88–92%) for COPD with hypercarbic failure — it is NOT 'normal.' It is a carefully titrated target to balance oxygen delivery and respiratory drive preservation."
+      },
+      "hint": "COPD type 2 respiratory failure: what drives breathing — CO2 or O2? What happens if O2 is too high?",
+      "clinicalPearl": "SpO2 targets: healthy adults = 94–98%. COPD with hypercarbic failure = 88–92%. Never use high-flow oxygen in COPD without monitoring blood gases or capnography for CO2 retention.",
+      "examStrategy": "COPD oxygen delivery: target 88–92%, not higher. High-flow O2 in COPD = suppress hypoxic drive = hypoventilation = CO2 retention = respiratory acidosis. This is a fundamental pharmacological safety principle tested frequently.",
+      "keyTakeaway": "COPD with type 2 respiratory failure: oxygen target 88–92%. Higher SpO2 suppresses hypoxic drive → CO2 retention. Do not raise O2 above target in these patients.",
+      "tags": ["COPD", "oxygen-therapy", "respiratory-aging", "hypoxic-drive", "oxygen-target", "SpO2"]
+    },
+    {
+      "id": "GERO-P2-018",
+      "topicSlug": "musculoskeletal-aging-sarcopenia-osteoporosis",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is developing a care plan for an 80-year-old woman with sarcopenia, recently discharged from hospital after a fall. She is underweight (BMI 18.5), eats poorly, and lives alone. Which interventions are appropriate for managing her sarcopenia? SELECT ALL THAT APPLY.",
+      "options": {
+        "A": "Refer for progressive resistance training exercises with physiotherapy",
+        "B": "Recommend complete bed rest to protect her from further falls",
+        "C": "Ensure protein intake of at least 1.2 g/kg body weight per day",
+        "D": "Assess and treat vitamin D deficiency",
+        "E": "Screen for depression which can contribute to anorexia and inactivity",
+        "F": "Refer for oral nutritional supplements if dietary protein is insufficient"
+      },
+      "correctAnswer": ["A", "C", "D", "E", "F"],
+      "rationale": "A (CORRECT): Resistance training is the most evidence-based intervention for sarcopenia. C (CORRECT): Protein 1.2 g/kg/day (some guidelines recommend 1.6 g/kg for sarcopenia treatment). D (CORRECT): Vitamin D deficiency is common in older adults and contributes to muscle weakness and fall risk. E (CORRECT): Depression causes anorexia and physical inactivity — both worsen sarcopenia; treating depression improves both outcomes. F (CORRECT): Oral nutritional supplements are indicated when dietary intake is insufficient.",
+      "distractorRationales": {
+        "B": "INCORRECT. Complete bed rest is the OPPOSITE of evidence-based sarcopenia management. Bed rest accelerates muscle loss dramatically in older adults (10 years of aging in 1 week of bed rest). Early mobilization and resistance exercise are essential."
+      },
+      "hint": "Sarcopenia management: exercise + nutrition + address modifiable factors. What is NOT appropriate?",
+      "clinicalPearl": "Sarcopenia is highly treatable with progressive resistance training — studies show significant gains in muscle mass and strength even in adults aged 80–90. It is never too late to benefit from resistance exercise.",
+      "examStrategy": "Sarcopenia SATA: include exercise (resistance training), protein, vitamin D, treat contributing factors (depression, malnutrition). Exclude: bed rest (always wrong for sarcopenia).",
+      "keyTakeaway": "Sarcopenia management: resistance training + protein 1.2 g/kg/day + vitamin D + treat depression. Bed rest worsens sarcopenia — never appropriate.",
+      "tags": ["sarcopenia", "resistance-training", "protein", "vitamin-D", "depression", "fall-prevention", "SATA"]
+    },
+    {
+      "id": "GERO-P2-019",
+      "topicSlug": "normal-cardiovascular-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is caring for a 75-year-old woman who has been on bed rest for 4 days following an acute MI. When preparing to assist her to the commode for the first time, which assessment is MOST important to complete before helping her stand?",
+      "options": {
+        "A": "12-lead ECG to assess for re-infarction before mobilization",
+        "B": "Orthostatic blood pressure measurement — lying, then 1 minute sitting at edge of bed",
+        "C": "Complete a Braden Scale assessment to determine fall risk from skin breakdown",
+        "D": "Assess fine motor coordination to determine ability to use call bell"
+      },
+      "correctAnswer": "B",
+      "rationale": "Before the first mobilization after 4 days of bed rest following an MI in a 75-year-old woman, orthostatic blood pressure assessment is essential. Prolonged bed rest causes deconditioning and volume redistribution, greatly increasing the risk of orthostatic hypotension on standing. In a post-MI patient, sudden hypotension can trigger a sympathetic response with tachycardia (increased myocardial oxygen demand) and reduce coronary perfusion. Orthostatic assessment (lying → sitting at edge of bed) before standing allows the nurse to identify and manage this risk before an unsafe transfer.",
+      "distractorRationales": {
+        "A": "Incorrect. A routine ECG is not required before first mobilization unless new symptoms have developed. The priority safety assessment for the mobilization itself is orthostatic BP.",
+        "C": "Incorrect. The Braden Scale assesses pressure injury risk — not mobility or fall risk specifically. This is not the priority assessment before first transfer.",
+        "D": "Incorrect. Fine motor coordination and call bell access are important for inpatient safety, but they do not assess the immediate risk of the first mobilization."
+      },
+      "hint": "What cardiovascular risk occurs when a patient who has been in bed for 4 days first stands?",
+      "clinicalPearl": "In post-MI older adults, early mobilization is therapeutic — but the first transfer requires orthostatic BP assessment, close monitoring, and slow progression: supine → head of bed elevated → sitting at edge (dangle) → standing → walk.",
+      "examStrategy": "Before FIRST mobilization after prolonged bed rest: orthostatic BP is the priority assessment. This prevents falls and hemodynamic compromise at the most vulnerable moment.",
+      "keyTakeaway": "Before first mobilization after bed rest: assess orthostatic BP (lying → sitting). Sudden standing after bed rest = orthostatic hypotension risk → fall or cardiac compromise.",
+      "tags": ["orthostatic-hypotension", "post-MI", "mobilization", "bed-rest", "cardiovascular-aging"]
+    },
+    {
+      "id": "GERO-P2-020",
+      "topicSlug": "pressure-injury-skin-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse assesses a 90-year-old man in the ICU who has been supine for 72 hours post-abdominal surgery. The nurse notes a 4 cm × 5 cm wound over the sacrum. The wound has visible adipose tissue in the wound bed; there is no bone, tendon, or muscle exposed. What stage of pressure injury does this represent?",
+      "options": {
+        "A": "Stage 2 — partial thickness skin loss",
+        "B": "Stage 3 — full thickness skin loss with visible fat but no exposed bone/tendon",
+        "C": "Stage 4 — full thickness with exposed bone, tendon, or muscle",
+        "D": "Unstageable — slough covers the wound bed"
+      },
+      "correctAnswer": "B",
+      "rationale": "Stage 3 pressure injury is defined as full thickness skin loss — both epidermis AND dermis are destroyed. Subcutaneous fat (adipose tissue) MAY be visible, but no bone, tendon, or muscle is exposed. The wound depth varies by location (areas with less subcutaneous fat — heels, nose, ears — may be shallow; areas with more fat — sacrum, buttocks — may be deeper). This wound fits Stage 3: full thickness loss with visible fat, no bone/tendon/muscle. Stage 4 requires bone, tendon, or muscle exposure.",
+      "distractorRationales": {
+        "A": "Incorrect. Stage 2 involves partial thickness loss — epidermis ± superficial dermis damaged. Subcutaneous fat is NOT visible in Stage 2. The wound described shows visible fat, indicating full thickness loss.",
+        "C": "Incorrect. Stage 4 requires EXPOSED bone, tendon, or muscle — none of which is present in this wound description.",
+        "D": "Incorrect. Unstageable pressure injuries have a wound bed OBSCURED by slough (yellow/tan/grey) or eschar (black/brown). This wound shows visible adipose tissue — the base is visible and assessable."
+      },
+      "hint": "Stage 2 = partial thickness; Stage 3 = full thickness + visible fat, no bone; Stage 4 = bone/tendon/muscle exposed.",
+      "clinicalPearl": "Stage 3 pressure injuries require prompt wound care specialist referral, advanced wound dressings, aggressive nutritional support, and interprofessional care planning. Healing in older adults is slow and requires sustained intervention.",
+      "examStrategy": "Pressure injury staging: fat visible but no bone/tendon/muscle = Stage 3. This distinction (Stage 3 vs Stage 4) appears consistently on NCLEX and requires understanding of wound depth at each stage.",
+      "keyTakeaway": "Stage 3: full thickness skin loss, visible fat, NO exposed bone/tendon/muscle. Stage 4: bone/tendon/muscle exposed. Unstageable: slough/eschar obscures wound base.",
+      "tags": ["pressure-injury", "staging", "Stage-3", "Stage-4", "wound-assessment"]
+    }
+  ]
+}

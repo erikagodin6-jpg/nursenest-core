@@ -1,0 +1,480 @@
+{
+  "version": 1,
+  "packageId": "maternal-newborn-pkg-01",
+  "label": "Reproductive Anatomy & Physiology — Lesson Outlines",
+  "generatedDate": "2026-06-02",
+  "targetExams": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "PNP-PC", "FNP"],
+  "programs": ["rpn", "lpn", "rn", "np"],
+  "domain": "Maternal Newborn",
+  "subdomain": "Reproductive Anatomy & Physiology",
+  "lessons": [
+    {
+      "lessonId": "mn-pkg01-L01",
+      "topicSlug": "female-reproductive-vulva",
+      "title": "The Vulva: External Female Genitalia",
+      "learningObjectives": [
+        "Identify the anatomical components of the vulva and their functions",
+        "Describe normal versus abnormal vulvar assessment findings",
+        "Recognize vulvar conditions relevant to reproductive and obstetric nursing",
+        "Perform a systematic external genitalia inspection",
+        "Identify risk factors for vulvar pathology across the lifespan"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **vulva** comprises all external female genitalia and serves as the anatomical boundary between internal reproductive structures and the external environment. In obstetric nursing, thorough understanding of vulvar anatomy is essential for accurate assessment during labor, postpartum care, and detection of complications such as lacerations, hematomas, and infection.\n\n**Components of the vulva:**\n- Mons pubis\n- Labia majora\n- Labia minora\n- Clitoris (glans, hood/prepuce, body, crura)\n- Vestibule (urethral meatus, vaginal introitus, Bartholin's gland openings, Skene's gland openings)\n- Perineum (between vaginal introitus and anus)\n\n**Clinical relevance for nursing:** During the intrapartum period, the perineum is assessed for integrity and laceration degree. Postpartum, the episiotomy or laceration site is assessed using the REEDA scale (Redness, Edema, Ecchymosis, Discharge, Approximation)."
+        },
+        {
+          "id": "anatomy_detail",
+          "heading": "Anatomical Components",
+          "kind": "pathophysiology_overview",
+          "body": "**Mons pubis:** Fatty pad overlying the pubic symphysis; covered with pubic hair after puberty. Provides cushioning during intercourse.\n\n**Labia majora:** Two folds of adipose and connective tissue extending from mons pubis to perineum. Homologous to male scrotum. Outer surface is pigmented and hair-bearing; inner surface is smooth and moist. Function: protect underlying structures.\n\n**Labia minora:** Two thin, highly vascular folds of tissue medial to labia majora; no hair follicles or adipose. Highly sensitive due to rich nerve supply. Anteriorly, they form the clitoral hood (prepuce) and frenulum. Posteriorly, they form the fourchette. The size and appearance vary widely among individuals — both asymmetry and prominence are normal variants.\n\n**Clitoris:** Erectile organ; primary structure of female sexual response. Glans is visible; body and crura extend internally, wrapping around vaginal walls (internal clitoris is far larger than external glans). Contains 8,000+ sensory nerve endings. Homologous to male penis.\n\n**Vestibule:** The area between the labia minora containing:\n- Urethral meatus: ~2.5 cm below clitoris\n- Vaginal introitus: below urethral meatus\n- Bartholin's glands (greater vestibular glands): at 4 and 8 o'clock positions at vaginal introitus; secrete mucus for lubrication\n- Skene's glands (lesser vestibular glands): paraurethral glands at 5 and 7 o'clock around urethral meatus\n\n**Perineum:** Diamond-shaped region between vaginal introitus and anus. Consists of perineal body (central tendon), urogenital triangle (anterior), and anal triangle (posterior). Critical obstetric landmark — site of episiotomy and laceration."
+        },
+        {
+          "id": "assessment",
+          "heading": "Nursing Assessment",
+          "kind": "nursing_assessment_interventions",
+          "body": "**External genitalia inspection (antepartum, intrapartum, postpartum):**\n- Position: lithotomy or dorsal recumbent\n- Use adequate lighting\n- Inspect for: lesions, discharge, erythema, swelling, ulcers, lacerations\n\n**Antepartum assessment:**\n- Note any lesions suggestive of herpes (vesicles), condyloma acuminata (HPV warts), or syphilitic chancre\n- Document presence of varicosities (vulvar varicosities common in pregnancy due to increased venous pressure)\n- Assess Bartholin's gland: normally not palpable; cyst or abscess presents as tender, fluctuant mass at 4 or 8 o'clock\n\n**Intrapartum assessment:**\n- Assess descent of presenting part\n- Monitor for crowning, bulging, perineal distension\n- Identify spontaneous lacerations early\n\n**Postpartum REEDA scale:**\n- **R**edness: degree of inflammation\n- **E**dema: swelling at repair site\n- **E**cchymosis: bruising\n- **D**ischarge: serous, serosanguineous, or purulent\n- **A**pproximation: wound edges aligned\n- Each scored 0–3; higher scores = impaired healing\n\n**Laceration classification:**\n- 1st degree: skin only\n- 2nd degree: skin + perineal muscle\n- 3rd degree: skin + muscle + external anal sphincter\n- 4th degree: through rectal mucosa"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Bartholin's gland abscess** is a common reproductive-age emergency presenting as unilateral, fluctuant, tender mass near vaginal introitus at 4 or 8 o'clock. Treatment is I&D; recurrent abscesses may require marsupialization.\n- **Vulvar hematoma** postpartum: expanding hematoma can develop even without visible laceration when blood collects in paravaginal space. Signs: severe perineal pain out of proportion to findings, ecchymosis, bulging. Requires prompt provider notification.\n- **Herpes simplex lesions** on vulva at time of delivery = contraindication to vaginal delivery (C-section required if active lesions or prodromal symptoms).\n- **Labial varicosities** are common in pregnancy; teach the client: cold compresses, avoiding prolonged standing, maternity support garments. Usually resolve postpartum.\n- Normal vulvar skin changes in pregnancy: increased vascularity causes Chadwick's sign (bluish-purple discoloration of vulva and vagina from engorgement) — first appears 6–8 weeks."
+        },
+        {
+          "id": "patient_teaching",
+          "heading": "Patient Teaching",
+          "kind": "client_education",
+          "body": "- Teach perineal hygiene: wipe front to back; sitz baths 3× daily postpartum for comfort and hygiene\n- Ice packs for first 24 hours postpartum to reduce edema\n- Sitz baths after first 24 hours for healing comfort\n- Pain management: topical anesthetics (benzocaine spray), oral analgesics as prescribed\n- Report signs of infection: increasing pain, purulent discharge, fever\n- Sexual resumption: generally deferred until 6-week postpartum check; confirm healing\n- Teach vulvar self-examination for changes: new lesions, discoloration, persistent pruritus"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Vulva = external female genitalia: mons pubis, labia majora, labia minora, clitoris, vestibule, perineum\n- Bartholin's glands at 4 and 8 o'clock; Skene's glands paraurethral — neither palpable normally\n- REEDA scale assesses postpartum wound healing (0–3 for each component)\n- Laceration degrees: 1st (skin) → 2nd (muscle) → 3rd (anal sphincter) → 4th (rectal mucosa)\n- Chadwick's sign: bluish-purple vulva/vagina = early sign of pregnancy from vascular engorgement\n- Active herpes lesions = C-section indication"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg01-L02",
+      "topicSlug": "female-reproductive-vagina",
+      "title": "The Vagina: Structure, Function & Clinical Assessment",
+      "learningObjectives": [
+        "Describe the anatomical layers and relationships of the vagina",
+        "Explain vaginal pH and its significance in pregnancy",
+        "Identify normal and abnormal vaginal discharge characteristics",
+        "Recognize clinical findings requiring intervention",
+        "Apply vaginal assessment knowledge to intrapartum and postpartum care"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **vagina** is a fibromuscular tube approximately 7–10 cm in length extending from the vestibule to the uterine cervix. It serves three essential functions: (1) passageway for menstrual flow, (2) receptacle for semen during intercourse, and (3) birth canal during delivery. In obstetric nursing, understanding vaginal anatomy and physiology is foundational for assessment, diagnosis of rupture of membranes, and recognition of infection."
+        },
+        {
+          "id": "anatomy_detail",
+          "heading": "Anatomical Structure",
+          "kind": "pathophysiology_overview",
+          "body": "**Orientation and relationships:**\n- Lies between bladder and urethra anteriorly, rectum and anal canal posteriorly\n- Axis is nearly horizontal in standing position\n- Forms anterior and posterior fornices (recesses) around cervix; posterior fornix is deepest (clinically significant — pooling of amniotic fluid after ROM)\n\n**Wall layers (from inside out):**\n1. **Mucosa:** stratified squamous epithelium arranged in transverse folds called rugae; rugae allow distension during delivery\n2. **Muscularis:** smooth muscle (inner circular, outer longitudinal)\n3. **Adventitia:** dense connective tissue connecting to adjacent structures\n\n**Blood supply:** Internal iliac artery branches (uterine, vaginal, internal pudendal arteries). Rich vascular supply accounts for significant potential for hemorrhage with vaginal lacerations.\n\n**Normal vaginal pH:** 3.8–4.5 (acidic), maintained by Lactobacillus species converting glycogen in epithelial cells to lactic acid. Acidic pH inhibits pathogen growth.\n\n**Changes in pregnancy:**\n- Increased vascularity → Chadwick's sign (bluish-purple discoloration)\n- Increased vaginal secretions (leukorrhea of pregnancy) — white/gray, odorless, non-irritating\n- Rugae become more prominent\n- pH may shift slightly toward alkaline\n- Vaginal walls soften and become more distensible (progesterone effect) in preparation for delivery"
+        },
+        {
+          "id": "assessment",
+          "heading": "Clinical Assessment",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Vaginal discharge assessment (COINS mnemonic):**\n- **C**olor: white (normal leukorrhea), gray (BV), yellow-green (trichomoniasis, gonorrhea), cottage cheese (Candida)\n- **O**dor: odorless (normal/Candida), fishy (BV — amine odor, worse with sex/KOH), foul (infection, foreign body)\n- **I**rritation: pruritus (Candida), burning (trichomoniasis, atrophic)\n- **N**itrazine/pH: normal <4.5; amniotic fluid pH ≥6.5 (turns nitrazine paper blue)\n- **S**ymptoms: pain, dyspareunia, dysuria\n\n**Rupture of membranes assessment:**\n- **Nitrazine test:** swab fluid from posterior fornix; pH ≥6.5 turns paper blue-green to blue → positive for amniotic fluid (false positives: blood, semen, BV, antiseptic solutions)\n- **Ferning (crystallization):** amniotic fluid on glass slide dries in fern-like pattern (arborization) due to electrolytes\n- **Pooling:** visualization of fluid pooling in posterior fornix\n- **PAMG-1 (AmniSure):** rapid immunoassay for placental alpha-microglobulin-1; high sensitivity and specificity\n\n**Postpartum vaginal assessment:**\n- Lochia assessment: rubra (days 1–3, red), serosa (days 4–10, pink-brown), alba (days 11–21+, white-yellow)\n- Abnormal lochia: foul odor (endometritis), large clots >golf ball, sudden heavy flow after lightening"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Leukorrhea of pregnancy** is normal: white-gray, non-irritating, no odor. Teach patients to wear a panty liner rather than a tampon (tampons contraindicated in pregnancy).\n- **Nitrazine false positives:** blood, semen, cervical mucus, Trichomonas, and some antiseptics can all make pH appear alkaline. Always correlate with ferning and pooling.\n- **Bacterial vaginosis (BV) in pregnancy:** associated with preterm labor, PPROM, chorioamnionitis. Treat with metronidazole or clindamycin.\n- **Group B Streptococcus:** colonizes vagina/rectum; swab at 35–37 weeks. GBS positive = prophylactic IV penicillin G in labor.\n- **Normal lochia flow:** soaks up to one pad per hour. If soaking more than one pad per hour for two consecutive hours → report immediately (postpartum hemorrhage).\n- **Vaginal hematoma** after delivery: characterized by rectal pressure, perineal pain, and urinary retention with no visible bleeding — blood pooling internally."
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Vagina: fibromuscular tube 7–10 cm; mucosa (rugae), muscularis, adventitia layers\n- Normal pH 3.8–4.5 maintained by Lactobacillus; pregnancy increases secretions\n- Chadwick's sign: bluish-purple vaginal discoloration = early pregnancy sign\n- ROM assessment: nitrazine (pH ≥6.5 = blue), ferning (arborization), pooling in posterior fornix\n- Normal lochia: rubra → serosa → alba; >1 pad/hour = hemorrhage warning\n- BV in pregnancy: treat (associated with preterm labor); GBS at 35–37 weeks = penicillin G in labor"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg01-L03",
+      "topicSlug": "female-reproductive-cervix",
+      "title": "The Cervix: Structure, Ripening & Obstetric Assessment",
+      "learningObjectives": [
+        "Describe the anatomical zones of the cervix and their cell types",
+        "Explain cervical changes during pregnancy and labor",
+        "Apply the Bishop Score to assess cervical readiness for induction",
+        "Identify cervical findings associated with pathology",
+        "Recognize incompetent cervix and appropriate nursing interventions"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **cervix** is the inferior cylindrical portion of the uterus, approximately 3–4 cm in length, projecting into the vaginal vault. It serves as a mechanical barrier protecting the uterine cavity during pregnancy and undergoes dramatic transformation (ripening, effacement, dilation) during labor. In obstetric nursing, cervical assessment is the most direct measure of labor progress."
+        },
+        {
+          "id": "anatomy_detail",
+          "heading": "Anatomy & Zones",
+          "kind": "pathophysiology_overview",
+          "body": "**Anatomical divisions:**\n- **Ectocervix (portio vaginalis):** portion visible on speculum exam; covered with stratified squamous epithelium\n- **Endocervix (cervical canal):** extends from external os to internal os; lined with columnar epithelium (glandular) that produces cervical mucus\n- **Transformation zone (squamocolumnar junction):** where squamous and columnar epithelium meet; location of most cervical dysplasia and cancer — the primary site targeted by Pap smear\n- **Internal os:** junction with lower uterine segment\n- **External os:** visible opening into vaginal vault; nulliparous = circular; parous = slit-like\n\n**Cervical mucus changes:**\n- Proliferative/follicular phase: thin, watery, clear (spinnbarkeit = stretchy up to 6–10 cm) → facilitates sperm penetration\n- Luteal/progesterone phase: thick, viscous, cellular plug forms\n- Pregnancy: Operculum (mucus plug) seals internal os — protects against ascending infection\n- Labor: mucus plug expelled (\"bloody show\") = small amount of blood-tinged mucus; normal sign of early labor\n\n**Cervical changes in pregnancy (Goodell's sign):**\n- Softening of cervix (consistency changes from firm like a nose → soft like lips)\n- Increased vascularity causes bluish color (contributes to Chadwick's sign)\n- Glandular hyperplasia → increased mucus production\n\n**Cervical ripening (pre-labor):**\n- Cervix transitions from firm, uneffaced, posterior to soft, effaced, anterior\n- Driven by prostaglandins (PGE2, PGF2α), relaxin, and inflammatory mediators\n- Collagen breakdown (collagenolysis) causes softening"
+        },
+        {
+          "id": "assessment",
+          "heading": "Cervical Assessment: Bishop Score",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Bishop Score** — used to predict success of labor induction (performed by nurse or provider via digital vaginal exam):\n\n| Parameter | 0 | 1 | 2 | 3 |\n|---|---|---|---|---|\n| Dilation (cm) | Closed | 1–2 | 3–4 | ≥5 |\n| Effacement (%) | 0–30 | 40–50 | 60–70 | ≥80 |\n| Station | –3 | –2 | –1/0 | +1/+2 |\n| Consistency | Firm | Medium | Soft | — |\n| Position | Posterior | Mid | Anterior | — |\n\n**Interpretation:**\n- Score ≥8: favorable cervix → induction likely to succeed; similar success to spontaneous labor\n- Score ≤6: unfavorable cervix → cervical ripening indicated before oxytocin induction\n- Score 0–4: very unfavorable → cervical ripening agents needed\n\n**Cervical ripening agents:**\n- **Mechanical:** Foley balloon catheter, laminaria\n- **Pharmacological:** Dinoprostone (Cervidil — insert; Prepidil — gel), Misoprostol (Cytotec)\n  - CAUTION: Never give oxytocin within 4 hours of misoprostol; risk of uterine hyperstimulation\n  - Remove Cervidil if uterine hyperstimulation (>5 contractions/10 min or non-reassuring FHR)\n\n**Incompetent cervix (cervical insufficiency):**\n- Painless dilation and effacement of cervix in 2nd trimester without contractions\n- Risk factors: prior LEEP/conization, DES exposure in utero, uterine anomalies, prior cervical trauma\n- Management: cerclage (purse-string suture) placed at 12–14 weeks; removed at 36–37 weeks\n- Nursing: teach activity restrictions, signs of infection, pelvic rest"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Goodell's sign** = softening of cervix, earliest cervical sign of pregnancy (4–6 weeks)\n- **Bloody show** (mucus + blood) = normal early labor sign; distinguish from hemorrhage: small amount, mucoid\n- **Cervical os appearance:** nulliparous = smooth, circular; parous = slit-like due to prior birth-related dilation\n- **Never perform digital vaginal exam** with known or suspected placenta previa — risk of catastrophic hemorrhage\n- **Cerclage patients:** restricted activity, avoid intercourse, report uterine contractions, ROM, or discharge immediately\n- **Oxytocin + misoprostol overlap:** fatal uterine hyperstimulation risk — always wait minimum 4 hours after misoprostol before starting oxytocin"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Cervix zones: ectocervix (squamous), endocervix (columnar), transformation zone (dysplasia/cancer target)\n- Goodell's sign = cervical softening in pregnancy\n- Mucus plug (operculum) seals os; bloody show = normal early labor\n- Bishop Score ≥8 = favorable; ≤6 = ripen first; Cervidil/Cytotec for ripening\n- Never do digital exam with placenta previa\n- Cervical insufficiency = painless 2nd trimester dilation → cerclage"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg01-L04",
+      "topicSlug": "female-reproductive-uterus",
+      "title": "The Uterus: Anatomy, Physiology & Obstetric Significance",
+      "learningObjectives": [
+        "Identify the anatomical regions and layers of the uterus",
+        "Explain uterine changes throughout pregnancy",
+        "Assess uterine fundal height and position",
+        "Recognize uterine abnormalities affecting reproductive outcomes",
+        "Apply knowledge of uterine physiology to labor and postpartum care"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **uterus** is a hollow, thick-walled, pear-shaped muscular organ located in the true pelvis between the bladder and rectum. In its non-pregnant state, it weighs approximately 60–70 g and measures 7.5 cm × 5 cm × 2.5 cm. By term pregnancy, it weighs approximately 1,100 g (1.1 kg) and can hold 5 liters of content. The uterus is the primary organ of gestation and the driving force of labor."
+        },
+        {
+          "id": "anatomy_detail",
+          "heading": "Anatomical Regions & Layers",
+          "kind": "pathophysiology_overview",
+          "body": "**Anatomical regions:**\n- **Fundus:** dome-shaped top, above fallopian tube insertion points; site of fundal height measurement\n- **Body (corpus):** main muscular mass\n- **Lower uterine segment (LUS):** thinner inferior portion that forms during 3rd trimester; site of most C-section incisions (less vascular, better healing)\n- **Isthmus:** narrow zone between body and cervix; becomes LUS in pregnancy\n- **Cervix:** see cervix lesson\n\n**Wall layers (inside to outside):**\n1. **Endometrium:** inner mucous lining; site of implantation; sheds monthly with menstruation\n   - Functional layer: shed each cycle\n   - Basal layer: source of regeneration\n2. **Myometrium:** middle, thickest layer; three interlacing smooth muscle layers (inner longitudinal, middle oblique/figure-8, outer longitudinal)\n   - Figure-8 arrangement around uterine vessels: contraction after delivery compresses vessels → living ligatures controlling hemorrhage\n3. **Perimetrium (serosa):** outer peritoneal covering\n\n**Ligamentous support:**\n- **Round ligaments:** maintain anteverted position (anteversion = normal forward tilt); become painful in pregnancy as uterus grows (round ligament pain — sharp unilateral lower abdominal pain with movement)\n- **Broad ligaments:** lateral peritoneal folds containing fallopian tubes, blood vessels, nerves\n- **Cardinal (Mackenrodt's) ligaments:** primary support against prolapse\n- **Uterosacral ligaments:** posterior support, attach to sacrum\n\n**Uterine positions:**\n- **Anteversion/anteflexion** (normal): fundus tilts anteriorly\n- **Retroversion/retroflexion**: fundus tilts posteriorly; associated with dysmenorrhea, but usually normal variant\n\n**Uterine blood supply:** Uterine arteries (branches of internal iliac) + ovarian arteries. In pregnancy, uterine blood flow increases from ~50 mL/min to ~500–700 mL/min at term."
+        },
+        {
+          "id": "assessment",
+          "heading": "Fundal Height & Uterine Assessment",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Fundal height measurement (McDonald's method):**\n- Tape measure from pubic symphysis over curve of abdomen to top of fundus\n- 16 weeks: fundus at midpoint between pubic symphysis and umbilicus\n- 20 weeks: fundus at umbilicus\n- 20–36 weeks: fundal height in cm ≈ gestational age in weeks (±2 cm)\n- Term: fundus near xiphoid process (~36–40 cm)\n- Lightening (fetal descent): fundus may drop at 38–40 weeks in nulliparas (\"baby dropped\")\n\n**Discrepancy in fundal height:**\n- **SGA (small for gestational age):** fundal height <2 cm below expected → IUGR, oligohydramnios\n- **LGA (large for gestational age):** fundal height >2 cm above expected → macrosomia, polyhydramnios, multiple gestation\n\n**Postpartum fundal assessment:**\n- Immediately after delivery: fundus at umbilicus, firm, midline\n- Involutes ~1 cm/day below umbilicus: day 1 = 1 fingerbreadth below umbilicus\n- By day 10–14: fundus no longer palpable abdominally\n- Boggy uterus (soft, not contracted) = uterine atony → #1 cause of postpartum hemorrhage\n  - Intervention: fundal massage, oxytocin, evaluate bladder (full bladder displaces uterus laterally)\n\n**Uterine abnormalities:**\n- **Bicornuate uterus:** heart-shaped; associated with preterm birth, malpresentation\n- **Uterine fibroids (leiomyomas):** can cause placenta previa if fundal, postpartum hemorrhage, pain\n- **Uterine septum:** intrauterine partition; associated with recurrent pregnancy loss"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Boggy uterus = emergency:** First action is fundal massage. Check bladder first — a full bladder prevents uterine contraction. Empty bladder → massage → oxytocin if needed.\n- **Round ligament pain:** common 2nd trimester complaint; sharp, unilateral, triggered by sudden movement. No intervention needed; heat, position change for comfort. Must differentiate from appendicitis (appendicitis: RLQ, fever, elevated WBC, rebound tenderness).\n- **Living ligatures:** the myometrium's figure-8 muscle fibers contract around uterine vessels after placental delivery — this is why a firm, contracted uterus is critical to hemostasis.\n- **Uterine inversion:** rare emergency when uterus turns inside out; appears as glistening red mass at vaginal introitus after delivery. Signs: sudden hemorrhage, hypotension, severe pain. Do NOT remove placenta if still attached. Call for immediate help.\n- **McDonald's rule:** fundal height (cm) = gestational weeks between 20–36 weeks."
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Uterus layers: endometrium (implantation) → myometrium (3 layers, living ligatures) → perimetrium\n- Fundal height ≈ gestational weeks (20–36 wks), ±2 cm; umbilicus = 20 weeks\n- Postpartum: firm fundus midline at umbilicus, involutes 1 cm/day\n- Boggy uterus → massage, check bladder, oxytocin — #1 cause PPH is atony\n- Round ligament pain = sharp, unilateral, 2nd trimester — normal; distinguish from appendicitis\n- Lower uterine segment = preferred C-section site (thinner, less vascular)"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg01-L05",
+      "topicSlug": "female-reproductive-endometrium",
+      "title": "The Endometrium: Cycle, Implantation & Pathology",
+      "learningObjectives": [
+        "Describe endometrial changes across the menstrual cycle",
+        "Explain the implantation process and endometrial requirements",
+        "Identify endometrial pathology relevant to obstetric nursing",
+        "Recognize postpartum endometritis and appropriate interventions",
+        "Explain the significance of endometrial assessment in infertility and pregnancy loss"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **endometrium** is the inner mucous lining of the uterine cavity, consisting of a functional layer (shed monthly) and a basal layer (source of regeneration). It undergoes cyclical changes driven by estrogen and progesterone, transforming each cycle to prepare for potential implantation. In pregnancy, it becomes the **decidua** — a specialized secretory tissue that supports placental development."
+        },
+        {
+          "id": "anatomy_detail",
+          "heading": "Endometrial Changes & Decidua",
+          "kind": "pathophysiology_overview",
+          "body": "**Menstrual cycle phases:**\n- **Menstrual phase (days 1–5):** functional layer sloughs, ischemic necrosis from estrogen/progesterone withdrawal\n- **Proliferative (follicular) phase (days 6–14):** estrogen drives endometrial regrowth from basal layer; glands elongate; thickness 6–10 mm\n- **Secretory (luteal) phase (days 15–28):** progesterone causes glandular secretion (glycogen-rich); stromal edema; thickness 10–14 mm; endometrium becomes receptive (implantation window: days 20–24)\n\n**Implantation window:** The 3–5 day period (days 20–24 of a 28-day cycle) when endometrium is maximally receptive to blastocyst implantation. Characterized by:\n- Pinopodes (surface projections on epithelium)\n- Maximal progesterone stimulation\n- Adequate blood flow via spiral arteries\n\n**Decidua:** After implantation, endometrium transforms into decidua under progesterone influence:\n- **Decidua basalis:** beneath the implanted embryo; forms maternal portion of placenta\n- **Decidua capsularis:** over the embryo (fuses with decidua parietalis by ~16 weeks)\n- **Decidua parietalis:** lines rest of uterine cavity\n\n**Endometrial pathology:**\n- **Endometritis:** infection of endometrium; postpartum (most common) or non-pregnancy\n- **Endometriosis:** endometrial tissue outside uterus → cyclical pain, infertility\n- **Asherman syndrome:** intrauterine adhesions (synechiae) → amenorrhea, recurrent pregnancy loss; caused by aggressive D&C\n- **Polyps:** benign overgrowths → abnormal bleeding, infertility"
+        },
+        {
+          "id": "assessment",
+          "heading": "Postpartum Endometritis Assessment",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Postpartum endometritis (puerperal infection):**\n- Fever > 38°C (100.4°F) on 2 or more consecutive days after first 24 hours postpartum\n- Most common postpartum infection; highest risk after C-section\n\n**Risk factors:** C-section (10–20× higher risk than vaginal delivery), prolonged labor, prolonged ROM, multiple vaginal exams, GBS colonization, anemia, obesity\n\n**Clinical features:**\n- Fever, chills, malaise\n- Uterine tenderness (fundal/parametrial)\n- Purulent, foul-smelling lochia\n- Subinvolution (uterus larger than expected for day postpartum)\n- Tachycardia\n\n**Nursing interventions:**\n- Assess vital signs q4h\n- Document lochia (color, odor, quantity)\n- Assess fundal position and firmness\n- Culture blood and endometrial specimens as ordered\n- Administer IV antibiotics as ordered (clindamycin + gentamicin is standard; ampicillin added for enterococcal coverage)\n- Monitor for sepsis progression: altered mental status, hypotension, oliguria"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Endometrium: functional layer (shed monthly) + basal layer (regeneration source)\n- Proliferative = estrogen → growth; Secretory = progesterone → glycogen-rich secretions, implantation readiness\n- Decidua basalis = maternal placenta; capsularis = over embryo; parietalis = rest of cavity\n- Postpartum endometritis: fever after 24h, uterine tenderness, foul lochia → IV clindamycin + gentamicin\n- Asherman syndrome from aggressive D&C → amenorrhea + pregnancy loss"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg01-L06",
+      "topicSlug": "female-reproductive-fallopian-tubes",
+      "title": "Fallopian Tubes: Anatomy, Oocyte Transport & Ectopic Pregnancy",
+      "learningObjectives": [
+        "Identify the four anatomical segments of the fallopian tube",
+        "Explain the process of oocyte pickup and transport",
+        "Recognize risk factors and clinical presentation of ectopic pregnancy",
+        "Describe nursing priorities for ectopic pregnancy emergencies",
+        "Explain tubal factors in infertility"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **fallopian tubes** (uterine tubes, oviducts) are paired muscular tubes approximately 10–12 cm in length extending laterally from the uterine cornua toward each ovary. They are the site of fertilization and transport the fertilized ovum to the uterine cavity for implantation. Tubal dysfunction is the most common cause of ectopic pregnancy — a life-threatening obstetric emergency."
+        },
+        {
+          "id": "anatomy_detail",
+          "heading": "Anatomical Segments",
+          "kind": "pathophysiology_overview",
+          "body": "**Four anatomical segments (medial to lateral):**\n1. **Interstitial (intramural):** penetrates uterine wall; narrowest segment (1 mm lumen); ectopic here = extremely dangerous (rupture into uterine vessels)\n2. **Isthmus:** narrow middle segment; 3–6 cm; 2–3 mm lumen; most common site of surgical tubal ligation\n3. **Ampulla:** widest, longest segment; 5–8 cm; most common site of fertilization and ectopic implantation (~70% of ectopics)\n4. **Infundibulum:** flared, trumpet-shaped distal end; contains finger-like projections called **fimbriae**\n\n**Ciliated epithelium + peristalsis:** The tube's inner lining has cilia that beat toward the uterus and smooth muscle that contracts in peristaltic waves to propel the egg and embryo toward the uterus. Transit time: 3–4 days.\n\n**Fertilization:** Sperm travel from vagina → cervix → uterus → tubes; fertilization occurs in the ampulla. The fertilized egg (zygote → morula → blastocyst) travels to uterus over 5–7 days.\n\n**Ectopic implantation sites:**\n- Ampulla: 70% (most common)\n- Isthmus: 12%\n- Interstitial: 2–3% (most dangerous)\n- Abdominal, ovarian, cervical: rare"
+        },
+        {
+          "id": "assessment",
+          "heading": "Ectopic Pregnancy: Recognition & Nursing Response",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Risk factors for ectopic pregnancy:**\n- Prior ectopic pregnancy (10–15% recurrence)\n- History of PID or STIs (especially chlamydia, gonorrhea) — scarring of tubal epithelium\n- Prior tubal surgery or ligation failure\n- IUD use (doesn't increase risk but if pregnancy occurs, is more likely ectopic)\n- Endometriosis\n- Assisted reproductive technology (ART)\n- Smoking\n\n**Clinical presentation (classic triad):**\n1. Amenorrhea (missed period)\n2. Unilateral lower abdominal/pelvic pain (can be diffuse if ruptured)\n3. Vaginal bleeding (usually light, spotting)\n\n**Ruptured ectopic (emergency):**\n- Sudden severe abdominal pain ('excruciating,' 'knife-like')\n- Referred shoulder pain (Kehr's sign) — blood irritates diaphragm → referred to left shoulder\n- Hemodynamic instability: hypotension, tachycardia, syncope\n- Peritoneal signs: guarding, rigidity, rebound tenderness\n\n**Diagnostics:**\n- Serum β-hCG: positive but lower than expected for dates; fails to double appropriately (normal: doubles every 48–72 hours)\n- Transvaginal ultrasound: empty uterus + adnexal mass or free fluid in cul-de-sac\n- Culdocentesis (historical): aspiration of non-clotting blood from cul-de-sac\n\n**Nursing priorities (ruptured ectopic):**\n1. IV access × 2 large-bore; normal saline bolus\n2. Type and crossmatch, CBC, coagulation studies\n3. NPO — prepare for emergency surgery (salpingectomy or salpingostomy)\n4. Continuous vital signs, oxygen\n5. Rh status — give RhoGAM if Rh-negative\n6. Emotional support — recognize pregnancy loss"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Kehr's sign** (referred shoulder pain) in a woman with pelvic pain + hemodynamic instability = ruptured ectopic until proven otherwise\n- **Medical treatment (unruptured):** Methotrexate (folic acid antagonist) if β-hCG <5,000, stable, no cardiac activity. Teach: avoid folic acid supplements, sun exposure, NSAIDs, alcohol, sexual intercourse, and pregnancy for 3 months\n- **IUD and ectopic:** IUD very effectively prevents intrauterine pregnancy; if pregnancy occurs despite IUD, risk of being ectopic is higher — but IUD does NOT cause ectopic\n- **Serial β-hCG monitoring:** in a viable intrauterine pregnancy, β-hCG doubles every 48–72 hours. Plateauing or slow rise suggests ectopic or nonviable IUP\n- **Rh-negative patients:** any pregnancy loss or bleeding event requires RhoGAM to prevent Rh sensitization"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Four segments: interstitial (narrowest, most dangerous) → isthmus → ampulla (fertilization; 70% of ectopics) → infundibulum (fimbriae)\n- Ectopic triad: amenorrhea + unilateral pain + vaginal bleeding\n- Kehr's sign = shoulder pain from diaphragmatic irritation by blood = ruptured ectopic emergency\n- Ruptured ectopic: 2 large-bore IVs, bolus, Type & cross, emergency salpingectomy\n- RhoGAM if Rh-negative with any pregnancy bleed\n- Methotrexate for unruptured ectopic; teach no folic acid, NSAIDs, alcohol, sun"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg01-L07",
+      "topicSlug": "female-reproductive-ovaries",
+      "title": "The Ovaries: Anatomy, Oogenesis & Hormonal Function",
+      "learningObjectives": [
+        "Describe ovarian anatomy and the stages of follicular development",
+        "Explain the hormones produced by the ovaries and their effects",
+        "Identify ovarian changes during pregnancy",
+        "Recognize ovarian pathology relevant to pregnancy",
+        "Apply knowledge of ovarian function to antepartum assessment"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **ovaries** are the paired female gonads, almond-shaped, approximately 3 × 2 × 1 cm in reproductive-age women, located in the lateral pelvic walls, suspended by the ovarian ligament (medially, to uterus) and infundibulopelvic (suspensory) ligament (laterally, to pelvic wall). Functions: (1) oogenesis (produce and release oocytes), (2) steroidogenesis (produce estrogen, progesterone, androgens, inhibin)."
+        },
+        {
+          "id": "anatomy_detail",
+          "heading": "Ovarian Structure & Follicular Development",
+          "kind": "pathophysiology_overview",
+          "body": "**Cortex:** Outer zone containing follicles (primordial, primary, secondary, Graafian/preovulatory). At birth: ~1–2 million primordial follicles; by puberty: ~300,000–400,000; lifetime ovulation: ~400.\n\n**Medulla:** Inner zone containing blood vessels, lymphatics, nerves.\n\n**Follicular development stages:**\n1. **Primordial follicle:** primary oocyte surrounded by single layer of granulosa cells; dormant\n2. **Primary follicle:** granulosa cells proliferate to multiple layers; zona pellucida forms\n3. **Secondary (antral) follicle:** fluid-filled antrum develops; theca cells form outer layer\n4. **Graafian (preovulatory) follicle:** dominant follicle, bulges from ovarian surface; fluid-filled blister\n5. **Ovulation:** LH surge causes follicle rupture → oocyte released with corona radiata\n6. **Corpus luteum:** remnant of follicle after ovulation; produces progesterone (and some estrogen) → maintains endometrium for implantation. If no pregnancy: degenerates → corpus albicans (fibrous scar)\n7. **Corpus luteum of pregnancy:** sustained by hCG from trophoblast; persists until placenta takes over progesterone production (~8–10 weeks)\n\n**Ovarian hormones:**\n- **Estrogen (estradiol E2):** from granulosa cells; stimulates endometrial proliferation, breast development, cervical mucus thinning, LH surge trigger\n- **Progesterone:** from corpus luteum and placenta; maintains secretory endometrium, suppresses uterine contractions in pregnancy, thickens cervical mucus, raises basal body temperature\n- **Inhibin B:** from granulosa cells; inhibits FSH release (negative feedback)\n- **Anti-Müllerian hormone (AMH):** from preantral follicles; marker of ovarian reserve"
+        },
+        {
+          "id": "assessment",
+          "heading": "Ovarian Pathology in Pregnancy",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Ovarian cysts in pregnancy:**\n- **Corpus luteum cyst:** most common in 1st trimester; usually regresses after 12 weeks when placenta takes over progesterone production\n- **Theca lutein cysts:** associated with gestational trophoblastic disease (hydatidiform mole) or ovarian hyperstimulation syndrome (OHSS); bilateral, multilocular\n- **Simple cysts <5 cm:** monitored with serial ultrasound; usually benign\n- **Cysts >5–6 cm:** risk of ovarian torsion — surgical emergency\n\n**Ovarian torsion (emergency):**\n- Adnexal mass twists on its pedicle → impairs blood flow → ovarian ischemia\n- Risk factors: ovarian cyst, ovarian mass, prior OHSS\n- Presentation: sudden severe unilateral lower abdominal pain (often colicky), nausea/vomiting, adnexal tenderness\n- **Most common in 1st trimester (6–14 weeks) when corpus luteum cyst is present**\n- Doppler ultrasound: decreased or absent ovarian blood flow\n- Treatment: emergency laparoscopy for detorsion (untwisting) + oophoropexy; oophorectomy if necrotic\n- Nursing: IV access, NPO, vital signs, prepare for OR, pain management, fetal assessment"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Ovaries: gametogenesis + steroidogenesis; ~400 lifetime ovulations\n- Corpus luteum → progesterone; sustained by hCG until 8–10 weeks (then placenta takes over)\n- Estrogen = endometrial proliferation, LH surge trigger; Progesterone = secretory endometrium, uterine quiescence\n- Corpus luteum cyst most common 1st trimester ovarian cyst; theca lutein cysts = molar pregnancy/OHSS\n- Ovarian torsion: sudden severe unilateral pain, N/V → emergency detorsion\n- AMH = ovarian reserve marker; inhibin B = FSH inhibitor"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg01-L08",
+      "topicSlug": "female-reproductive-pelvic-anatomy",
+      "title": "Pelvic Anatomy: Types, Measurements & Obstetric Relevance",
+      "learningObjectives": [
+        "Identify the four pelvic types and their obstetric implications",
+        "Describe key pelvic measurements and their clinical significance",
+        "Explain the relationship between pelvic structure and labor mechanics",
+        "Identify clinical indications for pelvic assessment",
+        "Apply knowledge of pelvis types to anticipate delivery complications"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **bony pelvis** forms the rigid passageway through which the fetus must descend during vaginal delivery. Its shape and dimensions directly influence the likelihood of vaginal birth and the mechanisms of labor. Pelvic assessment (clinical pelvimetry) helps predict cephalopelvic proportions. The pelvis consists of two innominate bones (ilium, ischium, pubis), the sacrum, and coccyx, joined by the pubic symphysis anteriorly and sacroiliac joints posteriorly."
+        },
+        {
+          "id": "anatomy_detail",
+          "heading": "Pelvic Types & Measurements",
+          "kind": "pathophysiology_overview",
+          "body": "**Caldwell-Moloy Classification (4 types):**\n\n1. **Gynecoid (50% of women):** Rounded inlet, adequate dimensions throughout, ideal for vaginal delivery\n   - Wide pubic arch (>90°), sacrum slightly curved\n   - Most favorable for vaginal birth\n\n2. **Android (23%):** Heart-shaped inlet, convergent side walls, narrowed subpubic arch (<90°), prominent ischial spines\n   - Male-type pelvis; most common cause of operative delivery, shoulder dystocia\n   - Least favorable for vaginal birth\n\n3. **Anthropoid (24%):** Oval inlet elongated anteroposteriorly (AP > transverse); deep pelvis\n   - Favors OP (occiput posterior) position; may deliver OP (\"sunny side up\")\n   - Adequate for vaginal delivery but longer labors\n\n4. **Platypelloid (3%):** Flat inlet, wide transverse diameter, very short AP diameter\n   - Rarest; transverse arrest common; often requires C-section\n\n**Key pelvic measurements:**\n- **True conjugate (conjugata vera):** AP diameter of pelvic inlet from sacral promontory to superior pubic symphysis; NOT directly measurable clinically; normal ≥11 cm\n- **Diagonal conjugate:** clinically measurable (fingers to sacral promontory); normal ≥11.5–12 cm; true conjugate = diagonal conjugate − 1.5–2 cm\n- **Obstetric conjugate:** shortest AP distance fetus must pass; normal ≥10 cm\n- **Bi-ischial (transverse) diameter:** distance between ischial tuberosities; normal ≥10 cm; measured externally with closed fist (if fist fits = adequate)\n- **Interspinous diameter:** distance between ischial spines (narrowest pelvic diameter); normal ≥10 cm; most important measurement for fetal descent\n\n**Pelvic divisions:**\n- **Inlet (pelvic brim):** where fetus enters pelvis; bounded by sacral promontory, iliopectineal line, pubic crest\n- **Midpelvis (cavity):** contains interspinous diameter — narrowest point\n- **Outlet:** between ischial tuberosities and pubic arch\n\n**Station:** relationship of fetal presenting part to ischial spines:\n- Ischial spine level = 0 station\n- Above spines: −1, −2, −3 (floating at −3)\n- Below spines: +1, +2, +3 (crowning at +3)"
+        },
+        {
+          "id": "assessment",
+          "heading": "Clinical Pelvimetry",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Clinical pelvimetry (performed by provider):**\n- Vaginal exam with fingers to measure diagonal conjugate (reach sacral promontory)\n- Assess pelvic side walls (convergent vs parallel vs divergent)\n- Palpate ischial spines (prominent = android, android-type narrowing)\n- Assess pubic arch angle (fist fits = adequate)\n\n**Nursing considerations:**\n- Understand pelvis type documentation in medical record → anticipate labor progression\n- Monitor for signs of cephalopelvic disproportion (CPD): failure to progress despite adequate contractions, arrested descent, asynclitism\n- Android/platypelloid pelvis types → higher C-section rate; prepare patient and family\n- Station monitoring: correlate with dilation progress; arrest of descent despite pushing = possible CPD"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Gynecoid (50%, round) = best for vaginal delivery; Android (23%, heart-shaped) = worst, narrow arch\n- Anthropoid (oval, AP-long) = OP position; Platypelloid (flat, transverse-wide) = C-section risk\n- Diagonal conjugate (measurable) − 1.5–2 cm = true conjugate; normal ≥10 cm\n- Interspinous diameter = narrowest pelvic point = most critical for descent\n- Station: ischial spines = 0; above = negative; below = positive\n- Closed fist between ischial tuberosities = adequate outlet"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg01-L09",
+      "topicSlug": "male-reproductive-testes",
+      "title": "The Testes: Spermatogenesis, Hormones & Nursing Assessment",
+      "learningObjectives": [
+        "Describe testicular anatomy and the process of spermatogenesis",
+        "Explain the hormonal regulation of testicular function",
+        "Identify conditions affecting testicular function",
+        "Apply knowledge to fertility counseling and reproductive health assessment",
+        "Recognize testicular emergencies requiring immediate intervention"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **testes** are paired ovoid glands (approximately 4 × 3 × 2 cm each) located in the scrotal sac, outside the body cavity, where temperature is 2–4°C lower than core body temperature. This cooler temperature is essential for spermatogenesis. Each testis weighs 15–25 g. Functions: (1) spermatogenesis (sperm production), (2) steroidogenesis (testosterone production by Leydig cells)."
+        },
+        {
+          "id": "anatomy_detail",
+          "heading": "Structure & Spermatogenesis",
+          "kind": "pathophysiology_overview",
+          "body": "**Internal structure:**\n- Divided into ~250 lobules by fibrous septa\n- Each lobule contains 1–4 seminiferous tubules (sperm production)\n- Between tubules: interstitial tissue containing **Leydig cells** (testosterone production)\n- Seminiferous tubule cells: **Sertoli cells** (blood-testis barrier, sperm support, inhibin B production) + spermatogenic cells\n\n**Spermatogenesis** (64–74 days):\n1. Spermatogonia (diploid stem cells, 46 chromosomes)\n2. Primary spermatocytes → First meiotic division → Secondary spermatocytes (23 chromosomes)\n3. Secondary spermatocytes → Second meiotic division → Spermatids\n4. Spermatids → Spermiogenesis → Spermatozoa (mature sperm)\n\n**Sperm maturation:** After testicular production, sperm transit epididymis (2–12 days) where motility and fertilizing capacity are acquired.\n\n**Hormonal regulation:**\n- FSH → Sertoli cells → supports spermatogenesis, secretes inhibin B (inhibits FSH)\n- LH → Leydig cells → testosterone production\n- Testosterone: spermatogenesis support, secondary sexual characteristics, libido, anabolic effects\n\n**Clinical conditions:**\n- **Cryptorchidism:** undescended testis; associated with infertility, testicular cancer if uncorrected; orchidopexy before age 2\n- **Varicocele:** dilated pampiniform plexus veins; most common correctable cause of male infertility; elevates testicular temperature\n- **Testicular torsion:** rotation of testis on spermatic cord → ischemia → emergency within 6 hours\n- **Orchitis:** inflammation, often from mumps in post-pubertal males; risk of infertility"
+        },
+        {
+          "id": "assessment",
+          "heading": "Testicular Torsion: Emergency Assessment",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Testicular torsion:**\n- Sudden severe scrotal pain, often during physical activity or sleep\n- Nausea and vomiting common\n- Affected testis elevated, horizontal lie ('bell-clapper deformity')\n- Prehn's sign: elevation of testis INCREASES pain (opposite to epididymitis, where elevation relieves pain)\n- Absent cremasteric reflex\n- Doppler ultrasound: absent blood flow to affected testis\n\n**Time-critical:** Salvage rate:\n- Within 6 hours: >90%\n- 6–12 hours: ~50%\n- >24 hours: <10%\n\n**Nursing:** IV access, NPO, analgesia, prepare for emergency surgery (orchidopexy or orchiectomy), emotional support\n\n**Self-testicular examination:**\n- Monthly after warm bath/shower\n- Normal: slight asymmetry, left testis often hangs lower\n- Abnormal: painless mass, hardness, change in size → report immediately\n- Testicular cancer: most common cancer in males 15–35 years; highly curable if caught early"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Testes: Leydig cells (testosterone) + Sertoli cells (support, inhibin B) + seminiferous tubules (spermatogenesis)\n- Spermatogenesis: 64–74 days; requires 2–4°C below core temp → scrotal location\n- FSH → Sertoli; LH → Leydig (testosterone)\n- Testicular torsion = sudden severe pain, absent cremasteric reflex → 6-hour window for salvage\n- Varicocele = most common correctable cause of male infertility\n- Cryptorchidism → orchidopexy before age 2 (infertility + cancer risk)"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg01-L10",
+      "topicSlug": "male-reproductive-epididymis-vas",
+      "title": "Epididymis & Vas Deferens: Sperm Transport & Maturation",
+      "learningObjectives": [
+        "Describe the anatomy and function of the epididymis",
+        "Explain sperm maturation in the epididymis",
+        "Trace the pathway of sperm from testis to ejaculation",
+        "Differentiate epididymitis from testicular torsion",
+        "Explain vasectomy as contraception and its nursing implications"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **epididymis** is a coiled tubular structure (~6 m when uncoiled) lying posterior to each testis. Sperm from the seminiferous tubules are immature and non-motile; transit through the epididymis (2–12 days) confers motility, forward progression capacity, and the ability to fertilize an egg. The **vas deferens** (ductus deferens) is the muscular tube that propels sperm from the epididymis toward the urethra during ejaculation."
+        },
+        {
+          "id": "anatomy_detail",
+          "heading": "Anatomy & Sperm Transport",
+          "kind": "pathophysiology_overview",
+          "body": "**Epididymis regions:**\n- **Head (caput):** receives sperm from efferent ductules of testis; where sperm enter\n- **Body (corpus):** site of sperm maturation\n- **Tail (cauda):** stores sperm until ejaculation (sperm remain viable 4–6 weeks)\n\n**Vas deferens pathway (\"SEVEN UP\" mnemonic):**\nSeminiferous tubules → Epididymis → Vas deferens → Ejaculatory duct → (Nothing) → Urethra → Penis\n\n**Vas deferens anatomy:** Paired muscular tube ~45 cm; travels from epididymis tail through inguinal canal into pelvis; joins seminal vesicle duct to form ejaculatory duct which enters the prostate.\n\n**Spermatic cord:** Contains vas deferens, testicular artery, pampiniform venous plexus, lymphatics, nerves — all enclosed in cremasteric muscle and fascial layers.\n\n**Epididymitis:**\n- Infection/inflammation of epididymis\n- Younger sexually active men: Chlamydia trachomatis, Neisseria gonorrhoeae\n- Older men: E. coli (associated with UTI, BPH)\n- Presentation: gradual onset scrotal pain + swelling, fever, dysuria\n- Prehn's sign: elevation RELIEVES pain (vs torsion where elevation worsens pain)\n- Cremasteric reflex: PRESENT (vs torsion: absent)\n- Treatment: antibiotics (doxycycline + ceftriaxone for STI-associated)\n\n**Vasectomy:**\n- Outpatient surgical ligation/transection of vas deferens\n- 99.9% effective contraception\n- Sperm still produced but reabsorbed; testosterone production unaffected\n- Not immediately effective — must confirm azoospermia (semen analysis at 12 weeks post-procedure)\n- Reversal (vasovasostomy): success rate decreases with time since vasectomy"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Epididymis: head (sperm entry) → body (maturation) → tail (storage, 4–6 weeks viable)\n- Sperm pathway: Seminiferous tubules → Epididymis → Vas deferens → Ejaculatory duct → Urethra → Penis\n- Epididymitis: gradual onset, Prehn's sign positive (elevation relieves), cremasteric reflex present → STI-associated in young men\n- Torsion vs epididymitis: torsion = sudden + severe + no cremasteric reflex + elevated testis; epididymitis = gradual + cremasteric present\n- Vasectomy: need semen analysis at 12 weeks to confirm azoospermia"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg01-L11",
+      "topicSlug": "male-reproductive-prostate-seminal-vesicles",
+      "title": "Prostate & Seminal Vesicles: Accessory Gland Function",
+      "learningObjectives": [
+        "Describe the anatomy and function of the prostate gland",
+        "Explain the contributions of seminal vesicles and prostate to semen composition",
+        "Identify prostate pathology relevant to male reproductive health",
+        "Apply knowledge to fertility counseling",
+        "Recognize prostate conditions requiring clinical intervention"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **accessory male reproductive glands** (seminal vesicles, prostate, bulbourethral/Cowper's glands) contribute secretions that form seminal fluid, providing nutrients, pH buffering, and motility support for sperm. Semen = sperm (5% of volume) + seminal vesicle fluid (65%) + prostatic fluid (25%) + bulbourethral gland fluid (5%). Total ejaculate volume: 2–5 mL."
+        },
+        {
+          "id": "anatomy_detail",
+          "heading": "Gland Anatomy & Function",
+          "kind": "pathophysiology_overview",
+          "body": "**Seminal vesicles:**\n- Paired glands posterior to bladder, lateral to ampullae of vas deferens\n- Secrete fructose-rich, alkaline fluid (pH 7.2–7.6) that provides energy for sperm motility\n- Also secrete prostaglandins, fibrinogen (causes initial semen coagulation)\n- Each joins vas deferens → forms ejaculatory duct (opens into prostatic urethra)\n\n**Prostate gland:**\n- Walnut-sized gland (~20 g normal) surrounding urethra at bladder neck\n- Zones: peripheral zone (70% of glandular tissue, most prostate cancers), central zone, transition zone (BPH develops here), fibromuscular stroma\n- Secretes prostatic fluid: thin, milky, slightly acidic (pH 6.5); contains:\n  - PSA (prostate-specific antigen) — liquefies semen coagulum\n  - Citric acid, zinc (antibacterial)\n  - Acid phosphatase\n- Prostatic smooth muscle contracts during ejaculation to expel fluid\n\n**Bulbourethral (Cowper's) glands:**\n- Pea-sized, at base of penis\n- Secrete pre-ejaculatory fluid (pre-cum): alkaline, lubricating, neutralizes urethral acidity before ejaculation\n- Can contain sperm — not reliably sperm-free (pregnancy risk with pre-ejaculatory fluid)\n\n**BPH (Benign Prostatic Hyperplasia):**\n- Enlargement of transition zone; compresses urethra\n- Symptoms: hesitancy, weak stream, nocturia, incomplete emptying (obstructive symptoms)\n- Treatment: alpha-blockers (tamsulosin), 5-alpha-reductase inhibitors (finasteride), TURP\n\n**Prostatitis:**\n- Acute bacterial (E. coli): fever, perineal pain, dysuria, urinary retention, exquisitely tender on DRE — avoid vigorous massage (bacteremia risk)\n- Chronic bacterial: recurrent UTIs, pelvic pain\n- Chronic pelvic pain syndrome (non-bacterial): most common; pelvic/perineal pain without infection"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Semen composition: seminal vesicles (65%, fructose) + prostate (25%, PSA, citric acid) + sperm (5%)\n- PSA = liquefies semen; fructose = sperm energy source; zinc = antibacterial\n- BPH: transition zone enlargement → obstructive voiding → alpha-blockers + finasteride\n- Acute prostatitis: exquisitely tender DRE, fever, retention → IV antibiotics, avoid vigorous massage\n- Pre-ejaculatory fluid may contain sperm — not a reliable contraceptive \"withdrawal\" method"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg01-L12",
+      "topicSlug": "male-reproductive-penis",
+      "title": "The Penis: Anatomy, Erection & Reproductive Function",
+      "learningObjectives": [
+        "Describe penile anatomy and the mechanism of erection",
+        "Explain the dual function of the penis in reproduction and urinary elimination",
+        "Identify penile conditions relevant to reproductive health",
+        "Apply knowledge to patient education on sexual health",
+        "Recognize clinical emergencies involving the penis"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Anatomy",
+          "kind": "introduction",
+          "body": "The **penis** serves as the organ of copulation and urinary excretion. It consists of three cylinders of erectile tissue: two **corpora cavernosa** (paired, dorsolateral) and one **corpus spongiosum** (ventral, surrounds urethra, forms glans at distal end). The glans is covered by the **prepuce (foreskin)** in uncircumcised men.\n\n**Mechanism of erection:**\n- Parasympathetic stimulation (pelvic splanchnic nerves, S2–S4): releases nitric oxide (NO) → smooth muscle relaxation in helicine arteries → increased blood flow → fills lacunar spaces in corpora cavernosa → compression of emissary veins → erection\n- Ejaculation: sympathetic stimulation (hypogastric nerve, T10–L2) → smooth muscle contraction → emission + ejaculation\n\n**Clinical conditions:**\n- **Phimosis:** foreskin cannot be retracted; can cause pain during intercourse; treatment: topical steroid or circumcision\n- **Paraphimosis (emergency):** foreskin retracted and cannot return to normal position → constricting ring → penile ischemia; manual reduction or emergency incision\n- **Priapism (emergency):** sustained, painful erection >4 hours unrelated to sexual stimulation; ischemic (most common, low-flow, high risk) vs non-ischemic (high-flow, arterial); causes: sickle cell disease, medications (trazodone, antipsychotics, PDE5 inhibitors), spinal cord injury\n  - Treatment: aspiration of corpora cavernosa ± intracavernous injection of sympathomimetic (phenylephrine)\n- **Erectile dysfunction:** failure to achieve/maintain erection; risk factors: diabetes, cardiovascular disease, hypertension, smoking, medications (beta-blockers, antidepressants); PDE5 inhibitors (sildenafil) first-line"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Penis: 2 corpora cavernosa + 1 corpus spongiosum (contains urethra); glans = distal end\n- Erection: parasympathetic (NO → vasodilation); ejaculation: sympathetic\n- Paraphimosis = retracted foreskin stuck → ischemia emergency → manual reduction\n- Priapism >4 hours → ischemia → aspiration ± phenylephrine; sickle cell is key risk factor\n- PDE5 inhibitors (sildenafil): contraindicated with nitrates (severe hypotension)"
+        }
+      ]
+    }
+  ]
+}

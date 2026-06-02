@@ -207,16 +207,23 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
     const intlDisclaimer = isIntlRnFoundationPathwayId(pathway.id)
       ? intlRnRegulatorDisclaimerText(marketingMessages)
       : "";
-    const AlliedHealthPathwayHubComponent = isAlliedHub
-      ? (await import("@/components/marketing/allied-health-pathway-hub")).AlliedHealthPathwayHub
-      : null;
-    const NursingTierHubPageComponent =
-      !isAlliedHub && content
-        ? (await import("@/components/marketing/nursing-tier-hub-page")).NursingTierHubPage
-        : null;
-    const InternationalRnHubSectionsComponent = intlSections
-      ? (await import("@/components/marketing/international-rn-hub-sections")).InternationalRnHubSections
-      : null;
+    let AlliedHealthPathwayHubComponent: typeof import("@/components/marketing/allied-health-pathway-hub").AlliedHealthPathwayHub | null = null;
+    let NursingTierHubPageComponent: typeof import("@/components/marketing/nursing-tier-hub-page").NursingTierHubPage | null = null;
+    let InternationalRnHubSectionsComponent: typeof import("@/components/marketing/international-rn-hub-sections").InternationalRnHubSections | null = null;
+
+    try {
+      if (isAlliedHub) {
+        AlliedHealthPathwayHubComponent = (await import("@/components/marketing/allied-health-pathway-hub")).AlliedHealthPathwayHub;
+      } else if (content) {
+        NursingTierHubPageComponent = (await import("@/components/marketing/nursing-tier-hub-page")).NursingTierHubPage;
+      }
+      if (intlSections) {
+        InternationalRnHubSectionsComponent = (await import("@/components/marketing/international-rn-hub-sections")).InternationalRnHubSections;
+      }
+    } catch (importErr) {
+      console.error("[ExamHub] dynamic import failed for pathway", pathway.id, importErr);
+      content = null;
+    }
 
     return (
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
@@ -260,8 +267,14 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
             oscePublic={oscePublicForHub}
           />
         ) : (
-          <div className="text-center py-10 text-red-500">
-            Homepage content failed to load (check logs)
+          <div className="py-16 text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-3">{pathway.displayName}</h1>
+            <p className="text-gray-500 mb-6 max-w-md mx-auto">
+              Exam prep content for this pathway is being prepared. Check back soon, or explore other pathways.
+            </p>
+            <Link href="/lessons" className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:brightness-110 transition-all no-underline">
+              Browse all lessons
+            </Link>
           </div>
         )}
 

@@ -35,6 +35,17 @@ import {
   configFromInput,
   pickPracticeQuestionIds,
 } from "@/lib/practice-tests/pick-question-ids";
+import {
+  buildPracticeTestAvailabilitySnapshot,
+  isSharedPracticeTestAvailabilityMode,
+  PRACTICE_TEST_GENERATED_CACHE_TTL_SECONDS,
+  readPracticeTestGeneratedSnapshot,
+  readPracticeTestPreGeneratedSnapshot,
+  savePracticeTestGeneratedSnapshot,
+  type PracticeTestAvailabilityKeyInput,
+  type PracticeTestAvailabilitySnapshot,
+  type PracticeTestCachedQuestion,
+} from "@/lib/practice-tests/practice-test-availability";
 import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
@@ -217,6 +228,96 @@ function linearConfigFingerprint(config: PracticeTestConfigJson) {
         : "after_each"),
     linearAllowReviewNavigation: config.linearAllowReviewNavigation === true,
   });
+}
+
+async function loadPracticeTestAvailabilityQuestions(
+  ids: string[],
+): Promise<PracticeTestCachedQuestion[]> {
+  if (ids.length === 0) return [];
+  const rows = await prisma.examQuestion.findMany({
+    where: { id: { in: ids } },
+    select: {
+      id: true,
+      correctAnswer: true,
+      rationale: true,
+      correctAnswerExplanation: true,
+      incorrectAnswerRationale: true,
+      distractorRationales: true,
+      clinicalPearl: true,
+      examStrategy: true,
+      keyTakeaway: true,
+      topic: true,
+      subtopic: true,
+      difficulty: true,
+    },
+    take: ids.length,
+  });
+  const byId = new Map(rows.map((row) => [row.id, row]));
+  return ids.flatMap((id) => {
+    const row = byId.get(id);
+    return row ? [row as PracticeTestCachedQuestion] : [];
+  });
+}
+
+async function createLinearPracticeTestFromAvailabilitySnapshot(args: {
+  snapshot: PracticeTestAvailabilitySnapshot;
+  userId: string;
+  title: string | null;
+  config: PracticeTestConfigJson;
+  timedMode: boolean;
+  timeLimitSec: number | null;
+  source: "cache" | "pre_generated";
+}) {
+  const questionIds = args.snapshot.questionIds.slice(
+    0,
+    Math.max(1, args.config.questionCount),
+  );
+  const fallbackConfig = {
+    ...args.config,
+    ...(args.source === "pre_generated"
+      ? {
+          topicNames: [] as string[],
+          difficultyMin: null,
+          difficultyMax: null,
+          selectionMode: "random" as const,
+        }
+      : {}),
+    availabilityFallback: {
+      source: args.source,
+      snapshotSource: args.snapshot.source,
+      cacheKey: args.snapshot.cacheKey,
+      createdAt: args.snapshot.createdAt,
+    },
+  };
+  const adaptiveState = args.config.linearDeliveryMode
+    ? { linearEngine: { committedQuestionIds: [] as string[] } }
+    : {};
+  const contract = assessPracticeTestSessionHydrateContract({
+    catMode: false,
+    status: "IN_PROGRESS",
+    questionIds,
+    cursorIndex: 0,
+    adaptiveState,
+    config: fallbackConfig as PracticeTestConfigJson,
+  });
+  if (!contract.ok) {
+    return { ok: false as const, code: contract.violation.code, message: contract.violation.message };
+  }
+  const row = await prisma.practiceTest.create({
+    data: {
+      userId: args.userId,
+      title: args.title,
+      config: fallbackConfig as object,
+      questionIds,
+      status: PracticeTestStatus.IN_PROGRESS,
+      timedMode: args.timedMode,
+      timeLimitSec: args.timeLimitSec,
+      ...(args.config.linearDeliveryMode
+        ? { adaptiveState: adaptiveState as object }
+        : {}),
+    },
+  });
+  return { ok: true as const, row, questionIds, config: fallbackConfig };
 }
 
 export async function GET(req: NextRequest) {
@@ -1055,6 +1156,124 @@ export async function POST(req: Request) {
       );
 
       if (!picked.ok) {
+        void incrementReliabilityCounter("practice", "tier_d_error");
+        safeServerLog("practice_tests", "linear_primary_generation_failed", {
+          loader_name: "practice_tests_create_api",
+          user_id_prefix: gate.userId.slice(0, 8),
+          pathway_id: d.pathwayId?.trim() || "",
+          selection_mode: d.selectionMode,
+          question_count: d.questionCount,
+          failure_message: picked.message.slice(0, 240),
+        });
+
+        const availabilityKey: PracticeTestAvailabilityKeyInput = {
+          pathwayId: d.pathwayId?.trim() || null,
+          categories: topicNames,
+          difficultyMin,
+          difficultyMax,
+          questionCount: d.questionCount,
+          selectionMode: d.selectionMode,
+        };
+        if (isSharedPracticeTestAvailabilityMode(d.selectionMode)) {
+          const cached = await readPracticeTestGeneratedSnapshot(availabilityKey);
+          if (cached?.questionIds?.length) {
+            const fallback = await createLinearPracticeTestFromAvailabilitySnapshot({
+              snapshot: cached,
+              userId: gate.userId,
+              title: d.title?.trim() || null,
+              config,
+              timedMode: d.timedMode,
+              timeLimitSec,
+              source: "cache",
+            });
+            if (fallback.ok) {
+              void incrementReliabilityCounter("practice", "tier_b");
+              safeServerLog("practice_tests", "linear_availability_cache_hit", {
+                loader_name: "practice_tests_create_api",
+                user_id_prefix: gate.userId.slice(0, 8),
+                pathway_id: d.pathwayId?.trim() || "",
+                selection_mode: d.selectionMode,
+                question_count: fallback.questionIds.length,
+                cache_key: cached.cacheKey,
+              });
+              return NextResponse.json(
+                {
+                  id: fallback.row.id,
+                  questionCount: fallback.questionIds.length,
+                  config: fallback.config,
+                  availabilityFallback: "cache" as const,
+                },
+                { status: 201 },
+              );
+            }
+            safeServerLog("practice_tests", "linear_availability_cache_rejected", {
+              loader_name: "practice_tests_create_api",
+              user_id_prefix: gate.userId.slice(0, 8),
+              code: fallback.code,
+              message: fallback.message.slice(0, 240),
+            });
+          }
+
+        } else {
+          safeServerLog("practice_tests", "linear_availability_shared_fallback_skipped", {
+            loader_name: "practice_tests_create_api",
+            user_id_prefix: gate.userId.slice(0, 8),
+            selection_mode: d.selectionMode,
+            reason: "user_specific_selection_mode",
+          });
+        }
+        const preGeneratedKey: PracticeTestAvailabilityKeyInput = {
+          ...availabilityKey,
+          categories: isSharedPracticeTestAvailabilityMode(d.selectionMode)
+            ? availabilityKey.categories
+            : [],
+          difficultyMin: isSharedPracticeTestAvailabilityMode(d.selectionMode)
+            ? availabilityKey.difficultyMin
+            : null,
+          difficultyMax: isSharedPracticeTestAvailabilityMode(d.selectionMode)
+            ? availabilityKey.difficultyMax
+            : null,
+          selectionMode: "random",
+        };
+        const preGenerated = await readPracticeTestPreGeneratedSnapshot(preGeneratedKey);
+        if (preGenerated?.questionIds?.length) {
+          const fallback = await createLinearPracticeTestFromAvailabilitySnapshot({
+            snapshot: preGenerated,
+            userId: gate.userId,
+            title: d.title?.trim() || null,
+            config,
+            timedMode: d.timedMode,
+            timeLimitSec,
+            source: "pre_generated",
+          });
+          if (fallback.ok) {
+            void incrementReliabilityCounter("practice", "tier_c");
+            safeServerLog("practice_tests", "linear_availability_pregenerated_hit", {
+              loader_name: "practice_tests_create_api",
+              user_id_prefix: gate.userId.slice(0, 8),
+              pathway_id: d.pathwayId?.trim() || "",
+              requested_selection_mode: d.selectionMode,
+              served_selection_mode: "random",
+              question_count: fallback.questionIds.length,
+              cache_key: preGenerated.cacheKey,
+            });
+            return NextResponse.json(
+              {
+                id: fallback.row.id,
+                questionCount: fallback.questionIds.length,
+                config: fallback.config,
+                availabilityFallback: "pre_generated" as const,
+              },
+              { status: 201 },
+            );
+          }
+          safeServerLog("practice_tests", "linear_availability_pregenerated_rejected", {
+            loader_name: "practice_tests_create_api",
+            user_id_prefix: gate.userId.slice(0, 8),
+            code: fallback.code,
+            message: fallback.message.slice(0, 240),
+          });
+        }
         return NextResponse.json(
           { error: picked.message, code: "pool_too_small" },
           { status: 400 },
@@ -1124,6 +1343,45 @@ export async function POST(req: Request) {
         },
       });
 
+      if (isSharedPracticeTestAvailabilityMode(d.selectionMode)) {
+        await safeStudyOptional(
+          "cache",
+          "practice_tests_generated_snapshot",
+          async () => {
+            const questions = await loadPracticeTestAvailabilityQuestions(picked.ids);
+            if (questions.length === 0) return false;
+            const snapshot = buildPracticeTestAvailabilitySnapshot({
+              source: "generated",
+              keyInput: {
+                pathwayId: d.pathwayId?.trim() || null,
+                categories: topicNames,
+                difficultyMin,
+                difficultyMax,
+                questionCount: d.questionCount,
+                selectionMode: d.selectionMode,
+              },
+              config,
+              questionIds: picked.ids,
+              questions,
+              title: d.title?.trim() || null,
+            });
+            await savePracticeTestGeneratedSnapshot(snapshot);
+            safeServerLog("practice_tests", "linear_generated_test_cached", {
+              loader_name: "practice_tests_create_api",
+              user_id_prefix: gate.userId.slice(0, 8),
+              pathway_id: d.pathwayId?.trim() || "",
+              selection_mode: d.selectionMode,
+              question_count: picked.ids.length,
+              cache_key: snapshot.cacheKey,
+              ttl_seconds: PRACTICE_TEST_GENERATED_CACHE_TTL_SECONDS,
+            });
+            return true;
+          },
+          false,
+          { timeoutMs: 1_500, label: "practice_tests_generated_snapshot" },
+        );
+      }
+
       await safeStudyOptional(
         "analytics",
         "practice_tests_create_linear",
@@ -1173,7 +1431,7 @@ export async function POST(req: Request) {
         d.selectionMode,
         { questionIds: picked.ids, config, cachedAt: new Date().toISOString() },
       );
-      void incrementReliabilityCounter("practice", "tier_b");
+      void incrementReliabilityCounter("practice", "tier_a");
       return NextResponse.json(
         { id: row.id, questionCount: picked.ids.length, config },
         { status: 201 },

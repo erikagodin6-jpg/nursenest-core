@@ -1,60 +1,35 @@
 import { traceLayout } from "@/build/tracing";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { ReferralAttributionTracker } from "@/components/referrals/referral-attribution-tracker";
-import type { Session } from "next-auth";
 
 import "./marketing-styles.css";
 
-async function getMarketingInitialSession(): Promise<Session | null | undefined> {
-  const hasSecret = Boolean(
-    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
-      (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
-  );
-  if (!hasSecret) return null;
-
-  let hasSessionCookie = false;
-  try {
-    const { cookies } = await import("next/headers");
-    const jar = await cookies();
-    const sessionCookieNames = [
-      "authjs.session-token",
-      "__Secure-authjs.session-token",
-      "next-auth.session-token",
-      "__Secure-next-auth.session-token",
-    ];
-    // Auth.js chunks large session cookies as `name.0`, `name.1`, etc.
-    // Treat any chunk as a real session signal so the first paint stays
-    // pending/auth-aware instead of incorrectly rendering guest chrome.
-    const allCookieNames = jar.getAll().map((cookie) => cookie.name);
-    hasSessionCookie = allCookieNames.some((name) =>
-      sessionCookieNames.some((sessionName) => name === sessionName || name.startsWith(`${sessionName}.`)),
-    );
-  } catch {
-    hasSessionCookie = true;
-  }
-
-  if (!hasSessionCookie) return null;
-
-  try {
-    const { auth } = await import("@/lib/auth");
-    const session = await auth();
-    if (session) return session;
-    const { getAuthSessionWithJwtCookieFallback } = await import("@/lib/auth/server-session-jwt-fallback");
-    return await getAuthSessionWithJwtCookieFallback();
-  } catch {
-    // A cookie exists but the server read failed. Keep client session status in
-    // "loading" so the header does not paint logged-out chrome before hydration.
-    return undefined;
-  }
-}
-
+/**
+ * Root marketing layout — fully static, no server-side cookie or auth reads.
+ *
+ * Auth state is resolved client-side by AuthSessionProvider (via useSession()
+ * calling /api/auth/session). The MarketingHeaderAuthDesktop/Mobile components
+ * already render a pulse skeleton while status === "loading", so there is no
+ * visible layout shift for anonymous users and only a brief (~100–150ms) skeleton
+ * for signed-in users before their account menu appears.
+ *
+ * Removing the server-side getMarketingInitialSession() call (which read cookies
+ * to detect a session and called auth()) eliminates the only cookies() dependency
+ * in this layout, making every marketing route eligible for CDN edge caching.
+ *
+ * Previous behaviour and why it was removed:
+ *   - cookies() read → Next.js opts the response into dynamic rendering (Cache-Control: private)
+ *   - auth() call → up to 500ms added to every marketing page server render
+ *   - No ISR edge caching possible while this read existed
+ *
+ * The trade-off is a ~100ms pulse on the auth chrome for signed-in users.
+ * For anonymous users (>95% of marketing traffic) there is no visible change.
+ */
 const MarketingGroupLayout = traceLayout(
   import.meta,
-  async function MarketingGroupLayout({ children }: { children: React.ReactNode }) {
-    const session = await getMarketingInitialSession();
-
+  function MarketingGroupLayout({ children }: { children: React.ReactNode }) {
     return (
-      <AuthSessionProvider session={session} runtimeBoundary="public">
+      <AuthSessionProvider runtimeBoundary="public">
         <ReferralAttributionTracker />
         {children}
       </AuthSessionProvider>

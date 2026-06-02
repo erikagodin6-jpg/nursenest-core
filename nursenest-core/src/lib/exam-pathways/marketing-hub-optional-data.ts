@@ -19,7 +19,7 @@ import {
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import {
-  countPathwayLessonsPublic,
+  countPathwayLessons,
   getPathwayLessonsPage,
   getPathwayLessonsPageFresh,
   listTopicClustersForPublicNavigation,
@@ -91,11 +91,15 @@ export async function loadMarketingExamHubOptionalBlocks(
     { name: "question_snapshot", run: () => loadPathwayQuestionBankSnapshot(pathway.id) },
     {
       name: "lesson_count",
+      // countPathwayLessons → single prisma.pathwayLesson.count() O(1) DB query.
+      // The previous call (countPathwayLessonsPublic) resolved the full renderable lesson list,
+      // which involves multiple sequential DB queries and held connection pool slots for 3–5s
+      // even after the timeout fired. The hub only needs a display count, not a filtered list.
       run: () =>
         withDatabaseFallbackTimeout(
-          () => countPathwayLessonsPublic(pathway.id),
+          () => countPathwayLessons(pathway.id),
           ZERO_LESSON_COUNT,
-          1_500,
+          1_000,
           { scope: "exam_pathway_hub", label: `lesson_count:${pathway.id}` },
         ),
     },
@@ -171,7 +175,7 @@ export type PathwayLessonsHubAggregates = {
   lessonsPageLoadRejected: boolean;
   /** True when the question bank snapshot task failed — do not infer “no adaptive pool” from defaults alone. */
   questionSnapshotLoadRejected: boolean;
-  /** True when `countPathwayLessonsPublic` failed (only when that task ran). */
+  /** True when the lesson count task failed (only when that task ran). */
   pathwayLessonCountLoadRejected: boolean;
   /** True when topic cluster navigation query failed (only when that task ran). */
   topicClustersLoadRejected: boolean;
@@ -235,9 +239,9 @@ export async function loadPathwayLessonsHubAggregates(
       run: () =>
         includeLessonCount
           ? withDatabaseFallbackTimeout(
-              () => countPathwayLessonsPublic(pathway.id),
+              () => countPathwayLessons(pathway.id),
               ZERO_LESSON_COUNT,
-              1_500,
+              1_000,
               { scope: "exam_pathway_hub", label: `lesson_count:${pathway.id}` },
             )
           : Promise.resolve(ZERO_LESSON_COUNT),

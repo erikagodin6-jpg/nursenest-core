@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-06-02T00:39:15.761Z",
+  "status": "pass",
+  "promotion": "allowed",
+  "rollback": "not_required",
+  "results": [
+    {
+      "name": "runtime-config",
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 76
+    },
+    {
+      "name": "build-artifacts",
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 4750
+    }
+  ]
+}

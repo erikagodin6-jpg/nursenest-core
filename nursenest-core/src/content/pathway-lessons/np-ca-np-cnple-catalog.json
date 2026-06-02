@@ -29,17 +29,30 @@
         {
           "slug": "np-ca-assessment-history-taking",
           "title": "History Taking and the Clinical Interview",
-          "sections": ["assessment-red-flags", "lifespan-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "assessment-red-flags",
+            "lifespan-considerations",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-assessment-physical-exam",
           "title": "Physical Examination Across the Lifespan",
-          "sections": ["assessment-red-flags", "lifespan-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "lifespan-considerations",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-assessment-functional-psychosocial",
           "title": "Functional and Psychosocial Assessment",
-          "sections": ["assessment-red-flags", "patient-education", "canadian-practice-considerations"]
+          "sections": [
+            "assessment-red-flags",
+            "patient-education",
+            "canadian-practice-considerations"
+          ]
         }
       ]
     },
@@ -51,22 +64,45 @@
         {
           "slug": "np-ca-diagnosis-clinical-reasoning-framework",
           "title": "Clinical Reasoning and Diagnostic Framework",
-          "sections": ["differential-diagnosis", "assessment-red-flags", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "differential-diagnosis",
+            "assessment-red-flags",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-diagnosis-cardiovascular",
           "title": "Cardiovascular Differential Diagnosis",
-          "sections": ["assessment-red-flags", "differential-diagnosis", "diagnostics-labs-imaging", "referral-thresholds", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "differential-diagnosis",
+            "diagnostics-labs-imaging",
+            "referral-thresholds",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-diagnosis-respiratory",
           "title": "Respiratory Differential Diagnosis",
-          "sections": ["assessment-red-flags", "differential-diagnosis", "diagnostics-labs-imaging", "referral-thresholds", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "differential-diagnosis",
+            "diagnostics-labs-imaging",
+            "referral-thresholds",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-diagnosis-endocrine",
           "title": "Endocrine Differential Diagnosis",
-          "sections": ["assessment-red-flags", "differential-diagnosis", "diagnostics-labs-imaging", "pharmacologic-management", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "differential-diagnosis",
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "clinical-judgment-pearls"
+          ]
         }
       ]
     },
@@ -78,37 +114,72 @@
         {
           "slug": "np-ca-pharma-safe-prescribing-principles",
           "title": "Safe Prescribing Principles for Canadian NPs",
-          "sections": ["pharmacologic-management", "canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "pharmacologic-management",
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-pharma-cardiovascular-drugs",
           "title": "Cardiovascular Pharmacology",
-          "sections": ["pharmacologic-management", "follow-up-monitoring", "patient-education", "clinical-judgment-pearls"]
+          "sections": [
+            "pharmacologic-management",
+            "follow-up-monitoring",
+            "patient-education",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-pharma-diabetes-medications",
           "title": "Diabetes Pharmacology and Insulin Management",
-          "sections": ["pharmacologic-management", "follow-up-monitoring", "patient-education", "lifespan-considerations"]
+          "sections": [
+            "pharmacologic-management",
+            "follow-up-monitoring",
+            "patient-education",
+            "lifespan-considerations"
+          ]
         },
         {
           "slug": "np-ca-pharma-respiratory-drugs",
           "title": "Respiratory Pharmacology (Inhalers, Steroids, Biologics)",
-          "sections": ["pharmacologic-management", "patient-education", "follow-up-monitoring", "clinical-judgment-pearls"]
+          "sections": [
+            "pharmacologic-management",
+            "patient-education",
+            "follow-up-monitoring",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-pharma-controlled-substances",
           "title": "Controlled Substances and Opioid Prescribing in Canada",
-          "sections": ["pharmacologic-management", "canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "pharmacologic-management",
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-pharma-polypharmacy-older-adults",
           "title": "Polypharmacy and the Beers Criteria in Older Adults",
-          "sections": ["pharmacologic-management", "lifespan-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "pharmacologic-management",
+            "lifespan-considerations",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-pharma-mental-health-medications",
           "title": "Mental Health Pharmacology",
-          "sections": ["pharmacologic-management", "follow-up-monitoring", "patient-education", "clinical-judgment-pearls"]
+          "sections": [
+            "pharmacologic-management",
+            "follow-up-monitoring",
+            "patient-education",
+            "clinical-judgment-pearls"
+          ]
         }
       ]
     },
@@ -120,32 +191,59 @@
         {
           "slug": "np-ca-labs-cbc-interpretation",
           "title": "CBC Interpretation in Primary Care",
-          "sections": ["diagnostics-labs-imaging", "differential-diagnosis", "clinical-judgment-pearls"]
+          "sections": [
+            "diagnostics-labs-imaging",
+            "differential-diagnosis",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-labs-metabolic-panels",
           "title": "Basic and Comprehensive Metabolic Panels",
-          "sections": ["diagnostics-labs-imaging", "follow-up-monitoring", "clinical-judgment-pearls"]
+          "sections": [
+            "diagnostics-labs-imaging",
+            "follow-up-monitoring",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-labs-lipids-thyroid-hba1c",
           "title": "Lipids, Thyroid Function, and HbA1c",
-          "sections": ["diagnostics-labs-imaging", "follow-up-monitoring", "pharmacologic-management", "clinical-judgment-pearls"]
+          "sections": [
+            "diagnostics-labs-imaging",
+            "follow-up-monitoring",
+            "pharmacologic-management",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-labs-urinalysis-renal",
           "title": "Urinalysis, Renal Function, and CKD Staging",
-          "sections": ["diagnostics-labs-imaging", "differential-diagnosis", "follow-up-monitoring", "clinical-judgment-pearls"]
+          "sections": [
+            "diagnostics-labs-imaging",
+            "differential-diagnosis",
+            "follow-up-monitoring",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-labs-ecg-basics",
           "title": "ECG Interpretation for the NP",
-          "sections": ["diagnostics-labs-imaging", "assessment-red-flags", "referral-thresholds", "clinical-judgment-pearls"]
+          "sections": [
+            "diagnostics-labs-imaging",
+            "assessment-red-flags",
+            "referral-thresholds",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-labs-imaging-selection",
           "title": "Appropriate Imaging Selection in Primary Care",
-          "sections": ["diagnostics-labs-imaging", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "diagnostics-labs-imaging",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         }
       ]
     },
@@ -157,22 +255,40 @@
         {
           "slug": "np-ca-prevention-canadian-screening-guidelines",
           "title": "Canadian Screening Guidelines (Canadian Task Force)",
-          "sections": ["patient-education", "lifespan-considerations", "canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "patient-education",
+            "lifespan-considerations",
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-prevention-immunisation-naci",
           "title": "Immunisation Schedules and NACI Recommendations",
-          "sections": ["patient-education", "lifespan-considerations", "canadian-practice-considerations"]
+          "sections": [
+            "patient-education",
+            "lifespan-considerations",
+            "canadian-practice-considerations"
+          ]
         },
         {
           "slug": "np-ca-prevention-lifestyle-counselling",
           "title": "Lifestyle Counselling: Nutrition, Physical Activity, Smoking Cessation",
-          "sections": ["non-pharmacologic-management", "patient-education", "follow-up-monitoring"]
+          "sections": [
+            "non-pharmacologic-management",
+            "patient-education",
+            "follow-up-monitoring"
+          ]
         },
         {
           "slug": "np-ca-prevention-sdoh",
           "title": "Social Determinants of Health in Canadian Primary Care",
-          "sections": ["assessment-red-flags", "patient-education", "canadian-practice-considerations"]
+          "sections": [
+            "assessment-red-flags",
+            "patient-education",
+            "canadian-practice-considerations"
+          ]
         }
       ]
     },
@@ -184,42 +300,100 @@
         {
           "slug": "np-ca-chronic-hypertension",
           "title": "Hypertension: Assessment, Guidelines, and Management",
-          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "non-pharmacologic-management", "follow-up-monitoring", "patient-education", "canadian-practice-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "non-pharmacologic-management",
+            "follow-up-monitoring",
+            "patient-education",
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-chronic-diabetes",
           "title": "Diabetes Mellitus: Type 1, Type 2, and Gestational",
-          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "non-pharmacologic-management", "follow-up-monitoring", "patient-education", "lifespan-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "non-pharmacologic-management",
+            "follow-up-monitoring",
+            "patient-education",
+            "lifespan-considerations",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-chronic-copd",
           "title": "COPD: Diagnosis, Staging, and Long-Term Management",
-          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "non-pharmacologic-management", "follow-up-monitoring", "referral-thresholds", "canadian-practice-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "non-pharmacologic-management",
+            "follow-up-monitoring",
+            "referral-thresholds",
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-chronic-heart-failure",
           "title": "Heart Failure: Recognition and Chronic Management",
-          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "follow-up-monitoring", "referral-thresholds", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "follow-up-monitoring",
+            "referral-thresholds",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-chronic-dyslipidemia",
           "title": "Dyslipidemia and Cardiovascular Risk Reduction",
-          "sections": ["diagnostics-labs-imaging", "pharmacologic-management", "follow-up-monitoring", "patient-education", "clinical-judgment-pearls"]
+          "sections": [
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "follow-up-monitoring",
+            "patient-education",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-chronic-ckd",
           "title": "Chronic Kidney Disease: Staging and NP Management",
-          "sections": ["diagnostics-labs-imaging", "pharmacologic-management", "follow-up-monitoring", "referral-thresholds", "clinical-judgment-pearls"]
+          "sections": [
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "follow-up-monitoring",
+            "referral-thresholds",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-chronic-osteoporosis",
           "title": "Osteoporosis: Screening, FRAX, and Treatment",
-          "sections": ["diagnostics-labs-imaging", "pharmacologic-management", "patient-education", "lifespan-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "patient-education",
+            "lifespan-considerations",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-chronic-thyroid",
           "title": "Thyroid Disorders: Hypothyroidism and Hyperthyroidism",
-          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "follow-up-monitoring", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "follow-up-monitoring",
+            "clinical-judgment-pearls"
+          ]
         }
       ]
     },
@@ -231,27 +405,54 @@
         {
           "slug": "np-ca-acute-chest-pain-acs",
           "title": "Chest Pain and Acute Coronary Syndrome Recognition",
-          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "referral-thresholds", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "assessment-red-flags",
+            "diagnostics-labs-imaging",
+            "referral-thresholds",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-acute-stroke-tia",
           "title": "Stroke and TIA: Recognition and Urgent Referral",
-          "sections": ["assessment-red-flags", "referral-thresholds", "canadian-practice-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "referral-thresholds",
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-acute-sepsis",
           "title": "Sepsis Recognition and Early Management",
-          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "referral-thresholds", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "diagnostics-labs-imaging",
+            "referral-thresholds",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-acute-anaphylaxis",
           "title": "Anaphylaxis: Recognition and Emergency Management",
-          "sections": ["assessment-red-flags", "pharmacologic-management", "referral-thresholds", "patient-education", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "pharmacologic-management",
+            "referral-thresholds",
+            "patient-education",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-acute-respiratory-failure",
           "title": "Acute Respiratory Failure and Deterioration",
-          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "referral-thresholds", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "diagnostics-labs-imaging",
+            "referral-thresholds",
+            "clinical-judgment-pearls"
+          ]
         }
       ]
     },
@@ -263,22 +464,45 @@
         {
           "slug": "np-ca-peds-well-child-visit",
           "title": "Well-Child Visits and Developmental Milestones",
-          "sections": ["assessment-red-flags", "patient-education", "lifespan-considerations", "canadian-practice-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "patient-education",
+            "lifespan-considerations",
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-peds-common-infections",
           "title": "Common Pediatric Infections: Otitis, Pharyngitis, Pneumonia",
-          "sections": ["differential-diagnosis", "diagnostics-labs-imaging", "pharmacologic-management", "patient-education", "clinical-judgment-pearls"]
+          "sections": [
+            "differential-diagnosis",
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "patient-education",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-peds-asthma",
           "title": "Pediatric Asthma: Assessment and Management",
-          "sections": ["assessment-red-flags", "pharmacologic-management", "patient-education", "follow-up-monitoring", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "pharmacologic-management",
+            "patient-education",
+            "follow-up-monitoring",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-peds-dosing-safety",
           "title": "Pediatric Dosing and Medication Safety",
-          "sections": ["pharmacologic-management", "patient-education", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "pharmacologic-management",
+            "patient-education",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         }
       ]
     },
@@ -290,32 +514,67 @@
         {
           "slug": "np-ca-adult-preventive-care",
           "title": "Preventive Care for Working-Age Adults",
-          "sections": ["patient-education", "canadian-practice-considerations", "follow-up-monitoring"]
+          "sections": [
+            "patient-education",
+            "canadian-practice-considerations",
+            "follow-up-monitoring"
+          ]
         },
         {
           "slug": "np-ca-adult-musculoskeletal",
           "title": "MSK: Low Back Pain, Osteoarthritis, and Common Injuries",
-          "sections": ["assessment-red-flags", "differential-diagnosis", "pharmacologic-management", "non-pharmacologic-management", "referral-thresholds", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "differential-diagnosis",
+            "pharmacologic-management",
+            "non-pharmacologic-management",
+            "referral-thresholds",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-adult-dermatology",
           "title": "Dermatology in Primary Care",
-          "sections": ["assessment-red-flags", "differential-diagnosis", "pharmacologic-management", "referral-thresholds", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "differential-diagnosis",
+            "pharmacologic-management",
+            "referral-thresholds",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-adult-gi",
           "title": "GI Presentations: GERD, IBS, Liver Disease Screening",
-          "sections": ["assessment-red-flags", "differential-diagnosis", "pharmacologic-management", "referral-thresholds", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "differential-diagnosis",
+            "pharmacologic-management",
+            "referral-thresholds",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-adult-neuro",
           "title": "Neurology: Headache, Vertigo, and Seizure Evaluation",
-          "sections": ["assessment-red-flags", "differential-diagnosis", "diagnostics-labs-imaging", "referral-thresholds", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "differential-diagnosis",
+            "diagnostics-labs-imaging",
+            "referral-thresholds",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-adult-infectious-disease",
           "title": "Infectious Disease: Common Infections and Antimicrobial Stewardship",
-          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "follow-up-monitoring", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "follow-up-monitoring",
+            "clinical-judgment-pearls"
+          ]
         }
       ]
     },
@@ -327,22 +586,42 @@
         {
           "slug": "np-ca-geri-frailty-screening",
           "title": "Frailty Screening and Comprehensive Geriatric Assessment",
-          "sections": ["assessment-red-flags", "clinical-judgment-pearls", "lifespan-considerations"]
+          "sections": [
+            "assessment-red-flags",
+            "clinical-judgment-pearls",
+            "lifespan-considerations"
+          ]
         },
         {
           "slug": "np-ca-geri-dementia-delirium",
           "title": "Dementia and Delirium: Assessment and Management",
-          "sections": ["assessment-red-flags", "differential-diagnosis", "pharmacologic-management", "patient-education", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "assessment-red-flags",
+            "differential-diagnosis",
+            "pharmacologic-management",
+            "patient-education",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-geri-falls-prevention",
           "title": "Falls Prevention in Older Adults",
-          "sections": ["assessment-red-flags", "non-pharmacologic-management", "patient-education", "referral-thresholds"]
+          "sections": [
+            "assessment-red-flags",
+            "non-pharmacologic-management",
+            "patient-education",
+            "referral-thresholds"
+          ]
         },
         {
           "slug": "np-ca-geri-advance-care-planning",
           "title": "Advance Care Planning and Goals of Care",
-          "sections": ["patient-education", "canadian-practice-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "patient-education",
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls"
+          ]
         }
       ]
     },
@@ -354,22 +633,46 @@
         {
           "slug": "np-ca-repro-prenatal-care",
           "title": "Prenatal Care and Obstetric Screening",
-          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "referral-thresholds", "patient-education", "canadian-practice-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "diagnostics-labs-imaging",
+            "referral-thresholds",
+            "patient-education",
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-repro-contraception",
           "title": "Contraception: Options, Selection, and Counselling",
-          "sections": ["pharmacologic-management", "patient-education", "lifespan-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "pharmacologic-management",
+            "patient-education",
+            "lifespan-considerations",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-repro-sti",
           "title": "STI Screening, Diagnosis, and Treatment in Canada",
-          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "patient-education", "canadian-practice-considerations"]
+          "sections": [
+            "assessment-red-flags",
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "patient-education",
+            "canadian-practice-considerations"
+          ]
         },
         {
           "slug": "np-ca-repro-menopause",
           "title": "Menopause: Assessment and Management",
-          "sections": ["assessment-red-flags", "pharmacologic-management", "non-pharmacologic-management", "patient-education", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "pharmacologic-management",
+            "non-pharmacologic-management",
+            "patient-education",
+            "clinical-judgment-pearls"
+          ]
         }
       ]
     },
@@ -381,22 +684,48 @@
         {
           "slug": "np-ca-mh-depression-anxiety",
           "title": "Depression and Anxiety: Assessment and Management",
-          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "non-pharmacologic-management", "follow-up-monitoring", "patient-education", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "diagnostics-labs-imaging",
+            "pharmacologic-management",
+            "non-pharmacologic-management",
+            "follow-up-monitoring",
+            "patient-education",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-mh-substance-use",
           "title": "Substance Use Disorders: Screening and Management",
-          "sections": ["assessment-red-flags", "pharmacologic-management", "referral-thresholds", "canadian-practice-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "assessment-red-flags",
+            "pharmacologic-management",
+            "referral-thresholds",
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-mh-ptsd-trauma",
           "title": "PTSD and Trauma-Informed Care",
-          "sections": ["assessment-red-flags", "pharmacologic-management", "non-pharmacologic-management", "patient-education", "canadian-practice-considerations"]
+          "sections": [
+            "assessment-red-flags",
+            "pharmacologic-management",
+            "non-pharmacologic-management",
+            "patient-education",
+            "canadian-practice-considerations"
+          ]
         },
         {
           "slug": "np-ca-mh-psychosis-risk",
           "title": "Psychosis Risk Recognition and Safe Prescribing",
-          "sections": ["assessment-red-flags", "pharmacologic-management", "referral-thresholds", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "assessment-red-flags",
+            "pharmacologic-management",
+            "referral-thresholds",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         }
       ]
     },
@@ -408,12 +737,20 @@
         {
           "slug": "np-ca-indigenous-cultural-safety-framework",
           "title": "Cultural Safety and Trauma-Informed Practice in Canada",
-          "sections": ["patient-education", "canadian-practice-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "patient-education",
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-indigenous-health-disparities",
           "title": "Health Disparities and Equity in Indigenous Populations",
-          "sections": ["assessment-red-flags", "patient-education", "canadian-practice-considerations"]
+          "sections": [
+            "assessment-red-flags",
+            "patient-education",
+            "canadian-practice-considerations"
+          ]
         }
       ]
     },
@@ -425,27 +762,46 @@
         {
           "slug": "np-ca-ethics-informed-consent-capacity",
           "title": "Informed Consent and Capacity Assessment",
-          "sections": ["canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-ethics-privacy-legislation",
           "title": "Privacy Legislation in Canada: PIPEDA and Provincial Acts",
-          "sections": ["canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-ethics-mandatory-reporting",
           "title": "Mandatory Reporting Obligations for Canadian NPs",
-          "sections": ["canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-ethics-scope-of-practice",
           "title": "NP Scope of Practice Across Canadian Jurisdictions",
-          "sections": ["canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-ethics-documentation",
           "title": "Documentation Standards and Professional Accountability",
-          "sections": ["canadian-practice-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls"
+          ]
         }
       ]
     },
@@ -457,12 +813,20 @@
         {
           "slug": "np-ca-ipc-referral-thresholds",
           "title": "When to Refer: Consultation and Referral Decision-Making",
-          "sections": ["referral-thresholds", "clinical-judgment-pearls", "common-exam-traps"]
+          "sections": [
+            "referral-thresholds",
+            "clinical-judgment-pearls",
+            "common-exam-traps"
+          ]
         },
         {
           "slug": "np-ca-ipc-team-communication",
           "title": "Effective Communication in Team-Based Care",
-          "sections": ["patient-education", "canadian-practice-considerations", "clinical-judgment-pearls"]
+          "sections": [
+            "patient-education",
+            "canadian-practice-considerations",
+            "clinical-judgment-pearls"
+          ]
         }
       ]
     },
@@ -474,20 +838,645 @@
         {
           "slug": "np-ca-edu-health-literacy",
           "title": "Health Literacy and Plain-Language Communication",
-          "sections": ["patient-education", "clinical-judgment-pearls"]
+          "sections": [
+            "patient-education",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-edu-motivational-interviewing",
           "title": "Motivational Interviewing in Primary Care",
-          "sections": ["non-pharmacologic-management", "patient-education", "clinical-judgment-pearls"]
+          "sections": [
+            "non-pharmacologic-management",
+            "patient-education",
+            "clinical-judgment-pearls"
+          ]
         },
         {
           "slug": "np-ca-edu-self-management-support",
           "title": "Chronic Disease Self-Management Support",
-          "sections": ["patient-education", "follow-up-monitoring", "clinical-judgment-pearls"]
+          "sections": [
+            "patient-education",
+            "follow-up-monitoring",
+            "clinical-judgment-pearls"
+          ]
         }
       ]
     }
   ],
-  "lessons": []
+  "lessons": [
+    {
+      "slug": "erikson-trust-vs-mistrust-cnple",
+      "title": "Erikson: Trust vs. Mistrust — Infant Nursing Care (CNPLE / NP)",
+      "topic": "Pediatric Growth and Development",
+      "topicSlug": "pediatric-growth-development",
+      "bodySystem": "Child health",
+      "previewSectionCount": 1,
+      "seoTitle": "Erikson Trust vs Mistrust | CNPLE | NurseNest",
+      "seoDescription": "CNPLE lesson: Erikson's Trust vs. Mistrust stage (0–18 months). Nursing implications for infant hospitalization, family-centred care, and separation anxiety.",
+      "exams": [
+        "NP"
+      ],
+      "countries": [
+        "CA"
+      ],
+      "priority": "high",
+      "audienceTiers": [
+        "NP"
+      ],
+      "studyTakeaways": [
+        "Trust is built through consistent, responsive caregiving — the RPN supports this by minimizing caregiver disruptions.",
+        "Separation anxiety peaks at 6–8 months; encourage parental presence during all care and procedures.",
+        "Non-nutritive sucking, gentle touch, and swaddling are evidence-based comfort measures for hospitalized infants.",
+        "Failure to thrive, poor eye contact, or flat affect in an infant warrants developmental concern and escalation."
+      ],
+      "studyCommonTraps": [
+        "Assuming an infant 'won't remember' the experience — emotional memory and stress physiology are active from birth.",
+        "Separating parents during procedures without clinical justification — parental presence reduces infant distress.",
+        "Confusing stranger anxiety (developmental milestone) with pathological behaviour."
+      ],
+      "memoryAnchor": "Trust = consistency + responsiveness. Infant cries → nurse responds → trust grows.",
+      "sections": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "heading": "Overview and learning objectives",
+          "body": "**Erikson's Trust vs. Mistrust** (birth to approximately 18 months) is the foundational psychosocial stage. The infant develops a sense that the world is safe and caregivers are reliable when needs are consistently met — or develops mistrust when care is unpredictable, painful, or absent.\n\nFor the NP, this stage is clinically relevant during any infant hospitalization, well-baby visit, or community nursing encounter. The practical nurse does not diagnose developmental delay independently but does **observe**, **report**, and **implement care** that protects healthy development.\n\n**Learning objectives:**\n- Identify the age range and core conflict of Erikson's Trust vs. Mistrust stage\n- Connect infant needs to nursing interventions that support trust-building\n- Recognize signs that hospitalization may be disrupting healthy development\n- Apply family-centred care principles to minimize separation anxiety\n- Communicate developmental concerns to the RN or healthcare provider using SBAR"
+        },
+        {
+          "id": "theory-framework",
+          "kind": "pathophysiology_overview",
+          "heading": "Developmental theory framework",
+          "body": "**Stage:** Trust vs. Mistrust\n**Age:** Birth to approximately 18 months\n**Virtue:** Hope\n**Key figure:** Primary caregiver (most often mother/parent)\n\n**Core mechanism:** The infant is entirely dependent. When a caregiver consistently responds to hunger, pain, cold, and loneliness, the infant's nervous system learns that distress signals work — the world is predictable and safe. This builds **basic trust**, the psychological foundation for all future relationships.\n\nWhen care is inconsistent, neglectful, or the infant is subjected to repeated painful procedures without adequate comfort, **mistrust** develops. The infant may become withdrawn, hypervigilant, or fail to form secure attachments.\n\n**Neurodevelopmental link:** Chronic stress in infancy elevates cortisol, which can disrupt hippocampal development, immune function, and the stress-response system. This is the biological basis for why early trauma has lasting effects — and why protective nursing care matters.\n\n**Hospitalization risk:** Even brief hospitalization disrupts the infant's predictable environment. Pain, unfamiliar faces, altered feeding schedules, and parental anxiety all challenge trust development. The NP's role is to **minimize disruption** and **support the parent–infant bond**."
+        },
+        {
+          "id": "signs-symptoms",
+          "kind": "signs_symptoms",
+          "heading": "Expected behaviours vs. concerning findings",
+          "body": "**Expected developmental behaviours (0–18 months)**\n\n- Birth–2 months: reflexive responses, beginning social smile, responds to voice\n- 2–6 months: sustained eye contact, social smile, recognizes parent's face, begins to anticipate feeding\n- 6–12 months: **stranger anxiety** (normal milestone), protests separation from caregiver, reaches for familiar people, babbling\n- 12–18 months: shows attachment to primary caregiver, exploration with return to caregiver as 'safe base,' 1–3 words\n\n**Concerning findings that warrant documentation and escalation**\n\n- Absent or flat social smile by 3 months\n- No eye contact or recognition of caregiver by 4–6 months\n- Failure to respond to name or voice by 9 months\n- **Failure to thrive** (weight gain less than expected, crossing 2 major percentile lines)\n- **Institutional behaviour**: very little crying (learned helplessness), absent protest at separation, no reach for comfort\n- Persistent flat affect, withdrawal, or inconsolable distress without physiologic cause\n- Signs of neglect: poor hygiene, inadequate feeding, multiple injuries at different healing stages\n\n**Hospitalization-specific changes to monitor**\n- Increased crying or withdrawal compared to pre-admission\n- Feeding refusal or difficulty latching (in breastfed infants)\n- Sleep pattern disruption\n- Increased need for parental contact"
+        },
+        {
+          "id": "nursing-assessment-interventions",
+          "kind": "nursing_assessment_interventions",
+          "heading": "Nursing assessment and interventions",
+          "body": "**Assessment priorities for the hospitalized infant**\n\n- Assess parent–infant interaction: Does the parent respond to infant cues? Does the infant calm with parent comfort?\n- Document developmental milestones using a structured tool (e.g., Nipissing District Developmental Screen, Rourke Baby Record)\n- Note feeding method, schedule, and success; breastfeeding should be preserved whenever possible\n- Assess pain using an infant-specific scale (FLACC, NIPS, CRIES)\n- Observe stranger anxiety as a **positive** developmental sign, not a problem\n\n**NP interventions to support trust**\n\n- **Maintain consistent caregivers**: assign the same nurse when possible; introduce yourself and explain in simple terms even to pre-verbal infants\n- **Cluster care activities**: group assessments, medication administration, and procedures to allow uninterrupted sleep\n- **Encourage parental presence**: parents should be present for all painful procedures unless the parent chooses otherwise; this is family-centred care\n- **Non-pharmacological comfort**: non-nutritive sucking (pacifier), swaddling, skin-to-skin (kangaroo care) when medically appropriate, gentle rocking, dim lighting, reduced noise\n- **Preserve feeding routines**: maintain breastfeeding on demand; coordinate IV access to avoid dominant arm if possible; use oral sucrose for minor painful procedures as ordered\n- **Educate parents**: explain that crying is communication, that consistent response builds trust, and that they are the most important comfort measure — not a disruption\n\n**Escalate to RN/provider when**\n- Infant has absent social smile, absent eye contact, or failure to track by expected milestones\n- Weight curve shows sustained downward crossing of percentiles\n- Parent–infant interaction appears unsafe or neglectful\n- Infant shows signs of institutional behaviour (flat affect, no protest at separation)"
+        },
+        {
+          "id": "family-centred-care",
+          "kind": "clinical_decision_making",
+          "heading": "Family-centred care priorities",
+          "body": "**Family-centred care (FCC)** is the standard of practice in pediatric nursing. For infants, FCC means:\n\n- Parents/caregivers are **partners in care**, not visitors\n- Open visiting hours; parent rooming-in should be supported\n- Care decisions are made **with** families, not for them\n- Cultural practices related to feeding, comfort, and interaction are respected and accommodated\n\n**NP role in FCC:**\n- Introduce all team members to the family and explain their roles\n- Provide a safe space for the parent to stay (chair, cot, privacy)\n- Teach the parent to recognize their infant's cues and how to participate in care (diaper changes, bathing, positioning)\n- Do not exclude parents from bedside care without clinical reason\n\n**Separation anxiety and hospitalization:**\n- Infants 6–18 months experience **protest** (crying, reaching), **despair** (withdrawal, passivity), and **detachment** (apparent calm — actually emotional shutdown) during separation — Robertson's phases\n- The NP recognises detachment as a **warning sign**, not improvement\n- Goal: keep parent–infant dyad together; if separation is unavoidable, transition gently with familiar object (comfort item), maintain routine, and reunite as soon as possible"
+        },
+        {
+          "id": "clinical-pearls",
+          "kind": "clinical_pearls",
+          "heading": "Clinical pearls and exam tips",
+          "body": "**Exam pearl 1:** Stranger anxiety (6–9 months) is a **normal developmental milestone** — choose the answer that validates this to parents rather than treating it as a problem.\n\n**Exam pearl 2:** The CNPLE exam may ask which nursing action best supports psychosocial development for a hospitalized infant. The correct answer involves **parental presence** and **consistent caregiving** — not separation for efficiency.\n\n**Exam pearl 3:** Non-nutritive sucking (pacifier, gloved finger) is a **proven non-pharmacological comfort measure** for minor procedures in infants — know it.\n\n**Common trap:** An infant who stops crying and becomes quiet during a painful procedure is not necessarily 'fine' — this may be **learned helplessness** or **dissociation**, not tolerance. Continued pain assessment is required.\n\n**Memory hook:** TRUST = **T**ouch consistently, **R**espond to cues, **U**nite parent and infant, **S**upport feeding, **T**reat pain promptly."
+        },
+        {
+          "id": "patient-education",
+          "kind": "client_education",
+          "heading": "Family and caregiver teaching",
+          "body": "**Key teaching points for parents of hospitalized infants:**\n\n- Your presence is the most powerful comfort measure for your baby — you are never 'in the way'\n- Your baby will cry during painful procedures; this is normal and does not mean something is seriously wrong\n- Maintaining your usual routines (feeding times, sleep patterns, familiar music or voice) helps your baby feel safe in an unfamiliar environment\n- Skin-to-skin contact and breastfeeding support healing and reduce stress hormones — ask your nurse how to do this safely with IV lines or monitors\n- After discharge, your baby may be clingy, fussy, or have sleep changes — this is a normal response to the hospital experience and typically resolves within days to weeks\n\n**When to call the clinic or provider:**\n- Baby is not feeding adequately after discharge\n- Extreme inconsolability (crying more than 3 hours/day) persisting beyond 2 weeks post-discharge\n- You are concerned about your baby's development or interactions"
+        },
+        {
+          "id": "case-study",
+          "kind": "case_study",
+          "heading": "Case-based application",
+          "body": "A 9-month-old infant is admitted to the pediatric unit for bronchiolitis requiring IV fluids and respiratory monitoring. The mother has not left the bedside since admission. During your assessment, you notice the infant stops crying as soon as the mother picks them up, reaches for the mother consistently, and shows clear stranger anxiety when you approach — crying and turning toward the mother.\n\n**Question 1: How should the NP interpret the infant's stranger anxiety?**\n\nThis is a **normal developmental milestone** for a 9-month-old. The nurse should reassure the mother that this behaviour reflects healthy attachment. The infant recognising and preferring the primary caregiver is expected at this stage.\n\n**Question 2: The mother says she needs to go home briefly to care for older children. What should the NP do?**\n\nAcknowledge and validate the mother's competing needs. Arrange for another familiar caregiver to stay if possible. Prepare the infant with familiar objects (comfort toy, familiar smell on a cloth). Cluster care activities to allow the infant maximum rest. Reassess the infant's response and document; inform the RN of planned parental absence. Do NOT discourage parental presence or suggest the infant will 'be fine' without preparation.\n\n**Key teaching point:** Robertson's phases of separation (protest → despair → detachment) remind us that a quiet infant during parental absence is not necessarily a settled infant — vigilance and comfort measures remain essential."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A 7-month-old infant cries and reaches for their mother when the nurse approaches to assess vital signs. How should the RPN respond?",
+          "options": [
+            "Ask the mother to leave the room so the infant is not further upset",
+            "Reassure the mother that stranger anxiety is a normal developmental milestone and proceed with assessment with the mother present",
+            "Document the behaviour as abnormal and notify the provider",
+            "Skip the vital signs assessment and return when the infant is calm"
+          ],
+          "correct": 1,
+          "rationale": "Stranger anxiety at 6–9 months is a normal developmental milestone indicating healthy attachment. The RPN should validate this to the mother, keep the mother present as a comfort measure, and proceed with assessment. Separating the mother would increase distress and is contrary to family-centred care principles."
+        },
+        {
+          "question": "Which nursing intervention best supports trust development in a hospitalized 4-month-old infant?",
+          "options": [
+            "Completing all assessments and procedures quickly to minimize handling time",
+            "Clustering care activities and encouraging parental presence during procedures",
+            "Keeping the infant in a quiet room with minimal stimulation",
+            "Scheduling all care during the infant's wake times to avoid disrupting sleep"
+          ],
+          "correct": 1,
+          "rationale": "Clustering care reduces the number of distressing interruptions, supporting consistent rest cycles. Encouraging parental presence preserves the parent–infant bond and uses the most effective comfort measure available. Both actions directly support trust development in the context of Erikson's first stage."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A hospitalized 12-month-old who was initially crying and protesting now lies quietly in the crib, makes no eye contact, and does not respond when the nurse enters. The parents have been absent for 6 hours. What is the RPN's priority action?",
+          "options": [
+            "Document that the infant has self-settled and is resting comfortably",
+            "Recognize this as a possible sign of despair or detachment; contact the family and notify the RN",
+            "Administer scheduled medications since the infant is calm",
+            "Decrease monitoring frequency as the infant appears stable"
+          ],
+          "correct": 1,
+          "rationale": "An infant transitioning from protest to withdrawal and then apparent calm during prolonged parental separation may be entering Robertson's phase of detachment — emotional shutdown, not improvement. The RPN should recognize this as a concerning developmental response, attempt to reach the family, provide comfort measures, and report to the RN."
+        }
+      ],
+      "linked_flashcard_prompts": [
+        "What is the age range and core conflict of Erikson's Trust vs. Mistrust stage?",
+        "Name three non-pharmacological comfort measures appropriate for a hospitalized infant.",
+        "What are Robertson's three phases of separation in young children?",
+        "What developmental milestone explains why a 9-month-old cries when a nurse approaches?",
+        "What nursing actions support the parent–infant bond during hospitalization?"
+      ],
+      "examMeta": [
+        {
+          "exam": "NP",
+          "domain": "Child and Family Health",
+          "competency": "Applies psychosocial development theory to advanced nursing practice in pediatric and family health contexts"
+        }
+      ],
+      "relatedLessonRefs": [],
+      "premiumOmittedSections": []
+    },
+    {
+      "slug": "erikson-autonomy-shame-doubt-cnple",
+      "title": "Erikson: Autonomy vs. Shame and Doubt — Toddler Nursing Care (CNPLE / NP)",
+      "topic": "Pediatric Growth and Development",
+      "topicSlug": "pediatric-growth-development",
+      "bodySystem": "Child health",
+      "previewSectionCount": 1,
+      "seoTitle": "Erikson Autonomy vs Shame and Doubt | CNPLE | NurseNest",
+      "seoDescription": "CNPLE lesson: Erikson's Autonomy vs. Shame and Doubt (18 months–3 years). Toddler hospitalization, regression, negativism, and family-centred care strategies.",
+      "exams": [
+        "NP"
+      ],
+      "countries": [
+        "CA"
+      ],
+      "priority": "high",
+      "audienceTiers": [
+        "NP"
+      ],
+      "studyTakeaways": [
+        "Toddlers need control — offer limited, genuine choices ('Do you want your medicine in the cup or syringe?') to support autonomy.",
+        "Regression (returning to earlier behaviours like bed-wetting or bottle use) is a normal stress response during hospitalization, not a problem to correct.",
+        "Negative behaviour ('NO!') is developmentally appropriate — work with it, not against it.",
+        "Separation anxiety peaks between 18–36 months; parental presence is the most effective intervention."
+      ],
+      "studyCommonTraps": [
+        "Forcing compliance without offering choices — this creates shame and undermines autonomy.",
+        "Treating regression as a discipline problem rather than a stress response.",
+        "Using guilt or shame as behaviour management tools — these directly damage this stage's healthy development."
+      ],
+      "memoryAnchor": "Autonomy = 'Me do it!' Give choices, allow safe independence, never shame.",
+      "sections": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "heading": "Overview and learning objectives",
+          "body": "**Erikson's Autonomy vs. Shame and Doubt** (approximately 18 months to 3 years) is the stage of the toddler. The child's central task is developing a sense of personal control over physical skills and a beginning sense of independence. When caregivers support safe exploration and decision-making, the child develops **autonomy**. When caregivers are over-controlling, punitive, or overly critical, the child develops **shame and doubt** — a sense of being incapable and unworthy of independence.\n\n**Learning objectives:**\n- Identify toddler developmental characteristics relevant to nursing care\n- Explain why regression occurs during hospitalization and how the NP responds\n- Apply choice-offering strategies to support toddler cooperation with care\n- Recognize normal negativism vs. signs of developmental concern\n- Support parental understanding of toddler behaviour during illness"
+        },
+        {
+          "id": "theory-framework",
+          "kind": "pathophysiology_overview",
+          "heading": "Developmental theory framework",
+          "body": "**Stage:** Autonomy vs. Shame and Doubt\n**Age:** Approximately 18 months to 3 years\n**Virtue:** Will\n**Key feature:** Developing independence through motor control, language, and decision-making\n\n**Core developmental tasks of the toddler:**\n- Toilet training (control of bodily functions)\n- Walking, running, climbing (physical autonomy)\n- Language explosion (expressing needs and opinions)\n- Beginning parallel play\n- Dawning sense of self as separate from parent\n\n**Negativism:** The toddler's frequent 'NO!' is not defiance — it is developmental testing of autonomy. The child is discovering that they have a will separate from the caregiver's. This is healthy and expected.\n\n**Hospitalization disrupts autonomy because:**\n- The child loses control over eating, toileting, sleep, and movement\n- Painful procedures are done TO the child, not WITH them\n- Parents may be absent or visibly anxious\n- Familiar routines are disrupted\n\n**Regression** is the return to earlier developmental behaviours (thumb-sucking, bed-wetting, baby talk, bottle use) when under stress. It is the toddler's coping mechanism. The NP treats regression with acceptance, not correction."
+        },
+        {
+          "id": "signs-symptoms",
+          "kind": "signs_symptoms",
+          "heading": "Expected behaviours vs. concerning findings",
+          "body": "**Expected developmental behaviours (18 months–3 years)**\n\n- 18 months: 10–20 words, points to communicate, parallel play, beginning self-feeding\n- 2 years: 50+ words, 2-word phrases, runs, kicks ball, temper tantrums, possessive ('Mine!')\n- 3 years: 3-word sentences, dresses with help, toilet trained by day (range: 18 months–4 years), imaginative play begins\n\n**Normal responses to hospitalization:**\n- Regression to earlier behaviour (bed-wetting after achieving continence, bottle after cup, baby talk)\n- Temper tantrums, increased crying\n- Refusing to cooperate with care ('NO!')\n- Increased clinging to parent\n- Sleep disturbance\n\n**Concerning findings requiring documentation and escalation:**\n- Absent or severely delayed language (fewer than 50 words by 24 months, no 2-word combinations by 30 months)\n- Loss of previously acquired skills **not** explained by acute illness or hospitalization stress\n- Self-injurious behaviour\n- Extreme withdrawal, flat affect\n- No parallel play or interest in environment\n- Signs of abuse or neglect"
+        },
+        {
+          "id": "nursing-assessment-interventions",
+          "kind": "nursing_assessment_interventions",
+          "heading": "Nursing assessment and interventions",
+          "body": "**Assessment priorities for the hospitalized toddler**\n\n- Assess developmental milestones against expected norms; ask parents what the child was doing before admission\n- Note regression from pre-hospitalization baseline — document as a stress response\n- Assess pain using toddler-validated scales (FLACC, FACES, CHEOPS)\n- Observe parent–child interaction; assess parental anxiety (which toddlers mirror)\n\n**Key NP interventions**\n\n**Offering choices:**\n- Always offer two genuine, acceptable options: 'Do you want your medicine in the cup or the syringe?' 'Do you want to sit up or lie down for this?'\n- Never offer a choice when one doesn't exist: don't ask 'Is it OK if I take your temperature?' — ask 'Do you want it in your arm or your ear?'\n\n**Minimizing shame:**\n- Never use shame, guilt, or ridicule ('Big kids don't cry,' 'You're acting like a baby')\n- Respond to regression with warmth and acceptance; explain to parents that this is expected and temporary\n- Praise cooperation specifically: 'You held very still — thank you!' rather than generic 'Good job'\n\n**Preparing for procedures:**\n- Use **immediate** pre-procedure preparation (minutes before, not hours — toddlers cannot understand future time)\n- Allow the child to handle safe equipment (stethoscope, bandage) before it is used on them\n- Use play-based preparation: 'Let's listen to your teddy's heart first'\n- Keep procedures brief; have parent in the room for comfort\n\n**Environment and routine:**\n- Maintain consistent caregivers; minimize the number of people entering the room\n- Preserve home routines for feeding, napping, and bedtime where possible\n- Bring familiar objects from home (comfort toy, blanket, familiar cup)\n- Allow safe mobility: playpen, crib rails down with supervision, age-appropriate toys"
+        },
+        {
+          "id": "family-centred-care",
+          "kind": "clinical_decision_making",
+          "heading": "Family-centred care and parental support",
+          "body": "**Supporting parents through toddler hospitalization:**\n\nParents of toddlers are often distressed by their child's regression and intensified behaviour. The NP's role includes **normalizing** and **educating**:\n\n- 'The regression you're seeing — the bed-wetting, the baby talk — is your child's way of coping with stress. It doesn't mean they've lost the skill, and it typically resolves after discharge.'\n- 'Your child's resistance to care is partly developmental — toddlers need some control. We work with that by giving real choices.'\n- 'You know your child best. Tell us what works at home — we'll try to match that here.'\n\n**Parent involvement in care:**\n- Parents should hold the toddler during painful procedures when possible (therapeutic holding)\n- Coach parents in distraction techniques: singing, blowing bubbles, counting, favourite video\n- Encourage parents to maintain their own coping — anxious parents transmit anxiety to toddlers"
+        },
+        {
+          "id": "clinical-pearls",
+          "kind": "clinical_pearls",
+          "heading": "Clinical pearls and exam tips",
+          "body": "**Exam pearl 1:** When a hospitalized toddler who was toilet trained begins bed-wetting, the correct nursing action is to **accept the regression** and reassure parents — not to begin toilet retraining or express disappointment.\n\n**Exam pearl 2:** Offering genuine limited choices is the most therapeutic approach to a non-cooperative toddler. This directly supports autonomy — the developmental task of this stage.\n\n**Exam pearl 3:** Immediate pre-procedure preparation works best for toddlers. Telling a 2-year-old about a procedure tomorrow creates prolonged anxiety without comprehension.\n\n**Common trap:** Choosing 'ignore the tantrum' as a nursing response to a hospitalized toddler ignores pain, fear, and separation anxiety as possible causes. **Assess first** — then use age-appropriate comfort strategies.\n\n**Never do this:** Use language that shames ('Stop crying, you're scaring the other patients') or coerces ('If you don't cooperate we'll have to hold you down'). These directly damage healthy psychosocial development and reduce cooperation."
+        },
+        {
+          "id": "patient-education",
+          "kind": "client_education",
+          "heading": "Family and caregiver teaching",
+          "body": "**Discharge teaching for parents of hospitalized toddlers:**\n\n- Regression (bed-wetting, bottle, baby talk, clinginess) is expected after hospitalization and typically resolves within 1–4 weeks without intervention\n- Resume home routines as quickly as possible — routine is the fastest path back to baseline\n- Your child may have nightmares, fear medical settings, or be more resistant than usual — this is normal\n- Offer choices wherever safe to do so to help rebuild your child's sense of control\n- Do not punish regression; simply provide warmth and re-establish expectations gently when the child is ready\n\n**Call the clinic if:**\n- Regression persists beyond 4–6 weeks post-discharge\n- Child shows extreme withdrawal, stops eating, or shows self-injurious behaviour\n- You are concerned about development"
+        },
+        {
+          "id": "case-study",
+          "kind": "case_study",
+          "heading": "Case-based application",
+          "body": "A 2.5-year-old child is admitted for a urinary tract infection requiring IV antibiotics. The mother reports the child was toilet trained for 6 months but has wet the bed twice since admission. The child refuses to allow the nurse to access the IV site, shouting 'NO!' and turning away.\n\n**Question 1: How should the NP interpret the toddler's bed-wetting?**\n\nThis is **regression** — a normal, expected stress response to hospitalization. The NP should document this as a response to illness and hospitalization stress, reassure the mother that this is temporary and does not represent a loss of the skill, and avoid any behaviour that suggests disapproval.\n\n**Question 2: The child refuses IV access. What is the best nursing approach?**\n\nOffer a genuine choice: 'Do you want me to look at your arm or your hand first?' Allow the child to hold a glove or piece of tape before the procedure. Keep the parent at the bedside for comfort. Prepare immediately before the procedure (not hours ahead). Use distraction (favourite show, bubbles, parent's singing). If the child remains distressed, assess whether the IV access is immediately necessary or can be briefly delayed while comfort measures are established."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A hospitalized 2-year-old who was toilet trained begins wetting the bed. The mother is frustrated and asks the nurse if they should retrain the child immediately. What is the best RPN response?",
+          "options": [
+            "Agree and help the mother set up a toileting schedule",
+            "Reassure the mother that regression is a normal stress response to hospitalization and typically resolves after discharge",
+            "Notify the provider, as regression may indicate a neurological problem",
+            "Ask the mother to bring the child's potty chair to the hospital"
+          ],
+          "correct": 1,
+          "rationale": "Regression — returning to earlier developmental behaviours — is a normal and expected response to the stress of hospitalization in toddlers. The RPN should normalize this experience for the parent and advise that regression typically resolves spontaneously as the child's stress decreases."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "Which nursing approach best supports Erikson's Autonomy stage for a 3-year-old requiring a dressing change?",
+          "options": [
+            "Explain the procedure step by step an hour before so the child can prepare",
+            "Ask the child's parent to restrain the child to ensure the procedure is done quickly",
+            "Offer a choice ('Do you want to sit up or lie down?') and prepare the child immediately before the procedure",
+            "Tell the child to be brave and that it will only hurt a little"
+          ],
+          "correct": 2,
+          "rationale": "Offering a genuine limited choice supports autonomy — the developmental task of this stage. Immediate preparation (minutes before, not hours) is appropriate for toddlers and preschoolers who cannot conceptualize future events. This approach reduces distress and increases cooperation."
+        }
+      ],
+      "linked_flashcard_prompts": [
+        "What is Erikson's Autonomy vs. Shame and Doubt stage, and what is the virtue of this stage?",
+        "Define regression in the context of pediatric nursing. When should the RPN intervene?",
+        "What is negativism and why is it a normal toddler behaviour?",
+        "How should the RPN prepare a 2-year-old for a painful procedure?",
+        "Name three nursing interventions that support autonomy in a hospitalized toddler."
+      ],
+      "examMeta": [
+        {
+          "exam": "NP",
+          "domain": "Child and Family Health",
+          "competency": "Applies psychosocial development theory to advanced nursing practice in pediatric and family health contexts"
+        }
+      ],
+      "relatedLessonRefs": [],
+      "premiumOmittedSections": []
+    },
+    {
+      "slug": "erikson-initiative-guilt-cnple",
+      "title": "Erikson: Initiative vs. Guilt — Preschool Nursing Care (CNPLE / NP)",
+      "topic": "Pediatric Growth and Development",
+      "topicSlug": "pediatric-growth-development",
+      "bodySystem": "Child health",
+      "previewSectionCount": 1,
+      "seoTitle": "Erikson Initiative vs Guilt | CNPLE | NurseNest",
+      "seoDescription": "CNPLE lesson: Erikson's Initiative vs. Guilt (3–6 years). Magical thinking, pre-procedure preparation, body integrity fears, and family-centred preschool care.",
+      "exams": [
+        "NP"
+      ],
+      "countries": [
+        "CA"
+      ],
+      "priority": "high",
+      "audienceTiers": [
+        "NP"
+      ],
+      "studyTakeaways": [
+        "Preschoolers think magically — illness may be interpreted as punishment. Correct this misconception explicitly.",
+        "Body integrity is a major fear: preschoolers worry that blood will 'all fall out' through a needle site.",
+        "Use dolls, drawings, and play to prepare preschoolers for procedures — play is the work of this age group.",
+        "Preparation 1–2 days before is appropriate for preschoolers (unlike toddlers who need immediate preparation)."
+      ],
+      "studyCommonTraps": [
+        "Assuming a preschooler understands adult explanations of illness — always check understanding.",
+        "Ignoring magical thinking (e.g., 'I got sick because I was bad') — this guilt is real and needs correction.",
+        "Leaving bandages off after procedures — preschoolers need wounds 'contained' to feel intact."
+      ],
+      "memoryAnchor": "Initiative = purpose and planning. Preschoolers: PLAY to prepare, CORRECT magic thinking, BANDAGE everything.",
+      "sections": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "heading": "Overview and learning objectives",
+          "body": "**Erikson's Initiative vs. Guilt** (approximately 3 to 6 years) is the preschool stage. The child begins to assert control and power over the environment through directing play and other social interactions. When initiative is encouraged, the child develops a sense of purpose. When the child is made to feel that their initiative causes problems or harm, **guilt** develops.\n\nFor nursing care, this stage has critical implications: preschoolers use **magical thinking**, fear **body mutilation**, interpret illness as **punishment**, and learn best through **play and role-play**.\n\n**Learning objectives:**\n- Define magical thinking and its clinical implications for the hospitalized preschooler\n- Explain why body integrity fears are developmentally normal at this stage\n- Apply play-based and age-appropriate preparation techniques\n- Recognize guilt related to illness causation and correct it therapeutically\n- Support parents in explaining illness and hospitalization to their preschool child"
+        },
+        {
+          "id": "theory-framework",
+          "kind": "pathophysiology_overview",
+          "heading": "Developmental theory framework",
+          "body": "**Stage:** Initiative vs. Guilt\n**Age:** Approximately 3 to 6 years\n**Virtue:** Purpose\n**Key developmental features:**\n- Active, purposeful play (dramatic/symbolic play)\n- Beginning of moral reasoning ('right' and 'wrong')\n- Strong curiosity about the world — 'why?' questions\n- Gender identity development\n- Increased independence in self-care\n\n**Magical thinking:** The preschooler's cognitive stage (Piaget's pre-operational) means they cannot yet distinguish cause and effect logically. They believe their own thoughts, wishes, or behaviour caused events. A preschooler who wished their sibling would go away and then the sibling got sick may believe they caused the illness. A child who was told 'if you don't behave we'll go to the hospital' who is then hospitalized may believe the illness is punishment.\n\n**Body integrity fear:** Preschoolers believe the body's contents (blood, organs) can leave through any opening. A venipuncture is frightening not just because of pain but because the child fears all their blood will drain out. Bandages are essential — not just for wound care but for psychological containment.\n\n**Hospitalization experience:** The preschooler may see the hospital as a punishment, the nurse as a punisher, and procedures as attacks. Building trust through play, honest simple language, and allowing appropriate control is essential."
+        },
+        {
+          "id": "signs-symptoms",
+          "kind": "signs_symptoms",
+          "heading": "Expected behaviours and developmental milestones",
+          "body": "**Expected developmental milestones (3–6 years)**\n\n- 3 years: 3-word sentences, uses pronouns, counts to 3, pedals tricycle, parallel → associative play\n- 4 years: tells stories, follows 3-step instructions, hops on one foot, draws a person with 3 body parts\n- 5 years: prints name, counts to 10, skips, cooperative play, aware of gender\n\n**Expected hospitalization responses:**\n- Fear and protest during procedures\n- Asking 'Did I do something bad to get sick?'\n- Bargaining ('If I'm good, will the needle hurt less?')\n- Regression to earlier behaviours under significant stress\n- Nightmares or sleep disturbance\n- Withdrawal or clinging to parents\n\n**Concerning findings:**\n- No 3-word sentences by 3 years\n- Unable to follow 2-step instructions by 3.5 years\n- No imaginative play by 4 years\n- Extreme persistent aggression or self-injury\n- Signs of abuse: fear response to specific adults, unexplained injuries"
+        },
+        {
+          "id": "nursing-assessment-interventions",
+          "kind": "nursing_assessment_interventions",
+          "heading": "Nursing assessment and interventions",
+          "body": "**Key nursing interventions for hospitalized preschoolers**\n\n**Correcting magical thinking:**\n- Ask directly: 'Do you know why you are in the hospital?' Listen carefully for magical explanations\n- Correct clearly and simply: 'You are sick because of germs that got into your body — not because of anything you did or said or thought. This is not a punishment.'\n- Repeat this reassurance throughout the admission — magical thinking is persistent\n\n**Procedure preparation (1–2 days ahead is appropriate):**\n- Use simple, honest, concrete language: 'It will pinch and hurt for a few seconds, then it will stop'\n- Use medical play: allow the child to examine equipment, perform procedures on a doll or stuffed animal first\n- Explain body integrity: 'We only need a little drop of blood — your body has lots and lots, and it will make more'\n- Always apply a bandage after any skin break — and make it a point of pride ('You were so brave')\n- Give a choice where possible: 'Which arm should we use for the blood draw?'\n\n**Language for this age group:**\n- Use concrete terms: 'fix your blood,' 'help your lungs work better,' not 'procedure,' 'specimen,' or 'incision'\n- Avoid medical jargon — what sounds neutral to an adult may be terrifying to a preschooler ('Put you to sleep' is understood as the same thing that happens to pets who die)\n\n**Play-based care:**\n- Provide medical play kits (toy stethoscope, syringe without needle, bandages)\n- Allow the child to be the 'doctor' or 'nurse' in play — this builds mastery and reduces fear\n- Use puppets, storybooks about hospitalization, or age-appropriate videos"
+        },
+        {
+          "id": "clinical-pearls",
+          "kind": "clinical_pearls",
+          "heading": "Clinical pearls and exam tips",
+          "body": "**Exam pearl 1:** A preschooler who asks 'Am I in the hospital because I was bad?' requires an explicit, clear correction of magical thinking — not reassurance alone. The correct nursing response addresses the misconception directly.\n\n**Exam pearl 2:** Always apply a bandage after a venipuncture or any skin break in a preschooler. This is not only wound care — it directly addresses body integrity fear.\n\n**Exam pearl 3:** Preparation 1–2 days before procedures is appropriate for preschoolers. This contrasts with toddlers (immediate preparation) and school-age children (1 week ahead).\n\n**Dangerous language to avoid with preschoolers:**\n- 'Put you to sleep' (associate with pet euthanasia)\n- 'Fix you up' (they are not broken)\n- 'This won't hurt a bit' (it will — dishonesty destroys trust)\n- 'Be brave' / 'Big kids don't cry' (shames expression of fear)\n\n**Memory hook:** Preschooler = PLAY + PREPARATION + correct PUNISHMENT thinking + PROTECT body integrity (bandage!)."
+        },
+        {
+          "id": "patient-education",
+          "kind": "client_education",
+          "heading": "Family and caregiver teaching",
+          "body": "**Teaching parents how to explain hospitalization to a preschooler:**\n\n- Use simple, honest words: 'Your body has some germs making you sick. The doctors and nurses are going to give you medicine to help your body fight the germs.'\n- Avoid scary metaphors and euphemisms\n- Correct magical thinking at home too: 'Getting sick is not because of anything you did wrong'\n- Allow the child to ask questions and answer simply and honestly\n- After discharge: expect some nightmares, fear of doctors, and regression. This is normal and typically resolves within weeks\n- Medical play at home (toy doctor kits) helps children process the experience\n\n**When to call the provider:**\n- Child refuses to eat or interact for more than 48 hours post-discharge\n- Extreme persistent fear or nightmares beyond 4–6 weeks\n- Child expresses persistent belief they caused their illness or someone else's"
+        },
+        {
+          "id": "case-study",
+          "kind": "case_study",
+          "heading": "Case-based application",
+          "body": "A 4-year-old child is admitted for pneumonia. When the nurse asks how the child is feeling, the child says quietly, 'I got sick because I hit my brother.' The child is withdrawn and refuses to make eye contact.\n\n**Question 1: What is the most important nursing priority?**\n\nAddress the magical thinking directly: 'Getting sick is not because you hit your brother. Pneumonia is caused by germs — tiny things too small to see — that got inside your lungs. It is not a punishment for anything you did.' This correction should be documented and repeated throughout the admission.\n\n**Question 2: How should the nurse prepare this child for an IV insertion scheduled tomorrow?**\n\nBegin preparation today (1 day ahead is appropriate for preschoolers). Use medical play: let the child examine the IV tubing and tape, practice on a doll. Use simple, honest language: 'Tomorrow a nurse will put a tiny straw in your arm to get medicine to you quickly. It will hurt for a few seconds, then stop. Your mom/dad will be right there.' Apply a bandage after the procedure and acknowledge the child's courage."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A 4-year-old hospitalized for appendicitis tells the nurse, 'Mommy said if I don't eat my vegetables I'll get sick. I didn't eat my broccoli.' Which response by the RPN is best?",
+          "options": [
+            "Reassure the child that they are getting better now",
+            "Correct the magical thinking: explain that appendicitis is caused by a body part becoming sore, not by food choices",
+            "Notify the provider that the child has a distorted body image",
+            "Tell the mother not to make comments about food"
+          ],
+          "correct": 1,
+          "rationale": "The child is exhibiting magical thinking — a characteristic of Piaget's pre-operational stage. The nurse must directly correct the misconception that the illness was caused by their behaviour. Simple, honest reassurance that addresses the specific belief is the priority."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "After a blood draw, a preschooler is crying and saying 'My blood is coming out!' The nurse's most appropriate first action is to:",
+          "options": [
+            "Explain that only a small amount of blood was taken",
+            "Apply a bandage and explain 'This covers the little pinch so your body can heal, and your blood stays inside'",
+            "Show the child the blood specimen to demonstrate how little was collected",
+            "Reassure the child that there is no more blood coming out"
+          ],
+          "correct": 1,
+          "rationale": "Applying a bandage directly addresses the preschooler's body integrity fear by 'containing' the perceived threat. The explanation reinforces body integrity in developmentally appropriate terms. Showing the specimen would likely increase fear, and verbal reassurance alone does not address the concrete fear."
+        }
+      ],
+      "linked_flashcard_prompts": [
+        "Define magical thinking and give a clinical example relevant to a hospitalized preschooler.",
+        "Why do preschoolers fear venipuncture beyond just the pain?",
+        "What language should the nurse NEVER use with a preschooler and why?",
+        "How far in advance should the nurse prepare a preschooler for a planned procedure?",
+        "What is the nurse's priority when a preschooler says they got sick because they were bad?"
+      ],
+      "examMeta": [
+        {
+          "exam": "NP",
+          "domain": "Child and Family Health",
+          "competency": "Applies psychosocial development theory to advanced nursing practice in pediatric and family health contexts"
+        }
+      ],
+      "relatedLessonRefs": [],
+      "premiumOmittedSections": []
+    },
+    {
+      "slug": "erikson-industry-inferiority-cnple",
+      "title": "Erikson: Industry vs. Inferiority — School-Age Nursing Care (CNPLE / NP)",
+      "topic": "Pediatric Growth and Development",
+      "topicSlug": "pediatric-growth-development",
+      "bodySystem": "Child health",
+      "previewSectionCount": 1,
+      "seoTitle": "Erikson Industry vs Inferiority | CNPLE | NurseNest",
+      "seoDescription": "CNPLE lesson: Erikson's Industry vs. Inferiority (6–12 years). School-age child hospitalization, peer relationships, academic impact, and family-centred care.",
+      "exams": [
+        "NP"
+      ],
+      "countries": [
+        "CA"
+      ],
+      "priority": "high",
+      "audienceTiers": [
+        "NP"
+      ],
+      "studyTakeaways": [
+        "School-age children want to understand their illness and participate in care — explain with diagrams, models, and honest age-appropriate information.",
+        "Peer relationships and school are central to this stage — facilitate contact with school and friends during hospitalization.",
+        "School-age children can tolerate preparation 1 week in advance and benefit from detailed explanations.",
+        "Loss of competence (inability to do schoolwork, sports, peer activities) due to illness threatens this stage — validate their frustration."
+      ],
+      "studyCommonTraps": [
+        "Talking only to the parent and excluding the child from care discussions — school-age children should be included.",
+        "Underestimating the school-age child's need for information — they want to know the 'why'.",
+        "Ignoring the social and academic impact of hospitalization as a nursing concern."
+      ],
+      "memoryAnchor": "Industry = competence. Give information, involve in care, protect school/peer connections.",
+      "sections": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "heading": "Overview and learning objectives",
+          "body": "**Erikson's Industry vs. Inferiority** (approximately 6 to 12 years) is the school-age stage. The child's central task is developing a sense of competence — mastering academic, social, and physical skills. When children experience success and recognition, they develop **industry** (a sense of capability and productivity). When they feel inadequate or unable to perform at the level of peers, **inferiority** develops.\n\n**Clinical relevance:** Hospitalization removes the school-age child from the very arenas where competence is demonstrated: school, sports, peer groups. The nurse's role includes facilitating continuity with these domains while supporting the child's participation in their own healthcare.\n\n**Learning objectives:**\n- Identify the developmental characteristics of school-age children relevant to nursing care\n- Apply age-appropriate communication and preparation strategies for hospitalized school-age children\n- Recognize the impact of illness on school-age development and peer relationships\n- Support the child's participation in care decisions"
+        },
+        {
+          "id": "theory-framework",
+          "kind": "pathophysiology_overview",
+          "heading": "Developmental theory framework",
+          "body": "**Stage:** Industry vs. Inferiority\n**Age:** Approximately 6 to 12 years\n**Virtue:** Competence\n**Key developmental features:**\n- Logical, concrete thinking (Piaget's concrete operational stage, ~7–11 years)\n- Strong peer orientation — peer group becomes increasingly important\n- Competition and comparison with peers is normal\n- Takes pride in completing tasks and producing things\n- Begins to understand cause and effect at a biological/logical level\n- Can follow complex instructions and participate in self-care\n\n**Illness threats to this stage:**\n- Missing school (falling behind peers academically)\n- Missing sports, activities, clubs (loss of competence domains)\n- Physical changes that make the child feel 'different' from peers (weight changes, hair loss, scars, medical devices)\n- Loss of control over body (incontinence, IV dependence, physical limitation)\n- Dependency on adults for ADLs previously mastered\n\n**Cognitive capacity:** The school-age child can understand cause and effect. They can understand 'the bacteria made your kidney infected, and the antibiotics will kill the bacteria' — and they want to. Explanations should be honest, detailed, and use correct anatomical terms."
+        },
+        {
+          "id": "signs-symptoms",
+          "kind": "signs_symptoms",
+          "heading": "Developmental milestones and hospitalization responses",
+          "body": "**Expected developmental milestones (6–12 years)**\n\n- 6–7 years: reads simple books, understands conservation (Piaget), cooperative play, strong peer friendships\n- 8–10 years: complex reading and math, competitive games, best friendships, begins to understand death as permanent\n- 11–12 years: abstract thinking begins to emerge, strong peer identity, puberty may begin (especially girls)\n\n**Expected responses to hospitalization:**\n- Questions about their diagnosis, treatment, and prognosis — they want real information\n- Concern about 'getting behind' at school\n- Worry about what peers will think of their appearance or condition\n- Frustration with loss of independence (needing help with ADLs)\n- Cooperative with care when given explanations and some control\n- Possible embarrassment around bodily care (bathing, toileting)\n\n**Concerning findings:**\n- Regression to toddler/preschool behaviour out of proportion to illness severity\n- Refusal to engage with schoolwork, family, or peers for an extended period\n- Signs of depression: persistent flat affect, hopelessness, loss of interest, sleep disturbance\n- Extreme separation anxiety not consistent with developmental level\n- Statements of hopelessness or self-harm"
+        },
+        {
+          "id": "nursing-assessment-interventions",
+          "kind": "nursing_assessment_interventions",
+          "heading": "Nursing assessment and interventions",
+          "body": "**Communication approach:**\n- Speak directly to the child — include them in all discussions about their care\n- Use correct anatomical and medical terms with simple explanations\n- Ask the child what they understand about their condition before teaching\n- Answer 'why' questions honestly and thoroughly\n\n**Preparation for procedures:**\n- Preparation 1 week ahead is appropriate; school-age children benefit from advance notice\n- Explain the procedure step by step, including what they will see, hear, and feel\n- Describe the purpose: 'This test shows us how well your kidneys are working'\n- Use diagrams, models, or age-appropriate videos\n- Negotiate involvement in the procedure: 'Would you like to hold the gauze?'\n\n**Supporting competence and control:**\n- Involve the child in setting their daily schedule where possible\n- Support self-care activities (self-administration of oral medications with supervision, self-monitoring of blood sugar if appropriate)\n- Provide schoolwork and contact with the school\n- Facilitate video calls or visits from peers\n- Acknowledge frustration when the child cannot do things they normally could\n\n**Privacy:**\n- Knock and ask permission before entering — privacy is important at this age\n- Provide appropriate draping and closed-door care, especially for body care and urinary procedures\n- Respect gendered preferences for care provider when feasible\n\n**Escalate when:**\n- Child expresses hopelessness, depression, or self-harm ideation\n- Adjustment to illness is severely impacting care adherence\n- School absence is expected to be prolonged — liaise with social work and school liaison"
+        },
+        {
+          "id": "clinical-pearls",
+          "kind": "clinical_pearls",
+          "heading": "Clinical pearls and exam tips",
+          "body": "**Exam pearl 1:** School-age children should be included in care discussions, not just their parents. The best nursing action for an 8-year-old involves speaking to the child directly.\n\n**Exam pearl 2:** A school-age child asking detailed questions about their illness is developmentally appropriate and healthy — not a sign of anxiety. Provide honest, concrete information.\n\n**Exam pearl 3:** When a school-age child expresses concern about missing school or not being able to play with friends, the NP's response should validate this concern and actively support connections — not minimize it.\n\n**Common trap:** Dismissing embarrassment or privacy needs in a 10-year-old as 'just being shy.' Privacy is a genuine developmental need at this stage — failing to respect it damages the therapeutic relationship and the child's sense of dignity.\n\n**Memory hook:** Industry = INFORMATION + INDEPENDENCE + peer CONNECTION. Give real answers, let them help, keep them connected."
+        },
+        {
+          "id": "patient-education",
+          "kind": "client_education",
+          "heading": "Teaching the school-age child and family",
+          "body": "**Teach directly to the child (with parents present):**\n\n- Use correct terms: 'This is called asthma — it makes the airways in your lungs get tight when you breathe in something that bothers them'\n- Explain how treatments work: 'The puffer helps open up the tight airways so air can get through'\n- Ask the child to teach back: 'Can you explain to your mum how the puffer works?'\n\n**Family teaching:**\n- Involve the child in all discharge planning conversations\n- Support school reintegration: provide medical notes, work with school to plan re-entry, address peer concerns early\n- Encourage the child to explain their condition to friends in their own words — this builds mastery and reduces stigma\n\n**When to call the provider:**\n- Child shows signs of depression (persistent sadness, loss of interest, hopelessness) lasting more than 2 weeks\n- Chronic illness is significantly disrupting school attendance or peer relationships\n- Child expresses any thoughts of self-harm"
+        },
+        {
+          "id": "case-study",
+          "kind": "case_study",
+          "heading": "Case-based application",
+          "body": "A 10-year-old girl is admitted for a newly diagnosed type 1 diabetes mellitus. She asks the nurse directly: 'Will I have to do needles forever? Will my friends know? Will I be able to play soccer again?'\n\n**Question 1: How should the NP respond?**\n\nAnswer honestly and directly: 'Yes, you will need insulin every day — but many children with diabetes learn to manage it and do exactly the activities they love, including soccer. We're going to teach you and your family everything you need to know so you can be in charge of it.' Address the social concern: 'What you tell your friends is up to you. Many children with diabetes decide to tell their closest friends so they know how to help — we can practise what to say if that would help.'\n\n**Question 2: The mother asks the nurse to tell her daughter everything is fine to 'protect her.' How should the NP respond?**\n\nExplain sensitively to the mother: 'At 10, your daughter is old enough and deserves accurate information about her condition. If we don't give her the facts, she may fill in the gaps with something more frightening, and she needs accurate information to manage her diabetes well. We'll make sure we explain things in a way that is hopeful and age-appropriate.'"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "An 8-year-old boy asks the nurse detailed questions about his surgery, including what the surgeon will do inside his body. What is the best nursing response?",
+          "options": [
+            "Tell the child to ask his parents",
+            "Provide an age-appropriate, honest explanation using simple anatomical terms and a diagram",
+            "Reassure the child that the doctors know what they are doing",
+            "Defer explanation until the day of surgery to prevent anxiety"
+          ],
+          "correct": 1,
+          "rationale": "School-age children are in Piaget's concrete operational stage and can understand cause-and-effect explanations. They want and benefit from accurate information. Providing an honest, age-appropriate explanation supports the child's sense of industry (competence) and builds trust."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A hospitalized 11-year-old tells the nurse she is worried about missing her soccer tournament and falling behind in school. The RPN's best response is to:",
+          "options": [
+            "Explain that health comes first and she can play soccer when she is better",
+            "Validate her concerns, explore options for schoolwork during admission, and facilitate contact with her team",
+            "Notify the provider that the child is non-compliant with the importance of her treatment",
+            "Ask the mother to explain to her daughter why the tournament is not a priority"
+          ],
+          "correct": 1,
+          "rationale": "The school-age child's peer relationships and academic competence are central to healthy psychosocial development (Erikson's Industry stage). Validating these concerns and actively supporting school and peer connections is a nursing priority, not a distraction."
+        }
+      ],
+      "linked_flashcard_prompts": [
+        "What is Erikson's Industry vs. Inferiority stage and why does hospitalization threaten it?",
+        "At what age can children participate meaningfully in their own care planning?",
+        "What cognitive stage (Piaget) corresponds to the school-age child, and what does this mean for nursing education?",
+        "How does the nurse prepare a 10-year-old for a surgical procedure?",
+        "Name three nursing actions that protect the school-age child's sense of competence during hospitalization."
+      ],
+      "examMeta": [
+        {
+          "exam": "NP",
+          "domain": "Child and Family Health",
+          "competency": "Applies psychosocial development theory to advanced nursing practice in pediatric and family health contexts"
+        }
+      ],
+      "relatedLessonRefs": [],
+      "premiumOmittedSections": []
+    },
+    {
+      "slug": "erikson-identity-role-confusion-cnple",
+      "title": "Erikson: Identity vs. Role Confusion — Adolescent Nursing Care (CNPLE / NP)",
+      "topic": "Pediatric Growth and Development",
+      "topicSlug": "pediatric-growth-development",
+      "bodySystem": "Child health",
+      "previewSectionCount": 1,
+      "seoTitle": "Erikson Identity vs Role Confusion | CNPLE | NurseNest",
+      "seoDescription": "CNPLE lesson: Erikson's Identity vs. Role Confusion (12–18 years). Adolescent hospitalization, body image, privacy, confidentiality, and chronic illness impact.",
+      "exams": [
+        "NP"
+      ],
+      "countries": [
+        "CA"
+      ],
+      "priority": "high",
+      "audienceTiers": [
+        "NP"
+      ],
+      "studyTakeaways": [
+        "Adolescents must be seen as individuals — always address them directly, not through their parents.",
+        "Body image and peer acceptance are paramount — illness that alters appearance or function is deeply threatening at this stage.",
+        "Privacy and confidentiality are legal and developmental priorities — know the limits of adolescent consent in your jurisdiction.",
+        "Non-adherence to treatment is often about identity and peer norms, not defiance — explore the 'why' before labelling."
+      ],
+      "studyCommonTraps": [
+        "Talking only to parents and excluding the adolescent from discussions about their own care.",
+        "Dismissing body image concerns as superficial — for this stage, they are developmentally central.",
+        "Breaching confidentiality with parents without clinical justification — this destroys therapeutic trust."
+      ],
+      "memoryAnchor": "Identity = 'Who am I?' Speak to the teen, protect privacy, address body image, explore non-adherence.",
+      "sections": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "heading": "Overview and learning objectives",
+          "body": "**Erikson's Identity vs. Role Confusion** (approximately 12 to 18 years) is the adolescent stage. The central task is forming a coherent sense of self — integrating past experiences, present roles, and future aspirations into an identity. When adolescents successfully explore and commit to values, roles, and a sense of who they are, they achieve **identity**. When they are unable to explore or when exploration is interrupted by illness, trauma, or over-control, **role confusion** results.\n\n**Clinical significance:** Adolescence is the most complex developmental stage for hospitalized patients. The nurse must navigate privacy, consent, confidentiality, body image, autonomy, peer influence, and the tension between parental involvement and adolescent independence.\n\n**Learning objectives:**\n- Identify the core developmental tasks of adolescence and their nursing implications\n- Apply privacy, confidentiality, and consent principles in adolescent nursing care\n- Recognize the impact of illness on body image and identity at this stage\n- Explore non-adherence to treatment in the context of adolescent development\n- Support adolescents with chronic illness in maintaining identity outside the 'sick role'"
+        },
+        {
+          "id": "theory-framework",
+          "kind": "pathophysiology_overview",
+          "heading": "Developmental theory framework",
+          "body": "**Stage:** Identity vs. Role Confusion\n**Age:** Approximately 12 to 18 years\n**Virtue:** Fidelity (loyalty, commitment)\n**Key developmental features:**\n\n- **Formal operational thinking** (Piaget): capable of abstract reasoning, hypothetical thinking, and understanding long-term consequences — but emotional regulation is still maturing\n- **Peer group is primary** reference group — conformity to peer norms is driven by identity development\n- **Body image** is critically important — physical changes of puberty, illness effects, or medical devices directly threaten identity\n- **Autonomy from parents** is a developmental imperative — not defiance\n- **Risk-taking** is developmentally normal — the adolescent brain's reward circuitry outpaces its risk-assessment circuitry until approximately age 25\n- **Sexual identity, gender identity, and values** are being actively explored\n\n**Chronic illness and identity:**\n- Adolescents with chronic illness face the 'sick role' at the exact moment they are trying to build an identity beyond it\n- Non-adherence to treatment (skipping insulin, stopping inhalers, missing medications in front of peers) is often about not wanting to be 'the sick kid'\n- Illness-related body changes (weight, hair loss, scars, ostomies, insulin pumps) can profoundly affect peer acceptance and self-image"
+        },
+        {
+          "id": "signs-symptoms",
+          "kind": "signs_symptoms",
+          "heading": "Developmental milestones and concerning findings",
+          "body": "**Expected developmental features (12–18 years)**\n\n- Early adolescence (12–14): puberty, strong peer influence, concrete thinking shifting to abstract, wide mood swings, seeks peer approval\n- Middle adolescence (14–16): identity exploration, risk-taking, romantic interest, separating from parents' values\n- Late adolescence (16–18): more stable identity, planning for future, more adult reasoning, some reintegration with family values\n\n**Expected responses to hospitalization:**\n- Embarrassment about bodily exposure or loss of function\n- Reluctance to discuss health concerns in front of parents\n- Concern about appearance, scarring, devices, or what peers will think\n- Negotiating and questioning care ('Why do I have to? What happens if I don't?')\n- Non-adherence as testing of autonomy\n\n**Concerning findings requiring assessment and escalation:**\n- Signs of depression: persistent low mood, hopelessness, loss of interest, sleep/appetite changes lasting >2 weeks\n- **Self-harm** or expressions of suicidal ideation — always take seriously and report immediately\n- Substance use with impact on medical management\n- Signs of eating disorder in the context of illness or body image concerns\n- Social withdrawal or isolation beyond expected adjustment period\n- Significant non-adherence that puts health at risk"
+        },
+        {
+          "id": "nursing-assessment-interventions",
+          "kind": "nursing_assessment_interventions",
+          "heading": "Nursing assessment and interventions",
+          "body": "**Communication approach:**\n- Always address the adolescent directly — introduce yourself to them first, then the parent\n- Provide private time for assessment without parents (standard practice for adolescents in most Canadian provinces and territories)\n- Use non-judgmental, open-ended questions: 'Tell me how things have been going for you'\n- Never dismiss concerns with 'you'll understand when you're older' or 'your parents know best'\n\n**Privacy and confidentiality:**\n- Knock and wait for a response before entering the room\n- Conduct sensitive assessments (reproductive health, mental health, substance use) privately\n- Understand your provincial legislation regarding adolescent consent (many Canadian provinces allow mature minors to consent to treatment independently)\n- Confidentiality has limits: share information with parents or providers when safety is at risk (self-harm, harm to others, abuse)\n\n**Body image and illness:**\n- Acknowledge body image concerns directly: 'A lot of patients tell me they feel self-conscious about the pump/scar/ostomy — is that something you're thinking about?'\n- Connect the adolescent with peers who have the same condition when appropriate (peer support programs)\n- For chronic illness: help the adolescent separate their identity from their diagnosis — 'You have diabetes; diabetes doesn't have you'\n\n**Non-adherence approach:**\n- Explore, do not lecture: 'What makes it hard to take your medication at school?'\n- Problem-solve barriers: discreet dosing, simpler regimens, peer-friendly devices\n- Respect the adolescent's perspective and involve them in solution-finding\n\n**Mental health:**\n- Screen for depression and anxiety at every admission using an adolescent-validated tool\n- Take all expressions of hopelessness or self-harm seriously — document and report immediately"
+        },
+        {
+          "id": "clinical-pearls",
+          "kind": "clinical_pearls",
+          "heading": "Clinical pearls and exam tips",
+          "body": "**Exam pearl 1:** For an adolescent patient, the nurse should always request private time for assessment — separate from parents. This is both developmentally appropriate and standard nursing practice for adolescent care.\n\n**Exam pearl 2:** Non-adherence in an adolescent is a nursing problem that requires exploration, not a character flaw to be reported without context. 'Why is this happening?' before 'What should I tell the parents?'\n\n**Exam pearl 3:** Confidentiality for adolescents has limits — safety concerns (suicidal ideation, abuse, harm to others) override confidentiality and must be reported.\n\n**Exam pearl 4:** Body image concerns in a teenager with a new ostomy or chronic illness are NOT trivial — they are a central nursing concern for this developmental stage.\n\n**Common trap:** Choosing the answer that involves informing parents first, without establishing whether the adolescent has a right to privacy regarding that particular information.\n\n**Memory hook:** Identity = INDIVIDUAL (speak to them), INDEPENDENCE (respect autonomy), IMAGE (take body concerns seriously), INFORMATION (give real facts), INVESTIGATE non-adherence before judging."
+        },
+        {
+          "id": "patient-education",
+          "kind": "client_education",
+          "heading": "Teaching the adolescent patient",
+          "body": "**Principles of adolescent health teaching:**\n- Teach the adolescent directly — do not route all education through parents\n- Use real language: 'This medication can affect your ability to get pregnant, so if you are sexually active, it's important to use reliable contraception'\n- Involve them in setting goals: 'What would make it easier to take your medication every day?'\n- Connect to their values and goals: 'What do you want to be able to do that this medication makes possible?'\n\n**Common teaching topics:**\n- Medication adherence and why it matters long-term\n- Safe sex education (appropriate and often within NP scope for adolescents with relevant diagnoses)\n- Mental health: normalizing struggle, recognizing depression vs. normal mood fluctuation, when to seek help\n- Substance use: harm reduction approach where appropriate\n- Managing chronic illness in social situations (school, sports, parties)\n\n**When to escalate:**\n- Any expression of self-harm or suicidal ideation — immediate escalation regardless of confidentiality\n- Severe non-adherence causing acute clinical deterioration\n- Evidence of abuse or unsafe home situation"
+        },
+        {
+          "id": "case-study",
+          "kind": "case_study",
+          "heading": "Case-based application",
+          "body": "A 16-year-old with type 1 diabetes is admitted in diabetic ketoacidosis (DKA). On private assessment, he tells the nurse he has been skipping his insulin at school because 'I don't want everyone to know I'm diabetic.' He asks the nurse not to tell his parents this.\n\n**Question 1: What is the NP's priority nursing response?**\n\nExplore the reason for non-adherence without judgment: 'It sounds like it's really important to you to not stand out at school. Let's talk about ways to manage your insulin that might feel more private.' Document the barrier and report to the RN for care planning. The goal is problem-solving (discreet administration options, smaller pen needles, insulin pump discussion) not lecturing.\n\n**Question 2: Should the nurse tell the parents about the insulin skipping?**\n\nThis requires clinical judgment. The non-adherence has resulted in a life-threatening admission (DKA). The NP should inform the RN and care team who will determine how to involve parents while respecting the adolescent's developing autonomy. The nurse can tell the patient: 'Because this has put you in real danger, the team will need to talk about your care with your parents — but we'll do this in a way that keeps you in the conversation and respects you.'"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A 15-year-old girl is admitted with a new diagnosis of Crohn's disease. Her mother is present and asks the nurse to explain everything to her because 'my daughter gets too upset.' What is the best nursing approach?",
+          "options": [
+            "Explain to the mother and provide her with written materials for her daughter",
+            "Speak with the adolescent directly, ask what she already knows and wants to know, and involve both the patient and mother in education",
+            "Ask the mother to leave the room and speak with the adolescent alone",
+            "Document the mother's request and defer education to the physician"
+          ],
+          "correct": 1,
+          "rationale": "Adolescents have the right and developmental need to be active participants in their own healthcare. The nurse should speak directly with the patient, assess her understanding and preferences, and involve both patient and parent in education. Excluding the adolescent entirely is developmentally inappropriate and may undermine adherence."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "During a private assessment, a 17-year-old discloses to the RPN that she has been cutting herself on her arms when she feels overwhelmed. She asks the nurse to keep this secret. The RPN's best response is to:",
+          "options": [
+            "Agree to keep the information private to maintain therapeutic trust",
+            "Inform the adolescent that self-harm must be reported to the care team for her safety, while being honest and supportive",
+            "Immediately call the parents without telling the adolescent",
+            "Document in the chart without discussing further to protect confidentiality"
+          ],
+          "correct": 1,
+          "rationale": "Self-harm is a safety concern that overrides confidentiality. The RPN must be transparent with the adolescent — explaining that this information needs to be shared with the care team because of safety concerns — while doing so supportively. Breaching confidentiality without notice destroys trust; maintaining secrecy places the adolescent at risk."
+        }
+      ],
+      "linked_flashcard_prompts": [
+        "What is Erikson's Identity vs. Role Confusion stage and what is the virtue of this stage?",
+        "Why do adolescents with chronic illness commonly have difficulty with treatment adherence?",
+        "When does adolescent confidentiality have limits in nursing practice?",
+        "How should the nurse approach non-adherence in a teenager with a chronic illness?",
+        "What are three nursing actions that protect adolescent identity and dignity during hospitalization?"
+      ],
+      "examMeta": [
+        {
+          "exam": "NP",
+          "domain": "Child and Family Health",
+          "competency": "Applies psychosocial development theory to advanced nursing practice in pediatric and family health contexts"
+        }
+      ],
+      "relatedLessonRefs": [],
+      "premiumOmittedSections": []
+    }
+  ]
 }
