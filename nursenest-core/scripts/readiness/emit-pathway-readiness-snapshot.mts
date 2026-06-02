@@ -1,4 +1,5 @@
 #!/usr/bin/env npx tsx
+import "@/lib/db/script-env-bootstrap";
 /**
  * Writes src/config/pathway-readiness-snapshot.json from live DB lesson counts and question coverage.
  *

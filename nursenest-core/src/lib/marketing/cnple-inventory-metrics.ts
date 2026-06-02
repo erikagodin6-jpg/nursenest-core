@@ -15,40 +15,41 @@
 
 export const CNPLE_INVENTORY = {
   /**
-   * Total Canadian-eligible NP practice questions.
-   * Includes: 1,496 CNPLE-tagged + 1,342 FNP|BOTH + any remaining NP|BOTH.
-   * Conservative round number per brand positioning guidance.
+   * Questions with studyLinkPathwayId=ca-np-cnple — the canonical pathway-scoped count.
+   * Updated: 2026-06-02 after launch-readiness publication sprint.
    * Use for hero copy and primary stat blocks.
    */
-  caQuestionsLabel: "4,000+" as const,
-  caQuestionsLong: "4,000+ Canadian-aligned NP practice questions" as const,
+  caQuestionsLabel: "10,000+" as const,
+  caQuestionsLong: "10,000+ CNPLE-aligned NP practice questions" as const,
 
   /**
-   * Questions explicitly tagged exam:"CNPLE" in the ExamQuestion table.
-   * More precise claim for secondary copy, FAQ, and comparison tables.
+   * Questions with studyLinkPathwayId=ca-np-cnple (precise pathway-scoped count).
+   * Prefer this over exam="CNPLE" queries — avoids counting legacy/untagged questions.
    */
-  cnpleTaggedLabel: "1,496" as const,
-  cnpleTaggedLong: "1,496 explicitly CNPLE-tagged practice questions" as const,
+  cnpleTaggedLabel: "10,375" as const,
+  cnpleTaggedLong: "10,375 CNPLE pathway-linked practice questions" as const,
 
   /**
-   * Total CNPLE flashcard deck size.
-   * Includes auto-generated condition-specific cards + hand-authored curated set.
+   * Total CNPLE flashcard deck size across all decks.
+   * cnple-clinical-reasoning-launch-deck (8,300) + np-pathway-ca-np-cnple-flashcards (1,154) = 9,454.
+   * Updated: 2026-06-02 after launch-readiness publication sprint.
    */
-  flashcardsLabel: "1,154" as const,
-  flashcardsLong: "1,154 CNPLE-aligned flashcards" as const,
+  flashcardsLabel: "9,000+" as const,
+  flashcardsLong: "9,000+ CNPLE-aligned flashcards" as const,
 
   /**
-   * Hand-authored curated CNPLE flashcards (examItemKind: CLINICAL).
-   * Canadian guideline-aligned, NP-level clinical reasoning cards.
+   * Hand-authored curated CNPLE flashcards in cnple-gap-closure-flashcards.ts.
+   * Updated: 2026-06-02 — 60 cards authored (not 100 as previously estimated).
    */
-  curatedFlashcardsLabel: "100" as const,
-  curatedFlashcardsLong: "100 hand-authored Canadian clinical reasoning flashcards" as const,
+  curatedFlashcardsLabel: "60" as const,
+  curatedFlashcardsLong: "60 hand-authored Canadian clinical reasoning flashcards" as const,
 
   /**
-   * CNPLE-pathway lesson count (unchanged from prior sprint).
+   * CNPLE-pathway lesson count (DB: pathwayLesson where pathwayId=ca-np-cnple).
+   * Updated: 2026-06-02.
    */
-  lessonsLabel: "1,463" as const,
-  lessonsLong: "1,463 CNPLE-aligned NP lessons" as const,
+  lessonsLabel: "1,465" as const,
+  lessonsLong: "1,465 CNPLE-aligned NP lessons" as const,
 } as const;
 
 export type CnpleInventoryMetrics = typeof CNPLE_INVENTORY;

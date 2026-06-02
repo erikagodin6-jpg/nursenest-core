@@ -18,7 +18,7 @@ import {
   marketingExamHubBasePath,
   normalizeMarketingLessonsHubTopicSlug,
 } from "@/lib/lessons/lesson-routes";
-import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import {
   getPathwayLessonForHubVerifySlim,
@@ -287,9 +287,8 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
           description = alliedProfessionTaxonomyMetaDescription(pathway, alliedProfForMeta.h1, cat);
         }
       } else if (topicSlugNorm) {
-        const loc = await getMarketingLocaleForDefaultRoute();
         try {
-          const topicClusters = await listTopicClustersForPublicNavigation(pathway.id, loc);
+          const topicClusters = await listTopicClustersForPublicNavigation(pathway.id, DEFAULT_MARKETING_LOCALE);
           const label =
             topicClusters.find((t) => t.topicSlug === topicSlugNorm)?.label ?? topicSlugNorm.replace(/-/g, " ");
           title = pathwayLessonTopicClusterMetaTitle(pathway, label);
@@ -327,7 +326,10 @@ export default async function PathwayLessonsHubPage({
 }: LessonsHubPageProps) {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
-  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
+  // Use the default (English) marketing locale — reading from a cookie here would opt this
+  // ISR page into dynamic rendering on every request, bypassing the 24-hour cache.
+  // Lesson hub content is published in English only; the locale cookie only affects UI chrome.
+  const lessonContentLocale = DEFAULT_MARKETING_LOCALE;
   const sp = await searchParams;
   const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) {

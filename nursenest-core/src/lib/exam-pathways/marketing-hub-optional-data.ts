@@ -28,6 +28,7 @@ import {
   type ResolvedPathwayLaunchBundle,
   type TopicCluster,
 } from "@/lib/lessons/pathway-lesson-loader";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { loadNpCanadaInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
 import { describeRejectedTask } from "@/lib/loading/critical-load-outcome";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
@@ -88,7 +89,16 @@ export async function loadMarketingExamHubOptionalBlocks(
       run: () => (pathway.id === "ca-np-cnple" ? loadNpCanadaInventoryGate() : Promise.resolve(null)),
     },
     { name: "question_snapshot", run: () => loadPathwayQuestionBankSnapshot(pathway.id) },
-    { name: "lesson_count", run: () => countPathwayLessonsPublic(pathway.id) },
+    {
+      name: "lesson_count",
+      run: () =>
+        withDatabaseFallbackTimeout(
+          () => countPathwayLessonsPublic(pathway.id),
+          ZERO_LESSON_COUNT,
+          1_500,
+          { scope: "exam_pathway_hub", label: `lesson_count:${pathway.id}` },
+        ),
+    },
   ];
 
   const settled = await Promise.allSettled(tasks.map((t) => t.run()));
@@ -220,7 +230,18 @@ export async function loadPathwayLessonsHubAggregates(
 
   const tasks: { name: string; run: () => Promise<unknown> }[] = [
     { name: "question_snapshot", run: () => loadPathwayQuestionBankSnapshot(pathway.id) },
-    { name: "lesson_count", run: () => (includeLessonCount ? countPathwayLessonsPublic(pathway.id) : Promise.resolve(ZERO_LESSON_COUNT)) },
+    {
+      name: "lesson_count",
+      run: () =>
+        includeLessonCount
+          ? withDatabaseFallbackTimeout(
+              () => countPathwayLessonsPublic(pathway.id),
+              ZERO_LESSON_COUNT,
+              1_500,
+              { scope: "exam_pathway_hub", label: `lesson_count:${pathway.id}` },
+            )
+          : Promise.resolve(ZERO_LESSON_COUNT),
+    },
     {
       name: "launch_bundle",
       run: () =>

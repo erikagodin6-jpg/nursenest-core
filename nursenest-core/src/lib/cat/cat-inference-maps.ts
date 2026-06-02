@@ -30,7 +30,8 @@ import type { CognitiveLayer, DispositionTag, RiskLevel } from "./types";
 export const COGNITIVE_LEVEL_TO_LAYER: Array<[string, CognitiveLayer]> = [
   // L3 — action / decision / evaluation
   ["eval",       "L3"],
-  ["analys",     "L3"],
+  ["analys",     "L3"],  // matches "analysis", "analyse"
+  ["analyz",     "L3"],  // matches "analyze" (US spelling stored by launch-readiness pipeline)
   ["synthesis",  "L3"],
   ["create",     "L3"],
   ["priorit",    "L3"],
