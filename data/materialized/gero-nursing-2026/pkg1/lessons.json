@@ -1,0 +1,352 @@
+[
+  {
+    "slug": "principles-of-healthy-aging",
+    "title": "Principles of Healthy Aging",
+    "packageId": "pkg1-foundations",
+    "bodySystem": "Multisystem",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+    "tier": ["RPN", "RN", "NP"],
+    "sections": [
+      {
+        "id": "learning_objectives",
+        "heading": "Learning Objectives",
+        "kind": "learning_objectives",
+        "body": "By the end of this lesson, you will be able to:\n1. Define healthy aging and distinguish it from pathological aging\n2. Describe the major theories of aging and their clinical relevance\n3. Identify the physiological, psychological, and social dimensions of healthy aging\n4. Apply principles of healthy aging to nursing assessment and care planning\n5. Differentiate expected age-related changes from signs of disease\n6. Describe the role of the nurse in promoting healthy aging across care settings"
+      },
+      {
+        "id": "normal_aging_changes",
+        "heading": "Normal Age-Related Changes",
+        "kind": "normal_changes",
+        "body": "**Healthy aging** is defined as the process of developing and maintaining the functional ability that enables well-being in older age (WHO, 2015). Normal aging is NOT simply the accumulation of disease.\n\n**Key principles:**\n- Aging is universal, progressive, and irreversible but does NOT equal disease\n- Heterogeneity increases with age — older adults are MORE different from each other than younger adults\n- Reserve capacity declines with age — the ability to respond to physiological stress diminishes\n- Homeostenosis — narrowing of homeostatic reserve across body systems\n\n**Expected changes across domains:**\n- **Physical:** Decreased muscle mass, reduced bone density, slower reflexes, reduced sensory acuity\n- **Cognitive:** Slower processing speed, mild word-finding difficulty, preserved long-term memory\n- **Psychological:** Increased life satisfaction, greater emotional regulation, shift in values toward meaning and legacy\n- **Social:** Role transitions (retirement, grandparenthood), potential for social network shrinkage\n\n**Theories of aging (clinically relevant):**\n- **Disuse theory:** Use it or lose it — physical and cognitive activity preserves function\n- **Compression of morbidity:** Goal is to compress the period of disability to the end of life\n- **Successful aging (Rowe & Kahn):** Low disease burden, high cognitive and physical function, active engagement with life"
+      },
+      {
+        "id": "abnormal_findings",
+        "heading": "Abnormal Findings — NOT Normal Aging",
+        "kind": "abnormal_findings",
+        "body": "**Never attribute these to 'just getting old':**\n- Acute confusion or sudden cognitive change → always investigate\n- Incontinence → not normal; is a symptom requiring evaluation\n- Falls → not normal; require comprehensive fall risk assessment\n- Depression → not a normal part of aging; must be screened and treated\n- Significant weight loss (>5% body weight in 1 month, >10% in 6 months)\n- Loss of ADL function → signals frailty, illness, or reversible cause\n- Chest pain, syncope, acute dyspnea → require urgent evaluation regardless of age\n- Persistent pain → unacceptable as inevitable; assess and manage\n\n**Ageism risk:** Attributing symptoms to age alone leads to missed diagnoses. Each symptom in an older adult deserves the same diagnostic rigor as in a younger person."
+      },
+      {
+        "id": "assessment",
+        "heading": "Assessment Considerations",
+        "kind": "assessment",
+        "body": "**Comprehensive Geriatric Assessment (CGA):**\n- Medical assessment: comorbidities, medications, nutrition, sensory function\n- Functional assessment: ADLs, IADLs, mobility, fall risk\n- Psychological assessment: cognitive status, mood, coping\n- Social assessment: social support, caregiver burden, living environment, finances\n\n**Assessment pearls:**\n- Allow extra time — do not rush older adults\n- Assess in a quiet, well-lit environment\n- Ensure hearing aids and glasses are in place\n- Use validated tools (Katz ADL, Lawton IADL, GDS, MMSE, MoCA, Timed Up and Go)\n- Verify the history with a collateral informant when cognition is in question\n- Assess baseline function — compare to premorbid state, not age norms alone\n\n**Common assessment pitfalls:**\n- Accepting 'fine' as a complete functional history\n- Not assessing social determinants (food security, housing stability)\n- Missing polypharmacy and medication burden"
+      },
+      {
+        "id": "interventions",
+        "heading": "Nursing Interventions",
+        "kind": "interventions",
+        "body": "**Health promotion:**\n- Physical activity: 150 min/week moderate aerobic + 2x/week resistance training\n- Nutrition: protein adequacy (1.0–1.2 g/kg/day), calcium, vitamin D\n- Fall prevention: environment modification, strength and balance training\n- Immunizations: influenza, pneumococcal, zoster, COVID-19, tetanus\n- Screening: cognitive, mood, vision, hearing, dental, cancer\n- Social engagement: prevent isolation, facilitate meaningful roles\n\n**Care coordination:**\n- Facilitate transitions of care — highest risk at hospital discharge\n- Involve interprofessional team: physiotherapy, OT, social work, pharmacy, dietitian\n- Advance care planning conversations — document goals of care\n- Optimize chronic disease management to preserve function"
+      },
+      {
+        "id": "patient_teaching",
+        "heading": "Patient & Family Teaching",
+        "kind": "patient_teaching",
+        "body": "**Key messages for older adults and families:**\n1. Normal changes of aging are expected — many can be mitigated with lifestyle\n2. 'Not moving' leads to faster decline — safe activity is medicine\n3. Stay up to date on all recommended immunizations\n4. Report new symptoms promptly — do not wait to see if they improve\n5. Bring a complete medication list (including OTC, supplements, herbals) to every appointment\n6. Plan ahead for care needs — discuss wishes with family and healthcare team\n7. Social connection matters as much as physical health\n8. Mental health problems are treatable at any age — depression is not normal aging"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- **Atypical presentations are typical in older adults** — the classic textbook presentation of any disease may not appear; watch for functional decline, delirium, falls, or anorexia as the presenting complaint\n- **Baseline matters** — always establish baseline function; a small functional decline from baseline is more meaningful than comparing to population norms\n- **The 'oldest old' (85+) are a distinct subgroup** — higher frailty burden, more atypical presentations, greater vulnerability to iatrogenic harm\n- **Every medication is a potential toxin** — in older adults, the therapeutic window narrows and the risk of adverse drug events increases dramatically\n- **Functional status predicts outcomes better than diagnosis in older adults** — a patient who is independent in all ADLs with multiple diagnoses often has better prognosis than a functionally dependent patient with fewer diagnoses"
+      },
+      {
+        "id": "safety_alerts",
+        "heading": "Safety Alerts",
+        "kind": "safety_alerts",
+        "body": "🚨 **Never assume confusion is 'baseline' without documentation** — acute confusion is a medical emergency until proven otherwise\n🚨 **Incontinence is not normal aging** — new incontinence may signal UTI, overflow, medication side effect, or neurological change\n🚨 **Falls are sentinel events** — a fall indicates something has changed; investigate medications, infection, dehydration, and environmental hazards\n🚨 **Pain is undertreated in older adults** — especially those with cognitive impairment who cannot self-report; use observational scales\n🚨 **Discharge planning must begin at admission** — functional losses from hospitalization can be permanent; early mobilization is essential"
+      },
+      {
+        "id": "exam_tips",
+        "heading": "Exam Tips",
+        "kind": "exam_tips",
+        "body": "- **Ageism trap:** Any option that dismisses a symptom as 'normal for their age' is almost always WRONG\n- **Assessment before intervention:** When an older adult presents with a change, the first step is ALWAYS assessment — not reassurance, not patient teaching, not medication\n- **Functional decline = potential delirium:** On NCLEX/REx-PN, sudden functional decline in an older adult should immediately trigger consideration of delirium, infection, medication toxicity\n- **Comprehensive Geriatric Assessment (CGA)** is a frequent exam trigger — know its four domains: medical, functional, psychological, social\n- **WHO definition of healthy aging:** 'The process of developing and maintaining functional ability that enables well-being in older age' — you may see this quoted on exams\n- **Theories of aging:** Disuse and Compression of Morbidity are most clinically tested; Rowe & Kahn successful aging model appears on advanced exams"
+      },
+      {
+        "id": "key_takeaways",
+        "heading": "Key Takeaways",
+        "kind": "key_takeaways",
+        "body": "- Aging is universal and progressive but does NOT equal disease\n- Normal aging brings reduced reserve capacity across all body systems (homeostenosis)\n- Heterogeneity increases with age — avoid generalizing older adults\n- Comprehensive Geriatric Assessment covers four domains: medical, functional, psychological, social\n- Never attribute confusion, falls, incontinence, depression, or pain to 'normal aging'\n- Nursing interventions focus on preserving function, preventing decline, and promoting health across all dimensions\n- Ageism in healthcare leads to missed diagnoses and worse outcomes"
+      }
+    ]
+  },
+  {
+    "slug": "demographics-of-aging",
+    "title": "Demographics of Aging",
+    "packageId": "pkg1-foundations",
+    "bodySystem": "Multisystem",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+    "tier": ["RPN", "RN", "NP"],
+    "sections": [
+      {
+        "id": "learning_objectives",
+        "heading": "Learning Objectives",
+        "kind": "learning_objectives",
+        "body": "By the end of this lesson, you will be able to:\n1. Describe global and North American trends in population aging\n2. Define key age-related demographic terms (young-old, old-old, oldest-old)\n3. Identify health inequities that affect older adults\n4. Describe the impact of population aging on healthcare systems\n5. Recognize how diversity within the older adult population influences care"
+      },
+      {
+        "id": "normal_aging_changes",
+        "heading": "Key Demographic Facts",
+        "kind": "normal_changes",
+        "body": "**Population aging — North America:**\n- Adults aged 65+ are the fastest-growing demographic in Canada and the US\n- By 2031, approximately 1 in 4 Canadians will be over age 65\n- The 'oldest old' (85+) are the fastest-growing subgroup within the older adult population\n- Life expectancy at birth: ~79 years (men), ~84 years (women) in Canada\n- Leading causes of death in older adults: heart disease, cancer, chronic lower respiratory disease, stroke, Alzheimer's disease\n\n**Age categories (clinical use):**\n- Young-old: 65–74 years\n- Old-old: 75–84 years\n- Oldest-old: 85+ years\n\n**Key statistical drivers of aging population:**\n- Baby Boomer cohort (born 1946–1964) reaching 65+\n- Declining birth rates\n- Increasing life expectancy due to improved healthcare\n\n**Diversity within older adults:**\n- Older adults include people from diverse ethnocultural, linguistic, religious, sexual orientation, and socioeconomic backgrounds\n- Indigenous older adults face unique health inequities including intergenerational trauma\n- LGBTQ+ older adults may face particular isolation, discrimination, and barriers to care\n- Women outnumber men in older cohorts; women are more likely to live alone and in poverty in old age"
+      },
+      {
+        "id": "abnormal_findings",
+        "heading": "Health Inequities in Older Adults",
+        "kind": "abnormal_findings",
+        "body": "**Social determinants that disproportionately affect older adults:**\n- Fixed income / poverty: affects nutrition, medication adherence, heating, social activities\n- Social isolation: independently associated with increased mortality risk\n- Housing insecurity: homelessness in older adults is a growing crisis\n- Transportation barriers: access to appointments, groceries, social activities\n- Digital divide: many older adults lack digital literacy — a barrier to telehealth and online services\n- Health literacy: low health literacy is more prevalent in older cohorts\n\n**Caregiver demographics:**\n- The majority of care provided to older adults is unpaid family caregiving\n- Approximately 70% of care for older adults with dementia is provided by family\n- Caregiver burden and burnout have their own health consequences"
+      },
+      {
+        "id": "assessment",
+        "heading": "Assessment Considerations",
+        "kind": "assessment",
+        "body": "**Demographic-informed assessment:**\n- Ask about living situation, social supports, access to food and medications\n- Explore cultural beliefs and practices that influence health behaviour and care preferences\n- Assess for financial strain — gently and respectfully\n- Use interpreters for non-English/French speakers — never rely on family members for medical interpretation\n- Assess caregiver stress in older adults who have a primary family caregiver"
+      },
+      {
+        "id": "interventions",
+        "heading": "Nursing Interventions",
+        "kind": "interventions",
+        "body": "- Connect older adults and caregivers to community resources (Meals on Wheels, transportation programs, adult day programs)\n- Advocate for older adults in institutional and community settings\n- Promote culturally safe care — include cultural and spiritual preferences in care planning\n- Support family caregivers: education, respite services, caregiver support groups\n- Address digital literacy barriers to telehealth access"
+      },
+      {
+        "id": "patient_teaching",
+        "heading": "Patient & Family Teaching",
+        "kind": "patient_teaching",
+        "body": "- Available community resources and how to access them\n- Rights of older adults in healthcare settings\n- Caregiver resources and respite care options\n- Financial assistance programs for medications (provincial drug programs, pharmaceutical assistance programs)"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- **Older adults are NOT a homogeneous group** — a 66-year-old marathoner and a 68-year-old with advanced dementia are both 'elderly' but require entirely different care approaches\n- **Women are the majority in old age** — and face specific risks: osteoporosis, social isolation, widowhood, poverty in old age\n- **Family caregivers are 'invisible patients'** — always screen the caregiver for stress, depression, and burnout when caring for a frail older adult\n- **Health systems are not designed for older adults** — fragmentation, lack of geriatric expertise, and ageism are systemic problems nurses can help mitigate"
+      },
+      {
+        "id": "safety_alerts",
+        "heading": "Safety Alerts",
+        "kind": "safety_alerts",
+        "body": "🚨 **Social isolation is a health emergency** — social isolation in older adults increases mortality risk comparably to smoking 15 cigarettes/day\n🚨 **Food insecurity in older adults** — unrecognized malnutrition accelerates functional decline; always screen nutrition\n🚨 **Never use family members as medical interpreters** — accuracy is compromised, privacy is violated, and family members may filter or alter information"
+      },
+      {
+        "id": "exam_tips",
+        "heading": "Exam Tips",
+        "kind": "exam_tips",
+        "body": "- Know the three age subgroups: young-old (65–74), old-old (75–84), oldest-old (85+)\n- Demographics questions often focus on nursing advocacy, equity, and connecting patients to resources\n- Caregiver burden as a nursing concern appears frequently — the nurse must always assess and address caregiver strain"
+      },
+      {
+        "id": "key_takeaways",
+        "heading": "Key Takeaways",
+        "kind": "key_takeaways",
+        "body": "- Older adults (65+) are the fastest-growing population segment in North America\n- The oldest-old (85+) are the fastest-growing subgroup and have the highest care complexity\n- Diversity within older adults is enormous — avoid stereotyping\n- Social determinants (poverty, isolation, housing) profoundly affect older adult health\n- Family caregivers are a critical part of older adult care and need assessment and support themselves"
+      }
+    ]
+  },
+  {
+    "slug": "functional-assessment-foundations",
+    "title": "Functional Assessment in Older Adults",
+    "packageId": "pkg1-foundations",
+    "bodySystem": "Multisystem",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+    "tier": ["RPN", "RN", "NP"],
+    "sections": [
+      {
+        "id": "learning_objectives",
+        "heading": "Learning Objectives",
+        "kind": "learning_objectives",
+        "body": "By the end of this lesson, you will be able to:\n1. Distinguish between ADLs and IADLs and give examples of each\n2. Apply the Katz Index of ADLs and Lawton IADL Scale in clinical assessment\n3. Describe the Timed Up and Go (TUG) test and interpret findings\n4. Identify how functional status is used to guide care planning and resource allocation\n5. Recognize functional decline as a key indicator of deterioration in older adults"
+      },
+      {
+        "id": "normal_aging_changes",
+        "heading": "Functional Assessment Tools & Concepts",
+        "kind": "normal_changes",
+        "body": "**Activities of Daily Living (ADLs) — Katz Index:**\nBasic self-care tasks: **BATHED** — Bathing, Ambulation (transfer), Toileting, Hygiene/grooming, Eating, Dressing\n- 6 = fully independent; 0 = fully dependent\n- Decline follows a predictable sequence: bathing is lost first; eating is preserved longest\n\n**Instrumental ADLs (IADLs) — Lawton Scale:**\nComplex tasks needed for independent community living: **SHAFT** — Shopping, Housekeeping, Accounting/finances, Food preparation, Telephone/transportation\n- Also includes: medication management, laundry, ability to use transportation\n- IADLs are lost before ADLs in the progression of functional decline\n\n**Timed Up and Go (TUG):**\n- Patient rises from a standard arm chair, walks 3 metres, turns, walks back, sits\n- ≤12 seconds: normal; 12–20 sec: increased fall risk; >20 sec: high fall risk, mobility aid likely needed\n- Predicts falls, hospitalization, and functional decline\n\n**Functional status trajectory:**\n- Functional decline often precedes acute illness diagnosis\n- Hospitalization causes significant functional decline (deconditioning)\n- Baseline functional status is the most important predictor of discharge planning needs"
+      },
+      {
+        "id": "abnormal_findings",
+        "heading": "Abnormal Functional Findings",
+        "kind": "abnormal_findings",
+        "body": "**Red flags in functional assessment:**\n- New inability to perform any ADL the patient previously performed independently\n- TUG >20 seconds or inability to complete the test\n- Recent fall(s)\n- Weight loss >5% in 1 month or >10% in 6 months\n- Inability to manage medications (missed doses, double-dosing)\n- Inability to prepare food or shop → nutritional risk\n- Driving cessation — signals loss of independence and social participation\n- Incontinence — new onset always requires evaluation"
+      },
+      {
+        "id": "assessment",
+        "heading": "Assessment Considerations",
+        "kind": "assessment",
+        "body": "**Approach to functional assessment:**\n- Ask specifically: 'What activities can you do on your own? What do you need help with?'\n- Validate with a collateral informant (family, caregiver) — patients often overestimate function\n- Observe performance directly when possible (watch them walk, transfer, button a button)\n- Distinguish between 'can't do' (physical limitation) and 'won't do' (motivation, depression, pain)\n- Document baseline AND current function — the delta (change) is clinically critical\n\n**Special considerations:**\n- Cognitive impairment affects ability to self-report — collateral history is essential\n- Assess the SAFETY of ADL performance, not just independence (e.g., showering with fall risk)"
+      },
+      {
+        "id": "interventions",
+        "heading": "Nursing Interventions",
+        "kind": "interventions",
+        "body": "- Refer to physiotherapy for mobility assessment and strengthening\n- Refer to occupational therapy for ADL assessment and adaptive equipment\n- Implement restorative care (not 'doing for' but 'doing with')\n- Ensure safe mobilization — appropriate footwear, assistive device at bedside\n- Prevent hospital-associated deconditioning: get patient up to chair/ambulate daily\n- Include functional goals in care plan\n- Arrange appropriate homecare or long-term care resources based on functional status"
+      },
+      {
+        "id": "patient_teaching",
+        "heading": "Patient & Family Teaching",
+        "kind": "patient_teaching",
+        "body": "- Encourage independence in ADLs — doing activities is therapeutic\n- Teach safe technique for transfers and ambulation\n- Educate caregivers: doing everything for the older adult accelerates functional decline\n- Importance of reporting any new difficulty with activities to the healthcare team"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- **IADLs are the canary in the coal mine** — IADL loss precedes ADL loss; a patient struggling with medication management or finances is on a trajectory toward greater dependence\n- **Function is the vital sign of geriatrics** — in older adults, 'how are you functioning?' tells you more than any single lab value\n- **Restorative vs custodial care:** Nursing homes and acute care hospitals must shift from doing everything for patients to assisting patients to maintain their own function\n- **ADL sequence:** Bathing → Dressing → Toileting → Continence → Transfer → Eating (Katz — lost in this order, regained in reverse)"
+      },
+      {
+        "id": "safety_alerts",
+        "heading": "Safety Alerts",
+        "kind": "safety_alerts",
+        "body": "🚨 **Any new ADL loss in an acutely hospitalized older adult** demands urgent investigation — it is often delirium, medication toxicity, infection, or immobility-related deconditioning\n🚨 **Functional dependency is a fall risk** — patients dependent for transfers and ambulation need a two-person assist or mechanical lift — never rush a transfer\n🚨 **Cognitive impairment + functional loss** = high injury risk for unsafe ADL performance (e.g., patient insisting on bathing alone with poor balance)"
+      },
+      {
+        "id": "exam_tips",
+        "heading": "Exam Tips",
+        "kind": "exam_tips",
+        "body": "- **Katz ADL BATHED mnemonic** is frequently tested\n- Know that IADLs are lost BEFORE ADLs in the functional decline trajectory\n- TUG >20 seconds = high fall risk — common NCLEX data point\n- Restorative nursing care = promote independence, not dependence\n- When a question describes an older adult who 'recently stopped cooking or driving,' this signals IADL loss — a key clinical alert\n- Functional status always drives care planning questions in gerontology"
+      },
+      {
+        "id": "key_takeaways",
+        "heading": "Key Takeaways",
+        "kind": "key_takeaways",
+        "body": "- ADLs (Katz): bathing, ambulation, toileting, hygiene, eating, dressing — basic self-care\n- IADLs (Lawton): shopping, housekeeping, accounting, food preparation, telephone/transport, medications — community independence\n- IADLs are lost before ADLs\n- TUG ≤12 sec normal; >20 sec high fall risk\n- Any new functional decline in an older adult is a clinical alert requiring investigation\n- Restorative care promotes independence; custodial care accelerates decline"
+      }
+    ]
+  },
+  {
+    "slug": "frailty",
+    "title": "Frailty in Older Adults",
+    "packageId": "pkg1-foundations",
+    "bodySystem": "Multisystem",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+    "tier": ["RPN", "RN", "NP"],
+    "sections": [
+      {
+        "id": "learning_objectives",
+        "heading": "Learning Objectives",
+        "kind": "learning_objectives",
+        "body": "By the end of this lesson, you will be able to:\n1. Define frailty and distinguish it from disability and comorbidity\n2. Describe the Fried Frailty Phenotype and the Clinical Frailty Scale\n3. Recognize clinical manifestations of frailty in older adult patients\n4. Apply frailty assessment to care planning and risk stratification\n5. Identify nursing interventions to prevent and manage frailty"
+      },
+      {
+        "id": "normal_aging_changes",
+        "heading": "Frailty — Definition & Models",
+        "kind": "normal_changes",
+        "body": "**Frailty** is a state of increased vulnerability to stressors due to decline in physiological reserve across multiple organ systems. It is distinct from but often coexists with disability (functional limitations) and comorbidity (multiple chronic diseases).\n\n**Fried Frailty Phenotype (5 criteria — 'WELSH'):**\n- **W**eight loss (unintentional ≥5% body weight in past year)\n- **E**xhaustion (self-reported fatigue or exhaustion)\n- **L**ow physical activity (reduced energy expenditure)\n- **S**lowness (slow gait speed)\n- **H**andgrip strength weakness (low grip strength for sex and BMI)\n\n**Frailty categories:**\n- Pre-frail: 1–2 criteria (modifiable with intervention)\n- Frail: 3+ criteria (highest risk for adverse outcomes)\n\n**Clinical Frailty Scale (CFS):**\n- 9-point scale from 1 (Very Fit) to 9 (Terminally Ill)\n- CFS 1–3: Fit to managing well\n- CFS 4–6: Vulnerable to moderately frail\n- CFS 7–8: Severely to very severely frail\n- CFS 9: Terminally ill\n- Used in acute and long-term care settings for prognosis and care planning"
+      },
+      {
+        "id": "abnormal_findings",
+        "heading": "Clinical Manifestations of Frailty",
+        "kind": "abnormal_findings",
+        "body": "**Cardinal signs of frailty:**\n- Unintentional weight loss (sarcopenia)\n- Generalized fatigue, low energy\n- Slow walking speed (<0.8 m/sec)\n- Weak grip strength\n- Low physical activity level\n\n**Consequences of frailty:**\n- Falls and fractures\n- Hospitalizations with prolonged length of stay\n- Delirium (especially during acute illness or surgery)\n- Inability to recover to pre-illness functional level\n- Mortality — frail older adults have significantly higher 1-year mortality after acute illness\n- 'Decompensation' from minor stressors (a UTI causes complete functional collapse in a frail older adult)"
+      },
+      {
+        "id": "assessment",
+        "heading": "Assessment Considerations",
+        "kind": "assessment",
+        "body": "**Bedside frailty screening:**\n- Unintentional weight loss — ask directly and check weight trend in chart\n- Gait speed assessment — observe gait during ambulation\n- Grip strength — formal dynamometer or functional estimate (hand squeeze)\n- Fatigue — 'Do you feel tired even after resting?'\n- Physical activity level — 'How often do you leave home? Exercise? Walk outdoors?'\n\n**Clinical Frailty Scale assessment:**\n- Based on clinical judgment integrating activity, independence, and disease burden\n- Must be based on 2-week premorbid status (not acute illness presentation)\n\n**Documentation:**\n- Record baseline frailty level on admission\n- Track changes in frailty status over time\n- Use frailty score to guide goals of care conversations"
+      },
+      {
+        "id": "interventions",
+        "heading": "Nursing Interventions",
+        "kind": "interventions",
+        "body": "**Reversible frailty interventions:**\n- **Exercise:** Progressive resistance training and balance training are the most evidence-based interventions for frailty\n- **Nutrition:** Ensure protein adequacy (1.2 g/kg/day); identify and treat malnutrition; oral nutritional supplements\n- **Optimize chronic disease management:** Reduce polypharmacy burden\n- **Address depression:** Untreated depression worsens frailty\n- **Social engagement:** Reduce isolation\n\n**During hospitalization:**\n- Implement HELP (Hospital Elder Life Program): mobilization, nutrition, sleep, cognitive stimulation\n- Avoid bed rest orders — mandatory early mobilization\n- Prevent iatrogenic harm: falls, pressure injuries, hospital-acquired delirium"
+      },
+      {
+        "id": "patient_teaching",
+        "heading": "Patient & Family Teaching",
+        "kind": "patient_teaching",
+        "body": "- Frailty is not inevitable — lifestyle changes can slow or reverse pre-frailty\n- Encourage supervised exercise programs (mall walking, falls prevention classes, strength training)\n- Protein-rich diet: eggs, meat, fish, legumes, dairy\n- Report any new fatigue, weight loss, or difficulty walking — early intervention prevents progression\n- Importance of keeping all chronic disease appointments and medications optimized"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- **Frailty is not a diagnosis — it is a vulnerability state** — guide prognosis and care intensity discussions\n- **A single stressor can cause complete functional collapse in a frail older adult** — a UTI can send a frail older adult to ICU; a UTI in a non-frail 70-year-old is outpatient management\n- **Hospitalization accelerates frailty** — 1 week of bed rest can cause 10 years of muscle aging in an 80-year-old\n- **The CFS must reflect premorbid status** — assessing during an acute illness overestimates frailty\n- **Pre-frailty is the target for intervention** — once fully frail, reversal is much harder"
+      },
+      {
+        "id": "safety_alerts",
+        "heading": "Safety Alerts",
+        "kind": "safety_alerts",
+        "body": "🚨 **Frail older adults decompensate rapidly** — small changes in status (confusion, appetite loss, not getting up) signal deterioration requiring urgent assessment\n🚨 **Polypharmacy worsens frailty** — every added medication increases risk; comprehensive medication review is essential\n🚨 **Bed rest is harmful** — a written order for bed rest in a frail older adult without specific indication is a patient safety issue; advocate for mobilization"
+      },
+      {
+        "id": "exam_tips",
+        "heading": "Exam Tips",
+        "kind": "exam_tips",
+        "body": "- **Fried Frailty Phenotype:** 5 criteria (WELSH); ≥3 = frail; 1–2 = pre-frail\n- The CFS is based on PREMORBID function (2 weeks before acute illness)\n- A frail older adult + acute stressor = expected to present atypically and deteriorate faster\n- Nursing priority for frail older adults in hospital: early mobilization, nutrition, delirium prevention\n- Exam stems describing a hospitalized older adult who 'has not gotten out of bed' → appropriate intervention is getting them up"
+      },
+      {
+        "id": "key_takeaways",
+        "heading": "Key Takeaways",
+        "kind": "key_takeaways",
+        "body": "- Frailty = increased vulnerability due to decline in physiological reserve across multiple systems\n- Fried Phenotype: WELSH — Weight loss, Exhaustion, Low activity, Slowness, Handgrip weakness (3+ = frail)\n- Clinical Frailty Scale: 1 (very fit) to 9 (terminally ill) — based on premorbid 2-week status\n- Frailty predicts falls, hospitalization, delirium, and mortality\n- Best interventions: progressive resistance training, protein optimization, deprescribing\n- Hospitalization itself worsens frailty — early mobilization is essential"
+      }
+    ]
+  },
+  {
+    "slug": "age-friendly-care",
+    "title": "Age-Friendly Care & The 4Ms Framework",
+    "packageId": "pkg1-foundations",
+    "bodySystem": "Multisystem",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+    "tier": ["RPN", "RN", "NP"],
+    "sections": [
+      {
+        "id": "learning_objectives",
+        "heading": "Learning Objectives",
+        "kind": "learning_objectives",
+        "body": "By the end of this lesson, you will be able to:\n1. Define age-friendly care and describe the Institute for Healthcare Improvement (IHI) Age-Friendly Health Systems initiative\n2. Describe each element of the 4Ms framework: What Matters, Medication, Mentation, Mobility\n3. Apply the 4Ms to bedside nursing care of older adults\n4. Describe the role of the 4Ms in preventing iatrogenic harm\n5. Differentiate age-friendly care from standard nursing care"
+      },
+      {
+        "id": "normal_aging_changes",
+        "heading": "The 4Ms Framework",
+        "kind": "normal_changes",
+        "body": "**Age-Friendly Health Systems (IHI)** — A framework to reliably provide evidence-based care that focuses on what matters most to older adults.\n\n**The 4Ms:**\n\n**1. What Matters**\n- Know and act on the health outcome goals, care preferences, and life priorities of the older adult\n- Advance care planning, goals of care conversations\n- Align all care decisions with patient priorities\n- Ask: 'What matters most to you about your health and care?'\n\n**2. Medication**\n- If a medication is necessary, use Age-Friendly medications that do not interfere with What Matters, Mentation, or Mobility\n- Avoid potentially inappropriate medications (PIMs) — Beers Criteria\n- Deprescribing when benefit no longer outweighs risk\n- Reconcile medications at every care transition\n\n**3. Mentation**\n- Prevent, identify, treat, and manage dementia, depression, and delirium\n- Screen cognitive status on admission and regularly\n- Identify and address delirium immediately\n- Non-pharmacological approaches to BPSD first\n\n**4. Mobility**\n- Ensure older adults move safely every day to maintain function and prevent complications\n- Early mobilization post-operatively and during acute illness\n- Appropriate assistive devices\n- Physical therapy referral for mobility impairment\n- Never use restraints as a substitute for safe mobility"
+      },
+      {
+        "id": "abnormal_findings",
+        "heading": "When Age-Friendly Care Fails",
+        "kind": "abnormal_findings",
+        "body": "**Iatrogenic harm to older adults (preventable with 4Ms):**\n- Hospital-acquired delirium (mentation failure)\n- Falls during hospitalization (mobility failure)\n- Polypharmacy adverse events (medication failure)\n- Care that does not align with patient goals (What Matters failure)\n- Pressure injuries from immobility\n- Aspiration pneumonia from being kept supine\n- Deconditioning from bed rest orders"
+      },
+      {
+        "id": "assessment",
+        "heading": "Assessment Using the 4Ms",
+        "kind": "assessment",
+        "body": "**Daily 4Ms assessment:**\n- **What Matters:** Review care goals and preferences; update after any significant clinical change\n- **Medication:** Review medication list for PIMs; assess for side effects; reconcile on transitions\n- **Mentation:** Screen for delirium (CAM or 4AT); assess mood; cognitive status\n- **Mobility:** Assess gait, fall risk, mobility aid use; ensure TUG or ambulation assessment performed"
+      },
+      {
+        "id": "interventions",
+        "heading": "Nursing Interventions — 4Ms in Practice",
+        "kind": "interventions",
+        "body": "**What Matters:**\n- Initiate goals-of-care conversations, document and communicate findings\n- Ensure care plan reflects stated priorities\n\n**Medication:**\n- Complete medication reconciliation on admission, transfer, and discharge\n- Flag PIMs using Beers Criteria; consult pharmacist\n- Deprescribe in collaboration with prescriber when risk exceeds benefit\n\n**Mentation:**\n- CAM screening for delirium twice daily\n- Orientation aids: calendar, clock, familiar objects\n- Glasses and hearing aids in place\n- HELP program activities: early mobilization, adequate sleep, cognitive stimulation\n\n**Mobility:**\n- Get patient to chair with meals\n- Ambulate at least twice daily if safe\n- Ensure call bell accessible; use skid-resistant footwear\n- Physical therapy consultation for any mobility concern"
+      },
+      {
+        "id": "patient_teaching",
+        "heading": "Patient & Family Teaching",
+        "kind": "patient_teaching",
+        "body": "- The 4Ms framework means your care team focuses on what matters to YOU, not just your diagnosis\n- Medications will be reviewed regularly — we want the safest and fewest medications\n- Staying mentally active and mobile helps prevent complications during your hospital stay\n- Family members can help by encouraging activity, bringing familiar objects from home, and engaging the patient in conversation"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- **'What Matters' is the anchor of the 4Ms** — all other decisions should flow from what the older adult values most\n- **The 4Ms work together** — a medication that causes sedation affects mentation and mobility; poor mentation increases fall risk; immobility worsens delirium\n- **Age-friendly care is proactive** — it prevents iatrogenic harm rather than reacting to complications\n- **The 4Ms apply across all settings** — hospital, LTC, home care, outpatient"
+      },
+      {
+        "id": "safety_alerts",
+        "heading": "Safety Alerts",
+        "kind": "safety_alerts",
+        "body": "🚨 **Restraints are NEVER age-friendly** — physical restraints increase delirium, falls, injuries, and mortality; use non-restraint alternatives universally\n🚨 **Iatrogenic harm is preventable** — the most common serious harms in hospitalized older adults are falls, delirium, pressure injuries, and medication errors — all addressed by the 4Ms\n🚨 **'What Matters' must be documented and communicated** — care preferences discovered by one nurse that are not communicated to the team are lost"
+      },
+      {
+        "id": "exam_tips",
+        "heading": "Exam Tips",
+        "kind": "exam_tips",
+        "body": "- **4Ms = What Matters, Medication, Mentation, Mobility** — this framework appears on NCLEX-RN, CNPLE, and NP exams\n- Any question describing iatrogenic harm to an older adult in hospital should be answered using 4Ms principles\n- 'What matters' = patient-centred care = goals of care — all describing the same concept\n- Safe daily mobility is a nursing responsibility — 'the nurse should encourage the patient to ambulate twice daily' is almost always correct for a hospitalized older adult"
+      },
+      {
+        "id": "key_takeaways",
+        "heading": "Key Takeaways",
+        "kind": "key_takeaways",
+        "body": "- Age-Friendly Health Systems (IHI) uses the 4Ms framework\n- 4Ms: What Matters (goals/preferences), Medication (safe/minimal), Mentation (cognitive health), Mobility (safe movement daily)\n- All four Ms are interconnected — a failure in one worsens the others\n- Age-friendly care prevents iatrogenic harm: delirium, falls, polypharmacy harm, goal-discordant care\n- Restraints are never age-friendly; restraint-free care is the standard"
+      }
+    ]
+  }
+]

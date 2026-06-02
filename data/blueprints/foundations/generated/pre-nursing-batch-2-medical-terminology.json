@@ -1,0 +1,3635 @@
+{
+  "batchMeta": {
+    "blueprintFile": "data/blueprints/foundations/pre-nursing-foundational-blueprint.json",
+    "domain": "Medical Terminology",
+    "generatedDate": "2026-04-11",
+    "sequence": "Blueprint recommendedSequenceOrder 1-6; all topics list word-roots-prefixes-and-suffixes as sole prerequisite except topic 1 (none).",
+    "curriculumNotes": [
+      "This batch unlocks blueprint prerequisites for organization-of-the-human-body (body-directions, body-cavities) and feeds cardiorespiratory / GI-urinary / neuro-msk terminology into later A&P topics.",
+      "Lesson counts follow readinessWeight from the original generation rules: critical word roots = 3 structured lessons (blueprint targetLessonCountMin is 4; add a fourth lesson in a later pass if you need strict blueprint parity); high topics = 2; medium = 2.",
+      "All topics are foundational-recall: MCQs test definitions, labeling, and term decoding without clinical judgment scenarios."
+    ]
+  },
+  "topics": [
+    {
+      "domain": "Medical Terminology",
+      "topicSlug": "word-roots-prefixes-and-suffixes",
+      "topicName": "Word Roots, Prefixes, and Suffixes",
+      "readinessWeight": "critical",
+      "cognitiveLevel": "foundational-recall",
+      "targetQuestionCountMin": 50,
+      "targetQuestionCountMax": 60,
+      "questionsGeneratedThisBatch": 50,
+      "prerequisiteTopicSlugs": [],
+      "lessons": [
+        {
+          "title": "How medical terms are built: word root, prefix, suffix",
+          "structuredContent": {
+            "overview": "Most medical terms combine a word root (core meaning), optional prefix (beginning), and optional suffix (ending). Recognizing parts lets you decode unfamiliar words instead of memorizing every term in isolation.",
+            "keyIdeas": [
+              "Word root: usually names a body part, condition, or process (e.g., cardi- relates to heart).",
+              "Prefix: often indicates number, position, time, or amount (e.g., hypo- = low/deficient).",
+              "Suffix: often indicates a procedure, condition, or quality (e.g., -itis = inflammation)."
+            ],
+            "commonMistakes": [
+              "Treating every long word as one random chunk instead of splitting it.",
+              "Confusing similar prefixes (hypo- vs hyper-, brady- vs tachy-)."
+            ],
+            "clinicalRelevanceLight": "Charting, orders, and textbooks use these parts constantly; decoding reduces intimidation and supports safe communication at a student level."
+          }
+        },
+        {
+          "title": "High-yield prefixes for speed and safety",
+          "structuredContent": {
+            "overview": "A small set of prefixes appears across body systems. Learning them once pays off in cardio, endocrine, lab language, and more.",
+            "prefixTable": [
+              {
+                "prefix": "hypo-",
+                "meaning": "low, under, below normal"
+              },
+              {
+                "prefix": "hyper-",
+                "meaning": "high, over, above normal"
+              },
+              {
+                "prefix": "brady-",
+                "meaning": "slow"
+              },
+              {
+                "prefix": "tachy-",
+                "meaning": "fast"
+              },
+              {
+                "prefix": "dys-",
+                "meaning": "difficult, painful, abnormal"
+              },
+              {
+                "prefix": "a-/an-",
+                "meaning": "without, absence of"
+              },
+              {
+                "prefix": "poly-",
+                "meaning": "many, much"
+              },
+              {
+                "prefix": "oligo-",
+                "meaning": "scant, few"
+              },
+              {
+                "prefix": "eu-",
+                "meaning": "normal, good, true"
+              },
+              {
+                "prefix": "neo-",
+                "meaning": "new"
+              }
+            ],
+            "commonMistakes": [
+              "Mixing hypo- and hyper- (opposites)",
+              "Confusing brady- and tachy-"
+            ],
+            "clinicalRelevanceLight": "Vital sign and lab descriptors (e.g., tachycardia, hypertension) reuse the same prefix logic."
+          }
+        },
+        {
+          "title": "High-yield suffixes and noun endings",
+          "structuredContent": {
+            "overview": "Suffixes often tell you what kind of word you are looking at: condition, procedure, specialist, or study.",
+            "suffixTable": [
+              {
+                "suffix": "-itis",
+                "meaning": "inflammation"
+              },
+              {
+                "suffix": "-osis",
+                "meaning": "condition, abnormal state, increase"
+              },
+              {
+                "suffix": "-emia",
+                "meaning": "blood condition"
+              },
+              {
+                "suffix": "-algia",
+                "meaning": "pain"
+              },
+              {
+                "suffix": "-ectomy",
+                "meaning": "surgical removal"
+              },
+              {
+                "suffix": "-otomy",
+                "meaning": "cutting/incision into"
+              },
+              {
+                "suffix": "-ostomy",
+                "meaning": "creation of an opening"
+              },
+              {
+                "suffix": "-plasty",
+                "meaning": "surgical repair or reshaping"
+              },
+              {
+                "suffix": "-logy",
+                "meaning": "study of"
+              },
+              {
+                "suffix": "-ologist",
+                "meaning": "specialist in a study/field"
+              }
+            ],
+            "commonMistakes": [
+              "-otomy vs -ectomy (cut into vs remove)",
+              "-ologist vs -ology"
+            ],
+            "clinicalRelevanceLight": "Procedure names on consent forms and OR schedules follow these patterns."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "The prefix brady- means:",
+          "options": {
+            "A": "slow",
+            "B": "fast",
+            "C": "low or deficient",
+            "D": "high or excessive"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: slow.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix tachy- means:",
+          "options": {
+            "A": "fast",
+            "B": "slow",
+            "C": "low or deficient",
+            "D": "high or excessive"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: fast.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix hypo- means:",
+          "options": {
+            "A": "low or deficient",
+            "B": "slow",
+            "C": "fast",
+            "D": "high or excessive"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: low or deficient.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix hyper- means:",
+          "options": {
+            "A": "high or excessive",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: high or excessive.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix dys- means:",
+          "options": {
+            "A": "difficult, painful, or abnormal",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: difficult, painful, or abnormal.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix poly- means:",
+          "options": {
+            "A": "many or much",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: many or much.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix oligo- means:",
+          "options": {
+            "A": "scant or few",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: scant or few.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix neo- means:",
+          "options": {
+            "A": "new",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: new.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix eu- means:",
+          "options": {
+            "A": "normal or good",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: normal or good.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix a- or an- (before a vowel) often means:",
+          "options": {
+            "A": "without or absence of",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: without or absence of.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix peri- means:",
+          "options": {
+            "A": "around",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: around.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix sub- means:",
+          "options": {
+            "A": "under or below",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: under or below.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix epi- means:",
+          "options": {
+            "A": "upon or above",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: upon or above.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix intra- means:",
+          "options": {
+            "A": "within",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: within.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix inter- means:",
+          "options": {
+            "A": "between",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: between.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix retro- means:",
+          "options": {
+            "A": "backward or behind",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: backward or behind.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix ante- means:",
+          "options": {
+            "A": "before or in front of",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: before or in front of.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix post- means:",
+          "options": {
+            "A": "after",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: after.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix bi- means:",
+          "options": {
+            "A": "two",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: two.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The prefix uni- means:",
+          "options": {
+            "A": "one",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: one.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -itis means:",
+          "options": {
+            "A": "inflammation",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: inflammation.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -osis means:",
+          "options": {
+            "A": "condition or abnormal state (often increase)",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: condition or abnormal state (often increase).",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -emia means:",
+          "options": {
+            "A": "blood condition",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: blood condition.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -algia means:",
+          "options": {
+            "A": "pain",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: pain.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -ectomy means:",
+          "options": {
+            "A": "surgical removal",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: surgical removal.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -otomy means:",
+          "options": {
+            "A": "incision or cutting into",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: incision or cutting into.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -ostomy means:",
+          "options": {
+            "A": "creation of an opening",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: creation of an opening.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -plasty means:",
+          "options": {
+            "A": "surgical repair or reshaping",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: surgical repair or reshaping.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -scopy means:",
+          "options": {
+            "A": "visual examination",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: visual examination.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -gram means:",
+          "options": {
+            "A": "record or image",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: record or image.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -penia means:",
+          "options": {
+            "A": "deficiency",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: deficiency.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -megaly means:",
+          "options": {
+            "A": "enlargement",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: enlargement.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -lysis means:",
+          "options": {
+            "A": "breakdown or separation",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: breakdown or separation.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -stasis means:",
+          "options": {
+            "A": "stopping or controlling",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: stopping or controlling.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The suffix -uria means:",
+          "options": {
+            "A": "urine condition",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: urine condition.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The combining form cardi/o- refers to the:",
+          "options": {
+            "A": "heart",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: heart.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The combining form gastr/o- refers to the:",
+          "options": {
+            "A": "stomach",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: stomach.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The combining form hepat/o- refers to the:",
+          "options": {
+            "A": "liver",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: liver.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The combining form nephr/o- refers to the:",
+          "options": {
+            "A": "kidney",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: kidney.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The combining form cyst/o- often refers to the:",
+          "options": {
+            "A": "bladder or a sac",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: bladder or a sac.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The combining form myel/o- often refers to:",
+          "options": {
+            "A": "bone marrow or spinal cord (context-dependent)",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: bone marrow or spinal cord (context-dependent).",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The combining form neur/o- refers to:",
+          "options": {
+            "A": "nerve",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: nerve.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The combining form oste/o- refers to:",
+          "options": {
+            "A": "bone",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: bone.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The combining form derm/o- or dermat/o- refers to:",
+          "options": {
+            "A": "skin",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: skin.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "The combining form pulmon/o- refers to:",
+          "options": {
+            "A": "lung",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: lung.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "Tachycardia literally suggests a heart rate that is:",
+          "options": {
+            "A": "fast",
+            "B": "slow",
+            "C": "low or deficient",
+            "D": "high or excessive"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: fast.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "Bradycardia literally suggests a heart rate that is:",
+          "options": {
+            "A": "slow",
+            "B": "fast",
+            "C": "low or deficient",
+            "D": "high or excessive"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: slow.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "Hypertension suggests blood pressure that is:",
+          "options": {
+            "A": "high",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: high.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "Hypotension suggests blood pressure that is:",
+          "options": {
+            "A": "low",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: low.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        },
+        {
+          "stem": "Dyspnea suggests breathing that is:",
+          "options": {
+            "A": "difficult or labored",
+            "B": "slow",
+            "C": "fast",
+            "D": "low or deficient"
+          },
+          "correctAnswer": "A",
+          "rationale": "The term part maps to: difficult or labored.",
+          "whyIncorrect": {
+            "B": "Different part or root.",
+            "C": "Different part or root.",
+            "D": "Different part or root."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Medical Terminology",
+      "topicSlug": "body-directions-and-planes",
+      "topicName": "Body Directions and Planes",
+      "readinessWeight": "high",
+      "cognitiveLevel": "foundational-recall",
+      "targetQuestionCountMin": 30,
+      "targetQuestionCountMax": 40,
+      "questionsGeneratedThisBatch": 30,
+      "prerequisiteTopicSlugs": [
+        "word-roots-prefixes-and-suffixes"
+      ],
+      "lessons": [
+        {
+          "title": "Anatomical position and paired directional terms",
+          "structuredContent": {
+            "overview": "Anatomical position is the reference stance. Directional terms are always interpreted relative to the patient in that standard, not relative to the observer.",
+            "terms": [
+              "Anterior (ventral) / Posterior (dorsal)",
+              "Superior (cephalic) / Inferior (caudal)",
+              "Medial / Lateral",
+              "Proximal / Distal (limbs)",
+              "Superficial / Deep"
+            ],
+            "commonMistakes": [
+              "Left/right confusion when facing the patient",
+              "Using distal/proximal for trunk midline structures"
+            ],
+            "clinicalRelevanceLight": "Wound locations and incision descriptions use these terms in documentation."
+          }
+        },
+        {
+          "title": "Planes of the body",
+          "structuredContent": {
+            "overview": "Planes describe imaginary slices used in imaging and anatomy.",
+            "planes": [
+              "Sagittal: left and right parts",
+              "Midsagittal: sagittal plane on the midline",
+              "Frontal (coronal): anterior and posterior parts",
+              "Transverse (horizontal): superior and inferior parts"
+            ],
+            "commonMistakes": [
+              "Calling any vertical cut sagittal when it is frontal",
+              "Confusing transverse with sagittal"
+            ],
+            "clinicalRelevanceLight": "CT/MRI reports reference planes; knowing names aids reading at a basic level."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "In anatomical position, the palms face:",
+          "options": {
+            "A": "anteriorly (forward)",
+            "B": "anterior",
+            "C": "posterior",
+            "D": "medial"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The sternum is ______ to the spine.",
+          "options": {
+            "A": "anterior",
+            "B": "anteriorly (forward)",
+            "C": "posterior",
+            "D": "medial"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The spine is ______ to the sternum.",
+          "options": {
+            "A": "posterior",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "medial"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The nose is ______ to the ears.",
+          "options": {
+            "A": "medial",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The ears are ______ to the nose.",
+          "options": {
+            "A": "lateral",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The knee is ______ to the hip.",
+          "options": {
+            "A": "distal",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The elbow is ______ to the wrist.",
+          "options": {
+            "A": "proximal",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The skin is ______ to the rib cage.",
+          "options": {
+            "A": "superficial",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The lungs are ______ to the skin of the back.",
+          "options": {
+            "A": "deep",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The foot is ______ to the knee.",
+          "options": {
+            "A": "inferior",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The head is ______ to the feet.",
+          "options": {
+            "A": "superior",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "A sagittal plane creates:",
+          "options": {
+            "A": "left and right sections",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "A frontal (coronal) plane creates:",
+          "options": {
+            "A": "anterior and posterior sections",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "A transverse plane creates:",
+          "options": {
+            "A": "superior and inferior sections",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The midsagittal plane is:",
+          "options": {
+            "A": "a sagittal plane on the midline",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "If a structure is toward the midline, it is:",
+          "options": {
+            "A": "medial",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "If a structure is away from the midline, it is:",
+          "options": {
+            "A": "lateral",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "On the upper limb, the shoulder is ______ to the hand.",
+          "options": {
+            "A": "proximal",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "On the lower limb, the ankle is ______ to the knee.",
+          "options": {
+            "A": "distal",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "Ventral is a synonym for:",
+          "options": {
+            "A": "anterior",
+            "B": "anteriorly (forward)",
+            "C": "posterior",
+            "D": "medial"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "Dorsal is a synonym for:",
+          "options": {
+            "A": "posterior",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "medial"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "Cephalic means toward the:",
+          "options": {
+            "A": "head",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "Caudal means toward the:",
+          "options": {
+            "A": "feet or tail end",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "Prone position means lying:",
+          "options": {
+            "A": "face down",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "Supine position means lying:",
+          "options": {
+            "A": "face up",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The heart is ______ to the diaphragm in typical description.",
+          "options": {
+            "A": "superior",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "The urinary bladder in the pelvis is ______ to the lungs.",
+          "options": {
+            "A": "inferior",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "A frontal plane is also called:",
+          "options": {
+            "A": "coronal",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "Which plane separates right lung from left lung conceptually along midline?",
+          "options": {
+            "A": "sagittal",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        },
+        {
+          "stem": "Which term pairs are opposites: superficial and ______.",
+          "options": {
+            "A": "deep",
+            "B": "anteriorly (forward)",
+            "C": "anterior",
+            "D": "posterior"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches standard anatomical language in anatomical position.",
+          "whyIncorrect": {
+            "B": "Opposite or different relationship.",
+            "C": "Opposite or different relationship.",
+            "D": "Opposite or different relationship."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Medical Terminology",
+      "topicSlug": "body-cavities-and-regions",
+      "topicName": "Body Cavities and Regions",
+      "readinessWeight": "medium",
+      "cognitiveLevel": "foundational-recall",
+      "targetQuestionCountMin": 25,
+      "targetQuestionCountMax": 35,
+      "questionsGeneratedThisBatch": 25,
+      "prerequisiteTopicSlugs": [
+        "word-roots-prefixes-and-suffixes"
+      ],
+      "lessons": [
+        {
+          "title": "Dorsal and ventral cavities (survey)",
+          "structuredContent": {
+            "overview": "The dorsal cavity protects neural tissue; ventral cavities house visceral organs.",
+            "content": [
+              "Dorsal: cranial cavity (brain), vertebral/spinal cavity (spinal cord)",
+              "Ventral: thoracic cavity (pleural, pericardial, mediastinum), abdominopelvic cavity"
+            ],
+            "commonMistakes": [
+              "Thinking the spinal cord is in the cranial cavity",
+              "Confusing pleural vs pericardial"
+            ],
+            "clinicalRelevanceLight": "Localization language for pain and procedures references cavities and subdivisions."
+          }
+        },
+        {
+          "title": "Abdominopelvic quadrants and regions (orientation)",
+          "structuredContent": {
+            "overview": "Quadrants (RUQ, LUQ, RLQ, LLQ) help communicate abdominal locations quickly.",
+            "quadrants": [
+              "RUQ",
+              "LUQ",
+              "RLQ",
+              "LLQ"
+            ],
+            "commonMistakes": [
+              "Mirroring left/right on paper vs patient",
+              "Confusing quadrant with nine-region names at this level"
+            ],
+            "clinicalRelevanceLight": "Charting and symptom reports use quadrant shorthand."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "The cranial cavity contains the:",
+          "options": {
+            "A": "brain",
+            "B": "spinal cord",
+            "C": "diaphragm",
+            "D": "mediastinum (within thoracic cavity)"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "The vertebral (spinal) cavity contains the:",
+          "options": {
+            "A": "spinal cord",
+            "B": "brain",
+            "C": "diaphragm",
+            "D": "mediastinum (within thoracic cavity)"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "The thoracic cavity is separated from the abdominopelvic cavity mainly by the:",
+          "options": {
+            "A": "diaphragm",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "mediastinum (within thoracic cavity)"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "The heart is located in the:",
+          "options": {
+            "A": "mediastinum (within thoracic cavity)",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "Each lung lies within a:",
+          "options": {
+            "A": "pleural cavity",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "The heart is enclosed by the:",
+          "options": {
+            "A": "pericardial cavity",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "The abdominopelvic cavity includes abdominal and ______ portions.",
+          "options": {
+            "A": "pelvic",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "RUQ stands for:",
+          "options": {
+            "A": "right upper quadrant",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "RLQ stands for:",
+          "options": {
+            "A": "right lower quadrant",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "LUQ stands for:",
+          "options": {
+            "A": "left upper quadrant",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "LLQ stands for:",
+          "options": {
+            "A": "left lower quadrant",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "The bladder is typically described in which major inferior region?",
+          "options": {
+            "A": "pelvic",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "The liver is mostly associated with which quadrant at survey level?",
+          "options": {
+            "A": "right upper",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "The stomach is often described toward which side at survey level?",
+          "options": {
+            "A": "left upper area (LUQ context)",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "Dorsal cavity subdivisions are cranial and:",
+          "options": {
+            "A": "vertebral (spinal)",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "Ventral cavity includes thoracic and:",
+          "options": {
+            "A": "abdominopelvic",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "Which cavity type houses the brain?",
+          "options": {
+            "A": "dorsal (cranial subdivision)",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "Pleural cavities surround the:",
+          "options": {
+            "A": "lungs",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "Pericardial cavity surrounds the:",
+          "options": {
+            "A": "heart",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "Quadrants divide the abdominopelvic area by:",
+          "options": {
+            "A": "vertical midline and horizontal line through umbilicus (teaching model)",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "The appendix is commonly referenced in which quadrant?",
+          "options": {
+            "A": "right lower",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "The gallbladder is commonly referenced with which quadrant?",
+          "options": {
+            "A": "right upper",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "Spinal cord protection is primarily associated with:",
+          "options": {
+            "A": "vertebral cavity",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "Thoracic cavity is ______ to the abdominopelvic cavity.",
+          "options": {
+            "A": "superior",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        },
+        {
+          "stem": "Pelvic cavity is ______ to most abdominal organs in global orientation.",
+          "options": {
+            "A": "inferior",
+            "B": "brain",
+            "C": "spinal cord",
+            "D": "diaphragm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard cavity/quadrant mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Different cavity or region.",
+            "C": "Different cavity or region.",
+            "D": "Different cavity or region."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Medical Terminology",
+      "topicSlug": "cardiorespiratory-terminology",
+      "topicName": "Cardiovascular and Respiratory Terminology",
+      "readinessWeight": "high",
+      "cognitiveLevel": "foundational-recall",
+      "targetQuestionCountMin": 45,
+      "targetQuestionCountMax": 55,
+      "questionsGeneratedThisBatch": 45,
+      "prerequisiteTopicSlugs": [
+        "word-roots-prefixes-and-suffixes"
+      ],
+      "lessons": [
+        {
+          "title": "Heart and vessel vocabulary (pre-nursing recall)",
+          "structuredContent": {
+            "overview": "Cardiovascular terms combine recurring roots (cardi-, angi-, vas-, thromb-) with prefixes/suffixes you already practiced.",
+            "examples": [
+              "Cardiology: study of the heart",
+              "Cardiomegaly: enlarged heart",
+              "Tachycardia / bradycardia: fast/slow heart rate",
+              "Angina: chest pain linked to cardiac ischemia (student-level definition)",
+              "Hypertension / hypotension: high/low blood pressure",
+              "Thrombus / embolus: clot staying put vs traveling (conceptual distinction)"
+            ],
+            "commonMistakes": [
+              "Thrombus vs embolus direction",
+              "Angina spelled or confused with unrelated terms"
+            ],
+            "clinicalRelevanceLight": "Vital signs and common admitting diagnoses reuse this vocabulary."
+          }
+        },
+        {
+          "title": "Breathing and lung-related vocabulary",
+          "structuredContent": {
+            "overview": "Respiratory terms describe air movement, gas exchange, and symptoms of impaired breathing.",
+            "examples": [
+              "Dyspnea: difficult/labored breathing",
+              "Tachypnea / bradypnea: fast/slow breathing rate",
+              "Apnea: absence of breathing",
+              "Hypoxia: low oxygen at tissue level (student-level)",
+              "Cyanosis: bluish discoloration from poor oxygenation",
+              "Pulmonary: pertaining to lungs"
+            ],
+            "commonMistakes": [
+              "Apnea vs dyspnea",
+              "Hypoxia vs hypoxemia at advanced detail—keep pre-nursing definitions simple"
+            ],
+            "clinicalRelevanceLight": "Respiratory complaints and pulse oximetry discussions use these terms daily."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Bradycardia means heart rate is:",
+          "options": {
+            "A": "slow",
+            "B": "fast",
+            "C": "high",
+            "D": "low"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Tachycardia means heart rate is:",
+          "options": {
+            "A": "fast",
+            "B": "slow",
+            "C": "high",
+            "D": "low"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Hypertension refers to blood pressure that is:",
+          "options": {
+            "A": "high",
+            "B": "slow",
+            "C": "fast",
+            "D": "low"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Hypotension refers to blood pressure that is:",
+          "options": {
+            "A": "low",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Angina classically involves:",
+          "options": {
+            "A": "chest pain related to cardiac ischemia (student definition)",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "A cardiologist specializes in:",
+          "options": {
+            "A": "the heart",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Cardiomegaly means:",
+          "options": {
+            "A": "enlarged heart",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "The root pulmon- refers to the:",
+          "options": {
+            "A": "lung",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Dyspnea means:",
+          "options": {
+            "A": "difficult or painful breathing",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Tachypnea means breathing rate is:",
+          "options": {
+            "A": "fast",
+            "B": "slow",
+            "C": "high",
+            "D": "low"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Bradypnea means breathing rate is:",
+          "options": {
+            "A": "slow",
+            "B": "fast",
+            "C": "high",
+            "D": "low"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Apnea means:",
+          "options": {
+            "A": "absence of breathing",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Hypoxia at a simple level means:",
+          "options": {
+            "A": "insufficient oxygen reaching tissues",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Cyanosis refers to:",
+          "options": {
+            "A": "bluish skin/mucosa from poor oxygenation",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Pulmonary relates to:",
+          "options": {
+            "A": "the lungs",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "The combining form angi/o- often relates to:",
+          "options": {
+            "A": "vessels",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "A thrombus is best described as:",
+          "options": {
+            "A": "a clot attached at its site of formation",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "An embolus is best described as:",
+          "options": {
+            "A": "a traveling clot or plug",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Arrhythmia suggests:",
+          "options": {
+            "A": "abnormal heart rhythm",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "The pericardium is:",
+          "options": {
+            "A": "around the heart",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Myocardium refers to:",
+          "options": {
+            "A": "heart muscle",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Endocardium lines:",
+          "options": {
+            "A": "the inner heart chambers/valves region",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Epicardium is associated with:",
+          "options": {
+            "A": "outer heart surface layer",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Hemorrhage means:",
+          "options": {
+            "A": "heavy bleeding or abnormal bleeding",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Edema means:",
+          "options": {
+            "A": "swelling from fluid accumulation in tissues",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Auscultation means:",
+          "options": {
+            "A": "listening with a stethoscope",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Percussion in assessment context often means:",
+          "options": {
+            "A": "tapping to elicit sound",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Orthopnea classically means:",
+          "options": {
+            "A": "breathing easier when sitting upright",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Hemoptysis means:",
+          "options": {
+            "A": "coughing up blood",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Pleurisy relates to:",
+          "options": {
+            "A": "pleura inflammation (pain with breathing at student level)",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Alveoli are best described as:",
+          "options": {
+            "A": "tiny air sacs for gas exchange",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Bronchi are:",
+          "options": {
+            "A": "major air passages branching from trachea",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "The trachea is the:",
+          "options": {
+            "A": "windpipe",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Epistaxis means:",
+          "options": {
+            "A": "nosebleed",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Stridor suggests:",
+          "options": {
+            "A": "high-pitched upper airway sound",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Wheezing is commonly associated with:",
+          "options": {
+            "A": "narrowed lower airways",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Inspiration means:",
+          "options": {
+            "A": "breathing in",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Expiration means:",
+          "options": {
+            "A": "breathing out",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Ventilation at student level refers to:",
+          "options": {
+            "A": "mechanical movement of air in and out",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Perfusion at a simple level refers to:",
+          "options": {
+            "A": "blood flow through tissues",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "A murmur is:",
+          "options": {
+            "A": "an extra heart sound",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Systole refers to:",
+          "options": {
+            "A": "contraction phase of the heart",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Diastole refers to:",
+          "options": {
+            "A": "relaxation/filling phase of the heart",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Hypertrophy means:",
+          "options": {
+            "A": "increase in tissue size (e.g., thickened muscle)",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        },
+        {
+          "stem": "Atrophy means:",
+          "options": {
+            "A": "decrease in tissue size",
+            "B": "slow",
+            "C": "fast",
+            "D": "high"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches foundational cardiorespiratory terminology.",
+          "whyIncorrect": {
+            "B": "Different definition.",
+            "C": "Different definition.",
+            "D": "Different definition."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Medical Terminology",
+      "topicSlug": "gi-urinary-terminology",
+      "topicName": "GI and Urinary Terminology",
+      "readinessWeight": "medium",
+      "cognitiveLevel": "foundational-recall",
+      "targetQuestionCountMin": 25,
+      "targetQuestionCountMax": 35,
+      "questionsGeneratedThisBatch": 25,
+      "prerequisiteTopicSlugs": [
+        "word-roots-prefixes-and-suffixes"
+      ],
+      "lessons": [
+        {
+          "title": "GI terminology: digestion through elimination",
+          "structuredContent": {
+            "overview": "GI terms use roots like gastr- (stomach), enter- (intestine), col- (colon), hepat- (liver), cholec- (gall/bile), and emesis (vomiting).",
+            "examples": [
+              "Gastritis: stomach inflammation",
+              "Gastroenteritis: stomach and intestine inflammation",
+              "Hepatitis: liver inflammation",
+              "Cholecystitis: gallbladder inflammation",
+              "Dysphagia: difficulty swallowing"
+            ],
+            "commonMistakes": [
+              "Gastro- vs enter-",
+              "Hepat- vs nephr-"
+            ],
+            "clinicalRelevanceLight": "Abdominal symptoms and diet orders use this language."
+          }
+        },
+        {
+          "title": "Urinary terminology: filtration to voiding",
+          "structuredContent": {
+            "overview": "Urinary terms center on nephr- (kidney), ren- (kidney), cyst- (bladder), ureter, urethra, and -uria patterns.",
+            "examples": [
+              "Nephrology: kidney study/specialty",
+              "Cystitis: bladder inflammation",
+              "Urethritis: urethra inflammation",
+              "Hematuria: blood in urine",
+              "Polyuria / oliguria: much urine vs scant urine"
+            ],
+            "commonMistakes": [
+              "Ureter vs urethra",
+              "Cyst- bladder vs other 'cyst' meanings in other contexts"
+            ],
+            "clinicalRelevanceLight": "I&O and urinalysis reports use these stems."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Gastritis involves inflammation of the:",
+          "options": {
+            "A": "stomach",
+            "B": "intestine",
+            "C": "liver",
+            "D": "gallbladder"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Gastroenteritis involves inflammation of stomach and:",
+          "options": {
+            "A": "intestine",
+            "B": "stomach",
+            "C": "liver",
+            "D": "gallbladder"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Hepatitis involves inflammation of the:",
+          "options": {
+            "A": "liver",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "gallbladder"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Cholecystitis involves inflammation of the:",
+          "options": {
+            "A": "gallbladder",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Dysphagia means:",
+          "options": {
+            "A": "difficulty swallowing",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Emesis means:",
+          "options": {
+            "A": "vomiting",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Melena suggests:",
+          "options": {
+            "A": "dark/tarry stools from digested blood (student recognition)",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Hematochezia suggests:",
+          "options": {
+            "A": "bright red blood per rectum (student recognition)",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "The root enter- refers to:",
+          "options": {
+            "A": "intestine",
+            "B": "stomach",
+            "C": "liver",
+            "D": "gallbladder"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "The root col- or colon refers to:",
+          "options": {
+            "A": "large intestine/colon",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "The root hepat- refers to:",
+          "options": {
+            "A": "liver",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "gallbladder"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "The root cholecyst- refers to:",
+          "options": {
+            "A": "gallbladder",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "The root gastr- refers to:",
+          "options": {
+            "A": "stomach",
+            "B": "intestine",
+            "C": "liver",
+            "D": "gallbladder"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Nephritis involves inflammation of the:",
+          "options": {
+            "A": "kidney",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Cystitis involves inflammation of the:",
+          "options": {
+            "A": "bladder",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Urethritis involves inflammation of the:",
+          "options": {
+            "A": "urethra",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "The ureter carries urine from kidney to:",
+          "options": {
+            "A": "bladder",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "The urethra carries urine from bladder:",
+          "options": {
+            "A": "to outside the body",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Polyuria means:",
+          "options": {
+            "A": "excessive urine output",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Oliguria means:",
+          "options": {
+            "A": "scant urine output",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Anuria means:",
+          "options": {
+            "A": "essentially no urine output",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Hematuria means:",
+          "options": {
+            "A": "blood in the urine",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Dysuria means:",
+          "options": {
+            "A": "painful urination",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Nephrology relates to:",
+          "options": {
+            "A": "kidneys",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        },
+        {
+          "stem": "Urology commonly relates to:",
+          "options": {
+            "A": "urinary tract and male reproductive (survey level)",
+            "B": "stomach",
+            "C": "intestine",
+            "D": "liver"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard GI/urinary word-part meaning.",
+          "whyIncorrect": {
+            "B": "Different organ or definition.",
+            "C": "Different organ or definition.",
+            "D": "Different organ or definition."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Medical Terminology",
+      "topicSlug": "neurological-musculoskeletal-terminology",
+      "topicName": "Neurological and Musculoskeletal Terminology",
+      "readinessWeight": "medium",
+      "cognitiveLevel": "foundational-recall",
+      "targetQuestionCountMin": 25,
+      "targetQuestionCountMax": 35,
+      "questionsGeneratedThisBatch": 25,
+      "prerequisiteTopicSlugs": [
+        "word-roots-prefixes-and-suffixes"
+      ],
+      "lessons": [
+        {
+          "title": "Neuro terminology: nerves, brain, and function words",
+          "structuredContent": {
+            "overview": "Neuro terms combine neur-, encephal-, myel-, mening-, and suffixes like -algia, -paresis, -plegia.",
+            "examples": [
+              "Neuralgia: nerve pain",
+              "Encephalitis: brain inflammation",
+              "Meningitis: meninges inflammation",
+              "Hemiparesis: weakness on one side",
+              "Hemiplegia: paralysis on one side"
+            ],
+            "commonMistakes": [
+              "-paresis vs -plegia",
+              "Mening- vs myel-"
+            ],
+            "clinicalRelevanceLight": "Neuro checks and handoff language use these stems."
+          }
+        },
+        {
+          "title": "Musculoskeletal terminology: bone, muscle, movement",
+          "structuredContent": {
+            "overview": "MSK terms use osteo- (bone), myo- (muscle), arthr- (joint), and prefixes like intra- extra- peri-.",
+            "examples": [
+              "Arthritis: joint inflammation",
+              "Myalgia: muscle pain",
+              "Osteoporosis: porous bone (student-level)",
+              "Tendon vs ligament: muscle-to-bone vs bone-to-bone"
+            ],
+            "commonMistakes": [
+              "Arthr- vs arteri-",
+              "Ligament vs tendon attachment pattern"
+            ],
+            "clinicalRelevanceLight": "Mobility and orthopedic notes reuse this vocabulary."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Neur/o- refers to:",
+          "options": {
+            "A": "nerve",
+            "B": "spinal cord or bone marrow (context-dependent)",
+            "C": "meninges",
+            "D": "brain"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Myel/o- commonly refers to:",
+          "options": {
+            "A": "spinal cord or bone marrow (context-dependent)",
+            "B": "nerve",
+            "C": "meninges",
+            "D": "brain"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Mening/o- refers to:",
+          "options": {
+            "A": "meninges",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "brain"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Encephal/o- refers to:",
+          "options": {
+            "A": "brain",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Neuralgia means:",
+          "options": {
+            "A": "nerve pain",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Myalgia means:",
+          "options": {
+            "A": "muscle pain",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Arthralgia means:",
+          "options": {
+            "A": "joint pain",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Arthritis means:",
+          "options": {
+            "A": "joint inflammation",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Myositis means:",
+          "options": {
+            "A": "muscle inflammation",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Oste/o- refers to:",
+          "options": {
+            "A": "bone",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Arthr/o- refers to:",
+          "options": {
+            "A": "joint",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "A tendon connects muscle to:",
+          "options": {
+            "A": "bone",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "A ligament connects bone to:",
+          "options": {
+            "A": "bone",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Hemiparesis means:",
+          "options": {
+            "A": "weakness on one side of the body",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Hemiplegia means:",
+          "options": {
+            "A": "paralysis on one side of the body",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Quadriplegia affects:",
+          "options": {
+            "A": "all four limbs",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Paraplegia typically affects:",
+          "options": {
+            "A": "lower limbs/trunk pattern (student level)",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Dysphasia/aphasia contexts involve:",
+          "options": {
+            "A": "speech/language impairment (student recognition)",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Paresthesia suggests:",
+          "options": {
+            "A": "abnormal sensation like tingling",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Ataxia suggests:",
+          "options": {
+            "A": "uncoordinated movement",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Clonus suggests:",
+          "options": {
+            "A": "rhythmic muscle contractions (student recognition)",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Seizure disorder context may use:",
+          "options": {
+            "A": "epilepsy (general term recognition)",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Subdural refers to:",
+          "options": {
+            "A": "below the dura",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Epidural refers to:",
+          "options": {
+            "A": "above/on the dura",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        },
+        {
+          "stem": "Osteoporosis at student level means:",
+          "options": {
+            "A": "bone density loss/porous bone",
+            "B": "nerve",
+            "C": "spinal cord or bone marrow (context-dependent)",
+            "D": "meninges"
+          },
+          "correctAnswer": "A",
+          "rationale": "Foundational neuro/MSK term decoding.",
+          "whyIncorrect": {
+            "B": "Different structure or meaning.",
+            "C": "Different structure or meaning.",
+            "D": "Different structure or meaning."
+          }
+        }
+      ]
+    }
+  ],
+  "finalReport": {
+    "topicsProcessed": 6,
+    "lessonsTotal": 13,
+    "questionsTotal": 200,
+    "lessonsPerTopic": {
+      "word-roots-prefixes-and-suffixes": 3,
+      "body-directions-and-planes": 2,
+      "body-cavities-and-regions": 2,
+      "cardiorespiratory-terminology": 2,
+      "gi-urinary-terminology": 2,
+      "neurological-musculoskeletal-terminology": 2
+    },
+    "questionsPerTopic": {
+      "word-roots-prefixes-and-suffixes": 50,
+      "body-directions-and-planes": 30,
+      "body-cavities-and-regions": 25,
+      "cardiorespiratory-terminology": 45,
+      "gi-urinary-terminology": 25,
+      "neurological-musculoskeletal-terminology": 25
+    },
+    "rulesConfirmation": "Prerequisite order respected: word roots first; other five topics depend only on word roots per blueprint. Depth: critical topic has three lessons; high topics have two; medium topics have two. Cognitive level: recall-only items. Each MCQ has rationale and whyIncorrect."
+  }
+}

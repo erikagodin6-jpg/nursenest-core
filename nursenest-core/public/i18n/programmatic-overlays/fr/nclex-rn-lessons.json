@@ -1,0 +1,34 @@
+{
+  "title": "Leçons NCLEX-RN | Modules structurés avant la banque de questions",
+  "h1": "Leçons NCLEX-RN reliées à vos sessions de questions",
+  "description": "Comment utiliser les leçons RN de votre filière avec la pratique de type NCLEX : ordre des modules, couplage systèmes faibles et séries de questions, et éviter l’étude passive par vidéos seules.",
+  "breadcrumb": {
+    "midLabel": "Préparation NCLEX-RN",
+    "currentLabel": "Leçons"
+  },
+  "sections": [
+    {
+      "heading": "Pourquoi les leçons précèdent les séries isolées",
+      "level": 2,
+      "body": [
+        "Si vous ne faites qu’enchainer les questions, vous mémorisez parfois les distracteurs sans corriger la règle. De courts blocs de leçon reconstruisent la règle, puis les questions testent l’application sous temps limité.",
+        "Utilisez les leçons lorsque la précision par catégorie stagne malgré plus de répétitions : c’est souvent un trou conceptuel, pas un manque de volume."
+      ]
+    },
+    {
+      "heading": "Exemple de rythme d’étude",
+      "level": 2,
+      "body": [
+        "Lundi : une section de leçon sur le système faible. Mardi à jeudi : deux mini-séries chronométrées ciblant ce système. Vendredi : revue des justifications uniquement sur les erreurs, puis une série mixte.",
+        "Gardez leçons et questions dans la même filière pour que le champ de pratique et le langage de délégation restent alignés sur votre inscription."
+      ]
+    },
+    {
+      "heading": "La suite logique",
+      "level": 2,
+      "body": [
+        "Enchaînez ce rythme avec les questions d’entraînement NCLEX-RN NurseNest lorsque vous voulez tester le transfert, pas la simple reconnaissance."
+      ]
+    }
+  ]
+}

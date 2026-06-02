@@ -1,0 +1,322 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import type { AdminLearnerQaLifecycle, AdminLearnerQaPublicState } from "@/lib/admin/admin-learner-qa-simulation";
+import { adminLearnerQaMobilePreviewHref } from "@/lib/admin/admin-learner-qa-mobile-preview";
+
+const TRACKS = ["RN", "RPN", "LVN_LPN", "NP", "ALLIED", "NEW_GRAD", "PRE_NURSING"] as const;
+const LIFECYCLES: AdminLearnerQaLifecycle[] = ["paid_active", "none", "expired", "trial"];
+const NP_SPECIALTIES = ["FNP", "AGPCNP", "PMHNP", "WHNP", "PNP_PC"] as const;
+const ALLIED_CAREERS = ["paramedic", "rrt", "mlt", "imaging", "ota_pta", "pharmtech", "socialwork"] as const;
+
+type Track = (typeof TRACKS)[number];
+type NpSpec = (typeof NP_SPECIALTIES)[number];
+type Allied = (typeof ALLIED_CAREERS)[number];
+type Lifecycle = AdminLearnerQaLifecycle;
+
+const MOBILE_W = 390;
+
+function trackLabel(t: Track): string {
+  if (t === "LVN_LPN") return "LVN/LPN";
+  if (t === "NEW_GRAD") return "New Grad";
+  if (t === "PRE_NURSING") return "Pre-Nursing";
+  if (t === "ALLIED") return "Allied";
+  return t;
+}
+
+export function AdminLearnerQaAppToolbar(props: {
+  bannerTitle: string;
+  initialPublicState: AdminLearnerQaPublicState;
+}) {
+  const { bannerTitle, initialPublicState } = props;
+  const router = useRouter();
+  const pathname = usePathname();
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [state, setState] = useState(initialPublicState);
+  const [track, setTrack] = useState<Track>(initialPublicState.track);
+  const [lifecycle, setLifecycle] = useState<Lifecycle>(initialPublicState.lifecycle);
+  const [country, setCountry] = useState<"US" | "CA">(initialPublicState.country);
+  const [npSpecialty, setNpSpecialty] = useState<NpSpec>(initialPublicState.npSpecialty ?? "FNP");
+  const [alliedCareer, setAlliedCareer] = useState<Allied>((initialPublicState.alliedCareer as Allied) ?? "paramedic");
+
+  useEffect(() => {
+    setState(initialPublicState);
+    setTrack(initialPublicState.track);
+    setLifecycle(initialPublicState.lifecycle);
+    setCountry(initialPublicState.country);
+    if (initialPublicState.npSpecialty) setNpSpecialty(initialPublicState.npSpecialty);
+    if (initialPublicState.alliedCareer) setAlliedCareer(initialPublicState.alliedCareer as Allied);
+  }, [initialPublicState]);
+
+  function buildBody(): Record<string, unknown> {
+    const b: Record<string, unknown> = { track, lifecycle, country };
+    if (track === "NP") b.npSpecialty = npSpecialty;
+    if (track === "ALLIED") b.alliedCareer = alliedCareer;
+    return b;
+  }
+
+  async function apply() {
+    setErr(null);
+    setBusy(true);
+    try {
+      const res = await fetch("/api/admin/learner-qa/simulate", {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...buildBody(), confirm: true }),
+      });
+      const j = (await res.json()) as {
+        ok?: boolean;
+        state?: AdminLearnerQaPublicState;
+        error?: string;
+        hint?: string;
+      };
+      if (!res.ok) {
+        setErr(j.hint ? `${j.error ?? "Failed"} - ${j.hint}` : (j.error ?? `HTTP ${res.status}`));
+        return;
+      }
+      if (j.state) setState(j.state);
+      router.refresh();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function applyPreset(preset: {
+    track: Track;
+    lifecycle: Lifecycle;
+    country: "US" | "CA";
+    npSpecialty?: NpSpec;
+    alliedCareer?: Allied;
+  }) {
+    setTrack(preset.track);
+    setLifecycle(preset.lifecycle);
+    setCountry(preset.country);
+    if (preset.npSpecialty) setNpSpecialty(preset.npSpecialty);
+    if (preset.alliedCareer) setAlliedCareer(preset.alliedCareer);
+    setErr(null);
+    setBusy(true);
+    try {
+      const body: Record<string, unknown> = {
+        track: preset.track,
+        lifecycle: preset.lifecycle,
+        country: preset.country,
+      };
+      if (preset.track === "NP" && preset.npSpecialty) body.npSpecialty = preset.npSpecialty;
+      if (preset.track === "ALLIED" && preset.alliedCareer) body.alliedCareer = preset.alliedCareer;
+      const res = await fetch("/api/admin/learner-qa/simulate", {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...body, confirm: true }),
+      });
+      const j = (await res.json()) as {
+        ok?: boolean;
+        state?: AdminLearnerQaPublicState;
+        error?: string;
+        hint?: string;
+      };
+      if (!res.ok) {
+        setErr(j.hint ? `${j.error ?? "Failed"} - ${j.hint}` : (j.error ?? `HTTP ${res.status}`));
+        return;
+      }
+      if (j.state) setState(j.state);
+      router.refresh();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function exit() {
+    setErr(null);
+    setBusy(true);
+    try {
+      const res = await fetch("/api/admin/learner-qa/clear", {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirm: true }),
+      });
+      if (!res.ok) {
+        const j = (await res.json().catch(() => ({}))) as { error?: string };
+        setErr(j.error ?? `Exit failed (${res.status})`);
+        return;
+      }
+      router.refresh();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const learnerPath = pathname.startsWith("/app") ? pathname : "/app";
+  const mobileHref = adminLearnerQaMobilePreviewHref(learnerPath, MOBILE_W);
+  const presetClass =
+    "rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2.5 py-1.5 text-xs font-semibold hover:bg-[var(--surface-interactive-hover)] disabled:opacity-50";
+
+  return (
+    <div
+      role="region"
+      aria-label="Admin: viewing as customer"
+      data-testid="admin-view-as-toolbar"
+      className="mb-2 space-y-2 rounded-lg border-2 border-amber-400 bg-amber-50 px-3 py-2.5 text-sm text-amber-900 shadow-sm dark:border-amber-500 dark:bg-amber-950/40 dark:text-amber-100 sm:px-4"
+    >
+      {/* ── Primary VIEWING AS banner ───────────────────────────────────────── */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          <span className="shrink-0 rounded-full bg-amber-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-white">
+            VIEWING AS USER
+          </span>
+          <p className="min-w-0 truncate font-semibold leading-snug">
+            {bannerTitle}
+          </p>
+        </div>
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <Link
+            href="/admin/view-as-customer"
+            className="rounded-md border border-amber-400 bg-white px-3 py-1.5 text-xs font-semibold text-amber-900 hover:bg-amber-50 dark:bg-amber-900/30 dark:text-amber-200 dark:hover:bg-amber-900/50"
+          >
+            ← Return To Admin
+          </Link>
+          <button
+            type="button"
+            onClick={() => void exit()}
+            disabled={busy}
+            className="rounded-md border border-amber-300 bg-amber-100 px-3 py-1.5 text-xs font-semibold text-amber-900 hover:bg-amber-200 disabled:opacity-50 dark:border-amber-600 dark:bg-amber-900/20 dark:text-amber-200"
+          >
+            {busy ? "…" : "Stop Viewing"}
+          </button>
+        </div>
+      </div>
+      <p className="text-xs text-amber-700 dark:text-amber-400">
+        Simulated: <strong>{trackLabel(state.track)}</strong> · {state.lifecycle.replace(/_/g, " ")} · {state.country}
+        {" · "}No writes performed as this user · All actions audited
+      </p>
+      <div className="flex flex-wrap gap-1.5 border-t border-[color-mix(in_srgb,var(--semantic-warning)_22%,transparent)] pt-2">
+        <button type="button" disabled={busy} onClick={() => void applyPreset({ track: "RN", lifecycle: "none", country: "US" })} className={presetClass}>
+          View As RN Free User
+        </button>
+        <button type="button" disabled={busy} onClick={() => void applyPreset({ track: "RN", lifecycle: "paid_active", country: "US" })} className={presetClass}>
+          View As RN Subscriber
+        </button>
+        <button type="button" disabled={busy} onClick={() => void applyPreset({ track: "RPN", lifecycle: "paid_active", country: "CA" })} className={presetClass}>
+          View As RPN Subscriber
+        </button>
+        <button type="button" disabled={busy} onClick={() => void applyPreset({ track: "NP", lifecycle: "paid_active", country: "US", npSpecialty: "FNP" })} className={presetClass}>
+          View As NP Subscriber
+        </button>
+        <button type="button" disabled={busy} onClick={() => void applyPreset({ track: "ALLIED", lifecycle: "paid_active", country: "US", alliedCareer: "paramedic" })} className={presetClass}>
+          View As Allied Subscriber
+        </button>
+        <button type="button" disabled={busy} onClick={() => void exit()} className={presetClass}>
+          View As Guest Visitor
+        </button>
+      </div>
+      <div className="flex flex-wrap items-end gap-2 border-t border-[color-mix(in_srgb,var(--semantic-warning)_22%,transparent)] pt-2">
+        <label className="flex min-w-[8.5rem] flex-col gap-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+          Track
+          <select
+            className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-1.5 text-xs font-medium text-[var(--semantic-text-primary)]"
+            value={track}
+            onChange={(e) => setTrack(e.target.value as Track)}
+          >
+            {TRACKS.map((t) => (
+              <option key={t} value={t}>
+                {trackLabel(t)}
+              </option>
+            ))}
+          </select>
+        </label>
+        {track === "NP" ? (
+          <label className="flex min-w-[7rem] flex-col gap-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+            NP spec
+            <select
+              className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-1.5 text-xs font-medium"
+              value={npSpecialty}
+              onChange={(e) => setNpSpecialty(e.target.value as NpSpec)}
+            >
+              {NP_SPECIALTIES.map((s) => (
+                <option key={s} value={s}>
+                  {s.replace(/_/g, "/")}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+        {track === "ALLIED" ? (
+          <label className="flex min-w-[9rem] flex-col gap-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+            Allied role
+            <select
+              className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-1.5 text-xs font-medium"
+              value={alliedCareer}
+              onChange={(e) => setAlliedCareer(e.target.value as Allied)}
+            >
+              {ALLIED_CAREERS.map((a) => (
+                <option key={a} value={a}>
+                  {a.replace(/_/g, " ")}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+        <label className="flex min-w-[7.5rem] flex-col gap-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+          Access
+          <select
+            className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-1.5 text-xs font-medium"
+            value={lifecycle}
+            onChange={(e) => setLifecycle(e.target.value as Lifecycle)}
+          >
+            <option value="paid_active">Paid active</option>
+            <option value="trial">Trial</option>
+            <option value="none">Free / no sub</option>
+            <option value="expired">Expired</option>
+          </select>
+        </label>
+        <label className="flex min-w-[5rem] flex-col gap-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+          Region
+          <select
+            className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-1.5 text-xs font-medium"
+            value={country}
+            onChange={(e) => setCountry(e.target.value as "US" | "CA")}
+          >
+            <option value="US">US</option>
+            <option value="CA">CA</option>
+          </select>
+        </label>
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void apply()}
+          className="rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
+        >
+          {busy ? "…" : "Apply"}
+        </button>
+      </div>
+      <p className="text-xs text-amber-700 dark:text-amber-400">
+        <Link className="font-semibold underline hover:opacity-80" href="/admin/view-as-customer">
+          View As Customer
+        </Link>
+        {" · "}
+        <Link className="font-semibold underline hover:opacity-80" href="/admin/learner-qa">
+          Full QA tools
+        </Link>
+        {" · "}
+        <Link className="font-semibold underline hover:opacity-80" href={mobileHref}>
+          Mobile preview ({MOBILE_W}px)
+        </Link>
+      </p>
+      {err ? <p className="text-xs text-[var(--semantic-danger)]">{err}</p> : null}
+    </div>
+  );
+}

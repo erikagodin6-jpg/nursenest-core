@@ -1,0 +1,330 @@
+{
+  "version": 1,
+  "packageId": "maternal-newborn-pkg-05",
+  "label": "Physiological Changes of Pregnancy — Lessons, Questions & Flashcards",
+  "generatedDate": "2026-06-02",
+  "targetExams": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","PNP-PC","FNP"],
+  "domain": "Maternal Newborn",
+  "subdomain": "Physiological Changes of Pregnancy",
+  "lessons": [
+    {
+      "lessonId": "mn-pkg05-L01",
+      "topicSlug": "cardiovascular-changes-pregnancy",
+      "title": "Cardiovascular Changes in Pregnancy",
+      "learningObjectives": [
+        "Describe maternal cardiovascular adaptations during pregnancy",
+        "Explain the cause and significance of supine hypotension syndrome",
+        "Identify normal vs abnormal cardiovascular findings in pregnancy",
+        "Apply cardiovascular knowledge to positioning and nursing care",
+        "Differentiate physiological changes from pathological conditions"
+      ],
+      "sections": [
+        {
+          "id": "cv_changes",
+          "heading": "Cardiovascular Adaptations",
+          "kind": "pathophysiology_overview",
+          "body": "Pregnancy requires dramatic cardiovascular adaptation to meet increased maternal and fetal metabolic demands.\n\n**Blood volume:**\n- Increases 40–50% by 32–34 weeks (plasma 50%, RBC 20–30%)\n- Plasma increases more than RBC mass → physiological anemia of pregnancy (dilutional anemia): Hgb 11–12 g/dL, Hct 33–37% (normal in pregnancy)\n- Dilutional anemia reduces blood viscosity → improves uteroplacental perfusion\n\n**Cardiac output (CO):**\n- Increases 30–50% above non-pregnant baseline\n- Mechanism: increased stroke volume (early) + increased heart rate (15–20 bpm above baseline)\n- Peak CO: 28–32 weeks\n- CO further increases 30–45% during labor and 50–60% during pushing\n\n**Heart rate:**\n- Resting HR increases 15–20 bpm above pre-pregnancy baseline\n- Normal range in pregnancy: 80–95 bpm (previously tachycardia)\n\n**Blood pressure:**\n- Systolic: minimal change (slight drop)\n- Diastolic: decreases 10–15 mmHg in 1st/2nd trimester (progesterone-mediated vasodilation)\n- BP returns to pre-pregnancy baseline by 3rd trimester\n- Normal: systolic <120/diastolic <80 (unchanged physiologically)\n\n**Peripheral vascular resistance:**\n- Decreases 25–30% (progesterone causes smooth muscle relaxation in vessel walls)\n- Responsible for 1st/2nd trimester BP drop and edema tendency\n\n**Cardiac changes:**\n- Heart displaced left and upward (fundal elevation)\n- Physiological S3 gallop can be normal in pregnancy (increased blood volume)\n- Innocent systolic murmur (flow murmur) in up to 90% of pregnant women — from increased CO through aortic and pulmonic valves\n- Diastolic murmur is NEVER normal in pregnancy → investigate\n\n**ECG changes:**\n- Left axis deviation (from cardiac rotation)\n- Flattened/inverted T waves in lead III\n- Q wave in lead III and aVF\n- These are normal — do not treat"
+        },
+        {
+          "id": "supine_hypotension",
+          "heading": "Supine Hypotension Syndrome",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Supine hypotension (aortocaval compression syndrome):**\n- Occurs from ~20 weeks: enlarging uterus compresses the inferior vena cava (IVC) and aorta when supine\n- IVC compression → reduced venous return to heart → decreased CO → maternal hypotension, dizziness, nausea, syncope\n- Aortic compression → reduced uterine blood flow → fetal bradycardia (uteroplacental insufficiency)\n\n**Nursing prevention and management:**\n- Teach and enforce lateral (left or right) position for rest, sleep, monitoring\n- Left lateral preferred: displaces uterus off IVC AND aorta to the left\n- If supine is required (emergency, procedure): wedge pillow under right hip/buttock to tilt uterus 15–30° to left\n- During labor: maintain left lateral tilt or frequent position changes\n- If supine hypotension occurs: turn to left side → usually resolves immediately\n\n**Electronic fetal monitoring and positioning:**\n- Even during NST/BPP monitoring: avoid sustained supine positioning\n- Semi-recumbent with left lateral tilt is preferred\n- Variable decelerations during monitoring may improve with position change"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Blood volume ↑ 40–50% (plasma > RBC = physiological anemia); normal pregnancy Hgb 11–12 g/dL\n- CO ↑ 30–50%; peaks at 28–32 weeks; increases further in labor\n- BP decreases in 1st/2nd trimester (progesterone vasodilation); HR ↑ 15–20 bpm\n- Physiological S3 and systolic flow murmur = normal. Diastolic murmur = ABNORMAL\n- Supine hypotension from IVC/aortic compression: prevent with left lateral position or 15° tilt\n- Left axis deviation on ECG = normal in pregnancy (cardiac rotation)"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg05-L02",
+      "topicSlug": "respiratory-changes-pregnancy",
+      "title": "Respiratory Changes in Pregnancy",
+      "learningObjectives": [
+        "Describe respiratory adaptations during pregnancy",
+        "Explain the physiological basis of dyspnea of pregnancy",
+        "Identify respiratory parameters that change versus those that remain stable",
+        "Recognize abnormal respiratory findings requiring investigation",
+        "Apply respiratory knowledge to nursing assessment"
+      ],
+      "sections": [
+        {
+          "id": "respiratory_changes",
+          "heading": "Respiratory Adaptations",
+          "kind": "pathophysiology_overview",
+          "body": "**Structural changes:**\n- Diaphragm elevated 4 cm (uterus pushes up)\n- Thoracic cage widens (subcostal angle increases from 68° to 103°)\n- These changes compensate — overall tidal volume increases despite elevated diaphragm\n\n**Lung volumes:**\n- **Tidal volume (TV): INCREASES 40–50%** (most important change) — more air per breath\n- **Residual volume (RV): decreases 20%** — air remaining after maximum exhalation\n- **Functional residual capacity (FRC): decreases 20–25%**\n- **Total lung capacity (TLC): slightly decreases** (elevated diaphragm)\n- **Vital capacity: unchanged or slightly increased**\n- **Respiratory rate: unchanged or minimally increased** (12–16/min)\n- **Minute ventilation: INCREASES 40–50%** (TV × RR) — primary driver\n\n**Gas exchange:**\n- Progesterone stimulates respiratory center → increases sensitivity to CO2 → hyperventilation\n- Result: maternal PaCO2 decreases to 27–32 mmHg (normal non-pregnant: 35–45)\n- Compensatory metabolic acidosis: bicarbonate (HCO3−) decreases to 18–21 mEq/L\n- Result: mildly alkalotic ABG: pH 7.40–7.47\n- Maternal PaO2 increases slightly (to 104–108 mmHg)\n- This creates a gradient favoring O2 transfer to fetus (fetal pO2 remains lower)\n\n**Dyspnea of pregnancy:**\n- Common complaint (~70% of pregnant women), especially 2nd trimester\n- Mechanism: progesterone sensitizes respiratory center → awareness of increased ventilatory effort\n- No hypoxia — SpO2 is normal\n- Normal SpO2 in pregnancy: 95–100% (same as non-pregnant)\n- Distinguish from pathological dyspnea: PE, cardiac disease, asthma exacerbation\n\n**Clinical implications:**\n- Normal ABG in pregnancy: ↓ PaCO2 (27–32), ↓ HCO3− (18–21), normal-alkalotic pH\n- A 'normal' non-pregnant PaCO2 of 40 mmHg in a pregnant woman may indicate respiratory FAILURE (she cannot maintain her expected low CO2)\n- Mucosal edema: nasal congestion, epistaxis common (estrogen-induced hyperemia)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Tidal volume ↑ 40–50%; RV and FRC decrease; vital capacity essentially unchanged\n- PaCO2 decreases to 27–32 mmHg (progesterone-driven hyperventilation); compensatory ↓ HCO3−\n- Normal pregnancy ABG: low CO2 (27–32), low HCO3 (18–21), slightly alkalotic pH\n- PaCO2 of 40 in pregnant woman = possible respiratory failure (cannot maintain hyperventilation)\n- Dyspnea of pregnancy = normal (progesterone effect); normal SpO2\n- Nasal congestion and epistaxis: estrogen-induced mucosal hyperemia"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg05-L03",
+      "topicSlug": "renal-changes-pregnancy",
+      "title": "Renal Changes in Pregnancy",
+      "learningObjectives": [
+        "Describe renal anatomical and functional changes during pregnancy",
+        "Explain the physiological basis for normal glucosuria and proteinuria in pregnancy",
+        "Identify upper limits of normal for renal laboratory values in pregnancy",
+        "Recognize pathological renal changes versus physiological adaptation",
+        "Apply renal physiology to antepartum assessment and patient education"
+      ],
+      "sections": [
+        {
+          "id": "renal_changes",
+          "heading": "Renal Adaptations",
+          "kind": "pathophysiology_overview",
+          "body": "**Anatomical changes:**\n- Kidneys enlarge 1–1.5 cm in length (increased blood flow and interstitial volume)\n- Renal pelvis and ureters dilate (physiological hydronephrosis — right > left from uterine compression of right ureter and dextrorotation of uterus)\n- Urinary stasis in dilated ureters and renal pelvis → increased risk for pyelonephritis (ascending UTI)\n- Bladder displaced anterosuperiorly → urinary frequency and nocturia (1st and 3rd trimester)\n\n**Functional changes:**\n- **GFR increases 40–65%** by late 1st trimester (increased renal blood flow from ↑ CO)\n- Result: normal serum creatinine decreases to 0.4–0.8 mg/dL (vs 0.8–1.2 non-pregnant)\n- A 'normal' non-pregnant creatinine of 1.0 mg/dL in a pregnant woman may indicate early renal impairment\n- BUN decreases (hemodilution)\n- Uric acid: decreases early, rises in 3rd trimester; elevated uric acid is a marker of preeclampsia\n\n**Glucosuria:**\n- Common in pregnancy (1–2+) on dipstick even with NORMAL blood glucose\n- Mechanism: ↑ GFR overwhelms tubular resorption capacity for glucose (tubular resorption threshold remains constant while filtered load increases)\n- NOT a reliable marker for GDM screening in pregnancy\n- Persistent 2–3+ glucosuria: check blood glucose\n\n**Proteinuria:**\n- Normal protein excretion: up to 300 mg/24h in pregnancy (vs 150 mg non-pregnant)\n- Spot urine protein:creatinine ratio >0.3 = significant (equivalent to ≥300 mg/24h)\n- Proteinuria >300 mg/24h + HTN = preeclampsia diagnostic criterion\n- Trace or 1+ on dipstick may be normal; ≥2+ requires 24h collection or spot P:Cr ratio\n\n**RAAS and fluid balance:**\n- Progesterone stimulates aldosterone production → sodium retention\n- Estrogen increases angiotensinogen → ↑ RAAS activity → ↑ aldosterone\n- Total body water increases by 6–8 liters in term pregnancy\n- Normally dependent edema (ankles, feet) is physiological in pregnancy"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- GFR ↑ 40–65% → serum creatinine decreases (0.4–0.8 normal in pregnancy)\n- Creatinine of 1.0 in pregnancy = possibly abnormal (investigate)\n- Glucosuria common in pregnancy (increased GFR overwhelms tubular threshold) — not diagnostic for GDM\n- Proteinuria normal up to 300 mg/24h; ≥300 mg/24h + HTN = preeclampsia\n- Physiological hydronephrosis (right > left): ureteral dilation → UTI/pyelonephritis risk\n- Dependent edema (ankles) = normal physiological change; facial/hand edema = concerning (preeclampsia)"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg05-L04",
+      "topicSlug": "hematologic-changes-pregnancy",
+      "title": "Hematologic Changes in Pregnancy",
+      "learningObjectives": [
+        "Explain the causes and significance of physiological anemia of pregnancy",
+        "Identify normal hematologic laboratory values in pregnancy",
+        "Describe the hypercoagulable state of pregnancy",
+        "Recognize the implications of hypercoagulability for thromboembolism risk",
+        "Apply hematologic knowledge to antepartum and postpartum nursing care"
+      ],
+      "sections": [
+        {
+          "id": "hematologic_changes",
+          "heading": "Hematologic Adaptations",
+          "kind": "pathophysiology_overview",
+          "body": "**Blood volume expansion:**\n- Plasma volume: ↑ 50% (by 32–34 weeks)\n- RBC mass: ↑ 20–30%\n- Plasma increases disproportionately → dilution of RBC → physiological (dilutional) anemia\n- Normal Hgb in pregnancy: ≥11 g/dL (1st/3rd trimester); ≥10.5 g/dL (2nd trimester)\n- Iron deficiency anemia (IDA) defined at Hgb <11/10.5 g/dL\n\n**Leukocytes (WBC):**\n- WBC increases to 5,000–15,000/mm³ (normal in pregnancy)\n- Can increase further in labor to 25,000–30,000/mm³ (physiological stress response)\n- Interpretation: a WBC of 15,000 in a laboring client is NOT necessarily infection\n\n**Platelets:**\n- May decrease slightly (gestational thrombocytopenia — benign, no fetal effects)\n- Platelet count 80,000–150,000 in pregnancy: monitor; if associated with hypertension = HELLP\n- Platelet count <100,000: assess for HELLP, ITP, TTP\n\n**Coagulation factors (hypercoagulable state):**\n- Fibrinogen: doubles (from 200–400 → 400–600 mg/dL)\n- Factors VII, VIII, X, XII: increase\n- Factors XI, XIII: decrease slightly\n- Protein S: decreases (natural anticoagulant)\n- NET EFFECT: hypercoagulable state — protective against hemorrhage at delivery, but increases VTE risk\n\n**DVT/PE risk in pregnancy:**\n- 5× higher risk than non-pregnant women of same age\n- Causes: Virchow's triad — venous stasis (IVC compression), endothelial injury (delivery), hypercoagulability (clotting factor changes)\n- DVT symptoms: unilateral leg swelling, pain, warmth, redness\n- PE symptoms: dyspnea, pleuritic chest pain, tachycardia, hemoptysis\n- Treatment in pregnancy: LMWH (enoxaparin) — heparin does NOT cross placenta; warfarin is teratogenic\n- Anticoagulation postpartum: continue for ≥6 weeks (highest risk period)\n\n**Erythropoietin:**\n- Increases from early pregnancy to stimulate RBC production\n- Without iron supplementation, RBC production cannot keep pace with plasma expansion → IDA\n- Prenatal iron supplementation (27 mg/day) is essential to prevent IDA"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Physiological anemia: plasma ↑50% > RBC ↑20% → dilutional; Hgb ≥11 g/dL is normal\n- WBC up to 15,000 normal in pregnancy; up to 30,000 in labor\n- Pregnancy = hypercoagulable: ↑ fibrinogen, ↑ factors VII/VIII/X/XII, ↓ protein S\n- VTE risk ×5 in pregnancy; treat with LMWH (heparin doesn't cross placenta)\n- Warfarin is teratogenic → contraindicated in 1st trimester; LMWH throughout pregnancy\n- Iron: 27 mg/day required; without supplementation → iron deficiency anemia"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg05-L05",
+      "topicSlug": "gastrointestinal-changes-pregnancy",
+      "title": "Gastrointestinal Changes in Pregnancy",
+      "learningObjectives": [
+        "Describe GI adaptations during pregnancy and their clinical significance",
+        "Explain the physiological basis for common GI complaints",
+        "Identify nursing interventions for nausea, heartburn, and constipation",
+        "Recognize when GI symptoms are pathological versus physiological",
+        "Apply GI knowledge to nutritional counseling"
+      ],
+      "sections": [
+        {
+          "id": "gi_changes",
+          "heading": "GI Adaptations",
+          "kind": "pathophysiology_overview",
+          "body": "**Mouth:**\n- Hyperemia and hypertrophy of gums (progesterone effect) → bleeding gums common\n- Ptialism (excessive salivation) — benign but distressing, especially with NVP\n- Pyalism can worsen nausea; treatment: sugar-free gum, frequent small sips of water\n\n**Stomach and esophagus:**\n- Lower esophageal sphincter (LES) tone decreases (progesterone relaxes smooth muscle) → gastroesophageal reflux\n- Stomach emptying slows (decreased motility from progesterone)\n- Gastric acid production may increase in later pregnancy\n- Result: heartburn/GERD is extremely common (>50% of pregnant women)\n- Management: small frequent meals, avoid lying down after eating, head of bed elevation, antacids (calcium carbonate safe), H2 blockers (famotidine safe), PPIs if needed\n\n**Nausea and vomiting of pregnancy (NVP):**\n- Affects 70–85% of pregnant women; peaks 8–12 weeks; typically resolves by 14–16 weeks\n- Caused by: rising hCG stimulates CTZ (chemoreceptor trigger zone); progesterone slows gastric emptying\n- First-line: vitamin B6 (pyridoxine) ± doxylamine (Diclegis/Bonjesta); ginger; small frequent meals\n- Hyperemesis gravidarum (HG): persistent vomiting, weight loss >5% pre-pregnancy weight, dehydration, ketonuria → hospitalization, IV fluids, IV antiemetics\n\n**Small and large intestine:**\n- Progesterone decreases intestinal motility throughout → constipation is nearly universal\n- Management: dietary fiber ↑, fluid ↑ (8–10 glasses/day), stool softeners (docusate sodium safe), walking\n- AVOID: stimulant laxatives (bisacodyl, senna — may cause contractions)\n- Hemorrhoids: very common from constipation + IVC compression → increased rectal venous pressure\n\n**Liver and gallbladder:**\n- Intrahepatic cholestasis of pregnancy (ICP): pruritus without rash, elevated bile acids, elevated LFTs; risk of fetal demise; treat with ursodiol, consider early delivery\n- Gallstones: increased risk from estrogen (↑ cholesterol saturation) and progesterone (impaired gallbladder emptying)\n- Normal LFTs in pregnancy: AST/ALT may be mildly elevated; alkaline phosphatase doubles (from placental isoform)\n- Appendix: displaced superiorly and laterally → appendicitis pain may be in RUQ/right flank in late pregnancy"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Progesterone relaxes smooth muscle everywhere → ↓ LES tone (GERD) + ↓ bowel motility (constipation)\n- NVP: B6 ± doxylamine first-line; HG = hospitalization, IV fluids, IV antiemetics\n- Heartburn: small meals, upright after eating, antacids (calcium carbonate safe), H2 blockers\n- Constipation: fiber + fluid + docusate. Avoid stimulant laxatives (contraction risk)\n- ICP (intrahepatic cholestasis): pruritus + elevated bile acids → fetal demise risk → ursodiol + early delivery\n- Appendix displaced superiorly in late pregnancy → appendicitis may present in RUQ"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg05-L06",
+      "topicSlug": "musculoskeletal-changes-pregnancy",
+      "title": "Musculoskeletal Changes in Pregnancy",
+      "learningObjectives": [
+        "Describe musculoskeletal adaptations during pregnancy",
+        "Explain the cause of common musculoskeletal complaints",
+        "Identify risk factors for diastasis recti and pelvic girdle pain",
+        "Apply knowledge to physical activity counseling in pregnancy",
+        "Recognize musculoskeletal complications requiring intervention"
+      ],
+      "sections": [
+        {
+          "id": "msk_changes",
+          "heading": "Musculoskeletal Adaptations",
+          "kind": "pathophysiology_overview",
+          "body": "**Relaxin hormone:**\n- Produced by corpus luteum and placenta\n- Causes ligamentous laxity throughout the body — especially pelvic joints (pubic symphysis, sacroiliac joints) to allow pelvic expansion for delivery\n- Also affects all other ligaments → generalized joint instability\n\n**Postural changes:**\n- Growing uterus shifts center of gravity anteriorly → compensatory lumbar lordosis (lower back curves inward more)\n- Progressive waddling gait as ligament laxity increases\n- Neck/upper back: progressive thoracic kyphosis to counterbalance\n- Low back pain: nearly universal (60–70% of pregnant women)\n\n**Pelvic girdle pain:**\n- Pubic symphysis diastasis: widening of pubic symphysis joint from relaxin\n- Normal: up to 1 cm diastasis; >1 cm can cause significant pain and disability\n- Sacroiliac joint dysfunction: pain radiating to buttock/posterior thigh (often confused with sciatica)\n- Management: support belt, physical therapy, avoidance of asymmetric activities\n\n**Diastasis recti:**\n- Separation of the rectus abdominis muscles along the linea alba from uterine expansion\n- More common in grand multiparas and women with large gestations\n- Can persist postpartum; causes weakness in abdominal wall; core rehabilitation post-delivery\n\n**Carpal tunnel syndrome:**\n- Compression of median nerve at wrist from tissue edema\n- Very common in pregnancy (17–40% of pregnant women)\n- Symptoms: hand tingling, numbness, pain, especially at night (wrist flexion during sleep)\n- Management: neutral wrist splints at night, elevation, ice\n\n**Leg cramps:**\n- Common in 2nd and 3rd trimester (50% of pregnant women)\n- Likely from increased muscle fatigue, venous congestion, calcium/magnesium changes\n- Management: calf stretching, dorsiflexion during cramp, adequate hydration, calcium supplementation\n\n**Physical activity in pregnancy:**\n- Moderate exercise (30+ min most days) is recommended for uncomplicated pregnancies\n- Benefits: weight management, reduced GDM risk, improved mood, shorter labor\n- Absolute contraindications: hemodynamically significant cardiac disease, PPROM, placenta previa with bleeding, severe preeclampsia, preterm labor\n- Avoid: supine exercises after 20 weeks (supine hypotension), contact sports, high-altitude exercise, SCUBA diving"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Relaxin → ligamentous laxity → pelvic joint pain, pubic symphysis diastasis, generalized instability\n- Lumbar lordosis from anterior center of gravity shift → low back pain (70% of pregnancies)\n- Carpal tunnel: median nerve compression from edema → night splinting + elevation\n- Diastasis recti: rectus abdominis separation → core rehab postpartum\n- Exercise: 30+ min moderate most days; avoid supine after 20w, contact sports, diving\n- Leg cramps: calf stretching + dorsiflexion during cramp + hydration"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg05-L07",
+      "topicSlug": "endocrine-changes-pregnancy",
+      "title": "Endocrine Changes in Pregnancy",
+      "learningObjectives": [
+        "Describe endocrine gland changes during pregnancy",
+        "Explain thyroid function changes and their clinical significance",
+        "Identify the role of insulin resistance in gestational diabetes",
+        "Recognize adrenal and pituitary changes in pregnancy",
+        "Apply endocrine knowledge to antepartum assessment and medication management"
+      ],
+      "sections": [
+        {
+          "id": "endocrine_changes",
+          "heading": "Endocrine Adaptations",
+          "kind": "pathophysiology_overview",
+          "body": "**Thyroid:**\n- Thyroid gland enlarges 10–15% (increased vascularity and glandular hypertrophy)\n- hCG stimulates TSH receptors → 1st trimester mild thyroid stimulation → slight TSH suppression (normal)\n- Total T4 increases (more TBG from estrogen), but free T4 stays normal\n- Normal TSH in pregnancy: 0.1–2.5 mIU/L (1st trimester); 0.2–3.0 (2nd/3rd)\n- Thyroid hormone requirements increase 30–50% in hypothyroid women on levothyroxine — dose adjustment needed\n- Subclinical hypothyroidism in pregnancy: treat with levothyroxine (fetal brain development depends on maternal thyroid hormone in 1st trimester)\n- Gestational transient thyrotoxicosis: from hCG stimulation, peaks at 8–10 weeks with hyperemesis gravidarum; usually self-limited\n\n**Pancreas/insulin:**\n- Fasting blood glucose: slightly lower in pregnancy (placental glucose consumption)\n- Insulin resistance progressively increases from 2nd trimester (HPL, cortisol, progesterone, estrogen)\n- Pancreatic beta cells compensate with increased insulin secretion\n- If beta cells cannot compensate → gestational diabetes mellitus (GDM)\n- GDM screening: 1-hour 50g OGTT at 24–28 weeks; if ≥140 mg/dL → proceed to 3-hour 100g OGTT\n\n**Adrenal glands:**\n- Cortisol increases 2–3× (from increased CBG and increased production)\n- Contributes to insulin resistance (together with HPL)\n- Aldosterone increases → sodium retention (normal pregnancy expansion of blood volume)\n- DHEAS (from adrenal): converted by placenta to estrogens\n\n**Pituitary gland:**\n- Enlarges 20–40% (lactotroph [prolactin-secreting] cells proliferate)\n- Prolactin increases from 25 ng/mL to 200–400 ng/mL at term (breast preparation)\n- Prolactin production suppressed during pregnancy by high estrogen (paradoxically); breastfeeding is inhibited until postpartum estrogen drop\n- GH: pituitary GH suppressed and replaced by placental GH (variant) after 20 weeks\n\n**Parathyroid/calcium:**\n- PTH decreases early but calcium homeostasis maintained through vitamin D and intestinal absorption increases\n- Fetal calcium needs are substantial; 30 g calcium transferred to fetus over pregnancy\n- Maternal dietary calcium requirement: 1,000 mg/day (may increase to 1,200–1,500 mg/day)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Thyroid enlarges; total T4 ↑ (more TBG), free T4 normal; TSH slightly lower in 1st trimester\n- Hypothyroid women: levothyroxine dose ↑ 30–50% in pregnancy (maternal T4 critical for fetal brain development)\n- Insulin resistance ↑ in 2nd/3rd trimester (HPL, cortisol, progesterone) → GDM risk\n- GDM screen: 1-hr 50g OGTT at 24–28 weeks; threshold ≥140 mg/dL → 3-hr test\n- Pituitary enlarges 20–40%; prolactin ↑ (breast prep); paradoxically lactation suppressed until postpartum\n- Cortisol ↑ (insulin resistance contributor); aldosterone ↑ (sodium retention, blood volume expansion)"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "mn-p05-001",
+      "topicSlug": "cardiovascular-changes-pregnancy",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "supine-hypotension-left-lateral-positioning",
+      "stem": "A client at 30 weeks gestation is lying supine for a non-stress test. After 10 minutes, she reports feeling lightheaded and nauseated. Her blood pressure drops from 118/72 to 88/52. The fetal heart rate decreases to 100 bpm. What is the priority nursing action?",
+      "options": {"A": "Administer IV fluid bolus of normal saline","B": "Turn the client to her left side immediately","C": "Place client in Trendelenburg position","D": "Administer oxygen via face mask at 10 L/min"},
+      "correctAnswer": "B",
+      "rationale": "This is supine hypotension syndrome (aortocaval compression): the enlarged uterus is compressing the inferior vena cava, reducing venous return → decreased cardiac output → maternal hypotension and fetal bradycardia. The immediate treatment is turning the client to her left (or right) lateral position to displace the uterus off the IVC/aorta. This typically resolves symptoms within minutes. Other measures (IV fluids, oxygen) may be added but are secondary to position change.",
+      "incorrectRationales": {"A": "IV fluids are secondary — position change is the immediate intervention that addresses the cause.", "C": "Trendelenburg would further increase IVC compression from the gravid uterus pressing on abdominal vessels. Left lateral position is correct, not Trendelenburg.", "D": "Oxygen may be added as a secondary measure but does not address the primary problem of IVC compression."},
+      "hint": "Supine hypotension = IVC compression → left lateral position immediately.",
+      "clinicalPearl": "Left lateral position is preferred over right because it displaces the uterus leftward, moving it away from the IVC (which runs slightly to the right of midline). However, right lateral position is also effective and may be used if left lateral is not tolerated.",
+      "examStrategy": "Any scenario with maternal hypotension + bradycardia + supine position at >20 weeks gestation: priority action = position change to left lateral. This is consistently the right answer.",
+      "keyTakeaway": "Supine hypotension in pregnancy: turn to left lateral position IMMEDIATELY to relieve IVC compression. Oxygen and IV fluids are secondary."
+    },
+    {
+      "questionId": "mn-p05-002",
+      "topicSlug": "hematologic-changes-pregnancy",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "DVT-pregnancy-LMWH-warfarin-anticoagulation",
+      "stem": "A client at 18 weeks gestation is diagnosed with a DVT in her left leg. Her provider orders anticoagulation therapy. Which medication is appropriate for treatment?",
+      "options": {"A": "Warfarin (Coumadin)","B": "Low molecular weight heparin (enoxaparin/Lovenox)","C": "Aspirin 325 mg daily","D": "Rivaroxaban (Xarelto)"},
+      "correctAnswer": "B",
+      "rationale": "LMWH (enoxaparin) is the anticoagulant of choice for VTE treatment and prevention throughout pregnancy. Heparin (unfractionated or LMWH) does not cross the placenta because the molecule is too large — making it safe for the fetus. Warfarin crosses the placenta and causes fetal warfarin syndrome (1st trimester) and fetal hemorrhage (all trimesters). Direct oral anticoagulants (DOACs like rivaroxaban) are not approved in pregnancy due to inadequate safety data. Aspirin is antiplatelet, not anticoagulant.",
+      "incorrectRationales": {"A": "Warfarin crosses the placenta → fetal warfarin syndrome (1st trimester: bone/facial defects) + hemorrhage. Contraindicated in pregnancy, especially 1st trimester.", "C": "Aspirin inhibits platelet aggregation — it is not effective for DVT treatment and does not provide anticoagulation.", "D": "DOACs (rivaroxaban, apixaban, dabigatran) are FDA Pregnancy Category not established; they may cross the placenta and carry unknown fetal risk. Not used in pregnancy."},
+      "hint": "Anticoagulation in pregnancy = LMWH (or UFH). Warfarin and DOACs are contraindicated.",
+      "clinicalPearl": "LMWH must be switched to unfractionated heparin (UFH) at 36 weeks or when delivery is imminent (LMWH's longer half-life makes neuraxial anesthesia unsafe if given too recently). UFH can be reversed with protamine sulfate; LMWH cannot be fully reversed.",
+      "examStrategy": "Anticoagulation in pregnancy questions: always choose heparin (UFH or LMWH). Warfarin = contraindicated. DOACs = contraindicated. This is a high-yield, consistently tested topic.",
+      "keyTakeaway": "VTE in pregnancy: treat with LMWH (enoxaparin). Warfarin = teratogenic/fetal hemorrhage. DOACs = unsafe. LMWH does not cross placenta."
+    },
+    {
+      "questionId": "mn-p05-003",
+      "topicSlug": "respiratory-changes-pregnancy",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "pregnancy-ABG-PaCO2-27-normal",
+      "stem": "A nurse reviews the arterial blood gas (ABG) results of a client at 34 weeks gestation with mild asthma: pH 7.44, PaCO2 27 mmHg, PaO2 102 mmHg, HCO3− 18 mEq/L, SpO2 98%. How should these results be interpreted?",
+      "options": {"A": "Respiratory alkalosis with metabolic compensation — this is ABNORMAL and requires bronchodilator treatment","B": "These values are normal for a pregnant woman — the lower PaCO2 and bicarbonate reflect normal physiological adaptations of pregnancy","C": "Metabolic acidosis — the low HCO3 requires bicarbonate supplementation","D": "Respiratory depression from medication side effect — notify provider immediately"},
+      "correctAnswer": "B",
+      "rationale": "Normal pregnancy ABGs: PaCO2 27–32 mmHg (low due to progesterone-driven hyperventilation), HCO3 18–21 mEq/L (compensatory metabolic 'acidosis'), pH 7.40–7.47 (slightly alkalotic). These values are NORMAL for pregnancy — the low PaCO2 is the expected adaptation. In a NON-pregnant patient, PaCO2 of 27 would suggest true respiratory alkalosis, but in pregnancy it is physiological.",
+      "incorrectRationales": {"A": "A PaCO2 of 27 IS expected in pregnancy — it is not a sign of pathology requiring bronchodilators.", "C": "The low HCO3 (18) is compensatory for the low PaCO2 — this is NOT metabolic acidosis. Metabolic acidosis would have a low pH with elevated anion gap.", "D": "These values are physiologically normal — there is no evidence of respiratory depression."},
+      "hint": "Normal pregnancy PaCO2 = 27–32 (lower than non-pregnant normal of 35–45). Low HCO3 = compensatory — not acidosis.",
+      "clinicalPearl": "If a pregnant patient's PaCO2 is 40 mmHg (normal for non-pregnant), this may indicate RESPIRATORY FAILURE because she cannot maintain her expected hyperventilation. Always interpret ABGs with pregnancy norms.",
+      "examStrategy": "Pregnancy ABG: PaCO2 27–32 = NORMAL (not alkalosis). HCO3 18–21 = NORMAL compensation. pH 7.40–7.47 = NORMAL. Applying non-pregnant normals will lead to misinterpretation.",
+      "keyTakeaway": "Normal pregnancy ABG: PaCO2 27–32 (progesterone-driven hyperventilation), HCO3 18–21 (compensation), pH slightly alkalotic. PaCO2 40 in pregnancy = possible respiratory failure."
+    },
+    {
+      "questionId": "mn-p05-004",
+      "topicSlug": "renal-changes-pregnancy",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "glucosuria-pregnancy-normal-GDM-test",
+      "stem": "A client at 26 weeks gestation has a routine prenatal urine dipstick showing 2+ glucose. Her fasting glucose this morning was 84 mg/dL. Which explanation is most accurate?",
+      "options": {"A": "2+ glucosuria confirms gestational diabetes — begin dietary modifications immediately","B": "Glucosuria in pregnancy can occur with normal blood glucose due to increased GFR exceeding renal tubular glucose resorption capacity; formal GDM screening with OGTT is still needed","C": "This is a false positive — glucosuria never occurs with normal blood glucose","D": "Glucosuria indicates a renal tubular disorder requiring nephrology referral"},
+      "correctAnswer": "B",
+      "rationale": "Physiological glucosuria of pregnancy occurs because the GFR increases 40–65% during pregnancy, greatly increasing the filtered glucose load. The renal tubular resorption capacity remains constant, so the excess glucose is spilled into the urine even when blood glucose levels are normal. Urine glucose is an unreliable screening tool for GDM in pregnancy. The formal 1-hour 50g OGTT at 24–28 weeks is the appropriate screening test.",
+      "incorrectRationales": {"A": "Urine glucose is NOT diagnostic for GDM and should not trigger dietary modifications without formal glucose tolerance testing.", "C": "Physiological glucosuria of pregnancy IS a real phenomenon — it commonly occurs with completely normal blood glucose levels.", "D": "Renal tubular disorders would be suspected if glucosuria persists outside of pregnancy or is accompanied by other abnormal urinalysis findings (amino acids, phosphate, uric acid)."},
+      "hint": "Glucosuria in pregnancy = often normal (↑GFR overwhelms tubular resorption). Not diagnostic for GDM — need OGTT.",
+      "clinicalPearl": "Dipstick glucosuria in pregnancy does NOT replace or eliminate the need for formal GDM screening with OGTT at 24–28 weeks. It is a common incidental finding.",
+      "examStrategy": "Glucosuria question in pregnancy context: the answer is always 'physiological — increased GFR overwhelms tubular threshold.' Urine glucose is not diagnostic for GDM.",
+      "keyTakeaway": "Glucosuria in pregnancy with normal blood glucose = physiological (↑GFR > tubular resorption capacity). Not diagnostic for GDM — still need 24–28 week OGTT."
+    },
+    {
+      "questionId": "mn-p05-005",
+      "topicSlug": "gastrointestinal-changes-pregnancy",
+      "difficulty": "easy",
+      "type": "MCQ",
+      "stemAnchor": "constipation-pregnancy-stimulant-laxative-contraindicated",
+      "stem": "A client at 28 weeks gestation reports severe constipation. She asks the nurse if she can take bisacodyl (Dulcolax) daily. Which response is most appropriate?",
+      "options": {"A": "Bisacodyl is safe in pregnancy; take as directed on the packaging","B": "Avoid bisacodyl in pregnancy as it may stimulate uterine contractions; recommend docusate sodium plus increased fiber and fluid intake","C": "All laxatives are contraindicated in pregnancy; only dietary changes are allowed","D": "Bisacodyl is appropriate for occasional use but not for daily use"},
+      "correctAnswer": "B",
+      "rationale": "Stimulant laxatives (bisacodyl, senna, castor oil) stimulate bowel muscle contraction and may also stimulate uterine muscle contractions, potentially triggering preterm labor. They are generally avoided in pregnancy. Safe alternatives: docusate sodium (stool softener, not stimulant), dietary fiber increase, adequate hydration (8–10 glasses/day), psyllium (Metamucil), and physical activity.",
+      "incorrectRationales": {"A": "Bisacodyl is not recommended in pregnancy due to contraction risk.", "C": "Not all laxatives are contraindicated — osmotic and bulk-forming laxatives (Miralax/polyethylene glycol, Metamucil, docusate) are safe.", "D": "Even occasional bisacodyl use is not recommended in pregnancy — safe alternatives should be used instead."},
+      "hint": "Stimulant laxatives (bisacodyl, senna, castor oil) = avoid in pregnancy (contraction risk). Docusate = safe.",
+      "clinicalPearl": "Castor oil was historically used to induce labor (stimulates bowel + uterine contractions) — this is why stimulant laxatives are not recommended in pregnancy. Docusate sodium (Colace) is the first-line pharmacological option for constipation in pregnancy.",
+      "examStrategy": "Constipation in pregnancy: safe treatments = fiber + fluids + docusate + walking. Unsafe = stimulant laxatives (bisacodyl, senna, castor oil) due to contraction risk.",
+      "keyTakeaway": "Constipation in pregnancy: use docusate, fiber, fluids. Avoid stimulant laxatives (bisacodyl, senna, castor oil) — may cause uterine contractions."
+    },
+    {
+      "questionId": "mn-p05-006",
+      "topicSlug": "endocrine-changes-pregnancy",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "levothyroxine-dose-increase-pregnancy-hypothyroid",
+      "stem": "A client with hypothyroidism on levothyroxine 75 mcg daily becomes pregnant. Her TSH at 8 weeks is 3.8 mIU/L. What action is most appropriate?",
+      "options": {"A": "Maintain current dose; TSH of 3.8 is within normal range","B": "Increase levothyroxine dose; the target TSH in the first trimester is <2.5 mIU/L and levothyroxine requirements typically increase 30–50% in pregnancy","C": "Decrease levothyroxine; elevated estrogen in pregnancy naturally provides thyroid hormone","D": "Discontinue levothyroxine temporarily until TSH normalizes spontaneously"},
+      "correctAnswer": "B",
+      "rationale": "In pregnancy, thyroid hormone requirements increase 30–50% because: (1) increased thyroxine-binding globulin (TBG) from estrogen binds more T4 (reducing free T4); (2) the fetus depends on maternal T4 for brain development in the 1st trimester; (3) placental degradation of thyroid hormones. Target TSH in pregnancy: <2.5 mIU/L (1st trimester) and <3.0 mIU/L (2nd/3rd trimester). TSH 3.8 is too high — dose increase is needed.",
+      "incorrectRationales": {"A": "TSH 3.8 exceeds the first-trimester pregnancy target of <2.5 mIU/L. 'Normal' non-pregnant TSH ranges do not apply to the pregnant patient.", "C": "Estrogen increases TBG (which binds T4, reducing free T4) — this REQUIRES more levothyroxine, not less.", "D": "Discontinuing levothyroxine in a hypothyroid pregnant woman risks fetal neurological damage from thyroid hormone deficiency."},
+      "hint": "Pregnancy increases thyroid hormone demand. Target TSH 1st trimester: <2.5. Levothyroxine dose ↑ 30–50%.",
+      "clinicalPearl": "Pre-conception counseling for hypothyroid women should include: increase levothyroxine dose by 20–30% as soon as pregnancy is confirmed (don't wait for first prenatal visit). TSH should be checked every 4–8 weeks in the first trimester and at least once in each subsequent trimester.",
+      "examStrategy": "Hypothyroidism in pregnancy: target TSH <2.5 (1st trimester). Levothyroxine dose must increase. Normal non-pregnant TSH up to 4.5 does not apply to pregnant patients.",
+      "keyTakeaway": "Hypothyroidism in pregnancy: levothyroxine dose increases 30–50%. Target TSH: <2.5 mIU/L (1st trimester). Fetal brain development depends on adequate maternal thyroid hormone."
+    },
+    {
+      "questionId": "mn-p05-007",
+      "topicSlug": "hematologic-changes-pregnancy",
+      "difficulty": "easy",
+      "type": "MCQ",
+      "stemAnchor": "physiological-anemia-hemoglobin-11-normal",
+      "stem": "A nurse reviews prenatal labs for a client at 28 weeks gestation: hemoglobin 11.4 g/dL, hematocrit 34%. The client is concerned she has anemia. Which response is most accurate?",
+      "options": {"A": "Yes, this hemoglobin indicates iron deficiency anemia requiring immediate iron infusion","B": "These values are within normal limits for pregnancy — physiological anemia occurs because plasma volume increases more than red cell mass","C": "These values are critically low — call the provider for emergency blood transfusion","D": "The hemoglobin is low, but it is borderline; begin weekly CBC monitoring"},
+      "correctAnswer": "B",
+      "rationale": "Physiological (dilutional) anemia of pregnancy occurs because plasma volume increases 50% while RBC mass increases only 20–30% — resulting in hemodilution. The normal Hgb in pregnancy is ≥11 g/dL (1st and 3rd trimester) or ≥10.5 g/dL (2nd trimester). A hemoglobin of 11.4 g/dL is normal for 28 weeks gestation. No intervention is needed beyond routine prenatal vitamin and dietary counseling.",
+      "incorrectRationales": {"A": "Hemoglobin 11.4 g/dL is above the threshold for pregnancy anemia (≥11 g/dL). Iron deficiency anemia is defined as Hgb <11 g/dL in pregnancy.", "C": "A hemoglobin of 11.4 is not critically low and does not warrant blood transfusion. Transfusion threshold in non-acute settings is typically Hgb <7–8 g/dL.", "D": "Weekly CBC monitoring is not indicated for a normal pregnancy hemoglobin."},
+      "hint": "Normal pregnancy Hgb: ≥11 g/dL. Physiological anemia = dilutional (plasma ↑ > RBC ↑). 11.4 = normal.",
+      "clinicalPearl": "Iron deficiency anemia criteria in pregnancy: Hgb <11 g/dL (1st/3rd trimester) or <10.5 g/dL (2nd trimester), with serum ferritin <30 mcg/L confirming iron deficiency. Treatment: therapeutic iron supplementation (150–200 mg elemental iron/day in divided doses).",
+      "examStrategy": "Normal pregnancy Hgb: ≥11 g/dL (or ≥10.5 in 2nd trimester). Don't apply non-pregnant normals (12–16 g/dL). If Hgb ≥11: reassure. If <11: evaluate for iron deficiency.",
+      "keyTakeaway": "Normal pregnancy Hgb ≥11 g/dL (dilutional anemia = physiological). Iron deficiency anemia defined as Hgb <11 (or <10.5 in 2nd trimester)."
+    }
+  ],
+  "flashcards": [
+    {"id":"mn-fc-p05-001","front":"What is physiological anemia of pregnancy and why does it occur?","back":"Plasma volume increases 50%; RBC mass increases only 20–30% → dilutional hemodilution → Hgb 11–12 g/dL in pregnancy. This is NORMAL — not iron deficiency anemia. Normal pregnancy Hgb: ≥11 g/dL.","hint":"Plasma grows faster than RBCs = dilution = lower Hgb. 11 g/dL is normal in pregnancy.","explanation":"The disproportionate plasma expansion reduces blood viscosity, improving uteroplacental perfusion and oxygen delivery to the fetus. Iron deficiency anemia (Hgb <11 g/dL) occurs on top of this physiological dilution when iron intake is insufficient.","clinicalPearl":"Plasma volume expansion peaks at 32–34 weeks. This is why hemoglobin reaches its nadir (lowest point) at approximately 28–32 weeks."},
+    {"id":"mn-fc-p05-002","front":"What are the cardiovascular changes in pregnancy?","back":"Blood volume ↑40–50%. Cardiac output ↑30–50% (↑stroke volume + ↑HR 15–20 bpm). BP: diastolic drops 10–15 mmHg 1st/2nd trimester. SVR decreases 25–30% (progesterone vasodilation). Physiological S3 and flow murmur = normal.","hint":"Volume up, output up, pressure down. HR slightly up. Flow murmur normal.","explanation":"Peak CO at 28–32 weeks. CO increases further during labor (↑30–45%) and pushing (↑50–60%). Diastolic murmurs are NEVER physiological in pregnancy — always evaluate. ECG: left axis deviation, T wave changes in III/aVF = normal.","clinicalPearl":"Cardiac conditions that worsen significantly with pregnancy's cardiovascular demands: mitral stenosis (fixed obstruction + ↑CO → pulmonary edema), Eisenmenger syndrome (fixed pulmonary hypertension + ↑CO → right heart failure), peripartum cardiomyopathy."},
+    {"id":"mn-fc-p05-003","front":"What is normal PaCO2 in pregnancy and why is it reduced?","back":"Normal pregnancy PaCO2: 27–32 mmHg (vs 35–45 non-pregnant). Progesterone sensitizes the respiratory center → hyperventilation → ↑tidal volume → CO2 blown off. Compensatory ↓ HCO3 (18–21). pH slightly alkalotic (7.40–7.47).","hint":"Progesterone = hyperventilation → low CO2 = NORMAL in pregnancy.","explanation":"This maternal hyperventilation creates a CO2 gradient: maternal pCO2 27 > fetal pCO2 ~40 → CO2 diffuses from fetus to mother across placenta. Without this gradient, fetal CO2 clearance would be impaired. A 'normal' pCO2 of 40 in a pregnant woman = impaired ventilatory compensation = respiratory concern.","clinicalPearl":"Interpreting ABGs in pregnancy: use pregnancy-specific normals. Respiratory alkalosis vs normal pregnancy: check if the patient is pregnant and apply pregnancy norms (pCO2 27–32 = NORMAL, not alkalosis requiring treatment)."},
+    {"id":"mn-fc-p05-004","front":"What is supine hypotension syndrome?","back":"After ~20 weeks, supine position allows gravid uterus to compress IVC → ↓venous return → ↓CO → maternal hypotension, dizziness, nausea, syncope. Also compresses aorta → ↓uterine blood flow → fetal bradycardia. Treatment: left lateral position.","hint":"Supine + pregnant = IVC compression = hypotension + fetal bradycardia. Fix: left lateral.","explanation":"The IVC lies slightly to the right of midline in the retroperitoneum. Left lateral position displaces the uterus off the IVC and aorta. If left lateral is not possible, a 15° left tilt (pillow under right hip) is adequate for procedures, monitoring, and surgery.","clinicalPearl":"During cesarean section (which requires supine position), a left lateral tilt of the operating table is maintained until the baby is delivered. 'Uterine displacement' is a standard component of obstetric anesthesia positioning."},
+    {"id":"mn-fc-p05-005","front":"What is the hypercoagulable state of pregnancy and why is it concerning?","back":"Pregnancy increases clotting factors (fibrinogen doubles; ↑VII, VIII, X, XII) and decreases anticoagulants (↓Protein S). Result: DVT/PE risk ×5 compared to non-pregnant. Treat with LMWH (heparin does not cross placenta). Warfarin and DOACs contraindicated.","hint":"More clotting, less anti-clotting = hypercoagulable = VTE risk. LMWH = safe treatment.","explanation":"Virchow's triad all present in pregnancy: venous stasis (IVC compression, immobility), hypercoagulability (clotting factor changes), and endothelial injury (at delivery). Highest VTE risk is actually in the first 6 weeks postpartum. Anticoagulation should continue 6 weeks postpartum after VTE.","clinicalPearl":"Most DVTs in pregnancy occur in the left leg (70–80%) — from the left iliac vein being compressed by the right iliac artery as it crosses over it. This anatomical relationship causes preferential left-sided compression."},
+    {"id":"mn-fc-p05-006","front":"What GI changes occur in pregnancy and why?","back":"Progesterone relaxes smooth muscle throughout GI tract → ↓LES tone (GERD) + ↓bowel motility (constipation). Gastric emptying slows. Nausea/vomiting peaks 8–12 weeks (hCG + progesterone). Appendix displaced superiorly in late pregnancy.","hint":"Progesterone = GI relaxation = GERD + constipation + slow emptying.","explanation":"The clinical consequences of progesterone's smooth muscle relaxation: heartburn (GERD), nausea/vomiting (altered gastric motility), constipation (colonic transit slowed), hemorrhoids (constipation + IVC compression → rectal venous hypertension).","clinicalPearl":"ICP (intrahepatic cholestasis of pregnancy): most common liver disorder of pregnancy (0.5–1%). Presents with pruritus (especially palms/soles), elevated serum bile acids, elevated LFTs. Significantly associated with fetal demise. Treat with ursodiol; delivery at 37–38 weeks (or earlier if severe)."},
+    {"id":"mn-fc-p05-007","front":"What changes occur in renal function during pregnancy?","back":"GFR ↑40–65% → ↓serum creatinine (0.4–0.8 normal) and ↓BUN. Physiological glucosuria common (↑GFR overwhelms tubular threshold). Normal proteinuria up to 300 mg/24h. Ureteral dilation (hydronephrosis, right > left) → ↑UTI/pyelonephritis risk.","hint":"GFR up = creatinine down = glucosuria OK. Up to 300 mg/24h proteinuria = normal.","explanation":"The decreased serum creatinine in pregnancy is important clinically: a creatinine of 1.0 mg/dL (normal non-pregnant) may indicate renal impairment in a pregnant patient whose normal is 0.5 mg/dL. Always apply pregnancy-specific creatinine normals.","clinicalPearl":"Asymptomatic bacteriuria (ASB) in pregnancy should be treated (unlike non-pregnant state) because 30–40% of untreated ASB progresses to pyelonephritis (from ureteral dilation/stasis). Screen at first prenatal visit with urine culture."},
+    {"id":"mn-fc-p05-008","front":"What musculoskeletal changes occur in pregnancy?","back":"Relaxin → ligamentous laxity → pubic symphysis diastasis, SI joint dysfunction, generalized instability. Anterior center of gravity → lumbar lordosis → low back pain. Carpal tunnel (edema compresses median nerve). Diastasis recti.","hint":"Relaxin = joint laxity. Growing belly = back pain. Edema = carpal tunnel.","explanation":"Low back pain affects 60–70% of pregnant women. Carpal tunnel syndrome affects 17–40%. Leg cramps affect 50%. Most are managed conservatively: support belt, PT, splinting. Diastasis recti (rectus abdominis separation) requires core rehabilitation postpartum.","clinicalPearl":"Exercise in pregnancy is beneficial and recommended (30+ min moderate intensity, most days). Exceptions/modifications: no contact sports, no supine exercise after 20 weeks, no SCUBA, no high-altitude exercise (>8,000 ft), no activities with fall risk after 2nd trimester."},
+    {"id":"mn-fc-p05-009","front":"What thyroid changes occur in pregnancy?","back":"Thyroid enlarges 10–15%. Total T4 ↑ (more TBG from estrogen) but free T4 normal. TSH slightly lower in 1st trimester (hCG stimulation). Normal 1st trimester TSH: 0.1–2.5 mIU/L. Hypothyroid women need 30–50% levothyroxine dose increase.","hint":"Total T4 up (more TBG), free T4 normal. Hypothyroid → more levothyroxine needed (30–50% ↑).","explanation":"The fetus depends entirely on maternal thyroid hormone for brain development until fetal thyroid becomes active at 10–12 weeks. Untreated maternal hypothyroidism in the 1st trimester = impaired fetal neurodevelopment. Early dose adjustment is critical.","clinicalPearl":"Graves' disease (hyperthyroidism): propylthiouracil (PTU) is preferred over methimazole in the 1st trimester (methimazole is associated with aplasia cutis and other defects). After 1st trimester, methimazole may be used (lower risk of PTU hepatotoxicity with prolonged use)."},
+    {"id":"mn-fc-p05-010","front":"What are the normal WBC values in pregnancy and labor?","back":"Normal WBC in pregnancy: up to 15,000/mm³. Normal WBC in labor: up to 25,000–30,000/mm³ (physiological stress response). Do NOT diagnose infection based on WBC alone in pregnancy/labor without other clinical signs.","hint":"WBC 15,000 = normal pregnancy. 25–30,000 = normal labor. Need clinical symptoms to call it infection.","explanation":"The WBC elevation in pregnancy is mainly from neutrophilia. In labor, catecholamines and cortisol release further elevate WBC. A WBC of 18,000 in a laboring client with normal temperature and no other signs of infection is not automatically chorioamnionitis.","clinicalPearl":"Chorioamnionitis diagnosis requires clinical criteria in addition to elevated WBC: maternal fever (≥38°C), fetal tachycardia, maternal tachycardia, uterine tenderness, and/or foul-smelling amniotic fluid. WBC alone is insufficient for diagnosis."},
+    {"id":"mn-fc-p05-011","front":"What causes nausea and vomiting of pregnancy (NVP)?","back":"Rising hCG (peaks 8–12 weeks → correlates with NVP peak) stimulates the chemoreceptor trigger zone (CTZ). Progesterone slows gastric emptying, worsening nausea. Estrogen also contributes. First-line treatment: vitamin B6 (pyridoxine) ± doxylamine.","hint":"NVP: hCG stimulates CTZ + progesterone slows stomach. B6 ± doxylamine = first-line.","explanation":"NVP affects 70–85% of pregnant women and typically resolves by 14–16 weeks. Severe NVP (hyperemesis gravidarum) = weight loss >5% + dehydration + ketonuria → hospitalization, IV fluids, IV antiemetics (ondansetron, promethazine, metoclopramide).","clinicalPearl":"Hyperemesis gravidarum (HG) is more common with molar pregnancy and multiple gestation (very high hCG levels). Corticosteroids (methylprednisolone) are used for refractory HG in the 2nd trimester. HG has a psychological and social impact — take it seriously; it is not 'just morning sickness.'"},
+    {"id":"mn-fc-p05-012","front":"What is intrahepatic cholestasis of pregnancy (ICP)?","back":"ICP: generalized pruritus (especially palms/soles), elevated serum bile acids (>10 μmol/L), elevated LFTs, WITHOUT rash. Highest risk: 3rd trimester. Fetal risk: stillbirth, meconium aspiration, preterm birth. Treatment: ursodiol. Delivery: 37–38 weeks.","hint":"ICP = pruritis + elevated bile acids, no rash. Fetal demise risk → ursodiol + early delivery.","explanation":"ICP is driven by estrogen and genetic susceptibility (mutations in hepatic transport proteins). Bile acids accumulate in maternal serum and cross the placenta, potentially causing fetal cardiac arrhythmia and umbilical vein constriction. Serial fetal surveillance (NST) is indicated; delivery at 37–38 weeks (or earlier if bile acids very high).","clinicalPearl":"The pruritus of ICP is characteristically without skin rash (unlike PUPPP — pruritic urticarial papules and plaques of pregnancy, which has a visible rash). If a client has severe pruritus without visible skin changes, check bile acids and LFTs."},
+    {"id":"mn-fc-p05-013","front":"What happens to blood pressure in the first and second trimester of pregnancy?","back":"BP decreases in the 1st and 2nd trimester: diastolic drops 10–15 mmHg (progesterone causes smooth muscle relaxation of vessel walls → decreased peripheral vascular resistance). BP returns to pre-pregnancy baseline in the 3rd trimester.","hint":"1st/2nd trimester: BP DOWN (progesterone vasodilation). 3rd trimester: returns to baseline.","explanation":"This physiological drop in BP explains why a woman with pre-existing borderline hypertension may appear normotensive early in pregnancy. Hypertension in the 1st/2nd trimester (when BP should be low) suggests chronic hypertension. Any BP ≥140/90 at any point in pregnancy is abnormal.","clinicalPearl":"New hypertension diagnosed at <20 weeks gestation = chronic hypertension (predates pregnancy). Hypertension first appearing at ≥20 weeks = gestational hypertension or preeclampsia."},
+    {"id":"mn-fc-p05-014","front":"What are the tidal volume and residual volume changes in pregnancy?","back":"Tidal volume (TV): INCREASES 40–50% (most important change). Residual volume (RV): DECREASES 20% (elevated diaphragm). FRC: decreases 20–25%. Vital capacity: essentially unchanged. Respiratory rate: unchanged.","hint":"TV up. RV and FRC down. Vital capacity stays. Rate stays.","explanation":"The increased tidal volume (breathing more deeply) drives the 40–50% increase in minute ventilation (TV × RR). This increased minute ventilation lowers PaCO2 (hyperventilation). The decreased FRC means that pregnant women have less oxygen reserve during apnea — rapid desaturation occurs during intubation/anesthesia induction.","clinicalPearl":"During obstetric anesthesia, rapid desaturation on induction is a real risk because of reduced FRC and increased oxygen consumption. Pre-oxygenation (5 minutes of 100% O2) before induction is mandatory in obstetric anesthesia practice."},
+    {"id":"mn-fc-p05-015","front":"What is the role of relaxin in pregnancy?","back":"Relaxin: secreted by corpus luteum and placenta. Causes ligamentous laxity (especially pelvic ligaments/joints for delivery), softens cervix (collagen remodeling), and relaxes smooth muscle. Also affects all systemic ligaments → generalized joint instability and injury risk.","hint":"Relaxin = loosen everything. Pelvis expands, cervix softens, joints unstable.","explanation":"Relaxin is also a contributor to the cardiovascular changes of pregnancy — it promotes systemic vasodilation and may contribute to the reduced vascular resistance. Its laxity effects on the pelvic floor contribute to stress incontinence, diastasis recti, and prolapse risk.","clinicalPearl":"Relaxin effects on the symphysis pubis can cause symphysis pubis dysfunction (SPD) — pain at the pubic symphysis that can be severe (difficulty walking, climbing stairs). Management: support belt, physio, avoid provocative movements (wide-leg straddle, asymmetric postures)."}
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-04-14T14:22:28.207Z",
+  "priority1": [
+    {
+      "task": "Mount external NurseNest export and re-run inventory diff against this baseline",
+      "type": "audit"
+    },
+    {
+      "task": "Drive down create_missing lessons using existing importers + enrichment JSON",
+      "type": "content_engineering"
+    },
+    {
+      "task": "CAT resume/checkpoint UX parity (engine unchanged)",
+      "type": "engineering_ux"
+    }
+  ],
+  "priority2": [
+    {
+      "task": "Flashcard ↔ question bank alignment per audit JSONs",
+      "type": "content"
+    },
+    {
+      "task": "Allied pathway coverage verification",
+      "type": "content"
+    },
+    {
+      "task": "Tools route parity: legacy client tools vs Next tools pages",
+      "type": "engineering"
+    }
+  ],
+  "priority3": [
+    {
+      "task": "New-grad / transition content cluster migration",
+      "type": "content"
+    },
+    {
+      "task": "Locale parity review (compiled i18n)",
+      "type": "content"
+    }
+  ],
+  "priority4": [
+    {
+      "task": "Deprecate or document parallel Vite marketing duplicates",
+      "type": "maintainability"
+    },
+    {
+      "task": "Legacy Express CAT endpoints — keep dev-only; do not revive as prod",
+      "type": "risk_reduction"
+    }
+  ]
+}

@@ -1,0 +1,649 @@
+"use client";
+
+import type { AdminAnalyticsDashboardData } from "@/lib/admin/load-admin-analytics-dashboard";
+import { Loader2, RefreshCw } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+function MiniBars({
+  points,
+  label,
+}: {
+  points: Array<{ label: string; value: number }>;
+  label: string;
+}) {
+  const max = Math.max(1, ...points.map((p) => p.value));
+  return (
+    <div className="space-y-2">
+      <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+      <div className="flex h-28 items-end gap-0.5">
+        {points.map((p) => (
+          <div key={p.label} className="flex min-w-0 flex-1 flex-col items-center gap-1" title={`${p.label}: ${p.value}`}>
+            <div
+              className="w-full max-w-[14px] rounded-t bg-primary/80 transition hover:bg-primary"
+              style={{ height: `${Math.max(4, (p.value / max) * 100)}%` }}
+            />
+            <span className="truncate text-[9px] text-muted-foreground">{p.label.slice(5)}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HBar({ label, value, max }: { label: string; value: number; max: number }) {
+  const pct = max > 0 ? Math.round((value / max) * 100) : 0;
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between gap-2 text-xs">
+        <span className="truncate text-muted-foreground">{label}</span>
+        <span className="shrink-0 tabular-nums font-medium">{value.toLocaleString()}</span>
+      </div>
+      <div className="h-2 overflow-hidden rounded-full bg-muted/60">
+        <div className="h-2 rounded-full bg-gradient-to-r from-primary/70 to-emerald-500/80" style={{ width: `${pct}%` }} />
+      </div>
+    </div>
+  );
+}
+
+function SectionCard({
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="rounded-2xl border border-border/70 bg-[var(--theme-card-bg)] p-5 shadow-sm">
+      <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">{title}</h2>
+      {subtitle ? <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p> : null}
+      <div className="mt-4">{children}</div>
+    </section>
+  );
+}
+
+function SecurityMetric({ label, value, sub }: { label: string; value: number | string; sub?: string }) {
+  return (
+    <div className="rounded-xl border border-border/60 bg-muted/15 p-3">
+      <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{value}</p>
+      {sub ? <p className="mt-1 text-[11px] leading-snug text-muted-foreground">{sub}</p> : null}
+    </div>
+  );
+}
+
+function StatusPill({ on, label }: { on: boolean; label: string }) {
+  return (
+    <span
+      className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
+        on
+          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+          : "border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-200"
+      }`}
+    >
+      {label}: {on ? "on" : "off"}
+    </span>
+  );
+}
+
+function SecurityTelemetryCard({ data }: { data: AdminAnalyticsDashboardData["securityTelemetry"] }) {
+  return (
+    <SectionCard
+      title="User verification & anti-fraud telemetry"
+      subtitle="DB-backed signals from session activity, trial/device checks, protection rollups, and abuse reviews. This does not require PostHog."
+    >
+      <div className="flex flex-wrap gap-2">
+        <StatusPill on={data.configured.accountSharingMonitor} label="Session monitor" />
+        <StatusPill on={data.configured.posthogQueryApi} label="PostHog query API" />
+        <StatusPill on={data.configured.posthogClientKey} label="PostHog client key" />
+        <StatusPill on={!data.configured.safeMode} label="DB telemetry" />
+        <StatusPill on={data.configured.accountSharingEnforce} label="Hard enforcement" />
+      </div>
+
+      {data.diagnostics.length > 0 ? (
+        <div className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-950 dark:text-amber-100">
+          <p className="font-semibold">Telemetry diagnostics</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            {data.diagnostics.map((d) => (
+              <li key={d}>{d}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <SecurityMetric label="Verified learners" value={data.verification.verifiedLearners.toLocaleString()} sub={`${data.verification.unverifiedLearners.toLocaleString()} unverified`} />
+        <SecurityMetric label="Session users 24h" value={data.sessionActivity.uniqueUsers24h.toLocaleString()} sub={`${data.sessionActivity.rows24h.toLocaleString()} session touches`} />
+        <SecurityMetric label="IP observations 24h" value={data.sessionActivity.ipObservations24h.toLocaleString()} sub={`${data.sessionActivity.usersWithIpObservations24h.toLocaleString()} learners observed`} />
+        <SecurityMetric label="Open abuse reviews" value={data.protection.openReviews.toLocaleString()} sub={`${data.protection.reviews7d.toLocaleString()} created in 7d`} />
+        <SecurityMetric label="Device trial bindings" value={data.verification.trialDeviceBindings.toLocaleString()} sub={`${data.verification.activeTrials.toLocaleString()} active trials`} />
+        <SecurityMetric label="Protection events 7d" value={data.protection.rollupEvents7d.toLocaleString()} sub={`${data.protection.userDayEvents7d.toLocaleString()} user-day tallies`} />
+        <SecurityMetric label="Suspicious sessions" value={data.sessionActivity.suspiciousRowsOpen.toLocaleString()} sub={`Limits: ${data.configured.maxIps24h} IPs / ${data.configured.maxActiveDevices} devices`} />
+        <SecurityMetric
+          label="Latest session touch"
+          value={data.sessionActivity.latestSeenAt ? new Date(data.sessionActivity.latestSeenAt).toLocaleDateString() : "—"}
+          sub={data.sessionActivity.latestSeenAt ? new Date(data.sessionActivity.latestSeenAt).toLocaleTimeString() : "No session rows yet"}
+        />
+      </div>
+
+      <div className="mt-5 grid gap-4 lg:grid-cols-2">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Top protection signals (7d)</p>
+          {data.protection.topRollups7d.length > 0 ? (
+            <div className="mt-2 space-y-2">
+              {data.protection.topRollups7d.map((r) => (
+                <div key={`${r.metricKey}:${r.segment}`} className="flex min-w-0 items-center justify-between gap-3 rounded-lg border border-border/50 bg-muted/10 px-3 py-2 text-xs">
+                  <span className="min-w-0">
+                    <span className="font-mono text-[var(--theme-heading-text)]">{r.metricKey}</span>
+                    {r.segment ? <span className="text-muted-foreground"> · {r.segment}</span> : null}
+                  </span>
+                  <span className="shrink-0 tabular-nums font-semibold">{r.count.toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-2 text-sm text-muted-foreground">
+              No premium-protection rollups in the last 7 days. Client deterrence events only appear after protected learner surfaces send telemetry.
+            </p>
+          )}
+        </div>
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Recent review queue</p>
+          {data.protection.recentReviews.length > 0 ? (
+            <div className="mt-2 space-y-2">
+              {data.protection.recentReviews.map((r) => (
+                <div key={r.id} className="rounded-lg border border-border/50 bg-muted/10 px-3 py-2 text-xs">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="font-semibold text-[var(--theme-heading-text)]">{r.reason}</span>
+                    <span className="shrink-0 tabular-nums text-muted-foreground">score {r.score}</span>
+                  </div>
+                  <p className="mt-1 text-muted-foreground">
+                    User {r.userIdPrefix} · {new Date(r.createdAt).toLocaleString()}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-2 text-sm text-muted-foreground">No abuse-review rows have been queued yet.</p>
+          )}
+        </div>
+      </div>
+    </SectionCard>
+  );
+}
+
+function PostHogTrafficCard({
+  traffic,
+}: {
+  traffic: NonNullable<AdminAnalyticsDashboardData["traffic"]["posthogTraffic"]>;
+}) {
+  const maxPv = Math.max(1, ...traffic.topPages.map((p) => p.pageviews));
+  const seriesMax = Math.max(1, ...traffic.dailySeries.map((d) => d.pageviews));
+
+  return (
+    <SectionCard
+      title={`Site traffic (PostHog · ${traffic.windowDays}d)`}
+      subtitle={`${traffic.totalPageviews?.toLocaleString() ?? "—"} pageviews · ${traffic.uniqueVisitors?.toLocaleString() ?? "—"} unique visitors`}
+    >
+      {traffic.error ? (
+        <p className="text-xs text-amber-700 dark:text-amber-300">{traffic.error}</p>
+      ) : null}
+
+      {/* Mini daily series */}
+      {traffic.dailySeries.length > 0 ? (
+        <div className="mb-4 flex h-20 items-end gap-0.5" aria-label="Daily pageviews chart">
+          {traffic.dailySeries.map((pt) => (
+            <div
+              key={pt.day}
+              className="flex min-w-0 flex-1 flex-col items-center gap-1"
+              title={`${pt.day}: ${pt.pageviews} pageviews, ${pt.uniqueVisitors} unique`}
+            >
+              <div
+                className="w-full rounded-t bg-sky-500/70 transition hover:bg-sky-500"
+                style={{ height: `${Math.max(4, (pt.pageviews / seriesMax) * 100)}%` }}
+              />
+            </div>
+          ))}
+        </div>
+      ) : null}
+
+      {/* Top pages */}
+      {traffic.topPages.length > 0 ? (
+        <div className="space-y-2">
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Top pages</p>
+          {traffic.topPages.slice(0, 8).map((p) => (
+            <div key={p.url} className="space-y-0.5">
+              <div className="flex justify-between gap-2 text-xs">
+                <span className="min-w-0 truncate text-muted-foreground" title={p.url}>
+                  {p.url.replace(/^https?:\/\/[^/]+/, "") || "/"}
+                </span>
+                <span className="shrink-0 tabular-nums font-medium">{p.pageviews.toLocaleString()}</span>
+              </div>
+              <div className="h-1.5 overflow-hidden rounded-full bg-muted/60">
+                <div
+                  className="h-1.5 rounded-full bg-sky-500/70"
+                  style={{ width: `${Math.round((p.pageviews / maxPv) * 100)}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-xs text-muted-foreground">No pageview data in the selected window yet.</p>
+      )}
+    </SectionCard>
+  );
+}
+
+export function AdminAnalyticsDashboard({ initialData }: { initialData: AdminAnalyticsDashboardData | null }) {
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+
+  async function refresh() {
+    setBusy(true);
+    try {
+      const res = await fetch("/api/admin/analytics/dashboard", { cache: "no-store" });
+      if (res.ok) router.refresh();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (!initialData) {
+    return (
+      <div className="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-6 text-sm">
+        <p className="font-semibold text-amber-950 dark:text-amber-100">Analytics data unavailable</p>
+        <p className="mt-2 text-muted-foreground">
+          The database may be offline or the app is in safe mode. Check{" "}
+          <Link className="font-semibold text-primary underline" href="/admin/operations">
+            Operations
+          </Link>{" "}
+          and environment configuration.
+        </p>
+      </div>
+    );
+  }
+
+  const d = initialData;
+  const maxPathLessons = Math.max(1, ...d.pathwayInterest.lessonsPublishedByPathway.map((x) => x.count));
+  const maxGoal = Math.max(1, ...d.pathwayInterest.learnerGoalPathways.map((x) => x.learners));
+  const maxLessonProg = Math.max(1, ...d.lessonUsage.topLessonsByProgressRows.map((x) => x.progressRows));
+  const maxExamAtt = Math.max(1, ...d.questionUsage.topExamsByAttempts7d.map((x) => x.attempts));
+  const maxTopic = Math.max(1, ...d.questionUsage.topTopicsByVolume.map((x) => x.totalAttempts));
+
+  const signupsSum = d.subscriptions.newUsersByDay.reduce((a, p) => a + p.value, 0);
+  const subsSum = d.subscriptions.newSubscriptionsByDay.reduce((a, p) => a + p.value, 0);
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-xs text-muted-foreground">
+          Last loaded {new Date(d.generatedAt).toLocaleString()}
+          {d.degraded ? " · Some sections reported warnings — see below." : ""}
+        </p>
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void refresh()}
+          className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-muted/60 disabled:opacity-50"
+        >
+          {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> : <RefreshCw className="h-3.5 w-3.5" aria-hidden />}
+          Refresh
+        </button>
+      </div>
+
+      {d.warnings.length > 0 ? (
+        <div className="rounded-xl border border-amber-500/35 bg-amber-500/10 px-4 py-3 text-sm text-amber-950 dark:text-amber-100">
+          <p className="font-semibold">Partial data</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-xs">
+            {d.warnings.map((w) => (
+              <li key={w}>{w}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      <div className="rounded-2xl border border-sky-500/25 bg-sky-500/[0.07] px-4 py-3 text-sm">
+        <p className="font-semibold text-[var(--theme-heading-text)]">What this dashboard does not include</p>
+        <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-muted-foreground">
+          {d.dataGaps.map((g) => (
+            <li key={g}>{g}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+        <div className="rounded-2xl border border-border/80 bg-gradient-to-br from-primary/[0.07] to-transparent p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Active subscriptions</p>
+          <p className="mt-1 text-3xl font-bold tabular-nums text-[var(--theme-heading-text)]">
+            {d.subscriptions.active.toLocaleString()}
+          </p>
+          <p className="mt-2 text-[11px] text-muted-foreground">
+            Grace {d.subscriptions.grace} · Past due {d.subscriptions.pastDue}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Exam attempts (7d)</p>
+          <p className="mt-1 text-3xl font-bold tabular-nums">{d.questionUsage.examAttempts7d.toLocaleString()}</p>
+          <p className="mt-2 text-[11px] text-muted-foreground">From ExamAttempt rows</p>
+        </div>
+        <div className="rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Lesson progress rows</p>
+          <p className="mt-1 text-3xl font-bold tabular-nums">{d.lessonUsage.progressRowsTotal.toLocaleString()}</p>
+          <p className="mt-2 text-[11px] text-muted-foreground">
+            Distinct learners (7d): {d.lessonUsage.distinctLearnersWithProgress7d.toLocaleString()}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">New users ({d.subscriptions.chartDays}d)</p>
+          <p className="mt-1 text-3xl font-bold tabular-nums">{signupsSum.toLocaleString()}</p>
+          <p className="mt-2 text-[11px] text-muted-foreground">Subscriptions started: {subsSum.toLocaleString()}</p>
+        </div>
+        {d.traffic.posthogTraffic?.configured ? (
+          <>
+            <div className="rounded-2xl border border-sky-500/25 bg-sky-500/[0.06] p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-sky-700 dark:text-sky-300">
+                Pageviews ({d.traffic.posthogTraffic.windowDays}d)
+              </p>
+              <p className="mt-1 text-3xl font-bold tabular-nums">
+                {d.traffic.posthogTraffic.totalPageviews?.toLocaleString() ?? "—"}
+              </p>
+              <p className="mt-2 text-[11px] text-muted-foreground">PostHog · marketing site</p>
+            </div>
+            <div className="rounded-2xl border border-sky-500/25 bg-sky-500/[0.06] p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-sky-700 dark:text-sky-300">
+                Unique visitors ({d.traffic.posthogTraffic.windowDays}d)
+              </p>
+              <p className="mt-1 text-3xl font-bold tabular-nums">
+                {d.traffic.posthogTraffic.uniqueVisitors?.toLocaleString() ?? "—"}
+              </p>
+              <p className="mt-2 text-[11px] text-muted-foreground">Distinct person IDs</p>
+            </div>
+          </>
+        ) : null}
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <SectionCard
+          title="Acquisition & subscriptions (database)"
+          subtitle={`Daily new users vs new Subscription rows — last ${d.subscriptions.chartDays} days.`}
+        >
+          <div className="grid gap-6 sm:grid-cols-2">
+            <MiniBars points={d.subscriptions.newUsersByDay} label="New users / day" />
+            <MiniBars points={d.subscriptions.newSubscriptionsByDay} label="New subscriptions / day" />
+          </div>
+        </SectionCard>
+
+        {d.traffic.posthogTraffic?.configured ? (
+          <PostHogTrafficCard traffic={d.traffic.posthogTraffic} />
+        ) : (
+          <SectionCard title="Site traffic" subtitle="Optional PostHog connection is not active yet.">
+            <p className="text-sm text-muted-foreground">{d.traffic.siteTrafficNote}</p>
+            <div className="mt-4 rounded-xl border border-border/70 bg-muted/20 p-3 text-xs leading-5 text-muted-foreground">
+              <p className="font-semibold text-[var(--theme-heading-text)]">Connection checklist</p>
+              <p className="mt-1">
+                Add <code className="rounded bg-muted px-1">POSTHOG_PERSONAL_API_KEY</code>,{" "}
+                <code className="rounded bg-muted px-1">POSTHOG_PROJECT_ID</code>, and the public client key to show live
+                pageview trends here. DB-backed learner, trial, and anti-fraud telemetry continues to render below.
+              </p>
+            </div>
+          </SectionCard>
+        )}
+      </div>
+
+      <SecurityTelemetryCard data={d.securityTelemetry} />
+
+      <SectionCard title="Blog content performance" subtitle={d.traffic.blogPerformanceNote}>
+        {d.traffic.blogPerformance.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No published posts with perf fields populated yet.</p>
+        ) : (
+          <div className="overflow-auto">
+            <table className="w-full min-w-[720px] text-left text-sm">
+              <thead className="border-b border-border text-xs uppercase text-muted-foreground">
+                <tr>
+                  <th className="py-2">Post</th>
+                  <th className="py-2 text-right">Impr.</th>
+                  <th className="py-2 text-right">Clicks</th>
+                  <th className="py-2 text-right">CTR</th>
+                  <th className="py-2 text-right">Internal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.traffic.blogPerformance.map((r) => (
+                  <tr key={r.slug} className="border-b border-border/40">
+                    <td className="py-2">
+                      <a className="font-medium text-primary underline" href={r.href} target="_blank" rel="noreferrer">
+                        {r.slug}
+                      </a>
+                      <div className="line-clamp-1 text-xs text-muted-foreground">{r.title}</div>
+                    </td>
+                    <td className="py-2 text-right tabular-nums">{r.impressions ?? "—"}</td>
+                    <td className="py-2 text-right tabular-nums">{r.clicks ?? "—"}</td>
+                    <td className="py-2 text-right tabular-nums">{r.ctr != null ? `${(r.ctr * 100).toFixed(2)}%` : "—"}</td>
+                    <td className="py-2 text-right tabular-nums">{r.internalClicks ?? "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </SectionCard>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <SectionCard title="Pathway interest" subtitle={d.pathwayInterest.note}>
+          <div className="space-y-4">
+            <p className="text-xs font-semibold text-muted-foreground">Published lessons by pathway</p>
+            <div className="space-y-3">
+              {d.pathwayInterest.lessonsPublishedByPathway.slice(0, 10).map((r) => (
+                <HBar key={r.pathwayId} label={r.pathwayId} value={r.count} max={maxPathLessons} />
+              ))}
+            </div>
+            <p className="mt-6 text-xs font-semibold text-muted-foreground">Learner goal pathways (profile)</p>
+            <div className="space-y-3">
+              {d.pathwayInterest.learnerGoalPathways.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No targetExamPathwayId values on learners yet.</p>
+              ) : (
+                d.pathwayInterest.learnerGoalPathways.slice(0, 10).map((r) => (
+                  <HBar key={r.pathwayId} label={r.pathwayId} value={r.learners} max={maxGoal} />
+                ))
+              )}
+            </div>
+          </div>
+        </SectionCard>
+
+        <SectionCard title="Lesson usage" subtitle={d.lessonUsage.note}>
+          <div className="space-y-3">
+            {d.lessonUsage.topLessonsByProgressRows.map((r) => (
+              <HBar
+                key={r.lessonId}
+                label={`${r.title.slice(0, 42)}${r.title.length > 42 ? "…" : ""}`}
+                value={r.progressRows}
+                max={maxLessonProg}
+              />
+            ))}
+            {d.lessonUsage.topLessonsByProgressRows.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No Progress rows yet.</p>
+            ) : null}
+          </div>
+          <Link className="mt-4 inline-block text-xs font-semibold text-primary underline" href="/admin/lessons">
+            Open lesson library
+          </Link>
+        </SectionCard>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <SectionCard title="Question & exam practice" subtitle={d.questionUsage.note}>
+          <p className="mb-4 text-sm">
+            Total attempts (7d):{" "}
+            <strong className="tabular-nums">{d.questionUsage.examAttempts7d.toLocaleString()}</strong>
+          </p>
+          <p className="mb-2 text-xs font-semibold text-muted-foreground">Top exams by attempts (7d)</p>
+          <div className="space-y-3">
+            {d.questionUsage.topExamsByAttempts7d.map((r) => (
+              <HBar
+                key={r.examId}
+                label={r.examTitle ?? r.examId.slice(0, 8)}
+                value={r.attempts}
+                max={maxExamAtt}
+              />
+            ))}
+            {d.questionUsage.topExamsByAttempts7d.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No attempts in window.</p>
+            ) : null}
+          </div>
+          <p className="mb-2 mt-6 text-xs font-semibold text-muted-foreground">Topic volume (UserTopicStat)</p>
+          <div className="space-y-3">
+            {d.questionUsage.topTopicsByVolume.map((r) => (
+              <HBar key={r.topic} label={r.topic} value={r.totalAttempts} max={maxTopic} />
+            ))}
+            {d.questionUsage.topTopicsByVolume.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No topic stats yet.</p>
+            ) : null}
+          </div>
+        </SectionCard>
+
+        <SectionCard title="CAT / adaptive usage (7d)" subtitle={d.catUsage.note}>
+          <div className="grid grid-cols-2 gap-3 text-center">
+            <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
+              <p className="text-2xl font-bold tabular-nums">{d.catUsage.examSessionsAdaptive7d}</p>
+              <p className="text-[11px] text-muted-foreground">ExamSession with adaptive state</p>
+            </div>
+            <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
+              <p className="text-2xl font-bold tabular-nums">{d.catUsage.examSessionsLinear7d}</p>
+              <p className="text-[11px] text-muted-foreground">Other exam sessions (incl. linear)</p>
+            </div>
+            <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
+              <p className="text-2xl font-bold tabular-nums">{d.catUsage.practiceTestsAdaptiveCompleted7d}</p>
+              <p className="text-[11px] text-muted-foreground">Adaptive practice tests completed</p>
+            </div>
+            <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
+              <p className="text-2xl font-bold tabular-nums">{d.catUsage.practiceTestsCompleted7d}</p>
+              <p className="text-[11px] text-muted-foreground">All practice tests completed</p>
+            </div>
+          </div>
+        </SectionCard>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <SectionCard
+          title="Content generation (AI jobs)"
+          subtitle="AiGenerationJob — last 7 days rollups + recent runs."
+        >
+          <div className="mb-4 flex flex-wrap gap-4 text-sm">
+            <span>
+              Completed: <strong>{d.contentGeneration.jobs7d.completed}</strong>
+            </span>
+            <span>
+              Failed: <strong className="text-rose-700 dark:text-rose-300">{d.contentGeneration.jobs7d.failed}</strong>
+            </span>
+            <span>
+              Pending/running: <strong>{d.contentGeneration.jobs7d.pendingOrRunning}</strong>
+            </span>
+          </div>
+          <div className="overflow-auto max-h-64">
+            <table className="w-full text-left text-xs">
+              <thead className="sticky top-0 border-b border-border bg-[var(--theme-card-bg)] text-muted-foreground">
+                <tr>
+                  <th className="py-1">Tool</th>
+                  <th className="py-1">Status</th>
+                  <th className="py-1">When</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.contentGeneration.recentJobs.map((j) => (
+                  <tr key={j.id} className="border-b border-border/30">
+                    <td className="py-1.5 font-mono">{j.tool}</td>
+                    <td className="py-1.5">{j.status}</td>
+                    <td className="py-1.5 text-muted-foreground">{new Date(j.createdAt).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Link className="mt-3 inline-block text-xs font-semibold text-primary underline" href="/admin/ai/exam-questions">
+            AI tools
+          </Link>
+        </SectionCard>
+
+        <SectionCard title="Admin automation activity" subtitle="ContentAutomationLog — most recent first.">
+          <div className="overflow-auto max-h-72">
+            <table className="w-full text-left text-xs">
+              <thead className="sticky top-0 border-b border-border bg-[var(--theme-card-bg)] text-muted-foreground">
+                <tr>
+                  <th className="py-1">Category</th>
+                  <th className="py-1">Job</th>
+                  <th className="py-1">Status</th>
+                  <th className="py-1">When</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.automation.recentLogs.map((l) => (
+                  <tr key={l.id} className="border-b border-border/30 align-top">
+                    <td className="py-1.5">{l.category}</td>
+                    <td className="py-1.5 font-mono">{l.jobType}</td>
+                    <td className="py-1.5">{l.status}</td>
+                    <td className="py-1.5 text-muted-foreground whitespace-nowrap">
+                      {new Date(l.createdAt).toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {d.automation.recentLogs.length === 0 ? (
+            <p className="mt-2 text-sm text-muted-foreground">No automation logs yet.</p>
+          ) : null}
+        </SectionCard>
+      </div>
+
+      <SectionCard title="Errors & failures" subtitle="Background jobs, AI jobs with stored errors, and failed content automation.">
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground">BackgroundJob (FAILED)</p>
+            <ul className="mt-2 space-y-2 text-xs">
+              {d.failures.backgroundJobsFailed.map((j) => (
+                <li key={j.id} className="rounded-lg border border-border/50 bg-muted/20 p-2">
+                  <span className="font-mono">{j.type}</span>
+                  <p className="mt-1 line-clamp-3 text-rose-800 dark:text-rose-200">{j.lastError ?? "—"}</p>
+                </li>
+              ))}
+            </ul>
+            {d.failures.backgroundJobsFailed.length === 0 ? <p className="text-xs text-muted-foreground">None.</p> : null}
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground">AiGenerationJob (error field)</p>
+            <ul className="mt-2 space-y-2 text-xs">
+              {d.failures.aiJobsWithErrors.map((j) => (
+                <li key={j.id} className="rounded-lg border border-border/50 bg-muted/20 p-2">
+                  <span className="font-mono">{j.tool}</span>
+                  <p className="mt-1 line-clamp-3">{j.errorPreview}</p>
+                </li>
+              ))}
+            </ul>
+            {d.failures.aiJobsWithErrors.length === 0 ? <p className="text-xs text-muted-foreground">None.</p> : null}
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground">ContentAutomationLog (FAILED)</p>
+            <ul className="mt-2 space-y-2 text-xs">
+              {d.failures.automationFailures.map((a) => (
+                <li key={a.id} className="rounded-lg border border-border/50 bg-muted/20 p-2">
+                  <span>
+                    {a.category} · <span className="font-mono">{a.jobType}</span>
+                  </span>
+                  <p className="mt-1 line-clamp-3 text-rose-800 dark:text-rose-200">{a.errorPreview}</p>
+                </li>
+              ))}
+            </ul>
+            {d.failures.automationFailures.length === 0 ? <p className="text-xs text-muted-foreground">None.</p> : null}
+          </div>
+        </div>
+        <Link className="mt-4 inline-block text-xs font-semibold text-primary underline" href="/admin/diagnostics">
+          Full diagnostics
+        </Link>
+      </SectionCard>
+    </div>
+  );
+}

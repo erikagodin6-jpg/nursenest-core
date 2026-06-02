@@ -1,0 +1,19 @@
+{
+  "overview": "La farmacología es el estudio de los medicamentos: su mecanismo de acción, su comportamiento en el organismo, sus efectos terapéuticos y sus efectos adversos. Para la enfermera, la farmacología es el núcleo de la seguridad en los cuidados — administrar un medicamento requiere mucho más que leer una etiqueta.",
+  "key_concepts": [
+    "Farmacocinética (ADME): Absorción → Distribución → Metabolismo → Eliminación",
+    "Farmacodinamia: mecanismo de acción del fármaco (agonista = activa un receptor, antagonista = lo bloquea)",
+    "Regla de los 8 'correctos': paciente correcto, medicamento correcto, dosis correcta, vía correcta, hora correcta, documentación correcta, motivo correcto, respuesta correcta",
+    "Índice terapéutico: relación entre dosis tóxica y dosis eficaz — estrecho = alto riesgo (digoxina, litio, warfarina)",
+    "Interacciones farmacológicas: sinergia (efecto aumentado) vs antagonismo (efecto reducido) vs toxicidad aditiva"
+  ],
+  "nursing_responsibilities": "La enfermera verifica los 'correctos' antes de cada administración, evalúa al paciente antes y después de la toma del medicamento, vigila los efectos adversos y documenta rigurosamente. Debe conocer las contraindicaciones e informar al prescriptor ante cualquier duda. Enseña al paciente el uso correcto, los efectos esperados y las señales de alarma.",
+  "clinical_pearls": "Los medicamentos con índice terapéutico estrecho requieren seguimiento de niveles séricos (digoxinemia, litemia, INR para warfarina). El aclaramiento renal disminuye con la edad — ajustar dosis en el anciano. Algunos medicamentos deben administrarse en ayunas (levotiroxina) y otros con alimentos (AINEs) para optimizar la absorción y reducir los efectos gastrointestinales.",
+  "patient_education": "Enseñe al paciente: el nombre genérico y comercial del medicamento, su indicación, la posología y el horario, los efectos adversos a vigilar, las interacciones alimentarias y farmacológicas, y cuándo contactar al profesional de salud. Insista en que no deben suspender el tratamiento sin indicación médica.",
+  "key_takeaways": [
+    "La farmacocinética describe lo que el cuerpo hace al medicamento; la farmacodinamia describe lo que el medicamento hace al cuerpo",
+    "El índice terapéutico estrecho implica monitorización estrecha de niveles y signos de toxicidad",
+    "La regla de los 8 'correctos' es una red de seguridad — nunca omitirla bajo presión",
+    "La educación terapéutica del paciente mejora la adherencia y previene errores en el domicilio"
+  ]
+}

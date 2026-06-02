@@ -1,0 +1,63 @@
+{
+  "mode": "apply",
+  "sourceArtifacts": [
+    "data/materialized/rn-phase1-pilot-content.json",
+    "data/materialized/rn-phase2-content.json",
+    "data/materialized/rn-phase3-content.json",
+    "data/materialized/rn-phase4-content.json",
+    "data/materialized/rn-phase5-content.json"
+  ],
+  "preImportQaStatus": "PASS",
+  "preImportQaBlockers": [],
+  "sourceTotals": {
+    "topics": 187,
+    "lessons": 274,
+    "questions": 5235,
+    "uniqueTopicSlugs": 187
+  },
+  "targetTotals": {
+    "totalTopics": 187,
+    "totalLessons": 274,
+    "totalQuestions": 5235,
+    "uniqueTopicSlugs": 187
+  },
+  "importSummary": {
+    "lessonsProcessed": 274,
+    "questionsProcessed": 5235,
+    "lessonsFailed": [],
+    "questionsFailed": []
+  },
+  "postImportVerification": {
+    "lessonsInsertedCount": 274,
+    "questionsInsertedCount": 5235,
+    "uniqueTopicSlugCount": 187,
+    "duplicateLessonIds": 0,
+    "duplicateQuestionIds": 0,
+    "questionToLessonTopicSlugFailures": [],
+    "countReconciliation": {
+      "expected": {
+        "totalTopics": 187,
+        "totalLessons": 274,
+        "totalQuestions": 5235,
+        "uniqueTopicSlugs": 187
+      },
+      "actual": {
+        "topics": 187,
+        "lessons": 274,
+        "questions": 5235
+      },
+      "matches": {
+        "topics": true,
+        "lessons": true,
+        "questions": true
+      }
+    },
+    "miPeBoundaryAssertions": {
+      "acuteMiFirst60Only": true,
+      "myocardialPostAcute": true,
+      "dvtOnlyCardiac": true,
+      "peAcuteRespOnly": true
+    }
+  },
+  "blockers": []
+}

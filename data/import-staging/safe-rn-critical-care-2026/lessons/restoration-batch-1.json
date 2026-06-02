@@ -1,0 +1,1232 @@
+[
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "icu-aki-management",
+    "title": "Acute Kidney Injury in the ICU",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Acute Kidney Injury in the ICU | us-rn-nclex-rn",
+    "seoDescription": "Acute Kidney Injury in the ICU: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Acute Kidney Injury in the ICU** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Sepsis (most common ICU cause)\n- Hypovolemia and hemodynamic instability\n- Nephrotoxic medications: aminoglycosides, vancomycin, NSAIDs, contrast dye\n- Major surgery especially cardiac surgery\n- Rhabdomyolysis\n- Hepatorenal syndrome\n- Pre-existing CKD\n- Diabetes mellitus"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**AKI Pathophysiology**\n\nAcute kidney injury (AKI) in the ICU is classified by the KDIGO criteria using serum creatinine rise and urine output decline. Stage 1: creatinine 1.5-1.9x baseline or UO <0.5 mL/kg/hr for 6-12 hours. Stage 2: creatinine 2.0-2.9x baseline or UO <0.5 mL/kg/hr for ≥12 hours. Stage 3: creatinine ≥3x baseline or ≥4.0 mg/dL or initiation of RRT, or UO <0.3 mL/kg/hr for ≥24 hours or anuria for ≥12 hours. AKI etiology is classified as prerenal (decreased renal perfusion from hypovolemia, shock, heart failure), intrinsic (direct renal parenchymal damage from ATN, nephrotoxins, contrast), or postrenal (obstruction). The most common cause in ICU is sepsis-associated AKI from a combination of hemodynamic changes, inflammation, and tubular injury. AKI occurs in 50-60% of ICU patients and independently increases mortality."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- Urine output >0.5 mL/kg/hr\n- Stable or decreasing creatinine\n- Electrolytes within normal limits\n- Responding to fluid resuscitation (prerenal)\n\n**Signs (unstable / late):**\n- Oliguria <0.5 mL/kg/hr or anuria\n- Rapidly rising creatinine\n- Hyperkalemia >6.0 mEq/L with ECG changes\n- Metabolic acidosis pH <7.20\n- Uremic symptoms: encephalopathy, pericarditis, bleeding"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- KDIGO staging: serum creatinine trajectory and urine output\n- FENa (fractional excretion of sodium): <1% prerenal, >2% intrinsic (ATN)\n- Urine sediment: muddy brown casts in ATN, RBC casts in glomerulonephritis\n- Renal ultrasound to rule out obstruction (postrenal)\n- Monitor trends: rising creatinine, declining UO, electrolyte derangements\n- BUN:Cr ratio >20:1 suggests prerenal etiology"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Optimize hemodynamics: maintain MAP >65 mmHg for adequate renal perfusion\n- Fluid resuscitation for prerenal AKI, avoid overhydration in oliguric AKI\n- Discontinue or dose-adjust nephrotoxic medications\n- Avoid contrast dye when possible; if needed, pre-hydrate with isotonic saline\n- Initiate CRRT for: refractory hyperkalemia, severe acidosis, fluid overload, uremic complications\n- Adjust all medication doses for reduced GFR\n\n**Nursing Actions:**\n- Monitor urine output hourly via indwelling catheter\n- Strict intake and output documentation\n- Daily weight for fluid balance assessment\n- Monitor electrolytes (especially potassium) every 6-12 hours\n- Assess for uremic symptoms: confusion, asterixis, pericardial friction rub\n- Advocate for nephrotoxic medication review\n\n**Medications:**\n**Furosemide** (Loop diuretic): Promotes diuresis in fluid-overloaded AKI patients\n  - Side effects: Hypokalemia, ototoxicity, dehydration\n  - Contraindications: Anuria (will not work without glomerular filtration)\n  - Clinical pearl: Diuretics do NOT improve AKI outcomes but help manage fluid overload. If no response to 1 mg/kg IV, unlikely to respond at higher doses - consider CRRT.\n\n**Sodium Polystyrene Sulfonate (Kayexalate)** (Cation exchange resin): Exchanges sodium for potassium in the GI tract to lower serum potassium\n  - Side effects: Constipation, intestinal necrosis (rare with sorbitol), sodium loading\n  - Contraindications: Bowel obstruction, postoperative patients\n  - Clinical pearl: Slow onset (hours). For acute hyperkalemia, use IV calcium, insulin/glucose, and albuterol first for rapid effect."
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- AKI prevention is better than treatment: maintain perfusion, avoid nephrotoxins, hydrate before contrast\n- FENa <1% = prerenal (kidneys retaining sodium appropriately); FENa >2% = intrinsic (tubular damage, cannot concentrate)\n- Diuretics do NOT improve AKI outcomes but manage complications (fluid overload)\n- Hyperkalemia management order: (1) Stabilize membrane (calcium), (2) Shift K intracellularly (insulin/glucose, albuterol, bicarb), (3) Remove K from body (diuretics, Kayexalate, dialysis)\n- Serum creatinine is a LAGGING indicator: AKI has already occurred by the time creatinine rises"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A septic patient's creatinine rises from 1.0 to 2.5 mg/dL over 24 hours with UO 15 mL/hr (70 kg). KDIGO stage?",
+        "options": [
+          "Stage 1",
+          "Stage 2",
+          "Stage 3",
+          "Not AKI"
+        ],
+        "correct": 1,
+        "rationale": "Creatinine 2.5x baseline (2.5/1.0 = 2.5x) and UO 15 mL/hr ÷ 70 kg = 0.21 mL/kg/hr. Stage 2 by creatinine (2.0-2.9x). UO <0.3 for 24 hours would be Stage 3."
+      },
+      {
+        "question": "An oliguric AKI patient has K+ 6.8 mEq/L with peaked T waves. What is the FIRST intervention?",
+        "options": [
+          "Kayexalate 30g PO",
+          "IV calcium gluconate to stabilize the cardiac membrane",
+          "Furosemide 80 mg IV",
+          "Start CRRT"
+        ],
+        "correct": 1,
+        "rationale": "With ECG changes (peaked T waves), the first priority is cardiac membrane stabilization with IV calcium gluconate. This does not lower potassium but protects the heart from arrhythmia while other measures take effect."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "icu-ards-management",
+    "title": "ARDS: Acute Respiratory Distress Syndrome",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "ARDS: Acute Respiratory Distress Syndrome | us-rn-nclex-rn",
+    "seoDescription": "ARDS: Acute Respiratory Distress Syndrome: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**ARDS: Acute Respiratory Distress Syndrome** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Pneumonia (most common direct cause)\n- Sepsis (most common indirect cause)\n- Aspiration\n- Major trauma\n- Massive transfusion (TRALI)\n- Pancreatitis\n- Inhalation injury\n- Drowning"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**ARDS Pathophysiology**\n\nARDS is severe inflammatory lung injury with diffuse alveolar damage, protein-rich pulmonary edema, and refractory hypoxemia. Three phases: Exudative (0-7d) with alveolar flooding and surfactant inactivation; Proliferative (7-21d) with type II pneumocyte repair; Fibrotic (>21d) with potential progressive fibrosis. Berlin Criteria classify by P/F ratio: Mild 200-300, Moderate 100-200, Severe <100. Common triggers: pneumonia, aspiration, sepsis, trauma, TRALI. The ventilation-perfusion mismatch and shunting produce hypoxemia refractory to supplemental oxygen alone."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- Improving P/F ratio\n- Decreasing FiO2 requirements\n- Improving lung compliance\n- Resolving bilateral infiltrates\n\n**Signs (unstable / late):**\n- Worsening P/F ratio despite optimal management\n- Plateau >30 on minimal Vt\n- New subcutaneous emphysema or pneumothorax\n- Refractory hypoxemia (P/F <60)\n- Progressive multi-organ failure"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- P/F ratio: Mild 200-300, Moderate 100-200, Severe <100\n- CXR: bilateral diffuse infiltrates\n- CT: ground-glass opacities with dependent distribution\n- Echo to exclude cardiogenic edema (PAOP <18)\n- BAL if infectious etiology suspected\n- Daily plateau and driving pressure measurements"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Lung-protective ventilation: Vt 4-6 mL/kg IBW, plateau <30, driving pressure <15\n- PEEP titration using ARDSNet tables\n- Prone positioning ≥16 hours/day in moderate-severe ARDS (P/F <150)\n- Conservative fluid strategy after resuscitation\n- NMB for 48 hours in early severe ARDS\n- ECMO referral for refractory severe ARDS (P/F <60)\n\n**Nursing Actions:**\n- Calculate IBW from height for Vt calculation\n- Monitor plateau and driving pressure with each assessment\n- Coordinate prone positioning with team\n- During proning: monitor ETT, facial pressure points, hemodynamics, eye protection\n- Assess for barotrauma, VAP, ICU-acquired weakness\n- Monitor fluid balance closely\n\n**Medications:**\n**Cisatracurium** (NMB agent): Skeletal muscle paralysis eliminating patient-ventilator dyssynchrony\n  - Side effects: ICU-acquired weakness, awareness without sedation\n  - Contraindications: Must have concurrent sedation\n  - Clinical pearl: ACURASYS trial: early 48hr use in severe ARDS improves oxygenation. Hoffman degradation allows use in renal/hepatic failure.\n\n**Dexmedetomidine** (Alpha-2 agonist sedative): Sedation without significant respiratory depression\n  - Side effects: Bradycardia, hypotension\n  - Contraindications: Heart block, severe bradycardia\n  - Clinical pearl: Preferred for light sedation targets. Less delirium than benzodiazepines."
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- ARDS is a syndrome - always identify and treat the underlying cause\n- P/F = PaO2 ÷ FiO2. Example: PaO2 80 on 0.60 = P/F 133 (moderate)\n- Prone positioning proven mortality benefit in severe ARDS\n- Permissive hypercapnia acceptable to maintain lung-protective Vt\n- FACTT trial: conservative fluid management improves oxygenation"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "ARDS patient with P/F 90 on FiO2 1.0 and PEEP 16. Most appropriate intervention?",
+        "options": [
+          "Increase Vt to 10 mL/kg",
+          "Initiate prone positioning ≥16 hours/day",
+          "Decrease PEEP",
+          "Switch to PSV"
+        ],
+        "correct": 1,
+        "rationale": "P/F <100 = severe ARDS. With P/F <150, prone positioning ≥16 hr/day recommended per PROSEVA trial showing mortality reduction."
+      },
+      {
+        "question": "Which parameter best predicts ARDS mortality?",
+        "options": [
+          "Peak inspiratory pressure",
+          "FiO2 requirement",
+          "Driving pressure (Plateau - PEEP)",
+          "Respiratory rate"
+        ],
+        "correct": 2,
+        "rationale": "Driving pressure <15 cmH2O is the strongest predictor of mortality in ARDS, reflecting cyclical strain on functional lung tissue."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "icu-cardiac-arrest-management",
+    "title": "Cardiac Arrest Management in the ICU",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Cardiac Arrest Management in the ICU | us-rn-nclex-rn",
+    "seoDescription": "Cardiac Arrest Management in the ICU: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Cardiac Arrest Management in the ICU** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Acute myocardial infarction\n- Heart failure with reduced ejection fraction\n- Electrolyte imbalances (hyperkalemia, hypomagnesemia)\n- Drug toxicity (digitalis, antiarrhythmics)\n- Pulmonary embolism\n- Tension pneumothorax\n- Cardiac tamponade\n- Hypothermia\n- Acidosis"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Cardiac Arrest Physiology**\n\nCardiac arrest is the cessation of effective cardiac mechanical activity, classified into shockable rhythms (ventricular fibrillation/VF and pulseless ventricular tachycardia/pVT) and non-shockable rhythms (asystole and pulseless electrical activity/PEA). VF involves chaotic electrical activity producing no organized contraction. pVT is organized rapid ventricular activity without adequate cardiac output. Asystole represents complete absence of electrical activity. PEA shows organized electrical activity without detectable pulse. Survival depends on the chain of survival: early recognition, high-quality CPR, early defibrillation for shockable rhythms, advanced life support, and integrated post-cardiac arrest care. Cerebral hypoxia begins within 4-6 minutes, and irreversible brain injury occurs within 10 minutes without intervention. High-quality CPR maintains partial cerebral and coronary perfusion until definitive treatment is available."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- ROSC achieved: palpable pulse, rising ETCO2 >40, arterial waveform\n- Organized rhythm on monitor with hemodynamic improvement\n- Spontaneous respirations returning\n- Improving mental status\n\n**Signs (unstable / late):**\n- Refractory VF despite multiple defibrillation attempts\n- PEA with no identifiable reversible cause\n- ETCO2 persistently <10 mmHg indicating poor compressions or futility\n- Prolonged resuscitation (>30-60 minutes) without ROSC"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- Rhythm identification: VF, pVT, asystole, or PEA\n- End-tidal CO2 (ETCO2) during CPR: >20 mmHg indicates adequate compressions, >40 mmHg may indicate ROSC\n- Point-of-care ultrasound during rhythm checks for reversible causes\n- Post-ROSC 12-lead ECG for STEMI identification\n- Serial labs: ABG, lactate, electrolytes, troponin\n- Post-ROSC CT/CTA if PE or aortic pathology suspected"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- High-quality CPR: rate 100-120/min, depth 5-6 cm, full recoil, minimize interruptions (<10 seconds)\n- Defibrillation for VF/pVT: 200J biphasic, shock every 2 minutes if persistent\n- Epinephrine 1 mg IV every 3-5 minutes for all rhythms\n- Amiodarone 300 mg IV first dose, then 150 mg for refractory VF/pVT\n- Address reversible causes: H's and T's\n- Post-ROSC care: targeted temperature management, coronary angiography for STEMI, ICU admission\n\n**Nursing Actions:**\n- Initiate CPR immediately upon recognition: check pulse <10 seconds\n- Ensure high-quality compressions: proper rate, depth, recoil, and minimal interruptions\n- Defibrillate as soon as available for VF/pVT: do NOT delay for intubation or IV access\n- Establish IV/IO access and administer medications per ACLS algorithm\n- Monitor ETCO2 during CPR as indicator of compression quality and ROSC\n- Document all interventions, medications, rhythm changes, and timing accurately\n\n**Medications:**\n**Epinephrine** (Vasopressor): Alpha-mediated vasoconstriction increases coronary and cerebral perfusion pressure during CPR\n  - Side effects: Post-ROSC tachycardia, hypertension, myocardial ischemia\n  - Contraindications: None during cardiac arrest\n  - Clinical pearl: 1 mg IV/IO every 3-5 minutes. For VF/pVT, give AFTER second shock. For asystole/PEA, give ASAP. Improves ROSC but not long-term survival.\n\n**Amiodarone** (Antiarrhythmic): Multi-channel blocker (sodium, potassium, calcium channels and beta-blockade) for refractory VF/pVT\n  - Side effects: Hypotension, bradycardia post-ROSC\n  - Contraindications: None during cardiac arrest\n  - Clinical pearl: 300 mg IV first dose after 3rd shock in refractory VF/pVT. May give additional 150 mg once. Superior to lidocaine for refractory VF."
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- H's and T's of reversible causes: Hypovolemia, Hypoxia, Hydrogen ion (acidosis), Hypo/Hyperkalemia, Hypothermia, Tension pneumothorax, Tamponade, Toxins, Thrombosis (coronary/PE)\n- ETCO2 during CPR: <20 = improve compressions, >40 = possible ROSC, <10 after 20 min = poor prognosis\n- Defibrillation is the definitive treatment for VF/pVT: every minute of delay decreases survival by 7-10%\n- Switch compressors every 2 minutes to maintain quality (fatigue causes declining effectiveness)\n- Post-ROSC care is critical: TTM, coronary angiography if indicated, hemodynamic optimization"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "During CPR, ETCO2 suddenly rises from 15 to 45 mmHg. What does this suggest?",
+        "options": [
+          "Compression quality has declined",
+          "The patient likely has ROSC",
+          "The ET tube has become dislodged",
+          "The patient needs defibrillation"
+        ],
+        "correct": 1,
+        "rationale": "A sudden significant rise in ETCO2 during CPR strongly suggests return of spontaneous circulation (ROSC). Increased cardiac output delivers more CO2 to the lungs for exhalation. Pause CPR briefly to check for pulse and organized rhythm."
+      },
+      {
+        "question": "A patient is in refractory VF after 3 shocks and 2 doses of epinephrine. What medication should be given next?",
+        "options": [
+          "Atropine 1 mg",
+          "Amiodarone 300 mg",
+          "Lidocaine 100 mg",
+          "Adenosine 6 mg"
+        ],
+        "correct": 1,
+        "rationale": "Amiodarone 300 mg IV is recommended for refractory VF/pVT after the third defibrillation attempt per ACLS guidelines. It is superior to lidocaine for shock-refractory VF/pVT."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "icu-fluid-electrolyte-management",
+    "title": "ICU Fluid and Electrolyte Management",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "ICU Fluid and Electrolyte Management | us-rn-nclex-rn",
+    "seoDescription": "ICU Fluid and Electrolyte Management: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**ICU Fluid and Electrolyte Management** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Sepsis with capillary leak\n- Hemorrhagic shock\n- Burns with massive fluid shifts\n- AKI with oliguria\n- Heart failure\n- ARDS with pulmonary edema\n- Chronic liver disease\n- Post-operative fluid shifts"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Fluid Physiology in Critical Illness**\n\nFluid management balances adequate resuscitation against fluid overload. Total body water is ~60% of body weight, distributed between intracellular (2/3) and extracellular (1/3) compartments. The Starling equation governs transcapillary fluid movement. In critical illness, inflammatory mediators increase capillary permeability causing third-spacing. Crystalloids distribute across the entire extracellular space (only 25% remains intravascular). Balanced crystalloids (LR, Plasma-Lyte) more closely match plasma and may cause less hyperchloremic acidosis than 0.9% NS."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- Balanced I&O with stable weights\n- Electrolytes WNL\n- UO >0.5 mL/kg/hr\n- Clear lungs, no edema\n- Stable hemodynamics\n\n**Signs (unstable / late):**\n- Fluid overload: weight gain >2 kg/day, pulmonary edema\n- Hypovolemia: tachycardia, hypotension, oliguria\n- Severe hyponatremia <125: seizures, cerebral edema\n- Severe hyperkalemia >6.5: peaked T waves, widened QRS\n- Severe hypocalcemia: tetany, Chvostek/Trousseau signs"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- Strict I&O recording\n- Daily weight (most reliable indicator)\n- Serum electrolytes every 6-12 hours\n- Serum/urine osmolality for hyponatremia workup\n- BUN/Cr ratio: >20:1 suggests prerenal\n- IVC ultrasound for volume status"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Phase-based: Rescue, Optimization, Stabilization, De-escalation\n- Balanced crystalloids over NS for large volumes\n- Replace electrolytes: K >4.0, Mg >2.0, Phos >3.0, Ca >8.5 for ICU\n- Conservative fluid strategy in ARDS\n- Diuretics for fluid overload when stable\n- CRRT when diuretics ineffective\n\n**Nursing Actions:**\n- Record all I&O hourly in acute settings\n- Daily weight at same time, scale, conditions\n- Monitor fluid overload: edema, JVD, crackles, increasing O2 needs\n- Monitor dehydration: tachycardia, hypotension, decreased UO\n- Replace electrolytes per protocols\n- Assess total daily fluid including medication diluents\n\n**Medications:**\n**Furosemide (Lasix)** (Loop diuretic): Inhibits Na-K-2Cl cotransporter in ascending loop causing potent diuresis\n  - Side effects: Hypokalemia, hyponatremia, ototoxicity\n  - Contraindications: Anuria, severe hypovolemia\n  - Clinical pearl: IV onset 5 min. Double dose if inadequate response. Continuous infusion may be more effective in ICU.\n\n**3% Hypertonic Saline** (Concentrated sodium solution): Raises serum osmolality to draw fluid from intracellular space\n  - Side effects: Osmotic demyelination with too-rapid correction\n  - Contraindications: Hypernatremia\n  - Clinical pearl: For severe symptomatic hyponatremia: 100-150 mL boluses. Max 8-10 mEq/L increase in 24 hours."
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- Fluid overload independently increases ICU mortality\n- Daily weight more reliable than I&O\n- Balanced crystalloids cause less hyperchloremic acidosis than NS (SMART trial)\n- Correct hyponatremia SLOWLY: max 8-10 mEq/L per 24hr to prevent osmotic demyelination"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "ARDS patient 5L positive with increasing FiO2 needs. Priority intervention?",
+        "options": [
+          "Continue maintenance fluids",
+          "Fluid bolus",
+          "Conservative fluid strategy with diuretics",
+          "Increase PEEP only"
+        ],
+        "correct": 2,
+        "rationale": "FACTT trial: conservative fluid strategy in ARDS improves oxygenation and shortens ventilator days."
+      },
+      {
+        "question": "Sodium 118 with seizures. After 3% saline, max safe correction in 24 hours?",
+        "options": [
+          "4-6 mEq/L",
+          "8-10 mEq/L",
+          "12-15 mEq/L",
+          "20 mEq/L"
+        ],
+        "correct": 1,
+        "rationale": "Max 8-10 mEq/L in 24 hours to prevent osmotic demyelination syndrome."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "icu-hemodynamic-monitoring",
+    "title": "Hemodynamic Monitoring in the ICU",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Hemodynamic Monitoring in the ICU | us-rn-nclex-rn",
+    "seoDescription": "Hemodynamic Monitoring in the ICU: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Hemodynamic Monitoring in the ICU** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Shock states requiring vasopressor support\n- Post-cardiac surgery patients\n- Acute heart failure with hemodynamic instability\n- Sepsis with organ dysfunction\n- Massive fluid resuscitation requirements\n- Multisystem trauma with hemorrhage"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Hemodynamic Physiology**\n\nHemodynamic monitoring is the cornerstone of ICU management, providing real-time data about cardiovascular function and tissue perfusion. The fundamental hemodynamic parameters include cardiac output (CO), mean arterial pressure (MAP), central venous pressure (CVP), pulmonary artery occlusion pressure (PAOP), systemic vascular resistance (SVR), and mixed venous oxygen saturation (SvO2). Cardiac output is determined by heart rate and stroke volume, which depends on preload, afterload, and contractility. The Frank-Starling mechanism describes how increasing preload stretches myocardial fibers, increasing contraction force up to an optimal point. Invasive monitoring via arterial lines provides continuous blood pressure measurement and waveform analysis, while pulmonary artery catheters measure right heart and pulmonary pressures. Modern non-invasive techniques include pulse contour analysis, bioreactance, and point-of-care echocardiography."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- MAP >65 mmHg with adequate organ perfusion\n- CI 2.5-4.0 L/min/m2\n- SvO2 60-80%\n- Urine output >0.5 mL/kg/hr\n\n**Signs (unstable / late):**\n- MAP <60 mmHg despite vasopressor support\n- CI <2.0 L/min/m2\n- SvO2 <50% indicating severe oxygen debt\n- Rising lactate >4 mmol/L"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- Arterial line waveform analysis: systolic pressure variation and pulse pressure variation for fluid responsiveness\n- Central venous pressure trending: normal 2-6 mmHg\n- Pulmonary artery catheter: PAOP normal 6-12 mmHg, CO 4-8 L/min, CI 2.5-4.0 L/min/m2\n- Mixed venous oxygen saturation: normal 60-80%\n- Cardiac index calculation\n- Lactate levels: normal <2 mmol/L"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Titrate vasopressors to maintain MAP >65 mmHg\n- Assess fluid responsiveness using dynamic parameters before volume loading\n- Optimize preload with crystalloid boluses while monitoring for overload\n- Adjust inotropes based on cardiac output and SvO2 goals\n- Implement goal-directed therapy protocols\n- Consider mechanical circulatory support for refractory cardiogenic shock\n\n**Nursing Actions:**\n- Zero and level transducers at the phlebostatic axis every shift and after position changes\n- Perform square wave test to verify arterial line dynamic response\n- Document hemodynamic parameters at prescribed intervals\n- Monitor arterial waveform morphology for changes\n- Maintain catheter patency with continuous flush system\n- Assess insertion sites for infection and compromised distal perfusion\n\n**Medications:**\n**Norepinephrine** (Vasopressor): Alpha-1 agonist causing vasoconstriction with mild beta-1 inotropic effect\n  - Side effects: Tissue necrosis with extravasation, peripheral ischemia, arrhythmias\n  - Contraindications: Uncorrected hypovolemia\n  - Clinical pearl: First-line vasopressor for most shock states. Central line preferred.\n\n**Dobutamine** (Inotrope): Beta-1 agonist increasing cardiac contractility and output\n  - Side effects: Tachycardia, hypotension from beta-2 vasodilation\n  - Contraindications: HOCM, severe aortic stenosis\n  - Clinical pearl: First-line inotrope for cardiogenic shock with adequate BP. Tachyphylaxis after 72 hours."
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- The phlebostatic axis (4th ICS, mid-axillary line) is the reference point for all pressure transducers\n- Pulse pressure variation >13% during controlled ventilation reliably predicts fluid responsiveness\n- SvO2 reflects O2 delivery-consumption balance; falling SvO2 is often the earliest sign of hemodynamic compromise\n- CVP alone is a poor predictor of fluid responsiveness\n- Always assess the patient, not just the numbers"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A patient on mechanical ventilation has pulse pressure variation of 18%. What does this indicate?",
+        "options": [
+          "Fluid overload",
+          "Likely to respond to a fluid bolus",
+          "Ventilator settings need adjustment",
+          "Arterial line malfunction"
+        ],
+        "correct": 1,
+        "rationale": "PPV >13% during controlled ventilation indicates fluid responsiveness, suggesting the heart is on the ascending portion of the Frank-Starling curve."
+      },
+      {
+        "question": "After repositioning a patient, the arterial line reads MAP 45 mmHg but the patient appears stable. What should the nurse do first?",
+        "options": [
+          "Start vasopressors",
+          "Re-level the transducer at the phlebostatic axis",
+          "Obtain a stat echocardiogram",
+          "Administer a fluid bolus"
+        ],
+        "correct": 1,
+        "rationale": "Position changes alter the transducer level relative to the phlebostatic axis causing inaccurate readings. Re-zero and re-level before treating."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "icu-multi-organ-dysfunction",
+    "title": "Multi-Organ Dysfunction Syndrome (MODS)",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Multi-Organ Dysfunction Syndrome (MODS) | us-rn-nclex-rn",
+    "seoDescription": "Multi-Organ Dysfunction Syndrome (MODS): critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Multi-Organ Dysfunction Syndrome (MODS)** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Sepsis (most common cause)\n- Severe trauma with hemorrhagic shock\n- Major burns (>30% TBSA)\n- Pancreatitis with systemic complications\n- Post-cardiac arrest syndrome\n- Massive transfusion\n- Prolonged hypotension from any cause\n- Pre-existing organ dysfunction"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**MODS Pathophysiology**\n\nMulti-organ dysfunction syndrome (MODS) represents progressive, potentially reversible dysfunction of two or more organ systems in an acutely ill patient, unable to maintain homeostasis without intervention. MODS develops through two pathways: primary MODS results directly from a well-defined insult (e.g., bilateral pulmonary contusion causing ARDS), while secondary MODS results from a systemic inflammatory response to an initial insult (e.g., sepsis leading to ARDS, AKI, and hepatic dysfunction). The inflammatory cascade involves neutrophil activation, complement activation, cytokine release, endothelial damage, microvascular thrombosis, and tissue ischemia-reperfusion injury. The sequential organ failure assessment (SOFA) score quantifies dysfunction across six systems: respiratory (P/F ratio), coagulation (platelets), liver (bilirubin), cardiovascular (MAP and vasopressors), CNS (GCS), and renal (creatinine/urine output). Mortality increases with each additional organ system involved: one organ 20%, two organs 40%, three organs 70%, four or more organs >80%."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- SOFA score stable or improving\n- Organ function parameters trending toward normal\n- Decreasing vasopressor and ventilator requirements\n- Improving mental status and functional capacity\n\n**Signs (unstable / late):**\n- Rising SOFA score indicating progressive dysfunction\n- New organ involvement (adding renal failure to existing respiratory failure)\n- Refractory shock despite maximal vasopressor support\n- Coagulopathy with DIC (dropping platelets, elevated D-dimer, prolonged PT/INR)\n- Anuria despite CRRT indicating severe renal failure"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- SOFA score calculated daily: respiratory, coagulation, liver, cardiovascular, CNS, renal components\n- Daily organ function labs: ABG, CBC, LFTs, creatinine, lactate, bilirubin\n- Trending organ dysfunction: improving vs worsening trajectory\n- Assess each organ system: P/F ratio (lungs), platelets/INR (coagulation), bilirubin (liver), MAP/vasopressor dose (cardiovascular), GCS (neuro), creatinine/UO (renal)\n- Procalcitonin and cultures for infection-driven MODS\n- Imaging as indicated for source identification"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Treat the underlying cause: source control for infection, hemorrhage control for trauma\n- Organ-specific supportive care: ventilation for ARDS, CRRT for AKI, vasopressors for shock\n- Implement lung-protective ventilation and conservative fluid strategy\n- Maintain adequate organ perfusion: MAP >65, CPP >60, adequate UO\n- Prevent secondary complications: VAP, CLABSI, CAUTI, VTE, stress ulcers\n- Goals of care discussion early when prognosis is poor\n\n**Nursing Actions:**\n- Perform comprehensive head-to-toe assessment every 2-4 hours\n- Monitor and trend organ function labs and SOFA score daily\n- Coordinate complex ICU care across multiple organ support modalities simultaneously\n- Prevent complications: infection prevention bundles, early mobility, nutrition\n- Assess for new organ dysfunction and report changes promptly\n- Support family with clear communication about status and prognosis\n\n**Medications:**\n**Supportive Care Bundle** (Multi-system support): Organ-specific support: vasopressors for cardiovascular, ventilation for respiratory, CRRT for renal\n  - Side effects: Each modality carries specific risks\n  - Contraindications: Goals of care may limit intensity\n  - Clinical pearl: There is no single drug that treats MODS. Management is organ-specific supportive care while treating the underlying cause. Prevention is always better than treatment."
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- MODS mortality correlates with number of failing organs: 1 organ ~20%, 2 organs ~40%, 3 organs ~70%, ≥4 organs >80%\n- Sepsis is the most common cause of MODS - early aggressive sepsis management is the best prevention\n- The gut is often called the 'motor' of MODS: gut barrier failure leads to bacterial translocation and perpetuates inflammation\n- SOFA score trending is more valuable than a single measurement: a rising SOFA predicts mortality\n- Early goals of care discussions are essential when multiple organs fail - families need realistic information"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A septic patient now has ARDS, AKI, and DIC. SOFA score has risen from 6 to 14 over 48 hours. What does this trend indicate?",
+        "options": [
+          "Expected recovery pattern",
+          "Progressive multi-organ dysfunction with worsening prognosis",
+          "Medication side effects",
+          "Laboratory error"
+        ],
+        "correct": 1,
+        "rationale": "A rising SOFA score from 6 to 14 indicates progressive multi-organ dysfunction. Each 1-point SOFA increase is associated with increased mortality. Three failing organ systems (respiratory, renal, coagulation) carries approximately 70% mortality."
+      },
+      {
+        "question": "What is the single most important strategy for preventing secondary MODS?",
+        "options": [
+          "Prophylactic antibiotics for all ICU patients",
+          "Early and aggressive treatment of the primary insult (e.g., sepsis)",
+          "Bed rest to conserve energy",
+          "High-dose corticosteroids for all critically ill patients"
+        ],
+        "correct": 1,
+        "rationale": "Preventing secondary MODS requires early, aggressive treatment of the primary insult. For sepsis (the most common cause), this means the Hour-1 bundle: early antibiotics, fluid resuscitation, vasopressors, and source control."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "icu-mechanical-ventilation",
+    "title": "Mechanical Ventilation: Fundamentals",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Mechanical Ventilation: Fundamentals | us-rn-nclex-rn",
+    "seoDescription": "Mechanical Ventilation: Fundamentals: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Mechanical Ventilation: Fundamentals** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Acute respiratory failure\n- ARDS\n- GCS <8 requiring airway protection\n- Post-operative respiratory support\n- Neuromuscular disease\n- Status asthmaticus\n- Massive PE\n- Post-cardiac arrest"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Respiratory Mechanics**\n\nMechanical ventilation supports or replaces spontaneous breathing by delivering positive pressure to inflate lungs. Key concepts include compliance (ease of lung expansion, normally 60-100 mL/cmH2O), resistance (opposition to airflow, normally 5-10 cmH2O/L/sec), and the equation of motion. Volume-controlled ventilation delivers set tidal volume regardless of pressure; pressure-controlled delivers set pressure regardless of volume. Key settings: tidal volume (6-8 mL/kg IBW for lung-protective ventilation), respiratory rate, FiO2, and PEEP (prevents alveolar collapse). Goals: adequate oxygenation (PaO2 60-100, SpO2 92-96%) and ventilation (PaCO2 35-45, pH 7.35-7.45) while minimizing ventilator-induced lung injury."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- Adequate Vt with acceptable pressures\n- SpO2 92-96% on minimal FiO2\n- Patient synchronous with ventilator\n- Clear bilateral breath sounds\n\n**Signs (unstable / late):**\n- High PIP >40 cmH2O\n- Desaturation despite increasing FiO2/PEEP\n- Auto-PEEP causing hemodynamic compromise\n- Patient-ventilator dyssynchrony\n- Absent ETCO2: extubation, obstruction, or arrest"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- ABG analysis for ventilator adjustment\n- P/F ratio for ARDS severity\n- Peak inspiratory pressure: elevated = increased resistance or decreased compliance\n- Plateau pressure: keep <30 cmH2O to prevent barotrauma\n- Driving pressure (Plateau - PEEP): target <15 cmH2O\n- End-tidal CO2 for continuous monitoring"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Lung-protective ventilation: Vt 6-8 mL/kg IBW, plateau <30 cmH2O\n- Titrate FiO2 and PEEP to maintain PaO2 60-80, SpO2 92-96%\n- PEEP/FiO2 tables for ARDS\n- Permissive hypercapnia (pH >7.20)\n- Daily SBT assessment\n- Ventilator bundle: HOB 30-45°, sedation vacation, SBT, DVT/stress ulcer prophylaxis\n\n**Nursing Actions:**\n- Verify ETT placement: bilateral breath sounds, ETCO2, chest X-ray\n- Secure ETT and document depth\n- Monitor alarms: high pressure, low pressure, low volume\n- Oral care with chlorhexidine every 4-6 hours\n- Assess for patient-ventilator dyssynchrony\n- Monitor cuff pressure every 8 hours (20-30 cmH2O)\n\n**Medications:**\n**Propofol** (Sedative-hypnotic): GABA-A agonist for rapid-onset sedation\n  - Side effects: Hypotension, PRIS with prolonged high-dose use\n  - Contraindications: Egg/soy allergy, hypertriglyceridemia\n  - Clinical pearl: Monitor triglycerides q48h. PRIS risk >5 mg/kg/hr for >48hr.\n\n**Fentanyl** (Opioid analgesic): Mu-receptor agonist for analgesia/sedation\n  - Side effects: Respiratory depression, chest wall rigidity, constipation\n  - Contraindications: MAOIs within 14 days\n  - Clinical pearl: Analgesia-first approach. Chest wall rigidity with rapid bolus.\n\n**Cisatracurium** (Neuromuscular blocking agent): Non-depolarizing NMB causing paralysis\n  - Side effects: Prolonged paralysis, ICU-acquired weakness\n  - Contraindications: Never without concurrent sedation\n  - Clinical pearl: For severe ARDS with refractory dyssynchrony. Train-of-four monitoring."
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- Lung-protective ventilation: Vt 6 mL/kg IDEAL body weight (from height, not actual weight)\n- Driving pressure <15 cmH2O may be best predictor of ARDS survival\n- Peak reflects TOTAL pressure; Plateau reflects COMPLIANCE only\n- NEVER paralyze without ensuring adequate sedation\n- Daily SAT + SBT reduces ventilator days by 3 and ICU LOS by 4 days"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "ARDS patient: Vt 6 mL/kg IBW, plateau 34 cmH2O, PEEP 14. What adjustment?",
+        "options": [
+          "Increase Vt",
+          "Decrease Vt to reduce plateau below 30",
+          "Increase PEEP to 20",
+          "No changes"
+        ],
+        "correct": 1,
+        "rationale": "Plateau >30 risks VILI. Reduce Vt even below 6 mL/kg if needed. Permissive hypercapnia is acceptable."
+      },
+      {
+        "question": "Ventilated patient: sudden high PIP alarm with normal plateau pressure. Most likely cause?",
+        "options": [
+          "Tension pneumothorax",
+          "ARDS worsening",
+          "Bronchospasm or mucus plug",
+          "Atelectasis"
+        ],
+        "correct": 2,
+        "rationale": "Elevated peak with normal plateau = increased AIRWAY RESISTANCE. Decreased compliance would elevate BOTH."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "acls-cardiac-arrest",
+    "title": "ACLS Cardiac Arrest Algorithm",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "ACLS Cardiac Arrest Algorithm | us-rn-nclex-rn",
+    "seoDescription": "ACLS Cardiac Arrest Algorithm: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**ACLS Cardiac Arrest Algorithm** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Acute myocardial infarction or cardiomyopathy\n- Electrolyte imbalances (hyperkalemia, hypomagnesemia)\n- Drug toxicity or overdose\n- Hypoxia, hypothermia, or tension pneumothorax"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Cardiac Arrest Pathophysiology and Response**\n\nCardiac arrest occurs when the heart ceases effective pumping, resulting in absence of circulation. The four arrest rhythms are: ventricular fibrillation (VF), pulseless ventricular tachycardia (pVT) — both shockable, and pulseless electrical activity (PEA) and asystole — both non-shockable.\n\nHigh-quality CPR is the foundation of resuscitation. Chest compressions generate approximately 25-30% of normal cardiac output, providing critical perfusion to the brain and heart. Compression depth (≥2 inches), rate (100-120/min), full recoil, and minimal interruptions are essential.\n\nThe ACLS algorithm follows a systematic approach: assess rhythm, shock if indicated, resume CPR immediately, establish IV/IO access, administer medications, and identify/treat reversible causes (H's and T's)."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- Unresponsive, no pulse, no breathing (or agonal gasps)\n- VF/pVT on monitor (shockable rhythms)\n- PEA or asystole on monitor (non-shockable)\n\n**Signs (unstable / late):**\n- ETCO2 >10 mmHg during CPR (effective compressions)\n- ROSC signs: ETCO2 spike, arterial waveform, spontaneous movement\n- Post-ROSC: assess neurologic status, 12-lead ECG"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- Cardiac monitor for rhythm identification (VF/pVT vs PEA/asystole)\n- End-tidal CO2 (ETCO2 >10 mmHg confirms effective CPR; sudden rise may indicate ROSC)\n- Point-of-care labs: potassium, glucose, blood gas"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Shockable (VF/pVT): Defibrillate → CPR 2 min → recheck rhythm → repeat; epinephrine q3-5 min, amiodarone after 3rd shock\n- Non-shockable (PEA/asystole): CPR → epinephrine q3-5 min → identify reversible causes (H's and T's)\n- Post-ROSC: targeted temperature management (TTM), PCI if STEMI, hemodynamic support\n\n**Nursing Actions:**\n- Begin high-quality CPR immediately: 100-120/min, ≥2 inches depth, allow full recoil\n- Minimize interruptions in compressions (<10 seconds for rhythm checks)\n- Prepare and administer medications via IV/IO; document resuscitation timeline\n\n**Medications:**\n**Epinephrine (cardiac arrest dose)** (Adrenergic agonist): Alpha-1 vasoconstriction increases coronary and cerebral perfusion pressure during CPR\n  - Side effects: Post-ROSC hypertension, tachyarrhythmias, myocardial oxygen demand\n  - Contraindications: No contraindications during cardiac arrest\n  - Clinical pearl: 1 mg IV/IO every 3-5 minutes; for shockable rhythms, give after 2nd shock; for non-shockable, give as soon as IV/IO access established"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- High-quality CPR saves lives: push hard (≥2\"), push fast (100-120/min), allow full recoil, minimize interruptions\n- H's and T's for reversible causes: Hypovolemia, Hypoxia, Hydrogen ion (acidosis), Hypo/Hyperkalemia, Hypothermia; Tension pneumothorax, Tamponade, Toxins, Thrombosis (PE/MI)\n- ETCO2 <10 mmHg during CPR: improve compression quality; sudden rise to 35-40 mmHg suggests ROSC"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A patient is in ventricular fibrillation. After the first defibrillation, what should the nurse do IMMEDIATELY?",
+        "options": [
+          "Check for a pulse",
+          "Resume CPR for 2 minutes",
+          "Administer amiodarone",
+          "Intubate the patient"
+        ],
+        "correct": 1,
+        "rationale": "After defibrillation, immediately resume CPR for 2 minutes before rechecking the rhythm. Pausing for pulse checks wastes valuable perfusion time."
+      },
+      {
+        "question": "During cardiac arrest, epinephrine 1 mg IV is administered. When should the next dose be given?",
+        "options": [
+          "Every 1-2 minutes",
+          "Every 3-5 minutes",
+          "Every 10 minutes",
+          "Only once during the code"
+        ],
+        "correct": 1,
+        "rationale": "Epinephrine is given every 3-5 minutes during cardiac arrest to maintain coronary and cerebral perfusion pressure."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "cardiogenic-shock",
+    "title": "Cardiogenic Shock",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Cardiogenic Shock | us-rn-nclex-rn",
+    "seoDescription": "Cardiogenic Shock: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Cardiogenic Shock** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Large anterior wall STEMI\n- Acute decompensated heart failure\n- Acute myocarditis\n- Papillary muscle rupture\n- Ventricular septal rupture post-MI\n- Cardiac tamponade\n- Massive pulmonary embolism\n- Acute valvular failure"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Pump Failure and Hemodynamic Collapse**\n\nCardiogenic shock is a state of end-organ hypoperfusion caused by severe cardiac pump failure, most commonly from acute myocardial infarction involving >40% of the left ventricular myocardium. It is the leading cause of death in hospitalized MI patients, with a mortality rate of 40-50% even with aggressive treatment.\n\nPathophysiology: The Downward Spiral:\n1. Massive myocardial damage → Severe reduction in contractility → Decreased stroke volume and cardiac output\n2. Decreased CO → Systemic hypoperfusion → Tissue hypoxia → Lactic acidosis\n3. Compensatory mechanisms activate:\n   a. Sympathetic nervous system: Catecholamine surge → Tachycardia + Vasoconstriction (increased SVR) → Increased afterload → Increased myocardial oxygen demand (worsens ischemia)\n   b. RAAS activation: Sodium/water retention → Increased preload → Pulmonary congestion → Worsened oxygenation\n4. The ischemic myocardium, now facing increased oxygen demand and decreased supply, sustains further damage → More contractility loss → VICIOUS CYCLE\n5. Without intervention, this spiral leads to irreversible multi-organ failure and death\n\nHemodynamic Profile (Classic Findings):\n• Cardiac Index: <2.2 L/min/m² (severely reduced: heart cannot pump effectively)\n• PAWP/PCWP: >18 mmHg (elevated: blood backing up into the lungs because the LV cannot eject)\n• SVR: >1400 dynes/sec/cm⁻⁵ (elevated: compensatory vasoconstriction to maintain BP)\n• SvO2: <60% (low: tissues extracting maximum oxygen because delivery is inadequate)\n• MAP: <65 mmHg despite adequate volume resuscitation\n• Blood Pressure: SBP <90 mmHg for ≥30 minutes, or vasopressors required to maintain SBP ≥90\n\nClinical Presentation:\n• Hypotension unresponsive to fluid resuscitation (distinguishes from hypovolemic shock)\n• Tachycardia (compensatory: trying to maintain CO despite reduced SV)\n• Cool, clammy, mottled skin (vasoconstriction shunting blood to vital organs)\n• Altered mental status (cerebral hypoperfusion)\n• Oliguria (<0.5 mL/kg/hr: renal hypoperfusion)\n• Pulmonary edema (crackles, dyspnea, frothy sputum: elevated left heart pressures)\n• Narrow pulse pressure (<25 mmHg: low stroke volume)\n\nCauses:\n• Acute MI (most common: especially large anterior wall STEMI)\n• Acute decompensated heart failure\n• Acute myocarditis\n• Papillary muscle or chordae tendineae rupture (acute severe mitral regurgitation)\n• Ventricular septal rupture post-MI\n• Cardiac tamponade\n• Massive pulmonary embolism (right heart failure)\n• Aortic stenosis decompensation\n\nMechanical Circulatory Support:\n• Intra-Aortic Balloon Pump (IABP): Counterpulsation device placed in descending aorta. Inflates during DIASTOLE (augments coronary and systemic perfusion), deflates during SYSTOLE (reduces afterload, assisting ventricular ejection). Increases coronary perfusion by 20-30% and decreases myocardial oxygen demand by 15-20%. Nursing: Monitor timing (proper inflation at dicrotic notch), check distal pulses and sensation frequently, keep HOB ≤30°, no hip flexion >45°, strict anticoagulation.\n• Impella: Percutaneous micro-axial pump placed across the aortic valve. Actively aspirates blood from LV and ejects into ascending aorta. Provides more hemodynamic support than IABP (up to 5.5 L/min with Impella 5.5). Used when IABP support is inadequate.\n• ECMO (Extracorporeal Membrane Oxygenation): VA-ECMO provides full cardiopulmonary support. Blood is drained from venous system, oxygenated externally, and returned to arterial system. Bridge to recovery, bridge to device (LVAD), or bridge to transplant."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- Hemodynamically stable: MAP >65, CI >2.5, adequate urine output, warm extremities\n- Normal mentation, no signs of end-organ hypoperfusion\n- Compensated heart failure with stable vital signs on oral medications\n\n**Signs (unstable / late):**\n- SBP <90 sustained despite fluid bolus: cardiogenic shock, initiate vasopressors\n- CI <2.2 with PAWP >18: classic cardiogenic shock profile, consider inotropes and mechanical support\n- Cold, clammy, mottled extremities with altered mental status: inadequate tissue perfusion\n- Rising lactate with falling SvO2: worsening tissue hypoxia despite interventions\n- Oliguria (<0.5 mL/kg/hr for >6 hours): renal hypoperfusion, consider renal-dose dopamine or escalate support\n- Pulmonary edema with hypotension: cannot use diuretics effectively (will worsen hypotension), needs inotropic support\n- IABP with absent distal pulses: limb ischemia, emergent vascular surgery consultation"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- Hemodynamic monitoring (CI < 2.2, PAWP > 18, elevated SVR)\n- Arterial line for continuous BP monitoring\n- Serum lactate levels (tissue hypoperfusion indicator)\n- Mixed venous oxygen saturation (SvO2 < 60%)\n- Cardiac biomarkers (troponin trending)\n- Continuous ECG monitoring for arrhythmias"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Initiate vasoactive medication infusions per protocol\n- Prepare for mechanical circulatory support (IABP, Impella) as ordered\n- Emergent cardiac catheterization for MI-related cardiogenic shock\n- Cautious fluid management (avoid overloading failing ventricle)\n- Correct underlying cause (PCI for STEMI, pericardiocentesis for tamponade)\n\n**Nursing Actions:**\n- Monitor hemodynamic parameters continuously (MAP, CVP, CI, SVR)\n- Titrate vasoactive drips per protocol (dobutamine, norepinephrine, milrinone)\n- Assess end-organ perfusion (urine output, mental status, lactate clearance)\n- Monitor IABP timing and distal circulation if mechanical support placed\n- Keep HOB ≤ 30 degrees with IABP, no hip flexion > 45 degrees\n- Assess for complications of mechanical support (limb ischemia, bleeding, infection)\n\n**Medications:**\n**Norepinephrine (Levophed)** (Alpha-1 and Beta-1 Agonist (Vasopressor)): Potent alpha-1 agonist causing peripheral vasoconstriction (increases SVR and MAP). Also stimulates beta-1 receptors in the heart, increasing contractility and heart rate (to a lesser degree). First-line vasopressor for cardiogenic shock when SBP <90 despite adequate preload\n  - Side effects: Peripheral ischemia (vasoconstriction reduces extremity perfusion), tissue necrosis with extravasation (vesicant: must use central line), tachycardia, dysrhythmias, mesenteric ischemia, digital ischemia/necrosis\n  - Contraindications: Hypovolemia (must correct volume deficit before vasopressors), mesenteric or peripheral vascular thrombosis, profound hypoxia or hypercarbia\n  - Clinical pearl: Start at 0.1-0.5 mcg/kg/min, titrate to MAP ≥65 mmHg. Must be administered through central venous access. If extravasation occurs, infiltrate area with phentolamine 5-10 mg in 10-20 mL NS within 12 hours. In cardiogenic shock, norepinephrine is preferred over dopamine (SOAP II trial showed lower mortality and fewer arrhythmias). However, remember that increasing SVR (afterload) in a failing heart may further reduce cardiac output: often combined with an inotrope (dobutamine) to maintain contractility.\n\n**Dobutamine** (Beta-1 Agonist (Inotrope)): Primarily stimulates cardiac beta-1 receptors, increasing myocardial contractility (positive inotrope) without significantly increasing heart rate at therapeutic doses. Also has mild beta-2 effects causing peripheral vasodilation (decreased afterload), which can paradoxically improve cardiac output by reducing the resistance against which the ventricle ejects\n  - Side effects: Tachycardia, dysrhythmias (PVCs, VTach), hypotension (from beta-2 vasodilation: may need concurrent vasopressor), increased myocardial oxygen demand, angina, headache\n  - Contraindications: IHSS (dynamic outflow tract obstruction worsened by increased contractility), severe uncorrected hypovolemia, hemodynamically significant ventricular tachycardia\n  - Clinical pearl: Dobutamine is the inotrope of choice when SBP is adequate (>90 mmHg): it improves contractility and reduces afterload (favorable hemodynamic profile). Start at 2.5 mcg/kg/min, titrate to effect (max 20 mcg/kg/min). Target: CI >2.2, SvO2 >60%, improved urine output, clearing lactate. If SBP <90, use norepinephrine FIRST to establish adequate perfusion pressure, then add dobutamine for inotropy. 'Norepi for the pipes, dobutamine for the pump.'\n\n**Milrinone** (Phosphodiesterase-3 Inhibitor (Inodilator)): Inhibits phosphodiesterase-3 (PDE3) in cardiac and vascular smooth muscle, increasing intracellular cAMP. In the heart, increased cAMP enhances calcium availability, increasing contractility. In vascular smooth muscle, increased cAMP causes vasodilation (both arterial and venous). Unlike dobutamine, milrinone works independently of beta-receptors: effective even in patients on beta-blockers\n  - Side effects: Hypotension (significant: from vasodilation), ventricular arrhythmias (VTach, VFib), thrombocytopenia, headache\n  - Contraindications: Severe hypotension, severe aortic or pulmonic stenosis, hypertrophic cardiomyopathy with outflow obstruction, severe hypovolemia\n  - Clinical pearl: Key advantage over dobutamine: Works via PDE3 inhibition, NOT beta-receptors, so effective in patients chronically on beta-blockers (whose beta-receptors are downregulated). Loading dose: 50 mcg/kg over 10 minutes (often skipped due to hypotension risk). Infusion: 0.375-0.75 mcg/kg/min. Has vasodilatory effects (lowers SVR and PAWP more than dobutamine): 'inodilator.' Renally cleared: reduce dose in renal impairment. Long half-life (2-3 hours) means effects persist after discontinuation."
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- Cardiogenic shock hemodynamic profile: HIGH PAWP + LOW CI + HIGH SVR. This distinguishes it from hypovolemic shock (LOW PAWP + LOW CI + HIGH SVR) and septic shock (LOW PAWP + HIGH CI + LOW SVR).\n- The goal in cardiogenic shock is to break the vicious cycle: restore perfusion (vasopressors), improve contractility (inotropes), reduce afterload (to improve ejection), and revascularize (emergent PCI for MI). All simultaneously: this is not a sequential approach.\n- IABP timing is critical: INFLATE at the dicrotic notch (start of diastole) to augment coronary perfusion. DEFLATE just before systole to reduce afterload. Improper timing can worsen hemodynamics. Augmented diastolic pressure should be HIGHER than unassisted systolic pressure on the waveform.\n- Lactate clearance is the best indicator of treatment effectiveness in cardiogenic shock. A normalizing lactate means tissues are being adequately perfused. A rising lactate despite maximal therapy suggests treatment failure: escalate to mechanical circulatory support.\n- In RV infarction causing cardiogenic shock: The hemodynamic profile is different: elevated CVP with LOW or NORMAL PAWP (the RV cannot fill the LV). Treatment: Volume loading (the opposite of LV-mediated cardiogenic shock) + avoid preload reducers (nitroglycerin, morphine, diuretics) + inotropes."
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A patient with an acute anterior STEMI develops cardiogenic shock. Current hemodynamics: MAP 52, CI 1.8, PAWP 24, SVR 2200. The patient is on norepinephrine at 15 mcg/min. What is the most appropriate next intervention?",
+        "options": [
+          "Increase the norepinephrine infusion rate to raise MAP",
+          "Add dobutamine to improve contractility and cardiac output",
+          "Administer a 500 mL NS fluid bolus to increase preload",
+          "Start IV furosemide to reduce the elevated PAWP"
+        ],
+        "correct": 1,
+        "rationale": "This patient has cardiogenic shock with the classic hemodynamic profile: low CI (1.8: heart can't pump), high PAWP (24: pulmonary congestion from backup), and very high SVR (2200: compensatory vasoconstriction). The norepinephrine is maintaining some MAP but increasing SVR further (more norepinephrine) would increase afterload and worsen cardiac output. The patient needs INOTROPY: dobutamine will increase contractility (improving CI) and cause mild vasodilation (reducing the excessive SVR, which helps the ventricle eject more effectively). Fluid bolus would worsen pulmonary edema (PAWP is already 24). Furosemide would reduce preload and worsen hypotension. The ideal strategy: maintain norepinephrine for perfusion pressure + add dobutamine for pump function + emergent PCI for reperfusion."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "fever-workup-sepsis",
+    "title": "Fever Workup and Sepsis Recognition",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Fever Workup and Sepsis Recognition | us-rn-nclex-rn",
+    "seoDescription": "Fever Workup and Sepsis Recognition: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Fever Workup and Sepsis Recognition** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Age extremes (very young or elderly >65)\n- Immunosuppression (chemotherapy, steroids, HIV)\n- Invasive devices (central lines, Foley catheters)\n- Recent surgery or hospitalization"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Fever and the Sepsis Cascade**\n\nFever is mediated by pyrogens (IL-1, IL-6, TNF-alpha) acting on the hypothalamic thermoregulatory center, raising the set point. While fever is a protective immune response, it may indicate serious infection requiring systematic evaluation.\n\nSepsis is a life-threatening organ dysfunction caused by a dysregulated host response to infection. The sepsis cascade involves pathogen recognition, massive cytokine release, endothelial dysfunction, microvascular thrombosis, and progressive organ failure. Early recognition and treatment within the first hour dramatically improve survival.\n\nThe Sepsis-3 criteria define sepsis as suspected infection plus ≥2 SOFA score points. qSOFA (quick SOFA) screens for sepsis using: SBP ≤100 mmHg, RR ≥22, altered mentation."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- Fever >38.3°C or hypothermia <36°C\n- Tachycardia >90 bpm and tachypnea >20\n- Altered mental status or confusion\n\n**Signs (unstable / late):**\n- Lactate >2 mmol/L (>4 mmol/L = severe)\n- WBC >12,000 or <4,000 or >10% bands\n- Positive blood cultures"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- Blood cultures ×2 sets before antibiotics\n- Lactate level (>2 mmol/L indicates tissue hypoperfusion)\n- CBC, BMP, urinalysis, chest X-ray; site-specific cultures"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- SEP-1 bundle: cultures, lactate, antibiotics within 1 hour, 30 mL/kg crystalloid if hypotensive\n- Vasopressors (norepinephrine first-line) if MAP <65 after fluid resuscitation\n- Source control: drain abscesses, remove infected devices\n\n**Nursing Actions:**\n- Recognize sepsis early using SIRS/qSOFA criteria and escalate immediately\n- Administer IV antibiotics within 1 hour of sepsis recognition\n- Monitor urine output (target ≥0.5 mL/kg/hr) and mean arterial pressure\n\n**Medications:**\n**Norepinephrine (Levophed)** (Alpha-1 adrenergic agonist (vasopressor)): Potent vasoconstriction increasing SVR and MAP\n  - Side effects: Tissue necrosis with extravasation, arrhythmias, peripheral ischemia\n  - Contraindications: Hypovolemia (must fluid resuscitate first); mesenteric/peripheral ischemia\n  - Clinical pearl: First-line vasopressor for septic shock; requires central line for infusion; titrate to MAP ≥65 mmHg"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- Each hour delay in antibiotics for sepsis increases mortality by 7-8%\n- Lactate >4 mmol/L indicates severe tissue hypoperfusion — requires aggressive resuscitation\n- Hypothermia in suspected sepsis is MORE concerning than fever — indicates poor prognosis"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A septic patient has received 30 mL/kg crystalloid but MAP remains 58 mmHg. What is the next intervention?",
+        "options": [
+          "Give additional fluid bolus of 30 mL/kg",
+          "Start norepinephrine infusion",
+          "Administer hydrocortisone",
+          "Obtain a CT scan"
+        ],
+        "correct": 1,
+        "rationale": "When MAP remains <65 mmHg after initial fluid resuscitation (30 mL/kg), vasopressors should be initiated. Norepinephrine is the first-line vasopressor for septic shock."
+      },
+      {
+        "question": "What is the target time for antibiotic administration once sepsis is recognized?",
+        "options": [
+          "Within 6 hours",
+          "Within 3 hours",
+          "Within 1 hour",
+          "Within 30 minutes"
+        ],
+        "correct": 2,
+        "rationale": "Current sepsis guidelines recommend antibiotic administration within 1 hour of sepsis recognition. Each hour of delay increases mortality significantly."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "icu-hypothermia-management",
+    "title": "Accidental Hypothermia ICU Management",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Accidental Hypothermia ICU Management | us-rn-nclex-rn",
+    "seoDescription": "Accidental Hypothermia ICU Management: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Accidental Hypothermia ICU Management** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Environmental exposure (cold weather, immersion)\n- Elderly and neonatal patients\n- Alcohol and substance intoxication\n- Endocrine disorders (hypothyroidism, adrenal insufficiency)\n- Sepsis and shock states\n- Burns and skin disorders\n- Trauma victims\n- Malnutrition and homelessness"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Hypothermia Physiology**\n\nAccidental hypothermia is an unintentional core temperature drop below 35°C (95°F). Classification: mild (32-35°C), moderate (28-32°C), severe (<28°C). Hypothermia decreases cellular metabolic rate by 6-10% per degree Celsius, initially protective but progressively causing cardiac conduction delays, coagulopathy, and eventual cardiac arrest. The J-wave (Osborn wave) is a characteristic ECG finding. Below 30°C, the myocardium becomes increasingly irritable and susceptible to ventricular fibrillation. Rewarming strategies depend on severity: passive external rewarming for mild, active external for moderate, and active core rewarming (warm IV fluids, peritoneal/pleural lavage, ECMO) for severe hypothermia."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- Core temperature rising 0.5-2°C/hr with rewarming\n- Improving level of consciousness\n- Resolution of ECG abnormalities\n- Hemodynamic stability during rewarming\n\n**Signs (unstable / late):**\n- Ventricular fibrillation (especially <30°C)\n- Afterdrop: paradoxical cooling after rewarming begins\n- Rewarming shock: vasodilation and hypotension\n- Persistent asystole despite rewarming\n- Severe hyperkalemia suggesting irreversible death"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- Core temperature measurement: esophageal, rectal, or bladder (NOT oral or tympanic in severe cases)\n- ECG: J-waves (Osborn waves), prolonged PR/QT, widened QRS, atrial fibrillation\n- ABG corrected for temperature\n- Coagulation studies: hypothermia impairs coagulation in vivo (may appear normal in lab tests warmed to 37°C)\n- Serum potassium: severe hyperkalemia (>12 mEq/L) in hypothermia suggests death has already occurred\n- Glucose monitoring (hypothermia impairs insulin function)"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Mild (32-35°C): passive external rewarming with blankets, warm environment\n- Moderate (28-32°C): active external rewarming with forced warm air (Bair Hugger), warm IV fluids (38-42°C)\n- Severe (<28°C): active core rewarming: warm IV fluids, peritoneal/pleural lavage, or ECMO rewarming\n- Handle patient gently: rough handling can trigger VF in hypothermic myocardium\n- Withhold resuscitation medications and limit defibrillation attempts until core temp >30°C (drugs ineffective at low temperatures)\n- A hypothermic patient is not dead until warm and dead: continue resuscitation until core temp >32°C\n\n**Nursing Actions:**\n- Monitor core temperature continuously with appropriate probe\n- Handle patient extremely gently to avoid triggering arrhythmias\n- Remove wet clothing and initiate appropriate rewarming method\n- Monitor ECG continuously for arrhythmias during rewarming\n- Warm all IV fluids before administration\n- Monitor for rewarming complications: afterdrop (continued cooling after rewarming starts), rewarming shock (vasodilation causing hypotension)\n\n**Medications:**\n**Warm IV Normal Saline (38-42°C)** (Active core rewarming): Delivers heat directly to core circulation\n  - Side effects: Burns if overheated, fluid overload\n  - Contraindications: None in severe hypothermia\n  - Clinical pearl: Warm all IV fluids to 38-42°C. Standard fluid warmers are essential. Do NOT microwave IV bags. Warm fluids alone are insufficient for severe hypothermia."
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- No one is dead until warm and dead: resuscitate until core temp >32°C before declaring death\n- Handle hypothermic patients gently: the cold myocardium is extremely susceptible to VF\n- J-waves (Osborn waves) on ECG are pathognomonic for hypothermia\n- Medications and defibrillation are largely ineffective below 30°C: focus on rewarming first\n- ECMO is the gold standard for severe hypothermic cardiac arrest rewarming"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A hypothermic patient (core temp 27°C) is in VF. After one defibrillation attempt, the rhythm persists. What is the next step?",
+        "options": [
+          "Continue defibrillation every 2 minutes",
+          "Focus on active core rewarming to >30°C before additional defibrillation attempts",
+          "Administer epinephrine 1 mg IV immediately",
+          "Pronounce death"
+        ],
+        "correct": 1,
+        "rationale": "Below 30°C, the myocardium is refractory to defibrillation and medications are ineffective. Focus on active core rewarming to >30°C, then resume standard ACLS interventions."
+      },
+      {
+        "question": "What ECG finding is characteristic of hypothermia?",
+        "options": [
+          "Delta wave",
+          "J-wave (Osborn wave)",
+          "U-wave",
+          "Epsilon wave"
+        ],
+        "correct": 1,
+        "rationale": "The J-wave or Osborn wave is a characteristic positive deflection at the junction of the QRS complex and ST segment, pathognomonic for hypothermia."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "icu-massive-transfusion",
+    "title": "Massive Transfusion Protocol in the ICU",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Massive Transfusion Protocol in the ICU | us-rn-nclex-rn",
+    "seoDescription": "Massive Transfusion Protocol in the ICU: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Massive Transfusion Protocol in the ICU** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Major trauma with hemorrhage\n- Massive upper or lower GI hemorrhage\n- Ruptured abdominal aortic aneurysm\n- Postpartum hemorrhage\n- Intraoperative hemorrhage\n- Liver laceration or splenic rupture\n- Pelvic fractures with vascular injury\n- Anticoagulant-related hemorrhage"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Massive Hemorrhage Physiology**\n\nMassive transfusion is defined as replacement of ≥10 units PRBCs in 24 hours, or ≥4 units in 1 hour, or replacement of the patient's entire blood volume in 24 hours. Massive hemorrhage triggers the 'lethal triad' of death: hypothermia (impairs coagulation factor function), acidosis (from hypoperfusion and lactate production), and coagulopathy (dilutional from crystalloid, consumptive from DIC, and hypothermia-related). Damage control resuscitation aims to prevent the lethal triad through balanced blood product administration (1:1:1 PRBC:FFP:platelets), permissive hypotension (SBP 80-90 or MAP 50-60 until surgical control), limitation of crystalloid, prevention of hypothermia, and early surgical/interventional hemorrhage control."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- Hemorrhage controlled with improving hemodynamics\n- Correction of lethal triad: warming, improving pH, correcting coagulopathy\n- Decreasing blood product requirements\n- Improving lactate clearance\n\n**Signs (unstable / late):**\n- Uncontrolled hemorrhage despite surgical efforts and MTP\n- Lethal triad progressing: hypothermia <35°C, pH <7.20, INR >1.5\n- Massive transfusion complications: hypocalcemia, hyperkalemia, TRALI, TACO\n- Irreversible shock with multi-organ failure"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- Serial hemoglobin: may be initially normal in acute hemorrhage (hemodilution takes time)\n- Coagulation studies: PT/INR, fibrinogen, platelet count every 30-60 minutes during MTP\n- TEG/ROTEM (thromboelastography): real-time assessment of clot formation and fibrinolysis\n- ABG with lactate for acidosis and perfusion assessment\n- Ionized calcium (citrate in blood products chelates calcium)\n- Assessment of Blood Consumption (ABC) score for MTP activation"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Activate institutional Massive Transfusion Protocol\n- Balanced resuscitation: 1:1:1 ratio of PRBC:FFP:platelets\n- Permissive hypotension: MAP 50-60 or SBP 80-90 until surgical hemorrhage control\n- Limit crystalloid to prevent dilutional coagulopathy\n- Tranexamic acid (TXA) within 3 hours of hemorrhage onset\n- Warm all blood products and IV fluids; actively warm patient\n\n**Nursing Actions:**\n- Obtain and hang blood products rapidly using pressure infusion devices\n- Verify each unit using institutional two-nurse verification protocol\n- Use blood warmers for all products to prevent hypothermia\n- Monitor ionized calcium and replace with calcium gluconate per protocol\n- Monitor temperature continuously and implement active warming\n- Prepare for emergent surgical intervention\n\n**Medications:**\n**Tranexamic Acid (TXA)** (Antifibrinolytic): Inhibits plasminogen activation, preventing clot breakdown\n  - Side effects: Thrombosis risk, seizures at high doses, nausea\n  - Contraindications: Active thromboembolic disease, DIC (relative)\n  - Clinical pearl: CRASH-2 trial: TXA given within 3 HOURS of traumatic hemorrhage reduces mortality. Give 1g IV over 10 min, then 1g over 8 hours. After 3 hours, TXA may INCREASE mortality - timing is critical.\n\n**Calcium Gluconate** (Electrolyte replacement): Replaces calcium chelated by citrate preservative in transfused blood products\n  - Side effects: Bradycardia if pushed rapidly\n  - Contraindications: Digitalis toxicity (relative)\n  - Clinical pearl: Empirically replace: 1g calcium gluconate for every 4 units PRBCs. Citrate-induced hypocalcemia causes coagulopathy and cardiac dysfunction - a correctable cause of ongoing bleeding."
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- Lethal triad of trauma death: hypothermia + acidosis + coagulopathy. All three must be addressed simultaneously.\n- TXA within 3 hours reduces mortality. After 3 hours, it may INCREASE mortality. Window of opportunity is narrow.\n- 1:1:1 ratio (PRBC:FFP:platelets) based on PROPPR trial: reduces death from exsanguination in first 24 hours\n- Permissive hypotension (SBP 80-90) until surgical control: aggressive fluid resuscitation before hemorrhage control worsens bleeding\n- Serial ionized calcium monitoring during MTP: hypocalcemia from citrate is a correctable cause of coagulopathy"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A trauma patient has received 8 units PRBCs in 1 hour. MTP is activated. What ratio of products should be transfused?",
+        "options": [
+          "PRBCs only until hemoglobin normalizes",
+          "1:1:1 ratio of PRBC:FFP:platelets",
+          "2:1 ratio of PRBC:FFP only",
+          "Crystalloid with occasional blood products"
+        ],
+        "correct": 1,
+        "rationale": "PROPPR trial demonstrated that 1:1:1 balanced ratio of PRBC:FFP:platelets reduces death from exsanguination compared to higher PRBC ratios. Balanced resuscitation prevents dilutional coagulopathy."
+      },
+      {
+        "question": "TXA is most effective in traumatic hemorrhage when given:",
+        "options": [
+          "Within 3 hours of injury onset",
+          "Within 24 hours",
+          "Anytime during resuscitation",
+          "Only after surgical control is achieved"
+        ],
+        "correct": 0,
+        "rationale": "The CRASH-2 trial showed TXA given within 3 hours of injury significantly reduces mortality. After 3 hours, TXA may paradoxically increase mortality. The narrow window makes early administration critical."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "shock-overview-lesson",
+    "title": "Shock: Comprehensive",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Shock: Comprehensive | us-rn-nclex-rn",
+    "seoDescription": "Shock: Comprehensive: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Shock: Comprehensive** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Hemorrhage, dehydration, or third-spacing (hypovolemic)\n- Acute MI, heart failure, dysrhythmias (cardiogenic)\n- Sepsis, anaphylaxis, spinal cord injury (distributive)\n- Tension pneumothorax, cardiac tamponade, massive PE (obstructive)"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Understanding Shock States**\n\nShock is a state of inadequate tissue perfusion resulting in cellular hypoxia, anaerobic metabolism, and organ dysfunction. Despite varied etiologies, all shock types share the final common pathway of impaired oxygen delivery relative to metabolic demand.\n\nThe four categories are distinguished by hemodynamic profiles: Hypovolemic (decreased preload, high SVR), Cardiogenic (decreased CO, high SVR, high preload), Distributive (decreased SVR, high CO initially — septic, anaphylactic, neurogenic), and Obstructive (mechanical barrier to CO — tamponade, tension pneumothorax, massive PE).\n\nShock progresses through compensated (tachycardia, vasoconstriction maintain BP), decompensated (hypotension, organ dysfunction), and irreversible (refractory organ failure, death) stages. Early recognition during the compensated phase is key to survival."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- Tachycardia and tachypnea (earliest signs)\n- Cool/clammy skin (hypovolemic) vs warm/flushed (distributive early)\n- Altered mentation, restlessness, confusion\n\n**Signs (unstable / late):**\n- MAP <65 mmHg\n- Lactate >2 mmol/L\n- Urine output <0.5 mL/kg/hr"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- Lactate: tissue perfusion marker (>2 mmol/L indicates hypoperfusion)\n- Echocardiogram: assess cardiac function and filling\n- Central venous catheter: CVP, ScvO2, and cardiac output monitoring"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Hypovolemic: volume resuscitation with crystalloids and blood products\n- Cardiogenic: inotropes (dobutamine), vasopressors, avoid fluid overload\n- Distributive: vasopressors (norepinephrine), treat underlying cause\n\n**Nursing Actions:**\n- Recognize early signs: tachycardia, restlessness, delayed capillary refill (>3 sec)\n- Establish large-bore IV access (2 sites, 16-18 gauge) and initiate fluid resuscitation\n- Monitor urine output hourly (target ≥0.5 mL/kg/hr as perfusion marker)\n\n**Medications:**\n**Dobutamine** (Synthetic catecholamine (beta-1 agonist)): Increases cardiac contractility and cardiac output\n  - Side effects: Tachycardia, arrhythmias, hypotension (due to beta-2 vasodilation)\n  - Contraindications: Idiopathic hypertrophic subaortic stenosis (IHSS); hypovolemia\n  - Clinical pearl: First-line inotrope for cardiogenic shock; may cause hypotension — often combined with norepinephrine"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- Tachycardia is often the FIRST sign of shock — do not dismiss unexplained tachycardia\n- In cardiogenic shock, fluids can WORSEN the situation — use inotropes instead\n- MAP ≥65 mmHg is the universal perfusion target in shock management"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A patient post-MI has BP 78/50, HR 120, JVD, and crackles bilaterally. What type of shock?",
+        "options": [
+          "Hypovolemic",
+          "Cardiogenic",
+          "Septic",
+          "Neurogenic"
+        ],
+        "correct": 1,
+        "rationale": "Post-MI with hypotension, tachycardia, JVD (elevated preload), and pulmonary crackles (fluid backup) indicates cardiogenic shock from pump failure."
+      },
+      {
+        "question": "Which intervention is CONTRAINDICATED in cardiogenic shock?",
+        "options": [
+          "Dobutamine infusion",
+          "Aggressive fluid resuscitation",
+          "Vasopressor support",
+          "Intra-aortic balloon pump"
+        ],
+        "correct": 1,
+        "rationale": "In cardiogenic shock, the heart cannot handle additional volume. Aggressive fluids will worsen pulmonary edema. Treatment focuses on inotropes and afterload reduction."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "sepsis-protocol-algorithm",
+    "title": "Sepsis Protocol Algorithm",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Sepsis Protocol Algorithm | us-rn-nclex-rn",
+    "seoDescription": "Sepsis Protocol Algorithm: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Sepsis Protocol Algorithm** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Delayed recognition of sepsis symptoms\n- Inadequate initial fluid resuscitation\n- Failure to obtain cultures before antibiotics\n- Delay in antibiotic administration >1 hour"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**The Hour-1 Sepsis Bundle**\n\nThe Surviving Sepsis Campaign Hour-1 Bundle represents time-critical interventions that should be initiated immediately upon sepsis recognition. The bundle approach ensures all elements are addressed simultaneously rather than sequentially.\n\nThe bundle includes: (1) Measure lactate — remeasure if >2 mmol/L, (2) Obtain blood cultures before antibiotics, (3) Administer broad-spectrum antibiotics, (4) Begin rapid infusion of 30 mL/kg crystalloid for hypotension or lactate ≥4 mmol/L, (5) Apply vasopressors if hypotension persists after fluid resuscitation to maintain MAP ≥65 mmHg.\n\nNursing recognition is the rate-limiting step. Screening tools (SIRS, qSOFA, NEWS) help identify at-risk patients. Once sepsis is suspected, the clock starts — each hour of delay in antibiotics increases mortality by 7-8%."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- qSOFA ≥2: SBP ≤100, RR ≥22, altered mentation\n- SIRS: temp >38.3 or <36, HR >90, RR >20, WBC >12K or <4K\n- Signs of end-organ dysfunction: oliguria, confusion, mottled skin\n\n**Signs (unstable / late):**\n- Lactate >2 mmol/L (tissue hypoperfusion)\n- Lactate >4 mmol/L (severe — high mortality)\n- Positive blood cultures confirming source"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- Serial lactate levels to assess perfusion and response to treatment\n- Blood cultures ×2 sets (aerobic and anaerobic) from different sites\n- Procalcitonin to guide antibiotic duration"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Hour-1 bundle: lactate, cultures, antibiotics, fluids, vasopressors as indicated\n- Reassess volume status after initial 30 mL/kg bolus using dynamic measures\n- De-escalate antibiotics within 48-72 hours based on culture results\n\n**Nursing Actions:**\n- Screen patients using institutional sepsis screening tool every shift\n- Initiate sepsis bundle immediately upon recognition — do not wait for physician orders\n- Document time of recognition, interventions, and reassessment findings\n\n**Medications:**\n**Meropenem** (Carbapenem (broad-spectrum beta-lactam)): Inhibits cell wall synthesis; resistant to most beta-lactamases\n  - Side effects: Seizures (especially with renal impairment), diarrhea, C. difficile, rash\n  - Contraindications: Carbapenem allergy; use caution in CNS disorders (seizure risk)\n  - Clinical pearl: Reserved for severe infections with MDR gram-negative organisms; de-escalate as soon as sensitivities are available"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- The Hour-1 Bundle means START within 1 hour — not complete within 1 hour\n- Crystalloid (LR or NS) is the initial fluid of choice — 30 mL/kg for lactate ≥4 or hypotension\n- Measure lactate early and REPEAT in 2-4 hours — lactate clearance >10% indicates adequate resuscitation"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A patient meets sepsis criteria. The nurse draws blood cultures. What is the NEXT priority action?",
+        "options": [
+          "Wait for culture results before treating",
+          "Administer broad-spectrum antibiotics within 1 hour",
+          "Order a CT scan to find the source",
+          "Start a dopamine drip"
+        ],
+        "correct": 1,
+        "rationale": "After obtaining cultures, broad-spectrum antibiotics should be administered within 1 hour of sepsis recognition. Do not wait for culture results to start empiric therapy."
+      },
+      {
+        "question": "A septic patient's initial lactate is 5.2 mmol/L. After fluid resuscitation, the repeat lactate is 4.8 mmol/L. What does this indicate?",
+        "options": [
+          "Adequate resuscitation — continue current management",
+          "Inadequate resuscitation — reassess and escalate treatment",
+          "Normal lactate clearance",
+          "No clinical significance"
+        ],
+        "correct": 1,
+        "rationale": "Lactate clearance of <10% suggests inadequate tissue perfusion. The patient needs reassessment of volume status and potentially vasopressor support."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "heart-failure-overview-lesson",
+    "title": "Heart Failure: Comprehensive",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Heart Failure: Comprehensive | us-rn-nclex-rn",
+    "seoDescription": "Heart Failure: Comprehensive: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Heart Failure: Comprehensive** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Coronary artery disease and prior MI (most common cause)\n- Uncontrolled hypertension\n- Valvular heart disease\n- Cardiomyopathy (dilated, hypertrophic, restrictive)"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Heart Failure Pathophysiology**\n\nHeart failure (HF) occurs when the heart cannot pump sufficient blood to meet metabolic demands. Left-sided HF causes pulmonary congestion (backward failure) and decreased systemic perfusion (forward failure). Right-sided HF causes systemic venous congestion (peripheral edema, hepatomegaly, JVD).\n\nHFrEF (reduced ejection fraction, EF <40%) involves impaired contractility — the ventricle cannot eject adequately. HFpEF (preserved ejection fraction, EF ≥50%) involves impaired relaxation — the ventricle cannot fill adequately. Neurohormonal activation (RAAS, sympathetic nervous system, BNP) initially compensates but eventually worsens HF through remodeling.\n\nTreatment targets the neurohormonal cascade: ACE inhibitors/ARBs reduce afterload and prevent remodeling, beta-blockers reduce sympathetic activation, diuretics manage fluid overload, and aldosterone antagonists improve survival."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- Dyspnea, orthopnea, paroxysmal nocturnal dyspnea\n- Crackles (rales) in lung bases\n- S3 gallop (volume overload)\n\n**Signs (unstable / late):**\n- Jugular venous distension (JVD)\n- Peripheral edema (dependent)\n- Hepatomegaly and ascites"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- BNP >400 pg/mL or NT-proBNP >900 pg/mL (confirms HF diagnosis)\n- Echocardiogram for EF, wall motion, valvular function\n- Chest X-ray showing cardiomegaly, pulmonary vascular congestion, pleural effusions"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- GDMT: ACE inhibitor/ARB/ARNI + beta-blocker + aldosterone antagonist + SGLT2 inhibitor\n- Diuretics (furosemide) for volume management — titrate to dry weight\n- Sodium restriction (<2g/day), fluid restriction (1.5-2L/day), daily weights\n\n**Nursing Actions:**\n- Weigh daily at same time — report gain >2 lbs/day or 5 lbs/week\n- Monitor I&O and assess for fluid overload: crackles, JVD, peripheral edema\n- Educate on medication compliance, low-sodium diet, and when to call provider\n\n**Medications:**\n**Carvedilol** (Non-selective beta-blocker with alpha-blocking activity): Reduces heart rate, BP, and myocardial oxygen demand; prevents remodeling\n  - Side effects: Bradycardia, hypotension, fatigue, dizziness, weight gain\n  - Contraindications: Decompensated HF (do not start during acute exacerbation), severe bradycardia, 2nd/3rd degree AV block\n  - Clinical pearl: Start low, go slow — do NOT initiate during acute decompensation; proven to reduce mortality in HFrEF"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- Daily weights are the best indicator of fluid status — gain of 2+ lbs/day indicates fluid retention\n- Left-sided HF = lungs (crackles, dyspnea); Right-sided HF = body (JVD, edema, ascites)\n- Beta-blockers improve survival but must NOT be started during acute decompensation"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A patient with HF gains 4 lbs overnight. The nurse should anticipate which order?",
+        "options": [
+          "Increase oral fluid intake",
+          "Administer IV furosemide",
+          "Discontinue all medications",
+          "Encourage ambulation"
+        ],
+        "correct": 1,
+        "rationale": "Rapid weight gain indicates fluid retention. IV furosemide will promote diuresis. Weight gain >2 lbs/day or 5 lbs/week requires intervention."
+      },
+      {
+        "question": "Which assessment finding is MOST consistent with left-sided heart failure?",
+        "options": [
+          "Hepatomegaly",
+          "Jugular venous distension",
+          "Crackles in lung bases",
+          "Peripheral edema"
+        ],
+        "correct": 2,
+        "rationale": "Left-sided HF causes blood to back up into the pulmonary circulation, resulting in pulmonary congestion manifesting as crackles. Hepatomegaly, JVD, and peripheral edema are right-sided HF signs."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "stroke-protocol-thrombolytic",
+    "title": "Stroke Protocol and Thrombolytic Therapy",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Stroke Protocol and Thrombolytic Therapy | us-rn-nclex-rn",
+    "seoDescription": "Stroke Protocol and Thrombolytic Therapy: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Stroke Protocol and Thrombolytic Therapy** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Atrial fibrillation (cardioembolic source)\n- Hypertension, diabetes, hyperlipidemia\n- Carotid artery stenosis\n- Previous stroke or TIA"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Ischemic Stroke Pathophysiology**\n\nIschemic stroke occurs when blood flow to a brain region is interrupted by a thrombus or embolus, causing neuronal death in the core infarct and reversible ischemia in the surrounding penumbra. The penumbra is the target of reperfusion therapy — saving this tissue reduces disability.\n\nThe ischemic cascade begins within minutes: ATP depletion leads to ion pump failure, calcium influx, glutamate excitotoxicity, free radical production, and cell death. Time is brain — approximately 1.9 million neurons die every minute during an untreated stroke.\n\nAlteplase (tPA) is the FDA-approved thrombolytic for acute ischemic stroke. The treatment window is up to 4.5 hours from symptom onset (last known well). Mechanical thrombectomy extends the window up to 24 hours for large vessel occlusions in selected patients."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- Sudden unilateral weakness or paralysis\n- Speech difficulties (aphasia or dysarthria)\n- Facial droop and arm drift\n\n**Signs (unstable / late):**\n- CT showing no hemorrhage (eligible for tPA)\n- NIHSS score documenting deficits\n- CTA showing large vessel occlusion"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- CT head without contrast STAT (rule out hemorrhagic stroke before tPA)\n- CT angiography for large vessel occlusion assessment\n- NIHSS score for stroke severity and treatment decisions"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Alteplase (tPA) 0.9 mg/kg IV (max 90 mg): 10% bolus, 90% infused over 60 min within 4.5 hours\n- Mechanical thrombectomy for large vessel occlusion within 24 hours (if eligible)\n- Permissive hypertension (do not lower BP unless >220/120 or >185/110 if tPA candidate)\n\n**Nursing Actions:**\n- Perform NIHSS assessment and document last known well time\n- Monitor neurological status every 15 minutes during and after tPA infusion\n- Hold anticoagulants and antiplatelets for 24 hours post-tPA; monitor for bleeding\n\n**Medications:**\n**Alteplase (tPA)** (Tissue plasminogen activator (thrombolytic)): Converts plasminogen to plasmin, dissolving fibrin clots\n  - Side effects: Hemorrhage (intracranial is most feared), angioedema, allergic reaction\n  - Contraindications: Active internal bleeding, recent surgery (<14 days), hemorrhagic stroke, BP >185/110 uncontrolled, platelets <100K, INR >1.7\n  - Clinical pearl: Door-to-needle time goal is <60 minutes; monitor for hemorrhagic conversion — stop infusion and get STAT CT if neurological decline"
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- TIME IS BRAIN — 1.9 million neurons die per minute; door-to-needle goal <60 minutes\n- CT head BEFORE tPA — must rule out hemorrhagic stroke (tPA contraindicated in hemorrhage)\n- BP must be <185/110 before tPA administration and <180/105 for 24 hours after"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A stroke patient's CT head shows no hemorrhage. Last known well was 3 hours ago. NIHSS is 12. What is the priority intervention?",
+        "options": [
+          "Administer aspirin 325 mg",
+          "Prepare for alteplase (tPA) administration",
+          "Lower blood pressure to 120/80",
+          "Schedule MRI brain"
+        ],
+        "correct": 1,
+        "rationale": "The patient is within the 4.5-hour tPA window with significant deficits (NIHSS 12) and no hemorrhage on CT. tPA administration is the priority to restore perfusion."
+      },
+      {
+        "question": "During tPA infusion, the patient develops a severe headache and new neurological deficits. What is the priority action?",
+        "options": [
+          "Increase the tPA infusion rate",
+          "Stop the tPA infusion and obtain STAT CT head",
+          "Administer morphine for headache",
+          "Continue infusion and monitor"
+        ],
+        "correct": 1,
+        "rationale": "New headache and neurological decline during tPA infusion suggest hemorrhagic conversion. Stop the infusion immediately and obtain STAT CT to confirm. Prepare to administer cryoprecipitate."
+      }
+    ]
+  },
+  {
+    "pathwayId": "us-rn-nclex-rn",
+    "slug": "icu-neurological-monitoring",
+    "title": "Neurological Monitoring in the ICU",
+    "topic": "Critical Care",
+    "topicSlug": "critical-care",
+    "bodySystem": "Multisystem",
+    "previewSectionCount": 2,
+    "seoTitle": "Neurological Monitoring in the ICU | us-rn-nclex-rn",
+    "seoDescription": "Neurological Monitoring in the ICU: critical care nursing lesson (legacy import).",
+    "sections": [
+      {
+        "id": "introduction",
+        "heading": "Overview",
+        "kind": "introduction",
+        "body": "**Neurological Monitoring in the ICU** is a clinically important condition that nurses must assess, monitor, and prioritize effectively.\n\n**Risk factors:**\n- Traumatic brain injury (TBI)\n- Subarachnoid hemorrhage (SAH)\n- Intracerebral hemorrhage\n- Large territory ischemic stroke\n- Brain tumors with mass effect\n- Hydrocephalus\n- Hepatic encephalopathy\n- Status epilepticus"
+      },
+      {
+        "id": "pathophysiology_overview",
+        "heading": "Pathophysiology",
+        "kind": "pathophysiology_overview",
+        "body": "**Neurological Assessment**\n\nNeurological monitoring in the ICU encompasses assessment of consciousness, cranial nerve function, motor/sensory function, and intracranial pressure (ICP). The Glasgow Coma Scale (GCS) quantifies consciousness: Eye opening (1-4), Verbal response (1-5), Motor response (1-6); total 3-15 with <8 indicating coma requiring airway protection. Pupillary assessment evaluates CN III function and brainstem integrity. ICP monitoring is indicated for traumatic brain injury with GCS ≤8, and elevated ICP (>20 mmHg) requires treatment to prevent secondary brain injury. Cerebral perfusion pressure (CPP = MAP - ICP) must be maintained at 60-70 mmHg to ensure adequate cerebral blood flow. The Monro-Kellie doctrine states that the cranial vault has fixed volume: brain (80%), blood (10%), CSF (10%), and any increase in one component must be compensated by decrease in another, or ICP rises."
+      },
+      {
+        "id": "signs_symptoms",
+        "heading": "Signs & Symptoms",
+        "kind": "signs_symptoms",
+        "body": "**Signs (stable / early):**\n- GCS stable or improving\n- Pupils equal, round, reactive\n- ICP <20 mmHg with CPP >60 mmHg\n- Following commands appropriately\n\n**Signs (unstable / late):**\n- Cushing triad: hypertension, bradycardia, irregular respirations (late sign of herniation)\n- Unilateral pupil dilation (CN III compression from uncal herniation)\n- Declining GCS: loss of motor response, verbal response, then eye opening\n- Posturing: decorticate (flexion) or decerebrate (extension)\n- Diabetes insipidus (posterior pituitary dysfunction): massive dilute urine output"
+      },
+      {
+        "id": "labs_diagnostics",
+        "heading": "Diagnostics / Labs",
+        "kind": "labs_diagnostics",
+        "body": "**Nursing: anticipate these orders and monitor these results:**\n- Glasgow Coma Scale (GCS) assessment: eye, verbal, motor components\n- Pupil size, symmetry, and reactivity (PERRL)\n- ICP monitoring: normal 0-15 mmHg, treat >20 mmHg\n- CPP calculation: MAP - ICP, target 60-70 mmHg\n- EEG for seizure detection and sedation monitoring\n- CT head for structural changes, hemorrhage, herniation signs"
+      },
+      {
+        "id": "nursing_assessment_interventions",
+        "heading": "Nursing Responsibilities",
+        "kind": "nursing_assessment_interventions",
+        "body": "**Management / Interventions:**\n- Maintain CPP 60-70 mmHg by managing MAP and ICP\n- Treat elevated ICP: HOB 30°, midline head position, osmotherapy, CSF drainage\n- Osmotherapy: mannitol 20% (0.25-1 g/kg) or hypertonic saline (23.4% via central line)\n- Targeted temperature management post-cardiac arrest (32-36°C for 24 hours)\n- Seizure prophylaxis with levetiracetam for 7 days post-TBI\n- Neuroprognostication: multimodal approach (clinical exam, EEG, imaging, biomarkers) at ≥72 hours post-arrest\n\n**Nursing Actions:**\n- Perform GCS assessment every 1-2 hours or per protocol\n- Assess and document pupil size, symmetry, and reactivity with every neuro check\n- Maintain HOB 30° and head midline to optimize venous drainage\n- Avoid factors that increase ICP: straining, coughing, suctioning without preoxygenation, tight cervical collars\n- Monitor ICP continuously and report sustained elevations >20 mmHg\n- Maintain seizure precautions: padded side rails, suction at bedside, oxygen available\n\n**Medications:**\n**Mannitol 20%** (Osmotic diuretic): Creates osmotic gradient pulling fluid from brain tissue to reduce ICP\n  - Side effects: Hypotension, dehydration, electrolyte imbalances, rebound ICP elevation\n  - Contraindications: Anuria, severe dehydration, active intracranial bleeding (relative)\n  - Clinical pearl: Dose 0.25-1 g/kg IV bolus. Check serum osmolality before each dose: hold if >320 mOsm/kg. Filter through inline filter (crystallization risk).\n\n**Hypertonic Saline (3% or 23.4%)** (Osmotic agent): Creates osmotic gradient reducing cerebral edema and ICP\n  - Side effects: Hypernatremia, central pontine myelinolysis with rapid correction, volume overload\n  - Contraindications: Severe hypernatremia >160 mEq/L\n  - Clinical pearl: 23.4% requires central line administration. Can be given even if mannitol has failed. Target serum Na 145-155 for sustained ICP management.\n\n**Levetiracetam (Keppra)** (Anticonvulsant): Binds SV2A synaptic vesicle protein to reduce neurotransmitter release\n  - Side effects: Somnolence, behavioral changes, thrombocytopenia\n  - Contraindications: Known hypersensitivity\n  - Clinical pearl: Preferred seizure prophylaxis in TBI: no hepatic enzyme induction, no drug interactions, IV and PO formulations available."
+      },
+      {
+        "id": "clinical_pearls",
+        "heading": "Clinical Pearls",
+        "kind": "clinical_pearls",
+        "body": "- Cushing triad (hypertension, bradycardia, irregular respirations) is a LATE sign of increased ICP and impending herniation\n- Unilateral fixed dilated pupil = ipsilateral uncal herniation until proven otherwise\n- CPP = MAP - ICP: maintain CPP 60-70 mmHg. Low CPP causes ischemia; high CPP causes edema\n- Avoid hypotension, hypoxia, hyperthermia, hyperglycemia, and hyponatremia in brain injury (secondary injury prevention)\n- Keep HOB 30° and head midline to optimize cerebral venous drainage and reduce ICP"
+      }
+    ],
+    "preTest": [
+      {
+        "question": "A TBI patient's ICP is 28 mmHg and MAP is 85 mmHg. What is the CPP and is it adequate?",
+        "options": [
+          "CPP 57 mmHg - inadequate, need to increase MAP or decrease ICP",
+          "CPP 113 mmHg - too high",
+          "CPP 28 mmHg - critically low",
+          "CPP cannot be calculated"
+        ],
+        "correct": 0,
+        "rationale": "CPP = MAP - ICP = 85 - 28 = 57 mmHg. Target CPP is 60-70 mmHg. A CPP of 57 is below target, requiring intervention to either increase MAP (vasopressors) or decrease ICP (osmotherapy, CSF drainage)."
+      },
+      {
+        "question": "A patient develops sudden unilateral pupil dilation, contralateral hemiparesis, and decreasing GCS. What is this?",
+        "options": [
+          "Seizure activity",
+          "Uncal herniation requiring emergent intervention",
+          "Stroke",
+          "Medication side effect"
+        ],
+        "correct": 1,
+        "rationale": "Unilateral (ipsilateral) pupil dilation with contralateral hemiparesis and declining consciousness is classic uncal herniation. The temporal lobe herniates through the tentorium, compressing CN III (pupil dilation) and the cerebral peduncle (contralateral weakness). This is a neurosurgical emergency."
+      }
+    ]
+  }
+]

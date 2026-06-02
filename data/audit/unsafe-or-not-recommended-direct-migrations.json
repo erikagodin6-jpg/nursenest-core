@@ -1,0 +1,25 @@
+{
+  "generatedAt": "2026-04-14T14:22:28.207Z",
+  "items": [
+    {
+      "id": "legacy_express_cat_engine",
+      "reason": "Duplicate adaptive logic; current cat-engine + Prisma is source of truth.",
+      "recommendation": "Study UX only; do not copy server paths wholesale."
+    },
+    {
+      "id": "raw_gs_image_urls",
+      "reason": "legacy-restoration rule: do not reintroduce raw gs:// URLs",
+      "recommendation": "Re-host via approved asset pipeline."
+    },
+    {
+      "id": "monolith_client_parallel_i18n_loader",
+      "reason": "Violates single compile pipeline guarantee",
+      "recommendation": "Merge strings into tools/i18n inputs only."
+    },
+    {
+      "id": "full_mock_exam_session_port",
+      "reason": "Very large monolithic client module; high regression risk",
+      "recommendation": "Extract discrete patterns (checkpoint UI) only."
+    }
+  ]
+}

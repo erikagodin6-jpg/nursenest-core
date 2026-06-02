@@ -1,0 +1,198 @@
+[
+  {
+    "question": "A 62-year-old male presents to the NP with a 3-month history of progressive dysphagia, initially to solids and now to liquids, an unintentional 8 kg weight loss, and a persistent cough worse after swallowing. He has a 35 pack-year smoking history and drinks approximately 4 standard drinks daily. Physical examination is remarkable for cachexia and mild cervical lymphadenopathy. Which is the most appropriate initial investigation?",
+    "option_a": "Barium swallow followed by CT chest/abdomen if positive",
+    "option_b": "Urgent upper endoscopy (OGD) with biopsy",
+    "option_c": "Empiric trial of proton pump inhibitor for 8 weeks and reassess",
+    "option_d": "H. pylori serology and urea breath test",
+    "correct_answer": "B",
+    "rationale": "This presentation — progressive dysphagia (solids then liquids), significant unintentional weight loss, cough after swallowing, heavy smoking and alcohol history, and cervical lymphadenopathy — has high specificity for oesophageal cancer, either squamous cell carcinoma (smoking + alcohol, mid-oesophagus) or adenocarcinoma (Barrett's, GEJ). Urgent upper endoscopy (OGD) with biopsy is the gold standard first investigation for oesophageal malignancy — it allows direct visualization, tissue biopsy for histology, and assessment of luminal involvement. Barium swallow can show structural abnormalities but cannot obtain tissue. PPI trial is appropriate for reflux — not for red flag dysphagia. Empiric treatment of a new progressive dysphagia with weight loss delays cancer diagnosis.",
+    "distractor_rationales": {
+      "A": "Barium swallow can identify structural oesophageal lesions but does not provide histological diagnosis. For this clinical picture — red flag dysphagia with weight loss and lymphadenopathy — tissue biopsy is required immediately. Barium swallow also involves radiation and takes longer to arrange.",
+      "C": "An empiric PPI trial is appropriate for heartburn, uncomplicated GERD, or mild dysphagia without alarm features. This patient has multiple alarm features (weight loss >5%, progressive dysphagia solids → liquids, cervical nodes, cachexia, heavy tobacco/alcohol). PPI trials are contraindicated in alarm dysphagia — they delay cancer diagnosis.",
+      "D": "H. pylori is associated with gastric adenocarcinoma (antrum) and MALT lymphoma — not with oesophageal cancer. The clinical features here are classic for oesophageal malignancy. H. pylori serology does not address the immediate diagnostic need."
+    },
+    "clinical_pearl": "Alarm features of dysphagia requiring urgent endoscopy: progressive dysphagia (solids → liquids), unintentional weight loss >5%, age >50 + smoking/alcohol, haematemesis, cervical lymphadenopathy, odynophagia. Never do empiric PPI in alarm dysphagia.",
+    "exam_strategy": "Oesophageal cancer questions on NP exams test recognition of alarm features and the appropriate urgency and investigation modality. OGD with biopsy = gold standard for oesophageal malignancy diagnosis. Barium swallow = appropriate for motility disorders, not malignancy with red flags.",
+    "memory_hook": "Red flag dysphagia (weight loss + progressive + lymph nodes + smoking) = OGD STAT. No PPI trials, no barium first. Tissue = diagnosis.",
+    "hints": [
+      { "level": 1, "text": "Identify the alarm features in this presentation — which symptoms indicate this dysphagia requires urgent investigation rather than empiric treatment, and what is the gold-standard test for suspected oesophageal malignancy?" },
+      { "level": 2, "text": "Progressive dysphagia (solids to liquids), 8 kg weight loss, cervical lymphadenopathy, and heavy tobacco/alcohol history are alarm features for oesophageal cancer. Which investigation provides both visualization AND tissue diagnosis?" },
+      { "level": 3, "text": "Urgent OGD with biopsy — it provides direct visualization and histological diagnosis needed for suspected oesophageal cancer. A PPI trial in alarm dysphagia delays cancer diagnosis and is contraindicated." }
+    ],
+    "difficulty": "hard",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Gastrointestinal / Oncology",
+    "client_needs": "Physiological Integrity",
+    "topic": "Oesophageal Cancer / Alarm Dysphagia Investigation"
+  },
+  {
+    "question": "A 45-year-old female presents to the NP with recurrent urinary tract infections — her fourth symptomatic episode in 12 months, each resolving with antibiotics. She denies structural urological abnormalities, sexual activity is unchanged, and she is post-menopausal with no current hormone therapy. Urinalysis confirms a new infection with E. coli. What is the most appropriate management strategy at this visit?",
+    "option_a": "Prescribe a 7-day course of nitrofurantoin and order a renal ultrasound to rule out structural pathology",
+    "option_b": "Prescribe topical vaginal oestrogen and consider continuous or post-coital antibiotic prophylaxis",
+    "option_c": "Order a urine culture and sensitivity and defer antibiotic treatment pending results",
+    "option_d": "Refer to urology for cystoscopy and urodynamic studies",
+    "correct_answer": "B",
+    "rationale": "This patient has recurrent UTIs (≥3 per year or ≥2 in 6 months) in a post-menopausal woman. Post-menopausal oestrogen deficiency causes vaginal and urethral atrophy (genitourinary syndrome of menopause), which decreases Lactobacillus colonization, raises vaginal pH, and markedly increases susceptibility to UTIs. Topical vaginal oestrogen restores the protective urogenital epithelium and reduces recurrent UTI frequency by 50–75% — it is the most evidence-based long-term intervention in this population. In addition, continuous low-dose antibiotic prophylaxis (e.g., nitrofurantoin 50–100 mg nightly) or post-coital prophylaxis should be considered. Treating the current infection is also appropriate — but the long-term strategy is the most important management decision at this visit.",
+    "distractor_rationales": {
+      "A": "Treating the acute infection is appropriate, but a renal ultrasound is not indicated for uncomplicated recurrent UTIs in post-menopausal women without structural risk factors, fever, or upper urinary tract symptoms. Imaging has low yield in this clinical picture and does not address the underlying oestrogen deficiency driving recurrence.",
+      "C": "Deferring antibiotic treatment pending C&S is appropriate for non-urgent cases, but this patient has confirmed symptomatic UTI on urinalysis and is symptomatic — empiric treatment is appropriate. Deferring does not address the recurrence mechanism.",
+      "D": "Urology referral for cystoscopy is appropriate if there are risk factors for bladder malignancy (haematuria, smoking, age >50, no obvious cause) or if recurrent UTIs persist despite appropriate management. This patient's recurrence is explained by post-menopausal urogenital atrophy — cystoscopy is not the first-line management step."
+    },
+    "clinical_pearl": "Post-menopausal recurrent UTIs: always think urogenital atrophy. Topical vaginal oestrogen (cream or ring) is first-line long-term prevention — minimal systemic absorption, effective, safe even in breast cancer survivors (Canadian Menopause Society). Also consider D-mannose, cranberry, antibiotic prophylaxis.",
+    "exam_strategy": "Recurrent UTI in post-menopausal women is a classic NP exam scenario testing knowledge of genitourinary syndrome of menopause as the root cause. The long-term preventive strategy (topical oestrogen + prophylaxis) is the key answer — not just treating the current infection.",
+    "memory_hook": "Post-menopausal recurrent UTIs: Low Oestrogen → Low Lactobacillus → High pH → E. coli paradise. Fix: Topical Oestrogen + Antibiotic prophylaxis. No ultrasound, no cystoscopy first.",
+    "hints": [
+      { "level": 1, "text": "Think about why post-menopausal women are particularly susceptible to recurrent UTIs — what hormonal change affects the urogenital epithelium, and what evidence-based intervention addresses this directly?" },
+      { "level": 2, "text": "Oestrogen deficiency after menopause causes urogenital atrophy, reducing Lactobacillus and raising pH — an ideal environment for E. coli. What is the evidence-based first-line long-term prevention strategy for this specific population?" },
+      { "level": 3, "text": "Topical vaginal oestrogen restores urogenital epithelium and reduces recurrent UTI by 50–75% in post-menopausal women — it is the cornerstone of long-term management. Combine with antibiotic prophylaxis for best results." }
+    ],
+    "difficulty": "moderate",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Urology / Women's Health",
+    "client_needs": "Health Promotion and Maintenance",
+    "topic": "Recurrent UTI in Post-Menopausal Women / Genitourinary Syndrome"
+  },
+  {
+    "question": "A 58-year-old male with a 15-year history of rheumatoid arthritis (RA) presents with a 3-week history of productive cough, night sweats, and a 5 kg weight loss. He is currently taking methotrexate 20 mg weekly and adalimumab (anti-TNF therapy). CXR reveals a cavitary upper lobe lesion with hilar lymphadenopathy. Which is the most likely diagnosis and appropriate next step?",
+    "option_a": "Community-acquired pneumonia — prescribe amoxicillin-clavulanate for 7 days",
+    "option_b": "Lung cancer — urgent CT chest and pulmonology referral",
+    "option_c": "Pulmonary tuberculosis — isolate the patient, withhold biologics, and initiate diagnostic workup",
+    "option_d": "RA-associated interstitial lung disease — order high-resolution CT and rheumatology consultation",
+    "correct_answer": "C",
+    "rationale": "This clinical picture is pulmonary tuberculosis (TB) until proven otherwise: cavitary upper lobe lesion + hilar lymphadenopathy + constitutional symptoms (night sweats, weight loss, cough) + immunosuppressive therapy (anti-TNF biologics + methotrexate). Anti-TNF agents (adalimumab, etanercept, infliximab) dramatically increase the risk of reactivation TB by 2–12 fold — TNF-alpha is a critical cytokine for granuloma formation and latent TB containment. The immediate actions are: (1) isolate the patient on airborne precautions; (2) withhold adalimumab (anti-TNF must be stopped during active TB treatment); (3) send sputum AFB smears × 3, culture, and nucleic acid amplification test (NAAT/GeneXpert); and (4) notify public health.",
+    "distractor_rationales": {
+      "A": "Community-acquired pneumonia does not cause cavitary lesions in the upper lobe with hilar adenopathy and constitutional symptoms. CAP presents with more acute-onset symptoms, lobar consolidation, and productive purulent sputum. This diagnosis is incorrect and the empiric antibiotic would delay TB diagnosis and expose the practitioner to a missed mandatory reportable disease.",
+      "B": "Lung cancer can cause cavitary lesions (especially squamous cell) — but the clinical context of immunosuppression + constitutional symptoms + upper lobe cavitation + lymphadenopathy in a patient on anti-TNF should raise TB as the more urgent initial consideration. TB is infectious and isolation is the priority; lung cancer workup can follow after TB is ruled out.",
+      "D": "RA-ILD typically presents as bilateral lower lobe reticular or ground-glass opacities — not a unilateral cavitary upper lobe lesion with constitutional symptoms. ILD is not associated with hilar adenopathy in this pattern. This diagnosis does not fit the radiographic or clinical picture."
+    },
+    "clinical_pearl": "Anti-TNF biologics + latent TB = reactivation TB risk. Screen ALL patients for LTBI (IGRA or TST + CXR) before starting anti-TNF therapy. If active TB is suspected: isolate, stop biologic, NAAT + AFB smear, notify public health. Cavitary upper lobe lesion = TB until proven otherwise.",
+    "exam_strategy": "Immunosuppression + cavitary upper lobe lesion + constitutional symptoms = TB on NP exams. The combination of biologic therapy and the classic radiographic pattern is the key discriminating feature. Immediate isolation and biologic withdrawal before confirming the diagnosis is the standard of care.",
+    "memory_hook": "Anti-TNF + Upper Lobe Cavity + Night Sweats = TB Until Proven Otherwise. STOP biologic. ISOLATE. SPUTUM × 3. NOTIFY public health. Never give antibiotics without TB workup first.",
+    "hints": [
+      { "level": 1, "text": "Think about how the patient's immunosuppressive medications change his risk for specific opportunistic infections — which drug class dramatically increases the risk of a specific mycobacterial infection?" },
+      { "level": 2, "text": "Anti-TNF therapy (adalimumab) reactivates latent TB by disrupting granuloma integrity. Cavitary upper lobe lesion + constitutional symptoms + immunosuppression = TB until proven otherwise. What are the immediate infection control and medication management priorities?" },
+      { "level": 3, "text": "Pulmonary TB: immediately isolate on airborne precautions, withhold adalimumab, send sputum AFB smear/NAAT × 3, notify public health. Anti-TNF biologics must be stopped — do not restart until TB treatment is completed." }
+    ],
+    "difficulty": "hard",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Infectious Disease / Rheumatology",
+    "client_needs": "Physiological Integrity",
+    "topic": "TB Reactivation on Biologic Therapy / Anti-TNF and Infection Risk"
+  },
+  {
+    "question": "A 72-year-old female presents to the NP with a 6-month history of progressive memory loss, word-finding difficulties, and personality changes. Her husband reports that she got lost driving to a store she has visited weekly for 20 years. Physical examination reveals mild disorientation to date and difficulty with serial 7s. She has a history of hypertension, dyslipidaemia, and a TIA 3 years ago. MRI shows periventricular white matter changes. Which diagnosis is most consistent with this presentation?",
+    "option_a": "Alzheimer's disease — refer to geriatric psychiatry for cognitive assessment and initiate donepezil",
+    "option_b": "Vascular cognitive impairment — optimize cardiovascular risk factors and refer to neurology",
+    "option_c": "Normal pressure hydrocephalus — refer for CT head and neurosurgery consultation",
+    "option_d": "Lewy body dementia — review medications for anticholinergic burden and start low-dose rivastigmine",
+    "correct_answer": "B",
+    "rationale": "This presentation is most consistent with vascular cognitive impairment (VCI)/vascular dementia: progressive cognitive decline in a patient with known cerebrovascular risk factors (hypertension, dyslipidaemia, prior TIA) and white matter changes on MRI (periventricular leukoaraiosis). VCI is caused by cumulative ischaemic damage to white matter tracts and cortical regions — the TIA history further supports a cerebrovascular aetiology. Management is centred on aggressive secondary prevention of cerebrovascular events (blood pressure control, statin therapy, antiplatelet therapy) to slow progression. Alzheimer's is characterized by insidious memory loss with parietal features (visuospatial, language) and hippocampal atrophy — the TIA history and white matter changes suggest a vascular rather than neurodegenerative primary cause here.",
+    "distractor_rationales": {
+      "A": "Alzheimer's disease can co-exist with vascular pathology (mixed dementia) but typically presents with early episodic memory loss, hippocampal atrophy on MRI, and lack of a major cerebrovascular history. The periventricular white matter changes and TIA history strongly point to a vascular aetiology as the primary diagnosis.",
+      "C": "Normal pressure hydrocephalus (NPH) presents with the classic Hakim's triad: gait ataxia (magnetic gait) + urinary incontinence + cognitive impairment. This patient has cognitive and memory symptoms but no mention of gait disturbance or incontinence — NPH is lower on the differential.",
+      "D": "Lewy body dementia is characterized by: fluctuating cognition, visual hallucinations, REM sleep behaviour disorder, and parkinsonism. This patient has a progressive decline without the distinctive LBD features. White matter changes on MRI point away from LBD toward a vascular aetiology."
+    },
+    "clinical_pearl": "Vascular dementia hallmarks: stepwise cognitive decline (vs. insidious in Alzheimer's), prominent executive function and processing speed deficits, white matter hyperintensities on MRI, focal neurological signs, cardiovascular risk factors. Slow progression by treating hypertension, DLP, and preventing more strokes.",
+    "exam_strategy": "Dementia differential diagnosis is a high-yield NP topic. Discriminate by: Alzheimer's = insidious + hippocampal atrophy + memory first. Vascular = stepwise + white matter changes + CVD risk factors. LBD = fluctuating + hallucinations + parkinsonism. NPH = Hakim's triad (wet, wacky, wobbly).",
+    "memory_hook": "VasCular dementia = Vascular risk factors + White matter Changes on MRI + prior Vascular events. Fix the arteries, slow the decline. NPH = Wet (incontinent) + Wobbly (gait) + Wacky (confused).",
+    "hints": [
+      { "level": 1, "text": "Consider the patient's comorbid conditions and imaging findings — what type of dementia is most directly linked to cerebrovascular risk factors, prior TIA, and white matter changes on MRI?" },
+      { "level": 2, "text": "Periventricular white matter changes + TIA history + hypertension + dyslipidaemia = vascular cognitive impairment. How does the management of vascular dementia differ fundamentally from Alzheimer's disease?" },
+      { "level": 3, "text": "Vascular cognitive impairment — optimize cardiovascular risk factors (BP, statin, antiplatelet) to slow progression. This is the key distinction from Alzheimer's: VCI management focuses on preventing further cerebrovascular events." }
+    ],
+    "difficulty": "moderate",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Neurology / Geriatrics",
+    "client_needs": "Physiological Integrity",
+    "topic": "Dementia Differential Diagnosis / Vascular Cognitive Impairment"
+  },
+  {
+    "question": "A 34-year-old male presents to the NP with acute onset severe right flank pain radiating to the right groin, nausea, and haematuria. He is afebrile and has no costovertebral angle tenderness. Urinalysis shows 3+ blood, 1+ leukocyte esterase, no nitrites, and no casts. Which initial management is most appropriate?",
+    "option_a": "Prescribe ciprofloxacin 500 mg twice daily for 7 days for possible pyelonephritis",
+    "option_b": "Order urgent CT KUB (non-contrast), prescribe analgesia, and push oral fluids",
+    "option_c": "Refer to the emergency department for immediate urological consultation",
+    "option_d": "Order renal ultrasound and urine culture, and reassess in 48 hours",
+    "correct_answer": "B",
+    "rationale": "This presentation is classic for nephrolithiasis (kidney stone): acute-onset severe colicky flank pain radiating to the groin (ureteric colic), haematuria, and nausea — with no fever or CVA tenderness (arguing against pyelonephritis). CT KUB (non-contrast helical CT of kidneys, ureter, and bladder) is the gold standard investigation for suspected urolithiasis — it has >95% sensitivity and can detect stones as small as 1 mm, identifies the stone size, location, and degree of obstruction. Adequate analgesia (NSAIDs first-line, opioids as needed) and hydration are the immediate management. Renal ultrasound has lower sensitivity for stones and cannot define exact location/size of ureteral stones. Ciprofloxacin is not indicated without signs of infection (no fever, no CVA tenderness, no nitrites).",
+    "distractor_rationales": {
+      "A": "This presentation lacks infection features: no fever, no CVA tenderness, no nitrites on UA. The 1+ leukocyte esterase can be caused by haematuria, not necessarily infection. Empiric antibiotics for pyelonephritis are not indicated, and ciprofloxacin does not treat or facilitate stone passage.",
+      "C": "ED referral is appropriate for: uncontrolled pain despite analgesia, fever with obstruction (infected hydronephrosis — emergency), solitary kidney with obstruction, stone >10 mm (unlikely to pass spontaneously), or anuria. This patient is not in a category requiring immediate emergency escalation — outpatient management with CT and analgesia is appropriate.",
+      "D": "Renal ultrasound has poor sensitivity for ureteral stones (the most symptomatic) compared to CT KUB. It is a reasonable alternative in pregnant patients or when radiation exposure must be minimized. Reassessing in 48 hours without imaging delays appropriate diagnosis and management of potential ureteral obstruction."
+    },
+    "clinical_pearl": "Nephrolithiasis workup: CT KUB (non-contrast) is gold standard. Ultrasound if pregnant or radiation concerns. Analgesia: NSAIDs (ketorolac IM/IV) first-line — they reduce ureteral spasm. Alpha-blockers (tamsulosin) facilitate passage of stones ≤10 mm. Stones >10 mm or failed passage → urology referral.",
+    "exam_strategy": "Renal colic questions test: (1) recognition of the classic triad (colicky flank pain + radiation to groin + haematuria), (2) the correct imaging modality (CT KUB, not IVP, not plain X-ray), (3) distinguishing stone from pyelonephritis (fever + CVA tenderness = pyelo). No infection signs = no antibiotics.",
+    "memory_hook": "Kidney Stone = Colicky Flank Pain → Groin + Blood in Urine. CT KUB to confirm, NSAIDs for pain, push fluids. No fever = No antibiotics. Stone >10 mm = urology referral.",
+    "hints": [
+      { "level": 1, "text": "Acute severe flank pain radiating to the groin with haematuria and no fever — what is the most likely diagnosis, and what is the gold-standard initial investigation for this condition?" },
+      { "level": 2, "text": "This is classic ureteric colic (kidney stone). No infection signs means no antibiotics. What is the imaging test with >95% sensitivity for urolithiasis, and what is first-line analgesia?" },
+      { "level": 3, "text": "CT KUB (non-contrast) is the gold standard for kidney stone diagnosis. Prescribe adequate analgesia (NSAIDs first-line) and encourage oral fluids. No antibiotics — no infection features present." }
+    ],
+    "difficulty": "moderate",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Urology",
+    "client_needs": "Physiological Integrity",
+    "topic": "Nephrolithiasis / Renal Colic Diagnosis and Management"
+  },
+  {
+    "question": "A 48-year-old male is referred to the NP for evaluation of incidentally discovered bilateral adrenal masses on CT (each 2.5 cm, homogeneous, HU <10). He is asymptomatic with normal BP. His aldosterone-to-renin ratio (ARR) is normal. Random cortisol is 320 nmol/L. Which workup is most appropriate at this point?",
+    "option_a": "Refer for adrenal vein sampling to rule out lateralized aldosterone excess",
+    "option_b": "Perform a 1 mg overnight dexamethasone suppression test to evaluate for subclinical Cushing's syndrome",
+    "option_c": "Order a 24-hour urine metanephrines and normetanephrines to exclude phaeochromocytoma",
+    "option_d": "Reassure and arrange repeat CT in 12 months given the benign appearance",
+    "correct_answer": "C",
+    "rationale": "When adrenal masses are found incidentally, biochemical workup for phaeochromocytoma is mandatory before any other evaluation or intervention — even when the patient is clinically asymptomatic. Phaeochromocytoma is often clinically silent and can cause a life-threatening hypertensive crisis under surgical manipulation, stress, or anaesthesia. Missing the diagnosis before surgical procedures (including future adrenal surgery) can be fatal. The standard adrenal incidentaloma workup is: (1) pheochromocytoma exclusion (plasma metanephrines or 24-hr urine metanephrines) FIRST; (2) subclinical Cushing's syndrome (1 mg DST); (3) hyperaldosteronism if hypertensive or hypokalaemic. Since the ARR is normal and this patient is normotensive, aldosterone evaluation is low priority. Cortisol exclusion (DST) is the second step.",
+    "distractor_rationales": {
+      "A": "Adrenal vein sampling is used to lateralize aldosterone-producing adenomas in patients with confirmed hyperaldosteronism (elevated ARR) who are considering surgical adrenalectomy. The ARR is normal in this patient — aldosterone excess has been excluded. ADS is not indicated here.",
+      "B": "The 1 mg dexamethasone suppression test (DST) is the correct next step AFTER pheochromocytoma exclusion — not before. It tests for subclinical Cushing's syndrome. However, because phaeochromocytoma must be excluded first (surgical safety risk), the 24-hr urine metanephrines precedes the DST in the workup sequence.",
+      "D": "Imaging follow-up alone is not adequate for adrenal incidentalomas without biochemical exclusion of functional tumours. The primary risk of an adrenal incidentaloma is a hormone-secreting tumour — the most dangerous being phaeochromocytoma. Reassurance without biochemical workup is below the standard of care."
+    },
+    "clinical_pearl": "Adrenal incidentaloma mandatory workup: FIRST exclude phaeochromocytoma (plasma/urine metanephrines) — this must happen BEFORE ANY PROCEDURE including surgery. Then: 1 mg DST (Cushing's). Then: ARR if hypertensive/hypokalaemic (Conn's). Pheochromocytoma first, always.",
+    "exam_strategy": "The sequence question for adrenal incidentalomas is classic NP/internal medicine exam material. The key point: phaeochromocytoma must be excluded first — not last — because the clinical consequences of missing it before procedures are catastrophic. Memorize the workup order: Pheo → Cushing's → Conn's (if indicated).",
+    "memory_hook": "Adrenal Incidentaloma workup order: P-C-C. Pheochromocytoma (metanephrines) FIRST. Then Cortisol (DST). Then Conn's (ARR) if HTN/low K+. Pheo first = safety rule.",
+    "hints": [
+      { "level": 1, "text": "When an adrenal mass is found incidentally, there is a specific hormone-secreting tumour that must be excluded first — not because it is most common, but because missing it has potentially fatal consequences. Which tumour is this, and why must it be excluded before any other workup or intervention?" },
+      { "level": 2, "text": "Phaeochromocytoma must be excluded first in adrenal incidentaloma workup — unsuspected phaeochromocytoma can cause a fatal hypertensive crisis with surgical manipulation or anaesthesia. What is the biochemical test for phaeochromocytoma?" },
+      { "level": 3, "text": "24-hour urine metanephrines (or plasma metanephrines) to exclude phaeochromocytoma — this is the first step in adrenal incidentaloma workup. The 1 mg DST (subclinical Cushing's) comes second. Always exclude pheo before any procedure." }
+    ],
+    "difficulty": "hard",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Endocrine",
+    "client_needs": "Health Promotion and Maintenance",
+    "topic": "Adrenal Incidentaloma Workup / Phaeochromocytoma Exclusion"
+  },
+  {
+    "question": "A 29-year-old female presents to the NP clinic at 10 weeks gestation with nausea and vomiting 6–8 times per day, unable to tolerate any oral intake for 3 days, and a 4 kg weight loss from her pre-pregnancy weight. She appears dehydrated with dry mucous membranes, HR 112 bpm, BP 98/64 mmHg. Urine dipstick shows 3+ ketones. Which management is most appropriate?",
+    "option_a": "Prescribe oral dimenhydrinate 50 mg every 6 hours and encourage small frequent bland meals",
+    "option_b": "Initiate IV fluid resuscitation with thiamine supplementation before dextrose-containing fluids and refer to obstetrical care",
+    "option_c": "Prescribe ondansetron 4 mg orally every 8 hours and recommend ginger tea and acupressure wristbands",
+    "option_d": "Order a urinalysis and urine culture to rule out UTI as a cause of nausea and vomiting",
+    "correct_answer": "B",
+    "rationale": "This presentation is hyperemesis gravidarum (HG): severe persistent vomiting in pregnancy, >5% weight loss from pre-pregnancy weight, dehydration, and ketonuria. HG requires IV hydration, IV antiemetics, and vitamin supplementation. Critically, thiamine (vitamin B1) must be given BEFORE dextrose-containing IV fluids. Administering glucose to a thiamine-depleted patient (from prolonged vomiting and starvation) can precipitate Wernicke's encephalopathy — a potentially permanent neurological emergency (ophthalmoplegia, ataxia, confusion). Thiamine 100 mg IV before any dextrose is mandatory in HG. This patient also requires obstetrical referral for inpatient or day-unit management.",
+    "distractor_rationales": {
+      "A": "Oral dimenhydrinate is a first-line antiemetic for nausea and vomiting of pregnancy (NVP) — but this patient has hyperemesis gravidarum with dehydration and 3+ ketonuria. Oral medications cannot be tolerated when the patient cannot keep anything down. Oral management is inadequate for this severity.",
+      "C": "Ondansetron is an appropriate antiemetic in hyperemesis, but again oral administration is not appropriate when the patient is haemodynamically compromised and unable to tolerate oral intake. Non-pharmacological measures (ginger, acupressure) have modest evidence for mild NVP — they are insufficient for HG with severe dehydration.",
+      "D": "Urinalysis for UTI is a reasonable second-line consideration — UTI can exacerbate nausea and vomiting in pregnancy. However, the clinical picture is consistent with HG (>5% weight loss, ketonuria, haemodynamic compromise), and treatment of dehydration with thiamine takes priority over investigation of a secondary contributor."
+    },
+    "clinical_pearl": "Hyperemesis gravidarum: thiamine BEFORE dextrose — this is a safety rule. Wernicke's encephalopathy is rare but preventable and can cause permanent neurological deficit. IV thiamine 100 mg before any glucose-containing fluid. Then NS/LR, then IV antiemetics (dimenhydrinate IV, ondansetron IV).",
+    "exam_strategy": "HG questions on NP exams almost always include the thiamine-before-dextrose trap. Options offering oral medications are wrong for severe HG. The distinguishing safety point separating this from regular NVP management is IV thiamine first.",
+    "memory_hook": "HG + IV Fluids = Thiamine FIRST, then Dextrose. Glucose before thiamine = Wernicke's encephalopathy. Always give B1 before D5. This is the safety rule for ALL malnourished/alcohol-dependent/prolonged vomiting patients.",
+    "hints": [
+      { "level": 1, "text": "This patient has hyperemesis gravidarum with severe dehydration — oral antiemetics are not appropriate. When starting IV fluid resuscitation in a patient with prolonged vomiting and nutritional deficiency, what vitamin must be given before glucose-containing IV fluids?" },
+      { "level": 2, "text": "Prolonged vomiting depletes thiamine (vitamin B1). Giving glucose (dextrose IV fluids) before thiamine in a depleted patient can precipitate Wernicke's encephalopathy — a preventable but potentially permanent neurological emergency. What must come first?" },
+      { "level": 3, "text": "Give IV thiamine 100 mg BEFORE any dextrose-containing fluids — this is a mandatory safety step in HG. Then IV hydration + IV antiemetics + obstetrical referral. Never start dextrose first in a patient with prolonged vomiting/nutritional deficiency." }
+    ],
+    "difficulty": "hard",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Obstetrics",
+    "client_needs": "Physiological Integrity",
+    "topic": "Hyperemesis Gravidarum / Thiamine-Before-Dextrose Safety Rule"
+  }
+]

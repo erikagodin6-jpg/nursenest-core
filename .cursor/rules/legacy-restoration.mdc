@@ -1,0 +1,28 @@
+---
+description: Legacy restoration in controlled layers—no monolithic rewrite; reuse old code when better.
+alwaysApply: true
+---
+
+# Legacy restoration: controlled layers
+
+**Do not flatten work into one giant rewrite.** Follow `docs/legacy-restoration-map.md` in order:
+
+1. **Audit** — locate originals and gaps.  
+2. **Feature matrix** — old vs current, status, action, priority.  
+3. **Critical user-facing restoration** — small vertical slices; adapt proven old code first.  
+4. **Reliability / performance protections** — SW, i18n, lazy load, server paywall (do not regress).  
+5. **Validation** — typecheck, build, targeted checks after each slice.  
+6. **Commit and push** — logical commits per layer or slice; push when green.
+
+## Before writing or pasting new logic
+
+1. **Search for the original implementation** in-repo: `nursenest-core/src/legacy/`, `client/src/components/`, `server/`, shared packages, and related paths. Use `git log -p -- <path>` on **this repo** (`origin` = `https://github.com/erikagodin6-jpg/nursenest-core`, branch `main` only). Do not add backup/subrepl/gitsafe remotes unless explicitly required—use local branches or history in this clone. Before `git push`, run `git remote -v` and confirm only `origin` points at nursenest-core. Production app source lives under **`nursenest-core/`** (DigitalOcean `source_dir`).
+2. **Open and compare** the old implementation with the current one (behavior, edge cases, error paths).
+3. If the **old code is more complete or production-proven**, **adapt and restore** it: merge into current patterns (imports, types, lazy loading), do not duplicate a second parallel implementation without cause.
+4. **Avoid** greenfield rewrites of features that already exist in legacy or monolith code unless blocked by documented performance or security requirements—and then prefer a minimal refactor over a from-scratch rewrite.
+
+## Non-negotiables when porting old code
+
+- Preserve lazy loading, route chunking, and i18n compile pipeline rules (`docs/i18n-architecture.md`, `docs/legacy-restoration-map.md`).
+- Keep server-side entitlement and paywall enforcement; do not replace with client-only checks.
+- Do not reintroduce raw `gs://` image URLs, unbounded eager imports, or a second translation runtime.

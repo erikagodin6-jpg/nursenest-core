@@ -1,0 +1,82 @@
+/**
+ * Failure reasons for marketing lesson hub row resolution and public lesson cross-link integrity.
+ * Dependency-free so pure filters/tests can import without `server-only` loader chains.
+ */
+export type HubMarketingLessonDetailFailureReason =
+  | "missing_slug"
+  | "detail_loader_miss"
+  | "detail_not_public_complete"
+  | "pathway_context_mismatch"
+  | "professional_hub_corpus_guard"
+  | "taxonomy_review_required";
+
+/** Stage counts from `prepareLessonsForHubCurriculumWithDiagnostics` (marketing hub curriculum pipeline). */
+export type HubCurriculumPrepareStageDiagnostics = {
+  incomingFromLoader: number;
+  afterRenderableSlugFilter: number;
+  droppedMissingOrUnsafeSlug: number;
+  afterLibraryDedupe: number;
+  droppedDuplicateSlug: number;
+  afterOrganize: number;
+  droppedOrganizeShrink: number;
+  afterMarketingHrefFilter: number;
+  droppedNoMarketingHref: number;
+};
+
+/** Structured counts for marketing lessons hub verify — safe to pass into presentation components. */
+export type MarketingHubLessonVerifyDiagnostics = {
+  pathwayId: string;
+  lessonContentLocale: string;
+  /** Hub page marketing locale (overlays) — same as {@link getPathwayLessonsPageFresh} `marketingLocale`. */
+  hubPageMarketingLocale?: string;
+  /** Dominant list warehouse locale passed into verify (DB shard fallback when rows omit `localeMeta`). */
+  verifyListWarehouseLocale?: string;
+  /** Populated when verify merges `prepareLessonsForHubCurriculumWithDiagnostics` output. */
+  prepareStages?: HubCurriculumPrepareStageDiagnostics;
+  /** Rows passed into verify (after hub prepare / dedupe on the marketing lessons page). */
+  incomingPreparedRowCount: number;
+  uniqueSlugCount: number;
+  keptRowCount: number;
+  /** Rows that passed strict verify (hydration + publicComplete + pathway context). */
+  strictVerifiedRowCount?: number;
+  /** Rows kept only via soft-verify recovery or downstream inventory fill (see hub page). */
+  degradedHubRowCount?: number;
+  droppedRowCount: number;
+  /** Count of **unique slugs** failing detail resolution. */
+  excludedUniqueSlugCount: number;
+  /** Resolver invocations (detail reads executed for this verify pass). */
+  verifyResolverCallCount: number;
+  /** Present when verify capped unique-slug detail reads (see {@link verifyMarketingHubLessonRowsResolve}). */
+  verifyUniqueSlugCap?: number;
+  /** Count of unique slugs not detail-verified on this pass (inventory kept as degraded). */
+  verifyUniqueSlugSkippedCount?: number;
+  excludedByReason: Partial<Record<HubMarketingLessonDetailFailureReason, number>>;
+  /**
+   * Same data as `excludedByReason`, sorted by descending count for structured logs / dashboards.
+   * Present whenever verify ran with at least one incoming row.
+   */
+  exclusionReasonsRanked?: Array<{ reason: HubMarketingLessonDetailFailureReason; count: number }>;
+  /** Capped unique-slug failures for debug (`NN_MARKETING_HUB_PIPELINE_DEBUG=1`) and ops triage. */
+  excludedSlugSamples?: Array<{ slug: string; reason: HubMarketingLessonDetailFailureReason }>;
+  /**
+   * First prepared hub rows that failed verify — joins slug failure reason with list-row metadata
+   * (`localeMeta`, structural gate) for production triage without removing verify.
+   */
+  droppedPreparedRowSamples?: HubVerifyDroppedPreparedRowSample[];
+};
+
+/** One dropped prepared row aligned with a verify exclusion (best-effort join on slug). */
+export type HubVerifyDroppedPreparedRowSample = {
+  slug: string;
+  pathwayId: string;
+  reasonDropped: HubMarketingLessonDetailFailureReason;
+  contentLocale?: string;
+  publicComplete?: boolean;
+  bodySystem?: string;
+  topicSlug?: string;
+};
+
+export type PublicMarketingLessonCrossLinkExclusionReason =
+  | HubMarketingLessonDetailFailureReason
+  | "cross_link_pathway_missing"
+  | "cross_link_slug_parse_failed";

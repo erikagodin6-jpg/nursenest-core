@@ -1,0 +1,207 @@
+# Build production Docker image → push to GHCR → trigger DigitalOcean deployment.
+#
+# DO App Platform pulls the pre-built image instead of cloning GitHub,
+# eliminating the "Selecting branch" hang entirely.
+#
+# Production deploys must use the sha-* image tag, not the mutable latest tag,
+# otherwise App Platform/CDN/runtime state can continue serving a stale image.
+#
+# Required GitHub repo secrets:
+#   DIGITALOCEAN_ACCESS_TOKEN   DO personal access token (App write scope)
+
+name: Build → GHCR → Deploy DigitalOcean
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+# During CI repair chains, stale partial-fix deploy builds must not block the
+# latest main commit from reaching GHCR and DigitalOcean.
+concurrency:
+  group: ghcr-build-main
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Install deploy guard dependencies
+        run: npm install --prefix /tmp/deploy-guard-deps --no-save --ignore-scripts --no-audit --no-fund js-yaml@4.1.1
+
+      - name: Verify source commit and NFT-safe i18n loader
+        run: |
+          echo "=== Building commit ==="
+          git rev-parse HEAD
+          echo ""
+          echo "=== i18n loader uses process.cwd() (NFT-opaque) ==="
+          grep -n "process\.cwd()" nursenest-core/src/lib/marketing-i18n/load-marketing-message-shards.ts
+          echo ""
+          echo "=== i18n loader must NOT use import.meta.url (exit 1 if found) ==="
+          if grep -qn "import\.meta\.url" nursenest-core/src/lib/marketing-i18n/load-marketing-message-shards.ts; then
+            echo "::error::import.meta.url found in shard loader — NFT trace explosion risk. Fix before building."
+            exit 1
+          fi
+          echo "  clean — no import.meta.url in shard loader"
+
+      - name: "[deploy-guard] Dockerfile must not bake DATABASE_URL"
+        run: node nursenest-core/scripts/verify-dockerfile-database-url.mjs
+
+      - name: "[deploy-guard] GHCR runtime secret scopes (RUN_TIME)"
+        run: node scripts/audit-ghcr-runtime-secret-scopes.mjs .do/app-nursenest-core-next.yaml
+        env:
+          NODE_PATH: /tmp/deploy-guard-deps/node_modules
+
+      - name: Build and push image
+        id: build
+        uses: docker/build-push-action@v6
+        env:
+          # Job summary + downloadable build record (see Summaries in build-push-action README).
+          DOCKER_BUILD_SUMMARY: true
+          DOCKER_BUILD_RECORD_UPLOAD: true
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/nursenest:latest
+          build-args: |
+            NN_BUILD_COMMIT=${{ github.sha }}
+            NN_BUILD_BRANCH=main
+            GITHUB_SHA=${{ github.sha }}
+            GITHUB_REF_NAME=main
+            NN_TIMED_INCLUDE_NPM_PRUNE=1
+            BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=2048
+          shm-size: 2g
+          provenance: false
+          sbom: false
+
+      - name: Log pushed image (diagnostic)
+        if: success()
+        run: |
+          echo "Pushed image tags:"
+          echo "  ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }}"
+          echo "  ghcr.io/${{ github.repository_owner }}/nursenest:latest"
+          echo "Digest: ${{ steps.build.outputs.digest }}"
+
+      - name: Build job summary (failure hints)
+        if: failure() && steps.build.outcome == 'failure'
+        run: |
+          {
+            echo "## Docker build failed"
+            echo ""
+            echo "Open the **Build and push image** step above, then:"
+            echo "1. Expand the step — the **job summary** tab should list each Dockerfile \`RUN\` stage and errors."
+            echo "2. Download the **build record** artifact linked in that summary (if present) for full BuildKit logs."
+            echo ""
+            echo "### Common causes on \`ubuntu-latest\` (~7 GiB RAM)"
+            echo "- **OOM during \`npm run heroku-postbuild\`** — look for \`SIGKILL\` / exit code 137 / silent \`exit code: 1\` right after \`next build\`."
+            echo "- **Stale GHA build cache** — re-run with cache cleared or temporarily set \`cache-from:\` / \`cache-to:\` empty in the workflow."
+            echo ""
+            echo "### This repo’s mitigations (already in Dockerfile / build-args)"
+            echo "- Turbopack + multi-worker compile enforced inside the build wrapper"
+            echo "- \`BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=2048\` (heap cap for Next compile inside the image build)"
+            echo "- \`SKIP_I18N_PREBUILD=1\`, \`NN_SKIP_HEAVY_BUILD_REPORTS=1\`"
+            echo ""
+            echo "Commit: \`${{ github.sha }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Trigger DigitalOcean deployment
+        if: steps.build.outputs.digest
+        env:
+          DO_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        run: |
+          echo "Image pushed:"
+          echo "  sha: ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }}"
+          echo "  digest: ${{ steps.build.outputs.digest }}"
+
+          if [ -z "$DO_TOKEN" ]; then
+            echo "::error::DIGITALOCEAN_ACCESS_TOKEN secret is not set — DigitalOcean will NOT deploy the new image."
+            exit 1
+          fi
+
+          APP_ID="d6a4b825-4d70-4dd4-8d71-04b354d36f43"
+          NEW_TAG="sha-${{ github.sha }}"
+          GHCR_REPOSITORY="${{ github.repository_owner }}/nursenest"
+          export NEW_TAG
+          export GHCR_REPOSITORY
+
+          # Fetch current live spec from DO (preserves encrypted secret values).
+          # Patch only the web image source, then PUT the modified spec back.
+          # This prevents doctl --spec from clearing RUN_TIME secrets that have no
+          # value field in the repo spec (type: SECRET with no value = spec-only declaration).
+          #
+          # Important: live spec can drift to a DOCR digest after an emergency manual deploy.
+          # In that state, changing only `image.tag` leaves registry/repository/digest fields
+          # incompatible and DigitalOcean rejects the PUT with 400. Re-normalize the whole
+          # image object back to the canonical GHCR tag and remove any stale digest.
+          curl -fsSL \
+            -H "Authorization: Bearer $DO_TOKEN" \
+            "https://api.digitalocean.com/v2/apps/${APP_ID}" \
+            > /tmp/do-app.json
+
+          PATCHED_SPEC=$(python3 - <<'PY'
+          import sys, json, os
+          with open("/tmp/do-app.json", "r", encoding="utf-8") as f:
+              payload = json.load(f)
+          spec = payload["app"]["spec"]
+          tag = os.environ["NEW_TAG"]
+          repository = os.environ["GHCR_REPOSITORY"]
+          for svc in spec.get("services", []):
+              if svc.get("name") == "web" and svc.get("image"):
+                  image = svc["image"]
+                  image["registry_type"] = "GHCR"
+                  image["registry"] = "ghcr.io"
+                  image["repository"] = repository
+                  image["tag"] = tag
+                  image.pop("digest", None)
+          print(json.dumps(spec))
+          PY
+          )
+
+          http_code=$(curl -sS -o /tmp/do-update-response.json -w "%{http_code}" -X PUT \
+            -H "Authorization: Bearer $DO_TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://api.digitalocean.com/v2/apps/${APP_ID}" \
+            -d "{\"spec\": $PATCHED_SPEC}")
+
+          if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
+            echo "::error::DigitalOcean app spec update failed with HTTP ${http_code}"
+            python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("/tmp/do-update-response.json")
+          try:
+              payload = json.loads(p.read_text(encoding="utf-8"))
+          except Exception:
+              print(p.read_text(encoding="utf-8")[:2000])
+          else:
+              print(json.dumps(payload, indent=2)[:4000])
+          PY
+            exit 1
+          fi
+
+          echo "DigitalOcean app spec updated to image tag ${NEW_TAG}."
+          echo "Track at: https://cloud.digitalocean.com/apps/${APP_ID}"

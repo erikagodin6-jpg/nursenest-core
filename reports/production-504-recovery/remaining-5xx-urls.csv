@@ -1,0 +1,3 @@
+url,status,error,origin_status,notes
+https://nursenest.ca/nclex-next-gen-question-types,504,,502,Observed in 100 URL pre-deploy crawl sample.
+https://nursenest.ca/best-nclex-prep-course,fetch_error,timeout,,Observed in 100 URL pre-deploy crawl sample.

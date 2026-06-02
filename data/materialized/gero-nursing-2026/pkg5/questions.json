@@ -1,0 +1,144 @@
+{
+  "packageId": "pkg5-pain",
+  "title": "Pain in Older Adults — Question Bank",
+  "generatedDate": "2026-06-02",
+  "questionCount": 250,
+  "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+  "questions": [
+    {
+      "id": "GERO-P5-001",
+      "topicSlug": "nonverbal-pain-assessment",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is caring for an 83-year-old woman with severe Alzheimer's disease who can no longer verbally communicate. During morning care, the nurse notices the patient grimaces, cries out, and resists repositioning — behaviors not seen at rest. Which assessment tool is MOST appropriate for this patient?",
+      "options": {
+        "A": "Numeric Pain Rating Scale (0–10) — ask her to point to a number",
+        "B": "Wong-Baker FACES Pain Rating Scale — show her the facial expressions",
+        "C": "Pain Assessment in Advanced Dementia (PAINAD) scale",
+        "D": "Visual Analogue Scale (VAS) — a line from 'no pain' to 'worst pain'"
+      },
+      "correctAnswer": "C",
+      "rationale": "The PAINAD (Pain Assessment in Advanced Dementia) scale is specifically designed and validated for older adults with severe cognitive impairment who CANNOT self-report pain. PAINAD assesses five observable behaviors: (1) Breathing — normal, laboured, or noisy; (2) Negative vocalization — quiet, moaning, crying, screaming; (3) Facial expression — smiling, calm, sad, frightened, grimacing; (4) Body language — relaxed, tense, fists clenched, knees pulled up, distressed; (5) Consolability — no need, able to console, or unable to console. All other scales (NRS, FACES, VAS) require the patient to self-report, which is not possible in severe dementia.",
+      "distractorRationales": {
+        "A": "Incorrect. A patient with severe Alzheimer's who cannot verbally communicate cannot reliably use a numeric scale. Self-report scales are invalid for patients with severe dementia.",
+        "B": "Incorrect. The FACES scale requires the patient to understand the concept of facial expressions as metaphors for pain intensity and choose one. This requires intact cognition and may be used in MODERATE dementia, but not severe.",
+        "D": "Incorrect. The VAS requires the patient to understand a visual analogy and locate their pain on a continuum. This is impossible for a patient with severe Alzheimer's who cannot communicate."
+      },
+      "hint": "Severe dementia + cannot self-report = use observational pain scale. Which scale is specifically designed for this?",
+      "clinicalPearl": "PAINAD score: 0–2 = no pain or mild pain; 3–5 = moderate pain; 6–10 = severe pain. Score behaviors at rest AND during activity — pain often only appears during movement in older adults with chronic musculoskeletal pain or procedural pain.",
+      "examStrategy": "Pain assessment tools: self-report (NRS, FACES, VAS) = requires cognitive ability. Observational (PAINAD, FLACC-revised) = for cognitively impaired who cannot self-report. Always choose the appropriate scale for the patient's communication ability.",
+      "keyTakeaway": "PAINAD is the validated observational pain scale for patients with severe dementia who cannot self-report. Never dismiss pain because a patient cannot verbalize it.",
+      "tags": ["PAINAD", "pain-assessment", "dementia", "nonverbal-pain", "cognitive-impairment", "observational-scale"]
+    },
+    {
+      "id": "GERO-P5-002",
+      "topicSlug": "pain-assessment-older-adults",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is performing a pain assessment on a 78-year-old woman with osteoarthritis and mild cognitive impairment. The patient denies pain when asked, but the nurse notices she is guarding her knee, frowning, and moving very slowly. When asked about her knee, she says, 'It just aches — I don't want to bother anyone.' Which nursing action is MOST appropriate?",
+      "options": {
+        "A": "Accept the patient's denial of pain and document 'Patient denies pain, no intervention required'",
+        "B": "Assess pain further using behavioral observation, explore barriers to reporting, and offer a pain management trial",
+        "C": "Immediately administer the maximum dose of ordered analgesia",
+        "D": "Ask the patient's family if she typically complains of pain"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient is showing behavioral indicators of pain (guarding, frowning, slow movement) while simultaneously denying it — a classic pain underreporting pattern in older adults. Reasons for underreporting include: stoicism ('don't complain'), concern about burdening others (stated: 'don't want to bother anyone'), fear of addiction, acceptance of pain as inevitable, fear of more tests/treatments, and cognitive difficulty with accurate pain reporting. The nurse must: (1) further assess behavioral pain indicators; (2) explore and address reporting barriers; (3) offer a pain management trial (even if modest analgesic) and assess response.",
+      "distractorRationales": {
+        "A": "Incorrect. Accepting verbal denial in the presence of observable pain behaviors is inadequate and negligent. The nurse's assessment must include observation, not only self-report.",
+        "C": "Incorrect. Administering maximum dose without thorough assessment is unsafe. Stepwise assessment and analgesic titration is appropriate.",
+        "D": "Incorrect. Family knowledge of pain behavior is useful supplementary information but does not replace direct assessment with the patient."
+      },
+      "hint": "Observing pain behaviors while patient denies pain = classic underreporting. What does the nurse do?",
+      "clinicalPearl": "Pain is chronically undertreated in older adults — particularly those with cognitive impairment. Behavioral indicators (facial expressions, guarding, reduced activity, verbal sounds) must be taken as seriously as self-report. Pain is undertreated in dementia at rates 3–5x higher than cognitively intact patients.",
+      "examStrategy": "Pain underreporting in older adults: behavioral indicators (guarding, frowning, slow movement) = PAIN until proven otherwise. Never accept verbal denial alone when behavioral indicators are present.",
+      "keyTakeaway": "Behavioral pain indicators override verbal denial in older adults. Assess behavior, explore reporting barriers, offer analgesic trial. Never dismiss pain because patient says 'it's fine.'",
+      "tags": ["pain-assessment", "underreporting", "osteoarthritis", "behavioral-indicators", "barriers-to-reporting"]
+    },
+    {
+      "id": "GERO-P5-003",
+      "topicSlug": "pharmacologic-pain-management",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "An 82-year-old woman with moderate chronic osteoarthritis knee pain (average 6/10), CKD Stage 3 (eGFR 42), hypertension on lisinopril, and heart failure (EF 45%) requests better pain control. She has been using ibuprofen 400 mg PRN. Which analgesic adjustment is MOST appropriate?",
+      "options": {
+        "A": "Continue ibuprofen and add omeprazole for gastroprotection",
+        "B": "Switch to acetaminophen 500 mg up to 3 g/day scheduled, with topical diclofenac for breakthrough",
+        "C": "Switch to naproxen 250 mg BID — it has a better cardiovascular profile than ibuprofen",
+        "D": "Initiate hydrocodone/acetaminophen 5/325 mg TID for better pain control"
+      },
+      "correctAnswer": "B",
+      "rationale": "Ibuprofen must be discontinued: NSAIDs in CKD + lisinopril (ACEi) = triple whammy AKI risk; NSAIDs worsen heart failure (sodium retention, fluid retention). Acetaminophen is the preferred first-line analgesic for musculoskeletal pain in older adults with renal impairment and heart failure — it has no renal or cardiovascular toxicity. Dose: up to 3 g/day in older adults (reduced from 4 g due to hepatic changes and polypharmacy risk with other acetaminophen-containing medications). Topical diclofenac gel has minimal systemic absorption and provides local anti-inflammatory effect with significantly less renal/cardiovascular risk than systemic NSAIDs — appropriate adjunct for osteoarthritis.",
+      "distractorRationales": {
+        "A": "Incorrect. Omeprazole reduces GI risk but does NOT protect kidneys or prevent heart failure exacerbation. The primary concern with ibuprofen in this patient is renal and cardiac, not GI.",
+        "C": "Incorrect. All oral NSAIDs (naproxen, ibuprofen, celecoxib) carry renal and cardiovascular risks in this patient. Naproxen is not safer than ibuprofen for CKD + heart failure + ACEi combination.",
+        "D": "Incorrect. While opioids may be appropriate for severe refractory pain, initiating a scheduled opioid combination product as a step-2 analgesic in an 82-year-old with CKD before optimizing safer alternatives (acetaminophen, topical agents) is not appropriate."
+      },
+      "hint": "CKD + lisinopril + heart failure + NSAID = triple whammy risk. What are the safe alternatives?",
+      "clinicalPearl": "Topical diclofenac (1% gel) achieves therapeutic tissue levels in osteoarthritic joints with approximately 6% of the systemic blood levels of oral diclofenac. This makes it the preferred anti-inflammatory option when systemic NSAIDs are contraindicated.",
+      "examStrategy": "CKD + heart failure + ACEi + NSAID = stop NSAIDs immediately. Safe alternatives: acetaminophen (up to 3 g/day in older adults), topical diclofenac (local, minimal systemic effect). Opioids: only if safer options inadequate.",
+      "keyTakeaway": "NSAIDs contraindicated in CKD + heart failure + ACEi combination. Use acetaminophen up to 3 g/day + topical diclofenac for osteoarthritis in older adults with renal/cardiac compromise.",
+      "tags": ["pain-management", "NSAID-contraindication", "CKD", "heart-failure", "acetaminophen", "topical-diclofenac", "NP"]
+    },
+    {
+      "id": "GERO-P5-004",
+      "topicSlug": "opioid-considerations-older-adults",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 79-year-old man with moderate dementia, CKD Stage 3, and severe chronic low back pain requires opioid analgesic therapy after non-opioid options have been inadequate. Which opioid selection and monitoring consideration is MOST appropriate?",
+      "options": {
+        "A": "Prescribe meperidine (Demerol) — it has shorter duration than morphine and is safer in older adults",
+        "B": "Prescribe oxycodone immediate-release with dose reduction for age (start low, go slow); monitor closely for constipation, sedation, delirium, and fall risk",
+        "C": "Prescribe codeine 30 mg TID — codeine is a mild opioid and therefore safest in older adults",
+        "D": "Avoid all opioids in older adults with dementia — the risk of delirium makes them absolutely contraindicated"
+      },
+      "correctAnswer": "B",
+      "rationale": "When opioids are required in older adults, low-dose oxycodone immediate-release with careful titration ('start low, go slow') is a reasonable choice. Key considerations: (1) 25–50% dose reduction from standard adult doses; (2) Immediate-release formulations preferred initially over extended-release; (3) Monitor: constipation (routine laxative prophylaxis required — methylcellulose, PEG 3350), sedation (fall risk), delirium (highest risk in dementia patients), respiratory depression. Opioids are not absolutely contraindicated in dementia — pain itself worsens delirium, agitation, and quality of life. The balance of untreated pain harm vs opioid adverse effects must be carefully considered.",
+      "distractorRationales": {
+        "A": "Incorrect. Meperidine (Demerol) is specifically listed on the Beers Criteria as CONTRAINDICATED in older adults. Its metabolite normeperidine accumulates in renal impairment (which this patient has) and causes neurotoxicity: tremors, myoclonus, and seizures.",
+        "C": "Incorrect. Codeine is a prodrug requiring conversion to morphine by CYP2D6. Up to 10–15% of patients are poor CYP2D6 metabolizers (ineffective) and ultra-rapid metabolizers can produce toxic morphine levels. Additionally, codeine has unpredictable efficacy and should NOT be used in older adults with renal impairment.",
+        "D": "Incorrect. Absolute contraindication of opioids in dementia is overly restrictive. Untreated severe pain in dementia causes: increased BPSD, delirium from pain-induced physiological stress, poor quality of life, and reduced function. Careful opioid use with close monitoring is often appropriate."
+      },
+      "hint": "Meperidine and codeine are both problematic in older adults. Which opioid is safer and what must be monitored?",
+      "clinicalPearl": "Meperidine (Demerol) is on the Beers Criteria specifically because normeperidine accumulation causes neurotoxicity — particularly dangerous in CKD. It is one of the most commonly tested Beers Criteria medications on advanced nursing exams.",
+      "examStrategy": "Opioid selection in older adults: Meperidine = CONTRAINDICATED (Beers — normeperidine neurotoxicity). Codeine = unpredictable (CYP2D6 variability). Use: oxycodone, hydromorphone, or low-dose morphine with dose reduction (25–50%).",
+      "keyTakeaway": "Meperidine = contraindicated in older adults (Beers Criteria). Codeine = unpredictable in older adults. Safe opioids: oxycodone IR with 50% dose reduction, close monitoring for constipation (use laxative), sedation, delirium, falls.",
+      "tags": ["opioids", "Beers-criteria", "meperidine", "codeine", "pain-management", "older-adults", "NP"]
+    },
+    {
+      "id": "GERO-P5-005",
+      "topicSlug": "nonpharmacologic-pain-management",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is developing a non-pharmacological pain management plan for an 81-year-old woman with chronic low back pain and mild cognitive impairment in a long-term care facility. Which interventions are appropriate? SELECT ALL THAT APPLY.",
+      "options": {
+        "A": "Application of moist heat for 15–20 minutes to the lumbar area before activities",
+        "B": "Positioning with pillows to support the spine during rest",
+        "C": "Referral for transcutaneous electrical nerve stimulation (TENS) therapy assessment",
+        "D": "Cognitive behavioural therapy — written homework-based pain management program",
+        "E": "Gentle range of motion exercises and physiotherapy referral",
+        "F": "Music therapy and relaxation techniques during periods of rest"
+      },
+      "correctAnswer": ["A", "B", "C", "E", "F"],
+      "rationale": "A (CORRECT): Moist heat reduces muscle spasm and improves circulation — appropriate for chronic musculoskeletal pain. B (CORRECT): Proper positioning reduces spinal stress and pain. C (CORRECT): TENS is evidence-based for chronic low back pain — appropriate for older adults with mild CI. E (CORRECT): Physiotherapy with gentle ROM and strengthening is first-line for chronic back pain management. F (CORRECT): Music therapy and relaxation techniques reduce pain perception and anxiety — appropriate for any age including mild CI.",
+      "distractorRationales": {
+        "D": "INCORRECT. CBT written homework-based programs require intact cognition and literacy for written exercises. Modified CBT can be used for patients with mild CI but must be adapted to their cognitive level (simpler, verbal, repetitive). A standard written homework CBT is not appropriate for mild CI."
+      },
+      "hint": "Identify which non-pharmacological intervention requires intact cognition that the patient may not have.",
+      "clinicalPearl": "Heat for muscle pain: 15–20 min maximum per session; protect fragile older skin with a towel barrier; never apply directly to bare skin; check skin before and after. Cold (ice) also effective for inflammation but often less preferred by older adults.",
+      "examStrategy": "Non-pharmacological pain SATA: heat, positioning, TENS, physiotherapy, music = appropriate. Written CBT homework = requires cognition that may be impaired in CI patients.",
+      "keyTakeaway": "Non-pharmacological pain: heat, positioning, TENS, physiotherapy, music/relaxation = appropriate. CBT written programs require intact cognition — adapt or avoid in cognitive impairment.",
+      "tags": ["non-pharmacological-pain", "TENS", "heat-therapy", "physiotherapy", "CBT", "cognitive-impairment", "SATA"]
+    }
+  ]
+}

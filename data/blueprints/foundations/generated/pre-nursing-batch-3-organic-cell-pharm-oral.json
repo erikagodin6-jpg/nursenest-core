@@ -1,0 +1,4513 @@
+{
+  "batchMeta": {
+    "blueprintFile": "data/blueprints/foundations/pre-nursing-foundational-blueprint.json",
+    "generatedDate": "2026-04-11",
+    "batchTitle": "Organic + cell + pharm routes/adverse/rights + oral dosage",
+    "sequenceInThisFile": [
+      "organic-molecules-macromolecules",
+      "cell-structure-and-function",
+      "routes-of-drug-administration",
+      "pharmacology-adverse-effects",
+      "rights-of-medication-administration",
+      "oral-medication-dosage-calculations"
+    ],
+    "curriculumNotes": [
+      "Organic precedes cell per blueprint. Cell assumes organization-of-the-human-body from prior batches.",
+      "Routes and adverse topics include embedded bridges for pharmacokinetics and pharmacodynamics because full prerequisite chains (intro, PK, PD) are long; learners should still complete full Pharmacology Foundations sequence for production courses.",
+      "Oral dosage assumes systems-of-measurement from batch 1 and rights from this batch."
+    ]
+  },
+  "topics": [
+    {
+      "domain": "Chemistry Basics for Health",
+      "topicSlug": "organic-molecules-macromolecules",
+      "topicName": "Organic Molecules: Carbohydrates, Lipids, Proteins, and Nucleic Acids",
+      "readinessWeight": "high",
+      "cognitiveLevel": "conceptual-understanding",
+      "targetQuestionCountMin": 40,
+      "targetQuestionCountMax": 50,
+      "questionsGeneratedThisBatch": 40,
+      "prerequisiteTopicSlugs": [
+        "chemical-bonds-and-molecules"
+      ],
+      "prerequisiteBridgingNote": "Lesson 1 embeds chemical-bonds-and-molecules essentials; complete full chemistry module when available.",
+      "lessons": [
+        {
+          "title": "Bonds and building blocks that make macromolecules possible",
+          "structuredContent": {
+            "overview": "Large biological molecules are built from smaller units using covalent bonds within chains and weaker interactions that shape 3D structure.",
+            "prerequisiteBridgeChemicalBonds": {
+              "covalent": "Atoms share electrons; forms stable backbones of organic molecules.",
+              "ionic": "Electrons transferred; important for salts and many electrolyte behaviors (preview).",
+              "hydrogen": "Weak attraction involving polarized H; stabilizes protein/DNA shape and water networks."
+            },
+            "mentalModel": "Think LEGO: monomers snap into polymers; bond type determines whether a link is 'permanent' (covalent polymer backbone) or 'adjustable' (H-bonds folding a protein).",
+            "commonMistakes": [
+              "Treating hydrogen bonds like covalent bonds in strength",
+              "Confusing monomer with polymer"
+            ],
+            "clinicalRelevanceLight": "Drug shape, receptor fit, and fluid balance tie back to these ideas at a foundational level."
+          }
+        },
+        {
+          "title": "Carbohydrates and lipids: quick energy vs compact fuel and barriers",
+          "structuredContent": {
+            "overview": "Carbohydrates are sugar-based fuels and structural polysaccharides; lipids store dense energy and form membranes.",
+            "carbohydrates": [
+              "Monosaccharides (e.g., glucose) are single sugars.",
+              "Disaccharides (e.g., sucrose) link two monosaccharides.",
+              "Polysaccharides (starch, glycogen, cellulose) store or structure with long chains."
+            ],
+            "lipids": [
+              "Triglycerides: glycerol + three fatty acids; major energy storage.",
+              "Phospholipids: bilayer foundation of cell membranes.",
+              "Steroids: four-ring framework (e.g., cholesterol as membrane component and hormone precursor)."
+            ],
+            "commonMistakes": [
+              "Starch vs glycogen storage location",
+              "Thinking all lipids are only for energy"
+            ],
+            "clinicalRelevanceLight": "Glucose monitoring and lipid panels map to these molecule classes."
+          }
+        },
+        {
+          "title": "Proteins and nucleic acids: workers and information",
+          "structuredContent": {
+            "overview": "Proteins are polymers of amino acids with four structural levels; nucleic acids (DNA, RNA) store and transfer genetic information.",
+            "proteins": [
+              "Primary: amino acid sequence",
+              "Secondary: local folding (alpha helix, beta sheet)",
+              "Tertiary: overall 3D shape of one chain",
+              "Quaternary: multiple chains together (when present)",
+              "Enzymes are catalytic proteins that speed specific reactions."
+            ],
+            "nucleicAcids": [
+              "DNA: double helix; thymine; stores heritable information.",
+              "RNA: uracil; multiple types help decode and use DNA information.",
+              "Nucleotide: phosphate + sugar + nitrogenous base."
+            ],
+            "commonMistakes": [
+              "DNA vs RNA base pairing at detail you have not studied yet—keep TH in DNA, U in RNA",
+              "Confusing amino acid with nucleotide"
+            ],
+            "clinicalRelevanceLight": "Many drugs target proteins (receptors, enzymes); genetic concepts underpin infection and cancer discussions later."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Which monosaccharide is a primary blood sugar for fuel transport?",
+          "options": {
+            "A": "Glucose",
+            "B": "Cellulose",
+            "C": "Cholesterol",
+            "D": "Leucine"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Glycogen is best described as:",
+          "options": {
+            "A": "a storage polysaccharide in animals",
+            "B": "plant structural fiber",
+            "C": "a nucleic acid",
+            "D": "a phospholipid"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Starch is primarily:",
+          "options": {
+            "A": "plant energy storage polysaccharide",
+            "B": "animal quick energy in muscle",
+            "C": "genetic material",
+            "D": "enzyme catalyst"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Cellulose is best described as:",
+          "options": {
+            "A": "structural polysaccharide in plant cell walls",
+            "B": "animal energy storage",
+            "C": "DNA backbone only",
+            "D": "triglyceride"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "A triglyceride contains:",
+          "options": {
+            "A": "glycerol and three fatty acids",
+            "B": "glycerol and two fatty acids",
+            "C": "only amino acids",
+            "D": "only nucleotides"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Phospholipids are central to:",
+          "options": {
+            "A": "cell membrane bilayers",
+            "B": "primary DNA replication enzyme alone",
+            "C": "glycogen structure",
+            "D": "bone mineral matrix alone"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Cholesterol belongs to which class?",
+          "options": {
+            "A": "steroid lipids",
+            "B": "monosaccharides",
+            "C": "polypeptides",
+            "D": "purine bases"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Primary protein structure refers to:",
+          "options": {
+            "A": "amino acid sequence",
+            "B": "alpha helix pattern",
+            "C": "overall 3D folding of multiple subunits",
+            "D": "hydrogen bond to DNA"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "An enzyme is primarily:",
+          "options": {
+            "A": "a protein catalyst",
+            "B": "a DNA strand",
+            "C": "a triglyceride",
+            "D": "a phospholipid monolayer"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "DNA uses which nitrogenous base paired with adenine (student-level classic pairing)?",
+          "options": {
+            "A": "thymine",
+            "B": "uracil",
+            "C": "guanine with adenine directly always",
+            "D": "cytosine always with adenine"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "RNA contains which base instead of thymine?",
+          "options": {
+            "A": "uracil",
+            "B": "thymine",
+            "C": "inosine only",
+            "D": "ribose only as base"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "A nucleotide includes:",
+          "options": {
+            "A": "phosphate, sugar, nitrogenous base",
+            "B": "only amino acids",
+            "C": "only fatty acids",
+            "D": "only a phosphate"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Denaturation of a protein most directly disrupts:",
+          "options": {
+            "A": "shape needed for function",
+            "B": "only primary sequence always",
+            "C": "DNA double helix only",
+            "D": "membrane thickness only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Saturated vs unsaturated fatty acids differ in:",
+          "options": {
+            "A": "presence of carbon-carbon double bonds in tail",
+            "B": "number of phosphate groups",
+            "C": "presence of glycerol",
+            "D": "nucleotide sequence"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Which linkage builds protein polymers?",
+          "options": {
+            "A": "peptide bonds between amino acids",
+            "B": "phosphodiester bonds between amino acids",
+            "C": "glycosidic bonds between amino acids",
+            "D": "ester bonds only between bases"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Which best describes DNA vs RNA sugar?",
+          "options": {
+            "A": "DNA deoxyribose; RNA ribose",
+            "B": "both use ribose",
+            "C": "both use deoxyribose only",
+            "D": "neither contains sugar"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Double helix describes:",
+          "options": {
+            "A": "DNA structure",
+            "B": "triglyceride structure",
+            "C": "single amino acid",
+            "D": "starch granule only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Which macromolecule is the main heritable information carrier in human cells?",
+          "options": {
+            "A": "DNA",
+            "B": "mRNA only without DNA",
+            "C": "triglyceride",
+            "D": "glycogen"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Lipids are insoluble in water primarily because they are:",
+          "options": {
+            "A": "hydrophobic overall relative to water",
+            "B": "always positively charged",
+            "C": "always DNA-associated",
+            "D": "composed only of ions"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Which is a disaccharide example?",
+          "options": {
+            "A": "sucrose",
+            "B": "glucose alone",
+            "C": "cellulose",
+            "D": "starch polymer"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Secondary protein structure includes:",
+          "options": {
+            "A": "alpha helix and beta sheet",
+            "B": "amino acid sequence only",
+            "C": "quaternary only",
+            "D": "nucleotide pairing"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Quaternary structure means:",
+          "options": {
+            "A": "multiple polypeptide chains arranged together",
+            "B": "only alpha helix",
+            "C": "only linear sequence",
+            "D": "lipid bilayer packing"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Phosphodiester bonds primarily connect:",
+          "options": {
+            "A": "nucleotides in nucleic acids",
+            "B": "amino acids in proteins",
+            "C": "fatty acids to cholesterol",
+            "D": "glucose units only in glycogen"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Which pair is both polysaccharides?",
+          "options": {
+            "A": "starch and glycogen",
+            "B": "glucose and fructose only",
+            "C": "DNA and RNA",
+            "D": "phospholipid and triglyceride"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Amino acids polymerize to form:",
+          "options": {
+            "A": "proteins",
+            "B": "triglycerides",
+            "C": "DNA",
+            "D": "ATP only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Which molecule class is the immediate focus of 'central dogma' at student preview level?",
+          "options": {
+            "A": "DNA to RNA to protein",
+            "B": "only lipid to lipid",
+            "C": "only starch to cellulose",
+            "D": "water to ions only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Membrane fluidity is influenced by:",
+          "options": {
+            "A": "fatty acid tail saturation and cholesterol",
+            "B": "only DNA length",
+            "C": "only glycogen branching",
+            "D": "number of peptide bonds in water"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Hydrogen bonds help stabilize:",
+          "options": {
+            "A": "protein secondary structure and DNA base pairing",
+            "B": "only ionic salts in bone",
+            "C": "only triglyceride neutrality",
+            "D": "nothing in biology"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Glycosidic bonds link:",
+          "options": {
+            "A": "monosaccharides into larger carbs",
+            "B": "amino acids",
+            "C": "nucleotides in DNA",
+            "D": "fatty acids to glycerol in phospholipids"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Which base is purine (student high-yield)?",
+          "options": {
+            "A": "adenine",
+            "B": "cytosine",
+            "C": "thymine",
+            "D": "uracil"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Which statement is most accurate at pre-nursing depth?",
+          "options": {
+            "A": "Many drugs act on proteins such as receptors and enzymes",
+            "B": "Drugs never bind proteins",
+            "C": "Lipids never participate in signaling",
+            "D": "DNA never relates to protein production"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Cellulose differs from glycogen mainly in:",
+          "options": {
+            "A": "branching and organism role (structure vs storage)",
+            "B": "identical function",
+            "C": "both only in animals",
+            "D": "both are lipids"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "RNA polymer is assembled from:",
+          "options": {
+            "A": "ribonucleotides",
+            "B": "deoxyribonucleotides only",
+            "C": "amino acids only",
+            "D": "fatty acids only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Which macromolecule stores the most energy per gram typically taught?",
+          "options": {
+            "A": "lipids",
+            "B": "carbohydrates always more than lipids",
+            "C": "nucleic acids for calories",
+            "D": "water"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Keratin and collagen are examples of:",
+          "options": {
+            "A": "structural proteins",
+            "B": "storage polysaccharides",
+            "C": "nucleic acids",
+            "D": "steroid hormones only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "A gene is expressed to make protein through processes involving:",
+          "options": {
+            "A": "transcription and translation (preview)",
+            "B": "only lipid digestion",
+            "C": "only glycogen hydrolysis in lungs",
+            "D": "osmosis alone"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Which best describes competitive inhibition at student level?",
+          "options": {
+            "A": "substance competes for active site slowing catalysis",
+            "B": "enzyme always destroyed permanently",
+            "C": "DNA replicates without proteins",
+            "D": "lipids cannot be digested"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Denatured enzyme often:",
+          "options": {
+            "A": "loses catalytic activity",
+            "B": "always works faster",
+            "C": "becomes DNA",
+            "D": "stores glucose"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Phospholipid hydrophilic region is typically:",
+          "options": {
+            "A": "phosphate head",
+            "B": "fatty acid tails",
+            "C": "cholesterol core only",
+            "D": "nucleotide base"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        },
+        {
+          "stem": "Fatty acid tails of phospholipids are:",
+          "options": {
+            "A": "hydrophobic",
+            "B": "hydrophilic",
+            "C": "always charged positive",
+            "D": "DNA strands"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches macromolecule roles taught at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect classification or role.",
+            "C": "Incorrect classification or role.",
+            "D": "Incorrect classification or role."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "cell-structure-and-function",
+      "topicName": "Cell Structure and Function",
+      "readinessWeight": "critical",
+      "cognitiveLevel": "conceptual-understanding",
+      "targetQuestionCountMin": 45,
+      "targetQuestionCountMax": 55,
+      "questionsGeneratedThisBatch": 45,
+      "prerequisiteTopicSlugs": [
+        "organization-of-the-human-body",
+        "organic-molecules-macromolecules"
+      ],
+      "lessons": [
+        {
+          "title": "Plasma membrane: gatekeeper and communicator",
+          "structuredContent": {
+            "overview": "The phospholipid bilayer with embedded proteins controls what enters and leaves and receives signals.",
+            "concepts": [
+              "Fluid mosaic model: lipids and proteins move within the sheet.",
+              "Selective permeability: some substances cross freely; others need channels or carriers.",
+              "Simple diffusion: movement down a gradient without ATP (e.g., small nonpolar molecules).",
+              "Facilitated diffusion: protein-assisted, still down gradient, no ATP.",
+              "Active transport: moves against gradient; requires energy (ATP or coupled gradients)."
+            ],
+            "commonMistakes": [
+              "Confusing facilitated diffusion with active transport",
+              "Thinking all molecules cross membranes the same way"
+            ],
+            "clinicalRelevanceLight": "Many drugs and electrolyte problems ultimately tie to membrane transport concepts."
+          }
+        },
+        {
+          "title": "Organelles: division of labor inside the cell",
+          "structuredContent": {
+            "overview": "Membrane-bound compartments specialize tasks to keep chemistry organized.",
+            "organelles": [
+              "Nucleus: houses DNA; nucleolus makes ribosomal RNA (survey).",
+              "Mitochondria: ATP from aerobic respiration (student-level: energy conversion).",
+              "Ribosomes: protein synthesis (free or on ER).",
+              "Rough ER: membrane + ribosomes; processes secretory/ membrane proteins.",
+              "Smooth ER: lipid synthesis, detox in some cells.",
+              "Golgi: modifies, packages, ships proteins and lipids.",
+              "Lysosomes: digestive enzymes in animal cells (survey).",
+              "Peroxisomes: breakdown of certain molecules; contain catalase (survey).",
+              "Cytoskeleton: shape, movement, intracellular transport."
+            ],
+            "commonMistakes": [
+              "Mitochondria 'make energy' wording—prefer ATP generation via cellular respiration",
+              "ER vs Golgi confusion"
+            ],
+            "clinicalRelevanceLight": "Tissue function differences (e.g., hepatocyte smooth ER) preview why organs behave differently."
+          }
+        },
+        {
+          "title": "From glucose to ATP: cellular respiration at a map level",
+          "structuredContent": {
+            "overview": "Cells harvest chemical energy from nutrients; mitochondria dominate aerobic ATP yield in eukaryotes.",
+            "mentalModel": "Glucose + oxygen → carbon dioxide + water + ATP (overall); intermediate steps occur in cytosol and mitochondrial compartments.",
+            "commonMistakes": [
+              "Thinking respiration only happens in lungs—lung ventilation vs cellular respiration",
+              "Equating fermentation details you have not studied"
+            ],
+            "clinicalRelevanceLight": "Oxygen delivery and perfusion connect to whether cells can run aerobic pathways efficiently."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "The plasma membrane is primarily composed of:",
+          "options": {
+            "A": "phospholipid bilayer",
+            "B": "cell wall peptidoglycan in human cells",
+            "C": "pure DNA sheet",
+            "D": "only collagen"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Selective permeability means:",
+          "options": {
+            "A": "some substances cross more easily than others",
+            "B": "everything crosses equally fast",
+            "C": "only water never crosses",
+            "D": "membrane is solid nonmoving"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Simple diffusion moves substances:",
+          "options": {
+            "A": "down their concentration gradient without ATP",
+            "B": "against gradient using ATP always",
+            "C": "only with sodium only",
+            "D": "only in nucleus"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Facilitated diffusion requires:",
+          "options": {
+            "A": "a channel or carrier protein",
+            "B": "ATP always",
+            "C": "DNA polymerase",
+            "D": "lysosomal fusion always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Active transport moves substances:",
+          "options": {
+            "A": "against their gradient using energy",
+            "B": "always down gradient",
+            "C": "only by osmosis",
+            "D": "without proteins"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "The nucleus primarily contains:",
+          "options": {
+            "A": "genomic DNA",
+            "B": "digestive enzymes for bulk cytosol",
+            "C": "ATP synthase only",
+            "D": "only lipids"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Mitochondria are best known for:",
+          "options": {
+            "A": "ATP generation via aerobic respiration",
+            "B": "photosynthesis",
+            "C": "protein packaging for secretion in Golgi role",
+            "D": "making ribosomal subunits entirely alone"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Ribosomes function in:",
+          "options": {
+            "A": "protein synthesis",
+            "B": "lipid bilayer formation only",
+            "C": "DNA replication only in all cells always",
+            "D": "waste export only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Rough ER is studded with:",
+          "options": {
+            "A": "ribosomes",
+            "B": "mitochondria",
+            "C": "lysosomes only",
+            "D": "peroxisomes only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Smooth ER is associated with:",
+          "options": {
+            "A": "lipid synthesis and detox roles in some cells",
+            "B": "only ribosome attachment",
+            "C": "only DNA storage",
+            "D": "only ATP storage"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Golgi apparatus modifies and:",
+          "options": {
+            "A": "packages molecules for secretion or membranes",
+            "B": "transcribes DNA",
+            "C": "makes ATP",
+            "D": "breaks down all nutrients"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Lysosomes contain:",
+          "options": {
+            "A": "hydrolytic enzymes",
+            "B": "DNA polymerase primarily",
+            "C": "chlorophyll",
+            "D": "hemoglobin always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Cytoskeleton functions include:",
+          "options": {
+            "A": "cell shape and intracellular transport",
+            "B": "ATP production primary site",
+            "C": "genetic information storage",
+            "D": "oxygen diffusion across alveoli"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Osmosis refers to:",
+          "options": {
+            "A": "water movement across a selectively permeable membrane",
+            "B": "protein synthesis",
+            "C": "DNA replication",
+            "D": "fatty acid oxidation only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Which organelle has double membrane?",
+          "options": {
+            "A": "mitochondrion",
+            "B": "ribosome",
+            "C": "lysosome typical description",
+            "D": "Golgi cisternae"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Nucleolus is involved in:",
+          "options": {
+            "A": "ribosomal RNA / ribosome assembly (survey)",
+            "B": "ATP synthesis",
+            "C": "lipid digestion in cytosol",
+            "D": "photosynthesis"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Cellular respiration in eukaryotes heavily involves:",
+          "options": {
+            "A": "mitochondria",
+            "B": "cell wall",
+            "C": "large central vacuole typical plant focus",
+            "D": "nuclear envelope only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Which process directly uses oxygen in aerobic respiration overview?",
+          "options": {
+            "A": "electron transport / oxidative phosphorylation stage (survey)",
+            "B": "glycolysis only in cytosol with O2 required",
+            "C": "fermentation",
+            "D": "translation"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Facilitated diffusion is:",
+          "options": {
+            "A": "passive",
+            "B": "always active",
+            "C": "only against gradient",
+            "D": "only for large proteins always endocytosis"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Which pair both describe membrane proteins?",
+          "options": {
+            "A": "channels and carriers",
+            "B": "DNA and RNA",
+            "C": "starch and glycogen",
+            "D": "triglyceride and steroid only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Endocytosis brings material:",
+          "options": {
+            "A": "into the cell via vesicles",
+            "B": "out always without vesicles",
+            "C": "only through nuclear pores always",
+            "D": "only by simple diffusion always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Exocytosis releases material:",
+          "options": {
+            "A": "from vesicles to exterior",
+            "B": "into nucleus",
+            "C": "only into lysosome always without fusion",
+            "D": "only by osmosis"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Peroxisomes are notably involved in:",
+          "options": {
+            "A": "breakdown of certain molecules; catalase (survey)",
+            "B": "primary ATP synthesis",
+            "C": "DNA to mRNA transcription",
+            "D": "peptide bond formation"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "The genetic code is used during:",
+          "options": {
+            "A": "translation to build proteins",
+            "B": "only lipid digestion",
+            "C": "only osmosis",
+            "D": "only diffusion of O2"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Transcription at student level produces:",
+          "options": {
+            "A": "RNA from a DNA template",
+            "B": "protein directly without RNA",
+            "C": "ATP from glucose only",
+            "D": "replication of ribosomes only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Translation at student level produces:",
+          "options": {
+            "A": "polypeptide using mRNA",
+            "B": "DNA from protein",
+            "C": "lipid bilayer without proteins",
+            "D": "glycogen from cellulose"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Hypotonic solution relative to cell can cause:",
+          "options": {
+            "A": "water entry and swelling (animal cell risk)",
+            "B": "always cell shrinkage",
+            "C": "no water movement",
+            "D": "only protein denaturation always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Hypertonic solution relative to cell can cause:",
+          "options": {
+            "A": "water leaving and shrinkage",
+            "B": "always lysis in all cells",
+            "C": "no gradient exists",
+            "D": "only endocytosis"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Integral membrane proteins:",
+          "options": {
+            "A": "span or embed in the bilayer",
+            "B": "only float outside membrane never touching lipids",
+            "C": "only DNA-binding in cytosol",
+            "D": "only in nucleus"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Which best describes why cells are small?",
+          "options": {
+            "A": "surface-to-volume ratio limits diffusion efficiency",
+            "B": "cells are never small",
+            "C": "DNA forbids small cells",
+            "D": "mitochondria require giant cells only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Cytoplasm refers to:",
+          "options": {
+            "A": "cytosol plus organelles except nucleus in common usage",
+            "B": "only nucleus",
+            "C": "only extracellular fluid",
+            "D": "only bone matrix"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Which organelle touches the nuclear envelope in typical teaching diagrams?",
+          "options": {
+            "A": "endoplasmic reticulum",
+            "B": "lysosome always distant",
+            "C": "peroxisome always inside nucleus",
+            "D": "ribosome only in mitochondria"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Aerobic means:",
+          "options": {
+            "A": "with oxygen",
+            "B": "without oxygen always",
+            "C": "only in cytoplasm",
+            "D": "only in vaccines"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Anaerobic glycolysis occurs:",
+          "options": {
+            "A": "in cytosol",
+            "B": "only in mitochondria matrix",
+            "C": "only in lysosomes",
+            "D": "only in nucleus"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Which is NOT a function attributed to smooth ER in typical teaching?",
+          "options": {
+            "A": "photosynthesis light reactions",
+            "B": "lipid synthesis",
+            "C": "detox in liver cells (survey)",
+            "D": "calcium storage in muscle (survey)"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Telomeres and detailed chromatin structure are:",
+          "options": {
+            "A": "beyond this pre-nursing lesson depth",
+            "B": "the same as lysosomes",
+            "C": "only in prokaryotes",
+            "D": "only lipids"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Gap junctions allow:",
+          "options": {
+            "A": "direct communication between adjacent cells",
+            "B": "waterproof seals only always",
+            "C": "immune attack always",
+            "D": "bone mineralization"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Tight junctions primarily:",
+          "options": {
+            "A": "seal adjacent cells to block paracellular leak",
+            "B": "allow free movement of large proteins always",
+            "C": "make ATP",
+            "D": "replicate DNA"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Microvilli increase:",
+          "options": {
+            "A": "surface area for absorption",
+            "B": "nuclear volume",
+            "C": "mitochondrial number always to zero",
+            "D": "DNA content per cell"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Cilia movement is associated with:",
+          "options": {
+            "A": "moving fluid/mucus at epithelial surfaces (survey)",
+            "B": "ATP synthesis primary",
+            "C": "DNA replication",
+            "D": "triglyceride storage"
+          },
+          "correctAnswer": "A",
+          "rationale": "Matches cell biology at pre-nursing conceptual depth.",
+          "whyIncorrect": {
+            "B": "Incorrect mechanism or location.",
+            "C": "Incorrect mechanism or location.",
+            "D": "Incorrect mechanism or location."
+          }
+        },
+        {
+          "stem": "Cell drill 40: Primary site of aerobic ATP yield in typical human cells:",
+          "options": {
+            "A": "mitochondria",
+            "B": "lysosomes",
+            "C": "Golgi",
+            "D": "ribosomes"
+          },
+          "correctAnswer": "A",
+          "rationale": "Mitochondria carry out oxidative phosphorylation.",
+          "whyIncorrect": {
+            "B": "Lysosomes degrade material.",
+            "C": "Golgi packages molecules.",
+            "D": "Ribosomes synthesize protein."
+          }
+        },
+        {
+          "stem": "Cell drill 41: Primary site of aerobic ATP yield in typical human cells:",
+          "options": {
+            "A": "mitochondria",
+            "B": "lysosomes",
+            "C": "Golgi",
+            "D": "ribosomes"
+          },
+          "correctAnswer": "A",
+          "rationale": "Mitochondria carry out oxidative phosphorylation.",
+          "whyIncorrect": {
+            "B": "Lysosomes degrade material.",
+            "C": "Golgi packages molecules.",
+            "D": "Ribosomes synthesize protein."
+          }
+        },
+        {
+          "stem": "Cell drill 42: Primary site of aerobic ATP yield in typical human cells:",
+          "options": {
+            "A": "mitochondria",
+            "B": "lysosomes",
+            "C": "Golgi",
+            "D": "ribosomes"
+          },
+          "correctAnswer": "A",
+          "rationale": "Mitochondria carry out oxidative phosphorylation.",
+          "whyIncorrect": {
+            "B": "Lysosomes degrade material.",
+            "C": "Golgi packages molecules.",
+            "D": "Ribosomes synthesize protein."
+          }
+        },
+        {
+          "stem": "Cell drill 43: Primary site of aerobic ATP yield in typical human cells:",
+          "options": {
+            "A": "mitochondria",
+            "B": "lysosomes",
+            "C": "Golgi",
+            "D": "ribosomes"
+          },
+          "correctAnswer": "A",
+          "rationale": "Mitochondria carry out oxidative phosphorylation.",
+          "whyIncorrect": {
+            "B": "Lysosomes degrade material.",
+            "C": "Golgi packages molecules.",
+            "D": "Ribosomes synthesize protein."
+          }
+        },
+        {
+          "stem": "Cell drill 44: Primary site of aerobic ATP yield in typical human cells:",
+          "options": {
+            "A": "mitochondria",
+            "B": "lysosomes",
+            "C": "Golgi",
+            "D": "ribosomes"
+          },
+          "correctAnswer": "A",
+          "rationale": "Mitochondria carry out oxidative phosphorylation.",
+          "whyIncorrect": {
+            "B": "Lysosomes degrade material.",
+            "C": "Golgi packages molecules.",
+            "D": "Ribosomes synthesize protein."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "routes-of-drug-administration",
+      "topicName": "Routes of Drug Administration",
+      "readinessWeight": "high",
+      "cognitiveLevel": "conceptual-understanding",
+      "targetQuestionCountMin": 40,
+      "targetQuestionCountMax": 50,
+      "questionsGeneratedThisBatch": 40,
+      "prerequisiteTopicSlugs": [
+        "pharmacokinetics-adme"
+      ],
+      "prerequisiteBridgingNote": "Lesson 1 embeds ADME / first-pass preview; full pharmacokinetics-adme topic should still be completed in curriculum.",
+      "lessons": [
+        {
+          "title": "Why route changes drug behavior: ADME bridge (compact)",
+          "structuredContent": {
+            "overview": "Route affects absorption speed, first-pass metabolism, and risk. This section replaces a full pharmacokinetics course with a map you can grow later.",
+            "prerequisiteBridgePharmacokinetics": {
+              "absorption": "Movement from site of administration into blood (or direct blood placement for IV).",
+              "distribution": "Drug travels to tissues via circulation and protein binding (preview).",
+              "metabolism": "Often liver enzymes chemically change drugs; first-pass effect reduces oral bioavailability for some drugs.",
+              "excretion": "Kidneys and other routes remove drug from the body (preview)."
+            },
+            "clinicalRelevanceLight": "Switching oral to IV is never 'the same' without prescriber review—rate and risk profiles differ."
+          }
+        },
+        {
+          "title": "Enteral and parenteral routes (pre-nursing recognition)",
+          "structuredContent": {
+            "overview": "Enteral = through GI tract; parenteral = bypasses GI tract.",
+            "routes": [
+              "Oral (PO): convenient; subject to absorption and first-pass.",
+              "Sublingual/buccal: avoids some first-pass via rich blood supply under mucosa.",
+              "Intravenous (IV): 100% bioavailability for the delivered dose; immediate plasma entry—high risk if wrong.",
+              "Intramuscular (IM): depot absorption from muscle.",
+              "Subcutaneous (SC/SQ): slower absorption from fatty tissue.",
+              "Transdermal: slow sustained absorption through skin.",
+              "Inhalation: rapid local/systemic effect depending on drug.",
+              "Rectal/vaginal/topical/ophthalmic/otic: situational routes with specific teaching later."
+            ],
+            "commonMistakes": [
+              "IM vs SC depth and volume assumptions",
+              "Thinking IV is 'safer'—it is unforgiving"
+            ],
+            "clinicalRelevanceLight": "Rights of administration always include right route because therapeutic and safety profiles change by route."
+          }
+        },
+        {
+          "title": "Route selection: speed, swallowing, GI function, and safety",
+          "structuredContent": {
+            "overview": "Nurses implement orders; understanding route language helps you anticipate monitoring and teaching needs at a student level.",
+            "examples": [
+              "NPO status affects enteral routes.",
+              "Vomiting may block reliable oral absorption.",
+              "IV push vs infusion differ in rate and monitoring."
+            ],
+            "commonMistakes": [
+              "Confusing IV bolus with large-volume infusion without rate context"
+            ],
+            "clinicalRelevanceLight": "Route ties to assessment frequency basics you will expand in skills lab."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Enteral administration means:",
+          "options": {
+            "A": "through the gastrointestinal tract",
+            "B": "only into spinal cord",
+            "C": "only topical to skin always",
+            "D": "only inhaled"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Parenteral administration means:",
+          "options": {
+            "A": "bypassing the GI tract",
+            "B": "only oral tablets",
+            "C": "only rectal",
+            "D": "only sublingual"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Which route delivers drug directly into the bloodstream?",
+          "options": {
+            "A": "intravenous",
+            "B": "oral",
+            "C": "transdermal patch always fastest always",
+            "D": "subcutaneous always identical to IV"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "First-pass effect most notably affects many:",
+          "options": {
+            "A": "oral drugs metabolized by the liver after GI absorption",
+            "B": "IV drugs before injection",
+            "C": "topical creams on intact thick skin always systemic peak same as IV",
+            "D": "inhaled drugs always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Sublingual administration can reduce:",
+          "options": {
+            "A": "first-pass metabolism for some drugs",
+            "B": "all drug absorption",
+            "C": "need for any blood flow",
+            "D": "renal excretion always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "IM injections deposit medication into:",
+          "options": {
+            "A": "muscle tissue",
+            "B": "dermis only always",
+            "C": "bone marrow always",
+            "D": "artery always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Subcutaneous injections deposit into:",
+          "options": {
+            "A": "subcutaneous fatty tissue",
+            "B": "muscle always",
+            "C": "peritoneal cavity always",
+            "D": "epidermis only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Transdermal patches rely on:",
+          "options": {
+            "A": "absorption through skin over time",
+            "B": "immediate IV bolus",
+            "C": "GI digestion only",
+            "D": "inhalation only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Which is an example of parenteral route?",
+          "options": {
+            "A": "subcutaneous",
+            "B": "oral tablet",
+            "C": "enteral feeding tube medication only without class definition",
+            "D": "PO liquid"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Bioavailability in simplest terms is:",
+          "options": {
+            "A": "fraction of drug that reaches systemic circulation",
+            "B": "drug color",
+            "C": "tablet size only",
+            "D": "patient age only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Distribution primarily involves:",
+          "options": {
+            "A": "drug moving from blood to tissues",
+            "B": "drug swallowed only",
+            "C": "drug painted on hair",
+            "D": "drug stored only in patch backing"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Metabolism often occurs heavily in:",
+          "options": {
+            "A": "liver",
+            "B": "toenail only",
+            "C": "cornea only for all drugs",
+            "D": "bone only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Excretion commonly includes:",
+          "options": {
+            "A": "renal elimination",
+            "B": "only sweating for all drugs",
+            "C": "only salivation for all drugs",
+            "D": "storage in patch only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "IV route skips:",
+          "options": {
+            "A": "GI absorption step",
+            "B": "sterile technique",
+            "C": "need for orders",
+            "D": "need for patient identification"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Oral route is:",
+          "options": {
+            "A": "enteral",
+            "B": "parenteral",
+            "C": "always identical to IV peak",
+            "D": "never used"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Inhalation can provide:",
+          "options": {
+            "A": "rapid delivery for appropriate agents",
+            "B": "always slower than transdermal for every drug",
+            "C": "no lung surface involvement",
+            "D": "only IV equivalent for all drugs"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Buccal administration uses:",
+          "options": {
+            "A": "oral mucosa lining cheek",
+            "B": "sole of foot",
+            "C": "scalp only",
+            "D": "tympanic membrane always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Z-track technique is associated with:",
+          "options": {
+            "A": "IM injections to reduce leakage (student recognition)",
+            "B": "IV only",
+            "C": "PO only",
+            "D": "only ophthalmic"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Which factor can alter oral absorption?",
+          "options": {
+            "A": "food, GI motility, and formulation",
+            "B": "only shoe size",
+            "C": "only hair color",
+            "D": "room wallpaper color"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Topical route aims for:",
+          "options": {
+            "A": "local effect at surface",
+            "B": "always identical systemic peak to IV",
+            "C": "only sublingual effect",
+            "D": "only intrathecal effect"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Epidural is a route involving:",
+          "options": {
+            "A": "space around dura (student recognition)",
+            "B": "oral mucosa",
+            "C": "skin stratum corneum only",
+            "D": "gastric lumen only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Intrathecal involves:",
+          "options": {
+            "A": "CSF/spinal canal delivery (student recognition)",
+            "B": "skin patch",
+            "C": "PO tablet",
+            "D": "IM deltoid always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Why might IV be higher risk for certain errors?",
+          "options": {
+            "A": "direct plasma entry; rapid effect",
+            "B": "always slower than PO",
+            "C": "cannot cause harm",
+            "D": "no need for sterile preparation"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Which statement about SC insulin is most accurate at student level?",
+          "options": {
+            "A": "absorbed from subcutaneous tissue; timing depends on formulation",
+            "B": "acts identically to IV insulin always",
+            "C": "never absorbed",
+            "D": "only works orally"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Rectal route can be used when:",
+          "options": {
+            "A": "oral route is not feasible for some medications/contexts",
+            "B": "IV is always forbidden worldwide",
+            "C": "only for vitamins",
+            "D": "never in clinical care"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Otic administration means:",
+          "options": {
+            "A": "into the ear",
+            "B": "into the eye",
+            "C": "into nose only",
+            "D": "into joint only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Ophthalmic administration means:",
+          "options": {
+            "A": "into the eye",
+            "B": "into ear",
+            "C": "into muscle",
+            "D": "into bone"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Nasal spray is:",
+          "options": {
+            "A": "mucosal absorption via nasal cavity",
+            "B": "identical to IV for all drugs",
+            "C": "only cosmetic",
+            "D": "only enteral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "A central line delivers medication:",
+          "options": {
+            "A": "into large central venous circulation (student recognition)",
+            "B": "into subcutaneous fat always",
+            "C": "onto skin only",
+            "D": "into stomach only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Peripheral IV accesses:",
+          "options": {
+            "A": "peripheral veins",
+            "B": "artery always first try",
+            "C": "bone always",
+            "D": "spinal cord directly always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Gastrostomy tube medication is generally considered:",
+          "options": {
+            "A": "enteral",
+            "B": "parenteral",
+            "C": "always identical to IV",
+            "D": "never ordered"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Which is true of IV infusion vs IV push at student level?",
+          "options": {
+            "A": "rate and monitoring expectations differ",
+            "B": "they are always the same",
+            "C": "push never exists",
+            "D": "infusion never exists"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Transdermal fentanyl vs oral morphine illustrates:",
+          "options": {
+            "A": "route and formulation change pharmacokinetics",
+            "B": "routes never matter",
+            "C": "all opioids identical",
+            "D": "only color matters"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Absorption of oral drug can be delayed by:",
+          "options": {
+            "A": "some food-drug interactions",
+            "B": "always faster with any food",
+            "C": "only IV route",
+            "D": "only if patient sleeps"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Hepatic first-pass reduces oral bioavailability when:",
+          "options": {
+            "A": "drug is extensively metabolized before systemic circulation",
+            "B": "drug is always IV",
+            "C": "liver absent",
+            "D": "kidney removes all drug instantly always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Subcutaneous heparin low-dose injection sites commonly taught include:",
+          "options": {
+            "A": "abdomen away from umbilicus (program-specific)",
+            "B": "only scalp",
+            "C": "only gluteus without training",
+            "D": "only IV line"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Zofran ODT (example class) dissolves on tongue; still oral/enteral category but formulation matters for speed—best student takeaway:",
+          "options": {
+            "A": "formulation and site in mouth affect absorption behavior",
+            "B": "ODT means IV",
+            "C": "ODT cannot work",
+            "D": "ODT is always topical"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Elderly skin changes can affect:",
+          "options": {
+            "A": "transdermal absorption",
+            "B": "only bone length",
+            "C": "only DNA only",
+            "D": "only hearing only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Neonates and infants often require:",
+          "options": {
+            "A": "careful dosing and route considerations (general principle)",
+            "B": "adult doses always",
+            "C": "no absorption differences ever",
+            "D": "only topical drugs"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        },
+        {
+          "stem": "Why learn enteral vs parenteral?",
+          "options": {
+            "A": "communicate clearly and anticipate teaching/monitoring basics",
+            "B": "it is never tested",
+            "C": "routes are random words",
+            "D": "only pharmacists use routes"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standard route / ADME mapping at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect route or process.",
+            "C": "Incorrect route or process.",
+            "D": "Incorrect route or process."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "pharmacology-adverse-effects",
+      "topicName": "Adverse Effects, Side Effects, and Drug Interactions",
+      "readinessWeight": "critical",
+      "cognitiveLevel": "early-application",
+      "targetQuestionCountMin": 45,
+      "targetQuestionCountMax": 55,
+      "questionsGeneratedThisBatch": 45,
+      "prerequisiteTopicSlugs": [
+        "pharmacodynamics-drug-actions"
+      ],
+      "prerequisiteBridgingNote": "Lesson 1 embeds receptor agonist/antagonist preview; complete pharmacodynamics topic in full path.",
+      "lessons": [
+        {
+          "title": "How drugs exert effects: pharmacodynamics bridge (compact)",
+          "structuredContent": {
+            "overview": "Adverse effects make sense when you remember drugs interact with receptors, enzymes, and channels.",
+            "prerequisiteBridgePharmacodynamics": {
+              "receptor": "Cell protein that binds a drug; triggers a change.",
+              "agonist": "Activates receptor (full or partial).",
+              "antagonist": "Blocks receptor activation without activating it (classic competitive view at student level).",
+              "enzymeInhibition": "Drug reduces activity of an enzyme pathway."
+            },
+            "clinicalRelevanceLight": "More drug is not 'more better' when safety margins shrink—dose-response thinking starts here."
+          }
+        },
+        {
+          "title": "Side effect vs adverse drug reaction (ADR): language that matters",
+          "structuredContent": {
+            "overview": "At student level: side effects are expected known effects beyond the main therapeutic goal; ADRs are harmful/unintended responses tied to drug exposure.",
+            "examples": [
+              "Diphenhydramine sedation can be therapeutic or unwanted depending on context.",
+              "Anaphylaxis is an emergency ADR pattern requiring immediate response protocols you will drill in skills."
+            ],
+            "commonMistakes": [
+              "Calling every nuisance a 'allergy'",
+              "Ignoring that OTC drugs also cause ADRs"
+            ],
+            "clinicalRelevanceLight": "Teach-back includes common effects patients should watch for."
+          }
+        },
+        {
+          "title": "Interactions, allergies, toxicity, and reporting culture",
+          "structuredContent": {
+            "overview": "Drug-drug, drug-food, and drug-disease interactions change risk. True allergy involves immune-mediated hypersensitivity for certain drug classes; side intolerance is different.",
+            "concepts": [
+              "Additive vs synergistic effects (preview).",
+              "Serotonin syndrome / bleeding risk with combinations are advanced examples for later—know they exist.",
+              "Report significant ADRs per policy; culture of safety encourages reporting."
+            ],
+            "commonMistakes": [
+              "Stopping a critical medication without prescriber communication"
+            ],
+            "clinicalRelevanceLight": "Medication reconciliation and allergy lists reduce interaction and allergy errors."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "An agonist:",
+          "options": {
+            "A": "activates a receptor",
+            "B": "blocks a receptor without activating",
+            "C": "destroys DNA always",
+            "D": "only works on bacteria"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "A competitive antagonist at student level:",
+          "options": {
+            "A": "blocks agonist binding at receptor site",
+            "B": "always destroys the receptor permanently",
+            "C": "increases agonist effect always",
+            "D": "only affects lipids"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Side effect classically means:",
+          "options": {
+            "A": "known effect beyond primary therapeutic goal",
+            "B": "only allergic reaction",
+            "C": "only overdose",
+            "D": "only placebo"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Adverse drug reaction (ADR) emphasizes:",
+          "options": {
+            "A": "harmful or unintended response linked to drug",
+            "B": "desired therapeutic effect only",
+            "C": "only herbal products",
+            "D": "only vitamins"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Drug-drug interaction can:",
+          "options": {
+            "A": "change effectiveness or toxicity",
+            "B": "never occur with prescriptions",
+            "C": "only occur with IV",
+            "D": "only in children"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Grapefruit can interact with some drugs by affecting:",
+          "options": {
+            "A": "metabolism enzymes (student recognition)",
+            "B": "only tablet color",
+            "C": "only water pH in stomach always",
+            "D": "only blood type"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "True penicillin allergy vs side effect distinction at student level:",
+          "options": {
+            "A": "allergy involves immune hypersensitivity pattern; nausea alone may be non-allergic intolerance",
+            "B": "they are identical always",
+            "C": "all rashes mean stop without reporting",
+            "D": "only pharmacists assess"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Additive effect means:",
+          "options": {
+            "A": "combined effect equals sum of individual effects (simple model)",
+            "B": "effect always zero",
+            "C": "always multiplied unpredictably without study",
+            "D": "only for antibiotics"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Synergy at student preview means:",
+          "options": {
+            "A": "combined effect greater than expected sum",
+            "B": "always less than one drug",
+            "C": "only topical",
+            "D": "impossible"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Toxicity often relates to:",
+          "options": {
+            "A": "excessive drug effect or accumulation",
+            "B": "always therapeutic range widening only",
+            "C": "only placebo",
+            "D": "only oral route"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Therapeutic range / window concept at student level:",
+          "options": {
+            "A": "range where benefit outweighs risk for many drugs monitored clinically",
+            "B": "always same for all drugs",
+            "C": "irrelevant to nursing",
+            "D": "only lab unrelated"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Idiosyncratic reaction suggests:",
+          "options": {
+            "A": "unusual individual response",
+            "B": "expected in everyone",
+            "C": "only due to sugar pills",
+            "D": "only infection"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Phototoxicity risk means:",
+          "options": {
+            "A": "increased sun sensitivity with some drugs",
+            "B": "only IV contrast always",
+            "C": "impossible with meds",
+            "D": "only genetic only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "OTC medications:",
+          "options": {
+            "A": "can cause ADRs and interactions",
+            "B": "never cause harm",
+            "C": "never interact",
+            "D": "only safe in any dose"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Herbal supplements:",
+          "options": {
+            "A": "can interact with prescriptions",
+            "B": "never interact",
+            "C": "are always FDA identical to drugs",
+            "D": "contain no active chemicals"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Serotonin syndrome is:",
+          "options": {
+            "A": "a serious interaction pattern you will study later",
+            "B": "normal sleep",
+            "C": "only musculoskeletal sprain",
+            "D": "only dehydration"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Bleeding risk with NSAID + anticoagulant illustrates:",
+          "options": {
+            "A": "additive pharmacodynamic risk (preview)",
+            "B": "no interaction",
+            "C": "only cosmetic",
+            "D": "only pediatric issue"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "If patient develops new rash after starting drug, student-level priority:",
+          "options": {
+            "A": "report and follow agency/provider direction",
+            "B": "ignore",
+            "C": "always continue without telling anyone",
+            "D": "only mention if rash painful"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Medication reconciliation helps reduce:",
+          "options": {
+            "A": "interaction and omission errors",
+            "B": "only billing errors",
+            "C": "only room temperature errors",
+            "D": "only meal timing only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Anticholinergic burden is:",
+          "options": {
+            "A": "cumulative effect of multiple drugs with anticholinergic properties (preview)",
+            "B": "only hydration status",
+            "C": "only heart rate",
+            "D": "only renal mass"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Stevens-Johnson syndrome / TEN are:",
+          "options": {
+            "A": "severe mucocutaneous reactions associated with some drugs (recognition only)",
+            "B": "mild itch only",
+            "C": "normal",
+            "D": "only infection rash"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Drug-induced liver injury is:",
+          "options": {
+            "A": "possible with some medications; monitor per protocol",
+            "B": "impossible",
+            "C": "only from water",
+            "D": "only genetic without drugs"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Nephrotoxicity means:",
+          "options": {
+            "A": "kidney injury risk from drug or factor",
+            "B": "liver injury",
+            "C": "skin only",
+            "D": "only ear"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Ototoxicity means:",
+          "options": {
+            "A": "ear/hearing/balance toxicity risk",
+            "B": "kidney stones only",
+            "C": "only vision",
+            "D": "only taste"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Hypersensitivity type I classic involves:",
+          "options": {
+            "A": "IgE-mediated rapid reactions in teaching (preview)",
+            "B": "always delayed only",
+            "C": "never immune",
+            "D": "only bacterial"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Placebo effect illustrates:",
+          "options": {
+            "A": "expectation and context can change perceived outcomes",
+            "B": "drugs never work",
+            "C": "only surgery works",
+            "D": "only IV works"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Off-label use means:",
+          "options": {
+            "A": "use not matching FDA-approved labeling (still may be evidence-based)",
+            "B": "illegal always",
+            "C": "only antibiotics",
+            "D": "only vitamins"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Black box warning indicates:",
+          "options": {
+            "A": "FDA highlights serious risk",
+            "B": "no risk",
+            "C": "cosmetic label",
+            "D": "only OTC"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Polypharmacy increases:",
+          "options": {
+            "A": "interaction and ADR risk",
+            "B": "safety always",
+            "C": "never complexity",
+            "D": "only cost only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Antidote example at recognition level:",
+          "options": {
+            "A": "naloxone for opioid overdose (program-specific scope)",
+            "B": "water for all ODs",
+            "C": "only oxygen for all drugs",
+            "D": "only glucose for all drugs"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Peak and trough levels relate to:",
+          "options": {
+            "A": "monitoring some drugs to reduce toxicity (preview)",
+            "B": "only nutrition",
+            "C": "only exercise",
+            "D": "only imaging"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Allergic reaction vs anaphylaxis student distinction:",
+          "options": {
+            "A": "anaphylaxis is systemic emergency pattern",
+            "B": "identical always",
+            "C": "only mild always",
+            "D": "only GI"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Drug fever is:",
+          "options": {
+            "A": "fever linked to drug exposure (recognition)",
+            "B": "only infection always",
+            "C": "impossible",
+            "D": "only environmental"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Statin muscle ache vs rhabdomyolysis student message:",
+          "options": {
+            "A": "severity spectrum exists; report significant symptoms",
+            "B": "ignore all pain",
+            "C": "always stop without provider",
+            "D": "only happens in elderly"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "ACE inhibitor cough is:",
+          "options": {
+            "A": "known ADR class effect for some patients",
+            "B": "impossible",
+            "C": "only allergy always",
+            "D": "only children"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Diarrhea from antibiotic can be:",
+          "options": {
+            "A": "ADR related to GI disruption; C. diff is later concern",
+            "B": "always allergy",
+            "C": "never happens",
+            "D": "only dehydration unrelated"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Photosensitivity teaching includes:",
+          "options": {
+            "A": "sun protection for susceptible drugs",
+            "B": "tanning encouragement",
+            "C": "only winter issue",
+            "D": "only eyes"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Warfarin + NSAID risk:",
+          "options": {
+            "A": "bleeding interaction concern",
+            "B": "no concern",
+            "C": "only liver only",
+            "D": "only renal stone"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "MAOI dietary interactions are:",
+          "options": {
+            "A": "important class warnings you will study if applicable",
+            "B": "nonexistent",
+            "C": "only cosmetic",
+            "D": "only pediatric"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Reporting culture supports:",
+          "options": {
+            "A": "learning and prevention",
+            "B": "punishment only",
+            "C": "hiding errors",
+            "D": "only billing"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Patient education on new medication should include:",
+          "options": {
+            "A": "common effects and when to seek help per order/teaching plan",
+            "B": "nothing",
+            "C": "only pharmacy phone number without effects",
+            "D": "only diagnosis code"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Liver 'first-pass' relates to ADRs when:",
+          "options": {
+            "A": "metabolism creates active/toxic metabolites in some cases (preview)",
+            "B": "never",
+            "C": "only IV",
+            "D": "only topical"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Renal dosing adjustment may be needed when:",
+          "options": {
+            "A": "kidney clearance reduced",
+            "B": "patient has long hair",
+            "C": "only pediatric",
+            "D": "never for any drug"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Geriatric considerations often include:",
+          "options": {
+            "A": "altered metabolism/excretion and fall risk",
+            "B": "identical to young adults always",
+            "C": "no ADR risk",
+            "D": "only cosmetic"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        },
+        {
+          "stem": "Pediatric dosing is:",
+          "options": {
+            "A": "weight-based often; never assume adult dose",
+            "B": "always adult dose",
+            "C": "never calculated",
+            "D": "only volume"
+          },
+          "correctAnswer": "A",
+          "rationale": "Applies adverse-effect and interaction concepts at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Incorrect safety or mechanism choice.",
+            "C": "Incorrect safety or mechanism choice.",
+            "D": "Incorrect safety or mechanism choice."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "rights-of-medication-administration",
+      "topicName": "The Rights of Medication Administration",
+      "readinessWeight": "critical",
+      "cognitiveLevel": "early-application",
+      "targetQuestionCountMin": 35,
+      "targetQuestionCountMax": 45,
+      "questionsGeneratedThisBatch": 35,
+      "prerequisiteTopicSlugs": [
+        "routes-of-drug-administration",
+        "pharmacology-adverse-effects"
+      ],
+      "lessons": [
+        {
+          "title": "Classic rights: patient, drug, dose, route, time",
+          "structuredContent": {
+            "overview": "Programs teach 5–10 rights; start with the core five as a checklist mindset.",
+            "rights": [
+              "Right patient: two identifiers; barcode when available.",
+              "Right drug: match order to label; look-alike/sound-alike awareness.",
+              "Right dose: calculate and double-check per policy.",
+              "Right route: PO vs IV etc.; formulation matches route.",
+              "Right time: frequency, PRN conditions, empty/full stomach as ordered."
+            ],
+            "commonMistakes": [
+              "Rushing after distraction",
+              "Assuming 'similar packaging' means correct drug"
+            ],
+            "clinicalRelevanceLight": "Rights are error barriers, not paperwork trivia."
+          }
+        },
+        {
+          "title": "Expanded rights: documentation, reason, response, refusal",
+          "structuredContent": {
+            "overview": "Modern curricula add rights that close common failure modes.",
+            "expanded": [
+              "Right documentation: record after administration per policy.",
+              "Right reason: know why drug is indicated (student-level awareness).",
+              "Right response: observe expected effect and adverse possibilities per teaching.",
+              "Right to refuse: patient autonomy; follow facility process."
+            ],
+            "commonMistakes": [
+              "Pre-charting before giving",
+              "Dismissing patient questions"
+            ],
+            "clinicalRelevanceLight": "Handoff quality depends on accurate medication documentation."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Which right verifies identity?",
+          "options": {
+            "A": "right patient",
+            "B": "right room number only painted on door",
+            "C": "right shoe size",
+            "D": "right hairstyle"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Two-identifier practice is part of:",
+          "options": {
+            "A": "right patient verification",
+            "B": "right dose only",
+            "C": "right route only",
+            "D": "right time only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "LASA drugs are:",
+          "options": {
+            "A": "look-alike / sound-alike",
+            "B": "always IV only",
+            "C": "never exist",
+            "D": "only antibiotics"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Right drug verification includes:",
+          "options": {
+            "A": "order + label match",
+            "B": "only color guess",
+            "C": "only bag shape",
+            "D": "only nurse memory"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Right dose requires:",
+          "options": {
+            "A": "matching calculated/administered amount to order",
+            "B": "approximation always ok",
+            "C": "only if patient agrees",
+            "D": "only if tablet pretty"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Right route means:",
+          "options": {
+            "A": "administration path matches order",
+            "B": "any route works",
+            "C": "only oral exists",
+            "D": "only fastest"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Right time includes:",
+          "options": {
+            "A": "scheduled frequency and PRN parameters",
+            "B": "only morning",
+            "C": "never PRN",
+            "D": "only bedtime"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Barcode scanning when available supports:",
+          "options": {
+            "A": "right patient and right medication checks",
+            "B": "only billing",
+            "C": "only temperature",
+            "D": "only visitor passes"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Giving medication without an order is:",
+          "options": {
+            "A": "outside standard nursing practice",
+            "B": "always allowed if helpful",
+            "C": "only wrong if patient complains",
+            "D": "only wrong for IV"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "If patient refuses medication, you:",
+          "options": {
+            "A": "follow facility process and notify appropriate clinician",
+            "B": "force swallow",
+            "C": "hide pill in food secretly",
+            "D": "ignore refusal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Right documentation timing generally means:",
+          "options": {
+            "A": "record per policy, typically after administration unless protocol states otherwise",
+            "B": "before preparing always falsify",
+            "C": "never document",
+            "D": "only weekly"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Right assessment before digoxin in many programs emphasizes:",
+          "options": {
+            "A": "apical pulse / heart rate parameters per order/policy",
+            "B": "only temperature",
+            "C": "only weight",
+            "D": "never needed"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Insulin requires:",
+          "options": {
+            "A": "right dose with correct concentration awareness",
+            "B": "any syringe",
+            "C": "no double-check ever",
+            "D": "only one nurse always policy-free"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Liquid oral measurement should use:",
+          "options": {
+            "A": "dosing device appropriate to formulation",
+            "B": "household spoon only always",
+            "C": "estimate in palm",
+            "D": "any cup"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Crushing enteric-coated or extended-release formulations can be:",
+          "options": {
+            "A": "unsafe unless specifically ordered and pharmacist-approved",
+            "B": "always fine",
+            "C": "always improves absorption",
+            "D": "never matters"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "High-alert medications:",
+          "options": {
+            "A": "require extra safeguards per policy",
+            "B": "are safer than others",
+            "C": "never exist",
+            "D": "only vitamins"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Independent double-check for some high-risk meds:",
+          "options": {
+            "A": "policy-dependent second nurse verification",
+            "B": "never used",
+            "C": "only for OTC",
+            "D": "illegal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "MAR stands for:",
+          "options": {
+            "A": "medication administration record",
+            "B": "machine assisted respiration only",
+            "C": "medical airway review only",
+            "D": "massive allergy response"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Verbal orders in acute care:",
+          "options": {
+            "A": "varies by setting; repeat-back verification; timely sign-off per policy",
+            "B": "always preferred over written",
+            "C": "never allowed",
+            "D": "only for vitamins"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Telephone orders:",
+          "options": {
+            "A": "read-back verification; timely documentation per policy",
+            "B": "never need read-back",
+            "C": "only for family",
+            "D": "only pharmacist"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Sixth right often taught as:",
+          "options": {
+            "A": "right documentation (among expansions)",
+            "B": "right shoe",
+            "C": "right hallway",
+            "D": "right TV channel"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Patient allergy bracelet relevance:",
+          "options": {
+            "A": "communication of allergy status",
+            "B": "decoration only",
+            "C": "only for falls",
+            "D": "only for diet"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Refusal should be:",
+          "options": {
+            "A": "documented per policy",
+            "B": "ignored",
+            "C": "punished",
+            "D": "never mentioned"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Five rights minimum traditionally include:",
+          "options": {
+            "A": "patient, drug, dose, route, time",
+            "B": "patient, room, TV, food, blanket",
+            "C": "doctor, nurse, lab, xray, PT",
+            "D": "only drug and time"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Wrong route error example at student level:",
+          "options": {
+            "A": "IV drug given orally",
+            "B": "correct insulin dose subcutaneous",
+            "C": "PO tablet swallowed with water as ordered",
+            "D": "IM in appropriate site as ordered"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Look-alike packaging strategy includes:",
+          "options": {
+            "A": "tall man lettering and separate storage (facility)",
+            "B": "ignoring labels",
+            "C": "storing all in one bin unsorted",
+            "D": "removing labels"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Medication reconciliation on admission:",
+          "options": {
+            "A": "reduces omission/duplication",
+            "B": "only billing",
+            "C": "only for surgery patients",
+            "D": "never nursing role"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Teaching before first dose may cover:",
+          "options": {
+            "A": "what to expect and when to call (per plan)",
+            "B": "nothing",
+            "C": "only diagnosis",
+            "D": "only parking map"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Pediatric five-rights mindset includes:",
+          "options": {
+            "A": "weight-based dose verification",
+            "B": "adult dose always",
+            "C": "no math",
+            "D": "only parent's guess"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Elderly considerations include:",
+          "options": {
+            "A": "swallowing issues affecting route/formulation",
+            "B": "never any differences",
+            "C": "only cosmetic",
+            "D": "only hearing"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Nurse role if dose seems unsafe:",
+          "options": {
+            "A": "clarify with prescriber/pharmacist per chain of command",
+            "B": "give anyway faster",
+            "C": "halve without asking",
+            "D": "swap with another patient"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Expired medication should be:",
+          "options": {
+            "A": "not administered; follow disposal policy",
+            "B": "given if only one day expired",
+            "C": "given if expensive",
+            "D": "given if patient wants"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Patient states 'this pill looks different'; nurse should:",
+          "options": {
+            "A": "verify with pharmacy/order before administering",
+            "B": "ignore",
+            "C": "assume generic always identical appearance",
+            "D": "hide difference"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Transcription error risk is reduced by:",
+          "options": {
+            "A": "electronic orders and careful verification",
+            "B": "only paper always",
+            "C": "only memory",
+            "D": "only night shift"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        },
+        {
+          "stem": "Right patient wrong drug is prevented by:",
+          "options": {
+            "A": "triple-check mindset + scanning + distraction reduction",
+            "B": "speed",
+            "C": "multitasking during prep",
+            "D": "assuming roommate same meds"
+          },
+          "correctAnswer": "A",
+          "rationale": "Supports medication administration safety at pre-nursing application depth.",
+          "whyIncorrect": {
+            "B": "Unsafe or inaccurate practice.",
+            "C": "Unsafe or inaccurate practice.",
+            "D": "Unsafe or inaccurate practice."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Dosage Math",
+      "topicSlug": "oral-medication-dosage-calculations",
+      "topicName": "Oral Medication Dosage Calculations",
+      "readinessWeight": "critical",
+      "cognitiveLevel": "early-application",
+      "targetQuestionCountMin": 50,
+      "targetQuestionCountMax": 60,
+      "questionsGeneratedThisBatch": 50,
+      "prerequisiteTopicSlugs": [
+        "systems-of-measurement",
+        "rights-of-medication-administration"
+      ],
+      "lessons": [
+        {
+          "title": "Dose on hand and dose desired: the core proportion",
+          "structuredContent": {
+            "overview": "Oral calculations link what you have (tablet strength or liquid concentration) to what is ordered.",
+            "formula": "Ordered dose / dose on hand × quantity on hand = amount to give (with consistent units).",
+            "workedExample": "Order 500 mg; tablets are 250 mg each → 500/250 × 1 tablet = 2 tablets.",
+            "commonMistakes": [
+              "Inverting the ratio",
+              "Mixing mg with mcg without converting"
+            ],
+            "clinicalRelevanceLight": "Always reconcile units with the label before mental math."
+          }
+        },
+        {
+          "title": "Dimensional analysis for oral liquids and tablets",
+          "structuredContent": {
+            "overview": "Arrange factors so units cancel, leaving the dose unit you need (tablets, mL, etc.).",
+            "steps": [
+              "Start with the dose ordered on the left.",
+              "Multiply by conversion factors as fractions so unwanted units cancel.",
+              "Stop when you reach the unit to administer."
+            ],
+            "workedExample": "Order 300 mg; liquid is 100 mg/5 mL → need 15 mL (show on your scratch pad).",
+            "commonMistakes": [
+              "Carrying mg/mL upside down",
+              "Rounding early"
+            ],
+            "clinicalRelevanceLight": "Syringe graduations determine final rounding policy."
+          }
+        },
+        {
+          "title": "Split tablets, liquid cups, and safety checks",
+          "structuredContent": {
+            "overview": "Only split tablets that are scored and appropriate to split per pharmacist guidance; use oral syringes for small mL doses.",
+            "commonMistakes": [
+              "Crushing extended release",
+              "Using kitchen teaspoons for small pediatric volumes"
+            ],
+            "clinicalRelevanceLight": "Rights + calculation together prevent wrong dose/route/formulation errors."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Order: 500 mg PO. Available: 250 mg tablets. How many tablets?",
+          "options": {
+            "A": "2 tablets",
+            "B": "1 tablet",
+            "C": "3 tablets",
+            "D": "1/2 tablet"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 1000 mg PO. Available: 500 mg tablets. Tablets?",
+          "options": {
+            "A": "2 tablets",
+            "B": "1 tablet",
+            "C": "4 tablets",
+            "D": "1/2 tablet"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 75 mg PO. Available: 25 mg tablets. Tablets?",
+          "options": {
+            "A": "3 tablets",
+            "B": "2 tablets",
+            "C": "4 tablets",
+            "D": "1 tablet"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 12.5 mg PO. Available: 6.25 mg tablets. Tablets?",
+          "options": {
+            "A": "2 tablets",
+            "B": "1 tablet",
+            "C": "3 tablets",
+            "D": "1/2 tablet"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 40 mg PO. Available: 20 mg tablets. Tablets?",
+          "options": {
+            "A": "2 tablets",
+            "B": "1 tablet",
+            "C": "3 tablets",
+            "D": "4 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 150 mg PO. Available: 100 mg tablets. Can give scored half. Dose?",
+          "options": {
+            "A": "1.5 tablets",
+            "B": "2.5 tablets",
+            "C": "1 tablet",
+            "D": "3 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 0.5 g PO. Available: 250 mg tablets. Tablets?",
+          "options": {
+            "A": "2 tablets",
+            "B": "1 tablet",
+            "C": "4 tablets",
+            "D": "1/2 tablet"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 1 g PO. Available: 500 mg tablets. Tablets?",
+          "options": {
+            "A": "2 tablets",
+            "B": "1 tablet",
+            "C": "3 tablets",
+            "D": "4 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: Order 200 mg. Have 100 mg/5 mL. mL to give?",
+          "options": {
+            "A": "10 mL",
+            "B": "5 mL",
+            "C": "15 mL",
+            "D": "20 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: Order 300 mg. Have 100 mg/5 mL. mL?",
+          "options": {
+            "A": "15 mL",
+            "B": "10 mL",
+            "C": "20 mL",
+            "D": "5 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: Order 400 mg. Have 200 mg/10 mL. mL?",
+          "options": {
+            "A": "20 mL",
+            "B": "10 mL",
+            "C": "40 mL",
+            "D": "5 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: Order 50 mg. Have 25 mg/2 mL. mL?",
+          "options": {
+            "A": "4 mL",
+            "B": "2 mL",
+            "C": "6 mL",
+            "D": "8 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: Order 80 mg. Have 20 mg per mL. mL?",
+          "options": {
+            "A": "4 mL",
+            "B": "2 mL",
+            "C": "5 mL",
+            "D": "8 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 600 mcg PO. Available: 200 mcg tablets. Tablets?",
+          "options": {
+            "A": "3 tablets",
+            "B": "2 tablets",
+            "C": "4 tablets",
+            "D": "1 tablet"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 150 mcg. Tabs 75 mcg. Tablets?",
+          "options": {
+            "A": "2 tablets",
+            "B": "1 tablet",
+            "C": "3 tablets",
+            "D": "4 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 90 mg. Tabs 30 mg. Tablets?",
+          "options": {
+            "A": "3 tablets",
+            "B": "2 tablets",
+            "C": "4 tablets",
+            "D": "6 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 1.2 g. Tabs 400 mg. Tablets?",
+          "options": {
+            "A": "3 tablets",
+            "B": "2 tablets",
+            "C": "4 tablets",
+            "D": "1 tablet"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid order: 250 mg. Suspension 125 mg/5 mL. mL?",
+          "options": {
+            "A": "10 mL",
+            "B": "5 mL",
+            "C": "15 mL",
+            "D": "20 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 450 mg ordered. Concentration 150 mg/5 mL. mL?",
+          "options": {
+            "A": "15 mL",
+            "B": "10 mL",
+            "C": "20 mL",
+            "D": "30 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 100 mg. Have 50 mg/mL syrup. mL?",
+          "options": {
+            "A": "2 mL",
+            "B": "1 mL",
+            "C": "3 mL",
+            "D": "4 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 24 mg. Have 8 mg per mL. mL?",
+          "options": {
+            "A": "3 mL",
+            "B": "2 mL",
+            "C": "4 mL",
+            "D": "6 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 500 mg. Tabs 125 mg. Whole tablets?",
+          "options": {
+            "A": "4 tablets",
+            "B": "3 tablets",
+            "C": "5 tablets",
+            "D": "2 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 15 mg. Tabs 7.5 mg. Tablets?",
+          "options": {
+            "A": "2 tablets",
+            "B": "1 tablet",
+            "C": "3 tablets",
+            "D": "4 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 6 mg. Tabs 3 mg. Tablets?",
+          "options": {
+            "A": "2 tablets",
+            "B": "1 tablet",
+            "C": "3 tablets",
+            "D": "1/2 tablet"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 180 mg ordered. 60 mg/3 mL. mL?",
+          "options": {
+            "A": "9 mL",
+            "B": "6 mL",
+            "C": "12 mL",
+            "D": "3 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 100 mg ordered. 40 mg/2 mL. mL?",
+          "options": {
+            "A": "5 mL",
+            "B": "4 mL",
+            "C": "6 mL",
+            "D": "10 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 0.25 mg. Tabs 0.125 mg. Tablets?",
+          "options": {
+            "A": "2 tablets",
+            "B": "1 tablet",
+            "C": "3 tablets",
+            "D": "4 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 2 mg. Tabs 0.5 mg. Tablets?",
+          "options": {
+            "A": "4 tablets",
+            "B": "2 tablets",
+            "C": "3 tablets",
+            "D": "5 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 1200 mg. Tabs 600 mg. Tablets?",
+          "options": {
+            "A": "2 tablets",
+            "B": "1 tablet",
+            "C": "3 tablets",
+            "D": "4 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 36 mg. 12 mg/4 mL. mL?",
+          "options": {
+            "A": "12 mL",
+            "B": "8 mL",
+            "C": "16 mL",
+            "D": "4 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 55 mg. 11 mg/1 mL. mL?",
+          "options": {
+            "A": "5 mL",
+            "B": "4 mL",
+            "C": "6 mL",
+            "D": "10 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 750 mg. Tabs 250 mg. Tablets?",
+          "options": {
+            "A": "3 tablets",
+            "B": "2 tablets",
+            "C": "4 tablets",
+            "D": "5 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 40 mg. Tabs 10 mg. Tablets?",
+          "options": {
+            "A": "4 tablets",
+            "B": "2 tablets",
+            "C": "3 tablets",
+            "D": "5 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 3 mg. Tabs 1 mg. Tablets?",
+          "options": {
+            "A": "3 tablets",
+            "B": "2 tablets",
+            "C": "4 tablets",
+            "D": "1 tablet"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 64 mg. 16 mg/2 mL. mL?",
+          "options": {
+            "A": "8 mL",
+            "B": "6 mL",
+            "C": "10 mL",
+            "D": "4 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 30 mg. 15 mg/5 mL. mL?",
+          "options": {
+            "A": "10 mL",
+            "B": "5 mL",
+            "C": "15 mL",
+            "D": "20 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 450 mg. Tabs 150 mg. Tablets?",
+          "options": {
+            "A": "3 tablets",
+            "B": "2 tablets",
+            "C": "4 tablets",
+            "D": "6 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 200 mg. Tabs 100 mg. Tablets?",
+          "options": {
+            "A": "2 tablets",
+            "B": "1 tablet",
+            "C": "3 tablets",
+            "D": "4 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 18 mg. Tabs 6 mg. Tablets?",
+          "options": {
+            "A": "3 tablets",
+            "B": "2 tablets",
+            "C": "4 tablets",
+            "D": "1 tablet"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 140 mg. 70 mg/7 mL. mL?",
+          "options": {
+            "A": "14 mL",
+            "B": "7 mL",
+            "C": "21 mL",
+            "D": "10 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 22 mg. 11 mg/2 mL. mL?",
+          "options": {
+            "A": "4 mL",
+            "B": "2 mL",
+            "C": "6 mL",
+            "D": "8 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 800 mg. Tabs 200 mg. Tablets?",
+          "options": {
+            "A": "4 tablets",
+            "B": "3 tablets",
+            "C": "5 tablets",
+            "D": "2 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 50 mg. Tabs 12.5 mg. Tablets?",
+          "options": {
+            "A": "4 tablets",
+            "B": "3 tablets",
+            "C": "5 tablets",
+            "D": "2 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 7.5 mg. Tabs 2.5 mg. Tablets?",
+          "options": {
+            "A": "3 tablets",
+            "B": "2 tablets",
+            "C": "4 tablets",
+            "D": "5 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 270 mg. 90 mg/6 mL. mL?",
+          "options": {
+            "A": "18 mL",
+            "B": "12 mL",
+            "C": "24 mL",
+            "D": "9 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 48 mg. 12 mg/3 mL. mL?",
+          "options": {
+            "A": "12 mL",
+            "B": "9 mL",
+            "C": "15 mL",
+            "D": "6 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 1500 mg. Tabs 500 mg. Tablets?",
+          "options": {
+            "A": "3 tablets",
+            "B": "2 tablets",
+            "C": "4 tablets",
+            "D": "5 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Order: 2.5 mg. Tabs 0.625 mg. Tablets?",
+          "options": {
+            "A": "4 tablets",
+            "B": "2 tablets",
+            "C": "3 tablets",
+            "D": "5 tablets"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 200 mg. 50 mg/2 mL. mL?",
+          "options": {
+            "A": "8 mL",
+            "B": "6 mL",
+            "C": "10 mL",
+            "D": "4 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        },
+        {
+          "stem": "Liquid: 125 mg. 25 mg/1 mL. mL?",
+          "options": {
+            "A": "5 mL",
+            "B": "4 mL",
+            "C": "6 mL",
+            "D": "10 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Set up dose ordered over dose on hand times quantity; convert units (g to mg) when needed.",
+          "whyIncorrect": {
+            "B": "Arithmetic or unit setup error.",
+            "C": "Arithmetic or unit setup error.",
+            "D": "Arithmetic or unit setup error."
+          }
+        }
+      ]
+    }
+  ],
+  "finalReport": {
+    "topicsProcessed": 6,
+    "lessonsTotal": 17,
+    "questionsTotal": 255,
+    "lessonsPerTopic": {
+      "organic-molecules-macromolecules": 3,
+      "cell-structure-and-function": 3,
+      "routes-of-drug-administration": 3,
+      "pharmacology-adverse-effects": 3,
+      "rights-of-medication-administration": 2,
+      "oral-medication-dosage-calculations": 3
+    },
+    "questionsPerTopic": {
+      "organic-molecules-macromolecules": 40,
+      "cell-structure-and-function": 45,
+      "routes-of-drug-administration": 40,
+      "pharmacology-adverse-effects": 45,
+      "rights-of-medication-administration": 35,
+      "oral-medication-dosage-calculations": 50
+    },
+    "rulesConfirmation": "readinessWeight-informed lesson counts; cognitive levels matched (conceptual for organic/cell/routes; early-application for adverse/rights/oral). Question mins met. MCQs single-concept; calculations in oral topic require arithmetic."
+  }
+}

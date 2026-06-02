@@ -1,0 +1,903 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NurseNest Premium UI Canvas</title>
+    <style>
+      :root {
+        --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --radius-xl: 22px;
+        --shadow-soft: 0 18px 50px rgba(15, 23, 42, 0.10);
+        --shadow-panel: 0 22px 70px rgba(15, 23, 42, 0.16);
+        --danger: #e11d48;
+        --success: #059669;
+        --warning: #d97706;
+        --info: #2563eb;
+        --insight: #7c3aed;
+        --teaching: #0891b2;
+      }
+
+      [data-theme="aurora"] {
+        --bg: #fff7fb;
+        --surface: #ffffff;
+        --surface-muted: #fff0f7;
+        --surface-elevated: #fffafd;
+        --text: #341827;
+        --muted: #7b5a6c;
+        --border: rgba(190, 90, 132, 0.24);
+        --accent: #db2777;
+        --accent-2: #38bdf8;
+        --accent-soft: #fce7f3;
+        --rail: rgba(255, 255, 255, 0.76);
+      }
+
+      [data-theme="ocean"] {
+        --bg: #f3fbff;
+        --surface: #ffffff;
+        --surface-muted: #e6f7fb;
+        --surface-elevated: #f8fdff;
+        --text: #0f2d3a;
+        --muted: #486978;
+        --border: rgba(8, 145, 178, 0.23);
+        --accent: #0891b2;
+        --accent-2: #2563eb;
+        --accent-soft: #cffafe;
+        --rail: rgba(255, 255, 255, 0.8);
+      }
+
+      [data-theme="garden"],
+      [data-theme="forest"] {
+        --bg: #f6fbf5;
+        --surface: #ffffff;
+        --surface-muted: #edf7ec;
+        --surface-elevated: #fbfefb;
+        --text: #163321;
+        --muted: #526d5d;
+        --border: rgba(5, 150, 105, 0.22);
+        --accent: #059669;
+        --accent-2: #0f766e;
+        --accent-soft: #d1fae5;
+        --rail: rgba(255, 255, 255, 0.78);
+      }
+
+      [data-theme="dark"],
+      [data-theme="midnight"] {
+        --bg: #08111f;
+        --surface: #101a2b;
+        --surface-muted: #132238;
+        --surface-elevated: #17243a;
+        --text: #edf7ff;
+        --muted: #9fb5cc;
+        --border: rgba(148, 163, 184, 0.26);
+        --accent: #38bdf8;
+        --accent-2: #818cf8;
+        --accent-soft: rgba(56, 189, 248, 0.14);
+        --rail: rgba(16, 26, 43, 0.86);
+        color-scheme: dark;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: var(--font);
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .canvas {
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 18%, transparent), transparent 30rem),
+          radial-gradient(circle at 86% 12%, color-mix(in srgb, var(--accent-2) 14%, transparent), transparent 24rem),
+          var(--bg);
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 18px 28px;
+        border-bottom: 1px solid var(--border);
+        background: color-mix(in srgb, var(--rail) 92%, transparent);
+        backdrop-filter: blur(18px);
+      }
+
+      body[data-capture="true"] .topbar {
+        display: none;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+      }
+
+      .leaf-placeholder {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 13px;
+        color: #fff;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        font-size: 17px;
+        font-weight: 900;
+      }
+
+      .note {
+        max-width: 860px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .theme-switcher, .device-switcher {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        min-height: 34px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 0 13px;
+        color: var(--text);
+        background: var(--surface);
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      button[aria-pressed="true"] {
+        border-color: color-mix(in srgb, var(--accent) 62%, var(--border));
+        background: var(--accent-soft);
+        color: var(--text);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+        gap: 28px;
+        padding: 42px 28px 24px;
+        max-width: 1500px;
+        margin: 0 auto;
+      }
+
+      .hero h1 {
+        margin: 0 0 14px;
+        font-size: clamp(38px, 5vw, 74px);
+        line-height: 0.98;
+        letter-spacing: 0;
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 780px;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.62;
+      }
+
+      .token-panel {
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        background: color-mix(in srgb, var(--surface) 88%, transparent);
+        box-shadow: var(--shadow-soft);
+        padding: 18px;
+      }
+
+      .token-row {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .swatch {
+        min-height: 74px;
+        border-radius: 15px;
+        border: 1px solid var(--border);
+        padding: 10px;
+        font-size: 11px;
+        color: var(--text);
+        background: var(--surface-muted);
+      }
+
+      .swatch strong { display: block; margin-top: 28px; }
+
+      .inventory {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 16px 28px 64px;
+      }
+
+      .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        margin: 24px 0 16px;
+      }
+
+      .section-title h2 {
+        margin: 0;
+        font-size: 24px;
+      }
+
+      .frame-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .frame {
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        background: var(--surface);
+        box-shadow: var(--shadow-panel);
+      }
+
+      .frame-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 15px 17px;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface-elevated);
+      }
+
+      .frame-title {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .frame-title strong {
+        font-size: 15px;
+      }
+
+      .frame-title span, .frame-meta {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .viewport {
+        margin: 16px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        background: var(--bg);
+      }
+
+      .viewport.desktop { height: 620px; }
+      .viewport.tablet { height: 560px; max-width: 760px; margin-inline: auto; }
+      .viewport.mobile { height: 680px; max-width: 355px; margin-inline: auto; border-radius: 32px; }
+
+      .mock {
+        height: 100%;
+        display: grid;
+        background:
+          linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 44%, transparent), transparent 46%),
+          var(--bg);
+      }
+
+      .mock.desktop-shell { grid-template-columns: 180px minmax(0, 1fr) 210px; }
+      .mock.tablet-shell { grid-template-columns: 92px minmax(0, 1fr); }
+      .mock.mobile-shell { grid-template-rows: 58px minmax(0, 1fr) 62px; }
+
+      .rail, .side, .mobilebar {
+        background: var(--rail);
+        border-color: var(--border);
+      }
+
+      .rail {
+        border-right: 1px solid var(--border);
+        padding: 14px;
+      }
+
+      .side {
+        border-left: 1px solid var(--border);
+        padding: 14px;
+      }
+
+      .mobilebar {
+        border-bottom: 1px solid var(--border);
+        padding: 12px;
+      }
+
+      .bottomnav {
+        border-top: 1px solid var(--border);
+        background: var(--surface);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        padding: 10px;
+      }
+
+      .nav-dot, .tiny-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 99px;
+        background: var(--accent);
+      }
+
+      .rail-line {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 28px;
+        margin-bottom: 7px;
+        padding: 0 9px;
+        border-radius: 99px;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .rail-line.active {
+        color: var(--text);
+        background: var(--accent-soft);
+      }
+
+      .mock-main {
+        padding: 18px;
+        overflow: hidden;
+      }
+
+      .mock.mobile-shell .mock-main { padding: 14px; }
+
+      .hero-band {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 220px;
+        gap: 14px;
+        min-height: 112px;
+        padding: 18px;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        background: var(--surface);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .mobile-shell .hero-band {
+        display: block;
+        min-height: 112px;
+        padding: 14px;
+      }
+
+      .hline {
+        height: 13px;
+        border-radius: 99px;
+        background: color-mix(in srgb, var(--text) 82%, transparent);
+        margin-bottom: 9px;
+      }
+
+      .hline.w70 { width: 70%; }
+      .hline.w55 { width: 55%; }
+      .hline.w35 { width: 35%; }
+
+      .pline {
+        height: 8px;
+        border-radius: 99px;
+        background: color-mix(in srgb, var(--muted) 34%, transparent);
+        margin-bottom: 7px;
+      }
+
+      .cta-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 28px;
+        padding: 0 10px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--surface-elevated);
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 800;
+      }
+      .pill.primary { color: #fff; border-color: transparent; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+
+      .mini-chart {
+        border-radius: 18px;
+        background:
+          linear-gradient(135deg, color-mix(in srgb, var(--accent) 70%, #fff), color-mix(in srgb, var(--accent-2) 68%, #fff));
+        min-height: 78px;
+      }
+
+      .progress {
+        height: 9px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--border) 70%, transparent);
+        overflow: hidden;
+        margin: 14px 0;
+      }
+
+      .progress span {
+        display: block;
+        height: 100%;
+        width: 68%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      }
+
+      .stepper {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin: 14px 0;
+      }
+
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-width: 0;
+        font-size: 10px;
+        font-weight: 800;
+        color: var(--muted);
+      }
+
+      .step::before {
+        content: "";
+        width: 16px;
+        height: 16px;
+        flex: 0 0 auto;
+        border-radius: 99px;
+        border: 2px solid var(--border);
+        background: var(--surface);
+      }
+
+      .step.done::before { border-color: var(--success); background: var(--success); }
+      .step.active::before { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .tablet-shell .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .mobile-shell .card-grid { grid-template-columns: 1fr; gap: 10px; }
+
+      .card {
+        min-height: 92px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: color-mix(in srgb, var(--surface) 86%, var(--accent-soft));
+        padding: 12px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .semantic-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .mobile-shell .semantic-row { grid-template-columns: 1fr; }
+
+      .semantic {
+        border-radius: 17px;
+        border: 1px solid color-mix(in srgb, var(--tone) 42%, var(--border));
+        background: color-mix(in srgb, var(--tone) 12%, var(--surface));
+        padding: 12px;
+      }
+
+      .semantic .badge {
+        display: inline-flex;
+        width: 28px;
+        height: 28px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        color: #fff;
+        background: var(--tone);
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      .side-card {
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: var(--surface);
+        padding: 12px;
+        margin-bottom: 10px;
+      }
+
+      .answer {
+        min-height: 44px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: var(--surface);
+        margin-top: 9px;
+        padding: 11px;
+      }
+
+      .answer.active {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+      }
+
+      .article {
+        display: grid;
+        grid-template-columns: 170px minmax(0, 1fr);
+        gap: 16px;
+      }
+
+      .mobile-shell .article { display: block; }
+
+      .table {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .row {
+        min-height: 42px;
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        background: var(--surface);
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        padding: 14px;
+        border-radius: 20px;
+        background: color-mix(in srgb, var(--surface-muted) 76%, var(--surface));
+        border: 1px solid var(--border);
+        margin-top: 13px;
+      }
+
+      .mobile-shell .summary {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .summary .semantic { min-height: 68px; }
+
+      .device-mobile-only { display: none; }
+
+      .frame[data-device="mobile"] .device-desktop-only { display: none; }
+      .frame[data-device="mobile"] .device-mobile-only { display: block; }
+
+      @media (max-width: 980px) {
+        .hero { grid-template-columns: 1fr; }
+        .frame-grid { grid-template-columns: 1fr; }
+        .topbar { align-items: flex-start; flex-direction: column; }
+      }
+    </style>
+  </head>
+  <body data-theme="ocean">
+    <div class="canvas">
+      <header class="topbar">
+        <div class="brand">
+          <div class="leaf-placeholder" aria-hidden="true">N</div>
+          <div>
+            NurseNest Premium UI Canvas
+            <div class="note">Mockup-only design exploration. The placeholder mark is not a logo redraw; production must keep the existing NurseNest leaf logo untouched.</div>
+          </div>
+        </div>
+        <div class="theme-switcher" aria-label="Theme selector">
+          <button data-theme-choice="aurora">Aurora</button>
+          <button data-theme-choice="ocean" aria-pressed="true">Ocean</button>
+          <button data-theme-choice="garden">Garden</button>
+          <button data-theme-choice="dark">Dark</button>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div>
+          <h1>Premium clinical learning system mockups</h1>
+          <p>
+            A Figma-style UI Canvas for NurseNest surfaces: marketing, learner cockpit, lessons, exams,
+            flashcards, analytics, admin, blogs, support, tools, mobile, and tablet layouts. Layouts stay
+            identical across themes; colors resolve through theme and semantic tokens.
+          </p>
+          <div class="cta-row">
+            <span class="pill primary">Visual Exploration Only</span>
+            <span class="pill">No Production Routes Changed</span>
+            <span class="pill">Logo Preserved</span>
+          </div>
+        </div>
+        <aside class="token-panel">
+          <div class="frame-title">
+            <strong>Theme token preview</strong>
+            <span>surface / accent / semantic meaning</span>
+          </div>
+          <div class="token-row" style="margin-top: 14px">
+            <div class="swatch" style="background: var(--surface)"><strong>Surface</strong></div>
+            <div class="swatch" style="background: var(--accent-soft)"><strong>Accent Soft</strong></div>
+            <div class="swatch" style="background: var(--danger); color: white"><strong>Urgent</strong></div>
+            <div class="swatch" style="background: var(--warning); color: white"><strong>Diagnostics</strong></div>
+            <div class="swatch" style="background: var(--success); color: white"><strong>Mastery</strong></div>
+            <div class="swatch" style="background: var(--insight); color: white"><strong>Pearls</strong></div>
+          </div>
+        </aside>
+      </section>
+
+      <main class="inventory">
+        <div class="section-title">
+          <div>
+            <h2>Frame Inventory</h2>
+            <div class="note">26 major surfaces × desktop/tablet/mobile variants × Aurora/Ocean/Forest/Midnight themes.</div>
+          </div>
+          <div class="device-switcher">
+            <button data-device-choice="desktop" aria-pressed="true">Desktop</button>
+            <button data-device-choice="tablet">Tablet</button>
+            <button data-device-choice="mobile">Mobile</button>
+          </div>
+        </div>
+        <div class="frame-grid" id="frames"></div>
+      </main>
+    </div>
+
+    <script>
+      const semantic = {
+        pathophysiology: ["#3730a3", "P"],
+        diagnostics: ["#d97706", "L"],
+        symptoms: ["#ea580c", "S"],
+        danger: ["#e11d48", "!"],
+        interventions: ["#059669", "I"],
+        teaching: ["#0891b2", "T"],
+        meds: ["#db2777", "Rx"],
+        pearls: ["#7c3aed", "*"],
+        exam: ["#2563eb", "Q"],
+        next: ["#475569", "N"],
+      };
+
+      const surfaces = [
+        ["Homepage", "Marketing", "Image-led hero, trust strip, pathway cards, premium CTA"],
+        ["Pricing Page", "Marketing", "Plan cards, comparison, reassurance, FAQ"],
+        ["FAQ Page", "Marketing", "Search, category chips, polished accordions"],
+        ["RN Hub", "Pathway Hub", "Exam readiness, topic map, study CTAs"],
+        ["RPN Hub", "Pathway Hub", "Scope-aware study map, practice entry"],
+        ["NP Hub", "Pathway Hub", "Specialty cards, board readiness, clinical depth"],
+        ["Allied Health Hub", "Pathway Hub", "Occupation cards, modality-aware study previews"],
+        ["New Grad Hub", "Pathway Hub", "Transition roadmap, unit/floor categories"],
+        ["Lesson Detail Page", "Lesson", "Sticky study rail, semantic cards, utilities, bottom summary"],
+        ["Learner Dashboard", "Dashboard", "Study cockpit, weak areas, streak, readiness"],
+        ["Flashcards Hub", "Study", "Deck cards, filters, mastery bars, empty states"],
+        ["Flashcard Session", "Study", "Focused card, reveal, confidence controls"],
+        ["Practice Test Builder", "Exam", "Filters, count cards, pathway/topic selection"],
+        ["Practice Test Runner", "Exam", "Answer cards, progress, rationale panel"],
+        ["CAT Exam Interface", "Exam", "Timer, adaptive progress, flag/review, no premature rationale"],
+        ["Report Cards", "Analytics", "Scores, recommendations, domains, next actions"],
+        ["Analytics/Progress Views", "Analytics", "Mastery curves, weak-area matrix, trends"],
+        ["Blog Index", "Blog", "Clinical article cards, filters, internal study links"],
+        ["Blog Detail", "Blog", "Sticky TOC, readable prose, clinical callouts"],
+        ["Admin Dashboard", "Admin", "Dense status panels, QA queues, tables"],
+        ["Tools/Calculators", "Tool", "Input panel, result card, explanation"],
+        ["Contact/Support", "Support", "Support cards, forms, help pathways"],
+        ["Mobile Navigation", "Mobile", "Bottom nav, compact drawer, persistent CTA"],
+        ["Mobile Lesson Layout", "Mobile Lesson", "Sticky progress, contents drawer, collapsible cards"],
+        ["Mobile Dashboard", "Mobile Dashboard", "Compact study plan, progress strip, next steps"],
+        ["Tablet Layouts", "Tablet", "Two-column adaptive dashboards and study rails"],
+      ];
+
+      const types = {
+        Marketing: renderMarketing,
+        "Pathway Hub": renderHub,
+        Lesson: renderLesson,
+        Dashboard: renderDashboard,
+        Study: renderStudy,
+        Exam: renderExam,
+        Analytics: renderAnalytics,
+        Blog: renderBlog,
+        Admin: renderAdmin,
+        Tool: renderTool,
+        Support: renderSupport,
+        Mobile: renderMobileNav,
+        "Mobile Lesson": renderLesson,
+        "Mobile Dashboard": renderDashboard,
+        Tablet: renderDashboard,
+      };
+
+      let device = new URLSearchParams(location.search).get("device") || "desktop";
+      const theme = new URLSearchParams(location.search).get("theme");
+      if (theme) document.body.dataset.theme = theme;
+      if (new URLSearchParams(location.search).get("capture") === "1") document.body.dataset.capture = "true";
+
+      function lines(widths = [70, 92, 84]) {
+        return widths.map((w) => `<div class="pline" style="width:${w}%"></div>`).join("");
+      }
+
+      function card(title = "", tone = "var(--accent)") {
+        return `<div class="card"><div class="tiny-dot" style="background:${tone}"></div><div class="hline w55" style="margin-top:16px"></div>${lines([80, 60])}</div>`;
+      }
+
+      function rail() {
+        return `<aside class="rail device-desktop-only">
+          <div class="rail-line active"><span class="nav-dot"></span>Overview</div>
+          <div class="rail-line"><span class="nav-dot" style="background:var(--info)"></span>Study</div>
+          <div class="rail-line"><span class="nav-dot" style="background:var(--success)"></span>Practice</div>
+          <div class="rail-line"><span class="nav-dot" style="background:var(--insight)"></span>Review</div>
+          <div class="progress"><span></span></div>
+        </aside>`;
+      }
+
+      function side() {
+        return `<aside class="side device-desktop-only">
+          <div class="side-card">${lines([60, 90, 72])}</div>
+          <div class="side-card">${lines([72, 80])}<div class="progress"><span style="width:46%"></span></div></div>
+          <div class="side-card">${lines([54, 88, 64])}</div>
+        </aside>`;
+      }
+
+      function shell(content, opts = {}) {
+        const shellClass = device === "mobile" ? "mobile-shell" : device === "tablet" ? "tablet-shell" : "desktop-shell";
+        const mobileTop = device === "mobile" ? `<div class="mobilebar"><div class="hline w55"></div><div class="progress"><span style="width:62%"></span></div></div>` : "";
+        const mobileBottom = device === "mobile" ? `<div class="bottomnav"><span class="pill">Home</span><span class="pill">Study</span><span class="pill">Test</span><span class="pill">More</span></div>` : "";
+        return `<div class="mock ${shellClass}">${mobileTop}${opts.rail === false ? "" : rail()}<section class="mock-main">${content}</section>${opts.side === false || device !== "desktop" ? "" : side()}${mobileBottom}</div>`;
+      }
+
+      function renderMarketing(name) {
+        return shell(`
+          <div class="hero-band">
+            <div><div class="hline w70"></div>${lines([96, 82, 64])}<div class="cta-row"><span class="pill primary">Start Free</span><span class="pill">View Plans</span></div></div>
+            <div class="mini-chart"></div>
+          </div>
+          <div class="card-grid">${card("Pathway")}${card("Trust", "var(--success)")}${card("Clinical", "var(--info)")}</div>
+          <div class="summary"><div class="semantic" style="--tone:var(--success)"></div><div class="semantic" style="--tone:var(--info)"></div><div class="semantic" style="--tone:var(--insight)"></div></div>
+        `, { rail: false, side: false });
+      }
+
+      function renderHub() {
+        return shell(`
+          <div class="hero-band"><div><div class="hline w55"></div>${lines([88, 76])}</div><div class="mini-chart"></div></div>
+          <div class="stepper"><span class="step done">Readiness</span><span class="step active">Study</span><span class="step">Reinforce</span><span class="step">Mastered</span></div>
+          <div class="card-grid">${card("", "var(--info)")}${card("", "var(--success)")}${card("", "var(--warning)")}${card("", "var(--insight)")}${card("", "var(--teaching)")}${card("", "var(--danger)")}</div>
+        `);
+      }
+
+      function renderLesson() {
+        const cardCount = device === "mobile" ? 2 : 4;
+        const semanticCards = Object.entries(semantic).slice(0, cardCount).map(([k, [tone, icon]]) =>
+          `<div class="semantic" style="--tone:${tone}"><span class="badge">${icon}</span><div class="hline w55" style="margin-top:12px"></div>${lines([82, 72])}</div>`
+        ).join("");
+        return shell(`
+          <div class="hero-band"><div><div class="hline w70"></div>${lines([88, 68])}</div><div><div class="progress"><span style="width:72%"></span></div>${lines([70, 52])}</div></div>
+          <div class="stepper"><span class="step done">Readiness</span><span class="step active">Study</span><span class="step">Reinforce</span><span class="step">Mastered</span></div>
+          <div class="semantic-row">${semanticCards}</div>
+          <div class="summary">
+            <div class="semantic" style="--tone:var(--info)"></div><div class="semantic" style="--tone:var(--danger)"></div><div class="semantic" style="--tone:var(--success)"></div>
+            <div class="semantic" style="--tone:var(--insight)"></div><div class="semantic" style="--tone:var(--warning)"></div><div class="semantic" style="--tone:var(--danger)"></div>
+          </div>
+        `);
+      }
+
+      function renderDashboard() {
+        return shell(`
+          <div class="hero-band"><div><div class="hline w55"></div>${lines([82, 72])}</div><div class="mini-chart"></div></div>
+          <div class="card-grid">${card("", "var(--success)")}${card("", "var(--warning)")}${card("", "var(--info)")}</div>
+          <div class="semantic-row"><div class="semantic" style="--tone:var(--success)">${lines([50,90,70])}</div><div class="semantic" style="--tone:var(--danger)">${lines([62,84,70])}</div></div>
+        `);
+      }
+
+      function renderStudy() {
+        return shell(`
+          <div class="hero-band"><div><div class="hline w55"></div>${lines([82, 58])}<div class="progress"><span style="width:54%"></span></div></div><div class="mini-chart"></div></div>
+          <div class="card-grid">${card("", "var(--insight)")}${card("", "var(--info)")}${card("", "var(--success)")}</div>
+          <div class="answer active">${lines([82, 54])}</div><div class="answer">${lines([72])}</div><div class="answer">${lines([66])}</div>
+        `, { side: false });
+      }
+
+      function renderExam() {
+        return shell(`
+          <div class="hero-band"><div><div class="hline w70"></div>${lines([92, 74])}</div><div><div class="progress"><span style="width:34%"></span></div><span class="pill">Timer 54:12</span></div></div>
+          <div class="answer">${lines([92])}</div><div class="answer active">${lines([84])}</div><div class="answer">${lines([76])}</div><div class="answer">${lines([88])}</div>
+          <div class="semantic" style="--tone:var(--info); margin-top:12px">${lines([45, 88, 72])}</div>
+        `);
+      }
+
+      function renderAnalytics() {
+        return shell(`
+          <div class="hero-band"><div><div class="hline w55"></div>${lines([72,62])}</div><div class="mini-chart"></div></div>
+          <div class="card-grid">${card("", "var(--success)")}${card("", "var(--warning)")}${card("", "var(--danger)")}</div>
+          <div class="table"><div class="row"></div><div class="row"></div><div class="row"></div></div>
+        `);
+      }
+
+      function renderBlog() {
+        return shell(`
+          <div class="article">
+            <div class="rail device-desktop-only"><div class="rail-line active"><span class="nav-dot"></span>Key points</div><div class="rail-line"><span class="nav-dot" style="background:var(--warning)"></span>Labs</div><div class="rail-line"><span class="nav-dot" style="background:var(--insight)"></span>Exam traps</div></div>
+            <div><div class="hero-band"><div><div class="hline w70"></div>${lines([96, 78, 66])}</div><div class="mini-chart"></div></div><div class="semantic-row"><div class="semantic" style="--tone:var(--info)">${lines([72,90])}</div><div class="semantic" style="--tone:var(--insight)">${lines([62,82])}</div></div><div class="card-grid">${card()}${card()}${card()}</div></div>
+          </div>
+        `, { rail: false, side: false });
+      }
+
+      function renderAdmin() {
+        return shell(`
+          <div class="hero-band"><div><div class="hline w55"></div>${lines([82, 72])}</div><div class="mini-chart"></div></div>
+          <div class="card-grid">${card("", "var(--danger)")}${card("", "var(--warning)")}${card("", "var(--success)")}</div>
+          <div class="table"><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div></div>
+        `);
+      }
+
+      function renderTool() {
+        return shell(`
+          <div class="hero-band"><div><div class="hline w55"></div>${lines([76, 62])}</div><div class="mini-chart"></div></div>
+          <div class="semantic-row"><div class="semantic" style="--tone:var(--info)">${lines([50,88,72,64])}</div><div class="semantic" style="--tone:var(--success)">${lines([42,76,92])}</div></div>
+          <div class="summary"><div class="semantic" style="--tone:var(--warning)"></div><div class="semantic" style="--tone:var(--info)"></div><div class="semantic" style="--tone:var(--insight)"></div></div>
+        `, { side: false });
+      }
+
+      function renderSupport() {
+        return shell(`
+          <div class="hero-band"><div><div class="hline w55"></div>${lines([86,70])}</div><div class="mini-chart"></div></div>
+          <div class="card-grid">${card("", "var(--info)")}${card("", "var(--success)")}${card("", "var(--warning)")}</div>
+          <div class="semantic" style="--tone:var(--info); margin-top:12px">${lines([50,92,80,64])}</div>
+        `, { rail: false, side: false });
+      }
+
+      function renderMobileNav() {
+        const old = device;
+        device = "mobile";
+        const html = shell(`
+          <div class="hero-band"><div class="hline w55"></div>${lines([82, 72])}</div>
+          <div class="card-grid">${card("", "var(--info)")}${card("", "var(--success)")}${card("", "var(--insight)")}</div>
+        `, { rail: false, side: false });
+        device = old;
+        return html;
+      }
+
+      function renderFrames() {
+        document.querySelectorAll("[data-theme-choice]").forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.themeChoice === document.body.dataset.theme));
+        });
+        document.querySelectorAll("[data-device-choice]").forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.deviceChoice === device));
+        });
+
+        const frames = document.getElementById("frames");
+        frames.innerHTML = surfaces.map(([name, type, desc], index) => {
+          const viewportClass = device;
+          const content = (types[type] || renderMarketing)(name);
+          return `<article class="frame" id="frame-${index + 1}" data-device="${device}">
+            <div class="frame-header">
+              <div class="frame-title"><strong>${String(index + 1).padStart(2, "0")} · ${name}</strong><span>${type}</span></div>
+              <div class="frame-meta">${device}</div>
+            </div>
+            <div class="viewport ${viewportClass}">${content}</div>
+            <div class="note" style="padding:0 18px 18px">${desc}</div>
+          </article>`;
+        }).join("");
+      }
+
+      document.querySelectorAll("[data-theme-choice]").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.body.dataset.theme = button.dataset.themeChoice;
+          renderFrames();
+        });
+      });
+
+      document.querySelectorAll("[data-device-choice]").forEach((button) => {
+        button.addEventListener("click", () => {
+          device = button.dataset.deviceChoice;
+          renderFrames();
+        });
+      });
+
+      renderFrames();
+    </script>
+  </body>
+</html>

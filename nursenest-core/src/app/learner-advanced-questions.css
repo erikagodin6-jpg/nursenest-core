@@ -1,0 +1,1201 @@
+/**
+ * NurseNest Advanced Question Type System
+ * Theme-aware clinical reasoning layouts for:
+ *   Matrix · Bowtie · Prioritization · Timeline Deterioration
+ *   ABG · Hotspot · Audio · Documentation
+ *
+ * Presentation-only — does not touch routing, scoring, or adaptive logic.
+ * All colours via semantic design tokens.
+ */
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   SHARED PRIMITIVES — used across all advanced question types
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Question type badge — shared by all NGN/advanced types */
+.nn-aqt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  margin-bottom: 0.1rem;
+}
+
+.nn-aqt-badge__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.55rem;
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
+  color: var(--semantic-brand);
+  flex-shrink: 0;
+}
+
+.nn-aqt-badge__label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--semantic-brand);
+}
+
+/* Patient vignette card */
+.nn-aqt-patient-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  border-radius: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 20%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 5%, var(--semantic-surface));
+  padding: 0.85rem 1rem;
+}
+
+.nn-aqt-patient-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
+  color: var(--semantic-brand);
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+
+.nn-aqt-patient-card__label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--semantic-brand);
+  margin-bottom: 0.3rem;
+}
+
+.nn-aqt-patient-card__text {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--semantic-text-secondary);
+}
+
+/* Section column header */
+.nn-aqt-col-header {
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--semantic-brand);
+  margin-bottom: 0.1rem;
+}
+
+.nn-aqt-col-subheader {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--semantic-text-muted);
+  letter-spacing: 0.06em;
+}
+
+/* Result/feedback banner */
+.nn-aqt-feedback-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  border-radius: 0.85rem;
+  border: 1px solid;
+  padding: 0.75rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+
+.nn-aqt-feedback-banner--success {
+  border-color: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-success) 72%, var(--semantic-text-primary));
+}
+
+.nn-aqt-feedback-banner--error {
+  border-color: color-mix(in srgb, var(--semantic-danger) 38%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-danger) 72%, var(--semantic-text-primary));
+}
+
+.nn-aqt-feedback-banner--partial {
+  border-color: color-mix(in srgb, var(--semantic-warning) 38%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-warning) 72%, var(--semantic-text-primary));
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   MATRIX QUESTION — Appropriate / Contraindicated / Requires Provider Order
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.nn-matrix-workspace {
+  border-radius: 0.95rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-brand) 6%);
+  background: var(--semantic-surface);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 48%, transparent),
+    0 4px 16px -8px color-mix(in srgb, var(--semantic-text-primary) 10%, transparent);
+}
+
+/* Desktop table */
+.nn-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.nn-matrix-table th {
+  padding: 0.75rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface));
+  border-bottom: 1.5px solid color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+}
+
+.nn-matrix-table th:first-child {
+  text-align: left;
+  color: var(--semantic-text-muted);
+  font-size: 0.67rem;
+}
+
+.nn-matrix-table th.nn-matrix-col--appropriate {
+  color: var(--semantic-success);
+}
+
+.nn-matrix-table th.nn-matrix-col--contraindicated {
+  color: var(--semantic-danger);
+}
+
+.nn-matrix-table th.nn-matrix-col--provider-order {
+  color: var(--semantic-info, var(--semantic-brand));
+}
+
+.nn-matrix-table th.nn-matrix-col--custom {
+  color: var(--semantic-brand);
+}
+
+.nn-matrix-table td {
+  padding: 0.8rem 0.65rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 55%, transparent);
+  vertical-align: middle;
+}
+
+.nn-matrix-table tr:last-child td {
+  border-bottom: none;
+}
+
+.nn-matrix-table tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 22%, var(--semantic-surface));
+}
+
+.nn-matrix-table td:first-child {
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: var(--semantic-text-primary);
+  text-align: left;
+}
+
+.nn-matrix-table td:not(:first-child) {
+  text-align: center;
+}
+
+/* Radio button custom style */
+.nn-matrix-radio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-text-muted));
+  background: var(--semantic-surface);
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease;
+  flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.nn-matrix-radio:checked,
+.nn-matrix-radio[aria-checked="true"] {
+  border-color: var(--semantic-brand);
+  background: var(--semantic-brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--semantic-brand) 22%, transparent);
+}
+
+.nn-matrix-radio--appropriate:checked,
+.nn-matrix-radio--appropriate[aria-checked="true"] {
+  border-color: var(--semantic-success);
+  background: var(--semantic-success);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--semantic-success) 20%, transparent);
+}
+
+.nn-matrix-radio--contraindicated:checked,
+.nn-matrix-radio--contraindicated[aria-checked="true"] {
+  border-color: var(--semantic-danger);
+  background: var(--semantic-danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--semantic-danger) 20%, transparent);
+}
+
+.nn-matrix-radio--provider-order:checked,
+.nn-matrix-radio--provider-order[aria-checked="true"] {
+  border-color: var(--semantic-info, var(--semantic-brand));
+  background: var(--semantic-info, var(--semantic-brand));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 20%, transparent);
+}
+
+.nn-matrix-radio:focus-visible {
+  outline: 2px solid var(--semantic-brand);
+  outline-offset: 2px;
+}
+
+/* Mobile: intervention cards */
+.nn-matrix-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nn-matrix-intervention-card {
+  border-radius: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-brand) 6%);
+  background: var(--semantic-surface);
+  padding: 0.9rem 1rem;
+  box-shadow: 0 2px 8px -4px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent);
+}
+
+.nn-matrix-intervention-card__name {
+  display: block;
+  margin-bottom: 0.65rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-matrix-intervention-card__options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.nn-matrix-option-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  border-radius: 0.6rem;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-border-soft) 75%, transparent);
+  background: color-mix(in srgb, var(--semantic-panel-muted) 20%, var(--semantic-surface));
+  padding: 0.55rem 0.8rem;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-matrix-option-row[data-selected="true"],
+.nn-matrix-option-row--selected {
+  border-color: var(--semantic-brand);
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-matrix-option-row[data-variant="appropriate"][data-selected="true"] {
+  border-color: var(--semantic-success);
+  background: color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-success) 60%, var(--semantic-text-primary));
+}
+
+.nn-matrix-option-row[data-variant="contraindicated"][data-selected="true"] {
+  border-color: var(--semantic-danger);
+  background: color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-danger) 60%, var(--semantic-text-primary));
+}
+
+.nn-matrix-option-row[data-variant="provider-order"][data-selected="true"] {
+  border-color: var(--semantic-info, var(--semantic-brand));
+  background: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 8%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 65%, var(--semantic-text-primary));
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   BOWTIE QUESTION — Condition → Key Findings → Interventions
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Desktop three-column layout */
+.nn-bowtie-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0;
+}
+
+.nn-bowtie-column {
+  border-radius: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-brand) 6%);
+  background: color-mix(in srgb, var(--semantic-surface) 97%, var(--semantic-panel-muted));
+  overflow: hidden;
+  box-shadow: 0 2px 10px -5px color-mix(in srgb, var(--semantic-text-primary) 10%, transparent);
+}
+
+.nn-bowtie-column__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.75rem 0.9rem 0.55rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 60%, transparent);
+  background: color-mix(in srgb, var(--semantic-panel-muted) 35%, var(--semantic-surface));
+}
+
+.nn-bowtie-column__options {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0.5rem 0;
+}
+
+.nn-bowtie-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  padding: 0.6rem 0.9rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 45%, transparent);
+  font-size: 0.875rem;
+  color: var(--semantic-text-primary);
+  transition: background 140ms ease;
+  width: 100%;
+}
+
+.nn-bowtie-option:last-child {
+  border-bottom: none;
+}
+
+.nn-bowtie-option:hover {
+  background: color-mix(in srgb, var(--semantic-brand) 5%, var(--semantic-surface));
+}
+
+.nn-bowtie-option[aria-pressed="true"],
+.nn-bowtie-option--selected {
+  background: color-mix(in srgb, var(--semantic-brand) 9%, var(--semantic-surface));
+  font-weight: 650;
+  color: var(--semantic-text-primary);
+}
+
+/* Radio/checkbox indicator */
+.nn-bowtie-option__control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  border: 2px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-text-muted));
+  border-radius: 999px;
+  background: var(--semantic-surface);
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.nn-bowtie-option--radio .nn-bowtie-option__control {
+  border-radius: 999px;
+}
+
+.nn-bowtie-option--checkbox .nn-bowtie-option__control {
+  border-radius: 0.3rem;
+}
+
+.nn-bowtie-option[aria-pressed="true"] .nn-bowtie-option__control,
+.nn-bowtie-option--selected .nn-bowtie-option__control {
+  border-color: var(--semantic-brand);
+  background: var(--semantic-brand);
+}
+
+.nn-bowtie-option__control svg {
+  width: 0.7rem;
+  height: 0.7rem;
+  color: white;
+}
+
+/* Arrow connector between columns */
+.nn-bowtie-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.65rem;
+  align-self: center;
+  margin-top: 2.5rem;
+}
+
+.nn-bowtie-arrow svg {
+  color: var(--semantic-brand);
+  opacity: 0.65;
+}
+
+/* Center diagnosis bubble */
+.nn-bowtie-diagnosis-bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 1.5rem;
+  border-radius: 1rem;
+  border: 1.5px dashed color-mix(in srgb, var(--semantic-brand) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface));
+  padding: 1rem 1.25rem;
+  text-align: center;
+  grid-column: 1 / -1;
+  min-height: 5rem;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.nn-bowtie-diagnosis-bubble--active {
+  border-style: solid;
+  border-color: var(--semantic-brand);
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+}
+
+.nn-bowtie-diagnosis-bubble__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-brand) 15%, var(--semantic-surface));
+  color: var(--semantic-brand);
+}
+
+.nn-bowtie-diagnosis-bubble__label {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--semantic-brand);
+  letter-spacing: 0.01em;
+}
+
+.nn-bowtie-diagnosis-bubble__sub {
+  font-size: 0.78rem;
+  color: var(--semantic-text-secondary);
+  line-height: 1.45;
+  max-width: 24rem;
+}
+
+/* Mobile: vertical step flow */
+.nn-bowtie-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.nn-bowtie-step {
+  border-radius: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-brand) 6%);
+  background: var(--semantic-surface);
+  overflow: hidden;
+  box-shadow: 0 2px 8px -4px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent);
+}
+
+.nn-bowtie-step__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 0.9rem;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 32%, var(--semantic-surface));
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 55%, transparent);
+}
+
+.nn-bowtie-step__step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: var(--semantic-brand);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* Mobile step down-arrow */
+.nn-bowtie-step-arrow {
+  display: flex;
+  justify-content: center;
+  padding: 0.1rem;
+  color: var(--semantic-brand);
+  opacity: 0.6;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   PRIORITIZATION QUESTION — Drag-to-rank / Tap-to-rank
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.nn-priority-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nn-priority-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  border-radius: 0.85rem;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-brand) 6%);
+  background: var(--semantic-surface);
+  padding: 0.65rem 0.9rem;
+  cursor: grab;
+  box-shadow: 0 1px 4px -2px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent);
+  transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+  touch-action: none;
+}
+
+.nn-priority-item:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 38%, var(--semantic-border-soft));
+  box-shadow: 0 4px 12px -6px color-mix(in srgb, var(--semantic-brand) 22%, transparent);
+}
+
+.nn-priority-item--dragging {
+  cursor: grabbing;
+  opacity: 0.92;
+  transform: scale(1.01);
+  box-shadow: 0 8px 24px -10px color-mix(in srgb, var(--semantic-brand) 30%, transparent);
+  border-color: var(--semantic-brand);
+  z-index: 10;
+}
+
+.nn-priority-item--correct {
+  border-color: color-mix(in srgb, var(--semantic-success) 42%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 7%, var(--semantic-surface));
+}
+
+.nn-priority-item--incorrect {
+  border-color: color-mix(in srgb, var(--semantic-danger) 38%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 6%, var(--semantic-surface));
+}
+
+.nn-priority-item__rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-text-muted));
+  background: var(--semantic-surface);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--semantic-text-secondary);
+  flex-shrink: 0;
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+.nn-priority-item--placed .nn-priority-item__rank {
+  border-color: var(--semantic-brand);
+  background: var(--semantic-brand);
+  color: white;
+}
+
+.nn-priority-item__handle {
+  color: var(--semantic-text-muted);
+  flex-shrink: 0;
+  cursor: grab;
+}
+
+.nn-priority-item__text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+  line-height: 1.42;
+}
+
+/* Mobile tap controls */
+.nn-priority-item__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.nn-priority-move-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, transparent);
+  background: color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface));
+  color: var(--semantic-text-secondary);
+  transition: border-color 120ms ease, background 120ms ease;
+}
+
+.nn-priority-move-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.nn-priority-move-btn:not(:disabled):hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  color: var(--semantic-brand);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   TIMELINE DETERIORATION — Vitals/Labs over time points
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.nn-timeline-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Horizontal time axis */
+.nn-timeline-axis {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.nn-timeline-axis::-webkit-scrollbar {
+  display: none;
+}
+
+.nn-timeline-point {
+  flex: 0 0 auto;
+  min-width: 9rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.nn-timeline-point__time-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--semantic-border-soft) 65%, transparent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--semantic-text-muted);
+  letter-spacing: 0.06em;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 35%, var(--semantic-surface));
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.nn-timeline-point--active .nn-timeline-point__time-header {
+  color: var(--semantic-brand);
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  border-bottom-color: var(--semantic-brand);
+}
+
+.nn-timeline-point--alert .nn-timeline-point__time-header {
+  color: var(--semantic-danger);
+  background: color-mix(in srgb, var(--semantic-danger) 7%, var(--semantic-surface));
+  border-bottom-color: var(--semantic-danger);
+}
+
+.nn-timeline-point__data {
+  padding: 0.7rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-right: 1px solid color-mix(in srgb, var(--semantic-border-soft) 55%, transparent);
+}
+
+.nn-timeline-vital {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+
+.nn-timeline-vital__label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-timeline-vital__value {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-timeline-vital__value--alert {
+  color: var(--semantic-danger);
+}
+
+.nn-timeline-vital__value--warning {
+  color: var(--semantic-warning);
+}
+
+.nn-timeline-vital__value--normal {
+  color: var(--semantic-success);
+}
+
+/* Mobile: vertical timeline */
+.nn-timeline-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.nn-timeline-vertical::before {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  top: 1.5rem;
+  bottom: 1.5rem;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-brand) 30%, transparent),
+    color-mix(in srgb, var(--semantic-danger) 30%, transparent)
+  );
+  z-index: 0;
+}
+
+.nn-timeline-v-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.75rem 0;
+  position: relative;
+  z-index: 1;
+}
+
+.nn-timeline-v-point__dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: 2px solid var(--semantic-brand);
+  background: var(--semantic-surface);
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--semantic-brand);
+  flex-shrink: 0;
+}
+
+.nn-timeline-v-point__dot--alert {
+  border-color: var(--semantic-danger);
+  background: color-mix(in srgb, var(--semantic-danger) 10%, var(--semantic-surface));
+  color: var(--semantic-danger);
+}
+
+.nn-timeline-v-point__content {
+  flex: 1;
+  min-width: 0;
+  border-radius: 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+  background: var(--semantic-surface);
+  padding: 0.65rem 0.85rem;
+}
+
+.nn-timeline-v-point__content--alert {
+  border-color: color-mix(in srgb, var(--semantic-danger) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 6%, var(--semantic-surface));
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   ABG INTERPRETATION — pH / PaCO2 / PaO2 / HCO3
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.nn-abg-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nn-abg-values-panel {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  border-radius: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-brand) 6%);
+  background: var(--semantic-surface);
+  padding: 1rem;
+  box-shadow: 0 2px 10px -5px color-mix(in srgb, var(--semantic-text-primary) 10%, transparent);
+}
+
+@media (max-width: 639px) {
+  .nn-abg-values-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.nn-abg-value-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 65%, transparent);
+  background: color-mix(in srgb, var(--semantic-panel-muted) 28%, var(--semantic-surface));
+  padding: 0.75rem 0.85rem;
+}
+
+.nn-abg-value-card__param {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-abg-value-card__value {
+  display: block;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--semantic-text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.nn-abg-value-card__range {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--semantic-text-muted);
+}
+
+.nn-abg-value-card--acidosis .nn-abg-value-card__value {
+  color: var(--semantic-danger);
+}
+
+.nn-abg-value-card--alkalosis .nn-abg-value-card__value {
+  color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 80%, var(--semantic-text-primary));
+}
+
+.nn-abg-value-card--normal .nn-abg-value-card__value {
+  color: var(--semantic-success);
+}
+
+/* ABG interpretation steps */
+.nn-abg-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+@media (max-width: 639px) {
+  .nn-abg-steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nn-abg-step-card {
+  border-radius: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 68%, var(--semantic-brand) 6%);
+  background: var(--semantic-surface);
+  padding: 0.85rem;
+}
+
+.nn-abg-step-card__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: var(--semantic-brand);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 800;
+  margin-bottom: 0.45rem;
+}
+
+.nn-abg-step-card__title {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--semantic-text-primary);
+  margin-bottom: 0.3rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   HOTSPOT QUESTION — Interactive image regions
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.nn-hotspot-workspace {
+  position: relative;
+  border-radius: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 68%, var(--semantic-brand) 6%);
+  background: color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--semantic-surface));
+  overflow: hidden;
+  user-select: none;
+}
+
+.nn-hotspot-workspace img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  touch-action: pinch-zoom;
+}
+
+.nn-hotspot-region {
+  position: absolute;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  transition: border-color 140ms ease, background 140ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nn-hotspot-region:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 55%, transparent);
+  background: color-mix(in srgb, var(--semantic-brand) 18%, transparent);
+}
+
+.nn-hotspot-region[aria-pressed="true"],
+.nn-hotspot-region--selected {
+  border-color: var(--semantic-brand);
+  background: color-mix(in srgb, var(--semantic-brand) 28%, transparent);
+}
+
+.nn-hotspot-region--correct {
+  border-color: var(--semantic-success);
+  background: color-mix(in srgb, var(--semantic-success) 22%, transparent);
+}
+
+.nn-hotspot-region--incorrect {
+  border-color: var(--semantic-danger);
+  background: color-mix(in srgb, var(--semantic-danger) 22%, transparent);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   AUDIO INTERPRETATION — Heart/lung sounds
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.nn-audio-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.nn-audio-player {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  border-radius: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 68%, var(--semantic-brand) 8%);
+  background: color-mix(in srgb, var(--semantic-brand) 5%, var(--semantic-surface));
+  padding: 0.85rem 1rem;
+}
+
+.nn-audio-play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-brand) 40%, var(--semantic-border-soft));
+  background: var(--semantic-brand);
+  color: white;
+  flex-shrink: 0;
+  transition: transform 140ms ease, opacity 140ms ease;
+}
+
+.nn-audio-play-btn:hover {
+  transform: scale(1.06);
+  opacity: 0.92;
+}
+
+.nn-audio-waveform {
+  flex: 1;
+  height: 3rem;
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface));
+  overflow: hidden;
+  position: relative;
+}
+
+.nn-audio-waveform__bar {
+  display: inline-block;
+  width: 3px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--semantic-brand) 55%, var(--semantic-border-soft));
+  vertical-align: middle;
+  transition: height 120ms ease;
+}
+
+.nn-audio-waveform__progress {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: color-mix(in srgb, var(--semantic-brand) 12%, transparent);
+  transition: width 100ms linear;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   DOCUMENTATION & HANDOFF — SBAR / Nursing notes
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.nn-documentation-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.85rem;
+}
+
+@media (max-width: 767px) {
+  .nn-documentation-workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nn-documentation-section {
+  border-radius: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 68%, var(--semantic-brand) 6%);
+  background: var(--semantic-surface);
+  overflow: hidden;
+}
+
+.nn-documentation-section__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 0.9rem;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 35%, var(--semantic-surface));
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 60%, transparent);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--semantic-brand);
+}
+
+.nn-documentation-section__body {
+  padding: 0.85rem 0.9rem;
+}
+
+.nn-documentation-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.75rem;
+}
+
+.nn-documentation-field:last-child {
+  margin-bottom: 0;
+}
+
+.nn-documentation-field__label {
+  font-size: 0.67rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-documentation-field__value {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--semantic-text-primary);
+}
+
+.nn-documentation-field__error {
+  border-left: 3px solid var(--semantic-danger);
+  padding-left: 0.65rem;
+  border-radius: 0 0.4rem 0.4rem 0;
+  background: color-mix(in srgb, var(--semantic-danger) 5%, var(--semantic-surface));
+}
+
+.nn-documentation-correction {
+  display: inline-block;
+  text-decoration: line-through;
+  color: var(--semantic-danger);
+  font-size: 0.85rem;
+}
+
+.nn-documentation-correction-hint {
+  display: inline-block;
+  font-weight: 700;
+  color: var(--semantic-success);
+  font-size: 0.85rem;
+  margin-left: 0.35rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   THEME OVERRIDES — semantic-only, covers Ocean / Blossom / Midnight / Aurora / Sunset
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+html[data-theme="midnight"] .nn-aqt-badge__icon,
+html[data-theme="midnight-indigo"] .nn-aqt-badge__icon {
+  background: color-mix(in srgb, var(--semantic-info, #38BDF8) 14%, var(--semantic-surface));
+  color: var(--semantic-info, #60A5FA);
+}
+
+html[data-theme="midnight"] .nn-aqt-badge__label,
+html[data-theme="midnight-indigo"] .nn-aqt-badge__label {
+  color: var(--semantic-info, #60A5FA);
+}
+
+html[data-theme="midnight"] .nn-bowtie-diagnosis-bubble--active,
+html[data-theme="midnight-indigo"] .nn-bowtie-diagnosis-bubble--active {
+  border-color: var(--semantic-info, #60A5FA);
+  background: color-mix(in srgb, var(--semantic-info, #38BDF8) 10%, var(--semantic-surface));
+}
+
+html[data-theme="sunset"] .nn-abg-value-card--acidosis .nn-abg-value-card__value {
+  color: var(--semantic-warning);
+}
+
+/* Mobile touch target enforcement */
+@media (max-width: 639px) {
+  .nn-matrix-option-row,
+  .nn-bowtie-option,
+  .nn-priority-item,
+  .nn-audio-play-btn,
+  .nn-priority-move-btn {
+    min-height: 44px;
+  }
+}
+
+/* Accessibility: focus rings */
+.nn-matrix-radio:focus-visible,
+.nn-bowtie-option:focus-visible,
+.nn-priority-item:focus-visible,
+.nn-hotspot-region:focus-visible {
+  outline: 2px solid var(--semantic-brand);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-priority-item,
+  .nn-bowtie-option,
+  .nn-matrix-option-row,
+  .nn-matrix-radio,
+  .nn-audio-play-btn {
+    transition: none !important;
+    transform: none !important;
+  }
+}

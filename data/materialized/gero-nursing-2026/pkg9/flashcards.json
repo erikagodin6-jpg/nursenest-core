@@ -1,0 +1,28 @@
+[
+  {
+    "id": "GERO-FC-P9-001",
+    "packageId": "pkg9-functional",
+    "front": "What is the Mini Nutritional Assessment (MNA) and what score indicates malnutrition?",
+    "back": "MNA: Validated tool for nutritional risk screening and assessment in older adults ≥65\n\nFull MNA (30 items): anthropometric (BMI, calf circumference), dietetic (meals/day, fluid intake, feeding independence), global assessment (mobility, skin, cognitive), patient assessment (body image, weight loss)\n\nScoring:\n• 24–30 = Normal nutritional status\n• 17–23.5 = At risk of malnutrition → intervention needed\n• <17 = MALNUTRITION → comprehensive intervention required\n\nShort form (MNA-SF): 6 items — 0–14; <8 = malnutrition",
+    "hint": "MNA <17 = malnutrition. 17–23.5 = at risk. 24–30 = normal.",
+    "explanation": "Malnutrition in older adults is highly prevalent (up to 50% in LTC) and underrecognized. Consequences: impaired wound healing, increased infection risk, accelerated functional decline, pressure injuries, cognitive decline, and increased mortality. Annual MNA screening recommended for all older adults in LTC; at each hospitalization.",
+    "clinicalPearl": "Weight loss threshold: >5% of body weight in 1 month, or >10% in 6 months = significant malnutrition marker requiring immediate nutritional intervention. Always weigh patients regularly — weight is the most sensitive nutritional indicator.",
+    "tier": "RPN",
+    "topicKey": "nutrition-screening",
+    "categorySlug": "functional-assessment",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P9-002",
+    "packageId": "pkg9-functional",
+    "front": "What is the Barthel Index and what does it measure?",
+    "back": "Barthel Index: Measures functional independence in basic ADLs across 10 items\n\n10 Items:\n1. Feeding\n2. Bathing\n3. Grooming\n4. Dressing\n5. Bowel control\n6. Bladder control\n7. Toilet use\n8. Chair/bed transfer\n9. Mobility (ambulation)\n10. Stairs\n\nScoring: Each item 0–10 or 0–15 (depending on version) — total 0–100\n• 100 = fully independent\n• <40 = severe functional dependence\n• Changes of ≥10 points are clinically significant",
+    "hint": "Barthel Index: 10 ADL items, 0–100 score. 100 = fully independent. <40 = severe dependence.",
+    "explanation": "The Barthel Index is widely used in rehabilitation settings to track functional recovery over time. It is more detailed than the Katz Index and is particularly useful for tracking rehabilitation progress post-stroke, hip fracture, or other functional impairment. A 10-point change = clinically meaningful functional change.",
+    "clinicalPearl": "Barthel Index as a discharge planning tool: a score of <60 at discharge is associated with high rates of readmission and institutionalization. Scores should drive discharge destination (home vs. rehabilitation vs. LTC) and intensity of community support.",
+    "tier": "RN",
+    "topicKey": "functional-independence",
+    "categorySlug": "functional-assessment",
+    "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"]
+  }
+]

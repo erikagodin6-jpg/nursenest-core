@@ -1,0 +1,19 @@
+{
+  "overview": "La química básica sustenta muchos conceptos enfermeros esenciales: equilibrio ácido-base, osmolaridad, solubilidad de medicamentos y reacciones metabólicas. Comprender estos principios facilita la interpretación de los gases arteriales, los resultados de laboratorio y los mecanismos de acción de los fármacos.",
+  "key_concepts": [
+    "pH sanguíneo normal: 7,35–7,45 (ligeramente alcalino); < 7,35 = acidosis, > 7,45 = alcalosis",
+    "Tampones: sistemas que resisten los cambios de pH (bicarbonato/CO₂ es el principal tampón sanguíneo)",
+    "Enlace iónico vs covalente: los electrolitos forman enlaces iónicos y se disocian en el agua para conducir la electricidad",
+    "Osmolaridad: concentración de solutos en una solución — determina los movimientos de agua por ósmosis",
+    "Reacciones enzimáticas: las enzimas (proteínas) aceleran las reacciones químicas sin consumirse — la temperatura y el pH afectan su actividad"
+  ],
+  "nursing_responsibilities": "La enfermera interpreta los gases arteriales sanguíneos (pH, PaCO₂, HCO₃⁻) para identificar los desequilibrios ácido-base y su compensación. Vigila los resultados de laboratorio que indiquen desequilibrio electrolítico o metabólico. Comprende que la solubilidad de un fármaco afecta a su vía de administración y biodisponibilidad.",
+  "clinical_pearls": "La regla ROME (Respiratory Opposite, Metabolic Equal): en acidosis respiratoria, el pH y el CO₂ van en direcciones opuestas; en acidosis metabólica, el pH y el bicarbonato van en la misma dirección. La compensación es parcial — el pH nunca vuelve completamente a la normalidad solo con compensación. Un pH > 7,45 con CO₂ bajo = alcalosis respiratoria (hiperventilación).",
+  "patient_education": "Explique los resultados de forma simple: 'Su sangre es un poco más ácida de lo normal. Su cuerpo intenta corregirlo respirando más rápido para eliminar CO₂.' Relacione los resultados de laboratorio con las sensaciones del paciente (disnea compensatoria) para mejorar la comprensión.",
+  "key_takeaways": [
+    "El pH sanguíneo normal (7,35–7,45) está estrechamente regulado — variaciones mínimas tienen consecuencias clínicas",
+    "El sistema bicarbonato/CO₂ es el principal tampón sanguíneo: compensado por los riñones (HCO₃⁻) y los pulmones (CO₂)",
+    "La osmolaridad determina los movimientos de agua entre compartimentos — comprensión esencial para elegir las soluciones IV",
+    "Los gases arteriales sanguíneos son una herramienta diagnóstica clave que la enfermera debe saber interpretar"
+  ]
+}

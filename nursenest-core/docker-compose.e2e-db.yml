@@ -1,0 +1,17 @@
+# Ephemeral Postgres for local paid E2E (no DigitalOcean credentials required on the machine).
+# Used by `npm run test:e2e:paid-local-green` — see scripts/e2e-paid-local-green.mts.
+name: nursenest_e2e_pg
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: nursenest_e2e
+      POSTGRES_PASSWORD: nursenest_e2e_local_dev
+      POSTGRES_DB: nursenest_e2e
+    ports:
+      - "55432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nursenest_e2e -d nursenest_e2e"]
+      interval: 2s
+      timeout: 5s
+      retries: 30

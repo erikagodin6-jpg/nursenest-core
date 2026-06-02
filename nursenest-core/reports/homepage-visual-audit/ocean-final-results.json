@@ -1,0 +1,38 @@
+[
+  {
+    "name": "ocean-final-desktop-1440x900",
+    "cardBgImage": "linear-gradient(color(srgb 0.82 0.906824 1) 0%, color(srgb 0.9 0.948235 1) 18%, rgb(255, 255, 255) 18%, rgb(255, 255, 255) 100%)",
+    "cardBorder": "color(srgb 0.476235 0.733412 1)",
+    "heroBg": "radial-gradient(circle at 92% 20%, color(srgb 0 0.482353 1 / 0.12), rgba(0, 0, 0, 0) 288px), radial-gradient(circle at 10% 24%, color(srgb 0.0235294 0.713726 0.831373 / 0.1), rgba(0, 0, 0, 0) 352px), linear-gradient(rgb(248, 252, 255) 0%, rgb(237, 248, 255) 100%)",
+    "primary": "#1da2d8",
+    "info": "#06b6d4",
+    "hasBeyond": true
+  },
+  {
+    "name": "ocean-final-pathways-1440x900",
+    "cardBgImage": "linear-gradient(color(srgb 0.82 0.906824 1) 0%, color(srgb 0.9 0.948235 1) 18%, rgb(255, 255, 255) 18%, rgb(255, 255, 255) 100%)",
+    "cardBorder": "color(srgb 0.476235 0.733412 1)",
+    "heroBg": "radial-gradient(circle at 92% 20%, color(srgb 0 0.482353 1 / 0.12), rgba(0, 0, 0, 0) 288px), radial-gradient(circle at 10% 24%, color(srgb 0.0235294 0.713726 0.831373 / 0.1), rgba(0, 0, 0, 0) 352px), linear-gradient(rgb(248, 252, 255) 0%, rgb(237, 248, 255) 100%)",
+    "primary": "#007bff",
+    "info": "#06b6d4",
+    "hasBeyond": true
+  },
+  {
+    "name": "ocean-final-beyond-1440x900",
+    "cardBgImage": null,
+    "cardBorder": null,
+    "heroBg": null,
+    "primary": "#1da2d8",
+    "info": "#06b6d4",
+    "hasBeyond": false
+  },
+  {
+    "name": "ocean-final-mobile-390x844",
+    "cardBgImage": "linear-gradient(color(srgb 0.82 0.906824 1) 0%, color(srgb 0.9 0.948235 1) 18%, rgb(255, 255, 255) 18%, rgb(255, 255, 255) 100%)",
+    "cardBorder": "color(srgb 0.476235 0.733412 1)",
+    "heroBg": "radial-gradient(circle at 92% 20%, color(srgb 0 0.482353 1 / 0.12), rgba(0, 0, 0, 0) 288px), radial-gradient(circle at 10% 24%, color(srgb 0.0235294 0.713726 0.831373 / 0.1), rgba(0, 0, 0, 0) 352px), linear-gradient(rgb(248, 252, 255) 0%, rgb(237, 248, 255) 100%)",
+    "primary": "#1da2d8",
+    "info": "#06b6d4",
+    "hasBeyond": true
+  }
+]

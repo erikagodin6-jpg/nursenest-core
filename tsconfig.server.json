@@ -1,0 +1,41 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["server/**/*.ts", "shared/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "client",
+    "build",
+    "dist",
+    "coverage",
+    ".next",
+    ".worktrees",
+    ".turbo",
+    ".local",
+    "data",
+    "reports",
+    "qa-reports",
+    "playwright-report",
+    "playwright-report-full-regression",
+    "test-results",
+    "preview-screenshots",
+    "rollback-snapshots",
+    "output",
+    "tmp",
+    "replit-export",
+    "backup-system",
+    "scripts",
+    "tools/i18n",
+    "server/replit_integrations",
+    "server/seeds",
+    "server/sitemap",
+    "server/seed-replit-json-imports.ts",
+    "client/src/data/translations",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/*.test.tsx",
+    "**/*.spec.tsx"
+  ]
+}

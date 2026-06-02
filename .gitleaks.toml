@@ -1,0 +1,20 @@
+# https://github.com/gitleaks/gitleaks — used by .github/workflows/repo-hygiene.yml
+title = "nursenest-core"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Committed env templates and the secrets policy doc (placeholders only — do not store real keys here)"
+paths = [
+  '''(?i)\.env\.example$''',
+  '''(?i)\.env\.[^/]*example$''',
+  '''(?i)SECRETS_AND_ENV\.md$''',
+]
+
+[[allowlists]]
+description = "Tests that intentionally contain fake secret-shaped strings"
+paths = [
+  '''\.test\.ts$''',
+  '''\.test\.tsx$''',
+]

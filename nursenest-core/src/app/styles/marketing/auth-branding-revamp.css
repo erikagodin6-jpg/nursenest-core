@@ -1,0 +1,153 @@
+/**
+ * Auth branding revamp 2026 — color depth, leaf atmosphere, readability.
+ * Presentation only: preserves auth layout, flow, and DOM structure.
+ */
+
+/* Responsive grid safety */
+.nn-premium-auth-layout,
+.nn-premium-auth-signup-hero,
+.nn-premium-auth-signup-hero > *,
+.nn-premium-auth-centered,
+.nn-premium-auth-verified__layout {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Page ambient leaf (mask — theme-tinted) */
+.nn-premium-auth-system[data-nn-auth-branding-revamp]::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  right: -8%;
+  top: 6%;
+  width: min(42vw, 400px);
+  aspect-ratio: 50 / 44;
+  opacity: 0.07;
+  background-color: color-mix(in srgb, var(--semantic-brand) 70%, var(--semantic-chart-2));
+  mask-image: url("/brand/leaf-logo.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url("/brand/leaf-logo.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  transform: rotate(12deg);
+  filter: blur(0.5px);
+}
+
+.nn-premium-auth-card[data-nn-auth-branding-revamp]::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  left: -14%;
+  bottom: -20%;
+  z-index: 0;
+  width: min(48%, 280px);
+  aspect-ratio: 50 / 44;
+  opacity: 0.05;
+  background-color: color-mix(in srgb, var(--semantic-chart-4) 65%, var(--semantic-brand));
+  mask-image: url("/brand/leaf-logo.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url("/brand/leaf-logo.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  transform: rotate(-16deg);
+}
+
+/* Mint Blossom — orchestrated multi-hue chips & tiles */
+html[data-theme="mint-blossom"] .nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-trust-chips > span:nth-child(1) {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 58%, var(--semantic-surface));
+}
+
+html[data-theme="mint-blossom"] .nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-trust-chips > span:nth-child(2) {
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 26%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--semantic-surface));
+}
+
+html[data-theme="mint-blossom"] .nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-trust-chips > span:nth-child(3) {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-lavender) 50%, var(--semantic-surface));
+}
+
+html[data-theme="mint-blossom"] .nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-readiness-tile:nth-child(1) strong {
+  color: color-mix(in srgb, var(--semantic-chart-4) 70%, var(--semantic-brand));
+}
+
+html[data-theme="mint-blossom"] .nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-readiness-tile:nth-child(2) strong {
+  color: color-mix(in srgb, var(--semantic-chart-2) 65%, var(--semantic-brand));
+}
+
+html[data-theme="mint-blossom"] .nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-readiness-tile:nth-child(3) strong {
+  color: color-mix(in srgb, var(--semantic-chart-8) 60%, var(--semantic-brand));
+}
+
+html[data-theme="mint-blossom"] .nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-readiness-tile:nth-child(4) strong {
+  color: color-mix(in srgb, var(--semantic-chart-1) 62%, var(--semantic-brand));
+}
+
+/* Signup preview strip — semantic progress hues */
+.nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-signup-preview-card:nth-child(1) .nn-premium-auth-signup-preview-bar > span {
+  background: linear-gradient(90deg, var(--semantic-chart-4), var(--semantic-chart-2));
+}
+
+.nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-signup-preview-card:nth-child(2) .nn-premium-auth-signup-preview-bar > span {
+  background: linear-gradient(90deg, var(--semantic-chart-2), var(--semantic-brand));
+}
+
+.nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-signup-preview-card:nth-child(3) .nn-premium-auth-signup-preview-bar > span {
+  background: linear-gradient(90deg, var(--semantic-chart-8), var(--semantic-chart-1));
+}
+
+/* Typography readability */
+.nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-header h1 {
+  line-height: 1.12;
+  letter-spacing: -0.032em;
+}
+
+.nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-header p,
+.nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-story-copy > p:last-child {
+  line-height: 1.62;
+}
+
+.nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-story h2 {
+  line-height: 1.02;
+}
+
+/* Elevated card glass on revamp */
+.nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+html[data-theme="ocean"] .nn-premium-auth-system[data-nn-auth-branding-revamp] {
+  background:
+    radial-gradient(ellipse 90% 70% at 0% 0%, color-mix(in srgb, var(--semantic-chart-2) 12%, transparent), transparent 58%),
+    radial-gradient(ellipse 80% 60% at 100% 8%, color-mix(in srgb, var(--semantic-chart-5) 10%, transparent), transparent 55%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-panel-aqua) 22%, var(--semantic-bg-base)),
+      var(--semantic-bg-base)
+    );
+}
+
+html[data-theme="mint-blossom"] .nn-premium-auth-system[data-nn-auth-branding-revamp],
+html[data-theme="blossom"] .nn-premium-auth-system[data-nn-auth-branding-revamp] {
+  background:
+    radial-gradient(ellipse 88% 68% at 8% 0%, color-mix(in srgb, var(--semantic-chart-4) 11%, transparent), transparent 56%),
+    radial-gradient(ellipse 76% 58% at 96% 6%, color-mix(in srgb, var(--semantic-chart-2) 10%, transparent), transparent 54%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, color-mix(in srgb, var(--semantic-chart-1) 9%, transparent), transparent 58%),
+    linear-gradient(180deg, var(--semantic-bg-base), color-mix(in srgb, var(--semantic-panel-mint) 18%, var(--semantic-bg-base)));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-auth-system[data-nn-auth-branding-revamp] .nn-premium-auth-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

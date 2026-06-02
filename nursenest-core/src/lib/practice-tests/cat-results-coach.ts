@@ -1,0 +1,1011 @@
+/**
+ * CAT results "coach" layer: presentation + light analytics only.
+ * Does not modify theta, SE, stopping rules, or item selection.
+ */
+import type { CatConfidenceLevel, CatExamReport, CatPresentationMode } from "@/lib/exams/cat-types";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { validateLearnerCopyForExamContext } from "@/lib/learner/validate-learner-copy-context";
+import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
+import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
+import { remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
+import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  deriveReadinessTier,
+  type LessonContentSignal,
+} from "@/lib/lessons/lesson-content-readiness";
+
+export type CatCoachStudyLinkKind = "lesson" | "flashcards" | "drill";
+
+export type CatCoachStudyLink = {
+  label: string;
+  href: string;
+  kind: CatCoachStudyLinkKind;
+};
+
+export type CatCoachStudyNextTopic = {
+  /** Display title (topic or client-needs label). */
+  title: string;
+  /** Why this topic was chosen for this run. */
+  reason: string;
+  links: CatCoachStudyLink[];
+};
+
+export type CatCoachErrorPattern = {
+  code: string;
+  title: string;
+  detail: string;
+};
+
+export type CatCoachReliabilityLevel = "low" | "medium" | "high";
+
+export type CatResultsCoachSnapshot = {
+  generatedAt: string;
+  /** Mirrors report readiness score (0–100); labeled as outlook in UI, not a licensure guarantee. */
+  passOutlookPercent: number;
+  passOutlookDisclaimer: string;
+  confidenceLevel: "low" | "medium" | "high";
+  reliabilityLevel: CatCoachReliabilityLevel;
+  confidenceSummary: string;
+  /** Single headline line for anxiety-friendly scanning. */
+  readinessHeadline: string;
+  /** Grounded paragraph — strengths, gaps, and what the estimate can / cannot claim. */
+  readinessNarrative: string;
+  strongestDomains: string[];
+  weakestDomains: string[];
+  keyRiskFactor: string | null;
+  studyNext: CatCoachStudyNextTopic[];
+  /** Short, specific “do this next” lines tied to weaknesses and patterns. */
+  specificStudyActions: string[];
+  difficultySeries: number[];
+  difficultyTrendLabel: "rising" | "falling" | "mixed" | "flat";
+  /** How θ moved within this session (from persisted history), not a licensure guarantee. */
+  stabilityTrendLabel: "improving" | "cooling" | "steady" | "insufficient";
+  stabilityInterpretation: string;
+  passingBandRelative: "above" | "below" | "uncertain";
+  passingBandCopy: string;
+  weaknessInsights: string[];
+  errorPatterns: CatCoachErrorPattern[];
+  /** Honest note when comparing multiple CAT attempts is more reliable than one sitting. */
+  multiSessionGuidance: string;
+  /** Exam pathway context — presentation only. */
+  examPassingStandardLine?: string;
+  /**
+   * When true, UI omits the confidence card instead of showing placeholder copy (legacy / partial payloads).
+   */
+  confidenceOmitted?: boolean;
+  /**
+   * When true, pass outlook block uses neutral copy — omit false precision for legacy rows missing outlook.
+   */
+  passOutlookOmitted?: boolean;
+  /**
+   * Readiness tier derived from the session score/decision. Controls study plan ordering in UI.
+   * Optional for backwards-compat with persisted snapshots that pre-date this field.
+   */
+  readinessTier?: "at_risk" | "borderline" | "likely_pass" | "unknown";
+  /**
+   * Content readiness signal for lesson recommendation gating.
+   * When absent (legacy snapshots), UI should default to conservative (questions-first) mode.
+   */
+  lessonContentSignal?: Pick<
+    LessonContentSignal,
+    "lessonPrimaryReady" | "lessonPartialAvailable" | "primaryStudyResource"
+  >;
+};
+
+/** UI-only fallback when coach payload is missing or failed to deserialize — does not affect scoring. */
+export const CAT_RESULTS_COACH_FALLBACK_HEADLINE = "CAT summary unavailable";
+
+export const EMPTY_CAT_RESULTS_COACH_SNAPSHOT: CatResultsCoachSnapshot = {
+  generatedAt: new Date(0).toISOString(),
+  passOutlookPercent: 0,
+  passOutlookDisclaimer: "Summary unavailable for this session.",
+  confidenceLevel: "low",
+  reliabilityLevel: "low",
+  confidenceSummary: "—",
+  readinessHeadline: CAT_RESULTS_COACH_FALLBACK_HEADLINE,
+  readinessNarrative:
+    "We could not load your coaching summary. Your results are still saved; try refreshing or open practice tests from the dashboard.",
+  strongestDomains: [],
+  weakestDomains: [],
+  keyRiskFactor: null,
+  studyNext: [],
+  specificStudyActions: [],
+  difficultySeries: [],
+  difficultyTrendLabel: "flat",
+  stabilityTrendLabel: "insufficient",
+  stabilityInterpretation: "Not enough data to describe a trend for this session.",
+  passingBandRelative: "uncertain",
+  passingBandCopy: "Practice band comparison is unavailable.",
+  weaknessInsights: [],
+  errorPatterns: [],
+  multiSessionGuidance: "Compare multiple sessions over time from your practice history when available.",
+};
+
+/** Fresh timestamp; use when enrichment or coach build fails. */
+export function buildFallbackCatResultsCoachSnapshot(): CatResultsCoachSnapshot {
+  return { ...EMPTY_CAT_RESULTS_COACH_SNAPSHOT, generatedAt: new Date().toISOString() };
+}
+
+export type CatCoachIncorrectRow = {
+  questionType: string;
+  topic: string | null;
+  subtopic: string | null;
+  stem: string | null;
+  tags: string[];
+  bodySystem: string | null;
+};
+
+function flashcardsHref(pathwayId: string | null, topicLabel: string): string {
+  const code = normalizeTopicKey(topicLabel);
+  if (pathwayId && code.length > 1) {
+    return `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}&topicCode=${encodeURIComponent(code)}`;
+  }
+  return "/app/flashcards";
+}
+
+function drillHref(pathwayId: string | null, topicLabel: string): string {
+  const code = normalizeTopicKey(topicLabel);
+  if (pathwayId) {
+    const qs = new URLSearchParams({
+      pathwayId,
+      preset: "topic_drill",
+      topic: topicLabel.trim(),
+    });
+    if (code.length > 1) qs.set("topicCode", code);
+    return `/app/questions?${qs.toString()}`;
+  }
+  return remediationTopicDrillHref(topicLabel);
+}
+
+function lessonHubHref(topicLabel: string): string {
+  return remediationLessonsTopicHref(topicLabel);
+}
+
+function linksForTopic(
+  title: string,
+  pathwayId: string | null,
+  lessonContentSignal?: Pick<LessonContentSignal, "lessonPrimaryReady" | "lessonPartialAvailable"> | null,
+): CatCoachStudyLink[] {
+  const links: CatCoachStudyLink[] = [];
+
+  // Always include drill (questions) — always available
+  links.push({ label: "Practice questions (targeted drill)", href: drillHref(pathwayId, title), kind: "drill" });
+
+  // Always include flashcards — always available
+  links.push({ label: "Flashcards for this topic", href: flashcardsHref(pathwayId, title), kind: "flashcards" });
+
+  // Lessons: only include when content is ready to be a meaningful resource
+  const lessonReady = lessonContentSignal == null || lessonContentSignal.lessonPrimaryReady;
+  const lessonPartial = lessonContentSignal?.lessonPartialAvailable ?? true;
+
+  if (lessonReady) {
+    links.push({ label: "Review lesson", href: lessonHubHref(title), kind: "lesson" });
+  } else if (lessonPartial) {
+    // Surface lesson as supplementary, not primary
+    links.push({ label: "Lesson preview (content being expanded)", href: lessonHubHref(title), kind: "lesson" });
+  }
+  // If neither, omit the lesson link entirely — no dead ends
+
+  return links;
+}
+
+function difficultyTrend(difficultyHistory: number[]): CatResultsCoachSnapshot["difficultyTrendLabel"] {
+  const s = difficultyHistory.filter((n) => Number.isFinite(n));
+  if (s.length < 4) return "flat";
+  const third = Math.max(1, Math.floor(s.length / 3));
+  const a = s.slice(0, third);
+  const b = s.slice(-third);
+  const ma = a.reduce((x, y) => x + y, 0) / a.length;
+  const mb = b.reduce((x, y) => x + y, 0) / b.length;
+  const d = mb - ma;
+  if (d > 0.35) return "rising";
+  if (d < -0.35) return "falling";
+  if (Math.abs(d) < 0.12) return "flat";
+  return "mixed";
+}
+
+function rowHaystack(r: CatCoachIncorrectRow): string {
+  const tagBlob = (r.tags ?? []).join(" ");
+  return `${r.topic ?? ""} ${r.subtopic ?? ""} ${r.bodySystem ?? ""} ${tagBlob} ${r.stem ?? ""}`.toLowerCase();
+}
+
+const CAT_COACH_RELIABILITY_RULES = {
+  lowQuestionCount: 15,
+  mediumQuestionCount: 25,
+  highQuestionCount: 45,
+  lowSeFloor: 0.6,
+  mediumSeFloor: 0.45,
+  highSeCeiling: 0.35,
+  weakDomainMinTotal: 3,
+  weakDomainMinMisses: 2,
+  strongDomainMinTotal: 3,
+  patternMinIncorrectRows: 4,
+  patternMinMatchCount: 2,
+  patternStrongMatchCount: 3,
+  patternMinMatchShare: 0.34,
+  clusteredWeaknessMinRows: 4,
+  clusteredWeaknessMinTopicMisses: 2,
+} as const;
+
+type CatCoachReliability = {
+  level: CatCoachReliabilityLevel;
+  confidenceLevel: CatResultsCoachSnapshot["confidenceLevel"];
+  summary: string;
+  allowAssertivePrediction: boolean;
+};
+
+function confidenceRank(level: CatResultsCoachSnapshot["confidenceLevel"]) {
+  if (level === "high") return 3;
+  if (level === "medium") return 2;
+  return 1;
+}
+
+function capConfidenceLevel(
+  reportLevel: CatResultsCoachSnapshot["confidenceLevel"],
+  reliabilityLevel: CatCoachReliabilityLevel,
+): CatResultsCoachSnapshot["confidenceLevel"] {
+  const capped =
+    confidenceRank(reportLevel) <= confidenceRank(reliabilityLevel as CatResultsCoachSnapshot["confidenceLevel"])
+      ? reportLevel
+      : reliabilityLevel;
+  return capped;
+}
+
+function classifyCatCoachReliability(report: CatExamReport): CatCoachReliability {
+  const reasons: string[] = [];
+  const shortRun = report.totalQuestions < CAT_COACH_RELIABILITY_RULES.mediumQuestionCount;
+  const veryShortRun = report.totalQuestions < CAT_COACH_RELIABILITY_RULES.lowQuestionCount;
+  const mediumPrecision = report.se >= CAT_COACH_RELIABILITY_RULES.mediumSeFloor;
+  const lowPrecision = report.se >= CAT_COACH_RELIABILITY_RULES.lowSeFloor;
+  const forcedStop = report.stoppedReason === "pool_exhausted" || report.stoppedReason === "user_completed";
+
+  if (forcedStop) {
+    reasons.push(
+      report.stoppedReason === "pool_exhausted"
+        ? "the CAT ran out of informative items before the estimate settled"
+        : "the session ended before the CAT reached a strong stopping signal",
+    );
+  }
+  if (veryShortRun) reasons.push("the run was very short");
+  else if (shortRun) reasons.push("the run was shorter than a stable CAT summary usually needs");
+  if (lowPrecision) reasons.push("precision stayed wide");
+  else if (mediumPrecision) reasons.push("precision is still moderate");
+
+  let level: CatCoachReliabilityLevel = "medium";
+  if (forcedStop || veryShortRun || lowPrecision) {
+    level = "low";
+  } else if (
+    report.totalQuestions >= CAT_COACH_RELIABILITY_RULES.highQuestionCount &&
+    report.se <= CAT_COACH_RELIABILITY_RULES.highSeCeiling &&
+    (report.stoppedReason === "confidence_pass" || report.stoppedReason === "confidence_fail" || report.stoppedReason === "completed")
+  ) {
+    level = "high";
+  } else if (
+    report.totalQuestions < CAT_COACH_RELIABILITY_RULES.mediumQuestionCount ||
+    report.se >= CAT_COACH_RELIABILITY_RULES.mediumSeFloor
+  ) {
+    level = "low";
+  }
+
+  const confidenceLevel = capConfidenceLevel(report.confidenceLevel, level);
+  const summary =
+    level === "high"
+      ? "High reliability. The CAT ran long enough and finished with a tight estimate, so stronger coaching language is reasonable."
+      : level === "medium"
+        ? "Medium reliability. The estimate is useful, but another solid CAT would make the outlook safer to trust."
+        : `Low reliability. Keep the coaching conservative because ${reasons[0] ?? "the estimate is still settling"}${
+            reasons[1] ? ` and ${reasons[1]}` : ""
+          }.`;
+
+  return {
+    level,
+    confidenceLevel,
+    summary,
+    allowAssertivePrediction: level === "high",
+  };
+}
+
+function qualifiesWeakDomain(row: CatExamReport["categoryBreakdown"][number]): boolean {
+  const misses = Math.max(0, row.total - row.correct);
+  return row.total >= CAT_COACH_RELIABILITY_RULES.weakDomainMinTotal && misses >= CAT_COACH_RELIABILITY_RULES.weakDomainMinMisses;
+}
+
+function qualifiesStrongDomain(row: CatExamReport["categoryBreakdown"][number]): boolean {
+  return row.total >= CAT_COACH_RELIABILITY_RULES.strongDomainMinTotal && row.correct / row.total >= 0.75;
+}
+
+function hasStablePatternEvidence(matchCount: number, totalIncorrectRows: number): boolean {
+  if (totalIncorrectRows < CAT_COACH_RELIABILITY_RULES.patternMinIncorrectRows) return false;
+  if (matchCount >= CAT_COACH_RELIABILITY_RULES.patternStrongMatchCount) return true;
+  return (
+    matchCount >= CAT_COACH_RELIABILITY_RULES.patternMinMatchCount &&
+    matchCount / totalIncorrectRows >= CAT_COACH_RELIABILITY_RULES.patternMinMatchShare
+  );
+}
+
+function pickStudyTopics(
+  report: CatExamReport,
+  patterns: CatCoachErrorPattern[],
+  weakestDomains: string[],
+): Array<{ title: string; reason: string }> {
+  const breakdown = Array.isArray(report.categoryBreakdown) ? report.categoryBreakdown : [];
+  const weakCats = breakdown
+    .filter(qualifiesWeakDomain)
+    .map((c) => ({
+      title: c.category,
+      acc: c.correct / c.total,
+      total: c.total,
+      missed: c.total - c.correct,
+    }))
+    .sort((x, y) => x.acc - y.acc || y.missed - x.missed);
+
+  const patternHint = patterns[0];
+  const fromBreakdown = weakCats.slice(0, 3).map((c) => ({
+    title: c.title,
+    reason:
+      c.missed > 0
+        ? `Focus next: ${c.title}. You missed ${c.missed} of ${c.total} items tagged here — rehearse the decision rule, not just facts.`
+        : `Reinforce ${c.title}: performance was mixed; consolidate before adding new topics.`,
+  }));
+
+  if (patternHint && fromBreakdown[0]) {
+    fromBreakdown[0] = {
+      ...fromBreakdown[0],
+      reason: `${fromBreakdown[0].reason} Pattern note: ${patternHint.title.toLowerCase()} showed up in this run.`,
+    };
+  }
+
+  if (fromBreakdown.length >= 3) return fromBreakdown;
+
+  const seen = new Set(fromBreakdown.map((x) => x.title));
+  for (const w of weakestDomains) {
+    const t = w.trim();
+    if (!t || t === "—" || seen.has(t)) continue;
+    seen.add(t);
+    fromBreakdown.push({
+      title: t,
+      reason: `Your weak-area list includes “${t}” from this session — schedule a short lesson + drill block before the next CAT.`,
+    });
+    if (fromBreakdown.length >= 3) break;
+  }
+
+  while (fromBreakdown.length < 3 && fromBreakdown.length < weakCats.length) {
+    const next = weakCats[fromBreakdown.length];
+    if (next) {
+      fromBreakdown.push({
+        title: next.title,
+        reason: `Balance your blueprint: add structured review in ${next.title} so one strong area does not mask another gap.`,
+      });
+    } else break;
+  }
+
+  if (fromBreakdown.length === 0) {
+    fromBreakdown.push({
+      title: "Targeted remediation",
+      reason:
+        "Use the incorrect review and pattern notes below — then rerun CAT after a short lesson + drill block on those areas.",
+    });
+  }
+
+  return fromBreakdown.slice(0, 3);
+}
+
+function specificStudyActions(
+  report: CatExamReport,
+  patterns: CatCoachErrorPattern[],
+  weakestLabel: string | null,
+  pathwayId: string | null,
+): string[] {
+  const framing = getLearnerExamFraming(pathwayId);
+  const actions: string[] = [];
+  for (const p of patterns.slice(0, 2)) {
+    if (p.code === "sata") {
+      actions.push("Practice SATA with a checklist: evaluate each option as true/false against the stem before submitting.");
+    } else if (p.code === "prioritization") {
+      actions.push(
+        "Drill prioritization: identify the most unstable patient or the first nursing action before reading distractors.",
+      );
+    } else if (p.code === "infection_control") {
+      actions.push("Review droplet vs airborne vs contact precautions and when each applies — then retry isolation-style items.");
+    } else if (p.code === "delegation") {
+      actions.push(framing.delegationRemediationHint);
+    } else if (p.code === "labs") {
+      actions.push("Study critical labs (electrolytes, renal, coagulation) with numeric thresholds tied to interventions.");
+    } else if (p.code === "medication_safety") {
+      actions.push("Focus on adverse effects, contraindications, and monitoring for high-risk medication classes you missed.");
+    }
+  }
+  if (weakestLabel && actions.length < 3) {
+    actions.push(`Schedule a focused block on ${weakestLabel}: lesson recap, then 10–15 targeted questions in that domain.`);
+  }
+  if (report.trajectory === "slipping" && actions.length < 3) {
+    actions.push("Next CAT: plan for exam-length stamina (timed mode) so late-session accuracy does not drop.");
+  }
+  return [...new Set(actions)].slice(0, 5);
+}
+
+function errorPatternsFromIncorrect(rows: CatCoachIncorrectRow[], pathwayId: string | null): CatCoachErrorPattern[] {
+  const patterns: CatCoachErrorPattern[] = [];
+  if (rows.length === 0) return patterns;
+  const framing = getLearnerExamFraming(pathwayId);
+
+  const isSata = (t: string) => {
+    const u = t.toUpperCase();
+    return u === "SATA" || u === "SELECT_ALL_THAT_APPLY" || u.includes("SELECT_ALL");
+  };
+  const sataWrong = rows.filter((r) => isSata(r.questionType));
+
+  if (hasStablePatternEvidence(sataWrong.length, rows.length)) {
+    patterns.push({
+      code: "sata",
+      title: "SATA / select-all-that-apply",
+      detail: `${sataWrong.length} incorrect item(s) were SATA-style. Treat each line as its own true/false decision; partial credit items reward every safe step you omit.`,
+    });
+  }
+
+  const prio = rows.filter((r) => {
+    const h = rowHaystack(r);
+    return (
+      /\bpriorit/i.test(h) ||
+      /\bfirst\b.*\b(action|step|intervention)/i.test(h) ||
+      /\bmost (critical|important|urgent)\b/i.test(h) ||
+      /\bwhich (client|patient|response)\b/i.test(h)
+    );
+  });
+  if (hasStablePatternEvidence(prio.length, rows.length)) {
+    patterns.push({
+      code: "prioritization",
+      title: "Prioritization and first-action framing",
+      detail: `${prio.length} miss(es) look like priority or “first action” judgment. Name the risk (airway, bleeding, neuro) before comparing answers.`,
+    });
+  }
+
+  const isolation = rows.filter((r) => {
+    const h = rowHaystack(r);
+    return (
+      /\b(isolation|precaution|ppe|n95|airborne|droplet|contact)\b/i.test(h) ||
+      /\b(transmission)\b/i.test(h)
+    );
+  });
+  if (hasStablePatternEvidence(isolation.length, rows.length)) {
+    patterns.push({
+      code: "infection_control",
+      title: "Isolation and infection control",
+      detail: `${isolation.length} miss(es) touch precautions or transmission. Reconcile the organism or symptom with the required precaution.`,
+    });
+  }
+
+  const deleg = rows.filter((r) => {
+    const h = rowHaystack(r);
+    const caAssist = /\bUCP\b|\bcare aide\b|\bpsw\b|\bunregulated care\b/i.test(h);
+    return /\bdelegat/i.test(h) || /\bUAP\b|\bCNA\b|\bunlicensed assist/i.test(h) || (framing.region === "ca" && caAssist);
+  });
+  if (hasStablePatternEvidence(deleg.length, rows.length)) {
+    const detail =
+      framing.region === "ca"
+        ? `${deleg.length} miss(es) involve delegation or assistive roles. Unstable clients and assessments that require nursing judgment typically stay with the RN or RPN per provincial scope—not delegated to unregulated providers.`
+        : `${deleg.length} miss(es) involve delegation. Unstable patients and assessments typically stay with the RN.`;
+    patterns.push({
+      code: "delegation",
+      title: "Delegation and scope",
+      detail,
+    });
+  }
+
+  const labs = rows.filter((r) => {
+    const h = rowHaystack(r);
+    return /\b(lab|labs|creatinine|potassium|sodium|inr|ptt|hemoglobin|glucose|abg|lactate|troponin)\b/i.test(h);
+  });
+  if (hasStablePatternEvidence(labs.length, rows.length)) {
+    patterns.push({
+      code: "labs",
+      title: "Labs and numeric interpretation",
+      detail: `${labs.length} miss(es) hinge on lab values or trends. Pair each abnormal value with the expected intervention.`,
+    });
+  }
+
+  const meds = rows.filter((r) => {
+    const h = rowHaystack(r);
+    return /\b(medication|drug|dose|adverse|side effect|contraindication|interaction|antidote)\b/i.test(h);
+  });
+  if (hasStablePatternEvidence(meds.length, rows.length)) {
+    patterns.push({
+      code: "medication_safety",
+      title: "Medication safety",
+      detail: `${meds.length} miss(es) involve medications. Slow down for black-box risks, monitoring, and hold parameters.`,
+    });
+  }
+
+  const matPed = rows.filter((r) => {
+    const h = rowHaystack(r);
+    return (
+      /\b(pregnancy|prenatal|labor|postpartum|gestation|newborn|pediatric|child|adolescent)\b/i.test(h) ||
+      /\b(milestone|immunization)\b/i.test(h)
+    );
+  });
+  if (hasStablePatternEvidence(matPed.length, rows.length)) {
+    patterns.push({
+      code: "lifespan",
+      title: "Maternity or pediatric context",
+      detail: `${matPed.length} miss(es) are lifespan-specific. Compare expected vs urgent findings for that stage.`,
+    });
+  }
+
+  const comm = rows.filter((r) => /\b(therapeutic communication|rapport|de-escalat|cultural)\b/i.test(rowHaystack(r)));
+  if (hasStablePatternEvidence(comm.length, rows.length)) {
+    patterns.push({
+      code: "communication",
+      title: "Therapeutic communication",
+      detail: `${comm.length} miss(es) involve communication cues. Choose responses that address emotion without false reassurance.`,
+    });
+  }
+
+  return patterns;
+}
+
+function weaknessInsights(report: CatExamReport, incorrect: CatCoachIncorrectRow[]): string[] {
+  const out: string[] = [];
+  const breakdown = Array.isArray(report.categoryBreakdown) ? report.categoryBreakdown : [];
+  const weakest = breakdown
+    .filter(qualifiesWeakDomain)
+    .sort((a, b) => a.correct / a.total - b.correct / b.total)[0];
+  if (weakest) {
+    out.push(
+      `You struggled most in ${weakest.category} (${weakest.correct}/${weakest.total} correct this run).`,
+    );
+  }
+
+  const byTopic = new Map<string, number>();
+  for (const r of incorrect) {
+    const k = (r.topic ?? "").trim() || "General";
+    byTopic.set(k, (byTopic.get(k) ?? 0) + 1);
+  }
+  const topTopic = [...byTopic.entries()].sort((a, b) => b[1] - a[1])[0];
+  if (
+    topTopic &&
+    incorrect.length >= CAT_COACH_RELIABILITY_RULES.clusteredWeaknessMinRows &&
+    topTopic[1] >= CAT_COACH_RELIABILITY_RULES.clusteredWeaknessMinTopicMisses
+  ) {
+    out.push(`Multiple misses clustered under “${topTopic[0]}” — worth a focused block there before your next CAT.`);
+  }
+
+  if (report.trajectory === "slipping") {
+    out.push("Accuracy cooled in the second half of this session — watch fatigue and timing on longer runs.");
+  } else if (report.trajectory === "improving") {
+    out.push("You finished stronger than you started — carry that pacing into the next session.");
+  }
+
+  return out.slice(0, 5);
+}
+
+function plainHeadline(args: {
+  report: CatExamReport;
+  presentationMode?: CatPresentationMode;
+  reliability: CatCoachReliability;
+  confidenceLevel: CatResultsCoachSnapshot["confidenceLevel"];
+}): string {
+  const { report, presentationMode, reliability, confidenceLevel } = args;
+  const sim = presentationMode === "exam_simulation";
+  const prefix = sim ? "Exam simulation: " : "";
+  const { decision, readinessScore } = report;
+
+  if (reliability.allowAssertivePrediction && decision === "pass" && readinessScore >= 58 && confidenceLevel !== "low") {
+    return `${prefix}You are trending above the practice passing standard for this session — still one piece of the picture, not a guarantee.`;
+  }
+  if (reliability.allowAssertivePrediction && (decision === "fail" || readinessScore < 42) && confidenceLevel !== "low") {
+    return `${prefix}You are close in some areas, but not yet consistently safe against our practice band — focus on the risks below, then rerun CAT.`;
+  }
+  if (reliability.level === "low" || confidenceLevel === "low") {
+    return `${prefix}The outlook is still forming — with more adaptive items (or another session), we can speak more confidently about readiness.`;
+  }
+  if (reliability.level === "medium") {
+    return `${prefix}This CAT gives a directional signal, but the estimate is not settled enough for a strong readiness call yet.`;
+  }
+  return `${prefix}Mixed performance today; use the domains and patterns below to guide the next study block before your next CAT.`;
+}
+
+function thetaStability(thetaHistory: number[]): Pick<CatResultsCoachSnapshot, "stabilityTrendLabel" | "stabilityInterpretation"> {
+  const t = thetaHistory.filter((x) => typeof x === "number" && Number.isFinite(x));
+  if (t.length < 5) {
+    return {
+      stabilityTrendLabel: "insufficient",
+      stabilityInterpretation:
+        "There were not enough scored steps in this session to describe an ability trend — try a longer CAT when you can.",
+    };
+  }
+  const k = Math.max(2, Math.floor(t.length / 3));
+  const early = t.slice(0, k);
+  const late = t.slice(-k);
+  const me = early.reduce((a, b) => a + b, 0) / early.length;
+  const ml = late.reduce((a, b) => a + b, 0) / late.length;
+  const delta = ml - me;
+  if (delta > 0.12) {
+    return {
+      stabilityTrendLabel: "improving",
+      stabilityInterpretation:
+        "Within this session, your estimated ability moved upward as you progressed — a reassuring sign when it lines up with your study goals.",
+    };
+  }
+  if (delta < -0.12) {
+    return {
+      stabilityTrendLabel: "cooling",
+      stabilityInterpretation:
+        "Estimated ability softened toward the end of this run — check fatigue, pacing, or the domains that appeared late.",
+    };
+  }
+  return {
+    stabilityTrendLabel: "steady",
+    stabilityInterpretation:
+      "Your estimate stayed relatively level across items — performance was steady within this CAT, not wildly swinging.",
+  };
+}
+
+function readinessNarrative(args: {
+  report: CatExamReport;
+  strongest: string[];
+  weakest: string[];
+  patterns: CatCoachErrorPattern[];
+  presentationMode?: CatPresentationMode;
+  reliability: CatCoachReliability;
+}): string {
+  const { report, strongest, weakest, patterns, presentationMode, reliability } = args;
+  const sim = presentationMode === "exam_simulation";
+  const strongLine =
+    strongest.length > 0
+      ? `Strengths this run include ${strongest.slice(0, 2).join(" and ")}.`
+      : "We did not see clearly dominant strengths in this short window.";
+  const weakLine =
+    weakest.length > 0
+      ? `The shakiest areas were ${weakest.slice(0, 2).join(" and ")}.`
+      : "Domain balance still looks mixed — use the list below for detail.";
+  const risk =
+    patterns[0] != null
+      ? ` A recurring pattern: ${patterns[0].title.toLowerCase()} — worth addressing before test day.`
+      : "";
+  const conf =
+    reliability.level === "high"
+      ? ""
+      : ` ${reliability.summary}`;
+  const simNote = sim ? " This simulation follows NurseNest stop rules; it is not a board score report." : "";
+  return `${strongLine} ${weakLine}${risk}${conf}${simNote}`;
+}
+
+function passingBandCopy(
+  report: CatExamReport,
+  presentationMode: CatPresentationMode | undefined,
+  pathwayId: string | null,
+  reliability: CatCoachReliability,
+): {
+  relative: CatResultsCoachSnapshot["passingBandRelative"];
+  copy: string;
+} {
+  const sim = presentationMode === "exam_simulation";
+  const prefix = sim ? "Simulation: " : "";
+  const framing = getLearnerExamFraming(pathwayId);
+  const band = framing.passingStandardPhrase;
+  if (!reliability.allowAssertivePrediction) {
+    return {
+      relative: "uncertain",
+      copy: `${prefix}This run gives a directional practice signal, but the estimate is not stable enough to label you clearly above or below ${band} yet.`,
+    };
+  }
+  if (report.decision === "pass") {
+    return {
+      relative: "above",
+      copy: `${prefix}You appear above our practice passing band for this session (${band}), at the confidence level shown — use it as a signal, not a promise.`,
+    };
+  }
+  if (report.decision === "fail") {
+    return {
+      relative: "below",
+      copy: `${prefix}You appear below our practice passing band on this run (${band}) — that is a remediation signal, not a verdict on your career.`,
+    };
+  }
+  return {
+    relative: "uncertain",
+    copy: `${prefix}The estimate has not locked in clearly above or below the practice band (${band}) — another CAT or more items will narrow this.`,
+  };
+}
+
+function keyRisk(report: CatExamReport, patterns: CatCoachErrorPattern[]): string | null {
+  if (patterns[0]) return patterns[0].title;
+  const breakdown = Array.isArray(report.categoryBreakdown) ? report.categoryBreakdown : [];
+  const w = breakdown
+    .filter((c) => c.total > 0)
+    .sort((a, b) => a.correct / a.total - b.correct / b.total)[0];
+  if (w && w.correct < w.total) return `Weakest domain right now: ${w.category}.`;
+  if (report.confidenceLevel === "low") return "Estimate still volatile — stopping early can misread readiness.";
+  return null;
+}
+
+const VALID_CAT_STOP_REASONS = new Set<string>([
+  "max_length_reached",
+  "max_length",
+  "confidence_pass",
+  "confidence_fail",
+  "pool_exhausted",
+  "user_completed",
+  "completed",
+]);
+
+function sanitizeCategoryRow(row: unknown): CatExamReport["categoryBreakdown"][number] | null {
+  if (!row || typeof row !== "object") return null;
+  const o = row as Record<string, unknown>;
+  const category = typeof o.category === "string" ? o.category.trim() : "";
+  if (!category) return null;
+  const correct = typeof o.correct === "number" && Number.isFinite(o.correct) ? Math.max(0, Math.floor(o.correct)) : 0;
+  const total = typeof o.total === "number" && Number.isFinite(o.total) ? Math.max(0, Math.floor(o.total)) : 0;
+  const strength =
+    o.strength === "strong" || o.strength === "weak" || o.strength === "mixed" ? o.strength : ("mixed" as const);
+  const blueprintKey = typeof o.blueprintKey === "string" && o.blueprintKey.trim() ? o.blueprintKey.trim() : category;
+  return { category, blueprintKey, correct, total, strength };
+}
+
+function sanitizeCatCoachIncorrectRow(r: unknown): CatCoachIncorrectRow | null {
+  if (!r || typeof r !== "object") return null;
+  const o = r as Record<string, unknown>;
+  const questionType = typeof o.questionType === "string" && o.questionType.trim() ? o.questionType : "UNKNOWN";
+  return {
+    questionType,
+    topic: typeof o.topic === "string" ? o.topic : null,
+    subtopic: typeof o.subtopic === "string" ? o.subtopic : null,
+    stem: typeof o.stem === "string" ? o.stem : null,
+    tags: Array.isArray(o.tags) ? o.tags.filter((t): t is string => typeof t === "string") : [],
+    bodySystem: typeof o.bodySystem === "string" ? o.bodySystem : null,
+  };
+}
+
+/** Coerce persisted / partial CAT report JSON into a shape the coach builder can use. */
+export function sanitizeCatExamReportForCoach(input: unknown): CatExamReport | null {
+  if (!input || typeof input !== "object") return null;
+  const r = input as Record<string, unknown>;
+  if (r.decision !== "pass" && r.decision !== "fail" && r.decision !== "uncertain") return null;
+
+  const categoryBreakdown: CatExamReport["categoryBreakdown"] = [];
+  if (Array.isArray(r.categoryBreakdown)) {
+    for (const row of r.categoryBreakdown) {
+      const s = sanitizeCategoryRow(row);
+      if (s) categoryBreakdown.push(s);
+    }
+  }
+
+  const weakAreas = Array.isArray(r.weakAreas)
+    ? r.weakAreas.filter((x): x is string => typeof x === "string")
+    : [];
+  const suggestedNextSteps = Array.isArray(r.suggestedNextSteps)
+    ? r.suggestedNextSteps.filter((x): x is string => typeof x === "string")
+    : [];
+
+  const readinessScore =
+    typeof r.readinessScore === "number" && Number.isFinite(r.readinessScore)
+      ? Math.max(0, Math.min(100, r.readinessScore))
+      : 0;
+
+  const confidenceLevel: CatConfidenceLevel =
+    r.confidenceLevel === "low" || r.confidenceLevel === "medium" || r.confidenceLevel === "high"
+      ? r.confidenceLevel
+      : "low";
+  const confidenceText =
+    typeof r.confidenceText === "string" && r.confidenceText.trim().length > 0 ? r.confidenceText : "—";
+
+  const trajectory: CatExamReport["trajectory"] =
+    r.trajectory === "improving" ||
+    r.trajectory === "slipping" ||
+    r.trajectory === "steady" ||
+    r.trajectory === "insufficient"
+      ? r.trajectory
+      : "insufficient";
+
+  const stoppedRaw = r.stoppedReason;
+  const stoppedReason: CatExamReport["stoppedReason"] =
+    typeof stoppedRaw === "string" && VALID_CAT_STOP_REASONS.has(stoppedRaw)
+      ? (stoppedRaw as CatExamReport["stoppedReason"])
+      : "completed";
+
+  const theta = typeof r.theta === "number" && Number.isFinite(r.theta) ? r.theta : 0;
+  const se = typeof r.se === "number" && Number.isFinite(r.se) ? r.se : 0;
+  const totalQuestions =
+    typeof r.totalQuestions === "number" && Number.isFinite(r.totalQuestions)
+      ? Math.max(0, Math.floor(r.totalQuestions))
+      : 0;
+  const correctCount =
+    typeof r.correctCount === "number" && Number.isFinite(r.correctCount) ? Math.max(0, Math.floor(r.correctCount)) : 0;
+
+  const readinessHeadline =
+    typeof r.readinessHeadline === "string" && r.readinessHeadline.trim().length > 0
+      ? r.readinessHeadline.trim()
+      : "Readiness summary";
+
+  const result: CatExamReport["result"] =
+    r.result === "PASS" || r.result === "BORDERLINE" || r.result === "FAIL"
+      ? r.result
+      : r.decision === "pass"
+        ? "PASS"
+        : r.decision === "fail"
+          ? "FAIL"
+          : "BORDERLINE";
+
+  const readinessLevel: CatExamReport["readinessLevel"] =
+    r.readinessLevel === "Likely Pass" || r.readinessLevel === "Borderline" || r.readinessLevel === "At Risk"
+      ? r.readinessLevel
+      : readinessScore >= 70
+        ? "Likely Pass"
+        : readinessScore >= 50
+          ? "Borderline"
+          : "At Risk";
+
+  const abilityScore =
+    typeof r.abilityScore === "number" && Number.isFinite(r.abilityScore) ? r.abilityScore : readinessScore;
+
+  const confidenceLevelLabel: CatExamReport["confidenceLevelLabel"] =
+    r.confidenceLevelLabel === "High" || r.confidenceLevelLabel === "Moderate" || r.confidenceLevelLabel === "Low"
+      ? r.confidenceLevelLabel
+      : confidenceLevel === "high"
+        ? "High"
+        : confidenceLevel === "medium"
+          ? "Moderate"
+          : "Low";
+
+  return {
+    decision: r.decision,
+    result,
+    readinessLevel,
+    abilityScore,
+    confidenceLevelLabel,
+    theta,
+    se,
+    totalQuestions,
+    correctCount,
+    stoppedReason,
+    categoryBreakdown,
+    weakAreas,
+    suggestedNextSteps,
+    readinessScore,
+    confidenceLevel,
+    confidenceText,
+    trajectory,
+    readinessHeadline,
+    blueprintDiagnostics: (r.blueprintDiagnostics ?? null) as CatExamReport["blueprintDiagnostics"],
+    blueprintAdminDiagnostics: (r.blueprintAdminDiagnostics ?? null) as CatExamReport["blueprintAdminDiagnostics"],
+  };
+}
+
+/**
+ * Build a serializable coach snapshot from an existing CAT report and light item metadata.
+ */
+export function buildCatResultsCoach(args: {
+  report: CatExamReport;
+  presentationMode?: CatPresentationMode;
+  pathwayId: string | null;
+  difficultyHistory: number[];
+  thetaHistory: number[];
+  incorrectRows: CatCoachIncorrectRow[];
+  /** Optional content readiness signal for lesson recommendation gating. */
+  lessonContentSignal?: LessonContentSignal | null;
+}): CatResultsCoachSnapshot {
+  try {
+    const report = sanitizeCatExamReportForCoach(args.report);
+    if (!report) {
+      safeServerLog("cat_results", "cat_results_coach_fallback_used", { reason: "invalid_report_shape" });
+      recordRouteRenderFallback({
+        fallbackType: "cat_coach_fallback",
+        pathwayId: args.pathwayId ?? undefined,
+      });
+      return buildFallbackCatResultsCoachSnapshot();
+    }
+
+    const difficultyHistory = Array.isArray(args.difficultyHistory)
+      ? args.difficultyHistory.filter((n): n is number => typeof n === "number" && Number.isFinite(n))
+      : [];
+    const thetaHistory = Array.isArray(args.thetaHistory)
+      ? args.thetaHistory.filter((n): n is number => typeof n === "number" && Number.isFinite(n))
+      : [];
+    const incorrectRows = Array.isArray(args.incorrectRows)
+      ? args.incorrectRows.map(sanitizeCatCoachIncorrectRow).filter((x): x is CatCoachIncorrectRow => x !== null)
+      : [];
+
+    const { presentationMode, pathwayId } = args;
+    const sim = presentationMode === "exam_simulation";
+    const framing = getLearnerExamFraming(pathwayId);
+    const patterns = errorPatternsFromIncorrect(incorrectRows, pathwayId);
+    const reliability = classifyCatCoachReliability(report);
+
+    const breakdown = Array.isArray(report.categoryBreakdown) ? report.categoryBreakdown : [];
+    const strongestDomains = breakdown
+      .filter(qualifiesStrongDomain)
+      .map((c) => c.category)
+      .slice(0, 4);
+
+    const weakestDomains = breakdown
+      .filter(qualifiesWeakDomain)
+      .sort((a, b) => a.correct / a.total - b.correct / b.total)
+      .map((c) => c.category)
+      .slice(0, 4);
+
+    const { lessonContentSignal } = args;
+    const readinessTier = deriveReadinessTier(report.readinessScore, report.decision);
+
+    const studyTopics = pickStudyTopics(report, patterns, weakestDomains);
+    const studyNext: CatCoachStudyNextTopic[] = studyTopics.map((s) => ({
+      title: s.title,
+      reason: s.reason,
+      links: linksForTopic(s.title, pathwayId, lessonContentSignal),
+    }));
+
+    const band = passingBandCopy(report, presentationMode, pathwayId, reliability);
+    const stability = thetaStability(thetaHistory);
+    const narrative = readinessNarrative({
+      report,
+      strongest: strongestDomains,
+      weakest: weakestDomains,
+      patterns,
+      presentationMode,
+      reliability,
+    });
+    const weakestLabel = weakestDomains[0] ?? null;
+    const specificStudyActionsList = specificStudyActions(report, patterns, weakestLabel, pathwayId);
+
+    const headline = plainHeadline({
+      report,
+      presentationMode,
+      reliability,
+      confidenceLevel: reliability.confidenceLevel,
+    });
+    const pathwayDef = pathwayId ? getExamPathwayById(pathwayId) : undefined;
+    if (pathwayDef) {
+      validateLearnerCopyForExamContext(pathwayDef, narrative, "cat_coach");
+      validateLearnerCopyForExamContext(pathwayDef, headline, "cat_coach");
+    }
+
+    return {
+      generatedAt: new Date().toISOString(),
+      passOutlookPercent: report.readinessScore,
+      passOutlookDisclaimer: sim
+        ? "Exam simulations mirror pacing and stop rules; they are not a prediction of NCLEX, AANP, or board outcomes."
+        : "Practice CAT uses the same adaptive engine as test mode, but no home platform can guarantee your licensure result.",
+      confidenceLevel: reliability.confidenceLevel,
+      reliabilityLevel: reliability.level,
+      confidenceSummary: reliability.summary,
+      readinessHeadline: headline,
+      readinessNarrative: narrative,
+      strongestDomains,
+      weakestDomains,
+      keyRiskFactor: keyRisk(report, patterns),
+      studyNext,
+      specificStudyActions: specificStudyActionsList,
+      difficultySeries: [...difficultyHistory],
+      difficultyTrendLabel: difficultyTrend(difficultyHistory),
+      stabilityTrendLabel: stability.stabilityTrendLabel,
+      stabilityInterpretation: stability.stabilityInterpretation,
+      passingBandRelative: band.relative,
+      passingBandCopy: band.copy,
+      weaknessInsights: weaknessInsights(report, incorrectRows),
+      errorPatterns: patterns,
+      multiSessionGuidance:
+        "Readiness is most reliable when you compare several CAT runs over time — use the CAT readiness dashboard to see whether your outlook is trending up.",
+      examPassingStandardLine:
+        framing.region === "unknown"
+          ? undefined
+          : `Performance is interpreted relative to ${framing.passingStandardPhrase}.`,
+      readinessTier,
+      lessonContentSignal: lessonContentSignal
+        ? {
+            lessonPrimaryReady: lessonContentSignal.lessonPrimaryReady,
+            lessonPartialAvailable: lessonContentSignal.lessonPartialAvailable,
+            primaryStudyResource: lessonContentSignal.primaryStudyResource,
+          }
+        : undefined,
+    };
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    safeServerLog("cat_results", "cat_results_coach_fallback_used", {
+      error_message: message.slice(0, 400),
+    });
+    recordRouteRenderFallback({
+      fallbackType: "cat_coach_fallback",
+      pathwayId: args.pathwayId ?? undefined,
+    });
+    return buildFallbackCatResultsCoachSnapshot();
+  }
+}

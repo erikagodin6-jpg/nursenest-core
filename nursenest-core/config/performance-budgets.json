@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Performance Budgets",
+  "description": "Enforced performance limits for production hardening",
+  
+  "budgets": {
+    "forceDynamic": {
+      "current": 212,
+      "target": 150,
+      "critical": 200,
+      "description": "Maximum number of force-dynamic declarations"
+    },
+    
+    "publicPayload": {
+      "maxKB": 100,
+      "warningKB": 75,
+      "description": "Maximum initial payload size for public routes"
+    },
+    
+    "learnerPayload": {
+      "maxKB": 150,
+      "warningKB": 100,
+      "description": "Maximum initial payload size for learner routes"
+    },
+    
+    "serializedProps": {
+      "maxKB": 50,
+      "warningKB": 35,
+      "description": "Maximum serialized props size per route"
+    },
+    
+    "ttfb": {
+      "public": {
+        "p50": 200,
+        "p95": 300,
+        "p99": 500,
+        "unit": "ms"
+      },
+      "learner": {
+        "p50": 300,
+        "p95": 500,
+        "p99": 1000,
+        "unit": "ms"
+      }
+    },
+    
+    "cacheHitRatio": {
+      "target": 0.80,
+      "warning": 0.70,
+      "description": "Minimum cache hit ratio for public routes"
+    },
+    
+    "queryLimits": {
+      "standardPageSize": 25,
+      "maxPageSize": 100,
+      "maxIncludeDepth": 2,
+      "description": "Prisma query standards"
+    },
+    
+    "concurrency": {
+      "publicUsers": 1000,
+      "learnerSessions": 500,
+      "description": "Target concurrent user capacity"
+    },
+    
+    "infrastructure": {
+      "dbPoolUtilization": 0.70,
+      "memoryPerInstanceMB": 2048,
+      "description": "Infrastructure resource limits"
+    }
+  },
+  
+  "monitoring": {
+    "alertThresholds": {
+      "forceDynamicExceeded": true,
+      "payloadSizeExceeded": true,
+      "ttfbExceeded": true,
+      "cacheHitRatioLow": true,
+      "dbPoolSaturation": true,
+      "memoryPressure": true
+    }
+  }
+}

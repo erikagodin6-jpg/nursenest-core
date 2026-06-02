@@ -1,0 +1,119 @@
+# Required gate before merge: same checks as DigitalOcean App Platform build (source_dir nursenest-core)
+# and droplet `deploy:precheck` — Prisma generate + typecheck + Next production build.
+name: Verify Build
+
+on:
+  push:
+    branches-ignore: [deploy]
+  pull_request:
+
+concurrency:
+  group: verify-build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      # Align with production compile: heavy multi-locale merge audits run in dedicated i18n jobs.
+      SKIP_I18N_PREBUILD: "1"
+      # `npm run typecheck` runs before `next build` in `ci:verify`; skip duplicate integrated TS pass
+      # to lower peak RAM (see `next.config.mjs` `typescript.ignoreBuildErrors`).
+      SKIP_NEXT_BUILD_TYPECHECK: "1"
+      # Turbopack + multi-worker compile enforced inside the build wrapper.
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Guard production reliability workflow (secrets + log safety)
+        run: node ../scripts/ci/assert-production-reliability-workflow-guard.mjs
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --install-links=false
+
+      - name: Guard lockfile drift after install
+        run: git diff --exit-code package-lock.json
+
+      - name: Validate Prisma Schema
+        run: npx prisma validate
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Guard generated file drift after Prisma generate
+        run: git diff --exit-code
+
+      - name: Install deploy guard dependencies
+        run: |
+          npm install --prefix /tmp/deploy-guard-deps --no-save --ignore-scripts --no-audit --no-fund js-yaml@4.1.1
+          echo "NODE_PATH=/tmp/deploy-guard-deps/node_modules" >> "$GITHUB_ENV"
+
+      - name: Guard DigitalOcean production domains
+        run: node ../scripts/verify-digitalocean-domain-persistence.mjs
+
+      # ── Deployment governance guards ──────────────────────────────────────
+      # Rule: Only .do/app-nursenest-core-next.yaml may be used with doctl apps update.
+      # These steps enforce that:
+      #   1. The canonical spec passes all required-key checks (no missing env names).
+      #   2. Known dangerous/non-canonical files are explicitly rejected by the guard.
+      # A PR that removes a required env key or makes a forbidden file deployable fails here.
+
+      - name: "[deploy-guard] Canonical spec passes env protection checks"
+        run: node ../scripts/do-spec-guard.mjs ../.do/app-nursenest-core-next.yaml
+
+      - name: "[deploy-guard] GHCR runtime secrets use RUN_TIME scope"
+        run: node ../scripts/audit-ghcr-runtime-secret-scopes.mjs ../.do/app-nursenest-core-next.yaml
+
+      - name: "[deploy-guard] Dockerfile must not bake DATABASE_URL"
+        run: node scripts/verify-dockerfile-database-url.mjs
+        working-directory: nursenest-core
+
+      - name: "[deploy-guard] Forbidden spec: nursenest-core/live-app-spec.yaml is rejected"
+        run: |
+          if node ../scripts/do-spec-guard.mjs live-app-spec.yaml 2>/dev/null; then
+            echo "ERROR: live-app-spec.yaml unexpectedly passed the guard — it must be rejected."
+            exit 1
+          fi
+          echo "OK: live-app-spec.yaml correctly rejected by guard."
+
+      - name: "[deploy-guard] Forbidden spec: nursenest-core/.do/app.yaml is rejected"
+        run: |
+          if node ../scripts/do-spec-guard.mjs .do/app.yaml 2>/dev/null; then
+            echo "ERROR: nursenest-core/.do/app.yaml unexpectedly passed the guard — it must be rejected."
+            exit 1
+          fi
+          echo "OK: nursenest-core/.do/app.yaml correctly rejected by guard."
+
+      - name: "[deploy-guard] Forbidden spec: .do/app.yaml (root) is rejected"
+        run: |
+          if node ../scripts/do-spec-guard.mjs ../.do/app.yaml 2>/dev/null; then
+            echo "ERROR: .do/app.yaml (root) unexpectedly passed the guard — it must be rejected."
+            exit 1
+          fi
+          echo "OK: .do/app.yaml (root) correctly rejected by guard."
+
+      - name: CI environment diagnostics
+        run: node ../scripts/ci/diagnose-actions-environment.mjs
+        env:
+          CI_DIAGNOSE_REQUIRED_SCRIPTS: "db:generate validate:marketing-production-surface ci:verify typecheck build"
+
+      # Enforced here only (removed from App Platform `heroku-postbuild` to cut deploy build memory).
+      - name: Validate marketing production surface
+        run: npm run validate:marketing-production-surface
+
+      - name: Semantic navigation static release gate
+        run: npm run qa:semantic-navigation-gate:static
+
+      - name: Deploy precheck (ci:verify — build must pass before deploy)
+        run: npm run ci:verify

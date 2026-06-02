@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-06-02T00:38:57.497Z",
+  "status": "unhealthy",
+  "reason": "deployment_smoke_certification_failed",
+  "failedRoutes": [
+    "/canada/rn/nclex-rn",
+    "/canada/pn/rex-pn",
+    "/canada/np/cnple",
+    "/lessons"
+  ],
+  "rollback": "required",
+  "report": "reports/deployment-reliability/deployment-smoke-certification.json"
+}

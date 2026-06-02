@@ -1,0 +1,148 @@
+/**
+ * Premium Allied Health + New Grad Convergence
+ *
+ * Scoped parity layer so Allied Health and New Grad feel equal to RN/RPN/NP,
+ * Pre-Nursing, Lessons, Flashcards, Practice, CAT, Dashboard, Auth, and FAQ
+ * redesign systems. Visual-only: no routing, SEO, entitlement, i18n, or
+ * alliedProfessionKey behavior changes.
+ */
+
+:root {
+  --nn-allied-newgrad-theme-covered: 0;
+  --nn-allied-newgrad-radius: var(--nn-platform-radius-card, 1.35rem);
+  --nn-allied-newgrad-panel:
+    linear-gradient(
+      150deg,
+      color-mix(in srgb, var(--semantic-surface) 86%, var(--nn-atmosphere-mint, var(--semantic-info)) 14%),
+      color-mix(in srgb, var(--semantic-surface) 90%, var(--nn-atmosphere-aqua, var(--semantic-brand)) 10%) 46%,
+      color-mix(in srgb, var(--semantic-surface) 88%, var(--nn-atmosphere-lavender, var(--semantic-chart-5)) 12%)
+    );
+  --nn-allied-newgrad-newgrad-panel:
+    linear-gradient(
+      150deg,
+      color-mix(in srgb, var(--semantic-surface) 84%, var(--nn-atmosphere-peach, var(--semantic-warning)) 16%),
+      color-mix(in srgb, var(--semantic-surface) 90%, var(--semantic-info) 10%) 48%,
+      color-mix(in srgb, var(--semantic-surface) 88%, var(--nn-atmosphere-gold, var(--semantic-warning)) 12%)
+    );
+  --nn-allied-newgrad-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 70%, transparent) inset,
+    0 18px 46px -34px color-mix(in srgb, var(--semantic-text-primary) 22%, transparent),
+    0 10px 34px -30px color-mix(in srgb, var(--semantic-brand) 24%, transparent);
+}
+
+html[data-theme="ocean"] :is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"]),
+html[data-theme="blossom"] :is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"]),
+html[data-theme="midnight"] :is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"]),
+html[data-theme="sunset"] :is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"]),
+html[data-theme="aurora"] :is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"]) {
+  --nn-allied-newgrad-theme-covered: 1;
+}
+
+:is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"]) {
+  position: relative;
+  isolation: isolate;
+  --nn-ecosystem-module-accent: var(--nn-module-readiness, var(--semantic-brand));
+}
+
+[data-nn-allied-pathway-hub="1"] {
+  --nn-ecosystem-module-accent: var(--nn-atmosphere-mint, var(--semantic-info));
+}
+
+[data-nn-new-grad-convergence="1"] {
+  --nn-ecosystem-module-accent: var(--nn-atmosphere-peach, var(--semantic-warning));
+}
+
+:is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"])::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -1rem -0.75rem auto;
+  height: min(34rem, 62vh);
+  border-radius: 9999px;
+  background: var(--nn-atmosphere-dashboard, var(--nn-depth-ambient));
+  opacity: 0.5;
+  z-index: -1;
+}
+
+:is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"]) .nn-nursing-tier-hub-hero-band,
+:is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"]) .nn-hub-tier-study-band {
+  border-radius: var(--nn-allied-newgrad-radius);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 66%, var(--nn-ecosystem-module-accent) 20%);
+  background: var(--nn-allied-newgrad-panel);
+  box-shadow: var(--nn-allied-newgrad-shadow);
+}
+
+[data-nn-new-grad-convergence="1"] .nn-nursing-tier-hub-hero-band,
+[data-nn-new-grad-convergence="1"] .nn-hub-tier-study-band {
+  background: var(--nn-allied-newgrad-newgrad-panel);
+}
+
+:is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"])
+  :is(
+    .nn-qa-pathway-lessons-grid > li > *,
+    .nn-exam-hub-study-card--lessons,
+    .nn-exam-hub-study-card--flashcards,
+    .nn-exam-hub-study-card--practice,
+    .nn-exam-hub-study-card--cat,
+    .nn-premium-allied-module-card,
+    .nn-premium-marketing-cat-card,
+    .nn-study-card,
+    article[class*="rounded"],
+    section[class*="rounded"]
+  ) {
+  border-radius: var(--nn-allied-newgrad-radius);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--nn-ecosystem-module-accent) 18%);
+  box-shadow: var(--nn-allied-newgrad-shadow);
+}
+
+:is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"])
+  :is(a, button, [role="button"]) {
+  touch-action: manipulation;
+}
+
+:is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"])
+  :is(a.nn-btn-primary, a.nn-btn-secondary, button, [role="button"]) {
+  min-height: var(--nn-mobile-study-tap-target, 2.75rem);
+}
+
+[data-nn-allied-pathway-hub="1"] [data-nn-allied-hub-compact-analytics="1"] {
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--semantic-panel-mint) 38%, var(--semantic-surface)),
+      color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--semantic-surface))
+    );
+}
+
+[data-nn-allied-pathway-hub="1"] [data-nn-allied-occupation-card-primary="1"],
+[data-nn-new-grad-convergence="1"] a {
+  text-underline-offset: 0.2em;
+}
+
+@media (max-width: 767.98px) {
+  :is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"]) {
+    overflow-x: clip;
+    scroll-padding-bottom: var(--nn-mobile-study-sticky-reserve, 5rem);
+  }
+
+  :is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"])::before {
+    inset-inline: -2rem;
+    opacity: 0.3;
+  }
+
+  :is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"])
+    :is(.nn-qa-pathway-lessons-grid, .grid) {
+    gap: var(--nn-mobile-study-card-gap, 1rem);
+  }
+
+  :is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"])
+    :is(.nn-nursing-tier-hub-hero-band, .nn-hub-tier-study-band, article, section[class*="rounded"]) {
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is([data-nn-allied-pathway-hub="1"], [data-nn-new-grad-convergence="1"]) * {
+    scroll-behavior: auto !important;
+  }
+}

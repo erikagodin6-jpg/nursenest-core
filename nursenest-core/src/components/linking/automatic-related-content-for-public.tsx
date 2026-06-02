@@ -1,0 +1,177 @@
+import "server-only";
+
+import { RelatedContentBlock, BlogStudyNextStrip } from "@/components/linking/related-content-block";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import {
+  buildLinkContextForPublicBlogPost,
+  countHighConfidenceCandidates,
+  pathwayIdForBlogPost,
+  resolveAutomaticRelatedBundleForBlogPost,
+  resolveAutomaticRelatedBundleForPathwayLesson,
+  resolveAutomaticRelatedLinksForProgrammaticQuestionTopic,
+  type BlogPostAutoLinkSource,
+  type PathwayLessonAutoLinkSnapshot,
+} from "@/lib/linking/automatic-internal-links";
+import { filterResolvedLinksLessonsByPublicMarketingIntegrity } from "@/lib/lessons/pathway-lesson-public-cross-link-integrity";
+import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+
+const MIN_PUBLIC_AUTO_LINKS = 2;
+
+type BlogProps = {
+  surface: "blog";
+  post: BlogPostAutoLinkSource;
+  excludeHrefs?: string[];
+};
+
+type LessonProps = {
+  surface: "lesson";
+  pathway: ExamPathwayDefinition;
+  lesson: PathwayLessonAutoLinkSnapshot;
+  locale: string;
+  /** Omit auto links that duplicate footer / sibling CTAs on the lesson page. */
+  excludeHrefs?: string[];
+};
+
+type QuestionTopicProps = {
+  surface: "programmatic_question";
+  def: { slug: string; primaryPathwayId: string };
+  locale: string;
+};
+
+export type AutomaticRelatedContentForPublicProps = BlogProps | LessonProps | QuestionTopicProps;
+
+/**
+ * Optional high-confidence related-content block for marketing surfaces.
+ * Renders nothing when the merged bundle has fewer than two strong/moderate links.
+ */
+export async function AutomaticRelatedContentForPublic(props: AutomaticRelatedContentForPublicProps) {
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
+
+  if (props.surface === "blog") {
+    let resolved: Awaited<ReturnType<typeof resolveAutomaticRelatedBundleForBlogPost>>;
+    try {
+      resolved = await resolveAutomaticRelatedBundleForBlogPost(props.post, {
+        excludeHrefs: props.excludeHrefs,
+      });
+    } catch (e) {
+      rethrowNextNavigationControlFlow(e);
+      safeServerLog("linking", "automatic_related_content_blog_failed", {
+        slug: props.post.slug.slice(0, 200),
+        detail: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      });
+      return null;
+    }
+    const blogPathwayId = pathwayIdForBlogPost(props.post);
+    const blogPathway = blogPathwayId ? getExamPathwayById(blogPathwayId) : undefined;
+    resolved = (
+      await filterResolvedLinksLessonsByPublicMarketingIntegrity({
+        pathway: blogPathway,
+        lessonContentLocale,
+        resolved,
+      })
+    ).resolved;
+    if (countHighConfidenceCandidates(resolved) < MIN_PUBLIC_AUTO_LINKS) return null;
+    const context = buildLinkContextForPublicBlogPost(props.post);
+    return (
+      <div className="mt-10 space-y-4 not-prose">
+        <BlogStudyNextStrip context={{ ...context, surface: "blog" }} resolvedLinks={resolved} />
+        <RelatedContentBlock
+          context={context}
+          resolvedLinks={resolved}
+          heading="Related lessons, practice, and reading"
+        />
+      </div>
+    );
+  }
+
+  if (props.surface === "lesson") {
+    try {
+      let resolved = await resolveAutomaticRelatedBundleForPathwayLesson({
+        pathway: props.pathway,
+        lesson: props.lesson,
+        locale: props.locale,
+        includeLessonBucket: true,
+        excludeHrefs: props.excludeHrefs,
+      });
+      resolved = (
+        await filterResolvedLinksLessonsByPublicMarketingIntegrity({
+          pathway: props.pathway,
+          lessonContentLocale,
+          resolved,
+        })
+      ).resolved;
+      if (countHighConfidenceCandidates(resolved) < MIN_PUBLIC_AUTO_LINKS) return null;
+      const context = {
+        surface: "lesson" as const,
+        locale: props.locale,
+        pathway: {
+          countrySlug: props.pathway.countrySlug,
+          roleTrack: props.pathway.roleTrack,
+          examCode: props.pathway.examCode,
+          examFamily: props.pathway.examFamily,
+        },
+        topicKey: props.lesson.topicSlug,
+        bodySystem: props.lesson.bodySystem,
+        topicHints: [props.lesson.topic, props.lesson.topicSlug],
+        excludeHrefs: [],
+      };
+      return (
+        <div className="mt-10 space-y-4 not-prose">
+          <RelatedContentBlock
+            context={context}
+            resolvedLinks={resolved}
+            heading="Related study on this pathway"
+            showKinds={["lesson", "flashcard", "question", "blog", "cat", "hub"]}
+          />
+        </div>
+      );
+    } catch (e) {
+      rethrowNextNavigationControlFlow(e);
+      safeServerLog("linking", "automatic_related_content_lesson_failed", {
+        pathway_id: props.pathway.id,
+        lesson_slug: props.lesson.slug.slice(0, 200),
+        detail: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      });
+      return null;
+    }
+  }
+
+  let resolved = resolveAutomaticRelatedLinksForProgrammaticQuestionTopic(props.def, props.locale);
+  const pathway = getExamPathwayById(props.def.primaryPathwayId);
+  resolved = (
+    await filterResolvedLinksLessonsByPublicMarketingIntegrity({
+      pathway: pathway ?? undefined,
+      lessonContentLocale,
+      resolved,
+    })
+  ).resolved;
+  if (countHighConfidenceCandidates(resolved) < MIN_PUBLIC_AUTO_LINKS) return null;
+  const context = {
+    surface: "question" as const,
+    locale: props.locale,
+    pathway: pathway
+      ? {
+          countrySlug: pathway.countrySlug,
+          roleTrack: pathway.roleTrack,
+          examCode: pathway.examCode,
+          examFamily: pathway.examFamily,
+        }
+      : undefined,
+    topicKey: props.def.slug.replace(/-/g, " ").slice(0, 80),
+    topicHints: [props.def.slug],
+    excludeHrefs: [],
+  };
+  return (
+    <div className="mt-10 space-y-4 not-prose">
+      <RelatedContentBlock
+        context={context}
+        resolvedLinks={resolved}
+        heading="Keep studying this topic"
+        showKinds={["lesson", "flashcard", "question", "cat"]}
+      />
+    </div>
+  );
+}

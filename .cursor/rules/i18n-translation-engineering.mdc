@@ -1,0 +1,18 @@
+---
+description: Static translation engineering rules (keys, shards, admin vs public, loading)
+alwaysApply: false
+globs: tools/i18n/**/*,**/public/i18n/**/*,**/i18n-admin-only/**/*,**/load-marketing-messages.ts,**/merge-next-public-i18n-shards.ts,**/marketing-i18n/**/*.tsx
+---
+
+# Translation engineering (strict)
+
+When editing static i18n sources, merged JSON, or loaders:
+
+- **Shard size**: Keep each `public/i18n/{locale}/{shard}.json` under **850 KB**; legacy monolithic `{locale}.json` under **2.2 MB** — validated by `npm run i18n:validate:production`. Split shards or move long copy to content systems.
+- **No exam/lesson body prose** in flat UI maps: question stems, rationales, and article bodies belong in DB/CMS/pathway/educational-overlay pipelines — not new keys in `tools/i18n` for long narrative content.
+- **Keys**: English baseline first; same key set per locale after `i18n:compile`; dot-separated names; no missing keys in production validate (`--strict`).
+- **UI**: No raw user-facing strings in TSX — use i18n helpers; use `npm run i18n:scan` / `i18n:scan:next` to audit.
+- **Admin vs public**: Never put `admin.json` under `public/i18n`. Staff strings only from `i18n-admin-only/` via scoped server loads (`ADMIN_UI_MESSAGE_SHARDS`).
+- **Loading**: Use existing server loaders (`loadMarketingMessages`, `loadMarketingMessageShards`); lazy client fetch for bundles — do not bloat client bundles with full locale maps unless already the app pattern.
+
+Reference: `docs/i18n-translation-engineering-policy.md`.

@@ -1,0 +1,262 @@
+[
+  {
+    "name": "desktop-1440-final4",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "overflowX": false,
+    "scrollWidth": 1440,
+    "shell": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 120.8,
+      "right": 1440
+    },
+    "desktopGrid": {
+      "x": 49,
+      "y": 38,
+      "w": 1342.1,
+      "h": 82.8,
+      "right": 1391
+    },
+    "mobileBar": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "right": 0
+    },
+    "logo": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "right": 0
+    },
+    "nav": {
+      "x": 539.2,
+      "y": 64.2,
+      "w": 361.6,
+      "h": 30.4,
+      "right": 900.8
+    },
+    "actions": {
+      "x": 1228,
+      "y": 60.4,
+      "w": 163,
+      "h": 38,
+      "right": 1391
+    },
+    "navGaps": [
+      37.4,
+      37.4,
+      37.4,
+      37.4
+    ],
+    "menu": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "right": 0
+    },
+    "menuColor": "rgb(255, 255, 255)"
+  },
+  {
+    "name": "laptop-1280-final4",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "overflowX": false,
+    "scrollWidth": 1280,
+    "shell": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 117.6,
+      "right": 1280
+    },
+    "desktopGrid": {
+      "x": 43.5,
+      "y": 38,
+      "w": 1193,
+      "h": 79.6,
+      "right": 1236.5
+    },
+    "mobileBar": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "right": 0
+    },
+    "logo": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "right": 0
+    },
+    "nav": {
+      "x": 467.5,
+      "y": 62.6,
+      "w": 344.9,
+      "h": 30.4,
+      "right": 812.5
+    },
+    "actions": {
+      "x": 1073.5,
+      "y": 58.8,
+      "w": 163,
+      "h": 38,
+      "right": 1236.5
+    },
+    "navGaps": [
+      33.3,
+      33.3,
+      33.3,
+      33.3
+    ],
+    "menu": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "right": 0
+    },
+    "menuColor": "rgb(255, 255, 255)"
+  },
+  {
+    "name": "tablet-768-final4",
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    },
+    "overflowX": false,
+    "scrollWidth": 768,
+    "shell": {
+      "x": 0,
+      "y": 0,
+      "w": 768,
+      "h": 60,
+      "right": 768
+    },
+    "desktopGrid": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "right": 0
+    },
+    "mobileBar": {
+      "x": 23,
+      "y": 0,
+      "w": 721.9,
+      "h": 60,
+      "right": 745
+    },
+    "logo": {
+      "x": 23,
+      "y": 5,
+      "w": 145.8,
+      "h": 50,
+      "right": 168.8
+    },
+    "nav": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "right": 0
+    },
+    "actions": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "right": 0
+    },
+    "navGaps": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "menu": {
+      "x": 701,
+      "y": 8,
+      "w": 44,
+      "h": 44,
+      "right": 745
+    },
+    "menuColor": "rgb(6, 26, 72)"
+  },
+  {
+    "name": "mobile-390-final4",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "overflowX": false,
+    "scrollWidth": 390,
+    "shell": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 61.6,
+      "right": 390
+    },
+    "desktopGrid": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "right": 0
+    },
+    "mobileBar": {
+      "x": 16,
+      "y": 0,
+      "w": 358,
+      "h": 61.6,
+      "right": 374
+    },
+    "logo": {
+      "x": 16,
+      "y": 5.6,
+      "w": 139,
+      "h": 50,
+      "right": 155
+    },
+    "nav": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "right": 0
+    },
+    "actions": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "right": 0
+    },
+    "navGaps": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "menu": {
+      "x": 330,
+      "y": 11.4,
+      "w": 44,
+      "h": 44,
+      "right": 374
+    },
+    "menuColor": "rgb(6, 26, 72)"
+  }
+]

@@ -1,0 +1,72 @@
+/* ==========================================================================
+   premium-redesign-2026.css — backward-compat barrel
+
+   This file is the historical entry point for the NurseNest premium
+   marketing design system. CSS has been split into section-scoped files
+   under src/app/styles/marketing/ for maintainability.
+
+   Import order below matches the original cascade exactly.
+   Do NOT reorder these @import lines.
+
+   To add new CSS for a marketing surface, append to the appropriate
+   section file in src/app/styles/marketing/ and document its ownership
+   at the top of that file and in styles/marketing/index.css.
+
+   Consuming layouts:
+     src/app/(marketing)/marketing-styles.css  →  this file
+   ========================================================================== */
+
+@import "./styles/marketing/hero.css";
+@import "./styles/marketing/header-nav.css";
+@import "./styles/marketing/header-single-line.css";
+@import "./styles/marketing/theme-overrides.css";
+@import "./styles/marketing/hub-system.css";
+@import "./styles/marketing/pathway-reading.css";
+@import "./styles/marketing/hub-tiers.css";
+@import "./styles/marketing/content-surfaces.css";
+@import "./styles/marketing/lesson-readability-hotfix.css";
+@import "./styles/marketing/lesson-clinical-compact.css";
+@import "./styles/marketing/footer-seo.css";
+
+/* ── Pre-Nursing convergence sentinels ──────────────────────────────────────
+   The actual Pre-Nursing rules live in imported marketing section files. This
+   no-op block keeps legacy static contracts pointed at the historical barrel
+   while preserving the split CSS cascade above.
+   ─────────────────────────────────────────────────────────────────────────── */
+html[data-theme="ocean"] .nn-pre-nursing-marketing-hub,
+html[data-theme="blossom"] .nn-pre-nursing-marketing-hub,
+html[data-theme="midnight"] .nn-pre-nursing-marketing-hub,
+html[data-theme="sunset"] .nn-pre-nursing-marketing-hub,
+html[data-theme="aurora"] .nn-pre-nursing-marketing-hub {
+  --nn-prenursing-theme-covered: 1;
+  --nn-prenursing-contract-clinical-pearls: var(--nn-module-clinical-pearls, var(--semantic-brand));
+  --nn-prenursing-contract-labs: var(--nn-module-labs, var(--semantic-info));
+  --nn-prenursing-contract-practice: var(--nn-module-practice, var(--semantic-success));
+  --nn-prenursing-contract-safety: var(--nn-module-safety, var(--semantic-warning));
+  --nn-prenursing-contract-flashcards: var(--nn-module-flashcards, var(--semantic-chart-3));
+  --nn-prenursing-contract-chart-6: var(--semantic-chart-6);
+  --nn-prenursing-contract-chart-7: var(--semantic-chart-7);
+  --nn-prenursing-contract-chart-8: var(--semantic-chart-8);
+  --nn-prenursing-contract-chart-9: var(--semantic-chart-9);
+  --nn-prenursing-contract-premium-card-glow: var(--premium-card-glow, var(--semantic-chart-6));
+  scroll-padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-pre-nursing-marketing-hub {
+    scroll-behavior: auto;
+  }
+}
+
+/* ── Brand lockup theme overrides ──────────────────────────────────────────
+   These rules are intentionally in the barrel file (not in section files) so
+   they load AFTER all @imports and act as the canonical last-word overrides.
+   Tests read this file directly to guard against regressions.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Blossom: wordmark follows the active semantic Cherry Blossom primary token.
+   Do NOT use --logo-primary here: .nn-header-logo-row remaps it to
+   --nn-header-primary-fg (near-black) inside the row4 header, breaking the match. */
+html[data-theme="blossom"] .nn-header-brand-lockup {
+  color: var(--theme-primary);
+}

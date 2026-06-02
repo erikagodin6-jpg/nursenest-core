@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ocean">
+<head>
+<meta charset="utf-8"/>
+<title>07 Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="leaf-shared.css"/>
+<style>
+:root {
+  --brand: #1ca3d9; --ink: #1a2330; --muted: #5c6b78; --bg: #f4f9fc;
+  --card: #ffffff; --border: #e2eaef; --soft: #e8f6fc;
+  --leaf-tint: #1ca3d9; --leaf-glow: rgba(28,163,217,0.14);
+  --leaf-op-1: 0.09; --leaf-op-2: 0.055; --leaf-op-depth: 0.045;
+}
+body { font-family: "DM Sans", system-ui, sans-serif; background: var(--bg); color: var(--ink); margin: 0; width: 1280px; }
+.wrap { padding: 2rem 2.5rem; }
+.label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand); margin-bottom: 0.5rem; }
+h1,h2 { font-weight: 800; letter-spacing: -0.02em; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 1.15rem; padding: 1.35rem; position: relative; }
+.btn { display: inline-block; padding: 0.7rem 1.25rem; background: var(--brand); color: #fff; font-weight: 700; border-radius: 999px; text-decoration: none; }
+</style>
+</head>
+<body><div class="nn-surface nn-leaf-radial" style="min-height:560px;display:flex;align-items:center;justify-content:center">
+  <div class="nn-leaf-layer nn-leaf--depth"><img src="/logos/blossom-leaf.png" alt="" aria-hidden="true" style="display:block;width:100%;height:auto;object-fit:contain;"></div>
+  <div class="card" style="max-width:28rem;text-align:center;padding:2.5rem">
+    <div class="nn-leaf-empty" style="opacity:0.45"><img src="/logos/blossom-leaf.png" alt="" aria-hidden="true" style="display:block;width:100%;height:auto;object-fit:contain;"></div>
+    <p class="label">Welcome</p>
+    <h2 style="font-size:1.5rem">Build your adaptive readiness profile</h2>
+    <p style="color:var(--muted);margin:1rem 0 1.5rem">Soft botanical depth behind onboarding — calm, premium, recognizable.</p>
+    <a class="btn" href="#">Continue</a>
+  </div>
+</div></body>
+</html>

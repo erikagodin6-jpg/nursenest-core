@@ -1,0 +1,195 @@
+[
+  {
+    "id": "GERO-SCN-P1-001",
+    "packageId": "pkg1-foundations",
+    "title": "Acute Functional Decline in a Frail Older Adult",
+    "type": "clinical-scenario",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+    "difficulty": "moderate",
+    "scenario": {
+      "setting": "Long-Term Care Facility",
+      "patient": {
+        "age": 84,
+        "sex": "Female",
+        "name": "Mrs. Helen Kowalski",
+        "medicalHistory": ["Type 2 diabetes (well-controlled)", "Osteoporosis", "Mild-moderate dementia (baseline MMSE 18/30)"],
+        "medications": ["Metformin 500mg BID", "Alendronate weekly", "Vitamin D 1000 IU daily", "Calcium 500mg BID"],
+        "baseline": "Ambulatory with walker, continent, communicates in short sentences, eats 75% of meals independently, participates in group activities",
+        "CFS": 5
+      },
+      "presentation": "The nursing assistant reports that Mrs. Kowalski was found in bed at 0900, which is unusual — she is normally dressed and in the common room by 0800. She appears more confused than usual, has not eaten breakfast, and was incontinent of urine (new onset). Her temperature is 37.1°C (oral), HR 98 bpm, RR 18, BP 108/66 (her baseline is 130/78), SpO2 96% on room air.",
+      "vitalsTrend": "BP 108/66 (down from baseline 130/78), HR 98 (up from baseline 72), Temperature 37.1°C (subnormal response in older adult with infection)",
+      "assessment": "Staff note she winces when repositioned, is pulling at her clothes, and repeatedly says 'I need to go.' She has not had a bowel movement documented in 3 days."
+    },
+    "questions": [
+      {
+        "order": 1,
+        "stem": "Which of the following is the nurse's PRIORITY assessment for Mrs. Kowalski at this time?",
+        "options": {
+          "A": "Review her MMSE score to determine if her dementia has worsened",
+          "B": "Assess for signs of infection including performing a urinalysis",
+          "C": "Call her family to report the change in behaviour",
+          "D": "Apply a urinary catheter to manage her new incontinence"
+        },
+        "correctAnswer": "B",
+        "rationale": "The constellation of new confusion (change from baseline), new incontinence, decreased oral intake, hypotension, and tachycardia in an older adult with dementia is highly suggestive of a urinary tract infection or other acute infection presenting atypically. In older adults — particularly those with dementia — infections do NOT reliably produce fever (impaired thermoregulatory response). The temperature of 37.1°C is NOT reassuring in this context. Priority: assess for infection (UA, CBC, blood cultures, BMP).",
+        "clinicalPearl": "In older adults with dementia, new behavioural changes and functional decline ARE the fever equivalent — they are the body's signal that something is acutely wrong. The absence of fever does not rule out infection."
+      },
+      {
+        "order": 2,
+        "stem": "The urinalysis returns: cloudy urine, WBC >50/hpf, positive nitrite, positive leukocyte esterase. The physician orders antibiotics. Which additional nursing intervention is the HIGHEST priority for Mrs. Kowalski over the next 24–48 hours?",
+        "options": {
+          "A": "Apply bilateral wrist restraints to prevent her from removing the antibiotic IV",
+          "B": "Implement delirium precautions: orientation, hydration, early mobilization, sensory aids",
+          "C": "Restrict fluid intake to prevent worsening urinary incontinence",
+          "D": "Administer lorazepam 0.5 mg PRN for agitation"
+        },
+        "correctAnswer": "B",
+        "rationale": "This patient is presenting with infection-triggered delirium superimposed on dementia — a highly vulnerable state. Delirium precautions (HELP principles) are the highest-priority nursing intervention alongside antibiotic therapy: ensure orientation (clock, calendar, familiar staff), encourage oral hydration, get her up to her chair and ambulating as soon as safely possible, ensure hearing aid and glasses are in place. These measures treat delirium, prevent worsening, and speed recovery.",
+        "clinicalPearl": "Never use restraints or benzodiazepines for delirium — both are contraindicated and worsen the delirium. Hydration is critical in older adults with UTI as dehydration worsens confusion and delays antibiotic efficacy."
+      },
+      {
+        "order": 3,
+        "stem": "Three days later, Mrs. Kowalski's UTI is responding to treatment. She is now sitting in her chair at meals but still needs assistance dressing and bathing (previously independent in these). Her family is distressed and asks, 'Will she ever be her old self again?' Which response by the nurse is MOST appropriate?",
+        "options": {
+          "A": "'She will likely return to her baseline within 1–2 weeks as she recovers from the infection.'",
+          "B": "'The dementia means she will never fully recover. This is a permanent decline.'",
+          "C": "'Recovery depends on several factors. Many older adults with dementia take 2–8 weeks to recover cognitive function after a delirium episode, and some may not return fully to their prior baseline. We are doing everything to support her recovery.'",
+          "D": "'She is 84 years old — this kind of decline is expected at her age.'"
+        },
+        "correctAnswer": "C",
+        "rationale": "This is an honest, evidence-based, compassionate response. Delirium recovery in older adults with dementia: cognitive function typically recovers over weeks, but recovery is often incomplete — particularly after each subsequent delirium episode. Being honest about the uncertain trajectory while actively describing ongoing supportive care is the most appropriate family communication.",
+        "clinicalPearl": "Each delirium episode in a patient with dementia accelerates cognitive decline. A hospitalization with delirium may move a patient 1–2 stages forward on the dementia severity spectrum from which they never return to premorbid baseline."
+      }
+    ],
+    "learningObjectives": [
+      "Recognize atypical infection presentation in older adults with dementia",
+      "Apply delirium precautions in an older adult with infection-triggered delirium",
+      "Communicate honestly and compassionately with families about delirium recovery"
+    ],
+    "keyTakeaways": [
+      "New confusion + incontinence + functional decline in older adult = likely infection, even without fever",
+      "Delirium in dementia requires HELP principles; restraints and benzodiazepines are contraindicated",
+      "Recovery from delirium in dementia patients is slow (weeks) and may be incomplete"
+    ]
+  },
+  {
+    "id": "GERO-SCN-P1-002",
+    "packageId": "pkg1-foundations",
+    "title": "Caregiver Burnout and Family-Centred Assessment",
+    "type": "clinical-scenario",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+    "difficulty": "moderate",
+    "scenario": {
+      "setting": "Community Health/Home Care",
+      "patient": {
+        "age": 88,
+        "sex": "Male",
+        "name": "Mr. George Patel",
+        "medicalHistory": ["Moderate Alzheimer's dementia (MMSE 14/30)", "Hypertension", "Type 2 diabetes", "Urinary incontinence"],
+        "medications": ["Donepezil 10mg daily", "Lisinopril 10mg daily", "Metformin 500mg BID", "Aspirin 81mg daily"],
+        "baseline": "Requires assistance with all ADLs, incontinent, can walk short distances with walker, recognizes wife",
+        "caregiver": "Wife, age 82, with arthritis and hypertension"
+      },
+      "presentation": "A home care nurse visits the Patel home for a routine assessment. Mrs. Patel answers the door in her housecoat at 2 PM. She appears pale, tearful, and moves slowly. She states, 'I haven't slept in 4 days — he keeps getting up at night. I can't leave him alone for even 5 minutes. I haven't been to my own doctor in 8 months.' Mr. Patel is in a recliner chair, appears clean but thin. There is minimal food in the kitchen."
+    },
+    "questions": [
+      {
+        "order": 1,
+        "stem": "After assessing Mr. Patel's immediate safety, which nursing priority should the nurse address NEXT?",
+        "options": {
+          "A": "Document Mrs. Patel's emotional distress and plan a follow-up visit in 2 weeks",
+          "B": "Comprehensively assess Mrs. Patel's physical and psychological health and access to respite",
+          "C": "Advise Mrs. Patel to arrange long-term care placement for her husband",
+          "D": "Telephone Mr. Patel's physician to report the caregiver's distress"
+        },
+        "correctAnswer": "B",
+        "rationale": "Mrs. Patel is in crisis — she is showing severe signs of caregiver burnout: sleep deprivation, social isolation, neglect of her own healthcare, emotional distress. She is as much a patient as her husband in this situation. The nurse must comprehensively assess her physical and psychological health (screening for depression, physical condition, safety) AND immediately connect her with respite care resources. A 2-week follow-up is unsafe; physician phone call without direct assessment of the caregiver misses the immediate crisis.",
+        "clinicalPearl": "When an elderly caregiver is in crisis, the priority is dual: ensure the care recipient's safety AND immediately address the caregiver's wellbeing and resource needs."
+      },
+      {
+        "order": 2,
+        "stem": "The nurse screens Mrs. Patel with the Geriatric Depression Scale-Short Form and she scores 8/15 (positive screen). Which nursing action is MOST appropriate?",
+        "options": {
+          "A": "Explain that her sadness is understandable given her caregiving situation and that it will improve when her husband's condition improves",
+          "B": "Refer Mrs. Patel to her primary care provider urgently and explore immediate caregiver relief options",
+          "C": "Advise Mrs. Patel to start antidepressants, which will help her cope better",
+          "D": "Document the GDS score and continue monitoring at subsequent home care visits"
+        },
+        "correctAnswer": "B",
+        "rationale": "A positive GDS screen requires action, not normalization. Depression in caregivers of people with dementia is extremely common and undertreated. The nurse must: (1) ensure Mrs. Patel accesses her own primary care provider urgently for depression assessment and treatment; (2) arrange immediate caregiver relief — respite care, in-home support workers, adult day programming — so the immediate crisis is stabilized. Nurses do not prescribe antidepressants; normalizing depression without action is a patient safety failure.",
+        "clinicalPearl": "Depression screening is part of caring for caregivers. A burned-out, depressed caregiver may not be able to provide safe care — preventing caregiver collapse prevents elder neglect."
+      }
+    ],
+    "learningObjectives": [
+      "Identify signs of caregiver burnout in older adult caregivers",
+      "Apply the GDS as a depression screening tool for caregivers",
+      "Prioritize caregiver wellbeing as part of holistic older adult care"
+    ],
+    "keyTakeaways": [
+      "Elderly spousal caregivers are high-risk for burnout, depression, and health deterioration",
+      "Caregiver assessment is part of every older adult home care visit",
+      "GDS positive screen → urgent primary care referral + respite care connection"
+    ]
+  },
+  {
+    "id": "GERO-SCN-P1-003",
+    "packageId": "pkg1-foundations",
+    "title": "Age-Friendly Care — 4Ms in Acute Hospital Setting",
+    "type": "clinical-scenario",
+    "examTargets": ["NCLEX-RN", "CNPLE"],
+    "difficulty": "hard",
+    "scenario": {
+      "setting": "Medical-Surgical Unit",
+      "patient": {
+        "age": 79,
+        "sex": "Female",
+        "name": "Mrs. Miriam Okonkwo",
+        "medicalHistory": ["Heart failure (EF 40%)", "Type 2 diabetes", "Hypertension", "Mild cognitive impairment (MoCA 24/30)"],
+        "medications": ["Furosemide 40mg daily", "Lisinopril 10mg daily", "Carvedilol 12.5mg BID", "Metformin 1000mg BID", "Aspirin 81mg daily"],
+        "baseline": "Lives at home alone. Independent in all ADLs. Drives locally. Volunteers at church weekly. Manages own finances and medications.",
+        "CFS": 3
+      },
+      "presentation": "Admitted 2 days ago for heart failure exacerbation. Currently receiving IV furosemide. She is on strict fluid restriction and bed rest ordered. The night nurse ordered temazepam 15mg for insomnia at 0100. At 0800, the day nurse finds her confused (not at baseline), trying to get out of bed, crying, and asking for 'her things.' Her glasses are not on. She is wearing her hospital gown backward. Staff on the previous shift placed bilateral padded bed rails in the highest position.",
+      "vitalsTrend": "BP 138/84, HR 86, RR 18, SpO2 96%, Temperature 36.8°C. No new labs ordered since admission."
+    },
+    "questions": [
+      {
+        "order": 1,
+        "stem": "Using the 4Ms framework, which finding represents the MOST urgent clinical concern for this nurse to address?",
+        "options": {
+          "A": "The bed rest order that has kept her immobile for 48 hours",
+          "B": "The temazepam administered at 0100 (Medication concern)",
+          "C": "The acute confusion that is not at her baseline (Mentation concern)",
+          "D": "The absence of her glasses (What Matters / sensory concern)"
+        },
+        "correctAnswer": "C",
+        "rationale": "While all findings represent 4Ms concerns, the MOST urgent is the acute mentation change — confusion that is not at baseline. This is delirium until proven otherwise: hospital environment, fluid restriction, sleep disruption, temazepam (anticholinergic, Beers Criteria), sensory deprivation (no glasses), and prolonged immobility have created a perfect storm for hospital-acquired delirium in a woman with mild cognitive impairment. Delirium is a medical emergency in older adults — it increases mortality, institutionalization, and permanent cognitive decline.",
+        "clinicalPearl": "Temazepam (benzodiazepine) is on the Beers Criteria for older adults. A one-time dose in a 79-year-old with mild cognitive impairment admitted to hospital is a significant delirium trigger. Prevention: always use non-pharmacologic sleep interventions first."
+      },
+      {
+        "order": 2,
+        "stem": "The nurse recognizes the clinical picture and immediately removes the temazepam from the medication administration record and contacts the physician. The physician asks, 'What do you want?' Which nursing recommendation best reflects 4Ms evidence-based care?",
+        "options": {
+          "A": "'Please order haloperidol 0.5 mg IM PRN for agitation — she is trying to get out of bed.'",
+          "B": "'Please discontinue the bed rest order, allow her to ambulate with assistance, and I would like a physiotherapy consult. I will also implement HELP program delirium precautions at the bedside.'",
+          "C": "'Please order a CT head to rule out stroke, and we should apply bilateral wrist restraints for her safety.'",
+          "D": "'Please order Ativan 0.5mg PO PRN for anxiety, which I believe is driving her agitation.'"
+        },
+        "correctAnswer": "B",
+        "rationale": "The 4Ms evidence-based approach to hospital-acquired delirium: (1) Mobility — remove the bed rest order; get her up and walking (immobility is a major delirium trigger); (2) Medication — temazepam already flagged; avoid additional sedating/anticholinergic medications; (3) Mentation — implement HELP delirium precautions (orientation, glasses, hearing, cognitive stimulation, hydration, non-pharmacologic sleep). Haloperidol and benzodiazepines are last-resort options for delirium only when the patient is an immediate danger; restraints worsen delirium.",
+        "clinicalPearl": "Bed rest orders in older adults are almost never appropriate beyond the immediate peri-procedure period. The default should be: 'up as tolerated with assistance' — not 'bed rest.'"
+      }
+    ],
+    "learningObjectives": [
+      "Apply the 4Ms framework to identify and prioritize concerns in a hospitalized older adult",
+      "Recognize hospital-acquired delirium triggers including benzodiazepines and immobility",
+      "Advocate for evidence-based, age-friendly interventions using clinical communication"
+    ],
+    "keyTakeaways": [
+      "Temazepam + bed rest + sensory deprivation + hospital stress = delirium recipe in older adult with MCI",
+      "4Ms approach: Mentation (delirium recognition), Mobility (remove bed rest), Medication (remove temazepam), What Matters (restore independence)",
+      "Restraints and benzodiazepines worsen delirium — never use for agitation in older adults without comprehensive assessment"
+    ]
+  }
+]

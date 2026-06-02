@@ -1,0 +1,146 @@
+/* =========================================================================
+   tokens.css
+   Global design-token :root block extracted from globals.css.
+   Imported by: src/app/layout.tsx (root layout).
+   These CSS custom properties must be available on every route.
+   ========================================================================= */
+
+:root {
+  --font-ui:
+    var(--font-sans-next),
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  --font-sans: var(--font-ui);
+  --font-devanagari: "Noto Sans Devanagari", "Mangal", "Kohinoor Devanagari", "Nirmala UI", var(--font-sans);
+  /* Slightly rounder global radius → calmer cards without “chunky” mobile tiles */
+  --radius: 0.8125rem;
+  --color-warmwhite: #fdfcfa;
+  --color-softgray: #5c6b7d;
+
+  --text-hero: clamp(2.25rem, 5vw, 3.5rem);
+  --text-section: clamp(1.75rem, 3.5vw, 2.5rem);
+  /* Hero band under sticky header: intentional gap, not flush */
+  --space-hero-top: clamp(0.625rem, 1.5vw, 1.125rem);
+  --space-hero-bottom: clamp(1rem, 2.2vw, 1.875rem);
+  --space-block: clamp(2.25rem, 4.2vw, 3.25rem);
+
+  --shadow-card:
+    0 1px 0 rgba(23, 34, 42, 0.05),
+    0 1px 3px rgba(23, 34, 42, 0.05),
+    0 12px 32px -14px rgba(23, 34, 42, 0.08);
+  --shadow-card-hover:
+    0 1px 0 rgba(23, 34, 42, 0.06),
+    0 4px 14px -4px rgba(23, 34, 42, 0.08),
+    0 18px 44px -14px rgba(23, 34, 42, 0.12);
+  --shadow-nav: 0 1px 4px rgba(0, 0, 0, 0.08), 0 4px 18px -4px rgba(0, 0, 0, 0.1);
+  --shadow-elevated:
+    0 8px 28px -10px rgba(23, 34, 42, 0.12),
+    0 2px 8px -2px rgba(23, 34, 42, 0.06);
+  --elevation-rest: var(--shadow-card);
+  --elevation-hover: var(--shadow-card-hover);
+  --elevation-active: 0 2px 10px -6px rgba(0, 0, 0, 0.14), 0 1px 4px rgba(0, 0, 0, 0.09);
+  --elevation-overlay: var(--shadow-elevated);
+  --lift-hover-y: -2px;
+  --lift-card-hover-y: -2px;
+  --lift-press-y: 0;
+  --motion-fast: 120ms;
+  --motion-base: 160ms;
+  --motion-slow: 180ms;
+  --motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* NurseNest brand motion — mirrors `src/lib/motion/tokens.ts` (Framer uses seconds; CSS uses ms) */
+  --brand-motion-fast: 140ms;
+  --brand-motion-normal: 200ms;
+  --brand-motion-hero: 220ms;
+  --brand-motion-card-hover: 180ms;
+  --brand-motion-medium: 280ms;
+  --brand-motion-slow: 360ms;
+  --brand-motion-ease-luxury: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --brand-motion-ease-calm-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Primary / CTA press & lift — 120–180ms, calm ease (used by .nn-ui-btn, .nn-btn-*, dashboard CTAs) */
+  --nn-btn-motion-duration: 140ms;
+  --nn-btn-motion-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* Marketing / exam-prep: one card recipe (padding, radius, shadow) */
+  --nn-marketing-card-padding: 1.25rem;
+  --nn-marketing-card-padding-md: 1.5rem;
+
+  /* Marketing typography scale — exam-prep (UWorld-like: calm hierarchy, long reading) */
+  --text-marketing-h3: 1.125rem;
+  --text-marketing-h4: 1.02rem;
+  --text-marketing-body: 1rem;
+  --text-marketing-body-sm: 0.875rem;
+  --text-marketing-caption: 0.75rem;
+  --leading-marketing-body: 1.62;
+  --leading-marketing-snug: 1.22;
+  /* Shared type scale — readable, low-fatigue hierarchy (weights stay 400–600) */
+  --nn-font-weight-body: 400;
+  --nn-font-weight-ui: 500;
+  /** Section titles + blog/lesson subheads (not the largest hero line) */
+  --nn-font-weight-heading: 600;
+  /** Primary marketing hero / page title only — slightly stronger than section heads */
+  --nn-font-weight-hero: 600;
+  /** Inline emphasis (e.g. lesson `<strong>`) without bumping all headings to 600 */
+  --nn-font-weight-emphasis: 550;
+  --nn-leading-prose: 1.72;
+  --nn-max-prose-ch: 65ch;
+
+  /*
+   * First-paint neutral header surface. Theme-specific values live in theme-palettes.css
+   * inside the :is([data-theme="…"], …) block which has [0,1,0,0] attribute specificity —
+   * higher than :root's [0,0,0,1] — so they correctly override once [data-theme] is applied.
+   * ⚠ DO NOT put theme-specific colors here; they would override [data-theme] for light themes
+   * because :root specificity beats :where([data-theme]) specificity.
+   */
+  --theme-header-surface: #ffffff;
+  /* Centralized palette roles (seeded before ThemeStateHydration applies per-theme values). */
+  --palette-primary: #1aaee0;
+  --palette-accent: #2563eb;
+  --palette-background: #eef2f8;
+  --palette-surface: #ffffff;
+  --palette-surface-alt: #e4eaf3;
+  --palette-text: #374151;
+  --palette-text-muted: #4b5563;
+  --palette-heading: #1f2937;
+  --palette-border: #bfd7f0;
+  --palette-ring: #2563eb;
+  --palette-button-primary: #2563eb;
+  --palette-button-primary-text: #ffffff;
+  --palette-button-secondary: #e4ecfb;
+  --palette-button-secondary-text: #244d8a;
+  --palette-badge: #bfd3f8;
+  --palette-badge-text: #285393;
+  --palette-nav-background: #f1f6fd;
+  --palette-nav: var(--palette-nav-background);
+  --palette-nav-border: #bed1f0;
+  --palette-nav-hover: #e6eefb;
+  --palette-nav-active: #d7e5f8;
+  --palette-nav-text: #0f172a;
+  --palette-nav-text-muted: #5b6b82;
+  --palette-top-bar-background: #1e4fa8;
+  --palette-top-bar-text: #ffffff;
+  --header-on-dark: #ffffff;
+  --theme-luminance: light;
+  --text-primary: var(--palette-heading);
+  --text-secondary: var(--palette-text);
+  --text-muted: var(--palette-text-muted);
+  --text-on-dark: #f8fafc;
+  --text-on-light: #0f172a;
+  --text-on-gradient: var(--text-on-light);
+  --background-primary: var(--palette-background);
+  --background-surface: var(--palette-surface);
+  --background-gradient: linear-gradient(135deg, var(--palette-surface-alt), var(--palette-surface));
+  --gradient-overlay: linear-gradient(180deg, transparent, transparent);
+  --text-on-accent: var(--palette-top-bar-text);
+  --border-subtle: var(--palette-border);
+  --accent-primary: var(--palette-button-primary);
+  --accent-secondary: var(--palette-accent);
+  /* Hero gradient first-paint: neutral transparent so no ocean flash before hydration. */
+  --nn-aesthetic-hero-glow: none;
+  --nn-aesthetic-hero-mesh: none;
+  --nn-aesthetic-frame-shine: none;
+}

@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RN Lessons Design Gallery v3 — 12 Hub + 12 Lesson Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button,input{font-family:inherit}
+svg{display:block;flex-shrink:0}
+
+/* ── Gallery chrome ── */
+.g-chrome{background:#0c1220;color:#e2e8f0;position:sticky;top:0;z-index:500;border-bottom:1px solid #1e293b}
+.g-top{padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.g-title{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8}
+.g-title strong{color:#f8fafc;display:block;font-size:15px;letter-spacing:-.02em;text-transform:none;margin-top:2px}
+.g-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.g-btn{height:34px;padding:0 14px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#cbd5e1;font-size:12px;font-weight:600;cursor:pointer}
+.g-btn.on{background:#f8fafc;color:#0f172a;border-color:#f8fafc}
+.g-btn:hover:not(.on){background:#273548}
+.g-tabs{display:flex;gap:2px;padding:0 24px 0;overflow-x:auto;scrollbar-width:none}
+.g-tabs::-webkit-scrollbar{display:none}
+.g-tab{padding:8px 16px 10px;font-size:11px;font-weight:700;color:#64748b;border:none;background:transparent;cursor:pointer;border-radius:6px 6px 0 0;white-space:nowrap}
+.g-tab.on{color:#0f172a;background:#f1f5f9}
+.g-subtabs{padding:8px 24px 12px;background:#f1f5f9;display:flex;gap:6px;overflow-x:auto;flex-wrap:wrap;border-bottom:1px solid #e2e8f0}
+.g-subtab{padding:6px 12px;font-size:11px;font-weight:600;color:#64748b;background:#fff;border:1px solid #e2e8f0;border-radius:999px;cursor:pointer;white-space:nowrap}
+.g-subtab.on{background:#0ea5e9;color:#fff;border-color:#0ea5e9}
+.g-stage{background:#cbd5e1;padding:32px;display:flex;justify-content:center;align-items:flex-start;min-height:calc(100vh - 140px);overflow:auto}
+.g-panel-system{display:none;max-width:1200px;width:100%;padding:24px}
+.g-panel-system.on{display:block}
+
+/* ── Viewport frames ── */
+.viewport{background:#fff;border-radius:12px;box-shadow:0 24px 80px rgba(15,23,42,.18);overflow:hidden;transition:width .3s ease}
+.viewport.desktop{width:1440px}
+.viewport.mobile{width:390px}
+.viewport-label{text-align:center;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#64748b;margin-bottom:12px}
+
+/* ── Shared tokens (light) ── */
+[data-mode="light"] .mock{
+  --bg:#f4f8fc;--surf:#fff;--panel:#f8fbfe;--panel2:#eef4fa;
+  --border:rgba(148,163,184,.35);--border-s:rgba(26,174,224,.25);
+  --txt:#0f172a;--txt2:#475569;--muted:#64748b;
+  --primary:#0d7aaa;--primary-b:#1aaee0;--primary-s:rgba(13,122,170,.1);
+  --sh:0 1px 0 rgba(0,0,0,.03),0 8px 28px -8px rgba(6,88,140,.1);
+  --sh-lg:0 2px 0 rgba(0,0,0,.04),0 20px 50px -16px rgba(6,88,140,.14);
+  --nav-h:56px;
+  --sec-patho:#2563eb;--sec-sx:#0d9488;--sec-assess:#0891b2;--sec-labs:#0284c7;
+  --sec-interv:#16a34a;--sec-meds:#7c3aed;--sec-teach:#059669;--sec-safety:#dc2626;
+  --sec-pearl:#d97706;--sec-priority:#ea580c;--sec-delegate:#6366f1;
+  --sec-scenario:#9333ea;--sec-practice:#4f46e5;
+}
+[data-mode="dark"] .mock{
+  --bg:#07111f;--surf:#111827;--panel:#0d1826;--panel2:#152032;
+  --border:rgba(71,96,124,.6);--border-s:rgba(56,189,248,.28);
+  --txt:#f0f6ff;--txt2:#c8d8ed;--muted:#5e7a98;
+  --primary:#38bdf8;--primary-b:#7dd3fc;--primary-s:rgba(56,189,248,.12);
+  --sh:0 2px 0 rgba(0,0,0,.25),0 8px 28px -8px rgba(0,0,0,.4);
+  --sh-lg:0 2px 0 rgba(0,0,0,.3),0 20px 50px -16px rgba(0,0,0,.5);
+  --nav-h:56px;
+  --sec-patho:#60a5fa;--sec-sx:#2dd4bf;--sec-assess:#22d3ee;--sec-labs:#38bdf8;
+  --sec-interv:#4ade80;--sec-meds:#a78bfa;--sec-teach:#34d399;--sec-safety:#f87171;
+  --sec-pearl:#fbbf24;--sec-priority:#fb923c;--sec-delegate:#818cf8;
+  --sec-scenario:#c084fc;--sec-practice:#818cf8;
+}
+
+.mock{width:100%;min-height:900px;background:var(--bg);color:var(--txt);font-size:15px;line-height:1.6;position:relative}
+.mock.mobile-view{min-height:780px;font-size:14px}
+.mock *{box-sizing:border-box}
+
+/* ── Top nav (all concepts) ── */
+.m-nav{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,32px);background:var(--surf);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20}
+.m-nav-logo{font-size:14px;font-weight:800;color:var(--primary)}
+.m-nav-links{display:flex;gap:20px;font-size:13px;font-weight:600;color:var(--muted)}
+.m-nav-links span.on{color:var(--txt)}
+.m-nav-cta{height:36px;padding:0 16px;border-radius:10px;background:var(--primary);color:#fff;font-size:12px;font-weight:700;border:none;display:flex;align-items:center}
+.mobile-view .m-nav-links{display:none}
+
+/* ── Shell ── */
+.m-shell{max-width:1520px;margin:0 auto;padding:clamp(24px,4vw,48px) clamp(20px,4vw,40px) 64px}
+.mobile-view .m-shell{padding:20px 16px 48px}
+
+/* ── Hub: shared pieces ── */
+.h-hero{margin-bottom:48px}
+.h-hero h1{font-size:clamp(32px,4vw,52px);font-weight:800;letter-spacing:-.04em;line-height:1.05;color:var(--txt)}
+.h-hero p{font-size:17px;color:var(--muted);max-width:640px;margin-top:14px;line-height:1.65}
+.h-eyebrow{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--primary);margin-bottom:12px}
+.h-search{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.h-search input{flex:1;min-width:200px;height:48px;border-radius:14px;border:1px solid var(--border);background:var(--surf);padding:0 18px;font-size:14px;color:var(--txt)}
+.h-pill{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--border);background:var(--surf);font-size:12px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center;cursor:pointer;white-space:nowrap}
+.h-pill.on{background:var(--primary-s);color:var(--primary);border-color:var(--border-s)}
+.h-section{margin-bottom:56px}
+.h-section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;gap:16px;flex-wrap:wrap}
+.h-section-head h2{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.h-section-head span{font-size:13px;color:var(--muted);font-weight:600}
+.h-card{background:var(--surf);border:1px solid var(--border);border-radius:18px;padding:22px 24px;box-shadow:var(--sh);transition:transform .15s,box-shadow .15s}
+.h-card:hover{transform:translateY(-2px);box-shadow:var(--sh-lg)}
+.h-card h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.h-card p{font-size:13px;color:var(--muted);line-height:1.5}
+.h-progress{height:6px;border-radius:999px;background:color-mix(in srgb,var(--primary) 15%,transparent);margin-top:14px;overflow:hidden}
+.h-progress span{display:block;height:100%;background:var(--primary-b);border-radius:inherit}
+.h-grid{display:grid;gap:16px}
+.h-grid-3{grid-template-columns:repeat(3,1fr)}
+.h-grid-4{grid-template-columns:repeat(4,1fr)}
+.mobile-view .h-grid-3,.mobile-view .h-grid-4{grid-template-columns:1fr}
+.h-cat{display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:16px;border:1px solid var(--border);background:var(--surf);cursor:pointer;transition:transform .15s}
+.h-cat:hover{transform:translateY(-2px)}
+.h-cat-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.h-cat b{font-size:14px;font-weight:700}
+.h-cat small{font-size:12px;color:var(--muted)}
+/* Compact resume — secondary to categories */
+.h-resume{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--surf);border:1px solid var(--border);border-radius:12px;box-shadow:var(--sh);font-size:12px;margin-bottom:8px}
+.h-resume-dot{width:8px;height:8px;border-radius:50%;background:var(--primary-b);flex-shrink:0}
+.h-resume-label{font-weight:700;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+.h-resume-title{font-weight:700;color:var(--txt)}
+.h-resume-meta{color:var(--muted);margin-left:8px}
+.h-resume-spacer{flex:1}
+.h-resume-btn{height:32px;padding:0 14px;border-radius:8px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;border:none;cursor:pointer}
+.mobile-view .h-resume{flex-wrap:wrap}
+.mobile-view .h-resume-spacer{display:none}
+.mobile-view .h-resume-btn{width:100%}
+.h-cat-primary{margin-bottom:48px}
+.h-cat-primary .h-section-head h2{font-size:28px}
+.h-cat-primary .h-section-head{margin-bottom:28px}
+.sys-card{background:var(--surf);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--sh)}
+.sys-accent{height:3px}
+.sys-head{padding:16px 18px 12px;display:flex;justify-content:space-between;align-items:center}
+.sys-title{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.sys-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+.sys-rows{padding:0 10px 12px}
+.sys-row{display:flex;gap:10px;padding:7px 10px;font-size:12px;color:var(--txt2);border-radius:8px}
+.sys-row:hover{background:var(--panel)}
+.sys-more{padding:9px;text-align:center;font-size:11px;font-weight:600;color:var(--primary);border-top:1px solid var(--border);background:var(--panel)}
+[data-theme="ocean"]{--bg:#f0f5fa;--surf:#fff;--panel:#f7fafd;--border:rgba(176,218,240,.65);--border-s:rgba(26,174,224,.28);--muted:#647894;--txt:#0f172a;--txt2:#455569;--primary:#0d7aaa;--primary-b:#1aaee0;--primary-s:rgba(13,122,170,.09);--sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(6,88,140,.08);--c1:#e11d48;--c2:#4eb0ce;--c3:#0d9488;--c4:#7c3aed}
+[data-theme="blossom"]{--bg:#fdf2fb;--surf:#fff;--panel:#fdf7fc;--border:rgba(232,200,226,.7);--border-s:rgba(217,72,168,.28);--muted:#7a6b84;--txt:#10182f;--txt2:#455569;--primary:#b3359a;--primary-b:#d948a8;--primary-s:rgba(217,72,168,.08);--sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(180,60,160,.07);--c1:#e11d48;--c2:#7c3aed;--c3:#d948a8;--c4:#4eb0ce}
+[data-theme="aurora"]{--bg:#f2f8ff;--surf:#fff;--panel:#f4f9ff;--border:rgba(180,210,240,.65);--border-s:rgba(99,160,217,.3);--muted:#637282;--txt:#1d3041;--txt2:#395266;--primary:#3a6eb8;--primary-b:#5e8bd9;--primary-s:rgba(94,139,217,.08);--sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(30,80,160,.09);--c1:#e11d48;--c2:#5e8bd9;--c3:#0d9488;--c4:#7c3aed}
+[data-theme="sunset"]{--bg:#fff8ed;--surf:#fffdf8;--panel:#fff4e8;--border:rgba(239,214,183,.7);--border-s:rgba(198,120,56,.28);--muted:#7a6652;--txt:#3f3024;--txt2:#5c4a36;--primary:#a05c22;--primary-b:#c67838;--primary-s:rgba(198,120,56,.09);--sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(100,60,20,.09);--c1:#e11d48;--c2:#c67838;--c3:#0d9488;--c4:#7c3aed}
+[data-theme="midnight"]{--bg:#07111f;--surf:#111827;--panel:#0d1826;--border:rgba(49,68,102,.85);--border-s:rgba(56,189,248,.25);--muted:#5e7a98;--txt:#f0f6ff;--txt2:#c8d8ed;--primary:#0ea5e9;--primary-b:#38bdf8;--primary-s:rgba(56,189,248,.08);--sh:0 2px 0 rgba(0,0,0,.2),0 6px 24px -10px rgba(0,0,0,.35);--c1:#f87171;--c2:#38bdf8;--c3:#34d399;--c4:#a78bda}
+.g-theme-btn{height:28px;padding:0 12px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:10px;font-weight:700;cursor:pointer}
+.g-theme-btn.on{background:var(--primary,#0d7aaa);color:#fff;border-color:transparent}
+
+/* ── Lesson: shared pieces ── */
+.l-hero{margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+.l-hero h1{font-size:clamp(28px,3.5vw,44px);font-weight:800;letter-spacing:-.04em;line-height:1.08}
+.l-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.l-chip{height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--border);background:var(--surf);font-size:12px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center}
+.l-nav-sticky{position:sticky;top:var(--nav-h);z-index:15;padding:16px 0;margin:0 0 32px;background:linear-gradient(180deg,var(--bg) 70%,transparent)}
+.l-pills{display:flex;gap:6px;overflow-x:auto;padding:6px;background:var(--surf);border:1px solid var(--border);border-radius:999px;box-shadow:var(--sh);scrollbar-width:none}
+.l-pills::-webkit-scrollbar{display:none}
+.l-pill{white-space:nowrap;padding:8px 14px;border-radius:999px;font-size:12px;font-weight:700;color:var(--muted);flex-shrink:0}
+.l-pill.on{background:var(--primary-s);color:var(--primary)}
+.l-sections{display:flex;flex-direction:column;gap:28px}
+.l-card{border-radius:20px;border:1px solid var(--border);padding:32px 36px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.l-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;border-radius:20px 0 0 20px}
+.l-card-head{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.l-card-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+.l-card h2{font-size:24px;font-weight:800;letter-spacing:-.02em;flex:1}
+.l-card-body{font-size:16px;line-height:1.78;color:var(--txt2);max-width:100%}
+.l-card-body p+p{margin-top:14px}
+.l-card ul{margin:16px 0 0 20px}
+.l-card li{margin-bottom:8px;color:var(--txt2)}
+.mobile-view .l-card{padding:22px 20px}
+.mobile-view .l-card h2{font-size:20px}
+
+/* Section colour variants */
+.l-card[data-sec="patho"]{background:color-mix(in srgb,var(--sec-patho) 6%,var(--surf))}
+.l-card[data-sec="patho"]::before{background:var(--sec-patho)}
+.l-card[data-sec="patho"] .l-card-icon{background:color-mix(in srgb,var(--sec-patho) 14%,transparent);color:var(--sec-patho)}
+.l-card[data-sec="sx"]{background:color-mix(in srgb,var(--sec-sx) 6%,var(--surf))}
+.l-card[data-sec="sx"]::before{background:var(--sec-sx)}
+.l-card[data-sec="sx"] .l-card-icon{background:color-mix(in srgb,var(--sec-sx) 14%,transparent);color:var(--sec-sx)}
+.l-card[data-sec="assess"]{background:color-mix(in srgb,var(--sec-assess) 6%,var(--surf))}
+.l-card[data-sec="assess"]::before{background:var(--sec-assess)}
+.l-card[data-sec="assess"] .l-card-icon{background:color-mix(in srgb,var(--sec-assess) 14%,transparent);color:var(--sec-assess)}
+.l-card[data-sec="labs"]{background:color-mix(in srgb,var(--sec-labs) 6%,var(--surf))}
+.l-card[data-sec="labs"]::before{background:var(--sec-labs)}
+.l-card[data-sec="labs"] .l-card-icon{background:color-mix(in srgb,var(--sec-labs) 14%,transparent);color:var(--sec-labs)}
+.l-card[data-sec="interv"]{background:color-mix(in srgb,var(--sec-interv) 6%,var(--surf))}
+.l-card[data-sec="interv"]::before{background:var(--sec-interv)}
+.l-card[data-sec="interv"] .l-card-icon{background:color-mix(in srgb,var(--sec-interv) 14%,transparent);color:var(--sec-interv)}
+.l-card[data-sec="meds"]{background:color-mix(in srgb,var(--sec-meds) 6%,var(--surf))}
+.l-card[data-sec="meds"]::before{background:var(--sec-meds)}
+.l-card[data-sec="meds"] .l-card-icon{background:color-mix(in srgb,var(--sec-meds) 14%,transparent);color:var(--sec-meds)}
+.l-card[data-sec="teach"]{background:color-mix(in srgb,var(--sec-teach) 6%,var(--surf))}
+.l-card[data-sec="teach"]::before{background:var(--sec-teach)}
+.l-card[data-sec="teach"] .l-card-icon{background:color-mix(in srgb,var(--sec-teach) 14%,transparent);color:var(--sec-teach)}
+.l-card[data-sec="safety"]{background:color-mix(in srgb,var(--sec-safety) 6%,var(--surf))}
+.l-card[data-sec="safety"]::before{background:var(--sec-safety)}
+.l-card[data-sec="safety"] .l-card-icon{background:color-mix(in srgb,var(--sec-safety) 14%,transparent);color:var(--sec-safety)}
+.l-card[data-sec="pearl"]{background:color-mix(in srgb,var(--sec-pearl) 6%,var(--surf))}
+.l-card[data-sec="pearl"]::before{background:var(--sec-pearl)}
+.l-card[data-sec="pearl"] .l-card-icon{background:color-mix(in srgb,var(--sec-pearl) 14%,transparent);color:var(--sec-pearl)}
+.l-card[data-sec="practice"]{background:color-mix(in srgb,var(--sec-practice) 6%,var(--surf))}
+.l-card[data-sec="practice"]::before{background:var(--sec-practice)}
+.l-card[data-sec="practice"] .l-card-icon{background:color-mix(in srgb,var(--sec-practice) 14%,transparent);color:var(--sec-practice)}
+
+.l-dock{margin-top:48px;padding:20px 24px;border-radius:16px;background:var(--surf);border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:var(--sh-lg)}
+.l-dock b{font-size:14px}
+.l-dock span{font-size:12px;color:var(--muted)}
+.l-dock button{height:42px;padding:0 20px;border-radius:12px;background:var(--primary);color:#fff;font-weight:700;border:none;font-size:13px}
+
+/* ── Concept-specific layout modifiers ── */
+/* H1 Clinical Atlas */
+.c-h1 .h-hero{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center}
+.c-h1 .h-ring{width:120px;height:120px;border-radius:50%;border:8px solid var(--border);display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative}
+.c-h1 .h-ring::after{content:'';position:absolute;inset:-8px;border-radius:50%;border:8px solid transparent;border-top-color:var(--primary-b);border-right-color:var(--primary-b)}
+.c-h1 .h-ring b{font-size:28px;font-weight:800}
+.c-h1 .h-ring small{font-size:11px;color:var(--muted)}
+.mobile-view.c-h1 .h-hero{grid-template-columns:1fr}
+
+/* H2 Editorial */
+.c-h2 .h-hero h1{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(40px,5vw,64px);font-weight:400}
+.c-h2 .h-cats-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.c-h2 .h-cats-scroll::-webkit-scrollbar{display:none}
+.c-h2 .h-cat{min-width:140px;flex-shrink:0}
+
+/* H3 Bento */
+.c-h3 .h-bento{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:auto auto;gap:16px}
+.c-h3 .h-bento .b-wide{grid-column:span 2}
+.c-h3 .h-bento .b-tall{grid-row:span 2}
+.mobile-view.c-h3 .h-bento{grid-template-columns:1fr}
+
+/* H4 Spectrum */
+.c-h4 .h-cat{border-left:4px solid var(--cat-color,var(--primary))}
+
+/* H5 Progress Journey */
+.c-h5 .h-timeline{display:flex;gap:0;overflow-x:auto;padding:24px 0}
+.c-h5 .h-step{flex:1;min-width:160px;padding:0 20px;border-left:2px solid var(--border);position:relative}
+.c-h5 .h-step:first-child{border-left:0}
+.c-h5 .h-step-dot{width:12px;height:12px;border-radius:50%;background:var(--primary);margin-bottom:12px}
+
+/* H6 Glass */
+.c-h6 .h-glass{background:color-mix(in srgb,var(--surf) 75%,transparent);backdrop-filter:blur(16px);border:1px solid color-mix(in srgb,#fff 40%,var(--border))}
+.c-h6 .mock::before,.c-h6 .mock::after{content:'';position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
+.c-h6 .mock::before{width:400px;height:400px;background:color-mix(in srgb,var(--primary) 12%,transparent);top:-100px;right:-80px}
+.c-h6 .mock::after{width:300px;height:300px;background:color-mix(in srgb,#7c3aed 8%,transparent);bottom:200px;left:-60px}
+.c-h6 .m-shell{position:relative;z-index:1}
+
+/* H7 Academic */
+.c-h7 .h-table{width:100%;border-collapse:collapse}
+.c-h7 .h-table th,.c-h7 .h-table td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--border);font-size:13px}
+.c-h7 .h-table th{font-weight:700;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+
+/* H8 Notion */
+.c-h8 .h-row{display:grid;grid-template-columns:1fr 100px 80px 60px;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);align-items:center;font-size:13px}
+.c-h8 .h-row-head{color:var(--muted);font-weight:700;font-size:11px;text-transform:uppercase}
+.mobile-view.c-h8 .h-row{grid-template-columns:1fr 70px}
+
+/* H9 Adaptive */
+.c-h9 .h-weak{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:40px}
+.c-h9 .h-weak-card{padding:24px;border-radius:18px;border:2px solid color-mix(in srgb,#dc2626 30%,var(--border));background:color-mix(in srgb,#dc2626 4%,var(--surf))}
+.mobile-view.c-h9 .h-weak{grid-template-columns:1fr}
+
+/* H10 Magazine */
+.c-h10 .h-featured{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+.c-h10 .h-feature-main{min-height:280px;border-radius:24px;background:linear-gradient(145deg,color-mix(in srgb,var(--primary) 15%,var(--panel)),var(--surf));padding:36px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--border)}
+.mobile-view.c-h10 .h-featured{grid-template-columns:1fr}
+
+/* H11 Minimal */
+.c-h11 .h-hero h1{font-size:clamp(36px,4vw,56px)}
+.c-h11 .h-section{margin-bottom:80px}
+.c-h11 .h-card{padding:32px 28px}
+
+/* H12 Ultrawide */
+.c-h12 .m-shell{max-width:1600px}
+.c-h12 .h-band{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+
+/* L2 Editorial lesson */
+.c-l2 .l-hero h1{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(36px,4.5vw,56px);font-weight:400}
+.c-l2 .l-sections{gap:64px}
+
+/* L3 Grid */
+.c-l3 .l-sections{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.mobile-view.c-l3 .l-sections{grid-template-columns:1fr}
+
+/* L4 Workflow */
+.c-l4 .l-flow{display:flex;gap:0;margin-bottom:32px}
+.c-l4 .l-flow-step{flex:1;padding:20px;text-align:center;border:1px solid var(--border);background:var(--surf);font-size:12px;font-weight:700}
+.c-l4 .l-flow-step:first-child{border-radius:16px 0 0 16px}
+.c-l4 .l-flow-step:last-child{border-radius:0 16px 16px 0}
+.c-l4 .l-flow-step.on{background:var(--primary-s);color:var(--primary);border-color:var(--border-s)}
+
+/* L6 Accordion - collapsed style */
+.c-l6 .l-card{padding:18px 24px}
+.c-l6 .l-card-body{display:none}
+.c-l6 .l-card.expanded .l-card-body{display:block}
+.c-l6 .l-card.expanded{padding:32px 36px}
+
+/* L7 Spine */
+.c-l7 .l-wrap{display:grid;grid-template-columns:48px 1fr;gap:28px}
+.c-l7 .l-spine{display:flex;flex-direction:column;align-items:center;padding-top:8px}
+.c-l7 .l-spine-line{width:3px;flex:1;background:var(--border);border-radius:999px;margin:8px 0;position:relative}
+.c-l7 .l-spine-fill{position:absolute;top:0;left:0;right:0;height:35%;background:var(--primary-b);border-radius:999px}
+
+/* L9 Neumorphism */
+.c-l9 .l-card{box-shadow:8px 8px 20px color-mix(in srgb,#000 6%,transparent),-6px -6px 16px color-mix(in srgb,#fff 80%,transparent);border:none}
+[data-mode="dark"].c-l9 .l-card{box-shadow:8px 8px 20px rgba(0,0,0,.4),-4px -4px 12px rgba(255,255,255,.03)}
+
+/* L10 Premium */
+.c-l10 .l-sections{gap:80px}
+.c-l10 .l-card{padding:48px 52px;border-radius:28px}
+.c-l10 .l-card h2{font-size:28px}
+
+/* L11 Practice */
+.c-l11 .l-practice-q{padding:16px;border-radius:12px;border:1px solid var(--border);background:var(--surf);margin-top:12px;cursor:pointer}
+.c-l11 .l-practice-q:hover{border-color:var(--sec-practice)}
+
+/* L12 Dark - uses dark tokens via parent */
+
+/* Design system panel */
+.ds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
+.ds-card{background:#fff;border-radius:16px;padding:24px;border:1px solid #e2e8f0}
+.ds-card h3{font-size:16px;font-weight:800;margin-bottom:16px;color:#0f172a}
+.ds-swatch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.ds-swatch span{width:48px;height:48px;border-radius:10px;border:1px solid rgba(0,0,0,.08)}
+.ds-type p{margin-bottom:8px;color:#334155}
+.ds-type .t-hero{font-size:48px;font-weight:800;letter-spacing:-.04em;color:#0f172a}
+.ds-type .t-h2{font-size:28px;font-weight:700;color:#0f172a}
+.ds-type .t-body{font-size:17px;line-height:1.75;color:#475569}
+.ds-comp{display:flex;flex-direction:column;gap:12px}
+.ds-comp .sample{height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="g-chrome">
+  <div class="g-top">
+    <div class="g-title">
+      NurseNest RN Lessons
+      <strong>Design Gallery v3</strong>
+    </div>
+    <div class="g-controls">
+      <button class="g-btn on" id="btnDesktop" type="button">Desktop 1440</button>
+      <button class="g-btn" id="btnMobile" type="button">Mobile 390</button>
+      <button class="g-btn on" id="btnLight" type="button">Light</button>
+      <button class="g-btn" id="btnDark" type="button">Dark</button>
+      <a class="g-btn" href="rn-lessons-hub-gallery-v4.html" style="text-decoration:none;display:inline-flex;align-items:center">Hub v4 ↗</a>
+    </div>
+  </div>
+  <div class="g-theme-row" id="themeRow" style="display:none;padding:8px 24px 10px;gap:6px;flex-wrap:wrap;border-bottom:1px solid #e2e8f0;background:#f8fafc"></div>
+  <div class="g-tabs" id="mainTabs">
+    <button class="g-tab on" data-panel="hub">Lessons Hub (12)</button>
+    <button class="g-tab" data-panel="lesson">Lesson Page (12)</button>
+    <button class="g-tab" data-panel="system">Design System</button>
+  </div>
+  <div class="g-subtabs" id="subTabs"></div>
+</div>
+
+<div class="g-stage" id="stage">
+  <div class="viewport desktop" id="viewport">
+    <div class="viewport-label" id="vpLabel">Desktop · 1440px</div>
+    <div id="mockRoot"></div>
+  </div>
+  <div class="g-panel-system" id="systemPanel"></div>
+</div>
+
+<script>
+const HUB_THEMES = ['ocean','blossom','aurora','sunset','midnight'];
+const CATEGORIES = [
+  {name:'Med-Surg',lessons:84,pct:34,accent:'var(--c1)',samples:['Pulmonary Embolism','Heart Failure','Sepsis Recognition']},
+  {name:'Pharmacology',lessons:62,pct:18,accent:'var(--c4)',samples:['Insulin & Hypoglycemia','Anticoagulants','Pain Management']},
+  {name:'Fundamentals',lessons:48,pct:52,accent:'var(--c3)',samples:['Vital Signs','Infection Control','Documentation']},
+  {name:'Pediatrics',lessons:36,pct:12,accent:'var(--c2)',samples:['Dehydration','Asthma','Immunizations']},
+  {name:'Mental Health',lessons:28,pct:8,accent:'var(--c4)',samples:['Therapeutic Communication','Schizophrenia Care']},
+  {name:'Maternity',lessons:32,pct:22,accent:'var(--c1)',samples:['Labor Stages','Preeclampsia','Newborn Assessment']},
+  {name:'Critical Care',lessons:40,pct:15,accent:'var(--c1)',samples:['Ventilator Basics','Shock States','ACLS']},
+  {name:'Prioritization',lessons:24,pct:41,accent:'var(--c6,#d97706)',samples:['ABC Framework','Urgent vs Emergent']},
+  {name:'Delegation',lessons:18,pct:28,accent:'var(--c4)',samples:['Scope of Practice','Task Assignment']},
+  {name:'Leadership',lessons:20,pct:10,accent:'var(--c2)',samples:['Conflict Resolution','Quality Improvement']},
+  {name:'NGN / Clinical Judgment',lessons:30,pct:5,accent:'var(--c5,#16a34a)',samples:['Clinical Decision Steps','Trend Analysis']},
+];
+
+const LESSONS = [
+  {title:'Pulmonary Embolism',cat:'Med-Surg',pct:72,time:'18 min'},
+  {title:'Heart Failure Exacerbation',cat:'Cardiovascular',pct:45,time:'22 min'},
+  {title:'Insulin Therapy & Hypoglycemia',cat:'Pharmacology',pct:90,time:'14 min'},
+  {title:'Sepsis Recognition',cat:'Critical Care',pct:30,time:'20 min'},
+  {title:'Labor Stage Assessment',cat:'Maternity',pct:0,time:'16 min'},
+  {title:'Schizophrenia Nursing Care',cat:'Mental Health',pct:55,time:'19 min'},
+];
+
+const LESSON_SECTIONS = [
+  {id:'patho',title:'Pathophysiology',icon:'P',sec:'patho',body:'Pulmonary embolism occurs when a thrombus obstructs pulmonary arterial circulation. The sudden increase in pulmonary vascular resistance raises right ventricular afterload and can precipitate right ventricular strain.'},
+  {id:'sx',title:'Signs & Symptoms',icon:'S',sec:'sx',body:'Sudden dyspnea, pleuritic chest pain, tachypnea, and tachycardia are hallmark presentations. Hypoxemia may occur before overt hemodynamic instability.'},
+  {id:'assess',title:'Assessment Findings',icon:'A',sec:'assess',body:'Assess respiratory rate, oxygen saturation, blood pressure, and level of consciousness. Unequal breath sounds are not always present—do not rule out PE based on a "normal" lung exam alone.'},
+  {id:'labs',title:'Labs & Diagnostics',icon:'L',sec:'labs',body:'D-dimer supports exclusion in low-probability patients. CT pulmonary angiography is the gold standard when PE is suspected and the patient is stable enough for imaging.'},
+  {id:'interv',title:'Nursing Interventions',icon:'N',sec:'interv',body:'Maintain oxygenation, establish IV access, prepare for anticoagulation per protocol, and monitor for hemodynamic deterioration. Keep the patient on bed rest only if ordered—mobility protocols vary by stability.'},
+  {id:'meds',title:'Medications',icon:'M',sec:'meds',body:'Anticoagulation (e.g., heparin, direct oral anticoagulants per order) prevents clot extension. Thrombolytics are reserved for massive PE with hemodynamic compromise.'},
+  {id:'teach',title:'Patient Teaching',icon:'T',sec:'teach',body:'Teach adherence to anticoagulation, bleeding precautions, and when to seek emergency care. Reinforce activity progression as prescribed after stabilization.'},
+  {id:'safety',title:'Safety Considerations',icon:'!',sec:'safety',body:'Monitor for signs of bleeding on anticoagulation. Assess fall risk, especially with altered mental status from hypoxemia. Never delay escalation for sudden respiratory decline.'},
+  {id:'pearl',title:'NCLEX Pearls',icon:'★',sec:'pearl',body:'Sudden dyspnea + clear lung sounds + risk factors (immobility, surgery, DVT history) = think PE first. Anticoagulation is priority—not waiting for confirmatory imaging in unstable patients per protocol.'},
+  {id:'practice',title:'Practice Questions',icon:'?',sec:'practice',body:'A client with recent knee replacement reports sudden shortness of breath and SpO₂ 88% on room air. What is the nurse\'s priority action?',practice:true},
+];
+
+const HUB_CONCEPTS = [
+  {id:'h1',name:'H1 · System Cards (2-col)',cls:'',desc:'Category-first 2-column system cards',layout:'cards-2'},
+  {id:'h2',name:'H2 · Category Tiles (3-col)',cls:'',desc:'Large bright category tiles',layout:'tiles-3'},
+  {id:'h3',name:'H3 · Hero Tiles (4-col)',cls:'c-h3',desc:'Spacious 4-column category grid',layout:'tiles-4'},
+  {id:'h4',name:'H4 · Mixed Grid',cls:'c-h4',desc:'System cards + compact tiles',layout:'mixed'},
+  {id:'h5',name:'H5 · Category List',cls:'c-h5',desc:'Full-width category rows',layout:'list'},
+  {id:'h6',name:'H6 · Category Focus',cls:'c-h6',desc:'Minimal hero, oversized categories',layout:'tiles-4'},
+  {id:'h7',name:'H7 · Horizontal Scroll',cls:'c-h7',desc:'Scrollable category panels',layout:'scroll'},
+  {id:'h8',name:'H8 · Bento Categories',cls:'c-h8',desc:'Categories dominate layout',layout:'bento'},
+  {id:'h9',name:'H9 · Ultrawide (3-col)',cls:'c-h9',desc:'3-column system cards',layout:'cards-3'},
+  {id:'h10',name:'H10 · Ultra Minimal',cls:'c-h10',desc:'Tiny header, categories fill page',layout:'tiles-4'},
+  {id:'h11',name:'H11 · Tiles + Progress',cls:'c-h11',desc:'Tiles with completion %',layout:'tiles-3'},
+  {id:'h12',name:'H12 · Full Grid + Footer',cls:'c-h12',desc:'All categories, compact secondary',layout:'tiles-4'},
+];
+
+const LESSON_CONCEPTS = [
+  {id:'l1',name:'L1 · Color-Coded Stack',cls:'',desc:'Full-width distinct section cards'},
+  {id:'l2',name:'L2 · Editorial Reader',cls:'c-l2',desc:'Magazine typography, 64px gaps'},
+  {id:'l3',name:'L3 · Modular Grid',cls:'c-l3',desc:'2-column section grid on desktop'},
+  {id:'l4',name:'L4 · Clinical Workflow',cls:'c-l4',desc:'Recognize → Assess → Intervene flow'},
+  {id:'l5',name:'L5 · Sticky Pill Nav',cls:'',desc:'Top pills only—no sidebar'},
+  {id:'l6',name:'L6 · Accordion Study',cls:'c-l6',desc:'Collapsible section cards'},
+  {id:'l7',name:'L7 · Progress Spine',cls:'c-l7',desc:'Thin 48px progress rail'},
+  {id:'l8',name:'L8 · Health-Tech Panels',cls:'',desc:'Icon headers, clinical SaaS panels'},
+  {id:'l9',name:'L9 · Soft Neumorphism',cls:'c-l9',desc:'Raised soft-shadow cards'},
+  {id:'l10',name:'L10 · Premium Magazine',cls:'c-l10',desc:'80px gaps, luxury spacing'},
+  {id:'l11',name:'L11 · Practice Dock',cls:'c-l11',desc:'Interactive practice + bottom dock'},
+  {id:'l12',name:'L12 · Dark Clinical',cls:'c-l12',desc:'Polished dark + vibrant accents'},
+];
+
+let state = { panel:'hub', concept:'h1', viewport:'desktop', mode:'light', hubTheme:'ocean' };
+
+function nav() {
+  return `<header class="m-nav">
+    <div class="m-nav-logo">NurseNest</div>
+    <div class="m-nav-links"><span class="on">Lessons</span><span>Practice</span><span>Flashcards</span><span>Progress</span></div>
+    <button class="m-nav-cta">Continue</button>
+  </header>`;
+}
+
+function lessonCard(l, i) {
+  return `<div class="h-card">
+    <h3>${l.title}</h3>
+    <p>${l.cat} · ${l.time}</p>
+    <div class="h-progress"><span style="width:${l.pct}%"></span></div>
+  </div>`;
+}
+
+function hubResumeMini() {
+  return `<div class="h-resume">
+    <span class="h-resume-dot"></span>
+    <span class="h-resume-label">Continue</span>
+    <span class="h-resume-title">Pulmonary Embolism</span>
+    <span class="h-resume-meta">72% · ~6 min</span>
+    <span class="h-resume-spacer"></span>
+    <button type="button" class="h-resume-btn">Resume</button>
+  </div>`;
+}
+
+function hubHero(minimal) {
+  if (minimal) return `<section class="h-hero" style="margin-bottom:24px"><h1 style="font-size:22px;font-weight:800">NCLEX-RN Lesson Library</h1></section>`;
+  return `<section class="h-hero" style="margin-bottom:28px">
+    <div class="h-eyebrow">NCLEX-RN · Study Library</div>
+    <h1 style="font-size:32px">NCLEX-RN Lesson Library</h1>
+    <p style="font-size:15px;color:var(--muted);max-width:56ch;margin-top:10px;line-height:1.65">Browse by clinical category. Structured lessons built for long, focused study sessions.</p>
+    <div class="h-search" style="margin-top:18px"><input type="text" placeholder="Search lessons or topics…" style="flex:1;min-width:180px;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--surf);padding:0 14px;font-size:13px"/></div>
+  </section>`;
+}
+
+function systemCard(cat) {
+  const rows = cat.samples.map((t,i) =>
+    `<div class="sys-row"><span style="width:8px;height:8px;border-radius:50%;background:${i===0?'var(--primary-b)':'var(--border)'};flex-shrink:0"></span><span>${t}</span></div>`
+  ).join('');
+  return `<div class="sys-card">
+    <div class="sys-accent" style="background:${cat.accent}"></div>
+    <div class="sys-head">
+      <div class="sys-title"><span class="sys-icon" style="background:color-mix(in srgb,${cat.accent} 12%,var(--surf));color:${cat.accent}">${cat.name.slice(0,2)}</span>${cat.name}</div>
+      <span style="font-size:11px;color:var(--muted)"><b style="color:var(--txt)">${cat.lessons}</b> lessons</span>
+    </div>
+    <div class="sys-rows">${rows}</div>
+    <div class="sys-more">View all ${cat.lessons} lessons</div>
+  </div>`;
+}
+
+function catTile(c) {
+  return `<div class="h-cat" style="padding:24px 22px;min-height:130px">
+    <div style="height:4px;width:48px;border-radius:99px;background:${c.accent};margin-bottom:12px"></div>
+    <b style="font-size:16px">${c.name}</b>
+    <small style="display:block;margin-top:8px">${c.lessons} lessons · ${c.pct}% complete</small>
+  </div>`;
+}
+
+function hubCategoriesPrimary(layout) {
+  let grid = '';
+  if (layout === 'tiles-3') grid = `<div class="h-grid h-grid-3">${CATEGORIES.map(catTile).join('')}</div>`;
+  else if (layout === 'tiles-4') grid = `<div class="h-grid h-grid-4">${CATEGORIES.map(catTile).join('')}</div>`;
+  else if (layout === 'cards-3') grid = `<div class="h-grid h-grid-3">${CATEGORIES.map(systemCard).join('')}</div>`;
+  else if (layout === 'mixed') grid = `<div class="h-grid h-grid-2">${CATEGORIES.slice(0,6).map(systemCard).join('')}</div><div class="h-grid h-grid-4" style="margin-top:16px">${CATEGORIES.slice(6).map(catTile).join('')}</div>`;
+  else if (layout === 'list') grid = `<div style="display:flex;flex-direction:column;gap:10px">${CATEGORIES.map(c => `<div class="h-cat" style="flex-direction:row;align-items:center;gap:16px;padding:18px 22px"><div style="width:4px;height:40px;border-radius:99px;background:${c.accent}"></div><div style="flex:1"><b>${c.name}</b><small style="display:block;margin-top:4px">${c.lessons} lessons</small></div><span style="font-size:12px;font-weight:600;color:var(--primary)">Open →</span></div>`).join('')}</div>`;
+  else if (layout === 'scroll') grid = `<div class="h-cats-scroll" style="display:flex;gap:14px;overflow-x:auto">${CATEGORIES.map(catTile).join('')}</div>`;
+  else grid = `<div class="h-grid h-grid-2">${CATEGORIES.map(systemCard).join('')}</div>`;
+  return `<section class="h-section h-cat-primary"><div class="h-section-head"><h2>Browse by category</h2><span>${CATEGORIES.length} clinical areas</span></div>${grid}</section>`;
+}
+
+function hubProgress() {
+  return `<section class="h-section">
+    <div class="h-section-head"><h2>Your progress</h2><span>342 lessons · 28% complete</span></div>
+    <div class="h-grid h-grid-3">
+      <div class="h-card"><h3>12-day streak</h3><p>Keep momentum with daily study</p><div class="h-progress"><span style="width:100%"></span></div></div>
+      <div class="h-card"><h3>94 lessons done</h3><p>Med-Surg leading at 41%</p><div class="h-progress"><span style="width:41%"></span></div></div>
+      <div class="h-card"><h3>6h this week</h3><p>On track for your goal</p><div class="h-progress"><span style="width:68%"></span></div></div>
+    </div>
+  </section>`;
+}
+
+function hubFeatured() {
+  return `<section class="h-section">
+    <div class="h-section-head"><h2>High-yield topics</h2><span>Updated weekly</span></div>
+    <div class="h-grid h-grid-3">${LESSONS.slice(0,3).map(lessonCard).join('')}</div>
+  </section>`;
+}
+
+function hubRecent() {
+  return `<section class="h-section">
+    <div class="h-section-head"><h2>Recently viewed</h2></div>
+    <div class="h-grid h-grid-3">${LESSONS.slice(2,5).map(lessonCard).join('')}</div>
+  </section>`;
+}
+
+function renderHub(id) {
+  const concept = HUB_CONCEPTS.find(c => c.id === id) || HUB_CONCEPTS[0];
+  const layout = concept.layout || 'cards-2';
+  let body = nav() + `<div class="m-shell">`;
+  body += hubHero(id === 'h10');
+  body += hubResumeMini();
+  body += hubCategoriesPrimary(layout);
+  if (['h1','h12'].includes(id)) {
+    body += `<section class="h-section" style="margin-top:40px;opacity:.9"><div class="h-section-head"><h2 style="font-size:16px">High-yield topics</h2></div>
+      <div class="h-grid h-grid-3">${LESSONS.slice(0,3).map(lessonCard).join('')}</div></section>`;
+  }
+  body += `</div>`;
+  const cls = concept.cls || '';
+  return `<div class="mock ${cls}" data-theme="${state.hubTheme}">${body}</div>`;
+}
+
+function sectionCard(s, expanded) {
+  const practice = s.practice ? `<div class="l-practice-q">A) Notify the provider and continue monitoring</div>
+    <div class="l-practice-q">B) Apply oxygen and escalate per protocol ✓</div>
+    <div class="l-practice-q">C) Encourage ambulation to prevent further clot</div>` : '';
+  return `<article class="l-card ${expanded?'expanded':''}" data-sec="${s.sec}" id="sec-${s.id}">
+    <div class="l-card-head">
+      <div class="l-card-icon">${s.icon}</div>
+      <h2>${s.title}</h2>
+    </div>
+    <div class="l-card-body">
+      <p>${s.body}</p>
+      ${s.body.includes('•')?'':''}
+      ${practice}
+    </div>
+  </article>`;
+}
+
+function lessonPills() {
+  return `<div class="l-nav-sticky"><nav class="l-pills">
+    ${LESSON_SECTIONS.map((s,i)=>`<span class="l-pill ${i===0?'on':''}">${s.title}</span>`).join('')}
+  </nav></div>`;
+}
+
+function lessonHero() {
+  return `<header class="l-hero">
+    <div class="h-eyebrow">Med-Surg · Cardiovascular</div>
+    <h1>Pulmonary Embolism</h1>
+    <div class="l-meta">
+      <span class="l-chip">18 min read</span>
+      <span class="l-chip">72% complete</span>
+      <span class="l-chip">High yield</span>
+      <span class="l-chip">Post-test at end</span>
+    </div>
+  </header>`;
+}
+
+function renderLesson(id) {
+  const sections = LESSON_SECTIONS.map((s,i) => sectionCard(s, id !== 'l6' || i < 2));
+  let body = nav() + `<div class="m-shell">` + lessonHero();
+
+  if (id === 'l4') {
+    body += `<div class="l-flow">
+      <div class="l-flow-step on">Recognize</div>
+      <div class="l-flow-step on">Assess</div>
+      <div class="l-flow-step">Intervene</div>
+      <div class="l-flow-step">Evaluate</div>
+    </div>`;
+  } else {
+    body += lessonPills();
+  }
+
+  if (id === 'l7') {
+    body += `<div class="l-wrap"><div class="l-spine"><div class="l-spine-line"><div class="l-spine-fill"></div></div></div><div class="l-sections">${sections.join('')}</div></div>`;
+  } else {
+    body += `<div class="l-sections">${sections.join('')}</div>`;
+  }
+
+  body += `<div class="l-dock"><div><b>Ready for post-test?</b><br><span>8 practice items · ~5 min</span></div><button>Start post-test</button></div>`;
+  body += `</div>`;
+
+  const cls = LESSON_CONCEPTS.find(c=>c.id===id)?.cls || '';
+  return `<div class="mock ${cls}">${body}</div>`;
+}
+
+function renderSystem() {
+  return `<div class="ds-grid">
+    <div class="ds-card"><h3>Section colours</h3><div class="ds-swatch">
+      <span style="background:#2563eb" title="Pathophysiology"></span>
+      <span style="background:#0d9488" title="Signs & Symptoms"></span>
+      <span style="background:#16a34a" title="Interventions"></span>
+      <span style="background:#dc2626" title="Safety"></span>
+      <span style="background:#7c3aed" title="Medications"></span>
+      <span style="background:#d97706" title="NCLEX Pearls"></span>
+      <span style="background:#4f46e5" title="Practice"></span>
+    </div><p style="font-size:13px;color:#64748b">Maps to lesson-section-theme.ts roles</p></div>
+    <div class="ds-card"><h3>Typography</h3><div class="ds-type">
+      <p class="t-hero">Pulmonary Embolism</p>
+      <p class="t-h2">Nursing Interventions</p>
+      <p class="t-body">Body text at 17px / 1.75 for long study sessions. DM Sans for UI; Instrument Serif optional for editorial concepts.</p>
+    </div></div>
+    <div class="ds-card"><h3>Spacing</h3><p style="font-size:13px;color:#475569;line-height:1.7">
+      Page padding: clamp(20px, 4vw, 48px)<br>
+      Section gap: 64–96px (hub), 28–80px (lesson)<br>
+      Card padding: 28–48px<br>
+      Max width: 1520px
+    </p></div>
+    <div class="ds-card"><h3>Components</h3><div class="ds-comp">
+      <div class="sample" style="background:#0d7aaa;color:#fff">Primary CTA</div>
+      <div class="sample" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0">Secondary</div>
+      <div class="sample" style="background:color-mix(in srgb,#2563eb 8%,#fff);color:#2563eb;border:1px solid color-mix(in srgb,#2563eb 25%,#e2e8f0)">Section card</div>
+    </div></div>
+    <div class="ds-card"><h3>Layout rules</h3><p style="font-size:13px;color:#475569;line-height:1.7">
+      ✓ Top nav only — no wide sidebar<br>
+      ✓ Each topic = own coloured box<br>
+      ✓ Wide content (1400–1600px)<br>
+      ✗ Narrow center columns<br>
+      ✗ Muddy grey-on-grey<br>
+      ✗ Dashboard widget clutter
+    </p></div>
+    <div class="ds-card"><h3>States</h3><p style="font-size:13px;color:#475569;line-height:1.7">
+      Hover: translateY(-2px) + shadow<br>
+      Active pill: primary tint fill<br>
+      Progress: 400ms width animation<br>
+      Accordion: 280ms height ease<br>
+      Dark: #07111f bg, vibrant accents
+    </p></div>
+  </div>`;
+}
+
+function updateThemeRow() {
+  const row = document.getElementById('themeRow');
+  row.style.display = state.panel === 'hub' ? 'flex' : 'none';
+  if (state.panel === 'hub') {
+    row.innerHTML = HUB_THEMES.map(t =>
+      `<button type="button" class="g-theme-btn ${state.hubTheme===t?'on':''}" data-theme="${t}">${t.charAt(0).toUpperCase()+t.slice(1)}</button>`
+    ).join('');
+  }
+}
+
+function render() {
+  updateThemeRow();
+  const subTabs = document.getElementById('subTabs');
+  const concepts = state.panel === 'hub' ? HUB_CONCEPTS : state.panel === 'lesson' ? LESSON_CONCEPTS : [];
+  subTabs.style.display = state.panel === 'system' ? 'none' : 'flex';
+  subTabs.innerHTML = concepts.map(c =>
+    `<button class="g-subtab ${state.concept===c.id?'on':''}" data-id="${c.id}">${c.name}</button>`
+  ).join('');
+
+  document.getElementById('systemPanel').classList.toggle('on', state.panel === 'system');
+  document.getElementById('systemPanel').innerHTML = state.panel === 'system' ? renderSystem() : '';
+  document.getElementById('viewport').style.display = state.panel === 'system' ? 'none' : 'block';
+
+  const root = document.getElementById('mockRoot');
+  if (state.panel === 'hub') root.innerHTML = renderHub(state.concept);
+  else if (state.panel === 'lesson') root.innerHTML = renderLesson(state.concept);
+
+  const concept = concepts.find(c=>c.id===state.concept);
+  document.getElementById('vpLabel').textContent =
+    (state.viewport==='desktop'?'Desktop · 1440px':'Mobile · 390px') +
+    (concept ? ' · ' + concept.desc : '');
+
+  const vp = document.getElementById('viewport');
+  vp.className = 'viewport ' + state.viewport;
+  root.querySelector('.mock')?.classList.toggle('mobile-view', state.viewport==='mobile');
+}
+
+document.getElementById('mainTabs').addEventListener('click', e => {
+  const t = e.target.closest('.g-tab');
+  if (!t) return;
+  state.panel = t.dataset.panel;
+  state.concept = state.panel === 'hub' ? 'h1' : state.panel === 'lesson' ? 'l1' : state.concept;
+  document.querySelectorAll('.g-tab').forEach(x => x.classList.toggle('on', x === t));
+  render();
+});
+
+document.getElementById('subTabs').addEventListener('click', e => {
+  const t = e.target.closest('.g-subtab');
+  if (!t) return;
+  state.concept = t.dataset.id;
+  render();
+});
+
+document.getElementById('themeRow').addEventListener('click', e => {
+  const t = e.target.closest('.g-theme-btn');
+  if (!t) return;
+  state.hubTheme = t.dataset.theme;
+  render();
+});
+
+document.getElementById('btnDesktop').onclick = () => {
+  state.viewport = 'desktop';
+  document.getElementById('btnDesktop').classList.add('on');
+  document.getElementById('btnMobile').classList.remove('on');
+  render();
+};
+document.getElementById('btnMobile').onclick = () => {
+  state.viewport = 'mobile';
+  document.getElementById('btnMobile').classList.add('on');
+  document.getElementById('btnDesktop').classList.remove('on');
+  render();
+};
+document.getElementById('btnLight').onclick = () => {
+  state.mode = 'light';
+  document.documentElement.dataset.mode = 'light';
+  document.getElementById('btnLight').classList.add('on');
+  document.getElementById('btnDark').classList.remove('on');
+};
+document.getElementById('btnDark').onclick = () => {
+  state.mode = 'dark';
+  document.documentElement.dataset.mode = 'dark';
+  document.getElementById('btnDark').classList.add('on');
+  document.getElementById('btnLight').classList.remove('on');
+};
+
+render();
+</script>
+</body>
+</html>

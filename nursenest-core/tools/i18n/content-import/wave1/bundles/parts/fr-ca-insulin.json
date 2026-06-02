@@ -1,0 +1,30 @@
+{
+  "ca-rn-nclex-rn:ca-rn-insulin-hypoglycemia": {
+    "title": "Insuline et hypoglycémie (NCLEX-RN, Canada)",
+    "topic": "Insuline et hypoglycémie",
+    "seoTitle": "Insuline et hypoglycémie | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Contexte infirmier au Canada : insuline et hypoglycémie — SI, sécurité médicamenteuse et périmètre.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Signification clinique",
+        "body": "Les questions sur l’**insuline** et l’**hypoglycémie** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte.\n\n**IPAC Canada :** utilisez les **mmol/L** pour le glucose lorsque l’énoncé les indique. Les normes provinciales encadrent la délégation et les actions autonomes."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l’examen",
+        "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+      },
+      "core_concept": {
+        "heading": "Concept central",
+        "body": "Reliez les interventions à la dynamique **glucose–insuline**, aux signes de **neuroglycopénie**, et à la surveillance qui confirme la réponse au traitement."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+      },
+      "takeaways": {
+        "heading": "Points à retenir",
+        "body": "- Reliez **signes vitaux + glycémie + récit** avant l’enseignement ou la sortie.\n- **Banque :** items `topic:insulin-hypoglycemia`.\n- **Canada :** vigilance aux **unités SI** et au **périmètre** dans les énoncés IPAC."
+      }
+    }
+  }
+}

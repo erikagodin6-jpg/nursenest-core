@@ -1,0 +1,30 @@
+{
+  "ca-rn-nclex-rn:ca-rn-heart-failure": {
+    "title": "Insuficiencia cardíaca (NCLEX-RN, Canadá)",
+    "topic": "Insuficiencia cardíaca",
+    "seoTitle": "Insuficiencia cardíaca | NCLEX-RN Canadá | NurseNest",
+    "seoDescription": "Contexto clínico en Canadá: insuficiencia cardíaca — datos métricos y alcance de práctica.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Significado clínico",
+        "body": "Los ítems sobre **insuficiencia cardíaca** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto.\n\n**Enfermería en Canadá:** use **unidades SI** cuando el enunciado muestre mmol/L. Las normas provinciales y las políticas del empleador gobiernan la delegación y el alcance."
+      },
+      "exam_relevance": {
+        "heading": "Relevancia para el examen",
+        "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal. Los ítems canadienses pueden usar unidades métricas; el razonamiento clínico es el mismo."
+      },
+      "core_concept": {
+        "heading": "Concepto central",
+        "body": "Vincule las intervenciones al patrón subyacente (perfusión, oxigenación, carga infecciosa, electrolitos o dinámica glucosa–insulina) y a la monitorización que demuestra respuesta."
+      },
+      "clinical_scenario": {
+        "heading": "Escenario clínico",
+        "body": "Arbitra prioridades concurrentes. Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda. Use contexto de cuidados agudos en Canadá cuando el enunciado cite unidades o roles."
+      },
+      "takeaways": {
+        "heading": "Conclusiones",
+        "body": "- Una **historia + signos vitales + laboratorios** antes de enseñar o dar el alta.\n- Elimine opciones que **omiten la valoración** o **retrasan la escalada** cuando hay inestabilidad.\n- **Banco:** ítems `topic:heart-failure`.\n- **Canadá:** atención a **laboratorios métricos** y al lenguaje del **alcance** en enunciados de PN."
+      }
+    }
+  }
+}

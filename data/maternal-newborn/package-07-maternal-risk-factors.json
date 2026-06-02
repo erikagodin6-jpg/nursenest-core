@@ -1,0 +1,276 @@
+{
+  "version": 1,
+  "packageId": "maternal-newborn-pkg-07",
+  "label": "Maternal Risk Factors — Lessons, Questions & Flashcards",
+  "generatedDate": "2026-06-02",
+  "targetExams": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","PNP-PC","FNP"],
+  "domain": "Maternal Newborn",
+  "subdomain": "Maternal Risk Factors",
+  "lessons": [
+    {
+      "lessonId": "mn-pkg07-L01",
+      "topicSlug": "advanced-maternal-age",
+      "title": "Advanced Maternal Age (AMA): Risks & Management",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Definition",
+          "kind": "introduction",
+          "body": "**Advanced maternal age (AMA):** Pregnancy at age ≥35 years. **Very advanced maternal age:** ≥40 years. The proportion of births to AMA women has tripled since 1980, now representing ~18% of all US births. Age is associated with declining egg quality and quantity, increased medical comorbidities, and higher rates of obstetric complications."
+        },
+        {
+          "id": "risks",
+          "heading": "Maternal & Fetal Risks",
+          "kind": "pathophysiology_overview",
+          "body": "**Chromosomal risks:**\n- Aneuploidy (non-disjunction) risk increases with maternal age\n- Trisomy 21 (Down syndrome): age 25 → 1:1,350; age 35 → 1:385; age 40 → 1:100; age 45 → 1:30\n- Also increased: trisomy 13, 18; sex chromosome aneuploidies\n- Mechanism: primary oocytes arrested in meiosis I since birth — spindle apparatus degrades over decades → increased non-disjunction\n\n**Obstetric risks:**\n- Miscarriage: rises from ~15% at 30–34 years to >50% at ≥45 years (poor egg quality, chromosomal abnormalities)\n- Stillbirth: risk increases after 35, significantly after 40\n- Gestational diabetes: risk rises with age and BMI\n- Hypertensive disorders (preeclampsia, gestational HTN): 2× higher at ≥35\n- Placenta previa and placenta accreta: higher with age (uterine changes)\n- Preterm birth: higher risk\n- Cesarean delivery: higher rate (failed induction, dystocia, malpresentation)\n- Multiple gestation: increased with assisted reproduction (common in AMA)\n\n**Management of AMA pregnancy:**\n- Genetic counseling and prenatal screening offered to all AMA women\n- NIPT: offered from 10 weeks (preferred first-line for AMA)\n- Anatomy ultrasound at 18–20 weeks\n- Fetal echocardiogram (offered to women with abnormal screening or family history)\n- Antepartum surveillance: NST/BPP starting 36–37 weeks (or earlier if other high-risk conditions)\n- Delivery timing: consider delivery at 39–40 weeks (increased stillbirth risk with post-term in AMA)\n- Antenatal discussion: anesthesia, delivery preferences, higher C-section likelihood"
+        },
+        {
+          "id": "patient_teaching",
+          "heading": "Patient Teaching & Counseling",
+          "kind": "client_education",
+          "body": "- Provide realistic but supportive information: AMA increases risks but the majority of AMA women have healthy pregnancies\n- Prenatal screening options are available and are a personal decision (not mandatory)\n- Healthy behaviors are more impactful at AMA: optimal weight, smoking cessation, folic acid, diabetes management\n- Psychological support: anxiety is common; validate feelings and connect to resources\n- Disclosure: when discussing age-related risks, use specific numbers ('1 in 100' not 'high risk') for shared decision-making"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- AMA = ≥35 years. Chromosomal risk rises sharply: trisomy 21 is 1:100 at age 40\n- Mechanisms: oocyte spindle degradation → non-disjunction → aneuploidy\n- Also increased: GDM, preeclampsia, stillbirth, C-section, placenta previa/accreta\n- NIPT from 10 weeks; anatomy scan; consider delivery at 39–40 weeks (stillbirth prevention)\n- Majority of AMA pregnancies are healthy — counseling should be balanced, not alarmist"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg07-L02",
+      "topicSlug": "adolescent-pregnancy",
+      "title": "Adolescent Pregnancy: Risks, Barriers & Nursing Approach",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "Adolescent pregnancy (age <20 years) disproportionately affects underserved communities and carries distinct biological, social, and psychological risks. Teen mothers face barriers to prenatal care and have higher rates of certain complications than adult women, while their fetuses face increased risks. Nursing care requires a non-judgmental, adolescent-tailored approach."
+        },
+        {
+          "id": "risks",
+          "heading": "Maternal & Neonatal Risks",
+          "kind": "pathophysiology_overview",
+          "body": "**Maternal risks:**\n- Preeclampsia: 2–3× higher in teens, especially those <16 years\n- Iron deficiency anemia: competing nutritional demands (own growth + fetal)\n- Preterm labor: higher rate (stress, poor nutrition, substance use, infection)\n- Cephalopelvic disproportion (CPD): immature pelvis in girls <16 years\n- STIs: higher prevalence, increasing chorioamnionitis risk\n- Nutritional deficiencies: inadequate calcium, iron, folate intake\n- Delayed prenatal care entry: more likely to present late or have fewer visits\n\n**Neonatal risks:**\n- Low birth weight (LBW): from preterm delivery and IUGR\n- Preterm birth: significantly higher rate\n- Infant mortality: higher than births to adult mothers\n- Neonatal abstinence syndrome: substance use higher in teens\n\n**Social/psychological:**\n- Higher rates of school dropout, poverty, domestic violence\n- Social isolation, stigma, family conflict\n- Postpartum depression risk elevated\n- Single parenthood more common\n\n**Nursing approach:**\n- Non-judgmental, trauma-informed care\n- Assess: support system, living situation, school status, partner relationship, substance use, safety\n- Connect to: social worker, WIC, housing assistance, school programs for teen mothers\n- Provide anticipatory guidance in accessible language (health literacy assessment)\n- Confidentiality: understand state laws on minor consent for prenatal care\n- Strengthen bonding and parenting skills postpartum"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Adolescent pregnancy risks: preeclampsia, PTL, anemia, CPD (<16 yrs), STIs, LBW infant\n- Social risks: poverty, delayed care, domestic violence, school dropout\n- Nursing: non-judgmental, trauma-informed, assess safety and social support\n- Connect to WIC, social work, teen parenting programs\n- Nutritional needs: iron, calcium, folate — competing demands with adolescent growth"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg07-L03",
+      "topicSlug": "smoking-pregnancy",
+      "title": "Smoking in Pregnancy: Effects & Cessation",
+      "sections": [
+        {
+          "id": "effects",
+          "heading": "Effects of Smoking on Pregnancy",
+          "kind": "pathophysiology_overview",
+          "body": "**Mechanism of harm:** Carbon monoxide (CO) displaces O2 on fetal hemoglobin (CO has 200× affinity for Hgb vs O2) → fetal hypoxia. Nicotine causes vasoconstriction of uteroplacental vessels → reduced placental perfusion → IUGR.\n\n**Maternal effects:**\n- Ectopic pregnancy risk: ×2 (impaired fallopian tube ciliary function)\n- Spontaneous abortion: significantly increased\n- Placenta previa: smoking associated with abnormal placentation\n- Placental abruption: ×2 risk\n- Preterm labor and PPROM: higher rates\n- Decreased fertility (even if patient conceives successfully)\n\n**Fetal/neonatal effects:**\n- IUGR and low birth weight (most significant — dose-dependent)\n- Preterm birth\n- SIDS (sudden infant death syndrome): 3× risk if mother smokes\n- Fetal breathing movement reduction (nicotine effect)\n- Cleft lip/palate: modest association\n- Neurodevelopmental: ADHD, behavioral issues in childhood\n\n**Management:**\n- Ask, Advise, Assess, Assist, Arrange (5 A's framework)\n- Cessation counseling: behavioral support; referral to quit lines\n- Pharmacotherapy:\n  - Nicotine replacement therapy (NRT — patch, gum, lozenges): safer than smoking; preferred over no cessation\n  - Bupropion: some use in pregnancy (limited data; benefit may outweigh risk)\n  - Varenicline (Chantix): limited data; generally avoided in pregnancy\n- Inform: no 'safe' level of smoking in pregnancy; even cutting down reduces but does not eliminate risk\n- Secondhand smoke: equally harmful — household members must not smoke near pregnant woman"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Smoking → CO replaces O2 on fetal Hgb + nicotine → uteroplacental vasoconstriction → IUGR\n- Risks: ectopic (×2), abruption (×2), PPROM, preterm, placenta previa, LBW, SIDS (×3)\n- Cessation: 5 A's framework. NRT safer than continued smoking.\n- SIDS is strongly associated with maternal (and postnatal) smoking\n- Secondhand smoke: equally harmful to fetus — whole household must be smoke-free"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg07-L04",
+      "topicSlug": "substance-use-pregnancy",
+      "title": "Substance Use in Pregnancy: Alcohol, Opioids & Other Substances",
+      "sections": [
+        {
+          "id": "alcohol",
+          "heading": "Alcohol (Most Dangerous)",
+          "kind": "pathophysiology_overview",
+          "body": "**Fetal Alcohol Spectrum Disorders (FASD):**\n- No safe amount of alcohol at any point in pregnancy\n- Teratogenic throughout gestation; 1st trimester = highest risk for structural defects\n- Leading preventable cause of intellectual disability in the US\n- Fetal alcohol syndrome (FAS): diagnostic criteria:\n  * Growth restriction (prenatal/postnatal LBW)\n  * Facial features: smooth philtrum, thin vermilion border (upper lip), small palpebral fissures\n  * CNS abnormalities: microcephaly, intellectual disability, behavioral disorders, learning disabilities\n- FASD spectrum: partial FAS, neurodevelopmental disorder without facial features\n\n**Opioids:**\n- Use in pregnancy rising dramatically (opioid crisis)\n- Risks: fetal growth restriction, preterm birth, placental abruption\n- Neonatal Opioid Withdrawal Syndrome (NOWS/NAS):\n  * Onset: 24–72 hours after birth (heroin), 2–4 days (methadone)\n  * Symptoms: tremors, high-pitched cry, poor feeding, sneezing, yawning, rhinorrhea, seizures\n  * Assessment: Finnegan Neonatal Abstinence Scoring System (NAS score)\n  * Treatment: non-pharmacological first (swaddling, low stimulation, skin-to-skin, feeding on demand); pharmacological (morphine, methadone) if NAS score criteria met\n- Medication-assisted treatment (MAT) in pregnancy:\n  * Methadone or buprenorphine: standard of care for opioid use disorder in pregnancy\n  * Reduces illicit drug use, overdose risk, and neonatal complications\n  * Buprenorphine (Subutex without naloxone) preferred in pregnancy\n  * Baby WILL have NOWS — this is expected and manageable, not a reason to avoid MAT\n\n**Cannabis:**\n- Most commonly used substance in pregnancy\n- Crosses placenta and fetal blood-brain barrier\n- Associated with: LBW, preterm birth, stillbirth (heavy use), neurodevelopmental delay in childhood\n- No safe level demonstrated; medical marijuana included\n- Counsel to discontinue immediately; no cessation pharmacotherapy needed\n\n**Methamphetamine/cocaine:**\n- Placental vasoconstriction → abruption (cocaine: 'cocaine is the abruption drug'), IUGR\n- Fetal stroke risk (cocaine), cardiac anomalies\n- Cocaine causes sympathomimetic crisis in mother and fetus"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- No safe alcohol level: FASD leading preventable intellectual disability. Facial features: smooth philtrum + thin upper lip border + small palpebral fissures\n- Opioids: NOWS expected with methadone/buprenorphine MAT — MAT is still recommended (reduces harm)\n- NAS assessment: Finnegan scoring; treatment: non-pharmacological first; morphine if score criteria met\n- Cannabis: LBW, neurodevelopmental delay — no safe level; counsel immediate cessation\n- Cocaine = abruption drug (vasoconstriction → placental separation)"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg07-L05",
+      "topicSlug": "obesity-pregnancy",
+      "title": "Obesity in Pregnancy: Risks & Management",
+      "sections": [
+        {
+          "id": "risks",
+          "heading": "Obstetric & Neonatal Risks of Obesity",
+          "kind": "pathophysiology_overview",
+          "body": "**Definition:** Pre-pregnancy BMI ≥30. Severe/morbid obesity: BMI ≥40. Obesity affects >30% of pregnant women in the US.\n\n**Maternal risks (multiple and compounding):**\n- Gestational diabetes: 2–8× increased risk (adipose tissue insulin resistance + HPL)\n- Preeclampsia: 4× increased risk (endothelial dysfunction, hypertension predisposition)\n- Venous thromboembolism: 4–5× increased risk (immobility, hypercoagulability, venous stasis)\n- Cesarean delivery: 2× higher C-section rate; higher wound complication rate\n- Anesthesia difficulties: intubation challenges, spinal/epidural placement difficulty, dosing challenges\n- Sleep apnea: worsened by pregnancy; mandates CPAP therapy\n- Postpartum hemorrhage: uterine atony risk higher\n\n**Fetal/neonatal risks:**\n- Neural tube defects: 2× higher even with normal folic acid intake (altered folate metabolism in obese women → recommend 5 mg folic acid/day)\n- Macrosomia (LGA): shoulder dystocia risk\n- Stillbirth: significantly higher risk\n- Congenital heart defects: association with obesity\n- NICU admission: higher rates from complications\n\n**Assessment challenges:**\n- Fundal height measurement less reliable in obese patients\n- Ultrasound image quality impaired by adipose tissue\n- Fetal heart tones may be harder to auscultate\n- External fetal monitoring may require internal monitors (IUPC, fetal scalp electrode) in labor\n\n**Management:**\n- IOM weight gain: 11–20 lbs (BMI ≥30); weight loss not recommended in pregnancy\n- High-dose folic acid: 5 mg/day (instead of standard 0.4–0.8 mg)\n- Early GDM screening (first trimester in morbid obesity)\n- Sleep study if OSA suspected\n- Enhanced thromboprophylaxis: LMWH in some settings\n- Anesthesia consultation in 3rd trimester (difficulty with neuraxial/intubation)\n- Increased ultrasound surveillance: growth scans\n- Delivery: offer elective delivery at 39–40 weeks (stillbirth risk)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Obesity risks: GDM (×2–8), preeclampsia (×4), VTE (×4–5), C-section (×2), macrosomia, NTDs\n- NTD risk: recommend 5 mg folic acid/day for BMI ≥30 (instead of standard 0.4–0.8 mg)\n- Weight gain: 11–20 lbs IOM recommendation; weight loss contraindicated\n- Assessment challenges: US image quality reduced; FHR monitoring difficulties\n- Anesthesia: consult in 3rd trimester. Sleep apnea: CPAP therapy\n- Stillbirth risk higher → consider delivery at 39–40 weeks"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg07-L06",
+      "topicSlug": "multiple-gestation-risk",
+      "title": "Multiple Gestation: Risk Classification & Surveillance",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Types & Risk Classification",
+          "kind": "pathophysiology_overview",
+          "body": "**Incidence:** Twins 3–4% of births (ART has doubled the rate). Triplets+ declining with single embryo transfer practices.\n\n**Zygosity and chorionicity:**\n- **Dichorionic diamniotic (DCDA) twins:** Two placentas, two amniotic sacs. Can be monozygotic (identical, split ≤4 days) or dizygotic (fraternal). LOWEST risk category.\n- **Monochorionic diamniotic (MCDA) twins:** One placenta shared, two amniotic sacs. Monozygotic split 4–8 days. MODERATE risk (twin-to-twin transfusion syndrome risk).\n- **Monochorionic monoamniotic (MCMA) twins:** One placenta, one amniotic sac. Monozygotic split 8–13 days. HIGHEST risk (cord entanglement).\n- **Conjoined twins:** Split >13 days. Extremely rare.\n\n**Determination of chorionicity:** First-trimester ultrasound (10–14 weeks) is most accurate:\n- DCDA: 'twin peak sign' (lambda sign) — triangular placental tissue between membrane layers\n- MCDA: 'T-sign' — amnion inserts perpendicular to chorion at its base\n\n**Maternal risks of multiple gestation:**\n- Preeclampsia: 3–5× higher\n- GDM: higher\n- Iron deficiency anemia: increased nutritional demands\n- Preterm labor and delivery: mean GA at delivery: twins ~36 weeks; triplets ~33 weeks\n- PPH: overdistended uterus → atony\n- C-section: higher rate (presentation, complications)\n- Hyperemesis gravidarum: higher hCG\n\n**Fetal risks:**\n- MCDA: TTTS (twin-to-twin transfusion syndrome) — 10–15% of MCDA; donor becomes anaemic/growth restricted; recipient becomes polycythemic/hydrops\n- MCDA/MCMA: selective IUGR, cord entanglement, fetal demise risk\n- Preterm birth: most significant complication of all multiple gestations\n- LBW, NICU admission, neurodevelopmental complications"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- DCDA = safest (2 placentas). MCDA = TTTS risk. MCMA = cord entanglement = most dangerous\n- Chorionicity determined by 1st trimester US: twin peak (lambda) = DCDA; T-sign = MCDA\n- Multiple gestation: preeclampsia ×3–5, preterm (twin average 36w), PPH, anemia\n- TTTS: donor twin → anemia/IUGR; recipient twin → polycythemia/hydrops. Treatment: laser ablation\n- Surveillance: MCDA requires serial ultrasound every 2 weeks from 16 weeks for TTTS assessment"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg07-L07",
+      "topicSlug": "chronic-illness-pregnancy",
+      "title": "Chronic Illness in Pregnancy: Diabetes, Cardiac, Thyroid",
+      "sections": [
+        {
+          "id": "chronic_conditions",
+          "heading": "Pre-existing Conditions in Pregnancy",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Pre-existing diabetes:**\n- Type 1 or Type 2 diabetes predating pregnancy\n- White's classification replaced by assessment of end-organ damage (nephropathy, retinopathy, neuropathy, cardiovascular)\n- Risks: congenital anomalies (cardiac, neural tube — 2–5× higher; HgbA1c >10% = very high malformation risk), macrosomia, IUGR, fetal cardiomyopathy, polyhydramnios, preeclampsia, stillbirth\n- Target HgbA1c preconception and in 1st trimester: <6.5–7% (balance of glycemic control vs hypoglycemia risk)\n- Management: insulin (only insulin is used — oral hypoglycemics generally avoided in pregnancy; metformin has limited use but crosses placenta)\n- Monitoring: ophthalmology (retinal exam), renal function, glucose monitoring\n- Hypoglycemia risk increases (insulin sensitivity increases in 1st trimester from hCG)\n- Hyperglycemia risk increases (insulin resistance from HPL, cortisol in 2nd/3rd trimester)\n\n**Cardiac disease:**\n- Acquired: rheumatic heart disease (developing world), peripartum cardiomyopathy, arrhythmias\n- Congenital: increasingly common as CHD patients reach reproductive age\n- Cardiac conditions with HIGHEST risk in pregnancy:\n  - Eisenmenger syndrome: fixed pulmonary HTN; mortality 30–50% — advise against pregnancy\n  - Pulmonary arterial hypertension: similar mortality risk\n  - Severe mitral/aortic stenosis: cannot increase CO of pregnancy without decompensation\n  - Marfan syndrome with aortic root >4 cm: risk of aortic dissection\n- Management: multidisciplinary (cardiology + MFM + anesthesia), monthly cardiac monitoring, delivery planning\n\n**Thyroid (pre-existing):**\n- Hypothyroidism: dose increase needed (30–50%), TSH target <2.5 in 1st trimester\n- Hyperthyroidism: PTU preferred in 1st trimester (methimazole avoided — aplasia cutis risk), methimazole preferred after 1st trimester\n- Grave's disease: TSH receptor antibodies cross placenta → fetal/neonatal hyperthyroidism (check fetal heart rate for tachycardia)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Pre-existing DM: macrosomia, congenital anomalies, stillbirth. HgbA1c <6.5–7% preconception. Insulin only in pregnancy.\n- Cardiac: Eisenmenger/PAH = advise against pregnancy (30–50% mortality). Severe valve lesions + Marfan (>4 cm aorta) = high risk.\n- Hypothyroidism: levothyroxine ↑ 30–50%; TSH <2.5 (1st trimester)\n- Hyperthyroidism: PTU (1st trimester) → methimazole (2nd/3rd trimester). Graves' → fetal thyrotoxicosis screening\n- All pre-existing conditions: preconception counseling critical; optimize prior to pregnancy"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg07-L08",
+      "topicSlug": "social-determinants-health-pregnancy",
+      "title": "Social Determinants of Health in Pregnancy",
+      "sections": [
+        {
+          "id": "sdoh",
+          "heading": "SDOH Assessment & Interventions",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Social determinants of health (SDOH)** are the conditions in the environments where people are born, live, learn, work, and age that affect health outcomes. In pregnancy, SDOH profoundly impact maternal and neonatal outcomes.\n\n**Key SDOH domains in obstetrics:**\n\n**Food insecurity:**\n- Associated with: preterm birth, LBW, maternal anemia, gestational hypertension\n- Assessment: HUNGER Vital Sign (2-question screen)\n- Intervention: WIC enrollment, food pantry referrals, community resources\n\n**Housing instability:**\n- Homeless or unstably housed pregnant women: less prenatal care, higher stress, higher preterm rate\n- Intervention: social work referral, housing assistance programs, shelter resources\n\n**Intimate partner violence (IPV):**\n- Affects 15–25% of pregnant women\n- Risks: trauma, preterm birth, abruption, LBW, fetal demise, maternal death\n- Universal screening: HITS tool ('Hurt, Insult, Threaten, Scream') or SAFE questions\n- Screen at EVERY prenatal visit in PRIVATE setting (without partner present)\n- Safety planning, hotline numbers, community resources\n- Mandatory reporting laws: vary by state; nurse must know jurisdiction\n\n**Uninsured/underinsured:**\n- Delayed prenatal care entry → missed screening, undiagnosed complications\n- Medicaid expansion has improved access for low-income pregnant women\n- Enroll in Medicaid, CHIP, or marketplace plans\n\n**Transportation barriers:**\n- Missed prenatal visits, delayed presentation in labor emergencies\n- Telehealth visits when appropriate; transportation assistance referrals\n\n**Mental health:**\n- Depression and anxiety prevalent in pregnancy; screen with Edinburgh Postnatal Depression Scale (EPDS) at prenatal visits and postpartum\n- Mental health treatment in pregnancy: psychotherapy first-line; SSRIs considered safe for most\n\n**Racial and ethnic disparities:**\n- Black women experience 2–3× higher maternal mortality than White women in the US\n- Structural racism → reduced access to quality care, higher stress burden, disproportionate preterm birth and pregnancy complications\n- Culturally competent care, advocacy, and implicit bias training are nursing responsibilities"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- SDOH assessment: food security, housing, IPV, transportation, mental health at every prenatal visit\n- IPV screening: HITS tool; screen EVERY visit in PRIVATE; mandatory safety planning resources\n- WIC, Medicaid, social work referrals are essential nursing interventions for SDOH\n- Black maternal mortality: 2–3× higher. Structural racism = key contributor. Culturally competent care is a nursing responsibility\n- Edinburgh scale: depression screen in pregnancy and postpartum; treat peripartum depression (SSRIs safe)"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "mn-p07-001",
+      "topicSlug": "advanced-maternal-age",
+      "difficulty": "easy",
+      "type": "MCQ",
+      "stemAnchor": "AMA-trisomy-21-risk-age-40",
+      "stem": "A 40-year-old client at her first prenatal visit asks about her risk of having a baby with Down syndrome. Which response reflects the most accurate risk data?",
+      "options": {"A": "Your risk is the same as a 25-year-old; chromosomal risk does not change significantly until age 45","B": "At age 40, your risk of trisomy 21 is approximately 1 in 100 (1%), which is why prenatal screening or diagnostic testing is strongly recommended","C": "At age 40, Down syndrome occurs in nearly half of pregnancies","D": "Your risk is slightly elevated but still only 1 in 10,000"},
+      "correctAnswer": "B",
+      "rationale": "Age-specific trisomy 21 risk: 25 years = ~1:1,350; 35 years = ~1:385; 40 years = ~1:100; 45 years = ~1:30. At age 40, the risk is approximately 1% — significantly elevated compared to younger women, justifying counseling about NIPT, first-trimester combined screening, and/or amniocentesis/CVS.",
+      "incorrectRationales": {"A": "Chromosomal risk does increase significantly with age, particularly after 35. The risk at 40 is approximately 13× higher than at 25.", "C": "Nearly half of pregnancies with Down syndrome would be an extreme overestimate at age 40 (only applies at extreme ages >50 with ART).", "D": "1 in 10,000 is far too low — the actual risk at 40 is approximately 1 in 100."},
+      "hint": "Trisomy 21 at 40 years = approximately 1:100 (1%). This is the most tested AMA risk number.",
+      "clinicalPearl": "The risk of ALL chromosomal aneuploidies (not just trisomy 21) increases with maternal age. NIPT detects trisomy 21, 18, 13, and sex chromosome aneuploidies — comprehensive for AMA patients.",
+      "examStrategy": "Know the key trisomy 21 risk numbers: 35 years = 1:385; 40 years = 1:100; 45 years = 1:30. These numbers appear in clinical scenarios requiring counseling.",
+      "keyTakeaway": "Trisomy 21 risk at age 40: approximately 1 in 100 (1%). NIPT and prenatal screening strongly recommended for AMA (≥35 years)."
+    },
+    {
+      "questionId": "mn-p07-002",
+      "topicSlug": "substance-use-pregnancy",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "neonatal-abstinence-syndrome-methadone-MAT",
+      "stem": "A client with opioid use disorder is maintained on methadone 80 mg/day throughout pregnancy. She is concerned that her baby will be 'addicted' because of her treatment. Which response is most accurate?",
+      "options": {"A": "She should discontinue methadone immediately to prevent neonatal withdrawal","B": "Neonatal opioid withdrawal syndrome (NOWS) is expected with methadone, but continuing MAT is the recommended standard of care because it reduces harm to both mother and baby","C": "Methadone at this dose will not cross the placenta, so the baby will not experience withdrawal","D": "The baby should be placed in foster care immediately after birth due to the maternal opioid use"},
+      "correctAnswer": "B",
+      "rationale": "Medication-assisted treatment (MAT) with methadone or buprenorphine is the standard of care for opioid use disorder in pregnancy. Benefits: reduces illicit opioid use, prevents overdose, improves prenatal care engagement, reduces preterm birth and fetal demise. NOWS is expected with MAT but is manageable and does not represent treatment failure. Abrupt discontinuation of methadone can cause fetal stress, preterm labor, and maternal relapse — which carries far higher risk than NOWS.",
+      "incorrectRationales": {"A": "Discontinuing methadone abruptly is dangerous — it can precipitate maternal relapse, fetal opioid withdrawal, preterm labor, and fetal demise.", "C": "Methadone DOES cross the placenta. This is expected and manageable. The baby WILL experience NOWS — this is known and anticipated, not a contraindication to MAT.", "D": "Opioid use disorder managed with MAT, with engaged prenatal care, is not automatic grounds for foster care. Child welfare involvement depends on many factors; routine placement is inappropriate and harmful."},
+      "hint": "MAT (methadone/buprenorphine) in pregnancy = standard of care. NOWS is expected and manageable. Never discontinue abruptly.",
+      "clinicalPearl": "Buprenorphine (Subutex — without naloxone) is preferred over buprenorphine/naloxone (Suboxone) in pregnancy because naloxone's safety in pregnancy is not fully established. Buprenorphine MAT generally results in milder, shorter NOWS than methadone.",
+      "examStrategy": "MAT in pregnancy: always support continuation. Discontinuation = dangerous (relapse risk + fetal harm). NOWS = expected outcome of MAT, not a reason to stop treatment.",
+      "keyTakeaway": "MAT (methadone/buprenorphine) is standard of care for opioid use disorder in pregnancy. NOWS is expected and manageable. Never abruptly discontinue — risk of relapse and fetal compromise."
+    },
+    {
+      "questionId": "mn-p07-003",
+      "topicSlug": "smoking-pregnancy",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "smoking-SIDS-risk-cessation-NRT",
+      "stem": "A client who smokes 1 pack per day tells the nurse she has tried to quit before but failed. She asks if using a nicotine patch during pregnancy is safe. Which response is most accurate?",
+      "options": {"A": "Nicotine patches are absolutely contraindicated in pregnancy — she must stop cold turkey","B": "Nicotine replacement therapy delivers less overall nicotine than smoking and eliminates carbon monoxide exposure — the benefits of cessation with NRT are generally considered to outweigh the risk of continued smoking","C": "She should continue smoking and not use any cessation aids — the stress of quitting is more harmful than the nicotine","D": "Nicotine patches are only safe after the first trimester"},
+      "correctAnswer": "B",
+      "rationale": "Nicotine replacement therapy (NRT) — patches, gum, lozenges — is considered an acceptable option for smoking cessation during pregnancy. The total nicotine exposure from NRT is lower than from cigarettes, and critically, NRT eliminates carbon monoxide exposure (a major cause of fetal hypoxia). The benefits of smoking cessation (reduced IUGR, preterm birth, SIDS, abruption) generally outweigh the theoretical risks of continued nicotine exposure from NRT. Behavioral counseling is first-line and should accompany any pharmacotherapy.",
+      "incorrectRationales": {"A": "Cold turkey is ideal but not always achievable. NRT is an acceptable adjunct when cold turkey has failed. Absolute contraindication is not accurate per current evidence.", "C": "This is harmful advice. Continued smoking carries significantly more risk to the fetus than nicotine replacement therapy. Stress of cessation does not equate to smoking risk.", "D": "There is no evidence-based restriction limiting NRT to after the first trimester exclusively — cessation at any point in pregnancy benefits the fetus."},
+      "hint": "NRT: less nicotine + no CO. Better than continued smoking for fetus. Behavioral support + NRT = evidence-based approach.",
+      "clinicalPearl": "Smoking cessation at any point in pregnancy provides benefit. Cessation by 16 weeks returns fetal growth and birth weight to near-normal. Even cessation late in pregnancy reduces SIDS risk and neonatal complications.",
+      "examStrategy": "Smoking cessation in pregnancy: NRT is acceptable when behavioral methods alone have failed. Never recommend continued smoking. Counsel that NRT is safer than cigarettes for the baby.",
+      "keyTakeaway": "NRT (patch, gum, lozenge) is acceptable for smoking cessation in pregnancy — less nicotine, no CO. Benefits of cessation outweigh NRT risks. Behavioral counseling is always first-line."
+    },
+    {
+      "questionId": "mn-p07-004",
+      "topicSlug": "social-determinants-health-pregnancy",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "IPV-screening-private-setting-HITS",
+      "stem": "A nurse is screening a 24-year-old client at her 20-week prenatal visit. The client's partner has been in the room for the entire visit. The nurse wants to screen for intimate partner violence. What is the most appropriate action?",
+      "options": {"A": "Screen for IPV with the partner present — it will demonstrate transparency","B": "Skip the IPV screening — it is too sensitive to ask about in a prenatal setting","C": "Ask the partner to step out for a moment for 'routine nursing assessments,' then screen the client privately using a validated tool (e.g., HITS)","D": "Wait until the client is admitted in labor to screen for IPV when the partner will likely not be present"},
+      "correctAnswer": "C",
+      "rationale": "IPV screening must be conducted in PRIVATE — the presence of the partner prevents honest disclosure and may endanger the client if the partner is abusive. The nurse should create a private opportunity using a routine rationale ('I need to take your blood pressure and check your urine — can you step outside for just a moment?'). The HITS tool (Hurt, Insult, Threaten, Scream) is a validated 4-question IPV screening instrument. Screening should occur at every prenatal visit.",
+      "incorrectRationales": {"A": "Screening with the partner present is contraindicated — an abusive partner may answer for the client, intimidate her, or retaliate later for any disclosure.", "B": "IPV screening is a standard of care in prenatal nursing. It should occur at every prenatal visit — it is not too sensitive to address, it is essential.", "D": "Waiting until labor delays critical safety assessment and intervention opportunities. IPV during pregnancy escalates the risk of serious harm, including fetal injury."},
+      "hint": "IPV screening: ALWAYS private. Partner MUST be out of the room. Use validated tool (HITS). Every prenatal visit.",
+      "clinicalPearl": "Many states require nurses to provide information about local IPV resources regardless of whether the screen is positive. Know your state's laws and your facility's IPV protocol. Always provide the National Domestic Violence Hotline number (1-800-799-SAFE).",
+      "examStrategy": "IPV screening questions: the correct answer always emphasizes PRIVATE setting. If the partner is in the room, that is the barrier to overcome first before any screening occurs.",
+      "keyTakeaway": "IPV screening: conduct PRIVATELY at every prenatal visit. Never screen with partner present. Use HITS tool. Provide safety resources regardless of disclosure."
+    },
+    {
+      "questionId": "mn-p07-005",
+      "topicSlug": "obesity-pregnancy",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "obesity-NTD-folic-acid-5mg",
+      "stem": "A client presents for preconception counseling. Her BMI is 36 (obese class II). She asks about folic acid supplementation. Which recommendation is most appropriate?",
+      "options": {"A": "Standard 400 mcg/day folic acid — the same dose for all women","B": "5 mg/day folic acid — higher-dose supplementation is recommended for women with pre-pregnancy obesity","C": "800 mcg/day — the maximum dose for any pregnant woman","D": "No folic acid supplementation needed until a positive pregnancy test"},
+      "correctAnswer": "B",
+      "rationale": "Women with pre-pregnancy obesity (BMI ≥30) have a 2–3× higher risk of neural tube defects compared to normal-weight women, even with standard folic acid supplementation. The mechanism is not fully understood but may relate to altered folate metabolism, increased folate distribution volume, and reduced folate bioavailability in obese individuals. Current guidelines recommend 5 mg/day folic acid preconception and throughout the first trimester for women with BMI ≥30.",
+      "incorrectRationales": {"A": "Standard 400 mcg is for average-risk women. Obese women need 5 mg (5,000 mcg) due to elevated NTD risk.", "C": "800 mcg is the upper typical dose for some high-risk groups (multiple gestation, anticonvulsant therapy), but obese women need 5,000 mcg (5 mg).", "D": "Folic acid supplementation must begin BEFORE conception — the neural tube closes by day 28 (before most women know they're pregnant)."},
+      "hint": "Obesity (BMI ≥30) + NTD risk = 5 mg folic acid. Standard dose is inadequate.",
+      "clinicalPearl": "Other groups requiring 5 mg folic acid: prior NTD-affected pregnancy, anticonvulsant use (valproate, carbamazepine), insulin-dependent diabetes, malabsorption disorders. All require supplementation started at least 1 month pre-conception.",
+      "examStrategy": "Folic acid dosing: standard = 0.4–0.8 mg (400–800 mcg). High-risk groups (obesity BMI≥30, prior NTD, anticonvulsants, DM) = 5 mg (5,000 mcg). Must start pre-conception.",
+      "keyTakeaway": "Obesity (BMI ≥30): NTD risk elevated. Recommend 5 mg folic acid/day preconception through 1st trimester (instead of standard 0.4–0.8 mg)."
+    }
+  ],
+  "flashcards": [
+    {"id":"mn-fc-p07-001","front":"What is the trisomy 21 (Down syndrome) risk at age 35 versus age 40?","back":"Age 35: approximately 1:385 (0.26%). Age 40: approximately 1:100 (1%). Age 45: approximately 1:30 (3.3%). Risk approximately triples with each 5-year age increment after 35.","hint":"35 = 1:385. 40 = 1:100. 45 = 1:30.","explanation":"The risk is due to non-disjunction during meiosis I — the primary oocyte spindle apparatus degrades over decades of meiotic arrest. All chromosome 21 non-disjunction risk increases with advancing maternal age.","clinicalPearl":"'Advanced maternal age' (AMA) threshold of 35 was historically chosen because at 35, the risk of procedure-related miscarriage from amniocentesis (~0.5%) approximately equaled the risk of chromosomal abnormality. With modern low-risk procedures and NIPT, AMA-specific thresholds are less clinically meaningful."},
+    {"id":"mn-fc-p07-002","front":"What is the classic triad of fetal alcohol syndrome (FAS)?","back":"1. Pre- and postnatal growth restriction (LBW, short stature). 2. Characteristic facial features: smooth philtrum + thin vermilion upper lip border + small palpebral fissures. 3. CNS abnormalities: microcephaly, intellectual disability, behavioral/learning disorders.","hint":"FAS = Growth restriction + Facial features (philtrum + lip + eyes) + CNS damage.","explanation":"FAS is the most severe form of fetal alcohol spectrum disorder (FASD). Alcohol is a teratogen throughout pregnancy — there is no safe amount and no safe time. Even moderate 'social drinking' is associated with neurodevelopmental harm on standardized testing.","clinicalPearl":"The smooth philtrum and thin upper lip are the most specific facial features of FAS. The philtrum is normally a vertical groove between the nose and upper lip — in FAS, it is smooth/flat (no groove)."},
+    {"id":"mn-fc-p07-003","front":"What is neonatal opioid withdrawal syndrome (NOWS) and how is it assessed?","back":"NOWS: constellation of signs in newborns exposed to opioids prenatally: high-pitched cry, tremors, poor feeding, yawning, sneezing, diarrhea, seizures. Assessed with Finnegan Neonatal Abstinence Scoring System (NAS score). Score ≥8 (or ≥3 consecutive ≥8) typically triggers pharmacological treatment.","hint":"NOWS signs: cry + tremors + poor feeding + autonomic dysregulation. Finnegan scale = assessment tool.","explanation":"Non-pharmacological treatment is always first-line: minimize stimulation, swaddling, skin-to-skin contact, feeding on demand (breastfeeding encouraged if no contraindications), rooming-in. Morphine or methadone is used if NAS scores meet treatment threshold.","clinicalPearl":"Breastfeeding is encouraged for mothers on MAT (methadone or buprenorphine) who are not using illicit drugs and do not have HIV or other contraindications. The very small amount of methadone/buprenorphine in breast milk may help reduce NOWS severity."},
+    {"id":"mn-fc-p07-004","front":"What obstetric risks are specifically associated with cocaine use in pregnancy?","back":"Cocaine causes sympathomimetic effects: uteroplacental vasoconstriction → placental abruption (strongest association). Also: IUGR, preterm birth, fetal stroke, congenital cardiac defects, maternal hypertensive crisis, arrhythmia.","hint":"Cocaine = abruption drug. Vasoconstriction + placental separation = classic cocaine complication.","explanation":"Cocaine blocks catecholamine reuptake → massive sympathomimetic effect → vasoconstriction, hypertension, tachycardia. In pregnancy: uteroplacental arteries constrict → placental ischemia → abruption. A classic NCLEX scenario: sudden-onset painful vaginal bleeding + rigid abdomen + cocaine use = abruption.","clinicalPearl":"A presentation of abruptio placentae in a 28-year-old without hypertension should prompt urine toxicology screening for cocaine. Cocaine use should always be in the differential for unexplained placental abruption."},
+    {"id":"mn-fc-p07-005","front":"What are the four criteria used to diagnose Twin-to-Twin Transfusion Syndrome (TTTS)?","back":"TTTS occurs in monochorionic twins (shared placenta). Quintero staging criteria: Stage I: discordant fluid (polyhydramnios in recipient, oligohydramnios in donor) with donor bladder visible. Stage II: donor bladder not visualized. Stage III: Doppler abnormalities. Stage IV: hydrops. Stage V: fetal death.","hint":"TTTS = MCDA twins. Donor gets too little (anemia, oligo); recipient gets too much (polycythemia, poly, hydrops).","explanation":"TTTS is caused by unbalanced arteriovenous anastomoses in the shared placenta — blood flows from one twin (donor) to the other (recipient). Without treatment, mortality is >80% in severe TTTS. Treatment: serial amnioreduction (drainage of recipient's excess fluid) or fetoscopic laser ablation of the anastomoses (preferred at specialized centers).","clinicalPearl":"Surveillance for TTTS in MCDA twins: serial ultrasound every 2 weeks from 16 weeks. Early detection is critical as TTTS can progress rapidly from Stage I to Stage IV within days."},
+    {"id":"mn-fc-p07-006","front":"What are the characteristics of dichorionic (DC) vs monochorionic (MC) twin placentas on ultrasound?","back":"DCDA (two placentas): 'Twin peak sign' (lambda sign) — triangular wedge of placental tissue between the dividing membrane and the placenta. MCDA (one placenta): 'T-sign' — membrane inserts perpendicularly to placenta without placental tissue between the layers.","hint":"Lambda (wedge) = DC (two placentas). T-sign = MC (one shared placenta).","explanation":"Chorionicity determination at 10–14 weeks is the most important prognostic assessment in multiple gestation. DCDA twins have the best prognosis (independent blood supplies). MCDA twins need close surveillance for TTTS. MCMA twins require weekly or biweekly Doppler from 28 weeks (cord entanglement).","clinicalPearl":"After 14 weeks, the lambda/T-sign distinction becomes less reliable. This is why chorionicity should be established in the first trimester — it guides the entire management of the twin pregnancy."},
+    {"id":"mn-fc-p07-007","front":"What is the Finnegan Neonatal Abstinence Scoring System?","back":"Validated clinical tool for assessing and scoring neonatal opioid withdrawal severity in NOWS. Evaluates 21 clinical signs in three categories: (1) CNS disturbance (tremors, cry, sleep, Moro, tone, seizures); (2) metabolic/vasomotor/respiratory (sweating, fever, mottling, stuffiness, tachypnea); (3) GI disturbance (feeding, regurgitation, stools). Scored every 3–4 hours. Treatment threshold: typically score ≥8 on two consecutive assessments.","hint":"Finnegan: 21 signs, 3 categories, score q3-4h. Score ≥8 twice = pharmacological treatment.","explanation":"The Finnegan score guides treatment decisions, dose adjustments, and weaning. High scores = more severe withdrawal = higher medication doses needed. Scores improve as the infant is treated and withdraws. Total duration of treatment: average 2–4 weeks for methadone NOWS.","clinicalPearl":"The 'Eat, Sleep, Console' (ESC) approach is a newer, more infant-centered approach to NOWS assessment that focuses on function (can the baby eat, sleep, and be consoled?) rather than scoring individual signs. ESC has shown to reduce pharmacological treatment rates and hospital length of stay."},
+    {"id":"mn-fc-p07-008","front":"What is the recommended folic acid dose for women with obesity (BMI ≥30) pre-conception?","back":"5 mg/day folic acid (5,000 mcg) — instead of the standard 400–800 mcg. Start at least 1 month before conception. Continue through first trimester. This reduces the elevated neural tube defect risk associated with obesity.","hint":"Obese women (BMI ≥30): 5 mg folic acid. Standard dose is inadequate for their NTD risk.",
+"explanation":"Obese women have 2–3× higher NTD risk due to altered folate metabolism and distribution. 5 mg folic acid is also recommended for: prior NTD-affected pregnancy, anticonvulsant therapy (valproate, carbamazepine), insulin-dependent diabetes, malabsorption syndromes.","clinicalPearl":"MTHFR gene variants (e.g., C677T) reduce folate metabolism efficiency. Women with known homozygous MTHFR variants may be recommended methylated folate (L-methylfolate) rather than synthetic folic acid, though evidence remains debated."},
+    {"id":"mn-fc-p07-009","front":"What are the components of the HITS intimate partner violence screening tool?","back":"H — Have you been physically Hurt by your partner? I — Have you been Insulted or verbally put down? T — Have you been Threatened with harm? S — Have you been Screamed or yelled at? Each question scored 1–5 (never to frequently). Score ≥11 indicates probable IPV.","hint":"HITS: Hurt, Insult, Threaten, Scream. Score ≥11 = positive screen.","explanation":"The HITS tool is validated, quick (4 questions), and suitable for the prenatal setting. IPV screening should occur at every prenatal visit in a private setting (partner removed). Even a negative screen result provides an opening for education and safety resource provision.","clinicalPearl":"Approximately 15–25% of pregnant women experience IPV. Pregnancy can be a trigger for escalation or initiation of violence (partner may be threatened by the pregnancy or attempt to control reproductive decisions). Prenatal screening is a critical intervention point."},
+    {"id":"mn-fc-p07-010","front":"What are the specific maternal risks of multiple gestation (twins)?","back":"Preeclampsia (×3–5 higher), gestational diabetes, severe anemia, preterm labor (average delivery 36 weeks), C-section (higher rate), hyperemesis gravidarum (higher hCG), postpartum hemorrhage (uterine overdistension → atony), perinatal depression.","hint":"Multiple gestation = multiply all obstetric risks. Preeclampsia and preterm birth are biggest.","explanation":"The management of twin pregnancy is more intensive throughout: earlier prenatal care visits, additional ultrasounds, cervical length monitoring, antenatal corticosteroids at appropriate GA, MCDA surveillance for TTTS. Most twins are delivered by 37–38 weeks (DCDA) or 34–36 weeks (MCDA/MCMA) electively.","clinicalPearl":"Fetal reduction (reduction from higher-order multiples to twins) is a difficult conversation that requires MFM expertise, genetic counseling, and psychological support. Reduction of triplets to twins improves preterm birth outcomes significantly."}
+  ]
+}

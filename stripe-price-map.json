@@ -1,0 +1,65 @@
+{
+  "syncedAt": "2026-03-14T16:21:39.458Z",
+  "mode": "test",
+  "plans": [
+    {
+      "key": "np_yearly",
+      "tier": "np",
+      "duration": "yearly",
+      "interval": "year",
+      "intervalCount": 1,
+      "prices": {
+        "usd": {
+          "priceId": "price_1TAuwOChmmgDwbsxavYCiWJe",
+          "unitAmount": 17749
+        },
+        "cad": {
+          "priceId": "price_1TAuwOChmmgDwbsxEPIo5fCc",
+          "unitAmount": 23999
+        }
+      },
+      "productName": "NurseNest NP - 1 Year",
+      "active": true
+    },
+
+    {
+      "key": "np_6month",
+      "tier": "np",
+      "duration": "6-month",
+      "interval": "month",
+      "intervalCount": 6,
+      "prices": {
+        "usd": {
+          "priceId": "price_1TAuwOChmmgDwbsxD9CeCzH4",
+          "unitAmount": 11849
+        },
+        "cad": {
+          "priceId": "price_1TAuwNChmmgDwbsxp9CQx6NC",
+          "unitAmount": 15999
+        }
+      },
+      "productName": "NurseNest NP - 6 Months",
+      "active": true
+    },
+
+    {
+      "key": "np_monthly",
+      "tier": "np",
+      "duration": "monthly",
+      "interval": "month",
+      "intervalCount": 1,
+      "prices": {
+        "usd": {
+          "priceId": "price_1TAuwMChmmgDwbsxJeq6yl1r",
+          "unitAmount": 2949
+        },
+        "cad": {
+          "priceId": "price_1TAuwMChmmgDwbsxmtmXPLRO",
+          "unitAmount": 3999
+        }
+      },
+      "productName": "NurseNest NP - 1 Month",
+      "active": true
+    }
+  ]
+}

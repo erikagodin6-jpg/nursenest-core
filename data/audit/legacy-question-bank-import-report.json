@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-04-15T02:59:17.383Z",
+  "dryRun": true,
+  "limit": 5,
+  "preImport": {
+    "skipped": true,
+    "reason": "DATABASE_URL not set"
+  },
+  "phases": {
+    "legacy_advanced_ts": {
+      "generatedAt": "2026-04-15T02:59:17.405Z",
+      "phase": "legacy_advanced_ts",
+      "dryRun": true,
+      "filesScanned": 40,
+      "rawQuestions": 5,
+      "normalizedOk": 5,
+      "normalizeErrors": 0,
+      "skippedDuplicateStemInDb": 0,
+      "skippedDuplicateInRun": 0,
+      "inserted": 0,
+      "insertErrors": [],
+      "fileSummaries": [],
+      "errorSamples": []
+    },
+    "legacy_career_ts": {
+      "generatedAt": "2026-04-15T02:59:17.566Z",
+      "phase": "legacy_career_ts",
+      "dryRun": true,
+      "filesScanned": 199,
+      "rawQuestions": 5,
+      "normalizedOk": 5,
+      "normalizeErrors": 0,
+      "skippedDuplicateStemInDb": 0,
+      "skippedDuplicateInRun": 0,
+      "inserted": 0,
+      "insertErrors": [],
+      "fileSummaries": [],
+      "errorSamples": []
+    }
+  },
+  "postImport": {
+    "skipped": true,
+    "reason": "DATABASE_URL not set"
+  },
+  "deltaTotal": null
+}

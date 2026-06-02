@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ocean">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Homepage Mobile — Ocean</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --brand:#1ca3d9; --ink:#1a2330; --muted:#5c6b78; --bg:#f4f9fc; --card:#fff; --border:#e2eaef; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);width:390px;margin:0 auto}
+    .pad{padding:1rem 1.15rem}
+    nav{display:flex;justify-content:space-between;align-items:center;padding:0.85rem 0;border-bottom:1px solid var(--border);background:#fff}
+    .logo{font-weight:800;color:var(--brand)}
+    .eyebrow{font-size:0.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);margin:1.5rem 0 .75rem}
+    h1{font-size:1.75rem;font-weight:800;line-height:1.12;letter-spacing:-.03em;margin-bottom:.85rem}
+    p.lead{font-size:.9375rem;color:var(--muted);margin-bottom:1.25rem;line-height:1.55}
+    .btn{display:block;text-align:center;padding:.85rem;border-radius:999px;font-weight:700;text-decoration:none;margin-bottom:.65rem}
+    .btn-p{background:var(--brand);color:#fff}
+    .btn-s{background:var(--card);border:1px solid var(--border);color:var(--ink)}
+    .panel{background:var(--card);border:1px solid var(--border);border-radius:1rem;padding:1.15rem;margin:1.25rem 0 2rem;box-shadow:0 10px 32px -18px rgba(26,35,48,.12)}
+    .score{font-size:2.75rem;font-weight:800;color:var(--brand)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:1rem;padding:1rem;margin-bottom:.75rem}
+    .card h3{font-size:1rem;margin-bottom:.35rem}
+    .card p{font-size:.8125rem;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="pad">
+    <nav><span class="logo">NurseNest</span><span style="font-size:.75rem;font-weight:700;color:#fff;background:var(--brand);padding:.35rem .75rem;border-radius:999px">Start</span></nav>
+    <p class="eyebrow">Adaptive clinical readiness</p>
+    <h1>AI-powered NCLEX readiness coaching</h1>
+    <p class="lead">CAT practice, readiness analytics, and calm clinical coaching in one loop.</p>
+    <a class="btn btn-p" href="#">Start free</a>
+    <a class="btn btn-s" href="#">View pricing</a>
+    <div class="panel"><div class="score">78%</div><p style="font-size:.8125rem;color:var(--muted);margin-top:.35rem">Exam readiness · Near ready</p></div>
+    <div class="card"><h3>CAT readiness</h3><p>Adaptive difficulty that mirrors exam pacing.</p></div>
+    <div class="card"><h3>Clinical coach</h3><p>Next-best actions with remediation focus.</p></div>
+  </div>
+</body>
+</html>

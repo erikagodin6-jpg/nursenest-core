@@ -1,0 +1,123 @@
+# Calls production HTTP cron routes (blog scheduler + background job worker).
+# Liveness: GET https://www.nursenest.ca/healthz (no secrets).
+# Cron POSTs run only after the "Require cron repository secrets" step passes (Bearer never logged).
+# Required repository secrets: PRODUCTION_CRON_BASE_URL (no trailing slash), CRON_SECRET.
+name: scheduled-cron-http-frequent
+
+on:
+  schedule:
+    # Every 10 minutes UTC — align with blog throughput docs (5–10 min cadence).
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: scheduled-cron-http-frequent
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Production liveness (GET /healthz)
+        run: |
+          set -euo pipefail
+          HEALTH_URL="https://www.nursenest.ca/healthz"
+          echo "Target (no secrets): ${HEALTH_URL#https://}"
+          code=""
+          if ! code="$(curl -sS --connect-timeout 15 --max-time 60 -o /tmp/healthz.body -w "%{http_code}" "$HEALTH_URL")"; then
+            echo "::error::curl failed before HTTP response (DNS/TLS/network/timeout). Target host/path above."
+            exit 1
+          fi
+          echo "HTTP status: ${code}"
+          if [ "$code" != "200" ]; then
+            echo "::error::Expected HTTP 200 from /healthz, got ${code}"
+            echo "Body (first 600 bytes, text only):"
+            head -c 600 /tmp/healthz.body 2>/dev/null || true
+            echo ""
+            exit 1
+          fi
+
+      - name: Require cron repository secrets
+        env:
+          BASE: ${{ secrets.PRODUCTION_CRON_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          missing=()
+          [ -z "${BASE:-}" ] && missing+=("PRODUCTION_CRON_BASE_URL")
+          [ -z "${CRON_SECRET:-}" ] && missing+=("CRON_SECRET")
+          if [ "${#missing[@]}" -ne 0 ]; then
+            echo "::error::Missing required repository secrets: ${missing[*]}"
+            echo "Add them under: Settings → Secrets and variables → Actions (repository secrets)."
+            echo "Do not commit values; never print secret values in logs."
+            exit 1
+          fi
+          host="${BASE#*//}"
+          host="${host%%/*}"
+          echo "Cron base host (from PRODUCTION_CRON_BASE_URL): ${host}"
+
+      - name: POST /api/cron/blog-batch-schedule
+        env:
+          BASE: ${{ secrets.PRODUCTION_CRON_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          path="/api/cron/blog-batch-schedule"
+          host="${BASE#*//}"
+          host="${host%%/*}"
+          url="${BASE%/}${path}"
+          echo "POST host=${host} path=${path}"
+          code=""
+          if ! code="$(curl -sS --connect-timeout 15 --max-time 120 -o blog-cron.json -w "%{http_code}" -X POST "$url" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "Content-Type: application/json")"; then
+            echo "::error::curl transport error for POST ${path} (no response body captured)."
+            exit 1
+          fi
+          echo "HTTP status: ${code}"
+          if [ "$code" != "200" ]; then
+            echo "::error::Expected HTTP 200 from POST ${path}, got ${code}"
+            echo "Body (first 800 bytes):"
+            head -c 800 blog-cron.json 2>/dev/null || true
+            echo ""
+            exit 1
+          fi
+          jq -e '.ok == true or .skipped == true' blog-cron.json
+
+      - name: POST /api/cron/jobs
+        env:
+          BASE: ${{ secrets.PRODUCTION_CRON_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          path="/api/cron/jobs"
+          host="${BASE#*//}"
+          host="${host%%/*}"
+          url="${BASE%/}${path}"
+          echo "POST host=${host} path=${path}"
+          code=""
+          if ! code="$(curl -sS --connect-timeout 15 --max-time 120 -o jobs-cron.json -w "%{http_code}" -X POST "$url" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "Content-Type: application/json")"; then
+            echo "::error::curl transport error for POST ${path} (no response body captured)."
+            exit 1
+          fi
+          echo "HTTP status: ${code}"
+          if [ "$code" != "200" ]; then
+            echo "::error::Expected HTTP 200 from POST ${path}, got ${code}"
+            echo "Body (first 800 bytes):"
+            head -c 800 jobs-cron.json 2>/dev/null || true
+            echo ""
+            exit 1
+          fi
+          jq -e '.ok == true' jobs-cron.json
+
+      - name: Upload cron JSON artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cron-frequent-${{ github.run_id }}
+          path: |
+            blog-cron.json
+            jobs-cron.json
+          if-no-files-found: ignore

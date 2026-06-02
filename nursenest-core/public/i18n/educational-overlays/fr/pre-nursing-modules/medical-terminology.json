@@ -1,0 +1,19 @@
+{
+  "overview": "La terminologie médicale est le langage universel de la santé. Elle est construite à partir de racines grecques et latines, de préfixes et de suffixes. Maîtriser ce vocabulaire permet de décoder rapidement des termes inconnus, de communiquer avec précision et d'assurer la sécurité des patients.",
+  "key_concepts": [
+    "Racines : indiquent la partie du corps ou la condition (cardi- = cœur, hepat- = foie, nephr- = rein)",
+    "Préfixes : modifient le sens (brady- = lent, tachy- = rapide, hyper- = excès, hypo- = insuffisance)",
+    "Suffixes : indiquent une procédure, une condition ou un état (-ite = inflammation, -ectomie = ablation, -plasie = formation)",
+    "Abréviations courantes : PRN (si nécessaire), BID (deux fois par jour), IV (intraveineux), NPO (rien par voie orale)",
+    "Règles de décodage : lire de la fin vers le début pour comprendre un terme composé"
+  ],
+  "nursing_responsibilities": "L'infirmière utilise la terminologie médicale pour documenter les soins, interpréter les ordonnances et transmettre des informations cliniques sans ambiguïté. Elle doit vérifier les abréviations non standardisées — certaines sont interdites car source d'erreurs (ex. : « U » pour unités peut être confondu avec « 0 »). Elle traduit également les termes techniques en langage accessible pour les patients.",
+  "clinical_pearls": "Les erreurs médicales surviennent souvent lors de la communication. L'ISMP (Institute for Safe Medication Practices) a publié une liste d'abréviations dangereuses à éviter. Sur les examens, décodez les termes inconnus en isolant la racine, le préfixe et le suffixe — vous pourrez souvent déduire le sens sans l'avoir appris.",
+  "patient_education": "Évitez le jargon médical avec les patients. Lorsque vous utilisez un terme technique, expliquez-le immédiatement : « Vous avez une tachycardie — c'est-à-dire que votre cœur bat trop vite. » Vérifiez la compréhension par le retour d'information (teach-back).",
+  "key_takeaways": [
+    "Décomposer un terme (préfixe + racine + suffixe) permet de comprendre sa signification même sans l'avoir mémorisé",
+    "Les abréviations standardisées améliorent la communication ; les abréviations non standardisées la rendent dangereuse",
+    "La traduction pour les patients est une compétence infirmière essentielle pour l'éducation thérapeutique",
+    "La terminologie précise prévient les erreurs de médication et de traitement"
+  ]
+}

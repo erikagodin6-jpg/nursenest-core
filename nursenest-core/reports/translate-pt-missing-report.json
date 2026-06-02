@@ -1,0 +1,16 @@
+{
+  "generatedAt": "2026-05-03T23:36:29.976Z",
+  "dryRun": true,
+  "applied": false,
+  "locale": "pt",
+  "language": "pt-BR",
+  "plannedChanges": 0,
+  "changedKeys": 0,
+  "protectedLocales": [
+    "en",
+    "fr",
+    "es",
+    "hi"
+  ],
+  "changes": []
+}

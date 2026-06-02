@@ -1,0 +1,106 @@
+export const LESSONS = [
+  {
+    pathwayId: "ca-rn-nclex-rn",
+    slug: "ca-rn-copd-respiratory",
+    previewSectionCount: 2,
+    seoTitle:
+      "COPD nursing: pathophysiology, exacerbations, spirometry & NCLEX-RN Canada",
+    seoDescription:
+      "Complete RN lesson on COPD: emphysema vs chronic bronchitis, GOLD staging, exacerbation triggers, bronchodilators, oxygen therapy, and Canadian NCLEX-RN clinical priorities.",
+
+    sections: [
+      {
+        id: "introduction",
+        heading: "Overview",
+        kind: "introduction",
+        body: `Chronic obstructive pulmonary disease (COPD) is a progressive airflow limitation that is not fully reversible. It commonly includes emphysema and chronic bronchitis.
+
+Key risk factor: cigarette smoking. 
+
+For exams: focus on recognizing exacerbations, safe oxygen use, and discharge teaching.`,
+      },
+      {
+        id: "pathophysiology",
+        heading: "Pathophysiology",
+        kind: "pathophysiology_overview",
+        body: `Inflammation → airway narrowing + alveolar destruction → air trapping → hyperinflation.
+
+V/Q mismatch leads to hypoxemia. Chronic CO₂ retention results in compensated respiratory acidosis.
+
+Target O₂ saturation in COPD: 88–92%.`,
+      },
+      {
+        id: "symptoms",
+        heading: "Signs & Symptoms",
+        kind: "signs_symptoms",
+        body: `• Dyspnea (progressive)
+• Chronic cough ± sputum
+• Wheeze, prolonged expiration
+• Barrel chest
+• Accessory muscle use
+
+Exacerbation: ↑ dyspnea, ↑ sputum, color change.`,
+      },
+      {
+        id: "red_flags",
+        heading: "Red Flags",
+        kind: "red_flags",
+        body: `• SpO₂ < 88% despite O₂
+• Confusion (CO₂ retention)
+• pH < 7.35 with rising CO₂
+• Severe dyspnea or fatigue`,
+      },
+      {
+        id: "management",
+        heading: "Management",
+        kind: "nursing_assessment_interventions",
+        body: `• O₂ target 88–92%
+• Bronchodilators (SABA + anticholinergic)
+• Steroids (short course)
+• Antibiotics if infection
+• BiPAP for respiratory failure`,
+      },
+      {
+        id: "takeaways",
+        heading: "Key Takeaways",
+        kind: "takeaways",
+        body: `• COPD = irreversible airflow obstruction
+• O₂ target 88–92% (critical)
+• Treat exacerbations early
+• Smoking cessation is most important`,
+      },
+    ],
+
+    preTest: [
+      {
+        question:
+          "A COPD patient has SpO₂ 91% on room air. What is the priority?",
+        options: [
+          "Give high-flow oxygen",
+          "Continue monitoring (target 88–92%)",
+          "Call provider immediately",
+          "Place in Trendelenburg",
+        ],
+        correct: 1,
+        rationale:
+          "91% is within the COPD target range (88–92%). High oxygen can suppress respiratory drive.",
+      },
+    ],
+
+    postTest: [
+      {
+        question:
+          "ABG: pH 7.29, CO₂ 72. What does this indicate?",
+        options: [
+          "Metabolic acidosis",
+          "Acute-on-chronic respiratory acidosis",
+          "Respiratory alkalosis",
+          "Normal",
+        ],
+        correct: 1,
+        rationale:
+          "Low pH + high CO₂ = respiratory acidosis. Chronic patients compensate but acute drop = decompensation.",
+      },
+    ],
+  },
+];

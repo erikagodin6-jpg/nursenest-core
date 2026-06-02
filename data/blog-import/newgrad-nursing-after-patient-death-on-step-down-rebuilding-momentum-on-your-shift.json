@@ -1,0 +1,49 @@
+{
+  "slug": "newgrad-nursing-after-patient-death-on-step-down-rebuilding-momentum-on-your-shift",
+  "source": "newgrad-400-batch-03",
+  "wave": "newgrad-400",
+  "manifestId": 30,
+  "batch": "newgrad-prod-batch-03",
+  "batchIndex": 17,
+  "title": "After Patient Death on Step-Down: Rebuilding Momentum on Your Shift",
+  "audience": "nursing",
+  "unit": "step-down",
+  "keywords": {
+    "primary": "after patient death on step down rebuilding momentum on your shift",
+    "secondary": [
+      "first year nurse",
+      "transition to practice",
+      "new grad",
+      "clinical confidence",
+      "unit culture"
+    ]
+  },
+  "relatedLessonPaths": [
+    "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+    "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+  ],
+  "relatedToolPaths": [
+    "/tools/lab-values",
+    "/tools/med-math"
+  ],
+  "internalLinks": {
+    "lessons": [
+      "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+      "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+    ],
+    "tools": [
+      "/tools/lab-values",
+      "/tools/med-math"
+    ],
+    "blogPost": "/blog/newgrad-nursing-first-code-blue-on-same-day-surgery-as-a-new-grad-nurse-what-to-do-first"
+  },
+  "content": {
+    "format": "html-fragment",
+    "bodyPath": "data/blog-content/newgrad-prod-batch-03/body-17.html",
+    "placeholderRelatedBlogBlock": "{{RELATED_BLOG_BLOCK}}"
+  },
+  "seo": {
+    "title": "After Patient Death on Step-Down: Rebuilding Momentum on Your… | NurseNest",
+    "description": "Practical new grad nursing guidance on step-down: after patient death on step-down: rebuilding momentum on your shift. Real workflow, escalation, documentation, and what preceptors expect—without fluff."
+  }
+}

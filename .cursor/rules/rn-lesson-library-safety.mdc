@@ -1,0 +1,33 @@
+---
+description: RN and pathway lesson volume — pagination, bounded payloads, safe imports; protect hubs, detail, qbank, progress.
+alwaysApply: true
+---
+
+# RN / pathway lesson library — safety rules
+
+Apply **before** expanding RN lesson inventory, generators, or imports. If a change risks destabilizing **lesson hubs**, **lesson detail pages**, **question bank**, **user progress**, or **navigation**, choose the **safer** approach (less data per request, fewer moving parts).
+
+## Listing and runtime
+
+- **Do not** load the full lesson library in one request or render. **Paginate** all lesson listings; use **server-side** pagination, streaming, or **ISR** where the stack already does—do not invent client-only “load everything then filter” patterns.
+- **Do not** fetch or serialize large lesson bodies for list/card views. Keep **lesson cards lightweight** (title, slug, summary, pathway/topic metadata—what the existing UI already needs).
+- **Do not** move large lesson payloads to the client unnecessarily. Detail pages should load **one lesson’s** content per route; avoid bundling many full lessons for a single page.
+
+## Generation and imports
+
+- **Generate or import lessons in batches** (chunked jobs), not one monolithic dump that can OOM or lock the DB.
+- Add **deduplication** (stable keys: pathway + slug or agreed unique id) and **resumable** imports (checkpoint batch index / cursor) so failures do not require starting from zero.
+- **Preserve** entitlement rules, paywall/server checks, and **progress tracking** semantics—do not bypass existing access helpers for convenience.
+
+## Operations
+
+- **Do not** introduce **blocking** work on critical path page loads (no synchronous heavy FS scans, unbounded Prisma `findMany` without `take`, or N+1 hydration of full lesson JSON on hubs).
+
+## Success criteria (non-functional)
+
+- RN lesson **volume can grow** without list/detail pages regressing.
+- Lesson surfaces stay **fast**; **no** huge client payloads; **no** avoidable **5xx** from lesson list/load paths.
+
+## Related
+
+- Layered restoration and i18n: `docs/legacy-restoration-map.md`, `docs/i18n-architecture.md`, `.cursor/rules/legacy-restoration.mdc`.

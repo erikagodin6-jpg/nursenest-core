@@ -1,0 +1,145 @@
+{
+  "packageId": "pkg6-infection",
+  "title": "Infection in Older Adults — Question Bank",
+  "generatedDate": "2026-06-02",
+  "questionCount": 400,
+  "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+  "questions": [
+    {
+      "id": "GERO-P6-001",
+      "topicSlug": "atypical-infection-presentation",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 77-year-old woman with mild dementia is brought to the emergency department by her family who reports she has been 'not herself' for 2 days — more confused, not eating, and fell twice at home. Her temperature is 37.3°C, HR 94, BP 118/72 (baseline 142/84), RR 18, SpO2 95%. She is disoriented to place and time but calm. Physical exam reveals mild suprapubic tenderness. Urinalysis shows WBC >50/hpf, positive nitrite, positive leukocyte esterase. Which statement BEST describes this clinical presentation?",
+      "options": {
+        "A": "The patient's symptoms are entirely explained by her dementia — a urinalysis finding alone does not require antibiotic treatment",
+        "B": "This is a classic UTI presentation in an older adult — fever and dysuria confirm the diagnosis",
+        "C": "The acute change from baseline (confusion, falls, anorexia, hypotension) combined with urinalysis findings is consistent with a symptomatic UTI causing delirium — antibiotic therapy is appropriate",
+        "D": "The temperature of 37.3°C rules out infection — treatment can be deferred until fever develops"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is the clinical teaching point: in older adults with dementia, UTI commonly presents WITHOUT classic symptoms (dysuria, frequency, urgency) and WITHOUT fever (blunted thermoregulatory response). Instead, the presentation is: ACUTE CHANGE FROM BASELINE (confusion, functional decline, falls), with urinalysis evidence of infection. The BP drop from 142/84 to 118/72 suggests early hemodynamic compromise consistent with systemic infection response. The combination of: acute change from baseline + urinalysis evidence + absence of another explanation = symptomatic UTI requiring treatment.",
+      "distractorRationales": {
+        "A": "Incorrect. Asymptomatic bacteriuria (bacteria in urine without symptoms) does NOT require treatment in older adults. However, this patient has ACUTE SYMPTOMS: new confusion from baseline, falls, anorexia, BP drop. These ARE symptoms — atypical ones. The urinalysis does not cause the symptoms; infection causing symptoms = symptomatic UTI.",
+        "B": "Incorrect. Classic UTI symptoms (dysuria, frequency, urgency) are ABSENT — which is typical for older adults with dementia. This is an ATYPICAL presentation, not classic.",
+        "D": "Incorrect. Temperature of 37.3°C is NOT reassuring in an older adult. Many older adults have a lower baseline temperature (36.0–36.5°C), and their thermoregulatory response is blunted. A temperature of 37.3°C may represent a significant 'fever' for that individual. Never wait for fever to treat infection in older adults."
+      },
+      "hint": "UTI in older adults with dementia: classic symptoms (dysuria, fever) are often ABSENT. What replaces them?",
+      "clinicalPearl": "The 'no treatment without symptoms' rule for asymptomatic bacteriuria does NOT apply when there ARE symptoms — even atypical ones. Acute functional decline, confusion, and falls in an older adult with positive urinalysis = symptomatic UTI = treat. The distinction: asymptomatic bacteriuria = UA positive + no change in clinical status = don't treat.",
+      "examStrategy": "Atypical UTI presentation: acute confusion + falls + anorexia + positive UA in older adult = symptomatic UTI = treat. Temperature of 37.3°C in older adult is NOT reassuring. Baseline BP drop = concerning.",
+      "keyTakeaway": "UTI in older adults with dementia: presents as acute confusion, falls, anorexia — NOT classic dysuria/fever. Positive UA + acute change from baseline = symptomatic UTI requiring treatment.",
+      "tags": ["UTI", "atypical-presentation", "delirium", "dementia", "infection-older-adults", "asymptomatic-bacteriuria"]
+    },
+    {
+      "id": "GERO-P6-002",
+      "topicSlug": "sepsis-recognition",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "An 82-year-old man with CKD and type 2 diabetes is admitted from a long-term care facility. He has been confused for 48 hours and has not been eating. His temperature is 36.8°C, HR 88, RR 22, BP 102/58 (he is typically 138/82). His WBC is 8.2×10⁹/L, lactate 3.8 mmol/L, creatinine 210 µmol/L (baseline 145 µmol/L). Blood cultures are pending. Which concern is MOST urgent?",
+      "options": {
+        "A": "His WBC of 8.2 is normal — infection is unlikely without leukocytosis",
+        "B": "His temperature of 36.8°C rules out serious infection — sepsis requires fever",
+        "C": "The clinical picture is consistent with sepsis — hypotension, elevated lactate, new organ dysfunction (AKI), and altered mentation require urgent sepsis management",
+        "D": "His altered mentation is likely from his chronic kidney disease progression"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient meets Sepsis-3 criteria: suspected infection + organ dysfunction (SOFA score ≥2). Signs of organ dysfunction: (1) AKI (creatinine up from 145 to 210 µmol/L = 45% increase); (2) Altered mental status from baseline; (3) Hypotension (102/58 from baseline 138/82). Additionally, lactate 3.8 mmol/L (>2.0 = tissue hypoperfusion → septic shock criteria when combined with hypotension). In older adults, WBC may NOT be elevated in sepsis (blunted immune response — neutrophilia may be absent), and fever may be absent or blunted. The clinical picture — combined with lactate elevation and new organ dysfunction — is sepsis until proven otherwise.",
+      "distractorRationales": {
+        "A": "Incorrect. Older adults with sepsis may have NORMAL or LOW WBC (leukopenia is actually a worse prognostic sign in sepsis). Absence of leukocytosis does NOT rule out sepsis in older adults.",
+        "B": "Incorrect. Older adults with sepsis frequently do NOT have fever. Hypothermia is actually a concerning sepsis sign. The absence of fever does not rule out serious infection.",
+        "D": "Incorrect. While CKD can cause uremia and affect cognition, the ACUTE change from baseline (48 hours) combined with hemodynamic instability and rising creatinine is septic rather than chronic disease progression."
+      },
+      "hint": "Sepsis in older adults: normal WBC, no fever, hypotension, rising creatinine, elevated lactate. Which criteria for sepsis are met?",
+      "clinicalPearl": "Sepsis-3 criteria: suspected infection + 2-point SOFA increase. In older adults: do not use fever or leukocytosis as gatekeepers — they are frequently absent. Lactate ≥2.0 mmol/L = tissue hypoperfusion. Lactate ≥4.0 mmol/L = septic shock (even with 'normal' BP). Lactate is one of the most important sepsis markers in older adults.",
+      "examStrategy": "Sepsis in older adults: classic signs (fever, leukocytosis) often absent. Look for: acute change from baseline + organ dysfunction (confusion = brain; AKI = kidney; hypotension = circulation) + elevated lactate. These are the key indicators.",
+      "keyTakeaway": "Sepsis in older adults: fever and leukocytosis often absent. Key indicators: acute mental status change + hypotension + new organ dysfunction + elevated lactate. Sepsis-3 criteria: suspected infection + SOFA ≥2.",
+      "tags": ["sepsis", "atypical-presentation", "lactate", "older-adults", "organ-dysfunction", "SOFA", "NP"]
+    },
+    {
+      "id": "GERO-P6-003",
+      "topicSlug": "pneumonia-older-adults",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is reviewing the medication administration record for an 80-year-old man in a long-term care facility and notes he has not received his annual influenza vaccine and has never received a pneumococcal vaccine. He is generally healthy, active, and lives in the LTC facility. Which statement about immunization in this context is MOST accurate?",
+      "options": {
+        "A": "Older adults have impaired immune responses, so vaccines are not effective in this population",
+        "B": "The patient should receive both influenza and pneumococcal vaccines — immunization is a nursing responsibility to promote and facilitate",
+        "C": "Vaccines are only important for community-dwelling older adults — LTC residents are protected by herd immunity from staff vaccinations",
+        "D": "Pneumococcal vaccine is only recommended for immunocompromised patients, not healthy older adults"
+      },
+      "correctAnswer": "B",
+      "rationale": "Immunization is one of the most effective interventions in older adults for preventing serious infection-related morbidity and mortality. Current recommendations: (1) Annual influenza vaccine for ALL adults ≥65; (2) Pneumococcal vaccine: PCV20 alone, or PCV15 followed by PPSV23 (8 weeks later if previously unvaccinated); additionally RSV vaccine for adults ≥60. LTC residents are at HIGHER risk of pneumonia than community-dwelling older adults and therefore benefit even more from vaccination. Vaccines have reduced but still meaningful effectiveness in older adults — they reduce severity, complications, and mortality even if not preventing all infections.",
+      "distractorRationales": {
+        "A": "Incorrect. While older adults have reduced immunogenicity (vaccine response), vaccines STILL provide meaningful protection — particularly against severe disease, hospitalization, and death. Reduced efficacy is not zero efficacy.",
+        "C": "Incorrect. LTC residents are among the HIGHEST RISK for pneumonia and influenza complications. Herd immunity from staff vaccination provides partial protection but does not eliminate the need for resident vaccination.",
+        "D": "Incorrect. Pneumococcal vaccine is recommended for ALL adults ≥65 regardless of immune status — this is a routine preventive recommendation, not limited to immunocompromised patients."
+      },
+      "hint": "Who is recommended to receive influenza and pneumococcal vaccines?",
+      "clinicalPearl": "Nursing advocacy for immunization includes: identifying unvaccinated patients, educating on benefits, obtaining standing orders for vaccine administration, and documenting immunizations. Nurses can administer influenza and pneumococcal vaccines under standing orders in most Canadian provinces and US states.",
+      "examStrategy": "Vaccine recommendations for older adults: influenza annually for ALL ≥65; pneumococcal for ALL ≥65. LTC residents = highest priority, not lower priority. Reduced immune response ≠ no benefit.",
+      "keyTakeaway": "Annual influenza + pneumococcal vaccines recommended for ALL adults ≥65, including LTC residents. Reduced immunogenicity in older adults does not negate vaccine benefit. Nurses promote and facilitate immunization.",
+      "tags": ["immunization", "influenza-vaccine", "pneumococcal-vaccine", "LTC", "infection-prevention", "older-adults"]
+    },
+    {
+      "id": "GERO-P6-004",
+      "topicSlug": "fever-response-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is caring for a 78-year-old man in a long-term care facility whose baseline oral temperature is consistently 36.2°C. Today his temperature is 37.5°C. He appears less alert than usual and is complaining of mild back pain. Which nursing interpretation is MOST accurate?",
+      "options": {
+        "A": "37.5°C is a normal temperature — there is no concern about fever",
+        "B": "A temperature of 37.5°C in this patient represents a 1.3°C increase from his baseline and may be clinically significant — assess for infection and notify physician",
+        "C": "Oral temperature is unreliable in older adults — repeat the temperature rectally before acting",
+        "D": "The back pain and mild confusion are typical of his age and do not require further assessment"
+      },
+      "correctAnswer": "B",
+      "rationale": "In older adults, baseline body temperature is often 0.5–1°C LOWER than the traditionally accepted 37°C. This patient's baseline is 36.2°C. A temperature of 37.5°C represents a 1.3°C elevation — which is clinically significant despite falling within the 'normal' range by standard definitions. McGeer criteria for LTC infections define fever as: temperature ≥38°C OR increase ≥1°C from baseline. Combined with altered mentation and back pain (possible pyelonephritis?), this requires urgent assessment and physician notification.",
+      "distractorRationales": {
+        "A": "Incorrect. Context is essential: for THIS patient, 37.5°C is a 1.3°C increase from his baseline — this IS clinically significant. 'Normal range' values must always be interpreted against the patient's personal baseline.",
+        "C": "Incorrect. Rectal temperature is more accurate but requires clinical indication. The appropriate response here is to act on the finding, not to delay by repeating the test.",
+        "D": "Incorrect. Ageism. New back pain + altered mentation + temperature elevation = clinical assessment required. Back pain + altered mentation in an older adult could represent pyelonephritis, vertebral osteomyelitis, or other serious pathology."
+      },
+      "hint": "Always compare temperature to the PATIENT'S OWN baseline, not the standard 37°C. What does a 1.3°C increase mean?",
+      "clinicalPearl": "McGeer LTC infection criteria for fever: T ≥38°C OR increase ≥1.1°C from baseline. Many LTC facilities require documentation of baseline vital signs specifically for this reason. A 'normal' temperature in an older adult with a low baseline may represent significant infection.",
+      "examStrategy": "Temperature assessment in older adults: ALWAYS compare to documented baseline. An increase of ≥1°C from baseline is significant regardless of absolute value. This is one of the most important clinical principles in LTC nursing.",
+      "keyTakeaway": "Older adults have lower baseline temperatures (~36.2°C common). An increase of ≥1°C from baseline = clinically significant fever even if absolute value is 'normal.' Always compare to documented baseline.",
+      "tags": ["fever-aging", "baseline-temperature", "McGeer-criteria", "LTC", "infection-recognition"]
+    },
+    {
+      "id": "GERO-P6-005",
+      "topicSlug": "infection-risks-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is teaching nursing staff about why older adults in long-term care are at increased risk for infections. Which age-related changes contribute to infection risk? SELECT ALL THAT APPLY.",
+      "options": {
+        "A": "Reduced cough reflex and mucociliary clearance increase aspiration pneumonia risk",
+        "B": "Immunosenescence — reduced function of both T-cell and B-cell immunity",
+        "C": "Skin thinning and reduced barrier function increase skin infection and breakdown risk",
+        "D": "Increased stomach acid production enhances pathogen destruction in the GI tract",
+        "E": "Reduced bladder capacity and incomplete emptying increase UTI risk",
+        "F": "Increased bone density reduces the risk of surgical site infections"
+      },
+      "correctAnswer": ["A", "B", "C", "E"],
+      "rationale": "A (CORRECT): Reduced cough + ciliary function = retained secretions = aspiration pneumonia risk. B (CORRECT): Immunosenescence — age-related decline in T-cell and B-cell function — reduces vaccination response, pathogen clearance, and immune surveillance. C (CORRECT): Thin, fragile skin with reduced barrier function increases risk of skin breakdown, skin infections, and IV site infections. E (CORRECT): Reduced bladder capacity, incomplete bladder emptying (urinary retention), weakened urinary sphincter (women), prostatic hypertrophy (men) = stasis = UTI risk.",
+      "distractorRationales": {
+        "D": "INCORRECT. Older adults have REDUCED (not increased) gastric acid production (achlorhydria with aging). This INCREASES risk of GI infections (H. pylori, C. difficile, food-borne illness) by reducing the acid barrier to ingested pathogens.",
+        "F": "INCORRECT. Bone density DECREASES with aging (osteoporosis). Reduced bone density increases fracture risk which may lead to surgical interventions and associated infection risks — not reduces infection risk."
+      },
+      "hint": "Aging impairs defenses. Which specific mechanisms increase infection risk? Two options describe incorrect effects.",
+      "clinicalPearl": "Immunosenescence explains why older adults are more susceptible to new infections, why old infections (TB, herpes zoster) reactivate, and why vaccines are less effective. It is one of the most fundamental mechanisms driving the infection vulnerability of older adults.",
+      "examStrategy": "Infection risk SATA: aging → reduced defenses. Reduced cough, immunosenescence, thin skin, incomplete bladder emptying = risk factors. Gastric acid DECREASES (not increases) with aging. Bone density DECREASES.",
+      "keyTakeaway": "Infection vulnerability in aging: reduced cough + mucociliary clearance, immunosenescence (T/B-cell decline), thin skin, urinary stasis. Gastric acid declines (increases GI infection risk). Bone density declines (osteoporosis).",
+      "tags": ["immunosenescence", "infection-risk", "aging", "UTI-risk", "aspiration-pneumonia", "SATA"]
+    }
+  ]
+}

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ocean">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RN Lesson Pre/Post Assessment — Design</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#e8edf2;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+
+[data-theme="ocean"]{
+  --page-bg:#fff;--surf:#fff;--border:#e2ebf3;--border-soft:#eef4f9;
+  --txt:#0f172a;--muted:#5c6f86;--brand:#0d7aaa;--brand-b:#1aaee0;
+  --info:#2563eb;--info-soft:#f5f8ff;
+  --success:#16a34a;--success-soft:#f6fcf8;
+  --warn:#d97706;
+}
+
+.g-bar{background:#0c1220;color:#94a3b8;padding:10px 20px;font-size:11px;font-weight:700;display:flex;justify-content:space-between}
+.g-bar strong{color:#f8fafc;font-size:13px}
+.frames{padding:28px;display:flex;flex-direction:column;gap:44px;align-items:center}
+.frame-label{text-align:center;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#475569;margin-bottom:12px;max-width:94%}
+
+.mock{background:var(--page-bg);color:var(--txt)}
+.mock.desktop{width:1440px}
+.mock.mobile{width:390px}
+
+.site-nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--border-soft)}
+.site-nav b{font-size:14px;font-weight:800;color:var(--brand)}
+.site-nav span{font-size:12px;color:var(--muted);font-weight:600}
+.shell{max-width:1380px;margin:0 auto;padding:0 24px 48px}
+
+.lesson-header{padding:28px 0 22px;border-bottom:1px solid var(--border-soft)}
+.eyebrow{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--brand)}
+.lesson-header h1{font-size:40px;font-weight:800;letter-spacing:-.04em;line-height:1.05;margin-top:8px}
+.deck{font-size:15px;color:var(--muted);line-height:1.6;margin-top:10px;max-width:56ch}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{height:30px;padding:0 11px;border-radius:999px;border:1px solid var(--border);font-size:11px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center}
+
+.assess-toggle{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--border);border-radius:12px;background:#fafcfe;margin:20px 0 16px}
+.assess-toggle p{font-size:12px;color:var(--muted);max-width:52ch;line-height:1.5}
+.assess-toggle b{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--txt);display:block;margin-bottom:4px}
+.toggle-pill{display:inline-flex;border:1px solid var(--border);border-radius:8px;padding:3px;background:var(--surf)}
+.toggle-pill button{min-height:36px;padding:0 14px;border:0;border-radius:6px;font-size:12px;font-weight:700;background:transparent;color:var(--muted)}
+.toggle-pill button.on{background:var(--surf);color:var(--txt);box-shadow:0 1px 4px rgba(15,23,42,.08)}
+
+/* Shared assessment module — same layout pre & post */
+.assessment-module{border:1px solid var(--border);border-radius:16px;background:var(--surf);overflow:hidden}
+.assessment-module[data-phase="pre"]{--accent:var(--info);--accent-soft:var(--info-soft)}
+.assessment-module[data-phase="post"]{--accent:var(--success);--accent-soft:var(--success-soft)}
+
+.am-head{padding:20px 22px 16px;border-bottom:1px solid var(--border-soft);background:linear-gradient(180deg,var(--accent-soft),var(--surf) 70%)}
+.am-head-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+.am-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;background:color-mix(in srgb,var(--accent) 12%,var(--surf));border:1px solid color-mix(in srgb,var(--accent) 22%,var(--border));color:var(--accent)}
+.am-eyebrow{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.am-title{font-size:20px;font-weight:800;margin-top:4px;letter-spacing:-.02em}
+.am-sub{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.5;max-width:52ch}
+.am-badge{font-size:11px;font-weight:700;padding:6px 10px;border-radius:8px;background:var(--accent-soft);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 20%,var(--border));white-space:nowrap}
+.am-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.btn-primary{min-height:44px;padding:0 18px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-size:13px;font-weight:700}
+.btn-ghost{min-height:44px;padding:0 18px;border-radius:10px;border:1px solid var(--border);background:var(--surf);color:var(--muted);font-size:13px;font-weight:600}
+
+.am-quiz{padding:18px 22px 22px}
+.am-quiz-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:11px;font-weight:700;color:var(--muted)}
+.am-quiz-meta span:last-child{color:var(--accent)}
+.q-card{border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:12px;background:var(--surf)}
+.q-card:last-of-type{margin-bottom:0}
+.q-num{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.q-stem{font-size:15px;font-weight:600;line-height:1.55;margin-bottom:14px}
+.q-sata{font-size:10px;font-weight:800;color:var(--info);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.q-opt{display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border-radius:10px;border:1px solid var(--border);background:#fafcfe;font-size:14px;line-height:1.45;color:#4a5d73}
+.q-opt.sel{border-color:color-mix(in srgb,var(--accent) 40%,var(--border));background:var(--accent-soft)}
+.q-opt .letter{font-weight:800;color:var(--accent);min-width:18px}
+.am-submit{margin-top:16px;padding-top:16px;border-top:1px solid var(--border-soft);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.am-submit p{font-size:12px;color:var(--muted)}
+.btn-submit{min-height:48px;padding:0 22px;border-radius:10px;border:0;background:var(--brand);color:#fff;font-size:14px;font-weight:700}
+
+.am-result{padding:22px}
+.am-score{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.am-score-ring{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:var(--accent);border:4px solid color-mix(in srgb,var(--accent) 35%,var(--border));background:var(--accent-soft)}
+.am-report{font-size:12px;color:var(--muted);margin-top:12px;padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid var(--border-soft)}
+.am-report b{color:var(--txt)}
+
+.lesson-locked{opacity:.35;pointer-events:none;filter:grayscale(.15);margin-top:8px;padding:24px;border:2px dashed var(--border);border-radius:14px;text-align:center}
+.lesson-locked p{font-size:13px;font-weight:600;color:var(--muted)}
+
+.lesson-body-preview{margin-top:20px;opacity:.92}
+.lesson-progress{padding:14px 18px;border:1px solid var(--border);border-radius:12px;margin-bottom:18px}
+.progress-bar{height:6px;border-radius:99px;background:#e8f4fa;overflow:hidden;margin-top:8px}
+.progress-bar i{display:block;height:100%;background:var(--brand-b)}
+
+.mini-lesson-hint{padding:14px 18px;border:1px solid var(--border);border-radius:12px;background:#fafcfe;font-size:12px;color:var(--muted);margin-top:16px}
+.post-locked{opacity:.55}
+.post-locked .am-head{background:#f8fafc}
+.lock-tag{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--warn)}
+
+.mobile .shell{padding:0 14px 32px}
+.mobile .lesson-header h1{font-size:26px}
+.mobile .am-head,.mobile .am-quiz{padding-left:16px;padding-right:16px}
+.mobile .q-stem{font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="g-bar">
+  <span>Pre/Post assessment mockups · Same layout · Pulmonary Embolism · 8 questions each</span>
+  <strong>Ocean theme</strong>
+</div>
+
+<div class="frames">
+
+<!-- PRE: IDLE (lesson locked) -->
+<div>
+  <div class="frame-label">Pre-Test · Idle — lesson locked until complete or skip · Toggle on</div>
+  <div class="mock desktop" id="pre-idle">
+    <header class="site-nav"><b>NurseNest</b><span>Lessons · Report Card</span></header>
+    <div class="shell">
+      <header class="lesson-header">
+        <div class="eyebrow">Med-Surg · NCLEX-RN</div>
+        <h1>Pulmonary Embolism</h1>
+        <p class="deck">Readiness and retention checks use questions from this lesson topic and count on your report card.</p>
+        <div class="meta"><span class="chip">18 min read</span><span class="chip">Pre + Post</span></div>
+      </header>
+      <div class="assess-toggle">
+        <div><b>Lesson checks</b><p>On — pre-test runs first, then lesson content, then post-test at the bottom.</p></div>
+        <div class="toggle-pill"><button class="on">On</button><button>Off</button></div>
+      </div>
+      <div class="assessment-module" data-phase="pre">
+        <div class="am-head">
+          <div class="am-head-top">
+            <div style="display:flex;gap:12px">
+              <div class="am-icon">🧠</div>
+              <div>
+                <div class="am-eyebrow">Pre-Test · Readiness</div>
+                <div class="am-title">Quick Readiness Check</div>
+                <p class="am-sub">8 questions on pulmonary embolism · ~6 min · saves to your report card as a baseline score.</p>
+              </div>
+            </div>
+            <span class="am-badge">Counts toward progress</span>
+          </div>
+          <div class="am-actions">
+            <button type="button" class="btn-primary">Start Pre-Test</button>
+            <button type="button" class="btn-ghost">Skip to Lesson</button>
+          </div>
+        </div>
+      </div>
+      <div class="lesson-locked"><p>Lesson content unlocks after you finish the pre-test or turn lesson checks off.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRE: ACTIVE (same quiz layout as post) -->
+<div>
+  <div class="frame-label">Pre-Test · Active — shared question layout (8 items, topic-specific)</div>
+  <div class="mock desktop" id="pre-active">
+    <header class="site-nav"><b>NurseNest</b><span>Lessons</span></header>
+    <div class="shell">
+      <header class="lesson-header" style="padding-bottom:16px">
+        <div class="eyebrow">Med-Surg</div>
+        <h1 style="font-size:34px">Pulmonary Embolism</h1>
+      </header>
+      <div class="assessment-module" data-phase="pre">
+        <div class="am-head" style="padding-bottom:14px">
+          <div class="am-eyebrow">Pre-Test · Readiness</div>
+          <div class="am-title" style="font-size:18px">Quick Readiness Check</div>
+          <p class="am-sub" style="margin-top:4px">Answer all items, then submit for rationale review.</p>
+        </div>
+        <div class="am-quiz">
+          <div class="am-quiz-meta"><span>Question 3 of 8</span><span>2 answered</span></div>
+          <div class="q-card">
+            <div class="q-num">Question 3 of 8</div>
+            <div class="q-stem">A client with suspected pulmonary embolism has sudden dyspnea and clear lung sounds bilaterally. Which finding is most consistent with PE?</div>
+            <div class="q-opts">
+              <label class="q-opt"><span class="letter">A</span> Wheezes throughout all lung fields</label>
+              <label class="q-opt sel"><span class="letter">B</span> Pleuritic chest pain worsening with inspiration</label>
+              <label class="q-opt"><span class="letter">C</span> Productive cough with green sputum</label>
+              <label class="q-opt"><span class="letter">D</span> Dullness to percussion at the bases</label>
+            </div>
+          </div>
+          <div class="q-card" style="opacity:.55">
+            <div class="q-num">Question 4 of 8</div>
+            <div class="q-stem">Which nursing action is the priority for a client with acute PE and hypoxemia?</div>
+            <div class="q-opts">
+              <label class="q-opt"><span class="letter">A</span> Administer ordered anticoagulant immediately</label>
+              <label class="q-opt"><span class="letter">B</span> Maintain airway and oxygenation</label>
+              <label class="q-opt"><span class="letter">C</span> Encourage ambulation to prevent further clot</label>
+              <label class="q-opt"><span class="letter">D</span> Place client in high Fowler's only</label>
+            </div>
+          </div>
+          <div class="am-submit">
+            <p>Submit when all 8 questions are answered · score saves to report card</p>
+            <button type="button" class="btn-submit">Submit Pre-Test</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRE: COMPLETE -->
+<div>
+  <div class="frame-label">Pre-Test · Complete — continue reveals lesson</div>
+  <div class="mock desktop" id="pre-complete">
+    <header class="site-nav"><b>NurseNest</b></header>
+    <div class="shell">
+      <header class="lesson-header" style="padding-bottom:14px"><h1 style="font-size:32px">Pulmonary Embolism</h1></header>
+      <div class="assessment-module" data-phase="pre">
+        <div class="am-result">
+          <div class="am-score">
+            <div class="am-score-ring">63%</div>
+            <div>
+              <div class="am-eyebrow">Pre-Test complete</div>
+              <div class="am-title" style="font-size:18px">Baseline captured</div>
+              <p class="am-sub">5 of 8 correct · recorded on your report card for Pulmonary Embolism.</p>
+            </div>
+          </div>
+          <p class="am-report"><b>Report card:</b> Readiness diagnostic logged · compare after post-test for growth.</p>
+          <div class="am-actions" style="margin-top:18px">
+            <button type="button" class="btn-primary">Continue to Lesson</button>
+          </div>
+        </div>
+      </div>
+      <div class="mini-lesson-hint">Lesson sections, progress bar, and clinical pearls appear below.</div>
+    </div>
+  </div>
+</div>
+
+<!-- LESSON + POST IDLE -->
+<div>
+  <div class="frame-label">Lesson content + Post-Test idle at bottom (unlocks after lesson complete)</div>
+  <div class="mock desktop" id="lesson-post-idle" style="padding-bottom:0">
+    <header class="site-nav"><b>NurseNest</b></header>
+    <div class="shell">
+      <header class="lesson-header" style="padding-bottom:12px"><div class="eyebrow">Med-Surg</div><h1 style="font-size:32px">Pulmonary Embolism</h1></header>
+      <div class="assess-toggle" style="margin-top:12px">
+        <div><b>Lesson checks</b><p>Pre-test complete · reading in progress.</p></div>
+        <div class="toggle-pill"><button class="on">On</button><button>Off</button></div>
+      </div>
+      <div class="lesson-progress">
+        <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--muted)"><span>Lesson progress</span><span><b style="color:var(--txt)">6</b> of 7 sections</span></div>
+        <div class="progress-bar"><i style="width:86%"></i></div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:20px">… lesson reading workspace (v2.7) …</p>
+      <div class="assessment-module post-locked" data-phase="post" style="margin-top:8px">
+        <div class="am-head">
+          <div class="am-head-top">
+            <div style="display:flex;gap:12px">
+              <div class="am-icon">✓</div>
+              <div>
+                <div class="am-eyebrow">Post-Test · Retention</div>
+                <div class="am-title">Retention Check</div>
+                <p class="am-sub">8 questions · same layout as pre-test · unlocks when you mark this lesson studied.</p>
+              </div>
+            </div>
+            <span class="am-badge lock-tag">Locked</span>
+          </div>
+          <div class="am-actions">
+            <button type="button" class="btn-primary" disabled style="opacity:.5">Mark lesson studied to unlock</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POST: ACTIVE (same layout, green accent) -->
+<div>
+  <div class="frame-label">Post-Test · Active — identical layout to pre-test</div>
+  <div class="mock desktop" id="post-active">
+    <header class="site-nav"><b>NurseNest</b></header>
+    <div class="shell">
+      <header class="lesson-header" style="padding-bottom:14px"><h1 style="font-size:32px">Pulmonary Embolism</h1></header>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:16px">End of lesson · post-test</p>
+      <div class="assessment-module" data-phase="post">
+        <div class="am-head" style="padding-bottom:14px">
+          <div class="am-eyebrow">Post-Test · Retention</div>
+          <div class="am-title" style="font-size:18px">Retention Check</div>
+          <p class="am-sub" style="margin-top:4px">Same question UI as pre-test · scores count on your report card.</p>
+        </div>
+        <div class="am-quiz">
+          <div class="am-quiz-meta"><span>Question 5 of 8</span><span>4 answered</span></div>
+          <div class="q-card">
+            <div class="q-num">Question 5 of 8</div>
+            <div class="q-sata">Select all that apply</div>
+            <div class="q-stem">Which findings are associated with pulmonary embolism? (Select all that apply)</div>
+            <div class="q-opts">
+              <label class="q-opt sel"><span class="letter">A</span> Sudden dyspnea</label>
+              <label class="q-opt sel"><span class="letter">B</span> Tachycardia</label>
+              <label class="q-opt"><span class="letter">C</span> Bradycardia as the earliest sign</label>
+              <label class="q-opt sel"><span class="letter">D</span> Hypoxemia</label>
+            </div>
+          </div>
+          <div class="am-submit">
+            <p>Pre-test baseline: 63% · post-test updates report card growth</p>
+            <button type="button" class="btn-submit" style="background:var(--success)">Submit Post-Test</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POST: COMPLETE -->
+<div>
+  <div class="frame-label">Post-Test · Complete — report card growth vs pre-test</div>
+  <div class="mock desktop" id="post-complete">
+    <header class="site-nav"><b>NurseNest</b><span>Report Card</span></header>
+    <div class="shell">
+      <header class="lesson-header" style="padding-bottom:14px"><h1 style="font-size:32px">Pulmonary Embolism</h1></header>
+      <div class="assessment-module" data-phase="post">
+        <div class="am-result">
+          <div class="am-score">
+            <div class="am-score-ring">88%</div>
+            <div>
+              <div class="am-eyebrow">Post-Test complete</div>
+              <div class="am-title" style="font-size:18px">Retention captured</div>
+              <p class="am-sub">7 of 8 correct · +25 pts vs pre-test baseline (63%).</p>
+            </div>
+          </div>
+          <p class="am-report"><b>Report card:</b> Pre 63% → Post 88% · lesson diagnostics complete for Pulmonary Embolism.</p>
+          <div class="am-actions" style="margin-top:18px">
+            <button type="button" class="btn-primary" style="background:var(--success)">Back to Lessons</button>
+            <button type="button" class="btn-ghost">Review answers</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE PRE -->
+<div>
+  <div class="frame-label">Mobile · Pre-Test active</div>
+  <div class="mock mobile" id="mobile-pre">
+    <header class="site-nav"><b>NN</b><span>Menu</span></header>
+    <div class="shell">
+      <header class="lesson-header"><div class="eyebrow">Med-Surg</div><h1>Pulmonary Embolism</h1></header>
+      <div class="assess-toggle" style="margin:14px 0">
+        <div><b>Lesson checks</b></div>
+        <div class="toggle-pill" style="margin-top:8px"><button class="on">On</button><button>Off</button></div>
+      </div>
+      <div class="assessment-module" data-phase="pre">
+        <div class="am-head">
+          <div class="am-eyebrow">Pre-Test · Readiness</div>
+          <div class="am-title" style="font-size:17px">Quick Readiness Check</div>
+          <p class="am-sub">8 questions · report card</p>
+        </div>
+        <div class="am-quiz">
+          <div class="am-quiz-meta"><span>Q 2 of 8</span><span>1 answered</span></div>
+          <div class="q-card">
+            <div class="q-stem">Which risk factor is most associated with pulmonary embolism?</div>
+            <div class="q-opts">
+              <label class="q-opt sel"><span class="letter">A</span> Recent immobilization / DVT</label>
+              <label class="q-opt"><span class="letter">B</span> Chronic hypertension alone</label>
+            </div>
+          </div>
+          <button type="button" class="btn-submit" style="width:100%;margin-top:14px">Submit Pre-Test</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE POST -->
+<div>
+  <div class="frame-label">Mobile · Post-Test complete</div>
+  <div class="mock mobile" id="mobile-post">
+    <header class="site-nav"><b>NN</b></header>
+    <div class="shell">
+      <header class="lesson-header"><h1 style="font-size:24px">Pulmonary Embolism</h1></header>
+      <div class="assessment-module" data-phase="post" style="margin-top:16px">
+        <div class="am-result">
+          <div class="am-score-ring" style="width:64px;height:64px;font-size:18px;margin-bottom:12px">88%</div>
+          <div class="am-eyebrow">Post-Test complete</div>
+          <div class="am-title" style="font-size:17px">+25% vs pre-test</div>
+          <p class="am-report" style="margin-top:12px"><b>Report card</b> updated.</p>
+          <button type="button" class="btn-primary" style="width:100%;margin-top:14px;background:var(--success)">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

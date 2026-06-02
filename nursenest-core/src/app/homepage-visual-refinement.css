@@ -1,0 +1,564 @@
+/* =====================================================================
+   NurseNest Homepage Visual Refinement
+   Restores softer, premium clinical aesthetic from earlier iterations
+   
+   Focus areas:
+   - Typography weight normalization (lighter, more readable)
+   - Softer text colors (no pure black)
+   - Rounded navigation pills (border-radius: 999px)
+   - Softer borders throughout
+   - Increased border radius for cards/components
+   - Enhanced line-height for breathing room
+   
+   Does NOT modify:
+   - Homepage structure or section order
+   - Layout or grid systems
+   - Component hierarchy
+   ===================================================================== */
+
+/* =====================================================================
+   TYPOGRAPHY WEIGHT NORMALIZATION
+   Reduce visual heaviness across the entire interface
+   ===================================================================== */
+
+html[data-theme] {
+  /* Override heavy font weights with softer values */
+  --nn-font-weight-heading: 600;
+  --nn-font-weight-subheading: 500;
+  --nn-font-weight-ui: 500;
+  --nn-font-weight-body: 400;
+  --nn-font-weight-label: 500;
+}
+
+/* Heading weight reduction: 700→600 max */
+h1, .nn-marketing-h1,
+h2, .nn-marketing-h2,
+h3, .nn-marketing-h3 {
+  font-weight: 600 !important;
+}
+
+h4, h5, h6 {
+  font-weight: 500 !important;
+}
+
+/* Card titles: 500-600 range */
+.nn-card h3,
+.nn-premium-pathway-card h3,
+.nn-premium-flow-card h3,
+.nn-premium-trust-card h3,
+.nn-premium-readiness-panel h3,
+.nn-marketing-card h3 {
+  font-weight: 500 !important;
+}
+
+/* Body text: always 400 */
+p, li, dd, span {
+  font-weight: 400;
+}
+
+/* Muted labels: 500 max */
+.nn-marketing-eyebrow,
+.nn-marketing-caption,
+.nn-marketing-label {
+  font-weight: 500 !important;
+}
+
+/* Navigation text: reduce semibold usage */
+.nn-marketing-nav-link,
+.nn-header-link,
+nav a {
+  font-weight: 500 !important;
+}
+
+/* Button text: 500 (not 600 or 700) */
+button,
+.nn-btn-primary,
+.nn-btn-secondary,
+.nn-button-primary {
+  font-weight: 500 !important;
+}
+
+/* =====================================================================
+   TEXT COLOR SYSTEM - SOFTER CHARCOAL/GRAY TONES
+   Remove pure black, introduce softer contrast
+   ===================================================================== */
+
+html[data-theme] {
+  /* Primary headings: #1F2937 (softer than black) */
+  --palette-heading: #1F2937;
+  --theme-heading-text: #1F2937;
+  
+  /* Body text: #4B5563 */
+  --palette-text: #4B5563;
+  --theme-body-text: #4B5563;
+  
+  /* Muted labels: #6B7280 */
+  --palette-text-muted: #6B7280;
+  --theme-muted-text: #6B7280;
+  
+  /* Navigation text: #374151 */
+  --nav-text: #374151;
+}
+
+/* Dark themes: keep existing softer values */
+html[data-theme^="dark-"],
+html[data-theme="midnight"],
+html[data-theme="midnight-indigo"],
+html[data-theme="apex"] {
+  --palette-heading: #F1F5F9;
+  --theme-heading-text: #F1F5F9;
+  --palette-text: #E2E8F0;
+  --theme-body-text: #E2E8F0;
+  --palette-text-muted: #CBD5E1;
+  --theme-muted-text: #CBD5E1;
+}
+
+/* =====================================================================
+   ENHANCED LINE-HEIGHT FOR BREATHING ROOM
+   Increase vertical rhythm for better readability
+   ===================================================================== */
+
+body {
+  line-height: 1.7;
+}
+
+p, li, dd {
+  line-height: 1.7 !important;
+}
+
+.nn-marketing-lead,
+.nn-marketing-body {
+  line-height: 1.7 !important;
+}
+
+/* Headings: slightly tighter but still comfortable */
+h1, .nn-marketing-h1 {
+  line-height: 1.2;
+}
+
+h2, .nn-marketing-h2 {
+  line-height: 1.3;
+}
+
+h3, .nn-marketing-h3,
+h4, h5, h6 {
+  line-height: 1.4;
+}
+
+/* =====================================================================
+   NAVIGATION REFINEMENT - ROUNDED PILLS & SOFT BORDERS
+   Restore modern, airy, premium navigation feel
+   ===================================================================== */
+
+/* Remove harsh top border from navigation */
+.nn-header-nav {
+  border-top: none !important;
+}
+
+.nn-header-utility {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.04) !important;
+}
+
+/* Navigation pills: full rounded (999px) */
+.nn-marketing-nav-link,
+.nn-tab-pill,
+.nn-chip,
+.nn-header-account-trigger {
+  border-radius: 999px !important;
+}
+
+/* Active nav styling: softer shadow, gentle border */
+.nn-tab-pill[data-active="true"],
+.nn-tab-pill[aria-selected="true"],
+.nn-chip[data-selected="true"],
+.nn-chip[aria-pressed="true"] {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 2px 8px rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Inactive nav: subtle gray with soft translucent backgrounds */
+.nn-tab-pill,
+.nn-chip {
+  background: rgba(248, 250, 252, 0.6) !important;
+  border-color: rgba(15, 23, 42, 0.06) !important;
+  color: #64748B !important;
+}
+
+.nn-tab-pill:hover:not([data-active="true"]),
+.nn-chip:hover:not([data-selected="true"]) {
+  background: rgba(248, 250, 252, 0.9) !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+  color: #475569 !important;
+}
+
+/* =====================================================================
+   GLOBAL BORDER RADIUS - SOFTER ROUNDED SHAPES
+   Increase rounding for premium approachable feel
+   ===================================================================== */
+
+html[data-theme] {
+  /* Increased border radius values */
+  --radius: 0.75rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+}
+
+/* Cards: more rounded corners */
+.nn-card,
+.nn-premium-pathway-card,
+.nn-premium-flow-card,
+.nn-premium-trust-card,
+.nn-premium-readiness-panel,
+.nn-marketing-card {
+  border-radius: 1.25rem !important;
+}
+
+/* Feature blocks and dashboards */
+.nn-premium-home-section,
+.nn-dash-section,
+.nn-learner-surface {
+  border-radius: 1.125rem !important;
+}
+
+/* Buttons: softer corners (not sharp) */
+.nn-btn-primary,
+.nn-btn-secondary,
+.nn-button-primary {
+  border-radius: 999px !important;
+}
+
+/* Input fields and form elements */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+  border-radius: 0.75rem !important;
+}
+
+/* =====================================================================
+   SOFTER BORDERS THROUGHOUT
+   Reduce border contrast intensity
+   ===================================================================== */
+
+html[data-theme] {
+  /* Extremely soft border colors */
+  --border-subtle: rgba(15, 23, 42, 0.06);
+  --border-medium: rgba(15, 23, 42, 0.09);
+  --border-strong: rgba(15, 23, 42, 0.12);
+  --header-nav-border: rgba(15, 23, 42, 0.05);
+  --divider: rgba(15, 23, 42, 0.06);
+}
+
+/* Card borders: ultra-soft */
+.nn-card,
+.nn-premium-pathway-card,
+.nn-premium-flow-card,
+.nn-premium-trust-card,
+.nn-card-system,
+.nn-marketing-card {
+  border: 1px solid rgba(15, 23, 42, 0.06) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Section dividers: barely visible */
+.nn-premium-home-section {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.04) !important;
+}
+
+/* =====================================================================
+   SOFTER SHADOWS
+   Reduce shadow intensity for calm interface
+   ===================================================================== */
+
+html[data-theme] {
+  /* Softer shadow definitions */
+  --shadow-card:
+    0 1px 2px rgba(15, 23, 42, 0.03),
+    0 2px 8px rgba(15, 23, 42, 0.04);
+  
+  --shadow-card-hover:
+    0 2px 4px rgba(15, 23, 42, 0.04),
+    0 4px 16px rgba(15, 23, 42, 0.06);
+  
+  --shadow-elevated:
+    0 4px 12px rgba(15, 23, 42, 0.05),
+    0 1px 4px rgba(15, 23, 42, 0.03);
+  
+  --shadow-nav:
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    0 2px 8px rgba(15, 23, 42, 0.05);
+  
+  --elevation-rest: var(--shadow-card);
+  --elevation-hover: var(--shadow-card-hover);
+}
+
+/* Apply softer shadows to cards */
+.nn-card,
+.nn-premium-pathway-card,
+.nn-premium-flow-card,
+.nn-card-system {
+  box-shadow: var(--shadow-card) !important;
+}
+
+.nn-card:hover,
+.nn-premium-pathway-card:hover,
+.nn-premium-flow-card:hover,
+.nn-card-system:hover {
+  box-shadow: var(--shadow-card-hover) !important;
+}
+
+/* =====================================================================
+   NAVIGATION CHROME - REMOVE HARSH BLACK DIVIDER
+   Replace with extremely soft border or remove entirely
+   ===================================================================== */
+
+/* Remove or soften top navigation border */
+.nn-header-nav,
+.nn-header-logo-row {
+  border-top: none !important;
+  box-shadow: none !important;
+}
+
+/* Optional: ultra-soft bottom border only when scrolled */
+.nn-header-nav--scrolled,
+.nn-header-logo-row--scrolled {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.04) !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03) !important;
+}
+
+/* =====================================================================
+   HOMEPAGE-SPECIFIC REFINEMENTS
+   Ensure homepage sections feel calm and premium
+   ===================================================================== */
+
+/* Hero section: softer background */
+.nn-hero-branded,
+.nn-premium-home-hero {
+  background: rgba(248, 250, 252, 0.4) !important;
+}
+
+/* Section backgrounds: ultra-light tints */
+.nn-premium-home-section {
+  background: rgba(248, 250, 252, 0.3);
+}
+
+/* Alternating sections for rhythm */
+.nn-premium-home-section:nth-child(even) {
+  background: rgba(241, 245, 249, 0.3);
+}
+
+/* Trust section: calming green tint */
+.nn-premium-home-section--trust {
+  background: rgba(236, 253, 245, 0.4) !important;
+}
+
+/* CTA section: subtle warmth */
+.nn-premium-home-section--cta {
+  background: rgba(253, 242, 248, 0.3) !important;
+}
+
+/* =====================================================================
+   BUTTON REFINEMENTS
+   Softer, more approachable button styling
+   ===================================================================== */
+
+/* Primary buttons: reduce contrast */
+.nn-btn-primary,
+.nn-button-primary {
+  box-shadow: 
+    0 2px 6px rgba(15, 23, 42, 0.08),
+    0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+.nn-btn-primary:hover,
+.nn-button-primary:hover {
+  box-shadow: 
+    0 4px 12px rgba(15, 23, 42, 0.10),
+    0 2px 4px rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Secondary buttons: softer borders */
+.nn-btn-secondary {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.nn-btn-secondary:hover {
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  background: rgba(255, 255, 255, 1) !important;
+}
+
+/* =====================================================================
+   DARK THEME ADJUSTMENTS
+   Ensure dark themes also feel softer
+   ===================================================================== */
+
+html[data-theme^="dark-"],
+html[data-theme="midnight"],
+html[data-theme="midnight-indigo"],
+html[data-theme="apex"] {
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  
+  --shadow-card:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 2px 8px rgba(0, 0, 0, 0.15);
+  
+  --shadow-card-hover:
+    0 2px 4px rgba(0, 0, 0, 0.25),
+    0 4px 16px rgba(0, 0, 0, 0.20);
+}
+
+html[data-theme^="dark-"] .nn-tab-pill,
+html[data-theme^="dark-"] .nn-chip {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+html[data-theme^="dark-"] .nn-tab-pill[data-active="true"],
+html[data-theme^="dark-"] .nn-chip[data-selected="true"] {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* =====================================================================
+   READABILITY ENHANCEMENTS
+   Improved whitespace and visual hierarchy
+   ===================================================================== */
+
+/* Increase section padding for breathing room */
+.nn-premium-home-section {
+  padding-top: clamp(3rem, 6vh, 5rem) !important;
+  padding-bottom: clamp(3rem, 6vh, 5rem) !important;
+}
+
+.nn-premium-home-section--ecosystem {
+  padding-top: clamp(2.25rem, 4.5vh, 3.75rem) !important;
+  padding-bottom: clamp(2.5rem, 5vh, 4rem) !important;
+}
+
+/* Card internal padding: more generous */
+.nn-card,
+.nn-premium-pathway-card,
+.nn-premium-flow-card,
+.nn-card-system {
+  padding: 1.75rem !important;
+}
+
+@media (min-width: 640px) {
+  .nn-card,
+  .nn-premium-pathway-card,
+  .nn-premium-flow-card,
+  .nn-card-system {
+    padding: 2rem !important;
+  }
+}
+
+.nn-card-system__cta,
+.nn-premium-flow-card__cta {
+  min-width: 160px !important;
+  height: 48px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  border-radius: 999px !important;
+  line-height: 1 !important;
+}
+
+.nn-premium-flow-card__cta {
+  width: fit-content;
+  margin-top: auto !important;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.72);
+  padding-inline: 1.25rem;
+}
+
+/* Heading to body spacing */
+h2 + p,
+h3 + p {
+  margin-top: 1rem;
+}
+
+/* List spacing */
+ul, ol {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+li + li {
+  margin-top: 0.75rem;
+}
+
+/* =====================================================================
+   PREMIUM FEEL ENHANCEMENTS
+   Make the interface feel more modern and premium
+   ===================================================================== */
+
+/* Subtle backdrop blur for floating elements */
+.nn-header-nav,
+.nn-header-logo-row {
+  backdrop-filter: blur(8px) saturate(1.1);
+  -webkit-backdrop-filter: blur(8px) saturate(1.1);
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0ms !important;
+  }
+}
+
+/* Softer focus rings */
+*:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.3) !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1) !important;
+}
+
+/* =====================================================================
+   FINAL POLISH
+   Small details that enhance the overall feel
+   ===================================================================== */
+
+/* Remove harsh outlines from images */
+img {
+  border-radius: 0.75rem;
+}
+
+/* Softer divider lines */
+hr {
+  border-color: rgba(15, 23, 42, 0.06);
+  opacity: 1;
+}
+
+/* Premium badge styling */
+.nn-badge-soft,
+.nn-ui-badge {
+  border-radius: 999px !important;
+  font-weight: 500 !important;
+  border-width: 1px;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Ensure icons don't feel too heavy */
+svg {
+  stroke-width: 1.5;
+}
+
+/* Reduce icon size slightly for better balance */
+.lucide {
+  width: 1.25rem;
+  height: 1.25rem;
+}

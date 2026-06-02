@@ -1,0 +1,661 @@
+{
+  "slug": "pkg3-elder-abuse",
+  "title": "Elder Abuse and Neglect: Recognition, Assessment, and Mandatory Reporting",
+  "packageId": "pkg3-psychosocial",
+  "bodySystem": "Psychosocial",
+  "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+  "tier": ["RPN", "RN", "NP"],
+  "sections": [
+    {
+      "id": "learning_objectives",
+      "heading": "Learning Objectives",
+      "kind": "learning_objectives",
+      "body": "By the end of this lesson, you will be able to:\n1. Define elder abuse and identify all six recognized types with clinical examples relevant to older adults in community, hospital, and long-term care settings\n2. Apply the ELDER mnemonic as a structured framework to guide clinical abuse assessment and documentation\n3. Identify risk factors for elder abuse — including victim characteristics, perpetrator patterns, and environmental contributors — with particular attention to cognitive impairment as a primary vulnerability\n4. Describe the mandatory reporting obligations for nurses across Canadian provinces and US states, including the standard of 'reasonable suspicion' versus confirmed proof\n5. Demonstrate the private assessment protocol required when elder abuse is suspected, explaining why the alleged abuser must never be present during the assessment\n6. Outline the adult protective services (APS) referral pathway and the nurse's ongoing obligations following a report\n7. Document elder abuse findings accurately and comprehensively, meeting legal and ethical standards for mandatory reporting situations"
+    },
+    {
+      "id": "blueprint_mapping",
+      "heading": "Blueprint Mapping",
+      "kind": "blueprint_mapping",
+      "body": "EXAM TARGETS:\n- REx-PN: Client Safety — recognizing and reporting abuse and neglect; ethical responsibilities\n- NCLEX-PN: Safe and Effective Care Environment — Safety and Infection Control; Coordinated Care\n- NCLEX-RN: Safe and Effective Care Environment — Safety and Infection Control; Management of Care\n- CNPLE: Professional Practice — legal and ethical obligations; client safety and advocacy\n- FNP/AGPCNP: Complex chronic care — vulnerable populations; trauma-informed care; APS coordination\n\nNCLEX CLIENT NEEDS CATEGORIES:\n- Safe and Effective Care Environment (Safety and Infection Control): mandatory reporting, risk reduction, abuse assessment\n- Safe and Effective Care Environment (Management of Care): referral, interdisciplinary collaboration, advocacy\n- Psychosocial Integrity: therapeutic communication, trauma-informed care, supporting abuse victims\n- Health Promotion and Maintenance: screening, risk factor identification, community resources\n\nNURSING DOMAINS:\n- Legal and ethical practice: mandatory reporting obligations, documentation standards\n- Advocacy: patient protection and rights\n- Clinical assessment: validated tools (EASI, Elder Abuse Suspicion Index, OARS screen)\n- Therapeutic communication: trauma-informed interviewing\n- Care coordination: APS referral, interdisciplinary response"
+    },
+    {
+      "id": "core_content",
+      "heading": "Core Content: Elder Abuse — Definitions, Types, Epidemiology, and Theoretical Frameworks",
+      "kind": "core_content",
+      "body": "DEFINITION\nElder abuse is a single or repeated act — or lack of appropriate action — occurring within any relationship where there is an expectation of trust, which causes harm or distress to an older adult. The World Health Organization (WHO, 2022) defines it as intentional actions that cause harm or create serious risk of harm to a vulnerable older person, whether by a caregiver or other trusted person.\n\nEPIDEMIOLOGY\nElder abuse affects approximately 1 in 6 (15.7%) older adults worldwide (WHO, 2022). In Canada, prevalence estimates range from 4–10%, with substantial underreporting due to shame, fear, cognitive impairment, and dependence on the abuser. In the United States, the National Council on Aging reports that 1 in 10 Americans over age 60 experience elder abuse annually. Financial abuse alone is estimated to cost $2.9–36.5 billion annually in the US. For every case reported, 24 cases go unreported.\n\nKEY PERPETRATOR PATTERN: 70% OF PERPETRATORS ARE FAMILY MEMBERS\nThe most important epidemiological fact for clinical practice: approximately 70% of elder abuse perpetrators are family members — most commonly adult children (50% of cases), followed by spouses/partners (25%), other family members, and then paid caregivers. This reality directly informs the private assessment protocol: the most common perpetrator is precisely the person most likely to accompany the older adult to care settings.\n\nTHE SIX TYPES OF ELDER ABUSE\n\n1. PHYSICAL ABUSE\nDefinition: Intentional infliction of physical pain, injury, or impairment. Includes hitting, slapping, pushing, kicking, burning, inappropriate physical restraint, and forced medication.\nClinical indicators: Unexplained injuries, bruises at unusual sites (inner arms, inner thighs, abdomen — not typical fall sites), bruises in various stages of healing (implying repeated incidents over time), bilateral injuries (falls produce unilateral injuries), injuries inconsistent with the described mechanism, fractures in non-ambulatory patients, defensive injuries (bruising on forearms/hands from protecting oneself), delay in seeking treatment.\nHigh-risk presentation: Patient who becomes fearful, quiet, or changes behaviour when the caregiver enters the room.\n\n2. EMOTIONAL/PSYCHOLOGICAL ABUSE\nDefinition: Verbal or non-verbal behaviour that inflicts anguish, mental pain, fear, or distress. Includes intimidation, humiliation, threats, yelling, isolation, and infantilization (treating the older adult like a child).\nClinical indicators: Older adult appears fearful, anxious, or withdrawn in the presence of the caregiver; reports feeling afraid; exhibits low self-esteem disproportionate to clinical picture; seems controlled (e.g., caregiver answers all questions, redirects the patient, makes decisions without consulting the patient); tearfulness without clear medical reason; changes in behaviour or personality.\nImportant distinction: Emotional abuse is pervasive and often present alongside other types. It may be the hardest to detect because there are no visible physical signs.\n\n3. FINANCIAL ABUSE/EXPLOITATION\nDefinition: Illegal or improper use of an older adult's funds, property, or assets without the individual's full informed consent. Includes theft, fraud, forgery, coercion regarding financial decisions, misuse of power of attorney, and preventing access to one's own money.\nClinical indicators: Unpaid bills despite adequate income, malnutrition or inadequate living conditions despite sufficient pension/savings, missing valuables, recent changes to will or power of attorney, new 'friends' with unusual financial interest, caregiver accompanies patient to all appointments and controls all communication, patient not aware of their own financial situation, medication non-adherence due to reported unaffordability when income should cover costs.\nClinical significance: Most common form of elder abuse in Canada. Often overlooked because it leaves no physical marks.\n\n4. SEXUAL ABUSE\nDefinition: Any non-consensual sexual contact or behaviour. Includes unwanted touching, rape, coerced nudity, showing pornographic material, and sexual exploitation. A person who lacks decision-making capacity cannot consent.\nClinical indicators: Unexplained vaginal or anal bleeding or trauma, difficulty walking or sitting, torn, stained, or bloody underclothing, new or recurrent sexually transmitted infections, bruising in genital or inner thigh areas, fearfulness during perineal care or physical examination.\nKey point: Sexual abuse occurs in all settings — homes, long-term care facilities, hospitals. People with dementia or cognitive impairment are particularly vulnerable because they cannot consent and may not be able to report.\n\n5. NEGLECT\nDefinition: Failure of a designated caregiver to meet an older adult's basic physical, psychological, or social needs. Can be active (intentional withholding of care) or passive (caregiver lacks knowledge, resources, or capacity to provide appropriate care).\nClinical indicators: Pressure injuries (especially Stage 3/4), dehydration, malnutrition, poor hygiene, inappropriate clothing for weather, untreated medical conditions, medication errors or omissions, failure to use prescribed assistive devices, inadequate shelter.\nNote: Neglect accounts for the highest proportion of confirmed elder abuse cases in most North American jurisdictions. It occurs in both home and institutional settings.\n\n6. ABANDONMENT\nDefinition: Desertion of an older adult by a person who has assumed responsibility for providing care. Includes leaving an older adult alone when they cannot be safely left alone, and failure to return after assuming care responsibility.\nClinical indicators: Older adult found alone and unable to care for themselves, reports being left for extended periods, evidence that the caregiver has moved away or become unavailable, no care plan in place.\n\nSELF-NEGLECT (SPECIAL CATEGORY)\nSelf-neglect occurs when an older adult with decision-making capacity makes autonomous choices that result in inadequate self-care — refusing medications, living in unsafe conditions, ignoring medical advice. Self-neglect requires a different framework: if the person has capacity, autonomy must be respected (they have the right to make unsafe choices). The nurse's role is to ensure capacity is accurately assessed, risks are clearly communicated, and the patient's choice is fully informed. Self-neglect does NOT apply to individuals who lack capacity.\n\nRISK FACTORS FOR ELDER ABUSE\n\nVictim risk factors:\n- Cognitive impairment (dementia) — highest single risk factor; doubles to triples abuse risk\n- Functional dependency (ADL/IADL impairment)\n- Social isolation\n- Female sex (for most abuse types)\n- History of family violence\n- Advanced age (80+)\n- Mental health conditions\n- Low literacy\n\nPerpetrator risk factors:\n- Caregiver stress and burnout\n- Substance use disorder (alcohol, drugs)\n- Mental illness\n- Financial dependency on the victim\n- History of violence\n- Social isolation\n- Resentment of caregiver role\n- Lack of caregiving knowledge or skills\n\nEnvironmental/situational risk factors:\n- Social isolation (victim and caregiver)\n- Shared living arrangements with a person with risk factors\n- Recent major life changes or stressors\n- Inadequate formal support services\n- Institutional factors (understaffing, poor culture, inadequate oversight)\n\nELDER ABUSE AND COGNITIVE IMPAIRMENT\nDementia is the single strongest risk factor for elder abuse. Reasons: (1) People with dementia may not be able to recognize, report, or remember abuse; (2) Behavioural and psychological symptoms of dementia (BPSD) increase caregiver stress and burnout; (3) Cognitive impairment makes it easier for abusers to control victims; (4) Memory impairment may cause the patient to be seen as an unreliable witness even when reporting abuse accurately. Nurses must assume that any report of abuse from a person with dementia deserves the same serious investigation as a report from a cognitively intact person.\n\nTHEORETICAL FRAMEWORKS\n- Caregiver stress model: abuse arises from caregiver overwhelm and burnout — most applicable to neglect and emotional abuse\n- Social learning theory: violence is learned behaviour transmitted across generations — family violence history as risk factor\n- Power and control framework (from domestic violence literature): abuse is a pattern of control and domination, not just individual incidents\n- Political economy framework: elder abuse is connected to ageism, devaluation of older adults, and reduced social and economic power in old age"
+    },
+    {
+      "id": "normal_aging_changes",
+      "heading": "Normal Aging Changes Relevant to Elder Abuse Recognition",
+      "kind": "normal_aging_changes",
+      "body": "Understanding age-related changes is critical for distinguishing normal findings from abuse indicators. KEY PRINCIPLE: Normal aging never explains abuse. Attributing abuse signs to 'aging' is a dangerous clinical error.\n\nSKIN AND BRUISING:\nNormal aging causes increased skin fragility due to dermal atrophy, loss of subcutaneous fat, reduced collagen, and capillary fragility (senile purpura). Senile purpura causes flat, irregularly shaped purple-red macules on sun-exposed skin (forearms, backs of hands) that result from minor trauma. However: (1) Senile purpura is bilateral and symmetric; (2) Unexplained bruising on inner thighs, upper arms, chest, abdomen, or face is NOT caused by aging — these sites are not typical senile purpura locations; (3) Multiple bruises at different healing stages require explanation regardless of age.\n\nCOGNITIVE CHANGES:\nNormal aging includes mild slowing of processing speed and retrieval time. Normal aging does NOT cause: confusion, disorientation, amnesia, inability to recall daily events, dramatic personality changes, or inability to make decisions. When an older adult appears confused, fearful, or gives inconsistent accounts, these require clinical investigation — not attribution to 'expected aging.'\n\nFALLS:\nFalls are common in older adults and legitimate fall injuries do occur. Normal fall-related injuries: bruising on knees, shins, elbows, lateral hips, palms; abrasions on exposed extremities. Fall injuries that are inconsistent: bilateral injuries in the same body region, inner-surface bruising (inner arms, inner thighs), bruising on the torso or face without face-forward falls, injuries incompatible with the described mechanism.\n\nNUTRITION AND WEIGHT:\nSome weight loss occurs with aging due to reduced appetite, taste changes, and metabolic changes. However, significant unintentional weight loss (>5% in 6 months), malnutrition (BMI <18.5), or clinical signs of dehydration in an older adult who has a caregiver are red flags for neglect — NOT normal aging.\n\nFEAR AND WITHDRAWAL:\nAge-related changes do not cause fear of specific people, sudden withdrawal of communication, or a change in behaviour when a specific person enters the room. These are clinical red flags requiring assessment."
+    },
+    {
+      "id": "abnormal_findings",
+      "heading": "Abnormal Findings — Red Flags for Elder Abuse",
+      "kind": "abnormal_findings",
+      "body": "RED FLAGS ORGANIZED BY ABUSE TYPE:\n\nPHYSICAL ABUSE RED FLAGS:\n🚨 Bruises in unusual locations: inner arms, inner thighs, abdomen, genitals, bilateral symmetrical bruising\n🚨 Multiple bruises at different stages of healing (implying repeated incidents)\n🚨 Injuries inconsistent with the reported mechanism (e.g., 'she fell' but bilateral arm bruising)\n🚨 Patterned injuries (marks from objects — cords, belts, fingers)\n🚨 Defensive injuries: bruising on forearms, hands consistent with protecting oneself\n🚨 Fractures in non-ambulatory or very frail patients without clear traumatic mechanism\n🚨 Burns with sharp margins (deliberate contact burns), cigarette burn marks\n🚨 Delay between injury and seeking treatment\n\nEMOTIONAL ABUSE RED FLAGS:\n🚨 Patient appears visibly frightened when caregiver is present or mentioned\n🚨 Patient becomes quiet, avoidant, or stops speaking when caregiver enters room\n🚨 Caregiver answers all questions, does not allow patient to speak independently\n🚨 Patient appears ashamed, humiliated, or excessively deferential to caregiver\n🚨 Patient reports being threatened, yelled at, or humiliated\n🚨 New-onset anxiety, depression, or withdrawal without medical explanation\n\nFINANCIAL ABUSE RED FLAGS:\n🚨 Unpaid utilities or rent despite adequate pension/income\n🚨 Malnutrition or inadequate care despite sufficient financial resources\n🚨 Caregiver controls all money and patient cannot access own funds\n🚨 Recent unexplained changes to will, power of attorney, or beneficiary designations\n🚨 Missing property, bank withdrawals patient cannot explain\n🚨 New acquaintances with apparent financial interest in the patient\n🚨 Patient reports inability to afford medications (but income should be sufficient)\n\nSEXUAL ABUSE RED FLAGS:\n🚨 Unexplained vaginal or rectal bleeding or trauma\n🚨 Torn, soiled, or bloody undergarments\n🚨 New sexually transmitted infections\n🚨 Extreme fear, distress, or avoidance during perineal care or pelvic exam\n🚨 Pain with ambulation or sitting\n\nNEGLECT RED FLAGS:\n🚨 Pressure injuries (especially Stage 3 or 4 in a patient with a caregiver)\n🚨 Severe dehydration or malnutrition with an identified caregiver\n🚨 Dirty or wet clothing, poor hygiene inconsistent with mobility\n🚨 Untreated medical conditions, missed appointments, medication non-adherence not explained by patient choice\n🚨 Inadequate shelter or unsafe home environment\n🚨 Caregiver absence or non-availability\n\nBEHAVIOURAL INDICATORS (ALL TYPES):\n🚨 Extreme passivity or fear in the presence of the caregiver\n🚨 Caregiver who is hostile, dismissive, or controlling during the assessment\n🚨 Caregiver who refuses to allow the nurse to speak with the patient alone\n🚨 Inconsistencies between caregiver and patient accounts\n🚨 Caregiver who appears to enjoy the patient's distress or humiliation"
+    },
+    {
+      "id": "assessment",
+      "heading": "Assessment: Validated Tools and Private Assessment Protocol",
+      "kind": "assessment",
+      "body": "THE PRIVATE ASSESSMENT PROTOCOL (NON-NEGOTIABLE)\nThe single most important procedural element in elder abuse assessment: the alleged abuser MUST NOT be present when the older adult is assessed. This applies equally to family members and professional caregivers. Rationale: (1) Victims are unlikely to disclose abuse in front of the perpetrator; (2) The abuser may answer for the patient, redirect the conversation, or intimidate non-verbally; (3) The safety assessment cannot be valid if the person who may be causing harm is in the room. How to achieve private assessment: 'Mr. Jones, I need to do a standard part of every assessment privately — it's routine for all patients. Can I ask you to step out for about 10 minutes?' This is framed as routine to reduce conflict.\n\nTHE ELDER MNEMONIC FOR ABUSE ASSESSMENT\nE — Evidence: Look for physical evidence (bruises, injuries, condition of environment)\nL — Lethality: Is this situation immediately dangerous? Does the patient need emergency protection?\nD — Disclosure: Has the patient made any direct or indirect disclosure of abuse?\nE — Emotional response: How does the patient appear — fearful, controlled, subdued, withdrawn?\nR — Resources: What formal and informal supports does the patient have? Are they adequate?\n\nVALIDATED SCREENING TOOLS:\n\n1. Elder Abuse Suspicion Index (EASI) — Yaffe et al., 2008\nDesigned for use by physicians and nurses in busy clinical settings. 6 questions, completed in under 2 minutes.\n- Questions 1-5: Asked to the patient: e.g., 'In the past 12 months, have you relied on people for any of the following activities: bathing, dressing, shopping, banking, or meals?' 'Has anyone prevented you from getting food, clothes, medication, glasses, hearing aids, or medical care, or from being with people you wanted to be with?'\n- Question 6: Clinician observation: 'Elder shows evidence of financial abuse, elder appears fearful, agitated, or ashamed.'\nScoring: One or more positive responses to questions 2–6 = further assessment warranted.\nClinical note: A positive EASI screen does not confirm abuse — it triggers comprehensive assessment and possible APS reporting.\n\n2. Vulnerability to Abuse Screening Scale (VASS) — Schofield & Mishra, 2003\nSelf-report tool examining vulnerability, dependence, dejection, and coercion. More comprehensive than EASI. Less suited to brief clinical encounters.\n\n3. Hwalek-Sengstock Elder Abuse Screening Test (H-S/EAST)\n15-item tool examining direct abuse, characteristics of vulnerability, and potentially abusive situations. Validated in community-dwelling elders.\n\n4. OARS Multidimensional Functional Assessment Questionnaire\nFunctional assessment tool with domains applicable to abuse risk — social resources, economic resources, mental health, physical health, and activities of daily living. Often used in comprehensive geriatric assessment.\n\n5. Geriatric Depression Scale (GDS) — Secondary role in abuse assessment\nDepression is both a consequence of abuse and a vulnerability factor. Screening for depression with the GDS-15 is appropriate in any elder abuse assessment.\n\nCLINICAL ASSESSMENT PEARLS:\n- Always ask direct questions in plain language: 'Has anyone hurt you?' 'Has anyone taken your money without permission?' 'Do you feel safe at home?'\n- Observe the patient-caregiver interaction before separating them: body language, eye contact, who initiates answers\n- Review available records for prior injury patterns, missed appointments, medication changes\n- If the patient has dementia and cannot provide a complete verbal account, rely on physical findings, environmental assessment, and observed behaviour\n- Never promise confidentiality — explain mandatory reporting obligations clearly and compassionately: 'I want to be honest with you — there are some situations where I have a legal responsibility to report what you've told me, in order to keep you safe. But I will always explain what I'm doing and why.'\n- Document verbatim patient statements in quotation marks whenever possible"
+    },
+    {
+      "id": "nursing_interventions",
+      "heading": "Nursing Interventions: Evidence-Based Response to Elder Abuse",
+      "kind": "nursing_interventions",
+      "body": "IMMEDIATE SAFETY ASSESSMENT (PRIORITY ONE)\nBefore any other intervention, determine: Is the patient in immediate danger? Does the patient need emergency removal from the situation? Does the patient require acute medical care? In cases of acute physical injury, emergency medical care and emergency services (911) take priority.\n\nMANDATORY REPORTING — THE NURSE'S LEGAL OBLIGATION\nIn Canada: All provinces have mandatory reporting legislation for abuse in long-term care settings. Several provinces (Ontario, Nova Scotia, Prince Edward Island, Alberta, British Columbia) have broader mandatory reporting obligations extending to community settings. Ontario's Long-Term Care Homes Act requires all staff to report reasonable suspicion of abuse immediately. In the United States: All 50 states have elder abuse mandatory reporting laws. The standard is 'reasonable suspicion' — not confirmed proof. Nurses cannot wait for certainty before reporting. How to report: Contact your provincial/territorial adult protective services, regional senior services, or in the US, the Adult Protective Services (APS) agency in the relevant jurisdiction. In acute care settings, the social work team typically coordinates the report and response.\n\nCOMPREHENSIVE ABUSE ASSESSMENT INTERVENTION SEQUENCE:\n1. Ensure patient safety — if immediate danger, activate emergency services\n2. Conduct private assessment without the alleged abuser present\n3. Complete validated screening tool (EASI or equivalent)\n4. Perform thorough physical assessment; photograph injuries if policy permits\n5. Document findings comprehensively, using verbatim patient statements\n6. Make mandatory report to APS or designated reporting body\n7. Notify social work and the interdisciplinary team\n8. Develop a safety plan collaboratively with the patient (if capacity is intact)\n9. Ensure patient knows their rights and available resources\n10. Provide trauma-informed support and counselling referral\n11. Follow up — abuse assessment is an ongoing process, not a one-time event\n\nTRAUMA-INFORMED CARE PRINCIPLES:\n- Use a non-judgmental, calm approach\n- Do not express disbelief, minimize, or rationalize what the patient reports\n- Understand that many victims feel ambivalent about reporting — they may love the abuser, fear retaliation, or fear losing their caregiver\n- Respect the patient's pace; rushing can cause re-traumatization\n- Focus on the patient's experience: 'What happened to you?' not 'Why didn't you say something sooner?'\n- Validate the patient's feelings: 'What you've described sounds very frightening. You did the right thing by telling me.'\n\nSAFETY PLANNING (IF PATIENT HAS CAPACITY):\n- Identify a safe person the patient can contact\n- Ensure the patient has a safe phone or communication method\n- Develop a plan for escalation if abuse occurs again\n- Discuss available options: home care increase, shelter, family conference, legal protections\n- Document the safety plan in the chart\n\nINTERDISCIPLINARY COLLABORATION:\n- Social work: APS coordination, safety planning, community resource navigation\n- Medicine/NP: medical evaluation of injuries, capacity assessment, forensic assessment referral\n- Legal/ethics: in complex cases involving power of attorney, capacity, or financial abuse\n- Law enforcement: when criminal abuse is suspected\n- Mental health: for victims requiring psychological support\n\nAPS REFERRAL PATHWAY:\n1. Nurse identifies concern and files mandatory report\n2. APS receives report and assigns case priority (immediate/urgent/routine) based on risk level\n3. APS conducts investigation, which may include home visit, interview with patient and others\n4. APS determines substantiation: substantiated (abuse confirmed), inconclusive, or unsubstantiated\n5. For substantiated cases: service plan developed, potential legal action, ongoing monitoring\n6. Nurse's obligation does not end with the report — ongoing assessment and documentation continue\n\nINSTITUTIONAL ABUSE IN LONG-TERM CARE:\n- Report through facility channels AND to regulatory body (e.g., Ontario Ministry of Long-Term Care)\n- Document using facility incident reporting system\n- Protect the patient from further contact with the alleged perpetrator pending investigation\n- Support other residents who may also be at risk"
+    },
+    {
+      "id": "patient_teaching",
+      "heading": "Patient and Family Teaching",
+      "kind": "patient_teaching",
+      "body": "TEACHING ELDER ABUSE VICTIMS (TRAUMA-INFORMED APPROACH)\n1. You have the right to be safe: 'Every person, regardless of age or ability, has the right to be treated with dignity and to live without fear of harm. What is happening to you is not acceptable and not your fault.'\n\n2. What constitutes abuse: Ensure the patient understands the full range of abuse types, including financial abuse and emotional abuse, which are often not recognized by victims. 'Abuse is not just hitting. Being yelled at, threatened, or having someone take your money without permission are all forms of abuse.'\n\n3. Mandatory reporting explained: 'I am required by law to report my concern about your safety. This is to protect you, not to punish anyone. Here is what will happen next...' Explain the APS process clearly.\n\n4. Available resources:\n- APS helpline numbers (provide local numbers in writing)\n- 24/7 crisis line for older adults (e.g., Seniors Safety Line in Ontario: 1-866-299-1011)\n- Legal aid services for seniors\n- Seniors shelters and emergency housing (where available)\n- Victim services\n\n5. Safety planning: 'If you feel unsafe, here are the steps to take: [go over the specific plan]'\n\n6. Rights and autonomy: If the patient has capacity and chooses not to pursue action against the perpetrator, nurses must respect this decision while documenting that the patient was fully informed of risks and resources. 'I understand that you don't want to report right now. I respect that. I want to make sure you know that the offer of help is always here, and that I will continue to be concerned about your safety.'\n\nTEACHING FAMILIES AND CAREGIVERS (NON-ABUSIVE):\n1. Caregiver stress is real and normal: help families understand burnout and accept help before crisis\n2. Warning signs in themselves: teach family members to recognize when they are reaching their limit\n3. Available supports: respite care, adult day programs, Alzheimer Society resources, crisis lines\n4. How to access APS if they are worried about their family member\n5. Normal versus abusive behaviour in caregiving: boundaries of appropriate caregiving\n\nCOMMUNITY EDUCATION CONTEXT:\n- Ageism enables abuse: community-level education about elder abuse prevention is part of the nurse's professional advocacy role\n- Healthcare providers can serve as a safety net when they conduct regular, thorough assessments that include abuse screening"
+    },
+    {
+      "id": "documentation",
+      "heading": "Documentation: Legal and Ethical Requirements",
+      "kind": "documentation",
+      "body": "DOCUMENTATION IS A LEGAL OBLIGATION IN ELDER ABUSE CASES\nDocumentation in elder abuse cases may be used in court proceedings, APS investigations, or institutional reviews. It must meet the highest standards of accuracy, completeness, and objectivity.\n\nWHAT MUST BE DOCUMENTED:\n\n1. OBJECTIVE PHYSICAL FINDINGS:\n- Describe all injuries precisely: location (use anatomical landmarks), size (measure in centimetres), shape, colour, edges (sharp vs. diffuse), and apparent age/healing stage\n- Use a body diagram/map to indicate injury locations\n- Photograph injuries where facility policy permits, labelling with date, time, patient ID, and nurse's name\n- Describe the condition of the patient's environment if assessment occurs in the home: cleanliness, food in refrigerator, heating, hazards\n\n2. PATIENT STATEMENTS (VERBATIM):\n- Quote the patient's exact words using quotation marks: Patient stated, 'He hits me when he gets angry.'\n- Do NOT paraphrase or interpret: 'Patient reported abuse' (wrong); 'Patient stated, \"My son hits me when I drop things.\"' (correct)\n- Document that assessment was conducted privately and that the caregiver was not present\n\n3. PATIENT AFFECT AND BEHAVIOUR:\n- Describe observable behaviour: 'Patient made eye contact while speaking privately, spoke clearly and consistently; became visibly tearful when asked about her son; averted gaze when son was present.'\n- Avoid interpretive language: do not write 'Patient appeared abused'; do write 'Patient presented with multiple bruises in various healing stages at inner arm bilaterally and abdomen; affect was fearful when caregiver present.'\n\n4. SCREENING TOOL RESULTS:\n- Document the tool used, the date, and the numerical score: 'EASI administered: 3 of 6 items positive (questions 2, 3, 6). Further assessment completed.'\n\n5. REPORT DETAILS:\n- Date and time of mandatory report filed\n- Agency/body reported to and contact name\n- Case reference number if provided\n- Any immediate safety measures taken\n\n6. CLINICAL DECISION RATIONALE:\n- Document why abuse is suspected: 'Given inconsistency between injury pattern (bilateral inner-arm bruising, multiple healing stages) and reported mechanism (one-time fall), elder abuse is suspected per mandatory reporting threshold.'\n\nDOCUMENTATION ERRORS TO AVOID:\n- Never document opinion or conclusion without supporting facts: 'Abuse confirmed' (wrong without documented rationale); 'Presentation is consistent with physical abuse based on findings above' (correct)\n- Never omit findings because they seem minor or uncertain — document everything observed\n- Never alter or backdate documentation\n- Never allow the alleged abuser access to the documentation"
+    },
+    {
+      "id": "clinical_pearls",
+      "heading": "Clinical Pearls",
+      "kind": "clinical_pearls",
+      "body": "1. THE STANDARD IS REASONABLE SUSPICION, NOT CERTAINTY\nNurses do not need to confirm abuse before reporting. The legal standard in all Canadian provinces and US states is 'reasonable suspicion' — a pattern of findings that would cause a reasonably prudent nurse to suspect abuse. You will never have certainty before reporting. If you wait for certainty, you are waiting too long.\n\n2. THE CAREGIVER AT THE BEDSIDE IS THE MOST LIKELY PERPETRATOR\nIn 70% of cases, the perpetrator is a family member. The person who brings the older adult to the clinic, stays at the bedside, and answers questions on behalf of the patient is statistically the person most likely to be causing harm. This is not a reason to view all caregivers with suspicion — it is a reason to always conduct a portion of every assessment privately.\n\n3. DEMENTIA DOES NOT INVALIDATE DISCLOSURE\nA patient with dementia who reports abuse deserves the same investigation as a cognitively intact patient. Cognitive impairment makes a person MORE vulnerable to abuse, not less deserving of protection. Abusers frequently exploit cognitive impairment by knowing their victim 'won't remember' or 'won't be believed.'\n\n4. FINANCIAL ABUSE LEAVES NO BRUISES\nFinancial abuse is among the most common and least visible forms of elder abuse. Always assess financial well-being as part of a comprehensive elder abuse screen — particularly in patients who report medication non-adherence due to cost, or who appear malnourished despite having adequate income.\n\n5. NEGLECT CAN BE UNINTENTIONAL — BUT IS STILL REPORTABLE\nPassive neglect (caregiver does not have the skills, resources, or capacity to provide adequate care) is still neglect and still requires reporting and intervention. The nurse's role is to address the outcome (patient harm) and connect the caregiver with support, regardless of intent.\n\n6. PRIVATE ASSESSMENT IS THE MOST IMPORTANT CLINICAL PROCEDURE IN ELDER ABUSE\nEvery assessment protocol, every validated tool, every clinical guideline on elder abuse centres on one procedural requirement: assess the patient alone. Without private assessment, an accurate abuse evaluation is impossible."
+    },
+    {
+      "id": "memory_anchors",
+      "heading": "Memory Anchors: Mnemonics and Pattern Rules",
+      "kind": "memory_anchors",
+      "body": "THE ELDER MNEMONIC (Abuse Assessment Framework):\nE — Evidence (physical signs, environmental clues)\nL — Lethality (is the patient in immediate danger?)\nD — Disclosure (has the patient said anything, directly or indirectly?)\nE — Emotional state (fear, withdrawal, shame, control by caregiver)\nR — Resources (formal and informal supports — are they adequate?)\n\nTHE SIX TYPES OF ELDER ABUSE — PENFSA:\nP — Physical\nE — Emotional/Psychological\nN — Neglect\nF — Financial\nS — Sexual\nA — Abandonment\n\nTHE '70% RULE': 70% of elder abuse perpetrators are family members. The caregiver at the bedside is usually a family member. Conduct private assessments routinely.\n\nBRUISING PATTERN RULE:\n- OUTER surface + single stage of healing = likely fall/accidental\n- INNER surface (inner arms, inner thighs, abdomen) + MULTIPLE healing stages = elder abuse until proven otherwise\n\nTHE REPORTING RULE: Report on SUSPICION, not PROOF. Reasonable suspicion = report. Waiting for certainty = failing the patient.\n\nTHE PRIVATE ASSESSMENT RULE: The alleged perpetrator is most often a family member. Always assess elder abuse victims ALONE. No exceptions.\n\nDEMENTIA + ABUSE FORMULA: Cognitive impairment = HIGHER abuse risk + HARDER to detect = MORE vigilant assessment required, not less."
+    },
+    {
+      "id": "safety_alerts",
+      "heading": "Safety Alerts",
+      "kind": "safety_alerts",
+      "body": "🚨 SAFETY ALERT 1 — IMMEDIATE REPORTING OBLIGATION\nElder abuse is a mandatory report in Canada and all US states. Nurses who fail to report suspected elder abuse may face professional discipline, legal liability, and regulatory consequences. The standard is REASONABLE SUSPICION — not confirmed proof. Report first, investigate second.\n\n🚨 SAFETY ALERT 2 — NEVER ASSESS WITH THE ALLEGED ABUSER PRESENT\nAssessing an elder abuse victim in front of the caregiver renders the assessment invalid and may endanger the patient. The perpetrator may intimidate the patient non-verbally, answer for them, or escalate violence after the appointment. Always arrange private assessment — frame it as routine.\n\n🚨 SAFETY ALERT 3 — DEMENTIA PATIENTS ARE AT HIGHEST RISK\nCognitive impairment is the single most significant risk factor for elder abuse. Patients with dementia cannot self-advocate, may not remember abuse, and may not be able to make disclosures. Physical examination and environmental assessment are essential when verbal history is limited.\n\n🚨 SAFETY ALERT 4 — FINANCIAL ABUSE IS COMMONLY MISSED\nFinancial abuse causes no visible injuries. Always assess financial well-being in every comprehensive geriatric assessment. Ask about who manages finances, whether the patient can access their own money, and whether bills are being paid. Medication non-adherence 'due to cost' in a patient with adequate income is a financial abuse red flag.\n\n🚨 SAFETY ALERT 5 — NEVER PROMISE CONFIDENTIALITY TO AN ABUSE VICTIM\nIf you promise confidentiality and then are legally required to make a mandatory report, you have broken a promise and damaged therapeutic trust. Instead, explain the reporting obligation clearly: 'I am required by law to report concerns about your safety, but I will always explain what I'm doing and support you through the process.'"
+    },
+    {
+      "id": "exam_tips",
+      "heading": "Exam Tips: NCLEX, REx-PN, and CNPLE Strategy",
+      "kind": "exam_tips",
+      "body": "1. ELDER ABUSE SCENARIOS: THE CORRECT ANSWER ALWAYS INCLUDES PRIVATE ASSESSMENT AND MANDATORY REPORTING\nIf a question presents signs of elder abuse, the correct answer will always include: (a) assessing the patient privately (asking the caregiver to leave), AND (b) reporting to adult protective services. Any option that includes 'ask the caregiver about the injury' or 'discuss with the family' while the caregiver is present is wrong.\n\n2. DISTRACTOR PATTERN — 'ASSESS FIRST' CAN BE WRONG IN ABUSE QUESTIONS\nIn most NCLEX scenarios, 'assess first' is the highest priority. Elder abuse is an exception: if the patient is in IMMEDIATE DANGER, the highest priority is safety/emergency intervention. If safety is established, then assessment (private interview + screening tool) precedes reporting. The sequence is: Safety → Private Assessment → Report.\n\n3. TYPE OF ABUSE IDENTIFICATION\nExam questions frequently ask you to identify the TYPE of abuse. Use PENFSA: Physical (hitting), Emotional (threats/humiliation), Neglect (failure to provide care), Financial (theft/exploitation), Sexual (non-consensual), Abandonment (desertion). Neglect is the most common type. Financial abuse is the most common type in Canada.\n\n4. DEMENTIA + ABUSE = AUTOMATIC RED FLAG\nAny question that combines cognitive impairment with unexplained injuries, fearful behaviour, or inadequate care is a high-probability elder abuse question. The correct answer will involve private assessment and mandatory reporting — cognitive impairment does NOT reduce the obligation to investigate.\n\n5. MANDATORY REPORTING STANDARD = REASONABLE SUSPICION\nExam questions may present a scenario with ambiguous findings. The correct answer is to report if there is reasonable suspicion — you do NOT need confirmed proof. Options like 'monitor and reassess in 2 weeks' or 'discuss further at the next family meeting' are wrong when abuse is suspected.\n\n6. SELF-NEGLECT QUESTIONS — THE CAPACITY DISTINCTION\nSelf-neglect questions test whether you understand the autonomy principle: a person WITH CAPACITY has the right to refuse care, even unsafe care. A person WITHOUT CAPACITY who is not having their needs met = neglect by caregiver. If the question involves a person with dementia in unsafe conditions with a caregiver present, it is NOT self-neglect — it is neglect/abuse.\n\n7. DOCUMENTATION QUESTIONS\nFor elder abuse documentation: verbatim patient quotes, objective physical descriptions, measurement of injuries, body map notation, and documentation of private assessment are all correct. Paraphrased patient statements, interpretive language ('patient appeared abused'), and documenting conclusions without supporting facts are wrong."
+    },
+    {
+      "id": "references",
+      "heading": "References",
+      "kind": "references",
+      "body": "1. World Health Organization (WHO). (2022). Elder Abuse. WHO Fact Sheet. Geneva: WHO. https://www.who.int/news-room/fact-sheets/detail/elder-abuse\n\n2. Registered Nurses' Association of Ontario (RNAO). (2014, updated 2019). Preventing and Addressing Abuse and Neglect of Older Adults: Person-Centred, Collaborative, System-Wide Approaches. Toronto: RNAO Best Practice Guideline.\n\n3. National Center on Elder Abuse (NCEA). (2022). Statistics and Data. Washington, DC: US Administration on Aging. https://ncea.acl.gov/\n\n4. Yaffe, M.J., Wolfson, C., Lithwick, M., & Weiss, D. (2008). Development and validation of a tool to assist physicians identify elder abuse: The Elder Abuse Suspicion Index (EASI). Journal of Elder Abuse and Neglect, 20(3), 276–300.\n\n5. Canadian Network for the Prevention of Elder Abuse (CNPEA). (2023). Elder Abuse Awareness and Response: A Practice Guide for Healthcare Providers. Vancouver: CNPEA."
+    },
+    {
+      "id": "key_takeaways",
+      "heading": "Key Takeaways",
+      "kind": "key_takeaways",
+      "body": "• Elder abuse affects approximately 1 in 6 older adults worldwide; 70% of perpetrators are family members — most commonly adult children\n• Six types: Physical, Emotional, Neglect, Financial, Sexual, Abandonment (PENFSA); neglect is the most prevalent; financial abuse is the most common in Canada\n• Cognitive impairment (dementia) is the single most significant risk factor for elder abuse — patients with dementia are more vulnerable, not less deserving of protection\n• The ELDER mnemonic guides structured assessment: Evidence, Lethality, Disclosure, Emotional state, Resources\n• Private assessment is mandatory — the alleged abuser MUST NOT be present during the interview; 70% of perpetrators are family members accompanying the patient\n• The mandatory reporting standard is REASONABLE SUSPICION, not confirmed proof — report first, investigate second\n• Documentation must include verbatim patient statements, precise objective descriptions of physical findings, screening tool scores, report details, and clinical rationale\n• APS referral initiates a formal investigation; the nurse's obligation for ongoing assessment and documentation continues after the report is filed"
+    }
+  ],
+  "pretest": [
+    {
+      "id": "ELDER-ABUSE-PRE-001",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse conducting a routine home visit for a 78-year-old woman with mild Alzheimer's disease notes multiple bruises on her inner arms in various stages of healing. Her adult son, who provides her care, says 'Mom falls all the time — it's the dementia.' The woman appears anxious and avoids eye contact when her son speaks. Which action is the HIGHEST priority?",
+      "options": {
+        "A": "Document the bruises as consistent with the son's explanation and schedule a follow-up in 2 weeks",
+        "B": "Ask the son to wait outside, complete a private abuse assessment, and file a mandatory report based on reasonable suspicion",
+        "C": "Contact the son's supervisor to investigate the care being provided",
+        "D": "Administer the Mini-Mental State Examination to assess the patient's reliability as a historian"
+      },
+      "correctAnswer": "B",
+      "rationale": "Multiple bruises on inner arms in various stages of healing are inconsistent with falls (which produce outer-surface injuries) and indicate repeated physical trauma over time. Combined with the patient's fearful affect in her son's presence, this presentation meets the threshold of reasonable suspicion for elder physical abuse. The nurse must: (1) conduct a private assessment (the alleged perpetrator must not be present), and (2) file a mandatory report. The standard is reasonable suspicion — not confirmed proof. Delaying action by monitoring for 2 weeks is dangerous and may constitute a failure of mandatory reporting obligations.",
+      "distractorRationales": {
+        "A": "Incorrect. Fall-related bruising occurs on outer surfaces (shins, knees, elbows). Inner-arm bruising in multiple healing stages is inconsistent with falls and requires immediate action, not delayed follow-up.",
+        "C": "Incorrect. Contacting the son's supervisor is not the appropriate reporting mechanism for suspected elder abuse. The required action is contacting Adult Protective Services (APS) per mandatory reporting legislation.",
+        "D": "Incorrect. A patient's cognitive impairment does not reduce the obligation to investigate suspected abuse. Dementia patients are MORE vulnerable to abuse and require MORE vigilant assessment, not cognitive testing to determine 'reliability.'"
+      },
+      "hint": "Inner-arm bruises + multiple healing stages + fearful patient = which nursing action?",
+      "clinicalPearl": "Fall-related bruising occurs on bony prominences (shins, knees, elbows, hips). Bruising on inner surfaces (inner arms, inner thighs, abdomen) is not caused by falls — these are protected surfaces that sustain bruising from grasping, holding, or impact from another person.",
+      "examStrategy": "Elder abuse questions: the correct answer almost always includes private assessment + mandatory reporting. Options involving delay or acceptance of the abuser's explanation are distractors.",
+      "keyTakeaway": "Inner-arm bruises + multiple healing stages + fearful affect = physical abuse until proven otherwise. Private assessment + mandatory report = correct action."
+    },
+    {
+      "id": "ELDER-ABUSE-PRE-002",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "Which of the following represents the MANDATORY REPORTING STANDARD that applies to nurses who suspect elder abuse?",
+      "options": {
+        "A": "Confirmed evidence of harm, verified by two witnesses",
+        "B": "The patient must disclose the abuse directly to the nurse",
+        "C": "Reasonable suspicion, based on observable signs or disclosures",
+        "D": "A physician must first assess the patient and confirm abuse before a nurse reports"
+      },
+      "correctAnswer": "C",
+      "rationale": "The mandatory reporting standard for elder abuse in all Canadian provinces and all US states is 'reasonable suspicion' — a standard that does not require proof, confirmation by another clinician, or direct patient disclosure. Any regulated healthcare provider, including nurses, who has reasonable grounds to suspect abuse is legally obligated to report. Waiting for the patient to disclose, waiting for physician confirmation, or waiting for witnessed evidence are all practices inconsistent with mandatory reporting obligations.",
+      "distractorRationales": {
+        "A": "Incorrect. No jurisdiction requires witnessed confirmation or proof before a mandatory report is filed. This standard is far too high and would prevent the majority of abuse cases from ever being reported.",
+        "B": "Incorrect. Many elder abuse victims — particularly those with cognitive impairment, those who are fearful, or those who are dependent on the abuser — cannot or do not make direct disclosures. Physical signs, behavioural indicators, and environmental findings are all sufficient grounds for reporting.",
+        "D": "Incorrect. Nurses are independent mandatory reporters. They do not need physician authorization or confirmation before filing a mandatory abuse report."
+      },
+      "hint": "What is the legal threshold for mandatory reporting of elder abuse?",
+      "clinicalPearl": "The reasonable suspicion standard exists to lower the barrier to reporting and protect vulnerable people. Nurses who delay reporting because they 'aren't sure' are misapplying the standard and may be legally liable for failure to report.",
+      "examStrategy": "Any exam option that requires proof, physician confirmation, or patient disclosure before reporting = incorrect. Reasonable suspicion is the standard.",
+      "keyTakeaway": "Mandatory reporting threshold = reasonable suspicion. Proof, physician confirmation, and direct disclosure are NOT required."
+    },
+    {
+      "id": "ELDER-ABUSE-PRE-003",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 74-year-old man with moderate dementia is brought to the clinic by his adult daughter, who manages his finances under a power of attorney. His BMI is 17.3 and he appears malnourished. The home care nurse notes he has no food in the home, unpaid utility bills, and wears visibly soiled clothing. His daughter states his pension goes toward 'household expenses.' His pension income is $2,100/month. His only medications are generic and cost $45/month. Which types of elder abuse are MOST likely present? (Select the best combination)",
+      "options": {
+        "A": "Physical abuse and sexual abuse",
+        "B": "Financial abuse and neglect",
+        "C": "Abandonment and emotional abuse",
+        "D": "Self-neglect and abandonment"
+      },
+      "correctAnswer": "B",
+      "rationale": "This scenario presents two concurrent abuse types: (1) Financial abuse — the patient's pension of $2,100/month is not being appropriately applied to his care; his medications cost only $45/month, yet there is no food, unpaid bills, and inadequate clothing. His daughter's control of finances via power of attorney without apparent appropriate application of funds is financial exploitation. (2) Neglect — a designated caregiver (the daughter) has failed to meet his basic physical needs: adequate nutrition, hygiene, shelter, and bill payment. His malnutrition, soiled clothing, and cold home constitute neglect. Self-neglect does not apply here because he has dementia (lacks full capacity) AND has a designated caregiver.",
+      "distractorRationales": {
+        "A": "Incorrect. There are no indicators of physical abuse (intentional infliction of injury) or sexual abuse (genital trauma, STIs) described in this scenario.",
+        "C": "Incorrect. Abandonment involves deserting someone who cannot be left alone. The daughter is present and appears actively involved, though harmfully so. Emotional abuse may be present but is not the primary documented concern.",
+        "D": "Incorrect. Self-neglect cannot apply to a person with dementia who lacks capacity and has an assigned caregiver. This patient is being neglected and financially exploited, not making autonomous unsafe choices."
+      },
+      "hint": "Pension income not applied to care + malnourished + no food = which two types of abuse?",
+      "clinicalPearl": "Financial abuse and neglect frequently co-occur. When funds are being diverted by a caregiver, the patient is often simultaneously deprived of the care those funds should provide. Always assess financial situation when assessing for neglect.",
+      "examStrategy": "Identify each abuse type by mechanism: who controls the money and whether it is properly applied (financial); whether a caregiver is failing to meet basic needs (neglect). Multiple types can coexist.",
+      "keyTakeaway": "Caregiver control of finances + patient malnourishment + unpaid bills = financial abuse + neglect. Self-neglect requires capacity — persons with dementia cannot self-neglect when they have a designated caregiver."
+    },
+    {
+      "id": "ELDER-ABUSE-PRE-004",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is conducting a comprehensive geriatric assessment in a community clinic. The nurse wants to screen for elder abuse but the appointment is only 15 minutes long. Which validated screening tool is MOST appropriate for brief clinical settings?",
+      "options": {
+        "A": "Geriatric Depression Scale — Long Form (GDS-30)",
+        "B": "Elder Abuse Suspicion Index (EASI)",
+        "C": "Vulnerability to Abuse Screening Scale (VASS)",
+        "D": "Hwalek-Sengstock Elder Abuse Screening Test (H-S/EAST)"
+      },
+      "correctAnswer": "B",
+      "rationale": "The Elder Abuse Suspicion Index (EASI) was specifically designed for use in brief clinical encounters. It contains 6 items and can be completed in under 2 minutes. The first 5 questions are asked directly to the patient; the 6th is a clinician observation item. One or more positive responses to questions 2–6 triggers further assessment. The VASS and H-S/EAST are more comprehensive tools requiring longer administration time. The GDS-30 screens for depression, not elder abuse (though depression screening is appropriate as a secondary step).",
+      "distractorRationales": {
+        "A": "Incorrect. The GDS-30 is a 30-item depression screening tool, not an elder abuse screening tool. While depression is relevant to elder abuse assessment as a secondary concern, it does not screen for abuse.",
+        "C": "Incorrect. The VASS is a more comprehensive screening tool examining vulnerability, dependence, dejection, and coercion — it requires more time than a 15-minute clinical encounter can typically accommodate.",
+        "D": "Incorrect. The H-S/EAST is a 15-item tool requiring more administration time and is better suited to comprehensive assessment settings rather than brief clinical encounters."
+      },
+      "hint": "Which elder abuse screening tool is specifically designed for brief clinical settings?",
+      "clinicalPearl": "The EASI was validated in family medicine settings and can be completed in under 2 minutes. Its brevity makes it practical in busy clinical environments where comprehensive assessment is not always possible.",
+      "examStrategy": "Know the EASI as the brief screening tool for elder abuse. Know the GDS as the tool for depression screening. These are commonly confused in exam questions.",
+      "keyTakeaway": "EASI (Elder Abuse Suspicion Index) = 6 items, under 2 minutes, designed for brief clinical settings. One or more positive responses to items 2–6 = further assessment required."
+    },
+    {
+      "id": "ELDER-ABUSE-PRE-005",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "Which epidemiological fact about elder abuse perpetrators is MOST important for guiding the nurse's assessment approach?",
+      "options": {
+        "A": "Most elder abuse is perpetrated by paid professional caregivers in institutional settings",
+        "B": "Approximately 70% of elder abuse perpetrators are family members",
+        "C": "Elder abuse is most commonly perpetrated by strangers during financial scams",
+        "D": "Male older adults are significantly more likely to be abused than female older adults"
+      },
+      "correctAnswer": "B",
+      "rationale": "Approximately 70% of elder abuse is perpetrated by family members — most commonly adult children (approximately 50% of all cases), followed by spouses and partners. This statistic has direct and critical clinical implications: the person most likely to accompany the older adult to care appointments, stand at the bedside, and answer questions on their behalf is statistically the person most likely to be the abuser. This is the primary rationale for the private assessment protocol — assessing the patient alone is not just best practice, it is the foundational response to this epidemiological reality.",
+      "distractorRationales": {
+        "A": "Incorrect. While institutional abuse by paid caregivers is a serious concern, it represents a minority of elder abuse cases. Family members perpetrate the majority.",
+        "C": "Incorrect. Financial scams by strangers do occur and are a form of financial exploitation. However, most elder financial abuse is also perpetrated by known persons — family members, friends, or caregivers — not strangers.",
+        "D": "Incorrect. Women are at higher risk for most types of elder abuse, particularly physical and sexual abuse. Men are at higher risk for financial abuse in some contexts."
+      },
+      "hint": "Who is MOST likely to be the perpetrator in elder abuse cases?",
+      "clinicalPearl": "The 70% family perpetrator statistic means the person at the bedside who appears caring and concerned may be the source of harm. This is not a reason for suspicion of all families — it is a reason to build private assessment into every routine elder assessment.",
+      "examStrategy": "Know the 70% family perpetrator statistic. This explains the entire private assessment protocol. Questions about 'why assess privately' are answered by this statistic.",
+      "keyTakeaway": "70% of elder abuse is perpetrated by family members. This is why private assessment is mandatory — the alleged abuser is almost always the person in the room."
+    },
+    {
+      "id": "ELDER-ABUSE-PRE-006",
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is preparing to assess a 79-year-old woman for possible elder abuse. The patient lives with her adult son. The son is present in the exam room. Which of the following actions should the nurse take? (Select ALL that apply)",
+      "options": {
+        "A": "Ask the son to wait in the waiting room using a routine framing such as 'I always conduct part of the assessment privately'",
+        "B": "Conduct the full assessment with the son present to make the patient feel supported",
+        "C": "Use the ELDER mnemonic to structure the assessment",
+        "D": "Ask direct questions including 'Has anyone hurt you?' and 'Do you feel safe at home?'",
+        "E": "Promise the patient that everything she says will remain confidential"
+      },
+      "correctAnswer": "ACD",
+      "rationale": "A: Correct — the private assessment protocol requires the alleged abuser to be removed from the room; framing it as routine reduces conflict and protects the patient. C: Correct — the ELDER mnemonic (Evidence, Lethality, Disclosure, Emotional state, Resources) provides a structured approach to abuse assessment. D: Correct — direct questioning is part of the assessment protocol; asking plain-language questions is more effective than vague, indirect approaches. B: Incorrect — conducting the full assessment with the alleged abuser present is a critical protocol violation that renders the assessment invalid and may endanger the patient. E: Incorrect — nurses must NEVER promise confidentiality when mandatory reporting may be required; this is both ethically wrong and legally problematic.",
+      "distractorRationales": {
+        "B": "Incorrect. The alleged abuser's presence invalidates the assessment — abuse victims cannot safely disclose when the perpetrator is present.",
+        "E": "Incorrect. Promising confidentiality when mandatory reporting obligations exist is both a clinical error and a breach of trust. Explain the reporting obligation honestly before the assessment."
+      },
+      "hint": "Private assessment protocol: what must happen before, during, and after the assessment?",
+      "clinicalPearl": "Framing private assessment as 'routine for all patients' is the most effective and least confrontational approach. It normalizes the process and prevents the caregiver from feeling specifically targeted.",
+      "examStrategy": "SATA questions on elder abuse: always select private assessment (caregiver removed) and direct questioning. Always reject assessment with caregiver present and promises of confidentiality.",
+      "keyTakeaway": "Private assessment = remove caregiver + use ELDER mnemonic + ask direct questions. Never promise confidentiality when mandatory reporting may apply."
+    },
+    {
+      "id": "ELDER-ABUSE-PRE-007",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "An 81-year-old woman with intact cognition is seen in a primary care clinic. During a private assessment, she discloses that her husband of 52 years has been hitting her for the past 3 years, since he was diagnosed with Parkinson's disease. She says: 'I know he can't help it — it's the disease. I don't want to leave him and I don't want you to report it. I just want help managing it.' Which nursing response is MOST ethically and legally appropriate?",
+      "options": {
+        "A": "Respect her autonomy and agree not to report, as she is cognitively intact and has made an informed decision",
+        "B": "Report immediately without informing her, as elder abuse always requires mandatory reporting regardless of the patient's wishes",
+        "C": "Explain the mandatory reporting obligation honestly, validate her feelings and her decision-making capacity, provide safety resources, develop a safety plan, and file the report while supporting her through the process",
+        "D": "Refer her to a social worker and defer the reporting decision to them"
+      },
+      "correctAnswer": "C",
+      "rationale": "This case presents a common and ethically complex situation: an older adult with cognitive capacity who does not want her abuse reported. The correct approach balances the legal obligation to report (which exists regardless of patient preference in most jurisdictions) with respect for her autonomy, therapeutic relationship, and trauma-informed care. The nurse must: (1) explain the legal reporting obligation clearly and compassionately; (2) validate her feelings and her love for her husband, while explaining that abuse — regardless of cause — must be reported; (3) provide safety resources, including a safety plan; (4) file the mandatory report while maintaining the therapeutic relationship. Option A is wrong because most jurisdictions require mandatory reporting even when the patient objects. Option B is wrong because it ignores her as a person and damages the therapeutic relationship by deceiving her. Option D is wrong because it improperly delegates the nurse's own mandatory reporting obligation.",
+      "distractorRationales": {
+        "A": "Incorrect. In most jurisdictions, the mandatory reporting obligation applies regardless of the patient's wishes when she is in an abusive situation. Autonomy in healthcare decision-making does not override mandatory reporting laws for abuse.",
+        "B": "Incorrect. While reporting is required, doing so without informing the patient violates the therapeutic relationship and is not consistent with trauma-informed care. The patient should know what the nurse is doing and why.",
+        "D": "Incorrect. Each nurse is individually responsible for filing mandatory reports. Deferring to a social worker does not fulfil the nurse's own legal obligation — the nurse must report AND may also involve social work."
+      },
+      "hint": "Mandatory reporting applies even when the patient objects — how do you balance obligation with trauma-informed care?",
+      "clinicalPearl": "Many elder abuse victims remain in abusive situations because they love the abuser, have financial dependence, fear retaliation, or — as in this case — understand the abuse as related to the abuser's illness. Trauma-informed care validates their perspective while fulfilling the legal obligation to protect them.",
+      "examStrategy": "When the patient objects to reporting: the nurse's legal obligation to report still applies. The correct action validates the patient's perspective AND fulfils the mandatory reporting requirement. Never choose deception; never choose abandonment of the reporting obligation.",
+      "keyTakeaway": "Patient objection to reporting does not override the mandatory reporting obligation. Validate her autonomy, explain the obligation honestly, provide safety resources, and file the report with compassion."
+    },
+    {
+      "id": "ELDER-ABUSE-PRE-008",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A nurse working in a long-term care facility witnesses a personal support worker (PSW) speaking harshly to an 86-year-old resident with dementia during morning care, saying: 'Stop being difficult, old man. Nobody wants to hear you complain.' The resident appears distressed but is unable to verbally communicate. Which action should the nurse take FIRST?",
+      "options": {
+        "A": "Speak with the PSW privately later in the shift to explain appropriate communication",
+        "B": "Immediately intervene to stop the interaction, ensure the resident's dignity, and initiate the institutional reporting process",
+        "C": "Document the incident and report it at the next team meeting",
+        "D": "Advise the PSW that they will be written up if this behaviour continues"
+      },
+      "correctAnswer": "B",
+      "rationale": "The witnessed behaviour constitutes emotional abuse — use of harsh, demeaning, infantilizing language that causes distress to a vulnerable resident. In long-term care settings, nursing staff are mandatory reporters under the relevant provincial/federal legislation (e.g., Ontario's Long-Term Care Homes Act mandates immediate reporting of suspected or witnessed abuse). The nurse must: (1) immediately intervene to stop the abuse and protect the resident; (2) ensure the resident's dignity and comfort; (3) initiate institutional reporting (incident report) AND report to the regulatory body as required by legislation. Delaying action to speak privately with the PSW, or deferring to a team meeting, constitutes failure to protect a vulnerable resident.",
+      "distractorRationales": {
+        "A": "Incorrect. Speaking privately later does not protect the resident during subsequent care encounters with this PSW. Institutional reporting is required immediately, not deferred.",
+        "C": "Incorrect. Team meeting reporting is insufficient for witnessed abuse. Mandatory reporting requires immediate action — not delayed documentation or meeting-based review.",
+        "D": "Incorrect. Verbal warning to the PSW is not the correct institutional response. The nurse has an independent obligation to initiate the reporting process — this is not a disciplinary matter managed solely by the nurse."
+      },
+      "hint": "Witnessed emotional abuse in LTC: what is the nurse's immediate obligation?",
+      "clinicalPearl": "In long-term care, all staff — not just nurses — are mandatory reporters in most jurisdictions. However, the nurse has a supervisory responsibility to intervene immediately when witnessing abuse and to initiate the formal reporting process regardless of the perpetrator's role.",
+      "examStrategy": "Witnessed abuse questions: always intervene immediately to stop the abuse first, then report. Deferring to later (private talk, team meeting) when abuse is actively occurring or has just occurred is incorrect.",
+      "keyTakeaway": "Witnessed LTC emotional abuse: intervene immediately to stop it, protect the resident, initiate incident reporting AND mandatory regulatory report. Delay = failure to protect."
+    },
+    {
+      "id": "ELDER-ABUSE-PRE-009",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "During a home visit, a nurse suspects elder abuse. The nurse documents the following: 'Patient appears to have been abused by her son.' Which documentation practice is being INCORRECTLY applied?",
+      "options": {
+        "A": "Using the patient's name in documentation",
+        "B": "Writing conclusions without supporting objective findings",
+        "C": "Documenting during the home visit",
+        "D": "Including family member information in the documentation"
+      },
+      "correctAnswer": "B",
+      "rationale": "The phrase 'appears to have been abused by her son' is a conclusion without documented supporting evidence. Correct documentation practice in elder abuse cases requires: (1) precise, objective physical descriptions with measurements; (2) verbatim patient statements in quotation marks; (3) observed behavioural indicators described factually; (4) screening tool scores; followed by (5) clinical interpretation that references the objective findings. Writing 'patient appears to have been abused' without the supporting objective data is legally insufficient, professionally incorrect, and potentially inadmissible as evidence. The correct documentation would describe the findings and then state the clinical interpretation: 'Based on the above findings (multiple bruises measuring 2–4 cm at inner bilateral forearms in varying healing stages; patient stated 'My son hits me'; patient became withdrawn when son's name was mentioned), elder physical abuse is suspected and a mandatory report has been filed.'",
+      "distractorRationales": {
+        "A": "Incorrect (not the error). Using the patient's name in documentation is correct practice — clinical records are identified to the patient.",
+        "C": "Incorrect (not the error). Documenting during the visit is appropriate and encouraged for accuracy.",
+        "D": "Incorrect (not the error). Including relevant information about family members involved in the patient's care and the abuse concern is appropriate and necessary in elder abuse documentation."
+      },
+      "hint": "What is the documentation error in writing 'appears to have been abused' without supporting data?",
+      "clinicalPearl": "In forensic and legal contexts, documentation that includes unsupported conclusions is weaker than documentation that presents objective findings and allows the reader to draw the same conclusion. Always document the evidence; let the evidence speak.",
+      "examStrategy": "Documentation questions on elder abuse: the correct approach is objective description → verbatim quotes → clinical interpretation referencing the objective data. Conclusions without evidence are documentation errors.",
+      "keyTakeaway": "Elder abuse documentation: objective findings first, verbatim patient quotes, then clinical interpretation referencing the data. Never write conclusions without documented supporting evidence."
+    },
+    {
+      "id": "ELDER-ABUSE-PRE-010",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "An 83-year-old man with dementia is assessed by a community nurse. He reports to the nurse that 'the woman who takes care of me at night hurts me.' He cannot describe what she does specifically. His wife, who provides daytime care, says he 'makes up stories.' Physical assessment is unremarkable. Which nursing action is MOST appropriate?",
+      "options": {
+        "A": "Accept the wife's explanation — the patient has dementia and confabulation is expected",
+        "B": "Document the patient's disclosure verbatim, conduct a thorough physical assessment during subsequent visits, and file a mandatory report based on his disclosure",
+        "C": "Arrange a psychiatric assessment to determine whether the patient's statements are symptoms of dementia",
+        "D": "Speak with the nighttime caregiver to understand her perspective before taking action"
+      },
+      "correctAnswer": "B",
+      "rationale": "A person with dementia who reports abuse deserves the same investigation and reporting response as a cognitively intact person. Disclosures from patients with cognitive impairment are frequently dismissed as 'confabulation' or 'storytelling' — this is a dangerous practice that enables abuse to continue. The mandatory reporting standard is reasonable suspicion, not confirmed proof. A direct verbal disclosure ('hurts me') from a patient constitutes reasonable suspicion regardless of the patient's cognitive status. The correct action is: (1) document the disclosure verbatim; (2) conduct thorough physical assessments; (3) file a mandatory report. The alleged perpetrator (nighttime caregiver) must not be informed of the investigation before APS intervention.",
+      "distractorRationales": {
+        "A": "Incorrect. Dementia does not mean all patient reports are unreliable fabrications. Confabulation typically involves filling in memory gaps with plausible but invented details — not specific reports of harm from a particular person. Reports of abuse from dementia patients require investigation, not dismissal.",
+        "C": "Incorrect. Psychiatric assessment is not the appropriate first response to an abuse disclosure. The disclosure meets the threshold for mandatory reporting. Psychiatric assessment may be part of a later comprehensive evaluation but does not replace reporting.",
+        "D": "Incorrect. Contacting the alleged perpetrator before an APS investigation is conducted may endanger the patient (the perpetrator could escalate abuse) and compromise the investigation. APS, not the nurse, investigates by interviewing all parties."
+      },
+      "hint": "Dementia patient reports being hurt: does cognitive impairment invalidate the disclosure?",
+      "clinicalPearl": "Abusers frequently target persons with dementia specifically because cognitive impairment makes victims less credible as reporters and less able to protect themselves. Dismissing abuse reports because of dementia is one of the most dangerous clinical errors in geriatric care.",
+      "examStrategy": "Any question that involves a patient with dementia making an abuse disclosure: the correct answer is to take the disclosure seriously, document verbatim, and report. Cognitive impairment does not reduce reporting obligations.",
+      "keyTakeaway": "Dementia patients who report abuse deserve the same investigation and mandatory reporting response as cognitively intact patients. Never dismiss abuse disclosures due to cognitive impairment."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "ELDER-ABUSE-POST-001",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A home care nurse is completing a care assessment for an 80-year-old woman whose adult daughter manages her care. When asked about her financial situation, the patient looks at her daughter before answering. The daughter quickly says, 'Mom doesn't need to worry about money — I handle all of that.' The patient nods silently. The patient's home is well-maintained and she appears well-nourished. Which nursing action is MOST appropriate?",
+      "options": {
+        "A": "Accept that the daughter is being helpful with finances and focus the assessment on physical needs",
+        "B": "Ask the daughter to step out, then ask the patient directly whether she is able to access her own money and makes her own financial decisions",
+        "C": "Contact the bank to verify the patient's account status",
+        "D": "Document that no concerns were identified and schedule a routine follow-up"
+      },
+      "correctAnswer": "B",
+      "rationale": "The behaviour in this scenario — patient looking to daughter before answering, daughter intercepting financial questions, patient's silent compliance — is consistent with a controlled relationship where the patient may not feel free to speak. Even when there are no visible physical signs of neglect, financial abuse can occur in comfortable-appearing environments. The appropriate action is private assessment: ask the daughter to step out, then ask the patient directly and in plain language whether she can access her own money and makes her own financial decisions. This is consistent with the private assessment protocol (alleged abuser not present) and the EASI screening approach. The nurse does not need visible harm to conduct this assessment — concerning interaction patterns are sufficient grounds.",
+      "distractorRationales": {
+        "A": "Incorrect. The interaction pattern (patient defers to daughter, daughter intercepts financial questions) warrants further assessment. Financial abuse does not require physical harm or malnutrition to be present.",
+        "C": "Incorrect. Nurses do not have authority to contact banks directly. APS and law enforcement have investigative authority for financial records. The nurse's role is to assess and report.",
+        "D": "Incorrect. Documenting 'no concerns' when an interaction pattern consistent with financial control has been observed is inaccurate documentation and a missed opportunity for intervention."
+      },
+      "hint": "Patient defers to caregiver, caregiver intercepts financial questions: what does the nurse do?",
+      "clinicalPearl": "Financial abuse does not require visible poverty or malnutrition. It can occur in comfortable, well-maintained homes. The red flag is control of finances without patient agency — especially when the patient cannot answer questions about their own money without looking to the caregiver.",
+      "examStrategy": "Financial abuse assessment: private interview about financial decision-making is the key intervention. Well-maintained home does not rule out financial abuse.",
+      "keyTakeaway": "Financial control without patient agency = financial abuse red flag. Private assessment: can she access her own money? Does she make her own financial decisions?"
+    },
+    {
+      "id": "ELDER-ABUSE-POST-002",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "After filing a mandatory elder abuse report to Adult Protective Services, the nurse's obligations are:",
+      "options": {
+        "A": "Complete — the nurse has met the legal obligation and APS assumes full responsibility",
+        "B": "Ongoing — the nurse continues to assess, document, and monitor the patient, and remains part of the interdisciplinary response",
+        "C": "Complete once the APS case number is obtained",
+        "D": "Transferred to the social worker, who takes over all abuse-related assessment"
+      },
+      "correctAnswer": "B",
+      "rationale": "Filing a mandatory report is not the end of the nurse's obligation — it is the beginning of a coordinated response. After filing, the nurse continues to: (1) conduct ongoing assessment at each encounter for signs of continuing or new abuse; (2) document findings thoroughly; (3) participate in the interdisciplinary team response; (4) maintain therapeutic relationship with the patient; (5) provide safety resources and emotional support; (6) collaborate with APS, social work, medicine, and legal services as the investigation progresses. APS investigates the situation but does not replace the nurse's ongoing clinical and advocacy role.",
+      "distractorRationales": {
+        "A": "Incorrect. The nurse retains ongoing assessment and documentation obligations after filing the report. Clinical responsibility for the patient's safety does not transfer to APS.",
+        "C": "Incorrect. A case number confirms the report was received — it does not end the nurse's obligations.",
+        "D": "Incorrect. Social work is a collaborative partner in elder abuse response, not a replacement for the nurse's individual mandatory reporting and ongoing assessment obligations."
+      },
+      "hint": "Is the nurse's obligation complete after filing the mandatory report?",
+      "clinicalPearl": "APS investigates and arranges protective services, but nurses are the healthcare system's ongoing safety net. Continuing assessment after reporting is how ongoing or escalating abuse is detected.",
+      "examStrategy": "Post-reporting obligation questions: the correct answer is always ongoing assessment and documentation. Filing the report begins the response — it does not end the nurse's role.",
+      "keyTakeaway": "Mandatory reporting is the beginning of the nurse's response, not the end. Ongoing assessment, documentation, and interdisciplinary collaboration continue after the report is filed."
+    },
+    {
+      "id": "ELDER-ABUSE-POST-003",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A nurse working in long-term care suspects that a colleague (a registered nurse) has been emotionally abusing a resident with advanced dementia — making derogatory comments about the resident's incontinence and refusing to respond promptly to call lights. The nurse has observed these behaviours twice. Which action should the nurse take?",
+      "options": {
+        "A": "Speak with the colleague privately and advise them to change their behaviour",
+        "B": "Wait for a third incident before taking action to ensure the pattern is clear",
+        "C": "Report the concern through the facility's mandatory reporting process and to the appropriate regulatory body (provincial nursing college/state board)",
+        "D": "Raise the concern at the next team huddle so the entire team is aware"
+      },
+      "correctAnswer": "C",
+      "rationale": "Observed or suspected abuse of a long-term care resident by any healthcare provider — including other nurses — is subject to mandatory reporting obligations. In Ontario (and equivalent legislation in other provinces and US states), this means reporting through the facility's internal reporting process AND to the provincial regulatory body (e.g., College of Nurses of Ontario) and to the Ministry of Long-Term Care. Emotional abuse (derogatory comments about incontinence, ignoring call lights) meets the threshold for reportable abuse. Two observed incidents are more than sufficient for reasonable suspicion. Peer reporting is professionally and legally required — it is not optional, it is not deferred, and it is not resolved by private conversation.",
+      "distractorRationales": {
+        "A": "Incorrect. Private conversation with the colleague does not fulfil mandatory reporting obligations and does not protect the resident from further abuse.",
+        "B": "Incorrect. Two incidents of witnessed abuse are more than sufficient reasonable suspicion. Waiting for additional incidents to occur allows more harm to the resident.",
+        "D": "Incorrect. Team huddle disclosure is not a substitute for formal mandatory reporting to the facility administration and regulatory authority. Team awareness does not constitute a formal report."
+      },
+      "hint": "Witnessing another nurse abuse a resident: what is the mandatory reporting obligation?",
+      "clinicalPearl": "Mandatory reporting applies even when the alleged abuser is a colleague. Protecting a colleague at the expense of a vulnerable resident is a professional and ethical violation. Nurses have a duty to report regardless of professional relationships.",
+      "examStrategy": "Peer abuse questions: the correct answer always involves formal reporting through the required channels. Private resolution, deferral, or informal team discussion are wrong answers.",
+      "keyTakeaway": "Colleague abuse = mandatory report through facility process AND regulatory body. Two observed incidents = sufficient reasonable suspicion. Peer relationship does not modify the reporting obligation."
+    },
+    {
+      "id": "ELDER-ABUSE-POST-004",
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "Which of the following are recognized risk factors for elder abuse? (Select ALL that apply)",
+      "options": {
+        "A": "Cognitive impairment (dementia) in the older adult",
+        "B": "Caregiver substance use disorder",
+        "C": "Social isolation of the older adult",
+        "D": "High household income with no financial stress",
+        "E": "Caregiver history of mental illness"
+      },
+      "correctAnswer": "ABCE",
+      "rationale": "A: Correct — cognitive impairment is the single strongest risk factor for elder abuse, doubling to tripling abuse rates. B: Correct — caregiver substance use disorder is a major risk factor for loss of impulse control, financial exploitation, and neglect. C: Correct — social isolation of the older adult removes protective witnesses and reduces the ability to access help. E: Correct — caregiver mental illness is a recognized risk factor, particularly for impulsive or erratic care. D: Incorrect — high income reduces the risk of financially motivated abuse and enables better access to formal care supports. Financial stress is the risk factor, not financial security.",
+      "distractorRationales": {
+        "D": "Incorrect. Financial security in the household reduces financially motivated abuse risk and enables access to adequate care support, reducing caregiver burden. Financial stress and poverty are risk factors."
+      },
+      "hint": "Which characteristics of the victim AND the perpetrator/caregiver increase elder abuse risk?",
+      "clinicalPearl": "Risk factor assessment should encompass both the older adult (cognitive impairment, isolation, dependency) and the caregiver (substance use, mental illness, financial dependence on the victim, lack of knowledge). Both sides of the relationship contribute to risk.",
+      "examStrategy": "SATA on risk factors: look for both victim factors (dementia, isolation, dependency) and perpetrator factors (substance use, mental illness, financial dependency). High income is protective, not a risk.",
+      "keyTakeaway": "Elder abuse risk factors: victim-side (dementia, isolation, functional dependency) + perpetrator-side (substance use, mental illness, financial dependency on victim, caregiver burnout)."
+    },
+    {
+      "id": "ELDER-ABUSE-POST-005",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is assessing a 76-year-old woman who presents to the emergency department after a fall. The patient is accompanied by her husband. When asked how she fell, she gives a vague answer and looks at her husband. He answers: 'She loses her balance all the time.' The nurse notes bruising on the patient's inner thighs and right cheek. The patient's affect is flat. Which action reflects CORRECT application of the private assessment protocol?",
+      "options": {
+        "A": "Continue the assessment in the husband's presence since he has provided a plausible explanation",
+        "B": "Ask the husband to wait in the waiting room using a routine framing, then complete the assessment and ask the patient directly about safety at home",
+        "C": "Document the husband's explanation and refer the patient to the social worker for further assessment",
+        "D": "Ask the husband directly whether he has been hurting his wife"
+      },
+      "correctAnswer": "B",
+      "rationale": "The clinical picture — bruising at non-fall-typical sites (inner thighs, cheek), patient deferring to husband, flat affect — is consistent with intimate partner abuse/elder abuse. The correct action is the private assessment protocol: ask the husband to leave using a routine framing ('I complete this part of every exam privately'), then conduct the assessment alone. Inner thigh and cheek bruising in a 'fall' patient requires the nurse to ask directly: 'Has anyone hurt you?' and 'Do you feel safe at home?' Continuing with the alleged abuser present (A) renders the assessment invalid. Delegating to social work before completing the nurse's own assessment (C) defers the immediate clinical obligation. Confronting the husband directly (D) is dangerous — it may escalate violence and violates the private assessment protocol.",
+      "distractorRationales": {
+        "A": "Incorrect. A vague patient history, deference to husband, and inner-thigh/cheek bruising are not consistent with a simple fall. Continuing with the husband present violates the private assessment protocol.",
+        "C": "Incorrect. The nurse must complete the private assessment first. Social work referral is a concurrent action, not a replacement for the nurse's assessment obligation.",
+        "D": "Incorrect. Confronting the alleged abuser directly (a) may endanger the patient, (b) compromises the investigation, (c) violates the private assessment protocol, and (d) is not the nurse's role in the immediate assessment phase."
+      },
+      "hint": "Inner thigh + cheek bruising + patient deferring to husband: what does the private assessment protocol require?",
+      "clinicalPearl": "Cheek and inner thigh bruising in a fall patient are major red flags. Falls from standing produce lateral hip, knee, and wrist injuries. Cheek bruising indicates a direct blow to the face. Inner thigh bruising indicates grasping or sexual violence — neither is consistent with a fall.",
+      "examStrategy": "Private assessment protocol: always present a routine framing to remove the alleged abuser, then assess alone. Direct confrontation of the alleged abuser = wrong answer.",
+      "keyTakeaway": "Inner thigh + cheek bruising = not a fall injury. Remove alleged abuser using routine framing, conduct private assessment, ask direct safety questions."
+    },
+    {
+      "id": "ELDER-ABUSE-POST-006",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "The MOST common form of elder abuse in Canada is:",
+      "options": {
+        "A": "Physical abuse",
+        "B": "Sexual abuse",
+        "C": "Financial abuse/exploitation",
+        "D": "Abandonment"
+      },
+      "correctAnswer": "C",
+      "rationale": "Financial abuse is recognized as the most common form of elder abuse in Canada. It is highly prevalent, severely underreported, and causes significant harm — including loss of housing, inability to afford medications, and destitution. Neglect is the most common type confirmed in US APS reports. Physical abuse is the most visible but not the most prevalent. Sexual abuse and abandonment occur but are less prevalent than financial and emotional abuse.",
+      "distractorRationales": {
+        "A": "Incorrect. Physical abuse is the most visible and often receives the most attention, but financial abuse occurs more frequently in Canada.",
+        "B": "Incorrect. Sexual abuse of older adults is underreported and underrecognized but is the least prevalent of the named types.",
+        "D": "Incorrect. Abandonment occurs but is not the most common form in the Canadian context."
+      },
+      "hint": "Which form of elder abuse leaves no visible marks and is most common in Canada?",
+      "clinicalPearl": "Financial abuse is so prevalent and underreported because it produces no physical evidence, victims are often dependent on the perpetrator (and fear losing support), and older adults may not recognize that control of their finances by another constitutes abuse.",
+      "examStrategy": "Know the prevalence hierarchy: Canada = financial abuse most common; US APS reports = neglect most common; physical abuse = most visible but not most prevalent.",
+      "keyTakeaway": "Most common elder abuse in Canada = financial abuse/exploitation. Most common in US APS confirmed cases = neglect. Physical abuse = most visible, not most prevalent."
+    },
+    {
+      "id": "ELDER-ABUSE-POST-007",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A patient with severe dementia in a long-term care facility develops a Stage 3 pressure injury over her sacrum. Her care plan includes repositioning every 2 hours. Nursing documentation over the past 2 weeks shows repositioning was completed only 40% of the time. The director of care attributes this to 'short staffing.' Which type of elder abuse does this MOST represent, and what is the appropriate nursing action?",
+      "options": {
+        "A": "Physical abuse by the nursing staff; report to police",
+        "B": "Passive neglect due to institutional failures; report through mandatory reporting channels including the provincial regulatory body",
+        "C": "Self-neglect; the patient has the right to refuse turning",
+        "D": "An acceptable outcome given staff shortages; document and request additional staffing"
+      },
+      "correctAnswer": "B",
+      "rationale": "A Stage 3 pressure injury resulting from a documented 60% failure to implement a repositioning care plan is institutional neglect — specifically passive neglect arising from systemic failures (understaffing leading to inadequate care). Passive neglect does not require intent; the outcome (preventable severe harm) and the failure to meet the standard of care are the criteria. In most Canadian provinces, this constitutes reportable institutional abuse under Long-Term Care legislation. The mandatory report must go through internal facility channels AND to the provincial regulatory authority (e.g., Ministry of Long-Term Care in Ontario). Attributing patient harm to 'short staffing' does not reduce the reporting obligation or shield the facility from accountability.",
+      "distractorRationales": {
+        "A": "Incorrect. Physical abuse requires intentional infliction of harm. Neglect from understaffing is not intentional physical assault, though it causes serious harm.",
+        "C": "Incorrect. A patient with severe dementia lacks capacity to refuse repositioning in a way that constitutes informed self-determination. This is not self-neglect — it is institutional failure to provide required care.",
+        "D": "Incorrect. Accepting severe, preventable patient harm as an 'acceptable outcome' of staffing shortages is both ethically and legally wrong. The mandatory reporting obligation exists regardless of the reason for the care failure."
+      },
+      "hint": "Stage 3 pressure injury from documented repositioning failures in LTC: what type of abuse and what reporting obligation?",
+      "clinicalPearl": "Institutional neglect is among the most commonly encountered forms of elder abuse in nursing practice. Short-staffing and systemic failures do not excuse care failures — they are themselves institutional problems that require reporting to regulatory authorities.",
+      "examStrategy": "LTC neglect questions: passive neglect from institutional failures = reportable under LTC legislation. Staffing explanations do not reduce reporting obligations. Stage 3/4 pressure injuries in a care facility with a repositioning plan = neglect red flag.",
+      "keyTakeaway": "Stage 3 PU + documented repositioning failures in LTC = institutional passive neglect. Report through facility channels AND provincial regulatory body. Staffing shortages do not excuse preventable harm."
+    },
+    {
+      "id": "ELDER-ABUSE-POST-008",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "An 88-year-old man with intact cognition lives alone in his own home. Neighbours have called the community health team with concerns: he is thin, his home is in disrepair, he has been observed eating from his recycling bin, and he refuses all offers of assistance. He has been assessed by his physician who confirmed his decisional capacity. When the community nurse visits, he says: 'I know how I live. I don't need anyone's help. I've made my own choices for 88 years and I'm going to keep making them.' Which nursing approach is MOST appropriate?",
+      "options": {
+        "A": "Arrange emergency removal from his home for his own safety",
+        "B": "Contact APS to report self-neglect and request mandatory intervention",
+        "C": "Respect his autonomous decision, document that his rights and available resources were explained, ensure he has information about how to access help if desired, and continue periodic assessment",
+        "D": "Call his children to intervene on his behalf"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is a self-neglect scenario involving a person with confirmed decisional capacity who is making autonomous — though risky — lifestyle choices. A person with capacity has the right to refuse care, live in conditions others find unacceptable, and make decisions that others disagree with. Forced removal against a competent person's wishes is a violation of autonomy and, depending on jurisdiction, legally unauthorized without a court order. The nurse's obligation is: (1) clearly explain the risks and available services; (2) ensure he knows how to access help if he changes his mind; (3) document that he was informed; (4) continue periodic assessment to reassess capacity and safety. This is not neglect by another person — it is autonomous choice by a person with capacity.",
+      "distractorRationales": {
+        "A": "Incorrect. Emergency removal against the will of a competent person is legally and ethically wrong without a court order. Autonomy must be respected.",
+        "B": "Incorrect. APS reports for self-neglect of a cognitively intact person do not authorize mandatory intervention. APS will assess but cannot remove a competent person against their will.",
+        "D": "Incorrect. Contacting his children without his consent violates his privacy and autonomy. He has capacity and has made his wishes clear."
+      },
+      "hint": "Intact cognition + self-neglect: how does capacity change the nursing response?",
+      "clinicalPearl": "The most critical distinction in self-neglect cases: capacity intact = respect autonomy, inform, document, monitor. Capacity impaired = different ethical and legal framework applies. Never conflate self-neglect with elder abuse by another person when capacity is present.",
+      "examStrategy": "Self-neglect + capacity questions: the correct answer respects autonomy, provides information, documents informed refusal, and plans ongoing monitoring. Forced intervention is wrong when capacity is confirmed.",
+      "keyTakeaway": "Self-neglect + confirmed capacity = respect autonomy, inform of risks/resources, document informed refusal, periodic reassessment. Forced intervention without court order = violation of autonomy."
+    },
+    {
+      "id": "ELDER-ABUSE-POST-009",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "When documenting a suspected elder sexual abuse assessment, which entry is CORRECTLY documented?",
+      "options": {
+        "A": "Patient was sexually abused by her roommate.",
+        "B": "Patient appears to have experienced sexual trauma.",
+        "C": "Patient stated, 'My roommate comes to my bed at night and touches me.' Perineal examination revealed ecchymosis 2 cm diameter on left labia majora. Patient was tearful and guarded during examination. Elder sexual abuse is suspected; mandatory report filed to APS at 14:30, case reference #APS-2026-0412.",
+        "D": "Patient is confused and making accusations — unreliable historian."
+      },
+      "correctAnswer": "C",
+      "rationale": "Option C is the only entry that correctly applies all elder abuse documentation standards: (1) verbatim patient disclosure in quotation marks; (2) objective physical finding described precisely (location, size, appearance); (3) observed behavioural indicators described objectively; (4) clinical interpretation referencing the supporting findings; (5) documentation of the mandatory report including agency, time, and case reference number. Options A and B are conclusions without supporting evidence. Option D is both clinically incorrect (dementia does not render disclosures invalid) and is an inappropriate editorial comment that violates the objectivity required in clinical documentation.",
+      "distractorRationales": {
+        "A": "Incorrect. This is a conclusion without documented supporting findings and names the perpetrator without an investigation. This type of documentation is legally insufficient and professionally incorrect.",
+        "B": "Incorrect. 'Appears to have experienced' is an unsupported interpretive conclusion without objective findings.",
+        "D": "Incorrect. Dismissing a patient's disclosure as confusion is clinically inappropriate, potentially discriminatory, and fails the mandatory reporting obligation."
+      },
+      "hint": "Which documentation entry includes all required elements: verbatim quote, objective findings, clinical interpretation, and report documentation?",
+      "clinicalPearl": "Correct documentation sequence in elder abuse: (1) verbatim quote → (2) objective physical findings → (3) behavioural observations → (4) clinical interpretation → (5) report details. This structure is both legally sound and clinically accurate.",
+      "examStrategy": "Documentation questions: always choose the option with verbatim quotes + objective physical findings + report documentation. Reject conclusions without supporting evidence and dismissive editorializing.",
+      "keyTakeaway": "Correct elder abuse documentation: verbatim patient statements + objective physical findings + clinical interpretation based on findings + mandatory report details including case reference number."
+    },
+    {
+      "id": "ELDER-ABUSE-POST-010",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 77-year-old woman with moderate dementia is assessed by the EASI tool during a primary care visit. She scores positive on 3 of 6 items (items 2, 4, and 6). Her physician says: 'The EASI is just a screening tool — it doesn't prove anything. Let's just monitor.' Which nursing response BEST reflects the nurse's professional obligation?",
+      "options": {
+        "A": "Agree with the physician — the EASI is a screening tool and monitoring is appropriate",
+        "B": "Explain that a positive EASI triggers comprehensive assessment and that mandatory reporting is required if reasonable suspicion exists, regardless of the physician's preference",
+        "C": "Repeat the EASI in 4 weeks before taking action",
+        "D": "Refer to social work and defer all further action"
+      },
+      "correctAnswer": "B",
+      "rationale": "A positive EASI score (one or more positive responses to questions 2–6) indicates that further comprehensive assessment is required and, if reasonable suspicion of abuse exists following that assessment, a mandatory report must be filed. Mandatory reporting is a legal obligation of every individual nurse — it is not subject to physician override. The nurse has an independent legal and professional obligation. The physician's clinical opinion does not release the nurse from their own reporting obligation. In practice, the appropriate response is to: explain to the physician why further action is required, complete the comprehensive assessment, and file a report if reasonable suspicion is confirmed. If the physician continues to resist, the nurse may report independently and should document the disagreement.",
+      "distractorRationales": {
+        "A": "Incorrect. Agreeing to 'monitor' when a screening tool has flagged concern does not fulfil the nurse's independent professional obligation. Deferring to the physician does not reduce the nurse's legal accountability.",
+        "C": "Incorrect. Repeating the screening tool 4 weeks later without acting on current findings delays a potentially needed assessment and report.",
+        "D": "Incorrect. Social work referral is appropriate as a concurrent step, not a replacement for the nurse's own reporting and assessment obligations."
+      },
+      "hint": "Positive EASI + physician saying 'just monitor': what is the nurse's independent legal obligation?",
+      "clinicalPearl": "Mandatory reporting is an individual professional and legal obligation. Nurses cannot defer their reporting responsibility to physicians, managers, or social workers. If a nurse believes abuse is occurring and fails to report because another team member disagrees, the nurse is legally and professionally liable.",
+      "examStrategy": "Mandatory reporting independence questions: the nurse has an individual, non-delegable legal obligation. Physician disagreement does not extinguish the nurse's reporting duty. Correct answer = explain obligation and report independently if necessary.",
+      "keyTakeaway": "Mandatory reporting is the nurse's individual legal obligation — it is not subject to physician veto. A positive EASI + reasonable suspicion = mandatory report, regardless of physician preference."
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "ELDER-ABUSE-FC-001",
+      "front": "What does the ELDER mnemonic stand for in elder abuse assessment?",
+      "back": "E — Evidence (physical findings, environmental clues)\nL — Lethality (is the patient in immediate danger?)\nD — Disclosure (any direct or indirect disclosure of abuse?)\nE — Emotional state (fear, withdrawal, shame, caregiver control)\nR — Resources (formal and informal supports — are they adequate?)",
+      "hint": "5-letter structured approach to abuse assessment",
+      "explanation": "The ELDER mnemonic provides a comprehensive framework covering physical evidence, immediate safety, disclosure, affect/behaviour, and resource availability. It ensures the nurse addresses all key domains in a time-pressured clinical encounter.",
+      "clinicalPearl": "In a busy clinical setting, the ELDER mnemonic can be completed in 5–10 minutes and covers all essential domains. Lethality (L) must always be assessed first — if the patient is in immediate danger, emergency intervention takes priority over the rest of the mnemonic."
+    },
+    {
+      "id": "ELDER-ABUSE-FC-002",
+      "front": "Name the 6 types of elder abuse using the PENFSA acronym.",
+      "back": "P — Physical (intentional infliction of pain/injury)\nE — Emotional/Psychological (verbal abuse, threats, humiliation)\nN — Neglect (failure by caregiver to meet basic needs — most prevalent in US)\nF — Financial (theft, fraud, misuse of power of attorney — most common in Canada)\nS — Sexual (non-consensual sexual contact; cognitive impairment = inability to consent)\nA — Abandonment (desertion by a designated caregiver)",
+      "hint": "PENFSA — 6 types, two of which are the 'most common' depending on jurisdiction",
+      "explanation": "Neglect accounts for the highest proportion of confirmed APS cases in the United States. Financial abuse is the most common type in Canada. Both can coexist and often do — when finances are exploited, care funds are diverted and neglect frequently follows.",
+      "clinicalPearl": "Financial abuse leaves no visible marks. Always ask about financial well-being as part of abuse screening, even when the patient appears well-nourished and well-housed. Control of the patient's finances by another person without patient agency is the key indicator."
+    },
+    {
+      "id": "ELDER-ABUSE-FC-003",
+      "front": "What is the mandatory reporting standard for elder abuse, and who must report?",
+      "back": "Standard: REASONABLE SUSPICION — not confirmed proof, not witnessed abuse, not patient disclosure\nWho must report: All regulated healthcare providers, including nurses, in all Canadian provinces and all US states\nWhen: Immediately upon reaching the threshold of reasonable suspicion\nReport to: Adult Protective Services (APS) or designated provincial agency\nKey rule: A nurse cannot defer reporting to a physician, manager, or social worker — it is an individual professional and legal obligation",
+      "hint": "Report on suspicion, not proof. Every nurse is an independent mandatory reporter.",
+      "explanation": "The reasonable suspicion standard was deliberately set low to capture abuse cases that would be missed under a higher evidentiary standard. Nurses who observe a pattern of concerning findings — even without direct disclosure or witnessed abuse — must report if those findings would cause a reasonably prudent nurse to suspect abuse.",
+      "clinicalPearl": "You will almost never have certainty about elder abuse before reporting. If you are waiting for certainty, you are waiting too long and the patient continues to be at risk. File the report, and let APS investigate."
+    },
+    {
+      "id": "ELDER-ABUSE-FC-004",
+      "front": "Why is the private assessment protocol the most critical procedure in elder abuse assessment?",
+      "back": "Because 70% of elder abuse perpetrators are family members — the most likely person to accompany the older adult to healthcare settings.\n\nWhen the alleged abuser is present:\n- Victim cannot safely disclose\n- Abuser may answer for the patient and redirect questions\n- Non-verbal intimidation may occur\n- Safety cannot be assessed accurately\n\nHow to implement: 'I complete this part of every assessment privately — it's routine for all my patients.' (Routine framing reduces conflict and protects the patient)",
+      "hint": "70% family perpetrators → remove them from the room before assessing",
+      "explanation": "The routine framing ('I always do this') is more effective than 'I need to speak with you alone about possible abuse,' which alerts the abuser and may endanger the patient after the appointment. Private assessment is not a special procedure — it should be routine in every comprehensive geriatric assessment.",
+      "clinicalPearl": "Framing private assessment as universal practice ('I do this with every patient') is the most effective implementation strategy. It avoids triggering the caregiver's defensiveness, makes the patient feel less exposed, and ensures the protocol is applied consistently."
+    },
+    {
+      "id": "ELDER-ABUSE-FC-005",
+      "front": "What are the clinical features that distinguish fall-related bruising from abuse-related bruising?",
+      "back": "FALL-RELATED BRUISING:\n- Located over bony prominences: shins, knees, lateral hips, elbows, wrists, palms\n- Usually unilateral\n- Single healing stage (consistent with one event)\n- Consistent with described fall mechanism\n\nABUSE-RELATED BRUISING:\n- Located on inner surfaces: inner arms, inner thighs, abdomen, genitals\n- May be bilateral and symmetric\n- Multiple healing stages (implies repeated incidents over time)\n- Inconsistent with the described mechanism\n- Patterned marks (cords, belts, hand prints)\n- Defensive injuries on forearms/hands",
+      "hint": "OUTER surface + one stage = fall; INNER surface + multiple stages = abuse",
+      "explanation": "The anatomical distribution of bruising is a critical diagnostic clue. Inner arm, inner thigh, and abdominal bruising occur when someone grabs, restrains, or strikes these areas. These surfaces are protected in a fall — they are not what contacts the ground or wall. Bilateral inner-arm bruising is particularly suspicious for grabbing/restraining.",
+      "clinicalPearl": "Bruises at various stages of healing indicate repeated incidents over time — this is the single most clinically significant physical finding in elder physical abuse. A single bruise in an unusual location is concerning; multiple bruises in multiple healing stages is highly suspicious."
+    },
+    {
+      "id": "ELDER-ABUSE-FC-006",
+      "front": "How does cognitive impairment (dementia) affect elder abuse risk, assessment, and reporting obligations?",
+      "back": "RISK: Dementia is the single strongest risk factor for elder abuse — doubles to triples abuse rates\nWhy: Cannot self-protect, cannot reliably report, BPSD increases caregiver stress, perpetrators exploit cognitive impairment\n\nASSESSMENT: Rely more on:\n- Physical examination findings\n- Environmental assessment\n- Observed behaviour and affect in caregiver's presence\n- Historical pattern review\n\nREPORTING: Cognitive impairment does NOT reduce the reporting obligation\n- Disclosures from patients with dementia deserve the same investigation as cognitively intact patients\n- Dementia is NOT a reason to dismiss abuse reports\n- Report on reasonable suspicion regardless of the patient's cognitive status",
+      "hint": "Dementia = MORE vulnerable, NOT less deserving of protection",
+      "explanation": "Abusers specifically target persons with dementia because they know cognitive impairment reduces the victim's ability to report, remember, or be believed. Dismissing abuse reports as 'confusion' or 'dementia symptoms' is one of the most dangerous clinical errors in geriatric nursing and may constitute failure to fulfil mandatory reporting obligations.",
+      "clinicalPearl": "A person with dementia who tells you 'he hurts me' may not be able to describe the details clearly, but the disclosure itself is sufficient reasonable suspicion for a mandatory report. Cognitive impairment is not a credibility filter — it is a vulnerability that demands more careful assessment, not less."
+    },
+    {
+      "id": "ELDER-ABUSE-FC-007",
+      "front": "What are the key red flags for financial elder abuse?",
+      "back": "FINANCIAL CONTROL INDICATORS:\n- Caregiver intercepts all questions about money and answers for the patient\n- Patient cannot answer questions about their own finances\n- Patient defers to caregiver before answering financial questions\n- Caregiver accompanies patient to all appointments and controls all communication\n\nFINANCIAL CONDITION RED FLAGS:\n- Unpaid bills despite adequate income\n- Malnutrition or inadequate care in a patient with sufficient pension/savings\n- Medication non-adherence 'due to cost' when income should cover costs\n- Recent unexplained changes to will or power of attorney\n- Missing personal property or unexplained bank withdrawals\n- New acquaintances with unusual financial interest",
+      "hint": "Financial abuse = financial control without patient agency + funds not applied to patient's needs",
+      "explanation": "Financial abuse does not require poverty or malnutrition to be present. It can occur in comfortable-appearing households where the patient's income is sufficient but is being diverted by the caregiver. The key clinical cues are control of finances without patient agency and discrepancy between available income and care quality.",
+      "clinicalPearl": "Always ask directly: 'Are you able to access your own money when you need it?' and 'Who makes decisions about how your money is spent?' These two questions are the fastest financial abuse screen available in a clinical setting."
+    },
+    {
+      "id": "ELDER-ABUSE-FC-008",
+      "front": "What must correct elder abuse documentation include?",
+      "back": "1. VERBATIM PATIENT STATEMENTS in quotation marks\n   Correct: Patient stated, 'My son hits me when I don't do what he says.'\n   Wrong: Patient reported abuse by son.\n\n2. OBJECTIVE PHYSICAL FINDINGS with precise descriptions\n   Include: Location (anatomical), size (cm), colour, healing stage, shape\n   Use body diagram to map locations\n\n3. BEHAVIOURAL OBSERVATIONS (objective)\n   Correct: 'Patient made eye contact, spoke clearly; became tearful and looked away when caregiver entered.'\n   Wrong: 'Patient appeared afraid.'\n\n4. SCREENING TOOL RESULTS\n   Document tool name, date, score\n\n5. MANDATORY REPORT DETAILS\n   Agency reported to, time, date, case reference number\n\n6. CLINICAL RATIONALE\n   'Based on findings above, elder physical abuse is suspected'",
+      "hint": "Objective findings → verbatim quotes → report details. Never write conclusions without evidence.",
+      "explanation": "Elder abuse documentation may become court evidence or regulatory evidence. The sequence matters: document the findings first, then interpret them. Conclusions without supporting evidence are legally and professionally insufficient. Verbatim quotes are the strongest evidence of patient disclosure.",
+      "clinicalPearl": "When documenting abuse findings, ask yourself: 'If I never see this patient again and this record goes to court, does it contain enough objective information for someone else to reach the same conclusion I did?' If yes, the documentation is complete."
+    },
+    {
+      "id": "ELDER-ABUSE-FC-009",
+      "front": "What is the Elder Abuse Suspicion Index (EASI), and what does a positive screen mean?",
+      "back": "EASI: 6-item validated screening tool designed for brief clinical encounters (under 2 minutes)\n\nQUESTIONS 1–5: Asked to the patient\n- Q1: Dependence in ADLs (identifies vulnerability)\n- Q2–5: Direct screening questions about financial control, being prevented from accessing care/people, being upset by verbal behaviour, being physically hurt\n\nQUESTION 6: Clinician observation\n- Does the elder show evidence of financial abuse, fearfulness, or agitation?\n\nSCORING:\n- 1 or more positive responses to questions 2–6 = further assessment required\n- Positive EASI ≠ confirmed abuse; it = 'comprehensive assessment needed'\n\nDEVELOPED BY: Yaffe et al. (2008) for use in family medicine/primary care",
+      "hint": "EASI: 6 items, under 2 minutes, 1+ positive on Q2–6 = further assessment",
+      "explanation": "The EASI was specifically designed to address the clinical reality that elder abuse screening is often neglected in busy primary care and community settings because available tools take too long. Its brief administration time removes the time-barrier to routine screening.",
+      "clinicalPearl": "A positive EASI does not confirm abuse — it means you must do more. After a positive EASI, conduct a comprehensive private assessment, apply additional validated tools if available, complete thorough physical assessment, and file a mandatory report if reasonable suspicion is established."
+    },
+    {
+      "id": "ELDER-ABUSE-FC-010",
+      "front": "What is the difference between neglect and self-neglect, and how does cognitive capacity change the nursing response?",
+      "back": "NEGLECT:\n- Defined as: Failure of a DESIGNATED CAREGIVER to meet the older adult's basic needs\n- Does NOT require intent (passive neglect from lack of knowledge/resources is still neglect)\n- Reportable as elder abuse in all jurisdictions\n- Applies regardless of the patient's cognitive status\n\nSELF-NEGLECT:\n- Defined as: An older adult with DECISION-MAKING CAPACITY making autonomous choices resulting in inadequate self-care\n- Requires CAPACITY to be present for self-neglect to apply\n- Capacity assessment is mandatory before labelling as self-neglect\n- A person WITHOUT capacity in poor conditions WITH a caregiver = NEGLECT, not self-neglect\n\nKEY RULE: Dementia + caregiver present + poor conditions = NEGLECT. Never 'self-neglect' a person who lacks capacity and has an assigned caregiver.",
+      "hint": "Self-neglect requires capacity. No capacity + caregiver = neglect. Capacity + autonomous choice = self-neglect.",
+      "explanation": "The capacity distinction is clinically and legally critical. A person with capacity has the right to make risky choices — the nurse informs, documents, and monitors. A person without capacity who is in poor conditions has rights that require active protection through reporting and intervention.",
+      "clinicalPearl": "Capacity is not an all-or-nothing determination. A person may have capacity for some decisions and not others. A capacity assessment by a qualified clinician (physician, NP, neuropsychologist) is the appropriate step when self-neglect is suspected and capacity is unclear."
+    },
+    {
+      "id": "ELDER-ABUSE-FC-011",
+      "front": "What is the APS referral pathway after a mandatory elder abuse report is filed?",
+      "back": "STEP 1: Nurse files mandatory report to APS (or provincial equivalent)\n- Report includes: patient identifying information, nature of concern, supporting observations, nurse's contact information\n\nSTEP 2: APS assigns priority\n- Immediate (patient in active danger): response within hours\n- Urgent: response within 24–72 hours\n- Routine: response within 1–2 weeks\n\nSTEP 3: APS investigation\n- APS caseworker conducts home visit or facility visit\n- Interviews patient, alleged abuser, and other relevant parties\n- Collaborates with healthcare team\n\nSTEP 4: APS determination\n- Substantiated: abuse confirmed; service plan, possible legal action\n- Inconclusive: insufficient evidence to confirm or exclude\n- Unsubstantiated: investigation did not support the concern\n\nSTEP 5: Ongoing monitoring\n- Nurse continues to assess, document, and report new findings\n- Filing a report does NOT end the nurse's ongoing clinical obligations",
+      "hint": "Report → priority triage → investigation → determination → ongoing nurse monitoring",
+      "explanation": "Understanding the APS pathway helps nurses set appropriate expectations for themselves and patients. APS does not always substantiate reports — this does not mean the nurse was wrong to report. An inconclusive finding means the situation requires ongoing vigilance, not that the concern was unfounded.",
+      "clinicalPearl": "An unsubstantiated APS finding does not protect the patient from ongoing risk. If your concern persists, continue rigorous assessment and file new reports as new evidence emerges. Your reporting obligation is continuous, not extinguished by a previous APS determination."
+    },
+    {
+      "id": "ELDER-ABUSE-FC-012",
+      "front": "What are the characteristics of a patient who cannot consent to sexual activity, and why does this matter for elder sexual abuse assessment?",
+      "back": "CONSENT CAPACITY REQUIREMENTS:\n1. Understanding: Can understand the nature of the sexual act\n2. Appreciation: Can appreciate consequences for themselves\n3. Reasoning: Can apply values to the decision\n4. Communication: Can express the decision\n\nCOGNITIVE IMPAIRMENT AND CONSENT:\n- Moderate-to-severe dementia typically eliminates the ability to consent to sexual activity\n- A person who lacks capacity CANNOT consent — any sexual contact = sexual abuse\n- This applies regardless of prior relationship (including marital relationships)\n\nCLINICAL IMPLICATIONS:\n- Sexual abuse of persons with dementia is severely underreported\n- Genital/rectal trauma in persons with dementia always requires investigation\n- In LTC settings: any sexual contact between a person with dementia and another person requires capacity assessment\n\nCLINICAL RED FLAGS:\n- Unexplained genital/rectal bleeding or ecchymosis\n- Torn undergarments\n- New STI\n- Extreme distress during perineal care",
+      "hint": "Dementia → cannot consent → sexual contact = sexual abuse. Capacity is required for consent.",
+      "explanation": "Sexual abuse of older adults with dementia in institutional settings is a documented and underaddressed problem. In many jurisdictions, marital rape laws have been updated to recognize that a cognitively impaired person cannot consent to sexual activity even within a marriage. This has direct implications for family member visits to LTC residents with advanced dementia.",
+      "clinicalPearl": "In long-term care, if a resident with dementia is found to have been involved in sexual activity, a capacity assessment for sexual consent must be completed before concluding the activity was consensual. In the absence of documented capacity for sexual consent, the default is that the activity cannot be consensual and must be investigated as potential sexual abuse."
+    }
+  ]
+}

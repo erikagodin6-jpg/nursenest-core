@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T17:57:09.531Z",
+  "priorityOrder": [
+    "RN",
+    "PN/RPN/LVN",
+    "NP",
+    "core nursing shared",
+    "Allied"
+  ],
+  "phases": [
+    {
+      "phase": 1,
+      "name": "inventory_and_gap_analysis",
+      "status": "complete"
+    },
+    {
+      "phase": 2,
+      "name": "low_risk_additive_imports",
+      "status": "pending_operator_execution",
+      "recommendedJobs": [
+        {
+          "action": "pathway_lesson_batch_import",
+          "scriptHints": [
+            "scripts/content-completion-incremental.ts (incremental)",
+            "lesson import batches per docs/legacy-restoration-map.md"
+          ],
+          "requires": [
+            "DATABASE_URL",
+            "idempotent keys (pathwayId+slug)"
+          ]
+        },
+        {
+          "action": "exam_question_import",
+          "scriptHints": [
+            "question bank importers in scripts/",
+            "dedupe by stem hash / examQuestionId"
+          ],
+          "requires": [
+            "DATABASE_URL"
+          ]
+        },
+        {
+          "action": "blog_import",
+          "scriptHints": [
+            "nursenest-core/scripts/import-blog.ts"
+          ],
+          "requires": [
+            "DATABASE_URL"
+          ]
+        },
+        {
+          "action": "i18n_merge",
+          "scriptHints": [
+            "tools/i18n pipeline per docs/i18n-architecture.md"
+          ],
+          "requires": [
+            "compile-i18n",
+            "no duplicate runtime loaders"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "transform_then_import",
+      "status": "blocked_until_mapping",
+      "items": [
+        "Legacy C-class lessons (4084) need slug/topic mapping before bulk import",
+        "NP slug mapping group in unimported-legacy-content.json"
+      ]
+    }
+  ],
+  "references": {
+    "highValueCandidates": "data/audit/high-value-import-candidates.json",
+    "unimported": "data/audit/unimported-legacy-content.json"
+  }
+}

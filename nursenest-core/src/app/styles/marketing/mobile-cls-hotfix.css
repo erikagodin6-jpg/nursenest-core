@@ -1,0 +1,177 @@
+@media (max-width: 1023.98px) {
+  :root {
+    --nn-marketing-header-mobile-reserved-height: 5.25rem;
+  }
+
+  html,
+  html:focus-within {
+    scroll-behavior: auto !important;
+  }
+
+  .sticky.top-0.z-50[data-nn-cls-region="site-header"] {
+    position: relative !important;
+    top: auto !important;
+    z-index: 50;
+  }
+
+  [data-nn-header-layout="marketing-row4"],
+  [data-nn-header-layout="marketing-unified-dark"] {
+    min-height: var(--nn-marketing-header-mobile-reserved-height, 5.25rem) !important;
+    contain: layout paint;
+  }
+
+  [data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"],
+  [data-nn-header-layout="marketing-unified-dark"] [data-nn-header-band="primary"],
+  [data-nn-header-layout="marketing-row4"] .top-bar,
+  [data-nn-header-layout="marketing-unified-dark"] .top-bar {
+    min-height: var(--nn-marketing-header-mobile-reserved-height, 5.25rem) !important;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-rail,
+  [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid {
+    display: none !important;
+  }
+
+  .nn-header-dark-surface,
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-frame,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-frame {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  .nn-header-animate-in,
+  .nn-header-logo-link,
+  .nn-marketing-nav-link,
+  .nn-premium-hero-panel,
+  .nn-premium-hero-grid,
+  .nn-premium-home-section,
+  .nn-hiw-step-card,
+  .nn-hiw-feature-card,
+  .nn-hiw-preview-card,
+  .nn-nav-cta,
+  .nav-item {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  main :where([style*="will-change"], [class*="will-change"]),
+  .nn-home-marketing-root :where([style*="will-change"], [class*="will-change"]),
+  [data-nn-header-layout="marketing-row4"] :where([style*="will-change"], [class*="will-change"]),
+  [data-nn-header-layout="marketing-unified-dark"] :where([style*="will-change"], [class*="will-change"]) {
+    will-change: auto !important;
+  }
+
+  .nn-premium-hero-grid,
+  .nn-pathway-hero,
+  .nn-hub-hero,
+  .nn-tier-hub-hero,
+  [data-nn-hero],
+  [data-nn-section="hero"] {
+    min-height: max(32rem, calc(100svh - var(--nn-marketing-header-mobile-reserved-height, 5.25rem))) !important;
+    contain: layout paint style;
+  }
+
+  .nn-premium-hero-panel,
+  .nn-pathway-hero-panel,
+  .nn-hub-hero-panel,
+  [data-nn-hero-panel] {
+    contain: layout paint style;
+    transform: none !important;
+  }
+
+  .nn-home-marketing-root .nn-premium-home-section:not(:first-child),
+  .nn-home-marketing-root section:not(:first-child),
+  .nn-home-marketing-root [data-nn-home-section]:not(:first-child),
+  main > section:nth-of-type(n + 2),
+  [data-nn-marketing-section]:not(:first-child),
+  [data-nn-pathway-section]:not(:first-child),
+  [data-nn-hub-section]:not(:first-child) {
+    content-visibility: auto;
+    contain: layout paint style;
+    contain-intrinsic-size: auto 720px;
+  }
+
+  .nn-home-marketing-root img[loading="lazy"],
+  main img[loading="lazy"],
+  .nn-home-marketing-root picture,
+  main picture,
+  .nn-home-marketing-root video,
+  main video,
+  .nn-home-marketing-root svg:not(.nn-header-logo-leaf),
+  main svg:not(.nn-header-logo-leaf) {
+    content-visibility: auto;
+    contain: paint;
+  }
+
+  main img,
+  main picture,
+  main video,
+  main canvas,
+  main iframe {
+    max-width: 100%;
+    height: auto;
+    overflow: clip;
+  }
+
+  main :where(img, picture, video, canvas, iframe):not([data-nn-above-fold]):not([fetchpriority="high"]) {
+    content-visibility: auto;
+    contain: layout paint;
+  }
+
+  main :where([class*="overflow-x-auto"], [class*="overflow-x-scroll"], [class*="snap-x"]) {
+    overscroll-behavior-inline: contain;
+    scroll-behavior: auto !important;
+  }
+
+  .nn-home-marketing-root :where(.nn-premium-card, .nn-hub-card, .nn-pathway-card, .nn-pricing-card, .nn-feature-card, .nn-stat-card, .nn-clinical-card),
+  main :where(.nn-premium-card, .nn-hub-card, .nn-pathway-card, .nn-pricing-card, .nn-feature-card, .nn-stat-card, .nn-clinical-card),
+  main :where([class*="shadow-"], [class*="backdrop-blur"], [class*="blur-"]) {
+    box-shadow: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  main :where([class*="hover:shadow"], [class*="hover:-translate"], [class*="hover:scale"]) {
+    transform: none !important;
+  }
+
+  .nn-header-overlay-mobile-only,
+  .nn-header-overlay-mobile-only * {
+    content-visibility: visible;
+    contain: none;
+    will-change: transform, opacity;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .nn-home-marketing-root .nn-premium-home-section:not(:first-child),
+  .nn-home-marketing-root section:not(:first-child),
+  .nn-home-marketing-root [data-nn-home-section]:not(:first-child),
+  main > section:nth-of-type(n + 2),
+  [data-nn-marketing-section]:not(:first-child),
+  [data-nn-pathway-section]:not(:first-child),
+  [data-nn-hub-section]:not(:first-child) {
+    contain-intrinsic-size: auto 640px;
+  }
+
+  .nn-premium-hero-grid,
+  .nn-pathway-hero,
+  .nn-hub-hero,
+  .nn-tier-hub-hero,
+  [data-nn-hero],
+  [data-nn-section="hero"] {
+    min-height: max(30rem, calc(100svh - var(--nn-marketing-header-mobile-reserved-height, 5.25rem))) !important;
+  }
+}
+
+@media (max-width: 1023.98px) and (prefers-reduced-motion: no-preference) {
+  .nn-header-overlay-mobile-only,
+  .nn-header-overlay-mobile-only * {
+    animation-duration: 0.16s !important;
+    transition-duration: 0.16s !important;
+  }
+}

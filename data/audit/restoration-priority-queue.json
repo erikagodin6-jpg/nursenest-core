@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 3,
+  "generatedAt": "2026-04-14T18:13:35.924Z",
+  "gitHead": "c6d27507",
+  "methodology": "Separated CONTENT parity from FEATURE parity. Counts from data/audit/unimported-legacy-content.json, pathway catalog sync, optional Prisma, and route scans — not claims without file evidence.",
+  "evidenceRootsScanned": [
+    "client/src",
+    "nursenest-core",
+    "external/NurseNest",
+    "data/audit"
+  ],
+  "tiers": {
+    "tier1_content_core": {
+      "focus": [
+        "Pathway lessons",
+        "Exam questions",
+        "Flashcards",
+        "Pre/post lesson quizzes in payloads"
+      ],
+      "evidenceFiles": [
+        "unimported-legacy-content.json",
+        "lesson-content-completeness-audit.json"
+      ],
+      "nursingFirst": true
+    },
+    "tier2_user_study": {
+      "focus": [
+        "Dashboard",
+        "practice flows",
+        "weak areas",
+        "CAT insights"
+      ],
+      "evidenceFiles": [
+        "user-surface-parity.json",
+        "src/app/(student)/**"
+      ]
+    },
+    "tier3_admin_editorial": {
+      "focus": [
+        "Admin lessons/questions/blog",
+        "E-E-A-T editorial",
+        "imports"
+      ],
+      "evidenceFiles": [
+        "admin-surface-parity.json",
+        "data/audit/eeat-*.json"
+      ]
+    },
+    "tier4_tools_secondary": {
+      "focus": [
+        "Calculators",
+        "activities",
+        "case studies",
+        "media"
+      ],
+      "evidenceFiles": [
+        "legacy-activities-inventory.json",
+        "tools/**"
+      ]
+    },
+    "tier5_obsolete": {
+      "focus": [
+        "Legacy-only UI",
+        "abandoned Replit experiments"
+      ],
+      "status": "intentionally_skipped_or_obsolete",
+      "evidenceFiles": [
+        "docs/legacy-restoration-map.md"
+      ]
+    }
+  },
+  "rules": [
+    "No single giant import — chunked batches with import-reports/*.json",
+    "Each batch: before/after counts + duplicates skipped"
+  ]
+}

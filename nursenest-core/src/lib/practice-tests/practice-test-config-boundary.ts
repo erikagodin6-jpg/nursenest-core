@@ -1,0 +1,193 @@
+/**
+ * Runtime validation for persisted `PracticeTest.config` JSON at read boundaries.
+ * Does not change how configs are written; coerces invalid rows to safe defaults and logs.
+ */
+import { z } from "zod";
+import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+
+/** Safe linear defaults when JSON is missing or unusable — preserves “session can load” over strictness. */
+export const DEFAULT_SAFE_PRACTICE_TEST_CONFIG: PracticeTestConfigJson = {
+  questionCount: 25,
+  topicNames: [],
+  difficultyMin: null,
+  difficultyMax: null,
+  selectionMode: "random",
+  pathwayId: null,
+  timedMode: false,
+  timeLimitSec: null,
+};
+
+const selectionModeZ = z.enum(["random", "targeted", "weak", "missed", "starred", "unseen", "cat"]);
+const linearDeliveryZ = z.enum(["practice", "exam"]);
+const linearRationaleVisibilityZ = z.enum(["after_each", "end_of_exam"]);
+const catSelectionBasisZ = z.enum(["random", "targeted", "weak", "missed", "starred"]);
+const catPoolSelectionStrictnessZ = z.enum(["soft", "strict"]);
+const catSelectionExpansionTierZ = z.enum(["exact", "soft", "broad"]);
+const catSelectionFilterBlockZ = z.object({
+  topicNames: z.array(z.string()).default([]),
+  catSelectionBasis: catSelectionBasisZ,
+  poolRequestStrictness: catPoolSelectionStrictnessZ,
+});
+const catSelectionAppliedMetaZ = z.object({
+  selectionStrictness: catSelectionExpansionTierZ,
+  requestedFilters: catSelectionFilterBlockZ,
+  appliedFilters: catSelectionFilterBlockZ,
+  matchedCountBeforeExpansion: z.coerce.number().int().min(0),
+  finalPoolSize: z.coerce.number().int().min(0),
+  candidatePoolSize: z.coerce.number().int().min(0).optional(),
+  fallbackReason: z.string().max(600).optional(),
+});
+const catPresentationZ = z.enum(["practice", "exam_simulation"]);
+const catFeedbackZ = z.enum(["study", "test"]);
+const catAdaptiveSessionTypeZ = z.enum(["cat", "practice"]);
+const catEngineTypeZ = z.enum(["CAT", "SIMULATION"]);
+const catEngineModeZ = z.enum(["production_ready", "beta", "mini_adaptive", "simulation", "unavailable"]);
+const studyLaunchPayloadZ = z
+  .object({
+    pathwayId: z.union([z.null(), z.string().max(120)]).optional(),
+    mode: z.string().max(40).optional(),
+    selectedCategories: z.array(z.string().max(80)).max(40).optional(),
+    filters: z.record(z.union([z.string(), z.number(), z.boolean(), z.null()])).optional(),
+    count: z.coerce.number().int().min(1).max(200).optional(),
+    shuffle: z.boolean().optional(),
+  })
+  .optional();
+
+/** Defaults on every field so partial persisted JSON still parses; unknown keys stripped. */
+const practiceTestConfigSchema = z.object({
+  questionCount: z.coerce.number().int().min(1).max(500).default(25),
+  topicNames: z.array(z.string()).default([]),
+  difficultyMin: z.union([z.null(), z.number()]).default(null),
+  difficultyMax: z.union([z.null(), z.number()]).default(null),
+  selectionMode: selectionModeZ.default("random"),
+  pathwayId: z.preprocess(
+    (v) => (v === "" || v === undefined ? null : v),
+    z.union([z.null(), z.string().min(1).max(120)]).default(null),
+  ),
+  timedMode: z.boolean().default(false),
+  timeLimitSec: z.union([z.null(), z.coerce.number().int().min(0).max(48 * 60 * 60)]).default(null),
+  linearDeliveryMode: linearDeliveryZ.optional(),
+  linearRationaleVisibility: linearRationaleVisibilityZ.optional(),
+  linearAllowReviewNavigation: z.boolean().optional(),
+  catSelectionBasis: catSelectionBasisZ.optional(),
+  catMinQuestions: z.coerce.number().int().min(1).max(500).optional(),
+  catMaxQuestions: z.coerce.number().int().min(1).max(500).optional(),
+  catPassingThreshold: z.coerce.number().min(-3).max(3).optional(),
+  catEngineType: catEngineTypeZ.optional(),
+  catEngineMode: catEngineModeZ.optional(),
+  catWeakCategories: z.array(z.string()).optional(),
+  catWeakPriorityByCanonical: z.record(z.coerce.number()).optional(),
+  catPresentationMode: catPresentationZ.optional(),
+  catExamFeedbackMode: catFeedbackZ.optional(),
+  catPoolSelectionStrictness: catPoolSelectionStrictnessZ.optional(),
+  catSelectionAppliedMeta: catSelectionAppliedMetaZ.optional(),
+  catAdaptiveSessionType: catAdaptiveSessionTypeZ.optional(),
+  catExamConfigId: z.union([z.null(), z.string()]).optional(),
+  sessionPickSalt: z.string().min(8).max(128).optional(),
+  disableOptionShuffle: z.boolean().optional(),
+  studyLaunchPayload: studyLaunchPayloadZ,
+});
+
+function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+  const o = raw as Record<string, unknown>;
+  const out: Partial<PracticeTestConfigJson> = {};
+  const sm = o.selectionMode;
+  if (
+    sm === "random" ||
+    sm === "targeted" ||
+    sm === "weak" ||
+    sm === "missed" ||
+    sm === "starred" ||
+    sm === "unseen" ||
+    sm === "cat"
+  ) {
+    out.selectionMode = sm;
+  }
+  if (typeof o.pathwayId === "string" && o.pathwayId.length > 0) out.pathwayId = o.pathwayId;
+  if (o.pathwayId === null) out.pathwayId = null;
+  if (typeof o.questionCount === "number" && Number.isFinite(o.questionCount)) {
+    out.questionCount = Math.max(1, Math.min(500, Math.floor(o.questionCount)));
+  }
+  const cast = o.catAdaptiveSessionType;
+  if (cast === "cat" || cast === "practice") out.catAdaptiveSessionType = cast;
+  if (o.disableOptionShuffle === true) out.disableOptionShuffle = true;
+  if (o.linearAllowReviewNavigation === true) out.linearAllowReviewNavigation = true;
+  const salt = o.sessionPickSalt;
+  if (typeof salt === "string" && salt.trim().length >= 8) {
+    out.sessionPickSalt = salt.trim().slice(0, 128);
+  }
+  for (const key of ["catMinQuestions", "catMaxQuestions"] as const) {
+    const n = o[key];
+    if (typeof n === "number" && Number.isFinite(n)) {
+      out[key] = Math.max(1, Math.min(500, Math.floor(n)));
+    }
+  }
+  const basis = o.catSelectionBasis;
+  if (basis === "random" || basis === "targeted" || basis === "weak" || basis === "missed" || basis === "starred") {
+    out.catSelectionBasis = basis;
+  }
+  const pss = o.catPoolSelectionStrictness;
+  if (pss === "soft" || pss === "strict") {
+    out.catPoolSelectionStrictness = pss;
+  }
+  const pm = o.catPresentationMode;
+  if (pm === "practice" || pm === "exam_simulation") out.catPresentationMode = pm;
+  const fm = o.catExamFeedbackMode;
+  if (fm === "study" || fm === "test") out.catExamFeedbackMode = fm;
+  const pt = o.catPassingThreshold;
+  if (typeof pt === "number" && Number.isFinite(pt)) {
+    out.catPassingThreshold = Math.max(-3, Math.min(3, pt));
+  }
+  const examCfg = o.catExamConfigId;
+  if (examCfg === null) out.catExamConfigId = null;
+  else if (typeof examCfg === "string" && examCfg.length > 0) out.catExamConfigId = examCfg.slice(0, 120);
+  const appliedMetaRaw = o.catSelectionAppliedMeta;
+  if (appliedMetaRaw && typeof appliedMetaRaw === "object" && !Array.isArray(appliedMetaRaw)) {
+    const m = catSelectionAppliedMetaZ.safeParse(appliedMetaRaw);
+    if (m.success) {
+      out.catSelectionAppliedMeta = m.data;
+    }
+  }
+  const slp = o.studyLaunchPayload;
+  if (slp && typeof slp === "object" && !Array.isArray(slp)) {
+    const m = studyLaunchPayloadZ.safeParse(slp);
+    if (m.success && m.data) {
+      out.studyLaunchPayload = m.data;
+    }
+  }
+  return out;
+}
+
+export type PracticeTestConfigParseMeta = {
+  practiceTestId?: string;
+  surface?: string;
+};
+
+/**
+ * Validates config at API / loader boundaries. On failure: logs, merges best-effort fields from raw, fills defaults.
+ */
+export function parsePracticeTestConfigAtBoundary(
+  raw: unknown,
+  meta?: PracticeTestConfigParseMeta,
+): PracticeTestConfigJson {
+  const parsed = practiceTestConfigSchema.safeParse(raw);
+  if (parsed.success) {
+    return parsed.data as PracticeTestConfigJson;
+  }
+  const issues = parsed.error.issues
+    .slice(0, 12)
+    .map((i) => `${i.path.join(".") || "root"}:${i.code}`)
+    .join("|");
+  safeServerLog("practice_test", "practice_test_config_invalid", {
+    event: "practice_test_config_invalid",
+    surface: meta?.surface,
+    practiceTestId: meta?.practiceTestId?.slice(0, 16),
+    zod_summary: issues.slice(0, 450),
+  });
+  return {
+    ...DEFAULT_SAFE_PRACTICE_TEST_CONFIG,
+    ...loosePickFromRaw(raw),
+  };
+}

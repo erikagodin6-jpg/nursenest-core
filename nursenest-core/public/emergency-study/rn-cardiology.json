@@ -1,0 +1,41 @@
+{
+  "id": "rn-cardiology",
+  "title": "RN Cardiology Emergency Study Set",
+  "pathway": "RN",
+  "system": "Cardiovascular",
+  "flashcards": [
+    {
+      "id": "emergency-rn-cardiology-1",
+      "front": "A client with chest pain becomes pale, diaphoretic, and hypotensive. What is the priority nursing action?",
+      "back": "Assess airway, breathing, circulation, obtain vital signs, stay with the client, and activate emergency response according to protocol.",
+      "rationale": "Unstable perfusion cues require immediate assessment and escalation before routine teaching or documentation.",
+      "pearl": "In cardiovascular deterioration, act on instability first: assess, support perfusion, and escalate."
+    },
+    {
+      "id": "emergency-rn-cardiology-2",
+      "front": "Which finding after starting nitroglycerin requires immediate follow-up?",
+      "back": "Marked hypotension, syncope, or worsening chest pain after nitroglycerin requires immediate reassessment and provider notification.",
+      "rationale": "Nitroglycerin can reduce preload and blood pressure; unsafe drops can worsen perfusion.",
+      "pearl": "Always reassess pain and blood pressure after antianginal therapy."
+    },
+    {
+      "id": "emergency-rn-cardiology-3",
+      "front": "What rhythm-related symptom is most concerning in a client with new palpitations?",
+      "back": "Syncope, chest pain, shortness of breath, hypotension, or altered mental status suggests unstable dysrhythmia.",
+      "rationale": "Symptoms of poor perfusion distinguish urgent rhythm problems from stable palpitations.",
+      "pearl": "Treat the patient, not just the monitor strip."
+    }
+  ],
+  "questions": [
+    {
+      "id": "emergency-rn-cardiology-q1",
+      "stem": "A client reports crushing chest pain and has cool clammy skin. Which action comes first?",
+      "answer": "Assess vital signs and activate the emergency response protocol.",
+      "rationale": "The client has instability cues; immediate assessment and escalation come before nonurgent interventions."
+    }
+  ],
+  "pearls": [
+    "Chest pain plus diaphoresis or hypotension is unstable until proven otherwise.",
+    "Reassessment after cardiovascular medication is part of the intervention."
+  ]
+}

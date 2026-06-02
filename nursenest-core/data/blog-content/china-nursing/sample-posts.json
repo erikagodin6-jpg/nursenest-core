@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "countrySlug": "china",
+  "entries": [
+    {
+      "slug": "cn-sample-001-nnqe-orientation-en",
+      "title": "NNQE orientation — public scope vs study plan (sample topic)",
+      "language": "en",
+      "countryTargets": ["CN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-cn-001",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "cn-sample-002-nnqe-zh",
+      "title": "护士执业资格考试备考节奏（示例主题）",
+      "language": "zh",
+      "countryTargets": ["CN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-cn-002",
+      "publicationPriority": 95,
+      "status": "sample"
+    },
+    {
+      "slug": "cn-sample-003-abroad-canada-en",
+      "title": "Canada pathways for China-trained nurses — evidence-first checklist (sample)",
+      "language": "en",
+      "countryTargets": ["CN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-cn-003",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "cn-sample-004-clinical-reasoning-en",
+      "title": "Transferable clinical reasoning — aligned to public exam scope (sample)",
+      "language": "en",
+      "countryTargets": ["CN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-cn-004",
+      "publicationPriority": 85,
+      "status": "sample"
+    },
+    {
+      "slug": "cn-sample-005-nclex-parallel-en",
+      "title": "Parallel NCLEX prep — without mixing national blueprints (sample)",
+      "language": "en",
+      "countryTargets": ["CN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-cn-005",
+      "publicationPriority": 80,
+      "status": "sample"
+    },
+    {
+      "slug": "cn-sample-006-gulf-overview-en",
+      "title": "Gulf licensing overview for internationally educated nurses (sample)",
+      "language": "en",
+      "countryTargets": ["CN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-cn-006",
+      "publicationPriority": 75,
+      "status": "sample"
+    }
+  ]
+}

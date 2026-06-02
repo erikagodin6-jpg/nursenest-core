@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NurseNest Report Card — 6 Mockups</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;background:#1e293b}
+button{font-family:inherit}svg{display:block;flex-shrink:0}
+
+.chrome{background:#0a0f1a;padding:10px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;border-bottom:1px solid #1e293b}
+.chrome-title{font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.08em;text-transform:uppercase}
+.tabs{background:#0f1623;padding:0 22px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;position:sticky;top:40px;z-index:299;padding-top:7px}
+.tabs::-webkit-scrollbar{display:none}
+.tsep{width:1px;height:12px;background:#1e293b;margin:0 4px 7px;align-self:center}
+.tab{padding:5px 12px 7px;font-size:10px;font-weight:600;color:#475569;border-radius:4px 4px 0 0;cursor:pointer;white-space:nowrap;font-family:inherit;background:transparent;border:none}
+.tab.on{color:#0f172a;background:white;font-weight:700}
+.tg{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#334155;padding:7px 4px 0;align-self:flex-start}
+
+.frame{display:none;width:1440px;min-height:900px;overflow:hidden;position:relative}
+.frame.mob{width:390px;min-height:844px}
+.frame.on{display:block}
+
+/* ═══ OCEAN TOKENS ══════════════════════════════════════════════ */
+.oc{
+  --bg:#f0f5fa;--surf:#fff;--panel:#f7fafd;--panel2:#eef4fa;
+  --bdr:rgba(180,218,240,.65);--bdr2:rgba(140,196,228,.8);--div:rgba(180,218,240,.4);
+  --muted:#647894;--subtle:#94a3b8;
+  --acc:#1aaee0;--acc-d:#0d7aaa;
+  --nav:#fff;--nav-bdr:rgba(180,218,240,.8);
+  --txt:#0f172a;--txt2:#455569;
+  --ok:#16a34a;--ok-bg:rgba(22,163,74,.08);--ok-bdr:rgba(22,163,74,.22);
+  --ok-d:#15803d;
+  --warn:#d97706;--warn-bg:rgba(217,119,6,.08);--warn-bdr:rgba(217,119,6,.22);
+  --err:#dc2626;--err-bg:rgba(220,38,38,.07);--err-bdr:rgba(220,38,38,.2);
+  --chip-bg:rgba(13,122,170,.09);--chip-bdr:rgba(13,122,170,.22);--chip-fg:#0d7aaa;
+  --sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(6,88,140,.07);
+  --sh-lg:0 2px 0 rgba(0,0,0,.04),0 16px 48px -20px rgba(6,88,140,.12);
+  --prog-t:rgba(180,218,240,.4);--prog-f:#1aaee0;
+  --ready-bg:rgba(22,163,74,.08);--ready-bdr:rgba(22,163,74,.25);--ready-fg:#15803d;
+  --approaching-bg:rgba(217,119,6,.08);--approaching-bdr:rgba(217,119,6,.22);--approaching-fg:#b45309;
+  --needs-bg:rgba(220,38,38,.07);--needs-bdr:rgba(220,38,38,.2);--needs-fg:#dc2626;
+}
+
+/* ═══ MIDNIGHT TOKENS ═══════════════════════════════════════════ */
+.mn{
+  --bg:#07111f;--surf:#111827;--panel:#0d1826;--panel2:#152032;
+  --bdr:rgba(49,68,102,.85);--bdr2:rgba(56,189,248,.22);--div:rgba(49,68,102,.5);
+  --muted:#5e7a98;--subtle:#47607c;
+  --acc:#38bdf8;--acc-d:#0ea5e9;
+  --nav:#0b1220;--nav-bdr:rgba(49,68,102,.9);
+  --txt:#f0f6ff;--txt2:#c8d8ed;
+  --ok:#34d399;--ok-bg:rgba(52,211,153,.1);--ok-bdr:rgba(52,211,153,.3);--ok-d:#34d399;
+  --warn:#fbbf24;--warn-bg:rgba(251,191,36,.09);--warn-bdr:rgba(251,191,36,.22);
+  --err:#f87171;--err-bg:rgba(248,113,113,.1);--err-bdr:rgba(248,113,113,.25);
+  --chip-bg:rgba(56,189,248,.12);--chip-bdr:rgba(56,189,248,.25);--chip-fg:#7dd3fc;
+  --sh:0 2px 0 rgba(0,0,0,.2),0 6px 24px -10px rgba(0,0,0,.35);
+  --sh-lg:0 2px 0 rgba(0,0,0,.25),0 16px 48px -20px rgba(0,0,0,.5);
+  --prog-t:rgba(49,68,102,.55);--prog-f:#38bdf8;
+  --ready-bg:rgba(52,211,153,.1);--ready-bdr:rgba(52,211,153,.28);--ready-fg:#34d399;
+  --approaching-bg:rgba(251,191,36,.09);--approaching-bdr:rgba(251,191,36,.22);--approaching-fg:#fbbf24;
+  --needs-bg:rgba(248,113,113,.1);--needs-bdr:rgba(248,113,113,.22);--needs-fg:#f87171;
+}
+
+/* ═══ SHELL ═════════════════════════════════════════════════════ */
+.shell{display:flex;flex-direction:column;background:var(--bg);min-height:900px;width:1440px}
+.shell.mob{width:390px;min-height:844px}
+
+/* Shared nav bar (matches practice/CAT shell) */
+.nav{height:52px;flex-shrink:0;background:var(--nav);border-bottom:1px solid var(--nav-bdr);display:flex;align-items:center;padding:0 28px;gap:0;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.nav-brand{font-size:14.5px;font-weight:800;letter-spacing:-.03em;color:var(--txt)}
+.nav-dot{color:var(--acc)}
+.nav-sep{width:1px;height:16px;background:var(--bdr);margin:0 16px}
+.nav-breadcrumb{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.nav-breadcrumb-active{color:var(--txt);font-weight:600}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.nav-avatar{width:30px;height:30px;border-radius:8px;background:var(--chip-bg);border:1px solid var(--chip-bdr);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--chip-fg)}
+
+/* Sub-nav performance tabs */
+.subnav{height:40px;background:var(--surf);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 40px;gap:2px;flex-shrink:0}
+.snav-tab{font-size:12px;font-weight:500;color:var(--muted);padding:7px 14px;border-radius:7px;cursor:pointer;white-space:nowrap;transition:.1s}
+.snav-tab.active{color:var(--acc-d);background:var(--chip-bg);font-weight:600}
+
+/* Main content well */
+.content{flex:1;padding:28px 40px;max-width:1280px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:24px}
+.mob .content{padding:16px 14px;gap:16px}
+
+/* ═══ REPORT CARD COMPONENTS ════════════════════════════════════ */
+
+/* A. HERO */
+.rc-hero{background:var(--surf);border:1px solid var(--bdr);border-radius:18px;padding:32px 36px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.rc-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(700px 300px at 100% 0%,color-mix(in srgb,var(--acc) 6%,transparent),transparent 60%),radial-gradient(400px 200px at -5% 100%,color-mix(in srgb,var(--ok) 5%,transparent),transparent 55%);pointer-events:none}
+.rc-hero-inner{position:relative;display:flex;align-items:center;gap:40px}
+.rc-hero-gauge{flex-shrink:0}
+.rc-hero-text{flex:1}
+.rc-hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.rc-hero-name{font-size:26px;font-weight:800;letter-spacing:-.03em;color:var(--txt);line-height:1.1;margin-bottom:4px}
+.rc-hero-track{font-size:13px;color:var(--muted);margin-bottom:16px}
+.rc-hero-readiness{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:99px;font-size:12px;font-weight:700;margin-bottom:12px}
+.rc-hero-readiness.ready{background:var(--ready-bg);border:1px solid var(--ready-bdr);color:var(--ready-fg)}
+.rc-hero-readiness.approaching{background:var(--approaching-bg);border:1px solid var(--approaching-bdr);color:var(--approaching-fg)}
+.rc-hero-readiness.needs{background:var(--needs-bg);border:1px solid var(--needs-bdr);color:var(--needs-fg)}
+.rc-hero-meta{font-size:11.5px;color:var(--subtle);display:flex;align-items:center;gap:12px}
+.rc-hero-meta-sep{width:3px;height:3px;border-radius:50%;background:var(--subtle)}
+.rc-hero-score-big{text-align:center}
+.rc-hero-score-n{font-size:54px;font-weight:800;letter-spacing:-.04em;color:var(--txt);line-height:1;font-variant-numeric:tabular-nums}
+.rc-hero-score-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* B. METRIC STRIP */
+.metric-strip{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none}
+.metric-strip::-webkit-scrollbar{display:none}
+.metric-card{flex:1;min-width:160px;background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:18px 20px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:4px}
+.metric-n{font-size:28px;font-weight:800;letter-spacing:-.03em;color:var(--txt);font-variant-numeric:tabular-nums;line-height:1}
+.metric-label{font-size:11px;color:var(--muted);font-weight:500;margin-top:4px}
+.metric-trend{font-size:11px;font-weight:700;display:flex;align-items:center;gap:3px;margin-top:2px}
+.metric-trend.up{color:var(--ok-d)}
+.metric-trend.down{color:var(--err)}
+.metric-trend.neutral{color:var(--muted)}
+.metric-icon{width:28px;height:28px;border-radius:7px;background:var(--chip-bg);border:1px solid var(--chip-bdr);display:flex;align-items:center;justify-content:center;margin-bottom:6px;align-self:flex-start}
+.metric-icon svg{stroke:var(--chip-fg)}
+
+/* C. PERFORMANCE OVERVIEW */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-title{font-size:14.5px;font-weight:700;color:var(--txt);letter-spacing:-.01em}
+.section-sub{font-size:11.5px;color:var(--muted)}
+.section-link{font-size:11.5px;font-weight:600;color:var(--acc-d);cursor:pointer}
+
+.domain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.domain-card{background:var(--surf);border:1px solid var(--bdr);border-radius:13px;padding:16px 18px;box-shadow:var(--sh)}
+.domain-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.domain-name{font-size:12.5px;font-weight:600;color:var(--txt)}
+.domain-pct{font-size:20px;font-weight:800;letter-spacing:-.03em;color:var(--txt);font-variant-numeric:tabular-nums}
+.domain-tag{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:99px}
+.domain-tag.strength{background:var(--ok-bg);border:1px solid var(--ok-bdr);color:var(--ok-d)}
+.domain-tag.building{background:var(--approaching-bg);border:1px solid var(--approaching-bdr);color:var(--approaching-fg)}
+.domain-tag.critical{background:var(--needs-bg);border:1px solid var(--err-bdr);color:var(--err)}
+.domain-bar-wrap{height:6px;background:var(--panel2);border-radius:99px;overflow:hidden;margin-top:8px}
+.domain-bar{height:100%;border-radius:99px;transition:width .4s ease}
+.domain-bar.ok{background:var(--ok)}
+.domain-bar.warn{background:var(--warn)}
+.domain-bar.err{background:var(--err)}
+.domain-bar.acc{background:var(--acc)}
+.domain-trend{font-size:10.5px;color:var(--muted);margin-top:6px;display:flex;align-items:center;gap:4px}
+
+/* D. PROGRESS TIMELINE */
+.timeline-card{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;padding:22px 24px;box-shadow:var(--sh)}
+.sparkline-area{position:relative;height:80px;width:100%}
+
+/* E. WEAKNESS CARDS */
+.weakness-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.weakness-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:18px 20px;box-shadow:var(--sh)}
+.weakness-rank{width:22px;height:22px;border-radius:6px;background:var(--err-bg);border:1px solid var(--err-bdr);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--err);flex-shrink:0}
+.weakness-topic{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:4px}
+.weakness-err-rate{font-size:24px;font-weight:800;color:var(--err);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;margin:10px 0 4px}
+.weakness-err-label{font-size:10.5px;color:var(--muted)}
+.weakness-mistake{font-size:11px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--div)}
+.weakness-cta{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--acc-d);margin-top:10px;cursor:pointer}
+
+/* F. QUESTION BREAKDOWN */
+.qbreakdown{display:flex;gap:12px}
+.qb-card{flex:1;background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:18px 20px;box-shadow:var(--sh)}
+.qb-n{font-size:36px;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1}
+.qb-n.correct{color:var(--ok-d)}
+.qb-n.incorrect{color:var(--err)}
+.qb-n.skipped{color:var(--muted)}
+.qb-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-top:4px}
+.qb-bar{height:4px;border-radius:99px;margin-top:10px}
+.qb-bar.correct{background:var(--ok)}
+.qb-bar.incorrect{background:var(--err)}
+.qb-bar.skipped{background:var(--subtle)}
+
+/* G. RECOMMENDATION */
+.rec-card{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;padding:22px 24px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.rec-card::before{content:'';position:absolute;inset:0;background:radial-gradient(500px 200px at 0% 50%,color-mix(in srgb,var(--acc) 5%,transparent),transparent 55%);pointer-events:none}
+.rec-inner{position:relative;display:flex;flex-direction:column;gap:10px}
+.rec-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--panel);border:1px solid var(--bdr);border-radius:10px}
+.rec-num{width:22px;height:22px;border-radius:6px;background:var(--chip-bg);border:1px solid var(--chip-bdr);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--chip-fg);flex-shrink:0;margin-top:1px}
+.rec-text{font-size:12.5px;color:var(--txt2);line-height:1.5;flex:1}
+.rec-cta{font-size:11px;font-weight:600;color:var(--acc-d);white-space:nowrap;align-self:center;flex-shrink:0;cursor:pointer}
+
+/* GAUGE SVG (reusable) */
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+.gauge-score-below{text-align:center}
+
+/* Cards common */
+.card{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;padding:22px 24px;box-shadow:var(--sh)}
+
+/* Divider */
+.divider{height:1px;background:var(--div)}
+</style>
+</head>
+<body>
+<div class="chrome">
+  <span class="chrome-title">NurseNest Report Card + Progress — 6 Mockups · Premium Redesign</span>
+</div>
+<div class="tabs">
+  <span class="tg">REPORT CARD</span>
+  <button class="tab on" onclick="s(0)">1 Hero + Metrics</button>
+  <button class="tab" onclick="s(1)">2 Domains + Weakness</button>
+  <button class="tab" onclick="s(2)">3 Breakdown + Recs</button>
+  <div class="tsep"></div>
+  <span class="tg">PROGRESS</span>
+  <button class="tab" onclick="s(3)">4 Progress Timeline</button>
+  <div class="tsep"></div>
+  <span class="tg">THEMES</span>
+  <button class="tab" onclick="s(4)">5 Midnight</button>
+  <button class="tab" onclick="s(5)">6 Mobile</button>
+</div>
+
+<!-- ══ FRAME 1 · Ocean · Report Card Hero + Metric Strip ══════ -->
+<div class="frame" id="f0">
+<div class="shell oc">
+  <nav class="nav">
+    <span class="nav-brand">Nurse<span class="nav-dot">Nest</span></span>
+    <div class="nav-sep"></div>
+    <div class="nav-breadcrumb">
+      <span>Account</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--subtle)"><polyline points="9 6 15 12 9 18"/></svg>
+      <span class="nav-breadcrumb-active">Report Card</span>
+    </div>
+    <div class="nav-right">
+      <div class="nav-avatar">JM</div>
+    </div>
+  </nav>
+  <div class="subnav">
+    <div class="snav-tab active">Report Card</div>
+    <div class="snav-tab">Progress</div>
+    <div class="snav-tab">Question Bank</div>
+    <div class="snav-tab">CAT History</div>
+    <div class="snav-tab">Focus Areas</div>
+    <div class="snav-tab">Study History</div>
+  </div>
+  <div class="content">
+
+    <!-- A. HERO -->
+    <div class="rc-hero">
+      <div class="rc-hero-inner">
+        <!-- Score gauge -->
+        <div class="rc-hero-gauge">
+          <svg width="160" height="160" viewBox="0 0 160 160">
+            <circle cx="80" cy="80" r="62" fill="none" stroke="rgba(180,218,240,.35)" stroke-width="11"/>
+            <circle cx="80" cy="80" r="62" fill="none" stroke="#1aaee0" stroke-width="11" stroke-linecap="round"
+              stroke-dasharray="292.2" stroke-dashoffset="73" transform="rotate(-90 80 80)"/>
+            <text x="80" y="73" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="34" font-weight="800" fill="#0f172a" letter-spacing="-2">78</text>
+            <text x="80" y="92" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="600" fill="#647894" letter-spacing="1">READINESS</text>
+          </svg>
+        </div>
+        <!-- Text -->
+        <div class="rc-hero-text">
+          <div class="rc-hero-eyebrow">NCLEX-RN · Canadian RN Track</div>
+          <div class="rc-hero-name">Jasmeen Mehta</div>
+          <div class="rc-hero-track">RN · Year 4 · University of British Columbia</div>
+          <div class="rc-hero-readiness ready">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Approaching Competency
+          </div>
+          <div class="rc-hero-meta">
+            <span>Last session: May 17, 2026</span>
+            <div class="rc-hero-meta-sep"></div>
+            <span>847 questions answered</span>
+            <div class="rc-hero-meta-sep"></div>
+            <span>11 practice sessions</span>
+            <div class="rc-hero-meta-sep"></div>
+            <span>4 CAT exams</span>
+          </div>
+        </div>
+        <!-- Right: forecast -->
+        <div style="flex-shrink:0;background:var(--panel);border:1px solid var(--bdr);border-radius:14px;padding:20px 24px;text-align:center;min-width:160px">
+          <div style="font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Forecast Range</div>
+          <div style="font-size:28px;font-weight:800;color:var(--txt);letter-spacing:-.03em;font-variant-numeric:tabular-nums">68–88%</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Passing probability</div>
+          <div style="margin-top:12px;height:1px;background:var(--div)"></div>
+          <div style="margin-top:10px;font-size:11px;color:var(--ok-d);font-weight:600;display:flex;align-items:center;gap:4px;justify-content:center">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+            +6% this month
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B. METRIC STRIP -->
+    <div class="metric-strip">
+      <div class="metric-card">
+        <div class="metric-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+        <div class="metric-n">62<span style="font-size:20px;color:var(--muted)">%</span></div>
+        <div class="metric-label">Overall Accuracy</div>
+        <div class="metric-trend up"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>+4% vs last month</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div class="metric-n" style="font-size:24px">847</div>
+        <div class="metric-label">Questions Attempted</div>
+        <div class="metric-trend neutral">Across 11 sessions</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="metric-n">33<span style="font-size:18px;color:var(--muted)">s</span></div>
+        <div class="metric-label">Avg Time / Question</div>
+        <div class="metric-trend up"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>Faster than avg</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg></div>
+        <div class="metric-n" style="color:var(--ok-d)">↑6<span style="font-size:18px">%</span></div>
+        <div class="metric-label">Improvement Trend</div>
+        <div class="metric-trend up">May 2 → May 17</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="metric-n" style="color:var(--err)">3</div>
+        <div class="metric-label">Critical Weak Areas</div>
+        <div class="metric-trend down">Cardio · Resp · Renal</div>
+      </div>
+    </div>
+
+    <!-- Progress bar teaser -->
+    <div class="card" style="padding:18px 24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div>
+          <div style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Exam Readiness Score Progression</div>
+          <div style="font-size:11px;color:var(--subtle);margin-top:2px">Last 5 sessions · May 2 – May 17</div>
+        </div>
+        <span style="font-size:11.5px;font-weight:600;color:var(--acc-d);cursor:pointer">View full timeline →</span>
+      </div>
+      <svg width="100%" height="52" viewBox="0 0 1200 52" preserveAspectRatio="none">
+        <defs><linearGradient id="progGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1aaee0" stop-opacity=".12"/><stop offset="100%" stop-color="#1aaee0" stop-opacity="0"/></linearGradient></defs>
+        <path d="M0 42 L200 36 L400 30 L600 26 L800 20 L1000 14 L1200 10 L1200 52 L0 52Z" fill="url(#progGrad)"/>
+        <path d="M0 42 L200 36 L400 30 L600 26 L800 20 L1000 14 L1200 10" fill="none" stroke="#1aaee0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="0" cy="42" r="5" fill="#1aaee0"/><circle cx="200" cy="36" r="5" fill="#1aaee0"/><circle cx="400" cy="30" r="5" fill="#1aaee0"/><circle cx="600" cy="26" r="5" fill="#1aaee0"/><circle cx="800" cy="20" r="5" fill="#1aaee0"/><circle cx="1000" cy="14" r="5" fill="#1aaee0"/><circle cx="1200" cy="10" r="6" fill="#0d7aaa"/>
+        <text x="0" y="52" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">May 2</text>
+        <text x="180" y="52" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">62%</text>
+        <text x="380" y="52" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">68%</text>
+        <text x="580" y="52" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">72%</text>
+        <text x="780" y="52" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">74%</text>
+        <text x="980" y="52" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">76%</text>
+        <text x="1164" y="52" font-family="DM Sans,sans-serif" font-size="9" fill="#0d7aaa" font-weight="700">78%</text>
+      </svg>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ══ FRAME 2 · Ocean · Domain Performance + Weakness ════════ -->
+<div class="frame" id="f1">
+<div class="shell oc">
+  <nav class="nav"><span class="nav-brand">Nurse<span class="nav-dot">Nest</span></span><div class="nav-sep"></div><div class="nav-breadcrumb"><span>Account</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--subtle)"><polyline points="9 6 15 12 9 18"/></svg><span class="nav-breadcrumb-active">Report Card</span></div><div class="nav-right"><div class="nav-avatar">JM</div></div></nav>
+  <div class="subnav"><div class="snav-tab active">Report Card</div><div class="snav-tab">Progress</div><div class="snav-tab">Question Bank</div><div class="snav-tab">CAT History</div><div class="snav-tab">Focus Areas</div></div>
+  <div class="content">
+
+    <!-- DOMAIN PERFORMANCE -->
+    <div>
+      <div class="section-header">
+        <div>
+          <div class="section-title">Domain Performance</div>
+          <div class="section-sub">Based on 847 answered questions across all topics</div>
+        </div>
+        <span class="section-link">Filter domains →</span>
+      </div>
+      <div class="domain-grid">
+        <!-- Row 1 -->
+        <div class="domain-card">
+          <div class="domain-header"><span class="domain-name">Pharmacology</span><span class="domain-tag strength">Strength</span></div>
+          <div style="display:flex;align-items:baseline;gap:6px"><span class="domain-pct">88%</span><span style="font-size:11px;color:var(--ok-d);display:flex;align-items:center;gap:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>↑4%</span></div>
+          <div class="domain-bar-wrap"><div class="domain-bar ok" style="width:88%"></div></div>
+          <div class="domain-trend">128 questions · <span style="color:var(--ok-d);font-weight:500">Improving</span></div>
+        </div>
+        <div class="domain-card">
+          <div class="domain-header"><span class="domain-name">Psych / Mental Health</span><span class="domain-tag strength">Strength</span></div>
+          <div style="display:flex;align-items:baseline;gap:6px"><span class="domain-pct">91%</span><span style="font-size:11px;color:var(--ok-d);display:flex;align-items:center;gap:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>↑2%</span></div>
+          <div class="domain-bar-wrap"><div class="domain-bar ok" style="width:91%"></div></div>
+          <div class="domain-trend">96 questions · <span style="color:var(--ok-d);font-weight:500">Stable high</span></div>
+        </div>
+        <!-- Row 2 -->
+        <div class="domain-card">
+          <div class="domain-header"><span class="domain-name">Med-Surg / GI</span><span class="domain-tag building">Building</span></div>
+          <div style="display:flex;align-items:baseline;gap:6px"><span class="domain-pct">71%</span><span style="font-size:11px;color:var(--warn);display:flex;align-items:center;gap:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>→ Stable</span></div>
+          <div class="domain-bar-wrap"><div class="domain-bar acc" style="width:71%"></div></div>
+          <div class="domain-trend">144 questions · <span style="color:var(--muted)">Plateau</span></div>
+        </div>
+        <div class="domain-card">
+          <div class="domain-header"><span class="domain-name">OB / Newborn Care</span><span class="domain-tag building">Building</span></div>
+          <div style="display:flex;align-items:baseline;gap:6px"><span class="domain-pct">74%</span><span style="font-size:11px;color:var(--ok-d);display:flex;align-items:center;gap:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>↑6%</span></div>
+          <div class="domain-bar-wrap"><div class="domain-bar acc" style="width:74%"></div></div>
+          <div class="domain-trend">82 questions · <span style="color:var(--ok-d);font-weight:500">Improving fast</span></div>
+        </div>
+        <!-- Row 3 -->
+        <div class="domain-card" style="border-color:rgba(220,38,38,.22);background:rgba(220,38,38,.03)">
+          <div class="domain-header"><span class="domain-name">Cardiovascular</span><span class="domain-tag critical">Critical</span></div>
+          <div style="display:flex;align-items:baseline;gap:6px"><span class="domain-pct" style="color:var(--err)">58%</span><span style="font-size:11px;color:var(--err);display:flex;align-items:center;gap:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/></svg>↓2%</span></div>
+          <div class="domain-bar-wrap"><div class="domain-bar err" style="width:58%"></div></div>
+          <div class="domain-trend" style="color:var(--err)">162 questions · <span style="font-weight:500">Declining</span></div>
+        </div>
+        <div class="domain-card" style="border-color:rgba(220,38,38,.22);background:rgba(220,38,38,.03)">
+          <div class="domain-header"><span class="domain-name">Respiratory</span><span class="domain-tag critical">Critical</span></div>
+          <div style="display:flex;align-items:baseline;gap:6px"><span class="domain-pct" style="color:var(--err)">54%</span><span style="font-size:11px;color:var(--err);display:flex;align-items:center;gap:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/></svg>↓4%</span></div>
+          <div class="domain-bar-wrap"><div class="domain-bar err" style="width:54%"></div></div>
+          <div class="domain-trend" style="color:var(--err)">118 questions · <span style="font-weight:500">Priority focus</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEAKNESS ANALYSIS -->
+    <div>
+      <div class="section-header">
+        <div>
+          <div class="section-title">Top Weak Areas</div>
+          <div class="section-sub">Ranked by error rate across recent sessions</div>
+        </div>
+      </div>
+      <div class="weakness-grid">
+        <div class="weakness-card" style="border-color:rgba(220,38,38,.25)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <div class="weakness-rank">1</div>
+            <div class="weakness-topic">Cardiovascular &amp; HF</div>
+          </div>
+          <div class="weakness-err-rate">42<span style="font-size:16px">%</span></div>
+          <div class="weakness-err-label">Error rate</div>
+          <div class="weakness-mistake">Most common: Misidentifying priority interventions (ABCs vs pharmacology)</div>
+          <div class="weakness-cta">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Review Lessons
+          </div>
+        </div>
+        <div class="weakness-card" style="border-color:rgba(220,38,38,.22)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <div class="weakness-rank">2</div>
+            <div class="weakness-topic">Respiratory Distress</div>
+          </div>
+          <div class="weakness-err-rate">38<span style="font-size:16px">%</span></div>
+          <div class="weakness-err-label">Error rate</div>
+          <div class="weakness-mistake">Most common: ABG interpretation and oxygen delivery selection</div>
+          <div class="weakness-cta">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Review Lessons
+          </div>
+        </div>
+        <div class="weakness-card" style="border-color:rgba(217,119,6,.22)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <div class="weakness-rank" style="background:var(--warn-bg);border-color:var(--warn-bdr);color:var(--warn)">3</div>
+            <div class="weakness-topic">Renal &amp; Fluid Balance</div>
+          </div>
+          <div class="weakness-err-rate" style="color:var(--warn)">29<span style="font-size:16px">%</span></div>
+          <div class="weakness-err-label">Error rate</div>
+          <div class="weakness-mistake">Most common: Fluid deficit vs overload priority ranking</div>
+          <div class="weakness-cta">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Review Lessons
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ══ FRAME 3 · Ocean · Breakdown + Recommendations ══════════ -->
+<div class="frame" id="f2">
+<div class="shell oc">
+  <nav class="nav"><span class="nav-brand">Nurse<span class="nav-dot">Nest</span></span><div class="nav-sep"></div><div class="nav-breadcrumb"><span>Account</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--subtle)"><polyline points="9 6 15 12 9 18"/></svg><span class="nav-breadcrumb-active">Report Card</span></div><div class="nav-right"><div class="nav-avatar">JM</div></div></nav>
+  <div class="subnav"><div class="snav-tab active">Report Card</div><div class="snav-tab">Progress</div><div class="snav-tab">Question Bank</div><div class="snav-tab">CAT History</div><div class="snav-tab">Focus Areas</div></div>
+  <div class="content">
+
+    <!-- F. QUESTION BREAKDOWN -->
+    <div>
+      <div class="section-header">
+        <div><div class="section-title">Question Breakdown</div><div class="section-sub">All 847 questions · This account lifetime</div></div>
+        <span class="section-link">Export report →</span>
+      </div>
+      <div class="qbreakdown">
+        <div class="qb-card">
+          <div class="qb-n correct">524</div>
+          <div class="qb-label">Correct</div>
+          <div class="qb-bar correct" style="width:62%"></div>
+          <div style="margin-top:10px;font-size:11.5px;color:var(--muted)">62.1% · Across 8 domains</div>
+          <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+            <span style="font-size:10px;font-weight:600;color:var(--ok-d);background:var(--ok-bg);border:1px solid var(--ok-bdr);padding:2px 8px;border-radius:99px">Pharmacology 88%</span>
+            <span style="font-size:10px;font-weight:600;color:var(--ok-d);background:var(--ok-bg);border:1px solid var(--ok-bdr);padding:2px 8px;border-radius:99px">Psych 91%</span>
+          </div>
+        </div>
+        <div class="qb-card">
+          <div class="qb-n incorrect">285</div>
+          <div class="qb-label">Incorrect</div>
+          <div class="qb-bar incorrect" style="width:33.6%"></div>
+          <div style="margin-top:10px;font-size:11.5px;color:var(--muted)">33.6% · 3 critical domains</div>
+          <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+            <span style="font-size:10px;font-weight:600;color:var(--err);background:var(--err-bg);border:1px solid var(--err-bdr);padding:2px 8px;border-radius:99px">Cardio 42% miss</span>
+            <span style="font-size:10px;font-weight:600;color:var(--err);background:var(--err-bg);border:1px solid var(--err-bdr);padding:2px 8px;border-radius:99px">Resp 46% miss</span>
+          </div>
+        </div>
+        <div class="qb-card">
+          <div class="qb-n skipped">38</div>
+          <div class="qb-label">Skipped / Flagged</div>
+          <div class="qb-bar skipped" style="width:4.4%"></div>
+          <div style="margin-top:10px;font-size:11.5px;color:var(--muted)">4.4% · Mostly NGN-format questions</div>
+          <div style="margin-top:8px;display:flex;gap:6px">
+            <span style="font-size:10px;font-weight:600;color:var(--muted);background:var(--panel);border:1px solid var(--bdr);padding:2px 8px;border-radius:99px">24 Bowtie</span>
+            <span style="font-size:10px;font-weight:600;color:var(--muted);background:var(--panel);border:1px solid var(--bdr);padding:2px 8px;border-radius:99px">14 Matrix</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NGN Breakdown mini strip -->
+    <div class="card" style="padding:18px 24px">
+      <div class="section-header" style="margin-bottom:12px">
+        <div><div style="font-size:13px;font-weight:700;color:var(--txt)">NGN Format Performance</div><div style="font-size:11px;color:var(--muted)">Next-Generation Nursing item types</div></div>
+        <span class="section-link">Practice NGN →</span>
+      </div>
+      <div style="display:flex;gap:10px">
+        <div style="flex:1;background:var(--panel);border:1px solid var(--bdr);border-radius:10px;padding:12px 14px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--txt);letter-spacing:-.02em">60%</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">SATA</div></div>
+        <div style="flex:1;background:var(--panel);border:1px solid var(--bdr);border-radius:10px;padding:12px 14px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--warn);letter-spacing:-.02em">42%</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">Bowtie</div></div>
+        <div style="flex:1;background:var(--panel);border:1px solid var(--bdr);border-radius:10px;padding:12px 14px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--err);letter-spacing:-.02em">38%</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">Matrix</div></div>
+        <div style="flex:1;background:var(--panel);border:1px solid var(--bdr);border-radius:10px;padding:12px 14px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--ok-d);letter-spacing:-.02em">74%</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">Extended MCQ</div></div>
+        <div style="flex:1;background:var(--panel);border:1px solid var(--bdr);border-radius:10px;padding:12px 14px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--warn);letter-spacing:-.02em">51%</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">Cloze Drop</div></div>
+      </div>
+    </div>
+
+    <!-- G. RECOMMENDATIONS -->
+    <div>
+      <div class="section-header">
+        <div><div class="section-title">Recommended Next Steps</div><div class="section-sub">Personalized based on your performance pattern</div></div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-inner">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--acc-d)" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc-d)">Adaptive Recommendations · Updated May 17</span>
+          </div>
+          <div class="rec-item">
+            <div class="rec-num">1</div>
+            <div class="rec-text"><strong>Launch a focused Cardiovascular CAT</strong> — Target 30 adaptive questions on hemodynamics and HF priority interventions</div>
+            <span class="rec-cta">Start → </span>
+          </div>
+          <div class="rec-item">
+            <div class="rec-num">2</div>
+            <div class="rec-text"><strong>Review ECG Interpretation lesson</strong> — 42% miss rate on cardiac rhythm questions; foundational gaps detected</div>
+            <span class="rec-cta">Open →</span>
+          </div>
+          <div class="rec-item">
+            <div class="rec-num">3</div>
+            <div class="rec-text"><strong>Complete Respiratory SATA drill</strong> — ABG + oxygen delivery selection has the highest distractor selection rate this month</div>
+            <span class="rec-cta">Start →</span>
+          </div>
+          <div class="rec-item">
+            <div class="rec-num">4</div>
+            <div class="rec-text"><strong>Practice Bowtie NGN format</strong> — Only 42% accuracy. 2 targeted Bowtie sessions before your next CAT exam</div>
+            <span class="rec-cta">Practice →</span>
+          </div>
+          <div class="rec-item">
+            <div class="rec-num">5</div>
+            <div class="rec-text"><strong>Take a full 75-question CAT exam</strong> — You've improved 6% this month. A full adaptive exam will accurately update your readiness score</div>
+            <span class="rec-cta">Launch →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ══ FRAME 4 · Ocean · Progress Timeline ════════════════════ -->
+<div class="frame" id="f3">
+<div class="shell oc">
+  <nav class="nav"><span class="nav-brand">Nurse<span class="nav-dot">Nest</span></span><div class="nav-sep"></div><div class="nav-breadcrumb"><span>Account</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--subtle)"><polyline points="9 6 15 12 9 18"/></svg><span class="nav-breadcrumb-active">Progress</span></div><div class="nav-right"><div class="nav-avatar">JM</div></div></nav>
+  <div class="subnav"><div class="snav-tab">Report Card</div><div class="snav-tab active">Progress</div><div class="snav-tab">Question Bank</div><div class="snav-tab">CAT History</div><div class="snav-tab">Focus Areas</div></div>
+  <div class="content">
+
+    <!-- Hero strip for progress page -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+      <div class="card" style="border-left:3px solid var(--acc);padding:20px 22px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Sessions This Month</div>
+        <div style="font-size:36px;font-weight:800;color:var(--txt);letter-spacing:-.04em;line-height:1">11</div>
+        <div style="font-size:11.5px;color:var(--ok-d);margin-top:4px;font-weight:600">↑ 4 more than last month</div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--ok);padding:20px 22px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Best Score</div>
+        <div style="font-size:36px;font-weight:800;color:var(--txt);letter-spacing:-.04em;line-height:1">82<span style="font-size:20px;color:var(--muted)">%</span></div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:4px">May 14 · 75-question CAT</div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--warn);padding:20px 22px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Study Streak</div>
+        <div style="font-size:36px;font-weight:800;color:var(--txt);letter-spacing:-.04em;line-height:1">6<span style="font-size:20px;color:var(--muted)">d</span></div>
+        <div style="font-size:11.5px;color:var(--warn);margin-top:4px;font-weight:600">Keep it going!</div>
+      </div>
+    </div>
+
+    <!-- Score trend chart -->
+    <div class="timeline-card">
+      <div class="section-header" style="margin-bottom:16px">
+        <div><div class="section-title">Score Progression</div><div class="section-sub">All practice sessions · May 2 – May 17, 2026</div></div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <span style="font-size:10.5px;font-weight:600;color:var(--muted);background:var(--panel);border:1px solid var(--bdr);padding:4px 10px;border-radius:7px;cursor:pointer">7 days</span>
+          <span style="font-size:10.5px;font-weight:600;color:var(--acc-d);background:var(--chip-bg);border:1px solid var(--chip-bdr);padding:4px 10px;border-radius:7px;cursor:pointer">30 days</span>
+          <span style="font-size:10.5px;font-weight:600;color:var(--muted);background:var(--panel);border:1px solid var(--bdr);padding:4px 10px;border-radius:7px;cursor:pointer">All time</span>
+        </div>
+      </div>
+      <!-- Chart: scores + session dots -->
+      <svg width="100%" height="140" viewBox="0 0 1340 140" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="scoreGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1aaee0" stop-opacity=".14"/>
+            <stop offset="100%" stop-color="#1aaee0" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- Grid lines -->
+        <line x1="0" y1="20" x2="1340" y2="20" stroke="rgba(180,218,240,.3)" stroke-width="1"/>
+        <line x1="0" y1="55" x2="1340" y2="55" stroke="rgba(180,218,240,.3)" stroke-width="1"/>
+        <line x1="0" y1="90" x2="1340" y2="90" stroke="rgba(180,218,240,.3)" stroke-width="1"/>
+        <text x="0" y="17" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">90%</text>
+        <text x="0" y="52" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">70%</text>
+        <text x="0" y="87" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">50%</text>
+        <!-- Score line -->
+        <path d="M80 100 L200 93 L320 78 L440 70 L560 65 L680 55 L800 42 L920 35 L1040 28 L1160 22 L1280 18 L1280 130 L80 130Z" fill="url(#scoreGrad)"/>
+        <path d="M80 100 L200 93 L320 78 L440 70 L560 65 L680 55 L800 42 L920 35 L1040 28 L1160 22 L1280 18" fill="none" stroke="#1aaee0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Session dots -->
+        <circle cx="80" cy="100" r="5" fill="#1aaee0"/><text x="73" y="118" font-family="DM Sans,sans-serif" font-size="8" fill="#647894">May 2</text><text x="70" y="128" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">62%</text>
+        <circle cx="320" cy="78" r="5" fill="#1aaee0"/><text x="312" y="96" font-family="DM Sans,sans-serif" font-size="8" fill="#647894">May 5</text>
+        <circle cx="560" cy="65" r="5" fill="#1aaee0"/><text x="552" y="83" font-family="DM Sans,sans-serif" font-size="8" fill="#647894">May 8</text>
+        <!-- CAT session marked differently -->
+        <circle cx="800" cy="42" r="7" fill="none" stroke="#0d7aaa" stroke-width="2.5"/><circle cx="800" cy="42" r="3.5" fill="#0d7aaa"/>
+        <text x="784" y="26" font-family="DM Sans,sans-serif" font-size="8" fill="#0d7aaa" font-weight="700">CAT</text>
+        <text x="786" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#647894">May 12</text>
+        <circle cx="1040" cy="28" r="5" fill="#1aaee0"/>
+        <circle cx="1280" cy="18" r="7" fill="none" stroke="#0d7aaa" stroke-width="2.5"/><circle cx="1280" cy="18" r="3.5" fill="#0d7aaa"/>
+        <text x="1252" y="6" font-family="DM Sans,sans-serif" font-size="8" fill="#0d7aaa" font-weight="700">CAT</text>
+        <text x="1244" y="36" font-family="DM Sans,sans-serif" font-size="8" fill="#647894">May 17 · 78%</text>
+      </svg>
+      <div style="display:flex;gap:16px;margin-top:10px">
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:16px;height:3px;border-radius:99px;background:#1aaee0"></div>Practice session</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:10px;height:10px;border-radius:50%;border:2px solid #0d7aaa;background:transparent;flex-shrink:0"></div>CAT Exam</div>
+      </div>
+    </div>
+
+    <!-- Session history cards -->
+    <div>
+      <div class="section-header"><div class="section-title">Session History</div><div class="section-sub">Most recent first</div></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:16px;box-shadow:var(--sh)">
+          <div style="width:36px;height:36px;border-radius:9px;background:rgba(13,122,170,.1);border:1px solid rgba(13,122,170,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9.5px;font-weight:700;color:#0d7aaa;text-align:center;line-height:1.2">CAT<br>Exam</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--txt)">CAT Exam · 75 Questions</div><div style="font-size:11px;color:var(--muted);margin-top:2px">May 17, 2026 · 42 min · Adaptive</div></div>
+          <div style="text-align:right"><div style="font-size:22px;font-weight:800;color:var(--acc-d);letter-spacing:-.03em;font-variant-numeric:tabular-nums">78%</div><div style="font-size:10px;color:var(--ok-d);font-weight:600">↑ +2% vs last CAT</div></div>
+        </div>
+        <div style="background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:16px;box-shadow:var(--sh)">
+          <div style="width:36px;height:36px;border-radius:9px;background:var(--ok-bg);border:1px solid var(--ok-bdr);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9.5px;font-weight:700;color:var(--ok-d);text-align:center;line-height:1.2">Prac<br>tice</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--txt)">Cardiovascular Focus · 40 Questions</div><div style="font-size:11px;color:var(--muted);margin-top:2px">May 16, 2026 · 22 min · Practice Mode</div></div>
+          <div style="text-align:right"><div style="font-size:22px;font-weight:800;color:var(--txt);letter-spacing:-.03em;font-variant-numeric:tabular-nums">61%</div><div style="font-size:10px;color:var(--muted)">24/40 correct</div></div>
+        </div>
+        <div style="background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:16px;box-shadow:var(--sh)">
+          <div style="width:36px;height:36px;border-radius:9px;background:var(--panel);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9.5px;font-weight:700;color:var(--muted);text-align:center;line-height:1.2">Prac<br>tice</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--txt)">Mixed NCLEX Session · 60 Questions</div><div style="font-size:11px;color:var(--muted);margin-top:2px">May 14, 2026 · 34 min · Practice Mode</div></div>
+          <div style="text-align:right"><div style="font-size:22px;font-weight:800;color:var(--txt);letter-spacing:-.03em;font-variant-numeric:tabular-nums">74%</div><div style="font-size:10px;color:var(--muted)">44/60 correct</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ══ FRAME 5 · Midnight · Full Report Card ═════════════════ -->
+<div class="frame" id="f4">
+<div class="shell mn">
+  <nav class="nav"><span class="nav-brand">Nurse<span class="nav-dot">Nest</span></span><div class="nav-sep"></div><div class="nav-breadcrumb"><span>Account</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--subtle)"><polyline points="9 6 15 12 9 18"/></svg><span class="nav-breadcrumb-active">Report Card</span></div><div class="nav-right"><div class="nav-avatar">JM</div></div></nav>
+  <div class="subnav" style="background:var(--surf);border-color:var(--nav-bdr)"><div class="snav-tab active">Report Card</div><div class="snav-tab">Progress</div><div class="snav-tab">Question Bank</div><div class="snav-tab">CAT History</div><div class="snav-tab">Focus Areas</div></div>
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="rc-hero" style="background:var(--surf);border-color:var(--bdr)">
+      <div class="rc-hero-inner">
+        <div class="rc-hero-gauge">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="58" fill="none" stroke="rgba(56,189,248,.15)" stroke-width="10"/>
+            <circle cx="75" cy="75" r="58" fill="none" stroke="#38bdf8" stroke-width="10" stroke-linecap="round"
+              stroke-dasharray="273.3" stroke-dashoffset="68" transform="rotate(-90 75 75)"/>
+            <text x="75" y="68" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="30" font-weight="800" fill="#f0f6ff" letter-spacing="-2">78</text>
+            <text x="75" y="86" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" font-weight="600" fill="#5e7a98" letter-spacing="1">READINESS</text>
+          </svg>
+        </div>
+        <div class="rc-hero-text">
+          <div class="rc-hero-eyebrow">NCLEX-RN · Canadian RN Track</div>
+          <div class="rc-hero-name" style="color:var(--txt)">Jasmeen Mehta</div>
+          <div class="rc-hero-track">RN · Year 4 · University of British Columbia</div>
+          <div class="rc-hero-readiness approaching">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
+            Approaching Competency
+          </div>
+          <div class="rc-hero-meta">
+            <span>Last session: May 17, 2026</span>
+            <div class="rc-hero-meta-sep"></div>
+            <span>847 questions</span>
+            <div class="rc-hero-meta-sep"></div>
+            <span>11 sessions</span>
+          </div>
+        </div>
+        <div style="flex-shrink:0;background:var(--panel);border:1px solid var(--bdr);border-radius:14px;padding:20px 24px;text-align:center;min-width:150px">
+          <div style="font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--subtle);margin-bottom:8px">Forecast Range</div>
+          <div style="font-size:26px;font-weight:800;color:var(--txt);letter-spacing:-.03em;font-variant-numeric:tabular-nums">68–88%</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Passing probability</div>
+          <div style="margin-top:10px;height:1px;background:var(--div)"></div>
+          <div style="margin-top:8px;font-size:11px;color:var(--ok);font-weight:600;display:flex;align-items:center;gap:4px;justify-content:center">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
+            +6% this month
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- METRIC STRIP -->
+    <div class="metric-strip">
+      <div class="metric-card" style="background:var(--surf);border-color:var(--bdr)">
+        <div class="metric-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+        <div class="metric-n" style="color:var(--txt)">62<span style="font-size:20px;color:var(--muted)">%</span></div>
+        <div class="metric-label">Overall Accuracy</div>
+        <div class="metric-trend up" style="color:var(--ok)">+4% vs last month</div>
+      </div>
+      <div class="metric-card" style="background:var(--surf);border-color:var(--bdr)">
+        <div class="metric-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div class="metric-n" style="color:var(--txt);font-size:24px">847</div>
+        <div class="metric-label">Questions Attempted</div>
+        <div class="metric-trend neutral" style="color:var(--muted)">11 sessions</div>
+      </div>
+      <div class="metric-card" style="background:var(--surf);border-color:var(--bdr)">
+        <div class="metric-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="metric-n" style="color:var(--txt)">33<span style="font-size:18px;color:var(--muted)">s</span></div>
+        <div class="metric-label">Avg Time / Question</div>
+        <div class="metric-trend up" style="color:var(--ok)">Faster than avg</div>
+      </div>
+      <div class="metric-card" style="background:var(--surf);border-color:var(--bdr)">
+        <div class="metric-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg></div>
+        <div class="metric-n" style="color:var(--ok);font-size:24px">↑6<span style="font-size:18px">%</span></div>
+        <div class="metric-label">Improvement Trend</div>
+        <div class="metric-trend up" style="color:var(--ok)">May 2 → May 17</div>
+      </div>
+      <div class="metric-card" style="background:var(--surf);border-color:var(--bdr)">
+        <div class="metric-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="metric-n" style="color:var(--err)">3</div>
+        <div class="metric-label">Critical Weak Areas</div>
+        <div class="metric-trend down" style="color:var(--err)">Cardio · Resp · Renal</div>
+      </div>
+    </div>
+
+    <!-- DOMAIN GRID (condensed) -->
+    <div>
+      <div class="section-header"><div class="section-title" style="color:var(--txt)">Domain Performance</div></div>
+      <div class="domain-grid">
+        <div class="domain-card" style="background:var(--surf);border-color:var(--bdr)">
+          <div class="domain-header"><span class="domain-name" style="color:var(--txt)">Pharmacology</span><span class="domain-tag strength">Strength</span></div>
+          <div class="domain-pct" style="color:var(--txt)">88%</div>
+          <div class="domain-bar-wrap" style="background:var(--panel2)"><div class="domain-bar ok" style="width:88%"></div></div>
+          <div class="domain-trend" style="color:var(--muted)">128 questions · <span style="color:var(--ok);font-weight:500">Improving</span></div>
+        </div>
+        <div class="domain-card" style="background:var(--surf);border-color:var(--bdr)">
+          <div class="domain-header"><span class="domain-name" style="color:var(--txt)">Psych / Mental Health</span><span class="domain-tag strength">Strength</span></div>
+          <div class="domain-pct" style="color:var(--txt)">91%</div>
+          <div class="domain-bar-wrap" style="background:var(--panel2)"><div class="domain-bar ok" style="width:91%"></div></div>
+          <div class="domain-trend" style="color:var(--muted)">96 questions · Stable high</div>
+        </div>
+        <div class="domain-card" style="background:rgba(248,113,113,.05);border-color:rgba(248,113,113,.28)">
+          <div class="domain-header"><span class="domain-name" style="color:var(--txt)">Cardiovascular</span><span class="domain-tag critical">Critical</span></div>
+          <div class="domain-pct" style="color:var(--err)">58%</div>
+          <div class="domain-bar-wrap" style="background:var(--panel2)"><div class="domain-bar err" style="width:58%"></div></div>
+          <div class="domain-trend" style="color:var(--err)">162 questions · Declining</div>
+        </div>
+        <div class="domain-card" style="background:rgba(248,113,113,.05);border-color:rgba(248,113,113,.25)">
+          <div class="domain-header"><span class="domain-name" style="color:var(--txt)">Respiratory</span><span class="domain-tag critical">Critical</span></div>
+          <div class="domain-pct" style="color:var(--err)">54%</div>
+          <div class="domain-bar-wrap" style="background:var(--panel2)"><div class="domain-bar err" style="width:54%"></div></div>
+          <div class="domain-trend" style="color:var(--err)">118 questions · Priority focus</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECOMMENDATIONS (condensed) -->
+    <div class="rec-card" style="background:var(--surf);border-color:var(--bdr)">
+      <div class="rec-inner">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc)">Recommended Next Steps</span>
+        </div>
+        <div class="rec-item" style="background:var(--panel);border-color:var(--bdr)">
+          <div class="rec-num">1</div>
+          <div class="rec-text" style="color:var(--txt2)"><strong style="color:var(--txt)">Launch Cardiovascular CAT</strong> — 30 adaptive questions on hemodynamics and HF priority interventions</div>
+          <span class="rec-cta" style="color:var(--acc)">Start →</span>
+        </div>
+        <div class="rec-item" style="background:var(--panel);border-color:var(--bdr)">
+          <div class="rec-num">2</div>
+          <div class="rec-text" style="color:var(--txt2)"><strong style="color:var(--txt)">Review ECG Interpretation</strong> — 42% miss rate on cardiac rhythm; foundational gaps detected</div>
+          <span class="rec-cta" style="color:var(--acc)">Open →</span>
+        </div>
+        <div class="rec-item" style="background:var(--panel);border-color:var(--bdr)">
+          <div class="rec-num">3</div>
+          <div class="rec-text" style="color:var(--txt2)"><strong style="color:var(--txt)">Take a full 75-question CAT</strong> — +6% this month. Full adaptive exam will update readiness score</div>
+          <span class="rec-cta" style="color:var(--acc)">Launch →</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ══ FRAME 6 · Mobile · Ocean · Report Card ════════════════ -->
+<div class="frame mob" id="f5">
+<div class="shell oc mob">
+  <nav class="nav" style="height:48px;padding:0 16px">
+    <span class="nav-brand" style="font-size:13.5px">Nurse<span class="nav-dot">Nest</span></span>
+    <div class="nav-sep"></div>
+    <span style="font-size:11.5px;font-weight:600;color:var(--txt)">Report Card</span>
+    <div class="nav-right"><div class="nav-avatar" style="width:28px;height:28px;font-size:10px">JM</div></div>
+  </nav>
+  <!-- Mobile sub-tabs: horizontal scroll -->
+  <div style="background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 14px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex-shrink:0">
+    <div class="snav-tab active" style="font-size:11.5px;padding:8px 12px">Report</div>
+    <div class="snav-tab" style="font-size:11.5px;padding:8px 12px">Progress</div>
+    <div class="snav-tab" style="font-size:11.5px;padding:8px 12px">Bank</div>
+    <div class="snav-tab" style="font-size:11.5px;padding:8px 12px">CAT</div>
+    <div class="snav-tab" style="font-size:11.5px;padding:8px 12px">Focus</div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px">
+
+    <!-- HERO (mobile) -->
+    <div class="rc-hero" style="padding:20px 18px">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px">
+        <svg width="90" height="90" viewBox="0 0 90 90">
+          <circle cx="45" cy="45" r="36" fill="none" stroke="rgba(180,218,240,.35)" stroke-width="7"/>
+          <circle cx="45" cy="45" r="36" fill="none" stroke="#1aaee0" stroke-width="7" stroke-linecap="round"
+            stroke-dasharray="169.6" stroke-dashoffset="42" transform="rotate(-90 45 45)"/>
+          <text x="45" y="42" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="20" font-weight="800" fill="#0f172a" letter-spacing="-1">78</text>
+          <text x="45" y="56" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="7.5" font-weight="600" fill="#647894" letter-spacing="0.5">READINESS</text>
+        </svg>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:var(--txt);letter-spacing:-.02em">Jasmeen M.</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">NCLEX-RN · RN Track</div>
+          <div class="rc-hero-readiness approaching" style="margin-top:8px;font-size:10.5px;padding:4px 10px">
+            ↑ Approaching Competency
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;font-size:10.5px;color:var(--muted)">
+        <span>May 17, 2026</span><span>·</span><span>847 questions</span><span>·</span><span>11 sessions</span>
+      </div>
+    </div>
+
+    <!-- METRIC STRIP (mobile horizontal scroll) -->
+    <div style="display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px">
+      <div style="flex-shrink:0;background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:14px 16px;min-width:120px">
+        <div style="font-size:22px;font-weight:800;color:var(--txt);letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1">62%</div>
+        <div style="font-size:10px;color:var(--muted);font-weight:500;margin-top:4px">Accuracy</div>
+        <div style="font-size:10px;color:var(--ok-d);font-weight:600;margin-top:2px">↑ +4%</div>
+      </div>
+      <div style="flex-shrink:0;background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:14px 16px;min-width:120px">
+        <div style="font-size:22px;font-weight:800;color:var(--txt);letter-spacing:-.03em;line-height:1">847</div>
+        <div style="font-size:10px;color:var(--muted);font-weight:500;margin-top:4px">Questions</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">11 sessions</div>
+      </div>
+      <div style="flex-shrink:0;background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:14px 16px;min-width:110px">
+        <div style="font-size:22px;font-weight:800;color:var(--ok-d);letter-spacing:-.03em;line-height:1">↑6%</div>
+        <div style="font-size:10px;color:var(--muted);font-weight:500;margin-top:4px">Trend</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">This month</div>
+      </div>
+      <div style="flex-shrink:0;background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:14px 16px;min-width:110px">
+        <div style="font-size:22px;font-weight:800;color:var(--err);letter-spacing:-.03em;line-height:1">3</div>
+        <div style="font-size:10px;color:var(--muted);font-weight:500;margin-top:4px">Weak areas</div>
+        <div style="font-size:10px;color:var(--err);margin-top:2px">Critical</div>
+      </div>
+    </div>
+
+    <!-- DOMAINS (mobile: vertical stack with mini bars) -->
+    <div style="background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:16px;box-shadow:var(--sh)">
+      <div style="font-size:12.5px;font-weight:700;color:var(--txt);margin-bottom:12px">Domain Performance</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="font-size:12px;color:var(--txt2);width:130px;flex-shrink:0">Pharmacology</div><div style="flex:1;height:5px;background:var(--panel2);border-radius:99px;overflow:hidden"><div style="height:100%;border-radius:99px;background:var(--ok);width:88%"></div></div><div style="font-size:11.5px;font-weight:700;color:var(--ok-d);margin-left:6px;width:32px;text-align:right;flex-shrink:0">88%</div></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="font-size:12px;color:var(--txt2);width:130px;flex-shrink:0">Psych / Mental</div><div style="flex:1;height:5px;background:var(--panel2);border-radius:99px;overflow:hidden"><div style="height:100%;border-radius:99px;background:var(--ok);width:91%"></div></div><div style="font-size:11.5px;font-weight:700;color:var(--ok-d);margin-left:6px;width:32px;text-align:right;flex-shrink:0">91%</div></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="font-size:12px;color:var(--txt2);width:130px;flex-shrink:0">Med-Surg / GI</div><div style="flex:1;height:5px;background:var(--panel2);border-radius:99px;overflow:hidden"><div style="height:100%;border-radius:99px;background:var(--acc);width:71%"></div></div><div style="font-size:11.5px;font-weight:700;color:var(--acc-d);margin-left:6px;width:32px;text-align:right;flex-shrink:0">71%</div></div>
+        <div style="height:1px;background:var(--div);margin:2px 0"></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="font-size:12px;color:var(--err);width:130px;flex-shrink:0">Cardiovascular ⚠</div><div style="flex:1;height:5px;background:var(--panel2);border-radius:99px;overflow:hidden"><div style="height:100%;border-radius:99px;background:var(--err);width:58%"></div></div><div style="font-size:11.5px;font-weight:700;color:var(--err);margin-left:6px;width:32px;text-align:right;flex-shrink:0">58%</div></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="font-size:12px;color:var(--err);width:130px;flex-shrink:0">Respiratory ⚠</div><div style="flex:1;height:5px;background:var(--panel2);border-radius:99px;overflow:hidden"><div style="height:100%;border-radius:99px;background:var(--err);width:54%"></div></div><div style="font-size:11.5px;font-weight:700;color:var(--err);margin-left:6px;width:32px;text-align:right;flex-shrink:0">54%</div></div>
+      </div>
+    </div>
+
+    <!-- WEAKNESS + RECS (mobile accordion style) -->
+    <div style="background:var(--surf);border:1px solid var(--bdr);border-radius:14px;box-shadow:var(--sh);overflow:hidden">
+      <div style="padding:14px 16px;border-bottom:1px solid var(--div);display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:12.5px;font-weight:700;color:var(--txt)">Top Weak Areas</div>
+        <span style="font-size:10.5px;color:var(--acc-d);font-weight:600">See all →</span>
+      </div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--div);display:flex;align-items:center;gap:10px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--err);flex-shrink:0"></div>
+        <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--txt)">Cardiovascular &amp; HF</div><div style="font-size:10.5px;color:var(--muted);margin-top:1px">42% error rate · ABCs vs pharmacology</div></div>
+        <span style="font-size:10.5px;font-weight:600;color:var(--acc-d)">Review →</span>
+      </div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--div);display:flex;align-items:center;gap:10px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--err);flex-shrink:0"></div>
+        <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--txt)">Respiratory Distress</div><div style="font-size:10.5px;color:var(--muted);margin-top:1px">38% error rate · ABG interpretation</div></div>
+        <span style="font-size:10.5px;font-weight:600;color:var(--acc-d)">Review →</span>
+      </div>
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:10px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--warn);flex-shrink:0"></div>
+        <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--txt)">Renal &amp; Fluids</div><div style="font-size:10.5px;color:var(--muted);margin-top:1px">29% error rate · Fluid deficit vs overload</div></div>
+        <span style="font-size:10.5px;font-weight:600;color:var(--acc-d)">Review →</span>
+      </div>
+    </div>
+
+    <!-- Recommended Next (mobile) -->
+    <div style="background:var(--surf);border:1px solid var(--chip-bdr);border-radius:14px;padding:16px;box-shadow:var(--sh)">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc-d);margin-bottom:10px">Recommended Next</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--panel);border:1px solid var(--bdr);border-radius:9px">
+          <div style="width:20px;height:20px;border-radius:5px;background:var(--chip-bg);border:1px solid var(--chip-bdr);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--chip-fg);flex-shrink:0">1</div>
+          <div style="font-size:12px;color:var(--txt2);flex:1">Launch Cardiovascular CAT — 30 adaptive questions</div>
+          <span style="font-size:10.5px;font-weight:600;color:var(--acc-d);flex-shrink:0">Start →</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--panel);border:1px solid var(--bdr);border-radius:9px">
+          <div style="width:20px;height:20px;border-radius:5px;background:var(--chip-bg);border:1px solid var(--chip-bdr);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--chip-fg);flex-shrink:0">2</div>
+          <div style="font-size:12px;color:var(--txt2);flex:1">Review ECG Interpretation lesson</div>
+          <span style="font-size:10.5px;font-weight:600;color:var(--acc-d);flex-shrink:0">Open →</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--panel);border:1px solid var(--bdr);border-radius:9px">
+          <div style="width:20px;height:20px;border-radius:5px;background:var(--chip-bg);border:1px solid var(--chip-bdr);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--chip-fg);flex-shrink:0">3</div>
+          <div style="font-size:12px;color:var(--txt2);flex:1">Take a full 75-question CAT exam</div>
+          <span style="font-size:10.5px;font-weight:600;color:var(--acc-d);flex-shrink:0">Launch →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const fs=document.querySelectorAll('.frame'),ts=document.querySelectorAll('.tab');
+function s(i){fs.forEach((f,j)=>{f.style.display=j===i?'block':'none'});ts.forEach((t,j)=>{t.classList.toggle('on',j===i)});window.scrollTo({top:0,behavior:'instant'})}
+s(0);
+(function(){const p=new URLSearchParams(location.search).get('frame');if(p!=null){const n=parseInt(p);if(!isNaN(n))s(n);}})();
+</script>
+</body>
+</html>

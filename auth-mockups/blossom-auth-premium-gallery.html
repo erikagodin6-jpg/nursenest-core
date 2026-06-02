@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="mint-blossom">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NurseNest Blossom Auth — Premium Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --sakura: #e86c9a;
+      --sakura-deep: #d45684;
+      --blush: #f7d6e3;
+      --blush-soft: #fdf0f5;
+      --warm-white: #fffcfa;
+      --cream: #fff8f2;
+      --charcoal: #2f2a33;
+      --charcoal-muted: #5c5563;
+      --charcoal-soft: #7a7280;
+      --mint: #b8e8d4;
+      --mint-deep: #6bc9a8;
+      --lavender-shadow: rgba(120, 98, 140, 0.08);
+      --glass: rgba(255, 252, 250, 0.72);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --font: "DM Sans", system-ui, sans-serif;
+      --shadow-soft: 0 24px 60px -28px var(--lavender-shadow), 0 8px 24px -12px rgba(232, 108, 154, 0.12);
+      --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 20px 50px -24px rgba(47, 42, 51, 0.14);
+      --focus-ring: 0 0 0 3px color-mix(in srgb, var(--sakura) 28%, transparent);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: #ece8eb;
+      color: var(--charcoal);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Capture targets — each mockup is a full viewport frame */
+    .mockup-canvas {
+      width: 1440px;
+      min-height: 900px;
+      margin: 48px auto;
+      background: var(--warm-white);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 40px 100px -40px rgba(47, 42, 51, 0.2);
+    }
+    .mockup-canvas.mobile {
+      width: 390px;
+      min-height: 844px;
+      border-radius: 32px;
+    }
+
+    .blossom-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 55% 45% at 8% 12%, color-mix(in srgb, var(--blush) 70%, transparent), transparent 70%),
+        radial-gradient(ellipse 40% 35% at 92% 8%, color-mix(in srgb, var(--mint) 35%, transparent), transparent 65%),
+        radial-gradient(ellipse 50% 40% at 50% 100%, color-mix(in srgb, var(--sakura) 8%, transparent), transparent 70%);
+    }
+
+    .leaf-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 50% 50% 50% 12%;
+      background: linear-gradient(145deg, var(--mint-deep), var(--sakura));
+      transform: rotate(-18deg);
+      flex-shrink: 0;
+      box-shadow: 0 6px 16px -6px rgba(232, 108, 154, 0.35);
+    }
+    .wordmark {
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.03em;
+      color: var(--charcoal);
+    }
+    .eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--sakura-deep);
+    }
+    h1, h2 {
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.12;
+      color: var(--charcoal);
+    }
+    .sub {
+      color: var(--charcoal-muted);
+      line-height: 1.55;
+      font-size: 0.98rem;
+    }
+
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 52px;
+      border: none;
+      border-radius: var(--radius-md);
+      background: linear-gradient(180deg, var(--sakura) 0%, var(--sakura-deep) 100%);
+      color: #fff;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 28px -10px rgba(232, 108, 154, 0.45);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 14px 32px -8px rgba(232, 108, 154, 0.5); }
+    .btn-ghost {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid color-mix(in srgb, var(--charcoal) 12%, var(--blush));
+      border-radius: var(--radius-md);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--charcoal);
+      cursor: pointer;
+    }
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--charcoal-muted);
+      margin-bottom: 8px;
+    }
+    .field input {
+      width: 100%;
+      min-height: 52px;
+      padding: 0 16px;
+      border: 1px solid color-mix(in srgb, var(--sakura) 18%, #e8e2e6);
+      border-radius: var(--radius-md);
+      background: #fff;
+      font-family: var(--font);
+      font-size: 1rem;
+      color: var(--charcoal);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field input:focus {
+      outline: none;
+      border-color: var(--sakura);
+      box-shadow: var(--focus-ring);
+    }
+    .field.error input {
+      border-color: color-mix(in srgb, var(--sakura) 55%, #e57373);
+    }
+    .field-hint {
+      font-size: 0.78rem;
+      color: var(--sakura-deep);
+      margin-top: 6px;
+    }
+
+    .global-footer {
+      margin-top: auto;
+      padding: 28px 40px 32px;
+      border-top: 1px solid color-mix(in srgb, var(--blush) 80%, #fff);
+      background: color-mix(in srgb, var(--cream) 60%, #fff);
+      display: grid;
+      grid-template-columns: 1.2fr repeat(3, 1fr);
+      gap: 24px;
+      font-size: 0.78rem;
+      color: var(--charcoal-soft);
+    }
+    .global-footer h4 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--charcoal-muted);
+      margin-bottom: 10px;
+    }
+    .global-footer ul { list-style: none; line-height: 1.8; }
+
+    /* ── 1. Sign In — Split Editorial ───────────────────────────── */
+    #mockup-sign-in-split {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      min-height: 900px;
+    }
+    #mockup-sign-in-split .story {
+      padding: 56px 52px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      border-right: 1px solid color-mix(in srgb, var(--blush) 90%, #fff);
+      background: linear-gradient(165deg, var(--blush-soft) 0%, var(--warm-white) 55%, var(--cream) 100%);
+    }
+    #mockup-sign-in-split .story h2 {
+      font-size: clamp(2.4rem, 4vw, 3.4rem);
+      max-width: 11em;
+    }
+    .readiness-preview {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: auto;
+    }
+    .readiness-preview .tile {
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      background: var(--glass);
+      border: 1px solid color-mix(in srgb, var(--blush) 70%, #fff);
+      backdrop-filter: blur(8px);
+    }
+    .readiness-preview .tile strong {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--sakura-deep);
+      letter-spacing: -0.03em;
+    }
+    .readiness-preview .tile span { font-size: 0.75rem; color: var(--charcoal-soft); }
+    #mockup-sign-in-split .form-panel {
+      padding: 56px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    #mockup-sign-in-split .form-card {
+      max-width: 400px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    #mockup-sign-in-split .form-card h1 { font-size: 2rem; }
+    .trust-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .trust-chips span {
+      font-size: 0.72rem;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--mint) 35%, #fff);
+      color: var(--charcoal-muted);
+      font-weight: 600;
+    }
+    .row-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--charcoal-muted);
+    }
+    .row-between a { color: var(--sakura-deep); font-weight: 600; text-decoration: none; }
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--charcoal-soft);
+      font-size: 0.78rem;
+    }
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--blush) 60%, #ddd);
+    }
+
+    /* ── 2. Sign Up — Aspirational pathway ─────────────────────── */
+    #mockup-sign-up-pathway {
+      padding: 48px 56px 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 900px;
+    }
+    #mockup-sign-up-pathway .hero-row {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    #mockup-sign-up-pathway .hero-row h1 { font-size: 2.75rem; max-width: 10em; }
+    .progress-rail {
+      display: flex;
+      gap: 8px;
+      margin: 20px 0 28px;
+    }
+    .progress-rail span {
+      height: 4px;
+      flex: 1;
+      border-radius: 99px;
+      background: var(--blush);
+    }
+    .progress-rail span.on { background: linear-gradient(90deg, var(--sakura), var(--mint-deep)); flex: 1.4; }
+    .pathway-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .pathway-card {
+      padding: 18px 16px;
+      border-radius: var(--radius-lg);
+      border: 1px solid color-mix(in srgb, var(--blush) 80%, #fff);
+      background: #fff;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .pathway-card.selected {
+      border-color: var(--sakura);
+      box-shadow: var(--focus-ring), var(--shadow-card);
+    }
+    .pathway-card strong { display: block; font-size: 1.1rem; margin-bottom: 4px; }
+    .pathway-card small { color: var(--charcoal-soft); font-size: 0.78rem; }
+    .preview-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .preview-card {
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      min-height: 140px;
+      border: 1px solid color-mix(in srgb, var(--blush) 70%, #fff);
+      background: linear-gradient(160deg, #fff 0%, var(--blush-soft) 100%);
+      box-shadow: var(--shadow-soft);
+    }
+    .preview-card h3 { font-size: 0.95rem; margin-bottom: 8px; }
+    .preview-card .bar {
+      height: 6px;
+      border-radius: 99px;
+      background: var(--blush);
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    .preview-card .bar i {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--mint-deep), var(--sakura));
+    }
+    #mockup-sign-up-pathway .signup-form-col {
+      background: #fff;
+      border: 1px solid color-mix(in srgb, var(--blush) 70%, #fff);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+    }
+
+    /* ── 3. Forgot Password — Centered glass ───────────────────── */
+    #mockup-forgot-centered {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 900px;
+      padding: 48px;
+    }
+    #mockup-forgot-centered .glass-card {
+      width: 100%;
+      max-width: 440px;
+      padding: 44px 40px;
+      border-radius: var(--radius-xl);
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid color-mix(in srgb, #fff 60%, var(--blush));
+      box-shadow: var(--shadow-card);
+      text-align: center;
+    }
+    #mockup-forgot-centered .icon-ring {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--blush-soft), #fff);
+      border: 1px solid var(--blush);
+      display: grid;
+      place-items: center;
+      font-size: 1.75rem;
+    }
+    #mockup-forgot-centered h1 { font-size: 1.85rem; margin-bottom: 10px; }
+    #mockup-forgot-centered .fields { text-align: left; margin-top: 28px; display: flex; flex-direction: column; gap: 16px; }
+
+    /* ── 4. Mobile Sign In ─────────────────────────────────────── */
+    #mockup-mobile-sign-in.mobile {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+    #mockup-mobile-sign-in .mobile-top {
+      padding: 52px 24px 28px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--blush-soft) 0%, var(--warm-white) 100%);
+    }
+    #mockup-mobile-sign-in .mobile-top .leaf-mark { margin: 0 auto 16px; width: 44px; height: 44px; }
+    #mockup-mobile-sign-in .mobile-top h1 { font-size: 1.65rem; }
+    #mockup-mobile-sign-in .mobile-body {
+      flex: 1;
+      padding: 24px 20px 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    #mockup-mobile-sign-in .sticky-cta {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px 28px;
+      background: linear-gradient(0deg, var(--warm-white) 70%, transparent);
+    }
+
+    /* ── 5. Email verification success ─────────────────────────── */
+    #mockup-verify-success {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      min-height: 900px;
+    }
+    #mockup-verify-success .celebrate {
+      padding: 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--mint) 25%, #fff) 0%, var(--warm-white) 50%, var(--blush-soft) 100%);
+    }
+    #mockup-verify-success .success-ring {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--mint-deep);
+      display: grid;
+      place-items: center;
+      font-size: 3rem;
+      color: var(--mint-deep);
+      margin-bottom: 28px;
+      box-shadow: 0 20px 50px -20px rgba(107, 201, 168, 0.4);
+    }
+    #mockup-verify-success .celebrate h1 { font-size: 2.5rem; max-width: 9em; }
+    #mockup-verify-success .next-panel {
+      padding: 64px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .step-list li {
+      list-style: none;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      border-radius: var(--radius-lg);
+      background: #fff;
+      border: 1px solid color-mix(in srgb, var(--blush) 60%, #fff);
+    }
+    .step-list .num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--blush-soft);
+      color: var(--sakura-deep);
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    /* Hidden gallery nav (not in captures) */
+    .gallery-nav {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 99;
+      background: var(--charcoal);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 99px;
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+    @media print {
+      .gallery-nav { display: none; }
+      .mockup-canvas { margin: 0; box-shadow: none; page-break-after: always; }
+    }
+  </style>
+</head>
+<body>
+  <p class="gallery-nav">Blossom Auth Gallery — scroll for all concepts · PNG capture via Playwright</p>
+
+  <!-- 1. Sign In — Split Editorial (unique layout A) -->
+  <section id="mockup-sign-in-split" class="mockup-canvas blossom-bg" data-capture="sign-in-split-desktop">
+    <div class="story">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="leaf-mark" aria-hidden="true"></div>
+        <span class="wordmark">NurseNest</span>
+        <span style="margin-left:auto;font-size:0.72rem;font-weight:700;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--blush);color:var(--sakura-deep)">Blossom</span>
+      </div>
+      <p class="eyebrow">Adaptive NCLEX preparation</p>
+      <h2>Calm focus for the shift ahead of your exam.</h2>
+      <p class="sub">Built for nursing students. Personalized readiness tracking across lessons, flashcards, and CAT — one premium study loop.</p>
+      <div class="trust-chips">
+        <span>NCLEX-RN · RPN · NP</span>
+        <span>Allied Health</span>
+        <span>Study smarter</span>
+      </div>
+      <div class="readiness-preview">
+        <div class="tile"><strong>78%</strong><span>Readiness index</span></div>
+        <div class="tile"><strong>12</strong><span>Day streak</span></div>
+        <div class="tile"><strong>240</strong><span>Cards due</span></div>
+        <div class="tile"><strong>CAT</strong><span>Next session</span></div>
+      </div>
+    </div>
+    <div class="form-panel">
+      <div class="form-card">
+        <p class="eyebrow">Welcome back</p>
+        <h1>Sign in</h1>
+        <p class="sub">Continue your adaptive study session.</p>
+        <div class="field"><label for="si-email">Email</label><input id="si-email" type="email" placeholder="you@school.edu" value="alex.jordan@nursing.edu" /></div>
+        <div class="field"><label for="si-pass">Password</label><input id="si-pass" type="password" value="••••••••••" /></div>
+        <div class="row-between">
+          <label><input type="checkbox" checked /> Remember me</label>
+          <a href="#">Forgot password?</a>
+        </div>
+        <button type="button" class="btn-primary">Continue</button>
+        <div class="divider">or</div>
+        <button type="button" class="btn-ghost">Continue with Google</button>
+        <button type="button" class="btn-ghost">Continue with Apple</button>
+        <p class="sub" style="text-align:center;font-size:0.85rem">New here? <a href="#" style="color:var(--sakura-deep);font-weight:700;text-decoration:none">Create account</a></p>
+      </div>
+    </div>
+    <footer class="global-footer" style="grid-column:1/-1">
+      <div><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div class="leaf-mark" style="width:28px;height:28px"></div><span class="wordmark">NurseNest</span></div><p>Educational platform — not medical advice.</p></div>
+      <div><h4>Study</h4><ul><li>Lessons</li><li>Flashcards</li><li>Practice</li></ul></div>
+      <div><h4>Pathways</h4><ul><li>RN</li><li>RPN</li><li>NP</li></ul></div>
+      <div><h4>Legal</h4><ul><li>Privacy</li><li>Terms</li><li>Support</li></ul></div>
+    </footer>
+  </section>
+
+  <!-- 2. Sign Up — Pathway aspirational (unique layout B) -->
+  <section id="mockup-sign-up-pathway" class="mockup-canvas blossom-bg" data-capture="sign-up-pathway-desktop">
+    <div class="progress-rail"><span class="on"></span><span class="on"></span><span></span><span></span></div>
+    <div class="hero-row">
+      <div>
+        <p class="eyebrow">Start your pathway</p>
+        <h1>Clinical mastery begins with one calm decision.</h1>
+        <p class="sub" style="margin-top:12px;max-width:36em">Join thousands preparing with adaptive intelligence — flashcards, CAT, and readiness analytics in one ecosystem.</p>
+        <p class="eyebrow" style="margin-top:28px">Choose your pathway</p>
+        <div class="pathway-grid" style="margin-top:12px">
+          <div class="pathway-card selected"><strong>RN</strong><small>NCLEX-RN</small></div>
+          <div class="pathway-card"><strong>RPN</strong><small>REx-PN</small></div>
+          <div class="pathway-card"><strong>NP</strong><small>Board prep</small></div>
+          <div class="pathway-card"><strong>Allied</strong><small>Health exams</small></div>
+        </div>
+        <div class="preview-strip">
+          <div class="preview-card"><h3>Readiness</h3><p class="sub" style="font-size:0.8rem">Live mastery bands</p><div class="bar"><i style="width:72%"></i></div></div>
+          <div class="preview-card"><h3>Flashcards</h3><p class="sub" style="font-size:0.8rem">Adaptive decks</p><div class="bar"><i style="width:58%"></i></div></div>
+          <div class="preview-card"><h3>CAT</h3><p class="sub" style="font-size:0.8rem">Exam simulation</p><div class="bar"><i style="width:84%"></i></div></div>
+        </div>
+      </div>
+      <div class="signup-form-col">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px"><div class="leaf-mark"></div><span class="wordmark">Create account</span></div>
+        <div class="field"><label>Full name</label><input type="text" placeholder="Alex Jordan" /></div>
+        <div class="field"><label>Email</label><input type="email" placeholder="you@school.edu" /></div>
+        <div class="field"><label>Password</label><input type="password" placeholder="Min. 8 characters" /></div>
+        <button type="button" class="btn-primary" style="margin-top:8px">Continue — RN pathway</button>
+        <div class="divider" style="margin:16px 0">or</div>
+        <button type="button" class="btn-ghost">Continue with Google</button>
+      </div>
+    </div>
+    <footer class="global-footer">
+      <div><span class="wordmark">NurseNest</span></div>
+      <div><h4>Product</h4><ul><li>Features</li><li>Pricing</li></ul></div>
+      <div><h4>Students</h4><ul><li>RN Hub</li><li>RPN Hub</li></ul></div>
+      <div><h4>Support</h4><ul><li>Help</li><li>Contact</li></ul></div>
+    </footer>
+  </section>
+
+  <!-- 3. Forgot Password — Centered glass (unique layout C) -->
+  <section id="mockup-forgot-centered" class="mockup-canvas blossom-bg" data-capture="forgot-password-centered">
+    <div class="glass-card">
+      <div class="icon-ring" aria-hidden="true">✉</div>
+      <p class="eyebrow">Account recovery</p>
+      <h1>Forgot your password?</h1>
+      <p class="sub">We’ll send a secure reset link. No stress — you’ll be back to studying in minutes.</p>
+      <div class="fields">
+        <div class="field"><label>Email address</label><input type="email" placeholder="you@school.edu" /></div>
+        <button type="button" class="btn-primary">Send reset link</button>
+        <a href="#" style="display:block;text-align:center;color:var(--sakura-deep);font-weight:600;font-size:0.9rem;text-decoration:none">Back to sign in</a>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:24px;text-align:center;max-width:360px;font-size:0.8rem">Built for nursing students · Adaptive NCLEX preparation</p>
+  </section>
+
+  <!-- 4. Mobile Sign In (unique layout D) -->
+  <section id="mockup-mobile-sign-in" class="mockup-canvas mobile blossom-bg" data-capture="sign-in-mobile">
+    <div class="mobile-top">
+      <div class="leaf-mark"></div>
+      <p class="eyebrow">NurseNest · Blossom</p>
+      <h1>Welcome back</h1>
+      <p class="sub" style="margin-top:8px;font-size:0.9rem">Sign in to continue studying</p>
+    </div>
+    <div class="mobile-body">
+      <div class="field"><label>Email</label><input type="email" placeholder="you@school.edu" /></div>
+      <div class="field"><label>Password</label><input type="password" /></div>
+      <div class="row-between"><label style="font-size:0.85rem"><input type="checkbox" /> Remember</label><a href="#">Forgot?</a></div>
+      <button type="button" class="btn-ghost">Continue with Google</button>
+      <button type="button" class="btn-ghost">Continue with Apple</button>
+      <p class="sub" style="text-align:center;font-size:0.82rem;margin-top:8px">Trusted by nursing students nationwide</p>
+    </div>
+    <div class="sticky-cta">
+      <button type="button" class="btn-primary">Continue</button>
+    </div>
+  </section>
+
+  <!-- 5. Email verification success (unique layout E) -->
+  <section id="mockup-verify-success" class="mockup-canvas blossom-bg" data-capture="email-verification-success">
+    <div class="celebrate">
+      <div class="success-ring" aria-hidden="true">✓</div>
+      <p class="eyebrow">Email verified</p>
+      <h1>You’re ready to study with confidence.</h1>
+      <p class="sub" style="margin-top:12px;max-width:22em">Your account is active. Adaptive readiness tracking and your RN pathway are now unlocked.</p>
+    </div>
+    <div class="next-panel">
+      <p class="eyebrow">What’s next</p>
+      <h2 style="font-size:1.5rem">Continue to your dashboard</h2>
+      <ul class="step-list">
+        <li><span class="num">1</span><div><strong>Complete profile</strong><br /><span class="sub" style="font-size:0.85rem">Set clinical focus areas</span></div></li>
+        <li><span class="num">2</span><div><strong>First adaptive session</strong><br /><span class="sub" style="font-size:0.85rem">20-card flashcard warm-up</span></div></li>
+        <li><span class="num">3</span><div><strong>CAT readiness check</strong><br /><span class="sub" style="font-size:0.85rem">Baseline in 15 minutes</span></div></li>
+      </ul>
+      <button type="button" class="btn-primary">Open dashboard</button>
+      <button type="button" class="btn-ghost">Explore lessons</button>
+    </div>
+  </section>
+
+  <!-- Additional states (for Figma completeness; optional PNG) -->
+  <section id="mockup-reset-password" class="mockup-canvas blossom-bg" data-capture="reset-password" style="display:grid;grid-template-columns:1fr 1fr;min-height:900px">
+    <div style="padding:64px;display:flex;flex-direction:column;justify-content:center">
+      <p class="eyebrow">Secure reset</p>
+      <h1 style="font-size:2.4rem">Create a new password</h1>
+      <p class="sub" style="margin-top:12px">Use at least 8 characters with a mix of letters and numbers.</p>
+      <div style="margin-top:32px;display:flex;flex-direction:column;gap:14px;max-width:380px">
+        <div class="field"><label>New password</label><input type="password" /></div>
+        <div class="field"><label>Confirm password</label><input type="password" /></div>
+        <div style="height:6px;border-radius:99px;background:var(--blush);overflow:hidden"><div style="width:65%;height:100%;background:linear-gradient(90deg,var(--mint-deep),var(--sakura))"></div></div>
+        <p class="sub" style="font-size:0.78rem">Strength: Good</p>
+        <button class="btn-primary">Update password</button>
+      </div>
+    </div>
+    <div style="background:linear-gradient(160deg,var(--blush-soft),var(--cream));display:flex;align-items:center;justify-content:center;padding:48px">
+      <div style="max-width:320px;text-align:center;padding:32px;background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow-card)">
+        <p class="eyebrow">Trust</p>
+        <p class="sub">Session secured with industry-standard encryption. Your study progress is unchanged.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="mockup-session-expired" class="mockup-canvas blossom-bg" data-capture="session-expired" style="min-height:900px;display:flex;align-items:center;justify-content:center;padding:48px">
+    <div style="max-width:480px;width:100%;padding:40px;border-radius:var(--radius-xl);background:#fff;border:1px solid var(--blush);box-shadow:var(--shadow-card);text-align:center">
+      <p class="eyebrow" style="color:var(--charcoal-muted)">Session expired</p>
+      <h1 style="font-size:1.75rem;margin:12px 0">Please sign in again</h1>
+      <p class="sub">For your security, we signed you out after inactivity. Your progress is saved.</p>
+      <button class="btn-primary" style="margin-top:24px">Return to sign in</button>
+    </div>
+  </section>
+
+  <section id="mockup-oauth-loading" class="mockup-canvas blossom-bg" data-capture="oauth-continuation" style="min-height:900px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px">
+    <div class="leaf-mark" style="width:56px;height:56px"></div>
+    <p class="eyebrow">Continuing with Google</p>
+    <h1 style="font-size:1.5rem">Linking your NurseNest account</h1>
+    <div style="width:200px;height:4px;border-radius:99px;background:var(--blush);overflow:hidden"><div style="width:45%;height:100%;background:var(--sakura);animation:pulse 1.2s ease infinite"></div></div>
+    <p class="sub">One moment — adaptive profile syncing</p>
+  </section>
+
+  <section id="mockup-error-state" class="mockup-canvas blossom-bg" data-capture="auth-error" style="min-height:900px;display:grid;place-items:center">
+    <div style="width:400px;padding:36px;background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow-card)">
+      <p class="eyebrow">Welcome back</p>
+      <h1 style="font-size:1.75rem">Sign in</h1>
+      <div class="field error" style="margin-top:20px"><label>Email</label><input value="wrong@example.com" /><p class="field-hint">We couldn’t find an account with that email.</p></div>
+      <div class="field" style="margin-top:12px"><label>Password</label><input type="password" /></div>
+      <button class="btn-primary" style="margin-top:16px">Continue</button>
+    </div>
+  </section>
+
+  <style>
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  </style>
+</body>
+</html>

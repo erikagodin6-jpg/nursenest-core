@@ -1,0 +1,93 @@
+[
+  {
+    "id": "GERO-FC-P4-001",
+    "packageId": "pkg4-mental-health",
+    "front": "What are the KEY differences between delirium and dementia?",
+    "back": "DELIRIUM:\n• Onset: Hours to days (ACUTE)\n• Course: Fluctuating (waxes and wanes)\n• Reversible: YES (if cause treated)\n• Cause: Always an underlying medical trigger\n• Attention: Severely impaired\n• Level of consciousness: Often altered\n\nDEMENTIA:\n• Onset: Months to years (GRADUAL)\n• Course: Stable day-to-day (slowly progressive)\n• Reversible: Usually NO (progressive)\n• Cause: Neurodegenerative or vascular\n• Attention: May be relatively preserved early\n• Level of consciousness: Clear until late stages",
+    "hint": "Key differentiator: ONSET and COURSE. Acute + fluctuating = delirium. Gradual + stable = dementia.",
+    "explanation": "Delirium requires finding and treating the cause (THINK: Toxic medications, Hypoxemia, Infection, Non-pharmacological, K+). Dementia requires management and support. Delirium superimposed on dementia is the most common and most missed form — dementia is the #1 risk factor for delirium.",
+    "clinicalPearl": "The CAM (Confusion Assessment Method) requires both acute onset AND inattention for diagnosis. It screens specifically for delirium, not dementia.",
+    "tier": "RPN",
+    "topicKey": "delirium-vs-dementia",
+    "categorySlug": "mental-health-aging",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P4-002",
+    "packageId": "pkg4-mental-health",
+    "front": "What is the GDS-15 and what score indicates depression?",
+    "back": "Geriatric Depression Scale (GDS-15): 15-item yes/no questionnaire designed for older adults\n\nCutoffs:\n• 0–4: Normal (no depression)\n• 5–8: Mild depression\n• 9–11: Moderate depression\n• 12–15: Severe depression\n\nScreen positive (action required): ≥5\n\nKey features: Simplified language; avoids somatic items (which overlap with medical illness); takes 5–7 minutes",
+    "hint": "GDS ≥5 = positive screen for depression. Action required.",
+    "explanation": "The GDS specifically avoids somatic items (fatigue, sleep, appetite) because these overlap with physical illness in older adults and inflate false-positive rates. It focuses on: life satisfaction, meaning, helplessness, hopelessness, and mood. A score ≥5 requires comprehensive depression assessment and intervention.",
+    "clinicalPearl": "Depression is NOT a normal part of aging. A GDS score ≥5 requires: (1) comprehensive assessment; (2) treatment discussion (therapy, medication, or both); (3) suicide risk assessment. Feeling like a burden is a suicide risk factor even when active ideation is denied.",
+    "tier": "RPN",
+    "topicKey": "depression-older-adults",
+    "categorySlug": "mental-health-aging",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P4-003",
+    "packageId": "pkg4-mental-health",
+    "front": "What is pseudodementia and how does it differ from true dementia?",
+    "back": "Pseudodementia: Cognitive impairment caused by DEPRESSION rather than primary neurodegeneration\n\nKey differences from true dementia:\n• ONSET: Subacute (weeks to months), often after identifiable stress/loss\n• DEPRESSION: Symptoms precede or accompany cognitive complaints\n• 'I DON'T KNOW' responses: Patients say 'I don't know' even when they know (motivational deficit)\n• INSIGHT: Overconcerned about cognitive symptoms (vs Alzheimer's — poor insight)\n• TREATMENT: Cognitive symptoms improve markedly with antidepressant therapy\n• TESTING: Inconsistent performance; motivated when coaxed",
+    "hint": "'I don't know' answers + depressed mood + recent onset = pseudodementia until proven otherwise.",
+    "explanation": "Treatment approach: treat the depression FIRST. If cognitive function improves significantly with antidepressants (typically 4–8 weeks), the diagnosis of depression-associated cognitive impairment is confirmed. Untreated pseudodementia can persist for years and is reversible — making it one of the most important diagnoses to identify and treat.",
+    "clinicalPearl": "The 'I don't know' sign: In depression, the cognitive deficit is motivational — patients give up before trying. In Alzheimer's disease, patients confabulate, guess, or circle back with incorrect answers. This behavioral difference during testing is diagnostically useful.",
+    "tier": "RN",
+    "topicKey": "depression-vs-dementia",
+    "categorySlug": "mental-health-aging",
+    "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"]
+  },
+  {
+    "id": "GERO-FC-P4-004",
+    "packageId": "pkg4-mental-health",
+    "front": "What are the 4 diagnostic criteria for decision-making capacity?",
+    "back": "1. UNDERSTANDING: Can the patient understand the nature of their condition and the proposed intervention?\n\n2. APPRECIATION: Does the patient understand how this information applies to their own situation?\n\n3. REASONING: Can the patient reason through the decision using the information?\n\n4. COMMUNICATION: Can the patient clearly and consistently communicate their choice?\n\nAll 4 must be present for the patient to have capacity for a specific decision.",
+    "hint": "4 elements: Understanding, Appreciation, Reasoning, Communication.",
+    "explanation": "Capacity is DECISION-SPECIFIC (not global). A patient with dementia may have capacity for simple decisions (accepting a meal, choosing clothing) but lack capacity for complex decisions (consenting to surgery). A diagnosis of dementia does NOT automatically mean lack of capacity — each decision must be assessed individually. Capacity can fluctuate (a delirious patient may lack capacity today but regain it after treatment).",
+    "clinicalPearl": "Legal competence (court-determined) ≠ clinical decision-making capacity (healthcare professional assessment). In healthcare, we assess CAPACITY, not competence. Nurses can and must identify and communicate concerns about capacity, though formal assessment is typically done by physicians.",
+    "tier": "RN",
+    "topicKey": "capacity-assessment",
+    "categorySlug": "mental-health-aging",
+    "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"]
+  },
+  {
+    "id": "GERO-FC-P4-005",
+    "packageId": "pkg4-mental-health",
+    "front": "What are the 5 Alzheimer's Disease (AD) stages and key features of each?",
+    "back": "Stage 1 — Preclinical: No symptoms; biomarker changes present\n\nStage 2 — MCI: Objective cognitive decline; preserved daily function; subjective concern\n\nStage 3 — Mild AD: Memory impairment affecting work/social function; getting lost; word-finding\n\nStage 4 — Moderate AD: ADL assistance needed; unable to manage finances; BPSD emerges; may not recognize family\n\nStage 5 — Severe AD: No communication; total ADL dependence; dysphagia; incontinence; bedbound; aspiration risk",
+    "hint": "5 stages: Preclinical → MCI → Mild → Moderate → Severe",
+    "explanation": "The most common dementia (60–70% of dementia cases). Key nursing implications by stage: Mild = safety (driving, stove), IADL support; Moderate = ADL assistance, BPSD management, caregiver support; Severe = aspiration prevention, comfort care, end-of-life planning. Family caregivers need support at every stage.",
+    "clinicalPearl": "Donepezil (AChEI) and memantine are the only FDA/Health Canada approved pharmacological treatments for AD. They slow progression modestly but do not reverse or halt the disease. Realistic family education about limitations is essential.",
+    "tier": "RPN",
+    "topicKey": "alzheimers-disease",
+    "categorySlug": "mental-health-aging",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P4-006",
+    "packageId": "pkg4-mental-health",
+    "front": "What is the first-line management approach for Behavioural and Psychological Symptoms of Dementia (BPSD)?",
+    "back": "BPSD includes: agitation, wandering, aggression, psychosis (hallucinations/delusions), sleep disturbance, depression, anxiety\n\nFirst-line: NON-PHARMACOLOGICAL APPROACHES\n1. Identify and treat UNMET NEEDS (pain, hunger, urination, fear, overstimulation)\n2. Validation therapy / therapeutic redirection\n3. Structured activities and routine\n4. Music therapy (high evidence)\n5. Exercise\n6. Environmental modification (reduce noise/stimulation, safety)\n7. Caregiver training and support\n\nPharmacological (second-line, specific indications):\n• Antipsychotics: last resort, short-term, with informed consent (black box warning)\n• Antidepressants: for depression/anxiety components\n• Melatonin: for sleep-wake cycle disruption",
+    "hint": "BPSD: non-pharmacological FIRST. Identify unmet needs. Antipsychotics = last resort.",
+    "explanation": "Antipsychotics (haloperidol, risperidone, quetiapine) in dementia patients carry a BLACK BOX WARNING for increased mortality (cerebrovascular events, pneumonia). They must ONLY be used when non-pharmacological measures have failed and safety is at immediate risk. Never first-line. Document informed consent discussion with family.",
+    "clinicalPearl": "Music therapy has among the highest evidence for BPSD management — it reaches the emotional memory centers that persist longer than explicit memory in Alzheimer's. Playing music from the patient's young adulthood (20–30 years old) is most effective.",
+    "tier": "RPN",
+    "topicKey": "behavioural-symptoms-dementia",
+    "categorySlug": "mental-health-aging",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P4-007",
+    "packageId": "pkg4-mental-health",
+    "front": "What are the suicide risk factors in older adults and which demographic has the highest completion rate?",
+    "back": "HIGHEST RISK: White men ≥85 years (highest suicide completion rate in North America)\n\nKey risk factors in older adults:\n• Recent bereavement or significant loss\n• New serious medical diagnosis (cancer, Parkinson's, COPD)\n• Social isolation / widowhood\n• Depression (GDS ≥5)\n• Substance use (particularly alcohol)\n• Functional decline / loss of independence\n• Access to lethal means (stored medications, firearms)\n\nBehavioral WARNING SIGNS:\n• Giving away possessions\n• 'Wrapping up affairs'\n• Stockpiling medications 'just in case'\n• Farewells / final visits",
+    "hint": "White men >85 = highest risk. Behavioral warning signs: giving away possessions, stockpiling medications.",
+    "explanation": "Older adults who attempt suicide are more likely to complete it than younger adults — less impulsive, higher lethality of chosen methods, less likely to call for help or survive. 'Passive' suicidal ideation (e.g., 'I wouldn't mind not waking up') requires assessment as seriously as active ideation. Means restriction (safe storage of medications, firearm removal) is a proven suicide prevention intervention.",
+    "clinicalPearl": "Feeling like a burden: older adults who say 'I'm just a burden to everyone' are expressing a suicide risk factor even without direct ideation. Always follow up: 'When you feel like a burden, do you ever have thoughts of ending your life?'",
+    "tier": "RN",
+    "topicKey": "suicide-risk",
+    "categorySlug": "mental-health-aging",
+    "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"]
+  }
+]

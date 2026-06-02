@@ -1,0 +1,196 @@
+{
+  "version": 1,
+  "label": "Gerontological Nursing — Healthy Aging & Older Adult Care Expansion Blueprint",
+  "description": "Comprehensive gerontological nursing content blueprint covering REx-PN, NCLEX-PN, NCLEX-RN, CNPLE, FNP, and AGPCNP examinations. Focuses on normal aging, pathological aging, psychosocial concerns, mental health, medications, infection, safety, and functional assessment using realistic older-adult clinical scenarios.",
+  "generatedDate": "2026-06-02",
+  "programs": ["rpn", "rn", "np"],
+  "targetExams": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+  "priorityWeightKey": {
+    "1": "Supplemental — enrichment or jurisdiction-specific nuance",
+    "2": "Low — tested less frequently, contextual",
+    "3": "Moderate — tested, supports clinical reasoning",
+    "4": "High — frequently tested, core gerontological nursing scope",
+    "5": "Critical — always tested, highest frequency on licensing/certification exams"
+  },
+  "difficultyScale": {
+    "easy": "Recall and recognition of core gerontological concepts",
+    "moderate": "Application of aging knowledge to clinical scenarios",
+    "hard": "Complex analysis, priority-setting, multi-system older adult presentations"
+  },
+  "questionTypeKey": {
+    "MCQ": "Multiple-choice single best answer",
+    "SATA": "Select all that apply",
+    "Priority": "Prioritization / ordered response",
+    "Exhibit": "Exhibit / chart-based with older adult vitals and labs",
+    "Delegation": "Delegation / supervision in LTC and acute settings",
+    "Matrix": "Matrix / grid — normal vs abnormal aging changes"
+  },
+  "packages": [
+    {
+      "packageId": "pkg1-foundations",
+      "title": "Foundations of Gerontological Nursing",
+      "priorityWeight": 4,
+      "questionTarget": 250,
+      "flashcardTarget": 75,
+      "scenarioTarget": 15,
+      "lessons": [
+        "Principles of Healthy Aging",
+        "Demographics of Aging",
+        "Functional Assessment",
+        "Frailty",
+        "Successful Aging",
+        "Family-Centred Older Adult Care",
+        "Age-Friendly Care"
+      ],
+      "tags": ["gerontology", "foundations", "healthy-aging", "frailty", "functional-assessment", "age-friendly"]
+    },
+    {
+      "packageId": "pkg2-physiological",
+      "title": "Physiological Changes of Aging",
+      "priorityWeight": 5,
+      "questionTarget": 500,
+      "flashcardTarget": 150,
+      "scenarioTarget": 0,
+      "lessons": [
+        "Normal Cardiovascular Aging", "Orthostatic Hypotension", "Reduced Cardiac Reserve",
+        "Reduced Lung Elasticity", "Reduced Cough Reflex", "Reduced Respiratory Reserve",
+        "Normal Cognitive Changes", "Sensory Changes", "Sleep Changes",
+        "Reduced Motility", "Nutritional Risks",
+        "Reduced Renal Function", "Fluid Balance Risks",
+        "Sarcopenia", "Osteoporosis", "Mobility Changes",
+        "Skin Changes", "Pressure Injury Risk"
+      ],
+      "emphasis": ["normal vs abnormal findings", "expected vs unexpected aging changes"],
+      "tags": ["physiology", "cardiovascular", "respiratory", "neurological", "GI", "renal", "musculoskeletal", "integumentary", "normal-aging"]
+    },
+    {
+      "packageId": "pkg3-psychosocial",
+      "title": "Psychosocial Concerns",
+      "priorityWeight": 4,
+      "questionTarget": 300,
+      "flashcardTarget": 100,
+      "scenarioTarget": 20,
+      "lessons": [
+        "Retirement Transition", "Loss & Grief", "Bereavement",
+        "Social Isolation", "Loneliness", "Caregiver Burden",
+        "Elder Abuse", "Financial Vulnerability", "Community Supports", "Quality of Life"
+      ],
+      "tags": ["psychosocial", "grief", "elder-abuse", "social-isolation", "caregiver-burden", "quality-of-life"]
+    },
+    {
+      "packageId": "pkg4-mental-health",
+      "title": "Mental Health in Older Adults",
+      "priorityWeight": 5,
+      "questionTarget": 600,
+      "flashcardTarget": 150,
+      "scenarioTarget": 40,
+      "lessons": [
+        "Depression in Older Adults", "Anxiety in Older Adults", "Suicide Risk",
+        "Delirium", "Dementia", "Alzheimer's Disease",
+        "Mild Cognitive Impairment", "Behavioural Symptoms of Dementia",
+        "Capacity Assessment", "Cognitive Screening"
+      ],
+      "emphasis": ["delirium vs dementia", "depression vs dementia", "assessment findings", "family teaching"],
+      "tags": ["mental-health", "depression", "anxiety", "delirium", "dementia", "alzheimers", "MCI", "BPSD", "cognitive-screening"]
+    },
+    {
+      "packageId": "pkg5-pain",
+      "title": "Pain in Older Adults",
+      "priorityWeight": 4,
+      "questionTarget": 250,
+      "flashcardTarget": 75,
+      "scenarioTarget": 15,
+      "lessons": [
+        "Pain Assessment in Older Adults", "Chronic Pain",
+        "Cognitive Impairment & Pain", "Nonverbal Pain Assessment",
+        "Pharmacologic Pain Management", "Nonpharmacologic Pain Management"
+      ],
+      "emphasis": ["PAINAD scale", "opioid considerations", "assessment challenges"],
+      "tags": ["pain", "chronic-pain", "PAINAD", "opioids", "nonpharmacologic", "cognitive-impairment"]
+    },
+    {
+      "packageId": "pkg6-infection",
+      "title": "Infection in Older Adults",
+      "priorityWeight": 5,
+      "questionTarget": 400,
+      "flashcardTarget": 100,
+      "scenarioTarget": 25,
+      "lessons": [
+        "Infection Risks in Aging", "Atypical Infection Presentations",
+        "UTI in Older Adults", "Pneumonia in Older Adults",
+        "Sepsis Recognition", "Fever Responses in Aging", "Infection Prevention"
+      ],
+      "emphasis": ["confusion as infection symptom", "subtle presentations", "early recognition"],
+      "tags": ["infection", "UTI", "pneumonia", "sepsis", "atypical-presentation", "fever", "older-adult"]
+    },
+    {
+      "packageId": "pkg7-medications",
+      "title": "Medications & Polypharmacy",
+      "priorityWeight": 5,
+      "questionTarget": 500,
+      "flashcardTarget": 150,
+      "scenarioTarget": 25,
+      "lessons": [
+        "Polypharmacy", "Medication Reconciliation", "Adverse Drug Reactions",
+        "Medication Safety", "Beers Criteria", "High-Risk Medications",
+        "Anticholinergic Burden", "Medication Adherence"
+      ],
+      "tags": ["polypharmacy", "beers-criteria", "medication-safety", "ADR", "anticholinergic", "reconciliation"]
+    },
+    {
+      "packageId": "pkg8-falls",
+      "title": "Falls & Safety",
+      "priorityWeight": 5,
+      "questionTarget": 350,
+      "flashcardTarget": 100,
+      "scenarioTarget": 25,
+      "lessons": [
+        "Fall Risk Assessment", "Mobility Assessment", "Home Safety",
+        "Assistive Devices", "Injury Prevention", "Restraint Alternatives", "Wandering Prevention"
+      ],
+      "tags": ["falls", "fall-risk", "mobility", "safety", "restraints", "wandering", "home-safety"]
+    },
+    {
+      "packageId": "pkg9-functional",
+      "title": "Functional Assessment",
+      "priorityWeight": 4,
+      "questionTarget": 250,
+      "flashcardTarget": 75,
+      "scenarioTarget": 0,
+      "lessons": [
+        "Activities of Daily Living (ADLs)", "Instrumental ADLs",
+        "Functional Independence", "Mobility Assessment",
+        "Nutrition Screening", "Cognitive Screening"
+      ],
+      "tags": ["functional-assessment", "ADL", "IADL", "Barthel", "Katz", "MNA", "MMSE", "MoCA"]
+    },
+    {
+      "packageId": "pkg10-prioritization",
+      "title": "Prioritization & Clinical Judgment",
+      "priorityWeight": 5,
+      "questionTarget": 750,
+      "flashcardTarget": 0,
+      "scenarioTarget": 0,
+      "questionSubtypes": {
+        "prioritization": 500,
+        "delegation": 250
+      },
+      "topics": ["delirium", "dementia", "falls", "infection", "medications", "elder-abuse", "polypharmacy", "pain", "functional-decline"],
+      "focus": ["Which client should be seen first?", "Which finding is most concerning?", "Which intervention is the priority?", "Which client can be delegated?"],
+      "tags": ["prioritization", "delegation", "clinical-judgment", "triage", "gerontology"]
+    }
+  ],
+  "qualityRequirements": {
+    "lesson": ["Learning Objectives", "Normal Age-Related Changes", "Abnormal Findings", "Assessment Considerations", "Nursing Interventions", "Patient & Family Teaching", "Clinical Pearls", "Safety Alerts", "Exam Tips", "Key Takeaways"],
+    "question": ["Hint", "Correct Rationale", "Incorrect Rationales", "Clinical Pearl", "Exam Strategy", "Key Takeaway"],
+    "flashcard": ["Hint", "Answer", "Explanation", "Clinical Pearl"]
+  },
+  "contentStandard": "UWorld-equivalent clinical reasoning depth with gerontological specificity",
+  "populationTags": ["older-adult", "LTC", "community-dwelling", "acute-care", "geriatric"],
+  "totalTargets": {
+    "lessons": 68,
+    "questions": 3400,
+    "flashcards": 975,
+    "scenarios": 140
+  }
+}

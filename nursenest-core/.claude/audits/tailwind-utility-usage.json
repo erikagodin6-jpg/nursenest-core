@@ -1,0 +1,2068 @@
+{
+  "generatedAt": "2026-05-13T14:36:33.270Z",
+  "summary": {
+    "totalUniqueUtilities": 2407,
+    "arbitraryValues": 828,
+    "responsiveVariants": 465,
+    "hoverFocusVariants": 165,
+    "darkVariants": 39,
+    "multiFamily": 1310,
+    "sharedOnly": 1017,
+    "marketingOnly": 25,
+    "learnerOnly": 22,
+    "adminOnly": 22,
+    "testsOnly": 11,
+    "learnerOrAdminOnly": 46,
+    "estimatedLAOnlyBytes": 5520
+  },
+  "familyUniqueCounts": {
+    "marketing": 833,
+    "learner": 402,
+    "admin": 890,
+    "shared": 2315,
+    "tests": 44
+  },
+  "top100": [
+    {
+      "cls": "font-semibold",
+      "count": 943,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-sm",
+      "count": 910,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "flex",
+      "count": 887,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "border",
+      "count": 798,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared",
+        "tests"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-xs",
+      "count": 729,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "items-center",
+      "count": 642,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "mt-2",
+      "count": 620,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "px-4",
+      "count": 607,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "flex-wrap",
+      "count": 595,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "gap-2",
+      "count": 573,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "gap-3",
+      "count": 561,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "uppercase",
+      "count": 542,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "rounded-xl",
+      "count": 520,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared",
+        "tests"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "font-medium",
+      "count": 517,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "rounded-full",
+      "count": 498,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "mt-1",
+      "count": 477,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "font-bold",
+      "count": 471,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "mx-auto",
+      "count": 444,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "w-full",
+      "count": 440,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "inline-flex",
+      "count": 436,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "grid",
+      "count": 434,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared",
+        "tests"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "mt-3",
+      "count": 430,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "flex-col",
+      "count": 429,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "px-3",
+      "count": 429,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "mt-4",
+      "count": 426,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "rounded-2xl",
+      "count": 416,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "shrink-0",
+      "count": 415,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-[var(--theme-heading-text)]",
+      "count": 411,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "py-2",
+      "count": 403,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "tracking-wide",
+      "count": 396,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "justify-between",
+      "count": 386,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "rounded-lg",
+      "count": 367,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "leading-relaxed",
+      "count": 352,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "border-[var(--semantic-border-soft)]",
+      "count": 350,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "p-4",
+      "count": 346,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-primary",
+      "count": 343,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "gap-4",
+      "count": 340,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "justify-center",
+      "count": 332,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-muted-foreground",
+      "count": 311,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "space-y-2",
+      "count": 296,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "hover:underline",
+      "count": 287,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "min-w-0",
+      "count": 279,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "max-w-3xl",
+      "count": 278,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-lg",
+      "count": 272,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-[var(--semantic-text-secondary)]",
+      "count": 264,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-[var(--semantic-text-primary)]",
+      "count": 264,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "h-4",
+      "count": 262,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "sm:grid-cols-2",
+      "count": 260,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "p-5",
+      "count": 259,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "flex-1",
+      "count": 253,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "border-b",
+      "count": 253,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "w-4",
+      "count": 249,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-center",
+      "count": 246,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-[var(--theme-muted-text)]",
+      "count": 245,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "py-3",
+      "count": 244,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "space-y-4",
+      "count": 244,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-[var(--semantic-text-muted)]",
+      "count": 243,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "mt-6",
+      "count": 240,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "border-t",
+      "count": 238,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "underline",
+      "count": 238,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "sm:px-6",
+      "count": 235,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "overflow-hidden",
+      "count": 224,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-[11px]",
+      "count": 223,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "border-border",
+      "count": 222,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "max-w-2xl",
+      "count": 213,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "items-start",
+      "count": 213,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "shadow-sm",
+      "count": 209,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "p-6",
+      "count": 209,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "py-1.5",
+      "count": 209,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "space-y-3",
+      "count": 205,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "px-2",
+      "count": 197,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "bg-[var(--semantic-surface)]",
+      "count": 194,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-[10px]",
+      "count": 194,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-[var(--semantic-brand)]",
+      "count": 194,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-base",
+      "count": 193,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "space-y-6",
+      "count": 193,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "px-5",
+      "count": 192,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-left",
+      "count": 188,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "mt-8",
+      "count": 187,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-2xl",
+      "count": 186,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "mt-0.5",
+      "count": 184,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-balance",
+      "count": 181,
+      "families": [
+        "marketing",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "py-2.5",
+      "count": 180,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "lg:px-8",
+      "count": 175,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "text-foreground",
+      "count": 175,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "py-1",
+      "count": 172,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "py-0.5",
+      "count": 172,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "sm:flex-row",
+      "count": 171,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "transition",
+      "count": 171,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "leading-snug",
+      "count": 166,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "font-mono",
+      "count": 163,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "block",
+      "count": 161,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared",
+        "tests"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "rounded",
+      "count": 160,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "h-5",
+      "count": 153,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "gap-1",
+      "count": 151,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "space-y-1",
+      "count": 151,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "items-end",
+      "count": 151,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "list-disc",
+      "count": 150,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "gap-1.5",
+      "count": 150,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    },
+    {
+      "cls": "w-5",
+      "count": 149,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ],
+      "classification": "MULTI_FAMILY"
+    }
+  ],
+  "prefixGroups": [
+    {
+      "prefix": "text",
+      "uniqueClasses": 307,
+      "totalUses": 8622
+    },
+    {
+      "prefix": "mt",
+      "uniqueClasses": 34,
+      "totalUses": 3111
+    },
+    {
+      "prefix": "border",
+      "uniqueClasses": 153,
+      "totalUses": 2990
+    },
+    {
+      "prefix": "flex",
+      "uniqueClasses": 25,
+      "totalUses": 2497
+    },
+    {
+      "prefix": "gap",
+      "uniqueClasses": 90,
+      "totalUses": 2483
+    },
+    {
+      "prefix": "px",
+      "uniqueClasses": 38,
+      "totalUses": 2404
+    },
+    {
+      "prefix": "bg",
+      "uniqueClasses": 307,
+      "totalUses": 2293
+    },
+    {
+      "prefix": "font",
+      "uniqueClasses": 10,
+      "totalUses": 2214
+    },
+    {
+      "prefix": "rounded",
+      "uniqueClasses": 28,
+      "totalUses": 2212
+    },
+    {
+      "prefix": "py",
+      "uniqueClasses": 54,
+      "totalUses": 2064
+    },
+    {
+      "prefix": "w",
+      "uniqueClasses": 76,
+      "totalUses": 1515
+    },
+    {
+      "prefix": "space",
+      "uniqueClasses": 29,
+      "totalUses": 1412
+    },
+    {
+      "prefix": "p",
+      "uniqueClasses": 30,
+      "totalUses": 1408
+    },
+    {
+      "prefix": "grid",
+      "uniqueClasses": 68,
+      "totalUses": 1346
+    },
+    {
+      "prefix": "items",
+      "uniqueClasses": 19,
+      "totalUses": 1338
+    },
+    {
+      "prefix": "max",
+      "uniqueClasses": 100,
+      "totalUses": 1279
+    },
+    {
+      "prefix": "h",
+      "uniqueClasses": 56,
+      "totalUses": 1251
+    },
+    {
+      "prefix": "min",
+      "uniqueClasses": 160,
+      "totalUses": 896
+    },
+    {
+      "prefix": "justify",
+      "uniqueClasses": 14,
+      "totalUses": 891
+    },
+    {
+      "prefix": "tracking",
+      "uniqueClasses": 19,
+      "totalUses": 809
+    },
+    {
+      "prefix": "underline",
+      "uniqueClasses": 7,
+      "totalUses": 772
+    },
+    {
+      "prefix": "leading",
+      "uniqueClasses": 16,
+      "totalUses": 625
+    },
+    {
+      "prefix": "mb",
+      "uniqueClasses": 24,
+      "totalUses": 592
+    },
+    {
+      "prefix": "shadow",
+      "uniqueClasses": 31,
+      "totalUses": 588
+    },
+    {
+      "prefix": "uppercase",
+      "uniqueClasses": 1,
+      "totalUses": 542
+    },
+    {
+      "prefix": "inline",
+      "uniqueClasses": 10,
+      "totalUses": 540
+    },
+    {
+      "prefix": "opacity",
+      "uniqueClasses": 48,
+      "totalUses": 479
+    },
+    {
+      "prefix": "transition",
+      "uniqueClasses": 10,
+      "totalUses": 478
+    },
+    {
+      "prefix": "mx",
+      "uniqueClasses": 8,
+      "totalUses": 458
+    },
+    {
+      "prefix": "pt",
+      "uniqueClasses": 40,
+      "totalUses": 439
+    }
+  ],
+  "arbitraryValues": [
+    {
+      "cls": "text-[var(--theme-heading-text)]",
+      "count": 411,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "border-[var(--semantic-border-soft)]",
+      "count": 350,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--semantic-text-secondary)]",
+      "count": 264,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--semantic-text-primary)]",
+      "count": 264,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--theme-muted-text)]",
+      "count": 245,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--semantic-text-muted)]",
+      "count": 243,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[11px]",
+      "count": 223,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "bg-[var(--semantic-surface)]",
+      "count": 194,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[10px]",
+      "count": 194,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--semantic-brand)]",
+      "count": 194,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--theme-body-text)]",
+      "count": 148,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "shadow-[var(--semantic-shadow-soft)]",
+      "count": 131,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "bg-[var(--theme-card-bg)]",
+      "count": 113,
+      "families": [
+        "marketing",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--semantic-info)]",
+      "count": 102,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--semantic-success)]",
+      "count": 96,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--semantic-danger)]",
+      "count": 79,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--semantic-warning)]",
+      "count": 76,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "border-[var(--border-subtle)]",
+      "count": 73,
+      "families": [
+        "marketing",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--theme-primary)]",
+      "count": 72,
+      "families": [
+        "marketing",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "bg-[var(--semantic-panel-muted)]",
+      "count": 65,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "pb-[var(--nn-rhythm-tight-y)]",
+      "count": 61,
+      "families": [
+        "marketing",
+        "shared"
+      ]
+    },
+    {
+      "cls": "pt-[var(--nn-rhythm-page-y)]",
+      "count": 61,
+      "families": [
+        "marketing",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--palette-heading)]",
+      "count": 51,
+      "families": [
+        "marketing",
+        "shared"
+      ]
+    },
+    {
+      "cls": "bg-[var(--semantic-brand)]",
+      "count": 50,
+      "families": [
+        "marketing",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--palette-text-muted)]",
+      "count": 49,
+      "families": [
+        "marketing",
+        "shared"
+      ]
+    },
+    {
+      "cls": "bg-[var(--bg-card)]",
+      "count": 46,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "min-h-[44px]",
+      "count": 45,
+      "families": [
+        "marketing",
+        "shared"
+      ]
+    },
+    {
+      "cls": "transition-[width]",
+      "count": 39,
+      "families": [
+        "marketing",
+        "learner",
+        "shared"
+      ]
+    },
+    {
+      "cls": "border-[var(--theme-card-border)]",
+      "count": 36,
+      "families": [
+        "marketing",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "hover:bg-[var(--semantic-panel-muted)]",
+      "count": 32,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[9px]",
+      "count": 30,
+      "families": [
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--semantic-chart-3)]",
+      "count": 29,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "shadow-[var(--elevation-rest)]",
+      "count": 29,
+      "families": [
+        "marketing",
+        "shared"
+      ]
+    },
+    {
+      "cls": "tracking-[0.14em]",
+      "count": 28,
+      "families": [
+        "marketing",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "shadow-[var(--shadow-elevated)]",
+      "count": 27,
+      "families": [
+        "marketing",
+        "shared"
+      ]
+    },
+    {
+      "cls": "bg-[var(--page-bg)]",
+      "count": 27,
+      "families": [
+        "marketing",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[0.65rem]",
+      "count": 26,
+      "families": [
+        "marketing",
+        "shared"
+      ]
+    },
+    {
+      "cls": "bg-[var(--semantic-panel-cool)]",
+      "count": 24,
+      "families": [
+        "marketing",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--semantic-warning-contrast)]",
+      "count": 23,
+      "families": [
+        "marketing",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "tracking-[0.12em]",
+      "count": 23,
+      "families": [
+        "marketing",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[13px]",
+      "count": 22,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "tracking-[0.18em]",
+      "count": 22,
+      "families": [
+        "marketing",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[12px]",
+      "count": 21,
+      "families": [
+        "marketing",
+        "learner",
+        "shared"
+      ]
+    },
+    {
+      "cls": "rounded-[1.75rem]",
+      "count": 21,
+      "families": [
+        "marketing",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--semantic-chart-2)]",
+      "count": 19,
+      "families": [
+        "marketing",
+        "learner",
+        "shared"
+      ]
+    },
+    {
+      "cls": "text-[var(--role-cta-foreground)]",
+      "count": 18,
+      "families": [
+        "marketing",
+        "shared"
+      ]
+    },
+    {
+      "cls": "shadow-[var(--shadow-card)]",
+      "count": 18,
+      "families": [
+        "marketing",
+        "learner",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "border-[var(--header-nav-border)]",
+      "count": 18,
+      "families": [
+        "marketing",
+        "shared"
+      ]
+    },
+    {
+      "cls": "min-w-[640px]",
+      "count": 18,
+      "families": [
+        "marketing",
+        "admin",
+        "shared"
+      ]
+    },
+    {
+      "cls": "min-w-[720px]",
+      "count": 17,
+      "families": [
+        "admin",
+        "shared"
+      ]
+    }
+  ],
+  "learnerAdminOnly": [
+    {
+      "cls": "max-w-[1200px]",
+      "count": 9,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "max-w-[1400px]",
+      "count": 6,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "sm:mt-3",
+      "count": 5,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "max-w-[1100px]",
+      "count": 4,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "bg-rose-500/[0.06]",
+      "count": 3,
+      "families": [
+        "learner",
+        "admin"
+      ]
+    },
+    {
+      "cls": "hover:opacity-75",
+      "count": 3,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "min-h-[70vh]",
+      "count": 2,
+      "families": [
+        "learner",
+        "admin"
+      ]
+    },
+    {
+      "cls": "border-rose-500/25",
+      "count": 2,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "bg-rose-500/[0.04]",
+      "count": 2,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "min-w-[760px]",
+      "count": 2,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "bg-amber-100",
+      "count": 2,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "lg:top-20",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "lg:w-56",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "xl:w-64",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "rotate-6",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "opacity-[0.05]",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "rounded-l-2xl",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "right-3",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "lg:grid-cols-[1fr_340px]",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "text-[22px]",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "sm:pt-0",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "pt-[var(--nn-rhythm-shell-y)]",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "md:pb-[var(--nn-rhythm-shell-y)]",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "md:pt-1",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "md:gap-2.5",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "md:px-4",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "sm:gap-x-3",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "md:gap-x-3",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "md:gap-y-2.5",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "md:px-3.5",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "md:py-2.5",
+      "count": 1,
+      "families": [
+        "learner"
+      ]
+    },
+    {
+      "cls": "sm:grid-cols-[10rem_1fr]",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "max-w-[1280px]",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "min-w-[920px]",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "max-h-60",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "min-w-[360px]",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "min-w-[180px]",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "border-emerald-500/20",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "bg-emerald-500/[0.04]",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "bg-[var(--theme-bg)]",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "lg:min-h-screen",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "bg-[var(--theme-muted-surface)]/35",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "bg-[var(--semantic-panel-positive)]/10",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "min-w-[32rem]",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "border-muted",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    },
+    {
+      "cls": "max-w-[320px]",
+      "count": 1,
+      "families": [
+        "admin"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Questions d’entraînement REx-PN et NCLEX-PN | Champ et sécurité",
+  "h1": "Questions d’entraînement REx-PN et NCLEX-PN",
+  "description": "Questions PN pour les parcours REx-PN et NCLEX-PN : justifications, retour par catégorie et énoncés sensibles au champ au Canada et aux États-Unis.",
+  "breadcrumb": {
+    "midLabel": "Préparation PN",
+    "currentLabel": "Questions d’entraînement"
+  },
+  "sections": [
+    {
+      "heading": "Pourquoi les items PN dépendent du champ et de la stabilité",
+      "level": 2,
+      "body": [
+        "Les examens aiment les angles de délégation, la séquence de contrôle des infections et le client à voir en premier. Les questions entraînent ces bifurcations plus vite que relire des diapositives.",
+        "NurseNest sépare les banques PN du champ RN, sauf si votre palier inclut un croisement."
+      ]
+    }
+  ]
+}

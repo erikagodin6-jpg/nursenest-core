@@ -1,0 +1,26 @@
+blog slug collision diagnostic (live DB ∩ supplement union)
+generated: 2026-05-10T01:49:27.129Z
+supplement slug count: 3891
+
+live DB rows overlapping supplement slugs: 20
+
+- acute-kidney-injury-prerenal-intrinsic-postrenal (PUBLISHED) supplement=longtail
+- beta-blockers-mechanism-side-effects-nursing-teaching (PUBLISHED) supplement=longtail
+- asthma-pathophysiology-emergency-nursing-interventions (PUBLISHED) supplement=longtail
+- dka-vs-hhs-nursing-priorities (PUBLISHED) supplement=longtail
+- digoxin-toxicity-nursing-priorities (PUBLISHED) supplement=longtail
+- copd-symptoms-treatment-nursing-care (PUBLISHED) supplement=longtail
+- deep-vein-thrombosis-nursing-guide (PUBLISHED) supplement=longtail
+- hypernatremia-causes-symptoms-nursing-care (PUBLISHED) supplement=longtail
+- left-sided-vs-right-sided-heart-failure (PUBLISHED) supplement=longtail
+- hyponatremia-symptoms-causes-nursing-priorities (PUBLISHED) supplement=longtail
+- hypocalcemia-vs-hypercalcemia-nclex-guide (PUBLISHED) supplement=longtail
+- metabolic-acidosis-vs-metabolic-alkalosis (PUBLISHED) supplement=longtail
+- increased-intracranial-pressure-nursing-priorities (PUBLISHED) supplement=longtail
+- respiratory-acidosis-vs-respiratory-alkalosis (PUBLISHED) supplement=longtail
+- pulmonary-embolism-signs-symptoms-nursing-priorities (PUBLISHED) supplement=longtail
+- siadh-vs-diabetes-insipidus-nursing-comparison (PUBLISHED) supplement=longtail
+- sepsis-pathophysiology-early-nursing-recognition (PUBLISHED) supplement=longtail
+- stroke-ischemic-vs-hemorrhagic-nursing-care (PUBLISHED) supplement=longtail
+- seizure-disorders-treatment-nursing-care (PUBLISHED) supplement=longtail
+- warfarin-vs-heparin-nursing-comparison (PUBLISHED) supplement=longtail

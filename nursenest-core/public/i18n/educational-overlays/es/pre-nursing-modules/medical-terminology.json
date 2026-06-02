@@ -1,0 +1,19 @@
+{
+  "overview": "La terminología médica es el lenguaje universal de la salud. Se construye a partir de raíces griegas y latinas, prefijos y sufijos. Dominar este vocabulario permite descifrar rápidamente términos desconocidos, comunicarse con precisión y garantizar la seguridad del paciente.",
+  "key_concepts": [
+    "Raíces: indican la parte del cuerpo o la condición (cardi- = corazón, hepat- = hígado, nefr- = riñón)",
+    "Prefijos: modifican el significado (bradi- = lento, taqui- = rápido, hiper- = exceso, hipo- = deficiencia)",
+    "Sufijos: indican procedimiento, condición o estado (-itis = inflamación, -ectomía = extirpación, -plasia = formación)",
+    "Abreviaturas comunes: PRN (según sea necesario), BID (dos veces al día), IV (intravenoso), NPO (nada por vía oral)",
+    "Reglas de decodificación: leer de atrás hacia adelante para entender un término compuesto"
+  ],
+  "nursing_responsibilities": "La enfermera utiliza la terminología médica para documentar los cuidados, interpretar las órdenes médicas y transmitir información clínica sin ambigüedad. Debe verificar las abreviaturas no estandarizadas — algunas están prohibidas porque son fuente de errores. También traduce términos técnicos a un lenguaje accesible para los pacientes.",
+  "clinical_pearls": "Los errores médicos ocurren con frecuencia durante la comunicación. La ISMP publicó una lista de abreviaturas peligrosas que deben evitarse. En los exámenes, descifre los términos desconocidos aislando raíz, prefijo y sufijo — a menudo podrá deducir el significado sin haberlo aprendido previamente.",
+  "patient_education": "Evite el lenguaje técnico con los pacientes. Cuando use un término médico, explíquelo de inmediato: 'Tiene taquicardia — es decir, su corazón late demasiado rápido.' Verifique la comprensión mediante la técnica de enseñanza de retorno (teach-back).",
+  "key_takeaways": [
+    "Descomponer un término (prefijo + raíz + sufijo) permite entender su significado incluso sin haberlo memorizado",
+    "Las abreviaturas estandarizadas mejoran la comunicación; las no estandarizadas la hacen peligrosa",
+    "La traducción para los pacientes es una habilidad enfermera esencial para la educación terapéutica",
+    "La terminología precisa previene errores de medicación y tratamiento"
+  ]
+}

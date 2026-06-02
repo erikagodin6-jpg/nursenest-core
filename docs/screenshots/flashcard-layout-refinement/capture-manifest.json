@@ -1,0 +1,15 @@
+{
+  "baseUrl": "http://127.0.0.1:3737",
+  "capturedAt": "2026-05-30T02:35:17.064Z",
+  "files": [
+    "/root/nursenest-core/docs/screenshots/flashcard-layout-refinement/desktop/flashcard-study-ocean.png",
+    "/root/nursenest-core/docs/screenshots/flashcard-layout-refinement/tablet/flashcard-study-ocean.png",
+    "/root/nursenest-core/docs/screenshots/flashcard-layout-refinement/mobile/flashcard-study-ocean.png",
+    "/root/nursenest-core/docs/screenshots/flashcard-layout-refinement/desktop/flashcard-study-blossom.png",
+    "/root/nursenest-core/docs/screenshots/flashcard-layout-refinement/tablet/flashcard-study-blossom.png",
+    "/root/nursenest-core/docs/screenshots/flashcard-layout-refinement/mobile/flashcard-study-blossom.png",
+    "/root/nursenest-core/docs/screenshots/flashcard-layout-refinement/desktop/flashcard-study-midnight.png",
+    "/root/nursenest-core/docs/screenshots/flashcard-layout-refinement/tablet/flashcard-study-midnight.png",
+    "/root/nursenest-core/docs/screenshots/flashcard-layout-refinement/mobile/flashcard-study-midnight.png"
+  ]
+}

@@ -1,0 +1,113 @@
+"use client";
+
+import { ArrowRight } from "lucide-react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { HUB, rnQuestions, type MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
+import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import {
+  MARKETING_PRIMARY_CTA_CLASS,
+  MARKETING_SECONDARY_CTA_CLASS,
+} from "@/lib/theme/marketing-hero-pattern";
+import { HOME_FEATURE_DEEP_DIVE_PROOFS } from "@/lib/marketing/marketing-proof-screenshots";
+import { MarketingProofScreenshot } from "@/components/marketing/marketing-proof-screenshot";
+
+function safe(value: any, fallback: any) {
+  return value ?? fallback;
+}
+
+function safeCall(fn: any, fallback: any) {
+  try {
+    return fn();
+  } catch {
+    return fallback;
+  }
+}
+
+export function HomeFeatureDeepDivesSection() {
+  const locale = safe(useMarketingI18n().locale, "en");
+  const region = safe(useNursenestRegion().region, "CA") as MarketingRegionToggle;
+
+  const loc = (path: string) => {
+    try {
+      return withMarketingLocale(locale, path);
+    } catch {
+      return path;
+    }
+  };
+
+  const pricingHref = safeCall(() => loc(HUB.pricing), "/pricing");
+  const questionsHref = safeCall(() => loc(rnQuestions(region)), "/lessons");
+  const catHref = safeCall(
+    () => loc(publicMarketingCatHrefForOffering(region, "rn")),
+    "/lessons"
+  );
+
+  const features = [
+    {
+      title: "Personalized Study Plan",
+      desc: "Daily tasks built from your weak areas and readiness score.",
+      proof: HOME_FEATURE_DEEP_DIVE_PROOFS[0]!,
+    },
+    {
+      title: "Smart Review System",
+      desc: "Focus on exactly what you got wrong and why.",
+      proof: HOME_FEATURE_DEEP_DIVE_PROOFS[1]!,
+    },
+    {
+      title: "CAT Exam Simulation",
+      desc: "Adaptive testing with real readiness scoring.",
+      proof: HOME_FEATURE_DEEP_DIVE_PROOFS[2]!,
+    },
+  ];
+
+  return (
+    <section className="border-b border-[var(--border)] bg-[var(--page-bg)] py-12">
+      <div className="mx-auto max-w-5xl px-4 text-center">
+        <h2 className="text-2xl font-bold">The full readiness system</h2>
+
+        <p className="mt-3 text-[var(--theme-muted-text)]">
+          Practice, test, review, and improve — all connected.
+        </p>
+
+        <div className="mt-8 grid gap-6 md:grid-cols-3">
+          {features.map((f) => (
+            <div key={f.title} className="overflow-hidden rounded-xl border bg-[var(--semantic-surface)]">
+              <div className="relative aspect-[16/11] w-full bg-[var(--semantic-panel-muted)]">
+                <MarketingProofScreenshot shot={f.proof} sizes="(min-width: 768px) 30vw, 100vw" />
+              </div>
+              <div className="p-5">
+                <h3 className="font-semibold">{f.title}</h3>
+                <p className="mt-2 text-sm text-muted">{f.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <MarketingTrackedLink
+            href={pricingHref}
+            event={PH.marketingHomeExploreHubClick}
+            eventProps={{ region }}
+            className={MARKETING_PRIMARY_CTA_CLASS}
+          >
+            View Pricing
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </MarketingTrackedLink>
+
+          <MarketingTrackedLink
+            href={questionsHref}
+            event={PH.marketingHomeExploreHubClick}
+            eventProps={{ region }}
+            className={MARKETING_SECONDARY_CTA_CLASS}
+          >
+            Try Practice Questions
+          </MarketingTrackedLink>
+        </div>
+      </div>
+    </section>
+  );
+}

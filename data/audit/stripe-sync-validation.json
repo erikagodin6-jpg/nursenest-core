@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-04-14T16:28:26.970Z",
+  "databaseAvailable": false,
+  "webhookEventsImplemented": [
+    "checkout.session.completed",
+    "customer.subscription.updated",
+    "customer.subscription.deleted",
+    "invoice.payment_succeeded (covers paid renewals; Stripe uses this instead of legacy invoice.paid in many APIs)",
+    "invoice.payment_failed"
+  ],
+  "note": "Stripe event `invoice.paid` is not used; `invoice.payment_succeeded` is the standard subscription renewal signal.",
+  "webhookHardening": {
+    "signature": "stripe.webhooks.constructEvent(body, signature, STRIPE_WEBHOOK_SECRET)",
+    "idempotency": "StripeWebhookEvent unique id — duplicate returns { ok: true, duplicate: true }",
+    "file": "src/app/api/subscriptions/webhook/route.ts"
+  },
+  "mismatches": {
+    "tierDriftUserVsPlan": [],
+    "activeSubButNoPremiumSample": [],
+    "counts": {}
+  },
+  "error": "Can't reach database server at `127.0.0.1:5432`\n\nPlease make sure your database server is running at `127.0.0.1:5432`."
+}

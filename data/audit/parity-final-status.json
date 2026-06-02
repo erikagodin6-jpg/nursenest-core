@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 3,
+  "generatedAt": "2026-04-14T18:13:35.924Z",
+  "gitHead": "c6d27507",
+  "methodology": "Separated CONTENT parity from FEATURE parity. Counts from data/audit/unimported-legacy-content.json, pathway catalog sync, optional Prisma, and route scans — not claims without file evidence.",
+  "evidenceRootsScanned": [
+    "client/src",
+    "nursenest-core",
+    "external/NurseNest",
+    "data/audit"
+  ],
+  "summary": {
+    "pathwaysInRegistry": 13,
+    "catalogLessonRows": 906,
+    "dbPublishedLessons": null,
+    "dbPublishedQuestions": null,
+    "dbPublishedDecks": null,
+    "legacyLessonRowsReported": 4223,
+    "missingLessonKeysFromSnapshots": 4084,
+    "programmaticSeoSlugs": 39,
+    "learnerAppTsFilesScannedApprox": 71,
+    "adminAppTsFilesScannedApprox": 63,
+    "databaseVerified": false
+  },
+  "structuralGateFromLessonAudit": {
+    "structuralIncompleteLessonCount": 633,
+    "structuralIncompleteNonEmptyCount": 633,
+    "sourceFile": "parity-registry-lesson-snapshot.json (from npm run audit:full-parity)"
+  },
+  "definitionOfDone": [
+    "Trace: legacy source → current source → route → audit row (this matrix).",
+    "If UI not routable or DB not wired, status cannot be matched.",
+    "Run `npm run audit:full-parity` before this script to refresh parity-registry-lesson-snapshot.json (structural gate)."
+  ]
+}

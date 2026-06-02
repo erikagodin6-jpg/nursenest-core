@@ -1,0 +1,1504 @@
+import type { CareerQuestion } from "./rrt-questions";
+
+export const paramedicQuestionsBatch3: CareerQuestion[] = [
+  {
+    id: "para-batch-101",
+    stem: "A 25-year-old male is involved in a high-speed MVC. He is unresponsive with a GCS of 6. His airway is patent with blood in the oropharynx. What is the most appropriate first action?",
+    options: [
+      "Suction the airway and provide spinal immobilization",
+      "Perform a rapid trauma assessment",
+      "Establish IV access and administer fluids",
+      "Apply a cervical collar and prepare for transport"
+    ],
+    correctIndex: 0,
+    rationale: "Airway management always takes priority in trauma. Suctioning blood from the oropharynx ensures a patent airway while maintaining spinal precautions. Other interventions follow after airway is secured.",
+    difficulty: 5,
+    category: "Trauma",
+    topic: "airway management in trauma"
+  },
+  {
+    id: "para-batch-102",
+    stem: "Which of the following is a sign of tension pneumothorax?",
+    options: [
+      "Bilateral wheezing with productive cough",
+      "Tracheal deviation away from the affected side",
+      "Increased breath sounds on the affected side",
+      "Bradycardia with hypertension"
+    ],
+    correctIndex: 1,
+    rationale: "Tension pneumothorax causes increased pressure in the affected hemithorax, pushing the trachea and mediastinum to the opposite side. Other signs include absent breath sounds on the affected side, JVD, and hypotension.",
+    difficulty: 5,
+    category: "Trauma",
+    topic: "tension pneumothorax"
+  },
+  {
+    id: "para-batch-103",
+    stem: "A patient has a sucking chest wound from a stab injury. What is the appropriate prehospital treatment?",
+    options: [
+      "Apply a bulky dressing secured on all four sides",
+      "Apply an occlusive dressing taped on three sides",
+      "Pack the wound with hemostatic gauze",
+      "Insert a chest tube at the fourth intercostal space"
+    ],
+    correctIndex: 1,
+    rationale: "An open pneumothorax (sucking chest wound) requires an occlusive dressing taped on three sides, creating a flutter-valve effect that allows air to escape during exhalation but prevents air entry during inhalation. A four-sided seal could create a tension pneumothorax.",
+    difficulty: 5,
+    category: "Trauma",
+    topic: "open pneumothorax"
+  },
+  {
+    id: "para-batch-104",
+    stem: "What is the most reliable early indicator of hemorrhagic shock in a trauma patient?",
+    options: [
+      "Hypotension",
+      "Tachycardia",
+      "Altered mental status",
+      "Decreased urine output"
+    ],
+    correctIndex: 1,
+    rationale: "Tachycardia is typically the earliest compensatory response to blood loss. Hypotension is a late sign, not appearing until approximately 30% of blood volume is lost. Altered mental status and decreased urine output also occur later.",
+    difficulty: 5,
+    category: "Trauma",
+    topic: "hemorrhagic shock"
+  },
+  {
+    id: "para-batch-105",
+    stem: "A patient involved in a motorcycle crash has an open femur fracture with significant bleeding. What is the priority intervention?",
+    options: [
+      "Splint the fracture in the position found",
+      "Control hemorrhage with direct pressure and tourniquet if needed",
+      "Start two large-bore IVs with normal saline",
+      "Perform a detailed secondary assessment"
+    ],
+    correctIndex: 1,
+    rationale: "Life-threatening hemorrhage control takes priority over splinting. Direct pressure and tourniquet application (if direct pressure fails) are the first steps. A femur fracture can result in 1-2 liters of blood loss.",
+    difficulty: 5,
+    category: "Trauma",
+    topic: "hemorrhage control"
+  },
+  {
+    id: "para-batch-106",
+    stem: "Which trauma mechanism is most likely to produce a cardiac tamponade?",
+    options: [
+      "Blunt trauma to the abdomen",
+      "Penetrating trauma to the chest",
+      "Fall from a standing height",
+      "Blast injury to the extremities"
+    ],
+    correctIndex: 1,
+    rationale: "Penetrating trauma to the chest (especially stab wounds) is the most common cause of traumatic cardiac tamponade. Blood accumulates in the pericardial sac, compressing the heart and reducing cardiac output.",
+    difficulty: 5,
+    category: "Trauma",
+    topic: "cardiac tamponade"
+  },
+  {
+    id: "para-batch-107",
+    stem: "Beck's triad in cardiac tamponade includes all of the following EXCEPT:",
+    options: [
+      "Muffled heart sounds",
+      "Jugular venous distention",
+      "Hypotension",
+      "Tracheal deviation"
+    ],
+    correctIndex: 3,
+    rationale: "Beck's triad consists of muffled heart sounds, JVD, and hypotension (narrowing pulse pressure). Tracheal deviation is associated with tension pneumothorax, not cardiac tamponade.",
+    difficulty: 5,
+    category: "Trauma",
+    topic: "cardiac tamponade"
+  },
+  {
+    id: "para-batch-108",
+    stem: "A 30-year-old construction worker fell 20 feet from scaffolding. He is alert but complains of severe back pain. Vital signs are stable. What is the most appropriate prehospital management?",
+    options: [
+      "Allow the patient to walk to the ambulance with assistance",
+      "Full spinal motion restriction with long backboard",
+      "Perform a standing takedown and transport seated",
+      "Apply a KED device and transport in position of comfort"
+    ],
+    correctIndex: 1,
+    rationale: "A fall of greater than 20 feet with back pain warrants full spinal motion restriction. The mechanism and symptoms suggest potential spinal injury. The patient should be fully immobilized on a long backboard for transport.",
+    difficulty: 5,
+    category: "Trauma",
+    topic: "spinal motion restriction"
+  },
+  {
+    id: "para-batch-109",
+    stem: "In the prehospital setting, what is the appropriate treatment for a flail chest?",
+    options: [
+      "Tape the affected ribs firmly to the chest wall",
+      "Stabilize the flail segment with a bulky dressing and provide positive pressure ventilation as needed",
+      "Position the patient on the unaffected side and hyperventilate",
+      "Perform needle decompression at the second intercostal space"
+    ],
+    correctIndex: 1,
+    rationale: "Flail chest is managed by stabilizing the segment with bulky dressings and providing positive pressure ventilation (BVM or intubation) if respiratory compromise develops. Taping ribs is contraindicated as it restricts breathing. Needle decompression is for tension pneumothorax.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "flail chest"
+  },
+  {
+    id: "para-batch-110",
+    stem: "A patient has been impaled by a metal rod through the right upper quadrant of the abdomen. What is the correct prehospital management?",
+    options: [
+      "Remove the object and apply direct pressure",
+      "Stabilize the object in place and transport",
+      "Push the object through to the other side",
+      "Cut the object flush with the skin surface"
+    ],
+    correctIndex: 1,
+    rationale: "Impaled objects should be stabilized in place and not removed in the field. Removal could cause uncontrolled hemorrhage as the object may be tamponading blood vessels. Secure the object with bulky dressings and transport.",
+    difficulty: 5,
+    category: "Trauma",
+    topic: "impaled objects"
+  },
+  {
+    id: "para-batch-111",
+    stem: "Which of the following findings in a trauma patient suggests a ruptured spleen?",
+    options: [
+      "Right upper quadrant pain with jaundice",
+      "Left upper quadrant pain radiating to the left shoulder (Kehr's sign)",
+      "Periumbilical ecchymosis (Cullen's sign)",
+      "Flank ecchymosis (Grey Turner's sign)"
+    ],
+    correctIndex: 1,
+    rationale: "Kehr's sign (left shoulder pain referred from diaphragmatic irritation by splenic bleeding) is classic for splenic rupture. Cullen's and Grey Turner's signs indicate retroperitoneal hemorrhage (pancreatitis). Right upper quadrant pain with jaundice suggests hepatobiliary pathology.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "abdominal trauma"
+  },
+  {
+    id: "para-batch-112",
+    stem: "A patient involved in an MVC has paradoxical chest wall movement. Which condition does this indicate?",
+    options: [
+      "Simple pneumothorax",
+      "Hemothorax",
+      "Flail chest",
+      "Pericardial tamponade"
+    ],
+    correctIndex: 2,
+    rationale: "Paradoxical movement (inward on inspiration, outward on expiration) of a chest wall segment indicates flail chest, caused by two or more ribs fractured in two or more places. This creates a free-floating segment that moves opposite to normal.",
+    difficulty: 5,
+    category: "Trauma",
+    topic: "flail chest"
+  },
+  {
+    id: "para-batch-113",
+    stem: "What class of hemorrhage is associated with approximately 30-40% blood loss, tachycardia over 120, and altered mental status?",
+    options: [
+      "Class I",
+      "Class II",
+      "Class III",
+      "Class IV"
+    ],
+    correctIndex: 2,
+    rationale: "Class III hemorrhage involves 30-40% blood volume loss (1500-2000 mL). Signs include tachycardia >120, tachypnea 30-40, decreased blood pressure, confusion/anxiety, and decreased urine output. Class IV is >40% with imminent cardiovascular collapse.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "hemorrhage classification"
+  },
+  {
+    id: "para-batch-114",
+    stem: "A 19-year-old has a gunshot wound to the right chest. He presents with absent breath sounds on the right, JVD, tracheal deviation to the left, and severe hypotension. What is the immediate intervention?",
+    options: [
+      "Intubation and bilateral chest decompression",
+      "Needle decompression of the right chest at the second intercostal space, midclavicular line",
+      "Immediate transport without intervention",
+      "Application of an occlusive dressing"
+    ],
+    correctIndex: 1,
+    rationale: "This presentation is classic tension pneumothorax. Needle decompression at the second intercostal space, midclavicular line on the affected side converts it to a simple pneumothorax and can be life-saving. Delaying this intervention can lead to cardiovascular collapse.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "needle decompression"
+  },
+  {
+    id: "para-batch-115",
+    stem: "Which of the following skull fractures carries the highest risk of epidural hematoma?",
+    options: [
+      "Occipital fracture",
+      "Temporal bone fracture",
+      "Frontal bone fracture",
+      "Parietal bone fracture"
+    ],
+    correctIndex: 1,
+    rationale: "Temporal bone fractures have the highest risk of epidural hematoma because the middle meningeal artery runs beneath the temporal bone. Rupture of this artery leads to rapid arterial bleeding between the dura and the skull.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "head trauma"
+  },
+  {
+    id: "para-batch-116",
+    stem: "A trauma patient has a suspected pelvic fracture. What is the most appropriate prehospital stabilization?",
+    options: [
+      "Apply traction to the lower extremities",
+      "Apply a pelvic binder or circumferential sheet",
+      "Place the patient in a lateral position",
+      "MAST/PASG application to the lower extremities only"
+    ],
+    correctIndex: 1,
+    rationale: "A pelvic binder or a circumferential sheet wrapped tightly around the greater trochanters helps stabilize pelvic fractures and reduce hemorrhage by decreasing the pelvic volume. Traction is used for femur fractures, not pelvic fractures.",
+    difficulty: 4,
+    category: "Trauma",
+    topic: "pelvic fracture management"
+  },
+  {
+    id: "para-batch-117",
+    stem: "A patient presents with a traumatic amputation of the right hand. How should the amputated part be managed during transport?",
+    options: [
+      "Wrap in wet gauze, place in a plastic bag, then on ice",
+      "Place directly on ice in a cooler",
+      "Submerge in cold water during transport",
+      "Wrap in dry gauze and leave at room temperature"
+    ],
+    correctIndex: 0,
+    rationale: "The amputated part should be wrapped in sterile moist gauze, placed in a sealed plastic bag, and then placed on ice (not directly on ice to prevent frostbite). This preserves viability for possible reimplantation. Direct ice contact or submersion causes tissue damage.",
+    difficulty: 4,
+    category: "Trauma",
+    topic: "traumatic amputation"
+  },
+  {
+    id: "para-batch-118",
+    stem: "Which of the following is the correct landmark for needle decompression of a tension pneumothorax?",
+    options: [
+      "Fourth intercostal space, anterior axillary line",
+      "Second intercostal space, midclavicular line",
+      "Fifth intercostal space, midaxillary line",
+      "Both B and C are acceptable sites"
+    ],
+    correctIndex: 3,
+    rationale: "Current guidelines accept both the second intercostal space at the midclavicular line and the fourth/fifth intercostal space at the anterior axillary line as appropriate needle decompression sites. The lateral site may be preferred in obese patients.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "needle decompression"
+  },
+  {
+    id: "para-batch-119",
+    stem: "What is the Revised Trauma Score (RTS) based on?",
+    options: [
+      "Blood pressure, heart rate, respiratory rate",
+      "GCS, systolic blood pressure, respiratory rate",
+      "Mechanism of injury, age, vital signs",
+      "GCS, pulse oximetry, capnography"
+    ],
+    correctIndex: 1,
+    rationale: "The Revised Trauma Score (RTS) is calculated using three parameters: Glasgow Coma Scale (GCS), systolic blood pressure, and respiratory rate. Each is coded 0-4, with the total used for triage and outcome prediction.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "trauma scoring"
+  },
+  {
+    id: "para-batch-120",
+    stem: "A patient ejected from a vehicle at highway speed has a blood pressure of 70/40, heart rate of 140, and is unresponsive. Estimated blood loss is greater than 40%. What class of hemorrhage is this?",
+    options: [
+      "Class II",
+      "Class III",
+      "Class IV",
+      "Class V"
+    ],
+    correctIndex: 2,
+    rationale: "Class IV hemorrhage involves loss of >40% blood volume (>2000 mL). It presents with marked tachycardia, severe hypotension, negligible urine output, and altered mental status/loss of consciousness. This is immediately life-threatening and requires aggressive resuscitation.",
+    difficulty: 1,
+    category: "Trauma",
+    topic: "hemorrhage classification"
+  },
+  {
+    id: "para-batch-121",
+    stem: "Which of the following best describes the 'lethal triad' in trauma?",
+    options: [
+      "Hypoxia, hypercarbia, acidosis",
+      "Hypothermia, acidosis, coagulopathy",
+      "Hemorrhage, infection, organ failure",
+      "Tachycardia, hypotension, tachypnea"
+    ],
+    correctIndex: 1,
+    rationale: "The lethal triad (trauma triad of death) consists of hypothermia, acidosis, and coagulopathy. These three conditions form a vicious cycle in severe trauma, each worsening the others and dramatically increasing mortality.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "lethal triad"
+  },
+  {
+    id: "para-batch-122",
+    stem: "A helmeted motorcyclist is found unconscious after a crash. When should the helmet be removed?",
+    options: [
+      "Immediately upon arrival to assess the airway",
+      "Only if the helmet interferes with airway management or ventilation",
+      "Never in the field; wait for the emergency department",
+      "Only after a cervical collar has been applied"
+    ],
+    correctIndex: 1,
+    rationale: "Helmet removal should be performed only when it interferes with airway management or adequate ventilation. It requires two rescuers to maintain inline cervical stabilization. Unnecessary removal increases the risk of cervical spine injury.",
+    difficulty: 4,
+    category: "Trauma",
+    topic: "helmet removal"
+  },
+  {
+    id: "para-batch-123",
+    stem: "A patient has bilateral femur fractures. What is the estimated blood loss from this injury alone?",
+    options: [
+      "500 mL",
+      "1000 mL",
+      "2000-3000 mL",
+      "4000-5000 mL"
+    ],
+    correctIndex: 2,
+    rationale: "Each femur fracture can result in approximately 1000-1500 mL of blood loss. Bilateral femur fractures can therefore cause 2000-3000 mL or more of hemorrhage, which represents Class III or IV hemorrhage requiring aggressive treatment.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "fracture blood loss"
+  },
+  {
+    id: "para-batch-124",
+    stem: "What is the most appropriate tourniquet placement for an arterial bleed from a wound just above the right knee?",
+    options: [
+      "At the ankle",
+      "Just below the wound",
+      "Proximal to the wound on the thigh",
+      "At the inguinal crease"
+    ],
+    correctIndex: 2,
+    rationale: "Tourniquets should be placed proximal (closer to the trunk) to the wound, typically 2-3 inches above the bleeding site. Placement distal to the wound would not control arterial blood flow to the injury.",
+    difficulty: 1,
+    category: "Trauma",
+    topic: "tourniquet application"
+  },
+  {
+    id: "para-batch-125",
+    stem: "A 45-year-old is found pinned under a heavy concrete slab for approximately 4 hours. Before extrication, what should the paramedic prepare for?",
+    options: [
+      "Hypothermia and frostbite",
+      "Crush syndrome with potential hyperkalemia and cardiac arrest",
+      "Anaphylactic reaction from tissue breakdown",
+      "Rhabdomyolysis requiring immediate dialysis"
+    ],
+    correctIndex: 1,
+    rationale: "Prolonged compression (>1 hour) of muscle tissue causes crush syndrome. Upon release, myoglobin, potassium, and lactic acid flood the circulation, leading to hyperkalemia, cardiac dysrhythmias, renal failure, and potentially cardiac arrest. IV fluids should be started before extrication.",
+    difficulty: 4,
+    category: "Trauma",
+    topic: "crush syndrome"
+  },
+  {
+    id: "para-batch-126",
+    stem: "Which GCS score indicates severe traumatic brain injury?",
+    options: [
+      "13-15",
+      "9-12",
+      "3-8",
+      "1-4"
+    ],
+    correctIndex: 2,
+    rationale: "Severe traumatic brain injury is defined by a GCS of 3-8. Moderate TBI is GCS 9-12, and mild TBI is GCS 13-15. The minimum GCS score is 3 (not 1), as each component has a minimum score of 1.",
+    difficulty: 1,
+    category: "Trauma",
+    topic: "Glasgow Coma Scale"
+  },
+  {
+    id: "para-batch-127",
+    stem: "A patient has raccoon eyes and Battle's sign. What type of injury do these findings suggest?",
+    options: [
+      "Subdural hematoma",
+      "Basilar skull fracture",
+      "Orbital blowout fracture",
+      "Le Fort III fracture"
+    ],
+    correctIndex: 1,
+    rationale: "Raccoon eyes (periorbital ecchymosis) and Battle's sign (postauricular ecchymosis) are classic signs of basilar skull fracture. Other signs include CSF otorrhea or rhinorrhea. Nasogastric tubes are contraindicated in suspected basilar skull fracture.",
+    difficulty: 4,
+    category: "Trauma",
+    topic: "basilar skull fracture"
+  },
+  {
+    id: "para-batch-128",
+    stem: "In a patient with suspected cervical spine injury, which intubation technique is most appropriate?",
+    options: [
+      "Nasotracheal intubation",
+      "Direct laryngoscopy with manual inline stabilization",
+      "Blind orotracheal intubation",
+      "Cricothyrotomy as the first-line approach"
+    ],
+    correctIndex: 1,
+    rationale: "Direct (or video) laryngoscopy with manual inline stabilization (MILS) is the preferred technique. An assistant maintains cervical alignment while the intubation is performed. Nasotracheal intubation may be used but is contraindicated in suspected basilar skull fracture.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "trauma intubation"
+  },
+  {
+    id: "para-batch-129",
+    stem: "What is the primary concern when managing a patient with a traumatic aortic injury?",
+    options: [
+      "Preventing tachycardia with atropine",
+      "Maintaining low blood pressure to prevent aortic rupture",
+      "Aggressive fluid resuscitation to normalize blood pressure",
+      "Immediate defibrillation"
+    ],
+    correctIndex: 1,
+    rationale: "Permissive hypotension (systolic BP around 80-90 mmHg) is recommended in suspected traumatic aortic injury to prevent complete rupture. Aggressive fluid resuscitation can increase pressure on the damaged aorta and cause rupture.",
+    difficulty: 4,
+    category: "Trauma",
+    topic: "traumatic aortic injury"
+  },
+  {
+    id: "para-batch-130",
+    stem: "A burn patient has superficial partial-thickness burns to the entire anterior chest and abdomen and both anterior arms. Using the Rule of Nines, what is the estimated total body surface area (TBSA) burned?",
+    options: [
+      "18%",
+      "27%",
+      "36%",
+      "45%"
+    ],
+    correctIndex: 1,
+    rationale: "Using the Rule of Nines: anterior trunk = 18%, each arm (anterior) = 4.5% x 2 = 9%. Total = 18% + 9% = 27%. The Rule of Nines assigns 9% to each arm, 18% to the anterior trunk, 18% to the posterior trunk, 18% to each leg, and 1% to the perineum.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "burn assessment"
+  },
+  {
+    id: "para-batch-131",
+    stem: "A patient sustained a stab wound to the right neck in Zone II. Which structures are most at risk?",
+    options: [
+      "Subclavian vessels and lung apex",
+      "Carotid artery, jugular vein, trachea, and esophagus",
+      "Vertebral arteries and spinal cord",
+      "Salivary glands and pharynx"
+    ],
+    correctIndex: 1,
+    rationale: "Zone II of the neck extends from the cricoid cartilage to the angle of the mandible and contains the carotid arteries, jugular veins, trachea, esophagus, and larynx. It is the most commonly injured and most accessible zone surgically.",
+    difficulty: 4,
+    category: "Trauma",
+    topic: "penetrating neck trauma"
+  },
+  {
+    id: "para-batch-132",
+    stem: "Which fluid is the initial resuscitation fluid of choice for a hemorrhaging trauma patient in the prehospital setting?",
+    options: [
+      "D5W (5% Dextrose in Water)",
+      "Lactated Ringer's or Normal Saline",
+      "Packed red blood cells",
+      "Albumin 5%"
+    ],
+    correctIndex: 1,
+    rationale: "Isotonic crystalloid solutions (Lactated Ringer's or Normal Saline) are the initial resuscitation fluid in the prehospital setting for hemorrhaging trauma patients. Blood products are preferred but typically unavailable in the field. D5W is hypotonic and inappropriate for volume resuscitation.",
+    difficulty: 1,
+    category: "Trauma",
+    topic: "fluid resuscitation"
+  },
+  {
+    id: "para-batch-133",
+    stem: "A patient has a suspected spinal cord injury at C4. Which complication should the paramedic be most prepared to manage?",
+    options: [
+      "Priapism",
+      "Respiratory failure",
+      "Autonomic dysreflexia",
+      "Neurogenic bladder"
+    ],
+    correctIndex: 1,
+    rationale: "Injuries at C4 and above can compromise the phrenic nerve (C3-C5), which innervates the diaphragm. This leads to respiratory failure requiring ventilatory support. Autonomic dysreflexia occurs with injuries at T6 and above but is a chronic complication.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "spinal cord injury"
+  },
+  {
+    id: "para-batch-134",
+    stem: "What is neurogenic shock characterized by in the setting of spinal cord injury?",
+    options: [
+      "Tachycardia and hypertension",
+      "Hypotension and bradycardia with warm, dry skin",
+      "Hypotension and tachycardia with cool, clammy skin",
+      "Hypertension and bradycardia with flushed skin"
+    ],
+    correctIndex: 1,
+    rationale: "Neurogenic shock results from loss of sympathetic tone below the level of spinal cord injury. This causes vasodilation (hypotension, warm/dry skin) and unopposed vagal tone (bradycardia). This differs from hypovolemic shock which presents with tachycardia and cool skin.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "neurogenic shock"
+  },
+  {
+    id: "para-batch-135",
+    stem: "A trauma patient has clear fluid draining from the nose following a head injury. What test can help confirm CSF leak?",
+    options: [
+      "Blood glucose test on the fluid",
+      "Halo test (double ring sign)",
+      "Litmus paper test",
+      "Culture and sensitivity"
+    ],
+    correctIndex: 1,
+    rationale: "The halo test (placing fluid on gauze and looking for a double ring sign with blood in the center surrounded by a clear ring of CSF) is a field-expedient method to help identify CSF in nasal or ear drainage after head trauma.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "CSF leak"
+  },
+  {
+    id: "para-batch-136",
+    stem: "In trauma, what does the mnemonic DCAP-BTLS stand for?",
+    options: [
+      "Deformities, Contusions, Abrasions, Punctures, Burns, Tenderness, Lacerations, Swelling",
+      "Discoloration, Crepitus, Avulsions, Pain, Bleeding, Trauma, Lesions, Shock",
+      "Deformities, Cyanosis, Abrasions, Pallor, Burns, Tachycardia, Lacerations, Shortness of breath",
+      "Distension, Contusions, Asymmetry, Pulselessness, Bruising, Tenderness, Limpness, Spasm"
+    ],
+    correctIndex: 0,
+    rationale: "DCAP-BTLS stands for Deformities, Contusions, Abrasions, Punctures/Penetrations, Burns, Tenderness, Lacerations, and Swelling. It is used as a systematic assessment tool during trauma patient evaluation.",
+    difficulty: 1,
+    category: "Trauma",
+    topic: "trauma assessment"
+  },
+  {
+    id: "para-batch-137",
+    stem: "A 6-year-old child is struck by a car. Which injury pattern should the paramedic anticipate based on Waddell's triad?",
+    options: [
+      "Head, cervical spine, and upper extremity injuries",
+      "Femur/tibia fractures, chest/abdominal injuries, and head/neck injuries",
+      "Pelvic fracture, lumbar spine fracture, and lower extremity injuries",
+      "Facial trauma, dental avulsion, and cervical strain"
+    ],
+    correctIndex: 1,
+    rationale: "Waddell's triad describes the classic pediatric pedestrian injury pattern: (1) bumper impact to femur/tibia, (2) hood/fender impact to trunk (chest/abdomen), and (3) ground impact to the head. Children are shorter, so the bumper strikes the femur rather than the knee.",
+    difficulty: 4,
+    category: "Trauma",
+    topic: "pediatric trauma"
+  },
+  {
+    id: "para-batch-138",
+    stem: "What is the recommended target systolic blood pressure for permissive hypotension in an adult trauma patient without head injury?",
+    options: [
+      "60-70 mmHg",
+      "80-90 mmHg",
+      "100-110 mmHg",
+      "120-130 mmHg"
+    ],
+    correctIndex: 1,
+    rationale: "Permissive hypotension targets a systolic BP of 80-90 mmHg in trauma patients without head injury. This reduces clot disruption while maintaining minimal perfusion. In patients with TBI, a higher target (>90 mmHg) is recommended to maintain cerebral perfusion.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "permissive hypotension"
+  },
+  {
+    id: "para-batch-139",
+    stem: "Which of the following is the most common cause of preventable death in trauma?",
+    options: [
+      "Tension pneumothorax",
+      "Hemorrhage",
+      "Airway obstruction",
+      "Traumatic brain injury"
+    ],
+    correctIndex: 1,
+    rationale: "Hemorrhage is the leading cause of preventable death in trauma. Early hemorrhage control through tourniquet use, wound packing, and damage control resuscitation has significantly reduced trauma mortality. The Stop the Bleed campaign emphasizes this.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "trauma mortality"
+  },
+  {
+    id: "para-batch-140",
+    stem: "A patient has circumferential full-thickness burns to both lower extremities. Beyond the burn injury, what complication should the paramedic be most concerned about?",
+    options: [
+      "Hypothermia",
+      "Compartment syndrome from eschar formation",
+      "Allergic reaction to topical agents",
+      "Wound infection"
+    ],
+    correctIndex: 1,
+    rationale: "Circumferential full-thickness burns can form a constricting eschar (rigid burned tissue) that restricts blood flow and may cause compartment syndrome. Escharotomy may be needed to restore circulation. This is a time-critical emergency.",
+    difficulty: 4,
+    category: "Trauma",
+    topic: "burn complications"
+  },
+  {
+    id: "para-batch-141",
+    stem: "Which of the following is the best indicator that a trauma patient needs emergent surgical intervention (positive FAST exam)?",
+    options: [
+      "Presence of fluid in the Morison's pouch",
+      "Absence of cardiac activity",
+      "Air in the peritoneum",
+      "Distended gallbladder"
+    ],
+    correctIndex: 0,
+    rationale: "Free fluid in Morison's pouch (hepatorenal recess) on FAST exam indicates hemoperitoneum and is the most sensitive finding for abdominal hemorrhage in trauma. This finding in an unstable patient typically warrants emergent surgical exploration.",
+    difficulty: 4,
+    category: "Trauma",
+    topic: "FAST exam"
+  },
+  {
+    id: "para-batch-142",
+    stem: "A patient with a known spinal cord injury at T4 develops sudden severe hypertension, bradycardia, headache, and flushing above the level of injury. What is the most likely diagnosis?",
+    options: [
+      "Neurogenic shock",
+      "Autonomic dysreflexia",
+      "Spinal shock",
+      "Cushing's reflex"
+    ],
+    correctIndex: 1,
+    rationale: "Autonomic dysreflexia occurs in patients with spinal cord injuries at T6 and above. A noxious stimulus below the injury level triggers massive sympathetic response causing severe hypertension and reflex bradycardia. Common triggers include bladder distension and bowel impaction.",
+    difficulty: 4,
+    category: "Trauma",
+    topic: "autonomic dysreflexia"
+  },
+  {
+    id: "para-batch-143",
+    stem: "What is the appropriate tidal volume for ventilating a patient with suspected traumatic brain injury?",
+    options: [
+      "6-8 mL/kg to prevent hyperventilation",
+      "10-12 mL/kg with a rate of 10 breaths/min to maintain normocarbia",
+      "15-20 mL/kg to maximize oxygenation",
+      "4-6 mL/kg with high PEEP"
+    ],
+    correctIndex: 1,
+    rationale: "In TBI, normocarbia (EtCO2 35-40 mmHg) is the goal. Ventilate at 10-12 mL/kg at 10 breaths/min. Hyperventilation causes cerebral vasoconstriction and worsens ischemia. It should only be used as a temporizing measure for signs of herniation.",
+    difficulty: 4,
+    category: "Trauma",
+    topic: "TBI ventilation"
+  },
+  {
+    id: "para-batch-144",
+    stem: "A patient presents with an evisceration after an abdominal stab wound. What is the correct prehospital management?",
+    options: [
+      "Push the organs back into the abdomen and cover with dry dressing",
+      "Cover exposed organs with moist sterile dressings and an occlusive cover",
+      "Apply direct pressure to the eviscerated organs",
+      "Leave the wound open and uncovered for surgical evaluation"
+    ],
+    correctIndex: 1,
+    rationale: "Eviscerated organs should never be pushed back in. Cover them with sterile saline-moistened dressings to prevent drying and tissue death, then apply an occlusive covering (plastic wrap) to maintain moisture. Position the patient supine with knees flexed.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "abdominal evisceration"
+  },
+  {
+    id: "para-batch-145",
+    stem: "During a mass casualty incident, a patient is breathing after repositioning the airway but has a respiratory rate of 35. Under the START triage system, what color tag should this patient receive?",
+    options: [
+      "Green (minor)",
+      "Yellow (delayed)",
+      "Red (immediate)",
+      "Black (expectant)"
+    ],
+    correctIndex: 2,
+    rationale: "In START triage, a respiratory rate >30 after airway positioning indicates respiratory compromise, classifying the patient as Red (Immediate). The algorithm checks: breathing? → respiratory rate → perfusion → mental status. A rate >30 is tagged Immediate.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "START triage"
+  },
+  {
+    id: "para-batch-146",
+    stem: "A blast injury victim has bilateral tympanic membrane rupture and abdominal pain. Which category of blast injury causes these findings?",
+    options: [
+      "Primary blast injury",
+      "Secondary blast injury",
+      "Tertiary blast injury",
+      "Quaternary blast injury"
+    ],
+    correctIndex: 0,
+    rationale: "Primary blast injuries are caused by the pressure wave (overpressure) and affect air-filled structures: tympanic membranes, lungs (blast lung), and GI tract. Secondary injuries are from projectiles, tertiary from being thrown, and quaternary from all other causes.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "blast injuries"
+  },
+  {
+    id: "para-batch-147",
+    stem: "What is the most appropriate first action for managing a patient with an unstable pelvic fracture and hemorrhagic shock?",
+    options: [
+      "Apply a pelvic binder and initiate fluid resuscitation",
+      "Perform a digital rectal exam to assess for rectal bleeding",
+      "Splint the lower extremities and elevate the legs",
+      "Administer pain medication before any stabilization"
+    ],
+    correctIndex: 0,
+    rationale: "An unstable pelvic fracture with hemorrhagic shock requires immediate application of a pelvic binder to reduce pelvic volume and tamponade bleeding, followed by aggressive fluid resuscitation and rapid transport. Pelvic fractures can cause life-threatening hemorrhage.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "pelvic fracture"
+  },
+  {
+    id: "para-batch-148",
+    stem: "A patient with isolated blunt abdominal trauma has a rigid, distended abdomen with guarding. Vitals: BP 78/50, HR 130, RR 28. What is the most likely diagnosis?",
+    options: [
+      "Small bowel obstruction",
+      "Intra-abdominal hemorrhage with peritonitis",
+      "Abdominal aortic aneurysm",
+      "Acute pancreatitis"
+    ],
+    correctIndex: 1,
+    rationale: "Blunt abdominal trauma with a rigid, distended abdomen, guarding, and signs of shock (hypotension, tachycardia) strongly suggests intra-abdominal hemorrhage with peritonitis from organ injury (spleen, liver). This patient requires emergent surgical intervention.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "abdominal hemorrhage"
+  },
+  {
+    id: "para-batch-149",
+    stem: "When should a tourniquet be applied in the management of extremity hemorrhage?",
+    options: [
+      "Only as a last resort after all other methods fail",
+      "When direct pressure fails to control life-threatening extremity bleeding",
+      "For any laceration greater than 3 cm",
+      "Only when the limb will require amputation"
+    ],
+    correctIndex: 1,
+    rationale: "Current evidence-based guidelines recommend tourniquet application when direct pressure fails to control life-threatening extremity hemorrhage. Military and civilian data show early tourniquet use saves lives with low complication rates. It is no longer considered a last resort.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "tourniquet use"
+  },
+  {
+    id: "para-batch-150",
+    stem: "A patient involved in a rollover MVC has clear fluid leaking from the right ear. What does this finding suggest?",
+    options: [
+      "Otitis media with perforation",
+      "Basilar skull fracture with CSF otorrhea",
+      "Temporal bone contusion",
+      "Traumatic cholesteatoma"
+    ],
+    correctIndex: 1,
+    rationale: "Clear fluid from the ear (CSF otorrhea) after head trauma is highly suggestive of basilar skull fracture with dural tear. Do not pack the ear or attempt to stop the flow. Transport with the affected ear down and avoid nasogastric tube insertion.",
+    difficulty: 3,
+    category: "Trauma",
+    topic: "basilar skull fracture"
+  },
+  {
+    id: "para-batch-151",
+    stem: "A 55-year-old female presents with sudden onset of severe chest pain described as 'tearing' radiating to the back. BP is 200/110 in the right arm and 160/90 in the left. What is the most likely diagnosis?",
+    options: [
+      "Acute myocardial infarction",
+      "Pulmonary embolism",
+      "Aortic dissection",
+      "Esophageal rupture"
+    ],
+    correctIndex: 2,
+    rationale: "Acute aortic dissection classically presents with sudden, severe, tearing chest pain radiating to the back and unequal blood pressures between arms (>20 mmHg difference). Hypertension is a major risk factor. This requires emergent surgical consultation.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "aortic dissection"
+  },
+  {
+    id: "para-batch-152",
+    stem: "A patient presents with sudden onset of right-sided weakness, facial droop, and slurred speech. Symptom onset was 90 minutes ago. What is the most important prehospital action?",
+    options: [
+      "Administer aspirin 325 mg",
+      "Establish IV access, determine blood glucose, and transport to a stroke center",
+      "Perform a 12-lead ECG and treat any dysrhythmias",
+      "Administer nitroglycerin sublingually"
+    ],
+    correctIndex: 1,
+    rationale: "In suspected acute stroke, the priority is rapid assessment (Cincinnati Stroke Scale, blood glucose), IV access, and transport to a designated stroke center within the treatment window. Aspirin, nitroglycerin, and other medications are not given prehospitally for stroke.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "acute stroke"
+  },
+  {
+    id: "para-batch-153",
+    stem: "What is the initial drug of choice for a patient in anaphylaxis?",
+    options: [
+      "Diphenhydramine 50 mg IV",
+      "Epinephrine 0.3 mg IM (1:1000)",
+      "Methylprednisolone 125 mg IV",
+      "Albuterol 2.5 mg nebulized"
+    ],
+    correctIndex: 1,
+    rationale: "Epinephrine is the first-line treatment for anaphylaxis. The adult dose is 0.3-0.5 mg of 1:1000 (1 mg/mL) given intramuscularly in the anterolateral thigh. It addresses bronchospasm, hypotension, and angioedema. Antihistamines and steroids are adjuncts, not primary treatment.",
+    difficulty: 1,
+    category: "Medical Emergencies",
+    topic: "anaphylaxis"
+  },
+  {
+    id: "para-batch-154",
+    stem: "A patient is found unresponsive with pinpoint pupils, respiratory rate of 4, and a needle near the body. What is the first-line treatment?",
+    options: [
+      "Flumazenil 0.2 mg IV",
+      "Naloxone 0.4-2 mg IV/IM/IN",
+      "Activated charcoal 50 g PO",
+      "Atropine 1 mg IV"
+    ],
+    correctIndex: 1,
+    rationale: "This presentation is classic for opioid overdose (unresponsive, pinpoint pupils, respiratory depression, drug paraphernalia). Naloxone is the specific opioid antagonist. It can be given IV, IM, or intranasally. Flumazenil is for benzodiazepine overdose.",
+    difficulty: 1,
+    category: "Medical Emergencies",
+    topic: "opioid overdose"
+  },
+  {
+    id: "para-batch-155",
+    stem: "A diabetic patient is found confused and diaphoretic with a blood glucose of 38 mg/dL. What is the most appropriate treatment?",
+    options: [
+      "Glucagon 1 mg IM if no IV access, or D10W/D50W IV",
+      "Insulin 10 units regular IV",
+      "Oral glucose paste only",
+      "Normal saline 1 liter bolus"
+    ],
+    correctIndex: 0,
+    rationale: "Severe hypoglycemia (BG <60 mg/dL) with altered mental status requires dextrose IV (D10W or D50W) if IV access is available, or glucagon 1 mg IM if not. Oral glucose is only appropriate in conscious patients who can protect their airway. Insulin would worsen hypoglycemia.",
+    difficulty: 1,
+    category: "Medical Emergencies",
+    topic: "hypoglycemia"
+  },
+  {
+    id: "para-batch-156",
+    stem: "Which ECG finding is most characteristic of ST-elevation myocardial infarction (STEMI)?",
+    options: [
+      "ST depression in two contiguous leads",
+      "ST elevation ≥1 mm in two or more contiguous leads",
+      "T-wave inversion in a single lead",
+      "Prolonged QT interval"
+    ],
+    correctIndex: 1,
+    rationale: "STEMI is defined by ST elevation of ≥1 mm in two or more contiguous leads (or ≥2 mm in V1-V3). This indicates transmural myocardial ischemia/infarction and requires emergent reperfusion therapy (PCI or thrombolytics). ST depression suggests NSTEMI or ischemia.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "STEMI recognition"
+  },
+  {
+    id: "para-batch-157",
+    stem: "A patient in cardiac arrest has a rhythm on the monitor showing organized electrical activity but no palpable pulse. What is this rhythm called?",
+    options: [
+      "Ventricular fibrillation",
+      "Asystole",
+      "Pulseless electrical activity (PEA)",
+      "Ventricular tachycardia"
+    ],
+    correctIndex: 2,
+    rationale: "Pulseless electrical activity (PEA) is the presence of organized cardiac electrical activity on the monitor without a palpable pulse or detectable blood pressure. Treatment includes CPR, epinephrine, and identifying reversible causes (H's and T's).",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "cardiac arrest rhythms"
+  },
+  {
+    id: "para-batch-158",
+    stem: "What are the reversible causes of cardiac arrest referred to as the 'H's and T's'?",
+    options: [
+      "Hypovolemia, Hypoxia, Hydrogen ion, Hypo/Hyperkalemia, Hypothermia; Tension pneumothorax, Tamponade, Toxins, Thrombosis (pulmonary/coronary)",
+      "Hemorrhage, Heart failure, Hepatitis, Hypotension, Heat stroke; Tachycardia, Tremors, Thyroid storm, Trauma",
+      "Hypertension, Hypoglycemia, Hyperventilation, Hypercarbia, Hematoma; Torsades, TIA, Tension headache, Tachypnea",
+      "Hypoxemia, Hemoptysis, Hematemesis, Hematuria, Hemolysis; Tamponade, Thrombus, Tricuspid regurgitation, Tracheal stenosis"
+    ],
+    correctIndex: 0,
+    rationale: "The H's and T's are the reversible causes of cardiac arrest: Hypovolemia, Hypoxia, Hydrogen ion (acidosis), Hypo/Hyperkalemia, Hypothermia; Tension pneumothorax, Tamponade (cardiac), Toxins, Thrombosis (pulmonary and coronary). Identifying and treating these improves outcomes.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "reversible causes of arrest"
+  },
+  {
+    id: "para-batch-159",
+    stem: "A patient presents with severe respiratory distress, tripod positioning, drooling, and stridor. The patient has a high fever. What is the most likely diagnosis?",
+    options: [
+      "Croup",
+      "Epiglottitis",
+      "Asthma exacerbation",
+      "Foreign body aspiration"
+    ],
+    correctIndex: 1,
+    rationale: "The classic presentation of epiglottitis includes the '4 D's': Dysphagia, Dysphonia, Drooling, and Distress, along with fever and stridor. The patient assumes a tripod/sniffing position. Avoid agitating the patient or examining the throat as it may cause complete airway obstruction.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "epiglottitis"
+  },
+  {
+    id: "para-batch-160",
+    stem: "What is the first-line medication for status epilepticus in the prehospital setting?",
+    options: [
+      "Phenytoin 20 mg/kg IV",
+      "Midazolam 10 mg IM or diazepam 5-10 mg IV",
+      "Levetiracetam 60 mg/kg IV",
+      "Propofol 2 mg/kg IV"
+    ],
+    correctIndex: 1,
+    rationale: "Benzodiazepines (midazolam IM/IN, diazepam IV/rectal, or lorazepam IV) are the first-line treatment for status epilepticus. Midazolam IM is preferred when IV access is not available. Phenytoin and levetiracetam are second-line agents used in the hospital setting.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "status epilepticus"
+  },
+  {
+    id: "para-batch-161",
+    stem: "A patient has been stung by a bee and develops generalized urticaria, throat swelling, wheezing, and hypotension. After administering epinephrine, what is the next priority?",
+    options: [
+      "Apply ice to the sting site",
+      "Establish IV access and administer a fluid bolus",
+      "Administer oral diphenhydramine",
+      "Place the patient in a sitting position"
+    ],
+    correctIndex: 1,
+    rationale: "After epinephrine for anaphylaxis, the next priority is establishing IV access and giving a crystalloid fluid bolus to address distributive shock. Adjunct medications include antihistamines (IV diphenhydramine) and corticosteroids. Position the patient supine with legs elevated if hypotensive.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "anaphylaxis management"
+  },
+  {
+    id: "para-batch-162",
+    stem: "A 70-year-old male presents with sudden onset severe headache described as 'the worst headache of my life,' neck stiffness, and photophobia. What is the most likely diagnosis?",
+    options: [
+      "Migraine headache",
+      "Subarachnoid hemorrhage",
+      "Meningitis",
+      "Tension headache"
+    ],
+    correctIndex: 1,
+    rationale: "A sudden onset, severe 'thunderclap' headache described as the worst of the patient's life with neck stiffness (meningismus) is the classic presentation of subarachnoid hemorrhage (SAH), often from a ruptured cerebral aneurysm. This is a neurosurgical emergency.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "subarachnoid hemorrhage"
+  },
+  {
+    id: "para-batch-163",
+    stem: "What is the correct compression-to-ventilation ratio for single-rescuer CPR in an adult?",
+    options: [
+      "15:2",
+      "30:2",
+      "15:1",
+      "30:1"
+    ],
+    correctIndex: 1,
+    rationale: "The correct compression-to-ventilation ratio for single-rescuer adult CPR is 30:2 (30 compressions followed by 2 ventilations). This applies to both single and two-rescuer adult CPR. For two-rescuer pediatric/infant CPR, the ratio is 15:2.",
+    difficulty: 1,
+    category: "Medical Emergencies",
+    topic: "CPR"
+  },
+  {
+    id: "para-batch-164",
+    stem: "A patient presents with chest pain, dyspnea, and a 12-lead ECG showing ST elevation in leads II, III, and aVF. Which coronary artery is most likely occluded?",
+    options: [
+      "Left anterior descending (LAD)",
+      "Left circumflex (LCx)",
+      "Right coronary artery (RCA)",
+      "Left main coronary artery"
+    ],
+    correctIndex: 2,
+    rationale: "ST elevation in leads II, III, and aVF indicates an inferior STEMI, which is most commonly caused by occlusion of the right coronary artery (RCA). The LAD typically causes anterior STEMI (V1-V4), and the LCx causes lateral STEMI (I, aVL, V5-V6).",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "STEMI localization"
+  },
+  {
+    id: "para-batch-165",
+    stem: "A patient with a history of COPD presents with worsening dyspnea, pursed-lip breathing, and barrel chest. SpO2 is 86% on room air. What is the appropriate oxygen therapy?",
+    options: [
+      "High-flow oxygen via non-rebreather at 15 LPM",
+      "Titrated oxygen via nasal cannula to maintain SpO2 88-92%",
+      "Withhold oxygen due to risk of suppressing hypoxic drive",
+      "CPAP at 10 cmH2O immediately"
+    ],
+    correctIndex: 1,
+    rationale: "In COPD patients, oxygen should be titrated to a target SpO2 of 88-92%. While the hypoxic drive concern is somewhat overstated, excessive oxygen can worsen hypercapnia through the Haldane effect. Never withhold oxygen from a hypoxic patient; titrate appropriately.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "COPD management"
+  },
+  {
+    id: "para-batch-166",
+    stem: "A patient is experiencing a generalized tonic-clonic seizure that has lasted 7 minutes. What is the immediate priority?",
+    options: [
+      "Insert an oral airway and restrain the patient",
+      "Protect the patient from injury, administer benzodiazepines, and manage the airway",
+      "Place a tongue blade between the teeth",
+      "Start an IV and administer phenytoin"
+    ],
+    correctIndex: 1,
+    rationale: "For active seizures lasting >5 minutes (status epilepticus), priorities are protecting from injury (padding, moving objects), administering benzodiazepines (midazolam IM/IN if no IV), and managing the airway post-seizure. Never force objects into the mouth during seizure.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "seizure management"
+  },
+  {
+    id: "para-batch-167",
+    stem: "Which of the following is the preferred vasopressor in cardiac arrest?",
+    options: [
+      "Dopamine",
+      "Norepinephrine",
+      "Epinephrine 1 mg IV/IO every 3-5 minutes",
+      "Vasopressin 40 units IV single dose"
+    ],
+    correctIndex: 2,
+    rationale: "Epinephrine 1 mg IV/IO every 3-5 minutes is the standard vasopressor in cardiac arrest per ACLS guidelines. Vasopressin is no longer recommended as an alternative. Epinephrine's alpha-adrenergic effects increase coronary and cerebral perfusion pressure during CPR.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "ACLS pharmacology"
+  },
+  {
+    id: "para-batch-168",
+    stem: "A patient presents with altered mental status, Kussmaul respirations, fruity breath odor, and blood glucose of 480 mg/dL. What is the most likely diagnosis?",
+    options: [
+      "Hyperosmolar hyperglycemic state (HHS)",
+      "Diabetic ketoacidosis (DKA)",
+      "Hypoglycemia",
+      "Alcohol intoxication"
+    ],
+    correctIndex: 1,
+    rationale: "DKA is characterized by hyperglycemia (often 300-800 mg/dL), Kussmaul respirations (deep, rapid breathing to compensate for metabolic acidosis), fruity/acetone breath odor from ketone production, and altered mental status. HHS typically has higher glucose (>600) without significant ketosis.",
+    difficulty: 1,
+    category: "Medical Emergencies",
+    topic: "diabetic ketoacidosis"
+  },
+  {
+    id: "para-batch-169",
+    stem: "What is the correct initial energy setting for synchronized cardioversion of unstable supraventricular tachycardia (SVT)?",
+    options: [
+      "50-100 J synchronized",
+      "120-200 J biphasic unsynchronized",
+      "200 J monophasic unsynchronized",
+      "360 J monophasic synchronized"
+    ],
+    correctIndex: 0,
+    rationale: "Unstable SVT is treated with synchronized cardioversion starting at 50-100 J. Synchronization delivers the shock during the R-wave to avoid the vulnerable T-wave period. If using biphasic, start at the low end (50 J). Unsynchronized shocks (defibrillation) are used for VF/pulseless VT.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "cardioversion"
+  },
+  {
+    id: "para-batch-170",
+    stem: "A patient with asthma presents with severe wheezing, accessory muscle use, and an SpO2 of 88%. After initial albuterol nebulization, there is no improvement. What is the next appropriate intervention?",
+    options: [
+      "Continue albuterol nebulization only",
+      "Administer ipratropium bromide and consider IV magnesium sulfate",
+      "Perform endotracheal intubation immediately",
+      "Administer morphine for bronchospasm relief"
+    ],
+    correctIndex: 1,
+    rationale: "For severe asthma not responding to initial beta-agonist therapy, add ipratropium bromide (anticholinergic) and consider IV magnesium sulfate (bronchodilator). Epinephrine IM may also be considered. Intubation is a last resort as it carries high risk in severe bronchospasm.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "severe asthma"
+  },
+  {
+    id: "para-batch-171",
+    stem: "Which rhythm requires defibrillation as the primary treatment?",
+    options: [
+      "Pulseless electrical activity",
+      "Asystole",
+      "Ventricular fibrillation",
+      "Third-degree heart block"
+    ],
+    correctIndex: 2,
+    rationale: "Ventricular fibrillation (VF) and pulseless ventricular tachycardia (pVT) are the two shockable rhythms in cardiac arrest. Early defibrillation is the definitive treatment for VF. PEA and asystole are non-shockable rhythms treated with CPR and epinephrine.",
+    difficulty: 1,
+    category: "Medical Emergencies",
+    topic: "cardiac arrest management"
+  },
+  {
+    id: "para-batch-172",
+    stem: "A patient experiencing a severe allergic reaction has stridor and is unable to speak. Epinephrine has been administered. What airway intervention should be prepared?",
+    options: [
+      "Nasopharyngeal airway insertion",
+      "Oropharyngeal airway insertion",
+      "Cricothyrotomy equipment in case of complete obstruction",
+      "Bag-valve-mask ventilation only"
+    ],
+    correctIndex: 2,
+    rationale: "Severe angioedema causing stridor and inability to speak indicates impending complete upper airway obstruction. If epinephrine fails to improve symptoms and intubation is impossible due to swelling, a surgical airway (cricothyrotomy) may be the only option to establish ventilation.",
+    difficulty: 4,
+    category: "Medical Emergencies",
+    topic: "airway management in anaphylaxis"
+  },
+  {
+    id: "para-batch-173",
+    stem: "A patient is experiencing acute pulmonary edema with severe respiratory distress. BP is 180/100. What is the most appropriate prehospital treatment?",
+    options: [
+      "Administer furosemide 80 mg IV",
+      "CPAP, nitroglycerin, and IV access",
+      "Albuterol nebulization and oxygen via nasal cannula",
+      "Intubation and mechanical ventilation immediately"
+    ],
+    correctIndex: 1,
+    rationale: "Acute pulmonary edema with hypertension is best managed with CPAP (improves oxygenation, reduces preload), nitroglycerin (reduces preload and afterload), and supportive care. CPAP has been shown to reduce the need for intubation. Albuterol is not indicated for cardiogenic pulmonary edema.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "acute pulmonary edema"
+  },
+  {
+    id: "para-batch-174",
+    stem: "What is the appropriate dose of amiodarone for a patient in refractory ventricular fibrillation?",
+    options: [
+      "150 mg IV bolus",
+      "300 mg IV bolus, followed by 150 mg if needed",
+      "1 mg/kg IV bolus",
+      "500 mg IV infusion over 30 minutes"
+    ],
+    correctIndex: 1,
+    rationale: "For VF/pulseless VT refractory to initial defibrillation and epinephrine, amiodarone 300 mg IV/IO bolus is given. If VF/pVT persists, a second dose of 150 mg may be given. Amiodarone is the preferred antiarrhythmic in cardiac arrest.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "ACLS antiarrhythmics"
+  },
+  {
+    id: "para-batch-175",
+    stem: "A patient presents with unilateral leg swelling, warmth, redness, and calf pain. They recently had hip surgery. What is the most likely diagnosis?",
+    options: [
+      "Cellulitis",
+      "Deep vein thrombosis (DVT)",
+      "Peripheral arterial disease",
+      "Muscle strain"
+    ],
+    correctIndex: 1,
+    rationale: "Unilateral leg swelling, warmth, redness, and calf pain (Homan's sign, though unreliable) following surgery (a major risk factor) is classic for deep vein thrombosis. Recent surgery, immobility, and trauma are major risk factors per Virchow's triad.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "deep vein thrombosis"
+  },
+  {
+    id: "para-batch-176",
+    stem: "A patient with DVT suddenly develops acute dyspnea, tachycardia, pleuritic chest pain, and hypoxia. What complication has most likely occurred?",
+    options: [
+      "Pneumonia",
+      "Pulmonary embolism",
+      "Heart failure",
+      "Pneumothorax"
+    ],
+    correctIndex: 1,
+    rationale: "Acute onset dyspnea, tachycardia, pleuritic chest pain, and hypoxia in a patient with known DVT strongly suggests pulmonary embolism. The thrombus has dislodged from the deep veins and traveled to the pulmonary vasculature, obstructing blood flow.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "pulmonary embolism"
+  },
+  {
+    id: "para-batch-177",
+    stem: "What is the initial treatment for a patient in stable monomorphic ventricular tachycardia with a pulse?",
+    options: [
+      "Defibrillation at 200 J",
+      "Adenosine 6 mg rapid IV push",
+      "Amiodarone 150 mg IV over 10 minutes",
+      "Atropine 1 mg IV"
+    ],
+    correctIndex: 2,
+    rationale: "Stable monomorphic VT with a pulse is treated with amiodarone 150 mg IV over 10 minutes (or procainamide/sotalol). If the patient becomes unstable (hypotension, altered mental status, chest pain), synchronized cardioversion is performed. Defibrillation is for pulseless VT/VF.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "ventricular tachycardia"
+  },
+  {
+    id: "para-batch-178",
+    stem: "A patient presents with sudden onset severe abdominal pain, abdominal rigidity, and signs of shock. He has a history of peptic ulcer disease. What is the most likely diagnosis?",
+    options: [
+      "Acute appendicitis",
+      "Perforated peptic ulcer",
+      "Acute cholecystitis",
+      "Bowel obstruction"
+    ],
+    correctIndex: 1,
+    rationale: "Sudden severe abdominal pain with rigidity (board-like abdomen from peritonitis) and shock in a patient with peptic ulcer disease strongly suggests perforation. Gastric contents spill into the peritoneum causing chemical peritonitis and sepsis. This requires emergent surgery.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "perforated ulcer"
+  },
+  {
+    id: "para-batch-179",
+    stem: "What is the maximum time from symptom onset to PCI (door-to-balloon) recommended for STEMI patients?",
+    options: [
+      "30 minutes",
+      "60 minutes",
+      "90 minutes",
+      "120 minutes"
+    ],
+    correctIndex: 2,
+    rationale: "The recommended door-to-balloon time for PCI in STEMI is 90 minutes or less from first medical contact. If PCI is not available within 120 minutes, fibrinolytic therapy should be considered within 30 minutes of hospital arrival.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "STEMI treatment timeline"
+  },
+  {
+    id: "para-batch-180",
+    stem: "A patient with a history of atrial fibrillation presents with sudden onset of severe, diffuse abdominal pain out of proportion to physical findings. What condition should be suspected?",
+    options: [
+      "Acute pancreatitis",
+      "Mesenteric ischemia",
+      "Abdominal aortic aneurysm",
+      "Small bowel obstruction"
+    ],
+    correctIndex: 1,
+    rationale: "Pain out of proportion to physical examination findings in a patient with atrial fibrillation (source of emboli) is classic for acute mesenteric ischemia. Atrial fibrillation creates clots that can embolize to the mesenteric vessels, causing bowel ischemia and infarction.",
+    difficulty: 4,
+    category: "Medical Emergencies",
+    topic: "mesenteric ischemia"
+  },
+  {
+    id: "para-batch-181",
+    stem: "What is the first-line treatment for symptomatic bradycardia with a heart rate of 35 and hypotension?",
+    options: [
+      "Epinephrine 1 mg IV push",
+      "Atropine 1 mg IV, may repeat every 3-5 minutes (max 3 mg)",
+      "Amiodarone 300 mg IV bolus",
+      "Adenosine 6 mg rapid IV push"
+    ],
+    correctIndex: 1,
+    rationale: "Atropine 1 mg IV is the first-line drug for symptomatic bradycardia per ACLS guidelines. It may be repeated every 3-5 minutes to a maximum total dose of 3 mg. If atropine is ineffective, transcutaneous pacing or dopamine/epinephrine infusion should be initiated.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "bradycardia management"
+  },
+  {
+    id: "para-batch-182",
+    stem: "A patient with known heart failure presents with acute dyspnea, pink frothy sputum, and bilateral crackles. What is the most appropriate prehospital intervention?",
+    options: [
+      "Administer furosemide 40 mg IV and morphine 4 mg IV",
+      "Apply CPAP at 5-10 cmH2O and administer sublingual nitroglycerin",
+      "Perform endotracheal intubation and start IV normal saline",
+      "Administer albuterol 2.5 mg nebulized and IV fluids"
+    ],
+    correctIndex: 1,
+    rationale: "Acute cardiogenic pulmonary edema with pink frothy sputum is managed with CPAP (5-10 cmH2O, reduces preload and work of breathing), nitroglycerin (vasodilator), and monitoring. CPAP significantly reduces intubation rates. IV fluids and morphine are generally avoided prehospitally.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "acute heart failure"
+  },
+  {
+    id: "para-batch-183",
+    stem: "A patient has ingested a large amount of acetaminophen approximately 2 hours ago. What is the specific antidote?",
+    options: [
+      "Naloxone",
+      "N-acetylcysteine (NAC)",
+      "Flumazenil",
+      "Atropine"
+    ],
+    correctIndex: 1,
+    rationale: "N-acetylcysteine (NAC) is the specific antidote for acetaminophen overdose. It replenishes glutathione stores and prevents hepatotoxicity. It is most effective when administered within 8 hours of ingestion but can be beneficial up to 24 hours or later.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "acetaminophen overdose"
+  },
+  {
+    id: "para-batch-184",
+    stem: "Which of the following is a contraindication to the administration of nitroglycerin?",
+    options: [
+      "Blood pressure of 140/90",
+      "Use of phosphodiesterase inhibitors (sildenafil) within 24-48 hours",
+      "Heart rate of 90 bpm",
+      "Age greater than 65 years"
+    ],
+    correctIndex: 1,
+    rationale: "Phosphodiesterase inhibitors (sildenafil/Viagra, tadalafil/Cialis) taken within 24-48 hours are an absolute contraindication to nitroglycerin. The combination can cause severe, refractory hypotension. Other contraindications include SBP <90 mmHg and right ventricular infarction.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "nitroglycerin contraindications"
+  },
+  {
+    id: "para-batch-185",
+    stem: "A patient presents with an acute asthma attack and is now silent (no wheezing), has decreased respiratory effort, and is becoming lethargic. What does this indicate?",
+    options: [
+      "The asthma attack is resolving",
+      "Impending respiratory failure requiring immediate intervention",
+      "The patient is hyperventilating",
+      "Anxiety-related symptoms"
+    ],
+    correctIndex: 1,
+    rationale: "A 'silent chest' during an asthma attack (absence of wheezing with decreased effort and altered mental status) indicates severe bronchospasm with critically reduced air movement. This is impending respiratory arrest requiring immediate aggressive intervention including intubation preparation.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "severe asthma"
+  },
+  {
+    id: "para-batch-186",
+    stem: "What is the appropriate treatment for a patient with symptomatic hyperkalemia showing peaked T-waves and widened QRS on ECG?",
+    options: [
+      "Calcium gluconate IV, sodium bicarbonate, and insulin with dextrose",
+      "Potassium supplementation IV",
+      "Magnesium sulfate 2 g IV",
+      "Adenosine 12 mg rapid IV push"
+    ],
+    correctIndex: 0,
+    rationale: "Symptomatic hyperkalemia with ECG changes requires calcium gluconate (cardioprotection), sodium bicarbonate (shifts potassium intracellularly), and insulin with glucose (drives potassium into cells). Albuterol also helps shift potassium. This is a life-threatening emergency.",
+    difficulty: 4,
+    category: "Medical Emergencies",
+    topic: "hyperkalemia"
+  },
+  {
+    id: "para-batch-187",
+    stem: "A patient presents with sudden onset of tearing abdominal pain radiating to the back. He is 72 years old with a pulsatile abdominal mass. BP is 70/40. What is the most likely diagnosis?",
+    options: [
+      "Acute pancreatitis",
+      "Ruptured abdominal aortic aneurysm",
+      "Bowel perforation",
+      "Renal colic"
+    ],
+    correctIndex: 1,
+    rationale: "A pulsatile abdominal mass with sudden tearing pain radiating to the back and hypotension in an elderly patient is classic for a ruptured abdominal aortic aneurysm (AAA). This is a surgical emergency requiring immediate transport. Mortality is very high without emergent repair.",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "ruptured AAA"
+  },
+  {
+    id: "para-batch-188",
+    stem: "What is the recommended initial dose of adenosine for stable narrow complex tachycardia (SVT)?",
+    options: [
+      "3 mg rapid IV push",
+      "6 mg rapid IV push followed by 20 mL NS flush",
+      "12 mg slow IV push",
+      "0.5 mg IV push"
+    ],
+    correctIndex: 1,
+    rationale: "Adenosine 6 mg rapid IV push followed by a rapid 20 mL NS flush is the initial dose for stable SVT. If ineffective after 1-2 minutes, a second dose of 12 mg may be given. It must be given rapidly through a proximal IV site due to its ultra-short half-life (<10 seconds).",
+    difficulty: 2,
+    category: "Medical Emergencies",
+    topic: "SVT management"
+  },
+  {
+    id: "para-batch-189",
+    stem: "A 28-year-old female at 36 weeks gestation presents with severe headache, visual changes, right upper quadrant pain, and BP of 170/110. What is the most likely diagnosis?",
+    options: [
+      "Gestational hypertension",
+      "Eclampsia",
+      "Severe preeclampsia",
+      "HELLP syndrome"
+    ],
+    correctIndex: 2,
+    rationale: "Severe preeclampsia presents with BP ≥160/110, headache, visual disturbances, and epigastric/RUQ pain (hepatic capsule distension). Eclampsia includes seizures. HELLP syndrome (Hemolysis, Elevated Liver enzymes, Low Platelets) may overlap but is a separate diagnosis.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "preeclampsia"
+  },
+  {
+    id: "para-batch-190",
+    stem: "What medication is given to prevent seizures in severe preeclampsia?",
+    options: [
+      "Diazepam 10 mg IV",
+      "Magnesium sulfate 4-6 g IV loading dose",
+      "Phenytoin 20 mg/kg IV",
+      "Lorazepam 2 mg IV"
+    ],
+    correctIndex: 1,
+    rationale: "Magnesium sulfate is the drug of choice for seizure prophylaxis and treatment in preeclampsia/eclampsia. A loading dose of 4-6 g IV is given over 15-20 minutes, followed by a maintenance infusion of 1-2 g/hour. Monitor for magnesium toxicity (loss of DTRs, respiratory depression).",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "eclampsia prevention"
+  },
+  {
+    id: "para-batch-191",
+    stem: "A patient is exposed to carbon monoxide from a house fire. SpO2 reads 99%. Why might this reading be unreliable?",
+    options: [
+      "Smoke particles interfere with the sensor",
+      "Pulse oximetry cannot distinguish carboxyhemoglobin from oxyhemoglobin",
+      "Burns on the fingers prevent proper sensor placement",
+      "The patient is hypothermic, affecting the reading"
+    ],
+    correctIndex: 1,
+    rationale: "Standard pulse oximetry measures the ratio of oxyhemoglobin to deoxyhemoglobin but cannot differentiate carboxyhemoglobin (COHb) from oxyhemoglobin. Both absorb light similarly, giving falsely elevated SpO2 readings. CO-oximetry is needed for accurate assessment.",
+    difficulty: 3,
+    category: "Medical Emergencies",
+    topic: "carbon monoxide poisoning"
+  },
+  {
+    id: "para-batch-192",
+    stem: "What is the primary treatment for carbon monoxide poisoning?",
+    options: [
+      "Oxygen via nasal cannula at 4 LPM",
+      "High-flow oxygen via non-rebreather mask at 15 LPM",
+      "Nebulized albuterol and steroids",
+      "IV sodium bicarbonate"
+    ],
+    correctIndex: 1,
+    rationale: "High-flow 100% oxygen via non-rebreather mask is the primary treatment for CO poisoning. It reduces the half-life of carboxyhemoglobin from 4-6 hours to 60-90 minutes. Severe cases may require hyperbaric oxygen therapy (reduces half-life to 20-30 minutes).",
+    difficulty: 1,
+    category: "Medical Emergencies",
+    topic: "carbon monoxide poisoning"
+  },
+  {
+    id: "para-batch-193",
+    stem: "A patient presents with an acute onset of speech difficulty where they can understand spoken language but produce fluent but nonsensical speech. What type of aphasia is this?",
+    options: [
+      "Broca's aphasia (expressive)",
+      "Wernicke's aphasia (receptive)",
+      "Global aphasia",
+      "Anomic aphasia"
+    ],
+    correctIndex: 1,
+    rationale: "Wernicke's aphasia (receptive/fluent aphasia) is characterized by fluent but meaningless speech with impaired comprehension. The patient speaks easily but words don't make sense. Broca's aphasia involves nonfluent speech with intact comprehension. This localizes to the temporal lobe.",
+    difficulty: 4,
+    category: "Medical Emergencies",
+    topic: "stroke syndromes"
+  },
+  {
+    id: "para-batch-194",
+    stem: "A patient with suspected meningitis presents with fever, headache, nuchal rigidity, and petechial rash. Which organism is most likely responsible?",
+    options: [
+      "Streptococcus pneumoniae",
+      "Neisseria meningitidis",
+      "Haemophilus influenzae",
+      "Escherichia coli"
+    ],
+    correctIndex: 1,
+    rationale: "Meningococcal meningitis (Neisseria meningitidis) classically presents with fever, headache, nuchal rigidity, and a petechial/purpuric rash. The rash indicates meningococcemia with disseminated intravascular coagulation. This is a rapidly fatal condition requiring emergent antibiotics.",
+    difficulty: 4,
+    category: "Medical Emergencies",
+    topic: "bacterial meningitis"
+  },
+  {
+    id: "para-batch-195",
+    stem: "A patient presents with signs and symptoms of sepsis. Which criteria define sepsis according to current guidelines?",
+    options: [
+      "Suspected infection with SIRS criteria met",
+      "Suspected infection with organ dysfunction (qSOFA ≥2 or SOFA score increase)",
+      "Positive blood cultures with fever",
+      "WBC >15,000 with two or more SIRS criteria"
+    ],
+    correctIndex: 1,
+    rationale: "Current Sepsis-3 guidelines define sepsis as suspected infection with organ dysfunction, identified by an increase in SOFA score ≥2 or a qSOFA score ≥2 (altered mentation, SBP ≤100 mmHg, RR ≥22). The older SIRS-based definition is less specific.",
+    difficulty: 4,
+    category: "Medical Emergencies",
+    topic: "sepsis definition"
+  },
+  {
+    id: "para-batch-196",
+    stem: "What is the prehospital management of a patient with suspected acute coronary syndrome who is not in cardiac arrest?",
+    options: [
+      "Aspirin, oxygen if hypoxic, nitroglycerin, 12-lead ECG, and transport",
+      "Immediate defibrillation followed by CPR",
+      "IV heparin and clopidogrel in the field",
+      "Thrombolytic administration and morphine"
+    ],
+    correctIndex: 0,
+    rationale: "Prehospital ACS management includes: Aspirin 162-325 mg (antiplatelet), oxygen if SpO2 <94%, nitroglycerin SL for ongoing pain (if no contraindications), 12-lead ECG for STEMI identification, and rapid transport to a cardiac catheterization-capable facility.",
+    difficulty: 1,
+    category: "Medical Emergencies",
+    topic: "acute coronary syndrome"
+  },
+  {
+    id: "para-batch-197",
+    stem: "A patient presents with sudden onset of severe, colicky flank pain radiating to the groin, with hematuria. What is the most likely diagnosis?",
+    options: [
+      "Appendicitis",
+      "Renal calculi (kidney stones)",
+      "Ovarian torsion",
+      "Aortic dissection"
+    ],
+    correctIndex: 1,
+    rationale: "Severe, colicky (waxing and waning) flank pain radiating to the groin with hematuria is the classic presentation of renal calculi (kidney stones). The pain follows the path of the ureter. Patients are often restless and unable to find a comfortable position.",
+    difficulty: 1,
+    category: "Medical Emergencies",
+    topic: "renal colic"
+  },
+  {
+    id: "para-batch-198",
+    stem: "A patient with a history of alcohol abuse presents with confusion, ataxia, and ophthalmoplegia. What is the most likely diagnosis and what treatment should be given?",
+    options: [
+      "Delirium tremens; benzodiazepines",
+      "Wernicke encephalopathy; thiamine (vitamin B1) IV",
+      "Hepatic encephalopathy; lactulose",
+      "Korsakoff syndrome; haloperidol"
+    ],
+    correctIndex: 1,
+    rationale: "The triad of confusion, ataxia, and ophthalmoplegia (eye movement abnormalities) defines Wernicke encephalopathy, caused by thiamine (B1) deficiency in chronic alcoholism. Thiamine must be given before glucose to prevent worsening. Without treatment, it may progress to Korsakoff syndrome.",
+    difficulty: 4,
+    category: "Medical Emergencies",
+    topic: "Wernicke encephalopathy"
+  },
+  {
+    id: "para-batch-199",
+    stem: "What is the correct rate and depth of chest compressions in adult CPR per current AHA guidelines?",
+    options: [
+      "At least 80/min, 1 inch deep",
+      "100-120/min, at least 2 inches (5 cm) deep",
+      "120-140/min, at least 3 inches deep",
+      "60-80/min, at least 1.5 inches deep"
+    ],
+    correctIndex: 1,
+    rationale: "Current AHA guidelines recommend chest compressions at a rate of 100-120 per minute with a depth of at least 2 inches (5 cm) but not more than 2.4 inches (6 cm) in adults. Allow complete chest recoil between compressions and minimize interruptions.",
+    difficulty: 1,
+    category: "Medical Emergencies",
+    topic: "CPR quality"
+  },
+  {
+    id: "para-batch-200",
+    stem: "A patient has ingested an unknown quantity of a tricyclic antidepressant. ECG shows a widened QRS complex (>100 ms). What is the appropriate treatment?",
+    options: [
+      "Flumazenil 0.2 mg IV",
+      "Sodium bicarbonate 1-2 mEq/kg IV bolus",
+      "Activated charcoal 50 g only",
+      "Physostigmine 2 mg slow IV"
+    ],
+    correctIndex: 1,
+    rationale: "Sodium bicarbonate is the primary treatment for TCA toxicity with QRS widening (>100 ms). It counteracts the sodium channel blockade by increasing serum sodium and alkalinizing the blood. Flumazenil is contraindicated as it may precipitate seizures. Physostigmine is rarely used and risky.",
+    difficulty: 4,
+    category: "Medical Emergencies",
+    topic: "TCA overdose"
+  }
+];

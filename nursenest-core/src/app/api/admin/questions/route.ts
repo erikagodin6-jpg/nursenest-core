@@ -1,0 +1,266 @@
+import { NextRequest, NextResponse } from "next/server";
+import { ContentStatus, Prisma, QuestionType } from "@prisma/client";
+import { z } from "zod";
+import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { stemHash } from "@/lib/content/stem-hash";
+import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
+import { assertExamQuestionContextForPublish } from "@/lib/content-quality/exam-question-context-validation";
+import { prisma } from "@/lib/db";
+import { contentStatusToDb } from "@/lib/prisma/content-status";
+import {
+  adminQuestionTypeToDb,
+  difficultyBandToInt,
+  examFamilyToExamColumn,
+  tierCodeToExamDbTier,
+} from "@/lib/prisma/exam-question-maps";
+import { ADMIN_API_LIST_PAGE, parseBoundedPageSize, parseListPage } from "@/lib/api/api-pagination-limits";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
+import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
+import { isBowtieQuestionType } from "@/lib/questions/bowtie-adapter";
+import { validateBowtieQuestionPayload } from "@/lib/questions/bowtie-question-schema";
+
+export const dynamic = "force-dynamic";
+
+const tierEnum = z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED"]);
+const qTypeEnum = z.enum(["MCQ", "SATA", "NGN_CASE", "ORDERING", "FIB_NUMERIC", "BOWTIE", "NGN_BOWTIE", "TREND", "NGN_TREND"]);
+const conventionalOptionsSchema = z.array(z.union([z.string(), z.number()])).min(1);
+const conventionalAnswerKeySchema = z.array(z.union([z.string(), z.number()])).min(1);
+const bowtieOptionsSchema = z.record(z.string(), z.unknown());
+const bowtieAnswerKeySchema = z.object({
+  correctMapping: z.object({
+    condition: z.string().min(1),
+    intervention: z.string().min(1),
+    monitoring: z.string().min(1),
+  }),
+});
+
+const createSchema = z
+  .object({
+    stem: z.string().min(10),
+    rationale: z.string().min(10),
+    options: z.union([conventionalOptionsSchema, bowtieOptionsSchema]),
+    answerKey: z.union([conventionalAnswerKeySchema, bowtieAnswerKeySchema]),
+    questionType: qTypeEnum,
+    country: z.enum(["CA", "US"]),
+    tier: tierEnum,
+    categoryId: z.string().min(5),
+    status: z.nativeEnum(ContentStatus).default(ContentStatus.DRAFT),
+    examFamily: z.enum(["NCLEX_RN", "NCLEX_PN", "REX_PN", "NP", "ALLIED", "GENERIC"]).optional(),
+    difficulty: z.enum(["FOUNDATION", "INTERMEDIATE", "ADVANCED"]).optional(),
+    topicTag: z.string().optional(),
+    systemTag: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    questionFormat: z.string().max(80).optional(),
+    exhibitData: z.unknown().optional(),
+    images: z.unknown().optional(),
+    lessonId: z.string().optional(),
+    sourceNotes: z.string().optional(),
+    generationBatchId: z.string().optional(),
+    /** Required when rationale is below the premium word-count bar but you still need to publish. */
+    acknowledgeBelowQualityBar: z.boolean().optional(),
+    /** Explicit opt-in for severe incompleteness (e.g., missing rationale). */
+    acknowledgeSevereQualityIssue: z.boolean().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (isBowtieQuestionType(data.questionType)) {
+      const result = validateBowtieQuestionPayload({
+        questionType: data.questionType,
+        stem: data.stem,
+        options: data.options,
+        correctAnswer: data.answerKey,
+        rationale: data.rationale,
+        topic: data.topicTag,
+        bodySystem: data.systemTag,
+        questionFormat: data.questionFormat,
+        tags: data.tags,
+        publishMode: data.status === ContentStatus.PUBLISHED,
+        requireRationale: true,
+      });
+      if (!result.ok) {
+        for (const error of result.errors) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: error });
+        }
+      }
+      return;
+    }
+    if (!Array.isArray(data.options)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["options"], message: "Non-bowtie options must be an array" });
+    }
+    if (!Array.isArray(data.answerKey)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["answerKey"], message: "Non-bowtie answerKey must be an array" });
+    }
+  });
+
+export async function GET(req: NextRequest) {
+  const gate = await requireAdmin(req);
+  if (!gate.ok) return gate.response;
+
+  const sp = req.nextUrl.searchParams;
+  const pageParsed = parseListPage(sp.get("page"));
+  if (!pageParsed.ok) {
+    return NextResponse.json({ error: pageParsed.error, code: "invalid_page" }, { status: 400 });
+  }
+  const page = pageParsed.page;
+  const sizeParsed = parseBoundedPageSize(sp.get("pageSize"), ADMIN_API_LIST_PAGE);
+  if (!sizeParsed.ok) {
+    return NextResponse.json(
+      {
+        error: sizeParsed.error.message,
+        code: sizeParsed.error.code,
+        ...(sizeParsed.error.maxPageSize !== undefined ? { maxPageSize: sizeParsed.error.maxPageSize } : {}),
+      },
+      { status: 400 },
+    );
+  }
+  const pageSize = sizeParsed.pageSize;
+  const statusParam = sp.get("status") as ContentStatus | null;
+  const topicFilter = sp.get("topic");
+
+  const where = {
+    ...(statusParam ? { status: contentStatusToDb(statusParam) } : {}),
+    ...(topicFilter ? { topic: topicFilter } : {}),
+  };
+
+  const [total, questions] = await Promise.all([
+    prisma.examQuestion.count({ where }),
+    prisma.examQuestion.findMany({
+      where,
+      select: {
+        id: true,
+        stem: true,
+        status: true,
+        tier: true,
+        countryCode: true,
+        questionType: true,
+        exam: true,
+        topic: true,
+        tags: true,
+        updatedAt: true,
+      },
+      orderBy: { updatedAt: "desc" },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+  ]);
+
+  const questionsTrimmed = questions.map((q) => ({
+    ...q,
+    stem: q.stem.length > 360 ? `${q.stem.slice(0, 360).trim()}…` : q.stem,
+  }));
+
+  return NextResponse.json({ page, pageSize, total, questions: questionsTrimmed });
+}
+
+export async function POST(req: Request) {
+  const gate = await requireAdmin(req);
+  if (!gate.ok) return gate.response;
+
+  const parsed = createSchema.safeParse(await req.json());
+  if (!parsed.success) return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
+
+  const data = parsed.data;
+  let publishGov: ReturnType<typeof governExamQuestionPublish> | null = null;
+  if (data.status === ContentStatus.PUBLISHED) {
+    try {
+      const publishContext = {
+        tier: tierCodeToExamDbTier(data.tier),
+        countryCode: data.country,
+        ...(data.examFamily
+          ? { exam: canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(data.examFamily)) }
+          : {}),
+      };
+
+      assertExamQuestionContextForPublish(publishContext);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Exam context required for publish";
+      return NextResponse.json({ error: message, code: "missing_exam_context" }, { status: 422 });
+    }
+    publishGov = governExamQuestionPublish(
+      {
+        stem: data.stem,
+        rationale: data.rationale,
+        questionType: data.questionType as QuestionType,
+        options: data.options,
+        answerKey: data.answerKey,
+        questionFormat: data.questionFormat,
+        exhibitData: data.exhibitData,
+        images: data.images,
+        tags: data.tags ?? [],
+      },
+      {
+        acknowledgeBelowQualityBar: data.acknowledgeBelowQualityBar === true,
+        acknowledgeSevereQualityIssue: data.acknowledgeSevereQualityIssue === true,
+      },
+    );
+    if (!publishGov.ok) {
+      return NextResponse.json(
+        { error: "Publish blocked by editorial policy", reasons: publishGov.reasons, quality: publishGov },
+        { status: 422 },
+      );
+    }
+  }
+
+  const hash = stemHash(data.stem);
+  const cat = await prisma.category.findUnique({ where: { id: data.categoryId } });
+  const topic = [cat?.name, data.topicTag].filter(Boolean).join(" · ") || cat?.slug;
+
+  const taxonomy = examQuestionTaxonomyFromCorpus({
+    stem: data.stem,
+    rationale: data.rationale,
+    topic: topic ?? null,
+    subtopic: data.systemTag ?? null,
+    tags: data.tags ?? [],
+  });
+  if (taxonomy.violations.length > 0) {
+    return NextResponse.json(
+      { error: "Taxonomy classification invalid", violations: taxonomy.violations, code: "taxonomy_invalid" },
+      { status: 422 },
+    );
+  }
+  if (data.status === ContentStatus.PUBLISHED && !taxonomy.publishable) {
+    return NextResponse.json(
+      {
+        error: "Publish blocked — taxonomy needs a resolved clinical/professional category",
+        code: "taxonomy_publish_blocked",
+        classification: {
+          domain: taxonomy.classification.domain,
+          category: taxonomy.classification.category,
+        },
+      },
+      { status: 422 },
+    );
+  }
+
+  const question = await prisma.examQuestion.create({
+    data: {
+      stem: data.stem,
+      rationale: data.rationale,
+      options: data.options as Prisma.InputJsonValue,
+      correctAnswer: data.answerKey as Prisma.InputJsonValue,
+      questionType: adminQuestionTypeToDb(data.questionType),
+      countryCode: data.country,
+      tier: tierCodeToExamDbTier(data.tier),
+      status: contentStatusToDb(data.status),
+      exam: canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(data.examFamily)),
+      difficulty: difficultyBandToInt(data.difficulty) ?? 3,
+      topic: topic ?? undefined,
+      subtopic: data.systemTag,
+      tags: data.tags ?? [],
+      questionFormat: isBowtieQuestionType(data.questionType) ? (data.questionFormat ?? "bowtie") : data.questionFormat,
+      exhibitData: data.exhibitData === undefined ? undefined : (data.exhibitData as Prisma.InputJsonValue),
+      images: data.images === undefined ? undefined : (data.images as Prisma.InputJsonValue),
+      careerType: "nursing",
+      regionScope: "BOTH",
+      stemHash: hash,
+      bodySystem: taxonomy.bodySystem,
+    },
+  });
+
+  return NextResponse.json(
+    {
+      question,
+      ...(publishGov && publishGov.warnings.length ? { publishWarnings: publishGov.warnings, quality: publishGov } : {}),
+    },
+    { status: 201 },
+  );
+}

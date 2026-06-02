@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-14T17:57:09.531Z",
+  "pass": "second-pass-recovery-audit",
+  "mutationsExecuted": [],
+  "contentImportedCounts": {},
+  "beforeAfter": {
+    "note": "No DB writes in this audit-only pass"
+  },
+  "skippedReason": "Audit generation only — run dedicated import scripts with DATABASE_URL and review dedupe reports.",
+  "highValueCandidatesPreview": [
+    "generatedAt",
+    "priority",
+    "criteria",
+    "top20"
+  ]
+}

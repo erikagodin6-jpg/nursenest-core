@@ -1,0 +1,961 @@
+{
+  "_meta": {
+    "description": "Internal link metadata overlay for the RN topic manifest",
+    "generatedAt": "2026-04-11T04:45:57.768Z",
+    "maxLinks": 6,
+    "algorithm": "bodySystem(+3) + sharedTags(+2ea) + sameCategory(+1)",
+    "totalTopics": 50
+  },
+  "topicLinks": [
+    {
+      "topicSlug": "myocardial-infarction",
+      "relatedTopicSlugs": [
+        "hypertensive-crisis",
+        "anticoagulation-therapy",
+        "atrial-fibrillation",
+        "heart-failure",
+        "antihypertensive-medications",
+        "digoxin-cardiac-glycosides"
+      ],
+      "suggestedQuestionTopics": [
+        "hypertensive-crisis",
+        "anticoagulation-therapy",
+        "atrial-fibrillation",
+        "heart-failure",
+        "antihypertensive-medications",
+        "digoxin-cardiac-glycosides"
+      ]
+    },
+    {
+      "topicSlug": "ischemic-stroke",
+      "relatedTopicSlugs": [
+        "anticonvulsant-medications",
+        "antipsychotic-medications",
+        "opioid-analgesics",
+        "pain-assessment-and-management",
+        "acute-respiratory-distress-syndrome",
+        "appendicitis-and-peritonitis"
+      ],
+      "suggestedQuestionTopics": [
+        "anticonvulsant-medications",
+        "antipsychotic-medications",
+        "opioid-analgesics",
+        "pain-assessment-and-management",
+        "acute-respiratory-distress-syndrome",
+        "appendicitis-and-peritonitis"
+      ]
+    },
+    {
+      "topicSlug": "hypertensive-crisis",
+      "relatedTopicSlugs": [
+        "myocardial-infarction",
+        "shock-recognition-and-response",
+        "atrial-fibrillation",
+        "heart-failure",
+        "antihypertensive-medications",
+        "digoxin-cardiac-glycosides"
+      ],
+      "suggestedQuestionTopics": [
+        "myocardial-infarction",
+        "shock-recognition-and-response",
+        "atrial-fibrillation",
+        "heart-failure",
+        "antihypertensive-medications",
+        "digoxin-cardiac-glycosides"
+      ]
+    },
+    {
+      "topicSlug": "pulmonary-embolism",
+      "relatedTopicSlugs": [
+        "atrial-fibrillation",
+        "anticoagulation-therapy",
+        "acute-respiratory-distress-syndrome",
+        "asthma-acute-exacerbation",
+        "chronic-obstructive-pulmonary-disease",
+        "pneumonia"
+      ],
+      "suggestedQuestionTopics": [
+        "atrial-fibrillation",
+        "anticoagulation-therapy",
+        "acute-respiratory-distress-syndrome",
+        "asthma-acute-exacerbation",
+        "chronic-obstructive-pulmonary-disease",
+        "pneumonia"
+      ]
+    },
+    {
+      "topicSlug": "acute-respiratory-distress-syndrome",
+      "relatedTopicSlugs": [
+        "asthma-acute-exacerbation",
+        "pulmonary-embolism",
+        "chronic-obstructive-pulmonary-disease",
+        "pneumonia",
+        "airway-management-priority",
+        "appendicitis-and-peritonitis"
+      ],
+      "suggestedQuestionTopics": [
+        "asthma-acute-exacerbation",
+        "pulmonary-embolism",
+        "chronic-obstructive-pulmonary-disease",
+        "pneumonia",
+        "airway-management-priority",
+        "appendicitis-and-peritonitis"
+      ]
+    },
+    {
+      "topicSlug": "diabetic-ketoacidosis",
+      "relatedTopicSlugs": [
+        "hyperosmolar-hyperglycemic-state",
+        "insulin-management",
+        "corticosteroid-therapy",
+        "acute-kidney-injury",
+        "acute-respiratory-distress-syndrome",
+        "appendicitis-and-peritonitis"
+      ],
+      "suggestedQuestionTopics": [
+        "hyperosmolar-hyperglycemic-state",
+        "insulin-management",
+        "corticosteroid-therapy",
+        "acute-kidney-injury",
+        "acute-respiratory-distress-syndrome",
+        "appendicitis-and-peritonitis"
+      ]
+    },
+    {
+      "topicSlug": "hyperosmolar-hyperglycemic-state",
+      "relatedTopicSlugs": [
+        "diabetic-ketoacidosis",
+        "corticosteroid-therapy",
+        "insulin-management",
+        "acute-kidney-injury",
+        "acute-respiratory-distress-syndrome",
+        "appendicitis-and-peritonitis"
+      ],
+      "suggestedQuestionTopics": [
+        "diabetic-ketoacidosis",
+        "corticosteroid-therapy",
+        "insulin-management",
+        "acute-kidney-injury",
+        "acute-respiratory-distress-syndrome",
+        "appendicitis-and-peritonitis"
+      ]
+    },
+    {
+      "topicSlug": "acute-kidney-injury",
+      "relatedTopicSlugs": [
+        "chronic-kidney-disease",
+        "diuretic-therapy",
+        "fluid-and-electrolyte-imbalances",
+        "heart-failure",
+        "urinary-tract-infection",
+        "chronic-obstructive-pulmonary-disease"
+      ],
+      "suggestedQuestionTopics": [
+        "chronic-kidney-disease",
+        "diuretic-therapy",
+        "fluid-and-electrolyte-imbalances",
+        "heart-failure",
+        "urinary-tract-infection",
+        "chronic-obstructive-pulmonary-disease"
+      ]
+    },
+    {
+      "topicSlug": "liver-cirrhosis-hepatic-encephalopathy",
+      "relatedTopicSlugs": [
+        "diuretic-therapy",
+        "acute-pancreatitis",
+        "appendicitis-and-peritonitis",
+        "gastrointestinal-bleeding",
+        "inflammatory-bowel-disease",
+        "acute-kidney-injury"
+      ],
+      "suggestedQuestionTopics": [
+        "diuretic-therapy",
+        "acute-pancreatitis",
+        "appendicitis-and-peritonitis",
+        "gastrointestinal-bleeding",
+        "inflammatory-bowel-disease",
+        "acute-kidney-injury"
+      ]
+    },
+    {
+      "topicSlug": "gastrointestinal-bleeding",
+      "relatedTopicSlugs": [
+        "appendicitis-and-peritonitis",
+        "acute-pancreatitis",
+        "inflammatory-bowel-disease",
+        "liver-cirrhosis-hepatic-encephalopathy",
+        "deteriorating-patient-rapid-response",
+        "emergency-triage-principles"
+      ],
+      "suggestedQuestionTopics": [
+        "appendicitis-and-peritonitis",
+        "acute-pancreatitis",
+        "inflammatory-bowel-disease",
+        "liver-cirrhosis-hepatic-encephalopathy",
+        "deteriorating-patient-rapid-response",
+        "emergency-triage-principles"
+      ]
+    },
+    {
+      "topicSlug": "heart-failure",
+      "relatedTopicSlugs": [
+        "antihypertensive-medications",
+        "atrial-fibrillation",
+        "myocardial-infarction",
+        "diuretic-therapy",
+        "digoxin-cardiac-glycosides",
+        "acute-kidney-injury"
+      ],
+      "suggestedQuestionTopics": [
+        "antihypertensive-medications",
+        "atrial-fibrillation",
+        "myocardial-infarction",
+        "diuretic-therapy",
+        "digoxin-cardiac-glycosides",
+        "acute-kidney-injury"
+      ]
+    },
+    {
+      "topicSlug": "atrial-fibrillation",
+      "relatedTopicSlugs": [
+        "anticoagulation-therapy",
+        "pulmonary-embolism",
+        "heart-failure",
+        "myocardial-infarction",
+        "antihypertensive-medications",
+        "digoxin-cardiac-glycosides"
+      ],
+      "suggestedQuestionTopics": [
+        "anticoagulation-therapy",
+        "pulmonary-embolism",
+        "heart-failure",
+        "myocardial-infarction",
+        "antihypertensive-medications",
+        "digoxin-cardiac-glycosides"
+      ]
+    },
+    {
+      "topicSlug": "pneumonia",
+      "relatedTopicSlugs": [
+        "acute-respiratory-distress-syndrome",
+        "asthma-acute-exacerbation",
+        "chronic-obstructive-pulmonary-disease",
+        "pulmonary-embolism",
+        "airway-management-priority",
+        "sepsis-and-septic-shock"
+      ],
+      "suggestedQuestionTopics": [
+        "acute-respiratory-distress-syndrome",
+        "asthma-acute-exacerbation",
+        "chronic-obstructive-pulmonary-disease",
+        "pulmonary-embolism",
+        "airway-management-priority",
+        "sepsis-and-septic-shock"
+      ]
+    },
+    {
+      "topicSlug": "chronic-obstructive-pulmonary-disease",
+      "relatedTopicSlugs": [
+        "acute-respiratory-distress-syndrome",
+        "asthma-acute-exacerbation",
+        "pneumonia",
+        "pulmonary-embolism",
+        "acute-kidney-injury",
+        "heart-failure"
+      ],
+      "suggestedQuestionTopics": [
+        "acute-respiratory-distress-syndrome",
+        "asthma-acute-exacerbation",
+        "pneumonia",
+        "pulmonary-embolism",
+        "acute-kidney-injury",
+        "heart-failure"
+      ]
+    },
+    {
+      "topicSlug": "asthma-acute-exacerbation",
+      "relatedTopicSlugs": [
+        "acute-respiratory-distress-syndrome",
+        "pulmonary-embolism",
+        "chronic-obstructive-pulmonary-disease",
+        "pneumonia",
+        "airway-management-priority",
+        "appendicitis-and-peritonitis"
+      ],
+      "suggestedQuestionTopics": [
+        "acute-respiratory-distress-syndrome",
+        "pulmonary-embolism",
+        "chronic-obstructive-pulmonary-disease",
+        "pneumonia",
+        "airway-management-priority",
+        "appendicitis-and-peritonitis"
+      ]
+    },
+    {
+      "topicSlug": "chronic-kidney-disease",
+      "relatedTopicSlugs": [
+        "acute-kidney-injury",
+        "diuretic-therapy",
+        "fluid-and-electrolyte-imbalances",
+        "urinary-tract-infection",
+        "heart-failure",
+        "atrial-fibrillation"
+      ],
+      "suggestedQuestionTopics": [
+        "acute-kidney-injury",
+        "diuretic-therapy",
+        "fluid-and-electrolyte-imbalances",
+        "urinary-tract-infection",
+        "heart-failure",
+        "atrial-fibrillation"
+      ]
+    },
+    {
+      "topicSlug": "acute-pancreatitis",
+      "relatedTopicSlugs": [
+        "inflammatory-bowel-disease",
+        "appendicitis-and-peritonitis",
+        "gastrointestinal-bleeding",
+        "liver-cirrhosis-hepatic-encephalopathy",
+        "burns-thermal-injury",
+        "fractures-and-orthopedic-care"
+      ],
+      "suggestedQuestionTopics": [
+        "inflammatory-bowel-disease",
+        "appendicitis-and-peritonitis",
+        "gastrointestinal-bleeding",
+        "liver-cirrhosis-hepatic-encephalopathy",
+        "burns-thermal-injury",
+        "fractures-and-orthopedic-care"
+      ]
+    },
+    {
+      "topicSlug": "inflammatory-bowel-disease",
+      "relatedTopicSlugs": [
+        "acute-pancreatitis",
+        "appendicitis-and-peritonitis",
+        "gastrointestinal-bleeding",
+        "liver-cirrhosis-hepatic-encephalopathy",
+        "acute-kidney-injury",
+        "atrial-fibrillation"
+      ],
+      "suggestedQuestionTopics": [
+        "acute-pancreatitis",
+        "appendicitis-and-peritonitis",
+        "gastrointestinal-bleeding",
+        "liver-cirrhosis-hepatic-encephalopathy",
+        "acute-kidney-injury",
+        "atrial-fibrillation"
+      ]
+    },
+    {
+      "topicSlug": "fractures-and-orthopedic-care",
+      "relatedTopicSlugs": [
+        "hip-replacement-post-op",
+        "opioid-analgesics",
+        "acute-pancreatitis",
+        "delegation-to-uap",
+        "fall-prevention-and-safety",
+        "interprofessional-collaboration-sbar"
+      ],
+      "suggestedQuestionTopics": [
+        "hip-replacement-post-op",
+        "opioid-analgesics",
+        "acute-pancreatitis",
+        "delegation-to-uap",
+        "fall-prevention-and-safety",
+        "interprofessional-collaboration-sbar"
+      ]
+    },
+    {
+      "topicSlug": "hip-replacement-post-op",
+      "relatedTopicSlugs": [
+        "fractures-and-orthopedic-care",
+        "post-operative-complications",
+        "delegation-to-uap",
+        "fall-prevention-and-safety",
+        "interprofessional-collaboration-sbar",
+        "lpn-rpn-scope-of-practice"
+      ],
+      "suggestedQuestionTopics": [
+        "fractures-and-orthopedic-care",
+        "post-operative-complications",
+        "delegation-to-uap",
+        "fall-prevention-and-safety",
+        "interprofessional-collaboration-sbar",
+        "lpn-rpn-scope-of-practice"
+      ]
+    },
+    {
+      "topicSlug": "wound-care-pressure-injuries",
+      "relatedTopicSlugs": [
+        "burns-thermal-injury",
+        "surgical-site-infection-prevention",
+        "delegation-to-uap",
+        "fall-prevention-and-safety",
+        "fractures-and-orthopedic-care",
+        "hip-replacement-post-op"
+      ],
+      "suggestedQuestionTopics": [
+        "burns-thermal-injury",
+        "surgical-site-infection-prevention",
+        "delegation-to-uap",
+        "fall-prevention-and-safety",
+        "fractures-and-orthopedic-care",
+        "hip-replacement-post-op"
+      ]
+    },
+    {
+      "topicSlug": "urinary-tract-infection",
+      "relatedTopicSlugs": [
+        "acute-kidney-injury",
+        "chronic-kidney-disease",
+        "pneumonia",
+        "sepsis-and-septic-shock",
+        "diuretic-therapy",
+        "fluid-and-electrolyte-imbalances"
+      ],
+      "suggestedQuestionTopics": [
+        "acute-kidney-injury",
+        "chronic-kidney-disease",
+        "pneumonia",
+        "sepsis-and-septic-shock",
+        "diuretic-therapy",
+        "fluid-and-electrolyte-imbalances"
+      ]
+    },
+    {
+      "topicSlug": "appendicitis-and-peritonitis",
+      "relatedTopicSlugs": [
+        "gastrointestinal-bleeding",
+        "acute-pancreatitis",
+        "inflammatory-bowel-disease",
+        "liver-cirrhosis-hepatic-encephalopathy",
+        "acute-respiratory-distress-syndrome",
+        "asthma-acute-exacerbation"
+      ],
+      "suggestedQuestionTopics": [
+        "gastrointestinal-bleeding",
+        "acute-pancreatitis",
+        "inflammatory-bowel-disease",
+        "liver-cirrhosis-hepatic-encephalopathy",
+        "acute-respiratory-distress-syndrome",
+        "asthma-acute-exacerbation"
+      ]
+    },
+    {
+      "topicSlug": "burns-thermal-injury",
+      "relatedTopicSlugs": [
+        "wound-care-pressure-injuries",
+        "surgical-site-infection-prevention",
+        "acute-pancreatitis",
+        "acute-respiratory-distress-syndrome",
+        "appendicitis-and-peritonitis",
+        "asthma-acute-exacerbation"
+      ],
+      "suggestedQuestionTopics": [
+        "wound-care-pressure-injuries",
+        "surgical-site-infection-prevention",
+        "acute-pancreatitis",
+        "acute-respiratory-distress-syndrome",
+        "appendicitis-and-peritonitis",
+        "asthma-acute-exacerbation"
+      ]
+    },
+    {
+      "topicSlug": "sepsis-and-septic-shock",
+      "relatedTopicSlugs": [
+        "antibiotic-selection-and-safety",
+        "pneumonia",
+        "urinary-tract-infection",
+        "shock-recognition-and-response",
+        "infection-control-and-precautions",
+        "acute-respiratory-distress-syndrome"
+      ],
+      "suggestedQuestionTopics": [
+        "antibiotic-selection-and-safety",
+        "pneumonia",
+        "urinary-tract-infection",
+        "shock-recognition-and-response",
+        "infection-control-and-precautions",
+        "acute-respiratory-distress-syndrome"
+      ]
+    },
+    {
+      "topicSlug": "anticoagulation-therapy",
+      "relatedTopicSlugs": [
+        "atrial-fibrillation",
+        "myocardial-infarction",
+        "pulmonary-embolism",
+        "anticonvulsant-medications",
+        "antihypertensive-medications",
+        "antipsychotic-medications"
+      ],
+      "suggestedQuestionTopics": [
+        "atrial-fibrillation",
+        "myocardial-infarction",
+        "pulmonary-embolism",
+        "anticonvulsant-medications",
+        "antihypertensive-medications",
+        "antipsychotic-medications"
+      ]
+    },
+    {
+      "topicSlug": "insulin-management",
+      "relatedTopicSlugs": [
+        "corticosteroid-therapy",
+        "diabetic-ketoacidosis",
+        "anticoagulation-therapy",
+        "anticonvulsant-medications",
+        "antihypertensive-medications",
+        "antipsychotic-medications"
+      ],
+      "suggestedQuestionTopics": [
+        "corticosteroid-therapy",
+        "diabetic-ketoacidosis",
+        "anticoagulation-therapy",
+        "anticonvulsant-medications",
+        "antihypertensive-medications",
+        "antipsychotic-medications"
+      ]
+    },
+    {
+      "topicSlug": "diuretic-therapy",
+      "relatedTopicSlugs": [
+        "liver-cirrhosis-hepatic-encephalopathy",
+        "acute-kidney-injury",
+        "fluid-and-electrolyte-imbalances",
+        "heart-failure",
+        "chronic-kidney-disease",
+        "antihypertensive-medications"
+      ],
+      "suggestedQuestionTopics": [
+        "liver-cirrhosis-hepatic-encephalopathy",
+        "acute-kidney-injury",
+        "fluid-and-electrolyte-imbalances",
+        "heart-failure",
+        "chronic-kidney-disease",
+        "antihypertensive-medications"
+      ]
+    },
+    {
+      "topicSlug": "opioid-analgesics",
+      "relatedTopicSlugs": [
+        "anticonvulsant-medications",
+        "antipsychotic-medications",
+        "pain-assessment-and-management",
+        "anticoagulation-therapy",
+        "antihypertensive-medications",
+        "corticosteroid-therapy"
+      ],
+      "suggestedQuestionTopics": [
+        "anticonvulsant-medications",
+        "antipsychotic-medications",
+        "pain-assessment-and-management",
+        "anticoagulation-therapy",
+        "antihypertensive-medications",
+        "corticosteroid-therapy"
+      ]
+    },
+    {
+      "topicSlug": "antihypertensive-medications",
+      "relatedTopicSlugs": [
+        "heart-failure",
+        "digoxin-cardiac-glycosides",
+        "atrial-fibrillation",
+        "myocardial-infarction",
+        "diuretic-therapy",
+        "hypertensive-crisis"
+      ],
+      "suggestedQuestionTopics": [
+        "heart-failure",
+        "digoxin-cardiac-glycosides",
+        "atrial-fibrillation",
+        "myocardial-infarction",
+        "diuretic-therapy",
+        "hypertensive-crisis"
+      ]
+    },
+    {
+      "topicSlug": "antibiotic-selection-and-safety",
+      "relatedTopicSlugs": [
+        "sepsis-and-septic-shock",
+        "infection-control-and-precautions",
+        "anticoagulation-therapy",
+        "anticonvulsant-medications",
+        "antihypertensive-medications",
+        "antipsychotic-medications"
+      ],
+      "suggestedQuestionTopics": [
+        "sepsis-and-septic-shock",
+        "infection-control-and-precautions",
+        "anticoagulation-therapy",
+        "anticonvulsant-medications",
+        "antihypertensive-medications",
+        "antipsychotic-medications"
+      ]
+    },
+    {
+      "topicSlug": "corticosteroid-therapy",
+      "relatedTopicSlugs": [
+        "insulin-management",
+        "anticoagulation-therapy",
+        "anticonvulsant-medications",
+        "antihypertensive-medications",
+        "antipsychotic-medications",
+        "opioid-analgesics"
+      ],
+      "suggestedQuestionTopics": [
+        "insulin-management",
+        "anticoagulation-therapy",
+        "anticonvulsant-medications",
+        "antihypertensive-medications",
+        "antipsychotic-medications",
+        "opioid-analgesics"
+      ]
+    },
+    {
+      "topicSlug": "digoxin-cardiac-glycosides",
+      "relatedTopicSlugs": [
+        "antihypertensive-medications",
+        "atrial-fibrillation",
+        "heart-failure",
+        "myocardial-infarction",
+        "hypertensive-crisis",
+        "diuretic-therapy"
+      ],
+      "suggestedQuestionTopics": [
+        "antihypertensive-medications",
+        "atrial-fibrillation",
+        "heart-failure",
+        "myocardial-infarction",
+        "hypertensive-crisis",
+        "diuretic-therapy"
+      ]
+    },
+    {
+      "topicSlug": "anticonvulsant-medications",
+      "relatedTopicSlugs": [
+        "antipsychotic-medications",
+        "opioid-analgesics",
+        "ischemic-stroke",
+        "pain-assessment-and-management",
+        "anticoagulation-therapy",
+        "antihypertensive-medications"
+      ],
+      "suggestedQuestionTopics": [
+        "antipsychotic-medications",
+        "opioid-analgesics",
+        "ischemic-stroke",
+        "pain-assessment-and-management",
+        "anticoagulation-therapy",
+        "antihypertensive-medications"
+      ]
+    },
+    {
+      "topicSlug": "antipsychotic-medications",
+      "relatedTopicSlugs": [
+        "anticonvulsant-medications",
+        "opioid-analgesics",
+        "pain-assessment-and-management",
+        "anticoagulation-therapy",
+        "antihypertensive-medications",
+        "corticosteroid-therapy"
+      ],
+      "suggestedQuestionTopics": [
+        "anticonvulsant-medications",
+        "opioid-analgesics",
+        "pain-assessment-and-management",
+        "anticoagulation-therapy",
+        "antihypertensive-medications",
+        "corticosteroid-therapy"
+      ]
+    },
+    {
+      "topicSlug": "emergency-triage-principles",
+      "relatedTopicSlugs": [
+        "deteriorating-patient-rapid-response",
+        "multiple-patient-assignment",
+        "post-operative-complications",
+        "airway-management-priority",
+        "shock-recognition-and-response",
+        "gastrointestinal-bleeding"
+      ],
+      "suggestedQuestionTopics": [
+        "deteriorating-patient-rapid-response",
+        "multiple-patient-assignment",
+        "post-operative-complications",
+        "airway-management-priority",
+        "shock-recognition-and-response",
+        "gastrointestinal-bleeding"
+      ]
+    },
+    {
+      "topicSlug": "post-operative-complications",
+      "relatedTopicSlugs": [
+        "multiple-patient-assignment",
+        "deteriorating-patient-rapid-response",
+        "emergency-triage-principles",
+        "delegation-to-uap",
+        "fall-prevention-and-safety",
+        "interprofessional-collaboration-sbar"
+      ],
+      "suggestedQuestionTopics": [
+        "multiple-patient-assignment",
+        "deteriorating-patient-rapid-response",
+        "emergency-triage-principles",
+        "delegation-to-uap",
+        "fall-prevention-and-safety",
+        "interprofessional-collaboration-sbar"
+      ]
+    },
+    {
+      "topicSlug": "deteriorating-patient-rapid-response",
+      "relatedTopicSlugs": [
+        "emergency-triage-principles",
+        "multiple-patient-assignment",
+        "post-operative-complications",
+        "airway-management-priority",
+        "shock-recognition-and-response",
+        "gastrointestinal-bleeding"
+      ],
+      "suggestedQuestionTopics": [
+        "emergency-triage-principles",
+        "multiple-patient-assignment",
+        "post-operative-complications",
+        "airway-management-priority",
+        "shock-recognition-and-response",
+        "gastrointestinal-bleeding"
+      ]
+    },
+    {
+      "topicSlug": "multiple-patient-assignment",
+      "relatedTopicSlugs": [
+        "post-operative-complications",
+        "delegation-to-uap",
+        "interprofessional-collaboration-sbar",
+        "lpn-rpn-scope-of-practice",
+        "deteriorating-patient-rapid-response",
+        "emergency-triage-principles"
+      ],
+      "suggestedQuestionTopics": [
+        "post-operative-complications",
+        "delegation-to-uap",
+        "interprofessional-collaboration-sbar",
+        "lpn-rpn-scope-of-practice",
+        "deteriorating-patient-rapid-response",
+        "emergency-triage-principles"
+      ]
+    },
+    {
+      "topicSlug": "airway-management-priority",
+      "relatedTopicSlugs": [
+        "deteriorating-patient-rapid-response",
+        "emergency-triage-principles",
+        "acute-respiratory-distress-syndrome",
+        "asthma-acute-exacerbation",
+        "pneumonia",
+        "pulmonary-embolism"
+      ],
+      "suggestedQuestionTopics": [
+        "deteriorating-patient-rapid-response",
+        "emergency-triage-principles",
+        "acute-respiratory-distress-syndrome",
+        "asthma-acute-exacerbation",
+        "pneumonia",
+        "pulmonary-embolism"
+      ]
+    },
+    {
+      "topicSlug": "shock-recognition-and-response",
+      "relatedTopicSlugs": [
+        "hypertensive-crisis",
+        "myocardial-infarction",
+        "deteriorating-patient-rapid-response",
+        "emergency-triage-principles",
+        "airway-management-priority",
+        "gastrointestinal-bleeding"
+      ],
+      "suggestedQuestionTopics": [
+        "hypertensive-crisis",
+        "myocardial-infarction",
+        "deteriorating-patient-rapid-response",
+        "emergency-triage-principles",
+        "airway-management-priority",
+        "gastrointestinal-bleeding"
+      ]
+    },
+    {
+      "topicSlug": "fluid-and-electrolyte-imbalances",
+      "relatedTopicSlugs": [
+        "acute-kidney-injury",
+        "diuretic-therapy",
+        "chronic-kidney-disease",
+        "heart-failure",
+        "antihypertensive-medications",
+        "chronic-obstructive-pulmonary-disease"
+      ],
+      "suggestedQuestionTopics": [
+        "acute-kidney-injury",
+        "diuretic-therapy",
+        "chronic-kidney-disease",
+        "heart-failure",
+        "antihypertensive-medications",
+        "chronic-obstructive-pulmonary-disease"
+      ]
+    },
+    {
+      "topicSlug": "pain-assessment-and-management",
+      "relatedTopicSlugs": [
+        "opioid-analgesics",
+        "anticonvulsant-medications",
+        "antipsychotic-medications",
+        "ischemic-stroke",
+        "fluid-and-electrolyte-imbalances",
+        "acute-kidney-injury"
+      ],
+      "suggestedQuestionTopics": [
+        "opioid-analgesics",
+        "anticonvulsant-medications",
+        "antipsychotic-medications",
+        "ischemic-stroke",
+        "fluid-and-electrolyte-imbalances",
+        "acute-kidney-injury"
+      ]
+    },
+    {
+      "topicSlug": "fall-prevention-and-safety",
+      "relatedTopicSlugs": [
+        "medication-administration-safety",
+        "delegation-to-uap",
+        "interprofessional-collaboration-sbar",
+        "lpn-rpn-scope-of-practice",
+        "multiple-patient-assignment",
+        "post-operative-complications"
+      ],
+      "suggestedQuestionTopics": [
+        "medication-administration-safety",
+        "delegation-to-uap",
+        "interprofessional-collaboration-sbar",
+        "lpn-rpn-scope-of-practice",
+        "multiple-patient-assignment",
+        "post-operative-complications"
+      ]
+    },
+    {
+      "topicSlug": "medication-administration-safety",
+      "relatedTopicSlugs": [
+        "fall-prevention-and-safety",
+        "delegation-to-uap",
+        "interprofessional-collaboration-sbar",
+        "lpn-rpn-scope-of-practice",
+        "multiple-patient-assignment",
+        "post-operative-complications"
+      ],
+      "suggestedQuestionTopics": [
+        "fall-prevention-and-safety",
+        "delegation-to-uap",
+        "interprofessional-collaboration-sbar",
+        "lpn-rpn-scope-of-practice",
+        "multiple-patient-assignment",
+        "post-operative-complications"
+      ]
+    },
+    {
+      "topicSlug": "infection-control-and-precautions",
+      "relatedTopicSlugs": [
+        "antibiotic-selection-and-safety",
+        "sepsis-and-septic-shock",
+        "surgical-site-infection-prevention",
+        "fall-prevention-and-safety",
+        "medication-administration-safety",
+        "delegation-to-uap"
+      ],
+      "suggestedQuestionTopics": [
+        "antibiotic-selection-and-safety",
+        "sepsis-and-septic-shock",
+        "surgical-site-infection-prevention",
+        "fall-prevention-and-safety",
+        "medication-administration-safety",
+        "delegation-to-uap"
+      ]
+    },
+    {
+      "topicSlug": "surgical-site-infection-prevention",
+      "relatedTopicSlugs": [
+        "wound-care-pressure-injuries",
+        "burns-thermal-injury",
+        "fall-prevention-and-safety",
+        "medication-administration-safety",
+        "delegation-to-uap",
+        "infection-control-and-precautions"
+      ],
+      "suggestedQuestionTopics": [
+        "wound-care-pressure-injuries",
+        "burns-thermal-injury",
+        "fall-prevention-and-safety",
+        "medication-administration-safety",
+        "delegation-to-uap",
+        "infection-control-and-precautions"
+      ]
+    },
+    {
+      "topicSlug": "delegation-to-uap",
+      "relatedTopicSlugs": [
+        "lpn-rpn-scope-of-practice",
+        "interprofessional-collaboration-sbar",
+        "multiple-patient-assignment",
+        "fall-prevention-and-safety",
+        "medication-administration-safety",
+        "post-operative-complications"
+      ],
+      "suggestedQuestionTopics": [
+        "lpn-rpn-scope-of-practice",
+        "interprofessional-collaboration-sbar",
+        "multiple-patient-assignment",
+        "fall-prevention-and-safety",
+        "medication-administration-safety",
+        "post-operative-complications"
+      ]
+    },
+    {
+      "topicSlug": "lpn-rpn-scope-of-practice",
+      "relatedTopicSlugs": [
+        "delegation-to-uap",
+        "interprofessional-collaboration-sbar",
+        "multiple-patient-assignment",
+        "fall-prevention-and-safety",
+        "medication-administration-safety",
+        "post-operative-complications"
+      ],
+      "suggestedQuestionTopics": [
+        "delegation-to-uap",
+        "interprofessional-collaboration-sbar",
+        "multiple-patient-assignment",
+        "fall-prevention-and-safety",
+        "medication-administration-safety",
+        "post-operative-complications"
+      ]
+    },
+    {
+      "topicSlug": "interprofessional-collaboration-sbar",
+      "relatedTopicSlugs": [
+        "delegation-to-uap",
+        "lpn-rpn-scope-of-practice",
+        "multiple-patient-assignment",
+        "fall-prevention-and-safety",
+        "medication-administration-safety",
+        "post-operative-complications"
+      ],
+      "suggestedQuestionTopics": [
+        "delegation-to-uap",
+        "lpn-rpn-scope-of-practice",
+        "multiple-patient-assignment",
+        "fall-prevention-and-safety",
+        "medication-administration-safety",
+        "post-operative-complications"
+      ]
+    }
+  ]
+}

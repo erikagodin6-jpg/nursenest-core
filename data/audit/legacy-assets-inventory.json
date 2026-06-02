@@ -1,0 +1,431 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "totalPublicFiles": 2751,
+    "extensionBuckets": {
+      ".json": 101,
+      ".jpg": 3,
+      ".gif": 9,
+      ".png": 989,
+      ".js": 1409,
+      ".webp": 144,
+      ".html": 5,
+      ".css": 4,
+      ".svg": 34,
+      ".mp4": 30,
+      ".jpeg": 23
+    },
+    "capNote": "Sample paths capped at 120; full tree via find."
+  },
+  "entries": [
+    {
+      "sourcePath": "public/**/*.json",
+      "contentType": "static_asset_bucket",
+      "estimatedRecordCount": 101,
+      "professionTierExam": {
+        "tier": "all",
+        "examHint": "n/a"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "as-is-urls-if-https-ready",
+      "riskFlags": [
+        "duplicate-risk"
+      ],
+      "recommendedDestination": "CDN / Next public assets; lesson figures must be HTTPS",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "figures-in-lesson-sections",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Audit large binaries separately; avoid gs:// raw URLs in product."
+    },
+    {
+      "sourcePath": "public/**/*.jpg",
+      "contentType": "static_asset_bucket",
+      "estimatedRecordCount": 3,
+      "professionTierExam": {
+        "tier": "all",
+        "examHint": "n/a"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "as-is-urls-if-https-ready",
+      "riskFlags": [
+        "duplicate-risk"
+      ],
+      "recommendedDestination": "CDN / Next public assets; lesson figures must be HTTPS",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "figures-in-lesson-sections",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Audit large binaries separately; avoid gs:// raw URLs in product."
+    },
+    {
+      "sourcePath": "public/**/*.gif",
+      "contentType": "static_asset_bucket",
+      "estimatedRecordCount": 9,
+      "professionTierExam": {
+        "tier": "all",
+        "examHint": "n/a"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "as-is-urls-if-https-ready",
+      "riskFlags": [
+        "duplicate-risk"
+      ],
+      "recommendedDestination": "CDN / Next public assets; lesson figures must be HTTPS",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "figures-in-lesson-sections",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Audit large binaries separately; avoid gs:// raw URLs in product."
+    },
+    {
+      "sourcePath": "public/**/*.png",
+      "contentType": "static_asset_bucket",
+      "estimatedRecordCount": 989,
+      "professionTierExam": {
+        "tier": "all",
+        "examHint": "n/a"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "as-is-urls-if-https-ready",
+      "riskFlags": [
+        "duplicate-risk"
+      ],
+      "recommendedDestination": "CDN / Next public assets; lesson figures must be HTTPS",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "figures-in-lesson-sections",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Audit large binaries separately; avoid gs:// raw URLs in product."
+    },
+    {
+      "sourcePath": "public/**/*.js",
+      "contentType": "static_asset_bucket",
+      "estimatedRecordCount": 1409,
+      "professionTierExam": {
+        "tier": "all",
+        "examHint": "n/a"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "as-is-urls-if-https-ready",
+      "riskFlags": [
+        "duplicate-risk"
+      ],
+      "recommendedDestination": "CDN / Next public assets; lesson figures must be HTTPS",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "figures-in-lesson-sections",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Audit large binaries separately; avoid gs:// raw URLs in product."
+    },
+    {
+      "sourcePath": "public/**/*.webp",
+      "contentType": "static_asset_bucket",
+      "estimatedRecordCount": 144,
+      "professionTierExam": {
+        "tier": "all",
+        "examHint": "n/a"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "as-is-urls-if-https-ready",
+      "riskFlags": [
+        "duplicate-risk"
+      ],
+      "recommendedDestination": "CDN / Next public assets; lesson figures must be HTTPS",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "figures-in-lesson-sections",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Audit large binaries separately; avoid gs:// raw URLs in product."
+    },
+    {
+      "sourcePath": "public/**/*.html",
+      "contentType": "static_asset_bucket",
+      "estimatedRecordCount": 5,
+      "professionTierExam": {
+        "tier": "all",
+        "examHint": "n/a"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "as-is-urls-if-https-ready",
+      "riskFlags": [
+        "duplicate-risk"
+      ],
+      "recommendedDestination": "CDN / Next public assets; lesson figures must be HTTPS",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "figures-in-lesson-sections",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Audit large binaries separately; avoid gs:// raw URLs in product."
+    },
+    {
+      "sourcePath": "public/**/*.css",
+      "contentType": "static_asset_bucket",
+      "estimatedRecordCount": 4,
+      "professionTierExam": {
+        "tier": "all",
+        "examHint": "n/a"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "as-is-urls-if-https-ready",
+      "riskFlags": [
+        "duplicate-risk"
+      ],
+      "recommendedDestination": "CDN / Next public assets; lesson figures must be HTTPS",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "figures-in-lesson-sections",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Audit large binaries separately; avoid gs:// raw URLs in product."
+    },
+    {
+      "sourcePath": "public/**/*.svg",
+      "contentType": "static_asset_bucket",
+      "estimatedRecordCount": 34,
+      "professionTierExam": {
+        "tier": "all",
+        "examHint": "n/a"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "as-is-urls-if-https-ready",
+      "riskFlags": [
+        "duplicate-risk"
+      ],
+      "recommendedDestination": "CDN / Next public assets; lesson figures must be HTTPS",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "figures-in-lesson-sections",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Audit large binaries separately; avoid gs:// raw URLs in product."
+    },
+    {
+      "sourcePath": "public/**/*.mp4",
+      "contentType": "static_asset_bucket",
+      "estimatedRecordCount": 30,
+      "professionTierExam": {
+        "tier": "all",
+        "examHint": "n/a"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "as-is-urls-if-https-ready",
+      "riskFlags": [
+        "duplicate-risk"
+      ],
+      "recommendedDestination": "CDN / Next public assets; lesson figures must be HTTPS",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "figures-in-lesson-sections",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Audit large binaries separately; avoid gs:// raw URLs in product."
+    },
+    {
+      "sourcePath": "public/**/*.jpeg",
+      "contentType": "static_asset_bucket",
+      "estimatedRecordCount": 23,
+      "professionTierExam": {
+        "tier": "all",
+        "examHint": "n/a"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "as-is-urls-if-https-ready",
+      "riskFlags": [
+        "duplicate-risk"
+      ],
+      "recommendedDestination": "CDN / Next public assets; lesson figures must be HTTPS",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "figures-in-lesson-sections",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Audit large binaries separately; avoid gs:// raw URLs in product."
+    }
+  ],
+  "samplePaths": [
+    "dist/public/i18n/en.json",
+    "dist/public/i18n/tr.json",
+    "dist/public/i18n/ja.json",
+    "dist/public/i18n/ar.json",
+    "dist/public/i18n/zh-tw.json",
+    "dist/public/i18n/fr.json",
+    "dist/public/i18n/ko.json",
+    "dist/public/i18n/vi.json",
+    "dist/public/i18n/th.json",
+    "dist/public/i18n/pt.json",
+    "dist/public/i18n/hi.json",
+    "dist/public/i18n/fa.json",
+    "dist/public/i18n/de.json",
+    "dist/public/i18n/zh.json",
+    "dist/public/i18n/pa.json",
+    "dist/public/i18n/ur.json",
+    "dist/public/i18n/ht.json",
+    "dist/public/i18n/tl.json",
+    "dist/public/i18n/es.json",
+    "dist/public/i18n/id.json",
+    "dist/public/opengraph.jpg",
+    "dist/public/brand-logo.gif",
+    "dist/public/favicon.png",
+    "dist/public/manifest.json",
+    "dist/public/sw.js",
+    "dist/public/screenshots/screenshottest_1773379293573-480w.webp",
+    "dist/public/screenshots/screenshot10_1773379293573-768w.webp",
+    "dist/public/screenshots/screenshot9_1773379293573-1200w.webp",
+    "dist/public/screenshots/screenshot2_1773379293573-full.webp",
+    "dist/public/screenshots/screenshot11_1773379293573-1200w.webp",
+    "dist/public/screenshots/screenshot5_1773379293573-768w.webp",
+    "dist/public/screenshots/screenshot11_1773379293573-full.webp",
+    "dist/public/screenshots/screenshot5_1773379293573-thumb-240w.webp",
+    "dist/public/screenshots/screenshot11_1773379293573-480w.webp",
+    "dist/public/screenshots/screenshot2_1773379293573-1200w.webp",
+    "dist/public/screenshots/screenshot5_1773379293573-480w.webp",
+    "dist/public/screenshots/screenshot10_1773379293573-thumb-160w.webp",
+    "dist/public/screenshots/screenshot10_1773379293573-480w.webp",
+    "dist/public/screenshots/screenshot10_1773379293573-1200w.webp",
+    "dist/public/screenshots/screenshot3_1773379293573-480w.webp",
+    "dist/public/screenshots/screenshot3_1773379293573-768w.webp",
+    "dist/public/screenshots/screenshottest_1773379293573-768w.webp",
+    "dist/public/screenshots/screenshot6_1773379293573-thumb-160w.webp",
+    "dist/public/screenshots/screenshottest_1773379293573-thumb-240w.webp",
+    "dist/public/screenshots/screenshot2_1773379293573-480w.webp",
+    "dist/public/screenshots/screenshot6_1773379293573-768w.webp",
+    "dist/public/screenshots/screenshot3_1773379293573-1200w.webp",
+    "dist/public/screenshots/screenshot6_1773379293573-full.webp",
+    "dist/public/screenshots/screenshot5_1773379293573-1200w.webp",
+    "dist/public/screenshots/screenshot3_1773379293573-thumb-240w.webp",
+    "dist/public/screenshots/screenshot9_1773379293573-768w.webp",
+    "dist/public/screenshots/screenshot11_1773379293573-768w.webp",
+    "dist/public/screenshots/screenshot2_1773379293573-768w.webp",
+    "dist/public/screenshots/screenshottest_1773379293573-thumb-160w.webp",
+    "dist/public/screenshots/screenshottest_1773379293573-1200w.webp",
+    "dist/public/screenshots/screenshot10_1773379293573-full.webp",
+    "dist/public/screenshots/screenshot10_1773379293573-thumb-240w.webp",
+    "dist/public/screenshots/screenshot3_1773379293573-thumb-160w.webp",
+    "dist/public/screenshots/screenshot9_1773379293573-480w.webp",
+    "dist/public/screenshots/screenshot6_1773379293573-thumb-240w.webp",
+    "dist/public/screenshots/screenshot6_1773379293573-1200w.webp",
+    "dist/public/screenshots/screenshot9_1773379293573-full.webp",
+    "dist/public/screenshots/screenshot9_1773379293573-thumb-160w.webp",
+    "dist/public/screenshots/screenshot3_1773379293573-full.webp",
+    "dist/public/screenshots/screenshot11_1773379293573-thumb-240w.webp",
+    "dist/public/screenshots/screenshot5_1773379293573-full.webp",
+    "dist/public/screenshots/screenshot9_1773379293573-thumb-240w.webp",
+    "dist/public/screenshots/screenshot5_1773379293573-thumb-160w.webp",
+    "dist/public/screenshots/screenshot6_1773379293573-480w.webp",
+    "dist/public/screenshots/screenshot11_1773379293573-thumb-160w.webp",
+    "dist/public/screenshots/screenshottest_1773379293573-full.webp",
+    "dist/public/screenshots/screenshot2_1773379293573-thumb-160w.webp",
+    "dist/public/screenshots/screenshot2_1773379293573-thumb-240w.webp",
+    "dist/public/offline.html",
+    "dist/public/assets/admin-data-migration-azrCaV1k.js",
+    "dist/public/assets/seo-hub-page-BQn4DpLx.js",
+    "dist/public/assets/admin-image-library-tSsnvFxj.js",
+    "dist/public/assets/nursing-specialty-detail-BWLbkZ3U.js",
+    "dist/public/assets/exam-fallbacks-CTbxsO3Q.js",
+    "dist/public/assets/daily-question-BYRDxCfH.js",
+    "dist/public/assets/career-page-CbMsBMK8.js",
+    "dist/public/assets/terms-CLa9hOgD.js",
+    "dist/public/assets/authority-hubs-f_L5RLuv.js",
+    "dist/public/assets/allied-health-professions-CeWFR8ze.js",
+    "dist/public/assets/admin-mock-exam-templates-eZKnHEPs.js",
+    "dist/public/assets/rrt-pharm-study-tools-D3KkaIIk.js",
+    "dist/public/assets/tier-messaging-CtC6D6qz.js",
+    "dist/public/assets/applynest-career-DjrjPfYl.js",
+    "dist/public/assets/pharmtech-calculations-page-eITZzidL.js",
+    "dist/public/assets/email-preferences-cfoBi5yp.js",
+    "dist/public/assets/first-action-simulator-BaE_ftov.js",
+    "dist/public/assets/pharmtech-flashcards-CvvBgG_D.js",
+    "dist/public/assets/certification-exam-prep-hub-DbCPAhl6.js",
+    "dist/public/assets/nursing-physiology-hub-page-D5Jtu87R.js",
+    "dist/public/assets/SocialProofBar-C2ueb5EB.js",
+    "dist/public/assets/admin-careers-XJG9du7W.js",
+    "dist/public/assets/nursing-regulatory-data-DuFMTMhq.js",
+    "dist/public/assets/admin-ops-dashboard-Damvs0Ix.js",
+    "dist/public/assets/nurse-residency-country-Bk42jtPE.js",
+    "dist/public/assets/job-detail-VL7K-pS5.js",
+    "dist/public/assets/scenarios-page-BH8uAVqM.js",
+    "dist/public/assets/career-guide-subpage-DyJ69KSn.js",
+    "dist/public/assets/mlt-microbiology-hub-CaWTPE-6.js",
+    "dist/public/assets/career-study-index-page-qYdxG08w.js",
+    "dist/public/assets/nurse-residency-hub-BSW51kK5.js",
+    "dist/public/assets/specialty-preview-DwVDIDYz.js",
+    "dist/public/assets/hero-trust-indicator-CKtq3LAz.js",
+    "dist/public/assets/paramedic-exam-launcher-uCAAaDnz.js",
+    "dist/public/assets/imaging-physics-topic-gPT9nOBr.js",
+    "dist/public/assets/admin-ops-incidents-DO7k7bW8.js",
+    "dist/public/assets/rex-pn-wellness-D7CMj7QV.js",
+    "dist/public/assets/ecg-admin-CkfIYFlH.js",
+    "dist/public/assets/login-BTam23N4.js",
+    "dist/public/assets/question-comments-BpPkmFxH.js",
+    "dist/public/assets/seo-guide-page-GZWUg0kK.js",
+    "dist/public/assets/medical-imaging-hub-uwzvb2OV.js",
+    "dist/public/assets/applynest-interview-prep-Dxy_HsaJ.js",
+    "dist/public/assets/qbank-api-BNpL4R3W.js",
+    "dist/public/assets/offline-status-banner-DjiRg4Kk.js",
+    "dist/public/assets/lesson-systems-BYW3ESwX.js"
+  ]
+}

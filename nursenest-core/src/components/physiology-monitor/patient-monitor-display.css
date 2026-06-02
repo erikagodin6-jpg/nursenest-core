@@ -1,0 +1,352 @@
+/*
+ * Patient Monitor Display — Dark clinical monitor theme
+ *
+ * Uses CSS custom properties scoped to [data-nn-monitor] so the dark
+ * theme doesn't bleed into the surrounding page.
+ */
+
+/* ── Monitor root variables ─────────────────────────────────────────────────── */
+
+[data-nn-monitor] {
+  --mon-bg:              #0a1520;
+  --mon-surface:         #0f1e2e;
+  --mon-surface-raised:  #152336;
+  --mon-border:          #1e3450;
+  --mon-border-bright:   #2a4a6e;
+
+  /* Vital colours — classic Spacelabs/Philips palette */
+  --mon-green:    #00e676;   /* HR */
+  --mon-white:    #e8edf2;   /* BP / MAP */
+  --mon-cyan:     #00e5ff;   /* SpO₂ */
+  --mon-yellow:   #ffd740;   /* RR */
+  --mon-orange:   #ff9100;   /* Temp */
+  --mon-purple:   #ea80fc;   /* EtCO₂ */
+  --mon-red:      #ff1744;   /* Alarms / ICP */
+  --mon-blue:     #40c4ff;   /* CVP / CO */
+
+  /* Alarm flash */
+  --mon-alarm-critical-bg: #3d0012;
+  --mon-alarm-warning-bg:  #2d2000;
+
+  /* ECG strip */
+  --mon-ecg-bg:           #040e18;
+  --mon-ecg-grid-minor:   #0a2030;
+  --mon-ecg-grid-major:   #0d2a40;
+  --mon-ecg-trace:        #00e676;
+
+  /* Vent waveform */
+  --mon-vent-pressure:    #40c4ff;
+  --mon-vent-flow:        #ea80fc;
+  --mon-vent-volume:      #ffd740;
+
+  /* Typography */
+  --mon-text-primary:   #e8edf2;
+  --mon-text-secondary: #8fafc8;
+  --mon-text-muted:     #4a6a88;
+  --mon-font:           "SF Mono", "Roboto Mono", "Consolas", monospace;
+}
+
+/* ── Monitor shell ───────────────────────────────────────────────────────────── */
+
+[data-nn-monitor] {
+  background: var(--mon-bg);
+  color: var(--mon-text-primary);
+  font-family: var(--mon-font);
+  border-radius: 12px;
+  border: 1px solid var(--mon-border);
+  overflow: hidden;
+}
+
+/* ── Vital tile ──────────────────────────────────────────────────────────────── */
+
+[data-nn-monitor-vital] {
+  background: var(--mon-surface);
+  border: 1px solid var(--mon-border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  position: relative;
+  transition: border-color 0.3s ease, background 0.3s ease;
+  min-width: 0;
+}
+
+[data-nn-monitor-vital][data-alarm="critical"] {
+  background: var(--mon-alarm-critical-bg);
+  border-color: var(--mon-red);
+  animation: mon-alarm-pulse 1s ease-in-out infinite;
+}
+
+[data-nn-monitor-vital][data-alarm="warning"] {
+  background: var(--mon-alarm-warning-bg);
+  border-color: var(--mon-orange);
+  animation: mon-alarm-pulse-warning 2s ease-in-out infinite;
+}
+
+@keyframes mon-alarm-pulse {
+  0%, 100% { border-color: var(--mon-red); box-shadow: 0 0 0 0 rgba(255, 23, 68, 0); }
+  50%       { border-color: #ff6090;       box-shadow: 0 0 8px 2px rgba(255, 23, 68, 0.4); }
+}
+
+@keyframes mon-alarm-pulse-warning {
+  0%, 100% { border-color: var(--mon-orange); }
+  50%       { border-color: #ffb74d; }
+}
+
+[data-nn-monitor-vital-label] {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mon-text-muted);
+  margin-bottom: 2px;
+}
+
+[data-nn-monitor-vital-value] {
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.5px;
+  tabular-nums: true;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-nn-monitor-vital-unit] {
+  font-size: 10px;
+  color: var(--mon-text-muted);
+  margin-left: 2px;
+}
+
+[data-nn-monitor-vital-trend] {
+  font-size: 11px;
+  font-weight: 600;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  opacity: 0.8;
+}
+
+/* ── Colour families ─────────────────────────────────────────────────────────── */
+
+[data-mon-color="green"]  [data-nn-monitor-vital-value] { color: var(--mon-green);  }
+[data-mon-color="white"]  [data-nn-monitor-vital-value] { color: var(--mon-white);  }
+[data-mon-color="cyan"]   [data-nn-monitor-vital-value] { color: var(--mon-cyan);   }
+[data-mon-color="yellow"] [data-nn-monitor-vital-value] { color: var(--mon-yellow); }
+[data-mon-color="orange"] [data-nn-monitor-vital-value] { color: var(--mon-orange); }
+[data-mon-color="purple"] [data-nn-monitor-vital-value] { color: var(--mon-purple); }
+[data-mon-color="red"]    [data-nn-monitor-vital-value] { color: var(--mon-red);    }
+
+[data-mon-color="green"]  [data-nn-monitor-vital-label] { color: var(--mon-green);  opacity: 0.7; }
+[data-mon-color="cyan"]   [data-nn-monitor-vital-label] { color: var(--mon-cyan);   opacity: 0.7; }
+[data-mon-color="yellow"] [data-nn-monitor-vital-label] { color: var(--mon-yellow); opacity: 0.7; }
+[data-mon-color="orange"] [data-nn-monitor-vital-label] { color: var(--mon-orange); opacity: 0.7; }
+[data-mon-color="purple"] [data-nn-monitor-vital-label] { color: var(--mon-purple); opacity: 0.7; }
+[data-mon-color="red"]    [data-nn-monitor-vital-label] { color: var(--mon-red);    opacity: 0.7; }
+
+/* ── ECG strip panel ─────────────────────────────────────────────────────────── */
+
+[data-nn-monitor-ecg] {
+  background: var(--mon-ecg-bg);
+  border: 1px solid var(--mon-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+[data-nn-monitor-ecg-label] {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mon-green);
+  opacity: 0.7;
+  padding: 6px 10px 0;
+}
+
+/* ── Ventilator waveform panel ───────────────────────────────────────────────── */
+
+[data-nn-monitor-vent] {
+  background: var(--mon-surface);
+  border: 1px solid var(--mon-border);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+[data-nn-monitor-vent-label] {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mon-text-muted);
+  margin-bottom: 6px;
+}
+
+/* ── Alarm bar ───────────────────────────────────────────────────────────────── */
+
+[data-nn-monitor-alarm-bar] {
+  background: var(--mon-alarm-critical-bg);
+  border-bottom: 1px solid var(--mon-red);
+  padding: 5px 14px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mon-red);
+  letter-spacing: 0.06em;
+  animation: mon-alarm-bar-flash 0.9s step-end infinite;
+}
+
+@keyframes mon-alarm-bar-flash {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.5; }
+}
+
+[data-nn-monitor-alarm-bar][data-level="warning"] {
+  background: var(--mon-alarm-warning-bg);
+  border-color: var(--mon-orange);
+  color: var(--mon-orange);
+  animation: mon-alarm-bar-flash-warning 1.8s ease-in-out infinite;
+}
+
+@keyframes mon-alarm-bar-flash-warning {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ── Trend sparkline ─────────────────────────────────────────────────────────── */
+
+[data-nn-monitor-sparkline] {
+  overflow: visible;
+}
+
+/* ── Stage badge ─────────────────────────────────────────────────────────────── */
+
+[data-nn-monitor-stage] {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+[data-nn-monitor-stage="early"]      { background: rgba(0, 230, 118, 0.12); color: var(--mon-green);  border: 1px solid rgba(0, 230, 118, 0.3); }
+[data-nn-monitor-stage="developing"] { background: rgba(255, 215, 64, 0.12); color: var(--mon-yellow); border: 1px solid rgba(255, 215, 64, 0.3); }
+[data-nn-monitor-stage="severe"]     { background: rgba(255, 145, 0, 0.14); color: var(--mon-orange); border: 1px solid rgba(255, 145, 0, 0.4);  }
+[data-nn-monitor-stage="critical"]   { background: rgba(255, 23, 68, 0.15); color: var(--mon-red);    border: 1px solid rgba(255, 23, 68, 0.5); animation: mon-alarm-pulse 1s ease-in-out infinite; }
+
+/* ── Clock / sim time ───────────────────────────────────────────────────────── */
+
+[data-nn-monitor-clock] {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mon-text-muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+/* ── Header bar ─────────────────────────────────────────────────────────────── */
+
+[data-nn-monitor-header] {
+  background: var(--mon-surface);
+  border-bottom: 1px solid var(--mon-border);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ── Intervention button ─────────────────────────────────────────────────────── */
+
+[data-nn-monitor-intervention-btn] {
+  background: var(--mon-surface-raised);
+  border: 1px solid var(--mon-border-bright);
+  border-radius: 5px;
+  color: var(--mon-text-primary);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  font-family: var(--mon-font);
+}
+
+[data-nn-monitor-intervention-btn]:hover {
+  background: #1e3a5a;
+  border-color: var(--mon-cyan);
+  color: var(--mon-cyan);
+}
+
+[data-nn-monitor-intervention-btn][data-active="true"] {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: var(--mon-cyan);
+  color: var(--mon-cyan);
+}
+
+[data-nn-monitor-intervention-btn]:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Educational overlay panel ───────────────────────────────────────────────── */
+
+[data-nn-monitor-overlay] {
+  background: rgba(10, 21, 32, 0.97);
+  border: 1px solid var(--mon-border-bright);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+[data-nn-monitor-overlay-entry][data-urgency="critical"] {
+  border-left: 3px solid var(--mon-red);
+  padding-left: 8px;
+}
+
+[data-nn-monitor-overlay-entry][data-urgency="warning"] {
+  border-left: 3px solid var(--mon-orange);
+  padding-left: 8px;
+}
+
+/* ── Trend panel ─────────────────────────────────────────────────────────────── */
+
+[data-nn-monitor-trend] {
+  background: var(--mon-surface);
+  border: 1px solid var(--mon-border);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+/* ── Mode selector pills ─────────────────────────────────────────────────────── */
+
+[data-nn-monitor-mode-pill] {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 3px 9px;
+  cursor: pointer;
+  border: 1px solid var(--mon-border-bright);
+  background: transparent;
+  color: var(--mon-text-muted);
+  font-family: var(--mon-font);
+  transition: all 0.15s;
+}
+
+[data-nn-monitor-mode-pill][aria-pressed="true"] {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: var(--mon-cyan);
+  color: var(--mon-cyan);
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-nn-monitor-vital],
+  [data-nn-monitor-alarm-bar],
+  [data-nn-monitor-stage] {
+    animation: none !important;
+  }
+}

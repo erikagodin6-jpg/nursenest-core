@@ -1,0 +1,375 @@
+{
+  "topicSlug": "gi-urinary-terminology",
+  "topicName": "Gastrointestinal and Urinary Terminology",
+  "domain": "Medical Terminology",
+  "contentWeight": "light",
+  "batchId": "foundations-batch-02",
+  "generatedAt": "2026-04-10",
+  "status": "pilot-draft",
+  "lessons": [
+    {
+      "lessonId": "gi-urinary-terminology-L01",
+      "title": "GI Tract Root Words and Common Terms",
+      "sequenceOrder": 1,
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Identify root words for each major structure of the gastrointestinal tract",
+        "Decode common GI diagnostic, procedural, and condition terms",
+        "Distinguish between similar-sounding GI terms that have different meanings",
+        "Recognize GI terminology in clinical documentation and patient histories"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "GI Tract Structure Roots",
+          "body": "or/o / stomat/o = mouth (oral, stomatitis)\nesophag/o = esophagus (esophagitis, esophagoscopy)\ngastr/o = stomach (gastritis, gastroparesis, gastroscopy)\nduoden/o = duodenum (duodenitis)\nenter/o = small intestine / intestine in general (enteritis, gastroenteritis)\njejun/o = jejunum (jejunostomy)\nile/o = ileum (ileostomy, ileitis)\ncol/o / colon/o = colon/large intestine (colitis, colonoscopy, colostomy)\nsigmoid/o = sigmoid colon (sigmoidoscopy)\nrect/o = rectum (rectal, rectocele)\nan/o = anus (anal, anoplasty)"
+        },
+        {
+          "heading": "Accessory Organ Roots",
+          "body": "hepat/o = liver (hepatitis, hepatomegaly, hepatology)\ncholecyst/o = gallbladder (cholecystitis, cholecystectomy)\ncholangi/o = bile ducts (cholangitis)\npancreat/o = pancreas (pancreatitis)\nbili/o / chol/e = bile (biliary, cholelithiasis = gallstones)"
+        },
+        {
+          "heading": "Common GI Condition and Procedure Terms",
+          "body": "gastritis = inflammation of the stomach lining\ngastroenteritis = inflammation of stomach + intestines (-enter/o + -itis)\ncholecystitis = inflammation of the gallbladder\ncholelithiasis = gallstones (chol/e = bile; lith/o = stone; -iasis = condition of)\ncolorectal = pertaining to the colon and rectum\nileostomy = surgical creation of an opening from the ileum to the outside\ncolostomy = opening from the colon to the abdominal wall\nendoscopy = visual examination inside using a scope (endo- = within)"
+        }
+      ],
+      "teachingNotes": "Use a simple GI tract diagram and have students label each organ with its root word. Cholecystectomy (gallbladder removal) is the most common elective abdominal surgery — use it as the primary example for cholelithiasis leading to cholecystitis leading to cholecystectomy."
+    },
+    {
+      "lessonId": "gi-urinary-terminology-L02",
+      "title": "Urinary System Root Words and Common Terms",
+      "sequenceOrder": 2,
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Identify root words for the major structures of the urinary system",
+        "Decode common urinary diagnostic, procedural, and condition terms",
+        "Apply urinary terminology accurately when documenting intake/output and assessment findings",
+        "Distinguish between terms describing urine abnormalities"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Urinary Tract Structure Roots",
+          "body": "nephr/o / ren/o = kidney (nephritis, nephrectomy, renal failure)\nureter/o = ureter (ureteritis, ureterostomy)\ncyst/o / vesic/o = urinary bladder (cystitis, cystoscopy, vesicoureteral)\nureth/r/o = urethra (urethritis, urethroscopy)\nur/o = urine / urinary system (urology, urostomy)"
+        },
+        {
+          "heading": "Urine Characteristic Terms",
+          "body": "oliguria = scanty or decreased urine output (olig/o = few, scanty)\nanuria = absence of urine output (an- = without)\npolyuria = excessive urine output (poly- = many/excessive)\nhematuria = blood in the urine (hemat/o = blood)\nproteinuria = protein in the urine (protein + ur/o + -ia)\nglycosuria = glucose/sugar in the urine (glyc/o = sugar)\nnocturia = urinating excessively at night (noct/o = night)\ndysuria = painful or difficult urination (dys- = difficult)"
+        },
+        {
+          "heading": "Urinary Conditions and Procedures",
+          "body": "cystitis = inflammation of the bladder (most common UTI location)\npyelonephritis = inflammation of the kidney and renal pelvis\nnephrolithiasis = kidney stones (nephr/o + lith/o + -iasis)\ncystoscopy = visual examination of the inside of the bladder\nnephrectomy = surgical removal of a kidney\ndialysis = filtering of waste from the blood when kidneys fail\nincontinence = inability to control urination (in- = not; continent = ability to hold)\ncatheterization = insertion of a tube into the bladder to drain urine"
+        }
+      ],
+      "teachingNotes": "The urine output terms (anuria, oliguria, polyuria) appear regularly in intake/output nursing documentation. Teach them together as a cluster with normal daily output (~1500 mL) as the anchor: less than 400 mL/day = oliguria; no output = anuria; more than 3000 mL/day without explanation = polyuria."
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "gi-urinary-terminology-Q01",
+      "stem": "Which root word is specifically associated with the stomach?",
+      "options": {
+        "A": "hepat/o",
+        "B": "gastr/o",
+        "C": "enter/o",
+        "D": "cyst/o"
+      },
+      "correctAnswer": "B",
+      "rationale": "Gastr/o = stomach. Gastritis = inflammation of the stomach. Hepat/o = liver. Enter/o = intestine (small intestine). Cyst/o = bladder or cyst.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root gastr/o = stomach"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q02",
+      "stem": "The surgical procedure 'cholecystectomy' refers to:",
+      "options": {
+        "A": "Creation of an opening into the gallbladder",
+        "B": "Visual examination of the gallbladder",
+        "C": "Removal of the gallbladder",
+        "D": "Cutting into the gallbladder to remove stones"
+      },
+      "correctAnswer": "C",
+      "rationale": "Cholecyst/o = gallbladder; -ectomy = surgical removal. Cholecystectomy = surgical removal of the gallbladder. -Ostomy = new opening. -Scopy = visual examination. -Otomy = cutting into. Cholecystectomy is the most commonly performed elective abdominal surgery.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "cholecystectomy — root cholecyst/o; suffix -ectomy"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q03",
+      "stem": "A patient has 'dysuria.' This term indicates:",
+      "options": {
+        "A": "Absence of urine output",
+        "B": "Blood in the urine",
+        "C": "Painful or difficult urination",
+        "D": "Excessive urine output at night"
+      },
+      "correctAnswer": "C",
+      "rationale": "Dys- = painful or difficult; ur/o = urine; -ia = condition. Dysuria = painful or difficult urination, commonly a symptom of a urinary tract infection. Anuria = no urine. Hematuria = blood in urine. Nocturia = excessive nighttime urination.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "dysuria — dys- + ur/o"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q04",
+      "stem": "The medical term 'nephrolithiasis' refers to:",
+      "options": {
+        "A": "Inflammation of the kidney",
+        "B": "Removal of a kidney",
+        "C": "Kidney stones",
+        "D": "Infection of the renal pelvis"
+      },
+      "correctAnswer": "C",
+      "rationale": "Nephr/o = kidney; lith/o = stone; -iasis = condition of. Nephrolithiasis = condition of kidney stones. Nephritis (-itis) = inflammation. Nephrectomy (-ectomy) = removal. Pyelonephritis = infection of kidney and renal pelvis (pyel/o = renal pelvis).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "nephrolithiasis — root lith/o = stone"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q05",
+      "stem": "A patient with 'oliguria' is producing:",
+      "options": {
+        "A": "No urine at all",
+        "B": "Abnormally small amounts of urine",
+        "C": "Excessive amounts of urine",
+        "D": "Urine containing blood"
+      },
+      "correctAnswer": "B",
+      "rationale": "Olig/o = few, scanty; ur/o = urine; -ia = condition. Oliguria = abnormally decreased urine output (typically < 400 mL/day in adults). Anuria (an- = without) = no urine. Polyuria (poly- = many) = excessive urine. Hematuria = blood in urine.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "oliguria — prefix olig/o"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q06",
+      "stem": "The root word 'hepat/o' refers to the:",
+      "options": {
+        "A": "Stomach",
+        "B": "Gallbladder",
+        "C": "Liver",
+        "D": "Pancreas"
+      },
+      "correctAnswer": "C",
+      "rationale": "Hepat/o = liver. Hepatitis = inflammation of the liver. Hepatomegaly = enlarged liver. Gastr/o = stomach. Cholecyst/o = gallbladder. Pancreat/o = pancreas.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root hepat/o = liver"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q07",
+      "stem": "The term 'hematuria' in a urinalysis report indicates:",
+      "options": {
+        "A": "Protein detected in the urine",
+        "B": "Glucose detected in the urine",
+        "C": "Red blood cells or blood detected in the urine",
+        "D": "Bacteria detected in the urine"
+      },
+      "correctAnswer": "C",
+      "rationale": "Hemat/o = blood; ur/o = urine; -ia = condition. Hematuria = blood in the urine, which may be visible (gross hematuria) or detected only by lab analysis (microscopic hematuria). Proteinuria = protein. Glycosuria = glucose. Bacteriuria = bacteria.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "hematuria — root hemat/o + ur/o"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q08",
+      "stem": "A colonoscopy procedure allows visualization of the:",
+      "options": {
+        "A": "Stomach and duodenum",
+        "B": "Entire large intestine (colon)",
+        "C": "Kidney and ureter",
+        "D": "Bladder and urethra"
+      },
+      "correctAnswer": "B",
+      "rationale": "Colon/o = colon; -scopy = visual examination using a scope. A colonoscopy allows direct visualization of the entire large intestine (colon). An upper endoscopy or esophagogastroduodenoscopy (EGD) visualizes the esophagus, stomach, and duodenum. Cystoscopy visualizes the bladder and urethra.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "colonoscopy — root colon/o; suffix -scopy"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q09",
+      "stem": "A patient is admitted with 'pyelonephritis.' Based on word-part analysis, this condition involves:",
+      "options": {
+        "A": "Inflammation of the bladder",
+        "B": "Stones in the kidney pelvis",
+        "C": "Inflammation of the kidney and renal pelvis",
+        "D": "Surgical removal of the renal pelvis"
+      },
+      "correctAnswer": "C",
+      "rationale": "Pyel/o = renal pelvis; nephr/o = kidney; -itis = inflammation. Pyelonephritis = bacterial infection and inflammation of the kidney and its collecting area (renal pelvis). Cystitis = bladder inflammation. Nephrolithiasis = kidney stones. -Ectomy = surgical removal, not present in this term.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "pyelonephritis — root pyel/o + nephr/o"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q10",
+      "stem": "Which of the following correctly describes a 'gastroenteritis'?",
+      "options": {
+        "A": "Inflammation of the stomach only",
+        "B": "Inflammation of the liver and gallbladder",
+        "C": "Inflammation of the stomach and intestines",
+        "D": "Surgical opening into the stomach"
+      },
+      "correctAnswer": "C",
+      "rationale": "Gastr/o = stomach; enter/o = intestines; -itis = inflammation. Gastroenteritis = inflammation involving both the stomach and intestines, often from infection (viral or bacterial). Gastritis alone = stomach only. Cholecystitis = gallbladder inflammation. Gastrostomy = surgical opening into the stomach.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "gastroenteritis — gastr/o + enter/o + -itis"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q11",
+      "stem": "The root word 'cyst/o' in urological terminology refers to the:",
+      "options": {
+        "A": "Kidney",
+        "B": "Urethra",
+        "C": "Urinary bladder",
+        "D": "Ureter"
+      },
+      "correctAnswer": "C",
+      "rationale": "Cyst/o in urological contexts refers to the urinary bladder (cystitis = bladder inflammation; cystoscopy = bladder visualization). Note: cyst/o can also refer to a fluid-filled sac/cyst in other contexts. Nephr/o = kidney. Urethr/o = urethra. Ureter/o = ureter.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root cyst/o = bladder"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q12",
+      "stem": "The term 'pancreatitis' most accurately refers to:",
+      "options": {
+        "A": "Cancer of the pancreas",
+        "B": "Removal of the pancreas",
+        "C": "Inflammation of the pancreas",
+        "D": "Study of the pancreas and its diseases"
+      },
+      "correctAnswer": "C",
+      "rationale": "Pancreat/o = pancreas; -itis = inflammation. Pancreatitis = inflammation of the pancreas, often caused by gallstones or alcohol use. Pancreatic cancer uses the term 'carcinoma' or 'adenocarcinoma.' Pancreatectomy (-ectomy) = removal. Pancreatology = study.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "pancreatitis — root pancreat/o + -itis"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q13",
+      "stem": "A patient is prescribed dialysis because of kidney failure. In word-part terms, dialysis involves:",
+      "options": {
+        "A": "Removing a kidney surgically",
+        "B": "Separating/filtering waste from the blood when kidneys cannot",
+        "C": "Transplanting a new kidney into the body",
+        "D": "Examining the kidneys using a scope"
+      },
+      "correctAnswer": "B",
+      "rationale": "Dia- = through, across; -lysis = separation or loosening. Dialysis = process of filtering/separating waste products across a membrane when kidneys can no longer perform this function. Nephrectomy = removal. Transplant uses the term 'renal transplantation.' Nephroscopy or cystoscopy = visual examination.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "dialysis — prefix dia-; suffix -lysis"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q14",
+      "stem": "Which term describes the presence of glucose in the urine?",
+      "options": {
+        "A": "Glucosemia",
+        "B": "Glycosuria",
+        "C": "Hyperuricemia",
+        "D": "Hematuria"
+      },
+      "correctAnswer": "B",
+      "rationale": "Glyc/o = sugar/glucose; ur/o = urine; -ia = condition. Glycosuria = glucose in the urine, common in uncontrolled diabetes when blood glucose exceeds the renal threshold. Glucosemia is not a standard term (-emia = blood condition, 'hyperglycemia' is correct). Hyperuricemia = excess uric acid in blood. Hematuria = blood in urine.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "glycosuria — glyc/o + ur/o"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q15",
+      "stem": "A patient with an ileostomy has had a surgical procedure that created:",
+      "options": {
+        "A": "An opening from the colon to the abdominal wall",
+        "B": "A connection from the ileum (small intestine) to the outside of the abdomen",
+        "C": "Removal of the ileum entirely",
+        "D": "A visual examination of the ileum using a scope"
+      },
+      "correctAnswer": "B",
+      "rationale": "Ile/o = ileum (the last part of the small intestine); -ostomy = surgical creation of a new opening. An ileostomy creates an opening from the ileum through the abdominal wall, with stool draining into an external pouch. A colostomy = opening from the colon. Ileectomy = removal. Ileoscopy = visual examination.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "ileostomy — root ile/o + suffix -ostomy"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q16",
+      "stem": "Nocturia is defined as:",
+      "options": {
+        "A": "Pain with urination at night",
+        "B": "Inability to urinate at all",
+        "C": "Excessive urination during nighttime hours",
+        "D": "Blood in the urine in the morning"
+      },
+      "correctAnswer": "C",
+      "rationale": "Noct/o = night; ur/o = urine; -ia = condition. Nocturia = excessive or bothersome urination during nighttime hours, disrupting sleep. It is a common symptom of bladder dysfunction, BPH, or poorly controlled heart failure. Dysuria = painful urination. Anuria = no urination. Hematuria = blood in urine.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "nocturia — root noct/o"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q17",
+      "stem": "The root word 'enter/o' refers specifically to the:",
+      "options": {
+        "A": "Stomach",
+        "B": "Liver",
+        "C": "Intestine (especially small intestine)",
+        "D": "Esophagus"
+      },
+      "correctAnswer": "C",
+      "rationale": "Enter/o = intestine, particularly the small intestine. Enteritis = inflammation of the intestine. Gastr/o = stomach. Hepat/o = liver. Esophag/o = esophagus.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root enter/o = intestine"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q18",
+      "stem": "A patient has urinary 'incontinence.' This term means the patient:",
+      "options": {
+        "A": "Has decreased urine output",
+        "B": "Cannot control the release of urine",
+        "C": "Experiences pain with urination",
+        "D": "Has blood in the urine"
+      },
+      "correctAnswer": "B",
+      "rationale": "In- = not; continent = able to retain. Incontinence = inability to control the release of urine (or stool). This is distinct from oliguria (low output), dysuria (painful urination), and hematuria (blood in urine). Urinary incontinence is a significant nursing assessment finding affecting safety and skin integrity.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "incontinence — prefix in- = not"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q19",
+      "stem": "The term 'cholelithiasis' describes the condition of having:",
+      "options": {
+        "A": "Inflammation of the gallbladder",
+        "B": "Stones in the bile duct or gallbladder",
+        "C": "Removal of the gallbladder",
+        "D": "Infection of the liver"
+      },
+      "correctAnswer": "B",
+      "rationale": "Chol/e = bile; lith/o = stone; -iasis = condition of. Cholelithiasis = gallstones (stones composed of hardened bile components). Cholecystitis = gallbladder inflammation (often caused by stones). Cholecystectomy = gallbladder removal. Hepatitis = liver infection/inflammation.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "cholelithiasis — lith/o = stone + -iasis"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q20",
+      "stem": "A nurse is monitoring intake and output (I&O) for a patient with renal failure and documents 'anuria' on the shift assessment. This means:",
+      "options": {
+        "A": "The patient voided less than the expected daily amount",
+        "B": "The patient's urine contained blood",
+        "C": "The patient produced no urine during the assessment period",
+        "D": "The patient urinated frequently throughout the shift"
+      },
+      "correctAnswer": "C",
+      "rationale": "An- = without; ur/o = urine; -ia = condition. Anuria = complete absence of urine production (typically < 50–100 mL/day). This is a critical finding in renal failure requiring immediate medical notification. Oliguria = decreased urine. Hematuria = blood in urine. Polyuria or frequency = excessive urination.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "anuria — prefix an- = without; clinical significance"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q21",
+      "stem": "Which of the following correctly pairs a root word with its organ?",
+      "options": {
+        "A": "sigm/o — rectum",
+        "B": "pancreat/o — liver",
+        "C": "nephr/o — kidney",
+        "D": "urethr/o — ureter"
+      },
+      "correctAnswer": "C",
+      "rationale": "Nephr/o correctly refers to the kidney (nephritis, nephrectomy). Sigm/o refers to the sigmoid colon, not the rectum (rect/o = rectum). Pancreat/o refers to the pancreas, not the liver (hepat/o = liver). Urethr/o refers to the urethra; ureter/o refers to the ureter.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root word-organ matching accuracy"
+    },
+    {
+      "questionId": "gi-urinary-terminology-Q22",
+      "stem": "The procedure 'cystoscopy' allows a clinician to examine the:",
+      "options": {
+        "A": "Inside of the stomach",
+        "B": "Inside of the large intestine",
+        "C": "Inside of the urinary bladder",
+        "D": "Inside of the kidney collecting system"
+      },
+      "correctAnswer": "C",
+      "rationale": "Cyst/o = urinary bladder; -scopy = visual examination. Cystoscopy uses a scope inserted through the urethra to directly visualize the inside of the bladder. Gastroscopy = stomach. Colonoscopy = large intestine. Ureteroscopy or nephroscopy = ureter and kidney collecting system.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "cystoscopy — root cyst/o + suffix -scopy"
+    }
+  ]
+}

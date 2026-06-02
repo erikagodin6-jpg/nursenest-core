@@ -1,0 +1,451 @@
+{
+  "generatedAt": "2026-04-15T03:30:01.648Z",
+  "pathways": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "country": "canada",
+      "exam": "nclex-rn",
+      "roleTrack": "rn",
+      "nursingPriority": true,
+      "totalLessons": 188,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 39,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 98,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 51,
+      "productionReadyEn": 29,
+      "goodEnglishNotLocalizationComplete": 29,
+      "averageOverallScore": 70.2,
+      "topReasons": [
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 146
+        },
+        {
+          "reason": "thin_total_word_count",
+          "count": 85
+        },
+        {
+          "reason": "missing_educational:core_concept_depth",
+          "count": 79
+        },
+        {
+          "reason": "Missing required premium section: tier_specific_relevance",
+          "count": 26
+        },
+        {
+          "reason": "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+          "count": 26
+        },
+        {
+          "reason": "Missing required premium section: related_next_steps",
+          "count": 26
+        },
+        {
+          "reason": "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+          "count": 26
+        },
+        {
+          "reason": "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+          "count": 25
+        }
+      ],
+      "contentReadinessBreakdown": {
+        "duplicate_or_unclear_source": 51,
+        "structurally_incomplete": 39,
+        "usable_but_thin_en": 69,
+        "production_ready_en": 29
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 84,
+        "localized_ready": 6,
+        "localization_incomplete": 98
+      }
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "country": "us",
+      "exam": "nclex-rn",
+      "roleTrack": "rn",
+      "nursingPriority": true,
+      "totalLessons": 187,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 104,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 32,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 51,
+      "productionReadyEn": 30,
+      "goodEnglishNotLocalizationComplete": 30,
+      "averageOverallScore": 47.8,
+      "topReasons": [
+        {
+          "reason": "low_total_word_count",
+          "count": 83
+        },
+        {
+          "reason": "missing_educational:overview_intro",
+          "count": 83
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 79
+        },
+        {
+          "reason": "missing_educational:clinical_application",
+          "count": 79
+        },
+        {
+          "reason": "missing_educational:core_concept_depth",
+          "count": 79
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 73
+        },
+        {
+          "reason": "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+          "count": 30
+        },
+        {
+          "reason": "Missing required premium section: tier_specific_relevance",
+          "count": 25
+        }
+      ],
+      "contentReadinessBreakdown": {
+        "duplicate_or_unclear_source": 51,
+        "production_ready_en": 30,
+        "structurally_incomplete": 104,
+        "usable_but_thin_en": 2
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 149,
+        "localized_ready": 6,
+        "localization_incomplete": 32
+      }
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "country": "us",
+      "exam": "fnp",
+      "roleTrack": "np",
+      "nursingPriority": true,
+      "totalLessons": 161,
+      "productionReady": 1,
+      "usableButThin": 0,
+      "structurallyIncomplete": 0,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 109,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 51,
+      "productionReadyEn": 104,
+      "goodEnglishNotLocalizationComplete": 103,
+      "averageOverallScore": 87.4,
+      "topReasons": [
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 157
+        },
+        {
+          "reason": "missing_educational:overview_intro",
+          "count": 6
+        },
+        {
+          "reason": "thin_total_word_count",
+          "count": 5
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 4
+        },
+        {
+          "reason": "links:internal_links_high_count(9)",
+          "count": 4
+        },
+        {
+          "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+          "count": 3
+        },
+        {
+          "reason": "missing_educational:clinical_application",
+          "count": 3
+        },
+        {
+          "reason": "missing_educational:core_concept_depth",
+          "count": 3
+        }
+      ],
+      "contentReadinessBreakdown": {
+        "duplicate_or_unclear_source": 51,
+        "production_ready_en": 104,
+        "usable_but_thin_en": 6
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 50,
+        "localized_ready": 2,
+        "localization_incomplete": 109
+      }
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "country": "canada",
+      "exam": "rex-pn",
+      "roleTrack": "rpn",
+      "nursingPriority": true,
+      "totalLessons": 150,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 61,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 38,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 51,
+      "productionReadyEn": 0,
+      "goodEnglishNotLocalizationComplete": 0,
+      "averageOverallScore": 50.9,
+      "topReasons": [
+        {
+          "reason": "missing_educational:core_concept_depth",
+          "count": 98
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 86
+        },
+        {
+          "reason": "low_total_word_count",
+          "count": 64
+        },
+        {
+          "reason": "missing_educational:overview_intro",
+          "count": 64
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 64
+        },
+        {
+          "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+          "count": 38
+        },
+        {
+          "reason": "thin_total_word_count",
+          "count": 38
+        },
+        {
+          "reason": "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
+          "count": 34
+        }
+      ],
+      "contentReadinessBreakdown": {
+        "duplicate_or_unclear_source": 51,
+        "structurally_incomplete": 61,
+        "usable_but_thin_en": 38
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 111,
+        "localized_ready": 1,
+        "localization_incomplete": 38
+      }
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "country": "us",
+      "exam": "nclex-pn",
+      "roleTrack": "lpn",
+      "nursingPriority": true,
+      "totalLessons": 150,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 61,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 38,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 51,
+      "productionReadyEn": 0,
+      "goodEnglishNotLocalizationComplete": 0,
+      "averageOverallScore": 50.8,
+      "topReasons": [
+        {
+          "reason": "missing_educational:core_concept_depth",
+          "count": 99
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 85
+        },
+        {
+          "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+          "count": 64
+        },
+        {
+          "reason": "low_total_word_count",
+          "count": 64
+        },
+        {
+          "reason": "missing_educational:overview_intro",
+          "count": 64
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 39
+        },
+        {
+          "reason": "thin_total_word_count",
+          "count": 38
+        },
+        {
+          "reason": "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
+          "count": 36
+        }
+      ],
+      "contentReadinessBreakdown": {
+        "duplicate_or_unclear_source": 51,
+        "structurally_incomplete": 61,
+        "usable_but_thin_en": 38
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 111,
+        "localized_ready": 1,
+        "localization_incomplete": 38
+      }
+    },
+    {
+      "pathwayId": "us-rn-new-grad-transition",
+      "country": "us",
+      "exam": "new-grad-transition",
+      "roleTrack": "rn",
+      "nursingPriority": true,
+      "totalLessons": 40,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 40,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 0,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 0,
+      "productionReadyEn": 0,
+      "goodEnglishNotLocalizationComplete": 0,
+      "averageOverallScore": 27.7,
+      "topReasons": [
+        {
+          "reason": "missing_educational:overview_intro",
+          "count": 40
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 40
+        },
+        {
+          "reason": "links:no_internal_study_links",
+          "count": 40
+        },
+        {
+          "reason": "thin_total_word_count",
+          "count": 35
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 35
+        },
+        {
+          "reason": "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
+          "count": 23
+        },
+        {
+          "reason": "not_in_exam_filtered_hub_list",
+          "count": 21
+        },
+        {
+          "reason": "missing_educational:safety_or_priority_mentioned",
+          "count": 18
+        }
+      ],
+      "contentReadinessBreakdown": {
+        "structurally_incomplete": 40
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 40
+      }
+    },
+    {
+      "pathwayId": "us-allied-core",
+      "country": "us",
+      "exam": "allied-health",
+      "roleTrack": "allied",
+      "nursingPriority": false,
+      "totalLessons": 15,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 0,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 15,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 0,
+      "productionReadyEn": 0,
+      "goodEnglishNotLocalizationComplete": 0,
+      "averageOverallScore": 77.3,
+      "topReasons": [
+        {
+          "reason": "links:no_internal_study_links",
+          "count": 15
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 15
+        },
+        {
+          "reason": "isolated_no_internal_links_or_related_refs",
+          "count": 15
+        }
+      ],
+      "contentReadinessBreakdown": {
+        "usable_but_thin_en": 15
+      },
+      "localizationReadinessBreakdown": {
+        "localization_incomplete": 15
+      }
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "country": "canada",
+      "exam": "allied-health",
+      "roleTrack": "allied",
+      "nursingPriority": false,
+      "totalLessons": 15,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 0,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 15,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 0,
+      "productionReadyEn": 0,
+      "goodEnglishNotLocalizationComplete": 0,
+      "averageOverallScore": 77.3,
+      "topReasons": [
+        {
+          "reason": "links:no_internal_study_links",
+          "count": 15
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 15
+        },
+        {
+          "reason": "isolated_no_internal_links_or_related_refs",
+          "count": 15
+        }
+      ],
+      "contentReadinessBreakdown": {
+        "usable_but_thin_en": 15
+      },
+      "localizationReadinessBreakdown": {
+        "localization_incomplete": 15
+      }
+    }
+  ]
+}

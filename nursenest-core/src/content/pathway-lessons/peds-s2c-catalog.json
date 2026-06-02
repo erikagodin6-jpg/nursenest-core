@@ -1,0 +1,545 @@
+{
+  "version": 1,
+  "generatedAt": "2026-06-02",
+  "source": "pediatric-nursing-sprint-package2-section2c",
+  "section": "Growth and Development",
+  "pathways": {
+    "ca-rpn-rex-pn": [
+      {
+        "slug": "developmental-milestones-toddler",
+        "title": "Developmental Milestones: Toddler (12–36 Months)",
+        "topic": "Growth and Development",
+        "topicSlug": "growth-and-development",
+        "bodySystem": "Child health",
+        "previewSectionCount": 1,
+        "seoTitle": "Developmental Milestones Toddler | REx-PN Pediatric Nursing | NurseNest",
+        "seoDescription": "REx-PN lesson: toddler developmental milestones 12-36 months — motor, language, social, regression, negativism, and developmental red flags.",
+        "exams": ["REX_PN"],
+        "countries": ["CA"],
+        "priority": "high",
+        "audienceTiers": ["RPN"],
+        "examBlueprintDomain": "Child and Family Health",
+        "examBlueprintCompetency": "Identifies expected developmental milestones for toddlers 12-36 months and applies this knowledge to clinical nursing care",
+        "studyTakeaways": [
+          "No 2-word phrases by 24 months is a language red flag requiring immediate referral regardless of other milestone progress.",
+          "Negativism ('NO!') is developmentally normal — it reflects healthy autonomy development, not defiance.",
+          "Parallel play (alongside but not with others) is normal for toddlers — do not interpret it as social delay.",
+          "Regression under stress is expected and temporary; respond with warmth and acceptance, never punishment."
+        ],
+        "studyCommonTraps": [
+          "Treating negativism as a behavioural problem requiring consequences rather than a normal developmental expression of autonomy.",
+          "Expecting cooperative play from toddlers — parallel play is developmentally appropriate for this age group.",
+          "Reassuring parents about absent 2-word phrases at 24 months — this is always a referral trigger."
+        ],
+        "memoryAnchor": "15-18-24-36: Words grow (4-6 → 10-20 → 50+ → sentences). Play grows (solitary → parallel). Control grows ('NO!' → choices).",
+        "sections": [
+          {
+            "id": "learning-objectives",
+            "kind": "learning_objectives",
+            "heading": "Learning objectives",
+            "body": "After completing this lesson, you will be able to:\n- State the key developmental milestones in motor, language, cognitive, and social-emotional domains at 15, 18, 24, 30, and 36 months\n- Identify developmental red flags in toddlers that require referral regardless of other milestone progress\n- Explain the clinical significance of negativism and regression in the toddler developmental context\n- Distinguish parallel play from associative play and identify which is appropriate for toddlers\n- Apply toddler developmental knowledge to clinical nursing decisions about assessment approach, procedure preparation, and parental guidance\n- Provide appropriate anticipatory guidance to parents of toddlers"
+          },
+          {
+            "id": "introduction",
+            "kind": "introduction",
+            "heading": "Overview and exam relevance",
+            "body": "Toddlerhood (12-36 months) is one of the most developmentally dynamic periods of childhood. In just 2 years, children progress from first steps and first words to running, climbing, speaking in short sentences, and asserting independence with enthusiasm. Understanding this trajectory is essential for every aspect of toddler nursing care — from how to approach assessment (adapt everything to minimize distress), to how to interpret behaviour (negativism is healthy, not defiant), to how to guide parents through one of the most challenging developmental phases.\n\nFor the REx-PN exam, toddler milestones appear in scenarios about regression during hospitalization, developmental screening, parent teaching, procedure preparation, and pain assessment tool selection. The most commonly tested red flags are language delays and the developmental context of behaviours (regression, negativism, toilet training challenges). A solid grasp of toddler development is foundational to safe, developmentally appropriate pediatric nursing practice."
+          },
+          {
+            "id": "core-content",
+            "kind": "core_content",
+            "heading": "Core clinical content",
+            "body": "**Milestones by age:**\n\n**15 months:**\n- Motor (gross): walks well; begins to run (unsteady); climbs stairs with help and both hands\n- Motor (fine): scribbles spontaneously; puts objects in containers; stacks 2 cubes\n- Language: 4-6 meaningful words; points to communicate; jargon diminishing\n- Social/cognitive: drinks from cup with help; follows 1-step commands without gesture; knows what objects are used for; shows off for attention\n\n**18 months:**\n- Motor (gross): runs (still falls often); walks up stairs holding on; kicks a ball; throws overhand\n- Motor (fine): removes clothing; feeds self with spoon (messily); stacks 3-4 cubes; scribbles in circular pattern\n- Language: 10-20 words; beginning to refer to self by name; identifies body parts (2-3)\n- Social/cognitive: beginning of pretend play (feeds doll, talks on toy phone); parallel play dominant; beginning of empathy (comforts distressed peer); strong attachment behaviours; significant stranger anxiety\n\n**24 months:**\n- Motor (gross): runs well without falling; walks up and down stairs with two feet per step; kicks ball forward; jumps off low step; begins tricycle (pushing with feet)\n- Motor (fine): stacks 6-7 cubes; turns pages of book; imitates straight line; uses spoon and fork\n- Language: **50+ words** (RED FLAG if <50); **2-word phrases** — 'more juice,' 'daddy go,' 'big truck' (RED FLAG if absent); 50% intelligible to unfamiliar listener; vocabulary explosion (new word almost daily); names pictures in books\n- Social/cognitive: parallel play; possessive ('mine!'); beginning of pretend play with real-world themes; refers to self as 'me' or 'I'; identifies self in mirror; follows 2-step related commands ('Pick up the cup and put it on the table')\n\n**30 months:**\n- Motor (gross): jumps with both feet off the floor; throws ball overhand with greater accuracy; begins alternating feet on stairs (may still use two-foot pattern)\n- Motor (fine): stacks 8 cubes; imitates horizontal and circular lines; turns doorknob; removes shoes and socks independently\n- Language: 3-word sentences; knows first and last name; beginning to use pronouns (I, me, mine — with errors); 75% intelligible; asks 'why?' questions\n- Social/cognitive: plays near and briefly with other children; beginning to share with prompting; understands simple rules ('no hitting'); role play with others begins\n\n**36 months:**\n- Motor (gross): pedals tricycle; runs smoothly; throws overhand; catches large ball; walks on tiptoes\n- Motor (fine): copies circle; dresses with help (snaps, Velcro); washes hands; stacks 10 cubes\n- Language: 4-word sentences; 200-900 words; counts to 3; knows colors (2+); 75% intelligible to strangers; tells name, age, and gender\n- Social/cognitive: toilet trained by daytime (WIDE NORMAL RANGE 18 months to 4 years, average 2.5-3 years); imaginative play; negotiates with peers; understands taking turns with reminders; beginning to understand 'mine' vs 'yours'\n\n**Developmental concepts unique to toddlerhood:**\n\n**Negativism:** The toddler's frequent, determined 'NO!' — even to things they want. This is a healthy expression of autonomy (Erikson's Autonomy vs Shame stage). The child is discovering they have a will separate from their caregiver's. Response: offer genuine limited choices, not commands or power struggles.\n\n**Regression:** Temporary return to earlier developmental behaviours (bed-wetting after toilet training, bottle use after cups, baby talk) under stress (hospitalization, new sibling, family change). The skill is NOT lost — it is temporarily suppressed by stress. Response: acceptance, warmth, continuation of same expectations when stress resolves.\n\n**Parallel play:** Playing alongside but not with other children — using similar toys in the same space but not interacting in a coordinated way. This is developmentally normal for toddlers and does not indicate social delay.\n\n**RED FLAGS requiring referral:**\n- No single words by 16 months\n- No 2-word phrases by 24 months (most important 24-month language red flag)\n- Loss of any previously acquired skill at any age\n- No pointing by 12-14 months\n- No pretend play by 18 months\n- No social interest in peers by 24 months\n\n**Toilet training readiness (assess, not prescribe):**\nSigns of readiness: shows interest in others using toilet; stays dry for 2+ hours; can pull pants up and down; understands simple related instructions; can express need to use toilet. Initiating training before readiness is associated with prolonged training and increased accidents."
+          },
+          {
+            "id": "nursing-assessment",
+            "kind": "nursing_assessment",
+            "heading": "Nursing assessment",
+            "body": "**Developmental history:**\n- Ask parents: 'What new things has your toddler started doing since the last visit?'\n- Language assessment: 'How many words does your child say? Does your child put two words together?' If <50 words at 24 months or no 2-word phrases: refer\n- Behaviour assessment: Has the parent noticed any regression? What stressors are present at home?\n- Parent concern: 'Do you have any concerns about how your child is growing or developing?'\n\n**Developmental screening:**\n- Administer ASQ-3 or equivalent at 18 and 24 months minimum\n- M-CHAT-R/F at 18 and 24 months for autism spectrum screening\n- If parent expresses concern at any visit: screen regardless of age\n\n**Growth assessment:**\n- Weight, height, head circumference (until 24 months), plot on appropriate growth chart\n- BMI begins at 2 years\n\n**Behavioral assessment during physical exam:**\n- Note use of negativism: does the child say 'no' when approached? This is normal — work with it\n- Observe play with any available objects: solitary or parallel? Functional play? Pretend play?\n- Language during visit: words, phrases, sentences — note quality and quantity\n- Stranger anxiety response: note presence (normal) or absence (potentially concerning)"
+          },
+          {
+            "id": "nursing-interventions",
+            "kind": "nursing_interventions",
+            "heading": "Nursing interventions",
+            "body": "**Working with toddlers during healthcare encounters:**\n\n**Offering choices:** Always offer 2 genuine, acceptable choices to support autonomy: 'Do you want to sit on Daddy's lap or the table?' Never offer a false choice ('Do you want me to check your ears?' — this IS happening regardless).\n\n**Managing negativism:** When a toddler refuses, do not escalate into a power struggle. Offer an alternative or wait 30-60 seconds before repeating. Use distraction. Work quickly once cooperation is achieved.\n\n**Handling regression during hospitalization:**\n- Normalize regression for parents: 'Regression is your child's way of coping with stress — the skill isn't gone, it's on pause'\n- Do not retrain or punish during admission\n- Reassure parents the regression will resolve after discharge\n- Cluster care to allow uninterrupted rest\n\n**Preparing toddlers for procedures:**\n- Preparation IMMEDIATELY BEFORE the procedure — toddlers cannot conceptualize future time\n- Use concrete sensory descriptions: 'It will feel cold,' 'You'll hear a beep'\n- Allow handling of safe equipment (stethoscope, bandage)\n- Keep the parent close throughout; use therapeutic holding\n\n**Anticipatory guidance for development:**\n- Language: talk to your toddler about everything; narrate daily activities; read daily; respond to communication attempts\n- Play: provide age-appropriate toys (stacking, push-pull, shape sorters); parallel play opportunities; don't force sharing (concept develops later)\n- Safety: poisoning risk is HIGHEST in toddlers — lock all medications and cleaning products"
+          },
+          {
+            "id": "parent-teaching",
+            "kind": "parent_teaching",
+            "heading": "Parent and family teaching",
+            "body": "**Teaching parents about toddler development:**\n\n'Your toddler's \"no\" — even when they want the thing they're refusing — is not defiance. It is a developmental achievement. They are discovering they have their own will. The best response is to offer two choices rather than a single command: \"Do you want to put your shoes on now or in 2 minutes?\"'\n\n'Regression — bed-wetting again, asking for the bottle, baby talk — is how your toddler copes with stress. It means the skill is temporarily set aside, not forgotten. It will come back when the stressor passes. The worst thing to do is punish or shame the regression.'\n\n'Playing next to other children without really joining them — called parallel play — is completely normal for this age. Your toddler is watching and learning. True cooperative play comes later, around age 3-4.'\n\n**When to call the provider:**\n- No single words by 16 months\n- No 2-word phrases by 24 months\n- Loss of any skill the child had\n- No pretend play by 18 months\n- You have any concern about development\n\n**Toilet training guidance:**\nDo not start training before the child shows clear signs of readiness (usually 18 months to 3 years). Pushing too early leads to more accidents and a longer training process. Signs of readiness: stays dry for 2+ hours; interested in the toilet; can pull pants up and down; can communicate the need."
+          },
+          {
+            "id": "safety-considerations",
+            "kind": "safety_considerations",
+            "heading": "Safety considerations",
+            "body": "**Toddler safety priorities (the developmental stage of highest poisoning risk):**\n\n- **Poisoning:** Lock ALL medications, cleaning products, and toxic substances in a cabinet out of reach. Child-resistant packaging is NOT child-proof. Call Poison Control (not 911 first unless the child is unconscious/not breathing) if ingestion occurs. Do NOT induce vomiting.\n- **Falls:** Install hardware-mounted gates at top of stairs. Ensure climbing surfaces are padded or supervised. Window guards (not screens) at any window where a toddler could lean.\n- **Strangulation:** Remove blind cords; use cordless blinds. No drawstrings on clothing. Supervise around clothing lines and ropes.\n- **Drowning:** Toddlers can drown silently in 2 inches of water. NEVER leave alone in bathtub even for seconds. Pool fencing required. Toilet locks when relevant.\n- **Motor vehicle:** Rear-facing car seat until age 2 minimum; until maximum weight/height for seat.\n- **Button batteries and magnet sets:** Keep away from toddlers — button batteries cause severe esophageal burns within 1-2 hours if swallowed; multiple magnets can perforate intestines.\n\n**Developmentally specific safety note:**\nToddler mobility (climbing, running, exploring) develops faster than their risk assessment. Safety must be environmental (locks, gates, latches) rather than relying on the toddler to respond to verbal warnings."
+          },
+          {
+            "id": "documentation",
+            "kind": "documentation",
+            "heading": "Documentation",
+            "body": "**Well-child visit (toddler):**\n- Growth: weight, height (standing if ≥24 months), head circumference (<24 months), BMI (≥24 months), percentiles\n- Developmental milestones: document specifically by domain — e.g., 'Gross motor: runs, climbs; Fine motor: scribbles, stacks 6 cubes; Language: 50+ words, 2-word phrases present, 50% intelligible; Social: parallel play, pretend play with doll'\n- Red flags: document any missing milestone, parent concern verbatim, and action taken (screening initiated, referral made)\n- Developmental screening: tool name, date, score, interpretation, action\n- Anticipatory guidance provided: topics, parent response\n- Immunizations: per standard documentation\n\n**For hospitalized toddlers:**\n- Document baseline developmental status at admission (using parent report of pre-admission functioning)\n- Note regression identified during admission: specific behaviour, presumed stressor, parent education provided\n- Document parent presence and participation in care\n- Note response to nursing interventions (e.g., distraction technique used, effectiveness)"
+          },
+          {
+            "id": "clinical-pearls",
+            "kind": "clinical_pearls",
+            "heading": "Clinical pearls and exam tips",
+            "body": "**Pearl 1:** No 2-word phrases at 24 months = ALWAYS refer. This is the most tested toddler language red flag. Do not reassure to 'wait and see.' The exam will try to tempt you to wait — choose referral.\n\n**Pearl 2:** Parallel play is the expected social play mode for toddlers. An exam scenario describing a 2-year-old who 'plays next to but not with' other children is describing normal development — not a social delay.\n\n**Pearl 3:** Negativism is healthy. An exam question about a toddler who says 'no' to everything should be answered with: 'normal toddler development consistent with Erikson's Autonomy stage' — not 'behavioural problem requiring assessment.'\n\n**Pearl 4:** Toilet training red flag: most children complete daytime training by age 3-3.5. A child who is not trained by 4 years warrants assessment. The normal range (18 months to 4 years) is very wide — do not pressure parents early in the range.\n\n**Pearl 5:** Procedure preparation timing: toddlers need IMMEDIATE preparation — minutes before the procedure. Telling a toddler about a procedure tomorrow creates prolonged anxiety without comprehension. This contrasts with preschoolers (1-2 days) and school-age children (1 week).\n\n**Exam trap:** A parent worried about a 20-month-old with only 8 words. Red flag? At 15 months, 4-6 words expected. At 18 months, 10-20 words expected. At 20 months, 10-20 words is still within range, but 8 words is slightly below — warrant screening, and referral if not improving. The red flag threshold is no words at 16 months or no 2-word phrases at 24 months."
+          }
+        ],
+        "preTest": [
+          {
+            "question": "A parent of a 24-month-old reports their child says individual words but does not yet put two words together. What is the most appropriate nursing action?",
+            "options": [
+              "Reassure the parent that 2-word phrases typically emerge between 24 and 30 months",
+              "Refer for speech-language assessment — absence of 2-word phrases at 24 months is a developmental red flag",
+              "Administer the ASQ-3 at the 30-month visit if the concern persists",
+              "Ask the parents to read to the child daily and recheck at the next scheduled visit"
+            ],
+            "correct": 1,
+            "rationale": "Two-word phrases (e.g., 'more milk,' 'daddy go') are expected by 24 months. Absence of 2-word phrases at 24 months is a well-established developmental red flag that warrants immediate referral for speech-language assessment, regardless of other milestone progress. Waiting until 30 months or attempting home interventions before referral is inappropriate.",
+            "distractorRationales": {
+              "A": "2-word phrases should be present by 24 months — stating they emerge 'between 24 and 30 months' creates an inaccurate expectation and delays necessary referral.",
+              "C": "Waiting for the 30-month visit delays assessment by 6 months. This red flag warrants action now, not at the next scheduled screen.",
+              "D": "Reading aloud is a beneficial general language intervention but does not replace a clinical referral for a child who is missing a key developmental milestone at 24 months."
+            }
+          },
+          {
+            "question": "A hospitalized 2.5-year-old who was successfully toilet trained for 3 months has begun having daily accidents since admission. The parents ask whether they should begin toilet retraining during the hospital stay. What is the best nursing response?",
+            "options": [
+              "Agree and recommend establishing a timed toileting schedule during the admission",
+              "Explain that this is expected regression — a normal stress response to hospitalization; the skill has not been lost and retraining should wait until after discharge",
+              "Notify the provider since regression at this age may indicate a urinary tract infection",
+              "Advise the parents to use positive reinforcement each time the child successfully uses the toilet"
+            ],
+            "correct": 1,
+            "rationale": "Regression — returning to earlier developmental behaviours — is a normal, expected coping response to the stress of hospitalization. The child has not lost toilet training skills; they are temporarily suppressed by stress. Retraining during an acute stressor is counterproductive and shaming. The nurse should normalize this for parents and advise that skills typically return within weeks of the stressor resolving.",
+            "distractorRationales": {
+              "A": "Starting toilet retraining during a stressful hospitalization is counterproductive — it increases pressure on the child at a time when they have reduced capacity to cope, often worsening regression.",
+              "C": "While a UTI could cause urinary symptoms, the context (prior toilet training, recent hospitalization, accidents in a previously trained child) is most consistent with regression. A UTI should be considered if other symptoms are present (fever, dysuria, foul-smelling urine).",
+              "D": "Positive reinforcement for successful toilet use during a regression period is premature and may create shame when the child cannot meet the expectation consistently."
+            }
+          },
+          {
+            "question": "A nurse observes a 22-month-old in the waiting area playing with blocks alongside another toddler but not interacting — each child plays with their own blocks independently. Which nursing interpretation is correct?",
+            "options": [
+              "This is concerning — children should be playing cooperatively by 18-24 months",
+              "This is parallel play — a normal developmental pattern for toddlers; cooperative play develops later at approximately 4-5 years",
+              "This suggests autism spectrum disorder — refer for developmental assessment",
+              "This is solitary play — the child has not yet reached the developmental level of parallel play"
+            ],
+            "correct": 1,
+            "rationale": "Parallel play — playing alongside but not with another child, using similar materials — is the developmentally expected social play mode for toddlers (18-24 months). It is NOT a social delay. Cooperative play, with coordinated interaction toward a shared goal, develops around 4-5 years. The observation described is entirely normal for a 22-month-old.",
+            "distractorRationales": {
+              "A": "Cooperative play is not expected until approximately 4-5 years. Expecting cooperative play from a 22-month-old creates an inappropriate developmental standard.",
+              "C": "Parallel play is a positive developmental indicator — the child is in the same space as peers and using similar materials, which is the precursor to associative and cooperative play. This alone does not warrant autism screening.",
+              "D": "The children are in the same space and using similar materials, which is a defining feature of parallel play. Solitary play involves playing alone without reference to others."
+            }
+          },
+          {
+            "question": "A 2-year-old in the emergency department refuses all attempts by the nurse to assess heart rate, saying 'NO!' and turning away. Which nursing approach is most developmentally appropriate?",
+            "options": [
+              "Explain to the child that the assessment is necessary and must be done regardless of their preference",
+              "Ask the parent to hold the child still while the nurse quickly completes the assessment",
+              "Offer a genuine limited choice: 'Do you want me to listen to your heart first or look at your ears first?' and use distraction",
+              "Defer the assessment until the child is calm and cooperative"
+            ],
+            "correct": 2,
+            "rationale": "Offering genuine limited choices supports the toddler's need for autonomy (Erikson's developmental task) while ensuring the assessment occurs. Both options offered are acceptable — the child experiences some control, which often reduces resistance. Active distraction (parent singing, bubbles) further supports cooperation. Working quickly once cooperation is achieved is essential with toddlers.",
+            "distractorRationales": {
+              "A": "An explanation that the assessment 'must be done' without offering any control will escalate resistance in a toddler. Cognitive explanations are less effective at this developmental stage than offering choices and distraction.",
+              "B": "Asking a parent to physically hold down a toddler should be avoided unless clinically necessary and after all other strategies have failed. This approach damages the parent-child trust relationship.",
+              "D": "Deferring the assessment entirely is rarely an option in a clinical setting and is not the best developmentally informed approach — the goal is to adapt the approach, not avoid it."
+            }
+          },
+          {
+            "question": "Which milestone is most expected for a typically developing 18-month-old?",
+            "options": [
+              "Rides a tricycle independently",
+              "Runs smoothly without falling, stacks 3-4 cubes, and uses 10-20 words",
+              "Speaks in 3-word sentences and can dress independently",
+              "Jumps off a low step with both feet together"
+            ],
+            "correct": 1,
+            "rationale": "At 18 months: runs (with some falling still), builds a tower of 3-4 cubes, and uses 10-20 words. Tricycle riding is expected at 3 years (when they can pedal). Three-word sentences and independent dressing are 3-year milestones. Jumping with both feet together develops at approximately 24-30 months.",
+            "distractorRationales": {
+              "A": "Tricycle pedaling is a 3-year milestone. At 18 months, children may push a riding toy with their feet but cannot pedal.",
+              "C": "Three-word sentences emerge at approximately 30 months; independent dressing (with snaps and Velcro) is a 3-year milestone. Both are significantly beyond 18-month expectations.",
+              "D": "Jumping with both feet together off a step is a 24-30 month milestone. At 18 months, children can step off a low surface with one foot leading but have not yet developed bilateral jumping."
+            }
+          },
+          {
+            "question": "A parent reports their 18-month-old says 'mama' and 'dada' specifically plus 6 other words, but is not yet pointing to communicate. How should the nurse interpret this?",
+            "options": [
+              "This is within normal limits for 18 months — reassure the parent",
+              "The pointing is a concern — pointing by 12-14 months is a key communicative milestone; absence at 18 months warrants referral for autism spectrum disorder screening and developmental assessment",
+              "Six words at 18 months is below the expected 10-20 word range — refer for speech-language assessment",
+              "Pointing typically develops between 18 and 24 months — this is within the expected range"
+            ],
+            "correct": 1,
+            "rationale": "Pointing to communicate (protodeclarative pointing: showing something of interest to share attention; protoimperative pointing: requesting an object) should be present by 12-14 months. Absence of pointing at 18 months is a specific red flag for autism spectrum disorder and joint attention development. Combined with 8 words at 18 months (below the 10-20 word expectation), this presentation warrants referral.",
+            "distractorRationales": {
+              "A": "Absence of pointing at 18 months is not within normal limits — it is a specific developmental red flag requiring assessment.",
+              "C": "While 8 words at 18 months is below the 10-20 word expectation, the absence of pointing is a separate and arguably more significant concern. Both warrant referral, but absence of pointing is the stronger red flag.",
+              "D": "Pointing is expected by 12-14 months, not between 18-24 months. Stating 18-24 months as the normal range is inaccurate and would delay appropriate referral."
+            }
+          },
+          {
+            "question": "The parents of a 28-month-old ask when they should start toilet training. The child is dry during naps but not overnight, shows interest in the toilet, and can pull their pants down but not up. What is the most appropriate nursing guidance?",
+            "options": [
+              "Begin training immediately — the child is overdue since most children complete toilet training by 24 months",
+              "The child is showing signs of readiness; begin toilet training now — they will likely achieve daytime continence within the next few months",
+              "Wait until the child is completely dry overnight before beginning any toilet training",
+              "Toilet training at 28 months is too early; wait until 3 years"
+            ],
+            "correct": 1,
+            "rationale": "This child shows multiple signs of toilet training readiness: dry during naps (physiological control during sleep), interest in the toilet, and ability to manage their own clothing partially. Beginning daytime toilet training with these readiness indicators present is appropriate. Daytime toilet training is a reasonable goal; nighttime continence typically follows months to years later and is not a prerequisite for beginning daytime training.",
+            "distractorRationales": {
+              "A": "Most children complete toilet training between 2.5 and 3.5 years. The 28-month-old is not overdue — they are well within the normal range. The sense of urgency at 28 months is not warranted.",
+              "C": "Nighttime dryness is not a prerequisite for beginning daytime toilet training. Nighttime continence typically develops 6-12 months or more after daytime continence and is a separate milestone.",
+              "D": "Toilet training is appropriate when readiness signs are present, regardless of specific age within the normal range. This child is showing clear readiness indicators at 28 months — delaying to 3 years is not evidence-based."
+            }
+          },
+          {
+            "question": "A 30-month-old uses 3-word sentences and has been speaking clearly for 6 months. Following the birth of a new sibling 3 weeks ago, the child has reverted to babbling and pointing rather than using words. The parents are very concerned. What is the best nursing response?",
+            "options": [
+              "Refer for speech-language assessment — language regression requires evaluation",
+              "Reassure parents that this is expected regression under stress of a new sibling; the language will return as the child adjusts, typically within weeks",
+              "Advise parents to correct the child each time they babble to reinforce language use",
+              "Recommend the parents spend more time reading to the child to stimulate language re-development"
+            ],
+            "correct": 1,
+            "rationale": "This is regression — a temporary return to earlier language patterns in response to the identified stressor (new sibling). Because this child demonstrated language skills (3-word sentences) that have temporarily disappeared in the context of a known acute stressor, this is most consistent with regression rather than true language delay or disorder. Reassurance and monitoring are appropriate. Skills typically return within weeks.",
+            "distractorRationales": {
+              "A": "Immediate referral is appropriate for regression that persists beyond the stressor or for skill loss without an identified stressor. In the context of a recent significant life change (new sibling), this temporary regression is expected and does not require immediate referral.",
+              "C": "Correcting a child in regression increases shame and may worsen the regression. Warm, patient acceptance of the regression while maintaining normal communication patterns is the recommended approach.",
+              "D": "Reading to the child is always beneficial but does not specifically address regression — and framing regression as requiring language 're-development' pathologizes a normal coping response."
+            }
+          },
+          {
+            "question": "When should a nurse prepare a toddler for a planned blood draw scheduled for the next morning?",
+            "options": [
+              "The evening before, so the child has time to process the information",
+              "One week before to give adequate preparation time",
+              "Immediately before the procedure — within minutes of beginning",
+              "At the time of the previous encounter to allow gradual adjustment"
+            ],
+            "correct": 2,
+            "rationale": "Toddlers cannot conceptualize future time — 'tomorrow' is meaningless to a 2-year-old. Pre-procedure preparation for toddlers should occur immediately before the procedure (minutes before). Telling a toddler about a procedure hours or days before creates prolonged anxiety without any benefit. This contrasts with preschoolers (1-2 days) and school-age children (1 week) who can benefit from advance preparation.",
+            "distractorRationales": {
+              "A": "The evening before is inappropriate for a toddler — they cannot conceptualize 'tomorrow' and will experience prolonged, unproductive anxiety overnight.",
+              "B": "One week of advance preparation is appropriate for school-age children who can understand future time. For toddlers, this would cause a week of anxiety without comprehension.",
+              "D": "Preparation at a previous encounter days ahead is not beneficial for toddlers due to their inability to conceptualize future events."
+            }
+          },
+          {
+            "question": "Which of the following statements about toddler negativism is most accurate from a developmental nursing perspective?",
+            "options": [
+              "Negativism indicates the toddler has been given too much control and requires firmer parenting",
+              "Negativism is a pathological response that may indicate an anxiety disorder in toddlers",
+              "Negativism is a healthy developmental behaviour reflecting the toddler's emerging sense of autonomy and self",
+              "Negativism is expected only in toddlers who have experienced inconsistent parenting"
+            ],
+            "correct": 2,
+            "rationale": "Toddler negativism — the frequent, determined 'NO!' — is one of the most characteristic and developmentally healthy features of toddlerhood. It reflects Erikson's Autonomy vs Shame stage: the child is discovering that they have a will separate from their caregiver's. It is not defiance or pathology; it is developmental progress. The appropriate nursing response is to validate this for parents and teach strategies that work with (not against) the toddler's need for autonomy.",
+            "distractorRationales": {
+              "A": "Negativism is not caused by 'too much control' — it is a universal developmental feature of toddlerhood across parenting styles. Pathologizing it leads to inappropriate parental responses.",
+              "B": "Negativism is a normal developmental behaviour, not a pathological response or anxiety disorder indicator. Diagnosing anxiety based on developmentally expected negativism is inappropriate.",
+              "D": "Negativism occurs universally in typically developing toddlers regardless of parenting style. It is not associated with inconsistent parenting."
+            }
+          }
+        ],
+        "postTest": [
+          {
+            "question": "A 24-month-old is seen for a well-child visit. The parent reports 30 words and no 2-word phrases, uses a spoon messily, stacks 6 cubes, and plays next to but not with other children. Which finding warrants immediate referral?",
+            "options": [
+              "Messy spoon use",
+              "Parallel play only",
+              "Absence of 2-word phrases",
+              "30 words"
+            ],
+            "correct": 2,
+            "rationale": "Absence of 2-word phrases at 24 months is a language red flag requiring immediate referral for speech-language assessment. Messy spoon use at 24 months is normal. Parallel play is the expected play mode at this age. 30 words, while slightly below the 50-word expectation, may or may not be concerning depending on the quality of words — but absent 2-word combinations is the most definitive red flag.",
+            "distractorRationales": {
+              "A": "Messy self-feeding with a spoon is expected at 24 months — the child is developing, not delayed.",
+              "B": "Parallel play is the developmentally appropriate social play mode for 24-month-olds.",
+              "D": "30 words at 24 months is slightly below the 50-word expectation, which warrants monitoring and potentially screening, but absent 2-word phrases is a more definitive red flag requiring referral."
+            }
+          },
+          {
+            "question": "A 36-month-old can pedal a tricycle, copies a circle, dresses with help, and uses 4-word sentences. Is this child meeting developmental expectations?",
+            "options": [
+              "No — pedaling a tricycle is not expected until age 4",
+              "No — 4-word sentences are behind the expected 5-6 word sentences at 3 years",
+              "Yes — all of these are expected milestones for a 3-year-old",
+              "Partially — only the language milestone is on track; motor milestones are delayed"
+            ],
+            "correct": 2,
+            "rationale": "All four milestones described are expected for a 36-month-old: pedaling a tricycle develops at approximately 3 years; copying a circle is a 3-year fine motor milestone; dressing with help is a 3-year milestone; 4-word sentences are the expected expressive language level at 3 years. This child is meeting all described developmental expectations.",
+            "distractorRationales": {
+              "A": "Pedaling a tricycle is a 3-year milestone, not 4 years. Three-year-olds can pedal a tricycle.",
+              "B": "Four-word sentences are expected at 3 years. Five-to-six word sentences develop at approximately 4-5 years.",
+              "D": "All milestones described are on track for 36 months. There are no motor delays in this description."
+            }
+          },
+          {
+            "question": "The parents of a 2-year-old with a recent major illness are told their child's toilet training regression 'will likely last for months.' Is this accurate?",
+            "options": [
+              "Yes — regression during serious illness can take 3-6 months to resolve",
+              "No — regression typically resolves within weeks of the stressor resolving; sustained regression beyond 4-6 weeks after the stressor warrants assessment",
+              "Yes — toilet training once regressed must be fully restarted from the beginning",
+              "No — regression resolves immediately once the stressor is removed"
+            ],
+            "correct": 1,
+            "rationale": "Regression secondary to stress typically resolves within weeks of the stressor resolving — not months. Sustained regression beyond 4-6 weeks after a stressor resolves may indicate the stressor is ongoing, the child has additional psychosocial needs, or there is an underlying medical issue (particularly for urinary regression). Toilet training does not need to be restarted from scratch — the skill typically resurfaces as the child stabilizes.",
+            "distractorRationales": {
+              "A": "Months-long regression is not typical after a discrete illness. Regression lasting that long after the stressor has resolved warrants assessment.",
+              "C": "The underlying skill is not lost during regression — it returns without requiring a full restart of the training process in most cases.",
+              "D": "While regression usually resolves relatively quickly, 'immediately' upon stressor removal is too rapid — adjustment typically takes days to weeks."
+            }
+          },
+          {
+            "question": "A parent of a 20-month-old is concerned because their child does not yet point to show interesting things to others. How should the nurse respond?",
+            "options": [
+              "Reassure the parent that pointing typically develops between 18 and 24 months",
+              "Administer the M-CHAT-R/F and refer for further assessment — pointing by 12-14 months is a key communicative milestone and its absence at 20 months is a concern",
+              "Reassure the parent that this is normal and recheck at the 24-month visit",
+              "Refer directly to a developmental pediatrician without completing a screening tool"
+            ],
+            "correct": 1,
+            "rationale": "Pointing to share attention (protodeclarative: 'look at that dog!') is expected by 12-14 months. Absence at 20 months is a specific red flag for autism spectrum disorder and joint attention development, warranting M-CHAT-R/F administration and referral for assessment if the screen is positive.",
+            "distractorRationales": {
+              "A": "Pointing is expected by 12-14 months, not between 18-24 months. This statement is inaccurate and would delay appropriate assessment.",
+              "C": "Waiting until the 24-month visit when a known red flag is present (absent pointing at 20 months) is inappropriate — screening and referral should occur at the current visit.",
+              "D": "Completing a validated screening tool (M-CHAT-R/F) before referral is the evidence-based approach — it quantifies the concern and guides the referral decision."
+            }
+          },
+          {
+            "question": "A toddler is described by the nursing staff as 'cooperative and settled' because they accept care from all nurses equally, do not cry when parents leave, and lie quietly in bed. The parents have been largely absent for 4 days. Which interpretation is most accurate?",
+            "options": [
+              "The toddler has adapted well to the hospital environment — this is a positive sign",
+              "This behaviour is consistent with Robertson's Phase 3 detachment — the apparent calm represents emotional shutdown, not positive adaptation",
+              "The toddler may have a social-emotional developmental delay requiring assessment",
+              "This is expected after 4 days of hospitalization — toddlers adjust within this time frame"
+            ],
+            "correct": 1,
+            "rationale": "A previously distressed toddler who progresses to accepting all caregivers equally with muted response to parental absence and return is showing signs of Robertson's Phase 3 (Detachment) — emotional shutdown. This is NOT positive adaptation. The nursing team should recognize this, communicate concern to the family, and actively work to increase parental presence.",
+            "distractorRationales": {
+              "A": "Detachment mimics adaptation but represents psychological harm. The key distinguishing feature — muted or absent response to returning parent — differentiates detachment from genuine adaptation.",
+              "C": "This is a contextually explained response to prolonged separation — not a developmental disorder. Developmental delay assessment is premature before addressing the environmental factor.",
+              "D": "Toddlers do not 'adjust' to prolonged separation through emotional shutdown. They regress or detach — neither of which is healthy adaptation."
+            }
+          },
+          {
+            "question": "A nurse is about to administer an oral medication to a 2.5-year-old who has been refusing all medications. Which statement best reflects a developmentally appropriate approach?",
+            "options": [
+              "'Here is your medicine. You need to drink it now so you can get better.'",
+              "'Would you like to take your medicine or skip it today?'",
+              "'You can take your medicine in the cup or the syringe — which do you choose?'",
+              "'If you take your medicine I'll give you a sticker — what do you think?'"
+            ],
+            "correct": 2,
+            "rationale": "Offering two genuine, acceptable choices supports autonomy (the developmental task of toddlerhood) while ensuring the medication is given. Both options are medically acceptable — the child experiences control over the method, which reduces resistance. This is the most developmentally appropriate approach.",
+            "distractorRationales": {
+              "A": "A command without choice is likely to escalate resistance in a toddler who is developmentally primed for negativism. Authoritative directives without choices increase refusal.",
+              "B": "Offering 'skip it today' as a choice is not acceptable when the medication is required — this is a false choice that undermines the treatment plan.",
+              "D": "While positive reinforcement (sticker reward) can be a useful adjunct, it is less developmentally grounded than offering genuine autonomy in the method of administration. If a sticker is added, it should accompany the choice rather than replace it."
+            }
+          },
+          {
+            "question": "What is the normal range for daytime toilet training completion in children, according to developmental guidelines?",
+            "options": [
+              "12 to 18 months",
+              "18 months to 4 years (average 2.5-3 years)",
+              "2 to 2.5 years",
+              "3 to 4 years"
+            ],
+            "correct": 1,
+            "rationale": "Daytime toilet training has a wide normal range: 18 months to 4 years, with most children completing daytime training between 2.5 and 3.5 years. The range is deliberately broad because readiness varies significantly between children. Initiating training before readiness (before signs of physiological and developmental readiness are present) is associated with prolonged training and increased accidents.",
+            "distractorRationales": {
+              "A": "12-18 months is too early for typical toilet training. Most children do not have the physiological and cognitive readiness for toilet training until closer to 18-24 months.",
+              "C": "2-2.5 years is too narrow and is younger than the average. This range would exclude many typically developing children who train later.",
+              "D": "While some children do not complete training until 4 years and this is within normal range, the range begins at 18 months — not 3 years."
+            }
+          },
+          {
+            "question": "What is the most important piece of information a nurse needs from parents before using the FLACC pain scale on a hospitalized toddler?",
+            "options": [
+              "The child's current diagnosis and medications",
+              "The child's typical behaviour and activity level when well (the parent's description of their child's baseline)",
+              "The child's most recent vital signs",
+              "The child's age and developmental level"
+            ],
+            "correct": 1,
+            "rationale": "The FLACC scale assesses behavioural indicators of pain (face, legs, activity, cry, consolability). For children with individual variations in baseline behaviour — particularly toddlers — parents' knowledge of the child's typical activity level, cry, and facial expressions when well is essential to interpreting what represents a change from baseline versus the child's normal presentation. A high-activity toddler who normally squirms a lot will score differently than a quiet child.",
+            "distractorRationales": {
+              "A": "Diagnosis and medications are clinically important but do not directly inform the interpretation of behavioural pain indicators in the FLACC scale.",
+              "C": "Vital signs are used to supplement pain assessment but are not reliable as standalone indicators of pain and are not necessary for administering the FLACC scale.",
+              "D": "Age and developmental level are relevant background information, but the FLACC scale is designed for children 2 months to 7 years — knowing the child's baseline behaviour from the parent is more specifically actionable."
+            }
+          },
+          {
+            "question": "A nurse is providing anticipatory guidance about language development at the 18-month well-child visit. Which statement accurately reflects what parents should expect by the 24-month visit?",
+            "options": [
+              "Your child should have about 20-30 words and will be starting to use sentences soon",
+              "Your child should have at least 50 words and should be putting two words together — if this is not happening by 24 months, it is important to let us know right away",
+              "Language development varies widely — there is nothing to worry about as long as your child is progressing",
+              "Your child should be speaking in 3-4 word sentences by 24 months"
+            ],
+            "correct": 1,
+            "rationale": "Providing accurate anticipatory guidance about specific language milestones empowers parents to identify red flags early. At 24 months, 50+ words and 2-word phrases are expected. Parents who know these specific benchmarks can recognize when their child may not be meeting them and seek help promptly. This statement is accurate and appropriately specific.",
+            "distractorRationales": {
+              "A": "This understates the 24-month expectation. 50+ words and 2-word phrases are the expected benchmarks — not 20-30 words without phrases.",
+              "C": "Generic reassurance without specific guidance is unhelpful and fails to equip parents with the information they need to identify language red flags.",
+              "D": "Three-to-four word sentences are expected at 30-36 months, not at 24 months. At 24 months, 2-word phrases are the expected phrase length."
+            }
+          },
+          {
+            "question": "A 15-month-old attends a well-child visit. The parent reports the child walks well, says 4 words, and shows a social smile. Which additional milestone should the nurse specifically assess for at this age?",
+            "options": [
+              "Drawing circles and imitating lines",
+              "Following a 2-step unrelated command ('Get the cup and then open the door')",
+              "Pointing to communicate and showing objects to others to share interest",
+              "Running smoothly without falling"
+            ],
+            "correct": 2,
+            "rationale": "At 15 months, pointing to communicate and showing objects to others (protodeclarative joint attention) is a key developmental milestone and a specific red flag for autism spectrum disorder if absent. The nurse should specifically assess for this communicative gesture at the 15-month visit. Circles and line-drawing are preschool milestones. Two-step unrelated commands are 24-30 month milestones. Running smoothly develops at 18-24 months.",
+            "distractorRationales": {
+              "A": "Copying circles is a 3-year fine motor milestone; imitating lines develops at approximately 18-24 months.",
+              "B": "A 2-step unrelated command is a 24-30 month milestone. At 15 months, following a 1-step command with gesture is expected.",
+              "D": "Running smoothly without falling is an 18-24 month milestone. At 15 months, running is just beginning to develop and falls are normal."
+            }
+          }
+        ],
+        "flashcards": [
+          {
+            "id": "dev-milestones-toddler-fc-01",
+            "front": "What language milestones are expected at 24 months and what are the red flags?",
+            "back": "Expected at 24 months:\n- 50+ words\n- 2-word phrases ('more milk,' 'daddy go')\n- 50% intelligible to unfamiliar listener\nRed flags (refer if absent):\n- Fewer than 50 words\n- No 2-word combinations\n- No pointing by 14-16 months\n- Any loss of previously acquired language",
+            "clinicalPearl": "No 2-word phrases at 24 months = ALWAYS refer. This is the most tested toddler language red flag on nursing exams.",
+            "memoryAnchor": "24 months = 50 words + 2-word phrases. '50+2 at 24' — no 2-word = refer."
+          },
+          {
+            "id": "dev-milestones-toddler-fc-02",
+            "front": "What is regression and how should the nurse respond to it in a hospitalized toddler?",
+            "back": "Regression = temporary return to earlier developmental behaviours under stress (bed-wetting after toilet training, bottle use, baby talk, increased clinging).\nNursing response:\n- Normalize for parents: 'This is expected coping, not lost skill'\n- Do NOT punish, shame, or retrain during the stressor\n- Maintain warmth and acceptance\n- Monitor: typically resolves within weeks of stressor resolving\n- If persists >4-6 weeks post-stressor: consider further assessment",
+            "clinicalPearl": "An exam question featuring a hospitalized toddler who has regressed should NEVER choose an answer involving punishment or immediate retraining. Choose normalization and parental education.",
+            "memoryAnchor": "Regression = STRESS RESPONSE not SKILL LOSS. Respond with WARMTH not DISCIPLINE."
+          },
+          {
+            "id": "dev-milestones-toddler-fc-03",
+            "front": "What is negativism in toddler development and how should the nurse approach it clinically?",
+            "back": "Negativism = the toddler's frequent, determined 'NO!' even to things they want.\nDevelopmental significance: reflects Erikson's Autonomy vs Shame stage — healthy discovery of independent will.\nClinical approach:\n- Offer genuine limited choices ('Which arm first?')\n- Never create an irresolvable power struggle\n- Avoid false choices ('Is it OK if I...?')\n- Work quickly once cooperation is achieved\n- Use distraction actively",
+            "clinicalPearl": "Negativism is healthy development, not defiance. On the exam, the correct answer for 'how to respond to a negative toddler' is always 'offer choices' — not consequences.",
+            "memoryAnchor": "NO = Normal Opportunity to offer choices. Negativism = give OPTIONS not ORDERS."
+          },
+          {
+            "id": "dev-milestones-toddler-fc-04",
+            "front": "What type of play is developmentally expected for a 2-year-old toddler?",
+            "back": "Parallel play: plays ALONGSIDE but not WITH another child; uses similar toys in same space but does not interact in a coordinated way.\nNormal at: 18-30 months\nPrecedes: Associative play (preschool) → Cooperative play (school age)\nDo NOT mistake parallel play for social delay.\nSolitary play (even earlier) → Parallel play (toddler) → Associative (preschool) → Cooperative (school age)",
+            "clinicalPearl": "Expecting a 2-year-old to play cooperatively with sharing and roles is developmentally inappropriate. Parallel play is the expected mode — choosing 'social delay' for a toddler playing alongside others is incorrect.",
+            "memoryAnchor": "Parten's Play: Solitary → Onlooker → Parallel → Associative → Cooperative. Toddlers = PARALLEL."
+          },
+          {
+            "id": "dev-milestones-toddler-fc-05",
+            "front": "When and how should a nurse prepare a toddler for a planned procedure?",
+            "back": "Timing: IMMEDIATELY BEFORE the procedure — minutes before starting, NOT hours or days ahead.\nRationale: Toddlers cannot conceptualize future time; advance notice creates prolonged anxiety without comprehension.\nMethod:\n- Concrete sensory descriptions ('It will feel cold, then pinchy for a second')\n- Allow handling of safe equipment before use\n- Keep parent close throughout\n- Therapeutic holding (parent embrace) during procedure\n- Distraction (bubbles, phone video, parent singing)\n- Work quickly once cooperation established",
+            "clinicalPearl": "Toddler preparation = IMMEDIATE. Preschool = 1-2 days. School age = 1 week. The exam tests this distinction between age groups for procedure preparation timing.",
+            "memoryAnchor": "Toddlers = IMMEDIATE prep (can't understand 'tomorrow'). Older = more advance notice."
+          },
+          {
+            "id": "dev-milestones-toddler-fc-06",
+            "front": "What gross motor milestones are expected at 18, 24, and 36 months?",
+            "back": "18 months: runs (unsteady, falls); walks up stairs holding on; kicks ball; throws overhand\n24 months: runs well without falling; walks up and down stairs with 2 feet per step; kicks ball forward; jumps off low step; pushes riding toy with feet\n36 months: pedals tricycle; runs smoothly; catches large ball; walks on tiptoes; alternates feet on stairs",
+            "clinicalPearl": "Pedaling a tricycle = 3 years. Running well = 2 years. First running (unsteady) = 18 months. These are frequently tested sequence milestones.",
+            "memoryAnchor": "18m = run/fall, 24m = run/stand, 36m = pedal/glide. Getting more coordinated with age."
+          },
+          {
+            "id": "dev-milestones-toddler-fc-07",
+            "front": "What fine motor milestones are expected at 18, 24, and 36 months?",
+            "back": "18 months: removes clothing; feeds self with spoon (messily); tower of 3-4 cubes; circular scribbling\n24 months: tower of 6-7 cubes; uses spoon and fork; turns pages singly; imitates vertical line\n36 months: copies circle; dresses with help (Velcro, snaps); washes hands; tower of 10 cubes; uses scissors (with help)",
+            "clinicalPearl": "Tower of cubes is a classic exam question: 3-4 cubes at 18 months, 6-7 at 24 months, 10 at 36 months. Double the age in months ≈ approximate tower height.",
+            "memoryAnchor": "Tower: 18m=4, 24m=7, 36m=10. 'Four-seven-ten, build them then.'"
+          },
+          {
+            "id": "dev-milestones-toddler-fc-08",
+            "front": "What is toilet training readiness and at what age is it expected?",
+            "back": "Toilet training readiness signs:\n- Stays dry for ≥2 hours\n- Shows interest in toilet or others' toilet use\n- Can pull pants up and down\n- Understands simple related instructions\n- Can express need to use toilet\nNormal range: 18 months to 4 years (WIDE range); average 2.5-3 years\nDo NOT start before readiness — earlier training is associated with longer time to completion\nNighttime dryness follows daytime by months to years",
+            "clinicalPearl": "Do not pressure parents to start toilet training before signs of readiness are present. 'My 15-month-old isn't trained' = reassure. 'My 4-year-old still isn't trained' = assess. Normal range is wide.",
+            "memoryAnchor": "Toilet training = readiness FIRST, not birthday. Wide range: 18m-4y, average 2.5-3 years."
+          },
+          {
+            "id": "dev-milestones-toddler-fc-09",
+            "front": "What are the developmental red flags at 18, 24, and 36 months that always warrant referral?",
+            "back": "18 months: no single words; no pointing; no pretend play; fewer than 7-10 meaningful words\n24 months: no 2-word phrases; fewer than 50 words; no pretend play; no social interest in peers; loss of any skill\n36 months: no 3-word sentences; unintelligible to family; unable to follow 2-step commands; no pretend play\nAll ages: loss of any previously acquired skill = ALWAYS urgent referral",
+            "clinicalPearl": "The 24-month red flags are the most commonly tested: no 50 words and no 2-word phrases. Memorize these specific thresholds.",
+            "memoryAnchor": "18m: 10 words, point, pretend. 24m: 50 words, 2-word phrases, social. 36m: 3-word sentences, intelligible. Loss = always refer."
+          },
+          {
+            "id": "dev-milestones-toddler-fc-10",
+            "front": "What cognitive milestone distinguishes a toddler (Piaget sensorimotor/early preoperational) and what are the nursing implications?",
+            "back": "Toddler cognitive features:\n- Object permanence established (9-12 months) — they know things exist when hidden\n- Early symbolic/pretend play beginning (18-24 months)\n- Cannot understand future time — 'tomorrow' is meaningless\n- Cannot reason about hypotheticals — need concrete, immediate experience\nNursing implications:\n- No advance preparation hours/days ahead — causes anxiety without comprehension\n- No abstract explanations — use sensory/concrete language\n- Can use 'show and tell' approach — let them handle equipment\n- Distraction is highly effective because attention span is brief",
+            "clinicalPearl": "The toddler's inability to conceptualize future time is the single most important cognitive feature for procedure preparation — everything else (choices, distraction, parent presence) follows from this.",
+            "memoryAnchor": "Toddler brain = NOW. No tomorrow, no yesterday, no hypotheticals. Prepare NOW = immediate before procedure."
+          }
+        ],
+        "imagePlaceholders": [
+          {
+            "id": "dev-milestones-toddler-img-01",
+            "alt": "Developmental milestone chart for toddlers 12-36 months by domain",
+            "caption": "Toddler developmental milestones by domain (gross motor, fine motor, language, social-cognitive) from 15 to 36 months",
+            "kind": "chart",
+            "suggestedContent": "Four-column table with age rows (15m, 18m, 24m, 30m, 36m) and columns for each developmental domain. Key milestones at each age in each domain. Red flag indicators highlighted in red at 18 and 24 months for language.",
+            "placement": "after section: core-content"
+          },
+          {
+            "id": "dev-milestones-toddler-img-02",
+            "alt": "Parten's social play stages diagram from solitary to cooperative",
+            "caption": "Parten's stages of social play: solitary → onlooker → parallel → associative → cooperative, with approximate age ranges",
+            "kind": "diagram",
+            "suggestedContent": "Sequential diagram showing five play types with age labels: Solitary (infant), Onlooker (12-18m), Parallel (18m-3y), Associative (3-4y), Cooperative (4-5y+). Each stage illustrated with simple icons of children in relevant play patterns.",
+            "placement": "after section: nursing-assessment"
+          }
+        ],
+        "documentationConsiderations": [
+          "Document language milestone assessment specifically: number of words (count or parent estimate), presence/absence of 2-word phrases, intelligibility to strangers",
+          "Record play type observed during assessment visit (parallel, solitary, associative) with context",
+          "For hospitalized toddlers: document regression present with stressor identified, parent education provided, and expected timeline for resolution",
+          "Anticipatory guidance: document topics covered (language stimulation, safety, toilet training readiness) and parent response"
+        ],
+        "references": [
+          "Canadian Paediatric Society. (2023). Toddler developmental milestones: What to expect and when to refer. CPS Practice Point.",
+          "Hockenberry, M. J., et al. (2022). Wong's Nursing Care of Infants and Children (12th ed.). Elsevier.",
+          "Parten, M. B. (1932). Social participation among preschool children. Journal of Abnormal and Social Psychology, 27(3), 243-269."
+        ],
+        "relatedLessons": [
+          "developmental-milestones-birth-12-months",
+          "developmental-milestones-preschool",
+          "principles-of-growth-and-development",
+          "erikson-autonomy-shame-doubt-rpn"
+        ],
+        "linked_flashcard_prompts": [
+          "What language milestones are expected at 24 months and what are the red flags?",
+          "What is regression and how should the nurse respond to it in a hospitalized toddler?",
+          "What is negativism in toddler development and how should the nurse approach it clinically?",
+          "What type of play is developmentally expected for a 2-year-old toddler?",
+          "When and how should a nurse prepare a toddler for a planned procedure?",
+          "What gross motor milestones are expected at 18, 24, and 36 months?",
+          "What fine motor milestones are expected at 18, 24, and 36 months?",
+          "What is toilet training readiness and at what age is it expected?",
+          "What are the developmental red flags at 18, 24, and 36 months that always warrant referral?",
+          "What cognitive milestone distinguishes a toddler and what are the nursing implications?"
+        ],
+        "examMeta": [
+          {
+            "exam": "REX_PN",
+            "domain": "Child and Family Health",
+            "competency": "Identifies expected developmental milestones for toddlers 12-36 months and applies this knowledge to clinical nursing care"
+          }
+        ],
+        "premiumOmittedSections": []
+      }
+    ]
+  }
+}

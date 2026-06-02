@@ -1,0 +1,2067 @@
+{
+  "version": 1,
+  "label": "Allied Health Multi-Career Blueprint",
+  "description": "Generated topic map for MLT, Imaging, Respiratory Therapy, PTA, OTA, Paramedic, and Pharmacy Technician. Domains sourced from allied_blueprints.json where available; PTA/OTA domains are curriculum-aligned placeholders.",
+  "generatedAt": "2026-04-13T00:25:55.800Z",
+  "sourceReplitBlueprints": "data/replit-exports/allied_blueprints.json",
+  "tracks": [
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "lessons": 15,
+      "questions": 43,
+      "replitCareer": "mlt"
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "lessons": 15,
+      "questions": 43,
+      "replitCareer": "imaging"
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "lessons": 14,
+      "questions": 43,
+      "replitCareer": "rrt"
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "lessons": 14,
+      "questions": 43,
+      "replitCareer": null
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "lessons": 14,
+      "questions": 43,
+      "replitCareer": null
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "lessons": 14,
+      "questions": 43,
+      "replitCareer": "paramedic"
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "lessons": 14,
+      "questions": 42,
+      "replitCareer": "pharmacyTech"
+    }
+  ],
+  "topics": [
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Hematology",
+      "topic": "Hematology: Practical MLT Exam Prep (Unit 1)",
+      "topicSlug": "mlt-hematology-unit-01-01",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "hematology"
+      ],
+      "lessonIndexInTrack": 1,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 0
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Urinalysis",
+      "topic": "Urinalysis: Practical MLT Exam Prep (Unit 1)",
+      "topicSlug": "mlt-urinalysis-unit-01-02",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "urinalysis"
+      ],
+      "lessonIndexInTrack": 2,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 1
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Body Fluids",
+      "topic": "Body Fluids: Practical MLT Exam Prep (Unit 1)",
+      "topicSlug": "mlt-body-fluids-unit-01-03",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "body-fluids"
+      ],
+      "lessonIndexInTrack": 3,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 2
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Microbiology",
+      "topic": "Microbiology: Practical MLT Exam Prep (Unit 1)",
+      "topicSlug": "mlt-microbiology-unit-01-04",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "microbiology"
+      ],
+      "lessonIndexInTrack": 4,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 3
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Blood Banking",
+      "topic": "Blood Banking: Practical MLT Exam Prep (Unit 1)",
+      "topicSlug": "mlt-blood-banking-unit-01-05",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "blood-banking"
+      ],
+      "lessonIndexInTrack": 5,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 4
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Lab Operations",
+      "topic": "Lab Operations: Practical MLT Exam Prep (Unit 1)",
+      "topicSlug": "mlt-lab-operations-unit-01-06",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "lab-operations"
+      ],
+      "lessonIndexInTrack": 6,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 5
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Quality Assurance",
+      "topic": "Quality Assurance: Practical MLT Exam Prep (Unit 1)",
+      "topicSlug": "mlt-quality-assurance-unit-01-07",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "quality-assurance"
+      ],
+      "lessonIndexInTrack": 7,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 6
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Clinical Chemistry",
+      "topic": "Clinical Chemistry: Practical MLT Exam Prep (Unit 1)",
+      "topicSlug": "mlt-clinical-chemistry-unit-01-08",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "clinical-chemistry"
+      ],
+      "lessonIndexInTrack": 8,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 7
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Immunology/Serology",
+      "topic": "Immunology/Serology: Practical MLT Exam Prep (Unit 1)",
+      "topicSlug": "mlt-immunology-serology-unit-01-09",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "immunology-serology"
+      ],
+      "lessonIndexInTrack": 9,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 8
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Molecular Diagnostics",
+      "topic": "Molecular Diagnostics: Practical MLT Exam Prep (Unit 1)",
+      "topicSlug": "mlt-molecular-diagnostics-unit-01-10",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "molecular-diagnostics"
+      ],
+      "lessonIndexInTrack": 10,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 9
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Hematology",
+      "topic": "Hematology: Practical MLT Exam Prep (Unit 2)",
+      "topicSlug": "mlt-hematology-unit-02-11",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "hematology"
+      ],
+      "lessonIndexInTrack": 11,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 10
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Urinalysis",
+      "topic": "Urinalysis: Practical MLT Exam Prep (Unit 2)",
+      "topicSlug": "mlt-urinalysis-unit-02-12",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "urinalysis"
+      ],
+      "lessonIndexInTrack": 12,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 11
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Body Fluids",
+      "topic": "Body Fluids: Practical MLT Exam Prep (Unit 2)",
+      "topicSlug": "mlt-body-fluids-unit-02-13",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "body-fluids"
+      ],
+      "lessonIndexInTrack": 13,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 12
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Microbiology",
+      "topic": "Microbiology: Practical MLT Exam Prep (Unit 2)",
+      "topicSlug": "mlt-microbiology-unit-02-14",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "microbiology"
+      ],
+      "lessonIndexInTrack": 14,
+      "questionQuotaForTopic": 2,
+      "globalLessonOrder": 13
+    },
+    {
+      "careerTrack": "MLT",
+      "professionKey": "mlt",
+      "exam": "ASCP-MLT",
+      "pathwayId": "us-allied-core",
+      "domain": "Blood Banking",
+      "topic": "Blood Banking: Practical MLT Exam Prep (Unit 2)",
+      "topicSlug": "mlt-blood-banking-unit-02-15",
+      "bodySystem": "multisystem",
+      "tags": [
+        "mlt",
+        "ascp-mlt",
+        "allied-health",
+        "exam-prep",
+        "blood-banking"
+      ],
+      "lessonIndexInTrack": 15,
+      "questionQuotaForTopic": 2,
+      "globalLessonOrder": 14
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "CT Imaging",
+      "topic": "CT Imaging: Practical Imaging Exam Prep (Unit 1)",
+      "topicSlug": "imaging-ct-imaging-unit-01-01",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "ct-imaging"
+      ],
+      "lessonIndexInTrack": 1,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 15
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "MRI Physics",
+      "topic": "MRI Physics: Practical Imaging Exam Prep (Unit 1)",
+      "topicSlug": "imaging-mri-physics-unit-01-02",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "mri-physics"
+      ],
+      "lessonIndexInTrack": 2,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 16
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "Patient Care",
+      "topic": "Patient Care: Practical Imaging Exam Prep (Unit 1)",
+      "topicSlug": "imaging-patient-care-unit-01-03",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "patient-care"
+      ],
+      "lessonIndexInTrack": 3,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 17
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "Image Production",
+      "topic": "Image Production: Practical Imaging Exam Prep (Unit 1)",
+      "topicSlug": "imaging-image-production-unit-01-04",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "image-production"
+      ],
+      "lessonIndexInTrack": 4,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 18
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "Radiation Safety",
+      "topic": "Radiation Safety: Practical Imaging Exam Prep (Unit 1)",
+      "topicSlug": "imaging-radiation-safety-unit-01-05",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "radiation-safety"
+      ],
+      "lessonIndexInTrack": 5,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 19
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "Anatomy/Physiology",
+      "topic": "Anatomy/Physiology: Practical Imaging Exam Prep (Unit 1)",
+      "topicSlug": "imaging-anatomy-physiology-unit-01-06",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "anatomy-physiology"
+      ],
+      "lessonIndexInTrack": 6,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 20
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "Ultrasound Physics",
+      "topic": "Ultrasound Physics: Practical Imaging Exam Prep (Unit 1)",
+      "topicSlug": "imaging-ultrasound-physics-unit-01-07",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "ultrasound-physics"
+      ],
+      "lessonIndexInTrack": 7,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 21
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "Equipment Operation",
+      "topic": "Equipment Operation: Practical Imaging Exam Prep (Unit 1)",
+      "topicSlug": "imaging-equipment-operation-unit-01-08",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "equipment-operation"
+      ],
+      "lessonIndexInTrack": 8,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 22
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "Pathology Recognition",
+      "topic": "Pathology Recognition: Practical Imaging Exam Prep (Unit 1)",
+      "topicSlug": "imaging-pathology-recognition-unit-01-09",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "pathology-recognition"
+      ],
+      "lessonIndexInTrack": 9,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 23
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "Radiographic Positioning",
+      "topic": "Radiographic Positioning: Practical Imaging Exam Prep (Unit 1)",
+      "topicSlug": "imaging-radiographic-positioning-unit-01-10",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "radiographic-positioning"
+      ],
+      "lessonIndexInTrack": 10,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 24
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "CT Imaging",
+      "topic": "CT Imaging: Practical Imaging Exam Prep (Unit 2)",
+      "topicSlug": "imaging-ct-imaging-unit-02-11",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "ct-imaging"
+      ],
+      "lessonIndexInTrack": 11,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 25
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "MRI Physics",
+      "topic": "MRI Physics: Practical Imaging Exam Prep (Unit 2)",
+      "topicSlug": "imaging-mri-physics-unit-02-12",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "mri-physics"
+      ],
+      "lessonIndexInTrack": 12,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 26
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "Patient Care",
+      "topic": "Patient Care: Practical Imaging Exam Prep (Unit 2)",
+      "topicSlug": "imaging-patient-care-unit-02-13",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "patient-care"
+      ],
+      "lessonIndexInTrack": 13,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 27
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "Image Production",
+      "topic": "Image Production: Practical Imaging Exam Prep (Unit 2)",
+      "topicSlug": "imaging-image-production-unit-02-14",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "image-production"
+      ],
+      "lessonIndexInTrack": 14,
+      "questionQuotaForTopic": 2,
+      "globalLessonOrder": 28
+    },
+    {
+      "careerTrack": "Imaging",
+      "professionKey": "imaging",
+      "exam": "ARRT-RAD",
+      "pathwayId": "us-allied-core",
+      "domain": "Radiation Safety",
+      "topic": "Radiation Safety: Practical Imaging Exam Prep (Unit 2)",
+      "topicSlug": "imaging-radiation-safety-unit-02-15",
+      "bodySystem": "multisystem",
+      "tags": [
+        "imaging",
+        "arrt-rad",
+        "allied-health",
+        "exam-prep",
+        "radiation-safety"
+      ],
+      "lessonIndexInTrack": 15,
+      "questionQuotaForTopic": 2,
+      "globalLessonOrder": 29
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Equipment",
+      "topic": "Equipment: Practical Respiratory Therapy Exam Prep (Unit 1)",
+      "topicSlug": "respiratory-equipment-unit-01-01",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "equipment"
+      ],
+      "lessonIndexInTrack": 1,
+      "questionQuotaForTopic": 4,
+      "globalLessonOrder": 30
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Diagnostics",
+      "topic": "Diagnostics: Practical Respiratory Therapy Exam Prep (Unit 1)",
+      "topicSlug": "respiratory-diagnostics-unit-01-02",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "diagnostics"
+      ],
+      "lessonIndexInTrack": 2,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 31
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Pharmacology",
+      "topic": "Pharmacology: Practical Respiratory Therapy Exam Prep (Unit 1)",
+      "topicSlug": "respiratory-pharmacology-unit-01-03",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "pharmacology"
+      ],
+      "lessonIndexInTrack": 3,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 32
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Airway Management",
+      "topic": "Airway Management: Practical Respiratory Therapy Exam Prep (Unit 1)",
+      "topicSlug": "respiratory-airway-management-unit-01-04",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "airway-management"
+      ],
+      "lessonIndexInTrack": 4,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 33
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "ABG Interpretation",
+      "topic": "ABG Interpretation: Practical Respiratory Therapy Exam Prep (Unit 1)",
+      "topicSlug": "respiratory-abg-interpretation-unit-01-05",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "abg-interpretation"
+      ],
+      "lessonIndexInTrack": 5,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 34
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Disease Management",
+      "topic": "Disease Management: Practical Respiratory Therapy Exam Prep (Unit 1)",
+      "topicSlug": "respiratory-disease-management-unit-01-06",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "disease-management"
+      ],
+      "lessonIndexInTrack": 6,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 35
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Patient Assessment",
+      "topic": "Patient Assessment: Practical Respiratory Therapy Exam Prep (Unit 1)",
+      "topicSlug": "respiratory-patient-assessment-unit-01-07",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "patient-assessment"
+      ],
+      "lessonIndexInTrack": 7,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 36
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Emergency Procedures",
+      "topic": "Emergency Procedures: Practical Respiratory Therapy Exam Prep (Unit 1)",
+      "topicSlug": "respiratory-emergency-procedures-unit-01-08",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "emergency-procedures"
+      ],
+      "lessonIndexInTrack": 8,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 37
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Ventilator Management",
+      "topic": "Ventilator Management: Practical Respiratory Therapy Exam Prep (Unit 1)",
+      "topicSlug": "respiratory-ventilator-management-unit-01-09",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "ventilator-management"
+      ],
+      "lessonIndexInTrack": 9,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 38
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Neonatal/Pediatric Respiratory",
+      "topic": "Neonatal/Pediatric Respiratory: Practical Respiratory Therapy Exam Prep (Unit 1)",
+      "topicSlug": "respiratory-neonatal-pediatric-respiratory-unit-01-10",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "neonatal-pediatric-respiratory"
+      ],
+      "lessonIndexInTrack": 10,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 39
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Equipment",
+      "topic": "Equipment: Practical Respiratory Therapy Exam Prep (Unit 2)",
+      "topicSlug": "respiratory-equipment-unit-02-11",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "equipment"
+      ],
+      "lessonIndexInTrack": 11,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 40
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Diagnostics",
+      "topic": "Diagnostics: Practical Respiratory Therapy Exam Prep (Unit 2)",
+      "topicSlug": "respiratory-diagnostics-unit-02-12",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "diagnostics"
+      ],
+      "lessonIndexInTrack": 12,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 41
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Pharmacology",
+      "topic": "Pharmacology: Practical Respiratory Therapy Exam Prep (Unit 2)",
+      "topicSlug": "respiratory-pharmacology-unit-02-13",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "pharmacology"
+      ],
+      "lessonIndexInTrack": 13,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 42
+    },
+    {
+      "careerTrack": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "exam": "NBRC-TMC",
+      "pathwayId": "us-allied-core",
+      "domain": "Airway Management",
+      "topic": "Airway Management: Practical Respiratory Therapy Exam Prep (Unit 2)",
+      "topicSlug": "respiratory-airway-management-unit-02-14",
+      "bodySystem": "multisystem",
+      "tags": [
+        "respiratory-therapy",
+        "nbrc-tmc",
+        "allied-health",
+        "exam-prep",
+        "airway-management"
+      ],
+      "lessonIndexInTrack": 14,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 43
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Therapeutic Exercise",
+      "topic": "Therapeutic Exercise: Practical PTA Exam Prep (Unit 1)",
+      "topicSlug": "pta-therapeutic-exercise-unit-01-01",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "therapeutic-exercise"
+      ],
+      "lessonIndexInTrack": 1,
+      "questionQuotaForTopic": 4,
+      "globalLessonOrder": 44
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Gait Training and Mobility",
+      "topic": "Gait Training and Mobility: Practical PTA Exam Prep (Unit 1)",
+      "topicSlug": "pta-gait-training-and-mobility-unit-01-02",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "gait-training-and-mobility"
+      ],
+      "lessonIndexInTrack": 2,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 45
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Modalities and Safety",
+      "topic": "Modalities and Safety: Practical PTA Exam Prep (Unit 1)",
+      "topicSlug": "pta-modalities-and-safety-unit-01-03",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "modalities-and-safety"
+      ],
+      "lessonIndexInTrack": 3,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 46
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Orthopedic Rehabilitation Concepts",
+      "topic": "Orthopedic Rehabilitation Concepts: Practical PTA Exam Prep (Unit 1)",
+      "topicSlug": "pta-orthopedic-rehabilitation-concepts-unit-01-04",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "orthopedic-rehabilitation-concepts"
+      ],
+      "lessonIndexInTrack": 4,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 47
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Neurologic Rehabilitation Support",
+      "topic": "Neurologic Rehabilitation Support: Practical PTA Exam Prep (Unit 1)",
+      "topicSlug": "pta-neurologic-rehabilitation-support-unit-01-05",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "neurologic-rehabilitation-support"
+      ],
+      "lessonIndexInTrack": 5,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 48
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Data Collection and Reporting",
+      "topic": "Data Collection and Reporting: Practical PTA Exam Prep (Unit 1)",
+      "topicSlug": "pta-data-collection-and-reporting-unit-01-06",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "data-collection-and-reporting"
+      ],
+      "lessonIndexInTrack": 6,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 49
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Plan of Care Implementation",
+      "topic": "Plan of Care Implementation: Practical PTA Exam Prep (Unit 1)",
+      "topicSlug": "pta-plan-of-care-implementation-unit-01-07",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "plan-of-care-implementation"
+      ],
+      "lessonIndexInTrack": 7,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 50
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Ethics, Scope, and Supervision",
+      "topic": "Ethics, Scope, and Supervision: Practical PTA Exam Prep (Unit 1)",
+      "topicSlug": "pta-ethics-scope-and-supervision-unit-01-08",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "ethics-scope-and-supervision"
+      ],
+      "lessonIndexInTrack": 8,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 51
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Therapeutic Exercise",
+      "topic": "Therapeutic Exercise: Practical PTA Exam Prep (Unit 2)",
+      "topicSlug": "pta-therapeutic-exercise-unit-02-09",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "therapeutic-exercise"
+      ],
+      "lessonIndexInTrack": 9,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 52
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Gait Training and Mobility",
+      "topic": "Gait Training and Mobility: Practical PTA Exam Prep (Unit 2)",
+      "topicSlug": "pta-gait-training-and-mobility-unit-02-10",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "gait-training-and-mobility"
+      ],
+      "lessonIndexInTrack": 10,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 53
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Modalities and Safety",
+      "topic": "Modalities and Safety: Practical PTA Exam Prep (Unit 2)",
+      "topicSlug": "pta-modalities-and-safety-unit-02-11",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "modalities-and-safety"
+      ],
+      "lessonIndexInTrack": 11,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 54
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Orthopedic Rehabilitation Concepts",
+      "topic": "Orthopedic Rehabilitation Concepts: Practical PTA Exam Prep (Unit 2)",
+      "topicSlug": "pta-orthopedic-rehabilitation-concepts-unit-02-12",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "orthopedic-rehabilitation-concepts"
+      ],
+      "lessonIndexInTrack": 12,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 55
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Neurologic Rehabilitation Support",
+      "topic": "Neurologic Rehabilitation Support: Practical PTA Exam Prep (Unit 2)",
+      "topicSlug": "pta-neurologic-rehabilitation-support-unit-02-13",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "neurologic-rehabilitation-support"
+      ],
+      "lessonIndexInTrack": 13,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 56
+    },
+    {
+      "careerTrack": "PTA",
+      "professionKey": "pta",
+      "exam": "NPTE-PTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Data Collection and Reporting",
+      "topic": "Data Collection and Reporting: Practical PTA Exam Prep (Unit 2)",
+      "topicSlug": "pta-data-collection-and-reporting-unit-02-14",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pta",
+        "npte-pta",
+        "allied-health",
+        "exam-prep",
+        "data-collection-and-reporting"
+      ],
+      "lessonIndexInTrack": 14,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 57
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Activities of Daily Living",
+      "topic": "Activities of Daily Living: Practical OTA Exam Prep (Unit 1)",
+      "topicSlug": "ota-activities-of-daily-living-unit-01-01",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "activities-of-daily-living"
+      ],
+      "lessonIndexInTrack": 1,
+      "questionQuotaForTopic": 4,
+      "globalLessonOrder": 58
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Cognitive and Perceptual Support",
+      "topic": "Cognitive and Perceptual Support: Practical OTA Exam Prep (Unit 1)",
+      "topicSlug": "ota-cognitive-and-perceptual-support-unit-01-02",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "cognitive-and-perceptual-support"
+      ],
+      "lessonIndexInTrack": 2,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 59
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Pediatric Occupations",
+      "topic": "Pediatric Occupations: Practical OTA Exam Prep (Unit 1)",
+      "topicSlug": "ota-pediatric-occupations-unit-01-03",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "pediatric-occupations"
+      ],
+      "lessonIndexInTrack": 3,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 60
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Musculoskeletal Adaptation",
+      "topic": "Musculoskeletal Adaptation: Practical OTA Exam Prep (Unit 1)",
+      "topicSlug": "ota-musculoskeletal-adaptation-unit-01-04",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "musculoskeletal-adaptation"
+      ],
+      "lessonIndexInTrack": 4,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 61
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Groups, Education, and Health Promotion",
+      "topic": "Groups, Education, and Health Promotion: Practical OTA Exam Prep (Unit 1)",
+      "topicSlug": "ota-groups-education-and-health-promotion-unit-01-05",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "groups-education-and-health-promotion"
+      ],
+      "lessonIndexInTrack": 5,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 62
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Environmental Modification",
+      "topic": "Environmental Modification: Practical OTA Exam Prep (Unit 1)",
+      "topicSlug": "ota-environmental-modification-unit-01-06",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "environmental-modification"
+      ],
+      "lessonIndexInTrack": 6,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 63
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Documentation and Billing Awareness",
+      "topic": "Documentation and Billing Awareness: Practical OTA Exam Prep (Unit 1)",
+      "topicSlug": "ota-documentation-and-billing-awareness-unit-01-07",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "documentation-and-billing-awareness"
+      ],
+      "lessonIndexInTrack": 7,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 64
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Ethics, Scope, and Interprofessional Collaboration",
+      "topic": "Ethics, Scope, and Interprofessional Collaboration: Practical OTA Exam Prep (Unit 1)",
+      "topicSlug": "ota-ethics-scope-and-interprofessional-collaboration-unit-01-08",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "ethics-scope-and-interprofessional-collaboration"
+      ],
+      "lessonIndexInTrack": 8,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 65
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Activities of Daily Living",
+      "topic": "Activities of Daily Living: Practical OTA Exam Prep (Unit 2)",
+      "topicSlug": "ota-activities-of-daily-living-unit-02-09",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "activities-of-daily-living"
+      ],
+      "lessonIndexInTrack": 9,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 66
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Cognitive and Perceptual Support",
+      "topic": "Cognitive and Perceptual Support: Practical OTA Exam Prep (Unit 2)",
+      "topicSlug": "ota-cognitive-and-perceptual-support-unit-02-10",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "cognitive-and-perceptual-support"
+      ],
+      "lessonIndexInTrack": 10,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 67
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Pediatric Occupations",
+      "topic": "Pediatric Occupations: Practical OTA Exam Prep (Unit 2)",
+      "topicSlug": "ota-pediatric-occupations-unit-02-11",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "pediatric-occupations"
+      ],
+      "lessonIndexInTrack": 11,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 68
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Musculoskeletal Adaptation",
+      "topic": "Musculoskeletal Adaptation: Practical OTA Exam Prep (Unit 2)",
+      "topicSlug": "ota-musculoskeletal-adaptation-unit-02-12",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "musculoskeletal-adaptation"
+      ],
+      "lessonIndexInTrack": 12,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 69
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Groups, Education, and Health Promotion",
+      "topic": "Groups, Education, and Health Promotion: Practical OTA Exam Prep (Unit 2)",
+      "topicSlug": "ota-groups-education-and-health-promotion-unit-02-13",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "groups-education-and-health-promotion"
+      ],
+      "lessonIndexInTrack": 13,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 70
+    },
+    {
+      "careerTrack": "OTA",
+      "professionKey": "ota",
+      "exam": "NBCOT-OTA",
+      "pathwayId": "us-allied-core",
+      "domain": "Environmental Modification",
+      "topic": "Environmental Modification: Practical OTA Exam Prep (Unit 2)",
+      "topicSlug": "ota-environmental-modification-unit-02-14",
+      "bodySystem": "multisystem",
+      "tags": [
+        "ota",
+        "nbcot-ota",
+        "allied-health",
+        "exam-prep",
+        "environmental-modification"
+      ],
+      "lessonIndexInTrack": 14,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 71
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Trauma",
+      "topic": "Trauma: Practical Paramedic Exam Prep (Unit 1)",
+      "topicSlug": "paramedic-trauma-unit-01-01",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "trauma"
+      ],
+      "lessonIndexInTrack": 1,
+      "questionQuotaForTopic": 4,
+      "globalLessonOrder": 72
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Assessment",
+      "topic": "Assessment: Practical Paramedic Exam Prep (Unit 1)",
+      "topicSlug": "paramedic-assessment-unit-01-02",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "assessment"
+      ],
+      "lessonIndexInTrack": 2,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 73
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Operations",
+      "topic": "Operations: Practical Paramedic Exam Prep (Unit 1)",
+      "topicSlug": "paramedic-operations-unit-01-03",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "operations"
+      ],
+      "lessonIndexInTrack": 3,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 74
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Cardiac/ACLS",
+      "topic": "Cardiac/ACLS: Practical Paramedic Exam Prep (Unit 1)",
+      "topicSlug": "paramedic-cardiac-acls-unit-01-04",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "cardiac-acls"
+      ],
+      "lessonIndexInTrack": 4,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 75
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Legal/Ethics",
+      "topic": "Legal/Ethics: Practical Paramedic Exam Prep (Unit 1)",
+      "topicSlug": "paramedic-legal-ethics-unit-01-05",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "legal-ethics"
+      ],
+      "lessonIndexInTrack": 5,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 76
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Pharmacology",
+      "topic": "Pharmacology: Practical Paramedic Exam Prep (Unit 1)",
+      "topicSlug": "paramedic-pharmacology-unit-01-06",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "pharmacology"
+      ],
+      "lessonIndexInTrack": 6,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 77
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "OB Emergencies",
+      "topic": "OB Emergencies: Practical Paramedic Exam Prep (Unit 1)",
+      "topicSlug": "paramedic-ob-emergencies-unit-01-07",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "ob-emergencies"
+      ],
+      "lessonIndexInTrack": 7,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 78
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Pediatric/PALS",
+      "topic": "Pediatric/PALS: Practical Paramedic Exam Prep (Unit 1)",
+      "topicSlug": "paramedic-pediatric-pals-unit-01-08",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "pediatric-pals"
+      ],
+      "lessonIndexInTrack": 8,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 79
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Airway Management",
+      "topic": "Airway Management: Practical Paramedic Exam Prep (Unit 1)",
+      "topicSlug": "paramedic-airway-management-unit-01-09",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "airway-management"
+      ],
+      "lessonIndexInTrack": 9,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 80
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Medical Emergencies",
+      "topic": "Medical Emergencies: Practical Paramedic Exam Prep (Unit 1)",
+      "topicSlug": "paramedic-medical-emergencies-unit-01-10",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "medical-emergencies"
+      ],
+      "lessonIndexInTrack": 10,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 81
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Trauma",
+      "topic": "Trauma: Practical Paramedic Exam Prep (Unit 2)",
+      "topicSlug": "paramedic-trauma-unit-02-11",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "trauma"
+      ],
+      "lessonIndexInTrack": 11,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 82
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Assessment",
+      "topic": "Assessment: Practical Paramedic Exam Prep (Unit 2)",
+      "topicSlug": "paramedic-assessment-unit-02-12",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "assessment"
+      ],
+      "lessonIndexInTrack": 12,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 83
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Operations",
+      "topic": "Operations: Practical Paramedic Exam Prep (Unit 2)",
+      "topicSlug": "paramedic-operations-unit-02-13",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "operations"
+      ],
+      "lessonIndexInTrack": 13,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 84
+    },
+    {
+      "careerTrack": "Paramedic",
+      "professionKey": "paramedic",
+      "exam": "NREMT-P",
+      "pathwayId": "us-allied-core",
+      "domain": "Cardiac/ACLS",
+      "topic": "Cardiac/ACLS: Practical Paramedic Exam Prep (Unit 2)",
+      "topicSlug": "paramedic-cardiac-acls-unit-02-14",
+      "bodySystem": "multisystem",
+      "tags": [
+        "paramedic",
+        "nremt-p",
+        "allied-health",
+        "exam-prep",
+        "cardiac-acls"
+      ],
+      "lessonIndexInTrack": 14,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 85
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Compounding",
+      "topic": "Compounding: Practical Pharmacy Technician Exam Prep (Unit 1)",
+      "topicSlug": "pharmacy-tech-compounding-unit-01-01",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "compounding"
+      ],
+      "lessonIndexInTrack": 1,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 86
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Pharmacology",
+      "topic": "Pharmacology: Practical Pharmacy Technician Exam Prep (Unit 1)",
+      "topicSlug": "pharmacy-tech-pharmacology-unit-01-02",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "pharmacology"
+      ],
+      "lessonIndexInTrack": 2,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 87
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Patient Safety",
+      "topic": "Patient Safety: Practical Pharmacy Technician Exam Prep (Unit 1)",
+      "topicSlug": "pharmacy-tech-patient-safety-unit-01-03",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "patient-safety"
+      ],
+      "lessonIndexInTrack": 3,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 88
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Regulations/Law",
+      "topic": "Regulations/Law: Practical Pharmacy Technician Exam Prep (Unit 1)",
+      "topicSlug": "pharmacy-tech-regulations-law-unit-01-04",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "regulations-law"
+      ],
+      "lessonIndexInTrack": 4,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 89
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Sterile Products",
+      "topic": "Sterile Products: Practical Pharmacy Technician Exam Prep (Unit 1)",
+      "topicSlug": "pharmacy-tech-sterile-products-unit-01-05",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "sterile-products"
+      ],
+      "lessonIndexInTrack": 5,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 90
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Drug Interactions",
+      "topic": "Drug Interactions: Practical Pharmacy Technician Exam Prep (Unit 1)",
+      "topicSlug": "pharmacy-tech-drug-interactions-unit-01-06",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "drug-interactions"
+      ],
+      "lessonIndexInTrack": 6,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 91
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Dosage Calculations",
+      "topic": "Dosage Calculations: Practical Pharmacy Technician Exam Prep (Unit 1)",
+      "topicSlug": "pharmacy-tech-dosage-calculations-unit-01-07",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "dosage-calculations"
+      ],
+      "lessonIndexInTrack": 7,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 92
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Drug Classifications",
+      "topic": "Drug Classifications: Practical Pharmacy Technician Exam Prep (Unit 1)",
+      "topicSlug": "pharmacy-tech-drug-classifications-unit-01-08",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "drug-classifications"
+      ],
+      "lessonIndexInTrack": 8,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 93
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Inventory Management",
+      "topic": "Inventory Management: Practical Pharmacy Technician Exam Prep (Unit 1)",
+      "topicSlug": "pharmacy-tech-inventory-management-unit-01-09",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "inventory-management"
+      ],
+      "lessonIndexInTrack": 9,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 94
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Prescription Processing",
+      "topic": "Prescription Processing: Practical Pharmacy Technician Exam Prep (Unit 1)",
+      "topicSlug": "pharmacy-tech-prescription-processing-unit-01-10",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "prescription-processing"
+      ],
+      "lessonIndexInTrack": 10,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 95
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Compounding",
+      "topic": "Compounding: Practical Pharmacy Technician Exam Prep (Unit 2)",
+      "topicSlug": "pharmacy-tech-compounding-unit-02-11",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "compounding"
+      ],
+      "lessonIndexInTrack": 11,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 96
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Pharmacology",
+      "topic": "Pharmacology: Practical Pharmacy Technician Exam Prep (Unit 2)",
+      "topicSlug": "pharmacy-tech-pharmacology-unit-02-12",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "pharmacology"
+      ],
+      "lessonIndexInTrack": 12,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 97
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Patient Safety",
+      "topic": "Patient Safety: Practical Pharmacy Technician Exam Prep (Unit 2)",
+      "topicSlug": "pharmacy-tech-patient-safety-unit-02-13",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "patient-safety"
+      ],
+      "lessonIndexInTrack": 13,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 98
+    },
+    {
+      "careerTrack": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "exam": "PTCB",
+      "pathwayId": "us-allied-core",
+      "domain": "Regulations/Law",
+      "topic": "Regulations/Law: Practical Pharmacy Technician Exam Prep (Unit 2)",
+      "topicSlug": "pharmacy-tech-regulations-law-unit-02-14",
+      "bodySystem": "multisystem",
+      "tags": [
+        "pharmacy-technician",
+        "ptcb",
+        "allied-health",
+        "exam-prep",
+        "regulations-law"
+      ],
+      "lessonIndexInTrack": 14,
+      "questionQuotaForTopic": 3,
+      "globalLessonOrder": 99
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+name: Sync Deploy Branch
+
+# Creates/updates a thin orphan `deploy` branch on every main push.
+# The branch has a single commit (no history) so the platform clone is
+# ~350MB instead of the full 5GB history — eliminating the "Selecting branch"
+# hang in DigitalOcean / Railway builds.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  sync-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main (shallow)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Create thin orphan commit and push to deploy
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+          COMMIT_SHA=$(git rev-parse HEAD)
+          COMMIT_MSG=$(git log -1 --pretty=%s)
+
+          # Create a new branch with no history
+          git checkout --orphan deploy
+
+          # Stage all tracked files (gitignored files are excluded automatically)
+          git add -A
+
+          git commit -m "deploy: ${COMMIT_MSG} (${COMMIT_SHA:0:7})"
+
+          # Force-push — deploy is always reset to the current main snapshot
+          git push origin deploy --force

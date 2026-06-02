@@ -1,0 +1,228 @@
+/**
+ * Semantic color roles (psychology + conversion)
+ * ------------------------------------------------
+ * - --role-cta*: main conversion CTAs only (warm-shifted primary; same slot per theme).
+ * - --role-secondary-action*: outline/secondary buttons (neutral emphasis).
+ * - --role-success*: progress, readiness, positive.
+ * - --role-warning*: attention, weak areas (amber, not alarm red).
+ * - --role-premium*: premium panels, value-implying surfaces.
+ * :root mirrors ocean/clinical-blue for first paint before data-theme hydrates.
+ */
+:root {
+  /* First-paint defaults (ocean/clinical-blue) — replaced once [data-theme] hydrates */
+  --role-cta: color-mix(in srgb, #1aaee0 78%, #ea580c);
+  --role-cta-foreground: #391226;
+  --role-cta-hover: color-mix(in srgb, var(--role-cta) 89%, #111827);
+  --role-cta-pressed: color-mix(in srgb, var(--role-cta) 76%, #111827);
+  --role-cta-shadow: color-mix(in srgb, var(--role-cta) 44%, transparent);
+  --role-cta-soft: color-mix(in srgb, var(--role-cta) 11%, #ffffff);
+  --role-cta-on-soft: color-mix(in srgb, var(--role-cta) 78%, #111827);
+  --role-secondary-action-bg: #ffffff;
+  --role-secondary-action-border: #e5e7eb;
+  --role-secondary-action-text: #374151;
+  --role-secondary-action-hover-bg: color-mix(in srgb, #1aaee0 12%, #ffffff);
+  --role-success: #15803d;
+  --role-success-soft: color-mix(in srgb, #15803d 11%, #ffffff);
+  --role-success-text: #14532d;
+  --role-success-on-soft: #166534;
+  --role-warning: #b45309;
+  --role-warning-soft: color-mix(in srgb, #d97706 13%, #ffffff);
+  --role-warning-text: #78350f;
+  --role-warning-border: color-mix(in srgb, #f59e0b 32%, #e5e7eb);
+  --role-premium-surface: color-mix(in srgb, #1aaee0 14%, #ffffff);
+  --role-premium-border: color-mix(in srgb, #1aaee0 44%, #d8f2fc);
+  --role-premium-text: color-mix(in srgb, #1aaee0 48%, #111827);
+  --role-premium-glow: color-mix(in srgb, #1aaee0 17%, transparent);
+  --role-heat-text: color-mix(in srgb, #c2410c 42%, #111827);
+
+  /* Semantic UI (design system): first paint before `[data-theme]` hydrates */
+  --semantic-progress-track: #d2e9fb;
+  --semantic-progress-fill: var(--role-success);
+  --semantic-progress-fill-accent: #1aaee0;
+  --semantic-info-bg: color-mix(in srgb, #1aaee0 9%, #f2fbfe);
+  --semantic-info-border: color-mix(in srgb, #1aaee0 24%, #b8e4fc);
+  --semantic-info-text: #111827;
+}
+
+/*
+ * Theme-scoped overrides (lavender, ocean, sage, dark-*, …): same roles, hue from --theme-primary.
+ *
+ * SPECIFICITY: `html[data-theme]` is (0,1,1) — beats :root's (0,1,0). Do NOT use
+ * `:where([data-theme])` here: :where() has 0 specificity, loses to :root, and the
+ * role-cta + role-success/warning/premium tokens stay frozen at the Ocean defaults for
+ * every other theme. The pink/ocean/mint/multi-pastel/dark overrides below remain at
+ * (0,2,0) and continue to win for those specific themes.
+ */
+html[data-theme] {
+  /* CTA: theme + warm shift so buttons read as “action” vs decorative primary hue elsewhere */
+  --role-cta: var(--palette-button-primary, color-mix(in srgb, var(--theme-primary) 78%, #ea580c));
+  --role-cta-foreground: var(--palette-button-primary-text, #ffffff);
+  --role-cta-hover: color-mix(in srgb, var(--role-cta) 88%, var(--palette-heading, var(--theme-heading-text)));
+  --role-cta-pressed: color-mix(in srgb, var(--role-cta) 74%, var(--palette-heading, var(--theme-heading-text)));
+  --role-cta-shadow: color-mix(in srgb, var(--role-cta) 44%, transparent);
+  --role-cta-soft: color-mix(in srgb, var(--role-cta) 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, var(--role-cta) 78%, var(--palette-heading, var(--theme-heading-text)));
+
+  /* Secondary actions (ghost / outline) */
+  --role-secondary-action-bg: var(--palette-button-secondary, var(--bg-card, var(--theme-card-bg)));
+  --role-secondary-action-border: color-mix(in srgb, var(--palette-border, var(--theme-border)) 72%, var(--border-medium, var(--theme-input-border)));
+  --role-secondary-action-text: var(--palette-button-secondary-text, var(--theme-menu-text));
+  --role-secondary-action-hover-bg: var(--accent-soft);
+
+  /* Success / readiness */
+  --role-success: #15803d;
+  --role-success-soft: color-mix(in srgb, #15803d 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-success-text: #14532d;
+  --role-success-on-soft: #166534;
+
+  /* Warning / attention */
+  --role-warning: #b45309;
+  --role-warning-soft: color-mix(in srgb, #d97706 13%, var(--bg-card, var(--theme-card-bg)));
+  --role-warning-text: #78350f;
+  --role-warning-border: color-mix(in srgb, #f59e0b 32%, var(--border-subtle));
+
+  /* Premium: slightly deeper surface so tier cards feel “above” generic panels */
+  --role-premium-surface: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 19%, var(--bg-card, var(--theme-card-bg)));
+  --role-premium-border: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 38%, var(--border-medium));
+  --role-premium-text: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 52%, var(--palette-heading, var(--theme-heading-text)));
+  --role-premium-glow: color-mix(in srgb, var(--theme-primary) 16%, transparent);
+  /* Urgency copy (deadlines, savings): warm, not alarm red */
+  --role-heat-text: color-mix(in srgb, #c2410c 42%, var(--theme-heading-text));
+
+  --semantic-progress-track: color-mix(in srgb, var(--theme-body-text) 8%, var(--bg-inset, var(--theme-card-bg)));
+  --semantic-progress-fill: var(--role-success);
+  --semantic-progress-fill-accent: var(--accent-primary, var(--palette-primary, var(--theme-primary)));
+  --semantic-info-bg: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 10%, var(--bg-card, var(--theme-card-bg)));
+  --semantic-info-border: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 25%, var(--border-subtle));
+  --semantic-info-text: var(--palette-heading, var(--theme-heading-text));
+}
+
+/*
+ * Pink-theme CTA overrides — the generic warm-shift formula produces very light rose colors
+ * (contrast ~2.5:1 white-on-pink). Use a deep rose that passes WCAG AA (≥4.5:1) instead.
+ */
+html[data-theme="blush"],
+html[data-theme="pastel-blush"],
+html[data-theme="strawberry"],
+html[data-theme="strawberry-cream"] {
+  --role-cta: #b84063;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: #a53558;
+  --role-cta-pressed: #91294c;
+  --role-cta-shadow: color-mix(in srgb, #b84063 38%, transparent);
+  --role-cta-soft: color-mix(in srgb, #b84063 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #b84063 78%, var(--theme-heading-text));
+}
+
+/* Ocean CTA: deeper clinical blue so white text passes AA (the auto-mix is medium teal, ~3.5:1) */
+html[data-theme="ocean"] {
+  --role-cta: #007bff;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: #006fe6;
+  --role-cta-pressed: #005dc2;
+  --role-cta-shadow: color-mix(in srgb, #007bff 38%, transparent);
+  --role-cta-soft: color-mix(in srgb, #007bff 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #007bff 78%, var(--theme-heading-text));
+}
+
+/* Mint CTA: use the deep teal topbar tone — clean healthcare action color */
+html[data-theme="mint"],
+html[data-theme="pastel-mint"],
+html[data-theme="teal"] {
+  --role-cta: #008080;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: #006e6e;
+  --role-cta-pressed: #005c5c;
+  --role-cta-shadow: color-mix(in srgb, #008080 38%, transparent);
+  --role-cta-soft: color-mix(in srgb, #008080 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #008080 78%, var(--theme-heading-text));
+}
+
+/* Multi-pastel CTA: auto-mix produces pale grayish purple (~2.6:1 contrast). Use deep periwinkle. */
+html[data-theme="multi-pastel"] {
+  --role-cta: #3a6e9e;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: #315e88;
+  --role-cta-pressed: #274e72;
+  --role-cta-shadow: color-mix(in srgb, #3a6e9e 38%, transparent);
+  --role-cta-soft: color-mix(in srgb, #3a6e9e 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #3a6e9e 78%, var(--theme-heading-text));
+}
+
+/* Blossom 2.0 CTA: cherry blossom primary, white text, restrained premium elevation. */
+html[data-theme="blossom"] {
+  --role-cta: #e94f82;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: #df477a;
+  --role-cta-pressed: #c83a6a;
+  --role-cta-shadow:
+    0 8px 28px -8px rgba(233, 79, 130, 0.30),
+    0 4px 16px -8px rgba(255, 185, 120, 0.18),
+    0 0 0 0 rgba(233, 79, 130, 0);
+  --role-cta-soft: color-mix(in srgb, #e94f82 8%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: #9d174d;
+  /* Rotated accent progress: pink → peach → yellow → sky on white-first surfaces. */
+  --semantic-progress-fill: linear-gradient(90deg, #e94f82 0%, #ffb978 38%, #f8c84f 68%, #65c4e9 100%);
+  --semantic-progress-fill-accent: linear-gradient(90deg, #f7a9c2 0%, #f8c84f 50%, #65c4e9 100%);
+}
+
+html[data-theme="sea-glass"],
+html[data-theme="mint-blossom"] {
+  --role-cta: #7cc9be;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: #69b8ad;
+  --role-cta-pressed: #5aa79d;
+  --role-cta-shadow:
+    0 8px 24px -8px rgba(124, 201, 190, 0.3),
+    0 4px 14px -6px rgba(153, 198, 223, 0.18);
+  --role-cta-soft: color-mix(in srgb, #a6e9d7 18%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: #4b5563;
+  --semantic-progress-fill: linear-gradient(90deg, #99c6df 0%, #a6e9d7 50%, #7cc9be 100%);
+  --semantic-progress-fill-accent: linear-gradient(90deg, #99c6df 0%, #a6e9d7 50%, #7cc9be 100%);
+}
+
+html[data-theme="aurora"] {
+  --role-cta: #8b5cf6;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: color-mix(in srgb, #8b5cf6 88%, #f9a8d4);
+  --role-cta-pressed: color-mix(in srgb, #8b5cf6 78%, #1a202c);
+  --role-cta-shadow:
+    0 8px 24px -8px rgba(139, 92, 246, 0.34),
+    0 4px 18px -8px rgba(249, 168, 212, 0.28);
+  --role-cta-soft: color-mix(in srgb, #8b5cf6 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #8b5cf6 76%, var(--theme-heading-text));
+  --semantic-progress-fill: linear-gradient(90deg, #6ee7b7, #67e8f9);
+  --semantic-progress-fill-accent: linear-gradient(90deg, #6ee7b7, #67e8f9);
+}
+
+html[data-theme="dark-clinical"],
+html[data-theme="dark-academia"],
+html[data-theme="dark-mode"],
+html[data-theme="midnight-indigo"],
+html[data-theme="deep-twilight"] {
+  --role-cta: color-mix(in srgb, var(--theme-primary) 88%, #fb923c);
+  --role-cta-hover: color-mix(in srgb, var(--role-cta) 87%, var(--theme-heading-text));
+  --role-cta-pressed: color-mix(in srgb, var(--role-cta) 74%, var(--theme-heading-text));
+  --role-cta-soft: color-mix(in srgb, var(--role-cta) 16%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, var(--role-cta) 72%, #ffffff);
+
+  --role-success: #34d399;
+  --role-success-soft: color-mix(in srgb, #34d399 14%, var(--bg-card, var(--theme-card-bg)));
+  --role-success-text: #a7f3d0;
+  --role-success-on-soft: #6ee7b7;
+
+  --role-warning: #fbbf24;
+  --role-warning-soft: color-mix(in srgb, #f59e0b 16%, var(--bg-card, var(--theme-card-bg)));
+  --role-warning-text: #fde68a;
+  --role-warning-border: color-mix(in srgb, #f59e0b 40%, var(--border-subtle));
+
+  --role-premium-text: color-mix(in srgb, var(--theme-primary) 65%, #ffffff);
+  --role-heat-text: color-mix(in srgb, #fdba74 58%, #ffffff);
+
+  --semantic-progress-track: color-mix(in srgb, var(--theme-body-text) 12%, var(--bg-inset, var(--theme-card-bg)));
+  --semantic-progress-fill: var(--role-success);
+  --semantic-progress-fill-accent: var(--accent-primary, var(--theme-primary));
+  --semantic-info-bg: color-mix(in srgb, var(--theme-primary) 14%, var(--bg-card, var(--theme-card-bg)));
+  --semantic-info-border: color-mix(in srgb, var(--theme-primary) 28%, var(--border-subtle));
+  --semantic-info-text: var(--theme-heading-text);
+}

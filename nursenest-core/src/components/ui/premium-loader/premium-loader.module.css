@@ -1,0 +1,304 @@
+/* Premium route loaders: semantic tokens only; GPU-friendly transform/opacity. */
+
+.root {
+  position: relative;
+  width: 100%;
+}
+
+.body {
+  position: relative;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 55%, transparent);
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 42%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-brand-soft) 28%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface))
+  );
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.bodyFullscreen {
+  min-height: min(70vh, 42rem);
+}
+
+.glassStrip {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.85rem 0.85rem 0 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 45%, transparent);
+  background: color-mix(in srgb, var(--semantic-surface-elevated) 72%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+/* Horizontal drift lane: leaf travels most of the strip (storyboard: drift across). */
+.leafDriftTrack {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 10rem;
+  height: 3rem;
+  align-self: stretch;
+}
+
+.leafDrone {
+  --nn-loader-leaf-box: 2.75rem;
+
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: var(--nn-loader-leaf-box);
+  height: var(--nn-loader-leaf-box);
+  margin-top: calc(var(--nn-loader-leaf-box) / -2);
+  animation: nn-premium-loader-leaf-drift-x 2.85s var(--brand-motion-ease-calm-out, cubic-bezier(0.45, 0.05, 0.25, 1)) infinite
+    alternate;
+  will-change: left, transform;
+}
+
+.pageLoaderLeafSvg {
+  width: 1.85rem;
+  height: 2.25rem;
+}
+
+/* Jitter / Bodymovin slot — sized to match leaf chrome; SVG is generated inside Lottie. */
+.jitterLottieSlot {
+  display: flex;
+  width: var(--nn-loader-leaf-box);
+  height: var(--nn-loader-leaf-box);
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.jitterLottieCanvas {
+  width: 100%;
+  height: 100%;
+}
+
+.jitterLottieCanvas :global(svg) {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .leafDrone {
+    --nn-loader-leaf-box: 3.35rem;
+  }
+
+  .pageLoaderLeafSvg {
+    width: 2.2rem;
+    height: 2.65rem;
+  }
+}
+
+.bodyPadding {
+  padding: 1.25rem 1.25rem 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glassStrip {
+    backdrop-filter: none;
+  }
+}
+
+/* Fade/slide in when the deferred strip mounts (after delay). */
+.deferredChromeEnter {
+  animation: nn-premium-loader-strip-in 360ms var(--brand-motion-ease-calm-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  will-change: opacity, transform;
+}
+
+@keyframes nn-premium-loader-strip-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deferredChromeEnter {
+    animation: none;
+    will-change: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leafMotion {
+    animation: none;
+  }
+}
+
+.leafCluster {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+}
+
+.pulseRing {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 35%, transparent);
+  opacity: 0.55;
+  animation: nn-premium-loader-pulse-ring 2.75s var(--brand-motion-ease-calm-out, ease-in-out) infinite;
+  pointer-events: none;
+}
+
+.leafMotion {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--semantic-brand);
+  transform-origin: 50% 60%;
+}
+
+/* Subtle opacity echo (trail) — same mark, no extra DOM. */
+.leafMotion::after {
+  content: "";
+  position: absolute;
+  inset: 12% 18%;
+  border-radius: 45% 55% 50% 50% / 55% 55% 45% 45%;
+  background: color-mix(in srgb, var(--semantic-brand) 22%, transparent);
+  opacity: 0;
+  transform: scale(0.92);
+  animation: nn-premium-loader-leaf-trail 2.85s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulseRing {
+    animation: none;
+    opacity: 0.35;
+  }
+
+  .leafDrone {
+    left: 12px;
+    animation: nn-premium-loader-leaf-breathe 2.4s ease-in-out infinite;
+    will-change: opacity;
+  }
+
+  .leafMotion::after {
+    display: none;
+  }
+}
+
+@keyframes nn-premium-loader-leaf-drift-x {
+  0% {
+    left: 0;
+    transform: rotate(-11deg);
+  }
+
+  100% {
+    left: calc(100% - var(--nn-loader-leaf-box));
+    transform: rotate(9deg);
+  }
+}
+
+/* When Lottie drives motion, keep the drone centered in the drift track (no CSS path). */
+.leafDroneNnLottie {
+  animation: none;
+  left: 50%;
+  transform: translateX(-50%);
+  will-change: auto;
+}
+
+.leafMotionNnLottie::after {
+  display: none;
+}
+
+@keyframes nn-premium-loader-leaf-trail {
+  0% {
+    opacity: 0;
+    transform: scale(0.88) translate(2px, 2px);
+  }
+
+  45% {
+    opacity: 0.22;
+  }
+
+  100% {
+    opacity: 0.08;
+    transform: scale(1.05) translate(-4px, -3px);
+  }
+}
+
+@keyframes nn-premium-loader-leaf-breathe {
+  0%,
+  100% {
+    opacity: 0.82;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes nn-premium-loader-pulse-ring {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 0.75;
+  }
+}
+
+.caption {
+  margin: 0;
+  flex: 1;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  color: var(--semantic-text-muted);
+}
+
+.inlineRoot {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inlineLeaf {
+  position: relative;
+  display: inline-flex;
+  width: 1.35rem;
+  height: 1.35rem;
+  align-items: center;
+  justify-content: center;
+  color: var(--semantic-brand);
+}
+
+.inlineLeafMotion {
+  animation: nn-premium-loader-leaf-drift 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inlineLeafMotion {
+    animation: none;
+    will-change: auto;
+  }
+}
+
+.inlineLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--semantic-text-muted);
+}

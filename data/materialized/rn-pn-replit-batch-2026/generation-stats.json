@@ -1,0 +1,83 @@
+{
+  "sourceFile": "data/replit-exports/exam_questions.json",
+  "rawRows": 13375,
+  "emittedQuestions": 7304,
+  "emittedByMaterializedTier": {
+    "rn": 3574,
+    "rpn": 3730,
+    "lvn": 0
+  },
+  "presetPoolCounts": {
+    "usRnFull": 3328,
+    "caRnFull": 0,
+    "usPnFull": 3494,
+    "caRpnFull": 0
+  },
+  "countryTagDistribution": {
+    "taggedBothCountries": 0,
+    "usTagOnly": 7304,
+    "caTagOnly": 0
+  },
+  "skippedNotPublished": 53,
+  "skippedInvalidMcq": 1591,
+  "skippedNonNursingTier": 3580,
+  "skippedStemDedupe": 347,
+  "skippedCanadaOnly": 500,
+  "questionsWithQualityFlags": 346,
+  "nclexEnhancedLessonTopicKeys": [
+    "heart-failure",
+    "myocardial-infarction",
+    "prioritization-abcs",
+    "delegation",
+    "insulin-hypoglycemia"
+  ],
+  "catchAllTopicKey": "general-nursing-clinical",
+  "catchAllMappedCount": 482,
+  "topicQuestionCounts": {
+    "pulmonary-embolism": 101,
+    "heart-failure": 408,
+    "myocardial-infarction": 145,
+    "angina": 30,
+    "dysrhythmias": 213,
+    "hypertension": 390,
+    "shock": 120,
+    "asthma": 187,
+    "ards": 42,
+    "pneumonia": 145,
+    "copd-respiratory": 266,
+    "abg-interpretation": 81,
+    "acid-base-advanced": 19,
+    "sodium-imbalance": 97,
+    "potassium-imbalance": 134,
+    "insulin-hypoglycemia": 312,
+    "sepsis": 47,
+    "infection-control": 651,
+    "anticoagulants": 150,
+    "antibiotics": 101,
+    "pain-management": 158,
+    "wound-care": 157,
+    "delegation": 37,
+    "fluid-balance": 140,
+    "prioritization-abcs": 162,
+    "neurological-acute-care": 287,
+    "mental-health-crisis": 335,
+    "pediatrics-care": 445,
+    "maternal-newborn-care": 181,
+    "gastrointestinal-acute-care": 265,
+    "renal-genitourinary-care": 267,
+    "hematology-oncology-care": 186,
+    "musculoskeletal-care": 233,
+    "integumentary-burn-wound": 118,
+    "emergency-triage-disaster": 100,
+    "fundamentals-patient-safety": 112,
+    "general-nursing-clinical": 482
+  },
+  "dedupe": {
+    "method": "stemHash(trim+lowercase)",
+    "note": "first row by stable id sort wins"
+  },
+  "flashcardTarget": 608,
+  "weakAreasRemaining": [
+    "346 questions carry quality:* tags (short stem, duplicate options, or synthetic rationale)—curate incrementally."
+  ]
+}

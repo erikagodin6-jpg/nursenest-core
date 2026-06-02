@@ -1,0 +1,710 @@
+{
+  "packageId": "pkg1-foundations",
+  "title": "Foundations of Gerontological Nursing — Question Bank",
+  "generatedDate": "2026-06-02",
+  "questionCount": 250,
+  "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+  "questions": [
+    {
+      "id": "GERO-P1-001",
+      "topicSlug": "principles-of-healthy-aging",
+      "lessonSlug": "principles-of-healthy-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A nurse is caring for an 82-year-old resident in a long-term care facility who tells the nurse, 'I guess getting confused sometimes is just part of getting old.' Which response by the nurse is most appropriate?",
+      "options": {
+        "A": "'You're right, some confusion is expected at your age.'",
+        "B": "'Confusion is not a normal part of aging and we should investigate what is causing it.'",
+        "C": "'Let me ask the physician to prescribe something to help with your confusion.'",
+        "D": "'Perhaps you need more sleep. That often causes confusion in older adults.'"
+      },
+      "correctAnswer": "B",
+      "rationale": "Confusion is NOT a normal part of aging. Attributing confusion to age alone (ageism) leads to missed diagnoses of treatable conditions such as delirium, medication toxicity, UTI, dehydration, or early dementia. The nurse must educate the patient that confusion requires investigation and not be dismissed as an expected age-related change.",
+      "distractorRationales": {
+        "A": "Incorrect. This response validates ageism and dismisses a symptom that requires clinical evaluation. Confusion is not a normal aging change.",
+        "C": "Incorrect. Prescribing medication before assessment and investigation is not appropriate. The first step is to assess the cause of confusion.",
+        "D": "Incorrect. While sleep deprivation can contribute to confusion, this response minimizes a clinical symptom and deflects from necessary assessment. It is a dismissive response."
+      },
+      "hint": "Think about what is normal vs. abnormal in aging. The nurse's role is to educate patients against ageism.",
+      "clinicalPearl": "The most dangerous phrase in geriatric nursing is 'it's just their age.' Every symptom — confusion, incontinence, falls, pain — deserves clinical evaluation regardless of the patient's age.",
+      "examStrategy": "Any option that normalizes a symptom in an older adult is almost always wrong on NCLEX and REx-PN. The correct answer promotes patient advocacy and accurate health education.",
+      "keyTakeaway": "Confusion is NEVER a normal part of aging. New or worsening confusion always requires investigation.",
+      "tags": ["gerontology", "ageism", "healthy-aging", "confusion", "patient-education"]
+    },
+    {
+      "id": "GERO-P1-002",
+      "topicSlug": "principles-of-healthy-aging",
+      "lessonSlug": "principles-of-healthy-aging",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is completing a health promotion assessment for a 70-year-old woman who is recently retired and lives alone. She reports she is 'doing fine' but has stopped cooking meals, has gained 4 kg over 3 months, and has not visited friends in 6 weeks. Which framework best guides the nurse's next assessment step?",
+      "options": {
+        "A": "The Fried Frailty Phenotype — assess for the five frailty criteria",
+        "B": "The Comprehensive Geriatric Assessment (CGA) — assess medical, functional, psychological, and social domains",
+        "C": "The Activities of Daily Living (ADL) Scale — determine level of self-care independence",
+        "D": "The 4Ms framework — assess What Matters, Medication, Mentation, Mobility"
+      },
+      "correctAnswer": "B",
+      "rationale": "The Comprehensive Geriatric Assessment (CGA) is the most appropriate framework here because this woman is presenting with concerns across multiple domains: functional (stopped cooking — an IADL), physical (weight gain), and social (withdrawal from social activities). CGA provides a structured four-domain assessment: medical, functional, psychological, and social. It is broader than frailty screening alone and captures the multidimensional concerns this patient is presenting with.",
+      "distractorRationales": {
+        "A": "Incorrect. The Fried Frailty Phenotype focuses specifically on five physical frailty criteria (weight loss, exhaustion, low activity, slowness, grip strength). While frailty may be a concern, it doesn't fully address the social and functional withdrawal evident here.",
+        "C": "Incorrect. The Katz ADL Scale assesses basic self-care (bathing, dressing, eating). Stopping cooking is an IADL, not an ADL. This tool is too narrow for this presentation.",
+        "D": "Incorrect. The 4Ms framework (Age-Friendly Health Systems) is primarily used in acute care and is an excellent framework, but the CGA is the most established comprehensive assessment framework for community-dwelling older adults presenting with multi-domain concerns."
+      },
+      "hint": "This patient has concerns across physical, functional, and social domains — which assessment captures all of these?",
+      "clinicalPearl": "The CGA predicts outcomes in older adults better than any individual measure. Stopping cooking (IADL loss) combined with social withdrawal are early warning signs of functional decline.",
+      "examStrategy": "When a question describes an older adult with concerns in multiple domains (function, mood, social, medical), the Comprehensive Geriatric Assessment is usually the correct framework.",
+      "keyTakeaway": "CGA covers four domains: medical, functional, psychological, and social. Use it when concerns span multiple dimensions of an older adult's life.",
+      "tags": ["CGA", "functional-assessment", "IADL", "social-isolation", "geriatric-assessment"]
+    },
+    {
+      "id": "GERO-P1-003",
+      "topicSlug": "frailty",
+      "lessonSlug": "frailty",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse uses the Fried Frailty Phenotype to assess an 80-year-old male resident. The nurse notes: unintentional weight loss of 7 kg over the past year, reports of constant fatigue, a gait speed of 0.6 m/sec, and weak handgrip strength. He is physically inactive. How should the nurse classify this patient?",
+      "options": {
+        "A": "Robust — no frailty criteria met",
+        "B": "Pre-frail — 1–2 frailty criteria met",
+        "C": "Frail — 3 or more frailty criteria met",
+        "D": "Severely frail — requires full nursing care for all activities"
+      },
+      "correctAnswer": "C",
+      "rationale": "The Fried Frailty Phenotype identifies five criteria: (1) unintentional weight loss ≥5% — PRESENT (7 kg loss); (2) exhaustion/fatigue — PRESENT (constant fatigue); (3) low physical activity — PRESENT (physically inactive); (4) slowness — PRESENT (gait speed 0.6 m/sec, which is below the 0.8 m/sec threshold); (5) weak handgrip — PRESENT. This patient meets ALL 5 criteria, making him FRAIL (3+ criteria required). Classification: Frail.",
+      "distractorRationales": {
+        "A": "Incorrect. Multiple frailty criteria are clearly met: weight loss, fatigue, slow gait, weak grip, and inactivity. This patient is not robust.",
+        "B": "Incorrect. Pre-frailty requires 1–2 criteria. This patient meets 5 of 5 criteria.",
+        "D": "Incorrect. 'Severely frail' is a descriptor from the Clinical Frailty Scale, not the Fried Phenotype classification system. The Fried Phenotype categories are robust, pre-frail, and frail."
+      },
+      "hint": "Count the number of Fried criteria met: weight loss, exhaustion, low activity, slowness (<0.8 m/sec), weak grip. 3+ = frail.",
+      "clinicalPearl": "Normal gait speed is ≥1.0 m/sec; ≤0.8 m/sec is the threshold for slowness in the Fried Phenotype. A slow gait speed is one of the strongest predictors of adverse outcomes in older adults.",
+      "examStrategy": "For Fried Frailty Phenotype questions: count the criteria, match to threshold (3+ = frail). The WELSH mnemonic: Weight loss, Exhaustion, Low activity, Slowness, Handgrip weakness.",
+      "keyTakeaway": "Fried Frailty: 5 criteria (WELSH); 0 = robust; 1–2 = pre-frail; 3+ = frail.",
+      "tags": ["frailty", "fried-phenotype", "WELSH", "gait-speed", "geriatric-assessment"]
+    },
+    {
+      "id": "GERO-P1-004",
+      "topicSlug": "frailty",
+      "lessonSlug": "frailty",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "An 84-year-old woman with a Clinical Frailty Scale score of 7 is admitted to hospital with a hip fracture requiring surgical repair. Her family asks the nurse about the plan for recovery. Which nursing response most accurately reflects the clinical implications of her frailty score?",
+      "options": {
+        "A": "'Your mother is in excellent health and we expect a full recovery within 4–6 weeks.'",
+        "B": "'With a CFS score of 7, your mother has severely reduced physiological reserve. Recovery will likely be prolonged, and functional return to pre-fracture baseline is uncertain.'",
+        "C": "'The frailty score just reflects her age — it doesn't affect her surgical recovery.'",
+        "D": "'A CFS of 7 means she is pre-frail and has a good chance of returning to independent living.'"
+      },
+      "correctAnswer": "B",
+      "rationale": "The Clinical Frailty Scale (CFS) ranges from 1 (very fit) to 9 (terminally ill). CFS 7 is 'severely frail' — the patient is completely dependent for personal care and has multiple chronic conditions, or the disease is progressing to a point where recovery is likely incomplete. For this patient, a hip fracture with CFS 7 represents a very high-risk surgical and recovery scenario: high rates of post-operative delirium, prolonged rehabilitation, and significant probability of not returning to pre-fracture functional status. The family must receive accurate, compassionate information about the realistic prognosis.",
+      "distractorRationales": {
+        "A": "Incorrect. This response grossly underestimates the risk and sets unrealistic expectations for a severely frail older adult with a hip fracture. CFS 7 patients have high peri-operative mortality and prolonged recovery.",
+        "C": "Incorrect. The CFS is a validated prognostic tool. It directly predicts post-operative delirium risk, rehabilitation duration, mortality, and likelihood of institutional discharge. Frailty absolutely affects surgical recovery.",
+        "D": "Incorrect. CFS 7 = severely frail (not pre-frail). Pre-frailty is CFS 4 (vulnerable). This misclassification would give the family dangerously inaccurate expectations."
+      },
+      "hint": "CFS 7 = severely frail. What does this mean for surgical risk and recovery expectations?",
+      "clinicalPearl": "Hip fracture in a frail older adult has a 1-year mortality rate of approximately 20–30%. CFS scores are routinely used in pre-operative risk stratification and goals of care conversations.",
+      "examStrategy": "Frailty severity questions often test understanding of prognosis and communication. Honest, accurate, compassionate communication about realistic outcomes is always the right answer.",
+      "keyTakeaway": "CFS 7 = severely frail; hip fracture at this frailty level carries high risk of peri-operative complications, prolonged recovery, and failure to return to prior functional baseline.",
+      "tags": ["frailty", "CFS", "hip-fracture", "surgical-risk", "prognosis", "family-communication"]
+    },
+    {
+      "id": "GERO-P1-005",
+      "topicSlug": "functional-assessment-foundations",
+      "lessonSlug": "functional-assessment-foundations",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A nurse is assessing a 76-year-old man using the Katz Index of Independence in Activities of Daily Living. Which task is classified as a basic ADL?",
+      "options": {
+        "A": "Managing medications",
+        "B": "Using the telephone",
+        "C": "Preparing meals",
+        "D": "Bathing"
+      },
+      "correctAnswer": "D",
+      "rationale": "Bathing is a basic Activity of Daily Living (ADL) as classified by the Katz Index. Basic ADLs include: Bathing, Ambulation (transfer), Toileting, Hygiene/grooming, Eating, and Dressing (BATHED mnemonic). Managing medications, using the telephone, and preparing meals are all Instrumental ADLs (IADLs) — more complex tasks required for independent community living.",
+      "distractorRationales": {
+        "A": "Incorrect. Medication management is an IADL (Lawton Scale). It requires cognitive function and coordination beyond basic self-care.",
+        "B": "Incorrect. Telephone use is an IADL. It requires communication skills and cognitive function.",
+        "C": "Incorrect. Meal preparation is an IADL requiring planning, coordination, and physical ability beyond basic self-care."
+      },
+      "hint": "Use the BATHED mnemonic: Bathing, Ambulation, Toileting, Hygiene, Eating, Dressing.",
+      "clinicalPearl": "Katz ADLs are lost in a predictable sequence: Bathing is typically lost first; eating is preserved the longest. Recovery follows the reverse sequence. Knowing this sequence helps predict care needs and set rehabilitation goals.",
+      "examStrategy": "Memorize BATHED for ADLs and SHAFT for IADLs. On exams, ADLs vs IADLs are frequently tested to assess understanding of functional assessment tools.",
+      "keyTakeaway": "ADLs (BATHED): Bathing, Ambulation, Toileting, Hygiene, Eating, Dressing — basic self-care. IADLs: complex tasks for community independence.",
+      "tags": ["ADL", "IADL", "Katz-index", "functional-assessment", "BATHED"]
+    },
+    {
+      "id": "GERO-P1-006",
+      "topicSlug": "functional-assessment-foundations",
+      "lessonSlug": "functional-assessment-foundations",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse performs a Timed Up and Go (TUG) test on a 79-year-old woman in a community clinic. The patient takes 24 seconds to complete the test. Which action should the nurse take first?",
+      "options": {
+        "A": "Reassure the patient that this is a normal result for her age",
+        "B": "Document the finding and continue with the rest of the assessment",
+        "C": "Refer the patient to physiotherapy and initiate a comprehensive fall risk assessment",
+        "D": "Prescribe a walker and arrange for home physiotherapy"
+      },
+      "correctAnswer": "C",
+      "rationale": "A TUG time of >20 seconds indicates HIGH fall risk. Normal is ≤12 seconds; 12–20 seconds = increased fall risk; >20 seconds = high fall risk requiring assistive device and referral. A TUG of 24 seconds warrants: (1) comprehensive fall risk assessment including medication review, sensory assessment, environmental hazards; and (2) physiotherapy referral for mobility assessment, balance training, and appropriate assistive device fitting. This is not a normal finding and requires action.",
+      "distractorRationales": {
+        "A": "Incorrect. A TUG of 24 seconds is NOT normal at any age and indicates high fall risk. Reassurance here is dangerous and constitutes a failure of nursing assessment.",
+        "B": "Incorrect. While documentation is necessary, the priority action is to address the HIGH fall risk finding. Document and refer — do not just move on.",
+        "D": "Incorrect. The nurse cannot prescribe. However, the referral to physiotherapy (option C) is appropriate; the prescribing of an assistive device is within PT scope, not nursing scope independently."
+      },
+      "hint": "TUG >20 seconds = high fall risk. What is the nurse's priority action when a high fall risk is identified?",
+      "clinicalPearl": "The TUG is a simple, inexpensive, clinically powerful test. It predicts falls, functional decline, and nursing home admission. Every second over 12 seconds represents increasing fall risk.",
+      "examStrategy": "Know the TUG thresholds: ≤12 sec = normal; 12–20 sec = increased risk; >20 sec = high risk. After identifying high risk, the priority is always ASSESSMENT first (complete fall risk assessment), then referral.",
+      "keyTakeaway": "TUG >20 seconds = high fall risk. Priority actions: comprehensive fall risk assessment and physiotherapy referral.",
+      "tags": ["TUG", "fall-risk", "mobility", "physiotherapy-referral", "functional-assessment"]
+    },
+    {
+      "id": "GERO-P1-007",
+      "topicSlug": "functional-assessment-foundations",
+      "lessonSlug": "functional-assessment-foundations",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is assessing a 78-year-old woman admitted from home after her family expressed concern about her safety. The nurse is completing an Activities of Daily Living (ADL) assessment. Which of the following are basic ADLs? SELECT ALL THAT APPLY.",
+      "options": {
+        "A": "Bathing",
+        "B": "Shopping for groceries",
+        "C": "Dressing",
+        "D": "Managing finances",
+        "E": "Eating",
+        "F": "Using transportation"
+      },
+      "correctAnswer": ["A", "C", "E"],
+      "rationale": "Basic ADLs (Katz Index — BATHED): Bathing (A), Ambulation/transfer, Toileting, Hygiene/grooming, Eating (E), Dressing (C). Shopping (B), managing finances (D), and using transportation (F) are Instrumental ADLs (IADLs) from the Lawton Scale — these require higher-level cognitive and physical coordination for community independence.",
+      "distractorRationales": {
+        "B": "Incorrect — IADL. Shopping requires planning, transportation, physical stamina, and financial management.",
+        "D": "Incorrect — IADL. Financial management requires cognitive organization and literacy.",
+        "F": "Incorrect — IADL. Using transportation requires planning, orientation, and either driving or navigating transit systems."
+      },
+      "hint": "BATHED = ADLs. SHAFT and medication management = IADLs.",
+      "clinicalPearl": "In functional decline, IADLs are lost BEFORE ADLs. A patient who can no longer manage finances or prepare meals is on the trajectory toward losing self-care ADLs.",
+      "examStrategy": "SATA questions about ADLs vs IADLs: classify each item — self-care = ADL, community independence task = IADL.",
+      "keyTakeaway": "ADLs: bathing, dressing, eating, toileting, continence, transfer. IADLs: shopping, finances, meal prep, phone, transportation, medications.",
+      "tags": ["ADL", "IADL", "Katz-index", "Lawton-scale", "functional-assessment", "SATA"]
+    },
+    {
+      "id": "GERO-P1-008",
+      "topicSlug": "age-friendly-care",
+      "lessonSlug": "age-friendly-care",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A hospitalized 85-year-old man with a history of mild dementia, hypertension, and osteoarthritis was admitted 3 days ago for a hip replacement. The nurse notes he has not been out of bed since surgery, is not wearing his hearing aids, appears disoriented to place, and is receiving diphenhydramine for sleep. Using the 4Ms Age-Friendly Health Systems framework, which finding is MOST immediately concerning?",
+      "options": {
+        "A": "He is not wearing his hearing aids (What Matters)",
+        "B": "He is receiving diphenhydramine for sleep (Medication)",
+        "C": "He has not been out of bed since surgery (Mobility)",
+        "D": "He appears disoriented to place (Mentation)"
+      },
+      "correctAnswer": "D",
+      "rationale": "While all four concerns align with the 4Ms framework, the MOST immediately concerning finding is disorientation to place in a patient 3 days post-hip replacement — this represents a RED FLAG for hospital-acquired delirium. In patients with pre-existing dementia, hospitalization, surgery, and medications (particularly diphenhydramine, a Beers Criteria PIMs) all significantly increase delirium risk. Delirium requires immediate assessment and intervention. However, it is important to note that diphenhydramine (option B) is contributing to the delirium — it should also be addressed immediately.",
+      "distractorRationales": {
+        "A": "Incorrect. Not wearing hearing aids (What Matters/sensory) is important and contributes to disorientation, but it is not the most immediately dangerous finding.",
+        "B": "Incorrect. Diphenhydramine is highly inappropriate (Beers Criteria — anticholinergic risk, high delirium risk) and must be addressed, but it is a contributing CAUSE to the priority concern (delirium/disorientation).",
+        "C": "Incorrect. Immobility is extremely concerning (increases DVT, pressure injury, deconditioning, and delirium risk), but acute disorientation indicates active delirium which is the higher priority."
+      },
+      "hint": "Among all 4Ms concerns, which represents an acute change requiring immediate nursing action?",
+      "clinicalPearl": "Diphenhydramine (Benadryl) is one of the most dangerous medications to use in older adults — it is strongly anticholinergic, causes acute confusional states, and is on the Beers Criteria. Never use for sleep in hospitalized older adults.",
+      "examStrategy": "When multiple 4Ms concerns are present, prioritize Mentation (acute delirium) as the most immediately life-threatening. Delirium increases mortality, length of stay, and permanent cognitive decline.",
+      "keyTakeaway": "In the 4Ms framework, acute mentation changes (delirium) are the most immediately dangerous. Diphenhydramine is a Beers Criteria PIMs and a major delirium trigger — avoid in all older adults.",
+      "tags": ["4Ms", "delirium", "mentation", "diphenhydramine", "beers-criteria", "age-friendly"]
+    },
+    {
+      "id": "GERO-P1-009",
+      "topicSlug": "age-friendly-care",
+      "lessonSlug": "age-friendly-care",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A nurse working in a long-term care facility is implementing age-friendly care principles. Which nursing action BEST reflects the 'Mobility' component of the 4Ms framework?",
+      "options": {
+        "A": "Reviewing the resident's medication list weekly for potentially inappropriate medications",
+        "B": "Asking the resident about their goals and preferences for daily activities",
+        "C": "Ensuring the resident ambulates to the dining room for all three meals each day",
+        "D": "Screening the resident for delirium using the Confusion Assessment Method"
+      },
+      "correctAnswer": "C",
+      "rationale": "The 'Mobility' component of the 4Ms framework states that older adults should 'move safely every day to maintain function and prevent complications.' Ensuring the resident ambulates to the dining room for meals represents safe daily movement integrated into routine care — the clearest implementation of the Mobility element. Option A reflects Medication; Option B reflects What Matters; Option D reflects Mentation.",
+      "distractorRationales": {
+        "A": "Incorrect. This reflects the Medication component of the 4Ms.",
+        "B": "Incorrect. This reflects the What Matters component — aligning care with patient priorities.",
+        "D": "Incorrect. This reflects the Mentation component — preventing and identifying delirium."
+      },
+      "hint": "Match each option to a component of the 4Ms: What Matters, Medication, Mentation, Mobility.",
+      "clinicalPearl": "In LTC, mobility is often reduced due to staffing constraints and custodial care culture. Each step an older resident takes is therapeutic — and each day of unnecessary bed rest increases mortality risk.",
+      "examStrategy": "4Ms matching questions: What Matters = goals/preferences; Medication = safe drugs, deprescribing; Mentation = delirium, cognition, mood; Mobility = safe movement every day.",
+      "keyTakeaway": "4Ms Mobility = safe daily movement. Getting residents to meals, outdoor walks, and daily ambulation is direct implementation.",
+      "tags": ["4Ms", "mobility", "age-friendly", "LTC", "ambulation"]
+    },
+    {
+      "id": "GERO-P1-010",
+      "topicSlug": "principles-of-healthy-aging",
+      "lessonSlug": "principles-of-healthy-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 74-year-old woman tells the nurse, 'I don't need to see my doctor anymore — I'm retired and healthy. Nothing major is wrong with me.' Which health promotion activity should the nurse MOST emphasize at this time?",
+      "options": {
+        "A": "Reviewing her advanced care directive and power of attorney documents",
+        "B": "Encouraging regular health screening and immunization updates",
+        "C": "Discussing end-of-life care preferences with her family",
+        "D": "Arranging a home safety assessment to prevent falls"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient views herself as healthy and retired — her primary health promotion need at this time is maintaining preventive health care, including regular screening (cancer screening, bone density, vision, hearing, cognitive screening) and immunization updates (influenza, pneumococcal, zoster, COVID-19, tetanus/Tdap). Regular preventive care is the cornerstone of healthy aging and can identify reversible risk factors before symptoms appear. The other options are important but are not the most relevant priority for a healthy, community-dwelling, recently retired woman.",
+      "distractorRationales": {
+        "A": "Incorrect. While advance care planning is important for all older adults, it is not the most urgent health promotion priority for a woman who is currently healthy and recently retired.",
+        "C": "Incorrect. End-of-life discussions are important but premature for a patient with no identified serious illness. This may feel threatening to someone who has expressed that she is healthy.",
+        "D": "Incorrect. Home safety is an important fall prevention strategy, but the patient has not reported any fall risk factors. Preventive immunizations and screening apply universally."
+      },
+      "hint": "This is a healthy older adult — what does preventive care prioritize at this stage of life?",
+      "clinicalPearl": "The period immediately post-retirement is a high-risk time for health decline due to loss of social structure, reduced activity, and decreased preventive care access. Nurses can capitalize on this transition to engage older adults in proactive health maintenance.",
+      "examStrategy": "Health promotion questions for healthy older adults always prioritize: immunizations, cancer screening, sensory screening, and maintaining regular preventive care visits.",
+      "keyTakeaway": "Healthy older adults need regular preventive screenings and immunization updates — influenza, pneumococcal, zoster, COVID-19, cervical (if applicable), colorectal, bone density, vision, hearing.",
+      "tags": ["health-promotion", "immunizations", "screening", "preventive-care", "healthy-aging"]
+    },
+    {
+      "id": "GERO-P1-011",
+      "topicSlug": "demographics-of-aging",
+      "lessonSlug": "demographics-of-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A nurse is presenting health education to nursing students about the demographics of aging in North America. Which statement accurately describes current aging trends?",
+      "options": {
+        "A": "The population of adults aged 65–74 (young-old) is declining as more people live to advanced old age",
+        "B": "Adults aged 85 and older are the fastest-growing subgroup within the older adult population",
+        "C": "Men outnumber women in the oldest-old (85+) age group",
+        "D": "Life expectancy has plateaued and is no longer increasing in Canada and the United States"
+      },
+      "correctAnswer": "B",
+      "rationale": "Adults aged 85 and older (the 'oldest-old') are the fastest-growing subgroup within the older adult population in both Canada and the United States. This is driven by improved chronic disease management, advances in medical care, and the aging of cohorts with historically high life expectancy. This subgroup has the highest care complexity, greatest frailty burden, and highest rates of cognitive impairment, requiring increasing healthcare resources.",
+      "distractorRationales": {
+        "A": "Incorrect. All older adult age groups are growing, not declining. The young-old (65–74) cohort is also expanding due to Baby Boomers.",
+        "C": "Incorrect. Women significantly outnumber men in the oldest-old group. Women have longer life expectancy and are more likely to live alone, in poverty, and in institutional care in advanced old age.",
+        "D": "Incorrect. Life expectancy continues to rise, although the rate of increase has slowed in some regions. It has not plateaued."
+      },
+      "hint": "Which age group within older adults is growing most rapidly?",
+      "clinicalPearl": "The fastest-growing demographic in North America is adults 85+. They have 3–4 times the healthcare utilization of adults aged 65–74 and are most vulnerable to frailty, delirium, polypharmacy harm, and iatrogenic injury.",
+      "examStrategy": "Demographics of aging questions test basic gerontological epidemiology. Key fact: oldest-old (85+) = fastest growing; women outnumber men in oldest-old; social determinants disproportionately affect older women.",
+      "keyTakeaway": "Oldest-old (85+) is the fastest-growing subgroup. Women outlive men and are the majority in advanced old age.",
+      "tags": ["demographics", "aging-trends", "oldest-old", "population-health"]
+    },
+    {
+      "id": "GERO-P1-012",
+      "topicSlug": "family-centred-older-adult-care",
+      "lessonSlug": "family-centred-older-adult-care",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is conducting a home assessment for an 82-year-old man with dementia. His wife, who is 79 years old and has her own health problems, provides all of his care. The wife states, 'I haven't left the house in 3 weeks. I don't sleep more than 4 hours a night. I'm exhausted, but I can't leave him.' Which nursing intervention has the HIGHEST priority?",
+      "options": {
+        "A": "Educate the wife about dementia progression so she can anticipate future care needs",
+        "B": "Assess the wife for caregiver burnout and connect her with respite services",
+        "C": "Contact the physician to reassess the husband's dementia medications",
+        "D": "Arrange for occupational therapy to assess the home environment for safety"
+      },
+      "correctAnswer": "B",
+      "rationale": "This caregiver is showing clear signs of caregiver burnout: social isolation (not leaving the house in 3 weeks), severe sleep deprivation (4 hours/night), and explicit expression of exhaustion. Caregiver burnout is a serious health risk for both the caregiver AND the care recipient — a burned-out caregiver is at risk for their own physical and mental health deterioration and may not be able to continue providing safe care. Respite services are designed to provide relief and prevent caregiver collapse. Assessing the caregiver is the highest priority in this scenario.",
+      "distractorRationales": {
+        "A": "Incorrect. While dementia education is important, this wife needs immediate support, not more information. Education should follow initial support and resource connection.",
+        "C": "Incorrect. Medication review is important but does not address the urgent care crisis — a caregiver on the verge of collapse.",
+        "D": "Incorrect. Home safety is important for fall prevention, but the most pressing issue is caregiver well-being, which directly affects the safety of the person with dementia."
+      },
+      "hint": "Who is the priority patient in this scenario — the man with dementia or his wife?",
+      "clinicalPearl": "Family caregivers of people with dementia are 'invisible patients.' Caregiver burnout increases risk of both caregiver and care recipient adverse outcomes. The nurse must assess and support caregivers as part of holistic older adult care.",
+      "examStrategy": "When a question includes a caregiver in crisis, the caregiver's needs are often the priority nursing concern — particularly when physical or psychological collapse is imminent.",
+      "keyTakeaway": "Caregiver burnout requires urgent assessment and respite care intervention. The family caregiver is always part of the nursing assessment when caring for a frail or cognitively impaired older adult.",
+      "tags": ["caregiver-burden", "caregiver-burnout", "dementia-care", "respite-care", "family-centred-care"]
+    },
+    {
+      "id": "GERO-P1-013",
+      "topicSlug": "successful-aging",
+      "lessonSlug": "successful-aging",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "According to Rowe and Kahn's model of successful aging, which combination of factors defines successful aging?",
+      "options": {
+        "A": "Living to age 85 with no chronic diseases",
+        "B": "Low disease burden, high cognitive and physical function, and active engagement with life",
+        "C": "Maintaining independence in all activities of daily living until death",
+        "D": "Absence of disability and full functional independence throughout the lifespan"
+      },
+      "correctAnswer": "B",
+      "rationale": "Rowe and Kahn's model of successful aging (1987, 1997) defines it across three interconnected domains: (1) Low probability of disease and disease-related disability; (2) High cognitive and physical functional capacity; and (3) Active engagement with life (social relationships and productive activity). Importantly, the model recognizes that most older adults have some chronic conditions — the goal is not perfect health but optimal function and engagement within the context of one's health status.",
+      "distractorRationales": {
+        "A": "Incorrect. Rowe and Kahn do NOT require an absence of all chronic disease. Many successfully aging older adults have managed chronic conditions. The model focuses on low disease BURDEN and DISABILITY, not zero disease.",
+        "C": "Incorrect. Functional independence is one element, but without social engagement and maintained cognitive function, full ADL independence alone does not constitute successful aging.",
+        "D": "Incorrect. Absence of disability is not required. Rowe and Kahn acknowledge that disability may occur; the goal is maintaining function and engagement as much as possible."
+      },
+      "hint": "Rowe & Kahn's model has three components — which option captures all three?",
+      "clinicalPearl": "The Rowe and Kahn model shifted gerontology from a disease-focused lens to a capability-focused lens. It led directly to interventions targeting lifestyle modification, social engagement, and exercise as anti-aging therapies.",
+      "examStrategy": "Successful aging theories are commonly tested at the NP and advanced nursing level. Know the 3 components of Rowe & Kahn and how they differ from simply 'living a long life' or 'being disease-free.'",
+      "keyTakeaway": "Rowe & Kahn successful aging: (1) low disease burden, (2) high cognitive and physical function, (3) active engagement with life.",
+      "tags": ["successful-aging", "Rowe-Kahn", "gerontology-theory", "healthy-aging"]
+    },
+    {
+      "id": "GERO-P1-014",
+      "topicSlug": "principles-of-healthy-aging",
+      "lessonSlug": "principles-of-healthy-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A nurse is reviewing a 77-year-old woman's recent assessment findings. The patient reports gradually needing more time to recall names, occasional word-finding difficulty, and relying on notes to remember appointments. Her recall is intact on formal testing, all ADLs are independent, and her family notes no change in her overall function over the past year. How should the nurse interpret these findings?",
+      "options": {
+        "A": "These findings are consistent with early Alzheimer's disease and require urgent specialist referral",
+        "B": "These findings represent age-related cognitive changes within normal limits",
+        "C": "These findings meet criteria for mild cognitive impairment (MCI) — monitor for progression",
+        "D": "These findings suggest vascular cognitive impairment requiring a brain CT scan"
+      },
+      "correctAnswer": "B",
+      "rationale": "Normal cognitive aging includes: slowed processing speed, mild word-finding difficulty (tip-of-the-tongue phenomenon), and the need for more organizational strategies (lists, calendars). Crucially, this patient has INTACT recall on formal testing, INTACT ADLs, and NO functional change noted by family. These are hallmarks of NORMAL cognitive aging, not MCI or dementia. MCI is distinguished by objective cognitive impairment on testing AND subjective concern — but this patient's formal testing is intact. Dementia requires functional impairment in daily life, which is absent here.",
+      "distractorRationales": {
+        "A": "Incorrect. Early Alzheimer's disease requires objective cognitive decline on formal testing AND functional impairment. This patient has neither. Urgent specialist referral is not indicated.",
+        "C": "Incorrect. MCI requires objective impairment on formal neuropsychological testing beyond what is expected for age and education. This patient's recall is intact on testing.",
+        "D": "Incorrect. Vascular cognitive impairment presents with executive function deficits, often stepwise decline, and associated vascular risk factors. No evidence of this pattern here."
+      },
+      "hint": "What distinguishes normal cognitive aging from MCI? Two key criteria: objective testing results AND functional impact.",
+      "clinicalPearl": "Normal cognitive aging: slower processing, mild word-finding difficulty, preserved long-term memory. Pathological: objective test deficits AND/OR functional impairment. Never diagnose cognitive impairment based on subjective complaint alone.",
+      "examStrategy": "Dementia vs MCI vs normal aging: (1) Normal = subjective changes, intact testing, intact function; (2) MCI = objective test changes, preserved function; (3) Dementia = objective test changes + functional impairment.",
+      "keyTakeaway": "Normal cognitive aging includes slower processing and word-finding difficulty but INTACT objective testing and preserved function. These alone do not indicate MCI or dementia.",
+      "tags": ["cognitive-aging", "normal-aging", "MCI", "dementia-vs-normal", "neurological-assessment"]
+    },
+    {
+      "id": "GERO-P1-015",
+      "topicSlug": "age-friendly-care",
+      "lessonSlug": "age-friendly-care",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is caring for an 80-year-old man who was admitted with pneumonia. He has been in restraints for the past 24 hours due to agitation. The nursing assistant asks why restraints are used if they are harmful. Which response by the nurse best reflects current evidence-based practice?",
+      "options": {
+        "A": "'Restraints are sometimes needed to keep patients from pulling out their IV lines or tubes.'",
+        "B": "'Restraints are never used in age-friendly care. We should assess the cause of agitation and use non-restraint alternatives.'",
+        "C": "'Restraints protect the patient from falling out of bed, which is our primary concern.'",
+        "D": "'Restraints can be used safely with physician orders for up to 48 hours in agitated older adults.'"
+      },
+      "correctAnswer": "B",
+      "rationale": "Current evidence-based practice and the Age-Friendly Health Systems (4Ms) framework are clear: physical restraints are harmful to older adults. Restraints cause: increased agitation, delirium (worsening), pressure injuries, aspiration, falls (when attempting to escape), strangulation risk, loss of dignity, and increased mortality. Non-restraint alternatives must always be the first approach: identify and treat the cause of agitation (delirium assessment, pain assessment, urinary retention, medication side effects, environmental factors), engage family at bedside, reorient, provide comfort measures, and use least-restrictive alternatives.",
+      "distractorRationales": {
+        "A": "Incorrect. While device dislodgement is a clinical concern, restraints to prevent IV removal in an agitated older adult are not appropriate. The CAUSE of agitation must be addressed. Mittens, distraction, and family presence are preferred alternatives.",
+        "C": "Incorrect. Restraints paradoxically INCREASE fall risk — restrained patients who attempt to get out of bed are at higher risk of falls and fractures than unrestrained patients.",
+        "D": "Incorrect. There is no safe duration for routine physical restraints in older adults. Restraint use requires ongoing individualized assessment; a 48-hour order is not appropriate without continuous reevaluation."
+      },
+      "hint": "What does evidence-based, age-friendly care say about physical restraints in older adults?",
+      "clinicalPearl": "Restraints worsen delirium by increasing fear, disorientation, and physical discomfort. The Canadian and US standard of care is restraint-free care. When agitation is present, assess for: pain, urinary retention, delirium, medication side effects, and unmet needs.",
+      "examStrategy": "Restraint questions on NCLEX and REx-PN: the correct answer is always to AVOID restraints and use least-restrictive alternatives. Restraints do not prevent falls — they increase risk.",
+      "keyTakeaway": "Restraints are contraindicated in age-friendly care. Identify and treat the cause of agitation. Use non-restraint alternatives always.",
+      "tags": ["restraints", "age-friendly", "delirium", "safety", "non-restraint-alternatives", "agitation"]
+    },
+    {
+      "id": "GERO-P1-016",
+      "topicSlug": "frailty",
+      "lessonSlug": "frailty",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 78-year-old woman with CFS score of 5 (mildly frail) is scheduled for elective knee replacement surgery. Her surgeon asks the nurse to complete a pre-operative assessment. Which finding would be MOST important to communicate to the surgical team?",
+      "options": {
+        "A": "She takes 8 medications including metformin, lisinopril, and atorvastatin",
+        "B": "Her CFS score of 5 and the evidence that frail patients have significantly higher rates of post-operative delirium, prolonged recovery, and failure to return to baseline",
+        "C": "She has mild osteoarthritis in both knees and reports difficulty walking more than 2 blocks",
+        "D": "Her blood pressure is 138/82 mmHg and her heart rate is 72 bpm"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pre-operative frailty assessment is recognized as the most powerful predictor of post-operative outcomes in older adults. CFS 5 (mildly frail) indicates the patient has partial dependence and is at significantly elevated risk for: post-operative delirium, prolonged hospital stay, failure to return to pre-operative functional baseline, higher rates of institutionalization, and higher 30-day mortality than non-frail patients. Communicating the frailty score and its implications is the most critical information the surgical team needs for risk stratification, care planning, pre-operative optimization, and family consent discussions.",
+      "distractorRationales": {
+        "A": "Incorrect. Medication list is important but all listed medications are standard chronic disease management and not immediately concerning for surgery. The surgical team needs frailty information most urgently.",
+        "C": "Incorrect. Knee OA and functional limitation are expected given the indication for surgery, and these are already known to the surgical team. Frailty score communicates risk beyond the diagnosis.",
+        "D": "Incorrect. These vital signs are within normal limits and do not represent a surgical risk factor. Frailty is a far more powerful predictor of surgical outcomes than borderline elevated BP."
+      },
+      "hint": "What single piece of information most changes surgical decision-making in an older adult patient?",
+      "clinicalPearl": "Frailty is now considered the most important pre-operative risk factor in older adults — more predictive than any individual organ system comorbidity. Many surgical centres now require CFS or frailty assessment pre-operatively.",
+      "examStrategy": "Pre-operative assessments in older adults: frailty status is the priority. Know that CFS 5 (mildly frail) and above significantly changes peri-operative risk, consent discussions, and discharge planning.",
+      "keyTakeaway": "Frailty (CFS) is the strongest pre-operative outcome predictor in older adults. Always assess and communicate frailty status to the surgical team.",
+      "tags": ["frailty", "CFS", "pre-operative", "surgical-risk", "clinical-judgment"]
+    },
+    {
+      "id": "GERO-P1-017",
+      "topicSlug": "functional-assessment-foundations",
+      "lessonSlug": "functional-assessment-foundations",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 73-year-old woman with mild cognitive impairment reports that she can cook and clean her own apartment but has stopped driving and now relies on her daughter for grocery shopping. Using the Lawton IADL Scale, how should the nurse interpret this information?",
+      "options": {
+        "A": "She is fully independent in all IADLs",
+        "B": "She has partial IADL dependence affecting transportation and shopping",
+        "C": "She has complete IADL dependence and requires institutional care",
+        "D": "IADL assessment is not reliable in patients with cognitive impairment"
+      },
+      "correctAnswer": "B",
+      "rationale": "The Lawton IADL Scale assesses independence in 8 domains. This patient is independent in cooking, housekeeping, and likely other IADLs, but is dependent for transportation and grocery shopping. This represents PARTIAL IADL dependence — she is NOT fully independent (she has lost driving and shopping) but she is NOT fully dependent (she maintains cooking and housekeeping). This partial IADL loss is significant: it indicates she is on a trajectory of decline and may need additional community supports. The cognitive impairment likely contributes to her driving cessation (appropriate safety decision).",
+      "distractorRationales": {
+        "A": "Incorrect. She is not fully IADL independent — she has lost two IADL domains (transportation, shopping), which is clinically significant.",
+        "C": "Incorrect. She manages several IADLs independently (cooking, housekeeping) — she does not require institutional care based on this assessment alone.",
+        "D": "Incorrect. IADL assessment is valid and important in patients with cognitive impairment. It must be combined with collateral history (from family) and direct observation for accuracy. Cognitive impairment does affect IADL performance — which is a key reason for assessment."
+      },
+      "hint": "Count which IADLs are independent and which require assistance.",
+      "clinicalPearl": "Driving cessation in an older adult with cognitive impairment is an important safety milestone — but it immediately creates transportation dependency, which can lead to food insecurity and social isolation. Always assess what support systems are in place when independence is lost.",
+      "examStrategy": "IADL loss is graduated — note which specific domains are affected and which are preserved. 'Partial IADL dependence' is the appropriate clinical description when some domains are maintained.",
+      "keyTakeaway": "Partial IADL dependence (some independent, some requiring help) is the most common presentation in community-dwelling older adults with early cognitive impairment. Identify specific gaps and match to support services.",
+      "tags": ["IADL", "Lawton-scale", "cognitive-impairment", "functional-assessment", "community-resources"]
+    },
+    {
+      "id": "GERO-P1-018",
+      "topicSlug": "principles-of-healthy-aging",
+      "lessonSlug": "principles-of-healthy-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A nurse is providing care to a 78-year-old man in a long-term care facility. During morning care, the nurse notices the resident is moving more slowly than usual, seems confused about where he is, and is not interested in eating breakfast. Compared to his usual alert and cooperative morning baseline, this is a notable change. What is the nurse's priority action?",
+      "options": {
+        "A": "Allow the resident to rest and reassess in 4 hours",
+        "B": "Document the observation and continue with the morning care routine",
+        "C": "Assess for potential causes of the behaviour change including delirium, infection, and medication effects",
+        "D": "Call the family to come in and observe the change"
+      },
+      "correctAnswer": "C",
+      "rationale": "Any ACUTE change from a known baseline in an older adult is a clinical RED FLAG requiring immediate assessment. Confusion, slowed movement, and anorexia that are new compared to a previously alert, cooperative resident could represent: delirium (acute illness trigger), infection (UTI, pneumonia — often present atypically), medication toxicity, pain, metabolic disturbance, or other acute processes. The FIRST nursing priority is assessment — identify the potential cause before deciding on intervention. Waiting, documenting without acting, or delegating to family are all inappropriate initial responses.",
+      "distractorRationales": {
+        "A": "Incorrect. A 4-hour wait when an older adult shows a new cognitive/functional change is dangerous. Delirium, sepsis, and other causes of acute change can deteriorate rapidly in frail older adults.",
+        "B": "Incorrect. Documentation is part of care but is not sufficient as a first action when there is an acute change from baseline. The nurse must actively assess.",
+        "D": "Incorrect. Family notification may be appropriate later, but it does not replace nursing assessment. Family cannot diagnose or treat the cause of the change."
+      },
+      "hint": "New change from baseline in an older adult = clinical RED FLAG. What is always the first nursing step?",
+      "clinicalPearl": "In older adults, subtle behavioural changes (less talkative, not eating, sleeping more) are often the first and ONLY sign of a serious acute illness. Sepsis, MI, pneumonia, and pulmonary embolism may all present as 'just not themselves.'",
+      "examStrategy": "Acute change from baseline = ASSESS first. This is the most important priority principle in gerontological nursing and will appear repeatedly in NCLEX and REx-PN questions.",
+      "keyTakeaway": "Any acute change from an older adult's known baseline requires immediate assessment for delirium, infection, medication toxicity, and other acute causes — never dismiss, never wait without assessing.",
+      "tags": ["baseline-change", "delirium", "infection", "clinical-assessment", "acute-care"]
+    },
+    {
+      "id": "GERO-P1-019",
+      "topicSlug": "demographics-of-aging",
+      "lessonSlug": "demographics-of-aging",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is teaching a group of new nursing graduates about the unique vulnerabilities of older adults in the healthcare system. Which of the following statements about aging demographics and health equity are accurate? SELECT ALL THAT APPLY.",
+      "options": {
+        "A": "Women in the oldest-old age group are more likely than men to live alone and in poverty",
+        "B": "LGBTQ+ older adults may experience heightened social isolation and discrimination in healthcare settings",
+        "C": "The oldest-old (85+) population is the fastest-growing demographic in North America",
+        "D": "All older adults from the same age group have similar health needs",
+        "E": "Indigenous older adults face additional health inequities related to intergenerational trauma"
+      },
+      "correctAnswer": ["A", "B", "C", "E"],
+      "rationale": "A: CORRECT — Women live longer than men, making them the majority of the oldest-old, and they are disproportionately represented among those living alone and in poverty in old age. B: CORRECT — LGBTQ+ older adults frequently experienced decades of discrimination and may face homophobia/transphobia in care settings, particularly LTC, increasing their isolation. C: CORRECT — Adults 85+ are the fastest-growing subgroup. E: CORRECT — Indigenous older adults carry the burden of intergenerational trauma, historical and ongoing systemic inequities, and culturally unsafe healthcare experiences.",
+      "distractorRationales": {
+        "D": "INCORRECT. Heterogeneity increases with age — older adults become MORE different from each other, not more similar. An 85-year-old marathon runner and an 85-year-old with advanced dementia are both 85 but have completely different health needs."
+      },
+      "hint": "Consider diversity, equity, and inclusion in older adult populations. Only one option is false.",
+      "clinicalPearl": "Healthcare designed for 'the average older adult' excludes the majority. Culturally safe, equitable, and individualized care requires nurses to recognize and address the specific vulnerabilities of LGBTQ+, Indigenous, racialized, and low-income older adults.",
+      "examStrategy": "SATA questions about demographics: watch for sweeping generalizations (all older adults are the same = false). Pick all accurate statements that reflect the heterogeneity and specific vulnerabilities within the older adult population.",
+      "keyTakeaway": "Older adults are a highly diverse population. Women, LGBTQ+, Indigenous, and low-income older adults face specific inequities requiring tailored, culturally safe nursing care.",
+      "tags": ["demographics", "health-equity", "LGBTQ", "Indigenous-health", "women-aging", "diversity"]
+    },
+    {
+      "id": "GERO-P1-020",
+      "topicSlug": "principles-of-healthy-aging",
+      "lessonSlug": "principles-of-healthy-aging",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 67-year-old newly retired male presents to his family nurse practitioner's office. He has type 2 diabetes (A1c 7.1%), hypertension (well-controlled on amlodipine), and is a former smoker (quit 5 years ago). He is overweight (BMI 27), exercises occasionally, and drinks 2 glasses of wine nightly. He has not had a colonoscopy, zoster vaccine, or shingles vaccination. Which health promotion priorities should be addressed at this visit? SELECT ALL THAT APPLY.",
+      "options": {
+        "A": "Colonoscopy referral",
+        "B": "Zoster (shingles) vaccine",
+        "C": "Alcohol use counselling",
+        "D": "Physical activity prescription",
+        "E": "Smoking cessation counselling"
+      },
+      "correctAnswer": ["A", "B", "C", "D"],
+      "rationale": "A: CORRECT — Colorectal cancer screening (colonoscopy) is recommended starting at age 50 for average-risk individuals; at age 67 without a prior colonoscopy, this is overdue. B: CORRECT — Shingrix (recombinant zoster vaccine) is recommended for all adults ≥50 regardless of prior varicella/zoster history — two doses, 2–6 months apart. C: CORRECT — 2 standard drinks DAILY (14/week) exceeds Canada's low-risk drinking guidelines (≤10/week for women, ≤15/week for men) and US guidelines. For a diabetic patient, alcohol contributes to hypoglycemia risk, medication interactions, and fatty liver disease — counselling is appropriate. D: CORRECT — 'Occasionally' exercising does not meet the recommended 150 min/week moderate aerobic activity + 2x resistance training. E: INCORRECT — He is a FORMER smoker who quit 5 years ago. Cessation counselling is not needed.",
+      "distractorRationales": {
+        "E": "INCORRECT. He quit smoking 5 years ago. Smoking cessation counselling is not indicated. Continued support for maintaining cessation and monitoring for smoking-related complications is appropriate, but active cessation counselling applies to current smokers only."
+      },
+      "hint": "For each option: is it indicated based on current status and guidelines? Remember — he is a FORMER smoker.",
+      "clinicalPearl": "Two glasses of wine nightly in a diabetic older adult = significant risk — hypoglycemia masking, fatty liver, falls, medication interactions. Many older adults underreport alcohol consumption; normalize assessment by asking all patients.",
+      "examStrategy": "Health promotion SATA: Apply the specific guideline for each item. Read carefully — 'former smoker' is a key detail that eliminates cessation counselling. Don't miss it.",
+      "keyTakeaway": "At 67, health priorities: colorectal screening, zoster vaccine, alcohol assessment, physical activity. Smoking cessation is not needed for ex-smokers who have already quit.",
+      "tags": ["health-promotion", "colorectal-screening", "zoster-vaccine", "alcohol-counselling", "exercise-prescription", "NP"]
+    },
+    {
+      "id": "GERO-P1-021",
+      "topicSlug": "frailty",
+      "lessonSlug": "frailty",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is caring for a 76-year-old woman admitted with a UTI. On admission, the patient's family reports that she was walking independently with a cane, preparing her own meals, and socializing with friends. Now, 48 hours into hospitalization, she is bedbound, refusing meals, and is extremely confused. The family asks the nurse, 'What happened to her? She was fine when she came in.' Which nursing response is MOST accurate?",
+      "options": {
+        "A": "'Her confusion is likely a sign that the antibiotics aren't working.'",
+        "B": "'Older adults, especially those with some frailty, can decompensate rapidly during acute illness and hospitalization. We are treating her UTI and doing everything to prevent further decline.'",
+        "C": "'This is probably her baseline — family members often overestimate how well older adults were functioning before admission.'",
+        "D": "'She has likely developed a new stroke — we should order a CT scan.'"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is a classic presentation of decompensation in a frail older adult during acute illness and hospitalization. Even a UTI — a relatively straightforward infection — can precipitate complete functional collapse in a frail or pre-frail older adult: delirium, immobility, anorexia, and loss of all recent functional gains. This is consistent with the narrowed homeostatic reserve (homeostenosis) of frailty — the system cannot compensate for even minor physiological stressors. The family's description of prior function (walking, cooking, socializing) is likely accurate and represents the true premorbid baseline. Honest family communication, aggressive treatment of the UTI, delirium precautions, and early mobilization are the priorities.",
+      "distractorRationales": {
+        "A": "Incorrect. Confusion in an older adult with UTI is highly consistent with delirium from infection — it does not indicate antibiotic failure. Delirium is a presenting symptom of UTI in older adults, not a marker of treatment failure.",
+        "C": "Incorrect. Family overestimation of function does occur, but this dismissive response undermines the family and is clinically inaccurate. The prior functional description (walking with cane, cooking, socializing) is specific and credible. Assuming families are wrong without evidence is ageism by proxy.",
+        "D": "Incorrect. While stroke should be considered in a sudden-onset neurological change, the temporal relationship with UTI admission and the clinical picture (infection + hospitalization + older adult) most strongly suggests delirium, not stroke. A CT may be warranted if delirium management does not improve or if focal neurological signs emerge."
+      },
+      "hint": "Why do frail older adults deteriorate so dramatically from seemingly minor illnesses?",
+      "clinicalPearl": "Homeostenosis — the narrowing of physiological reserve with aging — means frail older adults can no longer mount adequate compensatory responses to stressors. A minor infection that causes a mild illness in a younger person can cause complete decompensation in a frail 76-year-old.",
+      "examStrategy": "Questions describing dramatic functional decline during hospitalization in older adults = frailty + delirium. Family history of prior function is usually accurate and should be treated as the true baseline.",
+      "keyTakeaway": "Frail older adults can experience complete functional collapse from minor acute stressors. Hospitalization itself is a major stressor. Delirium, immobility, and anorexia during hospitalization must be actively prevented and treated.",
+      "tags": ["frailty", "delirium", "homeostenosis", "functional-decline", "hospitalization", "UTI"]
+    },
+    {
+      "id": "GERO-P1-022",
+      "topicSlug": "age-friendly-care",
+      "lessonSlug": "age-friendly-care",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is implementing the Hospital Elder Life Program (HELP) for a hospitalized 80-year-old patient with mild dementia. Which nursing actions are consistent with HELP program principles? SELECT ALL THAT APPLY.",
+      "options": {
+        "A": "Ensuring the patient wears glasses and hearing aids during waking hours",
+        "B": "Applying soft wrist restraints when the patient removes their IV",
+        "C": "Orienting the patient to date, time, and place at the beginning of each interaction",
+        "D": "Getting the patient up to a chair for meals three times daily",
+        "E": "Administering lorazepam 0.5 mg at bedtime to promote sleep",
+        "F": "Engaging the patient in conversation and cognitively stimulating activities"
+      },
+      "correctAnswer": ["A", "C", "D", "F"],
+      "rationale": "The Hospital Elder Life Program (HELP) targets six delirium risk factors: cognitive impairment, sleep deprivation, immobility, visual impairment, hearing impairment, and dehydration. Interventions: A (sensory optimization — glasses/hearing aids), C (cognitive stimulation — orientation), D (early mobilization), F (social engagement and cognitive activities) are all core HELP components. Restraints (B) are CONTRAINDICATED — they worsen delirium and increase harm. Benzodiazepines for sleep (E) are a Beers Criteria PIMs and increase delirium risk.",
+      "distractorRationales": {
+        "B": "INCORRECT. Restraints worsen delirium by increasing fear, agitation, and disorientation. They are contraindicated in HELP.",
+        "E": "INCORRECT. Benzodiazepines (lorazepam) are on the Beers Criteria for older adults and are strongly associated with increased delirium. Non-pharmacological sleep interventions are used in HELP: reducing nighttime noise, offering a warm drink, avoiding room checks at night, allowing sleep consolidation."
+      },
+      "hint": "HELP targets 6 delirium risk factors. Restraints and benzodiazepines violate HELP principles.",
+      "clinicalPearl": "HELP reduces delirium incidence by 33% and delirium duration by 47% when implemented consistently. It requires interprofessional team involvement and trained volunteers. Nurses drive HELP implementation.",
+      "examStrategy": "HELP SATA: any option involving restraints or sedating medications = WRONG. Any option targeting sensory function, orientation, mobility, nutrition, hydration, and cognitive stimulation = CORRECT.",
+      "keyTakeaway": "HELP program: sensory optimization (glasses, hearing aids), orientation, early mobilization, hydration, cognitive stimulation — no restraints, no benzodiazepines.",
+      "tags": ["HELP", "delirium-prevention", "hospitalization", "age-friendly", "cognitive-stimulation", "SATA"]
+    },
+    {
+      "id": "GERO-P1-023",
+      "topicSlug": "family-centred-older-adult-care",
+      "lessonSlug": "family-centred-older-adult-care",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is working in a community health centre and is meeting with an 80-year-old patient who speaks Cantonese. Her adult daughter accompanies her to the appointment and offers to translate. Which action by the nurse is MOST appropriate?",
+      "options": {
+        "A": "Accept the daughter's offer to translate — she knows her mother best",
+        "B": "Ask the daughter to summarize the main health concerns in English, then translate the plan back",
+        "C": "Use a professional medical interpreter — in person or via phone — and conduct the assessment directly with the patient",
+        "D": "Simplify the health assessment to focus only on medications, since translation accuracy may be limited"
+      },
+      "correctAnswer": "C",
+      "rationale": "The standard of professional medical practice and nursing ethics requires the use of a professional medical interpreter when a patient does not speak the provider's language — not a family member. Using family members as interpreters violates confidentiality, compromises accuracy (family members may filter, omit, or add information), creates role conflict for the family member, and may introduce power imbalances. The patient may not disclose sensitive information (abuse, mental health, incontinence) when the family member is present as interpreter.",
+      "distractorRationales": {
+        "A": "Incorrect. Familiarity does not qualify someone as a medical interpreter. Family members lack training in medical terminology, are emotionally involved, and may have their own agenda regarding the patient's care.",
+        "B": "Incorrect. Summary translation compounds the accuracy problem. Fragmented translation leaves critical clinical information unshared and is unsafe.",
+        "D": "Incorrect. Narrowing the assessment is not acceptable — it discriminates against non-English speakers by providing a lesser standard of care."
+      },
+      "hint": "Professional standards for language access in healthcare: who provides interpretation?",
+      "clinicalPearl": "Language barriers in older immigrants are a major source of health inequity. Older adults who immigrated later in life may speak little English/French. Use professional interpretation — it is a patient right, not a preference.",
+      "examStrategy": "Medical interpretation questions: always use professional interpreters. Never use family members, especially for sensitive topics (abuse, mental health, sexuality, end-of-life). This applies to all ages but is especially critical in older adult care where family dynamics are complex.",
+      "keyTakeaway": "Professional medical interpreter is always required when language barrier exists. Family interpreters are never appropriate for medical assessments.",
+      "tags": ["language-barrier", "medical-interpreter", "cultural-safety", "family-centred-care", "older-immigrants"]
+    },
+    {
+      "id": "GERO-P1-024",
+      "topicSlug": "principles-of-healthy-aging",
+      "lessonSlug": "principles-of-healthy-aging",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A nurse practitioner is caring for a 91-year-old woman with advanced heart failure (NYHA Class IV), moderate dementia, and significant frailty (CFS 8). Her family wants 'everything done' if her heart failure worsens. The patient previously expressed in a verbal discussion that she would not want resuscitation or ICU care. There is no formal advance directive. Which nursing priority reflects the most appropriate approach to this situation?",
+      "options": {
+        "A": "Follow the family's wishes — next of kin has authority over care decisions when the patient cannot speak for themselves",
+        "B": "Initiate a formal goals-of-care conversation with the patient (to whatever degree she can participate), the family, and the team — guided by prior stated wishes and the patient's values",
+        "C": "Order a psychiatric consultation to formally assess the patient's decision-making capacity",
+        "D": "Defer all care decisions to the attending physician — the nurse's role is to implement, not advise"
+      },
+      "correctAnswer": "B",
+      "rationale": "The most appropriate approach is a formal goals-of-care conversation that integrates: (1) the patient's prior expressed wishes (she verbally declined resuscitation/ICU — these carry weight even without a written directive); (2) her current values and preferences to the degree she can participate (dementia does not automatically eliminate all decision-making capacity — some capacity may remain for simple choices); (3) family input as advocates for stated wishes, not decision-makers to override wishes; and (4) clinical reality (CFS 8, NYHA IV — CPR in this context has essentially zero probability of meaningful survival). The family's authority extends to acting in accordance with the patient's KNOWN wishes, not overriding them.",
+      "distractorRationales": {
+        "A": "Incorrect. Next of kin has surrogate decision-making authority, but the surrogate's role is to represent what the patient would want, not to impose their own wishes. When the patient's wishes are known (verbal refusal of CPR/ICU), the substitute decision-maker is bound by them.",
+        "C": "Incorrect. A psychiatric consultation for formal capacity assessment may be appropriate if there is genuine uncertainty about the patient's decision-making capacity for a specific decision, but it is not the first or most appropriate step here. The priority is a goals-of-care conversation.",
+        "D": "Incorrect. Nurses are active advocates and key facilitators in goals-of-care conversations. Deferring entirely to the physician abdicates nursing's ethical responsibility and professional role in the care planning process."
+      },
+      "hint": "What is the ethical framework when a patient has previously expressed wishes but there is no formal directive?",
+      "clinicalPearl": "Verbally expressed wishes carry ethical weight even without a written advance directive. Nurses must document and communicate these wishes immediately. In Canadian law (SDM legislation), substitute decision-makers must honour prior capable expressed wishes.",
+      "examStrategy": "Goals-of-care questions test understanding of patient-centred ethics. Key points: prior expressed wishes > family preference; incapacity (dementia) doesn't erase prior autonomous wishes; nurses actively facilitate, not just implement.",
+      "keyTakeaway": "Prior expressed wishes (even verbal) must guide care when a patient can no longer decide. Goals-of-care conversations must include the patient (to the degree possible), family as advocates, and clinical team. Substitute decision-makers represent the patient's known wishes, not their own.",
+      "tags": ["goals-of-care", "advance-care-planning", "substitute-decision-maker", "capacity", "end-of-life", "NP"]
+    },
+    {
+      "id": "GERO-P1-025",
+      "topicSlug": "functional-assessment-foundations",
+      "lessonSlug": "functional-assessment-foundations",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is conducting a restorative care assessment for a 77-year-old man with Parkinson's disease in a long-term care facility. He is able to feed himself but requires assistance with cutting food, bathing, and dressing. He can transfer from bed to wheelchair with verbal cueing and can propel his wheelchair independently. Using the Katz ADL scale, which assessment of eating is correct?",
+      "options": {
+        "A": "Dependent — he requires staff to prepare his food before he can eat",
+        "B": "Independent — he self-feeds; assistance with cutting does not make eating dependent",
+        "C": "Requires assistance — any setup help classifies eating as needing assistance",
+        "D": "The Katz scale cannot be used for patients with Parkinson's disease"
+      },
+      "correctAnswer": "B",
+      "rationale": "The Katz ADL Scale defines independence in eating as: the act of bringing food from plate to mouth, chewing, and swallowing. Setting up food (cutting meat, opening containers, arranging the tray) is considered SETUP ASSISTANCE, not hands-on assistance with the act of eating itself. A patient who self-feeds once food is set up is classified as INDEPENDENT in eating on the Katz scale. This distinction is important for care planning — it reflects the patient's preserved feeding ability, which should be supported and maintained through restorative care.",
+      "distractorRationales": {
+        "A": "Incorrect. 'Dependent' on the Katz scale means the patient is fed by another person or uses tube/parenteral feeding. This patient self-feeds — he is not dependent.",
+        "C": "Incorrect. The Katz scale distinguishes between setup assistance (independent) and hands-on assistance (dependent). Setup help with cutting does not classify eating as dependent.",
+        "D": "Incorrect. The Katz ADL scale is a valid and widely used tool for patients with Parkinson's disease and other neurological conditions affecting function."
+      },
+      "hint": "The Katz scale defines eating as: bringing food from plate to mouth, chewing, swallowing. Setup help ≠ dependence.",
+      "clinicalPearl": "Restorative care philosophy: always support the highest level of independence the patient can safely achieve. Doing MORE for a patient than needed accelerates functional decline. A patient who can self-feed should always be allowed to do so.",
+      "examStrategy": "Katz ADL nuances: setup assistance = independent; hands-on assistance = dependent. This distinction appears on NCLEX as a testing point for understanding the Katz scale correctly.",
+      "keyTakeaway": "Katz ADL — eating: self-feeding = independent, even with setup assistance (cutting, opening). Hands-on feeding by staff = dependent.",
+      "tags": ["Katz-ADL", "eating", "restorative-care", "Parkinson's", "functional-independence"]
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+import type { CountryCode } from "@prisma/client";
+import { isAllowedBlogInternalHref } from "@/lib/blog/blog-internal-lesson-links";
+import { blogCountryFromPrismaTarget, marketingStudyHubsForBlogExam } from "@/lib/blog/blog-study-cta";
+import { toolPathForSlug } from "./blog-exam-routes";
+
+export type BlogAutoLinkContext = {
+  exam?: string | null;
+  countryTarget?: CountryCode | null;
+  /** Absolute or root-relative lesson paths already curated on the post */
+  relatedLessonPaths?: string[];
+  relatedTools?: string[];
+  /** Cap total auto-links inserted across the article (default 14). */
+  maxTotalAutoLinks?: number;
+};
+
+type LinkRule = { pattern: RegExp; href: string };
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Build phrase → link rules from post context (longest phrases first to avoid partial matches). Memoized by context key. */
+export function buildAutoLinkRules(ctx: BlogAutoLinkContext): LinkRule[] {
+  const key = autoLinkCacheKey(ctx);
+  const cached = autoLinkRulesCache.get(key);
+  if (cached) return cached;
+  const rules: LinkRule[] = [];
+  const hubs = marketingStudyHubsForBlogExam(ctx.exam ?? "", blogCountryFromPrismaTarget(ctx.countryTarget));
+  const questionsHub = hubs.pathwayQuestionsHub ?? hubs.questionBankHub;
+  const catHub = hubs.pathwayCatHub ?? hubs.practiceExamsHub;
+  const lessonsHub = hubs.lessonsHub;
+  const flashcardsHub = hubs.flashcardsHub;
+
+  for (const raw of ctx.relatedLessonPaths ?? []) {
+    const path = raw.trim();
+    if (!path.startsWith("/") || !isAllowedBlogInternalHref(path)) continue;
+    const segments = path.split("/").filter(Boolean);
+    const slug = segments[segments.length - 1];
+    if (!slug) continue;
+    const phrase = slug.replace(/-/g, " ");
+    if (phrase.length < 4) continue;
+    rules.push({
+      pattern: new RegExp(`\\b(${escapeRegex(phrase)})\\b`, "gi"),
+      href: path,
+    });
+  }
+
+  for (const tool of ctx.relatedTools ?? []) {
+    const href = toolPathForSlug(tool);
+    const label = tool.replace(/-/g, " ");
+    if (label.length < 2) continue;
+    rules.push({
+      pattern: new RegExp(`\\b(${escapeRegex(label)})\\b`, "gi"),
+      href,
+    });
+  }
+
+  rules.push(
+    { pattern: /\b(practice NCLEX-RN questions|practice NCLEX questions)\b/gi, href: questionsHub },
+    { pattern: /\b(practice REx-PN questions|practice REX-PN questions)\b/gi, href: questionsHub },
+    { pattern: /\b(adaptive NCLEX test|adaptive NCLEX exam)\b/gi, href: catHub },
+    { pattern: /\b(NCLEX flashcards|REx-PN flashcards)\b/gi, href: flashcardsHub },
+    { pattern: /\b(NCLEX)\b/g, href: "/lessons" },
+    { pattern: /\b(practice questions)\b/gi, href: questionsHub },
+    { pattern: /\b(question bank)\b/gi, href: questionsHub },
+    { pattern: /\b(CAT exam|adaptive practice exam|computerized adaptive test)\b/gi, href: catHub },
+    { pattern: /\b(practice exam)\b/gi, href: catHub },
+    // Keep auto-linked study-plan phrases on crawlable marketing hubs, not disallowed app routes.
+    { pattern: /\b(study plan)\b/gi, href: lessonsHub },
+  );
+
+  rules.sort((a, b) => {
+    const al = a.pattern.source.length;
+    const bl = b.pattern.source.length;
+    return bl - al;
+  });
+
+  const result = dedupeRules(rules);
+  autoLinkRulesCache.set(key, result);
+  return result;
+}
+
+const autoLinkRulesCache = new Map<string, LinkRule[]>();
+
+function autoLinkCacheKey(ctx: BlogAutoLinkContext): string {
+  const paths = (ctx.relatedLessonPaths ?? []).slice().sort().join("|");
+  const tools = (ctx.relatedTools ?? []).slice().sort().join("|");
+  return `${ctx.exam ?? ""}::${ctx.countryTarget ?? ""}::${paths}::${tools}::${ctx.maxTotalAutoLinks ?? 14}`;
+}
+
+function dedupeRules(rules: LinkRule[]): LinkRule[] {
+  const seen = new Set<string>();
+  const out: LinkRule[] = [];
+  for (const r of rules) {
+    const k = `${r.pattern.source}::${r.href}`;
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(r);
+  }
+  return out;
+}
+
+function applyRulesToPlainText(text: string, rules: LinkRule[], cap: { remaining: number }): string {
+  let out = text;
+  for (const { pattern, href } of rules) {
+    out = out.replace(pattern, (m) => {
+      if (cap.remaining <= 0) return m;
+      if (m.includes("<a ")) return m;
+      cap.remaining -= 1;
+      return `<a href="${href}" class="nn-blog-auto-link">${m}</a>`;
+    });
+  }
+  return out;
+}
+
+/**
+ * Injects internal links into HTML body text nodes only (skips existing anchors, pre, script, style).
+ * Safe for trusted admin HTML; escapes are not re-parsed as XML.
+ */
+export function applyAutoLinksToHtml(html: string, ctx: BlogAutoLinkContext): string {
+  const rules = buildAutoLinkRules(ctx);
+  if (rules.length === 0) return html;
+
+  const cap = { remaining: ctx.maxTotalAutoLinks ?? 14 };
+  const tokens = html.split(/(<[^>]+>)/g);
+  let inA = 0;
+  let inPre = 0;
+  let inScript = 0;
+  const result: string[] = [];
+
+  for (const token of tokens) {
+    if (!token) continue;
+    if (token.startsWith("<")) {
+      const low = token.toLowerCase();
+      if (/^<a[\s>]/.test(low) && !low.startsWith("</a")) inA += 1;
+      if (low === "</a>" || low.startsWith("</a>")) inA = Math.max(0, inA - 1);
+      if (low.startsWith("<pre")) inPre += 1;
+      if (low === "</pre>" || low.startsWith("</pre>")) inPre = Math.max(0, inPre - 1);
+      if (low.startsWith("<script")) inScript += 1;
+      if (low.startsWith("</script")) inScript = Math.max(0, inScript - 1);
+      result.push(token);
+      continue;
+    }
+    if (inA > 0 || inPre > 0 || inScript > 0) {
+      result.push(token);
+      continue;
+    }
+    result.push(applyRulesToPlainText(token, rules, cap));
+  }
+  return result.join("");
+}

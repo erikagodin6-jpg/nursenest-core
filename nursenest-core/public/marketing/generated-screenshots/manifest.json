@@ -1,0 +1,2424 @@
+{
+  "generatedAt": "2026-05-30T07:53:49.130Z",
+  "baseUrl": "https://nursenest.ca",
+  "outputDir": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots",
+  "totalCaptured": 71,
+  "totalErrors": 46,
+  "captures": [
+    {
+      "key": "marketing-home-desktop",
+      "tier": "marketing",
+      "label": "Homepage — desktop hero",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/marketing-home-desktop.webp",
+        "public/marketing/generated-screenshots/marketing/marketing-home-desktop-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/marketing-home-desktop-768w.webp",
+        "public/marketing/generated-screenshots/marketing/marketing-home-desktop-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:20:47.898Z"
+    },
+    {
+      "key": "marketing-home-desktop",
+      "tier": "marketing",
+      "label": "Homepage — desktop hero",
+      "theme": "ocean",
+      "viewport": "tablet",
+      "route": "/",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/marketing-home-desktop-tablet.webp",
+        "public/marketing/generated-screenshots/marketing/marketing-home-desktop-tablet-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:20:56.929Z"
+    },
+    {
+      "key": "marketing-home-desktop",
+      "tier": "marketing",
+      "label": "Homepage — desktop hero",
+      "theme": "ocean",
+      "viewport": "mobile",
+      "route": "/",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/marketing-home-desktop-mobile.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:21:15.820Z"
+    },
+    {
+      "key": "marketing-home-desktop",
+      "tier": "marketing",
+      "label": "Homepage — desktop hero",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "route": "/",
+      "files": [
+        "public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop.webp",
+        "public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop-1200w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop-768w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:21:34.311Z"
+    },
+    {
+      "key": "marketing-home-desktop",
+      "tier": "marketing",
+      "label": "Homepage — desktop hero",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/",
+      "files": [
+        "public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop.webp",
+        "public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop-1200w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop-768w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:21:45.531Z"
+    },
+    {
+      "key": "pricing",
+      "tier": "marketing",
+      "label": "Pricing page",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/pricing",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/pricing.webp",
+        "public/marketing/generated-screenshots/marketing/pricing-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/pricing-768w.webp",
+        "public/marketing/generated-screenshots/marketing/pricing-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:21:56.376Z"
+    },
+    {
+      "key": "pricing",
+      "tier": "marketing",
+      "label": "Pricing page",
+      "theme": "ocean",
+      "viewport": "tablet",
+      "route": "/pricing",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/pricing-tablet.webp",
+        "public/marketing/generated-screenshots/marketing/pricing-tablet-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:22:05.789Z"
+    },
+    {
+      "key": "pricing",
+      "tier": "marketing",
+      "label": "Pricing page",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "route": "/pricing",
+      "files": [
+        "public/marketing/generated-screenshots/themes/blossom/pricing.webp",
+        "public/marketing/generated-screenshots/themes/blossom/pricing-1200w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/pricing-768w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/pricing-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:22:16.658Z"
+    },
+    {
+      "key": "pricing",
+      "tier": "marketing",
+      "label": "Pricing page",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/pricing",
+      "files": [
+        "public/marketing/generated-screenshots/themes/midnight/pricing.webp",
+        "public/marketing/generated-screenshots/themes/midnight/pricing-1200w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/pricing-768w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/pricing-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:22:37.587Z"
+    },
+    {
+      "key": "faq",
+      "tier": "marketing",
+      "label": "FAQ page",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/faq",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/faq.webp",
+        "public/marketing/generated-screenshots/marketing/faq-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/faq-768w.webp",
+        "public/marketing/generated-screenshots/marketing/faq-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:22:48.756Z"
+    },
+    {
+      "key": "rn-marketing-hub",
+      "tier": "marketing",
+      "label": "RN pathway hub — marketing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/us/rn/nclex-rn",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/rn-marketing-hub.webp",
+        "public/marketing/generated-screenshots/marketing/rn-marketing-hub-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/rn-marketing-hub-768w.webp",
+        "public/marketing/generated-screenshots/marketing/rn-marketing-hub-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:22:58.118Z"
+    },
+    {
+      "key": "rn-questions-marketing",
+      "tier": "marketing",
+      "label": "RN Question Bank — marketing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/us/rn/nclex-rn/questions",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/rn-questions-marketing.webp",
+        "public/marketing/generated-screenshots/marketing/rn-questions-marketing-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/rn-questions-marketing-768w.webp",
+        "public/marketing/generated-screenshots/marketing/rn-questions-marketing-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:23:18.686Z"
+    },
+    {
+      "key": "rn-lessons-marketing",
+      "tier": "marketing",
+      "label": "RN Lessons — marketing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/us/rn/nclex-rn/lessons",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/rn-lessons-marketing.webp",
+        "public/marketing/generated-screenshots/marketing/rn-lessons-marketing-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/rn-lessons-marketing-768w.webp",
+        "public/marketing/generated-screenshots/marketing/rn-lessons-marketing-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:23:39.606Z"
+    },
+    {
+      "key": "pn-marketing-hub",
+      "tier": "marketing",
+      "label": "RPN/PN pathway hub — marketing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/canada/pn/rex-pn",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/pn-marketing-hub.webp",
+        "public/marketing/generated-screenshots/marketing/pn-marketing-hub-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/pn-marketing-hub-768w.webp",
+        "public/marketing/generated-screenshots/marketing/pn-marketing-hub-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:23:49.104Z"
+    },
+    {
+      "key": "np-marketing-hub",
+      "tier": "marketing",
+      "label": "NP pathway hub — marketing (CNPLE)",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/canada/np/cnple",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/np-marketing-hub.webp",
+        "public/marketing/generated-screenshots/marketing/np-marketing-hub-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/np-marketing-hub-768w.webp",
+        "public/marketing/generated-screenshots/marketing/np-marketing-hub-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:23:58.397Z"
+    },
+    {
+      "key": "allied-marketing-hub",
+      "tier": "marketing",
+      "label": "Allied Health hub — marketing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/allied/allied-health",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/allied-marketing-hub.webp",
+        "public/marketing/generated-screenshots/marketing/allied-marketing-hub-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/allied-marketing-hub-768w.webp",
+        "public/marketing/generated-screenshots/marketing/allied-marketing-hub-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:24:08.100Z"
+    },
+    {
+      "key": "new-grad-marketing-hub",
+      "tier": "marketing",
+      "label": "New Grad hub — marketing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/canada/new-grad",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub.webp",
+        "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub-768w.webp",
+        "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:24:19.474Z"
+    },
+    {
+      "key": "practice-rationale",
+      "tier": "core",
+      "label": "Practice Questions — rationale panel",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/practice-tests",
+      "files": [
+        "public/marketing/generated-screenshots/core/practice-rationale.webp",
+        "public/marketing/generated-screenshots/core/practice-rationale-1200w.webp",
+        "public/marketing/generated-screenshots/core/practice-rationale-768w.webp",
+        "public/marketing/generated-screenshots/core/practice-rationale-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "practice session with rationale"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:25:14.590Z"
+    },
+    {
+      "key": "practice-rationale",
+      "tier": "core",
+      "label": "Practice Questions — rationale panel",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "route": "/app/practice-tests",
+      "files": [
+        "public/marketing/generated-screenshots/themes/blossom/practice-rationale.webp",
+        "public/marketing/generated-screenshots/themes/blossom/practice-rationale-1200w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/practice-rationale-768w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/practice-rationale-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "practice session with rationale"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:25:26.385Z"
+    },
+    {
+      "key": "practice-rationale",
+      "tier": "core",
+      "label": "Practice Questions — rationale panel",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/app/practice-tests",
+      "files": [
+        "public/marketing/generated-screenshots/themes/midnight/practice-rationale.webp",
+        "public/marketing/generated-screenshots/themes/midnight/practice-rationale-1200w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/practice-rationale-768w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/practice-rationale-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "practice session with rationale"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:25:37.868Z"
+    },
+    {
+      "key": "flashcards",
+      "tier": "core",
+      "label": "Flashcard study mode",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/flashcards",
+      "files": [
+        "public/marketing/generated-screenshots/core/flashcards.webp",
+        "public/marketing/generated-screenshots/core/flashcards-1200w.webp",
+        "public/marketing/generated-screenshots/core/flashcards-768w.webp",
+        "public/marketing/generated-screenshots/core/flashcards-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "flashcard prompt"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:26:07.503Z"
+    },
+    {
+      "key": "flashcards",
+      "tier": "core",
+      "label": "Flashcard study mode",
+      "theme": "ocean",
+      "viewport": "mobile",
+      "route": "/app/flashcards",
+      "files": [
+        "public/marketing/generated-screenshots/core/flashcards-mobile.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "flashcard prompt"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:26:27.406Z"
+    },
+    {
+      "key": "flashcards",
+      "tier": "core",
+      "label": "Flashcard study mode",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/app/flashcards",
+      "files": [
+        "public/marketing/generated-screenshots/themes/midnight/flashcards.webp",
+        "public/marketing/generated-screenshots/themes/midnight/flashcards-1200w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/flashcards-768w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/flashcards-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "flashcard prompt"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:29:01.238Z"
+    },
+    {
+      "key": "learner-dashboard",
+      "tier": "core",
+      "label": "Learner dashboard",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app",
+      "files": [
+        "public/marketing/generated-screenshots/core/learner-dashboard.webp",
+        "public/marketing/generated-screenshots/core/learner-dashboard-1200w.webp",
+        "public/marketing/generated-screenshots/core/learner-dashboard-768w.webp",
+        "public/marketing/generated-screenshots/core/learner-dashboard-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:29:19.172Z"
+    },
+    {
+      "key": "learner-dashboard",
+      "tier": "core",
+      "label": "Learner dashboard",
+      "theme": "ocean",
+      "viewport": "tablet",
+      "route": "/app",
+      "files": [
+        "public/marketing/generated-screenshots/core/learner-dashboard-tablet.webp",
+        "public/marketing/generated-screenshots/core/learner-dashboard-tablet-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:29:39.507Z"
+    },
+    {
+      "key": "learner-dashboard",
+      "tier": "core",
+      "label": "Learner dashboard",
+      "theme": "ocean",
+      "viewport": "mobile",
+      "route": "/app",
+      "files": [
+        "public/marketing/generated-screenshots/core/learner-dashboard-mobile.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:29:53.809Z"
+    },
+    {
+      "key": "learner-dashboard",
+      "tier": "core",
+      "label": "Learner dashboard",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "route": "/app",
+      "files": [
+        "public/marketing/generated-screenshots/themes/blossom/learner-dashboard.webp",
+        "public/marketing/generated-screenshots/themes/blossom/learner-dashboard-1200w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/learner-dashboard-768w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/learner-dashboard-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:30:11.410Z"
+    },
+    {
+      "key": "learner-dashboard",
+      "tier": "core",
+      "label": "Learner dashboard",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/app",
+      "files": [
+        "public/marketing/generated-screenshots/themes/midnight/learner-dashboard.webp",
+        "public/marketing/generated-screenshots/themes/midnight/learner-dashboard-1200w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/learner-dashboard-768w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/learner-dashboard-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:30:27.117Z"
+    },
+    {
+      "key": "question-bank-advanced",
+      "tier": "core",
+      "label": "NGN / advanced question types",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/practice-tests",
+      "files": [
+        "public/marketing/generated-screenshots/core/question-bank-advanced.webp",
+        "public/marketing/generated-screenshots/core/question-bank-advanced-1200w.webp",
+        "public/marketing/generated-screenshots/core/question-bank-advanced-768w.webp",
+        "public/marketing/generated-screenshots/core/question-bank-advanced-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "question bank filters",
+          "question bank content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:30:42.762Z"
+    },
+    {
+      "key": "progress-report",
+      "tier": "core",
+      "label": "Progress report — topic accuracy",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/account/report",
+      "files": [
+        "public/marketing/generated-screenshots/core/progress-report.webp",
+        "public/marketing/generated-screenshots/core/progress-report-1200w.webp",
+        "public/marketing/generated-screenshots/core/progress-report-768w.webp",
+        "public/marketing/generated-screenshots/core/progress-report-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "analytics or report surface"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:30:58.130Z"
+    },
+    {
+      "key": "cat-exam-session",
+      "tier": "core",
+      "label": "CAT exam — adaptive session",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/app/practice-tests/cat-launch?pathwayId=ca-rn-nclex-rn",
+      "files": [
+        "public/marketing/generated-screenshots/core/cat-exam-session.webp",
+        "public/marketing/generated-screenshots/core/cat-exam-session-1200w.webp",
+        "public/marketing/generated-screenshots/core/cat-exam-session-768w.webp",
+        "public/marketing/generated-screenshots/core/cat-exam-session-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "CAT interface",
+          "CAT launch or results content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:31:20.614Z"
+    },
+    {
+      "key": "cat-results",
+      "tier": "core",
+      "label": "CAT results — readiness + weak areas",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/app/practice-tests/cat-insights",
+      "files": [
+        "public/marketing/generated-screenshots/core/cat-results.webp",
+        "public/marketing/generated-screenshots/core/cat-results-1200w.webp",
+        "public/marketing/generated-screenshots/core/cat-results-768w.webp",
+        "public/marketing/generated-screenshots/core/cat-results-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "CAT interface",
+          "CAT launch or results content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:31:30.053Z"
+    },
+    {
+      "key": "study-plan",
+      "tier": "core",
+      "label": "Adaptive study plan",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/study-plan",
+      "files": [
+        "public/marketing/generated-screenshots/core/study-plan.webp",
+        "public/marketing/generated-screenshots/core/study-plan-1200w.webp",
+        "public/marketing/generated-screenshots/core/study-plan-768w.webp",
+        "public/marketing/generated-screenshots/core/study-plan-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:31:39.834Z"
+    },
+    {
+      "key": "study-plan",
+      "tier": "core",
+      "label": "Adaptive study plan",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "route": "/app/study-plan",
+      "files": [
+        "public/marketing/generated-screenshots/themes/blossom/study-plan.webp",
+        "public/marketing/generated-screenshots/themes/blossom/study-plan-1200w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/study-plan-768w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/study-plan-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:31:50.024Z"
+    },
+    {
+      "key": "study-plan",
+      "tier": "core",
+      "label": "Adaptive study plan",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/app/study-plan",
+      "files": [
+        "public/marketing/generated-screenshots/themes/midnight/study-plan.webp",
+        "public/marketing/generated-screenshots/themes/midnight/study-plan-1200w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/study-plan-768w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/study-plan-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:32:06.427Z"
+    },
+    {
+      "key": "smart-review",
+      "tier": "core",
+      "label": "Smart review — grouped by confidence",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/review",
+      "files": [
+        "public/marketing/generated-screenshots/core/smart-review.webp",
+        "public/marketing/generated-screenshots/core/smart-review-1200w.webp",
+        "public/marketing/generated-screenshots/core/smart-review-768w.webp",
+        "public/marketing/generated-screenshots/core/smart-review-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:32:20.603Z"
+    },
+    {
+      "key": "smart-review",
+      "tier": "core",
+      "label": "Smart review — grouped by confidence",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "route": "/app/review",
+      "files": [
+        "public/marketing/generated-screenshots/themes/blossom/smart-review.webp",
+        "public/marketing/generated-screenshots/themes/blossom/smart-review-1200w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/smart-review-768w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/smart-review-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:32:31.249Z"
+    },
+    {
+      "key": "smart-review",
+      "tier": "core",
+      "label": "Smart review — grouped by confidence",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/app/review",
+      "files": [
+        "public/marketing/generated-screenshots/themes/midnight/smart-review.webp",
+        "public/marketing/generated-screenshots/themes/midnight/smart-review-1200w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/smart-review-768w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/smart-review-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:32:43.900Z"
+    },
+    {
+      "key": "question-bank",
+      "tier": "core",
+      "label": "Question bank — browse",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/practice-tests",
+      "files": [
+        "public/marketing/generated-screenshots/core/question-bank.webp",
+        "public/marketing/generated-screenshots/core/question-bank-1200w.webp",
+        "public/marketing/generated-screenshots/core/question-bank-768w.webp",
+        "public/marketing/generated-screenshots/core/question-bank-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "question bank filters",
+          "question bank content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:32:54.500Z"
+    },
+    {
+      "key": "question-bank",
+      "tier": "core",
+      "label": "Question bank — browse",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "route": "/app/practice-tests",
+      "files": [
+        "public/marketing/generated-screenshots/themes/blossom/question-bank.webp",
+        "public/marketing/generated-screenshots/themes/blossom/question-bank-1200w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/question-bank-768w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/question-bank-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "question bank filters",
+          "question bank content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:33:08.635Z"
+    },
+    {
+      "key": "question-bank",
+      "tier": "core",
+      "label": "Question bank — browse",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/app/practice-tests",
+      "files": [
+        "public/marketing/generated-screenshots/themes/midnight/question-bank.webp",
+        "public/marketing/generated-screenshots/themes/midnight/question-bank-1200w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/question-bank-768w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/question-bank-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "question bank filters",
+          "question bank content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:33:20.061Z"
+    },
+    {
+      "key": "confidence-analytics",
+      "tier": "core",
+      "label": "Confidence analytics",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/account/analytics",
+      "files": [
+        "public/marketing/generated-screenshots/core/confidence-analytics.webp",
+        "public/marketing/generated-screenshots/core/confidence-analytics-1200w.webp",
+        "public/marketing/generated-screenshots/core/confidence-analytics-768w.webp",
+        "public/marketing/generated-screenshots/core/confidence-analytics-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "analytics or report surface"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:33:36.296Z"
+    },
+    {
+      "key": "confidence-analytics",
+      "tier": "core",
+      "label": "Confidence analytics",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "route": "/app/account/analytics",
+      "files": [
+        "public/marketing/generated-screenshots/themes/blossom/confidence-analytics.webp",
+        "public/marketing/generated-screenshots/themes/blossom/confidence-analytics-1200w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/confidence-analytics-768w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/confidence-analytics-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "analytics or report surface"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:33:52.130Z"
+    },
+    {
+      "key": "confidence-analytics",
+      "tier": "core",
+      "label": "Confidence analytics",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/app/account/analytics",
+      "files": [
+        "public/marketing/generated-screenshots/themes/midnight/confidence-analytics.webp",
+        "public/marketing/generated-screenshots/themes/midnight/confidence-analytics-1200w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/confidence-analytics-768w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/confidence-analytics-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "analytics or report surface"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:34:08.375Z"
+    },
+    {
+      "key": "lesson-detail",
+      "tier": "core",
+      "label": "Lesson content — detail view",
+      "theme": "aurora",
+      "viewport": "desktop",
+      "route": "/app/lessons",
+      "files": [
+        "public/marketing/generated-screenshots/core/lesson-detail.webp",
+        "public/marketing/generated-screenshots/core/lesson-detail-1200w.webp",
+        "public/marketing/generated-screenshots/core/lesson-detail-768w.webp",
+        "public/marketing/generated-screenshots/core/lesson-detail-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "lesson title",
+          "lesson content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:34:31.434Z"
+    },
+    {
+      "key": "lesson-library",
+      "tier": "core",
+      "label": "Lesson library — browse",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/lessons",
+      "files": [
+        "public/marketing/generated-screenshots/core/lesson-library.webp",
+        "public/marketing/generated-screenshots/core/lesson-library-1200w.webp",
+        "public/marketing/generated-screenshots/core/lesson-library-768w.webp",
+        "public/marketing/generated-screenshots/core/lesson-library-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "lesson title",
+          "lesson content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:35:12.153Z"
+    },
+    {
+      "key": "ecg-workstation",
+      "tier": "core",
+      "label": "ECG & telemetry workstation",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/modules/ecg/basic/lessons",
+      "files": [
+        "public/marketing/generated-screenshots/core/ecg-workstation.webp",
+        "public/marketing/generated-screenshots/core/ecg-workstation-1200w.webp",
+        "public/marketing/generated-screenshots/core/ecg-workstation-768w.webp",
+        "public/marketing/generated-screenshots/core/ecg-workstation-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "lesson title",
+          "lesson content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:35:22.260Z"
+    },
+    {
+      "key": "rn-practice-questions",
+      "tier": "rn",
+      "label": "RN Practice Questions",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/questions",
+      "files": [
+        "public/marketing/generated-screenshots/rn/rn-practice-questions.webp",
+        "public/marketing/generated-screenshots/rn/rn-practice-questions-1200w.webp",
+        "public/marketing/generated-screenshots/rn/rn-practice-questions-768w.webp",
+        "public/marketing/generated-screenshots/rn/rn-practice-questions-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "practice question stem",
+          "answer options"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:42:17.202Z"
+    },
+    {
+      "key": "rn-practice-questions",
+      "tier": "rn",
+      "label": "RN Practice Questions",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "route": "/app/questions",
+      "files": [
+        "public/marketing/generated-screenshots/themes/blossom/rn-practice-questions.webp",
+        "public/marketing/generated-screenshots/themes/blossom/rn-practice-questions-1200w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/rn-practice-questions-768w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/rn-practice-questions-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "practice question stem",
+          "answer options"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:42:43.341Z"
+    },
+    {
+      "key": "rn-practice-questions",
+      "tier": "rn",
+      "label": "RN Practice Questions",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/app/questions",
+      "files": [
+        "public/marketing/generated-screenshots/themes/midnight/rn-practice-questions.webp",
+        "public/marketing/generated-screenshots/themes/midnight/rn-practice-questions-1200w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/rn-practice-questions-768w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/rn-practice-questions-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "practice question stem",
+          "answer options"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:43:20.846Z"
+    },
+    {
+      "key": "rn-ngn-questions",
+      "tier": "rn",
+      "label": "RN NGN Question types",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/questions/bank",
+      "files": [
+        "public/marketing/generated-screenshots/rn/rn-ngn-questions.webp",
+        "public/marketing/generated-screenshots/rn/rn-ngn-questions-1200w.webp",
+        "public/marketing/generated-screenshots/rn/rn-ngn-questions-768w.webp",
+        "public/marketing/generated-screenshots/rn/rn-ngn-questions-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "question bank filters",
+          "question bank content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:44:23.050Z"
+    },
+    {
+      "key": "rn-lessons",
+      "tier": "rn",
+      "label": "RN Lessons library",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/lessons",
+      "files": [
+        "public/marketing/generated-screenshots/rn/rn-lessons.webp",
+        "public/marketing/generated-screenshots/rn/rn-lessons-1200w.webp",
+        "public/marketing/generated-screenshots/rn/rn-lessons-768w.webp",
+        "public/marketing/generated-screenshots/rn/rn-lessons-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "lesson title",
+          "lesson content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:48:16.135Z"
+    },
+    {
+      "key": "rn-clinical-skills",
+      "tier": "rn",
+      "label": "RN Clinical Skills",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/clinical-skills",
+      "files": [
+        "public/marketing/generated-screenshots/rn/rn-clinical-skills.webp",
+        "public/marketing/generated-screenshots/rn/rn-clinical-skills-1200w.webp",
+        "public/marketing/generated-screenshots/rn/rn-clinical-skills-768w.webp",
+        "public/marketing/generated-screenshots/rn/rn-clinical-skills-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "clinical skills activity"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:51:03.822Z"
+    },
+    {
+      "key": "rn-pharmacology",
+      "tier": "rn",
+      "label": "RN Pharmacology",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/pharmacology",
+      "files": [
+        "public/marketing/generated-screenshots/rn/rn-pharmacology.webp",
+        "public/marketing/generated-screenshots/rn/rn-pharmacology-1200w.webp",
+        "public/marketing/generated-screenshots/rn/rn-pharmacology-768w.webp",
+        "public/marketing/generated-screenshots/rn/rn-pharmacology-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "pharmacology activity"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:51:15.900Z"
+    },
+    {
+      "key": "rn-ecg",
+      "tier": "rn",
+      "label": "RN ECG workstation",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/modules/ecg/basic/lessons",
+      "files": [
+        "public/marketing/generated-screenshots/rn/rn-ecg.webp",
+        "public/marketing/generated-screenshots/rn/rn-ecg-1200w.webp",
+        "public/marketing/generated-screenshots/rn/rn-ecg-768w.webp",
+        "public/marketing/generated-screenshots/rn/rn-ecg-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "lesson title",
+          "lesson content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T06:51:24.716Z"
+    },
+    {
+      "key": "pn-rex-pn",
+      "tier": "pn",
+      "label": "RPN/PN — REx-PN CAT launch",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/app/practice-tests/cat-launch?pathwayId=ca-rpn-rex-pn",
+      "files": [
+        "public/marketing/generated-screenshots/pn/pn-rex-pn.webp",
+        "public/marketing/generated-screenshots/pn/pn-rex-pn-1200w.webp",
+        "public/marketing/generated-screenshots/pn/pn-rex-pn-768w.webp",
+        "public/marketing/generated-screenshots/pn/pn-rex-pn-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "CAT interface",
+          "CAT launch or results content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:03:39.234Z"
+    },
+    {
+      "key": "pn-questions",
+      "tier": "pn",
+      "label": "RPN/PN Practice Questions",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/questions",
+      "files": [
+        "public/marketing/generated-screenshots/pn/pn-questions.webp",
+        "public/marketing/generated-screenshots/pn/pn-questions-1200w.webp",
+        "public/marketing/generated-screenshots/pn/pn-questions-768w.webp",
+        "public/marketing/generated-screenshots/pn/pn-questions-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "practice question stem",
+          "answer options"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:04:03.475Z"
+    },
+    {
+      "key": "pn-lessons",
+      "tier": "pn",
+      "label": "RPN/PN Lessons",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/lessons",
+      "files": [
+        "public/marketing/generated-screenshots/pn/pn-lessons.webp",
+        "public/marketing/generated-screenshots/pn/pn-lessons-1200w.webp",
+        "public/marketing/generated-screenshots/pn/pn-lessons-768w.webp",
+        "public/marketing/generated-screenshots/pn/pn-lessons-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "lesson title",
+          "lesson content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:05:48.317Z"
+    },
+    {
+      "key": "pn-cat",
+      "tier": "pn",
+      "label": "RPN/PN CAT results & insights",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/app/practice-tests/cat-insights",
+      "files": [
+        "public/marketing/generated-screenshots/pn/pn-cat.webp",
+        "public/marketing/generated-screenshots/pn/pn-cat-1200w.webp",
+        "public/marketing/generated-screenshots/pn/pn-cat-768w.webp",
+        "public/marketing/generated-screenshots/pn/pn-cat-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "CAT interface",
+          "CAT launch or results content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:06:39.206Z"
+    },
+    {
+      "key": "pn-clinical-skills",
+      "tier": "pn",
+      "label": "RPN/PN Clinical Skills",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/clinical-skills",
+      "files": [
+        "public/marketing/generated-screenshots/pn/pn-clinical-skills.webp",
+        "public/marketing/generated-screenshots/pn/pn-clinical-skills-1200w.webp",
+        "public/marketing/generated-screenshots/pn/pn-clinical-skills-768w.webp",
+        "public/marketing/generated-screenshots/pn/pn-clinical-skills-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "clinical skills activity"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:08:24.099Z"
+    },
+    {
+      "key": "pn-pharmacology",
+      "tier": "pn",
+      "label": "RPN/PN Pharmacology",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/pharmacology",
+      "files": [
+        "public/marketing/generated-screenshots/pn/pn-pharmacology.webp",
+        "public/marketing/generated-screenshots/pn/pn-pharmacology-1200w.webp",
+        "public/marketing/generated-screenshots/pn/pn-pharmacology-768w.webp",
+        "public/marketing/generated-screenshots/pn/pn-pharmacology-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "pharmacology activity"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:08:34.340Z"
+    },
+    {
+      "key": "np-cnple",
+      "tier": "np",
+      "label": "NP CNPLE cases hub",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/cases/cnple",
+      "files": [
+        "public/marketing/generated-screenshots/np/np-cnple.webp",
+        "public/marketing/generated-screenshots/np/np-cnple-1200w.webp",
+        "public/marketing/generated-screenshots/np/np-cnple-768w.webp",
+        "public/marketing/generated-screenshots/np/np-cnple-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:15:31.820Z"
+    },
+    {
+      "key": "np-clinical-skills",
+      "tier": "np",
+      "label": "NP Clinical Skills",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/clinical-skills",
+      "files": [
+        "public/marketing/generated-screenshots/np/np-clinical-skills.webp",
+        "public/marketing/generated-screenshots/np/np-clinical-skills-1200w.webp",
+        "public/marketing/generated-screenshots/np/np-clinical-skills-768w.webp",
+        "public/marketing/generated-screenshots/np/np-clinical-skills-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "clinical skills activity"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:24:51.227Z"
+    },
+    {
+      "key": "np-pharmacology",
+      "tier": "np",
+      "label": "NP Advanced Pharmacology",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/pharmacology",
+      "files": [
+        "public/marketing/generated-screenshots/np/np-pharmacology.webp",
+        "public/marketing/generated-screenshots/np/np-pharmacology-1200w.webp",
+        "public/marketing/generated-screenshots/np/np-pharmacology-768w.webp",
+        "public/marketing/generated-screenshots/np/np-pharmacology-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "pharmacology activity"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:25:12.859Z"
+    },
+    {
+      "key": "allied-questions",
+      "tier": "allied",
+      "label": "Allied Health Questions",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/questions",
+      "files": [
+        "public/marketing/generated-screenshots/allied/allied-questions.webp",
+        "public/marketing/generated-screenshots/allied/allied-questions-1200w.webp",
+        "public/marketing/generated-screenshots/allied/allied-questions-768w.webp",
+        "public/marketing/generated-screenshots/allied/allied-questions-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "practice question stem",
+          "answer options"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:32:28.652Z"
+    },
+    {
+      "key": "allied-lessons",
+      "tier": "allied",
+      "label": "Allied Health Lessons",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/lessons",
+      "files": [
+        "public/marketing/generated-screenshots/allied/allied-lessons.webp",
+        "public/marketing/generated-screenshots/allied/allied-lessons-1200w.webp",
+        "public/marketing/generated-screenshots/allied/allied-lessons-768w.webp",
+        "public/marketing/generated-screenshots/allied/allied-lessons-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "lesson title",
+          "lesson content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:34:11.704Z"
+    },
+    {
+      "key": "allied-clinical-skills",
+      "tier": "allied",
+      "label": "Allied Health Clinical Skills",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/clinical-skills",
+      "files": [
+        "public/marketing/generated-screenshots/allied/allied-clinical-skills.webp",
+        "public/marketing/generated-screenshots/allied/allied-clinical-skills-1200w.webp",
+        "public/marketing/generated-screenshots/allied/allied-clinical-skills-768w.webp",
+        "public/marketing/generated-screenshots/allied/allied-clinical-skills-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "clinical skills activity"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:34:39.995Z"
+    },
+    {
+      "key": "newgrad-specialty-tracks",
+      "tier": "newgrad",
+      "label": "New Grad Specialty Tracks — guided",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/guided",
+      "files": [
+        "public/marketing/generated-screenshots/newgrad/newgrad-specialty-tracks.webp",
+        "public/marketing/generated-screenshots/newgrad/newgrad-specialty-tracks-1200w.webp",
+        "public/marketing/generated-screenshots/newgrad/newgrad-specialty-tracks-768w.webp",
+        "public/marketing/generated-screenshots/newgrad/newgrad-specialty-tracks-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:44:36.855Z"
+    },
+    {
+      "key": "newgrad-clinical-skills",
+      "tier": "newgrad",
+      "label": "New Grad Clinical Skills",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/clinical-skills",
+      "files": [
+        "public/marketing/generated-screenshots/newgrad/newgrad-clinical-skills.webp",
+        "public/marketing/generated-screenshots/newgrad/newgrad-clinical-skills-1200w.webp",
+        "public/marketing/generated-screenshots/newgrad/newgrad-clinical-skills-768w.webp",
+        "public/marketing/generated-screenshots/newgrad/newgrad-clinical-skills-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "clinical skills activity"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:45:04.799Z"
+    },
+    {
+      "key": "newgrad-pharmacology",
+      "tier": "newgrad",
+      "label": "New Grad Advanced Pharmacology",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/app/pharmacology",
+      "files": [
+        "public/marketing/generated-screenshots/newgrad/newgrad-pharmacology.webp",
+        "public/marketing/generated-screenshots/newgrad/newgrad-pharmacology-1200w.webp",
+        "public/marketing/generated-screenshots/newgrad/newgrad-pharmacology-768w.webp",
+        "public/marketing/generated-screenshots/newgrad/newgrad-pharmacology-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "pharmacology activity"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:45:18.668Z"
+    },
+    {
+      "key": "newgrad-ecg",
+      "tier": "newgrad",
+      "label": "New Grad ECG / Telemetry",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/modules/ecg",
+      "files": [
+        "public/marketing/generated-screenshots/newgrad/newgrad-ecg.webp",
+        "public/marketing/generated-screenshots/newgrad/newgrad-ecg-1200w.webp",
+        "public/marketing/generated-screenshots/newgrad/newgrad-ecg-768w.webp",
+        "public/marketing/generated-screenshots/newgrad/newgrad-ecg-480w.webp"
+      ],
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "ECG strip or module",
+          "ECG interpretation content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-30T07:45:29.540Z"
+    }
+  ],
+  "errors": [
+    {
+      "key": "flashcards",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], [data-nn-flashcard-layout-refinement], .nn-question-stem') to be visible\n"
+    },
+    {
+      "key": "rn-hub",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "rn-hub",
+      "theme": "ocean",
+      "viewport": "mobile",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "rn-hub",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "rn-hub",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "rn-flashcards",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], [data-nn-flashcard-layout-refinement], .nn-question-stem') to be visible\n"
+    },
+    {
+      "key": "rn-flashcards",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], [data-nn-flashcard-layout-refinement], .nn-question-stem') to be visible\n"
+    },
+    {
+      "key": "rn-flashcards",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], [data-nn-flashcard-layout-refinement], .nn-question-stem') to be visible\n"
+    },
+    {
+      "key": "rn-cat-exam",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "page.goto: Timeout 90000ms exceeded.\nCall log:\n  - navigating to \"https://nursenest.ca/app/practice-tests/cat-launch?pathwayId=ca-rn-nclex-rn\", waiting until \"networkidle\"\n"
+    },
+    {
+      "key": "rn-analytics",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('main h1, main h2, main section, main canvas, main svg, main table, main p') to be visible\n"
+    },
+    {
+      "key": "rn-readiness",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Loading; blocked selector: [role='status'] (1)"
+    },
+    {
+      "key": "rn-readiness",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Loading; blocked selector: [role='status'] (1)"
+    },
+    {
+      "key": "rn-readiness",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Loading; blocked selector: [role='status'] (1)"
+    },
+    {
+      "key": "pn-hub",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "pn-hub",
+      "theme": "ocean",
+      "viewport": "mobile",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "pn-hub",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "pn-hub",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "pn-flashcards",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], [data-nn-flashcard-layout-refinement], .nn-question-stem') to be visible\n"
+    },
+    {
+      "key": "pn-analytics",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('main h1, main h2, main section, main canvas, main svg, main table, main p') to be visible\n"
+    },
+    {
+      "key": "np-hub",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "np-hub",
+      "theme": "ocean",
+      "viewport": "mobile",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "np-hub",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "np-hub",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "np-loft-simulation",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Loading; blocked selector: [role='status'] (1)"
+    },
+    {
+      "key": "np-clinical-reasoning",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Loading; blocked selector: [role='status'] (1)"
+    },
+    {
+      "key": "np-lessons",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "page.goto: Timeout 90000ms exceeded.\nCall log:\n  - navigating to \"https://nursenest.ca/app/lessons\", waiting until \"networkidle\"\n"
+    },
+    {
+      "key": "np-flashcards",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], [data-nn-flashcard-layout-refinement], .nn-question-stem') to be visible\n"
+    },
+    {
+      "key": "np-advanced-analytics",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('main h1, main h2, main section, main canvas, main svg, main table, main p') to be visible\n"
+    },
+    {
+      "key": "np-advanced-analytics",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('main h1, main h2, main section, main canvas, main svg, main table, main p') to be visible\n"
+    },
+    {
+      "key": "np-advanced-analytics",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('main h1, main h2, main section, main canvas, main svg, main table, main p') to be visible\n"
+    },
+    {
+      "key": "allied-hub",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "allied-hub",
+      "theme": "ocean",
+      "viewport": "mobile",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "allied-hub",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "allied-hub",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "allied-flashcards",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], [data-nn-flashcard-layout-refinement], .nn-question-stem') to be visible\n"
+    },
+    {
+      "key": "allied-analytics",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('main h1, main h2, main section, main canvas, main svg, main table, main p') to be visible\n"
+    },
+    {
+      "key": "allied-readiness",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Loading; blocked selector: [role='status'] (1)"
+    },
+    {
+      "key": "newgrad-hub",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "newgrad-hub",
+      "theme": "ocean",
+      "viewport": "mobile",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "newgrad-hub",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "newgrad-hub",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "newgrad-simulations",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Loading; blocked selector: [role='status'] (1)"
+    },
+    {
+      "key": "newgrad-readiness",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Loading; blocked selector: [role='status'] (1)"
+    },
+    {
+      "key": "newgrad-readiness",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Loading; blocked selector: [role='status'] (1)"
+    },
+    {
+      "key": "newgrad-readiness",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Loading; blocked selector: [role='status'] (1)"
+    },
+    {
+      "key": "newgrad-analytics",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('main h1, main h2, main section, main canvas, main svg, main table, main p') to be visible\n"
+    }
+  ]
+}

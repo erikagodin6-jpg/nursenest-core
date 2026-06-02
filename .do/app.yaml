@@ -1,0 +1,27 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║            LEGACY FILE — DO NOT USE FOR PRODUCTION DEPLOYS                 ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+#
+# This file is a legacy artifact from an early version of the app (app name
+# "nursenest", before the current "nursenest-core-next"). It references instance
+# size "basic-xxs" and lacks all current Stripe, auth, and ECG env vars.
+#
+# DEPLOYING FROM THIS FILE WILL:
+#   • Rename the app and create deployment conflicts
+#   • Delete every env var not listed here (including all STRIPE_PRICE_*, AUTH_SECRET,
+#     DATABASE_URL, CRON_SECRET, SPACES_KEY, SPACES_SECRET, OPENAI_API_KEY, ...)
+#   • Revert instance size to basic-xxs (OOM-crash risk)
+#   • Break checkout, auth, database, AI, and ECG permanently
+#
+# THE CANONICAL DEPLOY SPEC IS:
+#   .do/app-nursenest-core-next.yaml   ← same directory, correct file
+#
+# SAFE DEPLOY COMMANDS (from repo root):
+#   npm run do:deploy:dry       # validate + diff, print command
+#   npm run do:deploy:execute   # validate + diff + deploy
+#
+# GUARD STATUS: do-spec-guard.mjs exits 1 on this file.
+#
+# SEE: docs/ops/digitalocean-deploy-governance.md
+# ─────────────────────────────────────────────────────────────────────────────
+# This file contains no deployable YAML spec — only documentation.

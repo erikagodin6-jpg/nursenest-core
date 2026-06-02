@@ -1,0 +1,140 @@
+/* Pastel multi-tone — does NOT replace production theme tokens; mockup gate only */
+
+/* Ocean — optimistic pastel clinical (lighter; no navy hero) */
+[data-theme-palette="ocean"] {
+  --bg: #f2f9fc;
+  --card: #ffffff;
+  --ink: #243848;
+  --heading: #1e3344;
+  --muted: #5a7080;
+  --brand: #1aaee0;
+  --brand-deep: #0d8eb8;
+  --brand-soft: #e3f6fc;
+  --border: #d2e8f0;
+  --success: #2a9d7a;
+  --tag-sky: #3b9cc4;
+  --shadow: 0 12px 40px -18px rgba(30, 80, 110, 0.12);
+  --hero-wash: linear-gradient(180deg, #eef9ff 0%, #f2f9fc 42%, #f8fcfe 100%);
+  --eyebrow: #2a9d9a;
+  --mini-1: #eef9ff;
+  --mini-2: #e8f7f2;
+  --mini-3: #f3f0ff;
+  --feat-1: linear-gradient(165deg, #ffffff, #eef9ff);
+  --feat-2: linear-gradient(165deg, #ffffff, #e9faf5);
+  --feat-3: linear-gradient(165deg, #ffffff, #f2efff);
+  --cat-band-bg: linear-gradient(135deg, #e8f7fc, #f0faf8 55%, #f5f8ff);
+  --quote-1: #f5fbff;
+  --quote-2: #f2faf7;
+  --quote-3: #faf6ff;
+  --cta-bg: linear-gradient(165deg, #e0f4fc, #f5fbff 60%, #fff);
+  --accent-teal: #2a9d9a;
+  --leaf-tint: #1aaee0;
+  --leaf-op-1: 0.07;
+  --leaf-op-2: 0.04;
+}
+
+/* Blossom — warm pastel orchestration */
+[data-theme-palette="blossom"] {
+  --bg: #fdf9fb;
+  --card: #ffffff;
+  --ink: #3a2e42;
+  --heading: #322838;
+  --muted: #6f6278;
+  --brand: #d96ba8;
+  --brand-deep: #c45a96;
+  --brand-soft: #fdeef5;
+  --border: #edd9e8;
+  --success: #3db89e;
+  --tag-sky: #6a9fd4;
+  --shadow: 0 12px 40px -18px rgba(120, 60, 100, 0.1);
+  --hero-wash: linear-gradient(180deg, #fff5f9 0%, #fdf9fb 45%, #faf8ff 100%);
+  --eyebrow: #3db89e;
+  --mini-1: #fdeef5;
+  --mini-2: #e9faf4;
+  --mini-3: #f5f0ff;
+  --feat-1: linear-gradient(165deg, #fff, #fdeef5);
+  --feat-2: linear-gradient(165deg, #fff, #e8faf4);
+  --feat-3: linear-gradient(165deg, #fff, #f3ecff);
+  --cat-band-bg: linear-gradient(135deg, #fdeef5, #f5faf0 50%, #f3f0ff);
+  --quote-1: #fff7fa;
+  --quote-2: #f6fcf9;
+  --quote-3: #faf7ff;
+  --cta-bg: linear-gradient(165deg, #fdeef5, #fff9f5 55%, #fff);
+  --accent-teal: #3db89e;
+  --leaf-tint: #d96ba8;
+  --leaf-op-1: 0.08;
+  --leaf-op-2: 0.05;
+}
+
+/* Aurora — dawn pastels: peach · mint · sky · butter · lilac */
+[data-theme-palette="aurora"] {
+  --bg: #faf9f6;
+  --card: #ffffff;
+  --ink: #2e3540;
+  --heading: #283038;
+  --muted: #646e7a;
+  --brand: #6bc4b8;
+  --brand-deep: #4aada0;
+  --brand-soft: #e8f7f4;
+  --border: #e4e8ef;
+  --success: #4aab8a;
+  --tag-sky: #7eb0d8;
+  --shadow: 0 12px 40px -18px rgba(80, 100, 120, 0.1);
+  --hero-wash: linear-gradient(180deg, #fff8f2 0%, #f5fbf9 40%, #f3f6ff 100%);
+  --eyebrow: #c49a6a;
+  --mini-1: #fff4e8;
+  --mini-2: #e9f8f3;
+  --mini-3: #eef4ff;
+  --feat-1: linear-gradient(165deg, #fff, #fff6ec);
+  --feat-2: linear-gradient(165deg, #fff, #eaf9f4);
+  --feat-3: linear-gradient(165deg, #fff, #eef3ff);
+  --cat-band-bg: linear-gradient(135deg, #fff6ec, #eaf9f4 50%, #f0f2ff);
+  --quote-1: #fffaf4;
+  --quote-2: #f4fcf9;
+  --quote-3: #f6f8ff;
+  --cta-bg: linear-gradient(165deg, #eaf9f4, #fff9f4 50%, #fff);
+  --accent-teal: #6bc4b8;
+  --leaf-tint: #8fd4c4;
+  --leaf-op-1: 0.07;
+  --leaf-op-2: 0.04;
+}
+
+/* Depth (NEW optional theme) — darker marketing accent; existing themes unchanged */
+[data-theme-palette="depth"] {
+  --bg: #e8eef3;
+  --card: #ffffff;
+  --ink: #152433;
+  --heading: #ffffff;
+  --muted: #c5d4de;
+  --brand: #1aaee0;
+  --brand-deep: #0e6e94;
+  --brand-soft: #1a3d52;
+  --border: #c5d4de;
+  --success: #5fd4a8;
+  --tag-sky: #8ed4f0;
+  --shadow: 0 16px 48px -20px rgba(10, 30, 50, 0.35);
+  --hero-wash: linear-gradient(135deg, #152433 0%, #1a4a5c 50%, #1aaee0 100%);
+  --eyebrow: #8ed4f0;
+  --mini-1: #eef9ff;
+  --mini-2: #e8f7f2;
+  --mini-3: #f3f0ff;
+  --feat-1: #ffffff;
+  --feat-2: #ffffff;
+  --feat-3: #ffffff;
+  --cat-band-bg: linear-gradient(135deg, #dceef7, #ffffff);
+  --quote-1: #f5fbff;
+  --quote-2: #f2faf7;
+  --quote-3: #faf6ff;
+  --cta-bg: linear-gradient(135deg, #152433, #1a5a6e);
+  --section-white: #ffffff;
+  --heading-section: #152433;
+}
+[data-theme-palette="depth"] .hero h1,
+[data-theme-palette="depth"] .hero .lead,
+[data-theme-palette="depth"] .hero .trust-line { color: #fff; }
+[data-theme-palette="depth"] .hero .lead { color: #c5dce8; }
+[data-theme-palette="depth"] section.white h2,
+[data-theme-palette="depth"] section h2 { color: var(--heading-section, var(--ink)); }
+[data-theme-palette="depth"] .cta-final h2,
+[data-theme-palette="depth"] .cta-final p { color: #fff; }
+[data-theme-palette="depth"] .cta-final p { color: #c5dce8; }

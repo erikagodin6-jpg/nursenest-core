@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+<head>
+  <meta charset="utf-8" />
+  <title>Homepage Midnight Desktop</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --brand:#5ec8ef; --ink:#eef4f8; --muted:#8fa3b0; --bg:#0c1016; --card:#141a22; --border:#24303c; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink)}
+    .wrap{max-width:72rem;margin:0 auto;padding:0 1.5rem}
+    nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid var(--border)}
+    .logo{font-weight:800;color:var(--brand)}
+    .hero{padding:4.5rem 0;display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center}
+    h1{font-size:2.75rem;font-weight:800;line-height:1.1;letter-spacing:-.03em}
+    p{color:var(--muted);margin:1rem 0 1.5rem;max-width:40ch}
+    .btn{display:inline-block;padding:.75rem 1.25rem;background:var(--brand);color:#0c1016;font-weight:700;border-radius:999px;text-decoration:none}
+    .panel{background:var(--card);border:1px solid var(--border);border-radius:1.15rem;padding:1.35rem;box-shadow:0 20px 50px -30px #000}
+    .score{font-size:3rem;font-weight:800;color:var(--brand)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav><div class="logo">NurseNest</div><a class="btn" href="#">Start free</a></nav>
+    <header class="hero">
+      <div>
+        <p style="font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);margin-bottom:.75rem">Midnight theme</p>
+        <h1>Calm, intelligent NCLEX readiness — day or night</h1>
+        <p>Same Ocean structure with token-only accents. Charts and coaching panels stay readable in dark mode.</p>
+        <a class="btn" href="#">Start free</a>
+      </div>
+      <div class="panel"><p style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Readiness</p><p class="score">78%</p></div>
+    </header>
+  </div>
+</body>
+</html>

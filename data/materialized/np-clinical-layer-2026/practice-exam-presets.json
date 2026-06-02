@@ -1,0 +1,10 @@
+[
+  {
+    "id": "preset_np_clinical_2026",
+    "examId": "exam_np_clinical_practice_2026",
+    "tag": "exam-preset-np-clinical-2026",
+    "title": "NP clinical practice (25)",
+    "questionCount": 25,
+    "tierFilter": "np"
+  }
+]

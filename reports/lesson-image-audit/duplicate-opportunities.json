@@ -1,0 +1,855 @@
+{
+  "generatedAt": "2026-06-01T22:19:17.843Z",
+  "count": 25,
+  "items": [
+    {
+      "duplicateGroupId": "dup-0012",
+      "sharedVisualSystemId": "ecg_rhythm_family",
+      "matchedObjectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+      "recommendedFilename": "ecg-interpretation.webp",
+      "lessonCount": 47,
+      "lessonSlugs": [
+        "ecg-systematic-interpretation-nclex-rn",
+        "us-rn-pulmonary-embolism",
+        "hemodynamics-by-shock-type-nclex",
+        "atrial-fibrillation-nclex-rn",
+        "cardiogenic-shock-assessment-interventions",
+        "shock-stages-progression-nclex-rn",
+        "us-rn-myocardial-infarction",
+        "ventricular-dysrhythmias-vt-vf-torsades",
+        "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+        "heart-blocks-degrees-mobitz-nclex-rn",
+        "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+        "aortic-stenosis-vs-aortic-regurgitation",
+        "arterial-ulcers-vs-venous-ulcers",
+        "mitral-stenosis-vs-mitral-regurgitation",
+        "pericarditis-vs-tamponade-prioritization",
+        "antiarrhythmics-nursing-simplified",
+        "anticoagulants-antiplatelets-nursing-nclex",
+        "acute-coronary-syndrome-nclex-rn",
+        "acute-rheumatic-fever-nclex-rn",
+        "antihypertensives-ace-arb-beta-ccb-nclex",
+        "aortic-dissection-priorities-nclex-rn",
+        "arterial-line-blood-pressure-monitoring",
+        "cardiovascular-risk-reduction-nursing",
+        "carotid-endarterectomy-nclex-rn",
+        "chest-pain-first-nursing-action-nclex",
+        "chronic-venous-insufficiency-nursing",
+        "digoxin-toxicity-nursing-safety",
+        "hyperlipidemia-atherosclerosis-nursing",
+        "hypertensive-encephalopathy-nclex-rn",
+        "infective-endocarditis-nclex-rn",
+        "mixed-venous-oxygen-saturation-svo2",
+        "murmur-recognition-nurses-nclex",
+        "pacemakers-icds-nursing-care",
+        "peripheral-artery-disease-nclex-rn",
+        "post-cardiac-surgery-priorities-nclex",
+        "post-pci-complications-who-first-nclex",
+        "raynaud-phenomenon-nursing-care",
+        "statins-teaching-lab-safety",
+        "temporary-pacemaker-bedside-nursing",
+        "tetralogy-of-fallot-nclex-rn",
+        "unstable-cardiac-patient-recognition-ngn",
+        "us-rn-preeclampsia-eclampsia",
+        "valve-replacement-postop-nursing-care",
+        "varicose-veins-nursing-teaching",
+        "cardiac-catheterization-pre-post-care-nclex",
+        "carotid-endarterectomy-exam-notes-b4-nclex-rn",
+        "pci-stents-complications-nursing-priorities"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "ECG Interpretation",
+        "Pulmonary Embolism: Acute Care",
+        "Hemodynamic Changes in Shock Types",
+        "Atrial Fibrillation",
+        "Cardiogenic Shock",
+        "Stages of Shock",
+        "Myocardial Infarction: Recognition",
+        "Ventricular Dysrhythmias",
+        "DVT: Prevention & Management",
+        "Heart Blocks",
+        "Cardioversion vs Defibrillation",
+        "Aortic Stenosis vs Aortic Regurgitation",
+        "Arterial vs Venous Ulcers",
+        "Mitral Stenosis vs Mitral Regurgitation",
+        "Pericarditis vs Cardiac Tamponade",
+        "Antiarrhythmics",
+        "Anticoagulants and Antiplatelets",
+        "Acute Coronary Syndrome",
+        "Acute Rheumatic Fever",
+        "Antihypertensives",
+        "Aortic Dissection",
+        "Arterial Lines and Blood Pressure Monitoring",
+        "Cardiovascular Risk Reduction",
+        "Carotid Endarterectomy – Perioperative Nursing",
+        "Chest Pain",
+        "Chronic Venous Insufficiency",
+        "Digoxin Toxicity and Nursing Safety",
+        "Hyperlipidemia and Atherosclerosis",
+        "Hypertensive Encephalopathy",
+        "Infective Endocarditis",
+        "Mixed Venous Oxygen Saturation",
+        "Murmur Recognition",
+        "Pacemakers and ICDs",
+        "Peripheral Artery Disease",
+        "Post Cardiac Surgery",
+        "Post-PCI Complications",
+        "Raynaud’s Phenomenon",
+        "Statins",
+        "Temporary Pacemakers",
+        "Tetralogy of Fallot",
+        "Unstable Cardiac Patient",
+        "Preeclampsia & Eclampsia – RN Recognition",
+        "Valve Replacement",
+        "Varicose Veins",
+        "Cardiac Catheterization",
+        "Carotid Endarterectomy – Perioperative Nursing (Exam",
+        "PCI and Stents"
+      ],
+      "recommendation": "Reuse or modularize existing asset /clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg across 47 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0017",
+      "sharedVisualSystemId": "integumentary_clinical",
+      "matchedObjectKey": null,
+      "recommendedFilename": "burn-degrees.webp",
+      "lessonCount": 45,
+      "lessonSlugs": [
+        "burn-depth-classification-nclex",
+        "burn-airway-smoke-inhalation-nclex",
+        "burn-depth-fluid-resuscitation-basics",
+        "burn-fluid-resuscitation-parkland-nclex",
+        "burn-pain-management-nursing-nclex",
+        "burn-priority-first-actions-nclex",
+        "burn-wound-care-infection-prevention-nclex",
+        "electrical-chemical-burns-nclex",
+        "wound-sepsis-red-flags-nclex",
+        "acute-vs-chronic-wounds-nclex",
+        "proc-skill-basic-wound-care-rn",
+        "arterial-ulcers-nursing-nclex",
+        "cellulitis-nursing-care-nclex",
+        "diabetic-foot-ulcers-nursing",
+        "herpes-zoster-nursing-care-nclex",
+        "integumentary-priority-first-actions-nclex",
+        "melanoma-skin-cancer-warning-signs-nclex",
+        "moisture-associated-skin-damage-masd",
+        "mrsa-skin-infection-precautions-nclex",
+        "negative-pressure-wound-therapy-npwt",
+        "nutrition-wound-healing-nclex",
+        "pressure-injury-prevention-nclex-rn",
+        "pressure-injury-staging",
+        "psoriasis-eczema-nursing-care-nclex",
+        "skin-assessment-for-nurses-nclex",
+        "skin-grafts-donor-site-care-nclex",
+        "surgical-drain-care-jp-hemovac-penrose",
+        "surgical-wound-care-nclex",
+        "sutures-staples-steri-strips-care",
+        "tinea-corporis-nursing-nclex-rn",
+        "us-rn-wound-care",
+        "venous-stasis-ulcers-nursing",
+        "which-wound-care-patient-unstable-nclex",
+        "wound-dehiscence-evisceration-nclex",
+        "wound-healing-phases-nursing",
+        "contact-dermatitis-allergic-skin-reactions-nclex",
+        "dressing-types-gauze-foam-hydrocolloid-alginate-film",
+        "incontinence-associated-dermatitis-iad-nclex",
+        "pressure-injury-treatment-dressing-selection",
+        "proc-skill-positioning-pressure-injury-prevention-rn",
+        "tinea-corporis-nursing-exam-notes-b4-nclex-rn",
+        "wound-assessment-size-depth-drainage-odour-tissue",
+        "wound-infection-colonization-dehiscence-nclex-rn",
+        "gerd-pud-bleeding-clues",
+        "ostomy-skin-protection"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Burn Degrees",
+        "Burn Airway Injury & Smoke Inhalation",
+        "Burns",
+        "Burn Fluid Resuscitation & Parkland",
+        "Burn Pain Management",
+        "Burn Priority",
+        "Burn Wound Care & Infection Prevention",
+        "Electrical & Chemical Burns",
+        "Wound Infection & Sepsis Red Flags",
+        "Acute vs Chronic Wounds",
+        "Basic Wound Care",
+        "Arterial Ulcers",
+        "Cellulitis Nursing Care",
+        "Diabetic Foot Ulcers",
+        "Herpes Zoster Nursing Care",
+        "Integumentary Priority",
+        "Melanoma & Skin Cancer Warning Signs",
+        "Moisture-Associated Skin Damage",
+        "MRSA Skin Infection Precautions",
+        "Negative Pressure Wound Therapy",
+        "Nutrition for Wound Healing",
+        "Pressure Injury Prevention",
+        "Pressure Injuries",
+        "Psoriasis & Eczema Nursing Care",
+        "Skin Assessment",
+        "Skin Grafts & Donor Site Care",
+        "Drain Care",
+        "Surgical Wound Care",
+        "Sutures, Staples & Steri-Strips",
+        "Tinea Corporis (Ringworm)",
+        "Wound Care",
+        "Venous Stasis Ulcers",
+        "Which Wound Care Patient Is Unstable?",
+        "Wound Dehiscence & Evisceration",
+        "Wound Healing Phases",
+        "Contact Dermatitis & Allergic Skin Reactions",
+        "Wound Dressing Types",
+        "Incontinence-Associated Dermatitis",
+        "Pressure Injury Treatment & Dressings",
+        "Positioning and Pressure Injury Prevention",
+        "Tinea Corporis (Ringworm) (Exam notes batch",
+        "Wound Assessment",
+        "Wound Infection, Colonization, and Dehiscence",
+        "GERD & Peptic Ulcer Disease",
+        "Ostomy Care"
+      ],
+      "recommendation": "Build one modular integumentary_clinical illustration system for 45 related lessons."
+    },
+    {
+      "duplicateGroupId": "dup-0018",
+      "sharedVisualSystemId": "comparison_matrix",
+      "matchedObjectKey": null,
+      "recommendedFilename": "dehydration-vs-hypovolemia.webp",
+      "lessonCount": 32,
+      "lessonSlugs": [
+        "dehydration-vs-hypovolemia-nclex",
+        "us-rn-fluid-balance",
+        "dka-vs-hhs-priorities-hy",
+        "migraine-versus-stroke-red-flags-nclex",
+        "stroke-ischemic-vs-hemorrhagic-nclex",
+        "proc-skill-sterile-vs-clean-technique-rn",
+        "acute-vs-chronic-bronchitis-nclex",
+        "hypoxia-vs-hypoxemia-nclex",
+        "airborne-droplet-contact-respiratory-precautions-nclex",
+        "early-late-respiratory-distress-signs-nclex",
+        "respiratory-acidosis-alkalosis-clinical-nclex",
+        "aki-prerenal-vs-intrarenal",
+        "assignment-vs-delegation",
+        "bowel-obstruction-vs-paralytic-ileus",
+        "crohns-vs-ulcerative-colitis-nclex",
+        "cushing-syndrome-vs-disease-nclex",
+        "delirium-vs-dementia-vs-depression-nclex",
+        "diabetes-type-1-vs-type-2-nclex",
+        "exam-strat-acute-vs-chronic-rn",
+        "exam-strat-expected-vs-unexpected-rn",
+        "exam-strat-first-action-vs-best-action-rn",
+        "exam-strat-stable-vs-unstable-rn",
+        "incident-reporting-vs-charting-nclex-rn",
+        "increased-icp-early-vs-late-signs-nclex",
+        "melena-hematochezia-hematemesis-nclex",
+        "migraine-vs-red-flag-headache",
+        "preeclampsia-vs-eclampsia",
+        "prioritization-vs-delegation-nclex-rn",
+        "siadh-vs-di-basics",
+        "stable-unstable-delegation-nclex-rn",
+        "uti-vs-pyelonephritis",
+        "hyperglycemia-vs-hypoglycemia-recognition-nclex"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Dehydration vs Hypovolemia",
+        "Fluid Deficit vs Overload",
+        "DKA vs HHS",
+        "Migraine vs Stroke Red Flags",
+        "Stroke",
+        "Sterile Technique vs Clean Technique",
+        "Acute Bronchitis vs Chronic Bronchitis",
+        "Hypoxia vs Hypoxemia",
+        "Airborne vs Droplet vs Contact Precautions",
+        "Early vs Late Signs of Respiratory",
+        "Respiratory Acidosis vs Alkalosis",
+        "Acute Kidney Injury",
+        "Assignment vs Delegation",
+        "Bowel Obstruction vs Ileus",
+        "Crohn's Disease vs Ulcerative Colitis",
+        "Cushing Syndrome vs Cushing Disease",
+        "Delirium vs Dementia vs Depression",
+        "Diabetes Mellitus Type 1 vs Type",
+        "Acute vs Chronic Prioritization",
+        "Expected vs Unexpected Findings",
+        "First Action vs Best Action",
+        "Stable vs Unstable",
+        "Incident Reporting vs Charting",
+        "Increased ICP",
+        "Melena vs Hematochezia vs Hematemesis",
+        "Headache Red Flags",
+        "Preeclampsia vs Eclampsia",
+        "Prioritization vs Delegation",
+        "SIADH vs DI",
+        "Stable vs Unstable Patients in Delegation",
+        "UTI vs Pyelonephritis",
+        "Hyperglycemia vs Hypoglycemia Recognition"
+      ],
+      "recommendation": "Build one modular comparison_matrix illustration system for 32 related lessons."
+    },
+    {
+      "duplicateGroupId": "dup-0002",
+      "sharedVisualSystemId": "lab_interpretation_panel",
+      "matchedObjectKey": null,
+      "recommendedFilename": "potassium-emergencies-hypo-vs-hyperkalemia.webp",
+      "lessonCount": 18,
+      "lessonSlugs": [
+        "hypo-vs-hyperkalemia-hy",
+        "hyponatremia-vs-hypernatremia-hy",
+        "potassium-iv-administration-safety-nclex",
+        "us-rn-potassium-imbalance",
+        "electrolytes-nutrition-sodium-potassium-nclex",
+        "diuretics-electrolyte-shifts",
+        "clinical-casebook-electrolyte-crisis-gold",
+        "electrolyte-replacement-safety-nclex",
+        "fluids-electrolytes-emergencies-gold",
+        "sodium-correction-safety-nclex",
+        "us-rn-sodium-imbalance",
+        "which-electrolyte-patient-unstable-nclex",
+        "electrolyte-imbalances-endocrine-nclex",
+        "electrolyte-imbalances-kidney-disease-nclex",
+        "cbc-interpretation-nurses",
+        "renal-diet-potassium-phosphorus-protein-nclex",
+        "cardiac-diet-low-sodium-low-fat-nclex",
+        "cbc-hgb-hct-platelets-wbc-priorities"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Potassium Emergencies: Hypo- vs Hyperkalemia",
+        "Sodium Disorders: Hyponatremia vs Hypernatremia",
+        "Potassium IV Administration Safety",
+        "Potassium Imbalances",
+        "Electrolytes and Nutrition",
+        "Diuretics",
+        "Electrolyte crisis case study",
+        "Electrolyte Replacement Safety",
+        "Electrolyte & fluid crises: RN judgment",
+        "Sodium Correction Safety",
+        "Sodium Imbalances",
+        "Which Electrolyte Patient Is Unstable?",
+        "Electrolyte Imbalances in Endocrine Disorders",
+        "Electrolyte Imbalances in Kidney Disease",
+        "CBC Interpretation",
+        "Renal Diet",
+        "Cardiac Diet",
+        "Hgb, Hct, Platelets & WBC Priorities"
+      ],
+      "recommendation": "Build one modular lab_interpretation_panel illustration system for 18 related lessons."
+    },
+    {
+      "duplicateGroupId": "dup-0004",
+      "sharedVisualSystemId": "medication_safety_chart",
+      "matchedObjectKey": null,
+      "recommendedFilename": "anticoagulant-safety.webp",
+      "lessonCount": 14,
+      "lessonSlugs": [
+        "anticoagulant-safety-heparin-warfarin-doacs",
+        "heparin-induced-thrombocytopenia-hit",
+        "proc-skill-high-alert-medications-rn",
+        "proc-skill-iv-medication-administration-rn",
+        "proc-skill-medication-safety-checks-rn",
+        "high-alert-medications-safety-gold",
+        "medication-error-disclosure",
+        "proc-skill-oral-medication-administration-rn",
+        "grapefruit-juice-drug-interactions-nclex-rn",
+        "parkinson-disease-med-timing",
+        "renal-medication-safety-nclex",
+        "safety-family-medication-administration-gold",
+        "administering-medication-to-infants-exam-notes-b4-nclex-rn",
+        "administering-medication-to-infants-nclex-rn"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Anticoagulant Safety",
+        "Heparin-Induced Thrombocytopenia",
+        "High-Alert Medication Handling",
+        "IV Medication Administration",
+        "Medication Safety Checks",
+        "High-alert meds: nursing management",
+        "Medication Error Disclosure",
+        "Oral Medication Administration",
+        "Grapefruit – Drug Interactions",
+        "Parkinson Disease: Medication Timing",
+        "Renal Medication Safety",
+        "Medication administration & error prevention",
+        "Administering Medication to Infants (Exam notes",
+        "Administering Medication to Infants"
+      ],
+      "recommendation": "Build one modular medication_safety_chart illustration system for 14 related lessons."
+    },
+    {
+      "duplicateGroupId": "dup-0001",
+      "sharedVisualSystemId": "emergency_algorithm",
+      "matchedObjectKey": null,
+      "recommendedFilename": "calcium-gluconate-and-emergency-use.webp",
+      "lessonCount": 13,
+      "lessonSlugs": [
+        "calcium-gluconate-emergency-use-nclex",
+        "hyperkalemia-emergency-management-nclex",
+        "hyponatremia-emergency-recognition-nclex",
+        "neurogenic-shock-nclex-rn",
+        "sepsis-early-recognition-gold",
+        "sepsis-early-recognition-hy",
+        "sepsis-screening-escalation-nclex-rn",
+        "septic-shock-nursing-priorities-nclex-rn",
+        "us-rn-sepsis",
+        "clinical-casebook-glucose-dka-hypoglycemia-gold",
+        "delegation-emergency-situations-nclex-rn",
+        "meningitis-emergency-recognition-gold",
+        "thyroid-storm-emergency-gold"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Calcium Gluconate and Emergency Use",
+        "Hyperkalemia Emergency Management",
+        "Hyponatremia Emergency Recognition",
+        "Neurogenic Shock",
+        "Sepsis: recognition & first-line nursing response",
+        "Sepsis: Early Recognition",
+        "Sepsis Screening and Escalation",
+        "Septic Shock Nursing Priorities",
+        "Sepsis",
+        "Glucose emergency case study",
+        "Delegation in Emergency Situations",
+        "Meningitis: emergency recognition",
+        "Thyroid storm: emergency recognition"
+      ],
+      "recommendation": "Build one modular emergency_algorithm illustration system for 13 related lessons."
+    },
+    {
+      "duplicateGroupId": "dup-0006",
+      "sharedVisualSystemId": "cardiopulmonary_infographic",
+      "matchedObjectKey": null,
+      "recommendedFilename": "acid-base-imbalances-in-copd-and-respiratory.webp",
+      "lessonCount": 9,
+      "lessonSlugs": [
+        "acid-base-copd-respiratory-failure-nclex",
+        "copd-clinical-judgment-gold",
+        "copd-exacerbation-oxygen",
+        "us-rn-copd-respiratory",
+        "immobility-dvt-prophylaxis",
+        "covid19-viral-pneumonia-nursing-nclex",
+        "pneumonia-cap-nursing-gold",
+        "pneumonia-oxygenation",
+        "us-rn-pneumonia"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Acid-Base Imbalances in COPD and Respiratory",
+        "COPD: clinical judgment",
+        "COPD: Exacerbation & Oxygen",
+        "COPD",
+        "Immobility & DVT Prevention",
+        "COVID-19 and Viral Pneumonia Care",
+        "Pneumonia (CAP): nursing priorities",
+        "Pneumonia: Oxygenation & Monitoring",
+        "Pneumonia: Recognition & Care"
+      ],
+      "recommendation": "Build one modular cardiopulmonary_infographic illustration system for 9 related lessons."
+    },
+    {
+      "duplicateGroupId": "dup-0024",
+      "sharedVisualSystemId": "procedure_workflow",
+      "matchedObjectKey": null,
+      "recommendedFilename": "chest-tube-troubleshooting.webp",
+      "lessonCount": 9,
+      "lessonSlugs": [
+        "chest-tube-troubleshooting-nclex",
+        "proc-skill-iv-insertion-and-care-rn",
+        "proc-skill-tracheostomy-care-rn",
+        "proc-skill-urinary-catheter-insertion-rn",
+        "thoracentesis-nursing-care-nclex",
+        "tracheostomy-care-emergency-nclex",
+        "proc-skill-ng-tube-insertion-verification-rn",
+        "proc-skill-unsafe-procedure-clinical-judgment-rn",
+        "urinary-catheter-insertion-sterile-nclex"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Chest Tube Troubleshooting",
+        "IV Insertion and Care",
+        "Tracheostomy Care",
+        "Urinary Catheter Insertion",
+        "Thoracentesis Nursing Care",
+        "Tracheostomy Care and Emergency Management",
+        "NG Tube Insertion and Verification",
+        "Which Procedure Is Unsafe?",
+        "Catheter Insertion and Sterile Technique"
+      ],
+      "recommendation": "Build one modular procedure_workflow illustration system for 9 related lessons."
+    },
+    {
+      "duplicateGroupId": "dup-0005",
+      "sharedVisualSystemId": "emergency_algorithm",
+      "matchedObjectKey": "/clinical-illustrations/cardiovascular/shock-states.svg",
+      "recommendedFilename": "sepsis-case-study-rapid-response.webp",
+      "lessonCount": 4,
+      "lessonSlugs": [
+        "clinical-casebook-sepsis-rapid-response-gold",
+        "shock-emergencies-gold",
+        "us-rn-shock",
+        "med-family-emergency-response-gold"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Sepsis case study: rapid response",
+        "Shock resuscitation: RN acute management",
+        "Shock",
+        "Emergency response medications"
+      ],
+      "recommendation": "Reuse or modularize existing asset /clinical-illustrations/cardiovascular/shock-states.svg across 4 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0009",
+      "sharedVisualSystemId": "insulin_onset_peak_chart",
+      "matchedObjectKey": null,
+      "recommendedFilename": "insulin-diabetes-medications.webp",
+      "lessonCount": 4,
+      "lessonSlugs": [
+        "med-family-insulin-diabetes-gold",
+        "cgm-insulin-pump-nursing-nclex",
+        "insulin-administration-timing-nclex",
+        "us-rn-insulin-hypoglycemia"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Insulin & diabetes medications",
+        "Continuous Glucose Monitoring and Insulin Pumps",
+        "Insulin Administration and Timing",
+        "Insulin & Hypoglycemia"
+      ],
+      "recommendation": "Build one modular insulin_onset_peak_chart illustration system for 4 related lessons."
+    },
+    {
+      "duplicateGroupId": "dup-0015",
+      "sharedVisualSystemId": "abg_interpretation",
+      "matchedObjectKey": null,
+      "recommendedFilename": "abg-compensation-step-by-step.webp",
+      "lessonCount": 4,
+      "lessonSlugs": [
+        "abg-compensation-step-by-step-nclex",
+        "us-rn-abg-interpretation",
+        "abg-compensation-patterns-advanced-nclex",
+        "abg-interpretation-basics-hy"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "ABG Compensation Step-by-Step",
+        "ABG Interpretation",
+        "Advanced ABG Interpretation",
+        "ABG Interpretation: Clinical Integration"
+      ],
+      "recommendation": "Build one modular abg_interpretation illustration system for 4 related lessons."
+    },
+    {
+      "duplicateGroupId": "dup-0019",
+      "sharedVisualSystemId": "shared_asset",
+      "matchedObjectKey": "/clinical-illustrations/cardiovascular/cardiac-output-hemodynamics.svg",
+      "recommendedFilename": "cardiac-output-and-stroke-volume.webp",
+      "lessonCount": 4,
+      "lessonSlugs": [
+        "cardiac-output-stroke-volume-nclex-rn",
+        "shock-recognition-fluids",
+        "hemodynamic-monitoring-cvp-map-pawp",
+        "phlebostatic-axis-nclex-rn"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Cardiac Output and Stroke Volume",
+        "Shock: Recognition & Fluids",
+        "Hemodynamic Monitoring",
+        "Hemodynamic Monitoring: Phlebostatic Axis"
+      ],
+      "recommendation": "Reuse or modularize existing asset /clinical-illustrations/cardiovascular/cardiac-output-hemodynamics.svg across 4 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0020",
+      "sharedVisualSystemId": "ecg_rhythm_family",
+      "matchedObjectKey": "/clinical-illustrations/cardiovascular/valve-disorders.svg",
+      "recommendedFilename": "pericarditis-ecg-clues.webp",
+      "lessonCount": 4,
+      "lessonSlugs": [
+        "pericarditis-ecg-clues",
+        "cabg-and-postoperative-cabg-complications-nclex-rn",
+        "cardiac-tamponade-nclex-rn",
+        "endocarditis-blood-cultures"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Pericarditis: ECG Clues",
+        "CABG",
+        "Cardiac Tamponade",
+        "Endocarditis"
+      ],
+      "recommendation": "Reuse or modularize existing asset /clinical-illustrations/cardiovascular/valve-disorders.svg across 4 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0022",
+      "sharedVisualSystemId": "ventilation_workflow",
+      "matchedObjectKey": null,
+      "recommendedFilename": "ards-mechanical-ventilation.webp",
+      "lessonCount": 4,
+      "lessonSlugs": [
+        "ards-ventilation-basics",
+        "ventilator-alarms-troubleshooting-nclex",
+        "mechanical-ventilation-basics-nclex",
+        "weaning-mechanical-ventilation-nclex"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "ARDS: Mechanical Ventilation",
+        "Ventilator Alarms and Troubleshooting",
+        "Mechanical Ventilation Basics",
+        "Weaning from Mechanical Ventilation"
+      ],
+      "recommendation": "Build one modular ventilation_workflow illustration system for 4 related lessons."
+    },
+    {
+      "duplicateGroupId": "dup-0008",
+      "sharedVisualSystemId": "ecg_rhythm_family",
+      "matchedObjectKey": "/clinical-illustrations/cardiovascular/atrial-fibrillation.svg",
+      "recommendedFilename": "atrial-fibrillation-stroke-prevention.webp",
+      "lessonCount": 3,
+      "lessonSlugs": [
+        "atrial-fibrillation-stroke-prevention-gold",
+        "atrial-fibrillation-rate-control",
+        "med-family-anticoagulants-gold"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Atrial fibrillation: stroke prevention",
+        "Atrial Fibrillation: Rate Control",
+        "Anticoagulants – monitoring & safety"
+      ],
+      "recommendation": "Reuse or modularize existing asset /clinical-illustrations/cardiovascular/atrial-fibrillation.svg across 3 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0011",
+      "sharedVisualSystemId": "comparison_matrix",
+      "matchedObjectKey": "/clinical-illustrations/cardiovascular/hypertension.svg",
+      "recommendedFilename": "hypertensive-crisis-vs-urgency.webp",
+      "lessonCount": 3,
+      "lessonSlugs": [
+        "hypertensive-crisis-vs-urgency",
+        "med-family-antihypertensives-gold",
+        "us-rn-hypertension"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Hypertensive Crisis vs Urgency",
+        "Antihypertensives",
+        "Hypertension"
+      ],
+      "recommendation": "Reuse or modularize existing asset /clinical-illustrations/cardiovascular/hypertension.svg across 3 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0016",
+      "sharedVisualSystemId": "shared_asset",
+      "matchedObjectKey": "uploads/images/inflammatory-response.webp",
+      "recommendedFilename": "isolation-precautions-standards-transmission.webp",
+      "lessonCount": 3,
+      "lessonSlugs": [
+        "us-rn-infection-control",
+        "wound-infection-vs-colonization",
+        "c-diff-infection-control"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Isolation Precautions: Standards & Transmission",
+        "Wound Infection",
+        "C. difficile"
+      ],
+      "recommendation": "Reuse or modularize existing asset uploads/images/inflammatory-response.webp across 3 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0025",
+      "sharedVisualSystemId": "np_scenario_panel",
+      "matchedObjectKey": null,
+      "recommendedFilename": "chronic-kidney-disease.webp",
+      "lessonCount": 3,
+      "lessonSlugs": [
+        "chronic-kidney-disease-nclex",
+        "diabetes-chronic-complications-nclex",
+        "suctioning-techniques-oral-np-tracheal-nclex"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Chronic Kidney Disease",
+        "Chronic Diabetes Complications",
+        "Suctioning Techniques"
+      ],
+      "recommendation": "Build one modular np_scenario_panel illustration system for 3 related lessons."
+    },
+    {
+      "duplicateGroupId": "dup-0003",
+      "sharedVisualSystemId": "shared_asset",
+      "matchedObjectKey": "/clinical-illustrations/cardiovascular/acute-coronary-syndrome.svg",
+      "recommendedFilename": "acs-chest-pain-rn-management.webp",
+      "lessonCount": 2,
+      "lessonSlugs": [
+        "acute-coronary-syndrome-gold",
+        "clinical-casebook-acs-chest-pain-gold"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "ACS & chest pain: RN management",
+        "ACS case study: chest pain triage"
+      ],
+      "recommendation": "Reuse or modularize existing asset /clinical-illustrations/cardiovascular/acute-coronary-syndrome.svg across 2 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0007",
+      "sharedVisualSystemId": "lung_vascular_pe",
+      "matchedObjectKey": "/clinical-illustrations/cardiovascular/perfusion-disorders.svg",
+      "recommendedFilename": "pulmonary-embolism-recognition.webp",
+      "lessonCount": 2,
+      "lessonSlugs": [
+        "pulmonary-embolism-recognition-gold",
+        "abdominal-aortic-aneurysm-nclex-rn"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Pulmonary embolism: recognition",
+        "Abdominal Aortic Aneurysm"
+      ],
+      "recommendation": "Reuse or modularize existing asset /clinical-illustrations/cardiovascular/perfusion-disorders.svg across 2 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0010",
+      "sharedVisualSystemId": "ecg_rhythm_family",
+      "matchedObjectKey": "/clinical-illustrations/cardiovascular/cardiac-medication-mechanisms.svg",
+      "recommendedFilename": "cardiac-medications-ischemia-rhythm.webp",
+      "lessonCount": 2,
+      "lessonSlugs": [
+        "med-family-cardiac-gold",
+        "cardiac-glycosides-toxicity"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Cardiac medications (ischemia & rhythm)",
+        "Cardiac Glycosides"
+      ],
+      "recommendation": "Reuse or modularize existing asset /clinical-illustrations/cardiovascular/cardiac-medication-mechanisms.svg across 2 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0013",
+      "sharedVisualSystemId": "cardiopulmonary_infographic",
+      "matchedObjectKey": "/clinical-illustrations/cardiovascular/heart-failure.svg",
+      "recommendedFilename": "heart-failure-prioritization-safety.webp",
+      "lessonCount": 2,
+      "lessonSlugs": [
+        "heart-failure-nursing-priorities-hy",
+        "us-rn-heart-failure"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Heart Failure: Prioritization & Safety",
+        "Heart Failure: Assessment & Management"
+      ],
+      "recommendation": "Reuse or modularize existing asset /clinical-illustrations/cardiovascular/heart-failure.svg across 2 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0014",
+      "sharedVisualSystemId": "cardiopulmonary_infographic",
+      "matchedObjectKey": "/clinical-illustrations/cardiovascular/myocardial-infarction.svg",
+      "recommendedFilename": "mi-recognition-troponin.webp",
+      "lessonCount": 2,
+      "lessonSlugs": [
+        "acute-myocardial-infarction-troponin",
+        "us-rn-dysrhythmias"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "MI: Recognition & Troponin",
+        "Dysrhythmias"
+      ],
+      "recommendation": "Reuse or modularize existing asset /clinical-illustrations/cardiovascular/myocardial-infarction.svg across 2 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0021",
+      "sharedVisualSystemId": "lung_vascular_pe",
+      "matchedObjectKey": "DVT.png",
+      "recommendedFilename": "dvt-pulmonary-embolism-priorities.webp",
+      "lessonCount": 2,
+      "lessonSlugs": [
+        "dvt-pe-nursing-priorities",
+        "dvt-pe-prevention-nursing"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "DVT & Pulmonary Embolism: Priorities",
+        "DVT & PE Prevention"
+      ],
+      "recommendation": "Reuse or modularize existing asset DVT.png across 2 lessons; consider variant labels only."
+    },
+    {
+      "duplicateGroupId": "dup-0023",
+      "sharedVisualSystemId": "lung_vascular_pe",
+      "matchedObjectKey": null,
+      "recommendedFilename": "pulmonary-embolism-recognition-clues.webp",
+      "lessonCount": 2,
+      "lessonSlugs": [
+        "pulmonary-embolism-clues",
+        "fracture-complications-fat-embolism-infection-nclex"
+      ],
+      "pathwayIds": [
+        "us-rn-nclex-rn"
+      ],
+      "titles": [
+        "Pulmonary Embolism: Recognition Clues",
+        "Fracture Complications"
+      ],
+      "recommendation": "Build one modular lung_vascular_pe illustration system for 2 related lessons."
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "generatedAt": "2026-03-31T04:05:47.167Z",
+  "bottleneckNote": "Legacy `generate-materialized-rn-pn-batch.ts` caps at 10 topics × (7 RN + 5 PN) = 120. Sprint2 previously capped per-topic (15) and extra fill at 350. Use `generate-rn-pn-sprint2-batch.ts` (full-bank pass) for nursing-tier recovery.",
+  "sources": {
+    "data/replit-exports/exam_questions.json": {
+      "rawRows": 13375,
+      "published": 13322,
+      "validMcqPublished": 11731,
+      "nursingTierValidMcqPublished": 8151,
+      "nursingTierAfterGlobalStemDedupe": 7795,
+      "duplicateStemRowsBeyondFirst": 356,
+      "uniqueStemHashesAllRows": 13019,
+      "tierBreakdown": {
+        "rpn": 4279,
+        "rn": 3951,
+        "np": 2846,
+        "imaging": 1557,
+        "rrt": 742
+      },
+      "examBreakdownTop": {
+        "NCLEX-RN": 3148,
+        "REX-PN": 2135,
+        "RDCS-AE": 1387,
+        "AANP": 1342,
+        "RPN-CAT": 1323,
+        "RN-CAT": 803,
+        "REx-PN": 745,
+        "NP-Advanced": 711,
+        "NP-CAT": 710,
+        "RRT Mixed": 549,
+        "TMC": 193,
+        "CSCT-CARDIAC": 161,
+        "CNPLE": 83,
+        "NCLEX-PN": 76,
+        "CCI-RCS": 9
+      },
+      "statusBreakdown": {
+        "published": 13322,
+        "quarantined": 53
+      },
+      "description": "Primary NCLEX/RN/PN/NP/imaging/RRT mixed bank"
+    },
+    "data/replit-exports/allied_questions.json": {
+      "rawRows": 34292
+    },
+    "data/replit-exports/imaging_questions.json": {
+      "rawRows": 72
+    },
+    "data/replit-exports/generated_questions.json": {
+      "rawRows": 28436
+    }
+  },
+  "materializedBatch": {
+    "dir": "data/materialized/rn-pn-replit-batch-2026",
+    "questionsJsonCount": 7795,
+    "generationStats": {
+      "sourceFile": "data/replit-exports/exam_questions.json",
+      "rawRows": 13375,
+      "emittedQuestions": 7795,
+      "emittedByMaterializedTier": {
+        "rn": 3583,
+        "lvn_lpn": 4212
+      },
+      "skippedNotPublished": 53,
+      "skippedInvalidMcq": 1591,
+      "skippedNonNursingTier": 3580,
+      "skippedStemDedupe": 356,
+      "catchAllTopicKey": "general-nursing-clinical",
+      "catchAllMappedCount": 3635,
+      "topicQuestionCounts": {
+        "pulmonary-embolism": 104,
+        "heart-failure": 329,
+        "myocardial-infarction": 166,
+        "angina": 32,
+        "dysrhythmias": 214,
+        "hypertension": 397,
+        "shock": 131,
+        "asthma": 187,
+        "ards": 42,
+        "pneumonia": 164,
+        "copd-respiratory": 129,
+        "abg-interpretation": 81,
+        "acid-base-advanced": 20,
+        "sodium-imbalance": 93,
+        "potassium-imbalance": 124,
+        "insulin-hypoglycemia": 280,
+        "sepsis": 65,
+        "infection-control": 652,
+        "anticoagulants": 156,
+        "antibiotics": 117,
+        "pain-management": 160,
+        "wound-care": 175,
+        "delegation": 37,
+        "fluid-balance": 143,
+        "prioritization-abcs": 162,
+        "general-nursing-clinical": 3635
+      },
+      "dedupe": {
+        "method": "stemHash(trim+lowercase)",
+        "note": "first row by stable id sort wins"
+      },
+      "flashcardTarget": 649
+    }
+  }
+}

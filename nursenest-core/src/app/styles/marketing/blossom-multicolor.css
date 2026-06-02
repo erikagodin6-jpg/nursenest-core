@@ -1,0 +1,227 @@
+/* ==========================================================================
+   blossom-multicolor.css — Blossom clinical spectrum (white-first homepage + lesson parity)
+
+   Ownership: Blossom-only multi-hue expression on marketing + learner shells.
+   Aligns with Figma nav/theme swatch (file fZvJ2pfmWdUPauKPjUfvhU, nodes 54:2–54:4)
+   and the nine-band lesson section system in theme-palettes.css.
+
+   Palette roles (do not collapse to brand-only):
+     chart-1 pink · chart-2 peach · chart-3 sunshine · chart-4 sky
+     chart-5 rose · chart-6 blush · chart-7 coral · chart-8 butter · chart-9 blue
+   ========================================================================== */
+
+/* Homepage + marketing brand root — premium meters use distinct hues (not one bar color). */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-home-marketing-root,
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-marketing-brand-root {
+  --nn-premium-tone-brand: var(--semantic-chart-1);
+  --nn-premium-tone-info: var(--semantic-chart-3);
+  --nn-premium-tone-success: var(--semantic-chart-4);
+  --nn-premium-tone-warning: var(--semantic-chart-8);
+  --nn-premium-tone-accent: var(--semantic-chart-2);
+  --nn-premium-tone-danger: var(--semantic-chart-5);
+  --nn-premium-meter-brand: linear-gradient(
+    90deg,
+    var(--semantic-chart-1),
+    var(--semantic-chart-2)
+  );
+  --nn-premium-meter-info: linear-gradient(
+    90deg,
+    var(--semantic-chart-3),
+    var(--semantic-chart-7)
+  );
+  --nn-premium-meter-success: linear-gradient(
+    90deg,
+    var(--semantic-chart-4),
+    var(--semantic-chart-6)
+  );
+  --nn-premium-meter-warning: linear-gradient(
+    90deg,
+    var(--semantic-chart-8),
+    var(--semantic-chart-5)
+  );
+  --nn-premium-meter-danger: linear-gradient(
+    90deg,
+    var(--semantic-chart-5),
+    var(--semantic-chart-1)
+  );
+}
+
+/* Section eyebrows — each homepage band gets its own accent dot (multi-hue hierarchy). */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--pathways .nn-premium-home-eyebrow::before {
+  background: var(--semantic-chart-1);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-1) 18%, transparent);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--ecosystem .nn-premium-home-eyebrow::before {
+  background: var(--semantic-chart-2);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-2) 18%, transparent);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--clinical .nn-premium-home-eyebrow::before {
+  background: var(--semantic-chart-3);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-3) 18%, transparent);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--readiness .nn-premium-home-eyebrow::before {
+  background: var(--semantic-chart-4);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-4) 18%, transparent);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--trust .nn-premium-home-eyebrow::before {
+  background: var(--semantic-chart-5);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-5) 18%, transparent);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--social-study .nn-premium-home-eyebrow::before {
+  background: var(--semantic-chart-7);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-7) 18%, transparent);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--cta .nn-premium-home-eyebrow::before {
+  background: var(--semantic-chart-9);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-9) 18%, transparent);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-eyebrow {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 22%, var(--border-subtle));
+  color: color-mix(in srgb, var(--semantic-chart-9) 72%, var(--palette-heading));
+}
+
+/* Pathway / depth / flow cards — white-first with subtle per-card tint. */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-pathway-card {
+  background:
+    radial-gradient(
+      360px 180px at 100% 0%,
+      color-mix(in srgb, var(--premium-card-glow, var(--semantic-chart-3)) 7%, transparent),
+      transparent 56%
+    ),
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--premium-card-accent) 7%, var(--surface, #fff)),
+      color-mix(in srgb, var(--premium-card-soft, var(--premium-card-accent)) 4%, var(--surface, #fff))
+    );
+  border-color: color-mix(in srgb, var(--premium-card-accent) 14%, var(--border-subtle));
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-depth-card,
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-flow-card {
+  border-color: color-mix(in srgb, var(--depth-accent, var(--semantic-chart-2)) 14%, var(--border-subtle));
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-mini-metric {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 10%, var(--border-subtle));
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-chart-7) 4%, var(--semantic-surface)),
+      color-mix(in srgb, var(--semantic-chart-4) 4%, var(--semantic-surface))
+    );
+}
+
+/* Tier hub tabs — no decorative pill fills; subtle per-item underline hover only. */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-inner
+  nav
+  a:nth-child(5n + 1),
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-inner
+  nav
+  a.nn-marketing-tier-chip:nth-child(5n + 1) {
+  border-color: transparent;
+  background: transparent;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-inner
+  nav
+  a:nth-child(5n + 2),
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-inner
+  nav
+  a.nn-marketing-tier-chip:nth-child(5n + 2) {
+  border-color: transparent;
+  background: transparent;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-inner
+  nav
+  a:nth-child(5n + 3),
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-inner
+  nav
+  a.nn-marketing-tier-chip:nth-child(5n + 3) {
+  border-color: transparent;
+  background: transparent;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-inner
+  nav
+  a:nth-child(5n + 4),
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-inner
+  nav
+  a.nn-marketing-tier-chip:nth-child(5n + 4) {
+  border-color: transparent;
+  background: transparent;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-inner
+  nav
+  a:nth-child(5n + 5),
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-inner
+  nav
+  a.nn-marketing-tier-chip:nth-child(5n + 5) {
+  border-color: transparent;
+  background: transparent;
+}
+
+/* Lesson detail shell — hero wash uses three chart hues (matches lesson section bands). */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-learner-lesson-hero::before {
+  opacity: 0.12;
+  background:
+    radial-gradient(560px 200px at 12% 0%, color-mix(in srgb, var(--semantic-chart-1) 12%, transparent), transparent 58%),
+    radial-gradient(480px 180px at 90% 12%, color-mix(in srgb, var(--semantic-chart-4) 10%, transparent), transparent 56%),
+    radial-gradient(440px 160px at 50% 100%, color-mix(in srgb, var(--semantic-chart-2) 10%, transparent), transparent 58%);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-pathway-lesson-header::after {
+  opacity: 0.08;
+  background:
+    radial-gradient(520px 180px at 0% 0%, color-mix(in srgb, var(--semantic-chart-1) 14%, transparent), transparent 56%),
+    radial-gradient(420px 160px at 100% 20%, color-mix(in srgb, var(--semantic-chart-4) 12%, transparent), transparent 54%);
+}
+
+/* Pricing plan cards — white surfaces with blush and blue accent edges. */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-pricing-plan-card:nth-of-type(1) {
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-chart-1) 5%, var(--semantic-surface)) 0%,
+      var(--semantic-surface) 100%
+    );
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 12%, var(--semantic-border-soft));
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-pricing-plan-card:nth-of-type(2) {
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-chart-4) 6%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-chart-2) 4%, var(--semantic-surface)) 100%
+    );
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 14%, var(--semantic-border-soft));
+}

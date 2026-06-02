@@ -1,0 +1,8 @@
+{
+  "scanDir": "client/src",
+  "criticalThreshold": 0,
+  "totalThreshold": 25000,
+  "failOnCritical": false,
+  "outputJson": true,
+  "outputPath": "i18n-violations-report.json"
+}

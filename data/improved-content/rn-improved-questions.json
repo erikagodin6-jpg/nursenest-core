@@ -1,0 +1,306 @@
+[
+  {
+    "question": "A nurse is caring for four clients on an acute medical unit. Which client should the nurse reassess FIRST after receiving the morning report?",
+    "option_a": "A 61-year-old with stable COPD who is currently receiving 2 L/min of supplemental oxygen and requesting a bedpan",
+    "option_b": "A 74-year-old post-op Day 2 abdominal aortic aneurysm (AAA) repair whose urine output for the past 2 hours has been 12 mL total",
+    "option_c": "A 55-year-old admitted with community-acquired pneumonia who has a temperature of 38.3°C and is receiving IV antibiotics",
+    "option_d": "A 48-year-old awaiting a scheduled cholecystectomy who reports increased anxiety about the surgery",
+    "correct_answer": "B",
+    "rationale": "Post-operative AAA repair clients require vigilant monitoring of renal perfusion, as the aortic cross-clamping required during surgery disrupts renal blood flow and puts clients at high risk for acute kidney injury (AKI). A urine output of only 12 mL over 2 hours (6 mL/hr) is critically below the minimum acceptable threshold of 0.5 mL/kg/hr for adults (typically 30-50 mL/hr). This level of oliguria may indicate post-operative AKI, graft thrombosis, haemorrhage leading to hypovolaemia, or early multi-organ dysfunction. This is a time-sensitive clinical deterioration requiring immediate reassessment of vital signs, fluid balance, and notification of the surgical team. The other clients have concerning but more stable or lower-urgency presentations: the COPD client's stable oxygenation with a routine request; the pneumonia client whose elevated temperature is expected during active treatment; and the pre-operative client whose anxiety requires therapeutic communication but poses no immediate physiological risk.",
+    "distractor_rationales": {
+      "A": "A client with stable COPD on 2 L/min O2 requesting a bedpan is not a priority emergency. The request is a routine comfort need, and the oxygen delivery is stable. This client should be assisted but does not represent an acute physiological deterioration.",
+      "C": "A temperature of 38.3°C in a client with pneumonia receiving appropriate IV antibiotic therapy represents an expected clinical course. Fever during active infection while on antibiotics is not alarming — the nurse should monitor trends, but this client is not the immediate priority compared to a post-surgical client with oliguria.",
+      "D": "Pre-operative anxiety is an important psychosocial concern requiring therapeutic communication and nursing support, but it does not represent an acute physiological threat. This client's needs are real but can be addressed after addressing the physiological emergency."
+    },
+    "clinical_pearl": "Post-AAA repair monitoring priorities: Urine output (renal perfusion indicator — minimum 0.5 mL/kg/hr), distal pulses and extremity perfusion (graft patency), wound/graft site assessment, haemodynamic stability. Oliguria post-AAA repair is a red flag for graft thrombosis, AKI, or haemorrhage until proven otherwise. Act immediately.",
+    "exam_strategy": "For priority questions with multiple physiological concerns: identify which client's problem is ACUTE, DETERIORATING, and outside expected clinical parameters. Post-surgical complications (especially involving vital organs like kidneys after major vascular surgery) take priority over expected clinical courses (fever with pneumonia on antibiotics) or psychosocial needs.",
+    "memory_hook": "Post-AAA = Watch the PEE: Pulses (distal), Extremity temperature, and Excretion (urine output). No pee = emergency. 12 mL in 2 hours is NOT enough — call the surgeon.",
+    "hints": [
+      {
+        "level": 1,
+        "text": "Apply the ABC framework and physiological priority: which client has a finding outside normal parameters that represents a potentially life-threatening complication of their specific condition or surgery?"
+      },
+      {
+        "level": 2,
+        "text": "Post-AAA repair involves aortic cross-clamping which compromises renal blood flow. What is the minimum acceptable urine output in an adult? How does 12 mL in 2 hours compare to that threshold?"
+      },
+      {
+        "level": 3,
+        "text": "12 mL in 2 hours = 6 mL/hr — far below the minimum 30-50 mL/hr (0.5 mL/kg/hr). This post-AAA client has critical oliguria, indicating potential AKI or graft complications. This is your highest physiological priority — reassess immediately and notify the surgical team."
+      }
+    ],
+    "difficulty": "hard",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Cardiovascular / Renal",
+    "client_needs": "Physiological Adaptation / Prioritization",
+    "topic": "Post-Surgical Monitoring / Fluid Balance",
+    "question_type": "standard"
+  },
+  {
+    "question": "A nurse is caring for a client with septic shock who is receiving norepinephrine infusion at 0.15 mcg/kg/min and broad-spectrum IV antibiotics. Two hours into treatment, the client's blood pressure remains 74/42 mmHg. The nurse notes the client has received 2 L of IV normal saline over the past hour per resuscitation orders. Which assessment finding would MOST indicate that additional fluid resuscitation would be harmful?",
+    "option_a": "Central venous pressure (CVP) of 2 mmHg",
+    "option_b": "Urine output of 0.3 mL/kg/hr despite fluid resuscitation",
+    "option_c": "Oxygen saturation of 88% on 40% FiO2 with new bilateral crackles on auscultation",
+    "correct_answer": "C",
+    "rationale": "In septic shock resuscitation, additional fluid administration becomes harmful when the client develops fluid overload — evidenced by pulmonary oedema. The combination of oxygen saturation of 88% on 40% FiO2 (indicating worsening hypoxia) with NEW bilateral crackles (indicating pulmonary fluid accumulation) is the clearest clinical sign of fluid-related pulmonary oedema. This represents volume overload that will worsen respiratory status, potentially precipitating ARDS or requiring intubation. Continuing aggressive fluid resuscitation in the presence of these findings would cause more harm than benefit. The Surviving Sepsis Campaign recommends initial fluid resuscitation of 30 mL/kg crystalloid but emphasizes that ongoing fluid administration should be guided by dynamic indicators of fluid responsiveness — not static pressures or volume alone. Option A (CVP of 2) suggests the client may still need fluids. Option B (low urine output) reflects hypoperfusion, suggesting fluids may still help. Option D (elevated lactate) indicates ongoing tissue hypoperfusion but does not specifically indicate fluid overload.",
+    "distractor_rationales": {
+      "A": "A CVP of 2 mmHg is LOW — indicating relative hypovolaemia and suggesting the client may benefit from additional fluid resuscitation. This finding supports, rather than contraindicates, further fluids. CVP has limitations as a fluid responsiveness predictor but a very low value in septic shock generally indicates volume depletion.",
+      "B": "Urine output of 0.3 mL/kg/hr (below the minimum of 0.5 mL/kg/hr) reflects inadequate renal perfusion due to hypotension — suggesting continued need for resuscitation, not fluid overload. This finding would support, not contraindicate, additional fluids (in the absence of pulmonary overload signs).",
+      "D": "An elevated serum lactate of 4.8 mmol/L (normal <2 mmol/L) indicates ongoing tissue ischaemia and cellular hypoperfusion — a marker of inadequate oxygen delivery. This would actually support continued resuscitation efforts to improve perfusion, not indicate harm from fluids. However, the treatment goal is to reduce lactate through appropriate resuscitation AND vasopressors, not necessarily more fluids."
+    },
+    "clinical_pearl": "Surviving Sepsis Campaign 2021 Hour-1 Bundle: (1) Measure lactate, (2) Blood cultures x2 before antibiotics, (3) Broad-spectrum antibiotics, (4) 30 mL/kg IV crystalloid for hypotension or lactate ≥4, (5) Vasopressors (norepinephrine first-line) for persistent MAP <65. Fluid overload in sepsis: watch for new SpO2 drop + crackles + worsening PaO2/FiO2 ratio = stop aggressive fluid resuscitation.",
+    "exam_strategy": "For septic shock management questions: the key decision point between 'give more fluids' and 'stop fluids' is the presence of pulmonary oedema (crackles + hypoxia). CVP, lactate, and urine output guide resuscitation need — but worsening oxygenation + crackles = harm signal from fluid overload.",
+    "memory_hook": "SEPSIS = Source control, Early ABx, Pressors (norepinephrine), Support (IV fluids 30 mL/kg), Is there lactate elevation? STOP fluids when lungs get wet: crackles + O2 drop = fluid overload.",
+    "hints": [
+      {
+        "level": 1,
+        "text": "In septic shock resuscitation, there's a balance between not enough fluids (hypoperfusion) and too many fluids (pulmonary oedema). What clinical signs would tell you a client is developing fluid overload from aggressive resuscitation?"
+      },
+      {
+        "level": 2,
+        "text": "Pulmonary oedema from fluid overload presents as: new bilateral crackles (fluid in the alveoli) + declining oxygenation (SpO2 dropping) on increasing FiO2. Which option describes exactly this pattern?"
+      },
+      {
+        "level": 3,
+        "text": "SpO2 88% on 40% FiO2 with NEW bilateral crackles = pulmonary oedema from fluid overload. This combination tells you that more fluid will worsen respiratory status and cause more harm. This is the clinical signal to stop aggressive resuscitation and reassess the approach."
+      }
+    ],
+    "difficulty": "hard",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Critical Care / Infectious Disease",
+    "client_needs": "Physiological Adaptation / Clinical Judgment",
+    "topic": "Septic Shock Resuscitation / Fluid Management",
+    "question_type": "standard",
+    "option_d": "Serum lactate of 4.8 mmol/L"
+  },
+  {
+    "question": "A nurse is caring for a client with a traumatic brain injury (TBI) who is receiving mannitol 20% 1.5 g/kg IV over 30 minutes for suspected increased intracranial pressure (ICP). Which assessment finding would require the nurse to immediately stop the infusion and notify the physician?",
+    "option_a": "Serum osmolality of 298 mOsm/kg",
+    "option_b": "Urine output of 250 mL in the past 30 minutes",
+    "option_c": "Serum osmolality of 322 mOsm/kg with urine output less than 30 mL/hr",
+    "option_d": "Heart rate increase from 68 to 84 bpm",
+    "correct_answer": "C",
+    "rationale": "Mannitol is an osmotic diuretic used to reduce cerebral oedema by drawing water from brain tissue into the bloodstream (osmotic gradient effect). It has a critical monitoring parameter: serum osmolality must not exceed 320 mOsm/kg (some references say 310-320 mOsm/kg). A serum osmolality of 322 mOsm/kg has exceeded the therapeutic ceiling and places the client at risk for mannitol-induced renal failure (acute tubular necrosis) from excessively hyperosmolar state. Combined with urine output less than 30 mL/hr (below the minimum threshold of 0.5 mL/kg/hr), this finding indicates the kidneys are failing to respond appropriately to the diuretic — a sign of early renal dysfunction. The nurse must stop the infusion and notify the physician immediately. Option A (298 mOsm/kg) is within normal serum osmolality range (285-295 mOsm/kg) — safe. Option B (250 mL urine in 30 minutes) represents the EXPECTED high-volume diuresis of mannitol — expected and desired. Option D (heart rate increase from 68-84 bpm) is a normal variant change with no clinical significance in isolation.",
+    "distractor_rationales": {
+      "A": "A serum osmolality of 298 mOsm/kg is essentially normal (normal range 285-295 mOsm/kg with slight elevation expected during mannitol therapy). This finding does NOT indicate a need to stop the infusion — it suggests the osmolality is within acceptable limits.",
+      "B": "A urine output of 250 mL in 30 minutes represents brisk diuresis — this is the EXPECTED and DESIRED effect of mannitol. High urine output indicates the medication is working as intended. This is a positive response, not a reason to stop.",
+      "D": "A heart rate of 84 bpm (up from 68 bpm) is within normal limits and represents a modest increase, likely from normal variation or fluid shifts. This is not clinically significant enough to stop a critical neurological medication."
+    },
+    "clinical_pearl": "Mannitol critical monitoring parameters: (1) Serum osmolality — must STOP if >310-320 mOsm/kg (risk of acute tubular necrosis); (2) Urine output — expect high-volume diuresis (desired effect); (3) Electrolytes — monitor Na+, K+ for shifts; (4) BUN/creatinine — renal function markers; (5) Vital signs — watch for reflex hypertension from ICP reduction. Mannitol is contraindicated in anuria and renal failure.",
+    "exam_strategy": "For medication monitoring questions: know the SPECIFIC monitoring parameter for each high-risk medication. Mannitol = serum osmolality ceiling of 320 mOsm/kg + assess renal output. The combination of HIGH osmolality + LOW urine output is the red flag that requires immediate action.",
+    "memory_hook": "MANNITOL: Max osmolality = 320. Above 320 = STOP. Monitor Osmolality, Neuro status, Nitrate/electrolytes, Input/output, Temp, OsmoLality again. 'Too osmolar + no pee = stop the mannitol spree.'",
+    "hints": [
+      {
+        "level": 1,
+        "text": "Mannitol is an osmotic diuretic with specific safety monitoring parameters. Before identifying the dangerous finding, recall: what is the serum osmolality threshold above which mannitol becomes harmful?"
+      },
+      {
+        "level": 2,
+        "text": "The serum osmolality ceiling for mannitol is 320 mOsm/kg. One option shows 322 mOsm/kg (exceeded) PLUS low urine output — indicating renal dysfunction. Another option shows expected diuresis (250 mL/30 min = desired effect). Which combination signals a STOP?"
+      },
+      {
+        "level": 3,
+        "text": "322 mOsm/kg exceeds the mannitol osmolality ceiling + urine output <30 mL/hr = early renal failure from mannitol toxicity. This combination (exceeded osmolality ceiling + oliguria) requires immediate cessation of the infusion and physician notification. High urine output during mannitol is NORMAL — don't confuse expected response with toxicity."
+      }
+    ],
+    "difficulty": "hard",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Neurological",
+    "client_needs": "Pharmacological Therapies / Reduction of Risk",
+    "topic": "Osmotic Diuretics / ICP Management",
+    "question_type": "standard"
+  },
+  {
+    "question": "A nurse is discharging a client who was hospitalized for an exacerbation of heart failure (HFrEF). The client will be taking furosemide 40 mg PO daily, carvedilol 12.5 mg PO BID, and lisinopril 10 mg PO daily at home. Which discharge teaching point is MOST critical to include?",
+    "option_a": "Limit fluid intake to less than 1.5 litres per day regardless of symptoms",
+    "option_b": "Weigh yourself daily at the same time each morning; notify your provider if you gain more than 2 kg in 24 hours or 2.3 kg over 2-3 days",
+    "option_c": "Take furosemide at bedtime to avoid urinating frequently during the day",
+    "option_d": "Avoid foods with high potassium content, such as bananas and oranges, while taking furosemide",
+    "correct_answer": "B",
+    "rationale": "Daily weight monitoring is the cornerstone of outpatient heart failure management and the most critical early indicator of fluid retention. A weight gain of ≥2 kg in 24 hours or ≥2.3 kg over 2-3 days indicates fluid accumulation and early decompensation — before shortness of breath, oedema, or other clinical signs become apparent. Early recognition and notification allows the healthcare team to adjust diuretic doses, modify fluid/sodium intake, or arrange urgent follow-up to prevent rehospitalization. The other options contain inaccuracies: furosemide should be taken in the morning (not bedtime) to prevent nocturnal diuresis and sleep disruption; furosemide causes potassium LOSS (hypokalemia) — clients should be encouraged to eat potassium-rich foods OR take supplemental potassium; fluid restriction goals are individualized (not universally <1.5 L for all HF patients) and must be discussed with the care team.",
+    "distractor_rationales": {
+      "A": "While fluid restriction is a component of heart failure management, a blanket instruction to limit to <1.5 L/day is not universally appropriate for all heart failure patients — it must be individualized. Additionally, this option alone is not the MOST critical teaching point because it doesn't address early detection of decompensation.",
+      "C": "This is INCORRECT teaching that could harm the client. Furosemide should be taken in the MORNING (or by 2 PM at the latest) to promote daytime diuresis and prevent nocturia. Taking furosemide at bedtime would cause nocturnal diuresis, disrupt sleep, increase fall risk, and reduce medication adherence.",
+      "D": "This teaching is actually INCORRECT and potentially harmful. Furosemide is a loop diuretic that causes potassium LOSS (hypokalemia), not retention. Clients on furosemide should generally be encouraged to eat potassium-rich foods (bananas, oranges, potatoes) or take a potassium supplement. Instructing them to avoid potassium-rich foods risks dangerous hypokalemia."
+    },
+    "clinical_pearl": "Heart failure discharge teaching priorities (Canadian HF guidelines): Daily weights, fluid restriction (typically 1.5-2 L/day, individualized), low-sodium diet (<2 g/day), medication adherence, activity, when to seek help (weight gain ≥2 kg/24h, increased dyspnea, new edema). Furosemide causes K+ loss — replete with potassium. ACE inhibitors/ARBs increase K+ — monitor. Beta-blockers (carvedilol) lower HR — educate on expected effects.",
+    "exam_strategy": "Discharge teaching questions often have one CORRECT answer and several plausible-but-WRONG distractors. Read each option as true/false first — eliminate any teaching that is factually wrong (option C and D here contain errors), then select the MOST CRITICAL from the remaining correct options.",
+    "memory_hook": "HF home monitoring: WICK — Watch for Weight gain, Intake of fluids (restrict), Call if >2 kg in 24h, Keep daily record. Furosemide = flushes potassium → eat bananas. Take furosemide in the MORNING.",
+    "hints": [
+      {
+        "level": 1,
+        "text": "Evaluate each teaching point for accuracy AND importance. Some options here contain factually incorrect information (look at furosemide timing and potassium teaching). Eliminate the incorrect options first, then select the MOST CRITICAL from the remaining."
+      },
+      {
+        "level": 2,
+        "text": "Furosemide is a loop diuretic that causes potassium LOSS (not retention) — option D is wrong. Furosemide should be taken in the morning, not at bedtime (option C is wrong). What's left? Which of the remaining options is the most important early warning system for HF clients at home?"
+      },
+      {
+        "level": 3,
+        "text": "Daily weight monitoring with a 2 kg/24h notification threshold is the cornerstone of HF self-management at home — it detects fluid retention BEFORE clinical symptoms appear and allows early intervention to prevent rehospitalization. This is the most critical discharge teaching point."
+      }
+    ],
+    "difficulty": "moderate",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Cardiovascular",
+    "client_needs": "Health Promotion / Patient Education / Discharge Planning",
+    "topic": "Heart Failure Self-Management / Discharge Teaching",
+    "question_type": "standard"
+  },
+  {
+    "question": "A nurse is caring for a client who was started on heparin infusion 1,200 units/hour for deep vein thrombosis (DVT). The client's morning aPTT result is 180 seconds (normal: 25-35 seconds; therapeutic range for DVT: 60-100 seconds). The client has no active bleeding symptoms. Which action should the nurse take?",
+    "option_a": "Continue the current heparin infusion rate and repeat the aPTT in 6 hours",
+    "option_b": "Stop the heparin infusion and notify the physician immediately",
+    "option_c": "Slow the infusion by 20% and recheck the aPTT in 4 hours",
+    "option_d": "Administer protamine sulfate 50 mg IV as ordered for heparin reversal",
+    "correct_answer": "B",
+    "rationale": "An aPTT of 180 seconds is critically elevated — nearly twice the upper limit of the therapeutic range (60-100 seconds) and 7 times the upper limit of normal (25-35 seconds). While the client currently has no active bleeding symptoms, an aPTT this elevated places the client at extreme risk for life-threatening haemorrhage (intracranial, gastrointestinal, retroperitoneal). The nurse must STOP the heparin infusion immediately and notify the physician for urgent reassessment, downward dose adjustment, and repeat aPTT monitoring. This is a supratherapeutic response requiring immediate medical decision-making — the nurse does not independently adjust doses or administer protamine without specific physician orders. Continuing the infusion or only slowing it by 20% leaves the client in a dangerous supratherapeutic state.",
+    "distractor_rationales": {
+      "A": "Continuing the infusion at the current rate is dangerous. An aPTT of 180 seconds is critically supratherapeutic. Continuing infusion at the same rate guarantees continued extreme anticoagulation and increasing haemorrhage risk, even without current symptoms. Symptoms of major haemorrhage may not appear until significant bleeding has already occurred.",
+      "C": "A 20% reduction would bring the infusion to 960 units/hour — still a high dose when the aPTT is already 180 seconds. This adjustment is insufficient and does not match the magnitude of the supratherapeutic response. Furthermore, independently adjusting the heparin rate without physician order is outside nursing scope unless following an approved heparin protocol that authorizes this specific degree of adjustment.",
+      "D": "Protamine sulfate is the antidote for heparin and is used for life-threatening haemorrhage, not simply for a supratherapeutic aPTT without bleeding. Administering protamine without a physician order and without active haemorrhage is inappropriate. The immediate action is to stop the infusion and notify the physician — not to administer the antidote independently."
+    },
+    "clinical_pearl": "Heparin management: Therapeutic aPTT for DVT/PE treatment = 60-100 seconds (or 1.5-2.5x baseline). Critical aPTT values >100 sec = STOP and notify. Heparin antidote = protamine sulfate (given ONLY for active haemorrhage with physician order). Heparin-induced thrombocytopaenia (HIT): platelet count drop >50% + thrombosis — stop heparin immediately, switch to argatroban or bivalirudin.",
+    "exam_strategy": "Supratherapeutic lab values with HIGH-ALERT medications (heparin, warfarin): STOP the medication and NOTIFY the physician. Do not independently adjust doses unless a specific protocol permits it. Never give antidotes without physician order and documented indication (active bleeding).",
+    "memory_hook": "aPTT: 60-100 = therapeutic sweet spot. Above 100 = STOP and CALL. Protamine = antidote but only for active bleeding by physician order. 'aPTT of 180 = 0 drip, call the MD ASAP.'",
+    "hints": [
+      {
+        "level": 1,
+        "text": "The therapeutic aPTT range for DVT treatment with heparin is 60-100 seconds. The client's aPTT is 180 seconds. How does this compare to the therapeutic range, and what does a critically supratherapeutic value mean for the client's safety?"
+      },
+      {
+        "level": 2,
+        "text": "An aPTT of 180 seconds is dangerously supratherapeutic — even though the client has no current symptoms, extreme anticoagulation creates severe haemorrhage risk. The nurse cannot simply slow the infusion or continue. What is the correct first action when a high-alert medication produces a critically dangerous lab value?"
+      },
+      {
+        "level": 3,
+        "text": "Stop the heparin infusion immediately (not slow — stop) and notify the physician for urgent reassessment. The physician will decide whether to restart at a lower dose, check for bleeding, or order protamine. The nurse does not independently adjust a critically supratherapeutic heparin infusion — stop and escalate."
+      }
+    ],
+    "difficulty": "moderate",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Hematology / Pharmacology",
+    "client_needs": "Pharmacological Therapies / Reduction of Risk",
+    "topic": "Anticoagulation Monitoring — Heparin",
+    "question_type": "standard"
+  },
+  {
+    "question": "A nurse is caring for a client with acute pancreatitis. Which set of assessment findings is MOST consistent with the development of systemic complications and should prompt the nurse to notify the physician immediately?",
+    "option_a": "Epigastric pain rated 8/10, nausea, and bowel sounds absent in all quadrants",
+    "option_b": "Temperature 38.1°C, serum lipase 1,400 U/L, and mild abdominal tenderness",
+    "option_c": "Heart rate 124 bpm, respirations 28/min, SpO2 88% on 4 L/min O2, and blood pressure 88/52 mmHg",
+    "option_d": "Serum amylase 950 U/L, serum calcium 1.98 mmol/L, and nausea with one episode of emesis",
+    "correct_answer": "C",
+    "rationale": "Option C describes a client in systemic inflammatory response syndrome (SIRS) with hemodynamic instability, consistent with severe acute pancreatitis progressing to septic shock or multi-organ dysfunction syndrome (MODS). The combination of tachycardia (HR 124), tachypnoea (RR 28), hypoxaemia (SpO2 88% on 4 L/min O2), and hypotension (BP 88/52) meets 4 of 4 SIRS criteria with signs of end-organ hypoperfusion (respiratory failure, circulatory shock). Acute pancreatitis can cause SIRS through massive release of pancreatic enzymes, cytokines, and vasoactive mediators — leading to third-spacing, hypovolaemia, ARDS, and septic shock. This constellation requires immediate physician notification and intensive critical care intervention. Options A, B, and D describe findings consistent with expected acute pancreatitis features without systemic deterioration signs.",
+    "distractor_rationales": {
+      "A": "Epigastric pain, nausea, and absent bowel sounds (ileus) are expected findings in acute pancreatitis. These represent the local disease process and require nursing monitoring and comfort measures, but are not signs of systemic deterioration requiring immediate physician notification above the existing plan.",
+      "B": "Low-grade fever (38.1°C) is expected in acute pancreatitis. Elevated lipase (1,400 U/L) confirms the diagnosis. Mild tenderness is consistent with the disease. These findings are within the expected clinical picture of uncomplicated pancreatitis and do not signal systemic complication.",
+      "D": "Elevated amylase (950 U/L) is a diagnostic marker. Low serum calcium (1.98 mmol/L — normal 2.1-2.55 mmol/L) is a known complication of acute pancreatitis (calcium binds to saponified fat from lipase activity) and warrants monitoring, but mild hypocalcaemia with nausea alone does not constitute a systemic emergency."
+    },
+    "clinical_pearl": "Severe acute pancreatitis SIRS criteria (any 2): Temperature >38°C or <36°C, HR >90 bpm, RR >20/min, WBC >12,000 or <4,000, altered mentation. Complications to monitor: ARDS, AKI, DIC, sepsis, pseudocyst, necrotizing pancreatitis. Ranson criteria at admission: age >55, WBC >16,000, glucose >200, LDH >350, AST >250 — more criteria = more severe.",
+    "exam_strategy": "For 'most concerning findings' questions in pancreatitis: systemic deterioration (SIRS/sepsis criteria) always trumps local disease findings. Identify vital sign abnormalities that indicate multi-system compromise — these are the urgent findings. Elevated enzyme levels alone are diagnostic, not emergency indicators.",
+    "memory_hook": "SIRS in pancreatitis = TRWB: Temperature abnormal, Rate (HR) >90, Wind (RR) >20, Blood pressure dropping. When the pancreatitis spreads systemically, it attacks everything — CALL for urgent help when you see tachycardia + tachypnea + hypotension + hypoxia.",
+    "hints": [
+      {
+        "level": 1,
+        "text": "This question asks which findings indicate SYSTEMIC complications, not just local pancreatic disease. Think SIRS criteria: Temperature, Heart Rate, Respiratory Rate, WBC, and evidence of organ hypoperfusion. Which option shows systemic involvement?"
+      },
+      {
+        "level": 2,
+        "text": "Review each option's vital signs. Which set shows: tachycardia, tachypnea, hypoxemia, AND hypotension together? This combination indicates systemic inflammatory response with cardiovascular compromise — the clinical picture of septic shock in pancreatitis."
+      },
+      {
+        "level": 3,
+        "text": "Option C: HR 124, RR 28, SpO2 88% on 4 L O2, BP 88/52 mmHg = SIRS criteria met + hemodynamic instability + hypoxic respiratory failure = systemic complications requiring immediate physician notification and likely ICU transfer. Elevated enzymes and local symptoms (options A, B, D) are expected findings, not emergencies."
+      }
+    ],
+    "difficulty": "hard",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Gastrointestinal",
+    "client_needs": "Physiological Adaptation / Reduction of Risk",
+    "topic": "Acute Pancreatitis Complications / SIRS",
+    "question_type": "standard"
+  },
+  {
+    "question": "A nurse is caring for a client with end-stage renal disease (ESRD) who missed their last two dialysis sessions. The nurse notes the ECG shows peaked T waves, wide QRS complexes (>0.12 seconds), and a prolonged PR interval. The client's serum potassium is 6.8 mEq/L. Which intervention should the nurse anticipate the physician will order FIRST?",
+    "option_a": "Administer sodium polystyrene sulfonate (Kayexalate) 30 g PO",
+    "option_b": "Initiate emergency haemodialysis",
+    "option_c": "Administer calcium gluconate 10% 10 mL IV over 2-3 minutes",
+    "option_d": "Start a regular insulin 10 units IV with 50 mL of 50% dextrose",
+    "correct_answer": "C",
+    "rationale": "This client has severe, symptomatic hyperkalaemia (6.8 mEq/L) with life-threatening ECG changes (peaked T waves, wide QRS, prolonged PR) indicating imminent risk of fatal ventricular arrhythmia (ventricular fibrillation, asystole). The FIRST priority intervention is cardiac membrane stabilization with IV calcium gluconate. Calcium raises the threshold potential in cardiac cells, making them less excitable and reducing the risk of fatal arrhythmia — it acts within 1-3 minutes. Critically: calcium gluconate does NOT lower potassium levels — it only protects the heart from the electrical effects of hyperkalaemia while other interventions are implemented. After cardiac stabilization, the sequence continues: insulin + dextrose (shifts K+ intracellularly), sodium bicarbonate (alkalinizes blood, shifts K+ intracellularly), salbutamol (beta-agonist, shifts K+ into cells), and finally dialysis (removes K+ permanently). Kayexalate acts too slowly (hours) to address an acute emergency.",
+    "distractor_rationales": {
+      "A": "Sodium polystyrene sulfonate (Kayexalate) is a potassium binder that removes potassium through the GI tract — but it takes 4-24 hours to work. This is inappropriate as a FIRST intervention in a cardiac emergency. It may be used later for non-acute potassium management.",
+      "B": "Emergency haemodialysis is the most effective method for permanently removing potassium from the body — but it takes time to set up (30-60+ minutes) and does not address the immediate cardiac risk. It is an important definitive treatment but NOT the first intervention when the client is at risk for ventricular arrhythmia.",
+      "D": "Insulin + dextrose (regular insulin shifts K+ into cells, dextrose prevents hypoglycaemia) is a key intervention for hyperkalaemia, but it shifts K+ into cells rather than stabilizing the cardiac membrane. It takes 15-30 minutes to have its full effect. It should come AFTER calcium gluconate has been given to protect the heart first."
+    },
+    "clinical_pearl": "Hyperkalaemia management sequence (CBID): Cardiac membrane stabilization (calcium gluconate), Body shift (insulin/dextrose, sodium bicarb, salbutamol), Increase elimination (furosemide, Kayexalate, haemodialysis for ESRD). ECG changes progression: peaked T waves → prolonged PR → wide QRS → sine wave pattern → VF/asystole. Act aggressively when QRS is widened.",
+    "exam_strategy": "For hyperkalaemia with ECG changes: the answer is ALWAYS calcium gluconate first because it acts fastest (1-3 min) to protect the heart. Then shift K+ (insulin+dextrose), then remove K+ (dialysis). Remember: Calcium STABILIZES but does NOT lower K+.",
+    "memory_hook": "CBID for hyperkalaemia: Calcium first (stabilize the heart), Body shift (insulin + D50), Increase elimination (dialysis, Kayexalate). 'When the heart is at risk, CALCIUM goes in QUICK.' Wide QRS = give calcium now.",
+    "hints": [
+      {
+        "level": 1,
+        "text": "The client has severe hyperkalaemia with ECG changes (peaked T waves, wide QRS, prolonged PR). These ECG changes indicate imminent cardiac risk. What is the IMMEDIATE priority — remove potassium from the body, shift it into cells, or protect the heart from arrhythmia first?"
+      },
+      {
+        "level": 2,
+        "text": "When hyperkalaemia is causing ECG changes, cardiac membrane stabilization is always the first step. Which drug class accomplishes this — calcium, insulin, or a potassium binder? And which of the options contains this drug?"
+      },
+      {
+        "level": 3,
+        "text": "Calcium gluconate IV stabilizes cardiac cell membranes within 1-3 minutes, protecting against fatal arrhythmia WHILE other interventions are set up. It does NOT lower serum K+ — it buys time. After calcium: give insulin + dextrose to shift K+ into cells, then arrange dialysis to remove it permanently."
+      }
+    ],
+    "difficulty": "hard",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Renal & Metabolic",
+    "client_needs": "Physiological Adaptation / Pharmacological Therapies",
+    "topic": "Hyperkalaemia — ESRD / Emergency Management",
+    "question_type": "standard"
+  },
+  {
+    "question": "A nurse is caring for a postpartum client who delivered vaginally 2 hours ago. On assessment, the nurse finds the uterine fundus is firm, located 2 cm above the umbilicus, and deviated to the right. Lochia rubra is moderate. The client's vital signs are: BP 118/72, HR 86, RR 18. Which action should the nurse take FIRST?",
+    "option_a": "Perform uterine massage to prevent postpartum haemorrhage",
+    "option_b": "Assist the client to void and reassess fundal position",
+    "option_c": "Administer the prescribed oxytocin infusion for uterine atony",
+    "option_d": "Notify the obstetrician of fundal displacement above the umbilicus",
+    "correct_answer": "B",
+    "rationale": "A uterine fundus that is deviated to the RIGHT of midline indicates bladder distension. The bladder sits anterior and inferior to the uterus — when it becomes full, it pushes the uterus upward and laterally (typically to the right). This is the most common cause of a deviated, elevated fundus in the postpartum period, and it interferes with uterine involution and contraction. Crucially, the client's current vital signs are STABLE and the lochia is moderate (not haemorrhage), and the fundus IS FIRM (ruling out uterine atony as the primary issue). The FIRST action is to assist the client to void, which will decompress the bladder and allow the fundus to descend to the midline at or below the umbilicus. If the fundus does not correct after voiding, then further assessment and intervention are warranted. Uterine massage is not indicated when the uterus is already firm. Oxytocin is used for uterine atony (boggy uterus), not a firm displaced fundus.",
+    "distractor_rationales": {
+      "A": "Uterine massage is performed when the fundus is BOGGY (soft) — a sign of uterine atony. This client's fundus is FIRM. Massaging an already-firm uterus is unnecessary and can actually cause uterine irritability and discomfort. The displacement (deviation to the right) points to bladder distension, not atony.",
+      "C": "Oxytocin infusion is indicated for uterine atony — a soft, boggy, poorly contracting uterus. This client's uterus is firm, so oxytocin is not the appropriate intervention. The fundal elevation and deviation are caused by a full bladder, not uterine atony.",
+      "D": "While the obstetrician should be notified if the problem persists after voiding, notifying the physician is premature at this stage. The most likely cause (bladder distension) has a straightforward nursing intervention — assist the client to void. Physician notification can wait until the nurse has addressed the most probable cause and reassessed."
+    },
+    "clinical_pearl": "Postpartum fundal assessment: Normal involution — fundus should be MIDLINE, at or 1 cm BELOW the umbilicus at 1 hour postpartum, descending ~1 cm/day. Fundus deviated to the RIGHT = full bladder (most common). Fundus above umbilicus + deviated = bladder distension. Boggy fundus = uterine atony → massage → bimanual compression → oxytocin. Full bladder prevents uterine contraction and contributes to PPH risk.",
+    "exam_strategy": "For postpartum assessment questions: ALWAYS interpret the fundal position (height, midline vs. deviation, tone) as a SYSTEM. Firm fundus + upward/rightward displacement = bladder problem → void first. Boggy fundus = atony → massage first. Never apply the wrong intervention (massage for a firm uterus, oxytocin for a firm uterus).",
+    "memory_hook": "Right deviation + elevated firm fundus = FULL BLADDER. Have the patient VOID first. BOGGY fundus = MASSAGE first. Think of a full balloon pushing the uterus out of place — empty the balloon (bladder) first.",
+    "hints": [
+      {
+        "level": 1,
+        "text": "Assess the fundal characteristics systematically: firmness (tone), position (height relative to umbilicus), and midline vs. deviation. The fundus is firm but DEVIATED TO THE RIGHT. What anatomical structure, when full, typically displaces the postpartum uterus upward and to the right?"
+      },
+      {
+        "level": 2,
+        "text": "A full bladder displaces the postpartum uterus to the right and above the umbilicus. The uterus is already FIRM (ruling out atony). The client is hemodynamically stable. What simple nursing intervention addresses bladder distension?"
+      },
+      {
+        "level": 3,
+        "text": "The firm, right-deviated fundus = full bladder. Assist the client to void FIRST. After voiding, the fundus should descend to midline at/below the umbilicus. Uterine massage is for BOGGY uteri. Oxytocin is for atony. Notifying the obstetrician is premature when a simple nursing action (voiding) is likely to correct the problem."
+      }
+    ],
+    "difficulty": "moderate",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Maternity / Obstetrics",
+    "client_needs": "Physiological Adaptation / Reduction of Risk",
+    "topic": "Postpartum Assessment / Fundal Displacement",
+    "question_type": "standard"
+  }
+]

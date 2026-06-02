@@ -1,0 +1,143 @@
+# NurseNest Core
+
+Production-focused NurseNest rebuild using Next.js App Router, TypeScript, Tailwind, Prisma, NextAuth, and Stripe.
+
+**Canonical Git remote:** [github.com/erikagodin6-jpg/nursenest-core](https://github.com/erikagodin6-jpg/nursenest-core) — branch `main`. Deploys (e.g. DigitalOcean App Platform) use this repository with **`source_dir: nursenest-core`**. Do not push production work to any other GitHub repo.
+
+## Storage & content (scalability)
+
+Growing content (**questions, flashcards, lessons, blog, media**) must not bloat the **deploy container**. See:
+
+- `ARCHITECTURE_STORAGE.md` — app vs **Postgres** vs **Spaces/CDN**
+- `docs/STORAGE_POLICY.md` — enforceable rules
+- `docs/CONTENT_WORKFLOWS.md` — how to add blog posts, test banks, media safely
+- `docs/STORAGE_OPERATIONS.md` — checklists (imports, uploads, cleanup)
+
+Commands: `npm run disk:audit`, `npm run storage:check` (use `storage:check:strict` in CI).
+
+## Disk & build (avoid ENOSPC)
+
+- **Symptom:** `ENOSPC` while writing `.next` — usually the host volume is nearly full (check with `df -h`).
+- **Clean:** `npm run clean:build` removes `.next`, `dist`, `build`, and `out` under this package.
+- **Build:** `npm run build` sets `TMPDIR=${TMPDIR:-/tmp}` so Turbopack/Next temp files use a writable path when defaults are tight.
+- **Deploy (App Platform):** `heroku-postbuild` runs `log-build-cache-hints.mjs` (before compile), bootstrap guard, `NN_POSTBUILD_NEXT_BUILD=1 npm run build`, then `log-build-cache-hints.mjs --phase=heroku_postbuild_after_compile` so logs include **nested** `dot_next_cache_webpack_nested_files` / `swc` counts after `next build` (the pre-build line alone can show `0` on a cold restore). Cache snapshot still occurs after compile; `heroku-cleanup` logs again after save + prune. The buildpack’s follow-up `npm run build` skips the duplicate compile on DO (`scripts/run-buildpack-build.mjs`). `validate:marketing-production-surface` runs in GitHub **Verify Build** only (not on deploy) to reduce builder memory. `npm run build:deploy` runs post-compile steps only (`build:deploy:postbuild`); the App Platform spec then runs `npm prune --omit=dev`. **Preserves** `.next/cache` by default (`post-build-prune.mjs`); opt out with `NN_POST_BUILD_PRUNE_NEXT_CACHE=1`. (`build:deploy:app-platform` aliases `build:deploy`.) Droplet/CI one-liner: **`npm run build:deploy:full`**.
+- **Monitor:** keep several GB free on the volume that holds the repo and `~/.npm`; prune old `node_modules` copies if needed.
+
+### Build directory & monorepo root
+
+- **Working directory:** Run `npm run build` and `npm run dev` from **`nursenest-core/`** (the directory that contains this `package.json` and `next.config.ts`). A nested clone like `…/nursenest-core/nursenest-core/` is fine as long as commands run from the **inner** app folder that holds `next.config.ts`.
+- **Tracing roots:** `next.config.ts` sets `turbopack.root` and `outputFileTracingRoot` to the **parent** of the app package so monorepo/shared imports and lockfile resolution stay consistent (see inline comments there). Do not point those roots only at `nursenest-core` unless you know you are changing the import graph.
+- **Deploy:** Keep **`source_dir` / app root** (e.g. DigitalOcean App Platform) set to **`nursenest-core`**, matching local builds.
+
+## Stability-First Architecture
+
+- Route isolation:
+  - Marketing: `/`, `/pricing`, `/login`, `/signup`
+  - Learner app: `/app/*`
+  - Admin: `/admin`
+- Server Components by default.
+- Server-side entitlement resolver at `src/lib/entitlements/resolve-entitlement.ts`.
+- No service worker, no custom bundle caching, no Docker requirement.
+- Health endpoint: `/api/health` (degraded-safe if DB unavailable).
+
+## Local Setup
+
+1. Copy environment template to **`.env.local`** (gitignored):
+
+```bash
+cp .env.example .env.local
+```
+
+2. **Auth.js (required for `/app/*`, practice tests, login):** set **`AUTH_SECRET`** (preferred) or legacy **`NEXTAUTH_SECRET`** to a long random value — at least one must be non-empty or the dev server fails fast with a clear error. Generate locally:
+
+```bash
+openssl rand -base64 32
+```
+
+Also set **`AUTH_URL`** / **`NEXTAUTH_URL`** to your dev origin (see `.env.example`).
+
+3. Install dependencies:
+
+```bash
+npm install
+```
+
+4. Generate Prisma client:
+
+```bash
+npm run db:generate
+```
+
+5. Run migrations:
+
+```bash
+npm run db:migrate
+```
+
+6. Seed sample data (CA/US + RPN/LVN-LPN/RN/NP):
+
+```bash
+npm run db:seed
+```
+
+7. Start the **Next.js** dev server (learner app, App Router):
+
+```bash
+npm run dev:next
+```
+
+(`npm run dev` points at the legacy Express entry in the monorepo root; use **`dev:next`** for this package.)
+
+## Prisma Models
+
+- `User`
+- `Subscription`
+- `Category`
+- `Lesson`
+- `Question`
+- `Exam`
+- `ExamAttempt`
+- `Progress`
+
+## Stripe + Entitlement
+
+- Checkout API: `src/app/api/subscriptions/checkout/route.ts`
+- Webhook API: `src/app/api/subscriptions/webhook/route.ts`
+- Entitlement is always enforced server-side.
+- Grace period status preserves access on delayed webhook updates.
+
+## SEO
+
+- Metadata API configured in `src/app/layout.tsx`.
+- `robots.txt` via `src/app/robots.ts`.
+- `sitemap.xml` via `src/app/sitemap.ts` with public routes only.
+
+## DigitalOcean App Platform Deployment
+
+This app is designed to deploy directly from GitHub without Docker.
+
+- Build command:
+
+```bash
+npm run build
+```
+
+- Run command:
+
+```bash
+npm start
+```
+
+(`package.json` runs the **standalone** server from `.next/standalone/` — required because `next.config.ts` sets `output: "standalone"`. `PORT` is read from the environment, e.g. App Platform `8080`.)
+
+Environment variables to set in DigitalOcean (see also `.env.example`):
+- **`DATABASE_URL`** (secret) — DigitalOcean Managed PostgreSQL URI; canonical for Prisma at runtime.
+- **`AUTH_SECRET`** (preferred) or **`NEXTAUTH_SECRET`** (legacy), plus **`AUTH_URL`** / **`NEXTAUTH_URL`** (Auth.js)
+- `NEXT_PUBLIC_APP_URL` (optional)
+- Stripe keys as needed
+
+Migrations: run the **Prisma migrate** GitHub Action with repository secret **`DATABASE_URL`** matching App Platform (same database).
+
+## Selective Salvage Summary
+
+See `SALVAGE_AUDIT.md` for exactly what was reused, rewritten, and intentionally discarded.

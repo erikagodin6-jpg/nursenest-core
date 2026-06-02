@@ -1,0 +1,44 @@
+[
+  {
+    "name": "after-desktop-1440x900",
+    "ok": true,
+    "banned": true,
+    "height": 7102
+  },
+  {
+    "name": "after-laptop-1280x800",
+    "ok": false,
+    "banned": true,
+    "height": 6977
+  },
+  {
+    "name": "after-tablet-768x1024",
+    "ok": true,
+    "banned": true,
+    "height": 8867
+  },
+  {
+    "name": "after-mobile-390x844",
+    "ok": true,
+    "banned": true,
+    "height": 12000
+  },
+  {
+    "name": "after-theme-blossom-1440x900",
+    "ok": false,
+    "banned": true,
+    "height": 7097
+  },
+  {
+    "name": "after-theme-ocean-1440x900",
+    "ok": true,
+    "banned": true,
+    "height": 7102
+  },
+  {
+    "name": "after-theme-midnight-1440x900",
+    "ok": false,
+    "banned": true,
+    "height": 7097
+  }
+]

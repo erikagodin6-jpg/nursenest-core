@@ -1,0 +1,1840 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-14T17:57:03.815Z",
+  "dbConnected": false,
+  "legacySourcesScanned": [
+    "data/audit/legacy-assets-inventory.json"
+  ],
+  "currentSourcesScanned": [
+    "src/lib/lessons/pathway-lesson-catalog-sync.ts (bundled catalog lessons)",
+    "PathwayLessonSection.figures + markdown image patterns in section bodies"
+  ],
+  "summary": {
+    "catalogPathwaysWithLessons": 8,
+    "totalCatalogLessonsExamined": 1089,
+    "lessonsWithStructuredFigures": 0,
+    "lessonsWithInlineImageMarkdown": 0,
+    "lessonsWithNoFiguresOrInlineImages": 1089,
+    "legacyPublicAssetFilesApprox": 2751,
+    "legacyExtensionBuckets": {
+      ".json": 101,
+      ".jpg": 3,
+      ".gif": 9,
+      ".png": 989,
+      ".js": 1409,
+      ".webp": 144,
+      ".html": 5,
+      ".css": 4,
+      ".svg": 34,
+      ".mp4": 30,
+      ".jpeg": 23
+    }
+  },
+  "heuristic": {
+    "imageGapCandidates": "Catalog lessons with ≥120 words and zero section.figures and no markdown image URL — may still be fine (not every lesson needs art); cross-check legacy lesson file if slug matched.",
+    "noAutomatedLegacySlugMatch": "Per-lesson legacy image expectation requires legacy lesson file join; see legacy-to-current-lesson-map.json and import pipelines."
+  },
+  "samplesLessonsWithSubstanceButNoImages": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "clinical-judgment-prioritization-gold",
+      "title": "Clinical judgment: prioritization (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1470,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sepsis-early-recognition-gold",
+      "title": "Sepsis: recognition & nursing response (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1609,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluids-electrolytes-emergencies-gold",
+      "title": "Electrolyte & fluid crises (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1623,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-coronary-syndrome-gold",
+      "title": "ACS & chest pain (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1630,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "high-alert-medications-safety-gold",
+      "title": "High-alert meds: nursing management (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1588,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "stroke-increased-icp-gold",
+      "title": "Stroke & elevated ICP (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1566,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "shock-emergencies-gold",
+      "title": "Shock resuscitation (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1555,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "canadian-rpn-scope-collaboration-gold",
+      "title": "Collaborating with RPNs: assignment & accountability (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1477,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ob-emergencies-gold-standard",
+      "title": "OB emergencies (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 278,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pediatric-triage-emergencies-gold-standard",
+      "title": "Pediatric triage & dehydration (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 253,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "renal-dialysis-acute-complications-gold-standard",
+      "title": "Renal failure & dialysis complications (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 272,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "copd-clinical-judgment-gold",
+      "title": "COPD: clinical judgment (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1658,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dka-hhs-hyperglycemic-emergencies-gold",
+      "title": "DKA & HHS: clinical judgment (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1539,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-recognition-gold",
+      "title": "Pulmonary embolism: recognition (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1551,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-stroke-prevention-gold",
+      "title": "Atrial fibrillation: stroke prevention (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1544,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pneumonia-cap-nursing-gold",
+      "title": "Pneumonia (CAP): nursing priorities (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1503,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "upper-gi-bleed-prioritization-gold",
+      "title": "Upper GI bleed: priorities (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1483,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-kidney-injury-nursing-gold",
+      "title": "Acute kidney injury: nursing surveillance (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1472,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "meningitis-emergency-recognition-gold",
+      "title": "Meningitis: emergency recognition (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1482,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "opioid-toxicity-naloxone-gold",
+      "title": "Opioid toxicity & naloxone safety (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1468,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "falls-injury-prevention-gold",
+      "title": "Falls & injury prevention (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1474,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "nurse-patient-assignment-acuity-gold",
+      "title": "Patient assignment & acuity (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1447,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "adrenal-crisis-addisonian-gold",
+      "title": "Adrenal crisis (Addisonian) (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1466,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ards-acute-respiratory-failure-gold",
+      "title": "ARDS & acute respiratory failure (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1477,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "thyroid-storm-emergency-gold",
+      "title": "Thyroid storm: emergency recognition (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1457,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "delirium-acute-confusion-gold",
+      "title": "Delirium: acute confusion & safety (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1471,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "clinical-casebook-sepsis-rapid-response-gold",
+      "title": "Sepsis case study: rapid response (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1802,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "clinical-casebook-acs-chest-pain-gold",
+      "title": "ACS case study: chest pain triage (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1784,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "clinical-casebook-respiratory-distress-gold",
+      "title": "Respiratory distress case study (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1566,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "clinical-casebook-glucose-dka-hypoglycemia-gold",
+      "title": "Glucose emergency case study (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1580,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "clinical-casebook-electrolyte-crisis-gold",
+      "title": "Electrolyte crisis case study (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1713,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "clinical-casebook-maternal-newborn-emergency-gold",
+      "title": "Maternal emergency case study (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1597,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "clinical-casebook-pediatric-fever-dehydration-gold",
+      "title": "Pediatric fever / dehydration case study (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1552,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "clinical-casebook-mental-health-safety-gold",
+      "title": "Mental health & safety case study (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1562,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "med-family-antibiotics-gold",
+      "title": "Antibiotics — nursing implications (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1484,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "med-family-anticoagulants-gold",
+      "title": "Anticoagulants — monitoring & safety (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1475,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "med-family-insulin-diabetes-gold",
+      "title": "Insulin & diabetes medications (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1465,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "med-family-cardiac-gold",
+      "title": "Cardiac medications (ischemia & rhythm) (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1432,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "med-family-antihypertensives-gold",
+      "title": "Antihypertensives (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1417,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "med-family-respiratory-gold",
+      "title": "Respiratory medications (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1443,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "med-family-psychotropic-gold",
+      "title": "Psychotropic medications (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1428,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "med-family-pain-sedation-gold",
+      "title": "Pain & sedation medications (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1421,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "med-family-emergency-response-gold",
+      "title": "Emergency response medications (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1413,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "safety-family-infection-control-gold",
+      "title": "Infection control & standard precautions (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1417,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "safety-family-isolation-precautions-gold",
+      "title": "Isolation & transmission precautions (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1491,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "safety-family-falls-prevention-gold",
+      "title": "Falls prevention & safety (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1458,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "safety-family-restraints-alternatives-gold",
+      "title": "Restraints & least-restrictive alternatives (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1450,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "safety-family-medication-administration-gold",
+      "title": "Medication administration & error prevention (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1447,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "safety-family-delegation-supervision-gold",
+      "title": "Delegation & supervision (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1499,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "safety-family-escalation-notification-gold",
+      "title": "Escalation & when to notify (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1455,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "safety-family-prioritization-uncertainty-gold",
+      "title": "Prioritization under uncertainty (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1447,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-balance-acute-care",
+      "title": "Fluid balance & IV therapy judgment (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 594,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiovascular-prioritization",
+      "title": "Cardiovascular prioritization for Canadian NCLEX-RN",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1139,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pulmonary-embolism",
+      "title": "Pulmonary embolism (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1576,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-heart-failure",
+      "title": "Heart failure (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1671,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-myocardial-infarction",
+      "title": "Myocardial infarction (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1618,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-angina",
+      "title": "Angina (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1471,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-dysrhythmias",
+      "title": "Dysrhythmias (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1622,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-hypertension",
+      "title": "Hypertension (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1609,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-shock",
+      "title": "Shock (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1532,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-asthma",
+      "title": "Asthma (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1543,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-ards",
+      "title": "ARDS (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1420,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pneumonia",
+      "title": "Pneumonia (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1509,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-copd-respiratory",
+      "title": "COPD & respiratory basics (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1556,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-abg-interpretation",
+      "title": "ABG interpretation (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1533,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-acid-base-advanced",
+      "title": "Acid–base disorders (advanced) (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1633,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-sodium-imbalance",
+      "title": "Sodium imbalance (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1648,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-potassium-imbalance",
+      "title": "Potassium imbalance (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1291,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-insulin-hypoglycemia",
+      "title": "Insulin & hypoglycemia (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1553,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-sepsis",
+      "title": "Sepsis (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1466,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-infection-control",
+      "title": "Infection control (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1785,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-anticoagulants",
+      "title": "Anticoagulants (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1478,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-antibiotics",
+      "title": "Antibiotics (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1908,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pain-management",
+      "title": "Pain management (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 2015,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-wound-care",
+      "title": "Wound care (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 839,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-delegation",
+      "title": "Delegation & assignment (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1206,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-fluid-balance",
+      "title": "Fluid deficit vs excess (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1879,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-prioritization-abcs",
+      "title": "Prioritization, ABCs & safety (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1725,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-general-nursing-clinical",
+      "title": "General nursing clinical judgment (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1925,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "heart-failure-nursing-priorities-hy",
+      "title": "Heart Failure Nursing Priorities (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-myocardial-infarction-troponin",
+      "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "shock-recognition-fluids",
+      "title": "Shock Recognition & Fluids (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-crisis-vs-urgency",
+      "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-rate-control",
+      "title": "Atrial Fibrillation & Rate Control (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "endocarditis-blood-cultures",
+      "title": "Endocarditis & Blood Cultures (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pericarditis-ecg-clues",
+      "title": "Pericarditis & ECG Clues (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dvt-pe-nursing-priorities",
+      "title": "DVT & PE Nursing Priorities (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "abg-interpretation-basics-hy",
+      "title": "ABG Interpretation Basics (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 197,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "copd-exacerbation-oxygen",
+      "title": "COPD Exacerbation & Oxygen (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "asthma-status-asthmaticus",
+      "title": "Asthma & Status Asthmaticus (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ards-ventilation-basics",
+      "title": "ARDS & Ventilation Basics (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pneumonia-oxygenation",
+      "title": "Pneumonia & Oxygenation (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 197,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-clues",
+      "title": "Pulmonary Embolism Clues (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 197,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "tb-isolation-compliance",
+      "title": "TB Isolation & Compliance (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pleural-effusion-chest-tubes",
+      "title": "Pleural Effusion & Chest Tubes (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "insulin-hypoglycemia-hy",
+      "title": "Insulin & Hypoglycemia (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 197,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anticoagulants-bleeding-risk",
+      "title": "Anticoagulants & Bleeding Risk (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "antibiotic-classes-allergies-hy",
+      "title": "Antibiotic Classes & Allergies (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "opioids-respiratory-depression",
+      "title": "Opioids & Respiratory Depression (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiac-glycosides-toxicity",
+      "title": "Cardiac Glycosides & Toxicity (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diuretics-electrolyte-shifts",
+      "title": "Diuretics & Electrolyte Shifts (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "antihypertensive-combos",
+      "title": "Antihypertensive Combos (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 194,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "chemo-safe-handling-extravasation",
+      "title": "Chemo Safe Handling & Extravasation (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hyponatremia-vs-hypernatremia-hy",
+      "title": "Hyponatremia vs Hypernatremia (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 201,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypo-vs-hyperkalemia-hy",
+      "title": "Hypo- vs Hyperkalemia (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 201,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-volume-deficit",
+      "title": "Fluid Volume Deficit (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 201,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-volume-excess",
+      "title": "Fluid Volume Excess (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 201,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "magnesium-arrhythmia-risk",
+      "title": "Magnesium & Arrhythmia Risk (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 204,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "calcium-tetany",
+      "title": "Calcium & Tetany (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 201,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "phosphate-shifts-in-renal",
+      "title": "Phosphate Shifts in Renal (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 204,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "mixed-acid-base-patterns",
+      "title": "Mixed Acid-Base Patterns (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 201,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "liver-failure-hepatic-encephalopathy",
+      "title": "Liver Failure & Hepatic Encephalopathy (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-pancreatitis-nursing-care",
+      "title": "Acute Pancreatitis Nursing Care (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "bowel-obstruction-vs-paralytic-ileus",
+      "title": "Bowel Obstruction vs Paralytic Ileus (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "gerd-pud-bleeding-clues",
+      "title": "GERD & PUD Bleeding Clues (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "gi-bleed-assessment",
+      "title": "GI Bleed Assessment (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 197,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "c-diff-infection-control",
+      "title": "C. diff Infection Control (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ostomy-skin-protection",
+      "title": "Ostomy & Skin Protection (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "stroke-assessment-tpa-window",
+      "title": "Stroke Assessment & tPA Window (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "seizure-precautions-rescue-meds",
+      "title": "Seizure Precautions & Rescue Meds (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "increased-icp-positioning",
+      "title": "Increased ICP & Positioning (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "spinal-cord-injury-autonomic-dysreflexia",
+      "title": "Spinal Cord Injury Autonomic Dysreflexia (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "meningitis-isolation-assessment",
+      "title": "Meningitis Isolation & Assessment (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "migraine-vs-red-flag-headache",
+      "title": "Migraine vs Red-Flag Headache (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "parkinson-disease-med-timing",
+      "title": "Parkinson Disease Med Timing (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "title": "DKA vs HHS Priorities (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "thyroid-storm-myxedema-clues",
+      "title": "Thyroid Storm & Myxedema Clues (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "addisonian-crisis",
+      "title": "Addisonian Crisis (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 194,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cushing-syndrome-assessment",
+      "title": "Cushing Syndrome Assessment (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 197,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diabetes-self-management-teaching",
+      "title": "Diabetes Self-Management Teaching (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 197,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "siadh-vs-di-basics",
+      "title": "SIADH vs DI Basics (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "aki-prerenal-vs-intrarenal",
+      "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 204,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hemodialysis-access-care",
+      "title": "Hemodialysis Access Care (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 201,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "peritoneal-dialysis-complications",
+      "title": "Peritoneal Dialysis Complications (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 201,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "kidney-stones-strain-management",
+      "title": "Kidney Stones & Strain Management (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 207,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "uti-vs-pyelonephritis",
+      "title": "UTI vs Pyelonephritis (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 201,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "indwelling-catheter-risks",
+      "title": "Indwelling Catheter Risks (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 201,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anemia-types-transfusion-thresholds",
+      "title": "Anemia Types & Transfusion Thresholds (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 205,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "transfusion-reaction-recognition",
+      "title": "Transfusion Reaction Recognition (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 199,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "neutropenic-precautions",
+      "title": "Neutropenic Precautions (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 196,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sickle-cell-pain-acs",
+      "title": "Sickle Cell Pain & ACS (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 205,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hip-fracture-fall-risk",
+      "title": "Hip Fracture & Fall Risk (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ra-flare-immune-modulators",
+      "title": "RA Flare & Immune Modulators (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "immobility-dvt-prophylaxis",
+      "title": "Immobility & DVT Prophylaxis (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 197,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sepsis-early-recognition-hy",
+      "title": "Sepsis Early Recognition (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 198,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hiv-confidentiality-pep-basics",
+      "title": "HIV Confidentiality & PEP Basics (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "isolation-precautions-in-practice",
+      "title": "Isolation Precautions in Practice (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "wound-infection-vs-colonization",
+      "title": "Wound Infection vs Colonization (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "burn-depth-fluid-resuscitation-basics",
+      "title": "Burn Depth & Fluid Resuscitation Basics (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 203,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pressure-injury-staging",
+      "title": "Pressure Injury Staging (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 194,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "severe-dermatitis-skin-care",
+      "title": "Severe Dermatitis Skin Care (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 197,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "suicide-risk-assessment-hy",
+      "title": "Suicide Risk Assessment (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 197,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "psychotropic-side-effects",
+      "title": "Psychotropic Side Effects (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 196,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "alcohol-withdrawal-ciwa",
+      "title": "Alcohol Withdrawal CIWA (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 196,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "preeclampsia-vs-eclampsia",
+      "title": "Preeclampsia vs Eclampsia (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 196,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "postpartum-hemorrhage",
+      "title": "Postpartum Hemorrhage (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 193,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "late-decelerations-fhr",
+      "title": "Late Decelerations & FHR (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 199,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "newborn-thermoregulation-feeding",
+      "title": "Newborn Thermoregulation & Feeding (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 199,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "rh-incompatibility-basics",
+      "title": "Rh Incompatibility Basics (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 196,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pediatric-fever-dehydration",
+      "title": "Pediatric Fever & Dehydration (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 199,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "rsv-pediatric-resp-distress",
+      "title": "RSV & Pediatric Resp Distress (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 202,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "immunization-schedule-essentials",
+      "title": "Immunization Schedule Essentials (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 196,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "growth-failure-red-flags",
+      "title": "Growth Failure Red Flags (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 199,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "non-accidental-trauma-suspicion",
+      "title": "Non-Accidental Trauma Suspicion (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 196,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "assignment-vs-delegation",
+      "title": "Assignment vs Delegation (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 199,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ethical-distress-advocacy",
+      "title": "Ethical Distress & Advocacy (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 202,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "legal-nurse-practice-act",
+      "title": "Legal: Nurse Practice Act (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 202,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "qi-incident-reporting",
+      "title": "QI & Incident Reporting (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 202,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "falls-hourly-rounding",
+      "title": "Falls & Hourly Rounding (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 204,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "restraint-alternatives-policy",
+      "title": "Restraint Alternatives & Policy (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 204,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "medication-error-disclosure",
+      "title": "Medication Error Disclosure (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 201,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sharp-safety-exposure",
+      "title": "Sharp Safety & Exposure (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 204,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "enteral-feeding-tube-safety",
+      "title": "Enteral Feeding Tube Safety (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "tpn-line-care-basics",
+      "title": "TPN Line Care Basics (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 200,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "abdominal-aortic-aneurysm-nclex-rn",
+      "title": "Abdominal Aortic Aneurysm (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 175,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-coronary-syndrome-nclex-rn",
+      "title": "Acute Coronary Syndrome (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 167,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-nclex-rn",
+      "title": "Atrial Fibrillation (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 170,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+      "title": "CABG and Postoperative CABG Complications (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 164,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiac-tamponade-nclex-rn",
+      "title": "Cardiac Tamponade (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 150,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+      "title": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 169,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+      "title": "Defibrillation vs Synchronized Cardioversion (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 164,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "heart-failure-nclex-rn",
+      "title": "Heart Failure (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 186,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-encephalopathy-nclex-rn",
+      "title": "Hypertensive Encephalopathy (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 162,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "infective-endocarditis-nclex-rn",
+      "title": "Infective Endocarditis (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 175,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "myocardial-infarction-nclex-rn",
+      "title": "Myocardial Infarction (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 194,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "peripheral-artery-disease-nclex-rn",
+      "title": "Peripheral Artery Disease (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 195,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "phlebostatic-axis-nclex-rn",
+      "title": "Phlebostatic Axis (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 198,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-nclex-rn",
+      "title": "Pulmonary Embolism (NCLEX-RN, Canada)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 194,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "clinical-judgment-prioritization-gold",
+      "title": "Clinical judgment: prioritization (NCLEX-RN, US)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1511,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "sepsis-early-recognition-gold",
+      "title": "Sepsis: recognition & first-line nursing response (NCLEX-RN, US)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1586,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "fluids-electrolytes-emergencies-gold",
+      "title": "Electrolyte & fluid crises: RN judgment (NCLEX-RN, US)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1634,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "acute-coronary-syndrome-gold",
+      "title": "ACS & chest pain: RN management (NCLEX-RN, US)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1619,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "high-alert-medications-safety-gold",
+      "title": "High-alert meds: nursing management (NCLEX-RN, US)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1593,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "stroke-increased-icp-gold",
+      "title": "Stroke & elevated ICP: RN acute care (NCLEX-RN, US)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1600,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "shock-emergencies-gold",
+      "title": "Shock resuscitation: RN acute management (NCLEX-RN, US)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1596,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "canadian-rpn-scope-collaboration-gold",
+      "title": "Supervising practical nurses: delegation & safety (NCLEX-RN, US)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1481,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "ob-emergencies-gold-standard",
+      "title": "OB emergencies: RN stabilization & protocols (NCLEX-RN, US)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 303,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pediatric-triage-emergencies-gold-standard",
+      "title": "Pediatric respiratory & fluid emergencies (NCLEX-RN, US)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 279,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "renal-dialysis-acute-complications-gold-standard",
+      "title": "Renal failure & dialysis acute management (NCLEX-RN, US)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 321,
+      "priorityRank": 1
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "copd-clinical-judgment-gold",
+      "title": "COPD: clinical judgment (NCLEX-RN, US)",
+      "figureCount": 0,
+      "hasInlineImage": false,
+      "approxWords": 1708,
+      "priorityRank": 1
+    }
+  ],
+  "truncated": true
+}

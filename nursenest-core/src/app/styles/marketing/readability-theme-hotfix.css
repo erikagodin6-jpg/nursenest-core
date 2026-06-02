@@ -1,0 +1,124 @@
+/* =====================================================================
+   Marketing readability + Blossom/Aurora brand hotfix
+
+   Purpose:
+   - Keep the homepage headline emphasis crisp: no glow, blur, blend, or
+     transparency-dependent fallback.
+   - Theme personality comes from dedicated hero accent tokens in hero.css.
+   - Force Blossom and Aurora brand lockups to use the berry/pink theme brand
+     colour instead of near-black text.
+
+   Loaded last from marketing/index.css so this intentionally overrides earlier
+   hero/theme rules without changing layout structure.
+   ===================================================================== */
+
+.nn-home-marketing-rich-hero {
+  --hero-headline-solid: var(
+    --hero-accent-solid-fallback,
+    var(--semantic-brand, var(--theme-primary))
+  );
+}
+
+.nn-home-marketing-rich-hero .nn-hero-headline-emphasis,
+.nn-home-marketing-rich-hero .nn-blossom-hero-gradient-copy {
+  color: var(--hero-headline-solid) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  will-change: auto !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="ocean"] .nn-home-marketing-rich-hero {
+  --hero-headline-solid: var(--hero-accent-solid-fallback, #075f7d);
+}
+
+html[data-theme="blossom"] .nn-home-marketing-rich-hero {
+  --hero-headline-solid: var(--hero-accent-solid-fallback, #8f1f4f);
+}
+
+html[data-theme="aurora"] .nn-home-marketing-rich-hero {
+  --hero-headline-solid: var(--hero-accent-solid-fallback, #7a317f);
+}
+
+html[data-theme="sunset"] .nn-home-marketing-rich-hero {
+  --hero-headline-solid: var(--hero-accent-solid-fallback, #9b3f2c);
+}
+
+:is(
+    html[data-theme="dark-clinical"],
+    html[data-theme="dark-academia"],
+    html[data-theme="dark-mode"],
+    html[data-theme="midnight-indigo"],
+    html[data-theme="deep-twilight"],
+    html[data-theme="evergreen-steel"],
+    html[data-theme="midnight-ink"],
+    html[data-theme="storm-slate"],
+    html[data-theme="midnight"],
+    html[data-theme="apex"]
+  )
+  .nn-home-marketing-rich-hero {
+  --hero-headline-solid: var(--hero-accent-solid-fallback, #86ccff);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-header-brand-lockup {
+  color: var(
+    --logo-primary,
+    var(--semantic-brand, var(--theme-primary))
+  ) !important;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-brand-lockup {
+  color: var(
+    --logo-primary,
+    var(--semantic-brand, var(--theme-primary))
+  ) !important;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-header-logo-link
+  :where(span, strong, b) {
+  color: var(
+    --logo-primary,
+    var(--semantic-brand, var(--theme-primary))
+  ) !important;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail,
+[data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"] {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background: var(--nn-header-primary-bg) !important;
+  box-shadow: none !important;
+}
+
+[data-nn-header-layout="marketing-row4"].nn-header-marketing-v31 {
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner {
+  max-width: min(100%, 58rem) !important;
+  padding-inline: clamp(1rem, 2.4vw, 2rem) !important;
+}
+
+[data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-inner
+  > nav {
+  width: auto !important;
+  max-width: min(100%, 48rem) !important;
+  justify-content: center !important;
+  gap: 0.5rem 0.65rem !important;
+}
+
+[data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a,
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+  flex: 0 0 auto !important;
+}

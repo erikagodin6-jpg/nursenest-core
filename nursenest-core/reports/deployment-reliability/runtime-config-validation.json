@@ -1,0 +1,68 @@
+{
+  "generatedAt": "2026-06-02T00:39:10.993Z",
+  "status": "pass",
+  "failureCount": 0,
+  "checks": [
+    {
+      "ok": true,
+      "key": "DATABASE_URL",
+      "parsed": {
+        "protocol": "postgresql",
+        "hostname": "127.0.0.1",
+        "port": "5432",
+        "database": "nursenest",
+        "usernamePresent": true,
+        "passwordPresent": true
+      }
+    },
+    {
+      "ok": true,
+      "key": "DIRECT_URL",
+      "parsed": {
+        "protocol": "postgresql",
+        "hostname": "127.0.0.1",
+        "port": "5432",
+        "database": "nursenest",
+        "usernamePresent": true,
+        "passwordPresent": true
+      }
+    },
+    {
+      "ok": true,
+      "key": "AUTH_SECRET",
+      "length": 32,
+      "fingerprint": "aaa***aaa"
+    },
+    {
+      "ok": true,
+      "key": "NEXTAUTH_SECRET",
+      "length": 32,
+      "fingerprint": "bbb***bbb"
+    },
+    {
+      "ok": true,
+      "key": "SPACES_KEY",
+      "fingerprint": "spa***ple"
+    },
+    {
+      "ok": true,
+      "key": "SPACES_SECRET",
+      "fingerprint": "spa***ple"
+    },
+    {
+      "ok": true,
+      "key": "SPACES_BUCKET",
+      "value": "nursenest-images"
+    },
+    {
+      "ok": true,
+      "key": "SPACES_REGION",
+      "value": "tor1"
+    },
+    {
+      "ok": true,
+      "key": "SPACES_ENDPOINT",
+      "origin": "https://tor1.digitaloceanspaces.com"
+    }
+  ]
+}

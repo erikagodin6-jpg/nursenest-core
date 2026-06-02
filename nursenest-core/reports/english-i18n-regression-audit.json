@@ -1,0 +1,26 @@
+{
+  "generatedAt": "2026-05-29T20:13:53.740Z",
+  "allowEnglishWrite": false,
+  "results": [
+    {
+      "route": "/",
+      "locale": "en",
+      "surfaceType": "english-canonical",
+      "englishOnly": true,
+      "missingKeys": [],
+      "frenchLeakSuspicions": [],
+      "malformedTitles": [],
+      "brokenHeaders": [],
+      "emptyHeroText": [],
+      "changedCriticalEnglishCopy": [],
+      "seoIssues": [],
+      "jsonLdIssues": []
+    }
+  ],
+  "summary": {
+    "missingKeys": 0,
+    "frenchLeaks": 0,
+    "malformedTitles": 0,
+    "changedCriticalEnglishCopy": 0
+  }
+}

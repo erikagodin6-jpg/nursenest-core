@@ -1,0 +1,114 @@
+# NurseNest standby deployment template.
+#
+# This is intentionally a TEMPLATE, not the canonical production spec. Do not
+# use it for the primary app. Create the standby app from the DigitalOcean UI or
+# `doctl apps create --spec` after replacing placeholders and loading secrets.
+#
+# Standby database rule:
+#   DATABASE_URL / DIRECT_URL point at the managed Postgres read replica during
+#   normal operation. During failover, promote the replica and update the standby
+#   app to the promoted writable endpoint before shifting traffic.
+
+name: nursenest-core-standby
+region: tor
+ingress:
+  rules:
+    - component:
+        name: web
+      match:
+        path:
+          prefix: /
+services:
+  - name: web
+    image:
+      registry_type: GHCR
+      registry: ghcr.io
+      repository: erikagodin6-jpg/nursenest
+      tag: latest
+    run_command: node scripts/start-production.mjs
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-s
+    health_check:
+      http_path: /readyz
+      port: 8080
+      initial_delay_seconds: 240
+      period_seconds: 15
+      timeout_seconds: 15
+      success_threshold: 1
+      failure_threshold: 12
+    liveness_health_check:
+      http_path: /healthz
+      port: 8080
+      initial_delay_seconds: 240
+      period_seconds: 15
+      timeout_seconds: 15
+      success_threshold: 1
+      failure_threshold: 12
+    envs:
+      - key: NODE_ENV
+        scope: RUN_AND_BUILD_TIME
+        value: production
+      - key: PORT
+        scope: RUN_AND_BUILD_TIME
+        value: "8080"
+      - key: HOSTNAME
+        scope: RUN_AND_BUILD_TIME
+        value: 0.0.0.0
+      - key: NEXT_PUBLIC_APP_URL
+        scope: RUN_AND_BUILD_TIME
+        value: https://standby.example.nursenest.ca
+      - key: AUTH_URL
+        scope: RUN_TIME
+        value: https://standby.example.nursenest.ca
+      - key: NEXTAUTH_URL
+        scope: RUN_TIME
+        value: https://standby.example.nursenest.ca
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      - key: DIRECT_URL
+        scope: RUN_TIME
+        type: SECRET
+      - key: AUTH_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: NEXTAUTH_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: CRON_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: NN_RUNTIME_ENV_HEALTH_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: STRIPE_SECRET_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: STRIPE_WEBHOOK_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      - key: SPACES_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: SPACES_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: ENABLE_ECG_MODULE
+        scope: RUN_TIME
+        value: "true"
+      - key: NEXT_PUBLIC_ENABLE_ECG_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: ENABLE_ADVANCED_ECG_MODULE
+        scope: RUN_TIME
+        value: "true"
+      - key: NEXT_PUBLIC_ENABLE_ADVANCED_ECG_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+alerts:
+  - rule: DEPLOYMENT_FAILED
+  - rule: DOMAIN_FAILED

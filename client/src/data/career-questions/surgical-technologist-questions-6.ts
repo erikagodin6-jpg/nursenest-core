@@ -1,0 +1,28 @@
+import type { CareerQuestion } from "./surgical-technologist-questions";
+
+export const surgicalTechnologistQuestionsPart6: CareerQuestion[] = [
+  {
+    id: "st-1501",
+    stem: "What factors increase a patient's risk for surgical wound dehiscence?",
+    options: ["Obesity, malnutrition, diabetes, chronic steroid use, advanced age, wound infection, and increased abdominal pressure","Only poor surgical technique causes dehiscence","Dehiscence risk is the same for all patients","Young and healthy patients are at highest risk"],
+    correctIndex: 0,
+    rationale: "Multiple patient and surgical factors increase dehiscence risk, including obesity, malnutrition, diabetes, steroids, age, infection, and increased abdominal pressure.",
+    difficulty: 2,
+    category: "Surgical Complications",
+    topic: "wound complications",
+    regionScope: "BOTH",
+    questionType: "MCQ",
+  },
+  {
+    id: "st-1502",
+    stem: "What organism is used in biological indicators for steam sterilization and why?",
+    options: ["Geobacillus stearothermophilus because it is highly resistant to steam sterilization and its destruction confirms effective sterilization conditions","Escherichia coli as it is the most common surgical pathogen","Staphylococcus aureus because it is found on skin","Bacillus cereus due to its clinical significance"],
+    correctIndex: 0,
+    rationale: "G. stearothermophilus is the standard BI organism for steam sterilization because its high resistance to steam ensures that its kill confirms effective sterilization.",
+    difficulty: 2,
+    category: "Infection Prevention",
+    topic: "biological monitoring",
+    regionScope: "BOTH",
+    questionType: "MCQ",
+  },
+];

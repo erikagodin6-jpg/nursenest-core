@@ -1,0 +1,12 @@
+/* =========================================================================
+   base.css
+   Global HTML/body reset and page-level primitives.
+   Imported by: src/app/layout.tsx (root layout).
+
+   This file intentionally stays small — it should only contain rules that
+   must apply to every single route before any component CSS loads.
+   ========================================================================= */
+
+/* HTML + body overflow containment is in globals.css alongside the Tailwind
+   @import entry point. This file is reserved for future extraction of the
+   html/body reset block once theme cascade order is confirmed stable. */

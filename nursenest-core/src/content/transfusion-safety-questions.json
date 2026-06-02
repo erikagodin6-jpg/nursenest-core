@@ -1,0 +1,14 @@
+[
+  {
+    "promptKey": "tools.transfusionSafety.q1",
+    "options": ["tools.transfusionSafety.optA", "tools.transfusionSafety.optB", "tools.transfusionSafety.optC"],
+    "correctIndex": 0,
+    "rationaleKey": "tools.transfusionSafety.rationale1"
+  },
+  {
+    "promptKey": "tools.transfusionSafety.q2",
+    "options": ["tools.transfusionSafety.opt2a", "tools.transfusionSafety.opt2b"],
+    "correctIndex": 0,
+    "rationaleKey": "tools.transfusionSafety.rationale2"
+  }
+]

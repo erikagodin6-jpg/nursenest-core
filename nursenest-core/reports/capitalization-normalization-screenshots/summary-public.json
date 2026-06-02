@@ -1,0 +1,41 @@
+{
+  "base": "http://127.0.0.1:3100",
+  "capturedAt": "2026-05-10T21:45:22.598Z",
+  "summary": [
+    {
+      "route": "/tools",
+      "viewport": "desktop",
+      "status": 200,
+      "file": "/root/nursenest-core/nursenest-core/reports/capitalization-normalization-screenshots/clinical-tools-desktop.png"
+    },
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "status": 200,
+      "file": "/root/nursenest-core/nursenest-core/reports/capitalization-normalization-screenshots/homepage-mobile.png"
+    },
+    {
+      "route": "/tools",
+      "viewport": "mobile",
+      "status": 200,
+      "file": "/root/nursenest-core/nursenest-core/reports/capitalization-normalization-screenshots/clinical-tools-mobile.png"
+    }
+  ],
+  "issues": [
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "error": "TimeoutError: page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"http://127.0.0.1:3100/\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "route": "/tools",
+      "viewport": "desktop",
+      "bad": "Clinical tools"
+    },
+    {
+      "route": "/tools",
+      "viewport": "mobile",
+      "bad": "Clinical tools"
+    }
+  ]
+}

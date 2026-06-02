@@ -1,0 +1,19 @@
+{
+  "overview": "La anatomía estudia la estructura del cuerpo humano, mientras que la fisiología estudia su funcionamiento. Ambas disciplinas son inseparables: comprender por qué el corazón late requiere conocer su estructura. En enfermería, esta base es esencial para interpretar los signos clínicos y planificar cuidados seguros.",
+  "key_concepts": [
+    "Niveles de organización: químico → celular → tisular → órgano → sistema → organismo",
+    "Homeostasis: mantenimiento de un ambiente interno estable mediante mecanismos de retroalimentación negativa",
+    "Términos direccionales: anterior/posterior, medial/lateral, proximal/distal, ipsilateral/contralateral",
+    "Cavidades corporales: torácica (corazón, pulmones), abdominopélvica, craneal, vertebral",
+    "Los 11 sistemas: tegumentario, óseo, muscular, nervioso, endocrino, cardiovascular, linfático, respiratorio, digestivo, urinario, reproductor"
+  ],
+  "nursing_responsibilities": "La enfermera utiliza el vocabulario anatómico para documentar con precisión los síntomas y transmitir información clínica. Identifica los puntos de referencia anatómicos durante la valoración (auscultación, palpación) y orienta su intervención según el sistema afectado. Un conocimiento sólido de la fisiología permite anticipar complicaciones y explicar los cuidados al paciente.",
+  "clinical_pearls": "La retroalimentación negativa es el mecanismo homeostático más común: cuando la glucemia aumenta, se secreta insulina para reducirla. En patología, este mecanismo suele estar alterado (p. ej., diabetes). Los términos direccionales evitan ambigüedades en las comunicaciones: decir 'dolor en el cuadrante inferior derecho' es más preciso que 'dolor a la derecha'.",
+  "patient_education": "Explicar la estructura y la función de forma sencilla ayuda a los pacientes a entender su enfermedad. Por ejemplo: 'Su corazón es una bomba que envía sangre a todo su cuerpo. Cuando está debilitado, algunos órganos reciben menos oxígeno.' Las explicaciones claras mejoran el cumplimiento terapéutico.",
+  "key_takeaways": [
+    "La anatomía (estructura) y la fisiología (función) siempre se estudian juntas en enfermería",
+    "La homeostasis se altera en la mayoría de las enfermedades — identificar qué mecanismo falla orienta los cuidados",
+    "Dominar el vocabulario direccional es indispensable para una documentación y comunicación precisas",
+    "Los 11 sistemas corporales son interdependientes; la afección de uno suele repercutir en los demás"
+  ]
+}

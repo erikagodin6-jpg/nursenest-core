@@ -1,0 +1,299 @@
+{
+  "ca-rn-nclex-rn:ca-rn-heart-failure": {
+    "title": "Heart failure (NCLEX-RN, Canada)",
+    "seoTitle": "Heart failure | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Canadian RN: heart failure na may metric units at scope language.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "Sinusukat ng mga item sa **heart failure** kung naikonekta mo ang **assessment data sa panganib**: ano ang unang nagbabago, ano ang nangangailangan ng escalation, at aling teaching o order ang **hindi ligtas** sa konteksto.\n\n**RN Canada:** gamitin ang **SI labs** kapag **mmol/L** ang nasa stem (glucose, electrolytes) at bigyang-kahulugan kasama ang clinical picture. Ang provincial standards at employer policy ay namamahala pa rin sa delegasyon."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Asahan ang **prioritization**, **monitoring**, at **safety** — lalo na kapag may routine tasks kasabay ng abnormal finding. Ang Canadian items ay maaaring gumamit ng **metric units** at Canadian care settings; pareho ang judgment pattern."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "Ikonekta ang mga interbensyon sa **underlying pattern** (perfusion, oxygenation, infection burden, electrolyte shifts, o glucose–insulin dynamics) at sa **monitoring** na nagpapatunay na gumagana ang plano."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Namamahala ng magkakumpitensyang priyoridad. Piliin ang pasyenteng **pinakamabilis tumaas ang panganib** kung walang nursing intervention — pagkatapos ang assessment o order na tumutugma. Gamitin ang Canadian acute-care context kapag may units o roles sa stem."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• Ikonekta ang **vitals + labs + kwento** bago magturo o mag-discharge.  \n• Alisin ang mga sagot na **lumalaktaw sa assessment** o **natatagalan ang escalation** kapag may instability.  \n• **Bank:** mag-drill ng items na may tag na `topic:heart-failure`.  \n• **Canada:** tingnan ang **metric labs** at **college scope** language sa PN stems."
+      }
+    }
+  },
+  "us-rn-nclex-rn:us-rn-heart-failure": {
+    "title": "Heart failure (NCLEX-RN, US)",
+    "seoTitle": "Heart failure | NCLEX-RN US | NurseNest",
+    "seoDescription": "US RN: heart failure — limang section na leksyon at item bank.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "Sinusukat kung naikonekta mo ang **assessment data sa panganib**: ano ang unang nagbabago, ano ang nangangailangan ng escalation, at aling teaching o order ang **hindi ligtas** sa konteksto."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Asahan ang **prioritization**, **monitoring**, at **safety** — lalo na kapag may routine tasks kasabay ng abnormal finding."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "Ikonekta ang mga interbensyon sa **underlying pattern** (perfusion, oxygenation, infection burden, electrolyte shifts, o glucose–insulin dynamics) at sa **monitoring** na nagpapatunay na gumagana ang plano."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Namamahala ng magkakumpitensyang priyoridad. Piliin ang pasyenteng **pinakamabilis tumaas ang panganib** kung walang nursing intervention — pagkatapos ang assessment o order na tumutugma."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• Ikonekta ang **vitals + labs + kwento** bago magturo o mag-discharge.  \n• Alisin ang mga sagot na **lumalaktaw sa assessment** o **natatagalan ang escalation** kapag may instability.  \n• **Bank:** mag-drill ng `topic:heart-failure`."
+      }
+    }
+  },
+  "ca-rn-nclex-rn:diabetes-self-management-teaching": {
+    "title": "Diabetes self-management teaching (NCLEX-RN, Canada)",
+    "seoTitle": "Diabetes self-management | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Endocrine clinical judgment: data, risk, first safe action, delegation — Canada.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**Diabetes self-management teaching** (Endocrine) ay **clinical judgment** na tema: ikonekta ang **assessment data sa panganib**, piliin ang **unang ligtas na nursing action**, at alamin kailan **i-delegate** vs **panatilihin** ang responsibilidad. Maaaring may **SI units** at Canadian wording ang mga item; pareho ang NCLEX-RN prioritization logic."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Ginagamit ito para sukatin ang **prioritization**, **monitoring**, at **escalation**. May **distractors** na mukhang tama pero nag-aatras ng assessment, lumalaktaw sa unstable client, o hindi tamang nagde-delegate ng RN-level judgment."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "I-frame ang **diabetes self-management** sa **Endocrine**: iugnay ang inaasahang **assessment** findings sa **interventions** at **monitoring** na nagpapakita na gumagana ang plano. Default difficulty sa topic map: **3**; priority: **high_yield**."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Isipin ang maraming pasyente o gawain: piliin ang opsyon na **pinakamabilis bawasan ang pinsala** para sa taong **lumala** o **high risk** kung walang atensyon. Kung stable ang stem, piliin pa rin ang aksyon na **una ang data gap** bago ang routines."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago comfort o discharge teaching.  \n• Alisin ang mga sagot na **lumalaktaw sa assessment** o **natatagalan ang escalation** kapag may risk.  \n• Pair sa **topic slug `endocrine`** sa hub at timed blocks.  \n\n**Related topics:** `dka-vs-hhs-priorities`, `thyroid-storm-myxedema-clues`, `addisonian-crisis`, `cushing-syndrome-assessment`, `siadh-vs-di-basics`."
+      }
+    }
+  },
+  "us-rn-nclex-rn:diabetes-self-management-teaching": {
+    "title": "Diabetes self-management teaching (NCLEX-RN, US)",
+    "seoTitle": "Diabetes self-management | NCLEX-RN US | NurseNest",
+    "seoDescription": "US RN: unstable vs stable, delegation, first action sa diabetes teaching.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**Diabetes self-management teaching** (Endocrine) ay **clinical judgment** na tema: ikonekta ang **data sa panganib**, piliin ang **unang ligtas na aksyon**, at alamin kailan **mag-delegate** vs **panatilihin** ang responsibilidad. Ang US NCLEX-RN ay madalas mag-test ng **unstable vs stable**, **delegation**, at **first action**."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Sinusukat ang **prioritization**, **monitoring**, at **escalation**. May **distractors** na mukhang makatwiran pero nag-aatras ng assessment."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "I-frame sa **Endocrine**: **assessment** → **interventions** → **monitoring** na nagpapatunay na gumagana ang plano. Difficulty: **3**; priority: **high_yield**."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Maraming pasyente/gawain: unahin ang **pinakamabilis na pinsala** kung may **deterioration** o **high risk**."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago comfort o discharge.  \n• Iwasan ang **skip assessment** / **delay escalation**.  \n• Pair sa `endocrine`.  \n\n**Related:** `dka-vs-hhs-priorities`, `thyroid-storm-myxedema-clues`, `addisonian-crisis`, `cushing-syndrome-assessment`, `siadh-vs-di-basics`."
+      }
+    }
+  },
+  "ca-rn-nclex-rn:diuretics-electrolyte-shifts": {
+    "title": "Diuretics & electrolyte shifts (NCLEX-RN, Canada)",
+    "seoTitle": "Diuretics & electrolytes | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Pharmacology: diuretics, K, Mg, acid-base — Canada.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**Diuretics & electrolyte shifts** (Pharmacology) ay **clinical judgment** na tema: ikonekta ang **data sa panganib**, piliin ang **unang ligtas na aksyon**, at alamin kailan **mag-delegate** vs **panatilihin** ang RN-level judgment. Maaaring may **SI** ang Canadian items."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Sinusukat ang **prioritization**, **monitoring**, at **escalation**."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "I-frame sa **Pharmacology**: **assessment** → **interventions** → **monitoring**. Difficulty: **3**; priority: **high_yield**."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Unahin ang **pinakamataas na risk** na kailangan ng nursing intervention."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago comfort o discharge.  \n• Pair sa `pharmacology`.  \n\n**Related:** `insulin-hypoglycemia`, `anticoagulants-bleeding-risk`, `antibiotic-classes-allergies`, `opioids-respiratory-depression`, `cardiac-glycosides-toxicity`."
+      }
+    }
+  },
+  "us-rn-nclex-rn:diuretics-electrolyte-shifts": {
+    "title": "Diuretics & electrolyte shifts (NCLEX-RN, US)",
+    "seoTitle": "Diuretics & electrolytes | NCLEX-RN US | NurseNest",
+    "seoDescription": "US NCLEX-RN pharmacology: diuretics at electrolyte monitoring.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**Diuretics & electrolyte shifts** (Pharmacology) — **clinical judgment**: **data → risk → first action**, **delegation** vs **retain**. US items: **unstable vs stable**, **delegation**, **first action**."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "**Prioritization**, **monitoring**, **escalation**."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "I-frame sa **Pharmacology**. Difficulty: **3**; priority: **high_yield**."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Unahin ang **pinakamataas na risk** na kailangan ng intervention."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago comfort o discharge.  \n• Pair sa `pharmacology`.  \n\n**Related:** `insulin-hypoglycemia`, `anticoagulants-bleeding-risk`, `antibiotic-classes-allergies`, `opioids-respiratory-depression`, `cardiac-glycosides-toxicity`."
+      }
+    }
+  },
+  "ca-rn-nclex-rn:sepsis-early-recognition-hy": {
+    "title": "Sepsis early recognition (NCLEX-RN, Canada)",
+    "seoTitle": "Sepsis early recognition | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Infectious disease: maagang pagkilala, monitor, escalate — Canada.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**Sepsis early recognition** (Infectious disease) — **clinical judgment**: **data → risk → first action**, **delegation** vs **retain**. Canadian items: maaaring may **SI**."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "**Prioritization**, **monitoring**, **escalation**."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "I-frame sa **Infectious disease**. Difficulty: **4**; priority: **high_yield**."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Unahin ang **pinakamabilis na pinsala** kung may **deterioration**."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago comfort o discharge.  \n• Pair sa `infectious`.  \n\n**Related:** `sepsis-early-recognition`, `hiv-confidentiality-pep-basics`, `isolation-precautions-in-practice`, `wound-infection-vs-colonization`."
+      }
+    }
+  },
+  "us-rn-nclex-rn:sepsis-early-recognition-hy": {
+    "title": "Sepsis early recognition (NCLEX-RN, US)",
+    "seoTitle": "Sepsis early recognition | NCLEX-RN US | NurseNest",
+    "seoDescription": "US NCLEX-RN infectious: prioritization at escalation sa sepsis.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**Sepsis early recognition** (Infectious disease). US items: **unstable vs stable**, **delegation**, **first action**."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "**Prioritization**, **monitoring**, **escalation**."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "I-frame sa **Infectious disease**. Difficulty: **4**; priority: **high_yield**."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Unahin ang **pinakamataas na risk**."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago comfort o discharge.  \n• Pair sa `infectious`.  \n\n**Related:** `sepsis-early-recognition`, `hiv-confidentiality-pep-basics`, `isolation-precautions-in-practice`, `wound-infection-vs-colonization`."
+      }
+    }
+  },
+  "ca-rn-nclex-rn:ca-rn-sepsis": {
+    "title": "Sepsis (NCLEX-RN, Canada)",
+    "seoTitle": "Sepsis | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Canadian RN: sepsis na may metric/scope framing.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "Ang mga item sa **sepsis** ay sinusukat kung naikonekta mo ang **assessment data sa panganib**: ano ang unang nagbabago, ano ang nangangailangan ng escalation, at aling teaching o order ang **hindi ligtas** sa konteksto.\n\n**RN Canada:** gamitin ang **SI labs** kapag **mmol/L** ang nasa stem at bigyang-kahulugan kasama ang clinical picture. Ang provincial standards at employer policy ay namamahala pa rin sa delegasyon."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Asahan ang **prioritization**, **monitoring**, at **safety** — lalo na kapag may routine tasks kasabay ng abnormal finding. Ang Canadian items ay maaaring gumamit ng **metric units** at Canadian care settings; pareho ang judgment pattern."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "Ikonekta ang mga interbensyon sa **underlying pattern** (perfusion, oxygenation, infection burden, electrolyte shifts, o glucose–insulin dynamics) at sa **monitoring** na nagpapatunay na gumagana ang plano."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Namamahala ng magkakumpitensyang priyoridad. Piliin ang pasyenteng **pinakamabilis tumaas ang panganib** kung walang nursing intervention — pagkatapos ang assessment o order na tumutugma. Gamitin ang Canadian acute-care context kapag may units o roles sa stem."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago magturo o mag-discharge.  \n• Alisin ang mga sagot na **lumalaktaw sa assessment** o **natatagalan ang escalation** kapag may instability.  \n• **Bank:** mag-drill ng `topic:sepsis`.  \n• **Canada:** tingnan ang **metric labs** at **college scope** sa PN stems."
+      }
+    }
+  },
+  "us-rn-nclex-rn:us-rn-sepsis": {
+    "title": "Sepsis (NCLEX-RN, US)",
+    "seoTitle": "Sepsis | NCLEX-RN US | NurseNest",
+    "seoDescription": "US RN: sepsis — limang section na leksyon at item bank.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "Ang mga item sa **sepsis** ay sinusukat kung naikonekta mo ang **assessment data sa panganib**: ano ang unang nagbabago, ano ang nangangailangan ng escalation, at aling teaching o order ang **hindi ligtas** sa konteksto."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Asahan ang **prioritization**, **monitoring**, at **safety** — lalo na kapag may routine tasks kasabay ng abnormal finding."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "Ikonekta ang mga interbensyon sa **underlying pattern** (perfusion, oxygenation, infection burden, electrolyte shifts, o glucose–insulin dynamics) at sa **monitoring** na nagpapatunay na gumagana ang plano."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Namamahala ng magkakumpitensyang priyoridad. Piliin ang pasyenteng **pinakamabilis tumaas ang panganib** kung walang nursing intervention — pagkatapos ang assessment o order na tumutugma."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago magturo o mag-discharge.  \n• Alisin ang mga sagot na **lumalaktaw sa assessment** o **natatagalan ang escalation** kapag may instability.  \n• **Bank:** mag-drill ng `topic:sepsis`."
+      }
+    }
+  },
+  "us-np-fnp:fnp-overlay-respiratory-acute": {
+    "title": "COPD, asthma, ARDS, pneumonia, PE — NP respiratory overlay (FNP)",
+    "seoTitle": "NP acute respiratory overlay | FNP US | NurseNest",
+    "seoDescription": "APRN overlay para sa acute respiratory conditions — pair sa buong RN lesson sa catalog.",
+    "sections": {
+      "intro": {
+        "heading": "Introduction",
+        "body": "Ito ay **NP overlay** para sa **COPD, asthma, ARDS, pneumonia, PE** — hindi ulit ng buong RN lesson. Pair sa `us-rn-copd-respiratory` sa pathway catalog para sa pathophysiology at NCLEX-style drills; gamitin ang block na ito para sa **APRN-level** na desisyon."
+      },
+      "diagnosis_np": {
+        "heading": "Diagnosis considerations",
+        "body": "I-frame ang **problem representation**, **red flags**, at **must-not-miss** diagnoses. Mas gusto ng boards ang **next diagnostic step** kaysa **premature treatment** — iugnay ang history, exam, at targeted testing sa pre-test probability."
+      },
+      "management_np": {
+        "heading": "Management plans",
+        "body": "Ilahad ang **initial stabilization** (kung ipinahiwatig ng stem), **guideline-concordant** therapy kung pinapayagan ng stem, **consult triggers**, at **kailan mag-defer** sa specialty o ED. Piliin ang opsyon na tumutugma sa **severity** at **comorbid constraints**."
+      },
+      "meds_np": {
+        "heading": "Medication adjustments",
+        "body": "Asahan ang **dose adjustment** para sa renal/hepatic function, **interaction** at **contraindication** traps, **deprescribing** kung angkop, at **monitoring** pagkatapos ng pagbabago (labs, vitals, toxicity screens)."
+      },
+      "followup_np": {
+        "heading": "Follow-up & monitoring",
+        "body": "Piliin ang **follow-up interval**, **patient education**, **safety netting**, at **reassessment targets** (symptoms, labs, adherence). Ang NP items ay madalas sumusukat kung **nasa-sara mo ang loop** sa panganib — hindi lang ang unang aksyon sa visit."
+      }
+    }
+  }
+}

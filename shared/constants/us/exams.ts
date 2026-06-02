@@ -1,0 +1,38 @@
+export const US_EXAMS = {
+  practicalNurse: {
+    title: "LPN/LVN (Licensed Practical/Vocational Nurse)",
+    examName: "NCLEX-PN",
+    examFull: "National Council Licensure Examination - Practical Nurse",
+    regulatoryBody: "State Board of Nursing",
+    designation: "LPN/LVN",
+    scope: "LPN/LVN Scope of Practice",
+  },
+  registeredNurse: {
+    title: "RN (Registered Nurse)",
+    examName: "NCLEX-RN",
+    examFull: "National Council Licensure Examination - Registered Nurse",
+    regulatoryBody: "State Board of Nursing",
+    designation: "RN",
+    scope: "RN Scope of Practice",
+  },
+  nursePractitioner: {
+    title: "NP (Nurse Practitioner)",
+    examName: "AANP/ANCC",
+    examFull: "Nurse Practitioner Board Certification",
+    regulatoryBody: "State Board of Nursing",
+    designation: "NP",
+    scope: "NP Scope of Practice",
+  },
+  tiers: {
+    rpn: "LPN/LVN",
+    rn: "RN",
+    np: "NP",
+    prenursing: "Pre-Nursing",
+  },
+  designations: ["LVN", "RN", "NP"],
+  currency: "USD",
+  currencySymbol: "$",
+  tempUnit: "°F",
+  weightUnit: "lbs",
+  heightUnit: "in",
+};

@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-04-14T18:25:00.000Z",
+  "summary": "Mobile-first (≤768px) UX pass: safe-area padding, 44px-class touch targets on key marketing and learner chrome, learner bottom-nav pathway truncation, context bar height, and settings drawer close control. No routing, SEO URLs, or entitlement logic changed.",
+  "routesImproved": [
+    "Marketing localized pages using SiteHeader (all /[locale]/*)",
+    "Learner app shell (/app/*) when GlobalContextBar or bottom primary nav is visible",
+    "Region & settings drawer (mobile only)"
+  ],
+  "issuesAddressed": [
+    "Marketing mobile header: notch safe-area inset on brand row; guest Login/Sign up min height 44px",
+    "Marketing signed-in mobile CTA row: primary actions use min-h-11",
+    "Secondary header actions (Dashboard-style links): min-h 38px → 44px where HEADER_SECONDARY_ACTION_CLASS is used",
+    "Learner GlobalContextBar: row and pills taller on small screens for touch",
+    "MobileContextDrawer: larger close hit target; section labels 10px → 11px",
+    "Learner bottom nav: pathway pill truncate + title tooltip; slightly wider grid gap",
+    "Learner shell: bottom padding includes safe-area-inset-bottom for home indicator above fixed bottom nav"
+  ],
+  "componentsChanged": [
+    "nursenest-core/src/components/layout/site-header.tsx",
+    "nursenest-core/src/components/layout/global-context-bar.tsx",
+    "nursenest-core/src/components/layout/mobile-context-drawer.tsx",
+    "nursenest-core/src/components/layout/learner-shell-primary-nav.tsx",
+    "nursenest-core/src/app/(student)/app/(learner)/layout.tsx",
+    "nursenest-core/src/app/globals.css"
+  ],
+  "beforeAfterNotes": {
+    "before": "Guest marketing CTAs used 36px min-height; mobile header ignored safe-area-top; context pills sat in a 36px-tall row; pathway label could crowd five-column bottom nav; learner content could sit tight against iOS home indicator.",
+    "after": "Guest CTAs and key secondary actions align to ~44px minimum; header respects safe-area-top; context bar and drawer close control are easier to tap; pathway pill truncates with full label on long-press/hover via title; extra bottom inset clears the home gesture area."
+  },
+  "remainingLimitations": [
+    "Automated screenshot/visual regression not added — manual check at 320–414px still recommended for lesson detail, question session, and flashcard surfaces.",
+    "Individual page-level tables/filters were not exhaustively restyled; use overflow-x-auto patterns where wide tables appear.",
+    "Marketing mega-menu desktop row unchanged (lg+); mobile continues to use hamburger accordion pattern."
+  ],
+  "verificationCommands": [
+    "cd nursenest-core && npm run typecheck"
+  ],
+  "typecheckNote": "Full-package tsc may report pre-existing errors in unrelated tests/libs; touched layout files pass ESLint with no new issues."
+}

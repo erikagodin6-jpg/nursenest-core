@@ -1,0 +1,82 @@
+/* Pharmacology learning system
+   --------------------------------------------------------------------------
+   Extends the Flashcards learner surface with medication-safety branding while
+   preserving the same shell, spacing, and responsive behavior. */
+
+.nn-pharmacology-hub {
+  --nn-pharm-leaf-opacity: 0.11;
+  --nn-pharm-accent-a: var(--semantic-chart-2);
+  --nn-pharm-accent-b: var(--semantic-chart-3);
+  --nn-pharm-accent-c: var(--semantic-warning);
+}
+
+html[data-theme="mint-blossom"] .nn-pharmacology-hub,
+html[data-theme="blossom"] .nn-pharmacology-hub,
+html[data-theme="garden"] .nn-pharmacology-hub {
+  --nn-pharm-accent-a: color-mix(in srgb, var(--semantic-success) 72%, var(--semantic-brand));
+  --nn-pharm-accent-b: color-mix(in srgb, var(--semantic-info) 70%, var(--semantic-chart-5));
+  --nn-pharm-accent-c: color-mix(in srgb, var(--semantic-warning) 84%, var(--semantic-surface));
+}
+
+html[data-theme="ocean"] .nn-pharmacology-hub,
+html[data-theme="midnight"] .nn-pharmacology-hub,
+html[data-theme="midnight-indigo"] .nn-pharmacology-hub {
+  --nn-pharm-accent-a: color-mix(in srgb, var(--semantic-info) 78%, var(--semantic-success));
+  --nn-pharm-accent-b: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-chart-5));
+  --nn-pharm-accent-c: color-mix(in srgb, var(--semantic-chart-3) 65%, var(--semantic-surface));
+}
+
+.nn-pharmacology-hero,
+.nn-pharmacology-system-surface,
+.nn-pharmacology-action-band {
+  isolation: isolate;
+}
+
+.nn-pharmacology-hero::after,
+.nn-pharmacology-system-surface::after,
+.nn-pharmacology-action-band::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: auto 1.25rem 1rem auto;
+  width: 8rem;
+  height: 8rem;
+  opacity: var(--nn-pharm-leaf-opacity);
+  background:
+    radial-gradient(ellipse at 42% 26%, transparent 0 32%, currentColor 33% 35%, transparent 36%),
+    linear-gradient(135deg, transparent 0 44%, currentColor 45% 47%, transparent 48%);
+  color: var(--nn-pharm-accent-a);
+  transform: rotate(-12deg);
+  border-radius: 999px;
+  z-index: -1;
+}
+
+.nn-pharmacology-system-surface {
+  background:
+    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--nn-pharm-accent-c) 13%, transparent), transparent 32%),
+    radial-gradient(circle at 98% 12%, color-mix(in srgb, var(--nn-pharm-accent-b) 10%, transparent), transparent 34%),
+    color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--semantic-surface));
+}
+
+.nn-pharmacology-master-card {
+  box-shadow:
+    var(--semantic-shadow-soft),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 80%, transparent);
+}
+
+.nn-pharmacology-action-band {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--nn-pharm-accent-a) 8%, var(--semantic-surface)), var(--semantic-surface) 54%, color-mix(in srgb, var(--nn-pharm-accent-b) 7%, var(--semantic-surface)));
+}
+
+@media (max-width: 760px) {
+  .nn-pharmacology-hero::after,
+  .nn-pharmacology-system-surface::after,
+  .nn-pharmacology-action-band::after {
+    width: 5.5rem;
+    height: 5.5rem;
+    opacity: 0.08;
+  }
+}

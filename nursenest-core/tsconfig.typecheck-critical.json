@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "incremental": false,
+    "tsBuildInfoFile": "./node_modules/.cache/typescript/next-app-critical.tsbuildinfo"
+  },
+  "include": [
+    "next-env.typecheck-critical.d.ts",
+    "src/lib/stripe/**/*.ts",
+    "src/lib/auth/**/*.ts",
+    "src/lib/db.ts",
+    "src/lib/db/**/*.ts",
+    "src/app/api/subscriptions/**/*.ts",
+    "src/lib/mobile-native/**/*.ts"
+  ]
+}

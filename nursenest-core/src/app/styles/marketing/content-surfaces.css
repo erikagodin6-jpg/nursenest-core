@@ -1,0 +1,476 @@
+/* ==========================================================================
+   content-surfaces.css — NurseNest Premium Marketing Design System
+   
+   Ownership: Lesson detail shell, analytics shells, blog marketing readability
+   
+   Source: extracted from src/app/premium-redesign-2026.css (lines 4642–5081)
+   Import order: preserved — do not reorder imports in styles/marketing/index.css
+   Cascade: rules depend on cascade order across all section files; changes
+            to this file may affect other sections if shared selectors are involved.
+   
+   DO NOT add new rules here that belong to a different section file.
+   ========================================================================== */
+
+/* =====================================================================
+   Pathway lesson detail — premium shell (layout + rail tokens; no SOT/SEO).
+   Scopes: marketing + /app lesson detail when `.nn-premium-lesson-detail-shell`.
+   ===================================================================== */
+
+.nn-premium-lesson-detail-shell {
+  overflow-x: clip;
+}
+
+@media (max-width: 1023px) {
+  .nn-premium-lesson-detail-shell .nn-lesson-layout--triple > .nn-lesson-section-nav-mobile {
+    width: 100%;
+    max-width: 100%;
+    align-self: stretch;
+  }
+
+  .nn-premium-lesson-detail-shell .nn-lesson-layout--triple > .nn-lesson-main {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .nn-premium-lesson-detail-shell .nn-lesson-layout--triple {
+    gap: clamp(1.35rem, 2.1vw, 2.15rem);
+  }
+}
+
+.nn-premium-lesson-article.nn-lesson-article-grid {
+  row-gap: 1.15rem;
+  column-gap: 1.35rem;
+}
+
+@media (min-width: 768px) {
+  .nn-premium-lesson-article.nn-lesson-article-grid {
+    row-gap: 1.25rem;
+  }
+}
+
+.nn-premium-pathway-lesson-header {
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 75%, transparent);
+}
+
+.nn-premium-pathway-lesson-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.09;
+  background:
+    radial-gradient(520px 180px at 0% 0%, color-mix(in srgb, var(--semantic-chart-3) 35%, transparent), transparent 58%),
+    radial-gradient(420px 160px at 100% 20%, color-mix(in srgb, var(--semantic-chart-1) 28%, transparent), transparent 55%);
+}
+
+.nn-premium-learner-lesson-hero {
+  position: relative;
+  isolation: isolate;
+  padding-bottom: 1rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-brand) 12%);
+  background:
+    radial-gradient(
+      560px 220px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-7) 8%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 12%, var(--semantic-surface)),
+      color-mix(in srgb, var(--semantic-surface) 97%, var(--semantic-panel-muted))
+    );
+  box-shadow: 0 18px 44px -38px color-mix(in srgb, var(--semantic-text-primary) 18%, transparent);
+  padding: 1rem 1.1rem 1.15rem;
+}
+
+@media (min-width: 640px) {
+  .nn-premium-learner-lesson-hero {
+    padding: 1.15rem 1.25rem 1.25rem;
+  }
+}
+
+.nn-premium-learner-lesson-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.14;
+  background:
+    radial-gradient(560px 200px at 12% 0%, color-mix(in srgb, var(--semantic-chart-4) 24%, transparent), transparent 60%),
+    radial-gradient(480px 180px at 90% 12%, color-mix(in srgb, var(--semantic-brand) 18%, transparent), transparent 58%),
+    radial-gradient(440px 160px at 50% 100%, color-mix(in srgb, var(--semantic-chart-8) 16%, transparent), transparent 58%);
+  z-index: 0;
+}
+
+.nn-premium-learner-lesson-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-premium-lesson-quick-summary.nn-lesson-quick-summary .nn-lesson-quick-summary__header h2 {
+  letter-spacing: -0.02em;
+}
+
+.nn-premium-lesson-quick-summary.nn-lesson-quick-summary,
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary__header,
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary__grid,
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary-card,
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary-card ul {
+  width: 100%;
+}
+
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary__header {
+  max-width: min(100%, 75ch);
+}
+
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary-card {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .nn-premium-lesson-quick-summary .nn-lesson-quick-summary__grid {
+    gap: 0.85rem 1rem;
+  }
+}
+
+/* Study rail sections — token-driven surfaces (replaces inline styles). */
+.nn-premium-rail-section {
+  border-style: solid;
+  border-width: 1px;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 92%, var(--semantic-brand) 8%);
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+}
+
+.nn-premium-rail-section--success {
+  border-color: color-mix(in srgb, var(--semantic-success) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 55%, transparent);
+}
+
+.nn-premium-rail-section--info {
+  border-color: color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 50%, transparent);
+}
+
+.nn-premium-rail-section--warning {
+  border-color: color-mix(in srgb, var(--semantic-warning) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-warm) 45%, transparent);
+}
+
+.nn-premium-rail-section--brand {
+  border-color: color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-1) 12%, var(--semantic-surface));
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-study-rail-aside {
+  padding-left: max(0.25rem, env(safe-area-inset-left, 0px));
+  padding-right: max(0.25rem, env(safe-area-inset-right, 0px));
+}
+
+@media (min-width: 1280px) {
+  .nn-premium-lesson-detail-shell .nn-lesson-section-nav {
+    padding: 1.25rem 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-lesson-detail-loading .nn-skeleton {
+    animation: none !important;
+    opacity: 0.85;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-premium-lesson-detail-loading .nn-skeleton {
+    will-change: opacity;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Analytics + readiness — premium shells (presentation only; no data logic).
+   --------------------------------------------------------------------- */
+
+.nn-premium-analytics-report {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(520px 280px at 0% 0%, color-mix(in srgb, var(--semantic-chart-2) 14%, transparent), transparent 55%),
+    radial-gradient(480px 260px at 100% 8%, color-mix(in srgb, var(--semantic-chart-4) 12%, transparent), transparent 52%),
+    radial-gradient(520px 260px at 78% 100%, color-mix(in srgb, var(--semantic-chart-6) 10%, transparent), transparent 58%),
+    color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--semantic-surface));
+}
+
+.nn-premium-analytics-chart-column {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 12%, var(--semantic-border-soft));
+}
+
+.nn-premium-category-performance-shell {
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 14%, var(--semantic-border-soft));
+  background:
+    radial-gradient(540px 240px at 100% 0%, color-mix(in srgb, var(--semantic-chart-7) 8%, transparent), transparent 58%),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 16%, var(--semantic-surface)) 0%,
+      var(--semantic-surface) 48%,
+      color-mix(in srgb, var(--semantic-panel-muted) 35%, var(--semantic-surface)) 100%
+    );
+}
+
+.nn-premium-study-activity-heatmap {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 10%, var(--semantic-border-soft));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-readiness-donut-arc {
+    transition: none !important;
+  }
+}
+
+.nn-premium-readiness-page-hero {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 16%, var(--semantic-border-soft));
+  background:
+    radial-gradient(620px 260px at 100% 0%, color-mix(in srgb, var(--semantic-chart-8) 8%, transparent), transparent 58%),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 24%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted)) 100%
+    );
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-premium-readiness-trend-chart {
+  border-radius: 0.75rem;
+}
+
+/* Lightweight skeleton: opacity pulse (GPU-cheap); respect reduced motion */
+.nn-analytics-panel-skeleton .nn-analytics-skeleton-block {
+  animation: nn-premium-skeleton-breathe 1.65s ease-in-out infinite;
+  will-change: opacity;
+}
+
+@keyframes nn-premium-skeleton-breathe {
+  0%,
+  100% {
+    opacity: 0.52;
+  }
+  50% {
+    opacity: 0.88;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-analytics-panel-skeleton .nn-analytics-skeleton-block {
+    animation: none;
+    opacity: 0.72;
+  }
+}
+
+/* =====================================================================
+   Blog + tools marketing — premium readability (additive).
+   Patho/pharm ambient cues via data-nn-blog-topic on `.nn-premium-blog-article`.
+   Presentation only; no routing/schema/publishing changes.
+   ===================================================================== */
+
+.nn-premium-blog-index {
+  position: relative;
+}
+
+.nn-premium-blog-index::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: min(420px, 42vh);
+  background:
+    radial-gradient(720px 280px at 12% 0%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent), transparent 58%),
+    radial-gradient(620px 260px at 88% 6%, color-mix(in srgb, var(--semantic-chart-1) 10%, transparent), transparent 56%);
+  opacity: 0.85;
+  z-index: 0;
+}
+
+.nn-premium-blog-index > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-premium-blog-patho-spotlight {
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--theme-card-bg)),
+    color-mix(in srgb, var(--theme-card-bg) 96%, var(--semantic-panel-muted))
+  );
+  box-shadow:
+    0 20px 44px -36px color-mix(in srgb, var(--semantic-text-primary) 18%, transparent),
+    var(--semantic-shadow-soft);
+}
+
+.nn-premium-blog-article {
+  position: relative;
+}
+
+.nn-premium-blog-article::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(680px 320px at 8% 0%, color-mix(in srgb, var(--semantic-chart-3) 11%, transparent), transparent 60%),
+    radial-gradient(560px 280px at 96% 4%, color-mix(in srgb, var(--semantic-chart-4) 9%, transparent), transparent 58%);
+  opacity: 0.55;
+  z-index: 0;
+}
+
+.nn-premium-blog-article > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-premium-blog-article[data-nn-blog-topic="info"]::before {
+  background:
+    radial-gradient(720px 340px at 6% 0%, color-mix(in srgb, var(--semantic-info) 14%, transparent), transparent 62%),
+    radial-gradient(520px 260px at 100% 8%, color-mix(in srgb, var(--semantic-chart-3) 10%, transparent), transparent 58%);
+}
+
+.nn-premium-blog-article[data-nn-blog-topic="warning"]::before {
+  background:
+    radial-gradient(720px 340px at 10% 0%, color-mix(in srgb, var(--semantic-warning) 12%, transparent), transparent 60%),
+    radial-gradient(560px 280px at 94% 6%, color-mix(in srgb, var(--semantic-chart-2) 10%, transparent), transparent 58%);
+}
+
+.nn-premium-blog-article-hero {
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 1, var(--border));
+}
+
+.nn-premium-blog-back-link {
+  margin-top: 0.75rem;
+  border-radius: 999px;
+  padding: 0.25rem 0.5rem 0.25rem 0;
+}
+
+.nn-premium-blog-back-link:hover {
+  background: color-mix(in srgb, var(--semantic-brand) 7%, transparent);
+}
+
+.nn-premium-blog-prose {
+  line-height: 1.72;
+}
+
+.nn-premium-blog-prose :where(h2) {
+  margin-top: 2.25rem;
+  scroll-margin-top: 6rem;
+  letter-spacing: -0.02em;
+}
+
+.nn-premium-blog-prose :where(h3) {
+  margin-top: 1.75rem;
+  scroll-margin-top: 5.5rem;
+  letter-spacing: -0.015em;
+}
+
+.nn-premium-blog-prose :where(p, li) {
+  line-height: 1.72;
+}
+
+.nn-premium-blog-toc {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 14%, var(--semantic-border-soft));
+  background: linear-gradient(
+    175deg,
+    color-mix(in srgb, var(--semantic-info) 9%, var(--theme-card-bg)),
+    color-mix(in srgb, var(--theme-card-bg) 94%, var(--semantic-panel-cool))
+  );
+  box-shadow: 0 18px 40px -32px color-mix(in srgb, var(--semantic-text-primary) 20%, transparent);
+}
+
+.nn-premium-blog-toc a {
+  border-radius: 0.35rem;
+  padding: 0.1rem 0.15rem;
+  margin: -0.1rem -0.15rem;
+}
+
+.nn-premium-blog-toc a:hover {
+  background: color-mix(in srgb, var(--semantic-brand) 9%, transparent);
+}
+
+.nn-premium-blog-related {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 16%, var(--semantic-border-soft));
+  box-shadow:
+    0 22px 48px -38px color-mix(in srgb, var(--semantic-chart-3) 22%, transparent),
+    var(--semantic-shadow-soft);
+}
+
+.nn-premium-blog-related-card:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
+  box-shadow: 0 14px 32px -28px color-mix(in srgb, var(--semantic-brand) 25%, transparent);
+}
+
+.nn-premium-blog-post-card:hover {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 22%, var(--semantic-border-soft));
+  box-shadow:
+    0 20px 44px -34px color-mix(in srgb, var(--semantic-text-primary) 18%, transparent),
+    var(--semantic-shadow-soft);
+}
+
+.nn-premium-tools-hub-card:hover {
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 26%, var(--semantic-border-soft));
+  box-shadow:
+    0 22px 48px -36px color-mix(in srgb, var(--semantic-chart-3) 18%, transparent),
+    var(--shadow-elevated, var(--elevation-rest));
+}
+
+.nn-premium-tools-calculator-wrap.nn-tools-calculator-surface {
+  background: linear-gradient(
+    175deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 6%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted))
+  );
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 12%, var(--semantic-border-soft));
+  box-shadow:
+    0 24px 52px -40px color-mix(in srgb, var(--semantic-text-primary) 20%, transparent),
+    var(--elevation-rest, var(--shadow-card));
+}
+
+.nn-premium-tool-page header {
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 1, var(--border));
+  padding-bottom: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.nn-premium-tool-seo-section {
+  border-radius: 1.35rem;
+}
+
+.nn-premium-blog-loading {
+  position: relative;
+  border-radius: 1rem;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-border-soft));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-blog-post-card,
+  .nn-premium-tools-hub-card,
+  .nn-premium-blog-related-card {
+    transition: none !important;
+  }
+
+  .nn-premium-blog-post-card:hover,
+  .nn-tools-hub-card:hover {
+    transform: none !important;
+  }
+}

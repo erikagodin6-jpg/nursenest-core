@@ -1,0 +1,1304 @@
+{
+  "generatedAt": "2026-06-02T01:09:45.528Z",
+  "storage": {
+    "spacesPublicBase": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com",
+    "inventoryImageCount": 9,
+    "uniqueMappedObjectKeyCount": 37,
+    "totalKnownObjectKeyCount": 37,
+    "publicOkCount": 9,
+    "publicBrokenCount": 28
+  },
+  "registry": {
+    "overrideSlugCount": 138,
+    "overrideObjectKeyCount": 28,
+    "mapEntryCount": 17,
+    "mapObjectKeyCount": 17,
+    "inventoryKeysMissingFromPublicDelivery": [],
+    "mappedKeysMissingFromInventory": [
+      "uploads/images/alopecia.webp",
+      "uploads/images/atopic-dermatitis.webp",
+      "uploads/images/impetigo.webp",
+      "uploads/images/scabies.webp",
+      "uploads/images/herpes-simplex.webp",
+      "uploads/images/shingles.webp",
+      "uploads/images/varicella.webp",
+      "uploads/images/varicella-rash-stages.webp",
+      "uploads/images/pemphigus.webp",
+      "uploads/images/stevens-johnson-syndrome.webp",
+      "uploads/images/vitiligo.webp",
+      "uploads/images/conjunctivitis.webp",
+      "uploads/images/glaucoma.webp",
+      "uploads/images/retinal-detachment.webp",
+      "uploads/images/epiglottitis.webp",
+      "uploads/images/osteoporosis.webp",
+      "uploads/images/pinworms.webp",
+      "uploads/images/head-lice.webp",
+      "uploads/images/inflammatory-response.webp",
+      "uploads/images/kawasaki-disease.webp",
+      "bariatricsurgery.png",
+      "cardiacamyloidosis.png",
+      "eisenmenger.png",
+      "carotidbodytumor.png",
+      "giantcell.png",
+      "churgstrauss.jpeg",
+      "crutchparalysis.png",
+      "decels.png"
+    ]
+  },
+  "lessons": {
+    "totalRenderableLessons": 3229,
+    "totalLessonsWithResolvedImages": 298,
+    "sampled": 50,
+    "sampleAppearsInUiCount": 50,
+    "sampleFailures": []
+  },
+  "brokenMappings": [
+    {
+      "key": "uploads/images/alopecia.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/alopecia.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/atopic-dermatitis.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/atopic-dermatitis.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/impetigo.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/impetigo.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/scabies.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/scabies.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/herpes-simplex.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/herpes-simplex.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/shingles.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/shingles.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/varicella.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/varicella.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/varicella-rash-stages.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/varicella-rash-stages.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/pemphigus.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/pemphigus.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/stevens-johnson-syndrome.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/stevens-johnson-syndrome.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/vitiligo.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/vitiligo.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/conjunctivitis.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/conjunctivitis.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/glaucoma.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/glaucoma.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/retinal-detachment.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/retinal-detachment.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/epiglottitis.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/epiglottitis.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/osteoporosis.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/osteoporosis.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/pinworms.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/pinworms.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/head-lice.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/head-lice.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/inflammatory-response.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/inflammatory-response.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "uploads/images/kawasaki-disease.webp",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/uploads/images/kawasaki-disease.webp",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "bariatricsurgery.png",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/bariatricsurgery.png",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "cardiacamyloidosis.png",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/cardiacamyloidosis.png",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "eisenmenger.png",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/eisenmenger.png",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "carotidbodytumor.png",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/carotidbodytumor.png",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "giantcell.png",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/giantcell.png",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "churgstrauss.jpeg",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/churgstrauss.jpeg",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "crutchparalysis.png",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/crutchparalysis.png",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    },
+    {
+      "key": "decels.png",
+      "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/decels.png",
+      "status": 403,
+      "contentType": "application/xml",
+      "ok": false
+    }
+  ],
+  "sampleRows": [
+    {
+      "pathwayId": "ca-np-cnple",
+      "lessonSlug": "np-acute-coronary-syndrome-recognition-and-initial-management",
+      "lessonTitle": "Acute Coronary Syndrome: NP Diagnosis and",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "lessonSlug": "np-cardiac-ct-and-mri-indications-in-outpatient-practice",
+      "lessonTitle": "Cardiac CT and: NP Diagnosis and",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "lessonSlug": "np-device-therapy-indications-pacemakers-and-icds",
+      "lessonTitle": "Device Therapy Indications: NP Diagnosis and",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "lessonSlug": "np-heart-failure-with-reduced-and-preserved-ejection-fraction",
+      "lessonTitle": "Heart Failure With: NP Diagnosis and",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "lessonSlug": "np-palpitations-evaluation-and-management",
+      "lessonTitle": "Palpitations Evaluation and: NP Diagnosis and",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "lessonSlug": "np-stress-test-selection-and-result-interpretation",
+      "lessonTitle": "Stress Test Selection: NP Diagnosis and",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "lessonSlug": "np-heart-failure-primary-care-gold",
+      "lessonTitle": "Heart failure: outpatient management (Canadian NP",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-failure.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-failure.svg",
+        "alt": "Heart failure mechanism illustration showing reduced forward flow and pulmonary congestion",
+        "source": "clinical_illustration",
+        "caption": "Heart failure — congestion, perfusion, and escalation cues"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "acute-coronary-syndrome-nclex-rn",
+      "lessonTitle": "Acute Coronary Syndrome",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "med-family-antihypertensives-gold",
+      "lessonTitle": "Antihypertensives",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/hypertension.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/hypertension.svg",
+        "alt": "Hypertension illustration showing high afterload and end-organ strain",
+        "source": "clinical_illustration",
+        "caption": "Hypertension — afterload, crisis cues, and follow-up priorities"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "arterial-ulcers-vs-venous-ulcers",
+      "lessonTitle": "Arterial vs Venous Ulcers",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "cardiac-catheterization-pre-post-care-nclex",
+      "lessonTitle": "Cardiac Catheterization",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "cardiovascular-prioritization",
+      "lessonTitle": "Cardiovascular prioritization for Canadian RN exam",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "chest-pain-first-nursing-action-nclex",
+      "lessonTitle": "Chest Pain",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "ca-rn-dysrhythmias",
+      "lessonTitle": "Dysrhythmias",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/myocardial-infarction.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/myocardial-infarction.svg",
+        "alt": "Myocardial infarction illustration showing coronary occlusion, myocardial injury, and troponin release",
+        "source": "clinical_illustration",
+        "caption": "Myocardial infarction — occlusion, injury, and biomarker reasoning"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "heart-failure-nursing-priorities-hy",
+      "lessonTitle": "Heart Failure: Prioritization & Safety",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-failure.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-failure.svg",
+        "alt": "Heart failure mechanism illustration showing reduced forward flow and pulmonary congestion",
+        "source": "clinical_illustration",
+        "caption": "Heart failure — congestion, perfusion, and escalation cues"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "ca-rn-hypertension",
+      "lessonTitle": "Hypertension",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/hypertension.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/hypertension.svg",
+        "alt": "Hypertension illustration showing high afterload and end-organ strain",
+        "source": "clinical_illustration",
+        "caption": "Hypertension — afterload, crisis cues, and follow-up priorities"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "mitral-stenosis-vs-mitral-regurgitation",
+      "lessonTitle": "Mitral Stenosis vs Mitral Regurgitation",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "pci-stents-complications-nursing-priorities",
+      "lessonTitle": "PCI and Stents",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "post-pci-complications-who-first-nclex",
+      "lessonTitle": "Post-PCI Complications",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "shock-stages-progression-nclex-rn",
+      "lessonTitle": "Stages of Shock",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "valve-replacement-postop-nursing-care",
+      "lessonTitle": "Valve Replacement",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "dvt-pe-prevention-nursing",
+      "lessonTitle": "DVT & PE Prevention",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/DVT.png",
+        "objectKey": "DVT.png",
+        "alt": "DVT & PE Prevention — clinical illustration",
+        "source": "override"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "image/png",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessonSlug": "ca-rn-pulmonary-embolism",
+      "lessonTitle": "Pulmonary Embolism: Acute Care",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "lessonSlug": "rpn-cardiac-catheterization-recovery-checks",
+      "lessonTitle": "Cardiac Catheterization Recovery Checks for RPN",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "lessonSlug": "rpn-diuretic-response-monitoring",
+      "lessonTitle": "Diuretic Response Monitoring for RPN Practice",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "lessonSlug": "rpn-hypertension-medication-monitoring",
+      "lessonTitle": "Hypertension Medication Monitoring for RPN Practice",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "lessonSlug": "rpn-peripheral-vascular-disease-foot-care",
+      "lessonTitle": "Peripheral Vascular Disease Foot Care for",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "lessonSlug": "rpn-vascular-access-pulse-and-perfusion-checks",
+      "lessonTitle": "Vascular Access Pulse and Perfusion Checks",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "lessonSlug": "med-family-cardiac-gold",
+      "lessonTitle": "Cardiac medications (ischemia & rhythm) (REx-PN,",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/cardiac-medication-mechanisms.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/cardiac-medication-mechanisms.svg",
+        "alt": "Cardiac medication mechanisms illustration showing rate control, preload, afterload, rhythm, and ischemia safety",
+        "source": "clinical_illustration",
+        "caption": "Cardiac medications — rate, rhythm, preload, and afterload effects"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "lessonSlug": "ca-rpn-myocardial-infarction",
+      "lessonTitle": "Myocardial infarction (REx-PN / PN, Canada)",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "lessonSlug": "med-family-anticoagulants-gold",
+      "lessonTitle": "Anticoagulants – monitoring & safety (REx-PN,",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/atrial-fibrillation.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/atrial-fibrillation.svg",
+        "alt": "Atrial fibrillation illustration showing irregular atrial impulses, rate control, and stroke prevention cues",
+        "source": "clinical_illustration",
+        "caption": "Atrial fibrillation — irregular rhythm, rate control, and embolic risk"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-allied-core",
+      "lessonSlug": "sonography-vascular-doppler-dvt-and-arterial-waveforms",
+      "lessonTitle": "Vascular Sonography: Doppler, DVT, and Arterial",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "lessonSlug": "med-family-cardiac-gold",
+      "lessonTitle": "Cardiac medications (ischemia & rhythm)",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/cardiac-medication-mechanisms.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/cardiac-medication-mechanisms.svg",
+        "alt": "Cardiac medication mechanisms illustration showing rate control, preload, afterload, rhythm, and ischemia safety",
+        "source": "clinical_illustration",
+        "caption": "Cardiac medications — rate, rhythm, preload, and afterload effects"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "lessonSlug": "us-pn-hypertension",
+      "lessonTitle": "Hypertension – PN scope",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/hypertension.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/hypertension.svg",
+        "alt": "Hypertension illustration showing high afterload and end-organ strain",
+        "source": "clinical_illustration",
+        "caption": "Hypertension — afterload, crisis cues, and follow-up priorities"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "lessonSlug": "pulmonary-embolism-recognition-gold",
+      "lessonTitle": "Pulmonary embolism: recognition",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/perfusion-disorders.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/perfusion-disorders.svg",
+        "alt": "Perfusion disorders illustration showing oxygen delivery gap, cool extremities, low urine output, and circulation risk",
+        "source": "clinical_illustration",
+        "caption": "Perfusion disorders — oxygen delivery and circulation risk cues"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "lessonSlug": "np-acute-coronary-syndrome-recognition-and-initial-management",
+      "lessonTitle": "Acute Coronary Syndrome: NP Diagnosis and",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "lessonSlug": "np-cardiac-ct-and-mri-indications-in-outpatient-practice",
+      "lessonTitle": "Cardiac CT and: NP Diagnosis and",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "lessonSlug": "np-device-therapy-indications-pacemakers-and-icds",
+      "lessonTitle": "Device Therapy Indications: NP Diagnosis and",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "lessonSlug": "np-heart-failure-with-reduced-and-preserved-ejection-fraction",
+      "lessonTitle": "Heart Failure With: NP Diagnosis and",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "lessonSlug": "np-palpitations-evaluation-and-management",
+      "lessonTitle": "Palpitations Evaluation and: NP Diagnosis and",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "lessonSlug": "np-stress-test-selection-and-result-interpretation",
+      "lessonTitle": "Stress Test Selection: NP Diagnosis and",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "lessonSlug": "atrial-fibrillation-stroke-prevention-gold",
+      "lessonTitle": "AFib – stroke prevention & anticoagulation",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/atrial-fibrillation.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/atrial-fibrillation.svg",
+        "alt": "Atrial fibrillation illustration showing irregular atrial impulses, rate control, and stroke prevention cues",
+        "source": "clinical_illustration",
+        "caption": "Atrial fibrillation — irregular rhythm, rate control, and embolic risk"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "lessonSlug": "med-family-antihypertensives-gold",
+      "lessonTitle": "Hypertension meds – titration & follow-up",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/hypertension.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/hypertension.svg",
+        "alt": "Hypertension illustration showing high afterload and end-organ strain",
+        "source": "clinical_illustration",
+        "caption": "Hypertension — afterload, crisis cues, and follow-up priorities"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "lessonSlug": "fnp-overlay-heart-failure",
+      "lessonTitle": "Heart failure – NP diagnosis &",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-failure.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-failure.svg",
+        "alt": "Heart failure mechanism illustration showing reduced forward flow and pulmonary congestion",
+        "source": "clinical_illustration",
+        "caption": "Heart failure — congestion, perfusion, and escalation cues"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "lessonSlug": "acute-coronary-syndrome-gold",
+      "lessonTitle": "ACS & chest pain: RN management",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/acute-coronary-syndrome.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/acute-coronary-syndrome.svg",
+        "alt": "Acute coronary syndrome illustration showing unstable plaque, ischemia, and chest pain triage cues",
+        "source": "clinical_illustration",
+        "caption": "ACS — unstable plaque, ischemic symptoms, and rapid triage"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "lessonSlug": "antiarrhythmics-nursing-simplified",
+      "lessonTitle": "Antiarrhythmics",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "lessonSlug": "aortic-stenosis-vs-aortic-regurgitation",
+      "lessonTitle": "Aortic Stenosis vs Aortic Regurgitation",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "lessonSlug": "atrial-fibrillation-stroke-prevention-gold",
+      "lessonTitle": "Atrial fibrillation: stroke prevention",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/atrial-fibrillation.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/atrial-fibrillation.svg",
+        "alt": "Atrial fibrillation illustration showing irregular atrial impulses, rate control, and stroke prevention cues",
+        "source": "clinical_illustration",
+        "caption": "Atrial fibrillation — irregular rhythm, rate control, and embolic risk"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "lessonSlug": "cardiac-tamponade-nclex-rn",
+      "lessonTitle": "Cardiac Tamponade",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/valve-disorders.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/valve-disorders.svg",
+        "alt": "Valve disorders illustration showing stenosis, regurgitation, and pressure-volume overload",
+        "source": "clinical_illustration",
+        "caption": "Valve disorders — stenosis, regurgitation, and overload patterns"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "lessonSlug": "carotid-endarterectomy-exam-notes-b4-nclex-rn",
+      "lessonTitle": "Carotid Endarterectomy – Perioperative Nursing (Exam",
+      "imageExists": true,
+      "mappingExists": true,
+      "rendererReceivesImageData": true,
+      "appearsInUi": true,
+      "resolution": {
+        "url": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "objectKey": "/clinical-illustrations/cardiovascular/heart-anatomy-blood-flow.svg",
+        "alt": "Heart anatomy and blood flow illustration showing right heart to lungs and left heart to systemic circulation",
+        "source": "clinical_illustration",
+        "caption": "Heart anatomy — right-heart, lung, and systemic blood flow"
+      },
+      "delivery": {
+        "status": 200,
+        "contentType": "same-origin",
+        "ok": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+import { NextResponse, type NextRequest } from "next/server";
+import { consumeVerificationToken } from "@/lib/auth/email-verification";
+import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
+import { getTrustedClientIp } from "@/lib/http/client-ip";
+import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { markReferralEmailVerified } from "@/lib/referrals/referral-rewards";
+
+export const runtime = "nodejs";
+
+export async function GET(req: NextRequest) {
+  const base = req.nextUrl.origin;
+
+  const ip = getTrustedClientIp(req);
+  const rl = await checkRateLimitUnified(`verify-email:${ip}`, { windowMs: 60_000, max: 15 });
+  if (!rl.ok) {
+    return NextResponse.redirect(`${base}/verify-email?status=rate_limited`);
+  }
+
+  const token = req.nextUrl.searchParams.get("token");
+  if (!token || token.length < 20) {
+    return NextResponse.redirect(`${base}/verify-email?status=invalid`);
+  }
+
+  const result = await consumeVerificationToken(token);
+
+  if (!result.ok) {
+    safeServerLog("auth", "email_verify_failed", { reason: result.reason, ip: ip.slice(0, 64) });
+    const reason = result.reason === "expired" ? "expired" : "invalid";
+    return NextResponse.redirect(`${base}/verify-email?status=${reason}`);
+  }
+
+  await captureServerEvent(analyticsDistinctId(result.userId), "email_verified", {}).catch(() => {});
+  void markReferralEmailVerified(result.userId).catch((e) => {
+    safeServerLog("referrals", "email_verified_mark_failed", {
+      detail: e instanceof Error ? e.message.slice(0, 160) : "unknown",
+    });
+  });
+
+  const callbackRaw = req.nextUrl.searchParams.get("callbackUrl");
+  const successUrl = new URL(`${base}/verify-email`);
+  successUrl.searchParams.set("status", "success");
+  if (callbackRaw?.trim()) {
+    successUrl.searchParams.set("callbackUrl", callbackRaw.trim());
+  }
+  return NextResponse.redirect(successUrl.toString());
+}

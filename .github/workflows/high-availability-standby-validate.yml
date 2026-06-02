@@ -1,0 +1,46 @@
+name: High availability standby validation
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+    inputs:
+      primary_url:
+        description: "Primary production URL"
+        required: false
+        default: "https://www.nursenest.ca"
+      standby_url:
+        description: "Standby deployment URL"
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: high-availability-standby-validation
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+
+      - run: npm ci
+
+      - name: Validate primary and standby health
+        env:
+          HA_PRIMARY_URL: ${{ inputs.primary_url || secrets.HA_PRIMARY_URL || 'https://www.nursenest.ca' }}
+          HA_STANDBY_URL: ${{ inputs.standby_url || secrets.HA_STANDBY_URL }}
+          NN_RUNTIME_ENV_HEALTH_SECRET: ${{ secrets.NN_RUNTIME_ENV_HEALTH_SECRET }}
+        run: npm run ha:validate

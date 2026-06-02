@@ -1,0 +1,311 @@
+{
+  "email": "rpn.qa.student+1778174611739@nursenest.test",
+  "username": "rpnqa1778174611739",
+  "passwordPattern": "strongPasswordSchema (8+ chars, letter+digit)",
+  "baseUrl": "http://localhost:3010",
+  "pathway": {
+    "tier": "RPN",
+    "country": "CA",
+    "examFocus": "rex_pn"
+  },
+  "authEntitlementMethod": "api_signup_plus_credentials_login",
+  "screenshots": [
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/01-homepage-desktop.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/02-signup-form.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/03-signup-ui-gated.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/04-login-form.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/05-after-login-app.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/06-dashboard-desktop.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/07-lessons-hub-desktop.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/08-lessons-hub-mobile.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/09-flashcards-hub.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/10-questions-hub.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/11-practice-tests-hub.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/12-practice-tests-builder.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/13-cat-page.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/14-report-card.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/15-progress.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/16-study-plan.png",
+    "/root/nursenest-core/docs/qa-reports/rpn-pn-browser-2026-05-07/17-account.png"
+  ],
+  "routesHit": [
+    {
+      "label": "homepage",
+      "final": "http://localhost:3010/",
+      "ok": true
+    },
+    {
+      "label": "signup",
+      "final": "http://localhost:3010/signup",
+      "ok": true
+    },
+    {
+      "label": "api-signup",
+      "final": "http://localhost:3010/api/signup",
+      "ok": true
+    },
+    {
+      "label": "login",
+      "final": "http://localhost:3010/login?callbackUrl=%2Fapp",
+      "ok": true
+    },
+    {
+      "label": "learner-dashboard",
+      "final": "http://localhost:3010/login?callbackUrl=%2Fapp",
+      "ok": false
+    },
+    {
+      "label": "lessons-hub",
+      "final": "http://localhost:3010/app",
+      "ok": false
+    },
+    {
+      "label": "flashcards-hub",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "label": "questions-hub",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "label": "practice-tests-hub",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "label": "practice-tests-builder",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "label": "cat",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "label": "report-card",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "label": "progress",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "label": "study-plan",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "label": "account",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    }
+  ],
+  "navMatrix": [
+    {
+      "path": "/us/rn/nclex-rn",
+      "name": "US RN hub",
+      "final": "about:blank",
+      "ok": false
+    },
+    {
+      "path": "/canada/rpn/rex-pn",
+      "name": "CA RPN REx-PN hub",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "path": "/us/np",
+      "name": "US NP",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "path": "/new-grad",
+      "name": "New Grad",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "path": "/allied-health",
+      "name": "Allied",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "path": "/pre-nursing",
+      "name": "Pre-Nursing",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "path": "/pricing",
+      "name": "Pricing",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "path": "/blog",
+      "name": "Blog",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "path": "/faq",
+      "name": "FAQ",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    },
+    {
+      "path": "/tools",
+      "name": "Tools",
+      "final": "chrome-error://chromewebdata/",
+      "ok": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "med",
+      "code": "signup-ui-turnstile",
+      "detail": "Create Account disabled in browser — NEXT_PUBLIC_TURNSTILE_SITE_KEY gates the form. Using POST /api/signup for QA (same payload server accepts when Turnstile is not enforced)."
+    },
+    {
+      "severity": "high",
+      "code": "login-redirect",
+      "detail": "Expected /app after login; got http://localhost:3010/login?callbackUrl=%2Fapp"
+    },
+    {
+      "severity": "high",
+      "code": "nav-fail",
+      "detail": "learner-dashboard: page.goto: Timeout 20000ms exceeded.\nCall log:\n  - navigating to \"http://localhost:3010/app\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "severity": "high",
+      "code": "nav-fail",
+      "detail": "lessons-hub: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3010/app/lessons\nCall log:\n  - navigating to \"http://localhost:3010/app/lessons\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "severity": "med",
+      "code": "lessons-links",
+      "detail": "No lesson detail link found in hub."
+    },
+    {
+      "severity": "high",
+      "code": "nav-fail",
+      "detail": "flashcards-hub: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3010/app/flashcards\nCall log:\n  - navigating to \"http://localhost:3010/app/flashcards\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "severity": "high",
+      "code": "nav-fail",
+      "detail": "questions-hub: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3010/app/questions\nCall log:\n  - navigating to \"http://localhost:3010/app/questions\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "severity": "high",
+      "code": "nav-fail",
+      "detail": "practice-tests-hub: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3010/app/practice-tests\nCall log:\n  - navigating to \"http://localhost:3010/app/practice-tests\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "severity": "high",
+      "code": "nav-fail",
+      "detail": "practice-tests-builder: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3010/app/practice-tests/start\nCall log:\n  - navigating to \"http://localhost:3010/app/practice-tests/start\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "severity": "high",
+      "code": "nav-fail",
+      "detail": "cat: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3010/app/cat\nCall log:\n  - navigating to \"http://localhost:3010/app/cat\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "severity": "high",
+      "code": "nav-fail",
+      "detail": "report-card: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3010/app/account/report-card\nCall log:\n  - navigating to \"http://localhost:3010/app/account/report-card\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "severity": "high",
+      "code": "nav-fail",
+      "detail": "progress: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3010/app/account/progress\nCall log:\n  - navigating to \"http://localhost:3010/app/account/progress\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "severity": "high",
+      "code": "nav-fail",
+      "detail": "study-plan: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3010/app/study-plan\nCall log:\n  - navigating to \"http://localhost:3010/app/study-plan\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "severity": "high",
+      "code": "nav-fail",
+      "detail": "account: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3010/app/account\nCall log:\n  - navigating to \"http://localhost:3010/app/account\", waiting until \"domcontentloaded\"\n"
+    }
+  ],
+  "consoleErrors": [
+    "%c%s%c [nursenest-core] marketing_layout marketing layout start {\"route\":\"shared-marketing-default\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] marketing_layout marketing layout after messages {\"route\":\"shared-marketing-default\",\"locale\":\"en\",\"messageCount\":8350} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] marketing home_stats_fail_soft {\"reason\":\"shared_cache_degraded\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] marketing_main load_start {\"locale\":\"en\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] marketing_main load_done {\"locale\":\"en\",\"primary\":7371,\"fallback\":0} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"pages.home.stablePlaceholder.regions.title\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: pages.home.stablePlaceholder.regions.title",
+    "[nursenest-core] i18n marketing_missing_key_session {\"uniqueKeys\":1,\"invocations\":1}",
+    "[homepage-marketing-copy] missing or placeholder copy {key: pages.home.stablePlaceholder.regions.title, resolved: Title}",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"pages.home.stablePlaceholder.regions.body\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: pages.home.stablePlaceholder.regions.body",
+    "[homepage-marketing-copy] missing or placeholder copy {key: pages.home.stablePlaceholder.regions.body, resolved: Body}",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"pages.home.stablePlaceholder.regions.link\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: pages.home.stablePlaceholder.regions.link",
+    "[homepage-marketing-copy] missing or placeholder copy {key: pages.home.stablePlaceholder.regions.link, resolved: Link}",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"pages.home.stablePlaceholder.study.title\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: pages.home.stablePlaceholder.study.title",
+    "[homepage-marketing-copy] missing or placeholder copy {key: pages.home.stablePlaceholder.study.title, resolved: Title}",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"pages.home.stablePlaceholder.study.body\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: pages.home.stablePlaceholder.study.body",
+    "[homepage-marketing-copy] missing or placeholder copy {key: pages.home.stablePlaceholder.study.body, resolved: Body}",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"pages.home.stablePlaceholder.study.link\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: pages.home.stablePlaceholder.study.link",
+    "[homepage-marketing-copy] missing or placeholder copy {key: pages.home.stablePlaceholder.study.link, resolved: Link}",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"pages.home.stablePlaceholder.support.title\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: pages.home.stablePlaceholder.support.title",
+    "[homepage-marketing-copy] missing or placeholder copy {key: pages.home.stablePlaceholder.support.title, resolved: Title}",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"pages.home.stablePlaceholder.support.body\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: pages.home.stablePlaceholder.support.body",
+    "[homepage-marketing-copy] missing or placeholder copy {key: pages.home.stablePlaceholder.support.body, resolved: Body}",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"pages.home.stablePlaceholder.support.link\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: pages.home.stablePlaceholder.support.link",
+    "[homepage-marketing-copy] missing or placeholder copy {key: pages.home.stablePlaceholder.support.link, resolved: Link}",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"pages.home.pathwaysSection.title\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: pages.home.pathwaysSection.title",
+    "[homepage-marketing-copy] missing or placeholder copy {key: pages.home.pathwaysSection.title, resolved: Title}",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"components.homeHeroCarousel.slide10.label\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: components.homeHeroCarousel.slide10.label",
+    "[home-hero-carousel] missing or placeholder slide copy {key: components.homeHeroCarousel.slide10.label, resolved: Label}",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"components.homeHeroCarousel.slide01.label\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: components.homeHeroCarousel.slide01.label",
+    "[home-hero-carousel] missing or placeholder slide copy {key: components.homeHeroCarousel.slide01.label, resolved: Label}",
+    "{\"scope\":\"i18n\",\"event\":\"missing_or_invalid\",\"key\":\"components.homeHeroCarousel.slide07.label\",\"locale\":\"en\"}",
+    "[marketing] missing required marketing copy: components.homeHeroCarousel.slide07.label",
+    "[home-hero-carousel] missing or placeholder slide copy {key: components.homeHeroCarousel.slide07.label, resolved: Label}",
+    "[nursenest-core] i18n marketing_critical_nav_keys_missing_count {\"count\":13}",
+    "[MarketingI18nProvider] Missing hero/nav keys:\n components.homeHeroCarousel.slide01.label\ncomponents.homeHeroCarousel.slide02.label\ncomponents.homeHeroCarousel.slide04.label\ncomponents.homeHeroCarousel.slide05.label\ncomponents.homeHeroCarousel.slide06.label\ncomponents.homeHeroCarousel.slide07.label\ncomponents.homeHeroCarousel.slide08.label\ncomponents.homeHeroCarousel.slide10.label\ncomponents.homeHeroCarousel.slide11.label\ncomponents.homeHeroCarousel.slide12.label\ncomponents.homeHeroCarousel.slide13.label\ncomponents.homeHeroCarousel.slide14.label\ncomponents.homeHeroCarousel.slide15.label",
+    "[nursenest-core] i18n marketing_critical_nav_keys_missing_count {\"count\":14}",
+    "[MarketingI18nProvider] Missing hero/nav keys:\n components.homeHeroCarousel.slide01.label\ncomponents.homeHeroCarousel.slide02.label\ncomponents.homeHeroCarousel.slide04.label\ncomponents.homeHeroCarousel.slide05.label\ncomponents.homeHeroCarousel.slide06.label\ncomponents.homeHeroCarousel.slide07.label\ncomponents.homeHeroCarousel.slide08.label\ncomponents.homeHeroCarousel.slide10.label\ncomponents.homeHeroCarousel.slide11.label\ncomponents.homeHeroCarousel.slide12.label\ncomponents.homeHeroCarousel.slide13.label\ncomponents.homeHeroCarousel.slide14.label\ncomponents.homeHeroCarousel.slide15.label\npages.home.carouselHandoff.fallbackCta",
+    "%c%s%c [nursenest-core] seo marketing_canonical_rejected {\"code\":\"auth_noindex_path\",\"url\":\"https://www.nursenest.ca/signup\",\"detail\":\"/signup\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_hreflang_rejected {\"lang\":\"x-default\",\"url\":\"https://www.nursenest.ca/signup\",\"code\":\"auth_noindex_path\",\"detail\":\"/signup\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_hreflang_rejected {\"lang\":\"en-CA\",\"url\":\"https://www.nursenest.ca/signup\",\"code\":\"auth_noindex_path\",\"detail\":\"/signup\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_hreflang_rejected {\"lang\":\"es\",\"url\":\"https://www.nursenest.ca/es/signup\",\"code\":\"auth_noindex_path\",\"detail\":\"/es/signup\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_hreflang_rejected {\"lang\":\"tl\",\"url\":\"https://www.nursenest.ca/tl/signup\",\"code\":\"auth_noindex_path\",\"detail\":\"/tl/signup\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_hreflang_rejected {\"lang\":\"hi\",\"url\":\"https://www.nursenest.ca/hi/signup\",\"code\":\"auth_noindex_path\",\"detail\":\"/hi/signup\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_hreflang_rejected {\"lang\":\"pt-BR\",\"url\":\"https://www.nursenest.ca/pt/signup\",\"code\":\"auth_noindex_path\",\"detail\":\"/pt/signup\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_canonical_rejected {\"code\":\"auth_noindex_path\",\"url\":\"https://www.nursenest.ca/login\",\"detail\":\"/login\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_hreflang_rejected {\"lang\":\"x-default\",\"url\":\"https://www.nursenest.ca/login\",\"code\":\"auth_noindex_path\",\"detail\":\"/login\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_hreflang_rejected {\"lang\":\"en-CA\",\"url\":\"https://www.nursenest.ca/login\",\"code\":\"auth_noindex_path\",\"detail\":\"/login\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_hreflang_rejected {\"lang\":\"es\",\"url\":\"https://www.nursenest.ca/es/login\",\"code\":\"auth_noindex_path\",\"detail\":\"/es/login\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_hreflang_rejected {\"lang\":\"tl\",\"url\":\"https://www.nursenest.ca/tl/login\",\"code\":\"auth_noindex_path\",\"detail\":\"/tl/login\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_hreflang_rejected {\"lang\":\"hi\",\"url\":\"https://www.nursenest.ca/hi/login\",\"code\":\"auth_noindex_path\",\"detail\":\"/hi/login\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] seo marketing_hreflang_rejected {\"lang\":\"pt-BR\",\"url\":\"https://www.nursenest.ca/pt/login\",\"code\":\"auth_noindex_path\",\"detail\":\"/pt/login\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] entitlement get_user_access_timing {\"durationMs\":183,\"slowRead\":0,\"userFound\":true,\"subscriptionRowsRead\":0,\"subscriptionQueries\":1,\"outcome\":\"no_access\"} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "%c%s%c [nursenest-core] crawl_surface home_blog_teaser_slow {\"ms\":910,\"count\":3} background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server  ",
+    "ClientFetchError: Failed to fetch. Read more at https://errors.authjs.dev#autherror\n    at fetchData (http://localhost:3010/_next/static/chunks/node_modules_0a4wwtw._.js:513:22)\n    at async getSession (http://localhost:3010/_next/static/chunks/node_modules_0a4wwtw._.js:680:21)\n    at async SessionProvider.useEffect [as _getSession] (http://localhost:3010/_next/static/chunks/node_modules_0a4wwtw._.js:823:51)"
+  ],
+  "signupCompleted": true
+}

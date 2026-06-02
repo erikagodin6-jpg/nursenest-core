@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ocean" id="root-html">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RN CAT — In-Session Exam Mockups (by question type)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:transparent}
+
+[data-theme="ocean"]{
+  --semantic-surface:#fff;--semantic-panel-muted:#f4f9fc;--semantic-border-soft:#e2ebf3;
+  --semantic-text-primary:#0f172a;--semantic-text-secondary:#455569;--semantic-text-muted:#647894;
+  --semantic-brand:#0d7aaa;--semantic-brand-mix:#1aaee0;--semantic-info:#2563eb;--semantic-success:#16a34a;
+  --semantic-warning:#d97706;--semantic-danger:#e11d48;--semantic-chart-1:#1aaee0;--semantic-chart-2:#16a34a;
+  --semantic-chart-3:#7c3aed;--semantic-chart-4:#d97706;--semantic-chart-5:#e11d48;
+  --theme-heading-text:#0f172a;--nav-bg:#fff;--nav-fg:#0f172a;
+}
+[data-theme="blossom"]{
+  --semantic-surface:#fffcfb;--semantic-panel-muted:#fff5f7;--semantic-border-soft:#f5e4e8;
+  --semantic-text-primary:#3b1224;--semantic-text-secondary:#6b3a4d;--semantic-text-muted:#9a6b7d;
+  --semantic-brand:#b8325a;--semantic-brand-mix:#e85d8a;--semantic-info:#7c3aed;--semantic-success:#2ecc71;
+  --semantic-warning:#f39c12;--semantic-danger:#e14d8f;--semantic-chart-1:#e85d8a;--semantic-chart-2:#2ecc71;
+  --semantic-chart-3:#7c3aed;--semantic-chart-4:#ca8a04;--semantic-chart-5:#dc2626;
+  --theme-heading-text:#3b1224;--nav-bg:#fffcfb;--nav-fg:#3b1224;
+}
+[data-theme="midnight"]{
+  --semantic-surface:#121a2e;--semantic-panel-muted:#1a2438;--semantic-border-soft:#2a3650;
+  --semantic-text-primary:#e8eef8;--semantic-text-secondary:#a8b8d0;--semantic-text-muted:#7b8ca8;
+  --semantic-brand:#5eb8e8;--semantic-brand-mix:#7ec8f0;--semantic-info:#60a5fa;--semantic-success:#34d399;
+  --semantic-warning:#fbbf24;--semantic-danger:#fb7185;--semantic-chart-1:#7ec8f0;--semantic-chart-2:#34d399;
+  --semantic-chart-3:#a78bfa;--semantic-chart-4:#fbbf24;--semantic-chart-5:#fb7185;
+  --theme-heading-text:#f1f5f9;--nav-bg:#0c1220;--nav-fg:#e8eef8;
+}
+
+.ctrl{background:#0c1220;border-bottom:1px solid #1e293b;padding:12px 20px;position:sticky;top:0;z-index:100}
+.ctrl h1{font-size:13px;font-weight:700;color:#f8fafc;margin-bottom:8px}
+.ctrl-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+.ctrl-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#64748b;min-width:52px}
+.pill{padding:6px 12px;border-radius:8px;font-size:11px;font-weight:600;color:#94a3b8;background:#1e293b}
+.pill.on{color:#38bdf8;background:#0f2744}
+.pill.theme.on{color:#f0f9ff}
+.stage{display:flex;justify-content:center;padding:28px 20px 48px}
+#exam-viewport{width:1280px;height:900px;background:var(--semantic-surface);color:var(--semantic-text-primary);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.45);border-radius:12px;border:1px solid var(--semantic-border-soft)}
+
+/* Exam shell */
+.exam-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 16px;border-bottom:1px solid var(--semantic-border-soft);background:var(--semantic-surface);flex-shrink:0}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--semantic-brand-mix),var(--semantic-brand));color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+.logo-name{font-size:13px;font-weight:800;color:var(--semantic-text-primary);line-height:1.1}
+.logo-sub{font-size:10px;color:var(--semantic-text-muted);font-weight:600}
+.stat-block{text-align:center}
+.stat-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--semantic-text-muted)}
+.stat-val{font-size:14px;font-weight:700;color:var(--semantic-text-primary)}
+.top-actions{display:flex;gap:6px}
+.icon-btn{height:32px;padding:0 10px;border-radius:8px;border:1px solid var(--semantic-border-soft);font-size:11px;font-weight:600;color:var(--semantic-text-secondary);background:var(--semantic-panel-muted)}
+.progress-strip{height:4px;background:color-mix(in srgb,var(--semantic-info) 12%,var(--semantic-border-soft));flex-shrink:0}
+.progress-fill{height:100%;width:38%;background:linear-gradient(90deg,var(--semantic-chart-1),var(--semantic-chart-2));border-radius:0 2px 2px 0}
+
+.exam-body{flex:1;min-height:0;display:flex;overflow:hidden}
+.type-panel{width:168px;flex-shrink:0;border-right:1px solid var(--semantic-border-soft);padding:14px 12px;background:color-mix(in srgb,var(--semantic-panel-muted) 60%,var(--semantic-surface))}
+.type-panel.hide{display:none}
+.type-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:8px}
+.type-ico.mcq{background:color-mix(in srgb,var(--semantic-chart-1) 18%,transparent)}
+.type-ico.sata{background:color-mix(in srgb,var(--semantic-chart-2) 18%,transparent)}
+.type-ico.matrix{background:color-mix(in srgb,var(--semantic-chart-3) 18%,transparent)}
+.type-ico.drag{background:color-mix(in srgb,var(--semantic-chart-4) 18%,transparent)}
+.type-ico.case{background:color-mix(in srgb,var(--semantic-chart-5) 14%,transparent)}
+.type-label{font-size:12px;font-weight:800;color:var(--semantic-text-primary)}
+.type-sub{font-size:10px;color:var(--semantic-text-muted);margin-top:2px}
+.type-rule{height:1px;background:var(--semantic-border-soft);margin:10px 0}
+.type-hint{font-size:10px;line-height:1.5;color:var(--semantic-text-secondary)}
+
+.q-area{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
+.q-scroll{flex:1;min-height:0;overflow:hidden;padding:clamp(12px,2vh,20px) clamp(14px,2vw,24px) 8px;display:flex;flex-direction:column;gap:10px}
+.stem.compact{font-size:clamp(.9rem,1.55vh,1rem);line-height:1.5;-webkit-line-clamp:3;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
+.cat-label{display:inline-flex;border-radius:999px;border:1px solid color-mix(in srgb,var(--semantic-brand) 28%,var(--semantic-border-soft));background:color-mix(in srgb,var(--semantic-brand) 9%,var(--semantic-surface));padding:4px 12px;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--semantic-brand);margin-bottom:14px}
+.stem{font-size:1.05rem;line-height:1.72;color:var(--theme-heading-text);margin-bottom:16px;max-width:52rem}
+.stem.large{font-size:1.15rem;line-height:1.65}
+.stem.compact{font-size:.95rem;line-height:1.6}
+
+/* MCQ / SATA options */
+.opt-list{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1.5px solid var(--semantic-border-soft);background:var(--semantic-surface);font-size:14px;color:var(--semantic-text-secondary);cursor:pointer}
+.opt:hover{border-color:color-mix(in srgb,var(--semantic-brand-mix) 40%,var(--semantic-border-soft));background:color-mix(in srgb,var(--semantic-chart-1) 6%,var(--semantic-surface))}
+.opt.sel{border-color:var(--semantic-brand);background:color-mix(in srgb,var(--semantic-brand) 8%,var(--semantic-surface));color:var(--semantic-text-primary);font-weight:600}
+.opt-letter{min-width:26px;height:26px;border-radius:7px;background:var(--semantic-panel-muted);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--semantic-text-muted)}
+.opt.sel .opt-letter{background:var(--semantic-brand);color:#fff}
+.chk{width:20px;height:20px;border-radius:5px;border:2px solid var(--semantic-border-soft);flex-shrink:0;margin-top:2px}
+.opt.sel .chk{background:var(--semantic-success);border-color:var(--semantic-success)}
+
+/* Bowtie */
+.bowtie{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.bowtie-col{border:1px solid var(--semantic-border-soft);border-radius:12px;padding:12px;background:var(--semantic-panel-muted)}
+.bowtie-h{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--semantic-text-muted);margin-bottom:8px}
+.bowtie-slot{min-height:44px;border:1px dashed var(--semantic-border-soft);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--semantic-text-secondary);background:var(--semantic-surface);margin-bottom:6px}
+.bank{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{padding:6px 10px;border-radius:8px;border:1px solid var(--semantic-border-soft);font-size:12px;font-weight:600;background:var(--semantic-surface);color:var(--semantic-text-secondary)}
+
+/* Matrix */
+.matrix-wrap{overflow:auto;border:1px solid var(--semantic-border-soft);border-radius:12px}
+.matrix{width:100%;border-collapse:collapse;font-size:13px}
+.matrix th,.matrix td{border:1px solid var(--semantic-border-soft);padding:10px 12px}
+.matrix th{background:var(--semantic-panel-muted);font-size:11px;font-weight:700;text-align:center}
+.matrix td.row-h{background:var(--semantic-panel-muted);font-weight:600;font-size:12px}
+.matrix .cell-sel{background:color-mix(in srgb,var(--semantic-chart-1) 22%,var(--semantic-surface))}
+.matrix .dot{width:14px;height:14px;border-radius:50%;background:var(--semantic-chart-1);margin:0 auto}
+
+/* Drag drop */
+.drag-zones{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.drop-col{border:1px dashed color-mix(in srgb,var(--semantic-info) 35%,var(--semantic-border-soft));border-radius:12px;padding:12px;min-height:140px;background:color-mix(in srgb,var(--semantic-info) 5%,var(--semantic-surface))}
+.drop-title{font-size:10px;font-weight:800;text-transform:uppercase;color:var(--semantic-info);margin-bottom:8px}
+.drag-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:1px solid var(--semantic-border-soft);background:var(--semantic-surface);font-size:13px;font-weight:600;margin-bottom:6px}
+.grip{color:var(--semantic-text-muted);font-size:14px}
+
+/* Cloze */
+.cloze{font-size:15px;line-height:2;color:var(--semantic-text-primary)}
+.cloze-select{display:inline-block;min-width:120px;padding:4px 10px;margin:0 4px;border-radius:8px;border:1px solid var(--semantic-border-soft);background:var(--semantic-panel-muted);font-size:13px;font-weight:600;color:var(--semantic-brand)}
+
+/* Highlight */
+.passage{padding:16px;border-radius:12px;border:1px solid var(--semantic-border-soft);background:var(--semantic-panel-muted);font-size:14px;line-height:1.8;color:var(--semantic-text-primary)}
+.passage mark{background:color-mix(in srgb,var(--semantic-warning) 35%,transparent);padding:2px 4px;border-radius:4px;font-weight:600}
+
+/* Hotspot */
+.hotspot-box{position:relative;border-radius:12px;border:1px solid var(--semantic-border-soft);background:linear-gradient(145deg,color-mix(in srgb,var(--semantic-panel-muted) 80%,#1e293b),var(--semantic-panel-muted));height:220px;display:flex;align-items:center;justify-content:center;color:var(--semantic-text-muted);font-size:12px;font-weight:600}
+.hotspot-pin{position:absolute;width:28px;height:28px;border-radius:50%;border:3px solid var(--semantic-danger);background:color-mix(in srgb,var(--semantic-danger) 25%,transparent);left:58%;top:42%}
+
+/* Case study */
+.case-layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:16px;min-height:320px}
+.case-rail{border:1px solid var(--semantic-border-soft);border-radius:12px;padding:12px;background:var(--semantic-panel-muted)}
+.case-tab{padding:8px 10px;border-radius:8px;font-size:12px;font-weight:600;color:var(--semantic-text-muted);margin-bottom:4px}
+.case-tab.on{background:var(--semantic-surface);color:var(--semantic-brand);border:1px solid var(--semantic-border-soft)}
+.vitals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.vital{padding:8px;border-radius:8px;border:1px solid var(--semantic-border-soft);background:var(--semantic-surface);text-align:center}
+.vital b{display:block;font-size:14px;color:var(--semantic-text-primary)}
+.vital span{font-size:10px;color:var(--semantic-text-muted)}
+
+/* Trend */
+.trend-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+.trend-table th,.trend-table td{border:1px solid var(--semantic-border-soft);padding:8px}
+.trend-table th{background:var(--semantic-panel-muted)}
+
+.exam-foot{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-top:1px solid var(--semantic-border-soft);background:var(--semantic-surface)}
+.foot-left{display:flex;gap:8px}
+.foot-btn{padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;border:1px solid var(--semantic-border-soft);color:var(--semantic-text-secondary);background:var(--semantic-surface)}
+.foot-btn.primary{background:var(--semantic-brand);border-color:var(--semantic-brand);color:#fff}
+.foot-btn.success{background:var(--semantic-success);border-color:var(--semantic-success);color:#fff}
+
+/* Direction modifiers on viewport */
+#exam-viewport.dir-b .type-panel{background:var(--semantic-surface)}
+#exam-viewport.dir-b .stem{font-size:1.18rem}
+#exam-viewport.dir-c .q-scroll{padding:14px 18px}
+#exam-viewport.dir-c .opt{padding:9px 12px}
+#exam-viewport.dir-d .progress-fill{width:52%;background:linear-gradient(90deg,var(--semantic-chart-1),var(--semantic-chart-3),var(--semantic-chart-4))}
+#exam-viewport.dir-d .cat-label{background:color-mix(in srgb,var(--semantic-chart-3) 12%,var(--semantic-surface));border-color:color-mix(in srgb,var(--semantic-chart-3) 30%,var(--semantic-border-soft));color:var(--semantic-chart-3)}
+#exam-viewport.dir-e .type-panel{display:none}
+#exam-viewport.dir-e .q-scroll{padding:28px 32px}
+#exam-viewport.dir-e .opt-list{gap:12px}
+</style>
+</head>
+<body>
+
+<div class="ctrl">
+  <h1>RN CAT in-session exam mockups · 12 question types × 5 directions (A–E) · Ocean / Blossom / Midnight</h1>
+  <div class="ctrl-row">
+    <span class="ctrl-label">Type</span>
+    <div id="type-tabs"></div>
+  </div>
+  <div class="ctrl-row">
+    <span class="ctrl-label">Dir</span>
+    <div id="dir-tabs"></div>
+  </div>
+  <div class="ctrl-row">
+    <span class="ctrl-label">Theme</span>
+    <button type="button" class="pill theme on" data-theme-pick="ocean">Ocean</button>
+    <button type="button" class="pill theme" data-theme-pick="blossom">Blossom</button>
+    <button type="button" class="pill theme" data-theme-pick="midnight">Midnight</button>
+  </div>
+</div>
+
+<div class="stage">
+  <div id="exam-viewport" class="dir-a" data-capture-root>
+    <header class="exam-top">
+      <div class="logo">
+        <div class="logo-mark" aria-hidden="true">N</div>
+        <div>
+          <div class="logo-name">NurseNest</div>
+          <div class="logo-sub">NCLEX® NEXT GEN · CAT</div>
+        </div>
+      </div>
+      <div class="stat-block"><div class="stat-label">Questions</div><div class="stat-val">12</div></div>
+      <div class="stat-block"><div class="stat-label">Time remaining</div><div class="stat-val">01:42:18</div></div>
+      <div class="top-actions">
+        <button type="button" class="icon-btn">Calculator</button>
+        <button type="button" class="icon-btn">Notes</button>
+        <button type="button" class="icon-btn">Flag</button>
+        <button type="button" class="icon-btn">End test</button>
+      </div>
+    </header>
+    <div class="progress-strip"><div class="progress-fill"></div></div>
+    <div class="exam-body">
+      <aside class="type-panel" id="type-panel"></aside>
+      <div class="q-area">
+        <div class="q-scroll" id="q-content"></div>
+        <footer class="exam-foot">
+          <div class="foot-left">
+            <button type="button" class="foot-btn">Previous</button>
+            <button type="button" class="foot-btn">Flag item</button>
+          </div>
+          <button type="button" class="foot-btn primary" id="submit-btn">Submit answer</button>
+        </footer>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const TYPES = [
+  { id: 'mcq', label: 'MCQ', sub: 'Multiple choice', panelClass: 'mcq', panelIco: '◎', instruction: 'Select the single best answer.' },
+  { id: 'sata', label: 'SATA', sub: 'Select all', panelClass: 'sata', panelIco: '☑', instruction: 'Select all that apply.' },
+  { id: 'bowtie', label: 'Bowtie', sub: 'Clinical judgment', panelClass: 'mcq', panelIco: '⎇', instruction: 'Assign one option per row.' },
+  { id: 'matrix_mcq', label: 'Matrix', sub: 'One per row', panelClass: 'matrix', panelIco: '▦', instruction: 'Select one answer per row.' },
+  { id: 'matrix_mr', label: 'Matrix', sub: 'Multi-response', panelClass: 'matrix', panelIco: '▦', instruction: 'Select all that apply per row.' },
+  { id: 'drag_drop', label: 'Drag & drop', sub: 'Ordered', panelClass: 'drag', panelIco: '⋮', instruction: 'Drag into the correct order.' },
+  { id: 'dropdown_cloze', label: 'Drop-down', sub: 'Cloze', panelClass: 'matrix', panelIco: '▾', instruction: 'Complete each blank from the menu.' },
+  { id: 'highlight_text', label: 'Highlight', sub: 'Text', panelClass: 'matrix', panelIco: '◧', instruction: 'Highlight words that answer the item.' },
+  { id: 'hotspot', label: 'Hot spot', sub: 'Image', panelClass: 'matrix', panelIco: '⌖', instruction: 'Click the area on the image.' },
+  { id: 'case_study', label: 'Case study', sub: 'Multi-item', panelClass: 'case', panelIco: '▤', instruction: 'Use the chart; answer each tab.' },
+  { id: 'trend', label: 'Trend', sub: 'Vitals', panelClass: 'case', panelIco: '↗', instruction: 'Interpret trending data.' },
+  { id: 'ordered_response', label: 'Ordered', sub: 'Response', panelClass: 'drag', panelIco: '↕', instruction: 'Order steps correctly.' },
+];
+
+const DIRS = [
+  { id: 'a', label: 'A · Balanced' },
+  { id: 'b', label: 'B · Stem-forward' },
+  { id: 'c', label: 'C · Dense' },
+  { id: 'd', label: 'D · Multi-hue' },
+  { id: 'e', label: 'E · Minimal' },
+];
+
+let currentType = 'mcq';
+let currentDir = 'a';
+
+function renderTypePanel(meta) {
+  document.getElementById('type-panel').innerHTML = `
+    <div class="type-ico ${meta.panelClass}">${meta.panelIco}</div>
+    <div class="type-label">${meta.label}</div>
+    <div class="type-sub">${meta.sub}</div>
+    <div class="type-rule"></div>
+    <p class="type-hint">${meta.instruction}</p>`;
+}
+
+function renderMcq(sata) {
+  const opts = sata
+    ? ['Fluid restriction and daily weights', 'Increase IV rate to 125 mL/hr', 'Administer PRN antihypertensive', 'Encourage oral fluids ad lib']
+    : ['Notify the provider immediately', 'Continue current plan of care', 'Reposition and reassess in 15 minutes', 'Document and monitor only'];
+  return `
+    <div class="cat-label">Safe and effective care · Item 12</div>
+    <p class="stem">A client with heart failure reports increased shortness of breath when lying flat. Which action should the nurse take first?</p>
+    <div class="opt-list">
+      ${opts.map((t, i) => `
+        <div class="opt ${!sata && i === 0 ? 'sel' : sata && (i === 0 || i === 2) ? 'sel' : ''}">
+          ${sata ? '<span class="chk"></span>' : `<span class="opt-letter">${String.fromCharCode(65 + i)}</span>`}
+          <span>${t}</span>
+        </div>`).join('')}
+    </div>`;
+}
+
+function renderBowtie() {
+  return `
+    <div class="cat-label">Clinical judgment · Bowtie</div>
+    <p class="stem">A client arrives with acute dyspnea, SpO₂ 88% on room air, and bilateral crackles. Complete the bowtie.</p>
+    <div class="bowtie">
+      <div class="bowtie-col"><div class="bowtie-h">Actions to take</div><div class="bowtie-slot">Elevate HOB · O₂</div><div class="bowtie-slot" style="opacity:.5">Empty</div></div>
+      <div class="bowtie-col"><div class="bowtie-h">Condition</div><div class="bowtie-slot" style="border-style:solid;border-color:var(--semantic-brand)">Acute pulmonary edema</div></div>
+      <div class="bowtie-col"><div class="bowtie-h">Monitor</div><div class="bowtie-slot">SpO₂ · lung sounds</div></div>
+    </div>
+    <div class="bank">
+      <span class="chip">Acute pulmonary edema</span><span class="chip">Pneumonia</span><span class="chip">Elevate HOB</span><span class="chip">Fluid bolus</span><span class="chip">SpO₂ q15min</span>
+    </div>`;
+}
+
+function renderMatrix(multi) {
+  const rows = ['SpO₂ 88%', 'Crackles bilateral', 'JVD present'];
+  const cols = ['Expected finding', 'Unexpected', 'Requires immediate action'];
+  return `
+    <div class="cat-label">Matrix grid · ${multi ? 'Multi-response' : 'Multiple choice'}</div>
+    <p class="stem">For each assessment finding, select the category that best applies.</p>
+    <div class="matrix-wrap"><table class="matrix"><thead><tr><th></th>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map((r, ri) => `<tr><td class="row-h">${r}</td>${cols.map((_, ci) => `<td class="${ri === ci ? 'cell-sel' : ''}">${ri === ci ? '<div class="dot"></div>' : ''}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+
+function renderDrag(ordered) {
+  const items = ordered
+    ? ['Verify blood type and number', 'Obtain consent', 'Prime tubing', 'Start transfusion slowly']
+    : ['Assess airway', 'Start compressions', 'Attach monitor', 'Give epinephrine'];
+  return `
+    <div class="cat-label">${ordered ? 'Ordered response' : 'Drag & drop'}</div>
+    <p class="stem">Place the steps in the correct priority order for this scenario.</p>
+    <div class="drag-zones"><div class="drop-col"><div class="drop-title">Your order</div>
+      ${items.slice(0, 2).map(t => `<div class="drag-item"><span class="grip">⋮</span>${t}</div>`).join('')}
+    </div><div class="drop-col"><div class="drop-title">Available</div>
+      ${items.slice(2).map(t => `<div class="drag-item"><span class="grip">⋮</span>${t}</div>`).join('')}
+    </div></div>`;
+}
+
+function renderCloze() {
+  return `
+    <div class="cat-label">Drop-down cloze</div>
+    <p class="cloze stem" style="margin-bottom:0">The nurse should first <span class="cloze-select">assess airway ▾</span> then <span class="cloze-select">notify provider ▾</span> while maintaining <span class="cloze-select">SpO₂ monitoring ▾</span>.</p>`;
+}
+
+function renderHighlight() {
+  return `
+    <div class="cat-label">Highlight text</div>
+    <p class="stem">Click to highlight findings that require immediate nursing action.</p>
+    <div class="passage">The client reports <mark>chest pressure</mark> radiating to the jaw. Vitals: BP 92/58, HR 118. Lung sounds clear. Skin cool and <mark>diaphoretic</mark>. History includes hypertension.</div>`;
+}
+
+function renderHotspot() {
+  return `
+    <div class="cat-label">Hot spot</div>
+    <p class="stem">Click on the ECG region that indicates ST elevation concerning for infarction.</p>
+    <div class="hotspot-box">12-lead ECG preview · telemetry strip<div class="hotspot-pin" aria-hidden="true"></div></div>`;
+}
+
+function renderCase() {
+  return `
+    <div class="cat-label">NGN case study · Tab 2 of 6</div>
+    <div class="case-layout">
+      <div>
+        <p class="stem compact">62-year-old with chest discomfort. Labs and vitals update as you advance.</p>
+        <div class="vitals">
+          <div class="vital"><b>88%</b><span>SpO₂</span></div>
+          <div class="vital"><b>118</b><span>HR</span></div>
+          <div class="vital"><b>92/58</b><span>BP</span></div>
+        </div>
+        ${renderMcq(false)}
+      </div>
+      <div class="case-rail">
+        <div class="case-tab on">Chart</div>
+        <div class="case-tab">Labs</div>
+        <div class="case-tab">Notes</div>
+        <div class="case-tab">Item 2</div>
+        <div class="case-tab">Item 3</div>
+      </div>
+    </div>`;
+}
+
+function renderTrend() {
+  return `
+    <div class="cat-label">Trend</div>
+    <p class="stem">Review vital sign trends. Which interpretation is most appropriate?</p>
+    <table class="trend-table"><thead><tr><th>Time</th><th>HR</th><th>BP</th><th>SpO₂</th></tr></thead>
+    <tbody>
+      <tr><td>0800</td><td>72</td><td>118/76</td><td>98%</td></tr>
+      <tr><td>1000</td><td>88</td><td>110/70</td><td>95%</td></tr>
+      <tr><td>1200</td><td>104</td><td>98/60</td><td>91%</td></tr>
+    </tbody></table>
+    <div class="opt-list" style="margin-top:14px">
+      <div class="opt sel"><span class="opt-letter">A</span><span>Deteriorating perfusion — intervene</span></div>
+      <div class="opt"><span class="opt-letter">B</span><span>Stable improvement</span></div>
+    </div>`;
+}
+
+function renderQuestion() {
+  const meta = TYPES.find(t => t.id === currentType);
+  renderTypePanel(meta);
+  const vp = document.getElementById('exam-viewport');
+  vp.className = `dir-${currentDir}`;
+  vp.setAttribute('data-capture-type', currentType);
+  vp.setAttribute('data-capture-dir', currentDir);
+  const stem = document.querySelector('#q-content');
+  let html = '';
+  switch (currentType) {
+    case 'mcq': html = renderMcq(false); break;
+    case 'sata': html = renderMcq(true); break;
+    case 'bowtie': html = renderBowtie(); break;
+    case 'matrix_mcq': html = renderMatrix(false); break;
+    case 'matrix_mr': html = renderMatrix(true); break;
+    case 'drag_drop': html = renderDrag(false); break;
+    case 'ordered_response': html = renderDrag(true); break;
+    case 'dropdown_cloze': html = renderCloze(); break;
+    case 'highlight_text': html = renderHighlight(); break;
+    case 'hotspot': html = renderHotspot(); break;
+    case 'case_study': html = renderCase(); break;
+    case 'trend': html = renderTrend(); break;
+    default: html = renderMcq(false);
+  }
+  stem.innerHTML = html;
+  document.getElementById('submit-btn').textContent = currentType === 'case_study' ? 'Next item' : 'Submit answer';
+}
+
+function buildTabs() {
+  const tt = document.getElementById('type-tabs');
+  TYPES.forEach(t => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pill' + (t.id === currentType ? ' on' : '');
+    b.dataset.typePick = t.id;
+    b.textContent = t.label + (t.sub ? ` · ${t.sub}` : '');
+    b.onclick = () => { currentType = t.id; buildTabs(); renderQuestion(); };
+    tt.appendChild(b);
+  });
+  const dt = document.getElementById('dir-tabs');
+  dt.innerHTML = '';
+  DIRS.forEach(d => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pill' + (d.id === currentDir ? ' on' : '');
+    b.dataset.dirPick = d.id;
+    b.textContent = d.label;
+    b.onclick = () => { currentDir = d.id; buildTabs(); renderQuestion(); };
+    dt.appendChild(b);
+  });
+}
+
+document.querySelectorAll('[data-theme-pick]').forEach(btn => {
+  btn.onclick = () => {
+    document.documentElement.setAttribute('data-theme', btn.dataset.themePick);
+    document.querySelectorAll('[data-theme-pick]').forEach(b => b.classList.toggle('on', b === btn));
+    document.getElementById('exam-viewport').setAttribute('data-capture-theme', btn.dataset.themePick);
+  };
+});
+
+buildTabs();
+renderQuestion();
+document.getElementById('exam-viewport').setAttribute('data-capture-theme', 'ocean');
+</script>
+</body>
+</html>

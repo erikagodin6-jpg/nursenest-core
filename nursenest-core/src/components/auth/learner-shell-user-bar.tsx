@@ -1,0 +1,222 @@
+"use client";
+
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { ChevronDown, User } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
+import { SupportEmailAccountMenuLink } from "@/components/support/support-email-account-menu-link";
+import { SignOutButton } from "@/components/auth/sign-out-button";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+
+type MenuItem = { href: string; i18nKey: string };
+
+const STUDY_LINKS: MenuItem[] = [
+  { href: "/app", i18nKey: "learner.userBar.link.dashboard" },
+  { href: "/app/account/overview", i18nKey: "learner.userBar.link.accountOverview" },
+];
+
+const PERFORMANCE_LINKS: MenuItem[] = [
+  { href: "/app/account/report", i18nKey: "learner.userBar.link.reportCard" },
+  { href: "/app/account/readiness", i18nKey: "learner.userBar.link.readiness" },
+  { href: "/app/account/progress", i18nKey: "learner.userBar.link.progress" },
+  { href: "/app/account/question-bank-performance", i18nKey: "learner.userBar.link.questionBankPerf" },
+  { href: "/app/account/focus-areas", i18nKey: "learner.userBar.link.focusAreas" },
+];
+
+const ACTIVITY_LINKS: MenuItem[] = [
+  { href: "/app/account/study-history", i18nKey: "learner.userBar.link.studyHistory" },
+  { href: "/app/account/cat-history", i18nKey: "learner.userBar.link.catHistory" },
+  { href: "/app/account/review-queue", i18nKey: "learner.userBar.link.reviewQueue" },
+];
+
+const ACCOUNT_LINKS: MenuItem[] = [
+  { href: "/app/account/billing", i18nKey: "learner.userBar.link.subscription" },
+  { href: "/app/account/personal", i18nKey: "learner.userBar.link.personal" },
+  { href: "/app/account/study-preferences", i18nKey: "learner.userBar.link.settings" },
+  { href: "/app/account/security", i18nKey: "learner.userBar.link.security" },
+];
+
+function tierDisplayKey(tier: string): string {
+  const map: Record<string, string> = {
+    RPN: "learner.userBar.tier.RPN",
+    LVN_LPN: "learner.userBar.tier.LVN_LPN",
+    RN: "learner.userBar.tier.RN",
+    NP: "learner.userBar.tier.NP",
+    ALLIED: "learner.userBar.tier.ALLIED",
+    NEW_GRAD: "learner.userBar.tier.NEW_GRAD",
+  };
+  return map[tier] ?? "learner.userBar.tier.fallback";
+}
+
+function countryDisplayKey(country: string): string {
+  if (country === "CA") return "learner.userBar.region.CA";
+  if (country === "US") return "learner.userBar.region.US";
+  return "learner.userBar.region.fallback";
+}
+
+export function LearnerShellUserBar({
+  pathwayShortLabel = null,
+  learnerQaOverlay = null,
+}: {
+  pathwayShortLabel?: string | null;
+  /** When staff is in learner QA mode, show simulated plan/scope instead of JWT subscription hints. */
+  learnerQaOverlay?: { planLabel: string; scopeLine: string } | null;
+}) {
+  const { t } = useMarketingI18n();
+  const locale = useMarketingLocale();
+  const { data: session, status } = useSession();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  const closeNow = useCallback(() => setOpen(false), []);
+  /** Defer so `Link` navigation is not cancelled when the menu unmounts in the same tick (portaled / dropdown). */
+  const closeAfterNav = useCallback(() => {
+    window.setTimeout(() => setOpen(false), 0);
+  }, []);
+
+  useEffect(() => {
+    const onDoc = (e: MouseEvent) => {
+      if (!ref.current?.contains(e.target as Node)) closeNow();
+    };
+    document.addEventListener("click", onDoc);
+    return () => document.removeEventListener("click", onDoc);
+  }, [closeNow]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeNow();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, closeNow]);
+
+  if (status === "loading") {
+    return <span className="h-10 w-36 animate-pulse rounded-full bg-primary/[0.08]" aria-hidden />;
+  }
+
+  if (status !== "authenticated" || !session?.user) {
+    return null;
+  }
+
+  const user = session.user;
+  const displayName = user.name?.trim() || user.email?.split("@")[0] || t("learner.userBar.fallbackName");
+  const emailLine = user.email?.trim() ?? "";
+  const sub = user.subscriptionStatus ?? "none";
+  const tier = user.tier ?? "";
+  const country = user.country ?? "";
+
+  const planKey =
+    sub === "active"
+      ? "learner.userBar.plan.active"
+      : sub === "grace"
+        ? "learner.userBar.plan.grace"
+        : sub === "past_due_grace"
+          ? "learner.userBar.plan.past_due_grace"
+          : sub === "past_due"
+            ? "learner.userBar.plan.past_due"
+            : "learner.userBar.plan.none";
+
+  const scopeLine = learnerQaOverlay
+    ? learnerQaOverlay.scopeLine
+    : tier && country
+      ? `${t(tierDisplayKey(tier))} · ${t(countryDisplayKey(country))}`
+      : tier
+        ? t(tierDisplayKey(tier))
+        : "";
+
+  const linkClass =
+    "block touch-manipulation rounded-lg px-3 py-2 text-sm text-[var(--theme-menu-text)] transition-colors hover:bg-[var(--surface-interactive-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25";
+
+  const sectionLabelClass =
+    "px-3 pb-1.5 pt-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground first:pt-2";
+
+  const renderGroup = (labelKey: string, items: MenuItem[]) => (
+    <div role="group" aria-label={t(labelKey)}>
+      <div className={sectionLabelClass}>{t(labelKey)}</div>
+      <div className="space-y-0.5 px-1.5 pb-1">
+        {items.map(({ href, i18nKey }) => (
+          <Link
+            key={href}
+            href={href}
+            className={linkClass}
+            role="menuitem"
+            onClick={closeAfterNav}
+          >
+            {t(i18nKey)}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="flex max-w-[min(17rem,72vw)] touch-manipulation items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-left text-sm font-medium text-[var(--theme-menu-text)] shadow-sm transition-[box-shadow,background-color] hover:bg-[var(--surface-interactive-hover)] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+        aria-expanded={open}
+        aria-haspopup="menu"
+      >
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/[0.1] text-primary">
+          <User className="h-4 w-4" aria-hidden />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block truncate font-semibold leading-tight text-foreground">{displayName}</span>
+          {emailLine ? (
+            <span className="block truncate text-[11px] font-normal text-muted-foreground">{emailLine}</span>
+          ) : null}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`}
+          aria-hidden
+        />
+      </button>
+      {open ? (
+        <div
+          role="menu"
+          className="absolute right-0 z-50 mt-2 w-[min(19.5rem,calc(100vw-1.5rem))] max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] shadow-[var(--shadow-elevated)] ring-1 ring-black/[0.03] dark:ring-white/[0.04]"
+        >
+          <div className="border-b border-[var(--border-subtle)] bg-gradient-to-br from-primary/[0.07] via-transparent to-emerald-500/[0.04] px-4 py-3">
+            <p className="text-[11px] font-medium leading-relaxed text-muted-foreground">
+              {learnerQaOverlay ? learnerQaOverlay.planLabel : t(planKey)}
+            </p>
+            {scopeLine ? (
+              <p className="mt-0.5 text-xs font-medium text-foreground/90">{scopeLine}</p>
+            ) : null}
+            <p className="mt-2 border-t border-[var(--border-subtle)]/80 pt-2 text-[11px] leading-snug text-muted-foreground">
+              {pathwayShortLabel?.trim()
+                ? t("learner.userBar.pathwaySet", { pathway: pathwayShortLabel.trim() })
+                : t("learner.userBar.pathwayUnset")}
+            </p>
+          </div>
+
+          <div className="max-h-[min(22rem,70vh)] overflow-y-auto overscroll-contain py-1">
+            {renderGroup("learner.userBar.section.study", STUDY_LINKS)}
+            <div className="mx-3 my-1 h-px bg-[var(--border-subtle)]/90" aria-hidden />
+            {renderGroup("learner.userBar.section.performance", PERFORMANCE_LINKS)}
+            <div className="mx-3 my-1 h-px bg-[var(--border-subtle)]/90" aria-hidden />
+            {renderGroup("learner.userBar.section.activity", ACTIVITY_LINKS)}
+            <div className="mx-3 my-1 h-px bg-[var(--border-subtle)]/90" aria-hidden />
+            {renderGroup("learner.userBar.section.account", ACCOUNT_LINKS)}
+          </div>
+
+          <div className="border-t border-[var(--border-subtle)] bg-[var(--bg-muted)]/30 p-2">
+            <SupportEmailAccountMenuLink
+              onActivate={closeAfterNav}
+              className={`${linkClass} mb-1.5 w-full border-0 text-left text-foreground`}
+            />
+            <SignOutButton
+              role="menuitem"
+              className="w-full touch-manipulation rounded-xl px-3 py-2.5 text-left text-sm font-medium text-foreground transition-colors hover:bg-[var(--surface-interactive-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
+              onBeforeSignOut={closeAfterNav}
+              redirectTo={withMarketingLocale(locale, "/login")}
+            />
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}

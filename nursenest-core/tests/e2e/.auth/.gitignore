@@ -1,0 +1,3 @@
+# Session cookies + localStorage — do not commit
+*.json
+!.gitignore

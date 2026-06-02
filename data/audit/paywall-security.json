@@ -1,0 +1,45 @@
+{
+  "generatedAt": "2026-04-14T16:24:44.619Z",
+  "marketingPathwayLessons": {
+    "publicSeesPreviewOnly": "canViewFullPathwayLesson + visibleSectionsForLesson (pathway-lesson-access.ts)",
+    "notFoundWhenNotPublicComplete": "structuralQuality.publicComplete gate on lesson detail"
+  },
+  "apiCriticalRoutes": [
+    {
+      "file": "src/app/api/practice-tests/[id]/question/route.ts",
+      "requireSubscriberSession": true,
+      "authOrEntitlement": true,
+      "note": "subscriber_gate"
+    },
+    {
+      "file": "src/app/api/exams/session/question/route.ts",
+      "requireSubscriberSession": true,
+      "authOrEntitlement": false,
+      "note": "subscriber_gate"
+    },
+    {
+      "file": "src/app/api/lessons/route.ts",
+      "requireSubscriberSession": true,
+      "authOrEntitlement": true,
+      "note": "subscriber_gate"
+    },
+    {
+      "file": "src/app/api/lessons/progress/route.ts",
+      "requireSubscriberSession": true,
+      "authOrEntitlement": true,
+      "note": "subscriber_gate"
+    },
+    {
+      "file": "src/app/api/questions/route.ts",
+      "requireSubscriberSession": true,
+      "authOrEntitlement": true,
+      "note": "subscriber_gate"
+    }
+  ],
+  "suspectedBreaches": [],
+  "paywallBreachesCount": 0,
+  "notes": [
+    "Subscriber APIs use requireSubscriberSession; /api/questions mixes freemium-limited vs subscriber full payloads.",
+    "Re-run with security review for any new API routes under src/app/api."
+  ]
+}

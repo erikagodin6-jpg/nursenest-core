@@ -1,0 +1,185 @@
+/* Admin responsive containment
+   --------------------------------------------------------------------------
+   Scoped to admin shells so dense analytics, tables, charts, and operational
+   cards cannot widen the page on MacBook Air / tablet viewports. */
+
+[data-nn-admin-responsive],
+[data-nn-admin-responsive] * {
+  box-sizing: border-box;
+}
+
+[data-nn-admin-responsive] {
+  width: 100%;
+  max-width: 100vw;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+[data-nn-admin-responsive] :where(main, section, article, aside, nav, header, footer, div) {
+  max-width: 100%;
+  min-width: 0;
+}
+
+[data-nn-admin-responsive] :where(.flex, .grid),
+[data-nn-admin-responsive] :where(.flex > *, .grid > *) {
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+}
+
+[data-nn-admin-responsive] :where(.grid) {
+  align-items: start;
+}
+
+[data-nn-admin-responsive] :where(.overflow-x-auto, .overflow-auto) {
+  max-width: 100%;
+  min-width: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+[data-nn-admin-responsive] :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  a,
+  button,
+  label,
+  li,
+  dd,
+  dt,
+  td,
+  th
+) {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+[data-nn-admin-responsive] :where(code, pre) {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+[data-nn-admin-responsive] :where(table) {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+[data-nn-admin-responsive] :where(table[class*="min-w-"]) {
+  min-width: 100% !important;
+}
+
+[data-nn-admin-responsive] :where(th, td) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+}
+
+[data-nn-admin-responsive] :where(svg, canvas, img) {
+  max-width: 100%;
+}
+
+[data-nn-admin-responsive] :where(
+  section.rounded-xl,
+  section.rounded-2xl,
+  section.rounded-3xl,
+  article.rounded-xl,
+  article.rounded-2xl,
+  article.rounded-3xl,
+  .nn-card
+) {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+}
+
+[data-nn-admin-responsive] :where(section.overflow-hidden, article.overflow-hidden, .nn-card.overflow-hidden) {
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+[data-nn-admin-responsive] :where(
+  [class*="progress"],
+  [class*="Progress"],
+  [role="progressbar"],
+  progress,
+  .recharts-wrapper,
+  .recharts-responsive-container
+) {
+  max-width: 100%;
+  min-width: 0;
+}
+
+[data-nn-admin-responsive] :where(.recharts-wrapper, .recharts-responsive-container) {
+  width: 100% !important;
+  min-height: 10rem;
+}
+
+[data-nn-admin-responsive] :where(.whitespace-nowrap) {
+  white-space: normal !important;
+}
+
+@media (max-width: 1180px) {
+  [data-nn-admin-responsive] :where(main, section, article) :where(
+    .max-h-24,
+    .max-h-32,
+    .max-h-40,
+    .max-h-44,
+    .max-h-48,
+    .max-h-56,
+    .max-h-60,
+    .max-h-64,
+    .max-h-72,
+    .max-h-80,
+    .max-h-96,
+    [class*="max-h-["]
+  ) {
+    max-height: none !important;
+  }
+
+  [data-nn-admin-responsive] :where(main, section, article) :where(.overflow-y-auto, .overflow-auto, .overflow-scroll) {
+    overflow-y: visible !important;
+  }
+
+  [data-nn-admin-responsive] :where(main, section, article) :where(.overflow-auto, .overflow-scroll) {
+    overflow-x: auto;
+  }
+
+  [data-nn-admin-responsive] :where(.lg\:grid-cols-2) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  [data-nn-admin-responsive] :where(.lg\:grid-cols-3, .xl\:grid-cols-3) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  [data-nn-admin-responsive] :where(.xl\:grid-cols-4, .xl\:grid-cols-5, .xl\:grid-cols-6) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  [data-nn-admin-responsive] :where(.grid-cols-2, .sm\:grid-cols-2, .md\:grid-cols-2, .lg\:grid-cols-2),
+  [data-nn-admin-responsive] :where(.grid-cols-3, .sm\:grid-cols-3, .md\:grid-cols-3, .lg\:grid-cols-3),
+  [data-nn-admin-responsive] :where(.grid-cols-4, .sm\:grid-cols-4, .md\:grid-cols-4, .lg\:grid-cols-4),
+  [data-nn-admin-responsive] :where(.xl\:grid-cols-3, .xl\:grid-cols-4, .xl\:grid-cols-5, .xl\:grid-cols-6) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  [data-nn-admin-responsive] :where(table) {
+    table-layout: auto;
+  }
+}

@@ -1,0 +1,1441 @@
+import { randomUUID } from "node:crypto";
+import { NextRequest, NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
+import { ExamFamily, PracticeTestStatus, Prisma } from "@prisma/client";
+import { z } from "zod";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
+import {
+  setPracticeSessionRecovery,
+  incrementReliabilityCounter,
+} from "@/lib/server/content-cache";
+import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { enforcePracticeTestsListProtection } from "@/lib/http/api-protection";
+import { prisma } from "@/lib/db";
+import {
+  setSentryServerContext,
+  SERVER_FEATURE,
+} from "@/lib/observability/sentry-server-context";
+import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import {
+  examSimulationConfigForPathway,
+  nclexRnSimulationBoundsFromConfig,
+} from "@/lib/exams/cat-exam-simulation";
+import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
+import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
+import {
+  resolveCatPostExamTimedLimitSec,
+  resolveCatSelectionBasisForPost,
+} from "@/lib/practice-tests/cat-practice-post-helpers";
+import { createCatPracticeTestPayload } from "@/lib/practice-tests/cat-session";
+import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
+import { resolveCatPathwayIdForCatPost } from "@/lib/practice-tests/resolve-cat-pathway-for-post";
+import {
+  configFromInput,
+  pickPracticeQuestionIds,
+} from "@/lib/practice-tests/pick-question-ids";
+import {
+  buildPracticeTestAvailabilitySnapshot,
+  isSharedPracticeTestAvailabilityMode,
+  PRACTICE_TEST_GENERATED_CACHE_TTL_SECONDS,
+  readPracticeTestGeneratedSnapshot,
+  readPracticeTestPreGeneratedSnapshot,
+  savePracticeTestGeneratedSnapshot,
+  type PracticeTestAvailabilityKeyInput,
+  type PracticeTestAvailabilitySnapshot,
+  type PracticeTestCachedQuestion,
+} from "@/lib/practice-tests/practice-test-availability";
+import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
+import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
+import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import {
+  safeServerLog,
+  safeServerLogCritical,
+} from "@/lib/observability/safe-server-log";
+import { validatePracticeExamPostLaunchRequest } from "@/lib/learner/study-product-route-contract";
+import {
+  assessPracticeTestSessionHydrateContract,
+  normalizeLinearPracticeCreateContract,
+} from "@/lib/practice-tests/practice-session-contract";
+import { withTimeout } from "@/lib/server/with-timeout";
+import { safeStudyOptional } from "@/lib/study-mode/study-mode-fallback";
+
+export const dynamic = "force-dynamic";
+
+/** Serialize CAT creates per learner + pathway + presentation + adaptive session flavor (reduces duplicate rows under parallel POSTs). */
+function catSessionAdvisoryLockKey(
+  userId: string,
+  pathwayId: string,
+  presentationMode: string,
+  adaptiveSessionType: string = "cat",
+): bigint {
+  const s = `${userId}\0${pathwayId}\0${presentationMode}\0${adaptiveSessionType}`;
+  let h = 0n;
+  for (let i = 0; i < s.length; i++) {
+    h = (h * 131n + BigInt(s.charCodeAt(i))) & ((1n << 62n) - 1n);
+  }
+  return h === 0n ? 1n : h;
+}
+
+const createSchema = z
+  .object({
+    title: z.string().max(120).optional(),
+    questionCount: z.number().int().min(5).max(150),
+    topicNames: z
+      .array(z.string().min(1).max(200))
+      .max(30)
+      .optional()
+      .default([]),
+    difficultyMin: z
+      .union([z.number().int().min(1).max(5), z.null()])
+      .optional(),
+    difficultyMax: z
+      .union([z.number().int().min(1).max(5), z.null()])
+      .optional(),
+    selectionMode: z.enum([
+      "random",
+      "targeted",
+      "weak",
+      "missed",
+      "starred",
+      "unseen",
+      "cat",
+    ]),
+    /** Pool strategy when `selectionMode` is `cat`. */
+    catSelectionBasis: z
+      .enum(["random", "targeted", "weak", "missed", "starred"])
+      .optional(),
+    /** Practice CAT: widen filters server-side when the narrow slice is too small (hub default: soft). */
+    selectionStrictness: z.enum(["soft", "strict"]).optional(),
+    /** Exam simulation uses exam-config bounds (NCLEX 85–145, NP fixed 150/175) and blueprint balancing. */
+    catPresentationMode: z
+      .enum(["practice", "exam_simulation"])
+      .optional()
+      .default("practice"),
+    /**
+     * CAT only: Study Mode (rationales after each item) vs Test Mode (rationales after completion).
+     * Ignored for non-CAT; exam simulation coerces to Test Mode on the server.
+     */
+    catExamFeedbackMode: z.enum(["study", "test"]).optional().default("test"),
+    /** `practice` = guided fixed-length shuffle on the same CAT pool; `cat` = strict adaptive. */
+    catAdaptiveSessionType: z
+      .enum(["cat", "practice"])
+      .optional()
+      .default("cat"),
+    /** Exam simulation NP only: AANP-length (150) vs ANCC-length (175). Ignored for non-NP pathways. */
+    catNpExamBoard: z.enum(["AANP", "ANCC"]).optional(),
+    pathwayId: z.union([z.string().min(2).max(80), z.null()]).optional(),
+    timedMode: z.boolean(),
+    /** Timed exam simulation: up to 5h NCLEX default or 3h AANP-style NP when pathway is NP (overridable). */
+    timeLimitSec: z
+      .union([z.number().int().min(120).max(18_000), z.null()])
+      .optional(),
+    /** Linear sessions: per-question lock + practice rationales vs exam-style deferred rationales. */
+    linearDeliveryMode: z.enum(["practice", "exam"]).optional(),
+    /** Linear sessions: rationale timing controls (mirrors tutor vs exam behavior). */
+    linearRationaleVisibility: z.enum(["after_each", "end_of_exam"]).optional(),
+    linearAllowReviewNavigation: z.boolean().optional(),
+    studyLaunchPayload: z
+      .object({
+        pathwayId: z.union([z.null(), z.string().max(120)]).optional(),
+        mode: z.string().max(40).optional(),
+        selectedCategories: z.array(z.string().max(80)).max(40).optional(),
+        filters: z
+          .record(z.union([z.string(), z.number(), z.boolean(), z.null()]))
+          .optional(),
+        count: z.number().int().min(1).max(200).optional(),
+        shuffle: z.boolean().optional(),
+        unlimited: z.boolean().optional(),
+      })
+      .optional(),
+  })
+  .transform((d) => ({
+    ...d,
+    timeLimitSec: d.timedMode
+      ? d.timeLimitSec
+      : d.timeLimitSec === 0
+        ? null
+        : (d.timeLimitSec ?? null),
+  }))
+  .refine(
+    (d) =>
+      d.selectionMode !== "cat" ||
+      d.catPresentationMode !== "practice" ||
+      d.questionCount <= 200,
+    {
+      message: "CAT maximum question cap is 200.",
+      path: ["questionCount"],
+    },
+  )
+  .refine(
+    (d) =>
+      d.selectionMode !== "cat" ||
+      d.catPresentationMode !== "exam_simulation" ||
+      d.questionCount <= 175,
+    {
+      message: "Exam simulation maximum is 175 (ANCC NP full-length).",
+      path: ["questionCount"],
+    },
+  )
+  .refine((d) => d.selectionMode !== "cat" || d.questionCount >= 10, {
+    message:
+      "Adaptive (CAT) mode needs at least 10 as the maximum question cap input.",
+    path: ["questionCount"],
+  })
+  .refine(
+    (d) =>
+      d.catPresentationMode !== "exam_simulation" || d.selectionMode === "cat",
+    {
+      message: "Exam simulation requires adaptive (CAT) mode.",
+      path: ["catPresentationMode"],
+    },
+  )
+  .refine(
+    (d) =>
+      d.catAdaptiveSessionType !== "practice" ||
+      d.catPresentationMode !== "exam_simulation",
+    {
+      message: "Guided practice cannot use exam simulation.",
+      path: ["catAdaptiveSessionType"],
+    },
+  )
+  .refine((d) => d.selectionMode === "cat" || d.questionCount <= 100, {
+    message: "Linear practice tests support up to 100 questions.",
+    path: ["questionCount"],
+  });
+
+function linearConfigFingerprint(config: PracticeTestConfigJson) {
+  return JSON.stringify({
+    questionCount: config.questionCount,
+    topicNames: [...(config.topicNames ?? [])].sort((a, b) =>
+      a.localeCompare(b),
+    ),
+    difficultyMin: config.difficultyMin ?? null,
+    difficultyMax: config.difficultyMax ?? null,
+    selectionMode: config.selectionMode,
+    pathwayId: config.pathwayId ?? null,
+    timedMode: config.timedMode,
+    timeLimitSec: config.timedMode ? (config.timeLimitSec ?? null) : null,
+    linearDeliveryMode: config.linearDeliveryMode ?? "practice",
+    linearRationaleVisibility:
+      config.linearRationaleVisibility ??
+      ((config.linearDeliveryMode ?? "practice") === "exam"
+        ? "end_of_exam"
+        : "after_each"),
+    linearAllowReviewNavigation: config.linearAllowReviewNavigation === true,
+  });
+}
+
+async function loadPracticeTestAvailabilityQuestions(
+  ids: string[],
+): Promise<PracticeTestCachedQuestion[]> {
+  if (ids.length === 0) return [];
+  const rows = await prisma.examQuestion.findMany({
+    where: { id: { in: ids } },
+    select: {
+      id: true,
+      correctAnswer: true,
+      rationale: true,
+      correctAnswerExplanation: true,
+      incorrectAnswerRationale: true,
+      distractorRationales: true,
+      clinicalPearl: true,
+      examStrategy: true,
+      keyTakeaway: true,
+      topic: true,
+      subtopic: true,
+      difficulty: true,
+    },
+    take: ids.length,
+  });
+  const byId = new Map(rows.map((row) => [row.id, row]));
+  return ids.flatMap((id) => {
+    const row = byId.get(id);
+    return row ? [row as PracticeTestCachedQuestion] : [];
+  });
+}
+
+async function createLinearPracticeTestFromAvailabilitySnapshot(args: {
+  snapshot: PracticeTestAvailabilitySnapshot;
+  userId: string;
+  title: string | null;
+  config: PracticeTestConfigJson;
+  timedMode: boolean;
+  timeLimitSec: number | null;
+  source: "cache" | "pre_generated";
+}) {
+  const questionIds = args.snapshot.questionIds.slice(
+    0,
+    Math.max(1, args.config.questionCount),
+  );
+  const fallbackConfig = {
+    ...args.config,
+    ...(args.source === "pre_generated"
+      ? {
+          topicNames: [] as string[],
+          difficultyMin: null,
+          difficultyMax: null,
+          selectionMode: "random" as const,
+        }
+      : {}),
+    availabilityFallback: {
+      source: args.source,
+      snapshotSource: args.snapshot.source,
+      cacheKey: args.snapshot.cacheKey,
+      createdAt: args.snapshot.createdAt,
+    },
+  };
+  const adaptiveState = args.config.linearDeliveryMode
+    ? { linearEngine: { committedQuestionIds: [] as string[] } }
+    : {};
+  const contract = assessPracticeTestSessionHydrateContract({
+    catMode: false,
+    status: "IN_PROGRESS",
+    questionIds,
+    cursorIndex: 0,
+    adaptiveState,
+    config: fallbackConfig as PracticeTestConfigJson,
+  });
+  if (!contract.ok) {
+    return { ok: false as const, code: contract.violation.code, message: contract.violation.message };
+  }
+  const row = await prisma.practiceTest.create({
+    data: {
+      userId: args.userId,
+      title: args.title,
+      config: fallbackConfig as object,
+      questionIds,
+      status: PracticeTestStatus.IN_PROGRESS,
+      timedMode: args.timedMode,
+      timeLimitSec: args.timeLimitSec,
+      ...(args.config.linearDeliveryMode
+        ? { adaptiveState: adaptiveState as object }
+        : {}),
+    },
+  });
+  return { ok: true as const, row, questionIds, config: fallbackConfig };
+}
+
+export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(
+    req,
+    "GET /api/practice-tests",
+    "content",
+    async () => {
+      const gate = await requireSubscriberSession();
+      if (!gate.ok) return gate.response;
+
+      const rl = await enforcePracticeTestsListProtection(req, gate.userId);
+      if (rl) return rl;
+
+      setSentryServerContext({
+        route: "/api/practice-tests",
+        feature: SERVER_FEATURE.practiceTest,
+        userId: gate.userId,
+      });
+
+      let rows;
+      try {
+        rows = await prisma.practiceTest.findMany({
+          where: { userId: gate.userId },
+          orderBy: { updatedAt: "desc" },
+          take: 40,
+          select: {
+            id: true,
+            title: true,
+            status: true,
+            config: true,
+            questionIds: true,
+            timedMode: true,
+            timeLimitSec: true,
+            elapsedMs: true,
+            startedAt: true,
+            completedAt: true,
+            results: true,
+            updatedAt: true,
+          },
+        });
+      } catch (e) {
+        safeServerLogCritical(
+          "api_practice_tests",
+          "list_find_failed",
+          { userIdPrefix: gate.userId.slice(0, 8) },
+          e,
+        );
+        return NextResponse.json(
+          {
+            error:
+              "Unable to load your practice tests right now. Please retry.",
+            code: "primary_db_failed",
+            retryable: true,
+          },
+          { status: 503 },
+        );
+      }
+
+      const list = rows.map((r) => {
+        const ids = Array.isArray(r.questionIds)
+          ? r.questionIds.filter((x): x is string => typeof x === "string")
+          : [];
+        const cfg =
+          r.config != null
+            ? parsePracticeTestConfigAtBoundary(r.config, {
+                practiceTestId: r.id,
+                surface: "practice_tests_list",
+              })
+            : null;
+        const res = r.results as {
+          accuracyPct?: number;
+          scoreCorrect?: number;
+          scoreTotal?: number;
+        } | null;
+        const maxCap = cfg?.catMaxQuestions ?? cfg?.questionCount ?? ids.length;
+        return {
+          id: r.id,
+          title: r.title,
+          status: r.status,
+          questionCount: cfg?.selectionMode === "cat" ? maxCap : ids.length,
+          selectionMode: cfg?.selectionMode ?? null,
+          catPresentationMode: cfg?.catPresentationMode ?? "practice",
+          catExamFeedbackMode:
+            cfg?.selectionMode === "cat"
+              ? (cfg?.catExamFeedbackMode ?? "test")
+              : null,
+          timedMode: r.timedMode,
+          timeLimitSec: r.timeLimitSec,
+          elapsedMs: r.elapsedMs,
+          startedAt: r.startedAt.toISOString(),
+          completedAt: r.completedAt?.toISOString() ?? null,
+          accuracyPct: res?.accuracyPct ?? null,
+          scoreCorrect: res?.scoreCorrect ?? null,
+          scoreTotal: res?.scoreTotal ?? null,
+          updatedAt: r.updatedAt.toISOString(),
+        };
+      });
+
+      safeServerLog("practice_tests", "list_query_result", {
+        loader_name: "practice_tests_list_api",
+        user_id_prefix: gate.userId.slice(0, 8),
+        tier: String(gate.entitlement.tier ?? ""),
+        country: String(gate.entitlement.country ?? ""),
+        returned_count: list.length,
+      });
+
+      return NextResponse.json({
+        tests: list,
+        source_used: "primary" as const,
+      });
+    },
+  );
+}
+
+export async function POST(req: Request) {
+  return runWithApiTelemetry(
+    req,
+    "POST /api/practice-tests",
+    "content",
+    async () => {
+      const gate = await requireSubscriberSession();
+      if (!gate.ok) return gate.response;
+
+      setSentryServerContext({
+        route: "/api/practice-tests",
+        feature: SERVER_FEATURE.practiceTest,
+        userId: gate.userId,
+      });
+
+      const launchCheck = validatePracticeExamPostLaunchRequest(req);
+      if (!launchCheck.ok) {
+        safeServerLog(
+          "practice_tests",
+          "study_launch_route_contract_violation",
+          {
+            event: "study_launch_route_contract_violation",
+            feature_surface: "practice_exams",
+            outcome: "rejected_invalid_route",
+            expected: launchCheck.expected,
+            received: launchCheck.received,
+            userIdPrefix: gate.userId.slice(0, 8),
+          },
+        );
+        return NextResponse.json(
+          {
+            error: launchCheck.error,
+            expected: launchCheck.expected,
+            received: launchCheck.received,
+            reason: launchCheck.reason,
+            retryable: false,
+          },
+          { status: 403 },
+        );
+      }
+
+      let body: unknown;
+      try {
+        body = await req.json();
+      } catch {
+        return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+      }
+
+      const parsed = createSchema.safeParse(body);
+      if (!parsed.success) {
+        const firstIssue = parsed.error.issues[0];
+        const isQuestionCountIssue =
+          firstIssue?.path?.includes("questionCount");
+        const issueMessage =
+          typeof firstIssue?.message === "string" &&
+          firstIssue.message.trim().length > 0
+            ? firstIssue.message
+            : "Invalid request payload.";
+        return NextResponse.json(
+          {
+            error: issueMessage,
+            code: isQuestionCountIssue
+              ? PRACTICE_TEST_CAT_CREATE_CODE.cat_invalid_question_count
+              : "invalid_request_payload",
+            details: parsed.error.flatten(),
+          },
+          { status: 400 },
+        );
+      }
+
+      const d = parsed.data;
+      safeServerLog("practice_tests", "create_request_received", {
+        loader_name: "practice_tests_create_api",
+        user_id_prefix: gate.userId.slice(0, 8),
+        tier: String(gate.entitlement.tier ?? ""),
+        country: String(gate.entitlement.country ?? ""),
+        selectionMode: d.selectionMode,
+        pathwayId: d.pathwayId?.trim() ?? "",
+        questionCount: d.questionCount,
+        catPresentationMode: d.catPresentationMode,
+        catAdaptiveSessionType: d.catAdaptiveSessionType,
+      });
+      if (
+        d.selectionMode === "cat" &&
+        d.catPresentationMode === "exam_simulation" &&
+        d.questionCount > 145
+      ) {
+        const p = d.pathwayId?.trim()
+          ? getExamPathwayById(d.pathwayId.trim())
+          : null;
+        if (p?.examFamily !== ExamFamily.NP) {
+          return NextResponse.json(
+            {
+              error:
+                "NCLEX-RN exam simulation maximum is 145. Pass pathwayId for an NP track for up to 150 (AANP-style simulator).",
+              code: PRACTICE_TEST_CAT_CREATE_CODE.cat_invalid_question_count,
+              details: {
+                formErrors: [],
+                fieldErrors: {
+                  questionCount: [
+                    "NCLEX-RN exam simulation maximum is 145. Pass pathwayId for an NP track for up to 150 (AANP-style simulator).",
+                  ],
+                },
+              },
+            },
+            { status: 400 },
+          );
+        }
+      }
+      const isDev = process.env.NODE_ENV !== "production";
+      const topicNames = d.topicNames ?? [];
+      const difficultyMin = d.difficultyMin ?? null;
+      const difficultyMax = d.difficultyMax ?? null;
+
+      const timeLimitSec = d.timedMode
+        ? (d.timeLimitSec ??
+          Math.min(14_400, Math.max(300, d.questionCount * 90)))
+        : null;
+
+      if (d.selectionMode === "cat") {
+        if (isDev) {
+          safeServerLog("practice_tests", "CAT_START_ATTEMPT_DEV", {
+            userIdPrefix: gate.userId.slice(0, 8),
+            pathwayId: d.pathwayId?.trim() || undefined,
+            questionCount: d.questionCount,
+            catPresentationMode: d.catPresentationMode,
+            selectionMode: d.selectionMode,
+          });
+        }
+        const compatible = await listPathwaysCompatibleWithSubscription(
+          gate.entitlement,
+        );
+        const catEligible = compatible.filter(pathwayAllowsCatAdaptiveStart);
+        const resolvedPathway = resolveCatPathwayIdForCatPost(
+          d.pathwayId,
+          catEligible,
+        );
+        safeServerLog("practice_tests", "cat_pathway_resolution", {
+          loader_name: "practice_tests_create_api",
+          user_id_prefix: gate.userId.slice(0, 8),
+          requested_pathway_id: d.pathwayId?.trim() ?? "",
+          tier: String(gate.entitlement.tier ?? ""),
+          country: String(gate.entitlement.country ?? ""),
+          compatible_count: compatible.length,
+          compatible_ids: compatible
+            .map((p) => p.id)
+            .join(",")
+            .slice(0, 500),
+          cat_eligible_count: catEligible.length,
+          cat_eligible_ids: catEligible
+            .map((p) => p.id)
+            .join(",")
+            .slice(0, 500),
+          resolution_ok: resolvedPathway.ok ? "1" : "0",
+          resolution_code: resolvedPathway.ok ? "" : resolvedPathway.code,
+          resolved_pathway_id: resolvedPathway.ok
+            ? resolvedPathway.pathwayId
+            : "",
+        });
+        if (!resolvedPathway.ok) {
+          if (
+            resolvedPathway.code ===
+            PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous
+          ) {
+            safeServerLog("practice_tests", "CAT_PATHWAY_AMBIGUOUS", {
+              userIdPrefix: gate.userId.slice(0, 8),
+              catEligibleCount: catEligible.length,
+              compatibleCount: compatible.length,
+            });
+            return NextResponse.json(
+              {
+                error:
+                  "Choose which exam pathway you want to practice and pass pathwayId, or open CAT from a pathway-specific page (your account has more than one adaptive track).",
+                code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous,
+              },
+              { status: 400 },
+            );
+          }
+          safeServerLog("practice_tests", "CAT_PATHWAY_REQUIRED", {
+            userIdPrefix: gate.userId.slice(0, 8),
+            catEligibleCount: catEligible.length,
+            compatibleCount: compatible.length,
+          });
+          return NextResponse.json(
+            {
+              error:
+                catEligible.length === 0 && compatible.length > 0
+                  ? "No adaptive (CAT) sessions are available for your current pathways yet. Use lessons and the question bank on each pathway hub, or join a waitlist where offered."
+                  : "Choose an exam pathway for adaptive practice. If your profile is missing country or tier, update Account settings or Billing.",
+              code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_required,
+            },
+            { status: 400 },
+          );
+        }
+        const pathwayIdForCat = resolvedPathway.pathwayId;
+        if (pathwayIdForCat && !getExamPathwayById(pathwayIdForCat)) {
+          safeServerLog("practice_tests", "CAT_INVALID_PATHWAY", {
+            pathwayIdPrefix: pathwayIdForCat.slice(0, 14),
+            userIdPrefix: gate.userId.slice(0, 8),
+          });
+          return NextResponse.json(
+            {
+              error:
+                "Unknown exam pathway id. Refresh the page and pick a pathway from the list.",
+              code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_found,
+            },
+            { status: 400 },
+          );
+        }
+        if (
+          pathwayIdForCat &&
+          !catEligible.some((p) => p.id === pathwayIdForCat)
+        ) {
+          const inCompatible = compatible.some((p) => p.id === pathwayIdForCat);
+          const p = getExamPathwayById(pathwayIdForCat);
+          if (!inCompatible) {
+            safeServerLog("practice_tests", "CAT_WRONG_TIER", {
+              pathwayIdPrefix:
+                pathwayIdForCat.length > 14
+                  ? `${pathwayIdForCat.slice(0, 14)}…`
+                  : pathwayIdForCat,
+              userIdPrefix: gate.userId.slice(0, 8),
+            });
+            return NextResponse.json(
+              {
+                error:
+                  "That pathway is not included with your subscription. Pick a track that matches your plan and region, or review Account → Billing.",
+                code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled,
+              },
+              { status: 400 },
+            );
+          }
+          safeServerLog("practice_tests", "CAT_PATHWAY_UPCOMING", {
+            pathwayIdPrefix:
+              pathwayIdForCat.length > 14
+                ? `${pathwayIdForCat.slice(0, 14)}…`
+                : pathwayIdForCat,
+            userIdPrefix: gate.userId.slice(0, 8),
+          });
+          return NextResponse.json(
+            {
+              error:
+                p && !pathwayAllowsCatAdaptiveStart(p)
+                  ? "Adaptive practice is not open for this track yet. Use the question bank and lessons, or pick another active pathway your plan includes."
+                  : "That pathway is not available for adaptive practice. Pick another track from the list.",
+              code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready,
+            },
+            { status: 400 },
+          );
+        }
+        let catReadiness:
+          | Awaited<ReturnType<typeof assessCatPracticeReadinessForPathway>>
+          | { ok: true };
+        try {
+          catReadiness = await withTimeout(
+            assessCatPracticeReadinessForPathway(
+              gate.userId,
+              gate.entitlement,
+              pathwayIdForCat,
+            ),
+            2_500,
+            { label: "cat_practice_readiness_preflight" },
+          );
+        } catch (error) {
+          catReadiness = { ok: true };
+          safeServerLog("practice_tests", "cat_readiness_preflight_degraded", {
+            loader_name: "practice_tests_create_api",
+            user_id_prefix: gate.userId.slice(0, 8),
+            pathway_id: pathwayIdForCat,
+            message:
+              error instanceof Error ? error.message.slice(0, 160) : "unknown",
+          });
+        }
+        safeServerLog("practice_tests", "cat_readiness_result", {
+          loader_name: "practice_tests_create_api",
+          user_id_prefix: gate.userId.slice(0, 8),
+          pathway_id: pathwayIdForCat,
+          ok: catReadiness.ok ? "1" : "0",
+          code: catReadiness.ok ? "" : catReadiness.code,
+        });
+        if (!catReadiness.ok) {
+          const logKey =
+            catReadiness.code === PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid
+              ? "CAT_POOL_TOO_SMALL"
+              : catReadiness.code ===
+                  PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_found
+                ? "CAT_INVALID_PATHWAY"
+                : catReadiness.code ===
+                    PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled
+                  ? "CAT_WRONG_TIER"
+                  : catReadiness.code ===
+                      PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready
+                    ? "CAT_PATHWAY_WAITLIST"
+                    : "CAT_SESSION_BLOCKED";
+          safeServerLog("practice_tests", logKey, {
+            code: catReadiness.code,
+            pathwayIdPrefix:
+              pathwayIdForCat.length > 14
+                ? `${pathwayIdForCat.slice(0, 14)}…`
+                : pathwayIdForCat,
+            userIdPrefix: gate.userId.slice(0, 8),
+          });
+          return NextResponse.json(
+            { error: catReadiness.message, code: catReadiness.code },
+            { status: 400 },
+          );
+        }
+        const basis = resolveCatSelectionBasisForPost(
+          d.catPresentationMode,
+          d.catSelectionBasis,
+        );
+        const simPathway = getExamPathwayById(pathwayIdForCat) ?? null;
+        const readinessConfig = await safeStudyOptional(
+          "readiness",
+          "practice_tests_create_cat",
+          () => readinessConfigForPathwayId(pathwayIdForCat),
+          null,
+          { timeoutMs: 800, label: "cat_readiness_config" },
+        );
+        const pathwayCap =
+          d.catPresentationMode === "exam_simulation" && simPathway
+            ? nclexRnSimulationBoundsFromConfig(
+                examSimulationConfigForPathway(
+                  simPathway,
+                  simPathway.examFamily === ExamFamily.NP
+                    ? { npBoard: d.catNpExamBoard === "ANCC" ? "ANCC" : "AANP" }
+                    : undefined,
+                ),
+              ).max
+            : 150;
+        if (d.questionCount > pathwayCap) {
+          return NextResponse.json(
+            {
+              error: `This exam simulation allows up to ${pathwayCap} questions for the selected pathway.`,
+              code: PRACTICE_TEST_CAT_CREATE_CODE.cat_invalid_question_count,
+            },
+            { status: 400 },
+          );
+        }
+        // Resolve adaptive session type early — needed to decide whether readiness-config
+        // bounds should apply.  Exam simulation always uses full CAT bounds regardless.
+        const adaptiveSessionType =
+          d.catPresentationMode === "exam_simulation"
+            ? "cat"
+            : d.catAdaptiveSessionType;
+        const unlimitedPracticeLaunch =
+          d.catPresentationMode === "practice" &&
+          d.studyLaunchPayload?.unlimited === true &&
+          d.studyLaunchPayload?.mode === "adaptive_practice_unlimited";
+
+        // Guided practice sessions ("practice") use the caller's requested count so short
+        // runs (10–150 Q) are not inflated to the readiness-config max (e.g. 145 for NCLEX).
+        // Unlimited practice (study launch flag) keeps a high CAT cap for manual end.
+        // Full CAT and exam simulation continue to respect the readiness / pathway cap.
+        const configuredCount =
+          adaptiveSessionType === "practice"
+            ? d.questionCount
+            : unlimitedPracticeLaunch
+              ? Math.min(200, Math.max(10, d.questionCount))
+              : (readinessConfig?.maxQuestions ?? d.questionCount);
+        const enforcedQuestionCount =
+          d.catPresentationMode === "exam_simulation"
+            ? pathwayCap
+            : Math.min(configuredCount, pathwayCap);
+        const enforcedTimedMode =
+          readinessConfig?.mode === "production_ready" ||
+          readinessConfig?.mode === "simulation"
+            ? true
+            : d.timedMode;
+        const examTimedLimit = resolveCatPostExamTimedLimitSec({
+          timedMode: enforcedTimedMode,
+          timeLimitSec: readinessConfig
+            ? readinessConfig.timeLimitMinutes * 60
+            : d.timeLimitSec,
+          questionCount: enforcedQuestionCount,
+          catPresentationMode: d.catPresentationMode,
+          pathway: simPathway,
+        });
+        const catExamFeedbackModeForCreate =
+          adaptiveSessionType === "practice"
+            ? "study"
+            : d.catPresentationMode === "practice"
+              ? d.catExamFeedbackMode
+              : "test";
+        const poolSelectionStrictness: "soft" | "strict" =
+          d.catPresentationMode === "exam_simulation"
+            ? "strict"
+            : d.selectionStrictness === "strict"
+              ? "strict"
+              : "soft";
+        const lockKey = catSessionAdvisoryLockKey(
+          gate.userId,
+          pathwayIdForCat,
+          d.catPresentationMode,
+          adaptiveSessionType,
+        );
+        const txOutcome = await prisma.$transaction(
+          async (tx) => {
+            await tx.$executeRaw(
+              Prisma.sql`SELECT pg_advisory_xact_lock(${lockKey})`,
+            );
+            const candidates = await tx.practiceTest.findMany({
+              where: {
+                userId: gate.userId,
+                status: PracticeTestStatus.IN_PROGRESS,
+                AND: [
+                  { config: { path: ["selectionMode"], equals: "cat" } },
+                  { config: { path: ["pathwayId"], equals: pathwayIdForCat } },
+                  {
+                    config: {
+                      path: ["catPresentationMode"],
+                      equals: d.catPresentationMode,
+                    },
+                  },
+                ],
+              },
+              select: { id: true, config: true },
+              orderBy: { updatedAt: "desc" },
+              take: 12,
+            });
+            const existingInProgress = candidates.find((c) => {
+              const cfg = c.config as {
+                catAdaptiveSessionType?: string;
+              } | null;
+              const st =
+                cfg?.catAdaptiveSessionType === "practice" ? "practice" : "cat";
+              return st === adaptiveSessionType;
+            });
+            if (existingInProgress) {
+              return { kind: "resume" as const, id: existingInProgress.id };
+            }
+            const cat = await createCatPracticeTestPayload(
+              gate.userId,
+              gate.entitlement,
+              basis,
+              {
+                questionCount: enforcedQuestionCount,
+                topicNames,
+                difficultyMin,
+                difficultyMax,
+                pathwayId: pathwayIdForCat,
+                selectionStrictness: poolSelectionStrictness,
+              },
+              enforcedTimedMode,
+              examTimedLimit,
+              d.catPresentationMode,
+              catExamFeedbackModeForCreate,
+              adaptiveSessionType,
+              d.catNpExamBoard === "ANCC" ? "ANCC" : "AANP",
+            );
+            if (!cat.ok) {
+              return { kind: "reject" as const, cat };
+            }
+            const preContract = assessPracticeTestSessionHydrateContract({
+              catMode: true,
+              status: "IN_PROGRESS",
+              questionIds: cat.questionIds,
+              cursorIndex: 0,
+              adaptiveState: cat.adaptiveState,
+              config: cat.config,
+            });
+            if (!preContract.ok) {
+              safeServerLog(
+                "practice_tests",
+                "cat_create_contract_precheck_failed",
+                {
+                  event: "cat_create_contract_precheck_failed",
+                  code: preContract.violation.code,
+                  pathwayIdPrefix:
+                    pathwayIdForCat.length > 14
+                      ? `${pathwayIdForCat.slice(0, 14)}…`
+                      : pathwayIdForCat,
+                  userIdPrefix: gate.userId.slice(0, 8),
+                },
+              );
+              return {
+                kind: "reject" as const,
+                cat: {
+                  ok: false as const,
+                  message: preContract.violation.message,
+                  code: preContract.violation.code,
+                },
+              };
+            }
+            const catConfigPersisted = {
+              ...cat.config,
+              ...(d.studyLaunchPayload
+                ? {
+                    studyLaunchPayload: {
+                      ...d.studyLaunchPayload,
+                      pathwayId:
+                        d.studyLaunchPayload.pathwayId ?? pathwayIdForCat,
+                      mode: d.studyLaunchPayload.mode ?? "cat",
+                      count:
+                        d.studyLaunchPayload.count ?? enforcedQuestionCount,
+                    },
+                  }
+                : {}),
+            };
+            const row = await tx.practiceTest.create({
+              data: {
+                userId: gate.userId,
+                title: d.title?.trim() || null,
+                config: catConfigPersisted as object,
+                questionIds: cat.questionIds,
+                adaptiveState: cat.adaptiveState as object,
+                status: PracticeTestStatus.IN_PROGRESS,
+                timedMode: enforcedTimedMode,
+                timeLimitSec: examTimedLimit,
+                cursorIndex: 0,
+              },
+            });
+            return { kind: "created" as const, row, cat };
+          },
+          { maxWait: 3_000, timeout: 12_000 },
+        );
+
+        if (txOutcome.kind === "resume") {
+          safeServerLog("practice_tests", "cat_create_resume_existing", {
+            loader_name: "practice_tests_create_api",
+            user_id_prefix: gate.userId.slice(0, 8),
+            pathway_id: pathwayIdForCat,
+            practice_test_id: txOutcome.id,
+          });
+          return NextResponse.json(
+            { id: txOutcome.id, resumed: true as const },
+            { status: 200 },
+          );
+        }
+        if (txOutcome.kind === "reject") {
+          const cat = txOutcome.cat;
+          safeServerLog("practice_tests", "cat_create_rejected", {
+            code: String(
+              cat.code ?? PRACTICE_TEST_CAT_CREATE_CODE.cat_create_failed,
+            ),
+            pathwayIdPrefix:
+              pathwayIdForCat.length > 14
+                ? `${pathwayIdForCat.slice(0, 14)}…`
+                : pathwayIdForCat,
+            userIdPrefix: gate.userId.slice(0, 8),
+          });
+          return NextResponse.json(
+            {
+              error: cat.message,
+              code: cat.code ?? PRACTICE_TEST_CAT_CREATE_CODE.cat_create_failed,
+            },
+            { status: 400 },
+          );
+        }
+
+        const { row, cat } = txOutcome;
+        safeServerLog("practice_tests", "cat_create_success", {
+          loader_name: "practice_tests_create_api",
+          user_id_prefix: gate.userId.slice(0, 8),
+          pathway_id: pathwayIdForCat,
+          practice_test_id: row.id,
+          question_count: cat.questionIds.length,
+          catPresentationMode: d.catPresentationMode,
+          catAdaptiveSessionType: adaptiveSessionType,
+        });
+
+        await safeStudyOptional(
+          "analytics",
+          "practice_tests_create_cat",
+          async () => {
+            captureLearnerProductEvent(
+              gate.userId,
+              gate.entitlement,
+              PH.learnerCatExamStarted,
+              {
+                pathway_id: pathwayIdForCat,
+                exam_simulation: d.catPresentationMode === "exam_simulation",
+                cat_exam_feedback_mode:
+                  cat.config.catExamFeedbackMode ?? "test",
+                question_cap: enforcedQuestionCount,
+                timed: enforcedTimedMode,
+                ...examContextAnalyticsProps(
+                  buildGlobalExamContext(pathwayIdForCat, "en"),
+                ),
+              },
+            );
+            captureLearnerProductEvent(
+              gate.userId,
+              gate.entitlement,
+              PH.catStarted,
+              {
+                pathway_id: pathwayIdForCat,
+                exam_simulation: d.catPresentationMode === "exam_simulation",
+                question_cap: enforcedQuestionCount,
+                timed: enforcedTimedMode,
+              },
+            );
+            return true;
+          },
+          false,
+          { timeoutMs: 500, label: "cat_started_analytics" },
+        );
+        if (isDev) {
+          safeServerLog("practice_tests", "CAT_START_VALIDATION_DEV", {
+            userIdPrefix: gate.userId.slice(0, 8),
+            pathwayId: pathwayIdForCat,
+            requestedQuestionCount: d.questionCount,
+            configuredQuestionCount: configuredCount,
+            enforcedQuestionCount,
+            pathwayCap,
+            catPresentationMode: d.catPresentationMode,
+          });
+        }
+        if (isDev) {
+          safeServerLog("practice_tests", "CAT_START_SUCCESS_DEV", {
+            userIdPrefix: gate.userId.slice(0, 8),
+            pathwayId: pathwayIdForCat,
+            questionCap: enforcedQuestionCount,
+            returnedQuestionCount: cat.questionIds.length,
+            practiceTestId: row.id,
+          });
+        }
+
+        // Cache question IDs for self-healing recovery (20-min TTL, fire-and-forget)
+        void setPracticeSessionRecovery(
+          gate.userId,
+          pathwayIdForCat,
+          d.selectionMode,
+          { questionIds: cat.questionIds, config: row.config, cachedAt: new Date().toISOString() },
+        );
+        void incrementReliabilityCounter("practice", "tier_b");
+        return NextResponse.json(
+          {
+            id: row.id,
+            questionCount: cat.questionIds.length,
+            config: row.config,
+            adaptive: true,
+          },
+          { status: 201 },
+        );
+      }
+
+      const normalizedLinear = normalizeLinearPracticeCreateContract({
+        linearDeliveryMode: d.linearDeliveryMode ?? null,
+        linearRationaleVisibility: d.linearRationaleVisibility ?? null,
+        linearAllowReviewNavigation: d.linearAllowReviewNavigation,
+      });
+      const sessionPickSalt = randomUUID();
+      const config: PracticeTestConfigJson = {
+        ...configFromInput(
+          {
+            questionCount: d.questionCount,
+            topicNames,
+            difficultyMin,
+            difficultyMax,
+            selectionMode: d.selectionMode,
+            pathwayId: d.pathwayId?.trim() || null,
+          },
+          d.timedMode,
+          timeLimitSec,
+          {
+            linearDeliveryMode: normalizedLinear.linearDeliveryMode,
+            linearRationaleVisibility:
+              normalizedLinear.linearRationaleVisibility,
+            ...(normalizedLinear.linearAllowReviewNavigation
+              ? { linearAllowReviewNavigation: true as const }
+              : {}),
+          },
+        ),
+        sessionPickSalt,
+        ...(d.studyLaunchPayload
+          ? {
+              studyLaunchPayload: {
+                ...d.studyLaunchPayload,
+                pathwayId:
+                  d.studyLaunchPayload.pathwayId ?? d.pathwayId?.trim() ?? null,
+                count: d.studyLaunchPayload.count ?? d.questionCount,
+              },
+            }
+          : {}),
+      };
+
+      const requestedLinearFingerprint = linearConfigFingerprint(config);
+      const existingLinearInProgress = await prisma.practiceTest.findMany({
+        where: {
+          userId: gate.userId,
+          status: PracticeTestStatus.IN_PROGRESS,
+        },
+        select: { id: true, config: true },
+        orderBy: { updatedAt: "desc" },
+        take: 20,
+      });
+      const resumeLinear = existingLinearInProgress.find((candidate) => {
+        const candidateConfig = parsePracticeTestConfigAtBoundary(
+          candidate.config,
+          {
+            practiceTestId: candidate.id,
+            surface: "practice_test_linear_resume_match",
+          },
+        );
+        if (candidateConfig.selectionMode === "cat") return false;
+        return (
+          linearConfigFingerprint(candidateConfig) ===
+          requestedLinearFingerprint
+        );
+      });
+      if (resumeLinear) {
+        return NextResponse.json(
+          { id: resumeLinear.id, resumed: true as const },
+          { status: 200 },
+        );
+      }
+
+      const picked = await pickPracticeQuestionIds(
+        gate.userId,
+        gate.entitlement,
+        {
+          questionCount: d.questionCount,
+          topicNames,
+          difficultyMin,
+          difficultyMax,
+          selectionMode: d.selectionMode,
+          pathwayId: d.pathwayId?.trim() || null,
+          sessionPickSalt,
+        },
+      );
+
+      if (!picked.ok) {
+        void incrementReliabilityCounter("practice", "tier_d_error");
+        safeServerLog("practice_tests", "linear_primary_generation_failed", {
+          loader_name: "practice_tests_create_api",
+          user_id_prefix: gate.userId.slice(0, 8),
+          pathway_id: d.pathwayId?.trim() || "",
+          selection_mode: d.selectionMode,
+          question_count: d.questionCount,
+          failure_message: picked.message.slice(0, 240),
+        });
+
+        const availabilityKey: PracticeTestAvailabilityKeyInput = {
+          pathwayId: d.pathwayId?.trim() || null,
+          categories: topicNames,
+          difficultyMin,
+          difficultyMax,
+          questionCount: d.questionCount,
+          selectionMode: d.selectionMode,
+        };
+        if (isSharedPracticeTestAvailabilityMode(d.selectionMode)) {
+          const cached = await readPracticeTestGeneratedSnapshot(availabilityKey);
+          if (cached?.questionIds?.length) {
+            const fallback = await createLinearPracticeTestFromAvailabilitySnapshot({
+              snapshot: cached,
+              userId: gate.userId,
+              title: d.title?.trim() || null,
+              config,
+              timedMode: d.timedMode,
+              timeLimitSec,
+              source: "cache",
+            });
+            if (fallback.ok) {
+              void incrementReliabilityCounter("practice", "tier_b");
+              safeServerLog("practice_tests", "linear_availability_cache_hit", {
+                loader_name: "practice_tests_create_api",
+                user_id_prefix: gate.userId.slice(0, 8),
+                pathway_id: d.pathwayId?.trim() || "",
+                selection_mode: d.selectionMode,
+                question_count: fallback.questionIds.length,
+                cache_key: cached.cacheKey,
+              });
+              return NextResponse.json(
+                {
+                  id: fallback.row.id,
+                  questionCount: fallback.questionIds.length,
+                  config: fallback.config,
+                  availabilityFallback: "cache" as const,
+                },
+                { status: 201 },
+              );
+            }
+            safeServerLog("practice_tests", "linear_availability_cache_rejected", {
+              loader_name: "practice_tests_create_api",
+              user_id_prefix: gate.userId.slice(0, 8),
+              code: fallback.code,
+              message: fallback.message.slice(0, 240),
+            });
+          }
+
+        } else {
+          safeServerLog("practice_tests", "linear_availability_shared_fallback_skipped", {
+            loader_name: "practice_tests_create_api",
+            user_id_prefix: gate.userId.slice(0, 8),
+            selection_mode: d.selectionMode,
+            reason: "user_specific_selection_mode",
+          });
+        }
+        const preGeneratedKey: PracticeTestAvailabilityKeyInput = {
+          ...availabilityKey,
+          categories: isSharedPracticeTestAvailabilityMode(d.selectionMode)
+            ? availabilityKey.categories
+            : [],
+          difficultyMin: isSharedPracticeTestAvailabilityMode(d.selectionMode)
+            ? availabilityKey.difficultyMin
+            : null,
+          difficultyMax: isSharedPracticeTestAvailabilityMode(d.selectionMode)
+            ? availabilityKey.difficultyMax
+            : null,
+          selectionMode: "random",
+        };
+        const preGenerated = await readPracticeTestPreGeneratedSnapshot(preGeneratedKey);
+        if (preGenerated?.questionIds?.length) {
+          const fallback = await createLinearPracticeTestFromAvailabilitySnapshot({
+            snapshot: preGenerated,
+            userId: gate.userId,
+            title: d.title?.trim() || null,
+            config,
+            timedMode: d.timedMode,
+            timeLimitSec,
+            source: "pre_generated",
+          });
+          if (fallback.ok) {
+            void incrementReliabilityCounter("practice", "tier_c");
+            safeServerLog("practice_tests", "linear_availability_pregenerated_hit", {
+              loader_name: "practice_tests_create_api",
+              user_id_prefix: gate.userId.slice(0, 8),
+              pathway_id: d.pathwayId?.trim() || "",
+              requested_selection_mode: d.selectionMode,
+              served_selection_mode: "random",
+              question_count: fallback.questionIds.length,
+              cache_key: preGenerated.cacheKey,
+            });
+            return NextResponse.json(
+              {
+                id: fallback.row.id,
+                questionCount: fallback.questionIds.length,
+                config: fallback.config,
+                availabilityFallback: "pre_generated" as const,
+              },
+              { status: 201 },
+            );
+          }
+          safeServerLog("practice_tests", "linear_availability_pregenerated_rejected", {
+            loader_name: "practice_tests_create_api",
+            user_id_prefix: gate.userId.slice(0, 8),
+            code: fallback.code,
+            message: fallback.message.slice(0, 240),
+          });
+        }
+        return NextResponse.json(
+          { error: picked.message, code: "pool_too_small" },
+          { status: 400 },
+        );
+      }
+
+      const linearCreateAdaptiveStub = config.linearDeliveryMode
+        ? { linearEngine: { committedQuestionIds: [] as string[] } }
+        : {};
+      const linearCreateContract = assessPracticeTestSessionHydrateContract({
+        catMode: false,
+        status: "IN_PROGRESS",
+        questionIds: picked.ids,
+        cursorIndex: 0,
+        adaptiveState: linearCreateAdaptiveStub,
+        config,
+      });
+      if (!linearCreateContract.ok) {
+        safeServerLog(
+          "practice_tests",
+          "linear_create_contract_precheck_failed",
+          {
+            event: "linear_create_contract_precheck_failed",
+            code: linearCreateContract.violation.code,
+            userIdPrefix: gate.userId.slice(0, 8),
+          },
+        );
+        return NextResponse.json(
+          {
+            error: linearCreateContract.violation.message,
+            code: linearCreateContract.violation.code,
+            retryable: false,
+          },
+          { status: 400 },
+        );
+      }
+
+      if (isDev) {
+        safeServerLog("practice_tests", "linear_session_create_debug", {
+          event: "linear_session_create_debug",
+          userIdPrefix: gate.userId.slice(0, 8),
+          pathwayId: d.pathwayId?.trim() || undefined,
+          selectionMode: d.selectionMode,
+          questionCount: d.questionCount,
+          sessionSeed: sessionPickSalt,
+          selectedQuestionIds: picked.ids.join(","),
+          ...picked.linearSessionCreateDebug,
+        });
+      }
+
+      const row = await prisma.practiceTest.create({
+        data: {
+          userId: gate.userId,
+          title: d.title?.trim() || null,
+          config: config as object,
+          questionIds: picked.ids,
+          status: PracticeTestStatus.IN_PROGRESS,
+          timedMode: d.timedMode,
+          timeLimitSec,
+          ...(config.linearDeliveryMode
+            ? {
+                adaptiveState: {
+                  linearEngine: { committedQuestionIds: [] as string[] },
+                } as object,
+              }
+            : {}),
+        },
+      });
+
+      if (isSharedPracticeTestAvailabilityMode(d.selectionMode)) {
+        await safeStudyOptional(
+          "cache",
+          "practice_tests_generated_snapshot",
+          async () => {
+            const questions = await loadPracticeTestAvailabilityQuestions(picked.ids);
+            if (questions.length === 0) return false;
+            const snapshot = buildPracticeTestAvailabilitySnapshot({
+              source: "generated",
+              keyInput: {
+                pathwayId: d.pathwayId?.trim() || null,
+                categories: topicNames,
+                difficultyMin,
+                difficultyMax,
+                questionCount: d.questionCount,
+                selectionMode: d.selectionMode,
+              },
+              config,
+              questionIds: picked.ids,
+              questions,
+              title: d.title?.trim() || null,
+            });
+            await savePracticeTestGeneratedSnapshot(snapshot);
+            safeServerLog("practice_tests", "linear_generated_test_cached", {
+              loader_name: "practice_tests_create_api",
+              user_id_prefix: gate.userId.slice(0, 8),
+              pathway_id: d.pathwayId?.trim() || "",
+              selection_mode: d.selectionMode,
+              question_count: picked.ids.length,
+              cache_key: snapshot.cacheKey,
+              ttl_seconds: PRACTICE_TEST_GENERATED_CACHE_TTL_SECONDS,
+            });
+            return true;
+          },
+          false,
+          { timeoutMs: 1_500, label: "practice_tests_generated_snapshot" },
+        );
+      }
+
+      await safeStudyOptional(
+        "analytics",
+        "practice_tests_create_linear",
+        async () => {
+          captureLearnerProductEvent(
+            gate.userId,
+            gate.entitlement,
+            PH.learnerLinearPracticeTestStarted,
+            {
+              pathway_id: d.pathwayId?.trim() || undefined,
+              selection_mode: d.selectionMode,
+              question_count: d.questionCount,
+              timed: d.timedMode,
+              ...examContextAnalyticsProps(
+                buildGlobalExamContext(d.pathwayId?.trim() || null, "en"),
+              ),
+            },
+          );
+          captureLearnerProductEvent(
+            gate.userId,
+            gate.entitlement,
+            PH.practiceStarted,
+            {
+              pathway_id: d.pathwayId?.trim() || undefined,
+              selection_mode: d.selectionMode,
+              question_count: d.questionCount,
+              timed: d.timedMode,
+            },
+          );
+          return true;
+        },
+        false,
+        { timeoutMs: 500, label: "linear_started_analytics" },
+      );
+
+      await safeStudyOptional(
+        "cache_invalidation",
+        "practice_tests_create_linear",
+        () => invalidateLearnerPrivateReadCache(gate.userId).then(() => true),
+        false,
+        { timeoutMs: 500, label: "linear_create_cache_invalidation" },
+      );
+      // Cache question IDs for self-healing recovery (20-min TTL, fire-and-forget)
+      void setPracticeSessionRecovery(
+        gate.userId,
+        d.pathwayId?.trim() || null,
+        d.selectionMode,
+        { questionIds: picked.ids, config, cachedAt: new Date().toISOString() },
+      );
+      void incrementReliabilityCounter("practice", "tier_a");
+      return NextResponse.json(
+        { id: row.id, questionCount: picked.ids.length, config },
+        { status: 201 },
+      );
+    },
+  );
+}

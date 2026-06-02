@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NurseNest Lesson Detail - Refined Reading Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;background:#1e293b}
+.frame{width:1440px;min-height:1040px;overflow:hidden;position:relative;margin:0 0 48px;color:var(--text);background:var(--bg)}
+.lesson{padding:78px 80px 86px}
+.shell{max-width:1120px;margin:0 auto}
+.hero{padding:0 0 48px}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+h1{font-size:66px;line-height:.97;letter-spacing:-.052em;font-weight:800;max-width:980px;color:var(--text)}
+.deck{font-size:20px;line-height:1.7;color:var(--muted);max-width:840px;margin-top:26px}
+.meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:30px}
+.chip{height:34px;display:inline-flex;align-items:center;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:0 14px;font-size:12px;font-weight:720}
+.chip.active{color:var(--text);background:var(--soft)}
+.progress{width:154px;height:7px;border-radius:999px;background:var(--track);overflow:hidden}
+.progress span{display:block;height:100%;width:68%;border-radius:inherit;background:var(--accent)}
+.nav-wrap{position:sticky;top:0;z-index:10;margin:0 -8px;padding:16px 0 24px;background:linear-gradient(180deg,var(--bg) 58%,color-mix(in srgb,var(--bg) 82%,transparent));backdrop-filter:blur(18px)}
+.seg{display:flex;gap:7px;overflow-x:auto;width:max-content;max-width:100%;padding:7px;border:1px solid var(--line);background:var(--glass);border-radius:999px;box-shadow:var(--soft-shadow)}
+.seg::-webkit-scrollbar{display:none}
+.seg span{white-space:nowrap;color:var(--muted);font-size:13px;font-weight:760;border-radius:999px;padding:9px 15px}
+.seg span.on{background:var(--surface);color:var(--text);box-shadow:0 1px 0 rgba(22,24,28,.04),0 9px 24px rgba(22,24,28,.08)}
+.body{padding-top:38px;display:grid;gap:74px}
+.section{max-width:980px}
+.section.wide{max-width:1120px}
+.section h2{font-size:38px;line-height:1.08;letter-spacing:-.035em;color:var(--text);margin-bottom:22px}
+.section p{font-size:18px;line-height:1.84;color:var(--body);max-width:880px}
+.section p+p{margin-top:18px}
+.rule{height:1px;background:var(--line);margin-top:42px}
+.text-columns{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:30px}
+.text-columns p{font-size:16px;line-height:1.78}
+.reading-panel{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:46px 50px;box-shadow:var(--card-shadow)}
+.reading-panel h2{font-size:34px}
+.clinical-table{margin-top:34px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--surface)}
+.row{display:grid;grid-template-columns:240px 1fr;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row b{padding:22px 24px;background:var(--soft);font-size:14px;color:var(--text)}
+.row span{padding:22px 26px;color:var(--body);font-size:15.5px;line-height:1.64}
+.retention{margin-top:86px;padding:42px;border-radius:28px;background:var(--review);border:1px solid var(--line);box-shadow:var(--card-shadow)}
+.retention-head{display:flex;justify-content:space-between;gap:28px;align-items:flex-end;margin-bottom:28px}
+.retention h2{font-size:34px;line-height:1.1;letter-spacing:-.035em;color:var(--text)}
+.retention .intro{font-size:15px;line-height:1.65;color:var(--muted);max-width:520px}
+.review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.review-card{min-height:150px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px}
+.review-card .label{font-size:11px;font-weight:820;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.review-card h3{font-size:18px;line-height:1.18;letter-spacing:-.02em;color:var(--text);margin-bottom:9px}
+.review-card p{font-size:13.5px;line-height:1.58;color:var(--muted)}
+.dock{margin-top:16px;border-radius:999px;border:1px solid var(--line);background:var(--glass);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 10px 0 22px;backdrop-filter:blur(18px)}
+.dock b{font-size:13px;color:var(--text)}.dock span{font-size:12px;color:var(--muted);margin-left:8px}.dock button{height:42px;border:0;border-radius:999px;background:var(--accent);color:var(--button);font-weight:800;padding:0 20px}
+.caption{position:absolute;right:28px;bottom:16px;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+.apple{--bg:#fffaf4;--surface:#fffefb;--soft:#f8efe4;--review:#fff6ed;--glass:rgba(255,254,251,.78);--line:#e7d8ca;--text:#312927;--body:#554b48;--muted:#776865;--accent:#a7645f;--button:#fffaf5;--track:#eadbd0;--card-shadow:0 20px 55px rgba(86,54,42,.075);--soft-shadow:0 14px 42px rgba(86,54,42,.11)}
+.minimal{--bg:#fbfaf7;--surface:#fff;--soft:#f1eee8;--review:#f6f2eb;--glass:rgba(255,255,255,.78);--line:#ddd6ca;--text:#252423;--body:#504e49;--muted:#6c6862;--accent:#4f746c;--button:#fff;--track:#e5ded3;--card-shadow:0 20px 55px rgba(40,38,34,.065);--soft-shadow:0 14px 42px rgba(40,38,34,.1)}
+.linear{--bg:#f9fbfb;--surface:#fff;--soft:#eef6f5;--review:#f2f8f7;--glass:rgba(255,255,255,.8);--line:#d5e4e2;--text:#18282b;--body:#465b60;--muted:#61777c;--accent:#168f90;--button:#fff;--track:#dcebea;--card-shadow:0 20px 55px rgba(26,65,68,.07);--soft-shadow:0 14px 42px rgba(26,65,68,.11)}
+
+#r2 h1{font-size:72px;max-width:1040px}
+#r2 .hero{padding-bottom:58px}
+#r2 .section{max-width:930px;margin-left:auto;margin-right:auto}
+#r2 .reading-panel{padding:56px 62px;border-radius:28px}
+#r3 .lesson{padding-top:94px}
+#r3 .section{max-width:1010px}
+#r3 .body{gap:86px}
+#r3 .section h2{font-size:42px}
+#r3 .retention{background:transparent;box-shadow:none}
+</style>
+</head>
+<body>
+
+<section class="frame apple" id="r1" data-file="01-refined-apple-blossom-reading.png">
+  <main class="lesson"><div class="shell">
+    <section class="hero">
+      <div class="eyebrow">RN cardiovascular lesson</div>
+      <h1>Hypertensive Crisis</h1>
+      <p class="deck">Recognize urgent blood pressure patterns, organize assessment findings, and connect clinical cues to safe nursing priorities without turning the lesson into a dashboard.</p>
+      <div class="meta"><span class="chip active">Pretest complete</span><span class="chip">14 minute lesson</span><span class="chip">Post-test at end</span><span class="chip">Cardiovascular</span><div class="progress"><span></span></div></div>
+    </section>
+    <div class="nav-wrap"><nav class="seg"><span class="on">Overview</span><span>Risk Factors</span><span>Assessment</span><span>Interventions</span><span>Safety</span><span>Review</span></nav></div>
+    <div class="body">
+      <section class="section"><h2>A calm opening that frames the clinical problem.</h2><p>The lesson starts with the learner’s mental model: what is happening, why it matters, and what kind of clinical judgment the section is going to build. The page uses a wide reading measure and quiet rhythm rather than stacked widgets.</p><p>Concepts are introduced in a natural educational order. Retention material is held until the end so the main reading flow stays uninterrupted.</p><div class="rule"></div></section>
+      <section class="reading-panel"><h2>Assessment pattern</h2><p>Assessment content is presented as a clinical learning module with enough space for careful reading. A learner can scan the section, pause, and continue without feeling squeezed between side panels.</p><div class="text-columns"><p>Findings are grouped by relevance and urgency, using the existing lesson structure when available.</p><p>Each module can expand or collapse in production without changing the overall rhythm of the lesson.</p></div></section>
+      <section class="section wide"><h2>Interventions and safety priorities</h2><p>Intervention content uses a broad, editorial layout. The design avoids narrow cards and keeps the instructional voice centered.</p><div class="clinical-table"><div class="row"><b>Recognize</b><span>Clinical cues and patient status are introduced together so learners build the right pattern first.</span></div><div class="row"><b>Interpret</b><span>Existing diagnostics, labs, or assessment details can be mapped here only when present in the lesson source.</span></div><div class="row"><b>Act</b><span>Priority actions appear after the reasoning context, not as isolated dashboard tiles.</span></div></div></section>
+      <section class="retention"><div class="retention-head"><div><div class="eyebrow">Retention & exam readiness</div><h2>Review after learning, not during it.</h2></div><p class="intro">Support cards live at the bottom as a polished review zone with quick prompts, traps, pearls, and related concepts.</p></div><div class="review-grid"><div class="review-card"><div class="label">Clinical pearl</div><h3>Connect cue to priority</h3><p>Use existing lesson facts to reinforce decision-making.</p></div><div class="review-card"><div class="label">NCLEX trap</div><h3>Do not chase noise</h3><p>Trap language is concise and appears after the lesson body.</p></div><div class="review-card"><div class="label">Quick recall</div><h3>What changes urgency?</h3><p>A single prompt for active retrieval.</p></div></div><div class="dock"><div><b>Next step</b><span>Complete the post-test when ready.</span></div><button>Start post-test</button></div></section>
+    </div>
+  </div></main><div class="caption">Refined 01 apple blossom reading</div>
+</section>
+
+<section class="frame minimal" id="r2" data-file="02-refined-minimal-clinical-reading.png">
+  <main class="lesson"><div class="shell">
+    <section class="hero"><div class="eyebrow">Minimal clinical study interface</div><h1>Sepsis Recognition and Prioritization</h1><p class="deck">A stripped-back medical learning surface with strong typography, chapter-like sections, and a horizontal lesson nav that stays present without feeling like a toolbar.</p><div class="meta"><span class="chip active">RPN lesson</span><span class="chip">Open mode</span><span class="chip">18 minutes</span><span class="chip">Application focused</span></div></section>
+    <div class="nav-wrap"><nav class="seg"><span class="on">Overview</span><span>Mechanism</span><span>Assessment</span><span>Diagnostics</span><span>Interventions</span><span>Review</span></nav></div>
+    <div class="body">
+      <section class="section"><h2>Read first. Review later.</h2><p>This concept is intentionally quiet. The main body behaves like a premium clinical textbook page: wide, centered, and paced for comprehension.</p></section>
+      <section class="section"><h2>Mechanism and recognition</h2><p>Long-form explanation has room to breathe. There are no sidebars, no stacked support boxes, and no competing dashboard regions. The learner can stay inside one idea at a time.</p><p>When a section does not exist in the source lesson, the production version simply omits it and preserves the rhythm.</p></section>
+      <section class="reading-panel"><h2>Assessment and diagnostics</h2><p>The design supports clinical structure without feeling boxed-in. Tables and paired sections are used sparingly, only when they clarify a relationship.</p><div class="clinical-table"><div class="row"><b>Assessment</b><span>Bedside findings and clinical observations.</span></div><div class="row"><b>Diagnostics</b><span>Labs or tests when already present in lesson content.</span></div><div class="row"><b>Response</b><span>Intervention logic connected to the learner’s interpretation.</span></div></div></section>
+      <section class="retention"><div class="retention-head"><div><div class="eyebrow">Retention & exam readiness</div><h2>A clean review dock.</h2></div><p class="intro">The support layer is separated from the reading experience and arranged as a calm bottom strip.</p></div><div class="review-grid"><div class="review-card"><div class="label">High-yield</div><h3>Primary pattern</h3><p>One core concept worth revisiting.</p></div><div class="review-card"><div class="label">Safety priority</div><h3>Escalation cue</h3><p>Critical priority stated clearly and briefly.</p></div><div class="review-card"><div class="label">Related concept</div><h3>Shock recognition</h3><p>Bridge to the next clinical topic.</p></div></div></section>
+    </div>
+  </div></main><div class="caption">Refined 02 minimal clinical reading</div>
+</section>
+
+<section class="frame linear" id="r3" data-file="03-refined-linear-docs-medical.png">
+  <main class="lesson"><div class="shell">
+    <section class="hero"><div class="eyebrow">Modern medical learning architecture</div><h1>Heart Failure Exacerbation</h1><p class="deck">A Linear-docs inspired direction for RN, RPN, NP, and allied lessons: crisp, quiet, centered, and structured around the learner’s progression through the topic.</p><div class="meta"><span class="chip active">NP / RN compatible</span><span class="chip">Pretest status saved</span><span class="chip">72% complete</span><div class="progress"><span></span></div></div></section>
+    <div class="nav-wrap"><nav class="seg"><span class="on">Overview</span><span>Risk</span><span>Assessment</span><span>Treatment</span><span>Education</span><span>Readiness</span></nav></div>
+    <div class="body">
+      <section class="section"><h2>Clinical orientation</h2><p>The opening establishes the clinical frame in a single calm column. The content is wide enough to feel substantial, but not so wide that line length becomes tiring.</p></section>
+      <section class="section"><h2>Risk and presentation</h2><p>Instead of small dashboard cards, the lesson uses spacious sections and subtle dividers. The learner moves horizontally through tabs, then vertically through a curated reading flow.</p><div class="text-columns"><p>Risk factors can sit in a secondary text column when the source content supports a two-part explanation.</p><p>Presentation and assessment findings remain near each other to support pattern recognition.</p></div></section>
+      <section class="reading-panel"><h2>Patient education and follow-through</h2><p>Education content appears as its own clinical module, reinforcing the role of teaching without interrupting assessment and intervention sections.</p></section>
+      <section class="retention"><div class="retention-head"><div><div class="eyebrow">Retention & exam readiness</div><h2>One lightweight review architecture.</h2></div><p class="intro">Pearls, traps, safety priorities, and recall prompts are consolidated into one final learning surface.</p></div><div class="review-grid"><div class="review-card"><div class="label">Know this cold</div><h3>Core action link</h3><p>Review the decision point that matters most.</p></div><div class="review-card"><div class="label">NCLEX trap</div><h3>Common distractor</h3><p>One trap, stated after the lesson content.</p></div><div class="review-card"><div class="label">Quick recall</div><h3>Teach-back prompt</h3><p>Short active recall for long-term retention.</p></div></div><div class="dock"><div><b>Review complete</b><span>Related lessons and post-test are ready.</span></div><button>Continue</button></div></section>
+    </div>
+  </div></main><div class="caption">Refined 03 linear docs medical</div>
+</section>
+
+</body>
+</html>

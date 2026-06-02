@@ -1,0 +1,337 @@
+import { CountryCode, ExamFamily, QuestionType, TierCode } from "@prisma/client";
+import { z } from "zod";
+import { stemHash } from "@/lib/content/stem-hash";
+import {
+  validateGeneratedQuestionAuto,
+  type GeneratedQuestionExpectedTags,
+} from "@/lib/content/generated-question-auto-validation";
+import { validateQuestionForPublish } from "@/lib/content/publish-validation";
+import { validateQuestionPayload } from "@/lib/content/question-schema";
+import type { EcgVideoQuestionExhibit } from "@/lib/ecg-video-quiz/ecg-video-question";
+
+export type { GeneratedQuestionExpectedTags };
+
+export type DraftValidationResult = {
+  ok: boolean;
+  errors: string[];
+  warnings: string[];
+  duplicateRisk: boolean;
+  /** Automated quality gate (heuristic); failures are also listed in `errors`. */
+  autoValidation?: { passed: boolean; rejectionReasons: string[] };
+};
+
+export type ValidateNormalizedQuestionOpts = {
+  duplicateStemHashes: Set<string>;
+  /** Tier + exam + optional topic/subtopic/body from the generation job. */
+  expectedTags?: GeneratedQuestionExpectedTags;
+  /** Stems normalized for near-duplicate checks within the same run (no DB). */
+  priorNormalizedStems?: string[];
+};
+
+const lessonLinkSuggestionSchema = z.object({
+  lessonId: z.string().optional(),
+  title: z.string(),
+  slug: z.string().optional(),
+  reason: z.string(),
+  confidence: z.string().optional(),
+});
+
+const aiQuestionItemSchema = z.object({
+  question: z.string().optional(),
+  stem: z.string().optional(),
+  type: z.string().optional(),
+  options: z.array(z.string()).min(2).optional(),
+  correctIndex: z.number().int().min(0).optional(),
+  correctIndices: z.array(z.number().int().min(0)).optional(),
+  rationale: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  difficulty: z.string().optional(),
+  wrongAnswerRationales: z.array(z.string()).optional(),
+  lessonLinkSuggestions: z.array(lessonLinkSuggestionSchema).optional(),
+});
+
+export type LessonLinkSuggestion = z.infer<typeof lessonLinkSuggestionSchema>;
+
+/** Extra teaching / mapping fields stored in `normalizedJson` alongside core stem/options (promote reads core + optional metadata). */
+export type QuestionDraftMetadata = {
+  difficultyLabel?: string;
+  tags?: string[];
+  pathwayLabel?: string;
+  examContextLabel?: string;
+  /** One entry per option index; may be empty for correct option slots. */
+  wrongAnswerRationales?: string[];
+  lessonLinkSuggestions?: LessonLinkSuggestion[];
+  /** Draft-only ECG video metadata. Promotion keeps the question in DRAFT until clinical review. */
+  ecgVideo?: EcgVideoQuestionExhibit;
+  ecgLevel?: "basic" | "advanced";
+  ecgMode?: "lesson" | "quiz" | "drill";
+};
+
+export type NormalizedQuestionDraft = {
+  stem: string;
+  rationale: string;
+  options: string[];
+  answerKey: string[];
+  questionType: QuestionType;
+  topicTag?: string;
+  metadata?: QuestionDraftMetadata;
+};
+
+function normalizeWrongRationales(optionsLen: number, raw: string[] | undefined): string[] | undefined {
+  if (!raw?.length) return undefined;
+  const out = raw.map((s) => String(s ?? "").trim());
+  if (out.length === optionsLen) return out;
+  if (out.length > optionsLen) return out.slice(0, optionsLen);
+  return [...out, ...Array(optionsLen - out.length).fill("")];
+}
+
+function inferQuestionTypeFromAi(o: z.infer<typeof aiQuestionItemSchema>): "MCQ" | "SATA" {
+  const t = (o.type ?? "").toLowerCase();
+  if (t.includes("mcq") || t.includes("multiple")) return "MCQ";
+  if (t.includes("sata") || t.includes("select all")) return "SATA";
+  const multi = o.correctIndices?.length ?? 0;
+  if (multi >= 2) return "SATA";
+  return "MCQ";
+}
+
+export function normalizeAiQuestionItem(raw: unknown): { ok: true; value: NormalizedQuestionDraft } | { ok: false; error: string } {
+  const p = aiQuestionItemSchema.safeParse(raw);
+  if (!p.success) return { ok: false, error: "Invalid AI question shape" };
+  const o = p.data;
+  const stem = (o.stem ?? o.question ?? "").trim();
+  if (stem.length < 10) return { ok: false, error: "Stem too short" };
+  const options = o.options ?? [];
+  if (options.length < 2) return { ok: false, error: "Need at least 2 options" };
+  const rationale = (o.rationale ?? "").trim();
+
+  const mode = inferQuestionTypeFromAi(o);
+  let answerKey: string[];
+  let questionType: QuestionType;
+
+  if (mode === "SATA") {
+    const indices =
+      o.correctIndices && o.correctIndices.length > 0
+        ? [...new Set(o.correctIndices)].sort((a, b) => a - b)
+        : o.correctIndex !== undefined
+          ? [o.correctIndex]
+          : [];
+    if (indices.length < 1) return { ok: false, error: "SATA requires correctIndices (or correctIndex)" };
+    for (const i of indices) {
+      if (i < 0 || i >= options.length) return { ok: false, error: "correctIndices out of range" };
+    }
+    answerKey = indices.map((i) => options[i]).filter((x): x is string => Boolean(x));
+    if (answerKey.length < 1) return { ok: false, error: "SATA answerKey empty" };
+    questionType = QuestionType.SATA;
+  } else {
+    const idx = o.correctIndex ?? 0;
+    if (idx < 0 || idx >= options.length) return { ok: false, error: "correctIndex out of range" };
+    const correct = options[idx];
+    if (!correct) return { ok: false, error: "Missing correct option" };
+    answerKey = [correct];
+    questionType = QuestionType.MCQ;
+  }
+
+  const wrongR = normalizeWrongRationales(options.length, o.wrongAnswerRationales);
+  const metadata: QuestionDraftMetadata = {};
+  if (wrongR) metadata.wrongAnswerRationales = wrongR;
+  if (o.lessonLinkSuggestions?.length) metadata.lessonLinkSuggestions = o.lessonLinkSuggestions;
+  if (o.difficulty?.trim()) metadata.difficultyLabel = o.difficulty.trim();
+  if (o.tags?.length) metadata.tags = o.tags;
+
+  const hasMeta = Object.keys(metadata).length > 0;
+
+  return {
+    ok: true,
+    value: {
+      stem,
+      rationale,
+      options,
+      answerKey,
+      questionType,
+      topicTag: o.tags?.[0],
+      metadata: hasMeta ? metadata : undefined,
+    },
+  };
+}
+
+/** Merge pathway/exam context from the generation request into draft metadata (deterministic, not model-invented). */
+export function withQuestionDraftContext(
+  draft: NormalizedQuestionDraft,
+  ctx: { pathwayLabel?: string; examContextLabel?: string },
+): NormalizedQuestionDraft {
+  if (!ctx.pathwayLabel?.trim() && !ctx.examContextLabel?.trim()) return draft;
+  const nextMeta: QuestionDraftMetadata = {
+    ...draft.metadata,
+    pathwayLabel: ctx.pathwayLabel?.trim() || draft.metadata?.pathwayLabel,
+    examContextLabel: ctx.examContextLabel?.trim() || draft.metadata?.examContextLabel,
+  };
+  return { ...draft, metadata: nextMeta };
+}
+
+export function validateNormalizedQuestion(
+  n: NormalizedQuestionDraft,
+  opts: ValidateNormalizedQuestionOpts,
+): DraftValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  let duplicateRisk = false;
+
+  const sh = stemHash(n.stem);
+  if (opts.duplicateStemHashes.has(sh)) {
+    duplicateRisk = true;
+    warnings.push("Possible duplicate stem hash in this batch.");
+  }
+  opts.duplicateStemHashes.add(sh);
+
+  const shape = validateQuestionPayload(n.questionType, n.options, n.answerKey);
+  if (shape) errors.push(shape);
+
+  const pub = validateQuestionForPublish({
+    stem: n.stem,
+    rationale: n.rationale,
+    questionType: n.questionType,
+    options: n.options,
+    answerKey: n.answerKey,
+  });
+  if (!pub.ok) errors.push(...pub.reasons);
+
+  if (n.rationale.length < 20) warnings.push("Rationale is short — expand before publish.");
+  if (n.questionType === QuestionType.SATA && n.answerKey.length < 2) {
+    warnings.push("SATA with only one keyed answer — confirm this is intentional (NCLEX-style SATA usually has 2+ correct).");
+  }
+
+  const auto = validateGeneratedQuestionAuto(n, {
+    expectedTags: opts.expectedTags,
+    priorNormalizedStems: opts.priorNormalizedStems,
+  });
+  if (!auto.passed) {
+    errors.push(...auto.rejectionReasons);
+  }
+  warnings.push(...auto.warnings);
+
+  return {
+    ok: errors.length === 0,
+    errors,
+    warnings,
+    duplicateRisk,
+    autoValidation: { passed: auto.passed, rejectionReasons: auto.rejectionReasons },
+  };
+}
+
+const aiFlashOptionItemSchema = z.object({
+  letter: z.string().min(1).max(1),
+  text: z.string().min(2),
+});
+
+const aiFlashRationaleItemSchema = z.object({
+  letter: z.string().min(1).max(1),
+  rationale: z.string().min(4),
+});
+
+const aiFlashItemSchema = z.object({
+  front: z.string().optional(),
+  back: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  difficulty: z.string().optional(),
+  // Optional exam-style micro-question fields (populated by advanced AI generation runs)
+  examItemKind: z.string().optional(),
+  questionStem: z.string().optional(),
+  answerOptions: z.array(aiFlashOptionItemSchema).min(3).max(6).optional(),
+  correctAnswer: z.string().optional(),
+  correctLetters: z.array(z.string().min(1).max(1)).min(2).max(5).optional(),
+  rationaleCorrect: z.string().optional(),
+  rationaleIncorrect: z.array(aiFlashRationaleItemSchema).optional(),
+});
+
+/**
+ * Exam-style micro-question fields that can optionally be embedded in a flashcard draft.
+ * When present in normalizedJson, the promote route will dual-write canonical FlashcardOption rows.
+ */
+export type NormalizedFlashcardDraftExamFields = {
+  examItemKind: string;
+  questionStem: string;
+  answerOptions: Array<{ letter: string; text: string }>;
+  correctAnswer?: string | null;
+  correctLetters?: string[] | null;
+  rationaleCorrect: string;
+  rationaleIncorrect: Array<{ letter: string; rationale: string }>;
+};
+
+export type NormalizedFlashcardDraft = {
+  front: string;
+  back: string;
+  tags: string[];
+  /** Present only when the AI generation run included a full exam-style micro-question. */
+  examQuestion?: NormalizedFlashcardDraftExamFields;
+};
+
+export function normalizeAiFlashcardItem(raw: unknown): { ok: true; value: NormalizedFlashcardDraft } | { ok: false; error: string } {
+  const p = aiFlashItemSchema.safeParse(raw);
+  if (!p.success) return { ok: false, error: "Invalid AI flashcard shape" };
+  const front = (p.data.front ?? "").trim();
+  const back = (p.data.back ?? "").trim();
+  if (front.length < 3) return { ok: false, error: "Front too short" };
+  if (back.length < 3) return { ok: false, error: "Back too short" };
+
+  // Carry exam fields through when a full micro-question is present
+  let examQuestion: NormalizedFlashcardDraftExamFields | undefined;
+  if (
+    p.data.examItemKind &&
+    p.data.questionStem &&
+    p.data.answerOptions &&
+    p.data.rationaleCorrect &&
+    (p.data.correctAnswer || (p.data.correctLetters && p.data.correctLetters.length >= 2))
+  ) {
+    examQuestion = {
+      examItemKind: p.data.examItemKind,
+      questionStem: p.data.questionStem,
+      answerOptions: p.data.answerOptions,
+      correctAnswer: p.data.correctAnswer ?? null,
+      correctLetters: p.data.correctLetters ?? null,
+      rationaleCorrect: p.data.rationaleCorrect,
+      rationaleIncorrect: p.data.rationaleIncorrect ?? [],
+    };
+  }
+
+  return {
+    ok: true,
+    value: {
+      front,
+      back,
+      tags: p.data.tags ?? [],
+      ...(examQuestion ? { examQuestion } : {}),
+    },
+  };
+}
+
+export function validateNormalizedFlashcard(n: NormalizedFlashcardDraft): DraftValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  if (n.front.length > 8000) errors.push("Front too long");
+  if (n.back.length > 80000) errors.push("Back too long");
+  return { ok: errors.length === 0, errors, warnings, duplicateRisk: false };
+}
+
+export function tierFromApi(t: string): TierCode {
+  const u = t.toUpperCase();
+  if (u === "FREE") return TierCode.RN;
+  if (u === "RPN") return TierCode.RPN;
+  if (u === "RN") return TierCode.RN;
+  if (u === "NP") return TierCode.NP;
+  return TierCode.RN;
+}
+
+export function examFamilyFromApi(s?: string): ExamFamily {
+  if (!s) return ExamFamily.GENERIC;
+  const u = s.toUpperCase().replace(/-/g, "_");
+  if (u === "NCLEX_RN") return ExamFamily.NCLEX_RN;
+  if (u === "NCLEX_PN") return ExamFamily.NCLEX_PN;
+  if (u === "REX_PN") return ExamFamily.REX_PN;
+  if (u === "NP") return ExamFamily.NP;
+  if (u === "ALLIED") return ExamFamily.ALLIED;
+  return ExamFamily.GENERIC;
+}
+
+export function countryFromApi(c: string): CountryCode {
+  return c === "US" ? CountryCode.US : CountryCode.CA;
+}

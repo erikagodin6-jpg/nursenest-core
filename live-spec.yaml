@@ -1,0 +1,64 @@
+domains:
+- domain: nursenest.ca
+  type: PRIMARY
+  zone: nursenest.ca
+- domain: www.nursenest.ca
+  type: ALIAS
+  zone: nursenest.ca
+ingress:
+  rules:
+  - component:
+      name: web
+    match:
+      path:
+        prefix: /
+name: nursenest-core-next
+region: tor
+services:
+- envs:
+  - key: NODE_ENV
+    scope: RUN_AND_BUILD_TIME
+    value: production
+  - key: PORT
+    scope: RUN_AND_BUILD_TIME
+    value: "8080"
+  - key: HOSTNAME
+    scope: RUN_AND_BUILD_TIME
+    value: 0.0.0.0
+  - key: NEXT_PUBLIC_APP_URL
+    scope: RUN_AND_BUILD_TIME
+    value: https://nursenest.ca
+  - key: DATABASE_URL
+    scope: RUN_TIME
+    type: SECRET
+    value: EV[1:1p7UjFM+vRPkuK0G/O8pop5Hszc9bROi:UIf1c7ql8tFEDAvJT4na5A==]
+  - key: DIRECT_URL
+    scope: RUN_TIME
+    type: SECRET
+    value: EV[1:ZUuTXzMsWpSz2ErCByxyiWjFPiKqLE5h:33+/MCgqlbGARSeCyFOeTA==]
+  - key: AUTH_SECRET
+    scope: RUN_TIME
+    type: SECRET
+    value: EV[1:Od5huUBx8bNQIONeQV3/Ql8x1ImA9YVR:ediyjNe3jZJFDAg0DYg4oA==]
+  - key: NEXTAUTH_SECRET
+    scope: RUN_TIME
+    type: SECRET
+    value: EV[1:S2d+SQs4KxsTO+KsXLnJprVGVsw73cCE:2/fukNtJvXNwmLdg2NLtoA==]
+  health_check:
+    failure_threshold: 12
+    http_path: /readyz
+    initial_delay_seconds: 240
+    period_seconds: 15
+    port: 8080
+    success_threshold: 1
+    timeout_seconds: 15
+  http_port: 8080
+  image:
+    registry: ghcr.io
+    registry_type: GHCR
+    repository: erikagodin6-jpg/nursenest
+    tag: latest
+  instance_count: 1
+  instance_size_slug: basic-s
+  name: web
+  run_command: node scripts/start-production.mjs

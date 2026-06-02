@@ -1,0 +1,301 @@
+name: 🚦 Deployment Safety Gates
+
+on:
+  pull_request:
+    branches: [main, production]
+  push:
+    branches: [main]
+
+# Prevent architectural regressions from reaching production
+# All checks must pass before deployment is allowed
+
+jobs:
+  typecheck:
+    name: TypeScript Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run TypeScript compiler
+        run: npm run typecheck
+
+  runtime-boundary-audit:
+    name: Runtime Boundary Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Run runtime boundary audit
+        run: node scripts/audit-public-runtime.mjs
+
+  force-dynamic-audit:
+    name: Force-Dynamic Budget Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Create reports directory
+        run: mkdir -p reports
+      
+      - name: Run force-dynamic audit
+        run: node scripts/audit-force-dynamic.mjs
+      
+      - name: Upload force-dynamic report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: force-dynamic-audit
+          path: reports/force-dynamic-audit.json
+          retention-days: 30
+
+  unbounded-query-audit:
+    name: Unbounded Query Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Create reports directory
+        run: mkdir -p reports
+      
+      - name: Run unbounded query audit
+        run: node scripts/audit-unbounded-queries.mjs
+      
+      - name: Upload query audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unbounded-queries-audit
+          path: reports/unbounded-queries-audit.json
+          retention-days: 30
+
+  lint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run ESLint
+        run: npm run lint
+
+  middleware-ban:
+    name: 🚫 middleware.ts Ban Enforcement
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify src/middleware.ts does not exist
+        run: npm run verify:no-middleware
+        # This test will:
+        # 1. FAIL loudly if src/middleware.ts exists (permanent ban)
+        # 2. VERIFY src/proxy.ts exists and has correct exports
+        # 3. VERIFY proxy.ts is not referencing a banned middleware.ts shim
+        #
+        # Root cause of the ban:
+        # AI-assisted commits have re-added middleware.ts 6 times.
+        # See: docs/reports/middleware-regeneration-root-cause.md
+
+      - name: Verify architecture contracts
+        run: npm run verify:architecture-contracts
+
+  smoke-tests:
+    name: Production Smoke Tests
+    runs-on: ubuntu-latest
+    needs: [typecheck, lint, middleware-ban]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: Run smoke tests
+        run: npx playwright test --config=playwright.emergency.config.ts
+        env:
+          CI: true
+      
+      - name: Upload smoke test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-results
+          path: playwright-report/
+          retention-days: 30
+
+  runtime-browser-gate:
+    name: Runtime Browser Gate
+    runs-on: ubuntu-latest
+    needs: [typecheck]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Run runtime critical browser gate
+        run: npm run test:e2e:runtime-critical
+        env:
+          CI: true
+          AI_ADMIN_GENERATION_ENABLED: "false"
+          OPENAI_API_KEY: "playwright-placeholder-openai"
+          AUTH_SECRET: "playwright-e2e-local-secret"
+          NEXTAUTH_SECRET: "playwright-e2e-local-secret"
+          DATABASE_URL: "postgresql://USER:PASSWORD@host:5432/DBNAME"
+
+      - name: Upload runtime Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-browser-gate-report
+          path: |
+            playwright-report/runtime-critical/
+            test-results/runtime-critical/
+            test-results/
+          retention-days: 30
+
+  render-verification:
+    name: Render Verification
+    runs-on: ubuntu-latest
+    needs: [typecheck]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build application
+        run: npm run build
+        env:
+          SKIP_ENV_VALIDATION: true
+          DATABASE_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"
+          DIRECT_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"
+      
+      - name: Verify build artifacts
+        run: |
+          if [ ! -d ".next" ]; then
+            echo "Build failed: .next directory not found"
+            exit 1
+          fi
+          echo "Build successful"
+
+      - name: Enforce performance budgets
+        run: npm run perf:budgets
+
+  architectural-regression-check:
+    name: Architectural Regression Check
+    runs-on: ubuntu-latest
+    needs: [runtime-boundary-audit, force-dynamic-audit, unbounded-query-audit]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download audit reports
+        uses: actions/download-artifact@v4
+        with:
+          path: audit-reports
+      
+      - name: Check for regressions
+        run: |
+          echo "✅ All architectural audits passed"
+          echo "No runtime boundary violations detected"
+          echo "Force-dynamic budget maintained"
+          echo "No unbounded query violations"
+
+  deployment-gate-summary:
+    name: 🎯 Deployment Gate Summary
+    runs-on: ubuntu-latest
+    needs:
+      - typecheck
+      - runtime-boundary-audit
+      - force-dynamic-audit
+      - unbounded-query-audit
+      - lint
+      - middleware-ban
+      - smoke-tests
+      - runtime-browser-gate
+      - render-verification
+      - architectural-regression-check
+    if: always()
+    steps:
+      - name: Check all gates passed
+        run: |
+          if [ "${{ needs.typecheck.result }}" != "success" ] || \
+             [ "${{ needs.runtime-boundary-audit.result }}" != "success" ] || \
+             [ "${{ needs.force-dynamic-audit.result }}" != "success" ] || \
+             [ "${{ needs.unbounded-query-audit.result }}" != "success" ] || \
+             [ "${{ needs.lint.result }}" != "success" ] || \
+             [ "${{ needs.middleware-ban.result }}" != "success" ] || \
+             [ "${{ needs.smoke-tests.result }}" != "success" ] || \
+             [ "${{ needs.runtime-browser-gate.result }}" != "success" ] || \
+             [ "${{ needs.render-verification.result }}" != "success" ] || \
+             [ "${{ needs.architectural-regression-check.result }}" != "success" ]; then
+            echo "❌ Deployment gates FAILED"
+            echo "One or more checks did not pass"
+            exit 1
+          fi
+          
+          echo "✅ All deployment gates PASSED"
+          echo "Safe to deploy to production"

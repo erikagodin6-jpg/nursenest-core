@@ -1,0 +1,362 @@
+/* ==========================================================================
+   auth-mint-blossom.css — Premium auth on Sea Glass (coastal wellness)
+
+   Scope: Sea Glass auth surfaces, with mint-blossom retained as a hidden
+   compatibility alias for saved preferences.
+   ========================================================================== */
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-system {
+  --nn-auth-accent-primary: var(--theme-brand-strong, #69b8ad);
+  --nn-auth-accent-secondary: var(--theme-accent, #99c6df);
+  --nn-auth-accent-warm: var(--theme-brand-accent, #a6e9d7);
+  --nn-auth-accent-success: var(--semantic-success);
+  --nn-auth-theme-covered: 1;
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-system::before {
+  background:
+    radial-gradient(760px 340px at 0% 0%, color-mix(in srgb, #f8fffe 55%, transparent), transparent 66%),
+    radial-gradient(720px 320px at 100% 6%, color-mix(in srgb, #99c6df 42%, transparent), transparent 68%),
+    radial-gradient(640px 260px at 48% 100%, color-mix(in srgb, #7cc9be 18%, transparent), transparent 72%);
+  opacity: 0.82;
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-story {
+  border-color: color-mix(in srgb, #a6e9d7 22%, #7cc9be 14%);
+  background:
+    radial-gradient(520px 200px at 0% 0%, color-mix(in srgb, #f8fffe 55%, transparent), transparent 70%),
+    radial-gradient(480px 180px at 100% 20%, color-mix(in srgb, #99c6df 35%, transparent), transparent 72%),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, #f8fffe 28%, #ffffff) 0%,
+      color-mix(in srgb, #fffefe 92%, #ffffff) 52%,
+      color-mix(in srgb, #fcfffe 75%, #ffffff) 100%
+    );
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-card {
+  border-color: color-mix(in srgb, #a6e9d7 16%, #ffffff);
+  background:
+    radial-gradient(480px 200px at 100% 0%, color-mix(in srgb, #99c6df 28%, transparent), transparent 68%),
+    radial-gradient(420px 160px at 0% 100%, color-mix(in srgb, #a6e9d7 12%, transparent), transparent 70%),
+    color-mix(in srgb, #fffefe 96%, #ffffff);
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-theme-pill {
+  border-color: color-mix(in srgb, #a6e9d7 35%, #7cc9be 18%);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, #f8fffe 65%, #ffffff),
+    color-mix(in srgb, #fcfffe 70%, #ffffff)
+  );
+  color: var(--theme-heading-text);
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-eyebrow {
+  color: color-mix(in srgb, #5cbf9b 72%, #69b8ad);
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-ecosystem-grid > span:nth-child(3n + 1) {
+  border-color: color-mix(in srgb, #a6e9d7 40%, #ffffff);
+  background: color-mix(in srgb, #f8fffe 55%, #ffffff);
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-ecosystem-grid > span:nth-child(3n + 2) {
+  border-color: color-mix(in srgb, #99c6df 35%, #ffffff);
+  background: color-mix(in srgb, #99c6df 22%, #ffffff);
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-ecosystem-grid > span:nth-child(3n) {
+  border-color: color-mix(in srgb, #7cc9be 28%, #ffffff);
+  background: color-mix(in srgb, #a6e9d7 18%, #ffffff);
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-pathway-rail > span:first-child {
+  border-color: color-mix(in srgb, #7cc9be 38%, var(--semantic-border-soft));
+  background: color-mix(in srgb, #a6e9d7 35%, var(--semantic-surface));
+  box-shadow: 0 0 0 1px color-mix(in srgb, #69b8ad 22%, transparent);
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-pathway-rail > span:nth-child(2) {
+  border-color: color-mix(in srgb, #a6e9d7 32%, var(--semantic-border-soft));
+  background: color-mix(in srgb, #f8fffe 40%, var(--semantic-surface));
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-input {
+  border-color: color-mix(in srgb, #a6e9d7 22%, var(--semantic-border-soft)) !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, #ffffff 98%, #f8fffe),
+      color-mix(in srgb, #fffefe 92%, #ffffff)
+    ) !important;
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-input:focus-visible {
+  outline-color: color-mix(in srgb, #99c6df 38%, #69b8ad);
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-primary-button {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, #7cc9be 96%, #ffffff),
+    color-mix(in srgb, #69b8ad 92%, #7cc9be)
+  ) !important;
+  color: #ffffff !important;
+  border: 1px solid color-mix(in srgb, #7cc9be 35%, transparent);
+  box-shadow:
+    0 16px 34px -22px color-mix(in srgb, #69b8ad 45%, transparent),
+    0 8px 24px -16px color-mix(in srgb, #a6e9d7 22%, transparent);
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-primary-button:not(:disabled):hover {
+  box-shadow:
+    0 20px 38px -20px color-mix(in srgb, #69b8ad 52%, transparent),
+    0 10px 28px -14px color-mix(in srgb, #99c6df 18%, transparent);
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-premium-auth-onboarding {
+  background:
+    radial-gradient(420px 160px at 100% 0%, color-mix(in srgb, #99c6df 14%, transparent), transparent 70%),
+    radial-gradient(380px 140px at 0% 100%, color-mix(in srgb, #f8fffe 18%, transparent), transparent 72%),
+    color-mix(in srgb, #fffefe 94%, var(--semantic-surface)) !important;
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) .nn-verify-status--success {
+  border-color: color-mix(in srgb, #a6e9d7 40%, var(--semantic-border-soft));
+  background: color-mix(in srgb, #f8fffe 22%, var(--semantic-surface));
+}
+
+:is(html[data-theme="sea-glass"], html[data-theme="mint-blossom"]) [data-nn-footer-layout="marketing"] .nn-footer-panel {
+  border-color: color-mix(in srgb, #a6e9d7 12%, #ffffff);
+}
+
+/* ---------------------------------------------------------------------
+   Email verified — split celebration (existing transparent leaf background)
+   --------------------------------------------------------------------- */
+
+.nn-premium-auth-verified {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 78rem);
+  margin-inline: auto;
+  padding-top: clamp(1rem, 2vw, 1.5rem);
+  padding-bottom: max(clamp(1.5rem, 3vw, 2.25rem), env(safe-area-inset-bottom, 0px));
+  overflow: hidden;
+}
+
+.nn-premium-auth-verified::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -2rem -1.5rem auto;
+  height: min(36rem, 58vh);
+  border-radius: 9999px;
+  z-index: -2;
+  background:
+    radial-gradient(760px 340px at 0% 0%, color-mix(in srgb, #f8fffe 50%, transparent), transparent 66%),
+    radial-gradient(720px 320px at 100% 8%, color-mix(in srgb, #99c6df 38%, transparent), transparent 68%),
+    radial-gradient(640px 260px at 48% 100%, color-mix(in srgb, #7cc9be 16%, transparent), transparent 72%);
+  opacity: 0.85;
+}
+
+.nn-premium-auth-verified__brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  position: relative;
+  z-index: 1;
+}
+
+.nn-premium-auth-verified__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  align-items: stretch;
+  min-height: min(36rem, calc(100dvh - 12rem));
+}
+
+.nn-premium-auth-verified__celebrate,
+.nn-premium-auth-verified__next {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--nn-auth-radius-card, 1.55rem);
+  border: 1px solid color-mix(in srgb, #a6e9d7 18%, #ffffff);
+}
+
+.nn-premium-auth-verified__celebrate {
+  padding: clamp(2rem, 4vw, 3.5rem);
+  background:
+    radial-gradient(520px 200px at 0% 0%, color-mix(in srgb, #f8fffe 48%, transparent), transparent 70%),
+    radial-gradient(480px 180px at 100% 30%, color-mix(in srgb, #99c6df 32%, transparent), transparent 72%),
+    linear-gradient(
+      155deg,
+      color-mix(in srgb, #f8fffe 22%, #ffffff) 0%,
+      color-mix(in srgb, #fffefe 94%, #ffffff) 55%,
+      color-mix(in srgb, #fcfffe 70%, #ffffff) 100%
+    );
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.nn-premium-auth-verified__next {
+  padding: clamp(2rem, 4vw, 3.25rem);
+  background:
+    radial-gradient(420px 160px at 100% 0%, color-mix(in srgb, #99c6df 22%, transparent), transparent 70%),
+    color-mix(in srgb, #fffefe 96%, #ffffff);
+}
+
+.nn-premium-auth-verified__success-ring {
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 50%;
+  border: 3px solid color-mix(in srgb, #5cbf9b 85%, #a6e9d7);
+  background: #fff;
+  display: grid;
+  place-items: center;
+  margin-bottom: 1.75rem;
+  box-shadow:
+    0 20px 50px -24px color-mix(in srgb, #5cbf9b 45%, transparent),
+    0 8px 24px -12px color-mix(in srgb, #a6e9d7 28%, transparent);
+}
+
+.nn-premium-auth-verified__celebrate h1 {
+  margin-top: 0.65rem;
+  max-width: 11em;
+  font-size: clamp(2rem, 4.2vw, 2.65rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: var(--theme-heading-text);
+}
+
+.nn-premium-auth-verified__lead {
+  margin-top: 0.85rem;
+  max-width: 26em;
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-premium-auth-verified__hint {
+  margin-top: 0.65rem;
+  max-width: 28em;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--semantic-text-muted);
+}
+
+.nn-premium-auth-verified__next-title {
+  margin-top: 0.5rem;
+  font-size: clamp(1.35rem, 2.5vw, 1.65rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--theme-heading-text);
+}
+
+.nn-premium-auth-verified__steps {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.nn-premium-auth-verified__steps li {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  padding: 1rem 1.1rem;
+  border-radius: 1.15rem;
+  border: 1px solid color-mix(in srgb, #a6e9d7 14%, #ffffff);
+  background: color-mix(in srgb, #ffffff 92%, #f8fffe);
+  box-shadow: 0 10px 28px -22px color-mix(in srgb, #99c6df 18%, transparent);
+}
+
+.nn-premium-auth-verified__step-num {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: color-mix(in srgb, #69b8ad 88%, #4b5563);
+  background: color-mix(in srgb, #a6e9d7 35%, #ffffff);
+}
+
+.nn-premium-auth-verified__steps strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--theme-heading-text);
+}
+
+.nn-premium-auth-verified__steps span {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-premium-auth-verified__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.nn-premium-auth-verified__secondary-btn {
+  min-height: 3.1rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, #a6e9d7 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, #ffffff 88%, #f8fffe);
+  color: var(--theme-heading-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.nn-premium-auth-verified__secondary-btn:hover {
+  border-color: color-mix(in srgb, #99c6df 22%, #a6e9d7);
+  background: color-mix(in srgb, #f8fffe 45%, #ffffff);
+  transform: translateY(-1px);
+}
+
+.nn-premium-auth-verified__signin-hint {
+  margin-top: 1rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--semantic-text-secondary);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .nn-premium-auth-verified__layout {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .nn-premium-auth-verified__celebrate {
+    padding: clamp(1.75rem, 5vw, 2.5rem);
+  }
+
+  .nn-premium-auth-verified__celebrate h1 {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-auth-verified__secondary-btn:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "adjustmentsNeededBeforePhase2": [
+    "Carry forward the same Q/lesson ratio guardrail (<=25).",
+    "Apply same stem-dedup hash check prior to write.",
+    "Keep MI boundary tags and PE split tags unchanged in generated prompts.",
+    "For 6 legal/regulatory topics, inject exam-variant prompt notes for US vs Canada."
+  ]
+}

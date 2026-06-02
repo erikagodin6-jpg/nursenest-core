@@ -1,0 +1,208 @@
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
+import { PracticeTestStatus } from "@prisma/client";
+import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
+import { prisma } from "@/lib/db";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { withRetry } from "@/lib/resilience/with-retry";
+import { enforcePracticeTestQuestionProtection } from "@/lib/http/api-protection";
+import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
+import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
+import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
+import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
+import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
+import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
+import {
+  assessPracticeTestSessionHydrateContract,
+  sessionContractErrorJsonBody,
+} from "@/lib/practice-tests/practice-session-contract";
+
+export const dynamic = "force-dynamic";
+
+const previewSelect = {
+  id: true,
+  stem: true,
+  questionType: true,
+  options: true,
+  topic: true,
+  subtopic: true,
+  difficulty: true,
+  exam: true,
+  bodySystem: true,
+  tags: true,
+  questionFormat: true,
+  exhibitData: true,
+  images: true,
+} as const;
+
+function asIdList(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.filter((x): x is string => typeof x === "string" && x.length > 4);
+}
+
+function parsePracticeTestRouteParams(raw: unknown): { id: string } | null {
+  if (!raw || typeof raw !== "object") return null;
+  const id = (raw as Record<string, unknown>).id;
+  return typeof id === "string" && id.trim().length > 0 ? { id: id.trim() } : null;
+}
+
+/**
+ * One practice-test item at a time (same pattern as /api/exams/session/question).
+ * Keeps large CAT/linear runs off the wire and out of React state in one payload.
+ */
+export async function GET(req: NextRequest, ctx: { params: Promise<unknown> }) {
+  return runWithApiTelemetry(req, "GET /api/practice-tests/[id]/question", "content", async () => {
+  const gate = await requireSubscriberSession();
+  if (!gate.ok) return gate.response;
+
+  const limited = await enforcePracticeTestQuestionProtection(req, gate.userId);
+  if (limited) return limited;
+
+  const parsedParams = parsePracticeTestRouteParams(await ctx.params);
+  if (!parsedParams || parsedParams.id.length < 8) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+  const { id } = parsedParams;
+
+  const indexRaw = req.nextUrl.searchParams.get("index");
+  const questionIdRaw = req.nextUrl.searchParams.get("questionId")?.trim() || null;
+  if (indexRaw === null && !questionIdRaw) {
+    return NextResponse.json(
+      { error: "index or questionId required", code: "question_locator_required" },
+      { status: 400 },
+    );
+  }
+  const requestedIndex = indexRaw === null ? null : Number.parseInt(indexRaw, 10);
+  if (requestedIndex !== null && Number.isNaN(requestedIndex)) {
+    return NextResponse.json({ error: "invalid index", code: "invalid_index" }, { status: 400 });
+  }
+
+  setSentryServerContext({
+    route: "/api/practice-tests/[id]/question",
+    feature: SERVER_FEATURE.practiceTest,
+    userId: gate.userId,
+  });
+
+  try {
+    const row = await withRetry(() =>
+      prisma.practiceTest.findFirst({
+        where: { id, userId: gate.userId },
+        select: {
+          questionIds: true,
+          status: true,
+          cursorIndex: true,
+          config: true,
+          adaptiveState: true,
+          results: true,
+        },
+      }),
+    );
+
+    if (!row || row.status !== PracticeTestStatus.IN_PROGRESS) {
+      return NextResponse.json({ error: "Test not in progress" }, { status: 404 });
+    }
+
+    const cfg = parsePracticeTestConfigAtBoundary(row.config, {
+      practiceTestId: id,
+      surface: "practice_test_question_api_get",
+    });
+    let ids = asIdList(row.questionIds);
+    if (ids.length === 0) {
+      return NextResponse.json({ error: "No questions in session" }, { status: 404 });
+    }
+    const index =
+      requestedIndex !== null
+        ? Math.max(0, requestedIndex)
+        : ids.indexOf(questionIdRaw!);
+    if (index < 0) {
+      return NextResponse.json(
+        { error: "Question not in session", code: "question_not_in_session" },
+        { status: 404 },
+      );
+    }
+    if (index >= ids.length) {
+      return NextResponse.json({ error: "index out of range", code: "index_out_of_range" }, { status: 400 });
+    }
+
+    const qContract = assessPracticeTestSessionHydrateContract({
+      catMode: cfg.selectionMode === "cat",
+      status: row.status,
+      questionIds: ids,
+      cursorIndex: row.cursorIndex,
+      adaptiveState: row.adaptiveState ?? null,
+      config: cfg,
+      results: row.results,
+    });
+    if (!qContract.ok) {
+      safeServerLog("practice_tests", "practice_test_question_contract_violation", {
+        event: "practice_test_question_contract_violation",
+        practiceTestId: id.slice(0, 16),
+        code: qContract.violation.code,
+      });
+      return NextResponse.json(sessionContractErrorJsonBody(qContract.violation), { status: 409 });
+    }
+
+    const qid = ids[index]!;
+    const base = questionAccessWhere(gate.entitlement);
+    const q = await withRetry(() =>
+      prisma.examQuestion.findFirst({
+        where: { AND: [{ id: qid }, base] },
+        select: previewSelect,
+      }),
+    );
+
+    if (!q) {
+      return NextResponse.json({ error: "Question not available" }, { status: 404 });
+    }
+
+    const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+    const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
+    const isCat = cfg.selectionMode === "cat";
+    const catStripTeaching =
+      isCat &&
+      (cfg.catPresentationMode === "exam_simulation" ||
+        (cfg.catExamFeedbackMode ?? "test") === "test");
+    const linearExamHideTeaching =
+      !isCat &&
+      cfg.linearDeliveryMode === "exam" &&
+      (cfg.linearRationaleVisibility ?? "end_of_exam") === "end_of_exam";
+    const teachingExposure =
+      catStripTeaching || linearExamHideTeaching ? ("none" as const) : ("full" as const);
+    logCoreApiStudyDiagnostic({
+      endpoint: "GET /api/practice-tests/[id]/question",
+      pathwayId: cfg.pathwayId ?? null,
+      selectionMode: cfg.selectionMode ?? null,
+      catPresentationMode: cfg.catPresentationMode ?? null,
+      catExamFeedbackMode: cfg.catExamFeedbackMode ?? null,
+      teachingExposure,
+      questionIdPrefix: qid.slice(0, 12),
+      index,
+    });
+    const merged = mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle, {
+      teachingExposure,
+    });
+    const stem = String(merged.stem ?? "");
+    const question = {
+      ...merged,
+      stem: stem.length > 2000 ? `${stem.slice(0, 1997)}…` : stem,
+    };
+
+    const body = { index, total: ids.length, question };
+    const approxPayloadBytes = estimateJsonUtf8Bytes(body);
+    if (approxPayloadBytes >= QUESTION_PAYLOAD_WARN_BYTES) {
+      safeServerLog("api_practice_tests_question", "payload_warn", {
+        approxPayloadBytes,
+        threshold: QUESTION_PAYLOAD_WARN_BYTES,
+        questionId: qid,
+      });
+    }
+    return NextResponse.json(body);
+  } catch {
+    return NextResponse.json({ error: "Unable to load question" }, { status: 503 });
+  }
+  });
+}

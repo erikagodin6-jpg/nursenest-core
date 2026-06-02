@@ -1,0 +1,27 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║         STALE DUPLICATE — DO NOT USE FOR PRODUCTION DEPLOYS                ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+#
+# This file is a stale copy of an older version of the app spec, kept here
+# for historical reference. It diverges from the canonical spec on:
+#   • Stripe RPN/RN/New Grad/LVN/Allied price IDs (empty or missing)
+#   • Variable scopes (BUILD_TIME vs RUN_AND_BUILD_TIME)
+#   • Missing: CRON_SECRET, SPACES_KEY, SPACES_SECRET, NEXTAUTH_SECRET,
+#               AI_PROVIDER, OPENROUTER_*, DIRECT_URL
+#   • Missing: NEXT_PUBLIC_APP_URL (causes checkout 503)
+#
+# DEPLOYING FROM THIS FILE WILL DELETE THE ABOVE VARS FROM PRODUCTION.
+#
+# THE CANONICAL DEPLOY SPEC IS:
+#   .do/app-nursenest-core-next.yaml   (repo root — NOT inside nursenest-core/)
+#
+# SAFE DEPLOY COMMANDS (from repo root):
+#   npm run do:deploy:dry       # validate + diff, print command
+#   npm run do:deploy:execute   # validate + diff + deploy
+#
+# GUARD STATUS: do-spec-guard.mjs exits 1 on this file.
+#   Missing: CRON_SECRET, SPACES_KEY, SPACES_SECRET (minimum 3 failures)
+#
+# SEE: docs/ops/digitalocean-deploy-governance.md
+# ─────────────────────────────────────────────────────────────────────────────
+# This file contains no deployable YAML spec — only documentation.

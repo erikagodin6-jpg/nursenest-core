@@ -1,0 +1,101 @@
+/**
+ * Structured failure context for auth / entitlement / shell assertions (Node side).
+ * Does not change production behavior — diagnostics only.
+ */
+import type { Page } from "@playwright/test";
+
+export type AuthFailureSurface = {
+  url: string;
+  pathname: string;
+  appearsOnboarding: boolean;
+  appearsLogin: boolean;
+  subscriptionRequiredHeadingCount: number;
+  bodySample: string;
+  visibleAuthErrorLine: string | null;
+  /** First visible `[role=alert]` text (login form errors). */
+  alertText: string | null;
+};
+
+/** Truncate for logs — avoid dumping huge HTML. */
+const SAMPLE = 500;
+
+/** Strip credentials from accidental GET-login URLs (never log passwords). */
+export function redactAuthDiagnosticsUrl(raw: string): string {
+  try {
+    const u = new URL(raw);
+    if (!u.pathname.includes("/login")) return raw;
+    const sensitive = new Set(["password", "email", "rememberme", "csrf", "token", "secret"]);
+    let changed = false;
+    for (const key of [...u.searchParams.keys()]) {
+      if (sensitive.has(key.toLowerCase())) {
+        u.searchParams.set(key, "[REDACTED]");
+        changed = true;
+      }
+    }
+    return changed ? u.toString() : raw;
+  } catch {
+    return raw;
+  }
+}
+
+export async function describeAuthFailureSurface(page: Page): Promise<string> {
+  const d = await collectAuthFailureSurface(page);
+  return formatAuthFailureSurface(d);
+}
+
+export async function collectAuthFailureSurface(page: Page): Promise<AuthFailureSurface> {
+  const url = redactAuthDiagnosticsUrl(page.url());
+  let pathname = "";
+  try {
+    pathname = new URL(url).pathname;
+  } catch {
+    pathname = "(invalid-url)";
+  }
+  const appearsOnboarding = pathname.includes("/app/onboarding");
+  const appearsLogin = pathname.includes("/login");
+  const subscriptionRequiredHeadingCount = await page
+    .getByRole("heading", { name: "Subscription required" })
+    .count()
+    .catch(() => 0);
+  const body = (await page.locator("body").innerText().catch(() => "")).slice(0, SAMPLE);
+  const alertText = (
+    await page
+      .getByRole("alert")
+      .first()
+      .innerText()
+      .catch(() => "")
+  )
+    .trim()
+    .slice(0, 400);
+  let visibleAuthErrorLine: string | null = null;
+  const authLineMatch =
+    /Unable to sign in|Invalid email|Invalid credentials|incorrect password|Sign in failed|Authentication failed/i.exec(
+      body,
+    );
+  if (authLineMatch) {
+    visibleAuthErrorLine = authLineMatch[0].slice(0, 200);
+  }
+  return {
+    url,
+    pathname,
+    appearsOnboarding,
+    appearsLogin,
+    subscriptionRequiredHeadingCount,
+    bodySample: body,
+    visibleAuthErrorLine,
+    alertText: alertText.length > 0 ? alertText : null,
+  };
+}
+
+export function formatAuthFailureSurface(d: AuthFailureSurface): string {
+  const parts = [
+    `url=${d.url}`,
+    `pathname=${d.pathname}`,
+    `onboardingLike=${d.appearsOnboarding ? "yes" : "no"}`,
+    `loginRouteLike=${d.appearsLogin ? "yes" : "no"}`,
+    `subscriptionRequiredHeadings=${d.subscriptionRequiredHeadingCount}`,
+  ];
+  if (d.visibleAuthErrorLine) parts.push(`authErrorSnippet=${d.visibleAuthErrorLine}`);
+  if (d.alertText) parts.push(`alertText=${d.alertText.replace(/\s+/g, " ").slice(0, 280)}`);
+  return parts.join(" ");
+}

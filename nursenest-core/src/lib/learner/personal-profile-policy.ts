@@ -1,0 +1,79 @@
+import { SubscriptionStatus, type CountryCode, type TierCode } from "@prisma/client";
+import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-scope";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
+import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import { currentPathwayLabelForPathway } from "@/lib/exam-pathways/account-exam-preference";
+
+export type PathwayPickOption = { id: string; label: string };
+
+/**
+ * When an active billing record pins both plan tier and country, profile tier/country must not drift
+ * from what Stripe/checkout established (entitlements use the subscription row).
+ */
+export function subscriptionLocksProfileRegionAndTier(sub: {
+  status: SubscriptionStatus;
+  planTier: TierCode | null;
+  planCountry: CountryCode | null;
+} | null): boolean {
+  if (!sub) return false;
+  const locksRegionTier = new Set<SubscriptionStatus>([
+    SubscriptionStatus.ACTIVE,
+    SubscriptionStatus.GRACE,
+    SubscriptionStatus.PAST_DUE,
+  ]);
+  if (!locksRegionTier.has(sub.status)) return false;
+  return sub.planTier != null && sub.planCountry != null;
+}
+
+/**
+ * Pathways the learner may bind to `User.learnerPath` for the given profile tier/country.
+ * For subscribers, options are derived from the same rules as `listPathwaysCompatibleWithSubscription`
+ * but using the **profile** tier/country so validation stays correct when those fields are editable.
+ */
+export async function listPathwayPicksForProfile(
+  entitlement: AccessScope,
+  profileTier: TierCode,
+  profileCountry: CountryCode,
+  subscriberAccess: boolean,
+): Promise<PathwayPickOption[]> {
+  if (subscriberAccess && entitlement.hasAccess) {
+    const scope: AccessScope =
+      accessScopeIsStaffLearnerEntitlementBypass(entitlement)
+        ? {
+            hasAccess: true,
+            reason: "admin_override",
+            tier: profileTier,
+            country: profileCountry,
+            alliedCareer: entitlement.alliedCareer ?? null,
+          }
+        : {
+            hasAccess: true,
+            reason: "active_subscription",
+            tier: profileTier,
+            country: profileCountry,
+            alliedCareer: entitlement.alliedCareer ?? null,
+          };
+    const rows = await listPathwaysCompatibleWithSubscription(scope);
+    return rows.map((p) => ({
+      id: p.id,
+      label: currentPathwayLabelForPathway(p),
+    }));
+  }
+  const allowedTiers = new Set(accessibleTiersForUserTier(profileTier));
+  return listPublishedExamPathwaysForPublicSite()
+    .filter((p) => p.countryCode === profileCountry && allowedTiers.has(p.stripeTier))
+    .map((p) => ({
+      id: p.id,
+      label: currentPathwayLabelForPathway(p),
+    }));
+}
+
+export function learnerPathIsAllowed(
+  learnerPath: string | null,
+  options: PathwayPickOption[],
+): boolean {
+  if (learnerPath == null || learnerPath.trim() === "") return true;
+  return options.some((o) => o.id === learnerPath.trim());
+}

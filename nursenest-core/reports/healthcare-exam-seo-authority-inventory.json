@@ -1,0 +1,1463 @@
+{
+  "generatedAt": "2026-05-14T19:23:21.675Z",
+  "counts": {
+    "pillars": 14,
+    "ecosystemPages": 70,
+    "topicClusters": 7,
+    "inventoryRows": 91,
+    "liveUrls": 38,
+    "plannedRows": 53
+  },
+  "liveUrls": [
+    "/us/rn/nclex-rn",
+    "/canada/rpn/rex-pn",
+    "/canada/np/cnple",
+    "/us/np/fnp",
+    "/us/np/agpcnp",
+    "/us/np/pmhnp",
+    "/allied/mlt",
+    "/allied/paramedic",
+    "/allied/respiratory",
+    "/allied/social-work",
+    "/allied/occupational-therapy",
+    "/allied/physiotherapy",
+    "/allied/psychotherapy",
+    "/allied/psw-hca",
+    "/us/rn/nclex-rn/questions",
+    "/us/rn/nclex-rn/test-bank",
+    "/us/rn/nclex-rn/cat",
+    "/us/rn/nclex-rn/flashcards",
+    "/canada/rpn/rex-pn/questions",
+    "/canada/rpn/rex-pn/test-bank",
+    "/canada/rpn/rex-pn/cat",
+    "/canada/rpn/rex-pn/flashcards",
+    "/canada/np/cnple/questions",
+    "/canada/np/cnple/test-bank",
+    "/canada/np/cnple/cat",
+    "/canada/np/cnple/flashcards",
+    "/us/np/fnp/questions",
+    "/us/np/fnp/test-bank",
+    "/us/np/fnp/cat",
+    "/us/np/fnp/flashcards",
+    "/us/np/agpcnp/questions",
+    "/us/np/agpcnp/test-bank",
+    "/us/np/agpcnp/cat",
+    "/us/np/agpcnp/flashcards",
+    "/us/np/pmhnp/questions",
+    "/us/np/pmhnp/cat",
+    "/us/np/pmhnp/flashcards",
+    "/ecg/ecg-practice-questions"
+  ],
+  "inventory": [
+    {
+      "kind": "pillar",
+      "id": "us-rn-nclex-rn",
+      "family": "nclex-rn",
+      "canonicalPath": "/us/rn/nclex-rn",
+      "status": "live",
+      "title": "NCLEX-RN Exam Prep, CAT Practice, Test Bank & Flashcards | NurseNest",
+      "targetQueries": [
+        "NCLEX RN exam prep",
+        "NCLEX RN practice questions",
+        "NCLEX test bank",
+        "NCLEX CAT exam"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "ca-rpn-rex-pn",
+      "family": "rex-pn",
+      "canonicalPath": "/canada/rpn/rex-pn",
+      "status": "live",
+      "title": "REx-PN Exam Prep, CAT Practice & Question Bank | NurseNest",
+      "targetQueries": [
+        "REx-PN exam prep",
+        "REx-PN practice questions",
+        "REx-PN question bank",
+        "REx-PN CAT exam"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "ca-np-cnple",
+      "family": "cnple",
+      "canonicalPath": "/canada/np/cnple",
+      "status": "live",
+      "title": "CNPLE Exam Prep, Case Studies & Canadian NP Questions | NurseNest",
+      "targetQueries": [
+        "CNPLE exam prep",
+        "CNPLE practice questions",
+        "CNPLE case studies",
+        "Canadian NP exam prep"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "us-np-fnp",
+      "family": "np",
+      "canonicalPath": "/us/np/fnp",
+      "status": "live",
+      "title": "FNP exam prep, Practice Questions & Clinical Judgment Cases | NurseNest",
+      "targetQueries": [
+        "FNP exam prep",
+        "NP practice questions",
+        "NP clinical judgment",
+        "NP case studies"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "us-np-agpcnp",
+      "family": "np",
+      "canonicalPath": "/us/np/agpcnp",
+      "status": "live",
+      "title": "AGPCNP exam prep, Practice Questions & Clinical Judgment Cases | NurseNest",
+      "targetQueries": [
+        "AGPCNP exam prep",
+        "NP practice questions",
+        "NP clinical judgment",
+        "NP case studies"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "us-np-pmhnp",
+      "family": "np",
+      "canonicalPath": "/us/np/pmhnp",
+      "status": "live",
+      "title": "PMHNP exam prep, Practice Questions & Clinical Judgment Cases | NurseNest",
+      "targetQueries": [
+        "PMHNP exam prep",
+        "NP practice questions",
+        "NP clinical judgment",
+        "NP case studies"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "allied-mlt",
+      "family": "allied",
+      "canonicalPath": "/allied/mlt",
+      "status": "live",
+      "title": "Medical Laboratory Technology Exam Prep & Practice Questions | NurseNest",
+      "targetQueries": [
+        "Medical Laboratory Technology exam prep",
+        "Medical Laboratory Technology practice questions",
+        "Medical Laboratory Technology licensing exam"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "allied-paramedic",
+      "family": "allied",
+      "canonicalPath": "/allied/paramedic",
+      "status": "live",
+      "title": "Paramedic Exam Prep & Practice Questions | NurseNest",
+      "targetQueries": [
+        "Paramedic exam prep",
+        "Paramedic practice questions",
+        "Paramedic licensing exam"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "allied-respiratory",
+      "family": "allied",
+      "canonicalPath": "/allied/respiratory",
+      "status": "live",
+      "title": "Respiratory Therapy Exam Prep & Practice Questions | NurseNest",
+      "targetQueries": [
+        "Respiratory Therapy exam prep",
+        "Respiratory Therapy practice questions",
+        "Respiratory Therapy licensing exam"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "allied-social-work",
+      "family": "allied",
+      "canonicalPath": "/allied/social-work",
+      "status": "live",
+      "title": "Social Work Exam Prep & Practice Questions | NurseNest",
+      "targetQueries": [
+        "Social Work exam prep",
+        "Social Work practice questions",
+        "Social Work licensing exam"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "allied-occupational-therapy",
+      "family": "allied",
+      "canonicalPath": "/allied/occupational-therapy",
+      "status": "live",
+      "title": "Occupational Therapy Exam Prep & Practice Questions | NurseNest",
+      "targetQueries": [
+        "Occupational Therapy exam prep",
+        "Occupational Therapy practice questions",
+        "Occupational Therapy licensing exam"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "allied-physiotherapy",
+      "family": "allied",
+      "canonicalPath": "/allied/physiotherapy",
+      "status": "live",
+      "title": "Physiotherapy Exam Prep & Practice Questions | NurseNest",
+      "targetQueries": [
+        "Physiotherapy exam prep",
+        "Physiotherapy practice questions",
+        "Physiotherapy licensing exam"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "allied-psychotherapy",
+      "family": "allied",
+      "canonicalPath": "/allied/psychotherapy",
+      "status": "live",
+      "title": "Psychotherapy Exam Prep & Practice Questions | NurseNest",
+      "targetQueries": [
+        "Psychotherapy exam prep",
+        "Psychotherapy practice questions",
+        "Psychotherapy licensing exam"
+      ]
+    },
+    {
+      "kind": "pillar",
+      "id": "allied-psw-hca",
+      "family": "allied",
+      "canonicalPath": "/allied/psw-hca",
+      "status": "live",
+      "title": "PSW / HCA Exam Prep & Practice Questions | NurseNest",
+      "targetQueries": [
+        "PSW / HCA exam prep",
+        "PSW / HCA practice questions",
+        "PSW / HCA licensing exam"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-rn-nclex-rn-practice-questions",
+      "family": "nclex-rn",
+      "canonicalPath": "/us/rn/nclex-rn/questions",
+      "plannedAliasPath": "/nclex-rn/practice-questions",
+      "status": "live",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-rn-nclex-rn-test-bank",
+      "family": "nclex-rn",
+      "canonicalPath": "/us/rn/nclex-rn/test-bank",
+      "plannedAliasPath": "/nclex-rn/test-bank",
+      "status": "live",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-rn-nclex-rn-cat-exam",
+      "family": "nclex-rn",
+      "canonicalPath": "/us/rn/nclex-rn/cat",
+      "plannedAliasPath": "/nclex-rn/cat-exams",
+      "status": "live",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-rn-nclex-rn-flashcards",
+      "family": "nclex-rn",
+      "canonicalPath": "/us/rn/nclex-rn/flashcards",
+      "plannedAliasPath": "/nclex-rn/flashcards",
+      "status": "live",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-rn-nclex-rn-study-guide",
+      "family": "nclex-rn",
+      "canonicalPath": "/us/rn/nclex-rn/study-guide",
+      "plannedAliasPath": "/nclex-rn/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "ca-rpn-rex-pn-practice-questions",
+      "family": "rex-pn",
+      "canonicalPath": "/canada/rpn/rex-pn/questions",
+      "plannedAliasPath": "/rex-pn/practice-questions",
+      "status": "live",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "ca-rpn-rex-pn-test-bank",
+      "family": "rex-pn",
+      "canonicalPath": "/canada/rpn/rex-pn/test-bank",
+      "plannedAliasPath": "/rex-pn/test-bank",
+      "status": "live",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "ca-rpn-rex-pn-cat-exam",
+      "family": "rex-pn",
+      "canonicalPath": "/canada/rpn/rex-pn/cat",
+      "plannedAliasPath": "/rex-pn/cat-exams",
+      "status": "live",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "ca-rpn-rex-pn-flashcards",
+      "family": "rex-pn",
+      "canonicalPath": "/canada/rpn/rex-pn/flashcards",
+      "plannedAliasPath": "/rex-pn/flashcards",
+      "status": "live",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "ca-rpn-rex-pn-study-guide",
+      "family": "rex-pn",
+      "canonicalPath": "/canada/rpn/rex-pn/study-guide",
+      "plannedAliasPath": "/rex-pn/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "ca-np-cnple-practice-questions",
+      "family": "cnple",
+      "canonicalPath": "/canada/np/cnple/questions",
+      "plannedAliasPath": "/cnple/practice-questions",
+      "status": "live",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "ca-np-cnple-test-bank",
+      "family": "cnple",
+      "canonicalPath": "/canada/np/cnple/test-bank",
+      "plannedAliasPath": "/cnple/test-bank",
+      "status": "live",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "ca-np-cnple-cat-exam",
+      "family": "cnple",
+      "canonicalPath": "/canada/np/cnple/cat",
+      "plannedAliasPath": "/cnple/cat-exams",
+      "status": "live",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "ca-np-cnple-flashcards",
+      "family": "cnple",
+      "canonicalPath": "/canada/np/cnple/flashcards",
+      "plannedAliasPath": "/cnple/flashcards",
+      "status": "live",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "ca-np-cnple-study-guide",
+      "family": "cnple",
+      "canonicalPath": "/canada/np/cnple/study-guide",
+      "plannedAliasPath": "/cnple/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-fnp-practice-questions",
+      "family": "np",
+      "canonicalPath": "/us/np/fnp/questions",
+      "plannedAliasPath": "/np/practice-questions",
+      "status": "live",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-fnp-test-bank",
+      "family": "np",
+      "canonicalPath": "/us/np/fnp/test-bank",
+      "plannedAliasPath": "/np/test-bank",
+      "status": "live",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-fnp-cat-exam",
+      "family": "np",
+      "canonicalPath": "/us/np/fnp/cat",
+      "plannedAliasPath": "/np/cat-exams",
+      "status": "live",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-fnp-flashcards",
+      "family": "np",
+      "canonicalPath": "/us/np/fnp/flashcards",
+      "plannedAliasPath": "/np/flashcards",
+      "status": "live",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-fnp-study-guide",
+      "family": "np",
+      "canonicalPath": "/us/np/fnp/study-guide",
+      "plannedAliasPath": "/np/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-agpcnp-practice-questions",
+      "family": "np",
+      "canonicalPath": "/us/np/agpcnp/questions",
+      "plannedAliasPath": "/np/practice-questions",
+      "status": "live",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-agpcnp-test-bank",
+      "family": "np",
+      "canonicalPath": "/us/np/agpcnp/test-bank",
+      "plannedAliasPath": "/np/test-bank",
+      "status": "live",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-agpcnp-cat-exam",
+      "family": "np",
+      "canonicalPath": "/us/np/agpcnp/cat",
+      "plannedAliasPath": "/np/cat-exams",
+      "status": "live",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-agpcnp-flashcards",
+      "family": "np",
+      "canonicalPath": "/us/np/agpcnp/flashcards",
+      "plannedAliasPath": "/np/flashcards",
+      "status": "live",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-agpcnp-study-guide",
+      "family": "np",
+      "canonicalPath": "/us/np/agpcnp/study-guide",
+      "plannedAliasPath": "/np/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-pmhnp-practice-questions",
+      "family": "np",
+      "canonicalPath": "/us/np/pmhnp/questions",
+      "plannedAliasPath": "/np/practice-questions",
+      "status": "live",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-pmhnp-test-bank",
+      "family": "np",
+      "canonicalPath": "/us/np/pmhnp/test-bank",
+      "plannedAliasPath": "/np/test-bank",
+      "status": "planned",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-pmhnp-cat-exam",
+      "family": "np",
+      "canonicalPath": "/us/np/pmhnp/cat",
+      "plannedAliasPath": "/np/cat-exams",
+      "status": "live",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-pmhnp-flashcards",
+      "family": "np",
+      "canonicalPath": "/us/np/pmhnp/flashcards",
+      "plannedAliasPath": "/np/flashcards",
+      "status": "live",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "us-np-pmhnp-study-guide",
+      "family": "np",
+      "canonicalPath": "/us/np/pmhnp/study-guide",
+      "plannedAliasPath": "/np/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-mlt-practice-questions",
+      "family": "allied",
+      "canonicalPath": "/allied/mlt/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "status": "planned",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-mlt-test-bank",
+      "family": "allied",
+      "canonicalPath": "/allied/mlt/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "status": "planned",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-mlt-cat-exam",
+      "family": "allied",
+      "canonicalPath": "/allied/mlt/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "status": "planned",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-mlt-flashcards",
+      "family": "allied",
+      "canonicalPath": "/allied/mlt/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "status": "planned",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-mlt-study-guide",
+      "family": "allied",
+      "canonicalPath": "/allied/mlt/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-paramedic-practice-questions",
+      "family": "allied",
+      "canonicalPath": "/allied/paramedic/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "status": "planned",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-paramedic-test-bank",
+      "family": "allied",
+      "canonicalPath": "/allied/paramedic/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "status": "planned",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-paramedic-cat-exam",
+      "family": "allied",
+      "canonicalPath": "/allied/paramedic/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "status": "planned",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-paramedic-flashcards",
+      "family": "allied",
+      "canonicalPath": "/allied/paramedic/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "status": "planned",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-paramedic-study-guide",
+      "family": "allied",
+      "canonicalPath": "/allied/paramedic/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-respiratory-practice-questions",
+      "family": "allied",
+      "canonicalPath": "/allied/respiratory/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "status": "planned",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-respiratory-test-bank",
+      "family": "allied",
+      "canonicalPath": "/allied/respiratory/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "status": "planned",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-respiratory-cat-exam",
+      "family": "allied",
+      "canonicalPath": "/allied/respiratory/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "status": "planned",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-respiratory-flashcards",
+      "family": "allied",
+      "canonicalPath": "/allied/respiratory/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "status": "planned",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-respiratory-study-guide",
+      "family": "allied",
+      "canonicalPath": "/allied/respiratory/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-social-work-practice-questions",
+      "family": "allied",
+      "canonicalPath": "/allied/social-work/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "status": "planned",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-social-work-test-bank",
+      "family": "allied",
+      "canonicalPath": "/allied/social-work/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "status": "planned",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-social-work-cat-exam",
+      "family": "allied",
+      "canonicalPath": "/allied/social-work/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "status": "planned",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-social-work-flashcards",
+      "family": "allied",
+      "canonicalPath": "/allied/social-work/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "status": "planned",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-social-work-study-guide",
+      "family": "allied",
+      "canonicalPath": "/allied/social-work/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-occupational-therapy-practice-questions",
+      "family": "allied",
+      "canonicalPath": "/allied/occupational-therapy/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "status": "planned",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-occupational-therapy-test-bank",
+      "family": "allied",
+      "canonicalPath": "/allied/occupational-therapy/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "status": "planned",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-occupational-therapy-cat-exam",
+      "family": "allied",
+      "canonicalPath": "/allied/occupational-therapy/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "status": "planned",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-occupational-therapy-flashcards",
+      "family": "allied",
+      "canonicalPath": "/allied/occupational-therapy/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "status": "planned",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-occupational-therapy-study-guide",
+      "family": "allied",
+      "canonicalPath": "/allied/occupational-therapy/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-physiotherapy-practice-questions",
+      "family": "allied",
+      "canonicalPath": "/allied/physiotherapy/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "status": "planned",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-physiotherapy-test-bank",
+      "family": "allied",
+      "canonicalPath": "/allied/physiotherapy/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "status": "planned",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-physiotherapy-cat-exam",
+      "family": "allied",
+      "canonicalPath": "/allied/physiotherapy/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "status": "planned",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-physiotherapy-flashcards",
+      "family": "allied",
+      "canonicalPath": "/allied/physiotherapy/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "status": "planned",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-physiotherapy-study-guide",
+      "family": "allied",
+      "canonicalPath": "/allied/physiotherapy/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-psychotherapy-practice-questions",
+      "family": "allied",
+      "canonicalPath": "/allied/psychotherapy/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "status": "planned",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-psychotherapy-test-bank",
+      "family": "allied",
+      "canonicalPath": "/allied/psychotherapy/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "status": "planned",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-psychotherapy-cat-exam",
+      "family": "allied",
+      "canonicalPath": "/allied/psychotherapy/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "status": "planned",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-psychotherapy-flashcards",
+      "family": "allied",
+      "canonicalPath": "/allied/psychotherapy/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "status": "planned",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-psychotherapy-study-guide",
+      "family": "allied",
+      "canonicalPath": "/allied/psychotherapy/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-psw-hca-practice-questions",
+      "family": "allied",
+      "canonicalPath": "/allied/psw-hca/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "status": "planned",
+      "title": "Practice Questions With Rationales",
+      "targetQueries": [
+        "practice questions",
+        "exam questions with rationales",
+        "free practice questions"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-psw-hca-test-bank",
+      "family": "allied",
+      "canonicalPath": "/allied/psw-hca/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "status": "planned",
+      "title": "Test Bank and Question Bank",
+      "targetQueries": [
+        "test bank",
+        "question bank",
+        "qbank"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-psw-hca-cat-exam",
+      "family": "allied",
+      "canonicalPath": "/allied/psw-hca/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "status": "planned",
+      "title": "CAT Exam Practice",
+      "targetQueries": [
+        "CAT exam",
+        "adaptive exam",
+        "computer adaptive testing"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-psw-hca-flashcards",
+      "family": "allied",
+      "canonicalPath": "/allied/psw-hca/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "status": "planned",
+      "title": "Flashcards and Spaced Recall",
+      "targetQueries": [
+        "flashcards",
+        "pharmacology flashcards",
+        "clinical judgment flashcards"
+      ]
+    },
+    {
+      "kind": "ecosystem",
+      "id": "allied-psw-hca-study-guide",
+      "family": "allied",
+      "canonicalPath": "/allied/psw-hca/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "status": "planned",
+      "title": "Study Guide",
+      "targetQueries": [
+        "study guide",
+        "exam study plan",
+        "exam prep guide"
+      ]
+    },
+    {
+      "kind": "topic-cluster",
+      "id": "insulin-nursing-questions",
+      "family": "nclex-rn",
+      "canonicalPath": "/seo-cluster/insulin-nursing-questions",
+      "status": "planned",
+      "title": "Insulin safety and diabetes questions",
+      "targetQueries": [
+        "insulin nursing questions",
+        "diabetes nursing questions",
+        "insulin NCLEX questions"
+      ]
+    },
+    {
+      "kind": "topic-cluster",
+      "id": "copd-respiratory-questions",
+      "family": "nclex-rn",
+      "canonicalPath": "/seo-cluster/copd-respiratory-questions",
+      "status": "planned",
+      "title": "COPD and respiratory practice questions",
+      "targetQueries": [
+        "COPD nursing questions",
+        "respiratory therapy ABG questions",
+        "oxygen therapy questions"
+      ]
+    },
+    {
+      "kind": "topic-cluster",
+      "id": "ecg-nursing-questions",
+      "family": "nclex-rn",
+      "canonicalPath": "/ecg/ecg-practice-questions",
+      "status": "live",
+      "title": "ECG interpretation questions",
+      "targetQueries": [
+        "ECG nursing questions",
+        "paramedic ECG interpretation",
+        "telemetry practice questions"
+      ]
+    },
+    {
+      "kind": "topic-cluster",
+      "id": "dosage-calculations",
+      "family": "nclex-rn",
+      "canonicalPath": "/seo-cluster/dosage-calculations",
+      "status": "planned",
+      "title": "Dosage calculation practice",
+      "targetQueries": [
+        "dosage calculations",
+        "med math nursing questions",
+        "dosage calculation practice test"
+      ]
+    },
+    {
+      "kind": "topic-cluster",
+      "id": "prioritization-delegation-sata",
+      "family": "nclex-rn",
+      "canonicalPath": "/seo-cluster/prioritization-delegation-sata",
+      "status": "planned",
+      "title": "Prioritization, delegation, and SATA questions",
+      "targetQueries": [
+        "prioritization nursing questions",
+        "delegation NCLEX questions",
+        "SATA nursing questions"
+      ]
+    },
+    {
+      "kind": "topic-cluster",
+      "id": "np-case-studies-diagnostics",
+      "family": "cnple",
+      "canonicalPath": "/seo-cluster/np-case-studies-diagnostics",
+      "status": "planned",
+      "title": "NP diagnostics, SOAP notes, and prescribing case studies",
+      "targetQueries": [
+        "hypertension case studies NP",
+        "SOAP note examples",
+        "diagnostic interpretation NP",
+        "prescribing safety"
+      ]
+    },
+    {
+      "kind": "topic-cluster",
+      "id": "allied-competency-clusters",
+      "family": "allied",
+      "canonicalPath": "/seo-cluster/allied-competency-clusters",
+      "status": "planned",
+      "title": "Allied profession competency practice",
+      "targetQueries": [
+        "paramedic test bank",
+        "MLT hematology questions",
+        "OT case studies",
+        "psychotherapy ethics scenarios"
+      ]
+    }
+  ],
+  "topicClusters": [
+    {
+      "id": "insulin-nursing-questions",
+      "families": [
+        "nclex-rn",
+        "rex-pn",
+        "np"
+      ],
+      "canonicalTopic": "Insulin safety and diabetes questions",
+      "targetQueries": [
+        "insulin nursing questions",
+        "diabetes nursing questions",
+        "insulin NCLEX questions"
+      ],
+      "pageIntent": "pharmacology",
+      "requiredInternalLinks": [
+        "/us/rn/nclex-rn/questions",
+        "/canada/rpn/rex-pn/questions",
+        "/canada/np/cnple/questions"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "copd-respiratory-questions",
+      "families": [
+        "nclex-rn",
+        "rex-pn",
+        "allied"
+      ],
+      "canonicalTopic": "COPD and respiratory practice questions",
+      "targetQueries": [
+        "COPD nursing questions",
+        "respiratory therapy ABG questions",
+        "oxygen therapy questions"
+      ],
+      "pageIntent": "practice-questions",
+      "requiredInternalLinks": [
+        "/us/rn/nclex-rn/questions",
+        "/canada/rpn/rex-pn/questions",
+        "/allied/respiratory"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ecg-nursing-questions",
+      "families": [
+        "nclex-rn",
+        "np",
+        "allied"
+      ],
+      "canonicalPath": "/ecg/ecg-practice-questions",
+      "canonicalTopic": "ECG interpretation questions",
+      "targetQueries": [
+        "ECG nursing questions",
+        "paramedic ECG interpretation",
+        "telemetry practice questions"
+      ],
+      "pageIntent": "clinical-judgment",
+      "requiredInternalLinks": [
+        "/advanced-ecg-nursing",
+        "/ecg/ecg-practice-questions",
+        "/allied/paramedic"
+      ],
+      "status": "live"
+    },
+    {
+      "id": "dosage-calculations",
+      "families": [
+        "nclex-rn",
+        "rex-pn",
+        "allied"
+      ],
+      "canonicalTopic": "Dosage calculation practice",
+      "targetQueries": [
+        "dosage calculations",
+        "med math nursing questions",
+        "dosage calculation practice test"
+      ],
+      "pageIntent": "pharmacology",
+      "requiredInternalLinks": [
+        "/tools/dosage-calculator",
+        "/us/rn/nclex-rn/questions",
+        "/canada/rpn/rex-pn/questions"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "prioritization-delegation-sata",
+      "families": [
+        "nclex-rn",
+        "rex-pn"
+      ],
+      "canonicalTopic": "Prioritization, delegation, and SATA questions",
+      "targetQueries": [
+        "prioritization nursing questions",
+        "delegation NCLEX questions",
+        "SATA nursing questions"
+      ],
+      "pageIntent": "prioritization",
+      "requiredInternalLinks": [
+        "/nclex-next-gen-question-types",
+        "/us/rn/nclex-rn/questions",
+        "/canada/rpn/rex-pn/questions"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "np-case-studies-diagnostics",
+      "families": [
+        "cnple",
+        "np"
+      ],
+      "canonicalTopic": "NP diagnostics, SOAP notes, and prescribing case studies",
+      "targetQueries": [
+        "hypertension case studies NP",
+        "SOAP note examples",
+        "diagnostic interpretation NP",
+        "prescribing safety"
+      ],
+      "pageIntent": "case-studies",
+      "requiredInternalLinks": [
+        "/canada/np/cnple/case-based-questions",
+        "/canada/np/cnple/questions",
+        "/np-exam-prep"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "allied-competency-clusters",
+      "families": [
+        "allied"
+      ],
+      "canonicalTopic": "Allied profession competency practice",
+      "targetQueries": [
+        "paramedic test bank",
+        "MLT hematology questions",
+        "OT case studies",
+        "psychotherapy ethics scenarios"
+      ],
+      "pageIntent": "practice-questions",
+      "requiredInternalLinks": [
+        "/allied/paramedic",
+        "/allied/mlt",
+        "/allied/occupational-therapy",
+        "/allied/psychotherapy"
+      ],
+      "status": "planned"
+    }
+  ]
+}

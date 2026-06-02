@@ -1,0 +1,348 @@
+{
+  "version": 1,
+  "packageId": "maternal-newborn-pkg-09",
+  "label": "High-Risk Pregnancy Conditions — Lessons, Questions, Flashcards & Scenarios",
+  "generatedDate": "2026-06-02",
+  "targetExams": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","PNP-PC","FNP"],
+  "domain": "Maternal Newborn",
+  "subdomain": "High-Risk Pregnancy Conditions",
+  "lessons": [
+    {
+      "lessonId": "mn-pkg09-L01",
+      "topicSlug": "hyperemesis-gravidarum",
+      "title": "Hyperemesis Gravidarum: Assessment & Management",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Diagnostic Criteria",
+          "kind": "introduction",
+          "body": "**Hyperemesis gravidarum (HG):** Severe, persistent nausea and vomiting in pregnancy that causes dehydration, electrolyte imbalance, and weight loss of >5% of pre-pregnancy body weight. Affects 0.5–2% of pregnancies. Peak incidence: 8–12 weeks (correlates with hCG peak). Leading cause of hospitalization in 1st trimester. NOT the same as normal morning sickness (NVP).\n\n**Diagnostic criteria:**\n- Persistent vomiting with inability to maintain oral hydration\n- Weight loss >5% of pre-pregnancy weight\n- Dehydration with ketonuria\n- Electrolyte abnormalities\n- Requires medical intervention"
+        },
+        {
+          "id": "pathophysiology",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Mechanisms:**\n- hCG stimulation of chemoreceptor trigger zone (CTZ) — peak hCG = peak symptoms\n- Progesterone-induced GI smooth muscle relaxation → gastric dysmotility\n- Psychological and genetic factors\n- Helicobacter pylori association: H. pylori infection higher in HG patients\n- Gestational thyrotoxicosis: hCG cross-reacts with TSH receptor → elevated free T4, suppressed TSH (gestational transient thyrotoxicosis — transient, treatment with antithyroid drugs NOT indicated)\n\n**Conditions associated with elevated hCG and worse HG:**\n- Multiple gestation (higher hCG)\n- Molar pregnancy (extremely high hCG)\n- Trisomy 21 (elevated hCG)\n\n**Electrolyte abnormalities:**\n- Hyponatremia, hypokalemia (from vomiting)\n- Hypochloremia, metabolic alkalosis (from HCl loss)\n- Hypomagnesemia\n- Thiamine (B1) deficiency: severe/prolonged HG → Wernicke's encephalopathy (confusion, ataxia, ophthalmoplegia) — MUST supplement thiamine before glucose (giving glucose without thiamine can precipitate Wernicke's)\n\n**Maternal complications:**\n- Severe dehydration, hypovolemia\n- Mallory-Weiss tears (esophageal tears from forceful vomiting)\n- Wernicke's encephalopathy (thiamine deficiency)\n- Central pontine myelinolysis (from too-rapid correction of hyponatremia)\n\n**Fetal/neonatal outcomes:** Generally good with treatment; severe untreated HG → fetal growth restriction"
+        },
+        {
+          "id": "management",
+          "heading": "Treatment Algorithm",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Step 1: Non-pharmacological (mild NVP):**\n- Small frequent meals; avoid triggers (fatty, spicy food, strong odors)\n- Ginger (ginger chews, tea, capsules) — evidence-supported\n- Acupressure wristbands (P6 point)\n- Vitamin B6 (pyridoxine) 10–25 mg TID — reduces nausea\n\n**Step 2: Pharmacological outpatient:**\n- Doxylamine-B6 (Diclegis/Bonjesta) — FDA-approved, safe and effective\n- Antihistamines: promethazine, diphenhydramine (Benadryl)\n- Ondansetron (Zofran): commonly used; generally considered safe; use as second-line (some association with cleft palate — counsel risk/benefit)\n\n**Step 3: Inpatient IV management:**\n- NPO initially → IV fluids (D5LR or D5NS + electrolytes)\n- THIAMINE 100 mg IV BEFORE glucose (prevents Wernicke's) — critical\n- Correct electrolytes: potassium, magnesium, sodium (correct sodium slowly if <125 mmol/L to prevent CPM — max 8 mEq/L/day)\n- IV antiemetics: ondansetron 4–8 mg IV, promethazine 12.5–25 mg IV/IM, metoclopramide 10 mg IV\n- Corticosteroids (methylprednisolone 16 mg TID × 3 days → taper): for refractory HG; reserve for severe cases\n- Nutritional support: advance diet as tolerated; nasogastric tube feeding or TPN if severe\n\n**Nursing assessments:**\n- Daily weight (mark on hospital scale), I&O, urine specific gravity (hydration marker)\n- Frequency and character of emesis\n- Neurological assessment (thiamine deficiency signs)\n- Fetal wellbeing (FHTs)\n- Psychological support: HG is debilitating, often misunderstood, associated with anxiety and depression"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- HG: persistent vomiting + >5% weight loss + ketonuria + dehydration (not NVP)\n- Cause: hCG peak + progesterone GI relaxation + genetic predisposition\n- Worst with multiples and molar pregnancy (high hCG)\n- Thiamine (B1) BEFORE glucose (IV) — prevents Wernicke's encephalopathy\n- Correct hyponatremia SLOWLY (max 8 mEq/L/day) — CPM risk with rapid correction\n- Treatment escalation: B6 + ginger → doxylamine-B6 → IV fluids + IV antiemetics → corticosteroids"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg09-L02",
+      "topicSlug": "ectopic-pregnancy-high-risk",
+      "title": "Ectopic Pregnancy: High-Risk Presentation & Priorities",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Clinical Priorities",
+          "kind": "introduction",
+          "body": "**Ectopic pregnancy** (covered in depth in Package 1) — highlighted here for clinical judgment in the high-risk context. Leading cause of first-trimester maternal mortality. Every sexually active woman of reproductive age with pelvic pain + vaginal bleeding + amenorrhea must have ectopic pregnancy excluded. The window between stable and catastrophic is narrow."
+        },
+        {
+          "id": "risk_stratification",
+          "heading": "Risk Stratification & Clinical Decision-Making",
+          "kind": "nursing_assessment_interventions",
+          "body": "**High-risk clinical indicators (admit/prepare for emergency surgery):**\n- Hemodynamic instability (BP <90 systolic, HR >100)\n- Kehr's sign (shoulder pain)\n- Syncope or near-syncope\n- Peritoneal signs (guarding, rigidity, rebound tenderness)\n- Free fluid on ultrasound (hemoperitoneum)\n- β-hCG above discriminatory zone without IUP on TVUS\n\n**Hemodynamically stable (medical management candidate):**\n- β-hCG <5,000 mIU/mL\n- Ectopic mass <3.5 cm\n- No fetal cardiac activity on ultrasound\n- No rupture signs\n- β-hCG trending down (may self-resolve) or rising slowly\n\n**Nursing priority actions for suspected ruptured ectopic:**\n1. 2 large-bore IVs\n2. Normal saline 1–2L bolus\n3. Type and crossmatch × 2–4 units\n4. Foley catheter\n5. NPO — operating room preparation\n6. O-negative blood if crossmatch not ready\n7. Continuous vital signs monitoring\n8. RhoGAM if Rh-negative\n9. Emotional support — acknowledge pregnancy loss\n\n**Methotrexate eligibility criteria (full criteria):**\n- Hemodynamically stable\n- No rupture or peritoneal bleeding\n- Unruptured ectopic\n- β-hCG <5,000 mIU/mL (relative — some centers use <10,000)\n- No fetal cardiac activity\n- Mass ≤3.5 cm (relative)\n- Patient able to comply with follow-up\n- No contraindications (renal disease, hepatic disease, active peptic ulcer, immunodeficiency, breastfeeding, blood dyscrasia)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Ectopic emergencies: hemodynamic instability + Kehr's sign + peritoneal signs + free fluid = ruptured ectopic\n- Emergency: 2 large-bore IVs + aggressive resuscitation + emergency salpingectomy\n- Methotrexate: stable + unruptured + β-hCG <5,000 + no cardiac activity\n- Teach post-methotrexate: no folic acid, NSAIDs, alcohol, sun, sex; no pregnancy 3 months; serial β-hCG days 4 and 7\n- RhoGAM: ALWAYS in Rh-negative women with ectopic"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg09-L03",
+      "topicSlug": "gestational-diabetes",
+      "title": "Gestational Diabetes: Screening, Management & Neonatal Implications",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Gestational diabetes mellitus (GDM):** Carbohydrate intolerance first diagnosed during pregnancy. Affects 6–9% of pregnancies. Caused by progressive insulin resistance driven by human placental lactogen (HPL) and other counter-regulatory hormones of pregnancy. Usually diagnosed at 24–28 weeks screening."
+        },
+        {
+          "id": "screening",
+          "heading": "Screening & Diagnosis",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Standard 2-step approach (ACOG):**\n\n**Step 1: 1-hour 50g OGTT (Glucose Challenge Test, GCT):**\n- Performed at 24–28 weeks; no fasting required\n- Threshold: ≥140 mg/dL (some centers: ≥130 mg/dL) → proceed to 3-hour test\n- Sensitivity at 140 threshold: ~80%; at 130: ~90%\n\n**Step 2: 3-hour 100g OGTT (Oral Glucose Tolerance Test):**\n- Requires 3-day carbohydrate loading diet + overnight fast\n- ACOG diagnostic thresholds (Carpenter-Coustan criteria):\n  * Fasting: ≥95 mg/dL\n  * 1-hour: ≥180 mg/dL\n  * 2-hour: ≥155 mg/dL\n  * 3-hour: ≥140 mg/dL\n- GDM diagnosed: ≥2 of 4 values meet or exceed thresholds\n- 1 abnormal value: possible GDM ('impaired glucose tolerance') — monitor closely\n\n**High-risk: screen in 1st trimester:**\n- BMI ≥35, prior GDM, prior LGA infant, PCOS, first-degree relative with T2DM\n\n**Alternative: 1-step 75g OGTT (WHO/International criteria):**\n- Fasting: ≥92, 1-hour: ≥180, 2-hour: ≥153 (any ONE value = GDM)\n\n**Postpartum:** 2-hour 75g OGTT at 4–12 weeks postpartum (50% of GDM women develop T2DM within 5–10 years)"
+        },
+        {
+          "id": "management",
+          "heading": "GDM Management",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Glucose targets in pregnancy:**\n- Fasting: <95 mg/dL (or <90 mg/dL per some guidelines)\n- 1-hour postprandial: <140 mg/dL\n- 2-hour postprandial: <120 mg/dL\n\n**Step 1: Medical nutrition therapy (MNT) + exercise:**\n- 70–80% of GDM controlled with diet alone\n- Carbohydrate distribution: 3 meals + 2–3 snacks; 175g carb minimum per day (fetal requirements)\n- Avoid: simple sugars, refined carbs; emphasize complex carbs + protein + fat\n- Exercise: 30 min moderate after meals → improves insulin sensitivity\n\n**Step 2: Insulin therapy (preferred pharmacological agent):**\n- Used when glucose targets not met with MNT for 1–2 weeks\n- Insulin does NOT cross the placenta (unlike oral agents)\n- Starting doses: NPH ± regular insulin based on glucose pattern\n\n**Step 3: Oral agents (selected circumstances):**\n- Metformin: widely used outside US; crosses placenta; long-term neonatal effects under investigation\n- Glyburide: crosses placenta; higher neonatal hypoglycemia risk; less preferred than insulin\n\n**Fetal surveillance:**\n- Ultrasound: AC growth, EFW (macrosomia risk), AFI (polyhydramnios from fetal glycosuria)\n- NST/BPP: weekly from 32–34 weeks\n- Fetal echocardiogram if poorly controlled\n\n**Delivery planning:**\n- Diet-controlled GDM: deliver at 39–40 weeks\n- Insulin-requiring GDM: deliver at 39 weeks (some 38–39 weeks if macrosomia)\n- EFW >4,500 g: C-section consideration (shoulder dystocia risk)\n\n**Neonatal complications:**\n- Macrosomia (LGA): shoulder dystocia, birth trauma\n- Neonatal hypoglycemia: fetal hyperinsulinism from maternal hyperglycemia; check glucose q1h × 4h after birth\n- Polycythemia (hyperviscosity)\n- Hyperbilirubinemia\n- RDS: GDM delays lung maturity (lecithin:sphingomyelin ratio may be falsely elevated — PG is more reliable marker)\n- Cardiomyopathy (hypertrophic): from fetal hyperinsulinism"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- GDM: insulin resistance from HPL + cortisol. Screen at 24–28 weeks with 1-hr 50g GCT\n- 1-hr GCT ≥140 → 3-hr 100g OGTT → ≥2 abnormal values = GDM\n- Treatment: MNT first → insulin preferred (doesn't cross placenta); glyburide and metformin if insulin fails\n- Glucose targets: fasting <95; 1-hr postprandial <140; 2-hr <120\n- Neonatal complications: macrosomia, hypoglycemia (check q1h), polycythemia, hyperbili, cardiomyopathy\n- Postpartum: 75g OGTT at 4–12 weeks (50% develop T2DM within 5–10 years)"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg09-L04",
+      "topicSlug": "cardiac-disease-pregnancy",
+      "title": "Cardiac Disease in Pregnancy",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "Cardiac disease complicates 1–4% of pregnancies. Leading cause of maternal mortality in developed countries (non-obstetric). The cardiovascular demands of pregnancy (↑CO 30–50%, ↑HR, ↑blood volume) are profoundly stressful to diseased hearts."
+        },
+        {
+          "id": "classification",
+          "heading": "Risk Classification (WHO Modified)",
+          "kind": "pathophysiology_overview",
+          "body": "**WHO Modified Cardiac Risk in Pregnancy Classification:**\n- **Class I (WHO I):** No detectable risk; mild PS, repaired ASD/VSD, ectopic beats\n- **Class II (WHO II):** Small increased risk; unoperated ASD/VSD, repaired Fallot, most arrhythmias\n- **Class III (WHO III):** Significantly increased risk; moderate LV impairment, mechanical valve, Marfan syndrome without aortic dilation, moderate mitral stenosis\n- **Class IV (WHO IV):** Contraindicated for pregnancy; Eisenmenger syndrome, pulmonary arterial hypertension, severe LV impairment (EF <30%), NYHA class III–IV, severe aortic stenosis, Marfan aortic root >4.5 cm\n\n**High-risk cardiac lesions for pregnancy:**\n1. **Mitral stenosis:** Increased blood volume → elevated LA pressure → pulmonary edema, maternal death; most common rheumatic heart disease in pregnancy\n2. **Aortic stenosis:** Cannot increase CO against fixed obstruction → syncope, angina, heart failure\n3. **Eisenmenger syndrome:** Fixed pulmonary hypertension; pregnancy causes 30–50% maternal mortality\n4. **Peripartum cardiomyopathy (PPCM):** Occurs in last month of pregnancy to 5 months postpartum; LV dysfunction; treat with standard HF therapy (diuretics, beta-blockers, ACEi AFTER delivery; bromocriptine)\n\n**Nursing priorities in cardiac pregnancy:**\n- Multidisciplinary team: cardiology, MFM, anesthesia, neonatology\n- Monthly cardiac monitoring\n- Activity restrictions as indicated\n- Anticoagulation for mechanical valves (LMWH or warfarin — complex decision)\n- Fluid management: avoid volume overload OR dehydration\n- Delivery: vaginal preferred if possible (lower fluid shifts); epidural beneficial (reduces pain-induced SVR elevation)\n- Postpartum: highest risk period (fluid mobilization → autotransfusion after delivery) — monitor closely"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Cardiac disease = leading non-obstetric cause of maternal mortality in developed countries\n- Eisenmenger/PAH: 30–50% maternal mortality → advise against pregnancy (WHO IV)\n- Mitral stenosis: most common rheumatic disease in pregnancy; fixed obstruction → pulmonary edema\n- PPCM: last month pregnancy to 5 months postpartum; LV dysfunction; ACEi safe AFTER delivery\n- Postpartum: autotransfusion after placental delivery = fluid challenge → can precipitate pulmonary edema\n- Vaginal delivery preferred: lower hemodynamic fluctuation than C-section"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg09-L05",
+      "topicSlug": "pyelonephritis-pregnancy",
+      "title": "Pyelonephritis in Pregnancy",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Pathophysiology",
+          "kind": "introduction",
+          "body": "Pyelonephritis is the most common serious medical complication of pregnancy, occurring in 1–2% of pregnancies. Physiological ureteral dilation + urinary stasis (from progesterone-induced ureteral relaxation + uterine compression, right > left) predisposes to ascending UTI. Untreated asymptomatic bacteriuria (ASB) progresses to pyelonephritis in 30–40% of pregnant women — hence the universal ASB screening at first prenatal visit."
+        },
+        {
+          "id": "clinical",
+          "heading": "Clinical Features & Management",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Risk factors:**\n- Prior UTI or ASB in current pregnancy\n- Vesicoureteral reflux\n- Ureteral dilation of pregnancy (physiological hydronephrosis)\n- Diabetes, sickle cell disease, urinary tract abnormalities\n\n**Clinical presentation:**\n- Fever (often high: 38.5–40°C), chills, rigors\n- Costovertebral angle (CVA) tenderness — classic sign (right side more common)\n- Dysuria, frequency, urgency (cystitis symptoms may be absent in up to 40%)\n- Nausea and vomiting (malaise)\n- Uterine contractions (pyelonephritis is a significant cause of preterm labor)\n\n**Diagnosis:**\n- Urine culture (clean-catch midstream or catheter): most important — guides therapy\n- Urinalysis: pyuria, bacteriuria, positive leukocyte esterase/nitrites (E. coli most common organism)\n- Blood cultures if septic (hemodynamically unstable)\n- Renal ultrasound if obstructive urolithiasis suspected\n\n**Management:**\n- **Hospitalization required in pregnancy** (pyelonephritis in pregnancy can cause adult respiratory distress syndrome, preterm labor, septic shock)\n- IV antibiotics: ceftriaxone 1–2g IV daily (first-line); or gentamicin (caution — ototoxicity/nephrotoxicity; monitor levels) + ampicillin for enterococcal coverage\n- IV fluids to maintain adequate hydration + urine output ≥30 mL/hr\n- Antipyretics: acetaminophen (not NSAIDs — avoid NSAIDs in 2nd/3rd trimester)\n- Fetal monitoring: continuous if contracting or febrile; contractions may resolve with treatment\n- Clinical response expected in 24–48 hours; if no improvement → suspect abscess, resistant organism, or ureteral obstruction\n- Transition to oral antibiotics when afebrile ×24–48h and tolerating PO\n- Suppressive antibiotic therapy for remainder of pregnancy (nitrofurantoin or cephalexin nightly) after treatment to prevent recurrence"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Pyelonephritis: most common serious medical complication of pregnancy\n- Prevent by treating ASB (universal screening + treatment at first prenatal visit)\n- Presentation: fever + CVA tenderness + dysuria; can cause preterm labor\n- Management: hospitalization, IV antibiotics (ceftriaxone), IV fluids, fetal monitoring\n- NSAIDs contraindicated in 2nd/3rd trimester (renal effects + premature DA closure)\n- Suppressive antibiotics for remainder of pregnancy after treatment"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg09-L06",
+      "topicSlug": "chorioamnionitis",
+      "title": "Chorioamnionitis: Diagnosis, Management & Delivery",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Diagnosis",
+          "kind": "introduction",
+          "body": "**Chorioamnionitis (intraamniotic infection):** Infection of the amniotic fluid, membranes, placenta, and/or decidua. Complicates 1–4% of term pregnancies, up to 25% of preterm deliveries. Leading cause of preterm labor and early neonatal sepsis."
+        },
+        {
+          "id": "clinical",
+          "heading": "Clinical Features & Management",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Diagnosis (clinical — ACOG 2017 criteria):**\n- **Maternal fever ≥38°C (100.4°F) PLUS any one of:**\n  - Maternal tachycardia >100 bpm\n  - Fetal tachycardia >160 bpm for >10 min baseline\n  - Uterine fundal tenderness\n  - Purulent or foul-smelling amniotic fluid\n  - Maternal leukocytosis >15,000/mm³ (in absence of medications that elevate WBC)\n- Note: WBC alone is NOT sufficient for diagnosis\n- Amniotic fluid analysis (if amniocentesis): glucose <15 mg/dL, positive Gram stain, WBC >30, positive culture (takes 48–72h)\n\n**Risk factors:**\n- Prolonged ROM (SROM ≥18 hours)\n- Prolonged labor (especially active phase)\n- Multiple vaginal examinations\n- Low socioeconomic status, poor nutrition\n- Group B Streptococcus colonization (untreated)\n- Bacterial vaginosis\n- Meconium-stained amniotic fluid\n- Pre-existing vaginal infection\n\n**Management:**\n- **DELIVER regardless of gestational age** — infection source must be removed\n- IV antibiotics immediately: ampicillin 2g IV every 6 hours PLUS gentamicin 1.5 mg/kg IV every 8 hours (or 5 mg/kg once daily)\n  - If C-section: add clindamycin 900 mg IV to cover anaerobes\n- Continue antibiotics intrapartum and at least one postpartum dose\n- Antipyretics (acetaminophen) for maternal fever (maternal hyperthermia = fetal tachycardia)\n- Cooling measures for maternal fever reduction\n- Fetal monitoring: tachycardia may improve with treatment; fetal compromise from acidosis can occur\n- Neonatal team: alert NICU for delivery of chorioamnionitis-exposed neonate (sepsis workup likely)\n\n**Maternal complications:**\n- PPH (uterine atony from infected, poorly contracting uterus)\n- Sepsis, septic shock\n- Wound infection (C-section)\n\n**Neonatal complications:**\n- Early-onset neonatal sepsis\n- Pneumonia\n- Meningitis\n- Cerebral palsy (association with chorioamnionitis in preterm infants)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Chorioamnionitis diagnosis: fever ≥38°C + any one of: tachycardia (maternal/fetal), fundal tenderness, purulent fluid, leukocytosis\n- Deliver regardless of GA — remove the infection source\n- IV antibiotics: ampicillin + gentamicin. Add clindamycin if C-section\n- Maternal fever → fetal tachycardia (treat fever with antipyretics)\n- Risk factors: prolonged ROM ≥18h, multiple vaginal exams, GBS untreated\n- Neonatal: early-onset sepsis risk → NICU alert"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg09-L07",
+      "topicSlug": "hydatidiform-mole",
+      "title": "Hydatidiform Mole: Gestational Trophoblastic Disease",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Classification",
+          "kind": "introduction",
+          "body": "**Hydatidiform mole (molar pregnancy):** Abnormal proliferation of trophoblastic tissue; no viable embryo. Classified as gestational trophoblastic disease (GTD). Two types:\n\n**Complete mole:**\n- Karyotype: 46,XX (most common) or 46,XY — entirely paternal chromosomes\n- Empty ovum fertilized by two sperm (or one sperm that duplicates)\n- No fetal development; entirely molar tissue\n- β-hCG extremely elevated (often >100,000 mIU/mL)\n- Classic 'snowstorm pattern' on ultrasound\n\n**Partial mole:**\n- Karyotype: 69,XXX or 69,XXY — triploidy (one maternal + two paternal sets)\n- Normal egg + two sperm\n- Some fetal tissue may be present (abnormal, non-viable)\n- β-hCG less dramatically elevated"
+        },
+        {
+          "id": "clinical",
+          "heading": "Clinical Features & Management",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Clinical presentation:**\n- Vaginal bleeding (most common — 'prune juice'-colored)\n- Uterus LARGER than dates (but no viable fetus)\n- Hyperemesis gravidarum (markedly elevated hCG stimulates CTZ)\n- Early preeclampsia (<20 weeks — classic: preeclampsia before 20 weeks = think mole)\n- Theca lutein cysts (bilateral, from hCG hyperstimulation)\n- No fetal heart tones\n- β-hCG markedly elevated (often >100,000 in complete mole)\n\n**Ultrasound:**\n- Complete mole: 'snowstorm' appearance — heterogeneous echogenic mass filling uterus without fetus\n- Bilateral enlarged theca lutein cysts\n\n**Management:**\n1. Suction curettage (uterine evacuation) — NOT sharp curettage (risk of Asherman's)\n2. Oxytocin during evacuation to prevent hemorrhage\n3. Rh status → RhoGAM if Rh-negative\n4. Tissue: send to pathology to confirm diagnosis\n5. Post-evacuation: weekly β-hCG until undetectable (3 consecutive negatives)\n6. Reliable contraception for 6–12 months after complete mole (oral contraceptives safe)\n7. Avoid pregnancy for 6–12 months (pregnancy elevates hCG, masking GTD recurrence)\n\n**Malignant transformation (gestational trophoblastic neoplasia/GTN):**\n- Complete mole: 15–20% develop GTN (invasive mole, choriocarcinoma)\n- Partial mole: ~5% risk\n- Indicators: plateau or rise in β-hCG after evacuation\n- Treatment: single-agent methotrexate for low-risk GTN; multi-agent chemotherapy for high-risk/choriocarcinoma\n- Cure rate: >90% even with metastatic choriocarcinoma"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Complete mole: 46,XX (all paternal), snowstorm US, no FHTs, extremely high hCG, can → choriocarcinoma (15–20%)\n- Partial mole: 69,XXX triploidy, some fetal tissue, lower hCG, 5% GTN risk\n- Classic presentation: bleeding + uterus large for dates + preeclampsia <20 weeks + very high hCG\n- Management: suction curettage + serial weekly β-hCG until negative × 3\n- No pregnancy for 6–12 months; reliable contraception\n- Plateau or rise in β-hCG after evacuation = GTN → chemotherapy"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg09-L08",
+      "topicSlug": "incompetent-cervix-prevention",
+      "title": "Incompetent Cervix: Cerclage & Progesterone Therapy",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Prevention",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Cervical insufficiency (incompetent cervix):** Painless cervical dilation and effacement in the 2nd trimester without contractions, leading to pregnancy loss or extreme preterm birth. Caused by structural weakness of the cervix from prior trauma (LEEP, conization, cervical laceration) or congenital abnormality.\n\n**Cerclage (reviewed from Package 1):** Purse-string suture placed around cervix. Types:\n- History-indicated cerclage: placed electively at 12–14 weeks in women with 2+ prior 2nd trimester losses\n- Ultrasound-indicated: short cervix (<25 mm) found at 16–24 weeks without contractions, singleton with prior PTB\n- Emergency (rescue): cervix dilated ≥2 cm with bulging membranes; highest risk/complication rate\n\n**Progesterone supplementation (standalone prevention):**\n- Vaginal progesterone (Prometrium 200 mg nightly or Prochieve 8% gel): reduces preterm birth in women with short cervix (<25 mm) WITHOUT prior preterm birth history; NOT combined with cerclage (combination = worse outcomes)\n- 17-OHPC (17-alpha hydroxyprogesterone caproate, Makena): previously used for singleton with prior PTB; subsequent evidence showed lack of benefit; removed from market 2023\n\n**Cervical length surveillance:**\n- 16–24 weeks: serial transvaginal cervical length measurement in high-risk women\n- <25 mm = short cervix = consider intervention\n- Funneling (beaking of membranes into cervical canal) = sign of incompetence\n\n**Nursing post-cerclage care:**\n- Pelvic rest\n- Activity restrictions\n- Report: contractions, PPROM, fever, discharge\n- Cerclage removal: 36–37 weeks (or earlier if PPROM or preterm labor)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Cervical insufficiency: painless 2nd trimester dilation → cerclage at 12–14 weeks (history-indicated) or 16–24 weeks (US-indicated)\n- Cervical length <25 mm + no prior PTB: vaginal progesterone (not cerclage)\n- Short cervix + prior PTB: cerclage (progesterone does NOT improve outcomes when combined with cerclage)\n- PPROM with cerclage: remove cerclage (infection risk)\n- 17-OHPC (Makena): removed from market (lack of benefit demonstrated)"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg09-L09",
+      "topicSlug": "chronic-diabetes-pregnancy",
+      "title": "Chronic Diabetes in Pregnancy: Preconception & Antepartum",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Preconception Counseling",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Pre-existing type 1 or type 2 diabetes in pregnancy** carries substantially higher risks than GDM due to existing microvascular disease, longer duration of hyperglycemia, and potentially poor glycemic control at conception.\n\n**Preconception counseling (critical):**\n- Optimize glycemic control BEFORE pregnancy: target HgbA1c <6.5% ideally (<7%); HgbA1c >10% = very high malformation risk\n- Adjust medications: discontinue ACE inhibitors/ARBs (teratogenic in pregnancy), statins (teratogenic), SGLT2 inhibitors\n- Start high-dose folic acid (5 mg/day) preconception\n- Ophthalmology exam: retinopathy may worsen in pregnancy\n- Nephrology: baseline renal function (creatinine, 24h urine protein)\n- Cardiology: evaluate for silent CAD\n\n**Congenital malformation risk (from hyperglycemia at conception):**\n- HgbA1c 6–7%: malformation risk ~2% (near population rate)\n- HgbA1c 8–9%: ~5%\n- HgbA1c 10%: ~10%\n- HgbA1c >10%: ~25–30%\n- Most common malformations: cardiac (VSD, TGA, CoA), neural tube defects (sacral agenesis — specific to diabetes), renal/ureteral anomalies\n\n**Management in pregnancy:**\n- Insulin (T1DM: multiple daily injections or CSII pump; T2DM: intensify insulin or transition from oral agents)\n- Glucose monitoring: 4–8× daily; CGM (continuous glucose monitoring) beneficial\n- Insulin resistance increases dramatically in 2nd/3rd trimester from HPL\n- Hypoglycemia risk in 1st trimester (increased insulin sensitivity from hCG)\n- A1c target in pregnancy: <6–6.5% (balancing control vs hypoglycemia)\n- Delivery: 37–39 weeks based on degree of control and complications\n\n**Nursing education:**\n- Hypoglycemia management: 15-15 rule; glucagon kit at home\n- Sick day rules: continue insulin even if not eating\n- Importance of fetal kick counts (higher stillbirth risk)\n- Signs of hypoglycemia may be altered in pregnancy (counterregulatory response blunted)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Pre-existing DM: preconception A1c <6.5–7% reduces malformation risk\n- A1c >10% = 25–30% malformation risk (cardiac, NTD, sacral agenesis)\n- Discontinue before pregnancy: ACE/ARBs, statins, SGLT2 inhibitors\n- 5 mg folic acid preconception\n- Insulin: T1DM = pump/MDI; T2DM = intensify. Oral agents generally avoided\n- Hypoglycemia risk 1st trimester (↑insulin sensitivity); hyperglycemia risk 2nd/3rd (↑HPL resistance)"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg09-L10",
+      "topicSlug": "obesity-high-risk-pregnancy",
+      "title": "Obesity as a High-Risk Pregnancy Condition",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Clinical Management",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Obesity (BMI ≥30) in pregnancy** compounds every obstetric risk. This lesson focuses on the specific clinical management priorities.\n\n**Antenatal management:**\n- High-dose folic acid (5 mg/day)\n- Early GDM screening (first trimester in BMI ≥40)\n- Sleep study for OSA (treat with CPAP)\n- Thromboprophylaxis: LMWH for BMI ≥40 + additional VTE risk factors\n- Ultrasound: limited image quality — may need serial scans for growth and anatomy\n- Dietary counseling: IOM weight gain 11–20 lbs; referral to registered dietitian\n- Anesthesia consultation at 34–36 weeks (early epidural placement recommended; difficult intubation risk)\n\n**Intrapartum management:**\n- Early epidural strongly recommended (difficult emergency airway)\n- Continuous FHR monitoring (external monitoring difficult — consider internal IUPC/FSE)\n- Sequential compression devices (DVT prevention — all obese laboring women)\n- Shoulder dystocia preparation (higher LGA/macrosomia rate)\n- Increased C-section wound infection risk: prophylactic antibiotics, wound care protocols\n\n**Postpartum:**\n- VTE: early ambulation, compression devices, LMWH (especially post-C-section)\n- Breastfeeding: more challenging but strongly encouraged; may have delayed milk production\n- Wound care: C-section incision dehiscence and infection higher\n- Mood disorders: higher postpartum depression rate; screen with Edinburgh scale"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- BMI ≥30: comprehensive high-risk management including early anesthesia consultation\n- Early epidural recommended (difficult emergency airway in obesity)\n- Internal monitoring often needed (external difficult with adiposity)\n- DVT prevention: sequential compression devices + LMWH in high-risk obese patients\n- Wound infection risk: chlorhexidine-alcohol prep, prophylactic antibiotics before incision\n- 5 mg folic acid; early GDM screen; OSA treatment; dietitian referral"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "mn-p09-001",
+      "topicSlug": "hyperemesis-gravidarum",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "hyperemesis-thiamine-before-glucose-Wernickes",
+      "stem": "A client at 12 weeks with hyperemesis gravidarum is admitted with severe dehydration, confusion, and ataxia. She has not eaten in 10 days and has had no IV fluids. The provider orders D5W IV and antiemetics. What is the nurse's priority action BEFORE administering D5W?",
+      "options": {"A": "Administer ondansetron IV to stop vomiting first","B": "Obtain a blood glucose level to confirm hypoglycemia before giving glucose","C": "Administer thiamine 100 mg IV before any glucose-containing fluids to prevent Wernicke's encephalopathy","D": "Obtain a urine culture before starting any IV medications"},
+      "correctAnswer": "C",
+      "rationale": "This client has neurological signs (confusion, ataxia) with prolonged poor intake — the classic presentation of Wernicke's encephalopathy from thiamine (B1) deficiency. Administering glucose WITHOUT thiamine first can precipitate or worsen Wernicke's encephalopathy, because glucose metabolism requires thiamine (as a cofactor for pyruvate dehydrogenase). Wernicke's manifests as the triad: confusion, ataxia, and ophthalmoplegia. Thiamine 100 mg IV must be given BEFORE any glucose-containing fluids.",
+      "incorrectRationales": {"A": "Antiemetics are appropriate but not before the thiamine issue is addressed. Wernicke's encephalopathy can cause permanent neurological damage and death.", "B": "Blood glucose is important to check but does not change the priority — thiamine must be given before glucose regardless of the glucose level.", "D": "Urine culture has no time-critical relationship to the acute neurological emergency."},
+      "hint": "Confusion + ataxia + prolonged starvation = Wernicke's risk. Thiamine BEFORE any glucose IV.",
+      "clinicalPearl": "Wernicke's triad: Confusion + Ataxia + Ophthalmoplegia (eye movement abnormalities). HG lasting >3 weeks without thiamine supplementation carries significant Wernicke's risk. Thiamine should be given prophylactically to all admitted HG patients receiving IV fluids containing dextrose.",
+      "examStrategy": "Any scenario with prolonged vomiting/malnutrition + glucose infusion ordered: stop and give thiamine FIRST. This is a patient safety 'never event' — giving glucose before thiamine in thiamine-deficient patients.",
+      "keyTakeaway": "Hyperemesis + prolonged starvation + confusion/ataxia = Wernicke's risk → thiamine 100 mg IV BEFORE any glucose-containing IV fluids."
+    },
+    {
+      "questionId": "mn-p09-002",
+      "topicSlug": "gestational-diabetes",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "GDM-neonatal-hypoglycemia-monitoring",
+      "stem": "A client with gestational diabetes delivers a 4,100g infant at 38 weeks. Two hours after birth, the nurse obtains a heel-stick glucose: 34 mg/dL. The infant appears jittery. What is the priority nursing action?",
+      "options": {"A": "Recheck the glucose in 4 hours — glucose levels stabilize naturally after birth","B": "Initiate early breastfeeding or supplemental formula feeding and recheck glucose in 30–60 minutes","C": "Administer IV dextrose 50% immediately regardless of the clinical presentation","D": "Transfer the infant to the NICU for IV glucose regardless of whether feeding is attempted first"},
+      "correctAnswer": "B",
+      "rationale": "Neonatal hypoglycemia (glucose <45 mg/dL in symptomatic newborn, or <40 in asymptomatic per most protocols) in a GDM macrosomic infant is caused by fetal hyperinsulinism (chronic maternal hyperglycemia → fetal hyperinsulinism → persists after birth without maternal glucose supply). Symptomatic but glucose is 34 mg/dL: first-line treatment is early feeding (breast or formula). Colostrum or formula provides glucose substrate; recheck in 30–60 min. If glucose remains critically low or infant cannot feed, IV dextrose is used. D50 is not first-line in a feeding infant.",
+      "incorrectRationales": {"A": "Waiting 4 hours with symptomatic hypoglycemia (jittery) risks neurological injury (glucose is the primary brain fuel for neonates).", "C": "D50 is not given to neonates — it causes hyperosmolality and vascular injury. Neonatal IV dextrose is D10 at appropriate rates, not bolus D50.", "D": "NICU transfer is not required for first-line management — early feeding should be attempted first for mild-moderate hypoglycemia in a stable infant."},
+      "hint": "Neonatal hypoglycemia first-line: FEED (breast or formula). Recheck 30–60 min. IV glucose if feeding fails or critically low.",
+      "clinicalPearl": "Neonatal glucose monitoring protocol after GDM delivery: check glucose at 30 min, 1 hour, 2 hours, then q3–4h until stable. Early skin-to-skin and breastfeeding support maintains warmth (prevents cold stress hypoglycemia) and provides early caloric intake.",
+      "examStrategy": "Neonatal hypoglycemia from GDM: first-line = feed (breast/formula). IV dextrose for: critically low (<25 mg/dL), symptomatic unresponsive to feeding, or unable to feed. Never give D50 to neonates.",
+      "keyTakeaway": "Neonatal hypoglycemia (GDM infant): first-line = early breastfeeding or formula + recheck 30–60 min. IV D10 only if feeding fails or critically low."
+    },
+    {
+      "questionId": "mn-p09-003",
+      "topicSlug": "chorioamnionitis",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "chorioamnionitis-fever-fetal-tachycardia-deliver",
+      "stem": "A client at 32 weeks presents with temperature 38.8°C, HR 108 bpm, and the fetal heart rate baseline is 178 bpm. She ruptured membranes 22 hours ago. Uterine tenderness is present on palpation. Amniotic fluid is malodorous. Which action is the most appropriate next step?",
+      "options": {"A": "Administer betamethasone and initiate tocolysis to prolong gestation to 34 weeks","B": "Begin IV broad-spectrum antibiotics and prepare for delivery regardless of gestational age","C": "Hospitalize for observation and recheck temperature in 4 hours before starting antibiotics","D": "Perform amniocentesis to confirm the diagnosis before initiating treatment"},
+      "correctAnswer": "B",
+      "rationale": "Chorioamnionitis diagnosis: fever ≥38°C + uterine tenderness + fetal tachycardia >160 + prolonged ROM >18h + purulent/malodorous fluid = chorioamnionitis. Management: begin IV antibiotics immediately (ampicillin + gentamicin) AND deliver. There is NO role for tocolysis with confirmed chorioamnionitis — the infection source (placenta/membranes) must be removed. Even at 32 weeks, delivery is indicated because the risk of ongoing infection to mother and fetus exceeds the risk of prematurity at this gestational age.",
+      "incorrectRationales": {"A": "Tocolysis is absolutely contraindicated with chorioamnionitis — prolonging the pregnancy perpetuates the infection source and increases maternal and fetal morbidity.", "C": "Delaying antibiotics in confirmed chorioamnionitis leads to worsening sepsis. Clinical diagnosis is sufficient — culture results take days.", "D": "Amniocentesis is used for equivocal cases when clinical diagnosis is uncertain, not when diagnostic criteria are clearly met and the patient needs delivery."},
+      "hint": "Chorioamnionitis = deliver regardless of GA + IV antibiotics. NO tocolysis. NO observation — act.",
+      "clinicalPearl": "Betamethasone (corticosteroids) is NOT given with active chorioamnionitis — it would suppress the maternal immune response needed to fight the infection. Betamethasone is for imminent preterm delivery WITHOUT infection.",
+      "examStrategy": "Chorioamnionitis: the management is ALWAYS deliver + antibiotics. Any option suggesting tocolysis, observation without treatment, or waiting for cultures before starting antibiotics is wrong.",
+      "keyTakeaway": "Chorioamnionitis: deliver regardless of gestational age + IV ampicillin + gentamicin. Tocolysis CONTRAINDICATED. Do not delay treatment for culture confirmation."
+    },
+    {
+      "questionId": "mn-p09-004",
+      "topicSlug": "hydatidiform-mole",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "molar-pregnancy-preeclampsia-before-20-weeks",
+      "stem": "A client at 16 weeks presents with blood pressure of 158/104, 2+ proteinuria on dipstick, and has been having heavy vaginal bleeding and hyperemesis. The uterus measures 22 weeks. No fetal heart tones are detected. What is the most likely diagnosis?",
+      "options": {"A": "Severe preeclampsia with IUGR","B": "Complete hydatidiform mole (molar pregnancy)","C": "Twin pregnancy with one fetal demise","D": "Chorioamnionitis with uterine infection"},
+      "correctAnswer": "B",
+      "rationale": "Classic presentation of complete hydatidiform mole: (1) uterus larger than dates (22 weeks at 16 weeks), (2) no fetal heart tones, (3) heavy vaginal bleeding, (4) hyperemesis (very high hCG), (5) PREECLAMPSIA BEFORE 20 WEEKS — a hallmark finding (preeclampsia normally does not appear until ≥20 weeks; its presence before 20 weeks should trigger immediate consideration of molar pregnancy). Extremely elevated β-hCG in complete mole can produce hypertension and proteinuria.",
+      "incorrectRationales": {"A": "Severe preeclampsia does not develop before 20 weeks in a normal pregnancy — its presence before 20 weeks is a red flag for molar pregnancy.", "C": "Twin pregnancy with demise would still have one viable twin with FHTs detectable, and the uterus would not be large-for-dates from one twin alone.", "D": "Chorioamnionitis presents with fever, leukocytosis, and tenderness — not hypertension, proteinuria, and no FHTs."},
+      "hint": "Preeclampsia <20 weeks + no FHTs + uterus large for dates + hyperemesis = MOLAR PREGNANCY.",
+      "clinicalPearl": "After diagnosis of complete mole: β-hCG will be markedly elevated (often >100,000 mIU/mL). Ultrasound: 'snowstorm' appearance + bilateral theca lutein cysts. Management: suction curettage + serial weekly β-hCG until undetectable × 3.",
+      "examStrategy": "Preeclampsia BEFORE 20 weeks = molar pregnancy (or antiphospholipid syndrome — rare). In NCLEX context, the answer is almost always molar pregnancy when this timing is presented.",
+      "keyTakeaway": "Molar pregnancy: preeclampsia <20 weeks + large-for-dates uterus + no FHTs + hyperemesis + markedly elevated hCG. Management: suction curettage + serial β-hCG monitoring."
+    },
+    {
+      "questionId": "mn-p09-005",
+      "topicSlug": "pyelonephritis-pregnancy",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "pyelonephritis-contractions-treat-infection-first",
+      "stem": "A client at 28 weeks gestation presents with fever of 39.2°C, right costovertebral angle tenderness, urinalysis showing 3+ bacteria and large leukocyte esterase, and is having uterine contractions every 8–10 minutes. She has no prior preterm labor history. Which action should the nurse prioritize?",
+      "options": {"A": "Begin tocolysis with nifedipine immediately before treating the infection","B": "Obtain a clean-catch urine culture and begin IV antibiotics (ceftriaxone) and IV fluids; monitor contractions","C": "Administer betamethasone and transfer to a high-risk perinatal center","D": "Perform a digital vaginal exam to assess cervical dilation before starting antibiotics"},
+      "correctAnswer": "B",
+      "rationale": "Pyelonephritis is a significant cause of preterm labor because prostaglandins and endotoxins from the infection stimulate uterine contractions. Treating the underlying infection often resolves the contractions. Priority: urine culture (before antibiotics if possible), IV ceftriaxone, aggressive IV fluids. Contractions from infection frequently resolve with antibiotic treatment and fever control. Tocolysis is not first-line and may not be necessary once infection is treated.",
+      "incorrectRationales": {"A": "Tocolysis before treating infection is inappropriate — the contractions are likely from the infection itself; treat the cause first.", "C": "Betamethasone is appropriate if delivery is anticipated within 7 days at <34 weeks — but the immediate priority is treating the infection that's causing the contractions.", "D": "Digital vaginal exam is not a priority in this setting and should not delay antibiotic therapy. Cervical assessment may be done, but antibiotics come first."},
+      "hint": "Pyelonephritis causes preterm contractions. Treat the infection FIRST — contractions often resolve. Antibiotics before tocolysis.",
+      "clinicalPearl": "If contractions persist despite antibiotic therapy and fever resolution, then tocolysis and betamethasone can be considered. But the initial priority is always addressing the underlying infection that's driving the contractions.",
+      "examStrategy": "Pyelonephritis + contractions: treat pyelonephritis (antibiotics + fluids) first. Contractions often resolve with infection treatment. Tocolysis may not be needed.",
+      "keyTakeaway": "Pyelonephritis causes preterm contractions. Priority: IV antibiotics (ceftriaxone) + IV fluids. Contractions often resolve with infection treatment — tocolysis secondary."
+    }
+  ],
+  "flashcards": [
+    {"id":"mn-fc-p09-001","front":"What is the management of hyperemesis gravidarum in a hospitalized patient?","back":"1. Thiamine 100 mg IV BEFORE any glucose. 2. IV fluids (D5LR + electrolytes). 3. Correct electrolytes (K+, Mg, Na — slowly for hyponatremia). 4. IV antiemetics (ondansetron, promethazine, metoclopramide). 5. Advance diet gradually. 6. Corticosteroids if refractory. 7. Thiamine supplementation throughout.","hint":"THIAMINE FIRST. Then fluids. Then antiemetics. Slow sodium correction.","explanation":"Hyperemesis gravidarum hospital admission criteria: persistent vomiting unresponsive to outpatient therapy, weight loss >5%, dehydration/ketonuria, electrolyte abnormalities. Thiamine deficiency is life-threatening — Wernicke's encephalopathy (confusion, ataxia, ophthalmoplegia) can result from administering glucose without thiamine.","clinicalPearl":"Wernicke's encephalopathy mnemonic: 'COA' — Confusion, Ophthalmoplegia (eye movement disorders/nystagmus), Ataxia. This triad in a vomiting pregnant woman = emergency thiamine administration."},
+    {"id":"mn-fc-p09-002","front":"What are the 1-hour GCT and 3-hour OGTT thresholds for GDM diagnosis?","back":"1-hour 50g GCT: ≥140 mg/dL (some use ≥130) → proceed to 3-hour OGTT. 3-hour 100g OGTT (Carpenter-Coustan): Fasting ≥95, 1-hr ≥180, 2-hr ≥155, 3-hr ≥140. GDM = ≥2 of 4 values meet threshold.","hint":"GCT ≥140 → OGTT. OGTT: 95-180-155-140. Two abnormals = GDM.","explanation":"The 2-step approach is standard in the US. The 1-step 75g OGTT (WHO International criteria: fasting ≥92, 1-hr ≥180, 2-hr ≥153 — any ONE value = GDM) is used by some organizations and captures more patients but may over-diagnose.","clinicalPearl":"GDM screening is at 24–28 weeks because HPL (peak production at 28 weeks) drives peak insulin resistance. Early screening (<16 weeks) is done for high-risk patients (BMI ≥35, prior GDM, PCOS, family history)."},
+    {"id":"mn-fc-p09-003","front":"What is the key distinguishing feature of molar pregnancy (preeclampsia timing)?","back":"Preeclampsia occurring BEFORE 20 weeks gestation is a hallmark of complete hydatidiform mole. Normal preeclampsia does not develop before 20 weeks. Also: uterus large for dates, no FHTs, markedly elevated hCG (often >100,000 mIU/mL), hyperemesis gravidarum.","hint":"Preeclampsia <20 weeks = molar pregnancy. Can't have preeclampsia that early without a reason.","explanation":"Complete mole: 46,XX (all paternal) karyotype — no viable embryo; entirely molar tissue. The extremely elevated hCG from massive trophoblastic proliferation activates angiogenic pathways causing early preeclampsia (hypertension + proteinuria). Classic ultrasound: 'snowstorm' appearance.","clinicalPearl":"After suction curettage for molar pregnancy: serial weekly β-hCG monitoring until three consecutive negatives. If hCG plateaus or rises, gestational trophoblastic neoplasia (GTN) is diagnosed and chemotherapy initiated. Cure rate >90%."},
+    {"id":"mn-fc-p09-004","front":"What is the clinical diagnostic criteria for chorioamnionitis?","back":"Maternal fever ≥38°C PLUS any one of: maternal tachycardia >100 bpm, fetal tachycardia >160 bpm (sustained), uterine fundal tenderness, purulent or foul-smelling amniotic fluid, maternal leukocytosis >15,000/mm³ (without other cause).","hint":"Fever + any one of the other signs = chorioamnionitis. Fever alone is not enough.","explanation":"WBC elevation alone is not sufficient because WBC normally rises during labor. All five additional criteria represent specific indicators of infection. Management once criteria met: IV antibiotics + delivery regardless of gestational age.","clinicalPearl":"Maternal fever from epidural analgesia can mimic chorioamnionitis (epidural fever is common). Differentiate by: epidural fever typically without fetal tachycardia or uterine tenderness, resolves with delivery. Clinical context and additional criteria are needed before diagnosing chorioamnionitis in a laboring woman with epidural."},
+    {"id":"mn-fc-p09-005","front":"What is the glucose target range for gestational diabetes management?","back":"Fasting: <95 mg/dL. 1-hour postprandial: <140 mg/dL. 2-hour postprandial: <120 mg/dL. These targets minimize macrosomia, neonatal hypoglycemia, and fetal risks while avoiding maternal hypoglycemia.","hint":"GDM targets: fasting <95; 1-hr post-meal <140; 2-hr post-meal <120.","explanation":"Diet + exercise achieves targets in 70–80% of GDM patients. When diet fails (glucose consistently above targets for 1–2 weeks), insulin is initiated. Glyburide and metformin are sometimes used but are less preferred than insulin (insulin does not cross the placenta).","clinicalPearl":"Fasting hyperglycemia in GDM (fasting glucose consistently >95) typically requires bedtime NPH insulin to counter the hormonal dawn phenomenon (cortisol surge in early morning → insulin resistance → fasting glucose rise). Postprandial hyperglycemia is addressed with rapid-acting insulin before meals."},
+    {"id":"mn-fc-p09-006","front":"What are the diagnostic criteria for gestational diabetes using the 3-hour 100g OGTT (Carpenter-Coustan)?","back":"GDM requires ≥2 of 4 values: Fasting ≥95, 1-hr ≥180, 2-hr ≥155, 3-hr ≥140 mg/dL. Mnemonic: '95-180-155-140' or '95, then drop by 25 each hour.'","hint":"Two abnormal values from four time points = GDM. Thresholds: 95-180-155-140.","explanation":"The Carpenter-Coustan criteria are the most widely used in the US (endorsed by ACOG). Some institutions use the O'Sullivan criteria (slightly higher thresholds). One abnormal value is not diagnostic but requires repeat testing and close monitoring.","clinicalPearl":"A fasting glucose ≥126 mg/dL or random glucose ≥200 mg/dL at the first prenatal visit = pre-existing type 2 diabetes (NOT gestational diabetes) — requires immediate initiation of diabetes management and intensive monitoring throughout pregnancy."},
+    {"id":"mn-fc-p09-007","front":"What are the obstetric consequences of pyelonephritis in pregnancy?","back":"Preterm labor (most significant — prostaglandins and endotoxins stimulate uterine contractions), sepsis/septic shock, adult respiratory distress syndrome (ARDS) — pyelonephritis is the most common cause of non-obstetric ARDS in pregnancy, fetal growth restriction.","hint":"Pyelonephritis → preterm labor + ARDS + sepsis. Not just a UTI — can be life-threatening in pregnancy.",
+"explanation":"The pathophysiology: bacterial endotoxins stimulate prostaglandin synthesis in the kidneys → systemic prostaglandin release → uterine contractions → preterm labor. ARDS from pyelonephritis in pregnancy: acute inflammatory response + increased pulmonary vascular permeability from endotoxemia.","clinicalPearl":"Nitrofurantoin is safe for UTI/cystitis treatment in 1st and 2nd trimester. AVOID nitrofurantoin at term (≥36 weeks) — risk of neonatal hemolytic anemia. For pyelonephritis (upper tract): always use systemic IV antibiotics, not nitrofurantoin."},
+    {"id":"mn-fc-p09-008","front":"What is the treatment for GDM and why is insulin the preferred pharmacological agent?","back":"Step 1: Medical nutrition therapy (MNT) + exercise (70–80% success). Step 2: Insulin (preferred) — DOES NOT cross the placenta, well-studied, titrated precisely. Step 3: Oral agents — glyburide (crosses placenta, neonatal hypoglycemia risk), metformin (crosses placenta, long-term data insufficient).","hint":"MNT first. Insulin preferred (doesn't cross placenta). Oral agents second-line.","explanation":"Insulin is the safest pharmacological choice because it does not cross the placenta, has a long safety record, can be precisely titrated based on glucose patterns, and reduces fetal hyperinsulinism. Glyburide's neonatal side effects (hypoglycemia) and metformin's placental crossing are limitations.","clinicalPearl":"For postpartum management: most GDM resolves after delivery. Recheck fasting glucose before discharge — if >126 mg/dL = likely pre-existing T2DM. All GDM patients need 75g OGTT at 4–12 weeks postpartum (30–50% develop T2DM within 10 years)."}
+  ]
+}

@@ -1,0 +1,670 @@
+{
+  "generatedAt": "2026-04-09T06:14:29.816Z",
+  "pathways": {
+    "us-lpn-nclex-pn": {
+      "scanned": 38,
+      "summary": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "violations": {}
+    },
+    "ca-rpn-rex-pn": {
+      "scanned": 38,
+      "summary": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "violations": {}
+    },
+    "us-np-fnp": {
+      "scanned": 84,
+      "summary": {
+        "errors": 0,
+        "warnings": 78
+      },
+      "violations": {
+        "bp26-usnp-pad-000-safety_and_infection-cardiovascular": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-000-safety_and_infection-cardiovascular",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-001-management_of_care-respiratory": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-001-management_of_care-respiratory",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-002-pharmacological_therapies-neurological": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-002-pharmacological_therapies-neurological",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-003-physiological_adaptation-renal-gu": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-003-physiological_adaptation-renal-gu",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-004-psychosocial_integrity-endocrine": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-004-psychosocial_integrity-endocrine",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-005-risk_reduction-gastrointestinal": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-005-risk_reduction-gastrointestinal",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-006-health_promotion_maintenance-fluids-electrolytes": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-006-health_promotion_maintenance-fluids-electrolytes",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-007-basic_care_comfort-infection-control": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-007-basic_care_comfort-infection-control",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-008-safety_and_infection-medication-safety": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-008-safety_and_infection-medication-safety",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-009-management_of_care-prioritization-delegation": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-009-management_of_care-prioritization-delegation",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-010-pharmacological_therapies-cardiovascular": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-010-pharmacological_therapies-cardiovascular",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-011-physiological_adaptation-respiratory": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-011-physiological_adaptation-respiratory",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-012-psychosocial_integrity-neurological": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-012-psychosocial_integrity-neurological",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-013-risk_reduction-renal-gu": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-013-risk_reduction-renal-gu",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-014-health_promotion_maintenance-endocrine": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-014-health_promotion_maintenance-endocrine",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-015-basic_care_comfort-gastrointestinal": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-015-basic_care_comfort-gastrointestinal",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-016-safety_and_infection-fluids-electrolytes": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-016-safety_and_infection-fluids-electrolytes",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-017-management_of_care-infection-control": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-017-management_of_care-infection-control",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-018-pharmacological_therapies-medication-safety": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-018-pharmacological_therapies-medication-safety",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-019-physiological_adaptation-prioritization-delegation": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-019-physiological_adaptation-prioritization-delegation",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-020-psychosocial_integrity-cardiovascular": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-020-psychosocial_integrity-cardiovascular",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-021-risk_reduction-respiratory": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-021-risk_reduction-respiratory",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-022-health_promotion_maintenance-neurological": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-022-health_promotion_maintenance-neurological",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-023-basic_care_comfort-renal-gu": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-023-basic_care_comfort-renal-gu",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-024-safety_and_infection-endocrine": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-024-safety_and_infection-endocrine",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-025-management_of_care-gastrointestinal": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-025-management_of_care-gastrointestinal",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-026-pharmacological_therapies-fluids-electrolytes": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-026-pharmacological_therapies-fluids-electrolytes",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-027-physiological_adaptation-infection-control": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-027-physiological_adaptation-infection-control",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-028-psychosocial_integrity-medication-safety": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-028-psychosocial_integrity-medication-safety",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-029-risk_reduction-prioritization-delegation": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-029-risk_reduction-prioritization-delegation",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-030-health_promotion_maintenance-cardiovascular": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-030-health_promotion_maintenance-cardiovascular",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-031-basic_care_comfort-respiratory": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-031-basic_care_comfort-respiratory",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-032-safety_and_infection-neurological": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-032-safety_and_infection-neurological",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-033-management_of_care-renal-gu": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-033-management_of_care-renal-gu",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-034-pharmacological_therapies-endocrine": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-034-pharmacological_therapies-endocrine",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-035-physiological_adaptation-gastrointestinal": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-035-physiological_adaptation-gastrointestinal",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-036-psychosocial_integrity-fluids-electrolytes": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-036-psychosocial_integrity-fluids-electrolytes",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-037-risk_reduction-infection-control": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-037-risk_reduction-infection-control",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-038-health_promotion_maintenance-medication-safety": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-038-health_promotion_maintenance-medication-safety",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-039-basic_care_comfort-prioritization-delegation": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-039-basic_care_comfort-prioritization-delegation",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-040-safety_and_infection-cardiovascular": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-040-safety_and_infection-cardiovascular",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-041-management_of_care-respiratory": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-041-management_of_care-respiratory",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-042-pharmacological_therapies-neurological": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-042-pharmacological_therapies-neurological",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-043-physiological_adaptation-renal-gu": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-043-physiological_adaptation-renal-gu",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-044-psychosocial_integrity-endocrine": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-044-psychosocial_integrity-endocrine",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-045-risk_reduction-gastrointestinal": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-045-risk_reduction-gastrointestinal",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-046-health_promotion_maintenance-fluids-electrolytes": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-046-health_promotion_maintenance-fluids-electrolytes",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-047-basic_care_comfort-infection-control": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-047-basic_care_comfort-infection-control",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-048-safety_and_infection-medication-safety": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-048-safety_and_infection-medication-safety",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-049-management_of_care-prioritization-delegation": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-049-management_of_care-prioritization-delegation",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-050-pharmacological_therapies-cardiovascular": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-050-pharmacological_therapies-cardiovascular",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-051-physiological_adaptation-respiratory": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-051-physiological_adaptation-respiratory",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-052-psychosocial_integrity-neurological": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-052-psychosocial_integrity-neurological",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-053-risk_reduction-renal-gu": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-053-risk_reduction-renal-gu",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-054-health_promotion_maintenance-endocrine": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-054-health_promotion_maintenance-endocrine",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-055-basic_care_comfort-gastrointestinal": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-055-basic_care_comfort-gastrointestinal",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-056-safety_and_infection-fluids-electrolytes": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-056-safety_and_infection-fluids-electrolytes",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-057-management_of_care-infection-control": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-057-management_of_care-infection-control",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-058-pharmacological_therapies-medication-safety": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-058-pharmacological_therapies-medication-safety",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-059-physiological_adaptation-prioritization-delegation": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-059-physiological_adaptation-prioritization-delegation",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-060-psychosocial_integrity-cardiovascular": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-060-psychosocial_integrity-cardiovascular",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-061-risk_reduction-respiratory": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-061-risk_reduction-respiratory",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-062-health_promotion_maintenance-neurological": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-062-health_promotion_maintenance-neurological",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-063-basic_care_comfort-renal-gu": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-063-basic_care_comfort-renal-gu",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-064-safety_and_infection-endocrine": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-064-safety_and_infection-endocrine",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-065-management_of_care-gastrointestinal": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-065-management_of_care-gastrointestinal",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-066-pharmacological_therapies-fluids-electrolytes": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-066-pharmacological_therapies-fluids-electrolytes",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-067-physiological_adaptation-infection-control": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-067-physiological_adaptation-infection-control",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-068-psychosocial_integrity-medication-safety": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-068-psychosocial_integrity-medication-safety",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-069-risk_reduction-prioritization-delegation": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-069-risk_reduction-prioritization-delegation",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-070-health_promotion_maintenance-cardiovascular": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-070-health_promotion_maintenance-cardiovascular",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-071-basic_care_comfort-respiratory": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-071-basic_care_comfort-respiratory",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-072-safety_and_infection-neurological": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-072-safety_and_infection-neurological",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-073-management_of_care-renal-gu": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-073-management_of_care-renal-gu",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-074-pharmacological_therapies-endocrine": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-074-pharmacological_therapies-endocrine",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-075-physiological_adaptation-gastrointestinal": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-075-physiological_adaptation-gastrointestinal",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-076-psychosocial_integrity-fluids-electrolytes": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-076-psychosocial_integrity-fluids-electrolytes",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ],
+        "bp26-usnp-pad-077-risk_reduction-infection-control": [
+          {
+            "ruleId": "U2",
+            "severity": "warn",
+            "slug": "bp26-usnp-pad-077-risk_reduction-infection-control",
+            "message": "Title looks like a numbered placeholder — replace with a specific clinical/educational anchor when editorially ready."
+          }
+        ]
+      }
+    },
+    "us-rn-nclex-rn": {
+      "scanned": 0,
+      "summary": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "violations": {}
+    },
+    "ca-rn-nclex-rn": {
+      "scanned": 0,
+      "summary": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "violations": {}
+    }
+  }
+}

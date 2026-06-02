@@ -1,0 +1,145 @@
+{
+  "packageId": "pkg8-falls",
+  "title": "Falls & Safety in Older Adults — Question Bank",
+  "generatedDate": "2026-06-02",
+  "questionCount": 350,
+  "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+  "questions": [
+    {
+      "id": "GERO-P8-001",
+      "topicSlug": "fall-risk-assessment",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is conducting a fall risk assessment using the Morse Fall Scale for an 82-year-old woman admitted for a hip fracture repair. She has a history of two falls in the past year, uses a walker, receives IV heparin, has a normal gait, and is oriented but forgetful. What is the HIGHEST priority modifiable fall risk factor the nurse should address?",
+      "options": {
+        "A": "Her age of 82 — a non-modifiable risk factor",
+        "B": "Her history of falls — document and accept as a risk",
+        "C": "Her IV heparin drip — ensure IV tubing is managed to prevent tripping",
+        "D": "Her cognitive status — forgetfulness means she may get up without calling for help"
+      },
+      "correctAnswer": "D",
+      "rationale": "Cognitive impairment is the most dangerous MODIFIABLE fall risk factor in this patient. A patient who is forgetful may get up independently without calling for assistance, walk without her walker, or attempt tasks beyond her safe capability. The nursing priority is: (1) ensure call bell is within reach and patient understands to call; (2) assess if she consistently uses and remembers to call for help; (3) if cognitively impaired in a way that prevents safe recall — consider bed alarm, non-restrictive monitoring, and enhanced staff vigilance. IV tubing management is a component of safety but is not the highest-priority modifiable factor.",
+      "distractorRationales": {
+        "A": "Incorrect. Age is a non-modifiable risk factor — it cannot be changed. Nursing focus must be on modifiable factors.",
+        "B": "Incorrect. A fall history must be INVESTIGATED to identify modifiable causes and addressed — not accepted passively. Falls are sentinel events requiring root cause analysis.",
+        "C": "Incorrect. IV tubing management is part of the physical environment safety, but it is a lower priority than the cognitive risk that prevents the patient from self-managing her safety."
+      },
+      "hint": "Among the risk factors: age (non-modifiable), fall history, IV tubing, and cognitive impairment — which is both modifiable AND most dangerous?",
+      "clinicalPearl": "The Morse Fall Scale scores: fall history (25 pts), secondary diagnosis (15 pts), ambulation aid (15–30 pts), IV/heparin lock (20 pts), gait (10–20 pts), mental status (15 pts). A patient who ignores limitations or forgets to call for help (impaired mental status category) adds 15 points and is at high risk regardless of other factors.",
+      "examStrategy": "Fall risk questions: prioritize MODIFIABLE factors and the factor requiring IMMEDIATE nursing action. Cognitive impairment driving unsafe behavior = highest priority for intervention. Non-modifiable factors = assess but cannot change.",
+      "keyTakeaway": "Cognitive impairment = highest priority modifiable fall risk factor. Forgetful patients may not remember to call for help. Immediate interventions: bed alarm, call bell placement, enhanced supervision.",
+      "tags": ["fall-risk", "Morse-Fall-Scale", "cognitive-impairment", "fall-prevention", "safety"]
+    },
+    {
+      "id": "GERO-P8-002",
+      "topicSlug": "fall-risk-assessment",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 77-year-old woman is admitted to a medical unit. The admitting nurse completes a fall risk assessment and identifies her as 'HIGH fall risk.' Her care plan includes: bed alarm activated, call bell at bedside, and patient educated to call for help before getting up. During the night shift, the patient gets up independently to use the bathroom and falls, fracturing her wrist. Which nursing documentation BEST reflects appropriate care?",
+      "options": {
+        "A": "The fall occurred because the patient did not follow instructions — document as 'patient non-compliant'",
+        "B": "The fall occurred despite fall precautions in place — document the circumstances, injury, interventions, and notify the physician; review the care plan for additional interventions",
+        "C": "The fall is the patient's own fault — she was told to call for help",
+        "D": "Document the fall and the injury, but no further action is needed since all ordered precautions were in place"
+      },
+      "correctAnswer": "B",
+      "rationale": "A fall in a high-risk patient — even when precautions are in place — requires: (1) complete assessment of the patient's injuries; (2) full incident documentation; (3) physician notification; (4) re-evaluation of the fall prevention plan — what additional interventions could prevent recurrence?; (5) may require occupational therapy/physiotherapy consultation; (6) complete the event/incident report per hospital policy. Blaming the patient ('non-compliant') is victim-blaming and is not appropriate — patients with cognitive impairment, nocturia urgency, or delirium cannot reliably call for help every time.",
+      "distractorRationales": {
+        "A": "Incorrect. Labelling a high-risk patient as 'non-compliant' is inappropriate and legally incorrect. It also fails to address the systemic fall risk factors that need revision.",
+        "C": "Incorrect. Placing blame on the patient ignores the nurse's accountability for creating a safe environment adequate for the patient's risk level.",
+        "D": "Incorrect. Documenting alone is insufficient. The care plan must be reviewed and enhanced. A fall represents a gap between risk and precautions — the nurse must identify what additional interventions are needed."
+      },
+      "hint": "After a fall despite fall precautions: what are the nurse's responsibilities?",
+      "clinicalPearl": "Falls that occur despite precautions being in place indicate the precautions are insufficient for the patient's risk level. Common enhancements after failure of standard precautions: 1:1 supervision for nighttime bathroom trips, commode at bedside, physiotherapy assessment for safe transfer, urology referral for nocturia.",
+      "examStrategy": "Post-fall nursing responsibilities: assess injuries, document thoroughly, notify physician, revise care plan, complete incident report. Never attribute fall to patient 'non-compliance' — this is legally and ethically inappropriate.",
+      "keyTakeaway": "Post-fall: assess injuries, notify physician, document, revise fall prevention care plan. A fall despite precautions = precautions are insufficient, not patient non-compliance.",
+      "tags": ["fall-prevention", "post-fall-care", "documentation", "fall-incident", "care-plan-revision"]
+    },
+    {
+      "id": "GERO-P8-003",
+      "topicSlug": "assistive-devices",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A nurse is teaching an 80-year-old man how to use a standard cane. Which instruction is MOST important for proper cane use?",
+      "options": {
+        "A": "Hold the cane in the hand on the SAME side as the weak leg to improve support",
+        "B": "Hold the cane in the hand on the OPPOSITE side of the weak leg for optimal support and weight distribution",
+        "C": "The cane should be held at wrist height when the arm hangs naturally at the side",
+        "D": "When going upstairs, the cane goes first, then the weak leg, then the strong leg"
+      },
+      "correctAnswer": "B",
+      "rationale": "The cane should be held in the hand OPPOSITE to the weak or injured leg. This allows the cane and the unaffected leg to work together, creating a 3-point gait pattern. When the weak leg moves forward, the cane moves forward simultaneously, providing a wide base of support. If the cane were on the same side as the weak leg, it would reduce the base of support and is biomechanically less effective. The cane height should be adjusted to wrist level when the arm hangs naturally — this creates a 15–30° elbow flexion when using the cane.",
+      "distractorRationales": {
+        "A": "Incorrect. Holding the cane on the same side as the weak leg reduces stability. The contralateral placement creates a broader base of support mimicking a natural gait pattern.",
+        "C": "This is the correct technique for measuring cane height — but the question asks for the MOST IMPORTANT instruction for proper use. Contralateral placement is the most critical technique error that nurses must teach.",
+        "D": "Incorrect. The stair technique for going UP stairs: strong leg first (lead with strength), then weak leg, then cane. Going DOWN stairs: cane first, then weak leg, then strong leg. Mnemonic: 'up with the good, down with the bad.'"
+      },
+      "hint": "Cane in the hand OPPOSITE the weak leg. Which side?",
+      "clinicalPearl": "Stair teaching mnemonic: 'Up with the good, down with the bad (and the cane).' Going UP: good leg first, then bad leg, then cane. Going DOWN: cane first, then bad leg, then good leg. This ensures the strong leg is always bearing weight on the most challenging transition.",
+      "examStrategy": "Cane use: contralateral (opposite side from weak leg). This is a very commonly tested NCLEX and REx-PN question. Know it absolutely. Cane height = wrist level (elbow 15–30° flexion).",
+      "keyTakeaway": "Cane: hold OPPOSITE the weak leg. Stairs: up with good first; down with cane and weak leg first.",
+      "tags": ["assistive-devices", "cane", "gait-training", "fall-prevention", "mobility", "patient-teaching"]
+    },
+    {
+      "id": "GERO-P8-004",
+      "topicSlug": "restraint-alternatives",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is caring for an 84-year-old man with moderate dementia in a long-term care facility who repeatedly attempts to get out of bed at night, risking falls. The care team is considering physical restraints. Which restraint-free alternatives should be implemented first? SELECT ALL THAT APPLY.",
+      "options": {
+        "A": "Lower the bed to its lowest position and place a fall mat beside the bed",
+        "B": "Apply bilateral wrist restraints to prevent him from getting up",
+        "C": "Investigate the reason for getting out of bed — pain, hunger, urination, fear, disorientation",
+        "D": "Activate a bed alarm to alert staff when he gets up",
+        "E": "Ensure his glasses and hearing aids are in place to reduce nighttime disorientation",
+        "F": "Administer lorazepam 1 mg at bedtime to ensure he stays in bed"
+      },
+      "correctAnswer": ["A", "C", "D", "E"],
+      "rationale": "A (CORRECT): Lowest bed position + fall mat = reduces injury if he does get out. C (CORRECT): Investigate and address the CAUSE of getting up — pain (offer analgesic), urination (commode at bedside), hunger (evening snack), fear (nightlight), disorientation (orient, familiar objects). D (CORRECT): Bed alarm provides safety monitoring without restraint. E (CORRECT): Glasses and hearing aids reduce sensory deprivation contributing to nighttime disorientation.",
+      "distractorRationales": {
+        "B": "INCORRECT. Physical restraints are contraindicated in all circumstances where alternatives exist. They worsen agitation, increase fall injury when attempting to escape, cause pressure injuries, and worsen delirium.",
+        "F": "INCORRECT. Lorazepam (benzodiazepine) is a Beers Criteria PIM — contraindicated for sleep or behavioral management in older adults with dementia. It worsens cognitive function, increases fall risk, and paradoxically increases agitation."
+      },
+      "hint": "Two options involve physical restraints or medications contraindicated in older adults with dementia.",
+      "clinicalPearl": "Before ANY behavioral intervention for 'wandering' or 'getting up at night' in dementia: investigate the CAUSE. Most nighttime agitation has an unmet need: pain (arthritis, pressure injury), urination (nocturia, UTI, prostate), hunger (late dinner), fear (PTSD, dark room), or disorientation (new environment). Address the cause first.",
+      "examStrategy": "Restraint-free alternatives SATA: include bed lowering, fall mat, investigation of cause, bed alarm, sensory aids. EXCLUDE: physical restraints (always wrong) and benzodiazepines (Beers Criteria, worsen delirium).",
+      "keyTakeaway": "Restraint-free alternatives: investigate cause, lowest bed + fall mat, bed alarm, sensory aids, commode at bedside, nightlight. Physical restraints and benzodiazepines are contraindicated.",
+      "tags": ["restraint-alternatives", "wandering", "falls-prevention", "dementia", "bed-alarm", "Beers-criteria", "SATA"]
+    },
+    {
+      "id": "GERO-P8-005",
+      "topicSlug": "home-safety",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A home care nurse is conducting a home safety assessment for a 79-year-old woman who lives alone and has had two recent falls. Which home modification is MOST effective at reducing fall risk?",
+      "options": {
+        "A": "Installing thick carpeting throughout the home to cushion falls",
+        "B": "Installing grab bars in the bathroom beside the toilet and in the tub or shower",
+        "C": "Removing all furniture from main pathways to create open space",
+        "D": "Purchasing a recliner chair with an elevated seat for easier rising"
+      },
+      "correctAnswer": "B",
+      "rationale": "Bathroom falls are the most common and dangerous location for falls in older adults — specifically during toilet transfers and bathing. Installing grab bars beside the toilet (for lowering and rising) and in the tub/shower (for stability while bathing) is the single most evidence-based and cost-effective home safety modification. Falls from toilet and tub in older adults with osteoporosis frequently result in hip fractures.",
+      "distractorRationales": {
+        "A": "Incorrect. Thick carpeting can INCREASE fall risk by catching feet, causing tripping on edges, and making walker/cane use more difficult. Low-pile or hard flooring with non-slip area rugs (secured at edges) is safer.",
+        "C": "Incorrect. While clear pathways are important, removing all furniture eliminates items that can be used as stabilizers. Low, unsteady furniture should be removed; stable furniture at appropriate heights can aid balance.",
+        "D": "Incorrect. An elevated seat recliner chair helps with transfers and may reduce some rising-related falls, but it is a lower priority than bathroom grab bars, which address the most dangerous fall location."
+      },
+      "hint": "Where do most serious home falls occur? Which modification directly addresses that location?",
+      "clinicalPearl": "Home safety modification priorities in order: (1) Bathroom grab bars (toilet + tub/shower); (2) Remove loose rugs, secure rug edges; (3) Adequate lighting (especially nighttime path to bathroom); (4) Stair handrails; (5) Non-slip footwear. Bathroom modifications are the highest-yield intervention.",
+      "examStrategy": "Home safety questions: bathroom grab bars = highest priority. Carpet = NOT safer. Clear paths = yes, but don't eliminate stabilizing furniture.",
+      "keyTakeaway": "Most fall-related injuries occur in the bathroom. Installing grab bars beside toilet and in tub/shower is the most evidence-based single home safety modification.",
+      "tags": ["home-safety", "grab-bars", "bathroom-falls", "fall-prevention", "home-modification"]
+    }
+  ]
+}

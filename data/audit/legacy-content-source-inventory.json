@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T17:57:09.531Z",
+  "gitHead": "b7090578",
+  "description": "Machine-readable inventory of in-repo legacy / monolith-adjacent sources (second pass). External USB paths may be absent; see full-external-site-inventory.json.",
+  "scanRoots": [
+    "client/src",
+    "server",
+    "shared",
+    "nursenest-core/src/content",
+    "nursenest-core/src/legacy",
+    "data/materialized/**",
+    "data/audit/*.json (summaries)"
+  ],
+  "categories": {
+    "lessons": {
+      "legacyTotalFound": 4223,
+      "sources": [
+        "client/src (Vite lesson pages & content maps)",
+        "data/audit/unimported-legacy-content.json",
+        "data/audit/legacy-lessons-inventory.json",
+        "data/materialized/rn-pn-replit-batch-2026/catalog-lessons.json",
+        "src/content/pathway-lessons/rn-nclex-master-map.json"
+      ],
+      "clientTsApprox": 450,
+      "classification": {
+        "A_alreadyImportedMaterialized": 29,
+        "B_partialMasterMapOnly": 107,
+        "B_partialMergeIntoExisting": 3,
+        "C_notOnCatalogOrMaster": 4084
+      }
+    },
+    "questions": {
+      "legacyTotalFound": 22742,
+      "jsonFileCount": 165,
+      "sources": [
+        "client career question JSON",
+        "legacy flashcard-questionbank maps"
+      ]
+    },
+    "preTestsPostTests": {
+      "note": "Pre/post lesson quizzes in current app: pathway lesson DB payload (nnLessonPayloadV2) + import pipelines; legacy samples under data/audit maxTestsSampleFiles caps in legacy-full-restoration-scan.",
+      "legacySamples": 220
+    },
+    "catReadiness": {
+      "legacyEntryCount": 19,
+      "currentEntryCount": 22,
+      "sources": [
+        "legacy-cat-source-inventory.json",
+        "current-cat-source-inventory.json"
+      ]
+    },
+    "flashcards": {
+      "legacyInventoryRows": 32,
+      "sources": [
+        "legacy-flashcards-inventory.json",
+        "legacy-flashcards-questionbank-inventory.json"
+      ]
+    },
+    "activities": {
+      "legacyInventoryRows": 55,
+      "sources": [
+        "legacy-activities-inventory.json"
+      ]
+    },
+    "caseStudies": {
+      "legacyInventoryRows": 51,
+      "sources": [
+        "legacy-case-studies-inventory.json"
+      ]
+    },
+    "blogPosts": {
+      "legacyMergedFiles": 47,
+      "sources": [
+        "legacy-blog-inventory.json",
+        "client SEO / blog TS pages"
+      ]
+    },
+    "translations": {
+      "note": "See i18n-global-audit.json",
+      "legacyClientLocales": "client/public/i18n/*.json",
+      "currentAppLocales": "nursenest-core/public/i18n/*.json",
+      "toolsPipeline": "tools/i18n/*"
+    },
+    "seoProgrammatic": {
+      "legacySeoFiles": 42
+    },
+    "toolsCalculators": {
+      "sources": [
+        "client/src/pages/*calc*",
+        "nursenest-core/src/app/**/tools/**"
+      ],
+      "note": "Use pathway + marketing route inventories for authoritative list"
+    },
+    "imagesMedia": {
+      "sources": [
+        "legacy-assets-inventory.json",
+        "public/**",
+        "content/media/**"
+      ]
+    }
+  },
+  "filesystemScanSamples": {
+    "clientSrc": {
+      "totalWalked": 2894,
+      "byExt": {
+        ".tsx": 789,
+        ".ts": 1175,
+        ".json": 22
+      },
+      "capped": false
+    },
+    "server": {
+      "totalWalked": 620,
+      "byExt": {
+        ".ts": 606,
+        ".json": 9
+      },
+      "capped": false
+    },
+    "nursenestCoreSrcContent": {
+      "totalWalked": 42,
+      "byExt": {
+        ".json": 14,
+        ".ts": 2,
+        ".tsx": 25
+      },
+      "capped": false
+    },
+    "nursenestCoreSrcLegacyMarketing": {
+      "totalWalked": 15,
+      "byExt": {
+        ".tsx": 13,
+        ".ts": 1,
+        ".json": 0
+      },
+      "capped": false
+    }
+  },
+  "externalMirror": {
+    "status": "aborted",
+    "note": "Mount the Backup Plus volume on a machine where /Volumes/Backup Plus/... exists, OR copy NurseNest and 11 folders into this repo or an accessible path (e.g. /mnt/backup-nursenest)."
+  }
+}

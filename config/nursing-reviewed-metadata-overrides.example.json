@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "description": "Copy to nursing-reviewed-metadata-overrides.json or merge from nursing:apply-reviewed-metadata.",
+  "reviewed": true,
+  "cacheKeyExact": {
+    "example-cache-key-hex-from-export": {
+      "tier": "rn",
+      "exam": "NCLEX_RN",
+      "note": "example",
+      "reviewedAt": "2026-03-28",
+      "source": "manual_file"
+    }
+  }
+}

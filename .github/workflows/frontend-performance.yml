@@ -1,0 +1,108 @@
+name: Frontend performance budgets
+
+on:
+  pull_request:
+    paths:
+      - "nursenest-core/src/**"
+      - "nursenest-core/next.config.mjs"
+      - "nursenest-core/package.json"
+      - "nursenest-core/package-lock.json"
+  push:
+    branches: [main]
+    paths:
+      - "nursenest-core/src/**"
+      - "nursenest-core/next.config.mjs"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frontend-perf-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-budgets:
+    name: Source-level budget checks (fast, no build required)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Migration safety (blocks on non-concurrent index creation)
+        run: node scripts/check-migration-safety.mjs --base origin/main
+
+      - name: "use client" count (advisory — warns if count grows beyond 1000)"
+        run: |
+          COUNT=$(find src -type f \( -name "*.tsx" -o -name "*.ts" \) | \
+            xargs grep -l '"use client"' 2>/dev/null | wc -l)
+          echo "use client files: $COUNT"
+          if [ "$COUNT" -gt "1000" ]; then
+            echo "❌ use client count ($COUNT) exceeds budget (1000). Audit new client components."
+            exit 1
+          fi
+          echo "✅ within budget"
+
+      - name: Check for banned server-only imports in client components (strict)
+        run: node scripts/check-frontend-performance.mjs --strict
+        # Fails if Prisma, OpenAI SDK, etc. appear in "use client" files.
+        # Does not require a build — checks source only.
+        env:
+          # Script skips chunk analysis when .next dir is absent
+          SKIP_CHUNK_CHECK: "1"
+
+  query-budget-contracts:
+    name: Query budget contracts (no DB needed)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+
+      - run: npm ci
+
+      - name: Run query budget contract tests
+        run: node --import tsx --test src/lib/db/query-budget-contracts.test.ts
+        env:
+          DATABASE_URL: "postgresql://skip:skip@localhost:5432/skip"
+
+  bundle-size:
+    name: Bundle size check (requires build artifact)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+
+      - run: npm ci
+
+      - name: Build (production)
+        run: npm run build
+        env:
+          DATABASE_URL: "postgresql://skip:skip@localhost:5432/skip"
+          NEXTAUTH_SECRET: "ci-secret-placeholder"
+          NEXT_TELEMETRY_DISABLED: "1"
+
+      - name: Check bundle size budgets
+        run: node scripts/check-frontend-performance.mjs --report
+        # Fails if any single chunk > 800 KB or top-10 chunks > 4 MB combined.

@@ -1,0 +1,119 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import test from "node:test";
+import { CANONICAL_PRODUCTION_ORIGIN } from "@/lib/seo/canonical-site";
+import {
+  listAuthorityClusterPages,
+  listAuthorityClusterPaths,
+  listAuthorityClusterSiblings,
+} from "@/lib/seo/authority-cluster-pages";
+import { buildSitemapIndexXmlForOrigin } from "@/lib/seo/sitemap-index-children";
+
+const REQUIRED_PATHS = [
+  "/canada/np/cnple",
+  "/canada/np/cnple/questions",
+  "/canada/np/cnple/study-guide",
+  "/canada/np/cnple/case-based-questions",
+  "/canada/np/cnple/provisional-registration",
+  "/canada/np/cnple/loft-exam",
+  "/canada/np/cnple/pharmacology",
+  "/canada/np/cnple/clinical-judgment",
+  "/canada/np/cnple/practice-questions",
+  "/canada/np/cnple/pharmacology-questions",
+  "/canada/np/cnple/study-plan",
+  "/canada/np/cnple/exam-format",
+  "/canada/np/cnple/soap-note-scenarios",
+  "/canada/pn/rex-pn",
+  "/canada/pn/rex-pn/questions",
+  "/canada/pn/rex-pn/study-guide",
+  "/canada/pn/rex-pn/cat",
+  "/canada/pn/rex-pn/pharmacology",
+  "/canada/pn/rex-pn/client-needs",
+  "/canada/pn/rex-pn/practice-exam",
+  "/canada/pn/rex-pn/test-plan",
+  "/canada/pn/rex-pn/practice-questions",
+  "/canada/pn/rex-pn/delegation-questions",
+  "/canada/pn/rex-pn/priority-questions",
+  "/canada/pn/rex-pn/pharmacology-questions",
+  "/canada/pn/rex-pn/study-plan",
+  "/canada/pn/rex-pn/cat-simulation",
+  "/allied-health/respiratory-therapy",
+  "/allied-health/respiratory-therapy/exam-prep",
+  "/allied-health/respiratory-therapy/practice-questions",
+  "/allied-health/respiratory-therapy/abgs",
+  "/allied-health/respiratory-therapy/ventilation",
+  "/allied-health/respiratory-therapy/mechanical-ventilation",
+  "/allied-health/respiratory-therapy/oxygen-therapy",
+  "/allied-health/respiratory-therapy/airway-management",
+  "/allied-health/respiratory-therapy/pulmonary-function-testing",
+  "/allied-health/respiratory-therapy/abg-practice-questions",
+  "/allied-health/respiratory-therapy/mechanical-ventilation-questions",
+  "/allied-health/respiratory-therapy/oxygen-therapy-questions",
+  "/allied-health/respiratory-therapy/ventilator-modes",
+  "/allied-health/respiratory-therapy/ards-review",
+  "/allied-health/respiratory-therapy/airway-management-scenarios",
+] as const;
+
+function wordCount(page: ReturnType<typeof listAuthorityClusterPages>[number]): number {
+  const text = [
+    page.title,
+    page.description,
+    page.h1,
+    page.lead,
+    ...page.sections.flatMap((section) => [section.heading, ...section.body]),
+    ...page.mistakes,
+    ...page.examDay,
+    ...page.faq.flatMap((item) => [item.question, item.answer]),
+    ...page.table.rows.flat(),
+  ].join(" ");
+  return text.split(/\s+/).filter(Boolean).length;
+}
+
+test("authority cluster registry covers every requested route with unique SEO fields", () => {
+  const pages = listAuthorityClusterPages();
+  const paths = listAuthorityClusterPaths();
+  for (const required of REQUIRED_PATHS) {
+    assert.ok(paths.includes(required), `authority cluster registry must include ${required}`);
+  }
+  assert.ok(
+    !paths.some((p) => p === "/canada-nclex-rn" || p.startsWith("/canada-nclex-rn/")),
+    "legacy /canada-nclex-rn paths must not remain in the registry",
+  );
+  assert.ok(paths.includes("/canada/rn/nclex-rn"), "CA RN hub path must be registered");
+  assert.ok(
+    paths.includes("/canada/rn/nclex-rn/guide/study-guide"),
+    "CA RN guide paths must live under /guide/",
+  );
+  assert.equal(new Set(paths).size, paths.length, "authority cluster paths must be unique");
+  assert.equal(new Set(pages.map((page) => page.title)).size, pages.length, "title tags must be unique");
+  assert.equal(new Set(pages.map((page) => page.description)).size, pages.length, "meta descriptions must be unique");
+  assert.equal(new Set(pages.map((page) => page.h1)).size, pages.length, "H1s must be unique");
+
+  for (const page of pages) {
+    assert.ok(page.title.length > 12, `${page.path} title should be substantive`);
+    assert.ok(page.description.length >= 140 && page.description.length <= 220, `${page.path} meta description length`);
+    assert.ok(page.faq.length >= 4, `${page.path} should have visible FAQ data`);
+    assert.ok(page.ctas.length >= 4, `${page.path} should have study CTAs`);
+    assert.ok(page.table.rows.length >= 3, `${page.path} should have a useful comparison table`);
+    assert.ok(wordCount(page) >= 500, `${page.path} content should not be thin`);
+    assert.ok(listAuthorityClusterSiblings(page).length >= 7, `${page.path} should internally link to sibling pages`);
+  }
+});
+
+test("authority cluster sitemap is referenced by the sitemap index", () => {
+  const xml = buildSitemapIndexXmlForOrigin(CANONICAL_PRODUCTION_ORIGIN);
+  assert.match(xml, /https:\/\/www\.nursenest\.ca\/sitemap-authority-clusters\.xml/);
+});
+
+test("authority cluster renderer emits required SEO structured-data components", () => {
+  const src = fs.readFileSync(
+    path.join(process.cwd(), "src/components/seo/authority-cluster-page.tsx"),
+    "utf8",
+  );
+  assert.match(src, /<WebPageJsonLd\b/);
+  assert.match(src, /<ExamPrepCourseProgramJsonLd\b/);
+  assert.match(src, /<FaqJsonLd\b/);
+  assert.match(src, /BreadcrumbsFromResolution/);
+  assert.match(src, /listAuthorityClusterSiblings/);
+});

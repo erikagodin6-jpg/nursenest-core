@@ -1,0 +1,292 @@
+[
+  {
+    "question": "An RPN is caring for a client admitted with a Stage 2 pressure injury on the sacrum. During the morning assessment, the nurse notices the wound now has yellow, thick exudate, increased surrounding erythema, and the client reports new tenderness at the site. The client's temperature is 38.4°C. Which action should the nurse take FIRST?",
+    "option_a": "Apply a new hydrocolloid dressing and document the wound appearance",
+    "option_b": "Report the findings to the RN or supervising nurse immediately",
+    "option_c": "Increase the frequency of repositioning to every hour",
+    "option_d": "Obtain a wound swab culture before notifying anyone",
+    "correct_answer": "B",
+    "rationale": "The combination of yellow purulent exudate, increased surrounding erythema, new tenderness, and fever (38.4°C) indicates the wound has progressed to infection — a significant clinical deterioration that exceeds routine wound care management. The RPN's FIRST priority is prompt reporting to the RN or supervising nurse, because this client requires reassessment for systemic infection (potentially cellulitis or early sepsis), wound culture, and possible antibiotic therapy — all decisions that fall within RN/physician scope. Reporting first preserves the principle of working within collaborative scope while ensuring the client receives timely escalation. Although wound care and repositioning are important, they are secondary to recognizing and communicating a deteriorating clinical picture.",
+    "distractor_rationales": {
+      "A": "Applying a new dressing addresses the wound surface but ignores the systemic signs of infection (fever, purulent exudate, erythema). This would delay recognition of a potentially serious complication and is the wrong first action.",
+      "C": "Increasing repositioning frequency is a valid preventive and supportive intervention for pressure injuries, but it does not address the active infection that is now evident. Repositioning alone will not treat cellulitis or wound infection.",
+      "D": "Obtaining a wound culture is an appropriate intervention but is NOT the nurse's first independent action. In most Canadian practice settings, wound cultures require a physician or NP order, and the nurse must first report the deterioration so that orders can be obtained through the appropriate chain of communication."
+    },
+    "clinical_pearl": "A healing pressure injury should show decreased exudate, granulation tissue formation, and wound edge advancement. Increased exudate volume, change in colour to yellow or green, surrounding warmth/erythema, and systemic signs (fever, elevated WBC) all indicate infection. Think NERDS (Non-healing, Exudate increase, Red friable tissue, Debris, Smell) for local infection, and STONEES (Size increasing, Temperature elevated, Os probing to bone, New areas of breakdown, Exudate increase, Erythema/Edema, Smell) for spreading/systemic infection.",
+    "exam_strategy": "When a question describes worsening wound signs PLUS systemic symptoms (fever), the answer is almost always REPORT/NOTIFY first. RPN scope focuses on recognizing and reporting — not independently managing infections.",
+    "memory_hook": "PURULENT + FEVER = REPORT FIRST. The two-symptom combo (local AND systemic) signals escalation, not independent management.",
+    "hints": [
+      { "level": 1, "text": "Consider the combined picture: local wound changes AND a systemic sign (fever). When multiple body systems are affected, what principle guides nursing priority?" },
+      { "level": 2, "text": "These findings suggest the wound has progressed beyond a Stage 2 pressure injury to an infected wound. What falls outside the RPN's independent scope of practice when infection is suspected?" },
+      { "level": 3, "text": "Fever + purulent exudate + erythema = signs of infection requiring physician/NP assessment. The RPN's first action is to report findings through the appropriate chain — not to independently treat or culture the wound." }
+    ],
+    "difficulty": "moderate",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Integumentary / Wounds",
+    "client_needs": "Safety & Infection Control",
+    "topic": "Wound Assessment and Scope of Practice",
+    "question_type": "standard"
+  },
+  {
+    "question": "An RPN is preparing to administer 0.5 mg of digoxin IV to a client with heart failure. Before administration, the nurse assesses the client's apical pulse and obtains a rate of 52 beats per minute. The client is alert, denies chest pain, and the rhythm appears regular on the cardiac monitor. What should the nurse do?",
+    "option_a": "Administer the digoxin as ordered since the client is asymptomatic",
+    "option_b": "Hold the digoxin and notify the prescriber immediately",
+    "option_c": "Administer half the ordered dose and reassess in one hour",
+    "option_d": "Hold the digoxin, reassess the pulse in 30 minutes, and administer if rate improves",
+    "correct_answer": "B",
+    "rationale": "Digoxin is a high-alert cardiac glycoside with a narrow therapeutic window. The standard nursing protocol is to hold digoxin and contact the prescriber when the adult apical pulse is below 60 bpm (bradycardia). An apical pulse of 52 bpm is significantly below this threshold. Even though the client is currently asymptomatic, bradycardia combined with digoxin administration creates serious risk of life-threatening arrhythmias (heart block, ventricular fibrillation) because digoxin slows conduction through the AV node. The nurse must report this finding to the prescriber IMMEDIATELY so the order can be reviewed, digoxin levels checked, and further cardiac monitoring initiated. Administering any portion of the dose without prescriber guidance is unsafe and outside nursing scope.",
+    "distractor_rationales": {
+      "A": "This is dangerous. Being asymptomatic does not make it safe to administer digoxin with a pulse of 52 bpm. Bradycardia is an absolute contraindication. The nurse would be administering a medication known to further slow the heart rate, which could precipitate complete heart block or cardiac arrest.",
+      "C": "Modifying a medication dose without a prescriber order is outside the nurse's scope of practice and constitutes an unauthorized medication alteration. The nurse cannot independently decide to administer half a dose.",
+      "D": "Waiting 30 minutes delays reporting to the prescriber and does not address the underlying issue. If the pulse was 52 bpm before a dose of digoxin, reassessing alone is inadequate. The prescriber must be contacted now to evaluate digoxin levels, ECG changes, and whether the dose should be held or permanently adjusted."
+    },
+    "clinical_pearl": "The '60 Rule' for digoxin: HOLD and REPORT if the apical pulse is below 60 bpm in adults, or below 90-110 bpm in infants (varies by age). Also hold and report for new irregular rhythm, digoxin toxicity signs (nausea, vomiting, visual changes — 'yellow-green halos', bradycardia, arrhythmias).",
+    "exam_strategy": "High-alert medications (digoxin, anticoagulants, insulin, opioids) almost always have a holding parameter that must be checked. On exam questions, if the parameter is violated, the answer is HOLD + NOTIFY — never administer any portion of the dose.",
+    "memory_hook": "DIGOXIN: Below 60? HOLD and GO (report to prescriber). Symptoms of toxicity: Nausea, Yellow-green vision, Anorexia — think 'Dig or Die.'",
+    "hints": [
+      { "level": 1, "text": "Digoxin is a high-alert medication that slows the heart rate. Before administering any cardiac medication, what specific parameter must always be assessed?" },
+      { "level": 2, "text": "The adult threshold for withholding digoxin is a pulse below 60 bpm. The client's pulse is 52 bpm. What does the nurse do when a pre-administration parameter is outside the safe range?" },
+      { "level": 3, "text": "When the apical pulse is below 60 bpm, the nurse holds digoxin AND reports immediately to the prescriber. This is non-negotiable regardless of whether the client feels symptoms — future doses depend on a prescriber reassessment, not the nurse's independent judgment." }
+    ],
+    "difficulty": "moderate",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Pharmacology",
+    "client_needs": "Pharmacological Therapies / Safety",
+    "topic": "High-Alert Medications / Pre-Administration Checks",
+    "question_type": "standard"
+  },
+  {
+    "question": "An RPN is preparing to insert a urinary catheter for a female client who requires strict intake and output monitoring post-operatively. After gathering equipment and explaining the procedure, the nurse positions the client in dorsal recumbent position. What should the nurse do NEXT?",
+    "option_a": "Open the catheter kit and set up the sterile field",
+    "option_b": "Perform hand hygiene and apply clean gloves to cleanse the perineal area",
+    "option_c": "Insert the catheter immediately using the dominant hand",
+    "option_d": "Place the sterile drape and then locate the urinary meatus",
+    "correct_answer": "B",
+    "rationale": "Before setting up the sterile field, the perineum must be assessed and cleansed with soap and water using clean gloves (routine hygiene step). This is a critical preparatory step because cleansing removes gross contamination (feces, secretions, mucus) from the perineal area before the sterile procedure begins. If the perineum is contaminated, the nurse should cleanse it with clean gloves and soap and water first — then discard gloves, perform hand hygiene, and proceed to open the sterile catheter kit. Setting up the sterile field over a contaminated perineum risks contaminating the sterile field or introducing pathogens into the bladder, causing a catheter-associated urinary tract infection (CAUTI). The correct sequence is: position → assess/cleanse perineum (clean technique) → set up sterile field → cleanse with antiseptic (sterile technique) → insert catheter.",
+    "distractor_rationales": {
+      "A": "Opening the sterile kit before cleansing the perineum is out of sequence. If the perineum is visibly soiled, opening the sterile field first risks contaminating the contents before the procedure even begins.",
+      "C": "Inserting the catheter immediately skips the essential preparatory, assessment, and cleansing steps. Rushing to insertion without a clean/sterile field preparation dramatically increases CAUTI risk.",
+      "D": "Placing the sterile drape before cleansing is premature. The sterile drape is part of the sterile catheterization setup and should only be placed after the perineum has been pre-cleansed with clean technique and the sterile kit is opened."
+    },
+    "clinical_pearl": "CAUTI prevention is a critical nursing priority. Proper catheter insertion sequence: 1) Perform hand hygiene, 2) Position client, 3) Cleanse perineum with soap and water (clean gloves), 4) Discard gloves, perform hand hygiene, 5) Open sterile kit and set up sterile field, 6) Apply sterile gloves, 7) Cleanse meatus with antiseptic, 8) Insert catheter with sterile technique.",
+    "exam_strategy": "Procedure sequencing questions test whether the nurse knows the correct ORDER of steps. Look for the step that must logically precede the others. Cleansing (clean technique) always precedes sterile setup — you can't maintain sterility over a contaminated field.",
+    "memory_hook": "CLEAN before STERILE: Wash the area with clean gloves BEFORE setting up the sterile field. Think of it as cleaning the floor before laying a white carpet — never the reverse.",
+    "hints": [
+      { "level": 1, "text": "The client is positioned and the nurse is ready to start the procedure. Before opening a sterile catheter kit, what preparatory step ensures the sterile field will remain uncontaminated?" },
+      { "level": 2, "text": "Catheter insertion is a sterile procedure, but perineal pre-cleansing is a clean technique step that comes FIRST. What should the nurse use and wear to perform this pre-cleansing?" },
+      { "level": 3, "text": "The next step after positioning is perineal cleansing with soap and water using clean gloves. Only after this preparatory step should the nurse open the sterile kit and proceed with sterile technique for catheter insertion." }
+    ],
+    "difficulty": "moderate",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Genitourinary / Procedures",
+    "client_needs": "Safety / Infection Control / Procedures",
+    "topic": "Urinary Catheterization Technique",
+    "question_type": "standard"
+  },
+  {
+    "question": "An RPN is assigned four clients on a medical unit. Which client should the nurse assess FIRST?",
+    "option_a": "A 68-year-old with COPD who is requesting pain medication for chronic back pain, rated 5/10",
+    "option_b": "A 72-year-old post-op Day 1 bowel resection client whose oxygen saturation has dropped from 96% to 89% over the last 30 minutes",
+    "option_c": "A 55-year-old with Type 2 diabetes admitted for a foot ulcer who needs their morning blood glucose checked before breakfast",
+    "option_d": "A 48-year-old with a UTI who is asking to use the bathroom and is ambulatory",
+    "correct_answer": "B",
+    "rationale": "This client represents the highest clinical urgency using the ABCs (Airway, Breathing, Circulation) and early warning principles. A progressive drop in oxygen saturation from 96% to 89% over 30 minutes in a post-operative Day 1 bowel resection client signals acute respiratory deterioration. In post-abdominal surgery patients, this pattern raises immediate concern for atelectasis, pneumonia, pulmonary embolism, or internal bleeding — all of which can be life-threatening. An SpO2 of 89% is below the acceptable threshold of 95% and indicates hypoxemia requiring immediate assessment and intervention. The other clients have stable needs: chronic pain (not acute), routine blood glucose monitoring, and a routine elimination need.",
+    "distractor_rationales": {
+      "A": "Chronic back pain rated 5/10 in a client with COPD is uncomfortable but not immediately life-threatening. Pain management is important, but it takes lower priority than a client with rapidly developing respiratory compromise.",
+      "C": "Morning blood glucose checking before breakfast is time-sensitive (to ensure meal coverage) but not a life-threatening emergency. This can be addressed after the priority client with respiratory distress is stabilized.",
+      "D": "An ambulatory client requesting to use the bathroom is a low-priority routine need. The nurse can address this with a brief response while prioritizing the client with deteriorating oxygenation."
+    },
+    "clinical_pearl": "Use ABC + stability when triaging multiple clients: Airway/Breathing concerns (hypoxemia, respiratory distress) always take priority over comfort, routine monitoring, or predictable needs. Trending deterioration (SpO2 dropping over time) is more alarming than a static abnormal finding — it indicates a worsening trajectory.",
+    "exam_strategy": "For priority questions, look for the client who is TRENDING WORSE, not just abnormal. A progressive SpO2 drop is more urgent than a static pain complaint. Use the Maslow hierarchy (physiological > safety > psychosocial) and ABC framework.",
+    "memory_hook": "ABC = Airway, Breathing, Circulation — these are ALWAYS highest priority. When in doubt, the client with a breathing problem sees the nurse first. 'Not breathing right = Nurse arrives tonight.'",
+    "hints": [
+      { "level": 1, "text": "To prioritize among multiple clients, use the ABC framework (Airway, Breathing, Circulation). Which client has a problem in one of these fundamental categories?" },
+      { "level": 2, "text": "One client has a post-operative complication involving oxygenation — which is a respiratory (Breathing) concern. Notice this problem is getting WORSE over 30 minutes, not remaining stable. How does a trending decline change the priority?" },
+      { "level": 3, "text": "A post-op client with SpO2 dropping from 96% to 89% over 30 minutes has acute hypoxemia with a deteriorating trajectory — this is your highest priority. The other clients have chronic pain, routine monitoring needs, and a predictable elimination need." }
+    ],
+    "difficulty": "easy",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Respiratory",
+    "client_needs": "Prioritization / Management of Care",
+    "topic": "Client Prioritization — ABCs",
+    "question_type": "standard"
+  },
+  {
+    "question": "An RPN is educating a client newly diagnosed with Type 2 diabetes about hypoglycemia. Which statement made by the client indicates a need for further teaching?",
+    "option_a": "\"If I feel shaky and sweaty and my blood sugar reads 3.2 mmol/L, I should eat 15 grams of carbohydrates.\"",
+    "option_b": "\"I should recheck my blood sugar 15 minutes after treating a low blood sugar.\"",
+    "option_c": "\"If my blood sugar stays low after two treatments, I should eat a full meal.\"",
+    "option_d": "\"I can treat a low blood sugar with 15 mL of table sugar dissolved in water.\"",
+    "correct_answer": "C",
+    "rationale": "Option C demonstrates an incorrect understanding of hypoglycemia management. After two 15-gram fast-acting carbohydrate treatments that fail to raise blood glucose above 4 mmol/L, the correct action is to contact a healthcare provider or call emergency services — NOT to eat a full meal. A full meal contains protein and fat, which slow the absorption of glucose and are NOT appropriate for acute hypoglycemia rescue. The correct protocol is the '15-15 Rule': 15 grams of fast-acting carbohydrate → wait 15 minutes → recheck blood glucose → repeat if still below 4 mmol/L → if no improvement after two cycles, seek medical help. All other client statements reflect correct hypoglycemia management.",
+    "distractor_rationales": {
+      "A": "This statement is CORRECT. Symptoms of hypoglycemia (shakiness, diaphoresis) with a blood glucose of 3.2 mmol/L (below the 4 mmol/L threshold) appropriately triggers the 15-gram carbohydrate treatment. No further teaching needed for this.",
+      "B": "This statement is CORRECT. Rechecking blood glucose 15 minutes after treatment is the standard protocol to confirm the response to treatment.",
+      "D": "This statement is CORRECT. 15 mL (1 tablespoon) of table sugar dissolved in water provides approximately 15 grams of fast-acting carbohydrate and is an appropriate hypoglycemia treatment. Other valid options include 4 glucose tablets, 125 mL of juice, or 150 mL of regular (not diet) soft drink."
+    },
+    "clinical_pearl": "The 15-15 Rule: 15g fast-acting carbs → wait 15 min → recheck. Examples of 15g fast-acting carbs: 4 glucose tablets, 15 mL (1 tbsp) honey or table sugar, 125 mL juice or regular pop, 3 tsp of sugar in water. After treating: once BG >4 mmol/L, follow with a snack containing complex carbs + protein if the next meal is >1 hour away. Canadian target: BG >4 mmol/L to resolve hypoglycemia.",
+    "exam_strategy": "Questions asking about 'needs further teaching' or 'indicates incorrect understanding' are looking for the WRONG statement. After identifying the error, make sure you know WHY it's wrong — here, the error is recommending a full meal (slows absorption) instead of fast-acting carbs or seeking help.",
+    "memory_hook": "15-15 Rule: 15g of FAST carbs (juice, sugar, glucose tabs) → wait 15 minutes → re-check. If still low after 2 rounds → CALL FOR HELP. NOT a full meal — fat and protein slow glucose absorption.",
+    "hints": [
+      { "level": 1, "text": "This is an 'indicates further teaching' question — you're looking for the INCORRECT statement. Review the standard Canadian hypoglycemia treatment protocol (15-15 Rule) and identify which statement breaks the rules." },
+      { "level": 2, "text": "The 15-15 Rule: 15g of fast-acting carbohydrate → wait 15 min → recheck. If blood glucose remains below 4 mmol/L after TWO treatments, what is the correct next step — eating a full meal, or something else?" },
+      { "level": 3, "text": "After two failed hypoglycemia treatments, a full meal is NOT the answer — it contains protein and fat which slow glucose absorption. The correct action is to seek medical help (call 911 or contact a healthcare provider). Option C states the wrong next step." }
+    ],
+    "difficulty": "moderate",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Endocrine",
+    "client_needs": "Health Promotion / Patient Education",
+    "topic": "Hypoglycemia Management / Diabetes Teaching",
+    "question_type": "standard"
+  },
+  {
+    "question": "An RPN is caring for a client receiving a blood transfusion who reports sudden onset of chills, back pain, and feels 'hot all over.' The client's temperature has increased from 37.0°C to 38.9°C and the blood pressure has decreased from 128/76 to 102/62 mmHg. What is the nurse's PRIORITY action?",
+    "option_a": "Slow the transfusion rate and monitor the client for 15 minutes",
+    "option_b": "Stop the transfusion immediately and maintain IV access with normal saline",
+    "option_c": "Administer diphenhydramine (Benadryl) as per the blood transfusion policy",
+    "option_d": "Notify the blood bank and obtain a urine specimen",
+    "correct_answer": "B",
+    "rationale": "The client is exhibiting classic signs of an acute haemolytic transfusion reaction (AHTR) — the most dangerous type of blood transfusion reaction. The hallmark triad is: fever (rising temperature), back/flank pain (from intravascular haemolysis affecting the kidneys), and hypotension (indicating cardiovascular compromise and potential shock). In an AHTR, incompatible blood activates the complement system causing massive haemolysis, which can progress to disseminated intravascular coagulation (DIC), acute kidney injury, and death. The PRIORITY action is to STOP the transfusion IMMEDIATELY and keep the IV line open with normal saline (not through the blood tubing). This is a nursing emergency requiring immediate physician notification, vital sign monitoring, and blood bank notification. All other actions (diphenhydramine, slowing rate, obtaining specimens) come AFTER the transfusion is stopped.",
+    "distractor_rationales": {
+      "A": "Slowing the transfusion is appropriate for a mild febrile non-haemolytic reaction, but this client's combined findings (fever + back pain + hypotension) suggest an acute haemolytic reaction — slowing the infusion rate continues to deliver incompatible blood and increases the risk of haemolysis, DIC, and renal failure. The transfusion must be STOPPED, not slowed.",
+      "C": "Diphenhydramine is used for mild allergic reactions (urticaria, pruritus) — NOT for haemolytic reactions. Administering antihistamine without stopping the transfusion would delay the critical intervention and allow continued infusion of incompatible blood.",
+      "D": "Notifying the blood bank and obtaining urine are appropriate subsequent actions, but they are NOT the first priority. The transfusion must be stopped first to prevent further haemolysis before any other action is taken."
+    },
+    "clinical_pearl": "Blood transfusion reactions by severity: (1) Mild Allergic (urticaria, pruritus) — SLOW transfusion, give antihistamine; (2) Febrile Non-Haemolytic (fever, chills without haemolysis) — STOP transfusion, assess, restart slowly with new blood if stable; (3) Acute Haemolytic (fever + back pain + hypotension) — STOP IMMEDIATELY, normal saline, notify MD/blood bank. Back pain + hypotension = haemolytic until proven otherwise.",
+    "exam_strategy": "For transfusion reaction questions: ALWAYS stop the transfusion for moderate-severe reactions BEFORE any other intervention. The sequence is: STOP → Keep IV open with NS → Notify MD → Monitor vitals → Notify blood bank → Collect specimens.",
+    "memory_hook": "STOP-STAT: Stop Transfusion, Open line with Saline, Take vitals, Summon MD, Alert blood bank, Take specimens. 'Back pain + fever + low BP during transfusion = STOP the drip, call for help.'",
+    "hints": [
+      { "level": 1, "text": "The client is receiving a blood transfusion and developing new symptoms — chills, back pain, fever, and low blood pressure. What type of complication is the nurse concerned about, and what is always the first nursing action for a serious transfusion reaction?" },
+      { "level": 2, "text": "Back pain + fever + hypotension during a transfusion is the classic triad of an acute haemolytic reaction. This is caused by ABO incompatibility and can cause renal failure and DIC. Before any medication or notification, what must happen first?" },
+      { "level": 3, "text": "Stop the transfusion immediately and maintain the IV line with normal saline (not through the blood tubing). This prevents further haemolysis. All other actions — notifying the MD, blood bank, obtaining specimens — come AFTER stopping the transfusion." }
+    ],
+    "difficulty": "moderate",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Hematology / Blood Products",
+    "client_needs": "Safety / Physiological Adaptation",
+    "topic": "Blood Transfusion Reactions",
+    "question_type": "standard"
+  },
+  {
+    "question": "An RPN is caring for a client on a medical unit who has been placed in contact precautions for Clostridioides difficile (C. diff) infection. The client needs to be transferred to the X-ray department for a chest X-ray. Which PPE is MOST appropriate for the transporting nurse during the transfer?",
+    "option_a": "Surgical mask and gloves",
+    "option_b": "N95 respirator, gown, and gloves",
+    "option_c": "Gown and gloves",
+    "option_d": "No additional PPE is required if the client is ambulatory",
+    "correct_answer": "C",
+    "rationale": "Clostridioides difficile (C. diff) is transmitted via the fecal-oral route through contact with spores on surfaces, equipment, and hands. It is classified under CONTACT precautions, which require a gown and gloves for any direct patient contact or potential contact with contaminated surfaces. A surgical mask is NOT required because C. diff is not transmitted by airborne or droplet routes. An N95 respirator is used for airborne precautions (TB, measles, varicella). Importantly, C. diff spores are RESISTANT to alcohol-based hand sanitizers — hand washing with soap and water is required after removal of gloves. During transport, the gown and gloves protect the nurse and prevent environmental contamination of the hallways and X-ray department.",
+    "distractor_rationales": {
+      "A": "A surgical mask is not indicated for contact precautions. C. diff spreads via the fecal-oral route, not through respiratory droplets. Adding a mask here would suggest a misunderstanding of C. diff transmission pathways. Gloves alone without a gown are insufficient for contact precautions when direct client contact is anticipated.",
+      "B": "An N95 respirator is used for airborne precautions (Mycobacterium tuberculosis, measles, varicella, RSV in some settings). C. diff requires contact precautions, not airborne. Using an N95 wastes resources and incorrectly signals airborne transmission risk.",
+      "D": "PPE is required regardless of the client's mobility status. Contact precautions are based on the organism's transmission route, not the client's functional ability. Any nurse who will have direct contact with a C. diff client needs gown and gloves."
+    },
+    "clinical_pearl": "Contact precautions = GOWN + GLOVES. Key point for C. diff: Alcohol-based hand rub does NOT kill C. diff spores — SOAP AND WATER is mandatory for hand hygiene after C. diff client contact. C. diff spores can survive on surfaces for months. PPE summary: Airborne = N95 + gown + gloves (+ negative pressure room); Droplet = surgical mask + gown + gloves; Contact = gown + gloves.",
+    "exam_strategy": "PPE questions require knowing the precaution TYPE and then knowing WHAT each type requires. Match the organism → transmission route → precaution type → PPE. C. diff: fecal-oral contact → contact precautions → gown + gloves. Alcohol rub does NOT kill C. diff spores — this is a classic exam trap.",
+    "memory_hook": "C. diff = Contact → Gloves + Gown, soap & water to close. Remember: 'DIFF-icult to kill — alcohol doesn't work, you need SOAP to STOP the spore.'",
+    "hints": [
+      { "level": 1, "text": "C. diff requires a specific type of isolation precaution. First, recall HOW C. diff is transmitted — through spores via the fecal-oral route (contact with contaminated surfaces/hands). What type of precautions does this transmission route require?" },
+      { "level": 2, "text": "C. diff is a contact precaution organism. Contact precautions require specific PPE for direct patient contact. Review: what PPE is required for contact precautions vs. droplet vs. airborne?" },
+      { "level": 3, "text": "Contact precautions = gown + gloves. A surgical mask is NOT needed (C. diff is not airborne). An N95 is for airborne precautions only. Remember: after removing gloves with C. diff clients, use SOAP AND WATER — not alcohol gel — because alcohol doesn't kill C. diff spores." }
+    ],
+    "difficulty": "easy",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Immune System / Infection Control",
+    "client_needs": "Safety / Infection Control",
+    "topic": "Isolation Precautions and PPE",
+    "question_type": "standard"
+  },
+  {
+    "question": "An RPN is caring for a client at 38 weeks gestation who presents to the antenatal unit reporting decreased fetal movement for the past 24 hours. The client's last kick count showed 4 movements in 2 hours. Which nursing action is MOST appropriate?",
+    "option_a": "Reassure the client that decreased movement at term is normal as the baby becomes cramped",
+    "option_b": "Instruct the client to perform a kick count at home and return if fewer than 6 movements in 2 hours",
+    "option_c": "Notify the obstetrical team immediately and initiate electronic fetal monitoring",
+    "option_d": "Administer a glucose drink to stimulate fetal movement and recount",
+    "correct_answer": "C",
+    "rationale": "Decreased fetal movement is a significant warning sign of fetal compromise and should never be dismissed. The standard fetal kick count threshold in Canada (Sadovsky method) is 6 movements in 2 hours. This client reported only 4 movements in 2 hours over the past 24 hours — below the threshold and persisting for a prolonged period. At 38 weeks, decreased fetal movement raises concern for placental insufficiency, oligohydramnios, umbilical cord compression, or fetal hypoxia. The appropriate nursing action is IMMEDIATE notification of the obstetrical team and initiation of electronic fetal monitoring (non-stress test or continuous CTG) to assess fetal well-being. This is not the time for reassurance or home monitoring — the client is already in the clinical setting and the duration warrants urgent assessment.",
+    "distractor_rationales": {
+      "A": "Decreased fetal movement is never reassured away as a normal finding. While there is some natural slowing of gross fetal movement near term, the fetus should still demonstrate at least 6 movements in 2 hours. Reassuring a client with a 24-hour history of decreased movement and a failed kick count is dangerous and could result in missed fetal distress or fetal death.",
+      "B": "This option sends the client HOME when she is already in the clinical setting and has an abnormal kick count. Home monitoring is not appropriate when the movement threshold has already been violated over 24 hours — this level of concern requires in-hospital assessment.",
+      "D": "While some practitioners use a carbohydrate drink to briefly stimulate fetal movement during biophysical profile testing, this is not a first-line nursing intervention for decreased fetal movement at 38 weeks. It delays the critical step of notifying the obstetrical team and initiating fetal monitoring."
+    },
+    "clinical_pearl": "Fetal kick count thresholds (Canadian): Sadovsky method: Fewer than 6 movements in 2 hours = notify healthcare provider. Cardiff method: Fewer than 10 movements in 12 hours = notify provider. At any gestation: persistent decreased fetal movement warrants electronic fetal monitoring (NST or CTG). Key risk factors for decreased movement: placental insufficiency, IUGR, oligohydramnios, cord compression, maternal sedative use.",
+    "exam_strategy": "For obstetrical questions, decreased fetal movement below the threshold = urgent escalation, NOT reassurance. The 'notify the obstetrical team and initiate monitoring' option is almost always correct when a fetal warning sign is present.",
+    "memory_hook": "6 in 2: If baby moves fewer than SIX times in TWO hours, CALL the team. 'Less than six = call for a fix.' No reassurance, no home monitoring — assess NOW.",
+    "hints": [
+      { "level": 1, "text": "Decreased fetal movement at term is a significant warning sign, not a normal finding to be dismissed. What is the standard fetal kick count threshold in Canada, and has this client met it?" },
+      { "level": 2, "text": "The client has fewer than 6 movements in 2 hours AND has had this pattern for 24 hours. She is already in the clinical setting. Between reassurance, home monitoring, or escalation to the obstetrical team — which response is appropriate for a client with a concerning fetal status already in hospital?" },
+      { "level": 3, "text": "This client has a failed kick count (4 movements, below the 6-in-2 threshold) lasting 24 hours. The correct response is immediate notification of the obstetrical team and initiation of electronic fetal monitoring. Never reassure away decreased fetal movement — it can be the first sign of fetal compromise." }
+    ],
+    "difficulty": "moderate",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Maternity",
+    "client_needs": "Health Promotion / Physiological Adaptation",
+    "topic": "Fetal Well-Being / Decreased Fetal Movement",
+    "question_type": "standard"
+  },
+  {
+    "question": "An RPN is caring for a client who returns from a cardiac catheterization via the right femoral artery approach. Thirty minutes post-procedure, the nurse assesses the puncture site and notes a firm, expanding mass at the groin with overlying skin discolouration. The affected leg is cool and pale compared to the left. What should the nurse do FIRST?",
+    "option_a": "Apply manual pressure to the site for 10 minutes and reassess",
+    "option_b": "Notify the physician immediately and prepare the client for urgent assessment",
+    "option_c": "Elevate the right leg above heart level to reduce swelling",
+    "option_d": "Apply a cold compress to the groin site to control bleeding",
+    "correct_answer": "B",
+    "rationale": "The findings describe a rapidly expanding haematoma at the femoral puncture site with signs of acute arterial compromise (leg coolness, pallor) — this is consistent with a pseudoaneurysm or arterial haemorrhage, a serious post-cardiac catheterization complication. The expanding mass indicates ongoing arterial bleeding under the skin. The coolness and pallor of the affected leg suggest compromised distal perfusion — the haematoma may be compressing the femoral artery, reducing blood flow to the leg. This is a vascular emergency. The nurse must notify the physician IMMEDIATELY for urgent assessment, as the client may require interventional or surgical management. While manual pressure may be applied, an expanding pulsatile haematoma with vascular compromise is beyond basic pressure management and requires urgent medical response.",
+    "distractor_rationales": {
+      "A": "Manual pressure alone is insufficient when the haematoma is EXPANDING (indicating ongoing significant arterial bleeding) AND there are signs of vascular compromise (cool, pale leg). Simply applying pressure delays physician notification and does not address the underlying arterial bleeding or limb ischemia.",
+      "C": "Elevating the leg above heart level is contraindicated when vascular compromise is suspected. Elevation reduces arterial inflow further, worsening ischemia in an already compromised limb. Never elevate a limb with suspected arterial occlusion.",
+      "D": "A cold compress is not an appropriate intervention for arterial haemorrhage or haematoma expanding post-catheterization. Cold does not provide adequate haemostasis for arterial bleeding and is not a standard of care for this complication."
+    },
+    "clinical_pearl": "Post-cardiac catheterization (femoral approach) complications to monitor: (1) Haematoma — localized swelling; (2) Pseudoaneurysm — pulsatile mass that feels like a heartbeat; (3) Retroperitoneal bleed — sudden back/flank pain, falling BP without visible swelling; (4) Arterial occlusion — 5 Ps: Pain, Pallor, Pulselessness, Paresthesia, Paralysis. Any expanding mass + distal vascular changes = URGENT physician notification.",
+    "exam_strategy": "Post-procedure complication questions: When vascular complications are present (expanding haematoma, coolness, pallor, pulselessness), the answer is notify the physician immediately — not apply pressure alone, not use basic comfort measures. Vascular emergencies need urgent escalation.",
+    "memory_hook": "After femoral cath, assess the 5 Ps: Pain, Pallor, Pulselessness, Paresthesia, Paralysis = arterial compromise. Expanding mass + any 5P = CALL the physician STAT.",
+    "hints": [
+      { "level": 1, "text": "Post-cardiac catheterization clients require close monitoring of the puncture site for vascular complications. What complication does an 'expanding firm mass' at the groin site combined with a cool, pale leg suggest?" },
+      { "level": 2, "text": "An expanding haematoma with distal vascular changes (cool, pale leg) after femoral cardiac catheterization suggests arterial haemorrhage with possible arterial compromise — a vascular emergency. Is this a situation the nurse can manage independently with pressure, or does it require urgent physician assessment?" },
+      { "level": 3, "text": "Expanding haematoma + cool pale limb = vascular emergency. Notify the physician IMMEDIATELY. Leg elevation worsens arterial compromise. Manual pressure alone is insufficient for a pulsatile expanding haematoma. Urgency = escalation first." }
+    ],
+    "difficulty": "hard",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Cardiovascular",
+    "client_needs": "Physiological Adaptation / Reduction of Risk",
+    "topic": "Post-Procedural Complications — Cardiac Catheterization",
+    "question_type": "standard"
+  },
+  {
+    "question": "An RPN is delegating tasks to an unregulated care provider (UCP) on a busy medical unit. Which task is MOST appropriate to delegate to the UCP?",
+    "option_a": "Assess a client who is reporting new-onset chest pain",
+    "option_b": "Ambulate a client who is post-op Day 2 after knee replacement and is documented as stable",
+    "option_c": "Administer a prescribed oral acetaminophen to a client with a headache",
+    "option_d": "Perform a complete skin assessment on a client admitted with a new rash",
+    "correct_answer": "B",
+    "rationale": "Delegation to UCPs must involve tasks that are routine, predictable, and do not require nursing judgment or assessment. Ambulating a stable post-op Day 2 knee replacement client is a structured, routine task within UCP training — the client's stability has already been established by the nurse, and the task involves predictable physical assistance. The RPN retains responsibility for the client's overall care and must ensure the UCP is competent and has been instructed on what to report. Assessment (chest pain, new rash), medication administration (requires a regulated professional), and clinical evaluation are outside UCP scope and cannot be delegated.",
+    "distractor_rationales": {
+      "A": "A client reporting new-onset chest pain requires immediate nursing assessment to determine the severity and nature of the symptom (cardiac vs. musculoskeletal vs. respiratory). This requires clinical judgment and is entirely within the nurse's scope — it CANNOT be delegated to a UCP.",
+      "C": "Medication administration — even for an oral OTC medication like acetaminophen — requires a regulated nurse in most Canadian provincial practice settings. UCPs do not have the authority to administer prescribed medications. This task cannot be delegated.",
+      "D": "A complete skin assessment for a new rash requires clinical nursing judgment to characterize lesions, consider differential diagnoses, and determine reporting requirements. This is an assessment function that must be performed by a regulated nurse — it is not delegable to a UCP."
+    },
+    "clinical_pearl": "Delegation criteria (Canadian practice): A task is delegatable to a UCP if it is: (1) Routine and predictable, (2) Does not require ongoing nursing judgment/assessment, (3) The UCP is trained and competent, (4) The outcome is relatively safe and predictable. The 5 Rights of Delegation: Right Task, Right Person, Right Communication, Right Circumstances, Right Supervision.",
+    "exam_strategy": "Delegation questions: Never delegate ASSESSMENT, TEACHING, EVALUATION, or MEDICATION ADMINISTRATION to UCPs. Delegate activities of daily living (bathing, ambulation, feeding, vital signs in stable clients) and documented stable care tasks.",
+    "memory_hook": "UCPs can ATME: Ambulate, Transport, Monitor (stable vitals), Eat (assist with meals). They CANNOT ASSESS, EVALUATE, MEDICATE, or TEACH.",
+    "hints": [
+      { "level": 1, "text": "Delegation to UCPs must involve tasks that are routine, predictable, and do not require nursing judgment or clinical assessment. Which of the four options best matches this description?" },
+      { "level": 2, "text": "Eliminate options involving new symptoms (chest pain, new rash) — those require nurse assessment. Eliminate medication administration — UCPs cannot give medications. What remains?" },
+      { "level": 3, "text": "Ambulating a stable, documented post-op Day 2 client is a structured, routine task appropriate for a UCP under supervision. Assessment, medication administration, and evaluation of new symptoms are always the nurse's responsibility and cannot be delegated." }
+    ],
+    "difficulty": "easy",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Leadership / Management",
+    "client_needs": "Management of Care / Delegation",
+    "topic": "Delegation to Unregulated Care Providers",
+    "question_type": "standard"
+  }
+]

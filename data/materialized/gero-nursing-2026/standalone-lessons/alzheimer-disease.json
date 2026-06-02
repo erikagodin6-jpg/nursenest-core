@@ -1,0 +1,756 @@
+{
+  "slug": "alzheimer-disease-comprehensive",
+  "title": "Alzheimer's Disease: Comprehensive Clinical Nursing Guide",
+  "packageId": "standalone-gero",
+  "examTargets": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","FNP","AGPCNP"],
+  "sections": [
+    {
+      "id": "learning_objectives",
+      "title": "Learning Objectives",
+      "content": [
+        "1. Describe the neuropathological hallmarks of Alzheimer's disease including the amyloid cascade hypothesis, tau tangles, and cholinergic deficit theory.",
+        "2. Apply the FAST/Reisberg staging scale to identify the 7 stages of Alzheimer's disease and articulate specific nursing implications for each stage.",
+        "3. Identify the genetic risk factors for Alzheimer's disease, distinguishing APOE4 risk from familial autosomal dominant mutations.",
+        "4. Explain the mechanism of action, nursing considerations, and monitoring requirements for all FDA-approved pharmacological treatments including disease-modifying therapies.",
+        "5. Develop an evidence-based care plan addressing driving cessation, safety, and advance care planning in early Alzheimer's disease.",
+        "6. Implement non-pharmacological strategies for managing behavioral and psychological symptoms of dementia (BPSD) across all stages.",
+        "7. Provide evidence-based family education addressing prognosis, caregiver burden, community resources, and end-of-life care decisions."
+      ]
+    },
+    {
+      "id": "blueprint_mapping",
+      "title": "Blueprint Mapping",
+      "examTargets": {
+        "NCLEX_clientNeeds": [
+          "Psychosocial Integrity: Mental Health Concepts, Therapeutic Communication, Coping Mechanisms",
+          "Physiological Integrity: Pharmacological Therapies, Basic Care and Comfort, Reduction of Risk Potential",
+          "Safe and Effective Care Environment: Safety and Infection Control, Coordinated Care"
+        ],
+        "CNPLE_domains": [
+          "Domain 1: Professional Responsibility",
+          "Domain 2: Clinical Judgment",
+          "Domain 3: Communication and Relationship-Centered Care",
+          "Domain 5: Quality Improvement"
+        ],
+        "highYieldTopics": [
+          "FAST staging — stage-specific nursing interventions",
+          "AChEI mechanism of action and nursing considerations",
+          "Safety priorities: driving, wandering, aspiration",
+          "Advance care planning and substitute decision-making",
+          "Anticholinergic medication avoidance",
+          "End-of-life nutrition decisions in late-stage AD"
+        ]
+      }
+    },
+    {
+      "id": "core_content",
+      "title": "Core Clinical Content",
+      "subsections": [
+        {
+          "title": "Neuropathology — The Amyloid Cascade Hypothesis",
+          "content": "Alzheimer's disease (AD) is characterized by two pathological hallmarks visible on post-mortem brain examination: (1) extracellular neuritic plaques composed of beta-amyloid (Aβ) peptide, and (2) intracellular neurofibrillary tangles (NFTs) composed of hyperphosphorylated tau protein.\n\nAmyloid Cascade Hypothesis: Amyloid precursor protein (APP) is normally cleaved by α-secretase (non-amyloidogenic pathway). In AD, abnormal cleavage by β-secretase and γ-secretase produces Aβ42 peptide, which is prone to aggregation. Aβ42 aggregates form insoluble plaques that trigger neuroinflammation, synaptic dysfunction, and tau hyperphosphorylation. Hyperphosphorylated tau detaches from microtubules, forming insoluble NFTs that disrupt axonal transport and cause neuronal death.\n\nCholinergic Deficit: The nucleus basalis of Meynert (NBM) in the basal forebrain provides the primary cholinergic innervation to the cortex. NBM neurons are severely depleted in AD, resulting in a profound cholinergic deficit. This deficit impairs attention, memory consolidation, and learning — which forms the basis for acetylcholinesterase inhibitor (AChEI) therapy.\n\nBrain atrophy in AD follows a predictable pattern: begins in the entorhinal cortex → hippocampus (short-term memory center, which explains why recent memory fails first) → parietal lobes → frontal lobes → diffuse cortical atrophy in severe disease. The occipital lobes are relatively spared until late stages (explains why visuospatial is affected before basic vision).\n\nNeuropathological Staging (Braak stages I–VI): Stages I–II: confined to entorhinal cortex; asymptomatic. Stages III–IV: hippocampal involvement; MCI symptoms appear. Stages V–VI: widespread neocortical involvement; clinical AD."
+        },
+        {
+          "title": "Genetics of Alzheimer's Disease",
+          "content": "Sporadic AD (95% of cases): multifactorial, age is the greatest risk factor. APOE genotype is the strongest known genetic risk factor for sporadic AD.\n\nAPOE Gene: Three alleles — ε2, ε3, ε4. APOE2: protective (reduced amyloid deposition). APOE3: neutral (most common allele). APOE4: risk allele — one copy: 3× increased lifetime risk; two copies: 8–12× increased risk. APOE4 presence lowers the age of AD onset by approximately 10 years per allele. APOE4 accelerates amyloid deposition. APOE testing is NOT recommended for routine clinical use — cannot predict with certainty and has significant psychological implications without therapeutic consequence in most cases.\n\nFamilial AD (Early-Onset, <65 years; <5% of all AD): Autosomal dominant mutations:\n- APP (Amyloid Precursor Protein) gene — chromosome 21; also explains early AD in Down syndrome (trisomy 21 → 3 copies of APP)\n- PSEN1 (Presenilin 1) — chromosome 14; MOST COMMON familial mutation; accounts for majority of early-onset familial AD cases\n- PSEN2 (Presenilin 2) — chromosome 1; rarest; latest onset of familial mutations\nFamilial AD mutations all lead to increased Aβ42 production. Genetic counseling recommended for first-degree relatives."
+        },
+        {
+          "title": "FAST/Reisberg Staging — 7 Stages with Nursing Implications",
+          "content": "The Functional Assessment Staging Test (FAST) by Barry Reisberg provides 7 stages of AD progression with functional milestones:\n\nStage 1 — No cognitive decline: Cognitively normal. No functional impairment. No nursing implications (primary prevention: exercise, cognitive engagement, vascular risk management).\n\nStage 2 — Very mild cognitive decline (Normal aging / SCI): Subjective forgetfulness ('Where are my keys?'). No objective deficit on testing. No functional impairment. Nursing: differentiate from early disease; address anxiety about memory.\n\nStage 3 — Mild cognitive decline (MCI): Earliest clinical features. Difficulty with complex tasks (job performance, travel planning). Gets lost in familiar territory. Name-finding difficulties. Noticeable to close family. MoCA typically 18–25. Nursing: safety assessment, driving evaluation, depression screening, advance care planning initiation, financial management review.\n\nStage 4 — Moderate cognitive decline (Mild Dementia): Decreased knowledge of recent events. Difficulty with complex ADLs: managing finances, cooking complex meals, travel. Preserved: basic ADLs, orientation to person, recognition of familiar faces. MoCA typically 10–17. Nursing: medication management systems, home safety assessment, driving cessation, IADL support, caregiver education and support, day program referral.\n\nStage 5 — Moderately severe decline (Moderate Dementia): Requires assistance with ADL choices (e.g., selecting appropriate clothing). Cannot recall important details (address, phone number). Oriented to person and usually place but may not know year. Still continent. Nursing: prompting and cueing for ADLs, wandering safety (door alarms, GPS tracker, ID bracelet), medication administration, caregiver respite referral, adult day program.\n\nStage 6 — Severe decline (Moderately Severe Dementia): Substages A–E. 6A: Requires help dressing. 6B: Requires help bathing properly. 6C: Requires help with toileting. 6D: Urinary incontinence. 6E: Fecal incontinence. May not recognize spouse/close family. Behavioral symptoms common (agitation, sundowning, wandering). Nursing: full ADL assistance preserving dignity, incontinence care, behavioral symptom management (non-pharmacological first), caregiver burden assessment, long-term care evaluation, restraint-free care.\n\nStage 7 — Very severe decline (Severe Dementia): Substages A–F. 7A: Vocabulary limited to ~6 words. 7B: Intelligible vocabulary limited to 1 word. 7C: Non-ambulatory (cannot walk without assistance). 7D: Cannot sit without support. 7E: Loss of facial expression (smile disappears). 7F: Cannot hold head up independently. Loss of swallowing reflex increases aspiration risk. Nursing: comfort-focused care, dysphagia assessment, feeding decisions discussion, pressure injury prevention, contracture prevention, pain assessment using behavioral indicators (PAINAD scale), advance care directive implementation, palliative/hospice transition discussion."
+        },
+        {
+          "title": "Pharmacotherapy — Symptomatic Treatments",
+          "content": "1. Acetylcholinesterase Inhibitors (AChEIs) — Mild to Moderate AD:\nMechanism: inhibit acetylcholinesterase enzyme → increased acetylcholine in synaptic cleft → compensates for cholinergic deficit.\n\nDonepezil (Aricept): Stages 1–3 (mild to severe); once daily; available 5 mg, 10 mg, 23 mg (severe). GI side effects dose-dependent. Can cause bradycardia (sick sinus syndrome contraindication). QTc prolongation (monitor in patients on other QTc-prolonging drugs). Nursing: give at bedtime to reduce nausea; monitor heart rate.\n\nRivastigmine (Exelon): Mild to moderate AD and Parkinson's Disease Dementia. Available PO and transdermal patch (preferred in GI intolerance or adherence issues). Patch: less nausea but may cause skin reactions — rotate sites, do not cut patch. The 13.3 mg/24h patch may be used for severe AD. Nursing: rotate patch sites; do not use both oral and patch simultaneously.\n\nGalantamine (Razadyne): Mild to moderate AD. Extended-release (once daily preferred). Allosteric modulator of nicotinic receptors in addition to AChEI effect. Take with food to reduce nausea. Nursing: take with meals, monitor for nausea/vomiting.\n\nCommon AChEI side effects: Nausea/vomiting/diarrhea (cholinergic GI stimulation), anorexia, weight loss, nightmares (vivid dreams — may need to switch to morning dosing), muscle cramps, bradycardia, syncope.\n\nNursing monitoring: weight (monthly), heart rate, GI symptoms, sleep quality, falls risk (bradycardia/syncope).\n\n2. Memantine (Namenda) — Moderate to Severe AD:\nMechanism: NMDA (N-methyl-D-aspartate) glutamate receptor antagonist. Blocks pathological excess glutamate activity (excitotoxicity) while allowing normal physiological NMDA receptor signaling. Neuroprotective mechanism distinct from AChEIs.\nDosing: start 5 mg daily; titrate by 5 mg/week to target 10 mg twice daily (or 28 mg extended release once daily). Reduce dose in renal impairment.\nSide effects: dizziness, headache, confusion, constipation. Well tolerated overall.\nCombination therapy: donepezil + memantine provides additive benefit in moderate-to-severe AD. Namzaric = donepezil 10 mg + memantine ER 28 mg (combination capsule).\n\nNursing note: Neither AChEIs nor memantine slow or reverse the underlying disease — they provide modest symptomatic benefit (delay functional decline) for 6–12 months on average."
+        },
+        {
+          "title": "Pharmacotherapy — Disease-Modifying Therapies (DMTs)",
+          "content": "New anti-amyloid immunotherapies represent the first treatments to target the underlying pathology of AD rather than symptoms.\n\nLecanemab (Leqembi) — FDA approved 2023:\nMechanism: monoclonal antibody targeting soluble amyloid beta protofibrils (early aggregates). Promotes clearance of amyloid plaques.\nEligibility: early-stage AD (MCI due to AD or mild AD dementia) confirmed by amyloid PET or CSF biomarker.\nDosing: 10 mg/kg IV infusion every 2 weeks. Requires monitoring brain MRI every 3–6 months.\nARIA (Amyloid-Related Imaging Abnormalities): the critical safety concern.\n- ARIA-E (edema/effusions): brain edema on MRI; may cause headache, confusion, nausea, gait changes.\n- ARIA-H (hemosiderin deposits/microhemorrhages): brain microbleeds on MRI.\n- APOE4 homozygotes: highest ARIA risk (35% incidence).\nNursing: recognize ARIA symptoms (new headache, confusion, visual changes, gait problems); educate patient to report immediately; ensure MRI monitoring compliance.\n\nDonanemab (Kisunla) — FDA approved 2024:\nMechanism: targets N-terminal pyroglutamate form of amyloid beta in plaques. IV infusion every 4 weeks.\nKey finding: treatment can be discontinued when amyloid is cleared (PET confirmed). Patients with intermediate or low tau levels at baseline show greater benefit.\nARIA risk similar to lecanemab. APOE4 genotyping recommended before initiation.\n\nClinical reality: Both DMTs show statistically significant 27–35% slowing of clinical decline. Absolute benefit is modest in early disease; access, cost (>$26,500/year), and MRI monitoring requirements limit widespread use currently."
+        },
+        {
+          "title": "Medications to AVOID in Alzheimer's Disease",
+          "content": "Anticholinergic medications are contraindicated — they directly antagonize the cholinergic system that AChEIs are trying to restore, negating treatment and worsening cognition:\n- First-generation antihistamines: diphenhydramine (Benadryl), hydroxyzine\n- Bladder antimuscarinics: oxybutynin, tolterodine, solifenacin (use mirabegron instead)\n- TCAs: amitriptyline, nortriptyline, imipramine\n- Antipsychotics with high anticholinergic burden: chlorpromazine, thioridazine, clozapine\n- GI antispasmodics: hyoscine (scopolamine), dicyclomine\n- Muscle relaxants: cyclobenzaprine\n\nBenzodiazepines (Beers Criteria): increase fall risk, worsen cognition, can precipitate delirium, paradoxical disinhibition in older adults. Avoid for anxiety (use SSRIs), avoid for sleep (use melatonin/ramelteon/CBT-I).\n\nSleeping medications: zolpidem (Z-drugs), diphenhydramine — both worsen cognition and increase fall risk.\n\nNSAIDs: Increase cardiovascular risk; use acetaminophen for pain instead.\n\nAnticholinergic Burden Scale: cumulative anticholinergic exposure increases risk of cognitive decline. Target total anticholinergic burden score of 0–1 in patients with dementia."
+        }
+      ]
+    },
+    {
+      "id": "normal_aging_changes",
+      "title": "Normal Aging vs Alzheimer's Disease",
+      "content": "Normal aging:\n- Occasional word-finding difficulty (name on the tip of tongue — usually recalled later)\n- Slowed information processing speed\n- Forgets why entered a room, but remembers shortly after\n- Takes longer to learn new information\n- Multitasking is harder\n\nEarly Alzheimer's disease — RED FLAGS that differentiate from normal aging:\n- Forgetting recent important events (appointments, conversations) and NOT recalling them later\n- Asking the same question multiple times in the same conversation (repetitive questioning)\n- Getting lost in familiar places\n- Difficulty managing finances (paying bills, balancing checkbook)\n- Word-finding problems that are progressive and affect communication\n- Personality changes (irritability, suspiciousness, withdrawal)\n- Difficulty with familiar tasks (cooking a meal, driving to a known destination)\n- Judgment impairment (giving away money, poor decision-making)\n- Putting objects in inappropriate places AND not being able to retrace steps to find them\n- Loss of initiative"
+    },
+    {
+      "id": "abnormal_findings",
+      "title": "Abnormal Findings and Red Flags",
+      "content": "Early-onset features requiring urgent evaluation (age < 65):\n- Early-onset cognitive decline — consider familial AD, other causes\n- Cognitive decline + personality change early: frontotemporal dementia differential\n- Cognitive decline + motor signs: LBD, Parkinson's, NPH\n\nRapid progression red flags:\n- Decline over weeks to months (not years): CJD (Creutzfeldt-Jakob disease) — also causes myoclonus; paraneoplastic encephalitis; autoimmune encephalitis (often treatable)\n\nClinically urgent stages:\n- Stage 4 AD: driving cessation — patient may have impaired insight and refuse; MTO/DMV reporting may be legally required\n- Stage 6–7 AD: aspiration risk — dysphagia evaluation required; advance care planning\n- Any stage: suicidal ideation must be assessed — depression is common in early AD with preserved insight\n\nSafety emergency indicators:\n- Patient found wandering outside in unsafe conditions\n- Evidence of self-neglect, falls, home fire hazards (stove left on)\n- Financial abuse, caregiver abuse\n- Dehydration, malnutrition, medication mismanagement"
+    },
+    {
+      "id": "assessment",
+      "title": "Assessment Tools and Clinical Approach",
+      "content": "Cognitive Assessment:\n\nMoCA (Montreal Cognitive Assessment):\n- 30-point scale; cutoff < 26 = abnormal\n- Add 1 point for < 12 years of education\n- Domains: visuospatial/executive, naming, memory, attention, language, abstraction, delayed recall, orientation\n- Detects MCI better than MMSE (more sensitive to executive function and attention)\n- Takes 10–12 minutes\n\nMMSE (Mini-Mental State Examination):\n- 30-point scale; < 24 = mild dementia; 10–17 = moderate; < 10 = severe\n- Less sensitive for MCI and early AD\n- Biased against less educated and non-English speaking patients\n\nMini-Cog:\n- 3 minutes; 0–2 = positive screen\n- Step 1: 3-word registration and recall (after clock drawing)\n- Step 2: Clock Drawing Test (draw face, set hands to 11:10)\n- Score: 0–5; abnormal clock + ≤1 word recall = dementia likely\n\nCDR — Clinical Dementia Rating Scale:\n- Gold standard for staging research; assesses memory, orientation, judgment, community affairs, home and hobbies, personal care\n- CDR 0 = normal; 0.5 = questionable/MCI; 1 = mild; 2 = moderate; 3 = severe\n\nFunctional Assessment:\n- Katz ADLs (6 items): required for staging and discharge planning\n- Lawton IADLs (8 items): IADL decline precedes ADL decline in AD\n- FAST staging (see core content): functional milestones used in clinical practice and for hospice eligibility (FAST stage 7C for Medicare hospice)\n\nBehavioral Assessment:\n- NPI (Neuropsychiatric Inventory): 12 behavioral domains, frequency × severity scoring\n- Cohen-Mansfield Agitation Inventory (CMAI): for institutionalized patients\n- Pittsburgh Agitation Scale: acute care settings\n\nCapacity Assessment:\n- Required for advance care planning, treatment decisions, financial decisions\n- 4 elements: Understanding, Appreciation, Reasoning, Communication\n- Capacity fluctuates — assess when patient is at their best\n- Document finding with specific examples"
+    },
+    {
+      "id": "nursing_interventions",
+      "title": "Nursing Interventions by Stage",
+      "content": "Early Stage (FAST 3–4) — Nursing Priorities:\n1. Driving safety assessment and cessation counseling: Collaborate with physician for formal driving evaluation; discuss voluntary cessation with patient while capacity permits; provide alternative transportation options; if patient refuses, follow provincial/state mandatory reporting obligations; document discussion.\n2. Medication management: Dose pack (blister packs), medication dispenser with alarms, caregiver supervision; assess for polypharmacy and anticholinergic burden.\n3. Financial management: Facilitate power of attorney while patient has capacity; banking safeguards; refer to financial abuse prevention resources.\n4. Advance care planning: Initiate while patient can express wishes — goals of care, resuscitation preferences, substitute decision-maker appointment, personal care directive; document clearly.\n5. Safety assessment: Stove safety (automatic shut-off, gas stove removal); door sensors for wandering; medication lock box; carbon monoxide detector; remove firearms.\n6. Depression screening: GDS-15 at each visit; treat promptly (SSRIs: sertraline first-line).\n7. Caregiver assessment: Identify primary caregiver; assess burden; provide resources (Alzheimer Society caregiver programs, respite, support groups).\n\nMiddle Stage (FAST 5–6) — Nursing Priorities:\n1. ADL assistance: Person-centered, dignity-preserving. Use prompting and cueing before doing for the patient. Establish routine. Allow extra time.\n2. Wandering management: ID bracelet or GPS tracking device; door alarms (MediAlert Safely Home program); bed/chair alarms; CarePredict or similar technology; fencing for yard.\n3. Communication strategies: Simple language, one instruction at a time, approach from front, make eye contact, allow 30 seconds for response, use non-verbal cues, avoid arguing, redirect rather than confront.\n4. BPSD management (non-pharmacological first): ABC approach; music therapy (highest evidence); therapeutic touch; familiar objects and photos; structured meaningful activities; validation therapy (do not correct delusions — enter patient's reality).\n5. Nutrition: Small frequent meals, finger foods (easier with motor changes), ensure dentures fit, monitor weight monthly, encourage hydration.\n6. Sleep: Non-pharmacological first (consistent routine, daytime activity, darkness at night, limit caffeine); melatonin (0.5–3 mg) if needed; avoid sleep medication.\n\nLate Stage (FAST 7) — Nursing Priorities:\n1. Comfort care as primary goal: Minimize invasive procedures; prioritize pain, comfort, dignity.\n2. Dysphagia management: Swallow assessment by SLP; modified texture diet; positioning (90° upright, chin tuck); aspiration precautions; consider goals of care for feeding decisions.\n3. Feeding decisions: Evidence shows no survival or quality of life benefit from PEG tube feeding in severe dementia. Hand feeding maintains relationship and dignity. Decision must be made with substitute decision-maker; hospice/palliative philosophy guides.\n4. Pressure injury prevention: Repositioning every 2 hours minimum; skin assessment daily; specialized pressure-relief mattress; keep skin clean and dry.\n5. Contracture prevention: Range of motion exercises; positioning splints; physiotherapy referral.\n6. Pain assessment: PAINAD scale (behavioral indicators — facial grimacing, vocalization, body language, consolability) in non-verbal patients.\n7. Hospice/palliative transition: Discuss with family; FAST 7C meets Medicare hospice eligibility criteria for dementia."
+    },
+    {
+      "id": "patient_teaching",
+      "title": "Patient and Family Teaching",
+      "content": "Teaching for Patient (Early Stage — while capacity permits):\n- 'Your memory problems are caused by Alzheimer's disease — a brain condition, not a reflection of your intelligence or character'\n- Importance of routine and structured schedule\n- Memory strategies: written notes, calendar, reminders on phone\n- Exercise (aerobic exercise slows cognitive decline)\n- Driving: 'There will come a time when driving is no longer safe — let's make that plan together now'\n- Legal documents: power of attorney, advance directive — 'While you can express your wishes, let's document them'\n- Medication: how AChEIs work, what side effects to expect, why not to stop abruptly\n\nFamily/Caregiver Education:\n1. Understanding the disease: 'Alzheimer's disease is progressive — over time, your loved one will need more care. This is not a crisis but a journey. We can plan ahead.'\n2. Prognosis: 'Average survival after diagnosis is 8–10 years; range is 3–20 years. The pace varies.'\n3. Communication strategies: Face-to-face, eye contact, simple language, allow response time, redirect don't correct, 'entering their reality'\n4. Behavioral symptoms: 'The behaviors are not personal — they are symptoms of the disease. Ask yourself: What unmet need is being communicated?'\n5. Safety at home: Stove safety, medication lock, door alarms, firearms removal, fall prevention\n6. Caregiver self-care: 'Caregiver burnout is a medical condition. Your health matters too. Respite is not abandonment.'\n7. Resources: Alzheimer Society (local chapter), First Link (Canada), 24-hour Helpline 1-800-272-3900 (US), day programs, respite beds, support groups\n8. Legal and financial planning: Power of attorney (personal care and property) must be completed while the person has capacity\n9. Long-term care: Discuss proactively before crisis — touring facilities, waitlist registration"
+    },
+    {
+      "id": "documentation",
+      "title": "Documentation Requirements",
+      "content": "Diagnostic Documentation:\n- Record cognitive assessment scores (MoCA, MMSE, Mini-Cog) with date, patient's education level, language used\n- Document functional stage (FAST, CDR, Katz, Lawton) with specific functional descriptors\n- Record behavioral assessments (NPI, CMAI) with frequency and severity\n- Document reversible causes excluded in initial workup\n\nSafety Documentation:\n- Driving cessation: date of discussion, patient response, whether patient voluntarily surrendered license, whether mandatory reporting initiated (record physician involved and date)\n- Wandering risk: document safety measures in place\n- Home safety assessment: document hazards identified and interventions\n\nCapacity and Legal Documentation:\n- Document capacity assessment results with specific examples of what patient could and could not demonstrate\n- Record advance directive status: does one exist? Where is it kept?\n- Record substitute decision-maker name, relationship, and contact information\n- Document consent process for every significant procedure or care decision\n- Goals of care discussions: date, participants, patient's expressed wishes, agreed plan\n\nMedication Documentation:\n- AChEI/memantine: dosing, tolerability, weight, vital signs\n- Disease-modifying therapy (if prescribed): MRI monitoring dates, ARIA symptoms screen at each visit\n- Anticholinergic medications identified and deprescribed: document discussion and outcome\n\nEnd-of-Life Documentation:\n- Record hospice eligibility assessment (FAST 7C)\n- Document goals of care conversation: preferences for resuscitation, hospitalization, feeding, comfort measures\n- Record family discussions and consensus"
+    },
+    {
+      "id": "clinical_pearls",
+      "title": "Clinical Pearls",
+      "content": [
+        "The hippocampus fails first in Alzheimer's disease — short-term memory (recall of recent events) fails before remote memory. Patients remember their wedding day in detail but not what they had for breakfast. Remote memory is relatively preserved until late disease.",
+        "Repetitive questioning (asking the same question multiple times in a single conversation) is one of the earliest and most specific AD symptoms — it reflects failure to encode the answer into short-term memory.",
+        "AChEIs and anticholinergics cancel each other out: prescribing diphenhydramine for sleep or oxybutynin for incontinence in a patient on donepezil is pharmacological self-defeat. Always check and flag anticholinergic burden.",
+        "Disease-modifying therapies (lecanemab, donanemab) are only effective in EARLY disease (MCI or mild AD with confirmed amyloid). There is no benefit in moderate-severe AD. The window for potential benefit is narrow — early diagnosis matters more than ever.",
+        "Late-stage AD feeding tube decisions: multiple randomized trials and systematic reviews confirm PEG tubes do NOT prolong survival, reduce aspiration pneumonia risk, or improve quality of life in severe dementia. Careful hand feeding is the evidence-based standard. This is a critical family teaching point.",
+        "Early advance care planning is the most important intervention in early-stage AD: while the patient has capacity to articulate values and goals, document them. Waiting until moderate-severe disease leaves families making decisions without guidance."
+      ]
+    },
+    {
+      "id": "memory_anchors",
+      "title": "Memory Anchors and Mnemonics",
+      "content": {
+        "mnemonics": [
+          {
+            "name": "ABCDE of Early AD Safety",
+            "breakdown": "A=Advance directives (now, while capacity exists), B=Banking/finances (POA), C=Car/driving (cessation plan), D=Door alarms/wandering safety, E=Emergency contacts (substitute decision-maker identified)"
+          },
+          {
+            "name": "FAST Stages — 'Can't Do' Milestones",
+            "breakdown": "Stage 4: Can't manage finances. Stage 5: Can't choose clothing. Stage 6: Can't bathe/dress/toilet independently. Stage 7: Can't walk/sit/hold head up/swallow."
+          },
+          {
+            "name": "AChEI Side Effects — CALM",
+            "breakdown": "C=Cramps (muscle), A=Anorexia/nausea, L=Low heart rate (bradycardia), M=Misery (vivid nightmares)"
+          }
+        ],
+        "patternRules": [
+          "Hippocampus first → short-term memory fails first → recent events forgotten before remote memories",
+          "AChEI + anticholinergic = pharmacological opposition — never combine",
+          "APOE4 = risk, not diagnosis. Cannot be used to diagnose or exclude AD",
+          "Disease-modifying therapy = EARLY disease only; confirmed amyloid required",
+          "FAST 7C = Medicare hospice eligibility for dementia"
+        ]
+      }
+    },
+    {
+      "id": "safety_alerts",
+      "title": "Safety Alerts",
+      "content": [
+        "🚨 DRIVING CESSATION IS A PATIENT SAFETY AND PUBLIC SAFETY ISSUE: In many jurisdictions, nurses and physicians have a legal obligation to report patients with dementia to the DMV/MTO. Failure to address driving when a patient has stage 4+ AD is a safety breach. Document every discussion.",
+        "🚨 ANTICHOLINERGIC MEDICATIONS NEGATE AChEI THERAPY: Never prescribe or administer diphenhydramine, oxybutynin, or TCAs to a patient on donepezil, rivastigmine, or galantamine — this directly worsens cognition and is pharmacological harm.",
+        "🚨 ARIA WITH ANTI-AMYLOID THERAPIES: Patients on lecanemab or donanemab are at risk for ARIA (brain edema and microhemorrhages). New-onset headache, confusion, vision changes, or gait problems during treatment require immediate neuroimaging and treatment pause.",
+        "🚨 PEG TUBES DO NOT BENEFIT SEVERE DEMENTIA: Recommending PEG tube insertion in stage 7 AD without discussing evidence-based alternatives is a departure from best practice. Careful hand feeding is the evidence-based, dignity-preserving standard.",
+        "🚨 WANDERING IS A LIFE-SAFETY EMERGENCY: Patients who wander outside in cold weather, traffic, or unfamiliar areas can die. Every AD patient with wandering behavior requires a multi-layer safety plan BEFORE the first elopement occurs."
+      ]
+    },
+    {
+      "id": "exam_tips",
+      "title": "Exam Tips",
+      "content": [
+        "FAST stage 7C is the landmark for Medicare hospice eligibility in AD — know this number. Stage 7C = patient cannot ambulate without assistance.",
+        "NCLEX questions about AChEI side effects: the answer most frequently tested is bradycardia (check heart rate before administration) and GI symptoms (nausea/vomiting — give with food or at bedtime).",
+        "When a question asks about a medication combination that is problematic in AD: anticholinergic + AChEI is always wrong. Look for diphenhydramine, oxybutynin, TCAs being given to a patient already on donepezil.",
+        "Memory domain affected first in AD: short-term (recent) memory. Procedural memory (how to do things) is preserved longest. This is tested in NCLEX scenarios about which activities a mid-stage patient can still participate in (e.g., playing piano, gardening routine).",
+        "Late-stage AD nutrition decisions: PEG tube is NOT recommended and provides no benefit. The correct answer on exams is 'discuss goals of care with substitute decision-maker and implement careful hand feeding.'",
+        "Capacity questions with AD: capacity is decision-specific and task-specific, not global. A patient may lack capacity for financial decisions but retain capacity for healthcare decisions early in disease. This distinction is tested frequently.",
+        "Early AD interventions: the most important nursing action while the patient has capacity is initiating ADVANCE CARE PLANNING and legal documents (POA, advance directive). This appears in priority-setting questions."
+      ]
+    },
+    {
+      "id": "references",
+      "title": "References",
+      "content": [
+        "Alzheimer's Association. 2024 Alzheimer's Disease Facts and Figures. Alzheimers Dement. 2024;20(5):3708–3821.",
+        "Hardy J, Selkoe DJ. The amyloid hypothesis of Alzheimer's disease: progress and problems on the road to therapeutics. Science. 2002;297(5580):353–356.",
+        "Reisberg B, Ferris SH, de Leon MJ, Crook T. The Global Deterioration Scale for assessment of primary degenerative dementia. Am J Psychiatry. 1982;139(9):1136–1139.",
+        "van Dyck CH, Swanson CJ, Aisen P, et al. Lecanemab in early Alzheimer's disease. N Engl J Med. 2023;388(1):9–21.",
+        "American Geriatrics Society 2023 Updated Beers Criteria for Potentially Inappropriate Medication Use in Older Adults. J Am Geriatr Soc. 2023;71(7):2052–2081."
+      ]
+    },
+    {
+      "id": "key_takeaways",
+      "title": "Key Takeaways",
+      "content": [
+        "AD neuropathology: amyloid plaques, tau tangles, and cholinergic deficit — AChEIs compensate for the cholinergic loss (symptomatic only).",
+        "FAST staging: hippocampal (recent memory) fails first → IADLs → ADLs → continence → ambuliation → swallowing in the final stage.",
+        "APOE4 is the major genetic risk factor for sporadic AD; PSEN1 is the most common familial (autosomal dominant) mutation.",
+        "New disease-modifying therapies (lecanemab, donanemab) slow but do not stop progression, are only effective in EARLY disease, and carry ARIA risk requiring MRI monitoring.",
+        "Anticholinergic medications are absolutely contraindicated in AD patients receiving AChEI therapy.",
+        "Driving cessation, advance care planning, and legal documents are the highest-priority interventions in early-stage AD while the patient has capacity.",
+        "PEG tube feeding in stage 7 AD has no evidence of benefit and is inconsistent with comfort-focused care principles.",
+        "Caregiver health is integral to patient safety — caregiver burnout assessment and respite referral are nursing responsibilities."
+      ]
+    }
+  ],
+  "pretest": [
+    {
+      "id": "alz-pre-01",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A nurse is explaining to a student why a patient with Alzheimer's disease can remember events from their wedding 50 years ago but cannot recall what they had for breakfast. Which neurobiological explanation is MOST accurate?",
+      "options": {
+        "A": "The occipital lobe degenerates first in Alzheimer's disease, affecting recent visual memories",
+        "B": "The hippocampus, responsible for encoding new memories into long-term storage, is the earliest site of Alzheimer's pathology",
+        "C": "Remote memories are stored in a different compartment of the brain that is never affected by Alzheimer's disease",
+        "D": "Alzheimer's disease selectively destroys recent memories by increasing serotonin production"
+      },
+      "correctAnswer": "B",
+      "rationale": "AD neuropathology begins in the entorhinal cortex and hippocampus (Braak stages III–IV). The hippocampus is the critical structure for encoding new declarative memories into long-term storage. When hippocampal neurons are damaged by amyloid plaques and tau tangles, the patient loses the ability to form new memories (anterograde amnesia) — but memories laid down years earlier using a then-healthy hippocampus are stored in distributed cortical networks and are relatively preserved until later disease stages.",
+      "distractorRationales": {
+        "A": "The occipital lobe is relatively spared until late-stage AD. Early pathology targets entorhinal cortex and hippocampus.",
+        "C": "Remote memories are NOT protected forever — they are lost in moderate-to-severe AD when widespread cortical atrophy occurs, but they are protected longer than recent memories.",
+        "D": "Serotonin is not the primary neurotransmitter system involved in AD; the cholinergic deficit (acetylcholine) is the hallmark."
+      },
+      "hint": "Which brain structure encodes new memories?",
+      "clinicalPearl": "Hippocampal atrophy is measurable on MRI in MCI and early AD — it is one of the structural biomarkers used in the AD diagnostic workup.",
+      "examStrategy": "Memory pattern in AD: recent fails first, remote preserved longest. This reflects the anatomy of AD progression (hippocampus → cortex).",
+      "keyTakeaway": "Hippocampus fails first in AD → short-term (recent) memory is lost before remote memory."
+    },
+    {
+      "id": "alz-pre-02",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 74-year-old woman with mild Alzheimer's disease (FAST stage 4) is prescribed donepezil 5 mg at bedtime. Her daughter calls the clinic one week later reporting her mother is 'having terrible nightmares and woke up screaming every night this week.' What is the BEST nursing response?",
+      "options": {
+        "A": "Reassure the daughter that nightmares are a symptom of Alzheimer's disease and not medication-related",
+        "B": "Advise the daughter to stop the donepezil immediately as it is causing neurological harm",
+        "C": "Inform the daughter that vivid dreams and nightmares are a known side effect of donepezil; contact the prescriber to discuss switching to morning administration or alternative formulation",
+        "D": "Suggest adding a sleeping medication such as diphenhydramine to counteract the nightmares"
+      },
+      "correctAnswer": "C",
+      "rationale": "Vivid dreams and nightmares are a well-recognized side effect of donepezil (AChEI), attributed to increased cholinergic activity during REM sleep (ACh promotes REM). Taking the dose in the morning instead of at bedtime often eliminates this side effect. The prescriber should be informed to discuss this option. Discontinuing without medical advice is not appropriate — abrupt discontinuation can cause rapid deterioration. Diphenhydramine is absolutely contraindicated in AD patients on AChEI therapy (anticholinergic agent directly opposes the mechanism of donepezil).",
+      "distractorRationales": {
+        "A": "Nightmares are NOT a primary symptom of AD — this is a known donepezil side effect that can be addressed with timing change.",
+        "B": "Abrupt discontinuation is not appropriate without physician guidance; dose adjustment or timing change is the first intervention.",
+        "D": "Diphenhydramine is a first-generation antihistamine with high anticholinergic burden — contraindicated in AD patients on AChEI; it would worsen cognition and negate the therapeutic effect."
+      },
+      "hint": "What neurotransmitter does donepezil increase, and what does that do during sleep?",
+      "clinicalPearl": "Donepezil-induced nightmares are dose-dependent and timing-dependent. Morning administration resolves this in most cases.",
+      "examStrategy": "AChEI side effect question: know vivid dreams/nightmares = change to morning dosing. Know anticholinergics are contraindicated = never suggest diphenhydramine for sleep in an AD patient.",
+      "keyTakeaway": "Donepezil nightmares = switch to morning dosing; never add diphenhydramine — it directly opposes donepezil."
+    },
+    {
+      "id": "alz-pre-03",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "According to the FAST (Functional Assessment Staging Test), which finding is expected at Stage 6C?",
+      "options": {
+        "A": "Difficulty managing personal finances and complex IADL tasks",
+        "B": "Inability to recall their home address or telephone number",
+        "C": "Requires assistance with toileting and has urinary incontinence",
+        "D": "Inability to ambulate without physical support"
+      },
+      "correctAnswer": "C",
+      "rationale": "FAST Stage 6 involves requiring assistance with ADLs: 6A = difficulty dressing; 6B = difficulty bathing; 6C = difficulty toileting; 6D = urinary incontinence; 6E = fecal incontinence. Stage 6C specifically marks the point at which toileting requires assistance. Managing finances is Stage 4. Inability to recall address is Stage 5. Inability to ambulate is Stage 7C.",
+      "distractorRationales": {
+        "A": "Difficulty with finances is FAST Stage 4 (mild dementia).",
+        "B": "Inability to recall address/phone number is FAST Stage 5 (moderately severe).",
+        "D": "Inability to ambulate without support is FAST Stage 7C — the threshold for hospice eligibility."
+      },
+      "hint": "FAST 6 = ADL assistance needed, in order: Dress, Bath, Toilet, continence",
+      "clinicalPearl": "FAST staging drives care planning decisions including home care needs, long-term care placement timing, and hospice eligibility (Stage 7C).",
+      "examStrategy": "Memorize FAST stages 4–7 with their functional milestones. This is high-yield for CNPLE, NCLEX, and FNP exams.",
+      "keyTakeaway": "FAST 6C = toileting assistance needed; 6D = urinary incontinence; 7C = cannot walk = hospice eligible."
+    },
+    {
+      "id": "alz-pre-04",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A nurse is reviewing the medication list of an 80-year-old man with moderate Alzheimer's disease who is admitted with increased confusion. His current medications include: donepezil 10 mg PO daily, memantine 10 mg PO twice daily, amlodipine 5 mg PO daily, oxybutynin 5 mg PO three times daily, and metformin 500 mg PO twice daily. Which medication should the nurse FLAG as most likely contributing to his increased confusion?",
+      "options": {
+        "A": "Donepezil 10 mg PO daily",
+        "B": "Memantine 10 mg PO twice daily",
+        "C": "Oxybutynin 5 mg PO three times daily",
+        "D": "Amlodipine 5 mg PO daily"
+      },
+      "correctAnswer": "C",
+      "rationale": "Oxybutynin is a bladder antimuscarinic (anticholinergic) agent used for urge incontinence. It crosses the blood-brain barrier readily and has HIGH anticholinergic CNS activity. In a patient already taking donepezil (which increases acetylcholine), oxybutynin directly opposes the therapeutic effect AND contributes independently to cognitive worsening and delirium. Oxybutynin is on the American Beers Criteria as a medication to AVOID in older adults. Safer alternatives for overactive bladder include mirabegron (beta-3 agonist, no anticholinergic effect). Donepezil and memantine are appropriate AD treatments. Amlodipine is a calcium channel blocker with no significant CNS anticholinergic effect.",
+      "distractorRationales": {
+        "A": "Donepezil is an appropriate and indicated treatment for AD; it does not cause increased confusion.",
+        "B": "Memantine is appropriate for moderate-severe AD; it may cause mild dizziness but not significant worsening confusion at standard doses.",
+        "D": "Amlodipine is a dihydropyridine calcium channel blocker; it does not have significant anticholinergic CNS effects."
+      },
+      "hint": "Which medication has high anticholinergic burden and directly opposes the mechanism of donepezil?",
+      "clinicalPearl": "For urge incontinence in AD patients on AChEIs: mirabegron is the safe alternative. Oxybutynin, tolterodine, solifenacin, and fesoterodine should all be avoided.",
+      "examStrategy": "Medication safety in AD: always look for anticholinergic drugs in the med list. Oxybutynin, diphenhydramine, and TCAs are the most commonly tested offenders.",
+      "keyTakeaway": "Oxybutynin is high anticholinergic burden — contraindicated in AD patients on AChEI therapy; use mirabegron instead."
+    },
+    {
+      "id": "alz-pre-05",
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is conducting a home safety assessment for a 77-year-old woman with stage 4 Alzheimer's disease who lives alone. Her daughter wants to know what safety measures are most important to implement. Which of the following are evidence-based safety recommendations? Select all that apply.",
+      "options": {
+        "A": "Install automatic stove shut-off device or remove burner knobs",
+        "B": "Apply locks or alarms to exterior doors to prevent wandering",
+        "C": "Remove all firearms from the home",
+        "D": "Provide the patient with a duplicate set of car keys for emergencies",
+        "E": "Lock all medications in a secured location",
+        "F": "Enroll in a medical ID or GPS tracking program (e.g., MedicAlert Safely Home)"
+      },
+      "correctAnswer": "A, B, C, E, F",
+      "rationale": "Evidence-based home safety interventions for stage 4 AD: (A) Stove safety — major fire and burn hazard; automatic shut-off or burner knob removal prevents stove-related injuries. (B) Door alarms — stage 4 patients can still drive and wander; door alarms alert caregiver to exit attempts. (C) Firearms removal — impaired judgment and cognitive decline create firearm injury risk to patient and others; firearms must be secured or removed. (E) Medication lock box — medication mismanagement (overdose, missed doses) is common; locked storage prevents self-medication errors. (F) GPS/MedicAlert — wandering risk management; allows safe return if lost. Providing duplicate car keys (D) is DANGEROUS — stage 4 AD patients should be undergoing driving cessation, not being given additional access to vehicles.",
+      "distractorRationales": {
+        "D": "Stage 4 AD patients have impaired judgment and executive function; providing additional vehicle access increases serious injury/death risk. Driving cessation planning should be underway."
+      },
+      "hint": "Think about the major safety hazards in the home for someone with impaired judgment.",
+      "clinicalPearl": "Home safety assessments should be repeated as dementia progresses — what is safe at stage 4 may be unsafe at stage 5. Regular reassessment is essential.",
+      "examStrategy": "SATA home safety: firearms, stove, medications, wandering prevention are always correct. Car keys are always wrong in a driving cessation scenario.",
+      "keyTakeaway": "AD home safety: stove safety, door alarms, medication lock, firearm removal, GPS tracking — driving cessation is mandatory."
+    },
+    {
+      "id": "alz-pre-06",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 71-year-old man with early Alzheimer's disease is started on lecanemab (Leqembi) infusions. Three weeks after his second infusion, his wife calls reporting he has developed a new headache, states he feels 'foggy,' and had a brief episode of blurred vision. He has no fever. What is the MOST important nursing action?",
+      "options": {
+        "A": "Reassure the wife that headaches are expected with IV infusions and monitor at home",
+        "B": "Advise the wife to give acetaminophen and schedule a routine follow-up in 2 weeks",
+        "C": "Instruct the wife to bring the patient to the clinic or emergency department immediately; these symptoms may indicate ARIA",
+        "D": "Advise discontinuing the lecanemab permanently and initiating donepezil instead"
+      },
+      "correctAnswer": "C",
+      "rationale": "These symptoms — new headache, cognitive 'fogginess,' and visual disturbance following anti-amyloid immunotherapy — are classic warning signs of ARIA (Amyloid-Related Imaging Abnormalities). ARIA includes ARIA-E (brain edema) and ARIA-H (microhemorrhages). This is a potentially serious, life-threatening complication requiring urgent brain MRI. Infusion pause or discontinuation decisions are made based on imaging findings. Reassurance or delayed follow-up in this clinical context is dangerous. The nurse should direct the patient to urgent evaluation, not schedule a routine appointment. Permanent discontinuation decision requires imaging confirmation and specialist decision — it should not be a nursing unilateral action.",
+      "distractorRationales": {
+        "A": "These are not typical infusion headaches — new neurological symptoms (visual changes, cognitive fogginess) following anti-amyloid therapy require urgent evaluation.",
+        "B": "Acetaminophen and a 2-week wait is dangerously inadequate if ARIA-E with edema is developing.",
+        "D": "Permanent discontinuation without imaging confirmation is premature and a decision for the prescribing specialist."
+      },
+      "hint": "New neurological symptoms after anti-amyloid infusion = ARIA until proven otherwise.",
+      "clinicalPearl": "ARIA education is a critical nursing responsibility for patients on lecanemab or donanemab. Patients and families must know the warning symptoms and be instructed to report immediately — not wait for the next appointment.",
+      "examStrategy": "New DMT (lecanemab/donanemab) + new neurological symptoms = ARIA → urgent imaging. This is a new and increasingly tested topic as these medications enter clinical practice.",
+      "keyTakeaway": "Post-anti-amyloid infusion neurological symptoms = ARIA; require urgent MRI evaluation, not watchful waiting."
+    },
+    {
+      "id": "alz-pre-07",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A 69-year-old man with newly diagnosed mild Alzheimer's disease asks his nurse, 'My son wants me to stop driving. Do I have to?' What is the BEST response?",
+      "options": {
+        "A": "'Your son is being overprotective — many people with Alzheimer's drive safely for years.'",
+        "B": "'You have the legal right to drive as long as you want — it is your decision.'",
+        "C": "'The concern is real. Alzheimer's disease affects judgment, reaction time, and navigation. A formal driving evaluation can objectively assess your safety, and we should plan for the transition.'",
+        "D": "'Only a police officer can take away your license — we cannot advise you to stop.'"
+      },
+      "correctAnswer": "C",
+      "rationale": "Driving cessation is a major safety issue in Alzheimer's disease. AD impairs the executive function, spatial navigation, attention, and reaction time required for safe driving — even in early stages. The nursing response must be honest, empathetic, and action-oriented. A formal driving evaluation by an occupational therapist trained in driver rehabilitation provides objective evidence and is less emotionally charged than family pressure. Nurses also have a professional and sometimes legal obligation to report cognitively impaired drivers to the appropriate authority. Minimizing risk (Option A) or deflecting responsibility (Option D) is inappropriate.",
+      "distractorRationales": {
+        "A": "This minimizes a legitimate safety risk. Even mild AD impairs the cognitive functions required for safe driving.",
+        "B": "This is factually incorrect — physicians and nurses in many jurisdictions have mandatory reporting obligations for medically unfit drivers.",
+        "D": "This deflects professional responsibility. Healthcare providers play a central role in driving cessation."
+      },
+      "hint": "Driving cessation is both a patient safety AND public safety issue.",
+      "clinicalPearl": "Voluntary driving cessation with family support and alternative transportation planning is less traumatic than a license suspension. Initiating this conversation early — while the patient has insight — produces better outcomes.",
+      "examStrategy": "Driving cessation questions: the correct answer acknowledges the safety concern, validates the patient, and proposes a specific action (formal evaluation or transition planning).",
+      "keyTakeaway": "Driving cessation in AD is a patient and public safety priority — address it early, empathetically, and with a concrete plan."
+    },
+    {
+      "id": "alz-pre-08",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A substitute decision-maker (SDM) for a 92-year-old woman with severe Alzheimer's disease (FAST stage 7D) is asking whether a percutaneous endoscopic gastrostomy (PEG) tube should be placed because the patient is 'barely eating.' The patient has no advance directive. What is the MOST evidence-based information the nurse should provide to support the SDM's decision?",
+      "options": {
+        "A": "'PEG tubes are the gold standard for nutrition in severe dementia and significantly extend survival'",
+        "B": "'Multiple studies show PEG tubes in severe dementia do not extend survival, do not reduce aspiration risk, and do not improve quality of life; careful hand feeding is the evidence-based alternative'",
+        "C": "'The decision should be based solely on family preference without introducing evidence'",
+        "D": "'PEG tubes prevent aspiration pneumonia, which is the most common cause of death in severe dementia'"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is one of the most important evidence-based decisions in late-stage dementia care. Multiple systematic reviews and RCTs confirm: (1) PEG tubes in severe dementia do NOT prolong survival; (2) PEG tubes do NOT reduce aspiration pneumonia risk (aspiration occurs from oral secretions regardless of feeding route); (3) PEG tubes are associated with complications (tube site infections, leakage, aspiration of tube feeds); (4) PEG tubes remove the sensory pleasure of eating and the social interaction of being hand fed. Evidence-based standard: careful hand feeding by trained staff preserves dignity, maintains relationship, and provides equivalent or better outcomes.",
+      "distractorRationales": {
+        "A": "PEG tubes are NOT the gold standard in severe dementia — this is evidence-based nursing practice, not clinical opinion.",
+        "C": "Family preference must be informed by evidence — the nurse has a duty to provide accurate information to support informed decision-making.",
+        "D": "PEG tubes do NOT prevent aspiration pneumonia — aspiration from oral secretions continues regardless of feeding route. This is a common misconception."
+      },
+      "hint": "What does the evidence say about PEG tubes in severe dementia? This is one of the most tested evidence-based practice points in geriatric nursing.",
+      "clinicalPearl": "The palliative care principle: 'We are treating the person, not the diagnosis.' Hand feeding in severe dementia is not giving up — it is providing evidence-based, dignity-preserving care.",
+      "examStrategy": "Feeding decisions in late-stage dementia: PEG tube is always incorrect unless there is a reversible cause. Evidence-based answer = hand feeding + goals of care discussion.",
+      "keyTakeaway": "PEG tubes in severe dementia: no survival benefit, no aspiration reduction, complications — hand feeding is the evidence-based standard."
+    },
+    {
+      "id": "alz-pre-09",
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is completing an initial assessment of a 68-year-old man newly diagnosed with mild Alzheimer's disease (MoCA 21/30, FAST stage 3). He is living at home with his wife and is currently still driving. Which of the following are appropriate nursing interventions at this stage? Select all that apply.",
+      "options": {
+        "A": "Initiate advance care planning discussion and facilitate completion of advance directive while patient has decision-making capacity",
+        "B": "Refer to a driving evaluation specialist or occupational therapist for a formal driving assessment",
+        "C": "Assess for depression using GDS-15",
+        "D": "Apply bilateral wrist restraints during outpatient visits for safety",
+        "E": "Provide caregiver education and referral to Alzheimer Society support programs",
+        "F": "Review all medications for anticholinergic burden and flag for deprescribing"
+      },
+      "correctAnswer": "A, B, C, E, F",
+      "rationale": "(A) Advance care planning is the single most important early-stage intervention — the patient has current capacity to express values and wishes. (B) Formal driving evaluation by an OT provides objective assessment. (C) Depression co-occurs in 20–40% of early AD — GDS-15 screening is standard of care. (E) Caregiver education and support improves both caregiver and patient outcomes. (F) Anticholinergic medication review prevents pharmacological worsening of cognition. Bilateral restraints (D) are never appropriate in an outpatient setting for a patient with mild dementia who is ambulatory — this is not a safety measure; it is inappropriate and potentially abusive.",
+      "distractorRationales": {
+        "D": "Restraints are contraindicated in this context. The patient has mild dementia and is ambulatory — restraints would cause harm without any clinical indication."
+      },
+      "hint": "Early stage priorities: legal documents, safety assessment, caregiver support, medication review — while the patient can participate.",
+      "clinicalPearl": "The window of early-stage capacity is the most clinically valuable period in AD management. Every intervention that requires patient participation should be completed during this window.",
+      "examStrategy": "Early-stage AD nursing SATA: advance directives, driving eval, depression screen, caregiver support, med review = all correct. Restraints = always wrong.",
+      "keyTakeaway": "Early AD priorities: advance directives NOW, driving eval, depression screen, caregiver support, anticholinergic review."
+    },
+    {
+      "id": "alz-pre-10",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is providing care to an 82-year-old woman with moderate Alzheimer's disease (FAST 6) who is resisting morning care. The patient is pulling her hands away, saying 'No!' and turning her face away. Which nursing approach is MOST appropriate?",
+      "options": {
+        "A": "Proceed quickly with all care tasks despite resistance to minimize distress time",
+        "B": "Document the behavior as 'uncooperative' and request a PRN sedation order",
+        "C": "Stop the care activity momentarily; attempt to identify the unmet need; re-approach with a calm, soft voice, offering a simple choice, using gentle touch and non-verbal communication",
+        "D": "Assign the task to a different nurse as the patient has formed a negative relationship with this nurse"
+      },
+      "correctAnswer": "C",
+      "rationale": "Resistance to care in moderate AD is a form of communication — the patient is expressing discomfort, fear, pain, or loss of dignity. The appropriate response is: (1) STOP — do not force care (this escalates agitation and violates autonomy); (2) assess for physical cause (pain, cold water, unfamiliar touch); (3) re-approach calmly using the patient's preferred name, making eye contact, explaining simply what will happen; (4) offer simple choices ('Would you like to wash your face first, or your hands?'); (5) use gentle, predictable touch; (6) try music the patient enjoys during care. Person-centered care requires adapting to the patient's response.",
+      "distractorRationales": {
+        "A": "Forcing care despite resistance violates autonomy, worsens agitation, and can cause physical and psychological harm.",
+        "B": "Documenting as 'uncooperative' is pejorative and inaccurate. Resistance to care is a behavioral symptom requiring assessment, not sedation.",
+        "D": "Resistance to care is a disease symptom, not a relationship problem. Transferring care does not address the underlying behavioral communication."
+      },
+      "hint": "Resistance to care = communication. Ask: what need is being expressed?",
+      "clinicalPearl": "The unmet needs model of BPSD: every behavioral symptom is an attempt to communicate. Ask 'What is this person trying to tell me?' before labeling behavior.",
+      "examStrategy": "BPSD and resistance to care: the correct answer always involves stopping, assessing, re-approaching calmly with person-centered techniques. Force and sedation are never first responses.",
+      "keyTakeaway": "Resistance to care = unmet need. Stop, assess, re-approach calmly with simple choices and non-verbal comfort."
+    }
+  ],
+  "posttest": [
+    {
+      "id": "alz-post-01",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "What is the mechanism of action of acetylcholinesterase inhibitors (AChEIs) such as donepezil in Alzheimer's disease?",
+      "options": {
+        "A": "Block NMDA glutamate receptors to prevent excitotoxic neuronal injury",
+        "B": "Inhibit the enzyme that breaks down acetylcholine, increasing cholinergic neurotransmission",
+        "C": "Promote clearance of amyloid beta plaques from the brain",
+        "D": "Increase serotonin reuptake to improve mood and cognitive clarity"
+      },
+      "correctAnswer": "B",
+      "rationale": "AChEIs (donepezil, rivastigmine, galantamine) inhibit acetylcholinesterase — the enzyme that catabolizes (breaks down) acetylcholine in the synaptic cleft. By inhibiting this enzyme, more ACh remains available in the synapse, compensating for the cholinergic deficit caused by degeneration of basal forebrain cholinergic neurons (nucleus basalis of Meynert). This is symptomatic treatment only — it does not stop or slow the underlying neurodegeneration.",
+      "distractorRationales": {
+        "A": "NMDA receptor blockade is the mechanism of memantine, not AChEIs.",
+        "C": "Amyloid plaque clearance is the mechanism of the new disease-modifying therapies (lecanemab, donanemab).",
+        "D": "AChEIs do not affect serotonin — SSRIs work on serotonin for depression treatment."
+      },
+      "hint": "AChEI = inhibits acetylcholinesterase = more ACh stays in the synapse.",
+      "clinicalPearl": "AChEIs compensate for the cholinergic deficit but do not repair the neurons that produce acetylcholine — the underlying disease continues.",
+      "examStrategy": "Standard pharmacology question: donepezil = inhibits AChE = more acetylcholine. Memantine = NMDA blocker. Lecanemab = amyloid clearance.",
+      "keyTakeaway": "AChEIs inhibit acetylcholinesterase, increasing synaptic acetylcholine to compensate for the cholinergic deficit in AD."
+    },
+    {
+      "id": "alz-post-02",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 75-year-old woman with moderate Alzheimer's disease (FAST stage 6) began memantine 6 months ago in addition to her donepezil. Her daughter asks why two medications are needed. The nurse's BEST response is:",
+      "options": {
+        "A": "'Two medications are always better than one for Alzheimer's disease'",
+        "B": "'Donepezil works on the cholinergic system while memantine targets glutamate excitotoxicity — they have different mechanisms and provide additive benefit in moderate-severe disease'",
+        "C": "'Memantine is used because donepezil has stopped working and needs to be replaced'",
+        "D": "'Memantine cures Alzheimer's disease by removing amyloid plaques from the brain'"
+      },
+      "correctAnswer": "B",
+      "rationale": "Donepezil (AChEI) and memantine (NMDA antagonist) have completely different mechanisms of action and are complementary. Donepezil compensates for cholinergic deficit. Memantine blocks pathological excess glutamate activity (excitotoxicity) that accelerates neuronal death. Clinical trials demonstrate additive benefit from combination therapy in moderate-to-severe AD (improved cognition and function compared to AChEI alone). The combination is available as Namzaric (donepezil 10 mg + memantine ER 28 mg).",
+      "distractorRationales": {
+        "A": "Combination is appropriate because of complementary mechanisms, not simply because 'two is better than one.'",
+        "C": "Donepezil is not replaced — both are continued. The combination provides additive effect.",
+        "D": "Memantine does not remove amyloid — it modulates glutamate receptors. Amyloid clearance is the mechanism of lecanemab/donanemab."
+      },
+      "hint": "Different mechanisms = complementary effect. What does each drug target?",
+      "clinicalPearl": "Combination donepezil + memantine is the standard of care for moderate-severe AD and provides superior functional outcomes compared to either agent alone.",
+      "examStrategy": "Combination therapy question: know that donepezil = cholinergic and memantine = glutamate/NMDA — different targets, additive benefit.",
+      "keyTakeaway": "Donepezil (cholinergic) + memantine (NMDA) = complementary mechanisms, additive benefit in moderate-severe AD."
+    },
+    {
+      "id": "alz-post-03",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A patient with Alzheimer's disease is at FAST Stage 7C. They live in a long-term care facility. Which of the following is MOST relevant to this patient's current status?",
+      "options": {
+        "A": "They can no longer manage their own finances",
+        "B": "They require assistance choosing appropriate clothing",
+        "C": "They cannot ambulate without physical assistance and are approaching hospice eligibility",
+        "D": "They have just been diagnosed with Mild Cognitive Impairment"
+      },
+      "correctAnswer": "C",
+      "rationale": "FAST Stage 7C: the patient cannot walk without assistance. This is a major functional milestone in severe AD and represents the threshold for Medicare hospice eligibility for dementia. At this stage, the patient also typically has significant speech impairment (vocabulary of 1–6 words), complete ADL dependence, and swallowing difficulties are emerging. The care focus shifts to comfort and quality of life.",
+      "distractorRationales": {
+        "A": "Inability to manage finances is FAST Stage 4 — much earlier.",
+        "B": "Difficulty choosing clothing is FAST Stage 5.",
+        "D": "MCI is FAST Stage 3 — pre-dementia."
+      },
+      "hint": "7C is late severe — what physical function is lost?",
+      "clinicalPearl": "FAST 7C meets Medicare hospice 'six-month prognosis' requirement for dementia when combined with a secondary condition (e.g., aspiration pneumonia, sepsis, pressure injury).",
+      "examStrategy": "Know the FAST stage 7 milestones: 7A = 6 words, 7B = 1 word, 7C = cannot walk, 7D = cannot sit, 7E = no smile, 7F = cannot hold head up.",
+      "keyTakeaway": "FAST 7C = cannot walk without assistance = hospice eligibility threshold for dementia."
+    },
+    {
+      "id": "alz-post-04",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 70-year-old woman with early-onset Alzheimer's disease was diagnosed at age 65 and has two siblings who were diagnosed at ages 62 and 67. Her adult daughter asks the nurse, 'Is there something genetic going on? Should I get tested?' What is the MOST accurate response?",
+      "options": {
+        "A": "'Alzheimer's disease is never hereditary — it is caused by environmental factors only'",
+        "B": "'This family pattern is consistent with familial (autosomal dominant) AD. Genetic counseling is recommended; PSEN1 is the most common mutation to test for in early-onset familial cases'",
+        "C": "'Your mother has the APOE4 gene which means you definitely have it too — testing is unnecessary'",
+        "D": "'Testing for the APOE4 gene is recommended for all family members as a preventive measure'"
+      },
+      "correctAnswer": "B",
+      "rationale": "Three affected siblings with early-onset AD (all before age 70) is a classic pattern of familial autosomal dominant AD. PSEN1 (chromosome 14) is the most common cause of familial early-onset AD. If a PSEN1 mutation is identified in the proband, first-degree relatives have a 50% chance of inheriting the mutation. Genetic counseling (pre-test and post-test) is recommended before any genetic testing. This is not APOE4 (which is a risk allele for sporadic, late-onset AD, not a deterministic mutation). APOE testing is NOT recommended as a routine preventive screen — it provides probabilistic not deterministic information.",
+      "distractorRationales": {
+        "A": "Familial AD is a well-established autosomal dominant genetic condition.",
+        "C": "APOE4 is a risk modifier, not a deterministic mutation; the family pattern suggests autosomal dominant mutation (PSEN1/PSEN2/APP), not APOE4.",
+        "D": "APOE4 testing is NOT recommended for clinical use as a screening tool due to probabilistic nature and psychological burden without clear preventive action."
+      },
+      "hint": "Three siblings with early onset = familial pattern = autosomal dominant = which genes?",
+      "clinicalPearl": "Familial AD genetic testing should only be undertaken with pre-test genetic counseling. A positive mutation test has profound psychological, insurance, and family implications.",
+      "examStrategy": "Familial vs sporadic AD: early onset + family pattern = PSEN1 testing (with genetic counseling). Late onset + single risk = APOE4 (not routinely recommended).",
+      "keyTakeaway": "Early-onset familial AD pattern → refer for genetic counseling; PSEN1 is the most common autosomal dominant mutation."
+    },
+    {
+      "id": "alz-post-05",
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is developing a care plan for a 79-year-old man with moderate AD (FAST stage 5) who has begun to wander at night in his long-term care facility. He was found at 3 AM attempting to leave the building through an alarmed door. Which nursing interventions are appropriate? Select all that apply.",
+      "options": {
+        "A": "Apply bilateral wrist restraints at bedtime to prevent wandering",
+        "B": "Enroll the patient in a wandering identification program (e.g., MedicAlert Safely Home)",
+        "C": "Ensure door alarms are active and have been tested",
+        "D": "Assess for an unmet need that may be driving the nocturnal behavior (pain, hunger, need to void)",
+        "E": "Implement a structured activity program during the day to promote nighttime sleep",
+        "F": "Provide a safe wandering loop area in the facility where the patient can walk safely"
+      },
+      "correctAnswer": "B, C, D, E, F",
+      "rationale": "(B) Wandering identification programs are critical safety measures for community reintegration if elopement occurs. (C) Door alarms provide early warning of elopement attempts. (D) Wandering often represents an unmet need (looking for bathroom, hungry, pain, looking for home or family). Assessing triggers is essential. (E) Daytime activity and physical exertion promote nighttime sleep — reduce daytime napping, increase structured activity. (F) Safe wandering loops preserve the need to walk while preventing elopement. Restraints (A) are contraindicated: they increase agitation, injury risk, and do not address the underlying behavior.",
+      "distractorRationales": {
+        "A": "Physical restraints are contraindicated for wandering. They cause physical and psychological harm, worsen agitation, and violate the least restraint principle in most jurisdictions."
+      },
+      "hint": "Wandering management: safe environment, identification, activity, need assessment. Never restraints.",
+      "clinicalPearl": "Safe wandering paths in LTC facilities reduce elopement attempts while preserving the patient's need for movement. They are both safer and more humane than restraints.",
+      "examStrategy": "Wandering interventions SATA: door alarms, GPS/ID programs, safe paths, activity programs, need assessment = all correct. Restraints = always wrong.",
+      "keyTakeaway": "Wandering management: identification programs, alarms, safe paths, daytime activity, need assessment — restraints are never appropriate."
+    },
+    {
+      "id": "alz-post-06",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse overhears a personal support worker (PSW) speaking loudly to a resident with moderate AD: 'I've told you three times already — you're at Sunnybrook, it's Tuesday, your name is Margaret. Stop asking!' What is the MOST appropriate nursing response?",
+      "options": {
+        "A": "Agree with the PSW — repetitive questioning in dementia must be addressed with direct correction",
+        "B": "Intervene immediately to redirect the patient; speak privately with the PSW about therapeutic communication in dementia",
+        "C": "Report the PSW to administration for elder abuse without speaking to them first",
+        "D": "Allow the PSW to complete the care task before addressing the interaction"
+      },
+      "correctAnswer": "B",
+      "rationale": "The PSW's behavior (loud, frustrated, repetitive correction) is not therapeutic and is causing distress to the patient. The nurse's priority is to intervene immediately to protect the patient's wellbeing and de-escalate the situation. After the interaction, the nurse has a professional responsibility to educate the PSW about evidence-based communication in dementia: (1) repetitive questioning reflects memory failure — the patient cannot retain the answer; (2) repeated correction is ineffective and distressing; (3) redirect to the emotion rather than the fact ('You seem worried — let's sit together for a moment'); (4) orient briefly and calmly without frustration.",
+      "distractorRationales": {
+        "A": "Repeated reality orientation is not evidence-based for moderate dementia; it does not work and causes distress.",
+        "C": "While this interaction is concerning, immediate reporting to administration without addressing the situation first delays protection of the patient and bypasses the educational opportunity.",
+        "D": "Allowing a potentially distressing interaction to continue while a vulnerable patient is in distress is not acceptable — intervene now."
+      },
+      "hint": "Repetitive questioning = memory failure, not stubbornness. Interrupting is the first priority.",
+      "clinicalPearl": "Reality orientation is appropriate in EARLY dementia but is distressing and ineffective in MODERATE dementia. Validation therapy (entering the patient's reality) is evidence-based for moderate-severe dementia.",
+      "examStrategy": "Communication in dementia questions: the correct answer always involves redirecting to emotion, not repeated correction. Staff education is a nursing leadership responsibility.",
+      "keyTakeaway": "Repetitive questioning in moderate AD = redirect to emotion, don't repeat facts. Repeated correction is harmful."
+    },
+    {
+      "id": "alz-post-07",
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "Which of the following genetic risk factors is MOST strongly associated with late-onset sporadic Alzheimer's disease?",
+      "options": {
+        "A": "PSEN1 mutation on chromosome 14",
+        "B": "APP mutation on chromosome 21",
+        "C": "APOE4 allele",
+        "D": "Trisomy 21 (Down syndrome)"
+      },
+      "correctAnswer": "C",
+      "rationale": "APOE4 is the strongest known genetic risk factor for LATE-ONSET SPORADIC AD (the most common form, representing 95% of all AD). One APOE4 allele: 3× increased lifetime risk. Two APOE4 alleles: 8–12× increased risk. PSEN1 and APP mutations cause early-onset FAMILIAL (autosomal dominant) AD (rare, <5%). Trisomy 21 leads to AD due to three copies of the APP gene but this is specific to individuals with Down syndrome.",
+      "distractorRationales": {
+        "A": "PSEN1 causes familial early-onset AD, not sporadic late-onset AD.",
+        "B": "APP mutation causes familial early-onset AD; also explains early AD in Down syndrome.",
+        "D": "Trisomy 21 increases APP copies and causes early-onset AD specifically in Down syndrome individuals."
+      },
+      "hint": "What distinguishes sporadic from familial AD — and which genetic factor governs the common form?",
+      "clinicalPearl": "APOE4 is a risk factor, not a diagnostic test. Having APOE4 does not confirm AD; not having it does not exclude it.",
+      "examStrategy": "Genetics question: APOE4 = sporadic risk. PSEN1 = familial risk. Know both; know which is for which type.",
+      "keyTakeaway": "APOE4 = strongest genetic risk factor for late-onset sporadic AD (95% of cases); PSEN1 = familial early-onset."
+    },
+    {
+      "id": "alz-post-08",
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A nurse is assessing pain in an 88-year-old woman with severe Alzheimer's disease (FAST stage 7B) who is non-verbal. The nurse observes facial grimacing, vocalizations during repositioning, and rigid posturing when touched. Which pain assessment tool is MOST appropriate?",
+      "options": {
+        "A": "Numeric Rating Scale (NRS) 0–10",
+        "B": "Visual Analog Scale (VAS)",
+        "C": "PAINAD (Pain Assessment in Advanced Dementia) scale",
+        "D": "Wong-Baker FACES Pain Rating Scale"
+      },
+      "correctAnswer": "C",
+      "rationale": "The PAINAD (Pain Assessment in Advanced Dementia) scale was specifically designed for non-verbal patients with severe dementia. It assesses 5 behavioral indicators: (1) Breathing (normal = 0, labored = 1, distressed = 2); (2) Negative vocalization (none = 0, moaning = 1, crying = 2); (3) Facial expression (relaxed = 0, tense = 1, grimacing = 2); (4) Body language (relaxed = 0, tense = 1, rigid = 2); (5) Consolability (not needed = 0, distracted = 1, inconsolable = 2). Total score 0–10. Score ≥4 indicates pain requiring treatment. The NRS, VAS, and FACES scales all require self-report — not possible in non-verbal severe dementia.",
+      "distractorRationales": {
+        "A": "NRS requires the patient to self-report a number — not possible in non-verbal severe dementia.",
+        "B": "VAS requires patient to mark a visual line — requires comprehension and fine motor control; not appropriate.",
+        "D": "FACES requires patient to point to the face that matches their pain — requires comprehension; not appropriate in stage 7 AD."
+      },
+      "hint": "Non-verbal patient with severe dementia = behavioral pain assessment tool.",
+      "clinicalPearl": "Pain is chronically undertreated in non-verbal dementia patients. Behavioral changes (restlessness, guarding, facial grimacing, vocalizations) are pain's language — learn to read it.",
+      "examStrategy": "Pain assessment in non-verbal dementia = PAINAD. NRS/VAS/FACES all require self-report = not appropriate.",
+      "keyTakeaway": "Non-verbal severe dementia pain assessment: PAINAD scale (behavioral indicators) — score ≥4 = treat pain."
+    },
+    {
+      "id": "alz-post-09",
+      "type": "SATA",
+      "difficulty": "hard",
+      "stem": "A nurse is providing end-of-life care education to the family of an 84-year-old man with severe AD (FAST stage 7C) in a long-term care facility. Which of the following statements should be included in the family teaching? Select all that apply.",
+      "options": {
+        "A": "Feeding tubes have been shown to extend survival and are recommended in this stage of disease",
+        "B": "Careful hand feeding can meet nutritional needs and maintains meaningful human connection",
+        "C": "Comfort-focused care does not mean abandonment — it means prioritizing quality of life",
+        "D": "Common causes of death in late-stage AD include aspiration pneumonia, sepsis, and dehydration",
+        "E": "Hospice care can be initiated when the patient meets eligibility criteria; hospice improves comfort and supports the family",
+        "F": "Advance directives completed earlier should guide all end-of-life decisions"
+      },
+      "correctAnswer": "B, C, D, E, F",
+      "rationale": "(B) Hand feeding is evidence-based and maintains dignity and human connection. (C) Comfort care is an active and compassionate choice — not passive giving up. (D) Accurate prognosis education helps families understand the disease trajectory. (E) Hospice provides palliative symptom management, caregiver support, and bereavement services. (F) Advance directives represent the patient's voice when they could express it — honoring them is the legal and ethical obligation. Feeding tubes (A) are not recommended — they do not extend survival or improve quality of life in severe dementia.",
+      "distractorRationales": {
+        "A": "This is factually incorrect and represents a departure from evidence-based practice. Feeding tubes in severe dementia do not extend survival, reduce aspiration, or improve quality of life."
+      },
+      "hint": "Evidence-based late-stage care: comfort, dignity, hand feeding, family support — not tubes.",
+      "clinicalPearl": "Family grief often manifests as a demand for aggressive intervention. Nursing's role is to provide accurate, compassionate information about what evidence shows and what the patient's expressed wishes were.",
+      "examStrategy": "End-of-life AD teaching SATA: hand feeding, comfort care, hospice, advance directives = all correct. Feeding tube = incorrect.",
+      "keyTakeaway": "Late-stage AD end-of-life: comfort care, hand feeding, hospice, advance directive adherence — no evidence for feeding tubes."
+    },
+    {
+      "id": "alz-post-10",
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 77-year-old woman with moderate AD has been experiencing sundowning — increased confusion, agitation, and pacing beginning in late afternoon and persisting through the evening. Which non-pharmacological intervention has the HIGHEST level of evidence for managing sundowning in Alzheimer's disease?",
+      "options": {
+        "A": "Benzodiazepine PRN in the afternoon",
+        "B": "Increasing room lighting during afternoon hours and implementing a structured afternoon activity program with music",
+        "C": "Applying bilateral soft wrist restraints at 3 PM to prevent pacing",
+        "D": "Providing a high-dose melatonin supplement of 10 mg at noon"
+      },
+      "correctAnswer": "B",
+      "rationale": "Sundowning is associated with circadian rhythm disruption, reduced light exposure, and fatigue at end of day. Evidence-based non-pharmacological interventions: (1) Bright light therapy during afternoon hours (10,000 lux for 30 min); (2) Structured activity in the afternoon to replace unstructured time where agitation escalates; (3) Music therapy (highest evidence for BPSD); (4) Limiting afternoon napping to reduce sleep phase disruption; (5) Consistent evening routine. These interventions address the circadian and behavioral drivers of sundowning. Benzodiazepines worsen cognition and increase fall risk. Restraints worsen agitation. High-dose melatonin (10 mg) is not recommended; low-dose melatonin (0.5–3 mg) at bedtime has modest evidence.",
+      "distractorRationales": {
+        "A": "Benzodiazepines are Beers Criteria medications in older adults — increase fall risk, worsen cognition, cause paradoxical agitation in dementia. Not appropriate for sundowning.",
+        "C": "Restraints are contraindicated and worsen agitation in dementia patients.",
+        "D": "High-dose melatonin (10 mg) is not evidence-based; if melatonin is used, low doses (0.5–3 mg) at bedtime are more appropriate."
+      },
+      "hint": "Sundowning = circadian disruption. What non-pharmacological approach addresses circadian rhythm and behavioral triggers?",
+      "clinicalPearl": "Bright light therapy in the afternoon works by resetting the circadian clock and suppressing the late-afternoon melatonin surge that contributes to sundowning.",
+      "examStrategy": "Sundowning management: non-pharmacological first (light therapy, music, structured activity). Benzodiazepines and restraints = always wrong in dementia behavioral management.",
+      "keyTakeaway": "Sundowning: afternoon bright light therapy + structured activity + music therapy = first-line, evidence-based management."
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "alz-fc-01",
+      "front": "Amyloid Cascade Hypothesis — Key Steps",
+      "back": "1. Abnormal APP cleavage → Aβ42 peptide production\n2. Aβ42 aggregates → insoluble plaques\n3. Plaques → neuroinflammation + synaptic dysfunction\n4. Tau hyperphosphorylation → neurofibrillary tangles\n5. NFTs → axonal transport failure → neuronal death\n6. Cholinergic neurons (NBM) lost → memory impairment",
+      "hint": "Amyloid first, then tau, then neurons die.",
+      "explanation": "The amyloid cascade is the dominant theory of AD pathogenesis and the basis for anti-amyloid drug development. Understanding it explains why lecanemab targets early amyloid aggregates.",
+      "clinicalPearl": "Disease-modifying therapies target step 2 (amyloid aggregation/clearance) — they must be given EARLY before massive tau tangles and neuronal loss occur."
+    },
+    {
+      "id": "alz-fc-02",
+      "front": "FAST Staging — Functional Milestones",
+      "back": "Stage 3: Work performance decline, word-finding\nStage 4: Can't manage finances, complex IADLs (mild dementia)\nStage 5: Can't choose clothing; disoriented to year (moderate)\nStage 6A: Can't dress. 6B: Can't bathe. 6C: Can't toilet. 6D: Urinary incontinence. 6E: Fecal incontinence.\nStage 7A: 6 words. 7B: 1 word. 7C: Can't walk. 7D: Can't sit. 7E: No smile. 7F: Can't hold head up.",
+      "hint": "FAST goes from IADLs (4) → basic ADLs (6) → physical function (7).",
+      "explanation": "FAST staging correlates with nursing care intensity and legal/insurance milestones (FAST 7C = Medicare hospice eligibility).",
+      "clinicalPearl": "FAST 7C = cannot ambulate without assistance = Medicare hospice eligibility for dementia — know this for practice and exams."
+    },
+    {
+      "id": "alz-fc-03",
+      "front": "AChEI Drugs — Names, Doses, Special Considerations",
+      "back": "Donepezil (Aricept): all stages; 5→10→23 mg; once daily; HS preferred; QTc monitoring; bradycardia risk\nRivastigmine (Exelon): mild-moderate; PO or patch; rotate patch sites; do not use both simultaneously\nGalantamine (Razadyne): mild-moderate; extended-release preferred; with food\nAll: GI side effects (nausea, vomiting, diarrhea); vivid dreams (→morning dosing); bradycardia",
+      "hint": "All AChEIs = nausea, bradycardia, vivid dreams.",
+      "explanation": "The three AChEIs differ mainly in their pharmacokinetic profiles and formulations. All have similar therapeutic effects and side effect profiles.",
+      "clinicalPearl": "Rivastigmine patch is preferred for patients with significant GI intolerance to oral formulations — less nausea with transdermal delivery."
+    },
+    {
+      "id": "alz-fc-04",
+      "front": "Memantine — Mechanism, Dosing, Monitoring",
+      "back": "Class: NMDA receptor antagonist\nMechanism: blocks excess glutamate → reduces excitotoxicity\nStages: moderate to severe AD (FAST 5–7)\nDosing: 5 mg daily → titrate by 5 mg/week → 10 mg BID (or 28 mg ER once daily)\nAdjust in renal impairment\nSide effects: dizziness, headache, constipation\nCombination: donepezil + memantine → Namzaric",
+      "hint": "Memantine = moderate-severe; NMDA blocker; glutamate target.",
+      "explanation": "Memantine is used in addition to an AChEI in moderate-severe AD. It has a different mechanism (glutamate vs. cholinergic), providing complementary neuroprotection.",
+      "clinicalPearl": "Dose titration of memantine is mandatory — starting at 5 mg and increasing slowly reduces adverse effects. Do not start at 10 mg BID immediately."
+    },
+    {
+      "id": "alz-fc-05",
+      "front": "Anti-Amyloid DMTs — Lecanemab and Donanemab",
+      "back": "Lecanemab (Leqembi): targets soluble amyloid protofibrils; IV every 2 weeks; 27% slowing of decline; ARIA risk\nDonanemab (Kisunla): targets pyroglutamate-Aβ in plaques; IV every 4 weeks; 35% slowing; can stop when amyloid cleared\nBoth: early AD only (MCI-mild; amyloid confirmed); APOE4 homozygotes highest ARIA risk\nARIA-E: edema → headache, confusion; ARIA-H: microbleeds\nMRI monitoring every 3–6 months required",
+      "hint": "DMTs: early disease only, amyloid confirmed, ARIA monitoring mandatory.",
+      "explanation": "Disease-modifying therapies represent a paradigm shift — the first drugs to target the underlying pathology. But benefit is modest, cost is high, and safety monitoring is intensive.",
+      "clinicalPearl": "ARIA symptoms to report immediately: new headache, confusion, vision changes, gait problems after infusion. Do not wait for next appointment."
+    },
+    {
+      "id": "alz-fc-06",
+      "front": "Anticholinergic Medications CONTRAINDICATED in AD",
+      "back": "Category examples (HIGH anticholinergic burden):\n• First-gen antihistamines: diphenhydramine, hydroxyzine\n• Bladder antimuscarinics: oxybutynin, tolterodine, solifenacin\n• TCAs: amitriptyline, nortriptyline\n• Antipsychotics: chlorpromazine, clozapine\n• GI: dicyclomine, scopolamine\nSafer alternatives: mirabegron (bladder), SSRIs (depression/anxiety), melatonin (sleep)",
+      "hint": "Any drug that blocks muscarinic receptors worsens cognition and cancels AChEIs.",
+      "explanation": "Anticholinergic burden accumulates across all medications a patient is taking. Even one high-burden drug can significantly worsen cognition in AD.",
+      "clinicalPearl": "Anticholinergic Cognitive Burden (ACB) scale scores medications 0–3. Target total score 0–1 for patients with dementia."
+    },
+    {
+      "id": "alz-fc-07",
+      "front": "Communication Strategies for Moderate-Severe AD",
+      "back": "1. Approach from FRONT, make eye contact, smile\n2. Use PATIENT'S PREFERRED NAME\n3. SIMPLE language: one instruction at a time, short sentences\n4. Allow 30 SECONDS for response — do not rush\n5. NON-VERBAL communication: gentle touch, pointing, gestures\n6. REDIRECT rather than correct\n7. Enter THEIR REALITY — do not argue with delusions\n8. Offer simple CHOICES ('tea or juice?' not 'what do you want to drink?')\n9. MUSIC — familiar songs bypass verbal processing",
+      "hint": "Slow down, simplify, validate, redirect.",
+      "explanation": "Language comprehension deteriorates in AD but emotional perception remains intact longer. Tone, facial expression, and touch communicate when words no longer work.",
+      "clinicalPearl": "Validation therapy (entering the patient's reality) reduces agitation and increases cooperation in moderate-severe dementia. Reality orientation is distressing and ineffective at this stage."
+    },
+    {
+      "id": "alz-fc-08",
+      "front": "Early-Stage AD Priority Interventions (While Capacity Exists)",
+      "back": "A — Advance directive: healthcare & personal care\nB — Banking/finances: POA for property\nC — Car/driving: formal evaluation + cessation plan\nD — Depression: screen with GDS-15, treat with SSRI\nE — End-of-life wishes: goals of care discussion\nMedication: start AChEI; anticholinergic review\nCaution: medication management system",
+      "hint": "ABCDE of early AD — act while the patient can participate.",
+      "explanation": "The window of preserved capacity is finite and irreplaceable. All legal, safety, and advance care planning must occur early.",
+      "clinicalPearl": "Power of attorney for personal care and property must be signed while the patient has legal capacity — waiting until moderate disease means the patient may no longer qualify."
+    },
+    {
+      "id": "alz-fc-09",
+      "front": "PAINAD Scale — Pain Assessment in Non-Verbal Dementia",
+      "back": "5 behavioral domains, each scored 0–2:\n1. BREATHING (normal=0, labored=1, distressed=2)\n2. NEGATIVE VOCALIZATION (none=0, moaning=1, crying=2)\n3. FACIAL EXPRESSION (relaxed=0, tense=1, grimacing=2)\n4. BODY LANGUAGE (relaxed=0, tense=1, rigid=2)\n5. CONSOLABILITY (not needed=0, distracted=1, inconsolable=2)\nTotal: 0–10. Score ≥4 = treat pain",
+      "hint": "PAINAD for non-verbal patients; score ≥4 = pain treatment indicated.",
+      "explanation": "Pain is chronically undertreated in non-verbal dementia. PAINAD provides an objective behavioral framework to document and treat pain.",
+      "clinicalPearl": "Increased behavioral agitation in non-verbal dementia patients should always trigger a pain assessment with PAINAD before any other behavioral intervention."
+    },
+    {
+      "id": "alz-fc-10",
+      "front": "Feeding Decisions in Late-Stage AD (Stage 7)",
+      "back": "Evidence: PEG tube feeding in severe dementia DOES NOT:\n• Prolong survival\n• Reduce aspiration pneumonia risk (oral secretions still aspirated)\n• Improve quality of life\n• Prevent pressure injuries\nDoes: cause complications (site infection, tube displacement, aspiration of feeds)\n\nEvidence-based alternative: Careful hand feeding\n• Maintains human connection\n• Preserves dignity\n• Equivalent or better outcomes\nDecision: with substitute decision-maker + palliative care team",
+      "hint": "PEG in severe dementia = no benefit, complications. Hand feed instead.",
+      "explanation": "The evidence against PEG tubes in severe dementia is consistent across multiple systematic reviews. It is one of the most important and most tested evidence-based practice points in geriatric nursing.",
+      "clinicalPearl": "Family guilt often drives requests for PEG tubes. Nursing's role: provide compassionate, accurate evidence AND affirm that hand feeding IS active, caring, evidence-based care."
+    },
+    {
+      "id": "alz-fc-11",
+      "front": "Genetics Summary — Alzheimer's Disease",
+      "back": "SPORADIC AD (95% of cases; age >65):\n• APOE4: risk allele; 1 copy = 3× risk; 2 copies = 8–12× risk; NOT diagnostic\n• NOT recommended for routine testing\n\nFAMILIAL AD (<5%; early onset <65; autosomal dominant):\n• PSEN1 (chromosome 14): MOST COMMON familial mutation\n• PSEN2 (chromosome 1): rarest, latest onset\n• APP (chromosome 21): rare; explains AD in Down syndrome (trisomy 21)\nRecommendation: genetic counseling before testing",
+      "hint": "APOE4 = risk factor. PSEN1 = familial cause.",
+      "explanation": "The distinction between risk (APOE4) and causative mutation (PSEN1/PSEN2/APP) is critical for accurate counseling of patients and families.",
+      "clinicalPearl": "In early-onset familial AD clusters (3+ affected members, onset <70), PSEN1 testing with genetic counseling is indicated — not APOE4 testing."
+    },
+    {
+      "id": "alz-fc-12",
+      "front": "Sundowning — Causes and Management",
+      "back": "CAUSES: circadian rhythm disruption, reduced afternoon light, fatigue, understimulation, dehydration, pain, overstimulation earlier in day\n\nNON-PHARMACOLOGICAL (first-line):\n• Bright light therapy in afternoon (10,000 lux × 30 min)\n• Structured afternoon activity program\n• Music therapy (highest evidence for BPSD)\n• Reduce afternoon napping\n• Consistent evening routine\n• Ensure hydration\n\nPHARMACOLOGICAL (last resort):\n• Melatonin 0.5–3 mg at bedtime\n• Avoid: benzodiazepines, diphenhydramine",
+      "hint": "Sundowning = circadian problem → light therapy + structured activity first.",
+      "explanation": "Sundowning represents a late-day disruption in circadian regulation. Non-pharmacological approaches targeting circadian biology are the evidence-based first-line treatment.",
+      "clinicalPearl": "Music therapy activates preserved emotional and musical memory circuits even in advanced dementia — it reduces agitation more effectively than most pharmacological approaches."
+    }
+  ]
+}

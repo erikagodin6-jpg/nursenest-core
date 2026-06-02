@@ -1,0 +1,649 @@
+import type { CareerQuestion } from "./rrt-questions";
+
+export const ptaQuestionsBatch14: CareerQuestion[] = [
+  {
+    "id": "pta-b14-001",
+    "stem": "A patient with patellar dislocation typically has the patella displace:",
+    "options": [
+      "Medially",
+      "Laterally (due to Q-angle, VMO weakness, and lateral soft tissue tightness)",
+      "Superiorly",
+      "Inferiorly"
+    ],
+    "correctIndex": 1,
+    "rationale": "Patellar dislocation: lateral displacement due to Q-angle pull, VMO weakness, shallow trochlear groove, and lateral retinacular tightness. Rehab: VMO strengthening, patellar taping.",
+    "difficulty": 1,
+    "category": "Musculoskeletal Rehabilitation",
+    "topic": "Patellar Dislocation"
+  },
+  {
+    "id": "pta-b14-002",
+    "stem": "The painful arc for rotator cuff impingement occurs between:",
+    "options": [
+      "0-30°",
+      "60-120° of shoulder abduction",
+      "120-180°",
+      "Only at end range"
+    ],
+    "correctIndex": 1,
+    "rationale": "Painful arc: 60-120° abduction. Supraspinatus and bursa compressed under acromion in this range. Pain diminishes above 120° as greater tuberosity clears acromion.",
+    "difficulty": 1,
+    "category": "Musculoskeletal Rehabilitation",
+    "topic": "Shoulder Impingement"
+  },
+  {
+    "id": "pta-b14-003",
+    "stem": "After ACL reconstruction with hamstring autograft, the patient should avoid:",
+    "options": [
+      "Quad strengthening",
+      "Aggressive hamstring stretching and prone hamstring curls in early rehabilitation (protect graft harvest site)",
+      "Walking",
+      "Ice application"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hamstring autograft ACLR: protect hamstring donor site. Avoid aggressive hamstring stretching/resisted flexion for 6-8 weeks. Prone hamstring curls delayed. Address hamstring strength deficit.",
+    "difficulty": 2,
+    "category": "Musculoskeletal Rehabilitation",
+    "topic": "ACLR Protocols"
+  },
+  {
+    "id": "pta-b14-004",
+    "stem": "The crossover sign on X-ray suggests:",
+    "options": [
+      "Normal acetabulum",
+      "Acetabular retroversion (pincer-type FAI)",
+      "Femoral anteversion",
+      "Acetabular dysplasia"
+    ],
+    "correctIndex": 1,
+    "rationale": "Crossover sign: AP pelvis X-ray shows anterior wall crosses posterior wall indicating acetabular retroversion. Associated with pincer-type FAI. Over-coverage of femoral head anteriorly.",
+    "difficulty": 3,
+    "category": "Musculoskeletal Rehabilitation",
+    "topic": "Hip Imaging"
+  },
+  {
+    "id": "pta-b14-005",
+    "stem": "A patient post-PCL reconstruction should avoid:",
+    "options": [
+      "Knee extension exercises",
+      "Active hamstring contraction in early phase (hamstrings pull tibia posteriorly, stressing the graft)",
+      "Quad sets",
+      "Ankle pumps"
+    ],
+    "correctIndex": 1,
+    "rationale": "Post-PCL reconstruction: avoid active hamstring contraction and posterior tibial translation forces. Quad strengthening is safe and encouraged. Progress per surgeon protocol.",
+    "difficulty": 2,
+    "category": "Musculoskeletal Rehabilitation",
+    "topic": "PCL Reconstruction"
+  },
+  {
+    "id": "pta-b14-006",
+    "stem": "The Thessaly test assesses:",
+    "options": [
+      "ACL integrity",
+      "Meniscal integrity (rotational loading at 5° and 20° knee flexion reproducing joint line pain/catching)",
+      "PCL integrity",
+      "Patellar tracking"
+    ],
+    "correctIndex": 1,
+    "rationale": "Thessaly: patient stands on one leg at 5° then 20° knee flexion, rotates body/femur. Positive = joint line pain, locking, catching. Functional test for meniscal tears.",
+    "difficulty": 2,
+    "category": "Musculoskeletal Rehabilitation",
+    "topic": "Meniscal Tests"
+  },
+  {
+    "id": "pta-b14-007",
+    "stem": "A Jones fracture involves:",
+    "options": [
+      "First metatarsal",
+      "Fifth metatarsal diaphysis-metaphysis junction (poor blood supply area, risk of nonunion)",
+      "Calcaneus",
+      "Navicular"
+    ],
+    "correctIndex": 1,
+    "rationale": "Jones fracture: 5th MT at metadiaphyseal junction (Zone 2). Watershed area with poor blood supply. High nonunion rate. Often requires NWB or surgery. Different from avulsion fracture (Zone 1).",
+    "difficulty": 2,
+    "category": "Musculoskeletal Rehabilitation",
+    "topic": "Foot Fractures"
+  },
+  {
+    "id": "pta-b14-008",
+    "stem": "Lisfranc injury involves:",
+    "options": [
+      "Ankle joint",
+      "Tarsometatarsal joint complex (disruption of ligaments between midfoot and forefoot)",
+      "Hip joint",
+      "SI joint"
+    ],
+    "correctIndex": 1,
+    "rationale": "Lisfranc: tarsometatarsal joint disruption. Can be fracture-dislocation or purely ligamentous. Commonly missed. Weight-bearing X-ray needed. Often requires surgical fixation.",
+    "difficulty": 2,
+    "category": "Musculoskeletal Rehabilitation",
+    "topic": "Foot Injuries"
+  },
+  {
+    "id": "pta-b14-009",
+    "stem": "The Fugl-Meyer Assessment evaluates:",
+    "options": [
+      "Pain severity",
+      "Sensorimotor recovery after stroke (motor, sensation, balance, joint ROM, pain — scored 0-226)",
+      "Cognitive function",
+      "Functional independence"
+    ],
+    "correctIndex": 1,
+    "rationale": "Fugl-Meyer: gold standard stroke motor recovery assessment. Motor (0-100: UE 66, LE 34), sensation, balance, joint ROM, pain. Total 0-226. Sensitive to change in motor recovery.",
+    "difficulty": 2,
+    "category": "Neurological Rehabilitation",
+    "topic": "Stroke Assessment"
+  },
+  {
+    "id": "pta-b14-010",
+    "stem": "A patient with Brown-Sequard syndrome has:",
+    "options": [
+      "Bilateral motor/sensory loss",
+      "Ipsilateral motor loss and proprioception loss; contralateral pain/temperature loss",
+      "Complete cord transection",
+      "Only motor deficits"
+    ],
+    "correctIndex": 1,
+    "rationale": "Brown-Sequard (cord hemisection): ipsilateral motor loss (corticospinal), ipsilateral proprioception/vibration loss (dorsal columns), contralateral pain/temperature loss (spinothalamic — crosses).",
+    "difficulty": 3,
+    "category": "Neurological Rehabilitation",
+    "topic": "SCI Syndromes"
+  },
+  {
+    "id": "pta-b14-011",
+    "stem": "A patient with MS who has a heat-sensitive exacerbation should exercise in:",
+    "options": [
+      "A hot environment",
+      "A cool environment with precooling strategies and adequate hydration",
+      "Only outdoors in summer",
+      "A steam room"
+    ],
+    "correctIndex": 1,
+    "rationale": "MS heat sensitivity: exercise in cool environment, pre-cool with cooling vest, frequent rest breaks, adequate hydration, avoid hot tubs/saunas. Monitor core temperature.",
+    "difficulty": 1,
+    "category": "Neurological Rehabilitation",
+    "topic": "MS Exercise Guidelines"
+  },
+  {
+    "id": "pta-b14-012",
+    "stem": "Functional ambulation category (FAC) Level 4 indicates:",
+    "options": [
+      "Non-functional ambulation",
+      "Independent on level surfaces but requires supervision on stairs, uneven surfaces, and inclines",
+      "Full independent ambulation everywhere",
+      "Wheelchair-only mobility"
+    ],
+    "correctIndex": 1,
+    "rationale": "FAC: 0 (nonfunctional), 1 (continuous support), 2 (intermittent support), 3 (supervision only), 4 (independent on level, help on stairs/uneven), 5 (independent everywhere).",
+    "difficulty": 2,
+    "category": "Neurological Rehabilitation",
+    "topic": "Gait Classification"
+  },
+  {
+    "id": "pta-b14-013",
+    "stem": "Action tremor (intention tremor) is characteristic of:",
+    "options": [
+      "Parkinson disease",
+      "Cerebellar dysfunction (tremor increases as limb approaches target)",
+      "Essential tremor",
+      "Resting tremor"
+    ],
+    "correctIndex": 1,
+    "rationale": "Intention tremor: amplitude increases as target is approached (finger-to-nose test). Indicates cerebellar dysfunction. Contrasts with resting tremor (PD) and postural tremor (essential tremor).",
+    "difficulty": 2,
+    "category": "Neurological Rehabilitation",
+    "topic": "Cerebellar Signs"
+  },
+  {
+    "id": "pta-b14-014",
+    "stem": "Dysdiadochokinesia indicates:",
+    "options": [
+      "Motor cortex lesion",
+      "Cerebellar dysfunction (inability to perform rapid alternating movements)",
+      "Basal ganglia lesion",
+      "Peripheral neuropathy"
+    ],
+    "correctIndex": 1,
+    "rationale": "Dysdiadochokinesia: impaired rapid alternating movements (pronation/supination, hand patting). Cerebellar sign. Related to impaired timing and coordination of reciprocal muscle groups.",
+    "difficulty": 2,
+    "category": "Neurological Rehabilitation",
+    "topic": "Cerebellar Assessment"
+  },
+  {
+    "id": "pta-b14-015",
+    "stem": "The 6-minute walk test is used to assess:",
+    "options": [
+      "Maximum exercise capacity",
+      "Submaximal functional exercise capacity (distance walked in 6 minutes on flat surface)",
+      "Sprint speed",
+      "Upper extremity function"
+    ],
+    "correctIndex": 1,
+    "rationale": "6MWT: submaximal functional test. Walk as far as possible in 6 minutes on flat 30m course. Measures: distance, HR, SpO2, Borg dyspnea/fatigue. MCID: 30-54m depending on condition.",
+    "difficulty": 1,
+    "category": "Cardiopulmonary Physical Therapy",
+    "topic": "Functional Tests"
+  },
+  {
+    "id": "pta-b14-016",
+    "stem": "A patient post-coronary artery bypass graft should avoid UE activities exceeding:",
+    "options": [
+      "No restrictions",
+      "5-10 lbs and no pushing/pulling for 6-8 weeks (sternal precautions)",
+      "50 lbs",
+      "Only 1 lb"
+    ],
+    "correctIndex": 1,
+    "rationale": "Post-CABG sternal precautions: no lifting >5-10 lbs, no pushing/pulling with UEs, support sternum when coughing, no driving for 4-6 weeks. Duration: typically 6-8 weeks.",
+    "difficulty": 1,
+    "category": "Cardiopulmonary Physical Therapy",
+    "topic": "Post-CABG Care"
+  },
+  {
+    "id": "pta-b14-017",
+    "stem": "Peripheral edema with cardiac origin is typically:",
+    "options": [
+      "Unilateral",
+      "Bilateral, dependent (worse in evening), pitting, with possible JVD and weight gain",
+      "Non-pitting",
+      "Only in upper extremities"
+    ],
+    "correctIndex": 1,
+    "rationale": "Cardiac edema: bilateral, dependent (gravity), pitting, worse in evening (day's activity), associated with JVD, dyspnea, weight gain (>2 lbs/day concerning). Monitor daily weights.",
+    "difficulty": 1,
+    "category": "Cardiopulmonary Physical Therapy",
+    "topic": "Edema Assessment"
+  },
+  {
+    "id": "pta-b14-018",
+    "stem": "Typical walking age is:",
+    "options": [
+      "6 months",
+      "12-15 months (independent walking; cruising at 9-10 months, walking with hands held at 11-12 months)",
+      "18 months",
+      "24 months"
+    ],
+    "correctIndex": 1,
+    "rationale": "Independent walking: typically 12-15 months. Wide-based, high guard arms, short steps. Mature gait pattern not achieved until approximately 7 years.",
+    "difficulty": 1,
+    "category": "Pediatric Rehabilitation",
+    "topic": "Motor Milestones"
+  },
+  {
+    "id": "pta-b14-019",
+    "stem": "A reflex that persists beyond its normal integration age may indicate:",
+    "options": [
+      "Normal development",
+      "Neurological dysfunction that may interfere with voluntary motor development",
+      "Advanced development",
+      "No clinical significance"
+    ],
+    "correctIndex": 1,
+    "rationale": "Persistent primitive reflexes: may indicate CNS dysfunction. Interfere with voluntary motor control development. Example: persistent ATNR prevents midline hand activities and rolling.",
+    "difficulty": 1,
+    "category": "Pediatric Rehabilitation",
+    "topic": "Reflex Integration"
+  },
+  {
+    "id": "pta-b14-020",
+    "stem": "The parachute reaction (protective extension) forward appears at:",
+    "options": [
+      "Birth",
+      "6-7 months and persists throughout life",
+      "3 months",
+      "24 months"
+    ],
+    "correctIndex": 1,
+    "rationale": "Forward parachute: 6-7 months. Hold infant vertically and tip forward — arms extend protectively. Persists through life. Absence or asymmetry may indicate neurological concern.",
+    "difficulty": 1,
+    "category": "Pediatric Rehabilitation",
+    "topic": "Postural Reactions"
+  },
+  {
+    "id": "pta-b14-021",
+    "stem": "Torticollis in infants is treated with:",
+    "options": [
+      "Surgery as first line",
+      "Stretching (lateral flexion away from affected side, rotation toward affected side), positioning, and tummy time",
+      "No intervention",
+      "Only observation"
+    ],
+    "correctIndex": 1,
+    "rationale": "Congenital muscular torticollis: stretching SCM (lateral flex away, rotate toward tight side), positioning (encourage looking to non-preferred side), tummy time. Most resolve with conservative treatment.",
+    "difficulty": 1,
+    "category": "Pediatric Rehabilitation",
+    "topic": "Infant Conditions"
+  },
+  {
+    "id": "pta-b14-022",
+    "stem": "Developmental hip dysplasia (DDH) is screened with:",
+    "options": [
+      "X-ray at birth",
+      "Barlow test (push posteriorly to dislocate) and Ortolani test (abduct to reduce) in newborns",
+      "MRI at birth",
+      "CT scan"
+    ],
+    "correctIndex": 1,
+    "rationale": "DDH screening: Barlow (adduct + posterior pressure → dislocatable hip clicks out) and Ortolani (abduct → dislocated hip clicks back in). Ultrasound for confirmation. Pavlik harness treatment.",
+    "difficulty": 1,
+    "category": "Pediatric Rehabilitation",
+    "topic": "Infant Hip Screening"
+  },
+  {
+    "id": "pta-b14-023",
+    "stem": "Number needed to treat (NNT) represents:",
+    "options": [
+      "Total number of patients in a study",
+      "Number of patients who need to receive treatment for one additional person to benefit",
+      "Percentage of patients who improve",
+      "Effect size"
+    ],
+    "correctIndex": 1,
+    "rationale": "NNT = 1/ARR (absolute risk reduction). Lower NNT = more effective treatment. NNT of 5: treat 5 patients for 1 additional benefit. Clinically useful measure of treatment effectiveness.",
+    "difficulty": 2,
+    "category": "Evidence-Based Practice",
+    "topic": "Treatment Effectiveness"
+  },
+  {
+    "id": "pta-b14-024",
+    "stem": "Pragmatic clinical trials differ from explanatory trials by:",
+    "options": [
+      "Having strict inclusion criteria",
+      "Testing interventions in real-world clinical settings with broad inclusion criteria",
+      "Being conducted in laboratory settings",
+      "Using only randomized designs"
+    ],
+    "correctIndex": 1,
+    "rationale": "Pragmatic trials: real-world settings, broad inclusion, usual care comparison, patient-centered outcomes. Higher external validity. Explanatory: controlled settings, narrow criteria, higher internal validity.",
+    "difficulty": 2,
+    "category": "Evidence-Based Practice",
+    "topic": "Trial Design"
+  },
+  {
+    "id": "pta-b14-025",
+    "stem": "A negative predictive value (NPV) of 95% means:",
+    "options": [
+      "95% of positive tests are correct",
+      "95% of people who test negative truly do not have the condition",
+      "The test is 95% sensitive",
+      "The test is 95% specific"
+    ],
+    "correctIndex": 1,
+    "rationale": "NPV: proportion of negative test results that are true negatives. 95% NPV: if you test negative, 95% chance you don't have the condition. Affected by prevalence.",
+    "difficulty": 2,
+    "category": "Evidence-Based Practice",
+    "topic": "Diagnostic Accuracy"
+  },
+  {
+    "id": "pta-b14-026",
+    "stem": "Sensitivity of a test measures:",
+    "options": [
+      "True positive rate — ability to correctly identify those WITH the disease (SnNOut)",
+      "True negative rate",
+      "Positive predictive value",
+      "Negative predictive value"
+    ],
+    "correctIndex": 0,
+    "rationale": "Sensitivity: TP/(TP+FN). High sensitivity: few false negatives. SnNOut: sensitive test, negative result rules OUT disease. Screening tests need high sensitivity.",
+    "difficulty": 2,
+    "category": "Evidence-Based Practice",
+    "topic": "Diagnostic Accuracy"
+  },
+  {
+    "id": "pta-b14-027",
+    "stem": "Specificity of a test measures:",
+    "options": [
+      "True positive rate",
+      "True negative rate — ability to correctly identify those WITHOUT the disease (SpPIn)",
+      "Positive predictive value",
+      "Sensitivity"
+    ],
+    "correctIndex": 1,
+    "rationale": "Specificity: TN/(TN+FP). High specificity: few false positives. SpPIn: specific test, positive result rules IN disease. Confirmatory tests need high specificity.",
+    "difficulty": 2,
+    "category": "Evidence-Based Practice",
+    "topic": "Diagnostic Accuracy"
+  },
+  {
+    "id": "pta-b14-028",
+    "stem": "Diuretics may affect exercise performance by:",
+    "options": [
+      "Having no effect",
+      "Causing dehydration, electrolyte imbalance (hypokalemia), and orthostatic hypotension",
+      "Improving endurance",
+      "Increasing blood volume"
+    ],
+    "correctIndex": 1,
+    "rationale": "Diuretics: volume depletion → dehydration, orthostatic hypotension. Potassium-wasting (thiazide, loop): hypokalemia → muscle cramps, weakness, arrhythmias. Monitor hydration and electrolytes.",
+    "difficulty": 2,
+    "category": "Pharmacology for PTAs",
+    "topic": "Diuretics"
+  },
+  {
+    "id": "pta-b14-029",
+    "stem": "Antispasticity medication baclofen works at the:",
+    "options": [
+      "Muscle level",
+      "Spinal cord level (GABA-B agonist reducing excitatory neurotransmission)",
+      "Brain level only",
+      "Peripheral nerve level"
+    ],
+    "correctIndex": 1,
+    "rationale": "Baclofen: GABA-B receptor agonist at spinal cord level. Reduces excitatory neurotransmission → decreased spasticity. Can be oral or intrathecal (pump). Side effects: drowsiness, weakness.",
+    "difficulty": 2,
+    "category": "Pharmacology for PTAs",
+    "topic": "Antispasticity Drugs"
+  },
+  {
+    "id": "pta-b14-030",
+    "stem": "Electrical stimulation for wound healing uses:",
+    "options": [
+      "High-frequency AC",
+      "Cathodal (negative) polarity initially for bactericidal effects, then anodal (positive) for tissue growth",
+      "Only thermal modalities",
+      "Ultrasound only"
+    ],
+    "correctIndex": 1,
+    "rationale": "ES wound healing: cathodal polarity first (bactericidal, attracts neutrophils/macrophages). Switch to anodal when wound is clean (promotes fibroblast migration, epithelial growth). HVPC most common.",
+    "difficulty": 2,
+    "category": "Integumentary & Wound Care",
+    "topic": "Wound Healing Modalities"
+  },
+  {
+    "id": "pta-b14-031",
+    "stem": "Total contact casting for neuropathic foot ulcers works by:",
+    "options": [
+      "Immobilizing the ankle only",
+      "Redistributing plantar pressure across the entire foot to reduce pressure at the ulcer site",
+      "Providing heat therapy",
+      "Applying compression only"
+    ],
+    "correctIndex": 1,
+    "rationale": "TCC: gold standard for neuropathic plantar ulcers. Redistributes pressure across entire plantar surface. Reduces localized pressure by 60-80%. Promotes healing while allowing ambulation.",
+    "difficulty": 2,
+    "category": "Integumentary & Wound Care",
+    "topic": "Neuropathic Wound Care"
+  },
+  {
+    "id": "pta-b14-032",
+    "stem": "The supraspinatus initiates shoulder abduction in the first:",
+    "options": [
+      "90°",
+      "0-15° (compresses humeral head into glenoid, then deltoid takes over as primary abductor)",
+      "60-90°",
+      "120-180°"
+    ],
+    "correctIndex": 1,
+    "rationale": "Supraspinatus: initiates abduction (0-15°), compresses humeral head into glenoid (stabilizer role throughout). Deltoid becomes primary abductor above 15-30°. Both active throughout ROM.",
+    "difficulty": 2,
+    "category": "Biomechanics & Kinesiology",
+    "topic": "Shoulder Mechanics"
+  },
+  {
+    "id": "pta-b14-033",
+    "stem": "The pes anserinus is formed by the tendons of:",
+    "options": [
+      "Quadriceps",
+      "Sartorius, gracilis, and semitendinosus (inserting on medial proximal tibia)",
+      "Biceps femoris and popliteus",
+      "Gastrocnemius and soleus"
+    ],
+    "correctIndex": 1,
+    "rationale": "Pes anserinus: sartorius, gracilis, semitendinosus. Insert on medial proximal tibia. Mnemonic: SGT (Say Grace before Tea). Pes anserine bursitis: medial knee pain below joint line.",
+    "difficulty": 1,
+    "category": "Biomechanics & Kinesiology",
+    "topic": "Lower Extremity Anatomy"
+  },
+  {
+    "id": "pta-b14-034",
+    "stem": "A patient with myofascial pain syndrome has pain that:",
+    "options": [
+      "Is always localized to the trigger point",
+      "May refer to distant areas in predictable patterns when trigger points are stimulated",
+      "Only occurs at rest",
+      "Is always bilateral"
+    ],
+    "correctIndex": 1,
+    "rationale": "Myofascial referred pain: trigger points refer pain in predictable patterns (mapped by Travell & Simons). Upper trapezius TrP → temporal headache. Pattern helps identify source.",
+    "difficulty": 2,
+    "category": "Pain Management",
+    "topic": "Referred Pain Patterns"
+  },
+  {
+    "id": "pta-b14-035",
+    "stem": "TENS for acute pain typically uses:",
+    "options": [
+      "Low frequency, high intensity",
+      "High frequency (80-150 Hz), low intensity (sensory level), short pulse duration",
+      "Medium frequency only",
+      "No specific parameters"
+    ],
+    "correctIndex": 1,
+    "rationale": "Conventional TENS for acute pain: high frequency (80-150 Hz), low intensity (sensory), short pulse duration (50-80 μs). Gate control mechanism. Quick onset but short duration of relief.",
+    "difficulty": 1,
+    "category": "Therapeutic Modalities",
+    "topic": "TENS Parameters"
+  },
+  {
+    "id": "pta-b14-036",
+    "stem": "The minimal detectable change (MDC) represents:",
+    "options": [
+      "Any change in score",
+      "The smallest change that exceeds measurement error (95% confidence)",
+      "Clinical importance of change",
+      "Maximum possible change"
+    ],
+    "correctIndex": 1,
+    "rationale": "MDC: smallest change exceeding measurement error with 95% confidence. Anything less could be measurement error, not true change. Different from MCID (clinically meaningful change).",
+    "difficulty": 2,
+    "category": "Evidence-Based Practice",
+    "topic": "Measurement Properties"
+  },
+  {
+    "id": "pta-b14-037",
+    "stem": "Trendelenburg test (standing) is positive when:",
+    "options": [
+      "The pelvis rises on the stance side",
+      "The pelvis drops on the non-stance side during single-leg stance (indicating weak stance-side hip abductors)",
+      "The patient falls",
+      "The knees hyperextend"
+    ],
+    "correctIndex": 1,
+    "rationale": "Trendelenburg test: single-leg stance. Positive = contralateral pelvis drops (weak hip abductors on stance leg). Negative = pelvis stays level or rises on non-stance side.",
+    "difficulty": 1,
+    "category": "Musculoskeletal Rehabilitation",
+    "topic": "Hip Assessment"
+  },
+  {
+    "id": "pta-b14-038",
+    "stem": "A patient exercising at 70% HRmax is training at:",
+    "options": [
+      "Light intensity",
+      "Vigorous intensity (64-76% HRmax = moderate, 77-95% = vigorous per ACSM)",
+      "Maximal intensity",
+      "Recovery intensity"
+    ],
+    "correctIndex": 0,
+    "rationale": "Per ACSM: 57-63% HRmax = light, 64-76% = moderate, 77-95% = vigorous. 70% HRmax falls in moderate range. However, %HRR (Karvonen) gives different classification.",
+    "difficulty": 2,
+    "category": "Cardiopulmonary Physical Therapy",
+    "topic": "Exercise Intensity Zones"
+  },
+  {
+    "id": "pta-b14-039",
+    "stem": "An exercise blood pressure response where systolic fails to rise or drops with increasing workload suggests:",
+    "options": [
+      "Normal response",
+      "Possible cardiac pump failure or aortic outflow obstruction — stop exercise immediately",
+      "Excellent cardiovascular fitness",
+      "Dehydration only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Failure of SBP to rise or SBP drop with increasing workload: indicates cardiac pump failure (LV dysfunction), aortic stenosis, or myocardial ischemia. Absolute indication to stop exercise.",
+    "difficulty": 2,
+    "category": "Cardiopulmonary Physical Therapy",
+    "topic": "Exercise Safety"
+  },
+  {
+    "id": "pta-b14-040",
+    "stem": "A patient with bilateral LE edema, JVD, and dyspnea on exertion MOST likely has:",
+    "options": [
+      "Peripheral vascular disease",
+      "Right-sided or biventricular heart failure",
+      "Lymphedema",
+      "DVT"
+    ],
+    "correctIndex": 1,
+    "rationale": "Right heart failure: JVD, peripheral edema (bilateral, dependent), hepatomegaly. Left heart failure: pulmonary congestion, dyspnea. Biventricular: both sets of symptoms.",
+    "difficulty": 2,
+    "category": "Cardiopulmonary Physical Therapy",
+    "topic": "Heart Failure Signs"
+  },
+  {
+    "id": "pta-b14-041",
+    "stem": "A child with hypotonia, motor delays, and an almond-shaped eyes may have:",
+    "options": [
+      "Down syndrome",
+      "Prader-Willi syndrome",
+      "Cerebral palsy",
+      "Muscular dystrophy"
+    ],
+    "correctIndex": 1,
+    "rationale": "PWS features: severe hypotonia/feeding difficulties (infancy), hyperphagia/obesity (childhood), short stature, almond-shaped eyes, small hands/feet, cognitive impairment, behavioral issues.",
+    "difficulty": 2,
+    "category": "Pediatric Rehabilitation",
+    "topic": "Genetic Syndromes"
+  },
+  {
+    "id": "pta-b14-042",
+    "stem": "Auscultation revealing a friction rub in the chest indicates:",
+    "options": [
+      "Normal finding",
+      "Pleural inflammation (pleurisy) — rough, grating sound heard during both inspiration and expiration",
+      "Airway obstruction",
+      "Fluid in alveoli"
+    ],
+    "correctIndex": 1,
+    "rationale": "Pleural friction rub: rough, grating sound from inflamed pleural surfaces rubbing together. Heard during both phases of respiration. Associated with pleurisy, PE, pneumonia.",
+    "difficulty": 2,
+    "category": "Cardiopulmonary Physical Therapy",
+    "topic": "Lung Sounds"
+  },
+  {
+    "id": "pta-b14-043",
+    "stem": "The Rule of Nines for an adult: both lower extremities burned equals:",
+    "options": [
+      "18%",
+      "36% (each LE = 18%)",
+      "27%",
+      "45%"
+    ],
+    "correctIndex": 1,
+    "rationale": "Rule of Nines adult LEs: each entire LE = 18% (9% anterior + 9% posterior). Both LEs = 36%. Used for rapid TBSA estimation in burn assessment.",
+    "difficulty": 1,
+    "category": "Integumentary & Wound Care",
+    "topic": "Burn Assessment"
+  }
+];

@@ -1,0 +1,620 @@
+import { Suspense } from "react";
+import type { Metadata } from "next";
+import { FlashcardsHubSkeleton } from "@/components/skeletons/hub-page-skeleton";
+import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
+import { FlashcardsHubClientBoundary } from "@/components/flashcards/flashcards-hub-client-boundary";
+import FlashcardErrorBoundary from "@/components/flashcards/flashcard-error-boundary";
+import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
+import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { ContentEmptyState } from "@/components/ui/content-empty-state";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import {
+  resolveSubscribedQuestionBankPathways,
+  type ResolvedQuestionBankPathways,
+} from "@/lib/learner/tier-scoped-study-routes";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { readFlashcardsHubPathwayBootstrapSnapshot } from "@/lib/study-content-failover/flashcards-hub-bootstrap-snapshot-read";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
+import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import { builderCategoryOptionsForPathway } from "@/lib/flashcards/flashcard-builder-taxonomy";
+import { loadSharedFlashcardsHubInventoryForPathway } from "@/lib/flashcards/load-shared-flashcards-hub-inventory.server";
+import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
+import {
+  flashcardInventoryManifestKey,
+  flashcardInventorySnapshotPath,
+  loadWithManifest,
+  type FlashcardInventoryManifestPayload,
+} from "@/lib/server/manifest-loader";
+import {
+  pathwayFlashcardsHubH1,
+  pathwayFlashcardsHubLead,
+  tryResolveExamPathwayForFlashcardsMetadataQuery,
+  pathwayFlashcardsHubMetaTitle,
+} from "@/lib/lessons/pathway-flashcards-hub-seo";
+import {
+  pathwayCountryLabel,
+  pathwayRegionAwareExamName,
+} from "@/lib/lessons/pathway-lesson-hub-seo";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
+
+const DEFAULT_FLASHCARDS_PATHWAY_ID = "ca-rn-nclex-rn";
+const FLASHCARDS_PAGE_TIMING_LABEL = "flashcards_hub_server_bootstrap";
+const FLASHCARDS_PROFILE_BOOTSTRAP_TIMEOUT_MS = 1200;
+const FLASHCARDS_INVENTORY_BOOTSTRAP_TIMEOUT_MS = 100;
+
+type PageProps = {
+  searchParams: Promise<{
+    pathwayId?: string | string[];
+    alliedProfession?: string | string[];
+    topic?: string | string[];
+    weakOnly?: string | string[];
+  }>;
+};
+
+function timeoutAfter<T>(ms: number): Promise<T | null> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(null), ms);
+  });
+}
+
+export async function generateMetadata({
+  searchParams,
+}: PageProps): Promise<Metadata> {
+  return safeGenerateMetadata(
+    async () => {
+      const sp = await searchParams;
+      const rawPid = sp.pathwayId;
+      const pathwayQueryRaw =
+        typeof rawPid === "string" && rawPid.trim().length > 2
+          ? rawPid.trim()
+          : Array.isArray(rawPid) &&
+              typeof rawPid[0] === "string" &&
+              rawPid[0].trim().length > 2
+            ? rawPid[0].trim()
+            : DEFAULT_FLASHCARDS_PATHWAY_ID;
+      const { t } = await getLearnerMarketingBundle();
+      const pathway = pathwayQueryRaw
+        ? tryResolveExamPathwayForFlashcardsMetadataQuery(pathwayQueryRaw)
+        : null;
+      const title = pathway
+        ? pathwayFlashcardsHubMetaTitle(pathway)
+        : `${t("learner.flashcards.page.title")} | NurseNest`;
+      return {
+        title,
+        openGraph: { title },
+        twitter: { title },
+        robots: { index: false, follow: false },
+      };
+    },
+    { pathname: "/app/flashcards", routeGroup: "student.learner.flashcards" },
+  );
+}
+
+export default async function FlashcardsPage(props: PageProps) {
+  try {
+    return await FlashcardsPageContent(props);
+  } catch (e) {
+    let pathwayId = DEFAULT_FLASHCARDS_PATHWAY_ID;
+    try {
+      const sp = await props.searchParams;
+      const rawPid = sp.pathwayId;
+      pathwayId =
+        typeof rawPid === "string" && rawPid.trim().length > 2
+          ? rawPid.trim()
+          : Array.isArray(rawPid) &&
+              typeof rawPid[0] === "string" &&
+              rawPid[0].trim().length > 2
+            ? rawPid[0].trim()
+            : DEFAULT_FLASHCARDS_PATHWAY_ID;
+    } catch {
+      pathwayId = DEFAULT_FLASHCARDS_PATHWAY_ID;
+    }
+    safeServerLog("learner_flashcards", "page_bootstrap_failed", {
+      error_name: e instanceof Error ? e.name : "unknown",
+      error_message:
+        e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      pathway_id: pathwayId,
+      loader_name: "FlashcardsPageContent",
+      outcome: "error",
+    });
+    return (
+      <FlashcardsRouteRecovery
+        pathwayId={pathwayId}
+        reason="page_bootstrap_failed"
+      />
+    );
+  }
+}
+
+function FlashcardsRouteRecovery({
+  pathwayId,
+  reason,
+}: {
+  pathwayId: string;
+  reason: string;
+}) {
+  const href = `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId || DEFAULT_FLASHCARDS_PATHWAY_ID)}`;
+  return (
+    <div
+      className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6"
+      data-nn-e2e-flashcards-recovery-shell
+    >
+      <ContentEmptyState
+        variant="generic"
+        tone="default"
+        headline="Flashcards are recovering"
+        body="We could not finish loading the live flashcard workspace, but your account and progress are safe. You can retry this route directly without returning through the dashboard."
+        hint={
+          process.env.NODE_ENV === "development"
+            ? `reason=${reason}; pathwayId=${pathwayId}`
+            : undefined
+        }
+        primaryCta={{ label: "Retry flashcards", href }}
+        secondaryCtas={[
+          {
+            label: "Open practice exams",
+            href: `/app/practice-tests?pathwayId=${encodeURIComponent(pathwayId)}`,
+          },
+          { label: "Return to dashboard", href: "/app", variant: "ghost" },
+        ]}
+        showGrowthBadge={false}
+      />
+    </div>
+  );
+}
+
+async function FlashcardsPageContent({ searchParams }: PageProps) {
+  const bootstrapStarted = performance.now();
+  if (
+    process.env.NODE_ENV !== "production" ||
+    process.env.NN_FLASHCARDS_HUB_TIMING === "1"
+  ) {
+    console.time(FLASHCARDS_PAGE_TIMING_LABEL);
+  }
+  const [marketingBundle, sp] = await Promise.all([
+    getLearnerMarketingBundle(),
+    searchParams,
+  ]);
+  const { t } = marketingBundle;
+
+  const rawAllied = sp.alliedProfession;
+  const alliedProfessionParam =
+    typeof rawAllied === "string" && rawAllied.trim()
+      ? rawAllied.trim().toLowerCase()
+      : Array.isArray(rawAllied) &&
+          typeof rawAllied[0] === "string" &&
+          rawAllied[0].trim()
+        ? rawAllied[0].trim().toLowerCase()
+        : "";
+  const alliedProfessionFromQuery = alliedProfessionParam
+    ? (getAlliedProfessionByProfessionKey(alliedProfessionParam)
+        ?.professionKey ?? "")
+    : "";
+
+  const rawPid = sp.pathwayId;
+  const pathwayQueryRaw =
+    typeof rawPid === "string" && rawPid.trim().length > 2
+      ? rawPid.trim()
+      : Array.isArray(rawPid) &&
+          typeof rawPid[0] === "string" &&
+          rawPid[0].trim().length > 2
+        ? rawPid[0].trim()
+        : DEFAULT_FLASHCARDS_PATHWAY_ID;
+
+  const rawTopic = sp.topic;
+  const hubTopicFromQuery =
+    typeof rawTopic === "string" && rawTopic.trim()
+      ? rawTopic.trim().toLowerCase()
+      : Array.isArray(rawTopic) &&
+          typeof rawTopic[0] === "string" &&
+          rawTopic[0].trim()
+        ? rawTopic[0].trim().toLowerCase()
+        : null;
+
+  const rawWeak = sp.weakOnly;
+  const initialWeakOnly =
+    (typeof rawWeak === "string" && rawWeak === "1") ||
+    (Array.isArray(rawWeak) && rawWeak.some((v) => v === "1"));
+
+  const session = await getProtectedRouteSession(
+    "(student).app.(learner).flashcards",
+  );
+  const userId = (session?.user as { id?: string })?.id ?? "";
+
+  const entitlement = await resolveEntitlementForPage(userId);
+  safeServerLog("learner_flashcards", "server_bootstrap_auth_entitlement", {
+    loader_name: "flashcards_page",
+    pathway_id_raw: pathwayQueryRaw,
+    user_id_prefix: userId.slice(0, 8),
+    has_session: session ? "1" : "0",
+    entitlement_state:
+      entitlement === "error"
+        ? "error"
+        : entitlement.hasAccess
+          ? "has_access"
+          : "no_access",
+    tier: entitlement === "error" ? "" : String(entitlement.tier ?? ""),
+    country: entitlement === "error" ? "" : String(entitlement.country ?? ""),
+  });
+
+  if (entitlement === "error") {
+    return (
+      <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+        <div className="nn-card rounded-2xl border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm leading-relaxed text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
+          {t("learner.entitlement.flashcardsShort")}
+        </div>
+      </div>
+    );
+  }
+
+  if (!entitlement.hasAccess) {
+    return (
+      <div className="mx-auto w-full max-w-6xl space-y-6 px-4 sm:px-6">
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
+            {t("learner.flashcards.page.title")}
+          </h1>
+          <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
+            {t("learner.flashcards.page.subtitle.locked")}
+          </p>
+        </div>
+        <SubscriptionPaywall context="dashboard" />
+      </div>
+    );
+  }
+
+  const requestedPathwayId = pathwayQueryRaw
+    ? normalizeLearnerFlashcardsPathwayQueryId(
+        pathwayQueryRaw,
+        entitlement.country,
+      )
+    : null;
+
+  let pathwayOptions: { id: string; label: string }[] = [];
+  let pathwayResolution: ResolvedQuestionBankPathways | null = null;
+  let pathwayBootstrapSource: "primary" | "secondary" = "primary";
+  let learnerPath: string | null = null;
+
+  // listPathwaysCompatibleWithSubscription and loadLearnerActivityContext are independent —
+  // start both simultaneously and process once both settle.
+  const shouldLoadActivity = Boolean(userId && isDatabaseUrlConfigured());
+  const [compatible, u] = await Promise.all([
+    listPathwaysCompatibleWithSubscription(entitlement),
+    shouldLoadActivity
+      ? Promise.race([
+          loadLearnerActivityContext(userId),
+          timeoutAfter<{ learnerPath: string | null }>(FLASHCARDS_PROFILE_BOOTSTRAP_TIMEOUT_MS),
+        ])
+      : Promise.resolve(null),
+  ]);
+
+  pathwayOptions = compatible.map((p) => ({
+    id: p.id,
+    label: p.displayName ?? p.shortName,
+  }));
+
+  if (shouldLoadActivity) {
+    try {
+      // `u` is already resolved from the parallel fetch above.
+
+      const lp = u?.learnerPath?.trim() ?? null;
+      learnerPath = lp;
+
+      pathwayResolution = resolveSubscribedQuestionBankPathways({
+        requestedPathwayId,
+        compatible: compatible.map((p) => ({
+          id: p.id,
+          shortName: p.shortName,
+        })),
+        learnerPath: lp,
+        requireExplicitRequestedPathwayId: true,
+      });
+
+      if (u === null) {
+        safeServerLog("learner_flashcards", "pathway_profile_lookup_timeout", {
+          loader_name: "flashcards_page",
+          user_id_prefix: userId.slice(0, 8),
+          requested_pathway_id: requestedPathwayId ?? "",
+          timeout_ms: FLASHCARDS_PROFILE_BOOTSTRAP_TIMEOUT_MS,
+          outcome: "rendering_without_profile_pathway",
+        });
+      }
+      safeServerLog("learner_flashcards", "pathway_bootstrap_resolved", {
+        loader_name: "flashcards_page",
+        user_id_prefix: userId.slice(0, 8),
+        requested_pathway_id: requestedPathwayId ?? "",
+        learner_path: lp ?? "",
+        compatible_count: compatible.length,
+        compatible_ids: compatible
+          .map((p) => p.id)
+          .join(",")
+          .slice(0, 400),
+        resolution_state: pathwayResolution.state,
+        default_pathway_id:
+          pathwayResolution.state === "scoped"
+            ? pathwayResolution.defaultPathwayId
+            : "",
+      });
+    } catch (e) {
+      safeServerLog("learner_flashcards", "pathway_bootstrap_primary_failed", {
+        user_id: userId.slice(0, 8),
+        requested_pathway_id: requestedPathwayId ?? "",
+        tier: String(entitlement.tier ?? ""),
+        country: String(entitlement.country ?? ""),
+        error_name: e instanceof Error ? e.name : "unknown",
+        error_message:
+          e instanceof Error
+            ? e.message.slice(0, 400)
+            : String(e).slice(0, 400),
+        outcome: "error",
+      });
+
+      let snap = null;
+      try {
+        snap = await readFlashcardsHubPathwayBootstrapSnapshot({
+          tier: String(entitlement.tier ?? ""),
+          country: String(entitlement.country ?? ""),
+        });
+      } catch {
+        snap = null;
+      }
+
+      if (snap?.payload) {
+        pathwayBootstrapSource = "secondary";
+        pathwayOptions = snap.payload.pathwayOptions;
+
+        pathwayResolution = resolveSubscribedQuestionBankPathways({
+          requestedPathwayId,
+          compatible: snap.payload.compatibleRows,
+          learnerPath: null,
+          requireExplicitRequestedPathwayId: true,
+        });
+      } else if (compatible.length > 0) {
+        pathwayBootstrapSource = "secondary";
+        pathwayResolution = resolveSubscribedQuestionBankPathways({
+          requestedPathwayId,
+          compatible: compatible.map((p) => ({
+            id: p.id,
+            shortName: p.shortName,
+          })),
+          learnerPath: null,
+          requireExplicitRequestedPathwayId: true,
+        });
+      }
+    }
+  }
+
+  if (!pathwayResolution) {
+    pathwayResolution = resolveSubscribedQuestionBankPathways({
+      requestedPathwayId,
+      compatible: compatible.map((p) => ({ id: p.id, shortName: p.shortName })),
+      learnerPath,
+      requireExplicitRequestedPathwayId: true,
+    });
+  }
+
+  if (pathwayResolution?.state === "invalid_requested") {
+    return (
+      <ContentEmptyState
+        variant="generic"
+        headline="This study track is not on your account"
+        body="Choose an exam you are subscribed to."
+        primaryCta={{
+          label: "Study preferences",
+          href: "/app/account/study-preferences",
+        }}
+      />
+    );
+  }
+
+  if (pathwayResolution?.state === "no_pathway_context") {
+    return (
+      <div className="space-y-2">
+        <FlashcardsPathwayPickSurface
+          title={
+            t("learner.flashcards.page.noPathwayHeadline") ??
+            t("learner.flashcards.page.title")
+          }
+          subtitle={
+            t("learner.flashcards.page.noPathwayBody") ??
+            "Choose an exam track for flashcards. Your selection is applied via the URL — no redirects."
+          }
+          pathways={pathwayOptions}
+        />
+      </div>
+    );
+  }
+
+  if (pathwayResolution?.state !== "scoped") {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-8 text-sm">
+        {t("learner.entitlement.flashcardsShort")}
+      </div>
+    );
+  }
+
+  const scopedPathwayId = pathwayResolution.defaultPathwayId;
+  if (!scopedPathwayId) {
+    safeServerLog("learner_flashcards", "scoped_pathway_missing", {
+      loader_name: "flashcards_page",
+      user_id_prefix: userId.slice(0, 8),
+      requested_pathway_id: requestedPathwayId ?? "",
+      resolution_state: pathwayResolution.state,
+    });
+    return <FlashcardErrorBoundary />;
+  }
+
+  const catalogPathwayForInventory = getExamPathwayById(scopedPathwayId);
+  const catalogPathway = catalogPathwayForInventory;
+  const pathwayLabelFromOptions = pathwayOptions.find(
+    (p) => p.id === scopedPathwayId,
+  )?.label;
+  const pathwayDisplayName =
+    catalogPathway?.displayName ??
+    catalogPathway?.shortName ??
+    pathwayLabelFromOptions ??
+    scopedPathwayId;
+
+  let initialHub: FlashcardsHubServerPayload = {
+    categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
+    matchingTotal: 0,
+    lessonVirtualDiagnostics: null,
+    poolDiagnostics: null,
+  };
+  let inventorySource:
+    | "server_inventory"
+    | "server_inventory_timeout"
+    | "deferred_client_api" = "deferred_client_api";
+
+  if (catalogPathwayForInventory && userId && isDatabaseUrlConfigured()) {
+    try {
+      const tier = String(entitlement.tier ?? "");
+      const country = String(entitlement.country ?? "");
+      const timedInventory = await Promise.race([
+        tier && country
+          ? loadWithManifest<FlashcardInventoryManifestPayload>({
+              redisKey: flashcardInventoryManifestKey(tier, country, catalogPathwayForInventory.id),
+              redisTtl: 60 * 60,
+              snapshotPath: flashcardInventorySnapshotPath(tier, country, catalogPathwayForInventory.id),
+              buildLive: async () => {
+                const inv = await loadSharedFlashcardsHubInventoryForPathway({
+                  userId,
+                  entitlement,
+                  pathway: catalogPathwayForInventory,
+                });
+                if (!inv.ok) throw new Error(inv.code);
+                return {
+                  tier,
+                  country,
+                  pathwayId: catalogPathwayForInventory.id,
+                  total: inv.payload.matchingTotal,
+                  categoryOptions: inv.payload.categoryOptions,
+                  categories: inv.categories,
+                  diagnostics: inv.payload.poolDiagnostics ?? undefined,
+                  lessonVirtualDiagnostics: inv.payload.lessonVirtualDiagnostics ?? undefined,
+                };
+              },
+              isValid: (d) => d.total > 0,
+            })
+          : null,
+        new Promise<null>((resolve) => {
+          setTimeout(
+            () => resolve(null),
+            FLASHCARDS_INVENTORY_BOOTSTRAP_TIMEOUT_MS,
+          );
+        }),
+      ]);
+
+      if (timedInventory?.data) {
+        initialHub = {
+          categoryOptions: timedInventory.data.categoryOptions as FlashcardsHubServerPayload["categoryOptions"],
+          matchingTotal: timedInventory.data.total,
+          lessonVirtualDiagnostics:
+            (timedInventory.data.lessonVirtualDiagnostics as FlashcardsHubServerPayload["lessonVirtualDiagnostics"]) ?? null,
+          poolDiagnostics:
+            (timedInventory.data.diagnostics as FlashcardsHubServerPayload["poolDiagnostics"]) ?? null,
+        };
+        inventorySource = "server_inventory";
+      } else if (timedInventory === null) {
+        inventorySource = "server_inventory_timeout";
+        safeServerLog("learner_flashcards", "server_inventory_timeout", {
+          loader_name: "flashcards_page",
+          pathway_id: scopedPathwayId,
+          timeout_ms: FLASHCARDS_INVENTORY_BOOTSTRAP_TIMEOUT_MS,
+        });
+      }
+    } catch (e) {
+      safeServerLog("learner_flashcards", "server_inventory_failed", {
+        loader_name: "flashcards_page",
+        pathway_id: scopedPathwayId,
+        error_name: e instanceof Error ? e.name : "unknown",
+        error_message:
+          e instanceof Error
+            ? e.message.slice(0, 400)
+            : String(e).slice(0, 400),
+      });
+    }
+  }
+
+  if (initialHub.categoryOptions.length === 0) {
+    safeServerLog("learner_flashcards", "category_options_empty", {
+      loader_name: "flashcards_page",
+      user_id_prefix: userId.slice(0, 8),
+      pathway_id: scopedPathwayId,
+      source: pathwayBootstrapSource,
+    });
+    initialHub = {
+      ...initialHub,
+      categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
+    };
+  }
+
+  const alliedKeyForFlashcards =
+    alliedProfessionFromQuery && isAlliedMarketingCorePathwayId(scopedPathwayId)
+      ? alliedProfessionFromQuery
+      : "";
+  const catHref = appPathwayCatSessionStartPath(scopedPathwayId, {
+    alliedProfession: alliedKeyForFlashcards || null,
+  });
+
+  const flashcardsHeroEyebrow = catalogPathway
+    ? `${pathwayRegionAwareExamName(catalogPathway)} · ${pathwayCountryLabel(catalogPathway)}`
+    : undefined;
+  const flashcardsHeroTitle = catalogPathway
+    ? pathwayFlashcardsHubH1(catalogPathway)
+    : undefined;
+  const flashcardsHeroSubtitle = catalogPathway
+    ? pathwayFlashcardsHubLead(catalogPathway)
+    : undefined;
+  const bootstrapMs = Math.round(performance.now() - bootstrapStarted);
+  if (
+    process.env.NODE_ENV !== "production" ||
+    process.env.NN_FLASHCARDS_HUB_TIMING === "1"
+  ) {
+    console.timeEnd(FLASHCARDS_PAGE_TIMING_LABEL);
+  }
+  safeServerLog("learner_flashcards", "server_shell_ready", {
+    loader_name: "flashcards_page",
+    pathway_id: scopedPathwayId,
+    bootstrap_ms: bootstrapMs,
+    category_rows: initialHub.categoryOptions.length,
+    inventory_source: inventorySource,
+    blocking_inventory: inventorySource === "server_inventory" ? "1" : "0",
+    blocking_adaptive: "0",
+  });
+
+  return (
+    <div className="space-y-2">
+      <Suspense
+        fallback={<FlashcardsHubSkeleton withRouteAria={false} />}
+      >
+        <FlashcardsHubClientBoundary>
+          <FlashcardsHubClient
+            scopedPathwayId={scopedPathwayId}
+            pathwayDisplayName={pathwayDisplayName}
+            flashcardsHeroEyebrow={flashcardsHeroEyebrow}
+            flashcardsHeroTitle={flashcardsHeroTitle}
+            flashcardsHeroSubtitle={flashcardsHeroSubtitle}
+            pathwayBootstrapSource={pathwayBootstrapSource}
+            catHref={catHref}
+            initialHub={initialHub}
+            initialPoolDiagnostics={initialHub?.poolDiagnostics ?? null}
+            lessonsHubHref={`/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`}
+            alliedProfessionKey={alliedKeyForFlashcards || null}
+            hubTopicSlug={hubTopicFromQuery}
+            initialWeakOnly={initialWeakOnly}
+          />
+        </FlashcardsHubClientBoundary>
+      </Suspense>
+    </div>
+  );
+}

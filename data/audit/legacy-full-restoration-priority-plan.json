@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "priorityOrderReference": [
+    "nursing lessons",
+    "nursing question banks",
+    "pre/post lesson tests",
+    "flashcards",
+    "CAT / adaptive improvements",
+    "translations",
+    "high-quality blogs",
+    "tools/calculators",
+    "case studies / activities / games",
+    "dashboard/progress ideas",
+    "allied after nursing stable"
+  ],
+  "restoreImmediately": {
+    "rationale": "Highest learner value + existing pipelines",
+    "items": [
+      {
+        "slug": "lessons-contentMap",
+        "path": "client/src/data/lessons/**",
+        "migrationOrder": 1
+      },
+      {
+        "slug": "exam-questions",
+        "path": "client/src/data/exam-questions/**",
+        "migrationOrder": 2
+      },
+      {
+        "slug": "lesson-embedded-tests",
+        "path": "embedded in LessonContent",
+        "migrationOrder": 3
+      }
+    ]
+  },
+  "restoreNext": {
+    "items": [
+      {
+        "slug": "flashcard-decks",
+        "path": "client/src/data/*flashcard*.ts",
+        "migrationOrder": 4
+      },
+      {
+        "slug": "cat-server-review",
+        "path": "server/cat-engine.ts, server/adaptive-engine.ts",
+        "migrationOrder": 5
+      },
+      {
+        "slug": "i18n-bundles",
+        "path": "tools/i18n/source/**",
+        "migrationOrder": 6
+      }
+    ]
+  },
+  "rebuildInNewUiLater": {
+    "items": [
+      {
+        "slug": "med-math-and-calculators",
+        "path": "client/src/pages/med-math.tsx, clinical-calculators.tsx, ..."
+      },
+      {
+        "slug": "simulators-games",
+        "path": "client/src/pages/*simulator*.tsx"
+      },
+      {
+        "slug": "legacy-page-chrome",
+        "path": "client/src/pages/** — all non-content"
+      }
+    ]
+  },
+  "contentExtractionOnly": {
+    "items": [
+      {
+        "slug": "blog-editorial",
+        "path": "blog-related pages + server/blog*.ts"
+      },
+      {
+        "slug": "case-scenarios-narrative",
+        "path": "clinical-scenarios-hub + data narratives"
+      }
+    ]
+  },
+  "reviewManuallyBeforeRestore": {
+    "items": [
+      {
+        "slug": "generated-batches",
+        "path": "**/generated-batch-*.ts",
+        "reason": "volume + QA cost"
+      },
+      {
+        "slug": "lesson-repair-missing-batches",
+        "path": "**/lesson-repair*.ts, **/missing-batch*.ts"
+      },
+      {
+        "slug": "replit-export",
+        "paths": [
+          "replit-export/public/i18n/en.json",
+          "replit-export/public/i18n/tr.json",
+          "replit-export/public/i18n/ja.json",
+          "replit-export/public/i18n/ar.json",
+          "replit-export/public/i18n/zh-tw.json",
+          "replit-export/public/i18n/fr.json",
+          "replit-export/public/i18n/ko.json",
+          "replit-export/public/i18n/vi.json",
+          "replit-export/public/i18n/th.json",
+          "replit-export/public/i18n/pt.json",
+          "replit-export/public/i18n/hi.json",
+          "replit-export/public/i18n/fa.json",
+          "replit-export/public/i18n/de.json",
+          "replit-export/public/i18n/zh.json",
+          "replit-export/public/i18n/pa.json",
+          "replit-export/public/i18n/ur.json",
+          "replit-export/public/i18n/ht.json",
+          "replit-export/public/i18n/tl.json",
+          "replit-export/public/i18n/es.json",
+          "replit-export/public/i18n/id.json",
+          "replit-export/public/translations/ja.json",
+          "replit-export/public/translations/ar.json",
+          "replit-export/public/translations/zh-tw.json",
+          "replit-export/public/translations/fr.json",
+          "replit-export/public/translations/ko.json",
+          "replit-export/public/translations/vi.json",
+          "replit-export/public/translations/th.json",
+          "replit-export/public/translations/pt.json",
+          "replit-export/public/translations/hi.json",
+          "replit-export/public/translations/fa.json",
+          "replit-export/public/translations/de.json",
+          "replit-export/public/translations/zh.json",
+          "replit-export/public/translations/pa.json",
+          "replit-export/public/translations/ur.json",
+          "replit-export/public/translations/ht.json",
+          "replit-export/public/translations/tl.json",
+          "replit-export/public/translations/es.json",
+          "replit-export/public/translations/id.json"
+        ]
+      }
+    ]
+  },
+  "doNotRestore": {
+    "items": [
+      {
+        "slug": "ide-tooling",
+        "path": ".local/**, .agents/**"
+      },
+      {
+        "slug": "stale-artifacts",
+        "path": "artifacts/**, dist/**"
+      },
+      {
+        "slug": "legacy-admin-ops-only",
+        "path": "client/src/pages/admin-*.tsx (product admin differs)"
+      }
+    ]
+  },
+  "systemsClassification": {
+    "importMostlyAsContent": [
+      "lessons",
+      "exam questions",
+      "flashcard cards",
+      "blog prose",
+      "med-math items"
+    ],
+    "selectivelyReuseLogic": [
+      "CAT item selection facets",
+      "stem hashing ideas",
+      "study-path prioritization (review)"
+    ],
+    "rebuildInCurrentApp": [
+      "all page components",
+      "navigation",
+      "theme.ts visuals",
+      "dashboard widgets"
+    ],
+    "ignoreAsOutdated": [
+      "Vite-specific route guards tied to old auth shape",
+      "hardcoded hex theme as production source of truth"
+    ]
+  },
+  "blockers": [
+    "Legacy contentMap size — chunked import only",
+    "CAT depends on legacy DB shapes — map to Prisma before porting logic",
+    "i18n compile pipeline differs — keys must match nursenest-core rules",
+    "Duplicate stem/slug risk — dedupe against production"
+  ]
+}

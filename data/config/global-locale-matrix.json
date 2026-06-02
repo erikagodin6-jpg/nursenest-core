@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-14T18:00:00.000Z",
+  "description": "Authoritative market × locale × exam terminology map for NurseNest globalization. Regulatory exam names are illustrative — verify against current boards before UI commitments.",
+  "prioritization": ["RN", "PN", "NP", "Allied"],
+  "canonicalOverlayPaths": {
+    "lessons": "nursenest-core/public/i18n/educational-overlays/{locale}/lessons.json",
+    "questions": "nursenest-core/public/i18n/educational-overlays/{locale}/questions.json",
+    "flashcards": "nursenest-core/public/i18n/educational-overlays/{locale}/flashcards.json",
+    "note": "Do not store canonical English in overlays; English uses DB + base JSON. Blog: LocalizedBlogArticle + blog SEO pipeline — not file overlays per lesson pattern."
+  },
+  "markets": [
+    {
+      "country": "US",
+      "region": "North America",
+      "defaultLocale": "en-US",
+      "languages": ["en", "es"],
+      "nursingTiers": ["RN", "PN", "NP"],
+      "exams": {
+        "RN": "NCLEX-RN",
+        "PN": "NCLEX-PN",
+        "NP": "ANCC / AANP (role-specific)"
+      },
+      "terminologyOverrides": {
+        "PN": "LPN/LVN",
+        "registeredNurse": "RN"
+      }
+    },
+    {
+      "country": "CA",
+      "region": "North America",
+      "defaultLocale": "en-CA",
+      "languages": ["en", "fr"],
+      "nursingTiers": ["RN", "RPN", "NP"],
+      "exams": {
+        "RN": "NCLEX-RN",
+        "RPN": "REx-PN / CPRNE (jurisdiction-specific)",
+        "NP": "NNPBC / OIIAQ / provincial entry"
+      },
+      "terminologyOverrides": {
+        "PN": "RPN/LPN",
+        "NCLEX": "NCLEX-RN (RN)"
+      }
+    },
+    {
+      "country": "GB",
+      "region": "Europe",
+      "defaultLocale": "en-GB",
+      "languages": ["en"],
+      "nursingTiers": ["RN", "NP"],
+      "exams": {
+        "RN": "NMC registration / OSCE (context-specific)",
+        "NP": "UK advanced practice (framework-specific)"
+      },
+      "terminologyOverrides": {
+        "NCLEX": "NMC (not NCLEX)"
+      }
+    },
+    {
+      "country": "AU",
+      "region": "Oceania",
+      "defaultLocale": "en-AU",
+      "languages": ["en"],
+      "nursingTiers": ["RN", "NP"],
+      "exams": {
+        "RN": "AHPRA / NCLEX-RN pathway (verify program)",
+        "NP": "NMBA endorsed NP"
+      },
+      "terminologyOverrides": {}
+    },
+    {
+      "country": "IN",
+      "region": "Asia",
+      "defaultLocale": "en-IN",
+      "languages": ["en", "hi"],
+      "nursingTiers": ["RN", "NP"],
+      "exams": {
+        "RN": "INC / state nursing council licensure",
+        "NP": "Institutional / state advanced-practice framing"
+      },
+      "terminologyOverrides": {
+        "NCLEX": "India licensure (not NCLEX unless US-bound)"
+      }
+    },
+    {
+      "country": "PH",
+      "region": "Asia",
+      "defaultLocale": "en-PH",
+      "languages": ["en", "tl"],
+      "nursingTiers": ["RN", "NP"],
+      "exams": {
+        "RN": "PRC nursing licensure",
+        "NP": "Advanced practice (program-specific)"
+      },
+      "terminologyOverrides": {}
+    },
+    {
+      "country": "AE",
+      "region": "Middle East",
+      "defaultLocale": "ar-AE",
+      "languages": ["ar", "en"],
+      "nursingTiers": ["RN", "NP"],
+      "exams": {
+        "RN": "DHA / MOHAP / HAAD (emirate-specific)",
+        "NP": "Facility / regulator-specific"
+      },
+      "terminologyOverrides": {}
+    },
+    {
+      "country": "SA",
+      "region": "Middle East",
+      "defaultLocale": "ar-SA",
+      "languages": ["ar", "en"],
+      "nursingTiers": ["RN", "NP"],
+      "exams": {
+        "RN": "SCFHS licensing",
+        "NP": "SCFHS advanced classification"
+      },
+      "terminologyOverrides": {}
+    },
+    {
+      "country": "NG",
+      "region": "Africa",
+      "defaultLocale": "en-NG",
+      "languages": ["en"],
+      "nursingTiers": ["RN", "NP"],
+      "exams": {
+        "RN": "NMCN licensure",
+        "NP": "National / institutional advanced practice"
+      },
+      "terminologyOverrides": {}
+    },
+    {
+      "country": "ZA",
+      "region": "Africa",
+      "defaultLocale": "en-ZA",
+      "languages": ["en"],
+      "nursingTiers": ["RN", "NP"],
+      "exams": {
+        "RN": "SANC registration",
+        "NP": "Specialist / advanced program framing"
+      },
+      "terminologyOverrides": {}
+    },
+    {
+      "country": "MX",
+      "region": "LATAM",
+      "defaultLocale": "es-MX",
+      "languages": ["es"],
+      "nursingTiers": ["RN", "NP"],
+      "exams": {
+        "RN": "CONAETE / state-level (verify)",
+        "NP": "Institutional framing"
+      },
+      "terminologyOverrides": {}
+    },
+    {
+      "country": "BR",
+      "region": "LATAM",
+      "defaultLocale": "pt-BR",
+      "languages": ["pt"],
+      "nursingTiers": ["RN", "NP"],
+      "exams": {
+        "RN": "COREN registration",
+        "NP": "Residency / advanced practice programs"
+      },
+      "terminologyOverrides": {}
+    },
+    {
+      "country": "DE",
+      "region": "EU",
+      "defaultLocale": "de-DE",
+      "languages": ["de", "en"],
+      "nursingTiers": ["RN", "NP"],
+      "exams": {
+        "RN": "Approbation / EU directive context",
+        "NP": "Advanced nursing roles (country-specific)"
+      },
+      "terminologyOverrides": {
+        "NCLEX": "Not applicable — EU/US prep framing only"
+      }
+    },
+    {
+      "country": "FR",
+      "region": "EU",
+      "defaultLocale": "fr-FR",
+      "languages": ["fr", "en"],
+      "nursingTiers": ["RN", "NP"],
+      "exams": {
+        "RN": "Ordre infirmier / DEI pathway",
+        "NP": "Cadre infirmier avancé (context-specific)"
+      },
+      "terminologyOverrides": {}
+    }
+  ]
+}

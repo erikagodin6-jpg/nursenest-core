@@ -1,0 +1,41 @@
+{
+  "id": "rn-respiratory",
+  "title": "RN Respiratory Emergency Study Set",
+  "pathway": "RN",
+  "system": "Respiratory",
+  "flashcards": [
+    {
+      "id": "emergency-rn-respiratory-1",
+      "front": "A client with asthma is speaking in one-word phrases and using accessory muscles. What is the priority?",
+      "back": "Position upright, assess oxygenation and work of breathing, administer ordered rescue therapy, and escalate rapidly.",
+      "rationale": "Severe work of breathing indicates impending respiratory failure and requires immediate intervention.",
+      "pearl": "One-word speech is a high-risk respiratory distress cue."
+    },
+    {
+      "id": "emergency-rn-respiratory-2",
+      "front": "Which oxygenation finding requires urgent reassessment?",
+      "back": "A falling oxygen saturation with increasing drowsiness or reduced respiratory effort requires urgent reassessment.",
+      "rationale": "Mental status changes can reflect hypoxemia, hypercapnia, fatigue, or impending ventilatory failure.",
+      "pearl": "A quieter patient is not always an improving patient."
+    },
+    {
+      "id": "emergency-rn-respiratory-3",
+      "front": "What should the nurse verify before suctioning a tracheostomy?",
+      "back": "Assess oxygenation, explain the procedure as able, use appropriate sterile technique, and limit suction duration.",
+      "rationale": "Suctioning can worsen hypoxemia if performed too long or without preparation.",
+      "pearl": "Suction only as needed, not simply by the clock."
+    }
+  ],
+  "questions": [
+    {
+      "id": "emergency-rn-respiratory-q1",
+      "stem": "A client with COPD becomes acutely confused and increasingly somnolent. What is the priority?",
+      "answer": "Assess respiratory status, oxygenation, and ventilation immediately.",
+      "rationale": "New confusion can signal gas exchange failure or CO2 retention and requires rapid assessment."
+    }
+  ],
+  "pearls": [
+    "Work of breathing often deteriorates before oxygen saturation drops.",
+    "Respiratory fatigue can look like sudden calmness."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "ca-rn-nclex-rn:ca-rn-sepsis": {
+    "title": "Sepsis (NCLEX-RN, Canada)",
+    "topic": "Sepsis",
+    "seoTitle": "Sepsis | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Contexte infirmier au Canada : sepsis — lactate, antibiotiques précoces et surveillance.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Signification clinique",
+        "body": "Les questions sur le **sepsis** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte.\n\n**IPAC Canada :** utilisez les **unités SI** (p. ex. lactate mmol/L) et le contexte des soins canadiens."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l’examen",
+        "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+      },
+      "core_concept": {
+        "heading": "Concept central",
+        "body": "Reliez les interventions à la **perfusion tissulaire**, à la **réponse inflammatoire** et à la surveillance (lactate, perfusion, perfusion de liquides, cultures) qui confirme la réponse au traitement."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+      },
+      "takeaways": {
+        "heading": "Points à retenir",
+        "body": "- Reliez **signes vitaux + laboratoires + récit** avant l’enseignement ou la sortie.\n- **Banque :** items `topic:sepsis`.\n- **Canada :** vigilance aux **seuils métriques** et au **périmètre** dans les énoncés IPAC."
+      }
+    }
+  }
+}

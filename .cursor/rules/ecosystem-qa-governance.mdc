@@ -1,0 +1,30 @@
+---
+description: Recurring ecosystem QA — Playwright matrix, reports, cohesion, entitlements, adaptive loops.
+globs:
+  - nursenest-core/playwright*.config.ts
+  - nursenest-core/tests/e2e/**/*
+  - docs/governance/ecosystem-qa-master-program.md
+  - reports/ecosystem-audit/**/*
+alwaysApply: false
+---
+
+# Ecosystem QA governance
+
+NurseNest QA must validate **one cohesive premium adaptive clinical ecosystem**, not disconnected products.
+
+## When changing learner/marketing surfaces
+
+1. Map tests to `docs/governance/ecosystem-qa-master-program.md`.  
+2. Prefer extending existing Playwright specs over one-off checks.  
+3. Copy report templates from `docs/governance/ecosystem-qa-report-templates/` into `reports/ecosystem-audit/` after major releases.
+
+## Quick commands (from `nursenest-core/`)
+
+- `npm run test:e2e:ecosystem-audit` — curated homepage + hubs + learner smoke  
+- `npm run qa:release-gate` — deploy gate  
+- `npm run qa:ecosystem:matrix` — print full command matrix  
+
+## Related
+
+- `.cursor/rules/ecosystem-platform-guardrails.mdc`  
+- `docs/planning/clinical-readiness-ecosystem-implementation-directive.md`

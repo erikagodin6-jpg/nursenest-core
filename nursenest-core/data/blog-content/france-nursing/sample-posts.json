@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "countrySlug": "france",
+  "entries": [
+    {
+      "slug": "fr-sample-001-dreets-en",
+      "title": "French nursing registration — high-level orientation (sample)",
+      "language": "en",
+      "countryTargets": ["FR"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-fr-001",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "fr-sample-002-fr",
+      "title": "Diplôme d'État — préparation (exemple)",
+      "language": "fr",
+      "countryTargets": ["FR"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-fr-002",
+      "publicationPriority": 95,
+      "status": "sample"
+    },
+    {
+      "slug": "fr-sample-003-nclex-en",
+      "title": "NCLEX parallel prep — without replacing French requirements (sample)",
+      "language": "en",
+      "countryTargets": ["FR"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-fr-003",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "fr-sample-004-uk-en",
+      "title": "UK NMC — internationally educated nurse framing (sample)",
+      "language": "en",
+      "countryTargets": ["FR"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-fr-004",
+      "publicationPriority": 85,
+      "status": "sample"
+    },
+    {
+      "slug": "fr-sample-005-language-en",
+      "title": "English tests for migration pathways — checklist (sample)",
+      "language": "en",
+      "countryTargets": ["FR"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-fr-005",
+      "publicationPriority": 80,
+      "status": "sample"
+    },
+    {
+      "slug": "fr-sample-006-reasoning-en",
+      "title": "Clinical judgment — aligned to public exam scope (sample)",
+      "language": "en",
+      "countryTargets": ["FR"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-fr-006",
+      "publicationPriority": 75,
+      "status": "sample"
+    }
+  ]
+}

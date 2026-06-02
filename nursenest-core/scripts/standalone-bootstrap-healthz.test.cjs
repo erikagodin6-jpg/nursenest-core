@@ -1,0 +1,273 @@
+const assert = require("node:assert/strict");
+const test = require("node:test");
+
+const {
+  getNormalizedPathname,
+  isBootstrapHealthzRequest,
+  maybeServeBootstrapHealthz,
+  normalizeBootstrapProbePathname,
+} = require("./standalone-bootstrap-healthz-shared.cjs");
+
+function createFakeResponse() {
+  return {
+    statusCode: 0,
+    headers: {},
+    ended: false,
+    writableEnded: false,
+    finished: false,
+    body: undefined,
+    setHeader(name, value) {
+      this.headers[name.toLowerCase()] = value;
+    },
+    end(body) {
+      this.ended = true;
+      this.writableEnded = true;
+      this.finished = true;
+      this.body = body;
+    },
+  };
+}
+
+test("matches GET and HEAD bootstrap probe requests only", () => {
+  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/healthz" }), false);
+  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/healthz?check=1" }), false);
+  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/_nn_bootstrap_ready_check__" }), true);
+  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/_nn_bootstrap_ready_check__?check=1" }), true);
+  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/readyz" }), false);
+  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/readyz?check=1" }), false);
+  assert.equal(isBootstrapHealthzRequest({ method: "POST", url: "/healthz" }), false);
+  assert.equal(isBootstrapHealthzRequest({ method: "POST", url: "/_nn_bootstrap_ready_check__" }), false);
+  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/api/health" }), false);
+  assert.equal(
+    isBootstrapHealthzRequest({ method: "HEAD", url: "http://127.0.0.1:3005/_nn_bootstrap_ready_check__" }),
+    true,
+  );
+  assert.equal(
+    isBootstrapHealthzRequest({ method: "GET", url: "http://127.0.0.1:9/_nn_bootstrap_ready_check__?ts=1" }),
+    true,
+  );
+});
+
+test("getNormalizedPathname: relative, absolute, query; trailing slash preserved on pathname", () => {
+  assert.equal(getNormalizedPathname({ url: "/_nn_bootstrap_ready_check__" }), "/_nn_bootstrap_ready_check__");
+  assert.equal(getNormalizedPathname({ url: "/_nn_bootstrap_ready_check__?x=1" }), "/_nn_bootstrap_ready_check__");
+  assert.equal(
+    getNormalizedPathname({ url: "http://127.0.0.1:63074/_nn_bootstrap_ready_check__" }),
+    "/_nn_bootstrap_ready_check__",
+  );
+  assert.equal(getNormalizedPathname({ url: "/_nn_bootstrap_ready_check__/" }), "/_nn_bootstrap_ready_check__/");
+});
+
+test("trailing-slash probe URL does not match intercept or isBootstrapHealthzRequest", () => {
+  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/_nn_bootstrap_ready_check__/" }), false);
+  const res = createFakeResponse();
+  assert.equal(
+    maybeServeBootstrapHealthz({ method: "HEAD", url: "/_nn_bootstrap_ready_check__/" }, res, {}, null),
+    false,
+  );
+  assert.equal(res.ended, false);
+});
+
+test("normalizeBootstrapProbePathname: query and trailing slash (trimmed helper)", () => {
+  assert.equal(normalizeBootstrapProbePathname({ url: "/_nn_bootstrap_ready_check__?ts=1" }), "/_nn_bootstrap_ready_check__");
+  assert.equal(normalizeBootstrapProbePathname({ url: "/_nn_bootstrap_ready_check__/" }), "/_nn_bootstrap_ready_check__");
+  assert.equal(
+    normalizeBootstrapProbePathname({ url: "http://127.0.0.1:3000/_nn_bootstrap_ready_check__/?x=1" }),
+    "/_nn_bootstrap_ready_check__",
+  );
+});
+
+test("does not intercept public /healthz while child handlers are not ready", () => {
+  const res = createFakeResponse();
+  const intercepted = [];
+  const served = maybeServeBootstrapHealthz(
+    { method: "GET", url: "/healthz" },
+    res,
+    { handlersReady: false },
+    {
+      logBootstrapHealthzIntercepted(meta) {
+        intercepted.push(meta);
+      },
+    },
+  );
+
+  assert.equal(served, false);
+  assert.equal(res.ended, false);
+  assert.deepEqual(intercepted, []);
+});
+
+test("does not intercept public HEAD /healthz while child handlers are not ready", () => {
+  const res = createFakeResponse();
+  const served = maybeServeBootstrapHealthz(
+    { method: "HEAD", url: "/healthz" },
+    res,
+    { handlersReady: false },
+  );
+
+  assert.equal(served, false);
+  assert.equal(res.body, undefined);
+  assert.equal(res.ended, false);
+});
+
+test("serves the internal bootstrap ready probe directly while handlers are not ready", () => {
+  const res = createFakeResponse();
+  const intercepted = [];
+  const served = maybeServeBootstrapHealthz(
+    { method: "GET", url: "/_nn_bootstrap_ready_check__" },
+    res,
+    { handlersReady: false },
+    {
+      logBootstrapHealthzIntercepted(meta) {
+        intercepted.push(meta);
+      },
+    },
+  );
+
+  assert.equal(served, true);
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.headers["content-type"], "text/plain");
+  assert.equal(res.headers["cache-control"], "no-store");
+  assert.equal(res.body, "ok");
+  assert.equal(res.ended, true);
+  assert.equal(res.writableEnded, true);
+  assert.deepEqual(intercepted, [
+    {
+      method: "GET",
+      url: "/_nn_bootstrap_ready_check__",
+      pathname: "/_nn_bootstrap_ready_check__",
+      handlersReady: false,
+    },
+  ]);
+});
+
+test("serves internal bootstrap probe for absolute-form request-target (HEAD)", () => {
+  const res = createFakeResponse();
+  const served = maybeServeBootstrapHealthz(
+    { method: "HEAD", url: "http://127.0.0.1:4444/_nn_bootstrap_ready_check__" },
+    res,
+    { handlersReady: false },
+  );
+  assert.equal(served, true);
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.headers["content-type"], "text/plain");
+  assert.equal(res.body, undefined);
+  assert.equal(res.ended, true);
+  assert.equal(res.writableEnded, true);
+});
+
+test("serves internal bootstrap probe for absolute-form GET with query string", () => {
+  const res = createFakeResponse();
+  const served = maybeServeBootstrapHealthz(
+    { method: "GET", url: "http://127.0.0.1:1234/_nn_bootstrap_ready_check__?x=1&y=2" },
+    res,
+    { handlersReady: false },
+  );
+  assert.equal(served, true);
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body, "ok");
+  assert.equal(res.ended, true);
+});
+
+test("non-probe path does not emit bootstrap_probe_helper_eval and does not end response", () => {
+  const lines = [];
+  const origErr = console.error;
+  console.error = (msg, ...rest) => {
+    lines.push([msg, ...rest].map(String).join(" "));
+    origErr(msg, ...rest);
+  };
+  try {
+    const res = createFakeResponse();
+    const served = maybeServeBootstrapHealthz(
+      { method: "GET", url: "/api/health" },
+      res,
+      { handlersReady: false },
+      null,
+    );
+    assert.equal(served, false);
+    assert.equal(res.ended, false);
+    assert.ok(!lines.some((l) => l.includes("bootstrap_probe_helper_eval")));
+  } finally {
+    console.error = origErr;
+  }
+});
+
+test("bootstrap_probe_helper_eval logs intercepted outcome for relative HEAD probe", () => {
+  const lines = [];
+  const origErr = console.error;
+  console.error = (msg, ...rest) => {
+    lines.push([msg, ...rest].map(String).join(" "));
+    origErr(msg, ...rest);
+  };
+  try {
+    const res = createFakeResponse();
+    maybeServeBootstrapHealthz(
+      { method: "HEAD", url: "/_nn_bootstrap_ready_check__" },
+      res,
+      { handlersReady: false },
+      null,
+    );
+    const joined = lines.join("\n");
+    assert.match(joined, /\[nursenest-core\] startup_watchdog bootstrap_probe_helper_eval/);
+    assert.match(joined, /"outcome":"intercepted"/);
+    assert.match(joined, /"matched":true/);
+    assert.match(joined, /"intercepted":true/);
+    assert.match(joined, /"normalizedPathname":"\/_nn_bootstrap_ready_check__"/);
+  } finally {
+    console.error = origErr;
+  }
+});
+
+test("internal bootstrap probe is intercepted even when handlersReady is true", () => {
+  const res = createFakeResponse();
+  const served = maybeServeBootstrapHealthz(
+    { method: "GET", url: "/_nn_bootstrap_ready_check__" },
+    res,
+    { handlersReady: true },
+  );
+  assert.equal(served, true);
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body, "ok");
+  assert.equal(res.ended, true);
+  assert.equal(res.writableEnded, true);
+});
+
+test("probe path: second invoke is no-op when res.writableEnded (no double write)", () => {
+  const res = createFakeResponse();
+  assert.equal(
+    maybeServeBootstrapHealthz({ method: "GET", url: "/_nn_bootstrap_ready_check__" }, res, {}, null),
+    true,
+  );
+  const bodyAfterFirst = res.body;
+  assert.equal(
+    maybeServeBootstrapHealthz({ method: "GET", url: "/_nn_bootstrap_ready_check__" }, res, {}, null),
+    true,
+  );
+  assert.equal(res.body, bodyAfterFirst);
+});
+
+test("serves HEAD for the internal bootstrap ready probe without a body", () => {
+  const res = createFakeResponse();
+  const served = maybeServeBootstrapHealthz(
+    { method: "HEAD", url: "/_nn_bootstrap_ready_check__" },
+    res,
+    { handlersReady: false },
+  );
+
+  assert.equal(served, true);
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body, undefined);
+  assert.equal(res.ended, true);
+  assert.equal(res.writableEnded, true);
+});
+
+test("does not intercept /healthz after handlers are ready", () => {
+  const res = createFakeResponse();
+  const served = maybeServeBootstrapHealthz(
+    { method: "GET", url: "/healthz" },
+    res,
+    { handlersReady: true },
+  );
+
+  assert.equal(served, false);
+  assert.equal(res.ended, false);
+});

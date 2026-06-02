@@ -1,0 +1,97 @@
+{
+  "batchId": "example-pathophys-pharm-mix-01",
+  "notes": "Copy to pathophys-pharm-seo-batch.json (gitignored locally if preferred). Split per pathway: npx tsx scripts/blog/export-batch-topics.mts --file=./scripts/blog/pathophys-pharm-seo-batch.example.json. Then: cd nursenest-core && npx tsx scripts/generate-blog-posts.ts --topics-file=./path/to/<pathway>.topics.txt --pathway=<id> --min-words=1800 [--publish after review]. Canonical storage: Postgres BlogPost via publishBlogPostCanonical — not reports/ or ad-hoc hidden dirs.",
+  "items": [
+    {
+      "topic": "Why does hyperkalemia widen the QRS on the monitor — mechanism and first nursing actions (NCLEX-style)",
+      "pathwayId": "us-rn-nclex-rn",
+      "tier": "RN",
+      "occupation": "RN",
+      "domains": ["pathophysiology", "lab interpretation"]
+    },
+    {
+      "topic": "How do you calculate IV drop rate when the provider orders mL/hr only — REx-PN dosage calculation walkthrough",
+      "pathwayId": "ca-rpn-rex-pn",
+      "tier": "RPN",
+      "occupation": "RPN",
+      "domains": ["dosage calculation", "medication safety"]
+    },
+    {
+      "topic": "What is the mechanism of ACE inhibitor–induced cough versus angioedema in primary care (NP-level)",
+      "pathwayId": "us-np-fnp",
+      "tier": "NP",
+      "occupation": "NP",
+      "domains": ["pharmacology", "adverse effects"]
+    },
+    {
+      "topic": "When should you hold metformin before contrast — contraindications and lactic acidosis risk (new grad)",
+      "pathwayId": "ca-rn-nclex-rn",
+      "tier": "New Grad",
+      "occupation": "RN",
+      "domains": ["pharmacology", "contraindications", "clinical decision making"]
+    },
+    {
+      "topic": "Paramedic exam question: ketamine vs etomidate for RSI — hemodynamic trade-offs in shock",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": ["pharmacology", "clinical decision making"]
+    },
+    {
+      "topic": "MLT exam question: why does hemolysis falsely lower or skew potassium on a chemistry panel",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": ["lab interpretation", "pathophysiology"]
+    },
+    {
+      "topic": "OT board-style question: anticholinergic burden and functional cognition in older adults",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": ["pharmacology", "clinical decision making"]
+    },
+    {
+      "topic": "PT exam prep: loading dose vs maintenance for antiseizure medications after traumatic injury — what changes on exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": ["pharmacology", "pathophysiology"]
+    },
+    {
+      "topic": "Social work licensing: psychopharm basics — SSRIs, serotonin syndrome cues, and escalation thresholds",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": ["pharmacology", "medication safety"]
+    },
+    {
+      "topic": "Psychotherapy exam prep: when should you hold or adjust MAOIs relative to other antidepressants — mechanism and safety",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": ["pharmacology", "contraindications", "medication safety"]
+    },
+    {
+      "topic": "PSW exam question: insulin timing with meals — hypoglycemia prevention and observation priorities",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": ["medication safety", "dosage calculation"]
+    },
+    {
+      "topic": "Respiratory therapy exam: why salbutamol can drop potassium — mechanism and monitoring",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": ["pharmacology", "pathophysiology", "lab interpretation"]
+    },
+    {
+      "topic": "Pharmacy technician exam: high-alert look-alike/sound-alike pairs in the inpatient cart — safety checks",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": ["medication safety", "adverse effects"]
+    }
+  ]
+}

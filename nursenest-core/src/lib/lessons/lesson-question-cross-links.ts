@@ -1,0 +1,384 @@
+import { ContentStatus } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
+import { unstable_cache } from "next/cache";
+import { prisma } from "@/lib/db";
+import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import {
+  getRnNclexLessonQuestionBankBridgeClauses,
+  hasExplicitRnNclexLessonBridge,
+} from "@/lib/lessons/rn-nclex-lesson-question-bank-bridge";
+import {
+  cacheTagLessonQuestionStems,
+  LESSON_CONTENT_CACHE_TTL_SECONDS,
+} from "@/lib/cache/cache-tags";
+
+/** Minimum related questions we aim to surface from the bank for each lesson (coverage / completeness). */
+export const RELATED_EXAM_QUESTIONS_MIN_TARGET = 8;
+/** Lower bound of the “ideal” band (product prefers 15–25 visible when the pool allows). */
+export const RELATED_EXAM_QUESTIONS_IDEAL_MIN = 15;
+/**
+ * Upper bound for cross-link lists (lesson ↔ question bank). Single `findMany` uses `take` with this value.
+ * Keeps one bounded query; ordering is `updatedAt desc` so the list stays fresh without duplicate IDs.
+ */
+export const RELATED_EXAM_QUESTIONS_CAP = 25;
+
+export type LessonQuestionCoverageTier = "critical" | "low" | "below_minimum" | "adequate" | "ideal";
+
+/** Classify bank pool size for a lesson using the same predicate as {@link loadRelatedExamQuestionStemsForPathwayLesson}. */
+export function lessonQuestionCoverageTierFromCount(count: number): LessonQuestionCoverageTier {
+  if (count === 0) return "critical";
+  if (count < 5) return "low";
+  if (count < RELATED_EXAM_QUESTIONS_MIN_TARGET) return "below_minimum";
+  if (count < RELATED_EXAM_QUESTIONS_IDEAL_MIN) return "adequate";
+  return "ideal";
+}
+
+/** How many additional published questions (per the lesson link predicate) are needed to reach the minimum target. */
+export function relatedExamQuestionsNeededForMinTarget(currentCount: number): number {
+  return Math.max(0, RELATED_EXAM_QUESTIONS_MIN_TARGET - currentCount);
+}
+
+/** How many additional items are needed to reach the ideal band lower bound ({@link RELATED_EXAM_QUESTIONS_IDEAL_MIN}); 0 if already there or above. */
+export function relatedExamQuestionsNeededForIdealBand(currentCount: number): number {
+  return Math.max(0, RELATED_EXAM_QUESTIONS_IDEAL_MIN - currentCount);
+}
+
+/** Max `topic.contains` OR branches from title/slug tokens (additive only; direct matches stay separate). */
+const MAX_TOPIC_CONTAINS_TOKENS = 6;
+
+/** Conservative stop list for title/slug-derived `contains` tokens only (not used for exact `lessonTopic` / slug-phrase). */
+const TITLE_TOPIC_TOKEN_STOPWORDS = new Set([
+  "all",
+  "and",
+  "any",
+  "are",
+  "adult",
+  "adults",
+  "assessment",
+  "basic",
+  "basics",
+  "been",
+  "but",
+  "can",
+  "care",
+  "case",
+  "cases",
+  "clinical",
+  "disease",
+  "diseases",
+  "disorders",
+  "exam",
+  "for",
+  "from",
+  "has",
+  "have",
+  "how",
+  "into",
+  "introduction",
+  "interventions",
+  "lesson",
+  "lessons",
+  "management",
+  "may",
+  "not",
+  "nurse",
+  "nurses",
+  "nursing",
+  "overview",
+  "patient",
+  "patients",
+  "paediatric",
+  "pediatric",
+  "practice",
+  "prioritization",
+  "review",
+  "safety",
+  "study",
+  "studies",
+  "syndrome",
+  "syndromes",
+  "that",
+  "the",
+  "this",
+  "use",
+  "what",
+  "when",
+  "why",
+  "will",
+  "with",
+  "without",
+  "your",
+  "you",
+]);
+
+/**
+ * Short tokens that are valid length but too generic for `topic.contains` (common slug fragments / abbrev noise).
+ */
+const WEAK_TOPIC_CONTAINS_TOKENS = new Set([
+  "ca",
+  "iv",
+  "med",
+  "np",
+  "pn",
+  "rn",
+  "us",
+]);
+
+/**
+ * Lowercase, trim, strip apostrophes and punctuation, split on non-alphanumeric runs (covers space, hyphen, slash, underscore).
+ * Bounded input (lesson titles / slugs); simple linear passes, no backtracking-heavy patterns.
+ */
+function rawTokensFromNormalizedSource(source: string): string[] {
+  const collapsed = source
+    .toLowerCase()
+    .trim()
+    .replace(/['’`]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+  if (!collapsed) return [];
+  return collapsed
+    .split(/\s+/)
+    .map((t) => t.trim())
+    .filter((t) => t.length > 0);
+}
+
+function shouldEmitContainsToken(t: string): boolean {
+  if (t.length < 3) return false;
+  if (TITLE_TOPIC_TOKEN_STOPWORDS.has(t)) return false;
+  if (WEAK_TOPIC_CONTAINS_TOKENS.has(t)) return false;
+  return true;
+}
+
+/**
+ * Deterministic: emit eligible title tokens in order, then slug tokens not already seen; first-seen wins dedupe.
+ * At most {@link MAX_TOPIC_CONTAINS_TOKENS} `topic.contains` branches — additive only (exact topic / body / tags unchanged).
+ */
+function deriveTopicMatchTokens(lessonTitle: string, topicSlug: string): string[] {
+  const titlePart = rawTokensFromNormalizedSource(lessonTitle);
+  const slugPart = rawTokensFromNormalizedSource(topicSlug);
+  const seen = new Set<string>();
+  const out: string[] = [];
+
+  const pushIfEligible = (t: string): boolean => {
+    if (!shouldEmitContainsToken(t) || seen.has(t)) return false;
+    seen.add(t);
+    out.push(t);
+    return out.length >= MAX_TOPIC_CONTAINS_TOKENS;
+  };
+
+  for (const t of titlePart) {
+    if (pushIfEligible(t)) return out;
+  }
+  for (const t of slugPart) {
+    if (pushIfEligible(t)) return out;
+  }
+  return out;
+}
+
+export type RelatedExamQuestionStem = {
+  id: string;
+  stemPreview: string;
+};
+
+function stemPreview(stem: string, max = 155): string {
+  const t = stem.trim().replace(/\s+/g, " ");
+  if (t.length <= max) return t;
+  return `${t.slice(0, max - 1)}…`;
+}
+
+function dedupeOrClauses(clauses: Prisma.ExamQuestionWhereInput[]): Prisma.ExamQuestionWhereInput[] {
+  const seen = new Set<string>();
+  const out: Prisma.ExamQuestionWhereInput[] = [];
+  for (const c of clauses) {
+    const k = JSON.stringify(c);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(c);
+  }
+  return out;
+}
+
+/** Keep OR fan-in bounded when RN bridge + title tokens are merged. */
+const MAX_RELATED_QUESTION_OR_CLAUSES = 26;
+
+export type RelatedExamQuestionPathwayLessonArgs = {
+  pathway: ExamPathwayDefinition;
+  /** Lesson display title — tokenized for `topic` substring matches. */
+  lessonTitle: string;
+  /** Pathway lesson topic label (often matches `exam_questions.topic` exactly). */
+  lessonTopic: string;
+  lessonTopicSlug: string;
+  bodySystem?: string | null;
+  /** Catalog / DB lesson slug — enables RN NCLEX bridge hints (single query). */
+  lessonSlug?: string;
+};
+
+/**
+ * Same `AND` + `OR` predicate as {@link loadRelatedExamQuestionStemsForPathwayLesson} (pathway pool + lesson match).
+ * Use for bounded `count` / audits; does not execute a query.
+ */
+export function buildRelatedExamQuestionWhereForPathwayLesson(
+  args: RelatedExamQuestionPathwayLessonArgs,
+): Prisma.ExamQuestionWhereInput | null {
+  const { pathway, lessonTitle, lessonTopic, lessonTopicSlug, bodySystem, lessonSlug } = args;
+  const base = pathwayExamQuestionMarketingWhere(pathway);
+  const topicTrim = lessonTopic.trim();
+  const slug = lessonTopicSlug.trim().toLowerCase();
+  const fromSlugPhrase = slug.replace(/-/g, " ").trim();
+  const tokens = deriveTopicMatchTokens(lessonTitle, lessonTopicSlug);
+
+  const bridgeFirst = getRnNclexLessonQuestionBankBridgeClauses(pathway.id, lessonSlug ?? "");
+  const skipTitleSlugTokenFallback = hasExplicitRnNclexLessonBridge(pathway.id, lessonSlug ?? "");
+
+  const orClauses: Prisma.ExamQuestionWhereInput[] = [...bridgeFirst];
+  if (topicTrim.length > 0) {
+    orClauses.push({
+      OR: [
+        { topic: { equals: topicTrim, mode: "insensitive" } },
+        { subtopic: { equals: topicTrim, mode: "insensitive" } },
+      ],
+    });
+  }
+  if (fromSlugPhrase.length > 0 && fromSlugPhrase !== topicTrim.toLowerCase()) {
+    orClauses.push({
+      OR: [
+        { topic: { equals: fromSlugPhrase, mode: "insensitive" } },
+        { subtopic: { equals: fromSlugPhrase, mode: "insensitive" } },
+      ],
+    });
+  }
+  if (!skipTitleSlugTokenFallback) {
+    for (const tok of tokens) {
+      orClauses.push({
+        OR: [
+          { topic: { contains: tok, mode: "insensitive" } },
+          { subtopic: { contains: tok, mode: "insensitive" } },
+        ],
+      });
+    }
+  }
+  if (bodySystem?.trim()) {
+    orClauses.push({ bodySystem: { equals: bodySystem.trim(), mode: "insensitive" } });
+  }
+  if (slug.length > 0) {
+    orClauses.push({ tags: { has: slug } });
+  }
+
+  const orMerged = dedupeOrClauses(orClauses).slice(0, MAX_RELATED_QUESTION_OR_CLAUSES);
+
+  if (orMerged.length === 0) return null;
+
+  return { AND: [base, { OR: orMerged }] };
+}
+
+/**
+ * Published exam questions in the pathway’s marketing-scoped pool that match the lesson (topic labels/tokens
+ * from title + slug, optional `bodySystem`, optional `tags` has `topicSlug`). Single bounded `findMany`; no in-memory fallbacks.
+ */
+async function loadRelatedExamQuestionStemsForPathwayLessonUncached(
+  args: RelatedExamQuestionPathwayLessonArgs,
+): Promise<RelatedExamQuestionStem[]> {
+  const where = buildRelatedExamQuestionWhereForPathwayLesson(args);
+  if (!where) return [];
+
+  return withDatabaseFallback(
+    async () => {
+      const rows = await prisma.examQuestion.findMany({
+        where,
+        select: { id: true, stem: true },
+        orderBy: { updatedAt: "desc" },
+        take: RELATED_EXAM_QUESTIONS_CAP,
+      });
+      return rows.map((r) => ({ id: r.id, stemPreview: stemPreview(r.stem) }));
+    },
+    [],
+  );
+}
+
+/**
+ * 5-minute cached wrapper for lesson-related exam question stem loading.
+ *
+ * These stems are content-adjacent (which questions relate to this lesson?) and
+ * change only when questions are added/edited or the lesson content changes.
+ * A 5-minute TTL with lesson-publish tag invalidation provides near-instant
+ * freshness after admin edits while eliminating the `findMany` on every load.
+ *
+ * Tags: `lesson-question-stems:{pathwayId}:{lessonSlug}` — busted on lesson publish.
+ */
+export async function loadRelatedExamQuestionStemsForPathwayLesson(
+  args: RelatedExamQuestionPathwayLessonArgs,
+): Promise<RelatedExamQuestionStem[]> {
+  const pathwayId = args.pathway.id;
+  const lessonSlug = args.lessonSlug?.trim() ?? "";
+
+  if (!lessonSlug) {
+    return loadRelatedExamQuestionStemsForPathwayLessonUncached(args);
+  }
+
+  return unstable_cache(
+    () => loadRelatedExamQuestionStemsForPathwayLessonUncached(args),
+    [
+      "lesson-question-stems",
+      pathwayId,
+      lessonSlug,
+      args.lessonTopic ?? "",
+      args.lessonTopicSlug ?? "",
+      args.bodySystem ?? "",
+    ],
+    {
+      revalidate: LESSON_CONTENT_CACHE_TTL_SECONDS,
+      tags: [cacheTagLessonQuestionStems(pathwayId, lessonSlug)],
+    },
+  )();
+}
+
+/**
+ * Count of pathway-scoped published questions matching the lesson (same `where` as stems loader). For audits only.
+ */
+export async function countRelatedExamQuestionsForPathwayLesson(
+  args: RelatedExamQuestionPathwayLessonArgs,
+): Promise<number> {
+  const where = buildRelatedExamQuestionWhereForPathwayLesson(args);
+  if (!where) return 0;
+  return withDatabaseFallback(() => prisma.examQuestion.count({ where }), 0);
+}
+
+export { RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL } from "@/lib/lessons/pathway-lesson-loader-config";
+
+/**
+ * Resolve `topicSlug` from a human topic label (one row) so we can reuse {@link getRelatedPathwayLessons} safely.
+ */
+export async function resolveTopicSlugForPathwayTopicLabel(
+  pathwayId: string,
+  topicLabel: string,
+): Promise<string | null> {
+  const q = topicLabel.trim();
+  if (!q) return null;
+  return withDatabaseFallback(
+    async () => {
+      const row = await prisma.pathwayLesson.findFirst({
+        where: {
+          pathwayId,
+          status: ContentStatus.PUBLISHED,
+          topic: { equals: q, mode: "insensitive" },
+        },
+        select: { topicSlug: true },
+        orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+      });
+      if (row?.topicSlug) return row.topicSlug;
+      const guess = q
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      if (!guess) return null;
+      const bySlug = await prisma.pathwayLesson.findFirst({
+        where: { pathwayId, status: ContentStatus.PUBLISHED, topicSlug: guess },
+        select: { topicSlug: true },
+      });
+      return bySlug?.topicSlug ?? null;
+    },
+    null,
+  );
+}

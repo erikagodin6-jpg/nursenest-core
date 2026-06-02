@@ -1,0 +1,370 @@
+/**
+ * Learner dashboard + readiness report — premium adaptive coaching layout.
+ * Ocean-canonical structure; Blossom/Midnight/Aurora = semantic tokens only.
+ */
+
+:root {
+  --nn-dash-report-gap: clamp(1rem, 2.5vw, 1.5rem);
+  --nn-dash-kpi-min: 20rem; /* 320px — never compress KPI cards below usable width */
+  --nn-dash-grid-min: 23.75rem; /* 380px — primary dashboard auto-fit floor */
+  --nn-dash-copy-max: 65ch;
+  --nn-dash-kpi-score: clamp(2rem, 4.2vw, 3.25rem);
+  --nn-dash-section-title: clamp(1.05rem, 1.6vw, 1.35rem);
+}
+
+/* ── Responsive dashboard grid (user spec: auto-fit minmax 380px) ── */
+.nn-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--nn-dash-grid-min)), 1fr));
+  gap: var(--nn-dash-report-gap);
+  align-items: start;
+}
+
+.nn-dashboard-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--nn-dash-kpi-min)), 1fr));
+  gap: clamp(0.85rem, 2vw, 1.15rem);
+  align-items: stretch;
+}
+
+.nn-dashboard-signal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--nn-dash-kpi-min)), 1fr));
+  gap: clamp(0.85rem, 2vw, 1.15rem);
+  align-items: stretch;
+}
+
+/* Priority band: primary action + KPIs — no narrow sidebar rail */
+.nn-dashboard-report-layout {
+  display: grid;
+  gap: var(--nn-dash-report-gap);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1100px) {
+  .nn-dashboard-report-layout {
+    grid-template-columns: minmax(26rem, 1.25fr) minmax(0, 1fr);
+    grid-template-areas:
+      "primary kpi"
+      "signals signals";
+    align-items: start;
+  }
+
+  .nn-dashboard-report-layout__primary {
+    grid-area: primary;
+  }
+
+  .nn-dashboard-report-layout__kpi {
+    grid-area: kpi;
+  }
+
+  .nn-dashboard-report-layout__signals {
+    grid-area: signals;
+  }
+}
+
+/* Fluid copy — readable line length, no ultra-narrow columns */
+.nn-dash-report-copy {
+  font-size: clamp(0.8125rem, 0.35vw + 0.78rem, 0.9375rem);
+  line-height: 1.55;
+  max-width: var(--nn-dash-copy-max);
+}
+
+.nn-dash-report-eyebrow {
+  font-size: clamp(0.625rem, 0.2vw + 0.58rem, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nn-dash-report-section-title {
+  font-size: var(--nn-dash-section-title);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+/* ── Premium KPI stat module ── */
+.nn-kpi-stat-card {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-width: var(--nn-dash-kpi-min);
+  min-height: 0;
+  flex-direction: column;
+  gap: 0.65rem;
+  overflow: hidden;
+  border-radius: var(--nn-cockpit-card-radius, 1.15rem);
+  border: 1px solid color-mix(in srgb, var(--kpi-accent, var(--semantic-brand)) 18%, var(--semantic-border-soft));
+  background:
+    radial-gradient(
+      420px 200px at 100% 0%,
+      color-mix(in srgb, var(--kpi-accent, var(--semantic-brand)) 10%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-cool)) 0%,
+      var(--semantic-surface) 100%
+    );
+  padding: clamp(1rem, 2.2vw, 1.35rem);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 58%, transparent),
+    0 18px 42px -28px color-mix(in srgb, var(--kpi-accent, var(--semantic-brand)) 16%, transparent);
+}
+
+.nn-kpi-stat-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.nn-kpi-stat-card__icon {
+  display: flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--kpi-accent, var(--semantic-brand)) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--kpi-accent, var(--semantic-brand)) 10%, var(--semantic-surface));
+  color: var(--kpi-accent, var(--semantic-brand));
+}
+
+.nn-kpi-stat-card__meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.nn-kpi-stat-card__score-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.65rem;
+  margin-top: 0.35rem;
+}
+
+.nn-kpi-stat-card__score {
+  font-size: var(--nn-dash-kpi-score);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--semantic-text-primary);
+}
+
+.nn-kpi-stat-card__score-suffix {
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  font-weight: 600;
+  color: var(--semantic-text-muted);
+}
+
+.nn-kpi-stat-card__interpretation {
+  margin-top: 0.35rem;
+  font-size: clamp(0.75rem, 0.28vw + 0.7rem, 0.8125rem);
+  line-height: 1.5;
+  color: var(--semantic-text-secondary);
+  max-width: var(--nn-dash-copy-max);
+}
+
+.nn-kpi-stat-card__track {
+  margin-top: 0.5rem;
+}
+
+.nn-kpi-stat-card__footer {
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
+.nn-kpi-stat-card__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+.nn-kpi-stat-card__trend--up {
+  background: color-mix(in srgb, var(--semantic-success) 14%, var(--semantic-surface));
+  color: var(--semantic-success);
+}
+
+.nn-kpi-stat-card__trend--flat {
+  background: color-mix(in srgb, var(--semantic-info) 12%, var(--semantic-surface));
+  color: var(--semantic-info);
+}
+
+.nn-kpi-stat-card__trend--down {
+  background: color-mix(in srgb, var(--semantic-warning) 14%, var(--semantic-surface));
+  color: var(--semantic-warning);
+}
+
+/* Readiness ring inside KPI (compact) */
+.nn-kpi-stat-card__ring-wrap {
+  flex-shrink: 0;
+}
+
+/* ── Premium AI coaching panel ── */
+.nn-coaching-command-center {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: calc(var(--nn-cockpit-card-radius, 1.15rem) + 0.1rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 16%, var(--semantic-border-soft));
+  background:
+    radial-gradient(560px 240px at 0% 0%, color-mix(in srgb, var(--semantic-panel-cool) 42%, transparent), transparent 62%),
+    radial-gradient(480px 220px at 100% 0%, color-mix(in srgb, var(--semantic-chart-5) 12%, transparent), transparent 58%),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted)) 0%,
+      var(--semantic-surface) 100%
+    );
+  padding: clamp(1rem, 2.4vw, 1.35rem);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 62%, transparent),
+    0 22px 52px -34px color-mix(in srgb, var(--semantic-brand) 14%, transparent);
+}
+
+.nn-coaching-command-center__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.nn-coaching-command-center__title {
+  font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--semantic-text-primary);
+}
+
+.nn-coaching-command-center__subtitle {
+  margin-top: 0.25rem;
+  max-width: var(--nn-dash-copy-max);
+  font-size: clamp(0.8125rem, 0.35vw + 0.76rem, 0.875rem);
+  line-height: 1.5;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-coaching-command-center__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--nn-dash-kpi-min)), 1fr));
+  gap: clamp(0.75rem, 2vw, 1rem);
+}
+
+.nn-coaching-action-card {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 1rem;
+  padding: clamp(0.9rem, 2vw, 1.1rem);
+  border: 1px solid color-mix(in srgb, var(--coaching-accent, var(--semantic-brand)) 16%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--coaching-accent, var(--semantic-brand)) 6%, var(--semantic-surface));
+}
+
+.nn-coaching-action-card__priority {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--coaching-accent, var(--semantic-brand));
+  background: color-mix(in srgb, var(--coaching-accent, var(--semantic-brand)) 12%, var(--semantic-surface));
+}
+
+.nn-coaching-action-card__title {
+  font-size: clamp(0.875rem, 0.4vw + 0.82rem, 0.9375rem);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--semantic-text-primary);
+}
+
+.nn-coaching-action-card__body {
+  font-size: clamp(0.8125rem, 0.3vw + 0.76rem, 0.875rem);
+  line-height: 1.5;
+  color: var(--semantic-text-secondary);
+  max-width: var(--nn-dash-copy-max);
+}
+
+/* Account readiness workspace */
+.nn-readiness-report-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nn-dash-report-gap);
+}
+
+.nn-readiness-report-workspace__split {
+  display: grid;
+  gap: var(--nn-dash-report-gap);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .nn-readiness-report-workspace__split {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+  }
+}
+
+.nn-premium-readiness-page-hero.nn-readiness-hero-premium {
+  border-radius: calc(var(--nn-cockpit-card-radius, 1.15rem) + 0.15rem);
+  border: 1px solid color-mix(in srgb, var(--readiness-hero-accent, var(--semantic-brand)) 20%, var(--semantic-border-soft));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 58%, transparent),
+    0 24px 56px -32px color-mix(in srgb, var(--readiness-hero-accent, var(--semantic-brand)) 18%, transparent);
+}
+
+.nn-premium-readiness-page-hero .nn-readiness-hero-stat-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  align-items: start;
+}
+
+html[data-theme="midnight"] .nn-coaching-command-center,
+html[data-theme="midnight"] .nn-kpi-stat-card {
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-text-primary) 5%, transparent),
+    0 24px 56px -36px color-mix(in srgb, var(--semantic-text-primary) 14%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-kpi-stat-card,
+  .nn-coaching-command-center {
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 55%, transparent);
+  }
+}
+
+/* Readiness band on study hub — stack until both columns are usable */
+.nn-dash-snapshot-grid {
+  display: grid;
+  gap: var(--nn-dash-report-gap);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+@media (min-width: 1180px) {
+  .nn-dash-snapshot-grid {
+    grid-template-columns: minmax(var(--nn-dash-kpi-min), 1.25fr) minmax(18rem, 0.85fr);
+  }
+}
+
+.nn-dash-snapshot-grid__main,
+.nn-dash-snapshot-grid__aside {
+  min-width: 0;
+  min-height: 0;
+}

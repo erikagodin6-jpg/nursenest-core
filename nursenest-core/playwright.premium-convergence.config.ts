@@ -1,0 +1,63 @@
+/**
+ * Premium UI convergence — screenshot smoke (desktop + mobile × ocean + midnight).
+ *
+ *   cd nursenest-core && npm run test:e2e:premium-convergence
+ *
+ * Outputs PNGs under docs/screenshots/premium-convergence/
+ * Remote: PLAYWRIGHT_SKIP_WEB_SERVER=1 BASE_URL=https://… npm run test:e2e:premium-convergence
+ */
+import "./playwright.env";
+import { defineConfig, devices } from "@playwright/test";
+
+const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
+
+function localDevWebServer() {
+  if (process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1") return undefined;
+  let origin: URL;
+  try {
+    origin = new URL(baseURL);
+  } catch {
+    return undefined;
+  }
+  const host = origin.hostname;
+  if (host !== "127.0.0.1" && host !== "localhost") return undefined;
+  const port = origin.port || "3000";
+  const secret = process.env.NEXTAUTH_SECRET?.trim() || process.env.AUTH_SECRET?.trim() || "playwright-e2e-local-secret";
+  const dbUrl = process.env.DATABASE_URL?.trim();
+  const readyUrl = `${origin.origin}/api/auth/csrf`;
+  return {
+    command: `npx next dev --hostname 127.0.0.1 --port ${port}`,
+    url: readyUrl,
+    reuseExistingServer: !process.env.CI,
+    timeout: 180_000,
+    env: {
+      RUN_HEAVY_BUILD_TASKS: "false",
+      NEXTAUTH_SECRET: secret,
+      AUTH_SECRET: process.env.AUTH_SECRET?.trim() || secret,
+      AUTH_URL: origin.origin,
+      NEXTAUTH_URL: origin.origin,
+      ...(dbUrl ? { DATABASE_URL: dbUrl } : {}),
+    },
+  } as const;
+}
+
+const e2eWebServer = localDevWebServer();
+
+export default defineConfig({
+  ...(e2eWebServer ? { webServer: e2eWebServer } : {}),
+  testDir: ".",
+  testMatch: [/tests\/e2e\/learner-surfaces\/premium-convergence\.visual\.spec\.ts$/],
+  fullyParallel: false,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 1 : 0,
+  workers: 1,
+  timeout: 180_000,
+  expect: { timeout: 60_000 },
+  reporter: [["list"]],
+  use: {
+    baseURL,
+    trace: "on-first-retry",
+    screenshot: "only-on-failure",
+    ...devices["Desktop Chrome"],
+  },
+});

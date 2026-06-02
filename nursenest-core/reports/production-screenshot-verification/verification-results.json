@@ -1,0 +1,885 @@
+{
+  "baseUrl": "https://nursenest.ca",
+  "auditedAt": "2026-05-30T08:19:11.544Z",
+  "results": [
+    {
+      "id": "homepage",
+      "label": "Homepage",
+      "url": "https://nursenest.ca/",
+      "timestamp": "2026-05-30T08:17:47.788Z",
+      "status": "PASS",
+      "httpStatus": 200,
+      "images": [
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75",
+          "alt": "",
+          "naturalWidth": 183,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=640&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75",
+          "alt": "",
+          "naturalWidth": 167,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=640&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot1-768w.webp&w=3840&q=68",
+          "alt": "Question Bank. Practice by topic. Work through exam-style questions with filters that match your pathway.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot1-768w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fapi%2Fmarketing-assets%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot2-480w.webp&w=3840&q=68",
+          "alt": "RN Prep. See why an answer is right. Read clear rationales and review the options you missed.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fapi%2Fmarketing-assets%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot2-480w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot6-768w.webp&w=3840&q=68",
+          "alt": "Flashcards. Match your region. Set US or Canada so labels and pathways match your exam.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot6-768w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot7-768w.webp&w=3840&q=68",
+          "alt": "NP Prep. Pick your nursing tier. Choose RN, PN, NP, or pre-nursing so the bank stays on scope.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot7-768w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot15-768w.webp&w=3840&q=68",
+          "alt": "NurseNest. One place to prep. Questions, lessons, flashcards, practice exams, and analytics in one workspace.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot15-768w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75",
+          "alt": "",
+          "naturalWidth": 167,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=640&q=75"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        }
+      ],
+      "missingSelectors": [],
+      "legacyUrls": [],
+      "fingerprintMatches": [
+        {
+          "local": "public/marketing/homepage-screenshots/screenshot1.webp",
+          "url": "https://nursenest.ca/marketing/homepage-screenshots/screenshot1.webp",
+          "sha256": "d89cdbecb0565559c1132eccdbfc68dbc2f18a4e7923af7af60dcf07f0f8f37c",
+          "bytes": 58650,
+          "via": "static-probe"
+        }
+      ],
+      "fingerprintMismatches": [],
+      "screenshotPath": "/root/nursenest-core/nursenest-core/reports/production-screenshot-verification/homepage--1440x900.png"
+    },
+    {
+      "id": "pricing",
+      "label": "Pricing",
+      "url": "https://nursenest.ca/pricing",
+      "timestamp": "2026-05-30T08:17:51.716Z",
+      "status": "PASS",
+      "httpStatus": 200,
+      "images": [
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fcore%2Flearner-dashboard.webp&w=3840&q=75",
+          "alt": "RN learner dashboard with lesson progress and study streaks",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fcore%2Flearner-dashboard.webp&w=640&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fmarketing%2Frn-questions-marketing.webp&w=3840&q=75",
+          "alt": "RN active recall and practice interface",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fmarketing%2Frn-questions-marketing.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fcore%2Fcat-exam-session.webp&w=3840&q=75",
+          "alt": "RN CAT and exam trajectory view",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fcore%2Fcat-exam-session.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fcore%2Fsmart-review.webp&w=3840&q=75",
+          "alt": "RN coaching panel with targeted recommendations",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fcore%2Fsmart-review.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fcore%2Fconfidence-analytics.webp&w=3840&q=75",
+          "alt": "RN readiness score and analytics dashboard",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fcore%2Fconfidence-analytics.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fecg-workstation.webp&w=3840&q=75",
+          "alt": "ECG telemetry workstation with rhythm strip interpretation exercises",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fecg-workstation.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fecg-workstation.webp&w=3840&q=75",
+          "alt": "Interactive telemetry simulation with live rhythm analysis",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fecg-workstation.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Fmidnight%2Fcat-exam-session.webp&w=3840&q=75",
+          "alt": "Branching clinical scenario with adaptive patient deterioration cues",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Fmidnight%2Fcat-exam-session.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fpractice-rationale.webp&w=3840&q=75",
+          "alt": "Prioritization and delegation practice with rationale teaching",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fpractice-rationale.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fprogress-report.webp&w=3840&q=75",
+          "alt": "Lab trend interpretation with topic accuracy and readiness bands",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fprogress-report.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fquestion-bank.webp&w=3840&q=75",
+          "alt": "Medication calculation and dosage practice question bank",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fquestion-bank.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Fmidnight%2Fconfidence-analytics.webp&w=3840&q=75",
+          "alt": "Readiness analytics dashboard with confidence calibration and trends",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Fmidnight%2Fconfidence-analytics.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fquestion-bank.webp&w=3840&q=75",
+          "alt": "Medication calculation and high-alert dosage practice on NurseNest",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fquestion-bank.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Fblossom%2Flesson-detail.webp&w=3840&q=75",
+          "alt": "Clinical skills lesson with competency progression and safety checkpoints",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Fblossom%2Flesson-detail.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fecg-workstation.webp&w=3840&q=75",
+          "alt": "NurseNest ECG telemetry workstation with rhythm strip interpretation",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fecg-workstation.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fcore%2Fflashcards.webp&w=3840&q=75",
+          "alt": "NurseNest question workflow showing a question, SI/CONV clinical reasoning support, and teaching rationale",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fcore%2Fflashcards.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot1-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest practice runner showing a rationale panel with correct-answer explanation, incorrect-option breakdowns, and a ",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot1-1200w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot6-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest CAT exam mode showing a single question in a minimal, clinical layout with answer options and a slim progress ",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot6-1200w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot7-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest CAT results page showing a large readiness score, a 3-card summary row, and a weak-areas section with topic ba",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot7-1200w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75",
+          "alt": "",
+          "naturalWidth": 167,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=640&q=75"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        }
+      ],
+      "missingSelectors": [],
+      "legacyUrls": [],
+      "fingerprintMatches": [
+        {
+          "local": "public/marketing/generated-screenshots/marketing/rn-marketing-hub.webp",
+          "url": "https://nursenest.ca/marketing/generated-screenshots/marketing/rn-marketing-hub.webp",
+          "sha256": "53a9eff80fbec71e607913fc2a02824b59e14892d5ff53ca32af84d13c841f9b",
+          "bytes": 37250,
+          "via": "static-probe"
+        }
+      ],
+      "fingerprintMismatches": [],
+      "screenshotPath": "/root/nursenest-core/nursenest-core/reports/production-screenshot-verification/pricing--1440x900.png"
+    },
+    {
+      "id": "rn-hub",
+      "label": "RN Hub",
+      "url": "https://nursenest.ca/us/rn/nclex-rn",
+      "timestamp": "2026-05-30T08:17:57.407Z",
+      "status": "PASS",
+      "httpStatus": 200,
+      "images": [
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest.ca/marketing/hero-fallback.svg",
+          "alt": "NCLEX-RN study hub with lessons, NGN practice, CAT exams, and readiness analytics",
+          "naturalWidth": 900,
+          "resolvedUrl": "https://nursenest.ca/marketing/hero-fallback.svg"
+        },
+        {
+          "src": "https://nursenest.ca/marketing/hero-fallback.svg",
+          "alt": "NCLEX-RN practice question with full rationale and teaching breakdown",
+          "naturalWidth": 900,
+          "resolvedUrl": "https://nursenest.ca/marketing/hero-fallback.svg"
+        },
+        {
+          "src": "https://nursenest.ca/marketing/hero-fallback.svg",
+          "alt": "RN flashcard study session with active recall and spaced review",
+          "naturalWidth": 900,
+          "resolvedUrl": "https://nursenest.ca/marketing/hero-fallback.svg"
+        },
+        {
+          "src": "https://nursenest.ca/marketing/hero-fallback.svg",
+          "alt": "Adaptive CAT exam session with clinical question and progress bar",
+          "naturalWidth": 900,
+          "resolvedUrl": "https://nursenest.ca/marketing/hero-fallback.svg"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75",
+          "alt": "",
+          "naturalWidth": 167,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=640&q=75"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        }
+      ],
+      "missingSelectors": [],
+      "legacyUrls": [],
+      "fingerprintMatches": [
+        {
+          "local": "public/marketing/generated-screenshots/marketing/rn-marketing-hub.webp",
+          "url": "https://nursenest.ca/marketing/generated-screenshots/marketing/rn-marketing-hub.webp",
+          "sha256": "53a9eff80fbec71e607913fc2a02824b59e14892d5ff53ca32af84d13c841f9b",
+          "bytes": 37250,
+          "via": "static-probe"
+        }
+      ],
+      "fingerprintMismatches": [],
+      "screenshotPath": "/root/nursenest-core/nursenest-core/reports/production-screenshot-verification/rn-hub--1440x900.png"
+    },
+    {
+      "id": "pn-hub",
+      "label": "RPN/PN Hub",
+      "url": "https://nursenest.ca/canada/pn/rex-pn",
+      "timestamp": "2026-05-30T08:18:02.255Z",
+      "status": "PASS",
+      "httpStatus": 200,
+      "images": [
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest.ca/marketing/hero-fallback.svg",
+          "alt": "RPN and PN exam prep hub with lessons, practice, and CAT readiness on NurseNest",
+          "naturalWidth": 900,
+          "resolvedUrl": "https://nursenest.ca/marketing/hero-fallback.svg"
+        },
+        {
+          "src": "https://nursenest.ca/marketing/hero-fallback.svg",
+          "alt": "PN flashcard review for scope-safe fundamentals",
+          "naturalWidth": 900,
+          "resolvedUrl": "https://nursenest.ca/marketing/hero-fallback.svg"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75",
+          "alt": "",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        }
+      ],
+      "missingSelectors": [],
+      "legacyUrls": [],
+      "fingerprintMatches": [
+        {
+          "local": "public/marketing/generated-screenshots/marketing/pn-marketing-hub.webp",
+          "url": "https://nursenest.ca/marketing/generated-screenshots/marketing/pn-marketing-hub.webp",
+          "sha256": "347545422ce0850a342a0d448da909263f8a3800e63b56ae32c074eee5ee8657",
+          "bytes": 37608,
+          "via": "static-probe"
+        }
+      ],
+      "fingerprintMismatches": [],
+      "screenshotPath": "/root/nursenest-core/nursenest-core/reports/production-screenshot-verification/pn-hub--1440x900.png"
+    },
+    {
+      "id": "np-hub",
+      "label": "NP Hub",
+      "url": "https://nursenest.ca/canada/np/cnple",
+      "timestamp": "2026-05-30T08:18:09.578Z",
+      "status": "PASS",
+      "httpStatus": 200,
+      "images": [
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest.ca/marketing/hero-fallback.svg",
+          "alt": "NP readiness analytics and performance trends",
+          "naturalWidth": 900,
+          "resolvedUrl": "https://nursenest.ca/marketing/hero-fallback.svg"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75",
+          "alt": "",
+          "naturalWidth": 167,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=640&q=75"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        }
+      ],
+      "missingSelectors": [],
+      "legacyUrls": [],
+      "fingerprintMatches": [
+        {
+          "local": "public/marketing/generated-screenshots/marketing/np-marketing-hub.webp",
+          "url": "https://nursenest.ca/marketing/generated-screenshots/marketing/np-marketing-hub.webp",
+          "sha256": "0c36b11d8cfea5120bb3204f44dce71784a08498d1da55f908b612e34921c08b",
+          "bytes": 50074,
+          "via": "static-probe"
+        }
+      ],
+      "fingerprintMismatches": [],
+      "screenshotPath": "/root/nursenest-core/nursenest-core/reports/production-screenshot-verification/np-hub--1440x900.png"
+    },
+    {
+      "id": "allied-hub",
+      "label": "Allied Health",
+      "url": "https://nursenest.ca/allied/allied-health",
+      "timestamp": "2026-05-30T08:18:16.414Z",
+      "status": "PASS",
+      "httpStatus": 200,
+      "images": [
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fcore%2Flearner-dashboard.webp&w=3840&q=75",
+          "alt": "Allied health profession-specific study hub with competency-focused practice",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fcore%2Flearner-dashboard.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Fblossom%2Flesson-library.webp&w=3840&q=75",
+          "alt": "Allied health lesson library filtered by profession track",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Fblossom%2Flesson-library.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fquestion-bank.webp&w=3840&q=75",
+          "alt": "Allied health practice questions scoped to profession competencies",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fgenerated-screenshots%2Fthemes%2Focean%2Fquestion-bank.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75",
+          "alt": "",
+          "naturalWidth": 167,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=640&q=75"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        }
+      ],
+      "missingSelectors": [],
+      "legacyUrls": [],
+      "fingerprintMatches": [
+        {
+          "local": "public/marketing/generated-screenshots/marketing/allied-marketing-hub.webp",
+          "url": "https://nursenest.ca/marketing/generated-screenshots/marketing/allied-marketing-hub.webp",
+          "sha256": "4d611cee754f6100b3b46bf618f852bfc2e28ed867cea7ac1b16c4d2a247303e",
+          "bytes": 50420,
+          "via": "static-probe"
+        }
+      ],
+      "fingerprintMismatches": [],
+      "screenshotPath": "/root/nursenest-core/nursenest-core/reports/production-screenshot-verification/allied-hub--1440x900.png"
+    },
+    {
+      "id": "new-grad",
+      "label": "New Grad",
+      "url": "https://nursenest.ca/canada/new-grad",
+      "timestamp": "2026-05-30T08:18:46.988Z",
+      "status": "PASS",
+      "httpStatus": 200,
+      "images": [
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75",
+          "alt": "",
+          "naturalWidth": 167,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=640&q=75"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        }
+      ],
+      "missingSelectors": [],
+      "legacyUrls": [],
+      "fingerprintMatches": [
+        {
+          "local": "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub.webp",
+          "url": "https://nursenest.ca/marketing/generated-screenshots/marketing/new-grad-marketing-hub.webp",
+          "sha256": "8548bab77f54fb6d9872236c9e5040e16568751fd3f58d085c562246c72f944d",
+          "bytes": 17080,
+          "via": "static-probe"
+        }
+      ],
+      "fingerprintMismatches": [],
+      "screenshotPath": "/root/nursenest-core/nursenest-core/reports/production-screenshot-verification/new-grad--1440x900.png"
+    },
+    {
+      "id": "ecg",
+      "label": "ECG Marketing",
+      "url": "https://nursenest.ca/ecg-interpretation",
+      "timestamp": "2026-05-30T08:18:58.095Z",
+      "status": "PASS",
+      "httpStatus": 200,
+      "images": [
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest.ca/marketing/hero-fallback.svg",
+          "alt": "NurseNest ECG telemetry workstation with rhythm interpretation exercises",
+          "naturalWidth": 900,
+          "resolvedUrl": "https://nursenest.ca/marketing/hero-fallback.svg"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75",
+          "alt": "",
+          "naturalWidth": 167,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=640&q=75"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        }
+      ],
+      "missingSelectors": [],
+      "legacyUrls": [],
+      "fingerprintMatches": [
+        {
+          "local": "public/marketing/generated-screenshots/core/ecg-workstation.webp",
+          "url": "https://nursenest.ca/marketing/generated-screenshots/core/ecg-workstation.webp",
+          "sha256": "c2f43d28ac7aadd0d92b135d9c403fb2374b8182339ba6dfba0e8dd3428104b6",
+          "bytes": 60298,
+          "via": "static-probe"
+        }
+      ],
+      "fingerprintMismatches": [],
+      "screenshotPath": "/root/nursenest-core/nursenest-core/reports/production-screenshot-verification/ecg--1440x900.png"
+    },
+    {
+      "id": "faq",
+      "label": "FAQ",
+      "url": "https://nursenest.ca/faq",
+      "timestamp": "2026-05-30T08:19:03.000Z",
+      "status": "WARN",
+      "httpStatus": 200,
+      "images": [
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot1-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest practice runner showing a rationale panel with correct-answer explanation, incorrect-option breakdowns, and a ",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot1-1200w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75",
+          "alt": "",
+          "naturalWidth": 167,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=640&q=75"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        }
+      ],
+      "missingSelectors": [],
+      "legacyUrls": [],
+      "fingerprintMatches": [],
+      "fingerprintMismatches": [],
+      "screenshotPath": "/root/nursenest-core/nursenest-core/reports/production-screenshot-verification/faq--1440x900.png"
+    },
+    {
+      "id": "institutions",
+      "label": "Institutions",
+      "url": "https://nursenest.ca/for-institutions",
+      "timestamp": "2026-05-30T08:19:06.971Z",
+      "status": "FAIL",
+      "httpStatus": 200,
+      "images": [
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest leaf logo",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot7.png",
+          "alt": "NurseNest CAT results page showing a large readiness score, a 3-card summary row, and a weak-areas section with topic ba",
+          "naturalWidth": 2048,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot7.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot12-480w.webp",
+          "alt": "NurseNest lesson page showing a structured clinical topic lesson with section cards for pathophysiology, signs and sympt",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot12-480w.webp"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot15-480w.webp",
+          "alt": "NurseNest ECG learning workspace showing rhythm-focused navigation and clinical telemetry monitor styling.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot15-480w.webp"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot6.png",
+          "alt": "NurseNest CAT exam mode showing a single question in a minimal, clinical layout with answer options and a slim progress ",
+          "naturalWidth": 2388,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot6.png"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fapi%2Fmarketing-assets%2Fscreenshot5-480w.webp&w=3840&q=68",
+          "alt": "NurseNest progress report showing accuracy by topic area with horizontal bar charts and readiness scores.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fapi%2Fmarketing-assets%2Fscreenshot5-480w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot2-480w.webp",
+          "alt": "NurseNest flashcard study session showing a question on one side and a clinical concept answer on the other.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot2-480w.webp"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot10.png",
+          "alt": "NurseNest question bank showing category chips, question counts, and Practice Exam / CAT session launchers.",
+          "naturalWidth": 2654,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot10.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot12-480w.webp",
+          "alt": "NurseNest lesson page showing a structured clinical topic lesson with section cards for pathophysiology, signs and sympt",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot12-480w.webp"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot10.png",
+          "alt": "NurseNest question bank showing category chips, question counts, and Practice Exam / CAT session launchers.",
+          "naturalWidth": 2654,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot10.png"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot4.png",
+          "alt": "NurseNest practice hub showing NCLEX-RN category filters, Practice Exam and CAT entry points, and session launch control",
+          "naturalWidth": 2516,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot4.png"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fapi%2Fmarketing-assets%2Fscreenshot5-480w.webp&w=3840&q=68",
+          "alt": "NurseNest progress report showing accuracy by topic area with horizontal bar charts and readiness scores.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fapi%2Fmarketing-assets%2Fscreenshot5-480w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fapi%2Fmarketing-assets%2Fscreenshot13-480w.webp&w=3840&q=68",
+          "alt": "NurseNest lesson library showing a filterable grid of lesson cards organised by clinical category and RN pathway.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fapi%2Fmarketing-assets%2Fscreenshot13-480w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot14-768w.webp",
+          "alt": "NurseNest marketing homepage showing hero messaging and a platform preview of lessons, practice, CAT, and learner analyt",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot14-768w.webp"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot7-1200w.webp&w=3840&q=75",
+          "alt": "NP Prep. Pick your nursing tier. Choose RN, PN, NP, or pre-nursing so the bank stays on scope.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot7-1200w.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot12-1200w.webp&w=3840&q=75",
+          "alt": "Review. Review session results. See score breakdowns and trends so you know what to revisit.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot12-1200w.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot15-1200w.webp&w=3840&q=75",
+          "alt": "NurseNest. One place to prep. Questions, lessons, flashcards, practice exams, and analytics in one workspace.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot15-1200w.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot6-1200w.webp&w=3840&q=75",
+          "alt": "Flashcards. Match your region. Set US or Canada so labels and pathways match your exam.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot6-1200w.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot5-1200w.webp&w=3840&q=75",
+          "alt": "Progress. Prioritization scenarios. Practice multi-patient assignment, delegation, escalation, and safety decisions.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot5-1200w.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot2-1200w.webp&w=3840&q=75",
+          "alt": "RN Prep. See why an answer is right. Read clear rationales and review the options you missed.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot2-1200w.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot10-1200w.webp&w=3840&q=75",
+          "alt": "Dashboard. Your learner home. Pick up where you left off across lessons, questions, and due reviews.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot10-1200w.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot14-1200w.webp&w=3840&q=75",
+          "alt": "Exam Prep. Study on your phone. Layouts stay readable on small screens for short study blocks.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot14-1200w.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot11-1200w.webp&w=3840&q=75",
+          "alt": "Readiness. Get started quickly. Move from signup into your first practice session without extra steps.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot11-1200w.webp&w=3840&q=75"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot8-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest adaptive study plan showing Day 1 through Day 3 cards with study blocks, lesson links, and a retest strategy.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot8-1200w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot9-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest smart review screen showing four groups: High Priority Fixes, Needs Review, Uncertain Knowledge, and Strong Ar",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot9-1200w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot10-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest question bank showing category chips, question counts, and Practice Exam / CAT session launchers.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot10-1200w.webp&w=750&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot14-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest marketing homepage showing hero messaging and a platform preview of lessons, practice, CAT, and learner analyt",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot14-1200w.webp&w=750&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot15-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest ECG learning workspace showing rhythm-focused navigation and clinical telemetry monitor styling.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot15-1200w.webp&w=750&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot6-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest CAT exam mode showing a single question in a minimal, clinical layout with answer options and a slim progress ",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot6-1200w.webp&w=750&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot7-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest CAT results page showing a large readiness score, a 3-card summary row, and a weak-areas section with topic ba",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot7-1200w.webp&w=750&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot11-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest confidence analytics showing Overconfident Errors, Uncertain Correct, and Strong Knowledge cards side by side.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot11-1200w.webp&w=3840&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot5-1200w.webp&w=3840&q=68",
+          "alt": "NurseNest progress report showing accuracy by topic area with horizontal bar charts and readiness scores.",
+          "naturalWidth": 0,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=%2Fmarketing%2Fhomepage-screenshots%2Fscreenshot5-1200w.webp&w=750&q=68"
+        },
+        {
+          "src": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=3840&q=75",
+          "alt": "",
+          "naturalWidth": 167,
+          "resolvedUrl": "https://nursenest.ca/_next/image?url=https%3A%2F%2Fnursenest-images.tor1.cdn.digitaloceanspaces.com%2FLogos%2Fnorth-sea-leaf-transparent.png&w=640&q=75"
+        },
+        {
+          "src": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+          "alt": "NurseNest",
+          "naturalWidth": 255,
+          "resolvedUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png"
+        }
+      ],
+      "missingSelectors": [],
+      "legacyUrls": [
+        "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot7.png",
+        "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot12-480w.webp",
+        "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot15-480w.webp",
+        "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot6.png",
+        "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot2-480w.webp",
+        "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot10.png",
+        "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot12-480w.webp",
+        "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot10.png",
+        "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot4.png",
+        "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot14-768w.webp"
+      ],
+      "fingerprintMatches": [],
+      "fingerprintMismatches": [],
+      "screenshotPath": "/root/nursenest-core/nursenest-core/reports/production-screenshot-verification/institutions--1440x900.png"
+    }
+  ]
+}

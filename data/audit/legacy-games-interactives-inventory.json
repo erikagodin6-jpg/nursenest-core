@@ -1,0 +1,395 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "pageFiles": 15
+  },
+  "entries": [
+    {
+      "sourcePath": "client/src/pages/first-action-simulator.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/electrolyte-abg-simulator.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/simulators.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/safety-hazard-simulator.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/career-tools/career-ai-simulator.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/probability-simulator.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/flashcards.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/deck-page.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/imaging-flashcards.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/imaging-exam-simulator.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/iv-complications-simulator.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/public-flashcards.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/generator-v2.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/blood-transfusion-simulator.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    },
+    {
+      "sourcePath": "client/src/pages/deteriorating-patient-simulator.tsx",
+      "contentType": "game_simulator_or_interactive",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Engagement modules — only if pedagogy justifies maintenance",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-semantic-playful"
+      },
+      "notes": "Prefer stripping to content + simple quiz; avoid copying legacy chrome."
+    }
+  ]
+}

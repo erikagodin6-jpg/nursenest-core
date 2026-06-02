@@ -1,0 +1,30 @@
+{
+  "ca-rn-nclex-rn:ca-rn-insulin-hypoglycemia": {
+    "title": "Insulina e hipoglucemia (NCLEX-RN, Canadá)",
+    "topic": "Insulina e hipoglucemia",
+    "seoTitle": "Insulina e hipoglucemia | NCLEX-RN Canadá | NurseNest",
+    "seoDescription": "Contexto clínico en Canadá: insulina e hipoglucemia — mmol/L, seguridad del medicamento y alcance.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Significado clínico",
+        "body": "Los ítems sobre **insulina** e **hipoglucemia** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto.\n\n**Enfermería en Canadá:** use **mmol/L** para glucosa cuando el enunciado lo indique. Las normas provinciales gobiernan la delegación y el alcance."
+      },
+      "exam_relevance": {
+        "heading": "Relevancia para el examen",
+        "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal."
+      },
+      "core_concept": {
+        "heading": "Concepto central",
+        "body": "Vincule las intervenciones a la dinámica **glucosa–insulina**, a los signos de **neuroglucopenia** y a la monitorización que demuestra respuesta."
+      },
+      "clinical_scenario": {
+        "heading": "Escenario clínico",
+        "body": "Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda."
+      },
+      "takeaways": {
+        "heading": "Conclusiones",
+        "body": "- Una **historia + signos vitales + glucosa** antes de enseñar o dar el alta.\n- **Banco:** ítems `topic:insulin-hypoglycemia`.\n- **Canadá:** atención a **unidades SI** y al **alcance** en enunciados de PN."
+      }
+    }
+  }
+}

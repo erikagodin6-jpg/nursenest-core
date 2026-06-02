@@ -1,0 +1,6 @@
+route_family,sample_urls,status,notes
+homepage,1,200,At-rest probe healthy.
+health,2,200,/healthz and /readyz healthy at rest.
+blog,1,200,At-rest probe healthy and cache-backed.
+sitemaps,2,200,At-rest probe healthy and cache-backed.
+marketing_content,100,98_200_1_504_1_timeout,Sample crawl still slow before fixed build deployment.

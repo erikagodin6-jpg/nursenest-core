@@ -1,0 +1,340 @@
+{
+  "version": 1,
+  "reportType": "Phase 2 Completion Report",
+  "generatedDate": "2026-04-11",
+  "phase": 2,
+  "phase1ContractRef": "np-phase1-finalization.json",
+  "scopeFenceRef": "np-scope-fences.json (updated with SF-05, SF-06)",
+  "phase2Artifacts": [
+    "np-scope-fences.json (SF-05 + SF-06 added)",
+    "np-phase2-lesson-outlines.json",
+    "np-phase2-questions-part1.json",
+    "np-phase2-questions-part2.json",
+    "np-phase2-questions-part3.json"
+  ],
+
+  "questionInventory": {
+    "totalPhase2Questions": 178,
+    "byDomain": {
+      "RedFlagsAndSafety": {
+        "total": 62,
+        "topics": [
+          {"slug": "hypertension-red-flags-referral", "count": 10, "ids": "np-p2-001 to np-p2-010"},
+          {"slug": "neurological-red-flags-emergency-2A", "count": 6, "ids": "np-p2-011 to np-p2-016"},
+          {"slug": "neurological-red-flags-emergency-2B", "count": 6, "ids": "np-p2-017 to np-p2-022"},
+          {"slug": "cancer-red-flags-primary-care-2A", "count": 6, "ids": "np-p2-023 to np-p2-028"},
+          {"slug": "cancer-red-flags-primary-care-2B", "count": 6, "ids": "np-p2-029 to np-p2-034"},
+          {"slug": "pediatric-red-flags-dont-miss-2A", "count": 7, "ids": "np-p2-035 to np-p2-041"},
+          {"slug": "pediatric-red-flags-dont-miss-2B", "count": 7, "ids": "np-p2-042 to np-p2-048"},
+          {"slug": "psychiatric-red-flags-safety-2A", "count": 7, "ids": "np-p2-049 to np-p2-055"},
+          {"slug": "psychiatric-red-flags-safety-2B", "count": 7, "ids": "np-p2-056 to np-p2-062"}
+        ]
+      },
+      "CoreChronicDiseaseManagement": {
+        "total": 116,
+        "topics": [
+          {"slug": "heart-failure-gdmt-primary-care-2A", "count": 7, "ids": "np-p2-063 to np-p2-069"},
+          {"slug": "heart-failure-gdmt-primary-care-2B", "count": 7, "ids": "np-p2-070 to np-p2-076"},
+          {"slug": "hypertension-step-therapy-guideline-2A", "count": 7, "ids": "np-p2-077 to np-p2-083"},
+          {"slug": "hypertension-step-therapy-guideline-2B", "count": 7, "ids": "np-p2-084 to np-p2-090"},
+          {"slug": "afib-rate-rhythm-stroke-risk-2A", "count": 7, "ids": "np-p2-091 to np-p2-097"},
+          {"slug": "afib-rate-rhythm-stroke-risk-2B", "count": 7, "ids": "np-p2-098 to np-p2-104"},
+          {"slug": "t2dm-intensification-beyond-metformin-2A", "count": 7, "ids": "np-p2-105 to np-p2-111"},
+          {"slug": "t2dm-intensification-beyond-metformin-2B", "count": 7, "ids": "np-p2-112 to np-p2-118"},
+          {"slug": "thyroid-disease-diagnosis-management-2A", "count": 6, "ids": "np-p2-119 to np-p2-124"},
+          {"slug": "thyroid-disease-diagnosis-management-2B", "count": 6, "ids": "np-p2-125 to np-p2-130"},
+          {"slug": "ckd-progression-monitoring-medication-2A", "count": 6, "ids": "np-p2-131 to np-p2-136"},
+          {"slug": "ckd-progression-monitoring-medication-2B", "count": 6, "ids": "np-p2-137 to np-p2-142"},
+          {"slug": "copd-gold-staging-inhaler-selection-2A", "count": 7, "ids": "np-p2-143 to np-p2-149"},
+          {"slug": "copd-gold-staging-inhaler-selection-2B", "count": 7, "ids": "np-p2-150 to np-p2-156"},
+          {"slug": "hyperlipidemia-risk-statin-therapy-2", "count": 10, "ids": "np-p2-157 to np-p2-166"},
+          {"slug": "anemia-workup-treatment-types-2", "count": 12, "ids": "np-p2-167 to np-p2-178"}
+        ]
+      }
+    }
+  },
+
+  "difficultyAudit": {
+    "phase2Policy": "hard or expert only — medium is prohibited",
+    "actualDistribution": {
+      "hard": 120,
+      "expert": 58,
+      "medium": 0
+    },
+    "result": "PASS — all 178 questions are hard or expert. No medium questions generated."
+  },
+
+  "duplicationReport": {
+    "result": "PASS",
+    "methodology": "Each question was assigned a unique stemAnchor combining chief complaint + patient demographic + key clinical finding or decision point. Cross-reference was maintained against Phase 1 stem anchors from np-phase1-questions-part1.json and np-phase1-questions-part2.json.",
+    "phase1StemAnchorConflictsFound": 0,
+    "withinPhase2DuplicatesFound": 0,
+    "notableNearDuplicateResolvedPairs": [
+      {
+        "topic": "hypertension-red-flags-referral",
+        "resolution": "np-p2-001 (emergency with papilledema) vs np-p2-009 (urgency without papilledema) — differentiated by end-organ damage presence/absence; stems not duplicated"
+      },
+      {
+        "topic": "neurological-red-flags-emergency",
+        "resolution": "Phase 1 np-p1-001 (headache differential SAH vs GCA vs thunderclap) vs Phase 2 np-p2-011 (TIA disposition ABCD2) — entirely different clinical scenarios; no duplication"
+      },
+      {
+        "topic": "psychiatric-red-flags-safety vs mdd-diagnosis-risk",
+        "resolution": "Phase 1 mdd-diagnosis questions tested PHQ-9 scoring and MDD diagnosis. Phase 2 np-p2-049 to np-p2-055 test C-SSRS stratification and involuntary hold triggers — no content overlap. SF-04 boundary maintained."
+      },
+      {
+        "topic": "t2dm-intensification vs glp1-sglt2",
+        "resolution": "Phase 2 Part A T2DM questions (np-p2-105 to np-p2-118) stay within SF-01 slugA scope — map-level class selection, A1c targets, SU renal safety, metformin thresholds. No cardiorenal trial data, no GLP-1/SGLT-2 mechanism or AE profiles."
+      },
+      {
+        "topic": "thyroid diagnosis vs levothyroxine dosing",
+        "resolution": "np-p2-119 to np-p2-124 (2A) = TSH interpretation, treatment initiation decision, Graves vs Hashimoto. np-p2-125 to np-p2-130 (2B) = absorption interactions, dose adjustment, monitoring interval. SF-02 slugA/slugB boundary cleanly maintained."
+      }
+    ]
+  },
+
+  "scopeViolationReport": {
+    "result": "PASS",
+    "fencesActive": ["SF-01", "SF-02", "SF-03", "SF-04", "SF-05", "SF-06"],
+    "violationsDetected": 0,
+    "auditNotes": [
+      {
+        "fence": "SF-01",
+        "boundary": "t2dm-intensification slugA vs glp1-sglt2-comorbidity-selection slugB",
+        "status": "COMPLIANT",
+        "detail": "T2DM Phase 2 questions (np-p2-105 to np-p2-118) contain map-level SGLT-2 and GLP-1 references only (e.g., 'SGLT-2 when established ASCVD/HF/CKD present') without mechanism, AE profile, or cardiorenal trial data. Specific trial data (EMPA-REG, LEADER, etc.) explicitly excluded."
+      },
+      {
+        "fence": "SF-02",
+        "boundary": "thyroid-disease-diagnosis-management slugA vs levothyroxine-dosing slugB",
+        "status": "COMPLIANT",
+        "detail": "2A questions (np-p2-119 to np-p2-124) test TSH interpretation, treatment initiation decision, Graves recognition, nodule workup. 2B questions (np-p2-125 to np-p2-130) test levothyroxine dosing, absorption interactions, monitoring intervals, pregnancy adjustment. No cross-contamination found."
+      },
+      {
+        "fence": "SF-03",
+        "boundary": "ckd-progression slugA vs medication-dose-adjustment-ckd slugB",
+        "status": "COMPLIANT",
+        "detail": "CKD Phase 2 questions test KDIGO staging, renoprotective agents (RAAS, SGLT-2), dietary management, anemia, MBD, and metabolic acidosis. Cockcroft-Gault formula calculations, antibiotic dose adjustments, and DOAC dose tables explicitly excluded — belong to SF-03 slugB which is reserved for a future Phase 3 lesson."
+      },
+      {
+        "fence": "SF-04",
+        "boundary": "mdd-diagnosis slugA vs antidepressant-selection slugB",
+        "status": "COMPLIANT",
+        "detail": "Psychiatric Red Flags 2A (np-p2-049 to np-p2-055) tests C-SSRS use, involuntary hold criteria, Tarasoff duty, and prescribing safety (TCA supply limit). Antidepressant mechanism, SSRI/SNRI selection, or augmentation strategies were NOT included — those belong to antidepressant-selection topic (SF-04 slugB, planned for Phase 3)."
+      },
+      {
+        "fence": "SF-05",
+        "boundary": "hypertension-red-flags-referral slugA vs hypertension-step-therapy-guideline slugB",
+        "status": "COMPLIANT",
+        "detail": "HTN Red Flags questions (np-p2-001 to np-p2-010) test urgency vs emergency distinction, end-organ damage recognition, secondary HTN screen, white coat HTN. HTN Step Therapy questions (np-p2-077 to np-p2-090) test first-line drug selection, compelling indications, step therapy, resistant HTN, special populations. Clean boundary maintained."
+      },
+      {
+        "fence": "SF-06",
+        "boundary": "heart-failure-gdmt-primary-care 2A (phenotype) vs 2B (pharmacotherapy)",
+        "status": "COMPLIANT",
+        "detail": "2A questions (np-p2-063 to np-p2-069) test EF-based classification, BNP interpretation, NYHA staging, decompensation triggers, and phenotype-based clinical decisions. 2B questions (np-p2-070 to np-p2-076) test four-pillar GDMT, ARNi washout requirement, evidence-based BB selection, MRA contraindications, SGLT-2 indication without DM. Clean separation maintained at the lesson-part boundary."
+      }
+    ]
+  },
+
+  "topicShortfallsAndSaturation": {
+    "shortfalls": [
+      {
+        "slug": "afib-rate-rhythm-stroke-risk-2A",
+        "targetQuestions": 7,
+        "generated": 7,
+        "gap": 0,
+        "note": "Question np-p2-094 contains a complex answer rationale note about TEE-guided vs 3-week strategy — both B and D are guideline-acceptable approaches; the question is flagged for potential editorial review to ensure answer key clarity."
+      },
+      {
+        "slug": "copd-gold-staging-inhaler-selection",
+        "targetQuestions": 14,
+        "generated": 14,
+        "gap": 0,
+        "saturatedClusters": [
+          "GOLD staging framework — 2 questions (np-p2-143, np-p2-149)",
+          "ICS indication (eosinophils) — 2 questions (np-p2-144, np-p2-154)",
+          "Exacerbation management — 2 questions (np-p2-150, np-p2-151)"
+        ],
+        "note": "COPD topic is at saturation for primary care NP scope. Phase 3 would need different anchors (pulmonary rehabilitation details, NIV settings, palliative specifics) to avoid duplication."
+      }
+    ],
+    "saturationPoints": [
+      {
+        "slug": "heart-failure-gdmt-primary-care",
+        "note": "14 questions fully cover phenotype classification, four GDMT pillars, ARNi washout, evidence-based BB, MRA contraindications, SGLT-2 for HF. Additional questions in Phase 3 would need to focus on device therapy indications (CRT, ICD) or advanced heart failure (inotrope support, transplant evaluation) to avoid re-testing same prescribing concepts."
+      },
+      {
+        "slug": "hypertension-step-therapy-guideline",
+        "note": "14 questions cover first-line by race/comorbidity, ACEi cough switch, pregnancy contraindication, CCB edema, step therapy, resistant HTN, NSAID-induced HTN, CKD/DM special populations, post-stroke secondary prevention, thiazide-gout management. At high saturation for primary care ambulatory scope."
+      },
+      {
+        "slug": "anemia-workup-treatment-types",
+        "note": "12 questions cover IDA (alternate-day dosing), B12 deficiency with neuropathy, mixed anemia differential, G6PD, TTP, warm AIHA, sickle cell ACS, ACD vs IDA, pernicious anemia post-gastrectomy, sideroblastic/lead poisoning, phenytoin-folate, normocytic mixed anemia. At full saturation for primary care scope. Phase 3 would need to expand into bone marrow biopsy-level differentiation (beyond NP primary care scope) or polycythemia vera."
+      },
+      {
+        "slug": "thyroid-disease-diagnosis-management",
+        "note": "12 questions cover TSH interpretation, subclinical hypothyroidism thresholds, Graves vs Hashimoto, nodule FNAB indications, central hypothyroidism, overtreatment AF risk, depression-thyroid intersection, calcium absorption interaction, cardiac dosing, pregnancy increase, rifampin CYP induction, PPI absorption, brand-to-generic switch. At saturation for outpatient NP scope."
+      }
+    ],
+    "topicsNotCoveredInPhase2": [
+      {
+        "slug": "glp1-sglt2-comorbidity-selection",
+        "reason": "SF-01 slugB — GLP-1/SGLT-2 mechanism, cardiorenal trial data (EMPA-REG, LEADER, CREDENCE, SUSTAIN, REWIND), and comorbidity-specific selection are scoped to this separate lesson. Planned for Phase 3 Prescribing & Advanced Pharmacology domain.",
+        "phase3Priority": "HIGH"
+      },
+      {
+        "slug": "medication-dose-adjustment-ckd",
+        "reason": "SF-03 slugB — Cockcroft-Gault calculations, antibiotic dose adjustments by eGFR, DOAC dose tables, opioid adjustment. Planned for Phase 3.",
+        "phase3Priority": "HIGH"
+      },
+      {
+        "slug": "antidepressant-selection-ssri-snri",
+        "reason": "SF-04 slugB — SSRI/SNRI selection, titration, augmentation, discontinuation syndrome. Planned for Phase 3 Mental Health Prescribing domain.",
+        "phase3Priority": "HIGH"
+      },
+      {
+        "slug": "ace-arb-arni-indications-monitoring",
+        "reason": "SF-06 cross-topic fence — drug-specific monitoring, pharmacokinetics, and AE management for ACEi/ARB/ARNi at the agent level. Phase 2 HF questions test the DECISION of which class to add; Phase 3 Prescribing would test AE management per individual drug.",
+        "phase3Priority": "MEDIUM"
+      },
+      {
+        "slug": "antibiotic-stewardship-outpatient",
+        "reason": "Identified in Phase 1 readiness report as Phase 2 Prescribing domain. Covered in Phase 1 readiness report's phase2ExecutionOrder. Planned for Phase 3 given the Prescribing & Advanced Pharmacology domain is not the primary focus of Phase 2 as defined by user prompt.",
+        "phase3Priority": "HIGH"
+      },
+      {
+        "slug": "doac-selection-monitoring-reversal",
+        "reason": "Partially covered in afib-rate-rhythm-stroke-risk-2A (anticoagulation decision, DOAC selection, reversal agents, cardioversion protocol). Full prescribing-level detail (dose adjustment by renal function, drug interactions by DOAC class, perioperative management) reserved for Phase 3 Prescribing domain.",
+        "phase3Priority": "MEDIUM"
+      },
+      {
+        "slug": "high-alert-medications-primary-care",
+        "reason": "Identified in Phase 1 execution order. Was not part of the user-defined Phase 2 scope (Red Flags & Safety + Core CDM). Planned as a dedicated Phase 3 Safety topic.",
+        "phase3Priority": "HIGH"
+      }
+    ]
+  },
+
+  "scopeFenceUpdates": {
+    "SF05": {
+      "addedDate": "2026-04-11",
+      "slugA": "hypertension-red-flags-referral",
+      "slugB": "hypertension-step-therapy-guideline",
+      "boundary": "HTN staging/urgency recognition vs drug class selection and step therapy",
+      "status": "PERSISTED in np-scope-fences.json"
+    },
+    "SF06": {
+      "addedDate": "2026-04-11",
+      "slugA": "heart-failure-gdmt-primary-care lessonPart 2A",
+      "slugB": "heart-failure-gdmt-primary-care lessonPart 2B",
+      "crossTopicFence": "ace-arb-arni-indications-monitoring",
+      "boundary": "HF phenotype classification/BNP/NYHA vs four-pillar GDMT drug decisions",
+      "status": "PERSISTED in np-scope-fences.json"
+    }
+  },
+
+  "phase3ReadinessVerdict": {
+    "verdict": "PHASE 3 READY",
+    "conditions": [
+      {
+        "conditionId": "P3-C1",
+        "description": "Phase 1 Phase 2 combined inventory integrity",
+        "check": "Phase 1 (133 questions, np-p1-001 to np-p1-133) + Phase 2 (178 questions, np-p2-001 to np-p2-178) = 311 total NP-level questions with no ID gaps or duplicates",
+        "status": "PASS"
+      },
+      {
+        "conditionId": "P3-C2",
+        "description": "All 6 scope fences active and validated",
+        "check": "SF-01 through SF-06 all represented in np-scope-fences.json; Phase 2 questions were generated with all fences enforced; zero violations detected",
+        "status": "PASS"
+      },
+      {
+        "conditionId": "P3-C3",
+        "description": "Recognition vs management boundary preserved",
+        "check": "Phase 1 lessons/questions test RECOGNITION and DIFFERENTIAL REASONING. Phase 2 2A RF&S questions test recognition + disposition actions. Phase 2 CDM 2A/2B lessons maintain phenotype recognition vs pharmacotherapy separation per SF-06 template. Management prescribing questions live exclusively in Phase 2 CDM.",
+        "status": "PASS"
+      },
+      {
+        "conditionId": "P3-C4",
+        "description": "Difficulty policy maintained",
+        "check": "All 178 Phase 2 questions are hard or expert. Zero medium difficulty questions were generated.",
+        "status": "PASS"
+      },
+      {
+        "conditionId": "P3-C5",
+        "description": "TopicSlug integrity",
+        "check": "All Phase 2 question topicSlug values match corresponding lesson outlines in np-phase2-lesson-outlines.json. No new slugs introduced that are not in the blueprint.",
+        "status": "PASS"
+      },
+      {
+        "conditionId": "P3-C6",
+        "description": "Phase 1 shortfall questions from np-phase1-finalization ADJ-01",
+        "check": "ADJ-01 identified 14 shortfall questions across 6 Phase 1 topics. These have NOT yet been generated in this session. They remain outstanding from the Phase 1 contract.",
+        "status": "OUTSTANDING — must be completed before or concurrent with Phase 3 launch",
+        "action": "Generate 14 Phase 1 shortfall questions (np-p1-134 to np-p1-147) for: chest-pain-differential-primary-care, headache-differential-red-flags, knee-pain-differential, rash-differential-primary-care, flank-pain-differential-uti-stones-pyelo, syncope-differential-vasovagal-cardiac-neuro"
+      },
+      {
+        "conditionId": "P3-C7",
+        "description": "Slug consistency check (ADJ-02 from Phase 1 finalization)",
+        "check": "ADJ-02 flagged potential slug inconsistency for rash topic between outlines and expansion plan. This was a low-priority Phase 1 housekeeping item that has not yet been formally resolved.",
+        "status": "OUTSTANDING — low priority; can trail Phase 3 launch",
+        "action": "Verify rash-differential-primary-care slug consistency across np-phase1-lesson-outlines.json, np-phase1-questions-part1.json, and blueprint"
+      }
+    ],
+    "phase3RecommendedTopics": {
+      "PrescribingAndAdvancedPharmacology": [
+        {
+          "slug": "glp1-sglt2-comorbidity-selection",
+          "priority": "HIGH",
+          "rationale": "SF-01 slugB — most clinically impactful prescribing lesson; GLP-1 RAs (semaglutide, liraglutide, dulaglutide) and SGLT-2 inhibitors (empagliflozin, dapagliflozin, canagliflozin) with cardiorenal trial integration by comorbidity"
+        },
+        {
+          "slug": "antibiotic-stewardship-outpatient",
+          "priority": "HIGH",
+          "rationale": "CAP, SSTI, UTI, sinusitis, pharyngitis antibiotic selection with resistance stewardship principles; CURB-65, Centor/McIsaac guideline application"
+        },
+        {
+          "slug": "high-alert-medications-primary-care",
+          "priority": "HIGH",
+          "rationale": "Warfarin, insulin, digoxin, lithium, phenytoin — ISMP high-alert medication prescribing safety; narrow therapeutic index monitoring; drug-drug interactions"
+        },
+        {
+          "slug": "medication-dose-adjustment-ckd",
+          "priority": "HIGH",
+          "rationale": "SF-03 slugB — Cockcroft-Gault calculations; antibiotic dose adjustment by eGFR; DOAC dose tables in CKD; opioid adjustment; metformin rules"
+        },
+        {
+          "slug": "antidepressant-selection-ssri-snri",
+          "priority": "HIGH",
+          "rationale": "SF-04 slugB — SSRI/SNRI selection by patient profile (side effect profile, drug interactions, special populations); augmentation strategies; discontinuation syndrome"
+        },
+        {
+          "slug": "doac-selection-monitoring-reversal",
+          "priority": "MEDIUM",
+          "rationale": "Expand beyond AF-specific DOAC content from Phase 2 — VTE prophylaxis, PE/DVT treatment, drug interactions per DOAC (P-gp, CYP3A4), perioperative management tables"
+        }
+      ],
+      "AcutePrimaryCareAndUrgentCare": [
+        {
+          "slug": "cap-risk-stratification-antibiotic-admission",
+          "priority": "HIGH",
+          "rationale": "CAP CURB-65 risk stratification, antibiotic selection by severity and outpatient vs inpatient, atypical coverage"
+        },
+        {
+          "slug": "uti-management-uncomplicated-complicated",
+          "priority": "HIGH",
+          "rationale": "UTI antibiotic selection, complicated vs uncomplicated, catheter-associated, recurrent UTI prevention, Foley management"
+        }
+      ],
+      "MentalHealthPrescribing": [
+        {
+          "slug": "antidepressant-selection-ssri-snri",
+          "priority": "HIGH",
+          "rationale": "Phase 3 dedicated antidepressant prescribing lesson — SSRI vs SNRI vs atypicals by comorbidity and patient profile"
+        }
+      ]
+    },
+    "summaryStatement": "Phase 2 is complete with 178 questions across 16 topic-lesson-parts in two domains (Red Flags & Safety: 62 questions; Core Chronic Disease Management: 116 questions). All 6 scope fences (SF-01 through SF-06) are active and validated with zero violations. All Phase 2 questions are hard or expert difficulty. No duplicate stems were detected against Phase 1 inventory. The recognition-vs-management separation established in Phase 1 is maintained and extended by the SF-06 lesson-part-level boundary within heart-failure-gdmt-primary-care. Outstanding pre-Phase-3 items: (1) 14 Phase 1 shortfall questions (ADJ-01) remain ungenerated — these should be completed before Phase 3 launch; (2) Slug consistency check (ADJ-02) is low priority and can trail Phase 3. Phase 3 is recommended to begin with the Prescribing & Advanced Pharmacology domain, prioritizing GLP-1/SGLT-2 comorbidity selection (SF-01 slugB), antibiotic stewardship, high-alert medications, and medication dose adjustment in CKD (SF-03 slugB)."
+  }
+}

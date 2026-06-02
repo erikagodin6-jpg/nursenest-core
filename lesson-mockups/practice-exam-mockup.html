@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NurseNest Practice Exam — Mockups</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;background:#1e293b}
+button{font-family:inherit}svg{display:block;flex-shrink:0}
+
+/* Chrome */
+.chrome{background:#0a0f1a;padding:10px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;border-bottom:1px solid #1e293b}
+.chrome-title{font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.08em;text-transform:uppercase}
+.tabs{background:#0f1623;padding:0 22px 0;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;position:sticky;top:40px;z-index:299;padding-top:7px}
+.tabs::-webkit-scrollbar{display:none}
+.tsep{width:1px;height:13px;background:#1e293b;margin:0 5px 7px;align-self:center}
+.tab{padding:5px 12px 7px;font-size:10px;font-weight:600;color:#475569;border-radius:4px 4px 0 0;cursor:pointer;white-space:nowrap;font-family:inherit;background:transparent;border:none}
+.tab.on{color:#0f172a;background:white;font-weight:700}
+.tg{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#334155;padding:7px 5px 0;align-self:flex-start}
+
+.frame{display:none;width:1440px;height:900px;overflow:hidden;position:relative}
+.frame.mob{width:390px;height:844px}
+.frame.on{display:block}
+
+/* ═══ TOKEN SETS ══════════════════════════════════════════════════ */
+.oc{
+  --bg:#f0f5fa;--surf:#fff;--panel:#f7fafd;--panel2:#eef4fa;
+  --bdr:rgba(180,218,240,.7);--bdr2:rgba(140,196,228,.8);--div:rgba(180,218,240,.4);
+  --muted:#647894;--subtle:#94a3b8;
+  --acc:#1aaee0;--acc-d:#0d7aaa;--acc-s:rgba(13,122,170,.07);
+  --sel-bg:rgba(13,122,170,.07);--sel-bdr:#0d7aaa;
+  --nav:#fff;--nav-bdr:rgba(180,218,240,.8);--nav-sh:0 1px 0 rgba(0,0,0,.04),0 4px 12px -6px rgba(6,88,140,.08);
+  --bot:#fff;--bot-bdr:rgba(180,218,240,.8);--bot-sh:0 -1px 0 rgba(0,0,0,.03),0 -8px 24px -12px rgba(6,88,140,.06);
+  --txt:#0f172a;--txt2:#455569;--muted2:#647894;
+  --ok:#16a34a;--ok-bg:rgba(22,163,74,.08);--ok-bdr:rgba(22,163,74,.28);
+  --err:#dc2626;--err-bg:rgba(220,38,38,.07);--err-bdr:rgba(220,38,38,.25);
+  --warn:#d97706;
+  --lbg:#f1f5f9;--lfg:#647894;--lsel:#0d7aaa;--lself:#fff;
+  --chip-bg:rgba(13,122,170,.09);--chip-bdr:rgba(13,122,170,.22);--chip-fg:#0d7aaa;
+  --sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(6,88,140,.07);
+  --prog-t:rgba(180,218,240,.4);--prog-f:#1aaee0;
+  /* practice-specific */
+  --rat-bg:#f8fcff;--rat-bdr:rgba(180,218,240,.6);
+  --rat-ok-bg:rgba(22,163,74,.05);--rat-ok-bdr:rgba(22,163,74,.2);
+  --rat-err-bg:rgba(220,38,38,.05);--rat-err-bdr:rgba(220,38,38,.18);
+  --rat-muted-bg:#f7fafd;--rat-muted-bdr:rgba(180,218,240,.5);
+  --full-rat-bg:#f4f8fc;--full-rat-bdr:rgba(180,218,240,.7);
+}
+.mn{
+  --bg:#07111f;--surf:#111827;--panel:#0d1826;--panel2:#152032;
+  --bdr:rgba(49,68,102,.85);--bdr2:rgba(56,189,248,.22);--div:rgba(49,68,102,.5);
+  --muted:#5e7a98;--subtle:#47607c;
+  --acc:#38bdf8;--acc-d:#0ea5e9;--acc-s:rgba(56,189,248,.08);
+  --sel-bg:rgba(56,189,248,.1);--sel-bdr:#38bdf8;
+  --nav:#0b1220;--nav-bdr:rgba(49,68,102,.9);--nav-sh:0 1px 0 rgba(0,0,0,.25),0 4px 16px -6px rgba(0,0,0,.35);
+  --bot:#0b1220;--bot-bdr:rgba(49,68,102,.9);--bot-sh:0 -1px 0 rgba(0,0,0,.2),0 -8px 24px -12px rgba(0,0,0,.4);
+  --txt:#f0f6ff;--txt2:#c8d8ed;--muted2:#5e7a98;
+  --ok:#34d399;--ok-bg:rgba(52,211,153,.1);--ok-bdr:rgba(52,211,153,.3);
+  --err:#f87171;--err-bg:rgba(248,113,113,.1);--err-bdr:rgba(248,113,113,.28);
+  --warn:#fbbf24;
+  --lbg:#1e2d42;--lfg:#5e7a98;--lsel:#38bdf8;--lself:#07111f;
+  --chip-bg:rgba(56,189,248,.12);--chip-bdr:rgba(56,189,248,.25);--chip-fg:#7dd3fc;
+  --sh:0 2px 0 rgba(0,0,0,.2),0 6px 24px -10px rgba(0,0,0,.35);
+  --prog-t:rgba(49,68,102,.55);--prog-f:#38bdf8;
+  --rat-bg:#0f1c2e;--rat-bdr:rgba(49,68,102,.7);
+  --rat-ok-bg:rgba(52,211,153,.08);--rat-ok-bdr:rgba(52,211,153,.22);
+  --rat-err-bg:rgba(248,113,113,.08);--rat-err-bdr:rgba(248,113,113,.2);
+  --rat-muted-bg:#0d1826;--rat-muted-bdr:rgba(49,68,102,.6);
+  --full-rat-bg:#0d1826;--full-rat-bdr:rgba(49,68,102,.8);
+}
+
+/* ═══ SHELL ══════════════════════════════════════════════════════ */
+.cat{display:flex;flex-direction:column;background:var(--bg);height:900px;width:1440px;overflow:hidden}
+.cat.mob{height:844px;width:390px}
+
+/* TOP BAR — pixel-identical to CAT v2 */
+.tb{height:48px;flex-shrink:0;background:var(--nav);border-bottom:1px solid var(--nav-bdr);box-shadow:var(--nav-sh);display:flex;align-items:center;padding:0 24px;gap:0;position:relative;z-index:10}
+.tb-brand{font-size:14px;font-weight:800;letter-spacing:-.03em;color:var(--txt)}
+.tb-dot{color:var(--acc)}
+.tb-chip{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:4px;margin-left:10px;background:var(--chip-bg);border:1px solid var(--chip-bdr);color:var(--chip-fg)}
+/* Practice chip uses a slightly softer green tint to distinguish from CAT */
+.tb-chip-practice{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:4px;margin-left:10px;background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.25);color:#15803d}
+.tb-pulse{display:flex;align-items:center;gap:4px;font-size:9px;font-weight:600;letter-spacing:.05em;color:var(--muted);margin-left:10px}
+.tb-pulse-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 2.5px rgba(34,197,94,.18)}
+.tb-center{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px}
+.tb-qn{font-size:13px;font-weight:700;color:var(--txt);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.tb-of{font-size:13px;color:var(--muted);font-weight:400}
+.tb-prog{width:100px;height:3px;border-radius:99px;background:var(--prog-t);overflow:hidden}
+.tb-pfill{height:100%;border-radius:99px;background:var(--prog-f);transition:width .4s ease}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:4px}
+.tb-timer{font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.04em;color:var(--txt);padding:5px 10px;border-radius:7px;background:var(--panel);border:1px solid var(--bdr);margin-right:6px}
+.tb-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid transparent;cursor:pointer;transition:.12s}
+.tb-ico:hover{background:var(--panel);border-color:var(--bdr)}
+.tb-ico svg{stroke:var(--muted)}
+.tb-sep{width:1px;height:16px;background:var(--bdr);margin:0 3px}
+.tb-exit{font-size:11px;font-weight:600;color:var(--muted);padding:5px 10px;border-radius:6px;border:1px solid var(--bdr);background:transparent;cursor:pointer;transition:.12s;margin-left:4px}
+
+/* BODY */
+.body{flex:1;display:flex;min-height:0;overflow:hidden}
+
+/* QUESTION CANVAS */
+.qcanvas{flex:1;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:28px 48px;gap:0}
+.qwrap{width:100%;max-width:720px;display:flex;flex-direction:column;gap:14px}
+
+/* QUESTION CARD — identical to CAT */
+.qcard{background:var(--surf);border:1px solid var(--bdr);border-radius:18px;padding:30px 32px;box-shadow:var(--sh)}
+.qhead{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--div);margin-bottom:20px}
+.qmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.qpill{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--chip-fg);background:var(--chip-bg);border:1px solid var(--chip-bdr);padding:3px 10px;border-radius:5px}
+.qdiff{display:flex;gap:2px;align-items:center}
+.qpip{width:7px;height:7px;border-radius:2px}
+.qpip.f{background:var(--acc)}
+.qpip.e{background:var(--bdr2);opacity:.3}
+.qflag{width:30px;height:30px;border-radius:7px;background:transparent;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.qflag svg{stroke:var(--muted)}
+
+.stem{font-size:16px;line-height:1.78;letter-spacing:-.015em;color:var(--txt);font-weight:400;max-width:66ch}
+.stem strong{font-weight:700}
+
+/* OPTIONS — identical structure to CAT */
+.opts{display:flex;flex-direction:column;gap:9px;margin-top:22px}
+.opt{display:flex;flex-direction:column;border:1.5px solid var(--bdr);border-radius:13px;cursor:pointer;background:var(--surf);transition:border-color .12s,background .12s,box-shadow .12s;position:relative;overflow:hidden}
+.opt::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;border-radius:13px 0 0 13px;background:var(--sel-bdr);transition:width .12s ease}
+.opt-row{display:flex;align-items:flex-start;gap:14px;padding:15px 18px}
+.opt:hover{border-color:var(--bdr2);background:var(--panel)}
+.opt.sel{border-color:var(--sel-bdr);background:var(--sel-bg)}
+.opt.sel::before{width:4px}
+.opt.ok{border-color:var(--ok-bdr);background:var(--ok-bg)}
+.opt.ok::before{width:4px;background:var(--ok)}
+.opt.err{border-color:var(--err-bdr);background:var(--err-bg)}
+.opt.err::before{width:4px;background:var(--err)}
+.opt.dim{opacity:.45;pointer-events:none}
+.opt.dim::before{width:0}
+.oletter{width:26px;height:26px;border-radius:6px;background:var(--lbg);color:var(--lfg);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:.12s}
+.opt.sel .oletter{background:var(--lsel);color:var(--lself)}
+.opt.ok .oletter{background:var(--ok);color:#fff}
+.opt.err .oletter{background:var(--err);color:#fff}
+.otext{font-size:14px;color:var(--txt2);line-height:1.58;flex:1}
+.opt.sel .otext{color:var(--txt);font-weight:500}
+.opt.ok .otext{color:var(--txt)}
+.opt.err .otext{color:var(--txt)}
+
+/* ═══════════════════════════════════════════════
+   PRACTICE-ONLY: Per-option rationale panels
+   These appear BELOW each option row after submit.
+   Same border-radius as option, no new card chrome.
+   ═══════════════════════════════════════════════ */
+.opt-rationale{
+  display:none;
+  padding:10px 18px 13px 58px; /* left-aligns with option text (26px letter + 14px gap + 18px card-pad) */
+  font-size:12.5px;line-height:1.62;
+  color:var(--muted);
+  border-top:1px solid var(--div);
+}
+.opt-rationale.show{display:block}
+.opt.ok .opt-rationale{color:color-mix(in srgb,var(--ok) 65%,var(--txt2));border-top-color:var(--rat-ok-bdr);background:var(--rat-ok-bg)}
+.opt.err .opt-rationale{color:color-mix(in srgb,var(--err) 55%,var(--txt2));border-top-color:var(--rat-err-bdr);background:var(--rat-err-bg)}
+.opt.dim .opt-rationale{color:var(--subtle)}
+.rat-icon{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px}
+.rat-icon.ok{color:var(--ok)}
+.rat-icon.err{color:var(--err)}
+.rat-icon.neutral{color:var(--subtle)}
+
+/* ═══════════════════════════════════════════════
+   PRACTICE-ONLY: Full clinical rationale block
+   Appears below all options. Same border, same surface.
+   ═══════════════════════════════════════════════ */
+.full-rat{
+  display:none;
+  background:var(--full-rat-bg);
+  border:1px solid var(--full-rat-bdr);
+  border-radius:13px;
+  padding:18px 20px;
+  margin-top:4px;
+}
+.full-rat.show{display:block}
+.full-rat-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.full-rat-badge{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ok);background:var(--ok-bg);border:1px solid var(--ok-bdr);padding:2px 8px;border-radius:4px}
+.full-rat-title{font-size:11.5px;font-weight:700;color:var(--txt)}
+.full-rat-body{font-size:13px;color:var(--txt2);line-height:1.68}
+.full-rat-body p+p{margin-top:8px}
+.full-rat-strategy{margin-top:12px;padding-top:10px;border-top:1px solid var(--div);display:flex;align-items:flex-start;gap:8px}
+.full-rat-strategy-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);white-space:nowrap;padding-top:2px;flex-shrink:0}
+.full-rat-strategy-text{font-size:12px;color:var(--muted);line-height:1.55}
+
+/* BOTTOM BAR — pixel-identical to CAT */
+.bot{height:60px;flex-shrink:0;background:var(--bot);border-top:1px solid var(--bot-bdr);box-shadow:var(--bot-sh);display:flex;align-items:center;padding:0 36px;justify-content:space-between;gap:16px}
+.bot-l{display:flex;align-items:center;gap:8px}
+.bot-r{display:flex;align-items:center;gap:8px}
+.btn-ghost{font-size:13px;font-weight:600;color:var(--muted);background:transparent;border:1px solid var(--bdr);padding:8px 18px;border-radius:9px;cursor:pointer;transition:.12s;display:flex;align-items:center;gap:6px}
+.btn-ghost:hover{color:var(--txt);background:var(--panel);border-color:var(--bdr2)}
+.btn-flag{font-size:12.5px;font-weight:600;color:var(--muted);background:transparent;border:1px solid var(--bdr);padding:7px 14px;border-radius:9px;cursor:pointer;transition:.12s;display:flex;align-items:center;gap:5px}
+.btn-flag svg{stroke:var(--muted)}
+.btn-primary{font-size:13px;font-weight:700;color:#fff;background:var(--acc-d);padding:9px 24px;border-radius:9px;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 1px 0 rgba(0,0,0,.1),0 4px 12px -4px rgba(13,122,170,.28);transition:.12s}
+.mn .btn-primary{background:var(--acc);color:#07111f;box-shadow:0 1px 0 rgba(0,0,0,.15),0 4px 14px -4px rgba(56,189,248,.32)}
+.btn-primary:hover{opacity:.9}
+.kbd{font-size:9.5px;font-weight:600;background:var(--panel);border:1px solid var(--bdr);border-bottom-width:2px;padding:1px 5px;border-radius:4px;color:var(--muted);font-family:monospace}
+.kbhint{font-size:10.5px;color:var(--subtle);display:flex;align-items:center;gap:3px}
+
+/* ═══ PRACTICE MODE: bottom bar post-submit variant ═══ */
+.btn-continue{font-size:13px;font-weight:700;color:#fff;background:var(--ok);padding:9px 24px;border-radius:9px;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 1px 0 rgba(0,0,0,.1),0 4px 12px -4px rgba(22,163,74,.3);transition:.12s}
+.mn .btn-continue{color:#fff}
+.bot-session-count{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* MOBILE overrides */
+.mob .tb{height:44px;padding:0 12px}
+.mob .tb-brand{font-size:13px}
+.mob .qcanvas{padding:14px 12px}
+.mob .qcard{padding:18px 16px}
+.mob .stem{font-size:15px}
+.mob .opts{gap:7px;margin-top:18px}
+.mob .opt-row{padding:12px 14px;gap:10px}
+.mob .otext{font-size:13px}
+.mob .opt-rationale{padding:9px 14px 11px 50px;font-size:12px}
+.mob .bot{height:56px;padding:0 10px;gap:6px}
+.mob .btn-ghost{padding:8px 12px;font-size:12px}
+.mob .btn-primary,.mob .btn-continue{padding:9px 16px;font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="chrome">
+  <span class="chrome-title">NurseNest Practice Exam — 6 Mockups · CAT shell + teaching layer</span>
+</div>
+<div class="tabs">
+  <span class="tg">OCEAN</span>
+  <button class="tab on" onclick="s(0)">1 Active (pre-submit)</button>
+  <button class="tab" onclick="s(1)">2 Correct answer</button>
+  <button class="tab" onclick="s(2)">3 Wrong answer</button>
+  <button class="tab" onclick="s(3)">4 SATA post-submit</button>
+  <div class="tsep"></div>
+  <span class="tg">MIDNIGHT</span>
+  <button class="tab" onclick="s(4)">5 Midnight post-submit</button>
+  <div class="tsep"></div>
+  <span class="tg">MOBILE</span>
+  <button class="tab" onclick="s(5)">6 Mobile post-submit</button>
+</div>
+
+<!-- ══ FRAME 1 · Ocean · Active (pre-submit) — IDENTICAL to CAT ══ -->
+<div class="frame" id="f0">
+<div class="cat oc">
+  <header class="tb">
+    <span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span>
+    <span class="tb-chip-practice">Practice</span>
+    <span class="tb-pulse"><span class="tb-pulse-dot"></span>Tutor mode</span>
+    <div class="tb-center">
+      <span class="tb-qn">Question 12</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">40</span>
+      <div class="tb-prog"><div class="tb-pfill" style="width:30%"></div></div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-timer">00:18:42</div>
+      <button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+      <div class="tb-sep"></div>
+      <button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></button>
+      <button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></button>
+      <div class="tb-sep"></div>
+      <button class="tb-exit">End Session</button>
+    </div>
+  </header>
+  <div class="body">
+    <div class="qcanvas">
+      <div class="qwrap">
+        <div class="qcard">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="qpill">Cardiovascular &amp; Oxygenation</span>
+              <div class="qdiff"><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip e"></div></div>
+              <span style="font-size:10.5px;color:var(--muted)">Hard</span>
+            </div>
+            <button class="qflag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+          </div>
+          <p class="stem">A <strong>68-year-old client</strong> is admitted to the cardiac step-down unit with an acute heart failure exacerbation. Assessment: HR 104 bpm, BP 158/92 mmHg, RR 22/min, SpO₂ 92% on room air, bilateral crackles to mid-lung fields, 2+ pitting edema bilateral lower extremities, and jugular venous distension. Current medications include lisinopril 10 mg daily and metoprolol 25 mg twice daily. The provider has been notified. <strong>Which action should the nurse implement FIRST?</strong></p>
+          <div class="opts" role="radiogroup">
+            <div class="opt"><div class="opt-row"><span class="oletter">A</span><span class="otext">Administer furosemide 40 mg IV as ordered to relieve acute volume overload</span></div></div>
+            <div class="opt sel"><div class="opt-row"><span class="oletter">B</span><span class="otext">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span></div></div>
+            <div class="opt"><div class="opt-row"><span class="oletter">C</span><span class="otext">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span></div></div>
+            <div class="opt"><div class="opt-row"><span class="oletter">D</span><span class="otext">Increase the IV infusion rate to 125 mL/hr to maintain adequate preload and cardiac output</span></div></div>
+          </div>
+        </div>
+        <!-- No rationale visible yet — identical to CAT -->
+      </div>
+    </div>
+  </div>
+  <footer class="bot">
+    <div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div class="kbhint"><span class="kbd">A–D</span>&nbsp;select&nbsp;·&nbsp;<span class="kbd">Enter</span>&nbsp;submit</div>
+    <div class="bot-r">
+      <button class="btn-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Mark for Review</button>
+      <button class="btn-primary">Submit Answer <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button>
+    </div>
+  </footer>
+</div>
+</div>
+
+<!-- ══ FRAME 2 · Ocean · Post-submit CORRECT — teaching layer ══ -->
+<div class="frame" id="f1">
+<div class="cat oc">
+  <header class="tb">
+    <span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span>
+    <span class="tb-chip-practice">Practice</span>
+    <span style="font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ok);background:var(--ok-bg);border:1px solid var(--ok-bdr);padding:2px 8px;border-radius:4px;margin-left:8px;display:flex;align-items:center;gap:4px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Correct</span>
+    <div class="tb-center">
+      <span class="tb-qn">Question 12</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">40</span>
+      <div class="tb-prog"><div class="tb-pfill" style="width:30%"></div></div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-timer" style="color:var(--muted);background:none;border:none;font-size:11px;font-weight:500">Reviewed</div>
+      <div class="tb-sep"></div>
+      <button class="tb-exit">End Session</button>
+    </div>
+  </header>
+  <div class="body">
+    <div class="qcanvas" style="padding-top:22px">
+      <div class="qwrap">
+        <div class="qcard">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="qpill">Cardiovascular &amp; Oxygenation</span>
+              <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ok);font-weight:600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>Correct · Hard</span>
+            </div>
+            <span style="font-size:10.5px;color:var(--subtle)">Item 12</span>
+          </div>
+          <p class="stem">A <strong>68-year-old client</strong> is admitted with acute heart failure exacerbation. Assessment: HR 104, BP 158/92, SpO₂ 92% on room air, bilateral crackles, 2+ pitting edema, JVD. <strong>Which action should the nurse implement FIRST?</strong></p>
+          <div class="opts" style="margin-top:20px">
+
+            <!-- Option A: wrong, dim — with brief rationale -->
+            <div class="opt dim">
+              <div class="opt-row"><span class="oletter">A</span><span class="otext">Administer furosemide 40 mg IV as ordered to relieve acute volume overload</span></div>
+              <div class="opt-rationale show">
+                <div class="rat-icon neutral"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Why not A</div>
+                Furosemide is appropriate but not the priority. Address airway and oxygenation (SpO₂ 92%) before pharmacological diuresis.
+              </div>
+            </div>
+
+            <!-- Option B: correct, selected — with brief rationale -->
+            <div class="opt ok">
+              <div class="opt-row">
+                <span class="oletter">B</span>
+                <span class="otext">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
+              </div>
+              <div class="opt-rationale show">
+                <div class="rat-icon ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Correct answer</div>
+                High-Fowler's reduces venous return and preload, directly relieving pulmonary congestion. Supplemental O₂ corrects the SpO₂ of 92%. ABCs: airway/breathing precede pharmacology.
+              </div>
+            </div>
+
+            <!-- Option C: wrong, dim — with brief rationale -->
+            <div class="opt dim">
+              <div class="opt-row"><span class="oletter">C</span><span class="otext">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span></div>
+              <div class="opt-rationale show">
+                <div class="rat-icon neutral"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Why not C</div>
+                Cardiac rhythm assessment is secondary. The immediate priority is hypoxemia and hemodynamic stabilization, not documentation.
+              </div>
+            </div>
+
+            <!-- Option D: wrong, dim — with brief rationale -->
+            <div class="opt dim">
+              <div class="opt-row"><span class="oletter">D</span><span class="otext">Increase the IV infusion rate to 125 mL/hr to maintain adequate preload and cardiac output</span></div>
+              <div class="opt-rationale show">
+                <div class="rat-icon neutral"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Why not D</div>
+                Contraindicated. This client has fluid overload — increasing IV fluids worsens pulmonary edema and dyspnea.
+              </div>
+            </div>
+          </div>
+
+          <!-- Full clinical rationale -->
+          <div class="full-rat show" style="margin-top:12px">
+            <div class="full-rat-header">
+              <span class="full-rat-badge">Clinical Rationale</span>
+              <span class="full-rat-title">Airway &amp; Breathing Priority in Acute HF</span>
+            </div>
+            <div class="full-rat-body">
+              <p>In acute heart failure exacerbation with SpO₂ 92%, positioning and oxygenation are the immediate priorities. High-Fowler's (60–90°) reduces venous return to the right heart, decreasing preload and relieving pulmonary congestion. Supplemental oxygen at 2–4 L/min targets SpO₂ ≥ 94%.</p>
+              <p>Furosemide, while indicated, acts over 30–60 minutes and follows immediate airway stabilization. A 12-lead ECG and IV rate adjustment are appropriate later in the care sequence.</p>
+            </div>
+            <div class="full-rat-strategy">
+              <span class="full-rat-strategy-label">NCLEX Strategy</span>
+              <span class="full-rat-strategy-text">Apply the ABCs (Airway → Breathing → Circulation) and Maslow's hierarchy. Physiological needs, especially oxygenation, precede pharmacological intervention in priority questions.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="bot">
+    <div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <span class="bot-session-count">12 of 40 · 11 correct · 1 incorrect</span>
+    <div class="bot-r"><button class="btn-continue">Next Question <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- ══ FRAME 3 · Ocean · Post-submit WRONG ANSWER ══ -->
+<div class="frame" id="f2">
+<div class="cat oc">
+  <header class="tb">
+    <span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span>
+    <span class="tb-chip-practice">Practice</span>
+    <span style="font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--err);background:var(--err-bg);border:1px solid var(--err-bdr);padding:2px 8px;border-radius:4px;margin-left:8px;display:flex;align-items:center;gap:4px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Incorrect</span>
+    <div class="tb-center">
+      <span class="tb-qn">Question 12</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">40</span>
+      <div class="tb-prog"><div class="tb-pfill" style="width:30%"></div></div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-timer" style="color:var(--muted);background:none;border:none;font-size:11px;font-weight:500">Reviewed</div>
+      <div class="tb-sep"></div>
+      <button class="tb-exit">End Session</button>
+    </div>
+  </header>
+  <div class="body">
+    <div class="qcanvas" style="padding-top:22px">
+      <div class="qwrap">
+        <div class="qcard">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="qpill">Cardiovascular &amp; Oxygenation</span>
+              <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--err);font-weight:600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Incorrect · Hard</span>
+            </div>
+            <span style="font-size:10.5px;color:var(--subtle)">Item 12</span>
+          </div>
+          <p class="stem">A <strong>68-year-old client</strong> is admitted with acute heart failure exacerbation. Assessment: HR 104, BP 158/92, SpO₂ 92% on room air, bilateral crackles, 2+ pitting edema, JVD. <strong>Which action should the nurse implement FIRST?</strong></p>
+          <div class="opts" style="margin-top:20px">
+
+            <!-- Option A: student chose this — wrong -->
+            <div class="opt err">
+              <div class="opt-row">
+                <span class="oletter">A</span>
+                <span class="otext">Administer furosemide 40 mg IV as ordered to relieve acute volume overload</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--err)" stroke-width="2.5" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              </div>
+              <div class="opt-rationale show">
+                <div class="rat-icon err"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Your answer — incorrect</div>
+                Furosemide addresses volume overload but is not the first priority. SpO₂ of 92% requires immediate oxygenation before pharmacological intervention.
+              </div>
+            </div>
+
+            <!-- Option B: correct — highlighted even though not selected -->
+            <div class="opt ok">
+              <div class="opt-row">
+                <span class="oletter">B</span>
+                <span class="otext">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
+              </div>
+              <div class="opt-rationale show">
+                <div class="rat-icon ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Correct answer</div>
+                High-Fowler's reduces preload; supplemental O₂ corrects hypoxemia. ABCs: breathing before pharmacology. This is the FIRST priority action.
+              </div>
+            </div>
+
+            <div class="opt dim">
+              <div class="opt-row"><span class="oletter">C</span><span class="otext">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span></div>
+              <div class="opt-rationale show">
+                <div class="rat-icon neutral"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Why not C</div>
+                Documentation is secondary to immediate airway and hemodynamic stabilization.
+              </div>
+            </div>
+            <div class="opt dim">
+              <div class="opt-row"><span class="oletter">D</span><span class="otext">Increase the IV infusion rate to 125 mL/hr to maintain adequate preload and cardiac output</span></div>
+              <div class="opt-rationale show">
+                <div class="rat-icon neutral"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Why not D</div>
+                Contraindicated — fluid overload is the problem. Additional IV fluids would worsen pulmonary edema.
+              </div>
+            </div>
+          </div>
+          <div class="full-rat show" style="margin-top:12px">
+            <div class="full-rat-header">
+              <span class="full-rat-badge" style="background:var(--err-bg);border-color:var(--err-bdr);color:var(--err)">Review This Concept</span>
+              <span class="full-rat-title">ABCs in Acute Heart Failure — Airway First</span>
+            </div>
+            <div class="full-rat-body">
+              <p>SpO₂ 92% indicates hypoxemia requiring immediate oxygen therapy. High-Fowler's positioning reduces venous return to the heart, directly decreasing preload and pulmonary congestion. This addresses airway and breathing before circulation (ABCs).</p>
+              <p>Furosemide is appropriate as a <em>subsequent</em> intervention after oxygenation is secured. It works over 30–60 minutes and does not address the immediate hypoxemia.</p>
+            </div>
+            <div class="full-rat-strategy">
+              <span class="full-rat-strategy-label">NCLEX Strategy</span>
+              <span class="full-rat-strategy-text">Priority questions: always apply ABCs → Maslow's → safety. "FIRST" means the action you take before calling the provider or giving medications when there's an airway/breathing concern.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="bot">
+    <div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <span class="bot-session-count">12 of 40 · 10 correct · 2 incorrect</span>
+    <div class="bot-r"><button class="btn-continue">Next Question <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- ══ FRAME 4 · Ocean · SATA post-submit ══ -->
+<div class="frame" id="f3">
+<div class="cat oc">
+  <header class="tb">
+    <span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span>
+    <span class="tb-chip-practice">Practice</span>
+    <span style="font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--warn);background:rgba(217,119,6,.09);border:1px solid rgba(217,119,6,.28);padding:2px 8px;border-radius:4px;margin-left:8px;display:flex;align-items:center;gap:4px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Partial · 3/5</span>
+    <div class="tb-center">
+      <span class="tb-qn">Question 18</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">40</span>
+      <div class="tb-prog"><div class="tb-pfill" style="width:45%"></div></div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-timer" style="color:var(--muted);background:none;border:none;font-size:11px;font-weight:500">Reviewed</div>
+      <div class="tb-sep"></div>
+      <button class="tb-exit">End Session</button>
+    </div>
+  </header>
+  <div class="body">
+    <div class="qcanvas" style="padding-top:20px">
+      <div class="qwrap" style="max-width:760px">
+        <div class="qcard" style="padding:26px 30px">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="qpill">Respiratory &amp; Oxygenation</span>
+              <span style="font-size:9.5px;font-weight:700;color:var(--chip-fg);background:var(--chip-bg);border:1px solid var(--chip-bdr);padding:2px 8px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase">SATA</span>
+              <div class="qdiff"><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div></div>
+            </div>
+            <span style="font-size:10.5px;color:var(--subtle)">Item 18</span>
+          </div>
+          <p class="stem" style="font-size:15.5px">A client with community-acquired pneumonia receiving IV antibiotics has: T 38.9°C, HR 98, BP 136/82, RR 24, SpO₂ 91% on 4 L/min NC. Which nursing interventions are appropriate? <strong>Select all that apply.</strong></p>
+          <div class="opts" style="margin-top:18px;gap:8px">
+
+            <!-- A: correct, student selected ✓ -->
+            <div class="opt ok">
+              <div class="opt-row" style="gap:12px">
+                <span style="width:18px;height:18px;border-radius:4px;background:var(--ok);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                <span class="oletter">A</span><span class="otext">Elevate the head of the bed to 45° to optimize lung expansion and reduce aspiration risk</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
+              </div>
+              <div class="opt-rationale show">
+                <div class="rat-icon ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Correct — selected</div>
+                HOB elevation improves diaphragmatic excursion and reduces work of breathing. Correct and appropriate intervention for pneumonia with respiratory compromise.
+              </div>
+            </div>
+
+            <!-- B: incorrect, student selected ✗ -->
+            <div class="opt err">
+              <div class="opt-row" style="gap:12px">
+                <span style="width:18px;height:18px;border-radius:4px;background:var(--err);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                <span class="oletter">B</span><span class="otext">Apply a non-rebreather mask at 15 L/min for the SpO₂ of 91% on 4 L nasal cannula</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--err)" stroke-width="2.5" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              </div>
+              <div class="opt-rationale show">
+                <div class="rat-icon err"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Incorrect — selected</div>
+                SpO₂ 91% on 4L NC warrants titrating to higher-flow NC or simple face mask first. A NRB at 15 L/min is aggressive and not indicated yet — use a stepwise approach.
+              </div>
+            </div>
+
+            <!-- C: correct, student selected ✓ -->
+            <div class="opt ok">
+              <div class="opt-row" style="gap:12px">
+                <span style="width:18px;height:18px;border-radius:4px;background:var(--ok);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                <span class="oletter">C</span><span class="otext">Encourage fluid intake of 2–3 L/day to thin secretions and facilitate expectoration</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
+              </div>
+              <div class="opt-rationale show">
+                <div class="rat-icon ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Correct — selected</div>
+                Adequate hydration thins secretions and facilitates mucociliary clearance. Appropriate for bacterial pneumonia management.
+              </div>
+            </div>
+
+            <!-- D: correct, student MISSED it (not selected) -->
+            <div class="opt ok" style="border-style:dashed;opacity:.8">
+              <div class="opt-row" style="gap:12px">
+                <span style="width:18px;height:18px;border-radius:4px;background:transparent;border:1.5px solid var(--ok);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"></span>
+                <span class="oletter">D</span><span class="otext">Administer acetaminophen 650 mg PO PRN for fever and discomfort as ordered</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
+              </div>
+              <div class="opt-rationale show">
+                <div class="rat-icon ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Correct — you missed this</div>
+                Acetaminophen reduces fever (which increases metabolic demand and O₂ consumption) and improves comfort. Should have been selected.
+              </div>
+            </div>
+
+            <!-- E: incorrect, student did NOT select (correct decision) -->
+            <div class="opt dim">
+              <div class="opt-row" style="gap:12px">
+                <span style="width:18px;height:18px;border-radius:4px;background:transparent;border:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"></span>
+                <span class="oletter">E</span><span class="otext">Notify the provider immediately and prepare for intubation based on the current SpO₂</span>
+              </div>
+              <div class="opt-rationale show">
+                <div class="rat-icon neutral"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Correctly not selected</div>
+                SpO₂ 91% does not indicate imminent intubation. Pursue non-invasive oxygen escalation first. Intubation is a last resort after conservative measures fail.
+              </div>
+            </div>
+          </div>
+
+          <div class="full-rat show" style="margin-top:10px">
+            <div class="full-rat-header">
+              <span class="full-rat-badge" style="background:rgba(217,119,6,.09);border-color:rgba(217,119,6,.28);color:var(--warn)">Partial Credit · 3 of 4 correct</span>
+              <span class="full-rat-title">You missed: Acetaminophen for fever management</span>
+            </div>
+            <div class="full-rat-body">
+              <p>You correctly identified HOB elevation, hydration, and avoided aggressive NRB and premature intubation. However, fever reduction (acetaminophen) is an important intervention — fever increases metabolic demand and worsens hypoxemia in pneumonia.</p>
+            </div>
+            <div class="full-rat-strategy">
+              <span class="full-rat-strategy-label">SATA Tip</span>
+              <span class="full-rat-strategy-text">For SATA, evaluate each option independently against the clinical picture. Comfort + supportive care options (antipyretics, positioning, hydration) are frequently correct together in respiratory illness questions.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="bot">
+    <div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <span class="bot-session-count">18 of 40 · 15 correct · 3 incorrect</span>
+    <div class="bot-r"><button class="btn-continue">Next Question <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- ══ FRAME 5 · Midnight · Post-submit correct ══ -->
+<div class="frame" id="f4">
+<div class="cat mn">
+  <header class="tb">
+    <span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span>
+    <span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:4px;margin-left:10px;background:rgba(22,163,74,.12);border:1px solid rgba(52,211,153,.3);color:#34d399">Practice</span>
+    <span style="font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#34d399;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.28);padding:2px 8px;border-radius:4px;margin-left:8px;display:flex;align-items:center;gap:4px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Correct</span>
+    <div class="tb-center">
+      <span class="tb-qn">Question 12</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">40</span>
+      <div class="tb-prog"><div class="tb-pfill" style="width:30%"></div></div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-timer" style="color:var(--muted);background:none;border:none;font-size:11px">Reviewed</div>
+      <div class="tb-sep"></div>
+      <button class="tb-exit">End Session</button>
+    </div>
+  </header>
+  <div class="body">
+    <div class="qcanvas" style="padding-top:22px">
+      <div class="qwrap">
+        <div class="qcard">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="qpill">Cardiovascular &amp; Oxygenation</span>
+              <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:#34d399;font-weight:600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>Correct · Hard</span>
+            </div>
+          </div>
+          <p class="stem">A <strong>68-year-old client</strong> is admitted with acute heart failure exacerbation. Assessment: HR 104, BP 158/92, SpO₂ 92%, bilateral crackles, 2+ pitting edema, JVD. <strong>Which action should the nurse implement FIRST?</strong></p>
+          <div class="opts" style="margin-top:20px">
+            <div class="opt dim">
+              <div class="opt-row"><span class="oletter">A</span><span class="otext">Administer furosemide 40 mg IV as ordered</span></div>
+              <div class="opt-rationale show"><div class="rat-icon neutral"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Why not A</div>Pharmacological — follows oxygenation. Not the first action when SpO₂ is 92%.</div>
+            </div>
+            <div class="opt ok">
+              <div class="opt-row"><span class="oletter">B</span><span class="otext">Position in high-Fowler's and apply supplemental oxygen at 2–4 L/min via nasal cannula</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg></div>
+              <div class="opt-rationale show"><div class="rat-icon ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Correct answer</div>Reduces preload and corrects hypoxemia immediately. ABCs: breathing precedes pharmacology.</div>
+            </div>
+            <div class="opt dim">
+              <div class="opt-row"><span class="oletter">C</span><span class="otext">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span></div>
+              <div class="opt-rationale show"><div class="rat-icon neutral"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Why not C</div>Documentation is secondary to stabilizing respiratory status.</div>
+            </div>
+            <div class="opt dim">
+              <div class="opt-row"><span class="oletter">D</span><span class="otext">Increase IV infusion rate to 125 mL/hr to maintain preload</span></div>
+              <div class="opt-rationale show"><div class="rat-icon neutral"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Why not D</div>Contraindicated. Fluid overload — more IV fluids worsen pulmonary edema.</div>
+            </div>
+          </div>
+          <div class="full-rat show" style="margin-top:12px">
+            <div class="full-rat-header">
+              <span class="full-rat-badge">Clinical Rationale</span>
+              <span class="full-rat-title">Airway &amp; Breathing Priority in Acute HF</span>
+            </div>
+            <div class="full-rat-body">
+              <p>SpO₂ 92% requires immediate oxygenation. High-Fowler's reduces venous return and pulmonary congestion. O₂ at 2–4 L/min corrects hypoxemia. Apply ABCs before pharmacological intervention.</p>
+            </div>
+            <div class="full-rat-strategy">
+              <span class="full-rat-strategy-label">NCLEX Strategy</span>
+              <span class="full-rat-strategy-text">Priority questions: ABCs → Maslow's → safety. Airway and breathing are always addressed before medications.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="bot">
+    <div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <span class="bot-session-count" style="color:var(--muted)">12 of 40 · 11 correct</span>
+    <div class="bot-r"><button class="btn-continue" style="background:#34d399;color:#07111f;box-shadow:0 1px 0 rgba(0,0,0,.15),0 4px 14px -4px rgba(52,211,153,.32)">Next Question <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- ══ FRAME 6 · Mobile · Ocean · Post-submit correct ══ -->
+<div class="frame mob" id="f5">
+<div class="cat oc mob">
+  <header class="tb" style="height:44px;padding:0 12px">
+    <span class="tb-brand" style="font-size:13px">Nurse<span class="tb-dot">Nest</span></span>
+    <span style="font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-left:8px;background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.25);color:#15803d">Practice</span>
+    <span style="font-size:8.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ok);background:var(--ok-bg);border:1px solid var(--ok-bdr);padding:2px 7px;border-radius:4px;margin-left:6px;display:flex;align-items:center;gap:3px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Correct</span>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
+      <span style="font-size:11px;font-weight:700;color:var(--txt);font-variant-numeric:tabular-nums">12<span style="color:var(--muted);font-weight:400">/40</span></span>
+    </div>
+  </header>
+  <div style="flex:1;overflow-y:auto;padding:12px;height:calc(844px - 44px - 56px)">
+    <div class="qcard" style="padding:16px 14px">
+      <div style="display:flex;align-items:center;gap:7px;padding-bottom:12px;border-bottom:1px solid var(--div);margin-bottom:16px">
+        <span class="qpill">Cardiovascular</span>
+        <span style="font-size:10px;color:var(--ok);font-weight:600;display:flex;align-items:center;gap:3px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>Correct</span>
+      </div>
+      <p class="stem" style="font-size:15px;line-height:1.72">A <strong>68-year-old client</strong> admitted with acute HF: HR 104, BP 158/92, SpO₂ 92%, bilateral crackles, 2+ edema, JVD. <strong>Which action FIRST?</strong></p>
+      <div class="opts" style="margin-top:16px;gap:7px">
+        <div class="opt dim" style="border-radius:11px">
+          <div class="opt-row" style="padding:11px 12px;gap:10px"><span class="oletter" style="width:24px;height:24px">A</span><span class="otext" style="font-size:13px">Administer furosemide 40 mg IV stat</span></div>
+          <div class="opt-rationale show" style="padding:8px 12px 10px 46px;font-size:11.5px">
+            <div class="rat-icon neutral" style="font-size:9px;margin-bottom:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Why not A</div>
+            Not first priority. Address oxygenation before pharmacology.
+          </div>
+        </div>
+        <div class="opt ok" style="border-radius:11px">
+          <div class="opt-row" style="padding:11px 12px;gap:10px"><span class="oletter" style="width:24px;height:24px">B</span><span class="otext" style="font-size:13px">Position in high-Fowler's and apply supplemental O₂ at 2–4 L/min</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg></div>
+          <div class="opt-rationale show" style="padding:8px 12px 10px 46px;font-size:11.5px">
+            <div class="rat-icon ok" style="font-size:9px;margin-bottom:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Correct</div>
+            Reduces preload, corrects SpO₂ 92%. ABCs: breathing before medications.
+          </div>
+        </div>
+        <div class="opt dim" style="border-radius:11px">
+          <div class="opt-row" style="padding:11px 12px;gap:10px"><span class="oletter" style="width:24px;height:24px">C</span><span class="otext" style="font-size:13px">Obtain 12-lead ECG and document rhythm</span></div>
+          <div class="opt-rationale show" style="padding:8px 12px 10px 46px;font-size:11.5px"><div class="rat-icon neutral" style="font-size:9px;margin-bottom:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Why not C</div>Documentation is secondary.</div>
+        </div>
+        <div class="opt dim" style="border-radius:11px">
+          <div class="opt-row" style="padding:11px 12px;gap:10px"><span class="oletter" style="width:24px;height:24px">D</span><span class="otext" style="font-size:13px">Increase IV fluid rate to maintain preload</span></div>
+          <div class="opt-rationale show" style="padding:8px 12px 10px 46px;font-size:11.5px"><div class="rat-icon neutral" style="font-size:9px;margin-bottom:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Why not D</div>Contraindicated — worsens fluid overload.</div>
+        </div>
+      </div>
+      <div class="full-rat show" style="margin-top:10px">
+        <div class="full-rat-header" style="margin-bottom:8px"><span class="full-rat-badge" style="font-size:8.5px">Clinical Rationale</span><span class="full-rat-title" style="font-size:11px">Airway &amp; Breathing First in Acute HF</span></div>
+        <div class="full-rat-body" style="font-size:12px;line-height:1.62">SpO₂ 92% = immediate O₂. High-Fowler's reduces venous return. ABCs precede pharmacology.</div>
+        <div class="full-rat-strategy" style="margin-top:8px;padding-top:8px">
+          <span class="full-rat-strategy-label" style="font-size:8.5px">NCLEX</span>
+          <span class="full-rat-strategy-text" style="font-size:11px">ABCs → Maslow's → safety. Airway/breathing always before medications.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer style="height:56px;background:var(--bot);border-top:1px solid var(--bot-bdr);box-shadow:var(--bot-sh);display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0">
+    <button class="btn-ghost" style="padding:8px 12px;font-size:12px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Prev</button>
+    <span style="flex:1;font-size:10.5px;color:var(--muted);text-align:center">11 correct · 1 incorrect</span>
+    <button class="btn-continue" style="flex:2;justify-content:center;font-size:12.5px;padding:9px">Next <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button>
+  </footer>
+</div>
+</div>
+
+<script>
+const fs=document.querySelectorAll('.frame'),ts=document.querySelectorAll('.tab');
+function s(i){fs.forEach((f,j)=>{f.style.display=j===i?'block':'none'});ts.forEach((t,j)=>{t.classList.toggle('on',j===i)});window.scrollTo({top:0,behavior:'instant'})}
+s(0);
+(function(){const p=new URLSearchParams(location.search).get('frame');if(p!=null){const n=parseInt(p);if(!isNaN(n))s(n);}})();
+</script>
+</body>
+</html>

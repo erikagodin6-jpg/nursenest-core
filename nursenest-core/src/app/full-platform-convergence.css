@@ -1,0 +1,143 @@
+/**
+ * Full Platform Premium Convergence
+ *
+ * Additive governance layer for the plan in
+ * `docs/reports/premium-full-platform-convergence.md`.
+ * Presentation only: no route, entitlement, adaptive, auth, billing, or admin
+ * authorization behavior changes.
+ */
+
+:root {
+  --nn-platform-radius-card: 1.35rem;
+  --nn-platform-radius-panel: 1.75rem;
+  --nn-platform-gap-section: clamp(1.25rem, 2.8vw, 1.85rem);
+  --nn-platform-gap-stack: clamp(0.85rem, 2vw, 1.2rem);
+  --nn-platform-touch-target: 2.75rem;
+}
+
+html[data-theme="ocean"] [data-nn-premium-full-platform-convergence],
+html[data-theme="blossom"] [data-nn-premium-full-platform-convergence],
+html[data-theme="midnight"] [data-nn-premium-full-platform-convergence],
+html[data-theme="sunset"] [data-nn-premium-full-platform-convergence],
+html[data-theme="aurora"] [data-nn-premium-full-platform-convergence] {
+  --nn-platform-theme-covered: 1;
+}
+
+[data-nn-premium-full-platform-convergence] {
+  min-width: 0;
+}
+
+[data-nn-premium-full-platform-convergence] :is(a, button, input, select, textarea):focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--semantic-surface),
+    0 0 0 4px color-mix(in srgb, var(--semantic-brand) 38%, transparent);
+}
+
+[data-nn-premium-full-platform-convergence] :is(a, button) {
+  touch-action: manipulation;
+}
+
+[data-nn-premium-full-platform-convergence] :is(button, [role="button"], a.nn-btn-primary, a.nn-btn-secondary) {
+  min-height: var(--nn-platform-touch-target);
+}
+
+[data-nn-premium-full-platform-convergence] :is(.nn-card, .lv-card, .nn-ls-surface) {
+  border-radius: var(--nn-platform-radius-card);
+}
+
+/* Exam / study family: one visual rhythm across hub, active session, review, rationales, weak areas, and study plans. */
+[data-nn-premium-platform-family="exam-study"] {
+  --nn-platform-family-accent: var(--semantic-info);
+  --nn-platform-family-panel: var(--semantic-panel-cool);
+}
+
+[data-nn-premium-platform-family="exam-study"] :is(.nn-exam-session, .nn-practice-session, .nn-flashcards-hub-hero, .nn-premium-practice-hub-hero) {
+  scroll-margin-top: clamp(4rem, 10vw, 6rem);
+}
+
+[data-nn-premium-platform-family="exam-study"] :is(.nn-practice-exam-rationale-panel__card, .nn-practice-rationale-full__scroll, .nn-flashcards-deck-library-surface) {
+  border-radius: var(--nn-platform-radius-card);
+}
+
+[data-nn-premium-platform-family="exam-study"] [data-nn-premium-platform-sticky-controls] {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+/* Learner cockpit + account family: account pages should feel related to dashboard/readiness without hiding critical actions. */
+[data-nn-premium-platform-family="learner-account"] {
+  --nn-platform-family-accent: var(--semantic-brand);
+  --nn-platform-family-panel: var(--semantic-panel-muted);
+}
+
+[data-nn-premium-platform-family="learner-account"] :is(section, article)[class*="rounded-2xl"],
+[data-nn-premium-platform-family="learner-account"] :is(.nn-dash-page-header, .nn-learner-page-hero) {
+  border-radius: var(--nn-platform-radius-card);
+}
+
+[data-nn-premium-platform-account-action] {
+  scroll-margin-top: 5rem;
+}
+
+[data-nn-premium-platform-account-action="delete"] {
+  border-radius: var(--nn-platform-radius-card);
+}
+
+/* Clinical module family: ECG, Labs, Medication Calculations, Clinical Scenarios, NGN, and OSCE share clinical-workstation expression. */
+[data-nn-premium-platform-family="clinical"] {
+  --nn-platform-family-accent: var(--semantic-chart-7);
+  --nn-platform-family-panel: var(--semantic-panel-cool);
+}
+
+[data-nn-premium-platform-family="clinical"] > :is(header, .nn-learner-page-hero),
+[data-nn-premium-platform-family="clinical"] [data-nn-scenario-study-shell] > header,
+[data-nn-premium-platform-family="clinical"] .nn-labs-hub__hero {
+  border-radius: var(--nn-platform-radius-panel);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 68%, transparent),
+    0 20px 50px -34px color-mix(in srgb, var(--nn-platform-family-accent) 18%, transparent);
+}
+
+[data-nn-premium-platform-family="clinical"] :is(nav, ul, .grid) {
+  min-width: 0;
+}
+
+/* Admin / preview family: cohesive tokens and accessibility without making operational tools learner-first. */
+[data-nn-premium-platform-family="admin-preview"] {
+  --nn-platform-family-accent: var(--semantic-chart-3);
+  --nn-platform-family-panel: var(--semantic-panel-muted);
+}
+
+[data-nn-premium-platform-family="admin-preview"] :is(section, article) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 88%, var(--nn-platform-family-accent) 12%);
+}
+
+[data-nn-premium-platform-family="admin-preview"] code {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 767px) {
+  [data-nn-premium-full-platform-convergence] {
+    overflow-x: clip;
+  }
+
+  [data-nn-premium-full-platform-convergence] :is(.fixed, [role="dialog"]) {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  [data-nn-premium-full-platform-convergence] :is(input, select, textarea) {
+    min-height: var(--nn-platform-touch-target);
+    font-size: max(1rem, 16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-nn-premium-full-platform-convergence] *,
+  [data-nn-premium-full-platform-convergence] *::before,
+  [data-nn-premium-full-platform-convergence] *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

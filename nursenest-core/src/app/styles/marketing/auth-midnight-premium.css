@@ -1,0 +1,49 @@
+/* ==========================================================================
+   auth-midnight-premium.css — Dark immersive auth (Midnight workstation tone)
+
+   Scope: html[data-theme="midnight"] .nn-premium-auth-system only.
+   ========================================================================== */
+
+html[data-theme="midnight"] .nn-premium-auth-system {
+  --nn-auth-accent-primary: var(--semantic-chart-2);
+  --nn-auth-accent-secondary: var(--semantic-chart-5);
+  --nn-auth-accent-warm: var(--semantic-chart-4);
+  --auth-bg: color-mix(in srgb, var(--semantic-bg-base) 92%, var(--semantic-chart-5) 8%);
+  --auth-surface: color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted));
+  --auth-surface-elevated: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-cool));
+  --auth-heading: var(--semantic-text-primary);
+  --auth-subtext: var(--semantic-text-secondary);
+  --nn-auth-theme-covered: 1;
+}
+
+html[data-theme="midnight"] .nn-premium-auth-system::before {
+  background:
+    radial-gradient(760px 340px at 0% 0%, color-mix(in srgb, var(--semantic-chart-5) 16%, transparent), transparent 66%),
+    radial-gradient(720px 320px at 100% 6%, color-mix(in srgb, var(--semantic-chart-2) 14%, transparent), transparent 68%),
+    radial-gradient(640px 260px at 48% 100%, color-mix(in srgb, var(--semantic-chart-3) 10%, transparent), transparent 72%);
+  opacity: 0.75;
+}
+
+html[data-theme="midnight"] .nn-premium-auth-story,
+html[data-theme="midnight"] .nn-premium-auth-card {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 22%, var(--semantic-border-soft));
+  background:
+    radial-gradient(520px 200px at 100% 0%, color-mix(in srgb, var(--semantic-chart-2) 12%, transparent), transparent 68%),
+    radial-gradient(420px 160px at 0% 100%, color-mix(in srgb, var(--semantic-chart-3) 10%, transparent), transparent 70%),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow:
+    var(--semantic-shadow-soft),
+    0 20px 48px -32px color-mix(in srgb, var(--semantic-chart-5) 28%, transparent);
+}
+
+html[data-theme="midnight"] .nn-premium-auth-primary-button {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--semantic-chart-2) 88%, var(--semantic-brand)),
+    color-mix(in srgb, var(--semantic-chart-5) 72%, var(--semantic-chart-2))
+  ) !important;
+}
+
+html[data-theme="midnight"] .nn-premium-auth-readiness-tile strong {
+  color: color-mix(in srgb, var(--semantic-chart-3) 70%, var(--semantic-chart-2));
+}

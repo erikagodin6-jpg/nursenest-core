@@ -1,0 +1,54 @@
+[
+  {
+    "id": "GERO-FC-P7-001",
+    "packageId": "pkg7-medications",
+    "front": "What is the Beers Criteria and which 5 drug classes are most important to memorize?",
+    "back": "Beers Criteria: American Geriatrics Society list of Potentially Inappropriate Medications (PIMs) for adults ≥65\n\nTop 5 classes to memorize:\n1. BENZODIAZEPINES (lorazepam, diazepam, temazepam) — falls, cognitive impairment, delirium\n2. ANTICHOLINERGICS — diphenhydramine, oxybutynin, amitriptyline, dicyclomine — confusion, falls, urinary retention\n3. MEPERIDINE (Demerol) — normeperidine neurotoxicity → seizures\n4. NSAIDs (chronic use) — GI bleeding, renal failure, heart failure exacerbation\n5. HYPNOTICS — zolpidem (Ambien) — fall risk, complex sleep behaviors",
+    "hint": "BANMH: Benzos, Anticholinergics, NSAIDs, Meperidine, Hypnotics.",
+    "explanation": "The Beers Criteria is updated every 2–3 years by the American Geriatrics Society. Canadian equivalent: STOPP/START Criteria (used in many Canadian settings). Key principle: even Beers Criteria medications may be appropriate in SPECIFIC clinical situations — context matters. However, these medications require explicit justification and monitoring in older adults.",
+    "clinicalPearl": "Diphenhydramine (Benadryl) is found in dozens of OTC products (Tylenol PM, Advil PM, Nytol, ZzzQuil) — older adults frequently use these without knowing they contain an anticholinergic. Always ask specifically about sleep aids and allergy products by brand name.",
+    "tier": "RPN",
+    "topicKey": "beers-criteria",
+    "categorySlug": "medications-polypharmacy",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P7-002",
+    "packageId": "pkg7-medications",
+    "front": "What is the 'prescribing cascade' and give a clinical example?",
+    "back": "Prescribing cascade: A medication SIDE EFFECT is mistaken for a new disease → a NEW medication is prescribed to treat the side effect → this new medication causes its own side effects → another new medication is prescribed\n\nExample cascade:\n1. NSAID prescribed for arthritis\n2. NSAID → hypertension (side effect)\n3. Antihypertensive prescribed for hypertension\n4. Antihypertensive → orthostatic hypotension (side effect)\n5. Midodrine prescribed for orthostatic hypotension\n6. Midodrine → supine hypertension and urinary retention\n7. Urological referral + medication...",
+    "hint": "Side effect → new diagnosis → new medication → new side effects = prescribing cascade.",
+    "explanation": "Solution: always ask 'Could this new symptom be caused by an existing medication?' before prescribing a new medication. The best treatment for a prescribing cascade is STOPPING the causative medication, not adding another. Comprehensive medication review (MedRec) at every care transition interrupts cascades.",
+    "clinicalPearl": "NSAID-induced hypertension is one of the most common prescribing cascade initiators in older adults. Suspect NSAID as hypertension cause in any older adult where BP control was stable and worsened after starting an NSAID (including OTC ibuprofen).",
+    "tier": "RN",
+    "topicKey": "polypharmacy",
+    "categorySlug": "medications-polypharmacy",
+    "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"]
+  },
+  {
+    "id": "GERO-FC-P7-003",
+    "packageId": "pkg7-medications",
+    "front": "What physiological changes of aging alter drug pharmacokinetics and why does this matter?",
+    "back": "ABSORPTION: Generally unchanged (may slow — delayed peak)\n\nDISTRIBUTION:\n• ↑ body fat → increased Vd for fat-soluble drugs (benzodiazepines, amiodarone) → prolonged duration\n• ↓ lean body mass + body water → increased concentration of water-soluble drugs (lithium, digoxin)\n• ↓ serum albumin → more FREE (active) drug for highly protein-bound drugs (warfarin, phenytoin)\n\nMETABOLISM:\n• Reduced hepatic blood flow and mass → slower first-pass and CYP450 metabolism\n\nELIMINATION:\n• Reduced GFR → renally-cleared drugs accumulate (digoxin, antibiotics, metformin, direct oral anticoagulants)",
+    "hint": "ADME in aging: Distribution and Elimination are most clinically significant.",
+    "explanation": "Clinical implications: start doses 25–50% lower than standard adult doses in older adults; titrate slowly; monitor for toxicity more frequently; calculate eGFR before prescribing renally-cleared medications. The pharmacokinetic changes of aging explain why standard adult doses cause toxicity in older adults.",
+    "clinicalPearl": "Warfarin: reduced hepatic metabolism + reduced protein binding + reduced vitamin K intake = INR instability and hemorrhage risk. Older adults on warfarin require more frequent INR monitoring and are at higher risk of major bleeding even in therapeutic range.",
+    "tier": "RN",
+    "topicKey": "adverse-drug-reactions",
+    "categorySlug": "medications-polypharmacy",
+    "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"]
+  },
+  {
+    "id": "GERO-FC-P7-004",
+    "packageId": "pkg7-medications",
+    "front": "What is deprescribing and when is it appropriate?",
+    "back": "Deprescribing: Planned, supervised reduction or cessation of medications when the benefit no longer outweighs the risk\n\nAppropriate when:\n• Medication no longer indicated for a current condition\n• Benefit is minimal relative to risk (frailty changes benefit-risk balance)\n• Beers Criteria or STOPP Criteria PIMs identified\n• Patient preference (burden > benefit)\n• Palliative context (medications preventing death no longer appropriate)\n• Prescribing cascade medications\n\nPrinciples:\n• TAPER — do not abruptly stop most medications\n• MONITOR for withdrawal (benzodiazepines, opioids, SSRIs) or rebound (antihypertensives)\n• PATIENT EDUCATION — explain why stopping helps",
+    "hint": "Deprescribing = supervised cessation when harm > benefit. Always taper, never stop abruptly (especially benzodiazepines, opioids, SSRIs).",
+    "explanation": "Deprescribing is evidence-based and reduces falls, cognitive impairment, and adverse drug events. Many older adults are actually grateful to stop medications — they feel better with fewer side effects. The nurse's role: identify PIMs, discuss with patient and caregiver, collaborate with prescriber, monitor for withdrawal or deterioration.",
+    "clinicalPearl": "Frailty changes the benefit-risk balance. A statin that reduces MI risk by 20% over 10 years provides minimal benefit to an 89-year-old with a 2-year life expectancy but adds polypharmacy burden. Prognosis-guided deprescribing is part of geriatric palliative care.",
+    "tier": "RN",
+    "topicKey": "medication-safety",
+    "categorySlug": "medications-polypharmacy",
+    "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"]
+  }
+]

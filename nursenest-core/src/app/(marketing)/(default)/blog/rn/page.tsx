@@ -1,0 +1,155 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { BLOG_LIST_PAGE_SIZE, getPublishedBlogPostsPage } from "@/lib/blog/safe-blog-queries";
+import { nursingScopedCareerLabels } from "@/lib/blog/blog-scoped-career-hubs";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+
+const CAREER = "rn" as const;
+
+type Props = {
+  searchParams: Promise<{ page?: string }>;
+};
+
+export const revalidate = 3600;
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const labels = nursingScopedCareerLabels(CAREER);
+  return safeGenerateMetadata(
+    async () => {
+      const sp = await searchParams;
+      const rawPage = Number(sp.page ?? "1");
+      const page = Number.isFinite(rawPage) && rawPage >= 1 ? Math.floor(rawPage) : 1;
+      const canonicalPath = page <= 1 ? "/blog/rn" : `/blog/rn?page=${page}`;
+      return {
+        title: `${labels.short} NCLEX prep articles | NurseNest`,
+        description: `Long-tail NCLEX study guides and practice-question articles for ${labels.h1} candidates — linked to full RN lessons.`,
+        alternates: { canonical: absoluteUrl(canonicalPath) },
+        openGraph: {
+          title: `${labels.short} NCLEX prep articles | NurseNest`,
+          url: absoluteUrl(canonicalPath),
+          type: "website",
+        },
+      };
+    },
+    { pathname: "/blog/rn", routeGroup: "marketing.default.blog.rn.index" },
+  );
+}
+
+export default async function BlogRnHubPage({ searchParams }: Props) {
+  const labels = nursingScopedCareerLabels(CAREER);
+  const locale = await getMarketingLocaleForDefaultRoute();
+  const sp = await searchParams;
+  const rawPage = Number(sp.page ?? "1");
+  const page = Number.isFinite(rawPage) && rawPage >= 1 ? Math.floor(rawPage) : 1;
+  const { posts, total, pageSize, listLoad } = await getPublishedBlogPostsPage(page, BLOG_LIST_PAGE_SIZE, {
+    locale,
+    sourceLocale: "en",
+    careerSlug: CAREER,
+    allowSourceLocaleFallback: true,
+  }, {
+    includeTotal: false,
+  });
+  if (process.env.BLOG_INDEX_ROUTE_LIST_LOAD === "1") {
+    safeServerLog("blog", "BLOG_INDEX_ROUTE_LIST_LOAD", {
+      pathname: "/blog/rn",
+      page: String(page),
+      querySucceeded: listLoad.querySucceeded ? "1" : "0",
+      source: listLoad.source,
+      rawCount: listLoad.rawCount === null ? "" : String(listLoad.rawCount),
+      filteredCount: listLoad.filteredCount === null ? "" : String(listLoad.filteredCount),
+      finalCount: String(listLoad.finalCount),
+      reasonFailed: listLoad.reasonFailed ?? "",
+      reasonDropped: listLoad.reasonDropped ?? "",
+    });
+  }
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const crumbs = [
+    { name: "Blog", href: "/blog" },
+    { name: `${labels.short} NCLEX articles`, href: "/blog/rn" },
+  ];
+  const schemaItems = [
+    { name: "Blog", item: absoluteUrl("/blog") },
+    { name: `${labels.short} NCLEX articles`, item: absoluteUrl("/blog/rn") },
+  ];
+
+  return (
+    <div className="mx-auto max-w-3xl px-4 py-12">
+      <BreadcrumbJsonLd items={schemaItems} />
+      <div className="mb-6">
+        <BreadcrumbTrail items={crumbs} />
+      </div>
+      <header className="mb-10">
+        <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">
+          {labels.h1} — NCLEX study articles
+        </h1>
+        <p className="mt-2 text-[var(--theme-muted-text)]">
+          Topic-focused guides with practice questions, each linking back to the full pathway lesson on NurseNest.
+        </p>
+      </header>
+      {!listLoad.querySucceeded ? (
+        <section
+          className="mb-6 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--theme-card-bg))] p-6"
+          role="alert"
+          aria-live="polite"
+        >
+          <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Blog list could not load</h2>
+          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+            We’re updating our article library. Please try again in a moment.
+          </p>
+        </section>
+      ) : posts.length === 0 ? (
+        <p className="text-sm text-[var(--theme-muted-text)]">No published RN articles yet. Check back soon.</p>
+      ) : (
+        <>
+          <ul className="space-y-6">
+            {posts.map((p) => (
+              <li key={p.slug} className="border-b border-[var(--theme-separator)] pb-6">
+                <Link href={`/blog/rn/${p.slug}`} className="text-lg font-semibold text-primary hover:underline">
+                  {p.title}
+                </Link>
+                {p.category ? (
+                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">
+                    {p.category}
+                  </p>
+                ) : null}
+                <p className="mt-2 line-clamp-3 text-sm text-[var(--theme-muted-text)]">{p.excerpt}</p>
+                <p className="mt-2 text-xs text-[var(--theme-muted-text)]">{p.createdAt.toISOString().slice(0, 10)}</p>
+              </li>
+            ))}
+          </ul>
+          {totalPages > 1 ? (
+            <nav className="mt-10 flex flex-wrap items-center justify-between gap-4 text-sm" aria-label="Blog pagination">
+              <span className="text-[var(--theme-muted-text)]">
+                Page {page} of {totalPages}
+              </span>
+              <div className="flex gap-3">
+                {page > 1 ? (
+                  <Link
+                    href={page === 2 ? "/blog/rn" : `/blog/rn?page=${page - 1}`}
+                    className="font-medium text-primary hover:underline"
+                  >
+                    Previous
+                  </Link>
+                ) : (
+                  <span className="text-[var(--theme-muted-text)]">Previous</span>
+                )}
+                {page < totalPages ? (
+                  <Link href={`/blog/rn?page=${page + 1}`} className="font-medium text-primary hover:underline">
+                    Next
+                  </Link>
+                ) : (
+                  <span className="text-[var(--theme-muted-text)]">Next</span>
+                )}
+              </div>
+            </nav>
+          ) : null}
+        </>
+      )}
+    </div>
+  );
+}

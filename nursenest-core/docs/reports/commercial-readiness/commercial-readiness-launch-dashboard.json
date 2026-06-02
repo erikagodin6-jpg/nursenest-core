@@ -1,0 +1,978 @@
+{
+  "generatedAt": "2026-05-31T21:42:07.141Z",
+  "sourceNote": "The live database inventory was not audited because the database was unavailable in this environment.\n\nReason:  Invalid `db.examQuestion.findMany()` invocation in /root/nursenest-core/nursenest-core/scripts/audit-blueprint-coverage-gap-engine.mts:239:21 236 clinicalNursingScenario: { findMany: (args: unknown) => Promise<Array<Record<string, unknown>>> }; 237 }; 238 const [questions, lessons, flashcards, simulations] = await Promise.all([ → 239 db.examQuestion.findMany( Can't reach database server at `HOST:5432` Please make sure your database server is running at `HOST:5432`.\n\nStatic fallback covers repository-authored RN catalogs, PN CNPLE expansion questions, and CNPLE NP LOFT case steps only.",
+  "dashboard": {
+    "generatedAt": "2026-05-31T21:42:07.140Z",
+    "launchReadinessDashboard": [
+      {
+        "pathway": "NCLEX-RN",
+        "pathwayId": "us-rn-nclex-rn",
+        "displayName": "NCLEX-RN (United States)",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 1.3,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 100,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 1.3% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "estimatedRevenueOpportunity": "very_high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "NCLEX-PN",
+        "pathwayId": "us-lpn-nclex-pn",
+        "displayName": "NCLEX-PN (US LPN / LVN)",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "estimatedRevenueOpportunity": "high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "REx-PN",
+        "pathwayId": "ca-rpn-rex-pn",
+        "displayName": "REx-PN (Canada RPN)",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 11.3,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 100,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 11.3% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "estimatedRevenueOpportunity": "high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "CNPLE",
+        "pathwayId": "ca-np-cnple",
+        "displayName": "Canadian Nurse Practitioner Licensure Examination",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 11,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 100,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 11% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "estimatedRevenueOpportunity": "medium",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "FNP",
+        "pathwayId": "us-np-fnp",
+        "displayName": "FNP Certification Prep",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "estimatedRevenueOpportunity": "very_high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "NMC CBT",
+        "pathwayId": "uk-rn-nmc-test-of-competence",
+        "displayName": "UK RN registration / NMC Test of Competence (CBT + OSCE)",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 70,
+          "commercialReadiness": 0,
+          "reliabilityReadiness": 72.7,
+          "conversionReadiness": 0,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 70% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 72.7% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "Pathway registered & hub visible: Pathway is hidden or not registered for public hubs",
+          "Listed for public marketing pathways: Not included in public pathway list",
+          "Deep link / soft-404 audit (manual): Hidden or info-only pathways need route audit before launch"
+        ],
+        "estimatedRevenueOpportunity": "high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "Australia RN",
+        "pathwayId": "au-rn-iqnm-pathway",
+        "displayName": "Australia RN registration / NMBA–AHPRA IQNM pathway",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 70,
+          "commercialReadiness": 0,
+          "reliabilityReadiness": 72.7,
+          "conversionReadiness": 0,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 70% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 72.7% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "Pathway registered & hub visible: Pathway is hidden or not registered for public hubs",
+          "Listed for public marketing pathways: Not included in public pathway list",
+          "Deep link / soft-404 audit (manual): Hidden or info-only pathways need route audit before launch"
+        ],
+        "estimatedRevenueOpportunity": "high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "New Zealand RN",
+        "pathwayId": null,
+        "displayName": "New Zealand RN",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 0,
+          "commercialReadiness": 0,
+          "reliabilityReadiness": 0,
+          "conversionReadiness": 0,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 0% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 0% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "No pathway registry entry exists for deterministic reliability checks."
+        ],
+        "estimatedRevenueOpportunity": "medium",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "Future pathways",
+        "pathwayId": null,
+        "displayName": "Future pathways",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 0,
+          "commercialReadiness": 0,
+          "reliabilityReadiness": 0,
+          "conversionReadiness": 0,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 0% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 0% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "No pathway registry entry exists for deterministic reliability checks."
+        ],
+        "estimatedRevenueOpportunity": "deferred",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      }
+    ],
+    "commercialReadinessDashboard": [
+      {
+        "pathway": "NCLEX-RN",
+        "pathwayId": "us-rn-nclex-rn",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 1.3,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 100,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 1.3% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ]
+      },
+      {
+        "pathway": "NCLEX-PN",
+        "pathwayId": "us-lpn-nclex-pn",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ]
+      },
+      {
+        "pathway": "REx-PN",
+        "pathwayId": "ca-rpn-rex-pn",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 11.3,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 100,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 11.3% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ]
+      },
+      {
+        "pathway": "CNPLE",
+        "pathwayId": "ca-np-cnple",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 11,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 100,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 11% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ]
+      },
+      {
+        "pathway": "FNP",
+        "pathwayId": "us-np-fnp",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ]
+      },
+      {
+        "pathway": "NMC CBT",
+        "pathwayId": "uk-rn-nmc-test-of-competence",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 70,
+          "commercialReadiness": 0,
+          "reliabilityReadiness": 72.7,
+          "conversionReadiness": 0,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 70% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 72.7% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "Pathway registered & hub visible: Pathway is hidden or not registered for public hubs",
+          "Listed for public marketing pathways: Not included in public pathway list",
+          "Deep link / soft-404 audit (manual): Hidden or info-only pathways need route audit before launch"
+        ]
+      },
+      {
+        "pathway": "Australia RN",
+        "pathwayId": "au-rn-iqnm-pathway",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 70,
+          "commercialReadiness": 0,
+          "reliabilityReadiness": 72.7,
+          "conversionReadiness": 0,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 70% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 72.7% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "Pathway registered & hub visible: Pathway is hidden or not registered for public hubs",
+          "Listed for public marketing pathways: Not included in public pathway list",
+          "Deep link / soft-404 audit (manual): Hidden or info-only pathways need route audit before launch"
+        ]
+      },
+      {
+        "pathway": "New Zealand RN",
+        "pathwayId": null,
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 0,
+          "commercialReadiness": 0,
+          "reliabilityReadiness": 0,
+          "conversionReadiness": 0,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 0% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 0% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "No pathway registry entry exists for deterministic reliability checks."
+        ]
+      },
+      {
+        "pathway": "Future pathways",
+        "pathwayId": null,
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 0,
+          "commercialReadiness": 0,
+          "reliabilityReadiness": 0,
+          "conversionReadiness": 0,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 0% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 0% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "No pathway registry entry exists for deterministic reliability checks."
+        ]
+      }
+    ],
+    "revenueReadinessDashboard": [
+      {
+        "pathway": "NCLEX-RN",
+        "estimatedRevenueOpportunity": "very_high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "NCLEX-PN",
+        "estimatedRevenueOpportunity": "high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "REx-PN",
+        "estimatedRevenueOpportunity": "high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "CNPLE",
+        "estimatedRevenueOpportunity": "medium",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "FNP",
+        "estimatedRevenueOpportunity": "very_high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "NMC CBT",
+        "estimatedRevenueOpportunity": "high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "Australia RN",
+        "estimatedRevenueOpportunity": "high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "New Zealand RN",
+        "estimatedRevenueOpportunity": "medium",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "Future pathways",
+        "estimatedRevenueOpportunity": "deferred",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      }
+    ],
+    "conversionReadinessDashboard": [
+      {
+        "pathway": "NCLEX-RN",
+        "conversionReadiness": 70,
+        "status": "Development"
+      },
+      {
+        "pathway": "NCLEX-PN",
+        "conversionReadiness": 70,
+        "status": "Development"
+      },
+      {
+        "pathway": "REx-PN",
+        "conversionReadiness": 70,
+        "status": "Development"
+      },
+      {
+        "pathway": "CNPLE",
+        "conversionReadiness": 70,
+        "status": "Development"
+      },
+      {
+        "pathway": "FNP",
+        "conversionReadiness": 70,
+        "status": "Development"
+      },
+      {
+        "pathway": "NMC CBT",
+        "conversionReadiness": 0,
+        "status": "Not Ready"
+      },
+      {
+        "pathway": "Australia RN",
+        "conversionReadiness": 0,
+        "status": "Not Ready"
+      },
+      {
+        "pathway": "New Zealand RN",
+        "conversionReadiness": 0,
+        "status": "Not Ready"
+      },
+      {
+        "pathway": "Future pathways",
+        "conversionReadiness": 0,
+        "status": "Not Ready"
+      }
+    ],
+    "reliabilityDashboard": [
+      {
+        "pathway": "NCLEX-RN",
+        "reliabilityReadiness": 99.9,
+        "status": "Launch Candidate",
+        "blockers": []
+      },
+      {
+        "pathway": "NCLEX-PN",
+        "reliabilityReadiness": 99.9,
+        "status": "Launch Candidate",
+        "blockers": []
+      },
+      {
+        "pathway": "REx-PN",
+        "reliabilityReadiness": 99.9,
+        "status": "Launch Candidate",
+        "blockers": []
+      },
+      {
+        "pathway": "CNPLE",
+        "reliabilityReadiness": 99.9,
+        "status": "Launch Candidate",
+        "blockers": []
+      },
+      {
+        "pathway": "FNP",
+        "reliabilityReadiness": 99.9,
+        "status": "Launch Candidate",
+        "blockers": []
+      },
+      {
+        "pathway": "NMC CBT",
+        "reliabilityReadiness": 72.7,
+        "status": "Development",
+        "blockers": [
+          "Reliability gate 72.7% is below 99.9%.",
+          "Pathway registered & hub visible: Pathway is hidden or not registered for public hubs",
+          "Deep link / soft-404 audit (manual): Hidden or info-only pathways need route audit before launch"
+        ]
+      },
+      {
+        "pathway": "Australia RN",
+        "reliabilityReadiness": 72.7,
+        "status": "Development",
+        "blockers": [
+          "Reliability gate 72.7% is below 99.9%.",
+          "Pathway registered & hub visible: Pathway is hidden or not registered for public hubs",
+          "Deep link / soft-404 audit (manual): Hidden or info-only pathways need route audit before launch"
+        ]
+      },
+      {
+        "pathway": "New Zealand RN",
+        "reliabilityReadiness": 0,
+        "status": "Not Ready",
+        "blockers": [
+          "Reliability gate 0% is below 99.9%.",
+          "No pathway registry entry exists for deterministic reliability checks."
+        ]
+      },
+      {
+        "pathway": "Future pathways",
+        "reliabilityReadiness": 0,
+        "status": "Not Ready",
+        "blockers": [
+          "Reliability gate 0% is below 99.9%.",
+          "No pathway registry entry exists for deterministic reliability checks."
+        ]
+      }
+    ],
+    "recommendedLaunchOrder": [
+      {
+        "pathway": "NCLEX-RN",
+        "pathwayId": "us-rn-nclex-rn",
+        "displayName": "NCLEX-RN (United States)",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 1.3,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 100,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 1.3% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "estimatedRevenueOpportunity": "very_high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "NCLEX-PN",
+        "pathwayId": "us-lpn-nclex-pn",
+        "displayName": "NCLEX-PN (US LPN / LVN)",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "estimatedRevenueOpportunity": "high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "REx-PN",
+        "pathwayId": "ca-rpn-rex-pn",
+        "displayName": "REx-PN (Canada RPN)",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 11.3,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 100,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 11.3% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "estimatedRevenueOpportunity": "high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "CNPLE",
+        "pathwayId": "ca-np-cnple",
+        "displayName": "Canadian Nurse Practitioner Licensure Examination",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 11,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 100,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 11% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "estimatedRevenueOpportunity": "medium",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "FNP",
+        "pathwayId": "us-np-fnp",
+        "displayName": "FNP Certification Prep",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 100,
+          "commercialReadiness": 65,
+          "reliabilityReadiness": 99.9,
+          "conversionReadiness": 70,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "estimatedRevenueOpportunity": "very_high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "NMC CBT",
+        "pathwayId": "uk-rn-nmc-test-of-competence",
+        "displayName": "UK RN registration / NMC Test of Competence (CBT + OSCE)",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 70,
+          "commercialReadiness": 0,
+          "reliabilityReadiness": 72.7,
+          "conversionReadiness": 0,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 70% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 72.7% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "Pathway registered & hub visible: Pathway is hidden or not registered for public hubs",
+          "Listed for public marketing pathways: Not included in public pathway list",
+          "Deep link / soft-404 audit (manual): Hidden or info-only pathways need route audit before launch"
+        ],
+        "estimatedRevenueOpportunity": "high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "Australia RN",
+        "pathwayId": "au-rn-iqnm-pathway",
+        "displayName": "Australia RN registration / NMBA–AHPRA IQNM pathway",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 70,
+          "commercialReadiness": 0,
+          "reliabilityReadiness": 72.7,
+          "conversionReadiness": 0,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 70% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 72.7% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "Pathway registered & hub visible: Pathway is hidden or not registered for public hubs",
+          "Listed for public marketing pathways: Not included in public pathway list",
+          "Deep link / soft-404 audit (manual): Hidden or info-only pathways need route audit before launch"
+        ],
+        "estimatedRevenueOpportunity": "high",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "New Zealand RN",
+        "pathwayId": null,
+        "displayName": "New Zealand RN",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 0,
+          "commercialReadiness": 0,
+          "reliabilityReadiness": 0,
+          "conversionReadiness": 0,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 0% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 0% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "No pathway registry entry exists for deterministic reliability checks."
+        ],
+        "estimatedRevenueOpportunity": "medium",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "Future pathways",
+        "pathwayId": null,
+        "displayName": "Future pathways",
+        "launchStatus": "Not Ready",
+        "scores": {
+          "contentReadiness": 0,
+          "qualityReadiness": 0,
+          "adaptiveReadiness": 0,
+          "seoReadiness": 0,
+          "commercialReadiness": 0,
+          "reliabilityReadiness": 0,
+          "conversionReadiness": 0,
+          "overallLaunchReadiness": 0
+        },
+        "launchBlockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 0% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 0% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "No pathway registry entry exists for deterministic reliability checks."
+        ],
+        "estimatedRevenueOpportunity": "deferred",
+        "recommendedAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      }
+    ],
+    "remainingWorkReport": [
+      {
+        "pathway": "NCLEX-RN",
+        "blockers": [
+          "Content gate 1.3% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "nextAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "NCLEX-PN",
+        "blockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "nextAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "REx-PN",
+        "blockers": [
+          "Content gate 11.3% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "nextAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "CNPLE",
+        "blockers": [
+          "Content gate 11% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "nextAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "FNP",
+        "blockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "Monetization gate 65% is below 100%.",
+          "Conversion gate 70% is not established and tested."
+        ],
+        "nextAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "NMC CBT",
+        "blockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 70% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 72.7% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "Pathway registered & hub visible: Pathway is hidden or not registered for public hubs",
+          "Listed for public marketing pathways: Not included in public pathway list",
+          "Deep link / soft-404 audit (manual): Hidden or info-only pathways need route audit before launch"
+        ],
+        "nextAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "Australia RN",
+        "blockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 70% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 72.7% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "Pathway registered & hub visible: Pathway is hidden or not registered for public hubs",
+          "Listed for public marketing pathways: Not included in public pathway list",
+          "Deep link / soft-404 audit (manual): Hidden or info-only pathways need route audit before launch"
+        ],
+        "nextAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "New Zealand RN",
+        "blockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 0% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 0% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "No pathway registry entry exists for deterministic reliability checks."
+        ],
+        "nextAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      },
+      {
+        "pathway": "Future pathways",
+        "blockers": [
+          "Content gate 0% is below 95%.",
+          "Quality gate 0% is below 95%.",
+          "Adaptive learning gate 0% is below 95%.",
+          "SEO gate 0% is below 95%.",
+          "Monetization gate 0% is below 100%.",
+          "Reliability gate 0% is below 99.9%.",
+          "Conversion gate 0% is not established and tested.",
+          "No pathway registry entry exists for deterministic reliability checks."
+        ],
+        "nextAction": "Close content, quality, and adaptive-learning gaps before commercial launch work."
+      }
+    ]
+  }
+}

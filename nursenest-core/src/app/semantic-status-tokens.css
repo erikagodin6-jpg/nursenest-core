@@ -1,0 +1,1424 @@
+/**
+ * Multi-color semantic status system (learner product, charts, reports).
+ * - Complements `theme-palettes.css` (identity) + `color-roles.css` (CTA / conversion).
+ * - Success / info / warning / danger are NOT derived from `--theme-primary` alone.
+ * - Foundation aliases map to globals tonal layers when `[data-theme]` is active.
+ * - Guardrails: `.cursor/rules/semantic-color-guardrails.mdc` — avoid monochrome / brand-only data UI.
+ *
+ * First-paint `:root` mirrors ocean/clinical-blue defaults; `[data-theme]` overrides.
+ */
+/* First-paint defaults mirror the ocean/clinical-blue default theme. [data-theme] layers override all. */
+:root {
+  --semantic-bg-base: #fefefe;
+  --semantic-bg-soft: #f3f6fb;
+  --semantic-surface: #fefefe;
+  --semantic-surface-elevated: #ffffff;
+  --semantic-border-soft: #b0dcf3;
+  --semantic-shadow-soft:
+    0 1px 0 rgba(31, 41, 55, 0.035),
+    0 12px 36px -20px rgba(31, 41, 55, 0.08);
+  --semantic-text-primary: #1f2937;
+  --semantic-text-secondary: #374151;
+  --semantic-text-muted: #4b5563;
+  --semantic-brand: #1aaee0;
+  --semantic-brand-soft: #e6f6fc;
+  --semantic-brand-contrast: #ffffff;
+  --semantic-success: #16a34a;
+  --semantic-success-soft: #ecfdf5;
+  --semantic-success-contrast: #14532d;
+  --semantic-info: #4eb0ce;
+  --semantic-info-soft: #dff6fb;
+  --semantic-info-contrast: #064273;
+  --semantic-warning: #d97706;
+  --semantic-warning-soft: #fffbeb;
+  --semantic-warning-contrast: #78350f;
+  --semantic-danger: #e11d48;
+  --semantic-danger-soft: #fff1f2;
+  --semantic-danger-contrast: #9f1239;
+  --semantic-mastery-high: #16a34a;
+  --semantic-mastery-mid: #d97706;
+  --semantic-mastery-low: #e11d48;
+  --semantic-chart-1: #1aaee0;
+  --semantic-chart-2: #16a34a;
+  --semantic-chart-3: #52b8d4;
+  --semantic-chart-4: #f5a524;
+  --semantic-chart-5: #0d9488;
+  --semantic-chart-6: #7c8fa6;
+  --semantic-chart-7: #a7e3d1;
+  --semantic-chart-8: #d8bd79;
+  --semantic-chart-9: #6b8fa8;
+  --semantic-accent-turquoise: #25b9b1;
+  --semantic-accent-seafoam: #81d6d1;
+  --semantic-accent-mint: #6dd7b6;
+  --semantic-accent-periwinkle: #9585c8;
+  --semantic-accent-peach: #f4b887;
+  --semantic-accent-gold: #d8bd79;
+  --semantic-accent-plum: #8e5a7f;
+  --semantic-accent-indigo: #2c3e7e;
+  --semantic-accent-lavender: #b09bff;
+  --decorative-1: color-mix(in srgb, var(--semantic-info) 42%, var(--semantic-brand));
+  --decorative-2: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-warning));
+  --decorative-3: color-mix(in srgb, var(--semantic-accent-turquoise) 42%, var(--semantic-accent-lavender));
+  --decorative-4: color-mix(in srgb, var(--semantic-accent-peach) 44%, var(--semantic-accent-mint));
+  --semantic-panel-muted: #f1f4f9;
+  --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface));
+  --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
+  --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 11%, var(--semantic-surface));
+  --semantic-panel-aqua: color-mix(in srgb, var(--semantic-accent-turquoise) 10%, var(--semantic-surface));
+  --semantic-panel-mint: color-mix(in srgb, var(--semantic-accent-mint) 10%, var(--semantic-surface));
+  --semantic-panel-lavender: color-mix(in srgb, var(--semantic-accent-lavender) 10%, var(--semantic-surface));
+  --semantic-panel-peach: color-mix(in srgb, var(--semantic-accent-peach) 10%, var(--semantic-surface));
+  --semantic-panel-gold: color-mix(in srgb, var(--semantic-accent-gold) 10%, var(--semantic-surface));
+  --hero-gradient-start: transparent;
+  --hero-gradient-mid: transparent;
+  --hero-gradient-end: transparent;
+  /* Practice exam runner — maps to semantic + theme layers (no raw hex in components). */
+  --nn-correct-bg: color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface));
+  --nn-correct-border: color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft));
+  --nn-correct-fg: var(--semantic-text-primary);
+  --nn-review-panel-bg: var(--semantic-surface);
+  --nn-exam-option-selected-bg: color-mix(in srgb, var(--semantic-brand) 11%, var(--semantic-surface));
+
+  /* Premium UI aliases: components consume these, themes define the expression. */
+  --nn-surface: var(--semantic-surface);
+  --nn-surface-muted: var(--semantic-panel-muted);
+  --nn-surface-elevated: var(--semantic-surface-elevated);
+  --nn-border: var(--semantic-border-soft);
+  --nn-border-strong: color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-text-muted));
+  --nn-text-primary: var(--semantic-text-primary);
+  --nn-text-muted: var(--semantic-text-muted);
+  --nn-accent-primary: var(--semantic-brand);
+  --nn-accent-soft: var(--semantic-brand-soft);
+  --nn-accent-ring: color-mix(in srgb, var(--semantic-brand) 35%, transparent);
+  --nn-success: var(--semantic-success);
+  --nn-warning: var(--semantic-warning);
+  --nn-danger: var(--semantic-danger);
+  --nn-info: var(--semantic-info);
+  --nn-mastery: var(--semantic-mastery-high);
+  --nn-study: var(--semantic-info);
+  --nn-reinforce: var(--semantic-chart-5);
+  --lesson-pathophysiology-accent: var(--semantic-chart-1);
+  --lesson-pathophysiology-soft: color-mix(in srgb, var(--lesson-pathophysiology-accent) 10%, var(--semantic-surface));
+  --lesson-pathophysiology-contrast: color-mix(in srgb, var(--lesson-pathophysiology-accent) 70%, var(--semantic-text-primary));
+  --lesson-diagnostics-accent: var(--semantic-warning);
+  --lesson-diagnostics-soft: var(--semantic-warning-soft);
+  --lesson-diagnostics-contrast: var(--semantic-warning-contrast);
+  --lesson-symptoms-accent: color-mix(in srgb, var(--semantic-warning) 82%, var(--semantic-danger));
+  --lesson-symptoms-soft: color-mix(in srgb, var(--lesson-symptoms-accent) 10%, var(--semantic-surface));
+  --lesson-symptoms-contrast: color-mix(in srgb, var(--lesson-symptoms-accent) 70%, var(--semantic-text-primary));
+  --lesson-red-flags-accent: var(--semantic-danger);
+  --lesson-red-flags-soft: var(--semantic-danger-soft);
+  --lesson-red-flags-contrast: var(--semantic-danger-contrast);
+  --lesson-interventions-accent: var(--semantic-success);
+  --lesson-interventions-soft: var(--semantic-success-soft);
+  --lesson-interventions-contrast: var(--semantic-success-contrast);
+  --lesson-teaching-accent: var(--semantic-info);
+  --lesson-teaching-soft: var(--semantic-info-soft);
+  --lesson-teaching-contrast: var(--semantic-info-contrast);
+  --lesson-medications-accent: var(--semantic-chart-5);
+  --lesson-medications-soft: color-mix(in srgb, var(--lesson-medications-accent) 10%, var(--semantic-surface));
+  --lesson-medications-contrast: color-mix(in srgb, var(--lesson-medications-accent) 70%, var(--semantic-text-primary));
+  --lesson-pearls-accent: var(--semantic-chart-5);
+  --lesson-pearls-soft: color-mix(in srgb, var(--lesson-pearls-accent) 10%, var(--semantic-surface));
+  --lesson-pearls-contrast: color-mix(in srgb, var(--lesson-pearls-accent) 70%, var(--semantic-text-primary));
+  --lesson-exam-focus-accent: var(--semantic-brand);
+  --lesson-exam-focus-soft: var(--semantic-brand-soft);
+  --lesson-exam-focus-contrast: color-mix(in srgb, var(--lesson-exam-focus-accent) 72%, var(--semantic-text-primary));
+  --lesson-next-steps-accent: var(--semantic-text-muted);
+  --lesson-next-steps-soft: var(--semantic-panel-muted);
+  --lesson-next-steps-contrast: var(--semantic-text-secondary);
+}
+
+/*
+ * SPECIFICITY: `html[data-theme]` is (0,1,1) — beats :root's (0,1,0). Required for the
+ * semantic ↔ theme remap to actually override the first-paint defaults declared on :root above.
+ * Do NOT replace with :where([data-theme]) — :where() has 0 specificity, loses to :root,
+ * and freezes every semantic token at the Ocean default for all themes.
+ * Verified by tests/contracts/marketing-theme-propagation.contract.test.ts.
+ */
+html[data-theme] {
+  --semantic-bg-base: var(--bg-page);
+  --semantic-bg-soft: var(--bg-section-alt);
+  --semantic-surface: var(--bg-card);
+  --semantic-surface-elevated: var(--bg-elevated);
+  --semantic-border-soft: var(--border-subtle);
+  --semantic-shadow-soft: var(--shadow-card);
+  --semantic-text-primary: var(--theme-heading-text);
+  --semantic-text-secondary: var(--theme-body-text);
+  --semantic-text-muted: var(--theme-muted-text);
+  --semantic-brand: var(--theme-primary);
+  --semantic-brand-soft: var(--accent-soft);
+  --semantic-brand-contrast: var(--text-on-accent);
+  /* Default light-UI multi-color semantics (overridden per theme below) */
+  --semantic-success: #16a34a;
+  --semantic-success-soft: color-mix(in srgb, #16a34a 12%, var(--bg-card));
+  --semantic-success-contrast: #14532d;
+  --semantic-info: #0ea5dc;
+  --semantic-info-soft: color-mix(in srgb, #0ea5dc 11%, var(--bg-card));
+  --semantic-info-contrast: #0c4a6e;
+  --semantic-warning: #d97706;
+  --semantic-warning-soft: color-mix(in srgb, #d97706 12%, var(--bg-card));
+  --semantic-warning-contrast: #78350f;
+  --semantic-danger: #e11d48;
+  --semantic-danger-soft: color-mix(in srgb, #e11d48 10%, var(--bg-card));
+  --semantic-danger-contrast: #9f1239;
+  --semantic-mastery-high: var(--semantic-success);
+  --semantic-mastery-mid: var(--semantic-warning);
+  --semantic-mastery-low: var(--semantic-danger);
+  --semantic-chart-1: var(--semantic-brand);
+  --semantic-chart-2: var(--semantic-success);
+  --semantic-chart-3: var(--semantic-info);
+  --semantic-chart-4: var(--semantic-warning);
+  --semantic-chart-5: #b070ea;
+  /* Muted panels: neutral gray-50 — theme hue stays on controls / links */
+  --semantic-panel-muted: var(--bg-section-alt, #f9fafb);
+  --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 11%, var(--bg-card));
+
+  /* -----------------------------------------------------------------------
+   * Multi-surface layering system — visual depth without harsh contrast
+   *
+   * surface-base     → page background (most neutral)
+   * surface-elevated → floating cards above base
+   * surface-soft-a   → gentle primary brand tint (sections, alternating strips)
+   * surface-soft-b   → gentle success tint (positive / completion blocks)
+   * surface-soft-c   → gentle info/cool tint (clinical pearls, info insets)
+   * surface-emphasis → stronger brand tint (highlighted callouts, key facts)
+   * ----------------------------------------------------------------------- */
+  --surface-base: var(--bg-page);
+  --surface-elevated: var(--bg-elevated);
+  --surface-soft-a: var(--bg-section-alt, #f9fafb);
+  --surface-soft-b: color-mix(in srgb, var(--semantic-success) 5%, var(--bg-card));
+  --surface-soft-c: color-mix(in srgb, var(--semantic-info) 5%, var(--bg-card));
+  --surface-emphasis: color-mix(in srgb, var(--semantic-brand) 8%, var(--bg-card));
+
+  /* Short alias names (design-spec parity — all resolve to semantic tokens above) */
+  --bg-base: var(--semantic-bg-base);
+  --bg-soft: var(--semantic-bg-soft);
+  --surface: var(--semantic-surface);
+  --surface-elevated: var(--semantic-surface-elevated);
+  --border-soft: var(--semantic-border-soft);
+  --shadow-soft: var(--semantic-shadow-soft);
+  --text-primary: var(--semantic-text-primary);
+  --text-secondary: var(--semantic-text-secondary);
+  --text-muted: var(--semantic-text-muted);
+  --brand: var(--semantic-brand);
+  --brand-soft: var(--semantic-brand-soft);
+  --brand-contrast: var(--semantic-brand-contrast);
+  --success: var(--semantic-success);
+  --success-soft: var(--semantic-success-soft);
+  --success-contrast: var(--semantic-success-contrast);
+  --info: var(--semantic-info);
+  --info-soft: var(--semantic-info-soft);
+  --info-contrast: var(--semantic-info-contrast);
+  --warning: var(--semantic-warning);
+  --warning-soft: var(--semantic-warning-soft);
+  --warning-contrast: var(--semantic-warning-contrast);
+  --danger: var(--semantic-danger);
+  --danger-soft: var(--semantic-danger-soft);
+  --danger-contrast: var(--semantic-danger-contrast);
+  --chart-1: var(--semantic-chart-1);
+  --chart-2: var(--semantic-chart-2);
+  --chart-3: var(--semantic-chart-3);
+  --chart-4: var(--semantic-chart-4);
+  --chart-5: var(--semantic-chart-5);
+  --chart-6: var(--semantic-chart-6);
+  --chart-7: var(--semantic-chart-7);
+  --chart-8: var(--semantic-chart-8);
+  --chart-9: var(--semantic-chart-9);
+  --accent-turquoise: var(--semantic-accent-turquoise);
+  --accent-seafoam: var(--semantic-accent-seafoam);
+  --accent-mint: var(--semantic-accent-mint);
+  --accent-periwinkle: var(--semantic-accent-periwinkle);
+  --accent-peach: var(--semantic-accent-peach);
+  --accent-gold: var(--semantic-accent-gold);
+  --accent-plum: var(--semantic-accent-plum);
+  --accent-indigo: var(--semantic-accent-indigo);
+  --accent-lavender: var(--semantic-accent-lavender);
+  --mastery-high: var(--semantic-mastery-high);
+  --mastery-mid: var(--semantic-mastery-mid);
+  --mastery-low: var(--semantic-mastery-low);
+  --decorative-1: color-mix(in srgb, var(--semantic-info) 42%, var(--semantic-brand));
+  --decorative-2: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-warning));
+  --decorative-3: color-mix(in srgb, var(--semantic-accent-turquoise) 42%, var(--semantic-accent-lavender));
+  --decorative-4: color-mix(in srgb, var(--semantic-accent-peach) 44%, var(--semantic-accent-mint));
+  --hero-gradient-start: transparent;
+  --hero-gradient-mid: transparent;
+  --hero-gradient-end: transparent;
+
+  /* ── Requested surface aliases ── */
+  --surface-soft: var(--surface-soft-a);
+  --surface-muted: var(--semantic-panel-muted);
+
+  /* ── Requested text aliases ── */
+  --text-inverse: var(--text-on-accent);
+
+  /* ── Requested accent aliases ── */
+  --accent-muted: var(--semantic-brand-soft);
+  --accent-strong: var(--surface-emphasis);
+
+  /* ── CTA aliases (map to existing role-cta) ── */
+  --cta-primary-bg: var(--role-cta);
+  --cta-primary-text: var(--role-cta-foreground);
+  --cta-secondary-bg: var(--role-cta-soft);
+  --cta-secondary-text: var(--role-cta-on-soft);
+  --cta-emphasis-bg: color-mix(in srgb, var(--role-cta) 82%, var(--semantic-warning));
+  --cta-emphasis-text: var(--role-cta-foreground);
+
+  /* ── Semantic application (learner-context brand alias) ── */
+  --semantic-application: var(--semantic-brand);
+
+  /* ── Progress aliases ── */
+  --progress-low: var(--semantic-mastery-low);
+  --progress-mid: var(--semantic-mastery-mid);
+  --progress-high: var(--semantic-mastery-high);
+
+  /* Premium NurseNest UI tokens — components use these instead of page-level colors. */
+  --nn-surface: var(--semantic-surface);
+  --nn-surface-muted: var(--semantic-panel-muted);
+  --nn-surface-elevated: var(--semantic-surface-elevated);
+  --nn-border: var(--semantic-border-soft);
+  --nn-border-strong: color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-text-muted));
+  --nn-text-primary: var(--semantic-text-primary);
+  --nn-text-muted: var(--semantic-text-muted);
+  --nn-accent-primary: var(--semantic-brand);
+  --nn-accent-soft: var(--semantic-brand-soft);
+  --nn-accent-ring: color-mix(in srgb, var(--semantic-brand) 35%, transparent);
+  --nn-success: var(--semantic-success);
+  --nn-warning: var(--semantic-warning);
+  --nn-danger: var(--semantic-danger);
+  --nn-info: var(--semantic-info);
+  --nn-mastery: var(--semantic-mastery-high);
+  --nn-study: var(--semantic-info);
+  --nn-reinforce: var(--semantic-chart-5);
+  --nn-module-clinical-pearls: var(--semantic-accent-lavender);
+  --nn-module-pharmacology: var(--semantic-accent-peach);
+  --nn-module-labs: var(--semantic-accent-turquoise);
+  --nn-module-ecg: var(--semantic-accent-indigo);
+  --nn-module-ngn: var(--semantic-accent-periwinkle);
+  --nn-module-safety: var(--semantic-danger);
+  --nn-module-communication: var(--semantic-accent-seafoam);
+  --nn-module-delegation: var(--semantic-accent-gold);
+  --nn-module-weak-areas: var(--semantic-warning);
+  --nn-module-flashcards: var(--semantic-chart-5);
+  --nn-module-cat: var(--semantic-chart-4);
+  --nn-module-practice: var(--semantic-chart-3);
+
+  /* Lesson semantic section colors. Distinct roles, theme-aware expression. */
+  --lesson-pathophysiology-accent: var(--semantic-violet);
+  --lesson-pathophysiology-soft: var(--semantic-violet-soft);
+  --lesson-pathophysiology-contrast: var(--semantic-violet-contrast);
+  --lesson-diagnostics-accent: var(--semantic-warning);
+  --lesson-diagnostics-soft: var(--semantic-warning-soft);
+  --lesson-diagnostics-contrast: var(--semantic-warning-contrast);
+  --lesson-symptoms-accent: color-mix(in srgb, var(--semantic-warning) 82%, var(--semantic-danger));
+  --lesson-symptoms-soft: color-mix(in srgb, var(--lesson-symptoms-accent) 10%, var(--bg-card));
+  --lesson-symptoms-contrast: color-mix(in srgb, var(--lesson-symptoms-accent) 70%, var(--semantic-text-primary));
+  --lesson-red-flags-accent: var(--semantic-danger);
+  --lesson-red-flags-soft: var(--semantic-danger-soft);
+  --lesson-red-flags-contrast: var(--semantic-danger-contrast);
+  --lesson-interventions-accent: var(--semantic-success);
+  --lesson-interventions-soft: var(--semantic-success-soft);
+  --lesson-interventions-contrast: var(--semantic-success-contrast);
+  --lesson-teaching-accent: var(--semantic-cyan);
+  --lesson-teaching-soft: var(--semantic-cyan-soft);
+  --lesson-teaching-contrast: var(--semantic-cyan-contrast);
+  --lesson-medications-accent: var(--semantic-chart-5);
+  --lesson-medications-soft: color-mix(in srgb, var(--lesson-medications-accent) 10%, var(--bg-card));
+  --lesson-medications-contrast: color-mix(in srgb, var(--lesson-medications-accent) 70%, var(--semantic-text-primary));
+  --lesson-pearls-accent: var(--semantic-violet);
+  --lesson-pearls-soft: var(--semantic-violet-soft);
+  --lesson-pearls-contrast: var(--semantic-violet-contrast);
+  --lesson-exam-focus-accent: var(--semantic-info);
+  --lesson-exam-focus-soft: var(--semantic-info-soft);
+  --lesson-exam-focus-contrast: var(--semantic-info-contrast);
+  --lesson-next-steps-accent: var(--semantic-text-muted);
+  --lesson-next-steps-soft: var(--semantic-panel-muted);
+  --lesson-next-steps-contrast: var(--semantic-text-secondary);
+}
+
+/* Lavender: brand violet — success mint, info sky, warning amber, danger coral-rose */
+html[data-theme="lavender"],
+html[data-theme="pastel-lavender"],
+html[data-theme="lavender-dream"] {
+  --semantic-success: #22c55e;
+  --semantic-success-soft: color-mix(in srgb, #22c55e 11%, var(--bg-card));
+  --semantic-success-contrast: #166534;
+  --semantic-info: #38bdf8;
+  --semantic-info-soft: color-mix(in srgb, #38bdf8 11%, var(--bg-card));
+  --semantic-info-contrast: #075985;
+  --semantic-warning: #fbbf24;
+  --semantic-warning-soft: color-mix(in srgb, #fbbf24 12%, var(--bg-card));
+  --semantic-warning-contrast: #92400e;
+  --semantic-danger: #fb7185;
+  --semantic-danger-soft: color-mix(in srgb, #fb7185 11%, var(--bg-card));
+  --semantic-danger-contrast: #9f1239;
+  --semantic-chart-2: #22c55e;
+  --semantic-chart-3: #38bdf8;
+  --semantic-chart-4: #fbbf24;
+  --semantic-chart-5: #7c3aed;
+}
+
+/* Mint / teal brand — success deeper green, info blue, danger coral */
+html[data-theme="mint"],
+html[data-theme="pastel-mint"],
+html[data-theme="forest"],
+html[data-theme="teal"],
+html[data-theme="soft-sage"] {
+  --semantic-success: #059669;
+  --semantic-success-soft: color-mix(in srgb, #059669 11%, var(--bg-card));
+  --semantic-info: #2563eb;
+  --semantic-info-soft: color-mix(in srgb, #2563eb 10%, var(--bg-card));
+  --semantic-info-contrast: #1e3a8a;
+  --semantic-warning: #f59e0b;
+  --semantic-warning-soft: color-mix(in srgb, #f59e0b 11%, var(--bg-card));
+  --semantic-danger: #f97316;
+  --semantic-danger-soft: color-mix(in srgb, #f97316 10%, var(--bg-card));
+  --semantic-chart-2: #10b981;
+  --semantic-chart-3: #3b82f6;
+  --semantic-chart-4: #f59e0b;
+  --semantic-chart-5: #8b5cf6;
+}
+
+/* Aurora — borealis purple with mint success, aqua study-time, and soft pink streak accents. */
+html[data-theme="aurora"] {
+  --semantic-brand-soft: color-mix(in srgb, #8b5cf6 12%, var(--bg-card));
+  --semantic-brand: #8b5cf6;
+  --semantic-chart-1: #8b5cf6;
+  --semantic-success: #24b889;
+  --semantic-success-soft: color-mix(in srgb, #6ee7b7 13%, var(--bg-card));
+  --semantic-success-contrast: #0f6b52;
+  --semantic-info: #0891b2;
+  --semantic-info-soft: color-mix(in srgb, #67e8f9 12%, var(--bg-card));
+  --semantic-info-contrast: #155e75;
+  --semantic-warning: #0891b2;
+  --semantic-warning-soft: color-mix(in srgb, #67e8f9 10%, var(--bg-card));
+  --semantic-warning-contrast: #155e75;
+  --semantic-danger: #d9468f;
+  --semantic-danger-soft: color-mix(in srgb, #f9a8d4 10%, var(--bg-card));
+  --semantic-chart-2: #24b889;
+  --semantic-chart-3: #67e8f9;
+  --semantic-chart-4: #6ee7b7;
+  --semantic-chart-5: #f9a8d4;
+  --semantic-panel-muted: color-mix(in srgb, #8b5cf6 5%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #f9a8d4 9%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #67e8f9 10%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #6ee7b7 12%, var(--bg-card));
+}
+
+/* Sunset — warm coral + sky + mint + golden accents (multi-hue; readable on cream) */
+html[data-theme="sunset"] {
+  --semantic-brand-soft: color-mix(in srgb, #e07862 11%, var(--bg-card));
+  --semantic-chart-1: #e07862;
+  --semantic-success: #34d399;
+  --semantic-success-soft: color-mix(in srgb, #34d399 11%, var(--bg-card));
+  --semantic-success-contrast: #14532d;
+  --semantic-info: #38bdf8;
+  --semantic-info-soft: color-mix(in srgb, #38bdf8 11%, var(--bg-card));
+  --semantic-info-contrast: #1e3a5f;
+  --semantic-warning: #e8b44f;
+  --semantic-warning-soft: color-mix(in srgb, #e8b44f 12%, var(--bg-card));
+  --semantic-warning-contrast: #713f12;
+  --semantic-danger: #e07862;
+  --semantic-danger-soft: color-mix(in srgb, #e07862 10%, var(--bg-card));
+  --semantic-chart-2: #34d399;
+  --semantic-chart-3: #38bdf8;
+  --semantic-chart-4: #e8b44f;
+  --semantic-chart-5: #7dd3fc;
+  --semantic-panel-muted: color-mix(in srgb, #1a2438 4%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #e07862 9%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #38bdf8 10%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #34d399 10%, var(--bg-card));
+}
+
+/* Blush / rose / strawberry brand — success mint, info periwinkle */
+html[data-theme="blush"],
+html[data-theme="pastel-blush"],
+html[data-theme="strawberry"] {
+  --semantic-success: #34d399;
+  --semantic-success-soft: color-mix(in srgb, #34d399 11%, var(--bg-card));
+  --semantic-info: #818cf8;
+  --semantic-info-soft: color-mix(in srgb, #818cf8 10%, var(--bg-card));
+  --semantic-info-contrast: #3730a3;
+  --semantic-warning: #fcd34d;
+  --semantic-warning-soft: color-mix(in srgb, #fcd34d 12%, var(--bg-card));
+  --semantic-warning-contrast: #92400e;
+  --semantic-danger: #e11d48;
+  --semantic-danger-soft: color-mix(in srgb, #e11d48 10%, var(--bg-card));
+  --semantic-chart-2: #34d399;
+  --semantic-chart-3: #818cf8;
+  --semantic-chart-4: #fbbf24;
+  --semantic-chart-5: #a855f7;
+}
+
+/* Ocean / clinical blue — keep success green distinct from brand blue */
+html[data-theme="ocean"],
+html[data-theme="clinical-light"] {
+  --semantic-success: #16a34a;
+  --semantic-success-soft: color-mix(in srgb, #16a34a 11%, var(--bg-card));
+  --semantic-success-contrast: #14532d;
+  --semantic-info: #06b6d4;
+  --semantic-info-soft: color-mix(in srgb, #06b6d4 10%, var(--bg-card));
+  --semantic-info-contrast: #063f8f;
+  --semantic-warning: #f59e0b;
+  --semantic-warning-soft: color-mix(in srgb, #f59e0b 11%, var(--bg-card));
+  --semantic-danger: #f87171;
+  --semantic-danger-soft: color-mix(in srgb, #f87171 10%, var(--bg-card));
+  --semantic-chart-2: #16a34a;
+  --semantic-chart-3: #06b6d4;
+  --semantic-chart-4: #f59e0b;
+  --semantic-chart-5: #007bff;
+}
+
+/* Multi-pastel — balanced across all hues; chart colors are deeper than background accents */
+html[data-theme="multi-pastel"] {
+  --semantic-success: #22c55e;
+  --semantic-success-soft: color-mix(in srgb, #22c55e 11%, var(--bg-card));
+  --semantic-success-contrast: #14532d;
+  /* Info uses a deeper blue than the primary so it reads as a distinct role */
+  --semantic-info: #5b8db8;
+  --semantic-info-soft: color-mix(in srgb, #5b8db8 11%, var(--bg-card));
+  --semantic-info-contrast: #1e3a5f;
+  --semantic-warning: #d97706;
+  --semantic-warning-soft: color-mix(in srgb, #d97706 11%, var(--bg-card));
+  --semantic-warning-contrast: #78350f;
+  --semantic-danger: #e11d48;
+  --semantic-danger-soft: color-mix(in srgb, #e11d48 10%, var(--bg-card));
+  --semantic-danger-contrast: #9f1239;
+  /* Chart palette uses saturated mid-tone versions of the cozy pastel hues */
+  --semantic-chart-1: #90b4d4;
+  --semantic-chart-2: #5aaa8e;
+  --semantic-chart-3: #9585c8;
+  --semantic-chart-4: #c89050;
+  --semantic-chart-5: #64748b;
+}
+
+html[data-theme="dark-clinical"],
+html[data-theme="dark-academia"],
+html[data-theme="dark-mode"],
+html[data-theme="midnight"],
+html[data-theme="midnight-indigo"],
+html[data-theme="deep-twilight"] {
+  /* Multi-surface: higher % so tints are perceptible on dark backgrounds */
+  --surface-soft-a: color-mix(in srgb, var(--theme-primary) 9%, var(--bg-page));
+  --surface-soft-b: color-mix(in srgb, var(--semantic-success) 11%, var(--bg-card));
+  --surface-soft-c: color-mix(in srgb, var(--semantic-info) 11%, var(--bg-card));
+  --surface-emphasis: color-mix(in srgb, var(--semantic-brand) 15%, var(--bg-card));
+
+  --semantic-success: #34d399;
+  --semantic-success-soft: color-mix(in srgb, #34d399 14%, var(--bg-card));
+  --semantic-success-contrast: #a7f3d0;
+  --semantic-info: #38bdf8;
+  --semantic-info-soft: color-mix(in srgb, #38bdf8 14%, var(--bg-card));
+  --semantic-info-contrast: #bae6fd;
+  --semantic-warning: #fbbf24;
+  --semantic-warning-soft: color-mix(in srgb, #fbbf24 14%, var(--bg-card));
+  --semantic-warning-contrast: #fde68a;
+  --semantic-danger: #fb7185;
+  --semantic-danger-soft: color-mix(in srgb, #fb7185 12%, var(--bg-card));
+  --semantic-danger-contrast: #fecdd3;
+  --semantic-mastery-high: #34d399;
+  --semantic-mastery-mid: #fbbf24;
+  --semantic-mastery-low: #fb7185;
+  --semantic-chart-2: #34d399;
+  --semantic-chart-3: #38bdf8;
+  --semantic-chart-4: #fbbf24;
+  /* Fifth chart hue — slate-violet (avoid pink/magenta on marketing + dashboards) */
+  --semantic-chart-5: #818cf8;
+  --semantic-panel-muted: color-mix(in srgb, var(--theme-primary) 10%, var(--bg-card));
+  --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 10%, var(--bg-card));
+}
+
+/* Premium expanded ecosystem palettes — homepage-grade richness for dense product surfaces. */
+html[data-theme="ocean"] {
+  --semantic-chart-1: #168cc7;
+  --semantic-chart-2: #25b9b1;
+  --semantic-chart-3: #81d6d1;
+  --semantic-chart-4: #d8bd79;
+  --semantic-chart-5: #0f4b6e;
+  --semantic-chart-6: #8fafc4;
+  --semantic-chart-7: #6dd7b6;
+  --semantic-chart-8: #4aa3cf;
+  --semantic-chart-9: #b9ecf2;
+  --semantic-accent-turquoise: #25b9b1;
+  --semantic-accent-seafoam: #81d6d1;
+  --semantic-accent-mint: #6dd7b6;
+  --semantic-accent-periwinkle: #7f98c8;
+  --semantic-accent-peach: #e4c783;
+  --semantic-accent-gold: #d8bd79;
+  --semantic-accent-plum: #6a7597;
+  --semantic-accent-indigo: #0f4b6e;
+  --semantic-accent-lavender: #8fa8d8;
+  --semantic-panel-aqua: color-mix(in srgb, #25b9b1 12%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #6dd7b6 11%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #8fa8d8 10%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #e4c783 12%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #d8bd79 12%, var(--bg-card));
+}
+
+html[data-theme="blossom"] {
+  /* Blossom stays white-first; semantic color is used as accent and data signal. */
+  --semantic-brand-soft: color-mix(in srgb, #e94f82 9%, var(--bg-card));
+  --semantic-brand: #e94f82;
+  --semantic-success: #e94f82;
+  --semantic-success-soft: color-mix(in srgb, #e94f82 9%, var(--bg-card));
+  --semantic-success-contrast: #7f123f;
+  --semantic-info: #0b7db5;
+  --semantic-info-soft: color-mix(in srgb, #65c4e9 10%, var(--bg-card));
+  --semantic-info-contrast: #065078;
+  --semantic-warning: #c07800;
+  --semantic-warning-soft: color-mix(in srgb, #f8c84f 12%, var(--bg-card));
+  --semantic-warning-contrast: #5a3a00;
+  --semantic-danger: #c83a6a;
+  --semantic-danger-soft: color-mix(in srgb, #f7a9c2 9%, var(--bg-card));
+  --semantic-danger-contrast: #8b1748;
+  /* Chart palette: pink, peach, sunshine, and sky are distinct accents on white surfaces. */
+  --semantic-chart-1: #e94f82;
+  --semantic-chart-2: #ffb978;
+  --semantic-chart-3: #f8c84f;
+  --semantic-chart-4: #65c4e9;
+  --semantic-chart-5: #f7a9c2;
+  --semantic-chart-6: #ffd9e4;
+  --semantic-chart-7: #ff9f73;
+  --semantic-chart-8: #ffe27a;
+  --semantic-chart-9: #42b7df;
+  --semantic-accent-turquoise: #65c4e9;
+  --semantic-accent-seafoam: #b8f0ff;
+  --semantic-accent-mint: #ffdce8;
+  --semantic-accent-periwinkle: #65c4e9;
+  --semantic-accent-peach: #ffb978;
+  --semantic-accent-gold: #f8c84f;
+  --semantic-accent-plum: #c83a6a;
+  --semantic-accent-indigo: #0b7db5;
+  --semantic-accent-lavender: #ffd9e4;
+  --semantic-panel-muted: color-mix(in srgb, #fff8fa 42%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #ffb978 9%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #65c4e9 9%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #e94f82 8%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #65c4e9 10%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #f7a9c2 7%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #ffd9e4 9%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #ffb978 10%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #f8c84f 11%, var(--bg-card));
+  --semantic-violet: #c83a6a;
+  --semantic-violet-soft: color-mix(in srgb, #f7a9c2 8%, var(--bg-card));
+  --semantic-violet-contrast: #8b1748;
+}
+
+html[data-theme="mint-blossom"] {
+  --semantic-brand-soft: color-mix(in srgb, #a7f3d0 16%, var(--bg-card));
+  --semantic-brand: #1d7ed8;
+  --semantic-success: #2fbf92;
+  --semantic-success-soft: color-mix(in srgb, #a7f3d0 20%, var(--bg-card));
+  --semantic-success-contrast: #0f6b52;
+  --semantic-info: #2f93dd;
+  --semantic-info-soft: color-mix(in srgb, #9ec5fe 16%, var(--bg-card));
+  --semantic-info-contrast: #155b8e;
+  --semantic-warning: #d6a514;
+  --semantic-warning-soft: color-mix(in srgb, #fde68a 12%, var(--bg-card));
+  --semantic-warning-contrast: #6f4f00;
+  --semantic-danger: #d85d8e;
+  --semantic-danger-soft: color-mix(in srgb, #f8c8dc 10%, var(--bg-card));
+  --semantic-danger-contrast: #8f315b;
+  --semantic-chart-1: #1d7ed8;
+  --semantic-chart-2: #2fbf92;
+  --semantic-chart-3: #9ec5fe;
+  --semantic-chart-4: #a7f3d0;
+  --semantic-chart-5: #f8c8dc;
+  --semantic-chart-6: #dbeafe;
+  --semantic-chart-7: #7ddfc0;
+  --semantic-chart-8: #fde68a;
+  --semantic-chart-9: #67aae9;
+  --semantic-accent-turquoise: #a7f3d0;
+  --semantic-accent-seafoam: #7ddfc0;
+  --semantic-accent-mint: #a7f3d0;
+  --semantic-accent-periwinkle: #9ec5fe;
+  --semantic-accent-peach: #f8c8dc;
+  --semantic-accent-gold: #fde68a;
+  --semantic-accent-plum: #d85d8e;
+  --semantic-accent-indigo: #1d7ed8;
+  --semantic-accent-lavender: #dbeafe;
+  --semantic-panel-muted: color-mix(in srgb, #f8fafc 54%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #fde68a 9%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #9ec5fe 12%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #a7f3d0 18%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #a7f3d0 16%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #a7f3d0 18%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #9ec5fe 9%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #f8c8dc 7%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #fde68a 9%, var(--bg-card));
+  --semantic-violet: #67aae9;
+  --semantic-violet-soft: color-mix(in srgb, #9ec5fe 9%, var(--bg-card));
+  --semantic-violet-contrast: #155b8e;
+}
+
+html[data-theme="aurora"] {
+  --semantic-brand-soft: color-mix(in srgb, #8b5cf6 12%, var(--bg-card));
+  --semantic-brand: #8b5cf6;
+  --semantic-chart-1: #8b5cf6;
+  --semantic-chart-2: #24b889;
+  --semantic-chart-3: #67e8f9;
+  --semantic-chart-4: #6ee7b7;
+  --semantic-chart-5: #f9a8d4;
+  --semantic-chart-6: #c4b5fd;
+  --semantic-chart-7: #2dd4bf;
+  --semantic-chart-8: #a78bfa;
+  --semantic-chart-9: #155e75;
+  --semantic-accent-turquoise: #67e8f9;
+  --semantic-accent-seafoam: #6ee7b7;
+  --semantic-accent-mint: #6ee7b7;
+  --semantic-accent-periwinkle: #c4b5fd;
+  --semantic-accent-peach: #f9a8d4;
+  --semantic-accent-gold: #67e8f9;
+  --semantic-accent-plum: #d9468f;
+  --semantic-accent-indigo: #8b5cf6;
+  --semantic-accent-lavender: #c4b5fd;
+  --semantic-panel-muted: color-mix(in srgb, #8b5cf6 5%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #f9a8d4 8%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #67e8f9 11%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #6ee7b7 13%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #67e8f9 13%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #6ee7b7 13%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #8b5cf6 10%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #f9a8d4 8%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #67e8f9 9%, var(--bg-card));
+  --semantic-violet: #8b5cf6;
+  --semantic-violet-soft: color-mix(in srgb, #8b5cf6 10%, var(--bg-card));
+  --semantic-violet-contrast: #5b21b6;
+}
+
+/* Marketing homepage layered surfaces (semantic aliases — color-only; no layout). */
+html[data-theme="ocean"] {
+  --nn-marketing-surface-secondary: var(--semantic-panel-cool);
+  --nn-marketing-surface-tertiary: var(--semantic-panel-mint);
+  --nn-marketing-gradient-hero: linear-gradient(
+    94deg,
+    color-mix(in srgb, var(--semantic-chart-2) 95%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 90%, var(--semantic-border-soft)) 44%,
+    color-mix(in srgb, var(--semantic-chart-3) 92%, var(--semantic-border-soft)) 100%
+  );
+  --nn-marketing-gradient-ocean: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-panel-aqua) 40%, var(--semantic-surface)) 0%,
+    var(--semantic-bg-base) 42%,
+    color-mix(in srgb, var(--semantic-panel-mint) 25%, var(--semantic-bg-base)) 100%
+  );
+}
+
+html[data-theme="blossom"],
+html[data-theme="sea-glass"],
+html[data-theme="mint-blossom"] {
+  --nn-marketing-surface-secondary: var(--semantic-panel-mint);
+  --nn-marketing-surface-tertiary: var(--semantic-panel-cool);
+  --nn-premium-meter-brand: linear-gradient(90deg, #9ec5fe, #a7f3d0);
+  --nn-premium-meter-info: linear-gradient(90deg, #9ec5fe, #a7f3d0);
+  --nn-premium-meter-success: linear-gradient(90deg, #a7f3d0, #9ec5fe);
+  --nn-premium-meter-warning: linear-gradient(90deg, #fde68a, #9ec5fe);
+  --nn-premium-meter-danger: linear-gradient(90deg, #f8c8dc, #9ec5fe);
+  --nn-marketing-gradient-hero: linear-gradient(
+    92deg,
+    color-mix(in srgb, var(--semantic-chart-1) 96%, transparent) 0%,
+    color-mix(in srgb, var(--semantic-chart-2) 94%, transparent) 48%,
+    color-mix(in srgb, var(--semantic-chart-3) 95%, transparent) 100%
+  );
+  --nn-marketing-gradient-blossom: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-chart-1) 8%, var(--semantic-bg-base)) 0%,
+    var(--semantic-bg-base) 45%,
+    color-mix(in srgb, var(--semantic-chart-4) 8%, var(--semantic-bg-base)) 100%
+  );
+}
+
+html[data-theme="sea-glass"],
+html[data-theme="mint-blossom"] {
+  --nn-marketing-surface-secondary: #f8fffe;
+  --nn-marketing-surface-tertiary: #fcfffe;
+  --nn-premium-meter-brand: linear-gradient(90deg, #99c6df 0%, #a6e9d7 50%, #7cc9be 100%);
+  --nn-premium-meter-info: linear-gradient(90deg, #99c6df 0%, #a6e9d7 50%, #7cc9be 100%);
+  --nn-premium-meter-success: linear-gradient(90deg, #a6e9d7 0%, #7cc9be 100%);
+  --nn-premium-meter-warning: linear-gradient(90deg, #f4c67a 0%, #a6e9d7 100%);
+  --nn-premium-meter-danger: linear-gradient(90deg, #f18b8b 0%, #99c6df 100%);
+  --nn-marketing-gradient-hero: linear-gradient(135deg, #f8fafc 0%, #ddecf5 35%, #c6e7e0 70%, #7cc9be 100%);
+}
+
+html[data-theme="aurora"] {
+  --nn-marketing-surface-secondary: var(--semantic-panel-cool);
+  --nn-marketing-surface-tertiary: var(--semantic-panel-warm);
+  --nn-marketing-gradient-hero: linear-gradient(
+    94deg,
+    color-mix(in srgb, #8b5cf6 90%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, #67e8f9 84%, var(--semantic-border-soft)) 48%,
+    color-mix(in srgb, #6ee7b7 86%, var(--semantic-border-soft)) 100%
+  );
+  --nn-premium-meter-brand: linear-gradient(90deg, #8b5cf6, #6ee7b7);
+  --nn-premium-meter-info: linear-gradient(90deg, #67e8f9, #6ee7b7);
+  --nn-premium-meter-success: linear-gradient(90deg, #6ee7b7, #67e8f9);
+  --nn-premium-meter-warning: linear-gradient(90deg, #67e8f9, #f9a8d4);
+  --nn-premium-meter-danger: linear-gradient(90deg, #f9a8d4, #8b5cf6);
+}
+
+html[data-theme="sunset"] {
+  --semantic-chart-1: #df704a;
+  --semantic-chart-2: #c75f78;
+  --semantic-chart-3: #b7a1d8;
+  --semantic-chart-4: #d9a44c;
+  --semantic-chart-5: #24445f;
+  --semantic-chart-6: #8e5a7f;
+  --semantic-chart-7: #f4b887;
+  --semantic-chart-8: #e7b6c1;
+  --semantic-chart-9: #f1d08a;
+  --semantic-accent-turquoise: #4f9f9a;
+  --semantic-accent-seafoam: #93c6a8;
+  --semantic-accent-mint: #7dbf9f;
+  --semantic-accent-periwinkle: #b7a1d8;
+  --semantic-accent-peach: #f4b887;
+  --semantic-accent-gold: #d9a44c;
+  --semantic-accent-plum: #8e5a7f;
+  --semantic-accent-indigo: #24445f;
+  --semantic-accent-lavender: #b7a1d8;
+  --semantic-panel-muted: color-mix(in srgb, #24445f 5%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #df704a 11%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #b7a1d8 11%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #7dbf9f 11%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #4f9f9a 10%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #7dbf9f 11%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #b7a1d8 13%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #f4b887 15%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #d9a44c 13%, var(--bg-card));
+}
+
+html[data-theme="midnight"] {
+  --semantic-chart-1: #78c7ff;
+  --semantic-chart-2: #35c6b8;
+  --semantic-chart-3: #6a83d8;
+  --semantic-chart-4: #d6b56d;
+  --semantic-chart-5: #a987d9;
+  --semantic-chart-6: #92e2c2;
+  --semantic-chart-7: #466c91;
+  --semantic-chart-8: #4dd1e1;
+  --semantic-chart-9: #203a66;
+  --semantic-accent-turquoise: #35c6b8;
+  --semantic-accent-seafoam: #92e2c2;
+  --semantic-accent-mint: #6ee7b7;
+  --semantic-accent-periwinkle: #6a83d8;
+  --semantic-accent-peach: #d6b56d;
+  --semantic-accent-gold: #d6b56d;
+  --semantic-accent-plum: #a987d9;
+  --semantic-accent-indigo: #203a66;
+  --semantic-accent-lavender: #a987d9;
+  --semantic-panel-muted: color-mix(in srgb, #78c7ff 9%, var(--bg-card));
+  --semantic-panel-warm: color-mix(in srgb, #d6b56d 12%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #78c7ff 13%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #35c6b8 13%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #4dd1e1 14%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #92e2c2 13%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #a987d9 14%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #d6b56d 12%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #d6b56d 13%, var(--bg-card));
+}
+
+/* -------------------------------------------------------------------------- */
+/* Extended palette — lesson section card colors (teal, cyan, violet)        */
+/* -------------------------------------------------------------------------- */
+/*
+ * These extend the base semantic system for study card variety.
+ * Guardrail: each token here must resolve from existing `--bg-card` / `--semantic-surface`
+ * so soft tints stay theme-aware. Hard values are stable mid-tones chosen to read
+ * clearly in both light and dark defaults; per-theme overrides follow below.
+ */
+/*
+ * SPECIFICITY: `html[data-theme]` is (0,1,1) — beats :root's (0,1,0). Required so
+ * the violet/teal/cyan defaults below actually take effect under any active theme.
+ * Per-theme overrides (lavender, dark-*) below use `html[data-theme="…"]` (0,2,0)
+ * which still wins.
+ */
+html[data-theme] {
+  --semantic-violet: #7c3aed;
+  --semantic-violet-soft: color-mix(in srgb, #7c3aed 10%, var(--bg-card));
+  --semantic-violet-contrast: #4c1d95;
+  --semantic-teal: #0d9488;
+  --semantic-teal-soft: color-mix(in srgb, #0d9488 10%, var(--bg-card));
+  --semantic-teal-contrast: #134e4a;
+  --semantic-cyan: #0891b2;
+  --semantic-cyan-soft: color-mix(in srgb, #0891b2 10%, var(--bg-card));
+  --semantic-cyan-contrast: #164e63;
+}
+
+/* Lavender / pastel: lighter, more vibrant variants */
+html[data-theme="lavender"],
+html[data-theme="pastel-lavender"],
+html[data-theme="lavender-dream"] {
+  --semantic-violet: #8b5cf6;
+  --semantic-violet-soft: color-mix(in srgb, #8b5cf6 11%, var(--bg-card));
+  --semantic-violet-contrast: #3730a3;
+  --semantic-teal: #0d9488;
+  --semantic-teal-soft: color-mix(in srgb, #0d9488 10%, var(--bg-card));
+  --semantic-teal-contrast: #134e4a;
+  --semantic-cyan: #0e7490;
+  --semantic-cyan-soft: color-mix(in srgb, #0e7490 10%, var(--bg-card));
+  --semantic-cyan-contrast: #164e63;
+}
+
+/* Dark themes: brighter, lighter mid-tones for legibility on dark surfaces */
+html[data-theme="dark-clinical"],
+html[data-theme="dark-academia"],
+html[data-theme="dark-mode"],
+html[data-theme="midnight"],
+html[data-theme="midnight-indigo"],
+html[data-theme="deep-twilight"] {
+  --semantic-violet: #a78bfa;
+  --semantic-violet-soft: color-mix(in srgb, #a78bfa 14%, var(--bg-card));
+  --semantic-violet-contrast: #ddd6fe;
+  --semantic-teal: #2dd4bf;
+  --semantic-teal-soft: color-mix(in srgb, #2dd4bf 14%, var(--bg-card));
+  --semantic-teal-contrast: #ccfbf1;
+  --semantic-cyan: #22d3ee;
+  --semantic-cyan-soft: color-mix(in srgb, #22d3ee 14%, var(--bg-card));
+  --semantic-cyan-contrast: #a5f3fc;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Learner / analytics presentation (token-only — use in TSX as class names) */
+/* -------------------------------------------------------------------------- */
+
+.nn-learner-app {
+  background: linear-gradient(180deg, var(--semantic-bg-base) 0%, var(--semantic-bg-soft) 100%);
+}
+
+.nn-semantic-inset {
+  background: var(--semantic-panel-muted);
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: var(--radius-lg, 0.75rem);
+}
+
+.nn-semantic-inset--positive {
+  background: var(--semantic-panel-positive);
+}
+
+.nn-semantic-inset--cool {
+  background: var(--semantic-panel-cool);
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: var(--radius-lg, 0.75rem);
+}
+
+.nn-semantic-inset--warm {
+  background: var(--semantic-panel-warm);
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: var(--radius-lg, 0.75rem);
+}
+
+.nn-semantic-inset--risk {
+  background: var(--semantic-danger-soft);
+  border: 1px solid color-mix(in srgb, var(--semantic-danger) 22%, var(--semantic-border-soft));
+  border-radius: var(--radius-lg, 0.75rem);
+}
+
+.nn-section-header-learner {
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 75%, transparent);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)),
+    transparent,
+    color-mix(in srgb, var(--semantic-success) 6%, var(--semantic-surface))
+  );
+}
+
+.nn-section-header-learner--muted {
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+  background: linear-gradient(180deg, var(--semantic-panel-muted), var(--semantic-surface));
+}
+
+.nn-progress-track-semantic {
+  height: 0.5rem;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: var(--semantic-progress-track);
+}
+
+.nn-progress-track-semantic--md {
+  height: 0.625rem;
+}
+
+.nn-progress-track-semantic--lg {
+  height: 0.75rem;
+}
+
+.nn-progress-track-semantic--xs {
+  height: 0.375rem;
+}
+
+/* Fills animate in on first paint (dashboard / session bars); width still transitions on updates. */
+@media (prefers-reduced-motion: no-preference) {
+  .nn-progress-fill-reveal {
+    transform-origin: left center;
+    animation: nn-progress-fill-reveal-kf 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes nn-progress-fill-reveal-kf {
+    from {
+      transform: scaleX(0.05);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .nn-panel-chart-fade {
+    animation: nn-panel-chart-fade-kf 0.38s ease-out both;
+  }
+
+  @keyframes nn-panel-chart-fade-kf {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .nn-score-reveal {
+    animation: nn-score-reveal-kf 0.48s ease-out both;
+  }
+
+  @keyframes nn-score-reveal-kf {
+    from {
+      opacity: 0.2;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-progress-fill-reveal,
+  .nn-panel-chart-fade,
+  .nn-score-reveal {
+    animation: none;
+  }
+}
+
+.nn-progress-fill-semantic-success {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    var(--semantic-success),
+    color-mix(in srgb, var(--semantic-success) 78%, var(--semantic-brand))
+  );
+}
+
+.nn-progress-fill-semantic-brand {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--semantic-brand), color-mix(in srgb, var(--semantic-brand) 82%, var(--semantic-info)));
+}
+
+.nn-progress-fill-semantic-readiness {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-brand) 88%, var(--semantic-text-primary)),
+    var(--semantic-success)
+  );
+}
+
+.nn-progress-fill-semantic-info {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    var(--semantic-chart-3),
+    color-mix(in srgb, var(--semantic-info) 88%, var(--semantic-chart-3))
+  );
+}
+
+.nn-progress-fill-semantic-warning {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    var(--semantic-warning),
+    color-mix(in srgb, var(--semantic-warning) 82%, var(--semantic-chart-4))
+  );
+}
+
+.nn-progress-fill-semantic-danger {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    var(--semantic-danger),
+    color-mix(in srgb, var(--semantic-danger) 85%, var(--semantic-mastery-low))
+  );
+}
+
+.nn-progress-fill-semantic-muted {
+  height: 100%;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--semantic-text-muted) 28%, var(--semantic-border-soft));
+}
+
+/** Thin multi-hue rule — cards, resume strips (uses chart tokens, not brand alone). */
+.nn-spectrum-rule-top {
+  height: 0.25rem;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--semantic-chart-3),
+    var(--semantic-chart-1),
+    var(--semantic-chart-2),
+    var(--semantic-chart-4),
+    var(--semantic-chart-5),
+    var(--semantic-chart-6),
+    var(--semantic-chart-7),
+    var(--semantic-chart-8),
+    color-mix(in srgb, var(--semantic-chart-9) 88%, var(--semantic-chart-1))
+  );
+}
+
+.nn-badge-semantic-success {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: var(--semantic-success-soft);
+  color: var(--semantic-success-contrast);
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 28%, var(--semantic-border-soft));
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.625rem;
+}
+
+.nn-badge-semantic-warning {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: var(--semantic-warning-soft);
+  color: var(--semantic-warning-contrast);
+  border: 1px solid color-mix(in srgb, var(--semantic-warning) 30%, var(--semantic-border-soft));
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.625rem;
+}
+
+.nn-badge-semantic-danger {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: var(--semantic-danger-soft);
+  color: var(--semantic-danger-contrast);
+  border: 1px solid color-mix(in srgb, var(--semantic-danger) 26%, var(--semantic-border-soft));
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.625rem;
+}
+
+.nn-badge-semantic-info {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: var(--semantic-info-soft);
+  color: var(--semantic-info-contrast);
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 26%, var(--semantic-border-soft));
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.625rem;
+}
+
+.nn-metric-tile {
+  border-radius: 1rem;
+  border: 1px solid var(--semantic-border-soft);
+  background:
+    radial-gradient(
+      420px 180px at 100% 0%,
+      color-mix(in srgb, var(--metric-accent, var(--semantic-chart-3)) 8%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--metric-soft, var(--semantic-panel-cool)) 30%, var(--semantic-surface)),
+      var(--semantic-surface)
+    );
+  box-shadow: var(--semantic-shadow-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+.nn-metric-tile::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--metric-accent, var(--semantic-brand)), var(--metric-accent-end, var(--semantic-info)));
+  opacity: 0.85;
+}
+
+.nn-metric-tile:nth-of-type(9n + 1) {
+  --metric-accent: var(--semantic-chart-1);
+  --metric-accent-end: var(--semantic-chart-2);
+  --metric-soft: var(--semantic-panel-cool);
+}
+.nn-metric-tile:nth-of-type(9n + 2) {
+  --metric-accent: var(--semantic-chart-2);
+  --metric-accent-end: var(--semantic-chart-7);
+  --metric-soft: var(--semantic-panel-positive);
+}
+.nn-metric-tile:nth-of-type(9n + 3) {
+  --metric-accent: var(--semantic-chart-3);
+  --metric-accent-end: var(--semantic-chart-8);
+  --metric-soft: var(--semantic-panel-aqua);
+}
+.nn-metric-tile:nth-of-type(9n + 4) {
+  --metric-accent: var(--semantic-chart-4);
+  --metric-accent-end: var(--semantic-chart-9);
+  --metric-soft: var(--semantic-panel-warm);
+}
+.nn-metric-tile:nth-of-type(9n + 5) {
+  --metric-accent: var(--semantic-chart-5);
+  --metric-accent-end: var(--semantic-chart-6);
+  --metric-soft: var(--semantic-panel-lavender);
+}
+.nn-metric-tile:nth-of-type(9n + 6) {
+  --metric-accent: var(--semantic-chart-6);
+  --metric-accent-end: var(--semantic-chart-1);
+  --metric-soft: var(--semantic-panel-muted);
+}
+.nn-metric-tile:nth-of-type(9n + 7) {
+  --metric-accent: var(--semantic-chart-7);
+  --metric-accent-end: var(--semantic-chart-2);
+  --metric-soft: var(--semantic-panel-mint);
+}
+.nn-metric-tile:nth-of-type(9n + 8) {
+  --metric-accent: var(--semantic-chart-8);
+  --metric-accent-end: var(--semantic-chart-3);
+  --metric-soft: var(--semantic-panel-peach);
+}
+.nn-metric-tile:nth-of-type(9n + 9) {
+  --metric-accent: var(--semantic-chart-9);
+  --metric-accent-end: var(--semantic-chart-4);
+  --metric-soft: var(--semantic-panel-gold);
+}
+
+.nn-momentum-glow {
+  background: radial-gradient(
+    circle at 90% 0%,
+    color-mix(in srgb, var(--semantic-success) 17%, transparent),
+    transparent 55%
+  );
+}
+
+.nn-readiness-hero-glow {
+  background: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--semantic-brand) 22%, transparent),
+    transparent 65%
+  );
+}
+
+/* Dashboard / lesson intros — soft multi-hue band (calm, not brand-only) */
+.nn-learner-page-hero {
+  border-radius: 1.25rem;
+  border: 1px solid var(--semantic-border-soft);
+  margin-bottom: clamp(0.5rem, 1.5vw, 0.85rem);
+  background:
+    radial-gradient(
+      ellipse 85% 65% at 100% -5%,
+      color-mix(in srgb, var(--semantic-chart-5) 17%, transparent),
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse 70% 50% at 0% 100%,
+      color-mix(in srgb, var(--semantic-chart-3) 14%, transparent),
+      transparent 48%
+    ),
+    linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-mid) 48%, var(--hero-gradient-end) 100%);
+  box-shadow: var(--semantic-shadow-soft);
+  padding: clamp(1.35rem, 3.2vw, 1.95rem);
+}
+
+/* Reusable top accent for results / summary cards (theme multi-stop, not single purple) */
+.nn-product-surface-accent {
+  position: relative;
+  overflow: hidden;
+}
+
+.nn-product-surface-accent::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--semantic-chart-3),
+    var(--semantic-brand),
+    var(--semantic-chart-2),
+    var(--semantic-chart-4),
+    var(--semantic-chart-5),
+    var(--semantic-chart-6),
+    var(--semantic-chart-7),
+    var(--semantic-chart-8),
+    color-mix(in srgb, var(--semantic-chart-9) 92%, var(--semantic-brand))
+  );
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* Study quick-links shell — airy wash; top accent still from .nn-product-surface-accent */
+.nn-learner-quick-links-section {
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-info) 5%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 38%,
+    color-mix(in srgb, var(--semantic-success) 5%, var(--semantic-surface)) 100%
+  );
+}
+
+.nn-learner-quick-links-heading-icon {
+  color: var(--decorative-1);
+}
+
+/* Per-tile accent via data attribute — semantic chart + status hues, not all brand */
+.nn-study-link-tile {
+  --study-accent: var(--semantic-brand);
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--study-accent) 7%, var(--semantic-surface));
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--semantic-text-primary) 6%, transparent);
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.nn-study-link-tile:hover {
+  border-color: color-mix(in srgb, var(--study-accent) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--study-accent) 13%, var(--semantic-surface));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-study-link-tile:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--semantic-surface),
+    0 0 0 4px color-mix(in srgb, var(--study-accent) 38%, transparent);
+}
+
+.nn-study-link-tile[data-study-accent="cat"] {
+  --study-accent: var(--nn-module-cat);
+}
+.nn-study-link-tile[data-study-accent="exams"] {
+  --study-accent: var(--nn-module-practice);
+}
+.nn-study-link-tile[data-study-accent="bank"] {
+  --study-accent: var(--semantic-accent-turquoise);
+}
+.nn-study-link-tile[data-study-accent="lessons"] {
+  --study-accent: var(--semantic-accent-mint);
+}
+.nn-study-link-tile[data-study-accent="flashcards"] {
+  --study-accent: var(--nn-module-flashcards);
+}
+.nn-study-link-tile[data-study-accent="planner"] {
+  --study-accent: var(--semantic-accent-lavender);
+}
+.nn-study-link-tile[data-study-accent="report"] {
+  --study-accent: var(--decorative-3);
+}
+.nn-study-link-tile[data-study-accent="readiness"] {
+  --study-accent: var(--semantic-success);
+}
+.nn-study-link-tile[data-study-accent="review"] {
+  --study-accent: var(--semantic-warning);
+}
+
+.nn-study-link-tile .nn-study-link-icon-wrap {
+  display: flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--study-accent) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--study-accent) 11%, var(--semantic-surface));
+  color: var(--study-accent);
+  transition: background-color 0.18s ease, border-color 0.18s ease;
+}
+
+.nn-study-link-tile:hover .nn-study-link-icon-wrap {
+  background: color-mix(in srgb, var(--study-accent) 17%, var(--semantic-surface));
+}
+
+/* Reusable learner action chips: tiny hover-lift + crisp focus ring. */
+.nn-premium-action-chip {
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.16s ease;
+}
+
+.nn-premium-action-chip:hover {
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-premium-action-chip:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--semantic-surface),
+    0 0 0 4px color-mix(in srgb, var(--semantic-brand) 30%, transparent);
+}
+
+.nn-premium-action-chip:active {
+  transform: translateY(0.5px) scale(0.985);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-action-chip {
+    transition:
+      background-color 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+
+  .nn-premium-action-chip:active {
+    transform: none;
+  }
+}
+
+/* Readiness “integrated study” callout — cool + calm, not primary-wash */
+.nn-learner-readiness-integrated-callout {
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 26%, var(--semantic-border-soft));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--semantic-info) 9%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-chart-2) 6%, var(--semantic-surface))
+  );
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+/* Review queue intro — warm/cool supportive wash */
+.nn-learner-review-queue-intro {
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-warning) 22%, var(--semantic-border-soft));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--semantic-warning) 9%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-chart-3) 7%, var(--semantic-surface)) 100%
+  );
+  box-shadow: var(--semantic-shadow-soft);
+}

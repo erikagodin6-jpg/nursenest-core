@@ -1,0 +1,125 @@
+{
+  "generatedAt": "2026-06-02T00:39:15.741Z",
+  "status": "pass",
+  "failureCount": 0,
+  "expectedRoutes": [
+    "/",
+    "/canada/rn/nclex-rn",
+    "/canada/pn/rex-pn",
+    "/canada/np/cnple",
+    "/flashcards",
+    "/cat",
+    "/practice-tests",
+    "/lessons",
+    "/readyz",
+    "/healthz"
+  ],
+  "checks": [
+    {
+      "name": "middleware-manifest",
+      "ok": true,
+      "details": {
+        "version": 3,
+        "middlewareCount": 0,
+        "functionCount": 0,
+        "middlewareRuntimeFile": ".next/server/middleware.js"
+      }
+    },
+    {
+      "name": "routes-manifest",
+      "ok": true,
+      "details": {
+        "version": 3,
+        "staticRouteCount": 762,
+        "dynamicRouteCount": 275,
+        "redirectCount": 37
+      }
+    },
+    {
+      "name": "app-paths-manifest",
+      "ok": true,
+      "details": {
+        "appPathCount": 1037
+      }
+    },
+    {
+      "name": "expected-route-registrations",
+      "ok": true,
+      "details": [
+        {
+          "ok": true,
+          "route": "/",
+          "kind": "static",
+          "page": "/"
+        },
+        {
+          "ok": true,
+          "route": "/canada/rn/nclex-rn",
+          "kind": "static",
+          "page": "/canada/rn/nclex-rn"
+        },
+        {
+          "ok": true,
+          "route": "/canada/pn/rex-pn",
+          "kind": "dynamic",
+          "page": "/[locale]/[slug]/[examCode]"
+        },
+        {
+          "ok": true,
+          "route": "/canada/np/cnple",
+          "kind": "static",
+          "page": "/canada/np/cnple"
+        },
+        {
+          "ok": true,
+          "route": "/flashcards",
+          "kind": "static",
+          "page": "/flashcards"
+        },
+        {
+          "ok": true,
+          "route": "/cat",
+          "kind": "dynamic",
+          "page": "/[locale]"
+        },
+        {
+          "ok": true,
+          "route": "/practice-tests",
+          "kind": "dynamic",
+          "page": "/[locale]"
+        },
+        {
+          "ok": true,
+          "route": "/lessons",
+          "kind": "static",
+          "page": "/lessons"
+        },
+        {
+          "ok": true,
+          "route": "/readyz",
+          "kind": "static",
+          "page": "/readyz"
+        },
+        {
+          "ok": true,
+          "route": "/healthz",
+          "kind": "static",
+          "page": "/healthz"
+        }
+      ]
+    },
+    {
+      "name": "retired-error-string-scan",
+      "ok": true,
+      "details": {
+        "stringsScanned": [
+          "origin_no_healthy_upstream",
+          "no healthy upstream",
+          "The request did not complete before the flashcard player could hydrate."
+        ],
+        "hitCount": 0,
+        "hits": []
+      }
+    }
+  ]
+}

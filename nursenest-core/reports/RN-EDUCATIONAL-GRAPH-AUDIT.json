@@ -1,0 +1,81 @@
+{
+  "generatedAt": "2026-05-20T10:55:11.838Z",
+  "glossary": {
+    "count": 36,
+    "slugs": [
+      "preload",
+      "afterload",
+      "cardiac-output",
+      "heart-failure",
+      "hyperkalemia",
+      "hypokalemia",
+      "sepsis",
+      "sirs",
+      "dka",
+      "siadh",
+      "diabetes-insipidus",
+      "copd",
+      "abg",
+      "metabolic-acidosis",
+      "respiratory-acidosis",
+      "stroke",
+      "delegation",
+      "prioritization",
+      "anticoagulation",
+      "troponin",
+      "map",
+      "lactic-acid",
+      "anion-gap",
+      "insulin",
+      "vasopressor",
+      "peep",
+      "fio2",
+      "inr",
+      "creatinine",
+      "hemoglobin",
+      "platelet",
+      "pao2",
+      "hco3",
+      "osmolality",
+      "raas",
+      "scope-of-practice"
+    ]
+  },
+  "mechanisms": {
+    "published": 6,
+    "planned": 10,
+    "draft": 4
+  },
+  "clinicalInterpretation": {
+    "published": 3,
+    "draft": 6,
+    "figma_pending": 6
+  },
+  "legacyCanadaRpnRexPn": {
+    "fileCount": 4,
+    "topFiles": [
+      {
+        "file": "src/lib/navigation/rpn-route-aliases.contract.test.ts",
+        "count": 3
+      },
+      {
+        "file": "src/lib/educational-graph/educational-graph-orchestrator.contract.test.ts",
+        "count": 2
+      },
+      {
+        "file": "src/app/(marketing)/(default)/canada/rpn/rex-pn/test-bank/page.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/lib/linking/seo-graph-hardening.contract.test.ts",
+        "count": 1
+      }
+    ]
+  },
+  "recommendations": [
+    "Glossary at 36 terms — expand via editorial batches toward 200+ with governance gates.",
+    "Migrate 4 files still referencing /canada/rpn/rex-pn.",
+    "Remediation V2: mechanism → lessons → interpretation → prioritize → flashcards → CAT.",
+    "Wire longitudinal weak-topic signals into buildTopicHubLearningGraph for personalized sequencing."
+  ]
+}

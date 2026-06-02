@@ -1,0 +1,41 @@
+{
+  "id": "rpn-fundamentals",
+  "title": "RPN Fundamentals Emergency Study Set",
+  "pathway": "RPN/PN",
+  "system": "Fundamentals",
+  "flashcards": [
+    {
+      "id": "emergency-rpn-fundamentals-1",
+      "front": "A client is found on the floor beside the bed. What should the nurse do first?",
+      "back": "Assess the client for injury and safety before moving them, then follow fall protocol.",
+      "rationale": "Immediate assessment prevents further harm and identifies urgent complications.",
+      "pearl": "After a fall, assess first and move only when safe."
+    },
+    {
+      "id": "emergency-rpn-fundamentals-2",
+      "front": "What makes delegation to assistive personnel appropriate?",
+      "back": "The task is stable, predictable, within policy, and the delegate has demonstrated competence.",
+      "rationale": "Delegation must match client acuity, task complexity, and staff competence.",
+      "pearl": "The nurse retains accountability for appropriate delegation and follow-up."
+    },
+    {
+      "id": "emergency-rpn-fundamentals-3",
+      "front": "Which infection-control action is essential before and after glove use?",
+      "back": "Perform hand hygiene before donning gloves and after removing them.",
+      "rationale": "Gloves reduce exposure but do not replace hand hygiene.",
+      "pearl": "Gloves are a barrier, not a substitute for clean hands."
+    }
+  ],
+  "questions": [
+    {
+      "id": "emergency-rpn-fundamentals-q1",
+      "stem": "Which task is safest to delegate for a stable client?",
+      "answer": "Assisting with a routine bath after the nurse has assessed the client.",
+      "rationale": "Stable, predictable activities of daily living may be delegated when staff are competent."
+    }
+  ],
+  "pearls": [
+    "Stable and predictable tasks are safer delegation candidates.",
+    "Safety events require assessment before documentation."
+  ]
+}

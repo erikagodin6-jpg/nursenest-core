@@ -1,0 +1,210 @@
+{
+  "generatedAt": "2026-06-02T00:38:57.497Z",
+  "baseUrl": "http://127.0.0.1:18081",
+  "status": "fail",
+  "failureCount": 4,
+  "promotion": "blocked",
+  "rollback": "required",
+  "results": [
+    {
+      "route": "/",
+      "ok": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "ok": true,
+          "status": 200,
+          "finalUrl": "http://127.0.0.1:18081/",
+          "durationMs": 598,
+          "contentType": "text/html; charset=utf-8",
+          "bodyPreview": "<!DOCTYPE html><html lang=\"en\" class=\"__variable_1a5708\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\"/><link rel=\"stylesheet\" href=\"/_next/static/css/a15aadac923fd0cd.c",
+          "bodyBytes": 146553,
+          "verdict": {
+            "ok": true,
+            "reason": "ok"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/canada/rn/nclex-rn",
+      "ok": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "ok": true,
+          "status": 500,
+          "finalUrl": "http://127.0.0.1:18081/canada/rn/nclex-rn",
+          "durationMs": 96,
+          "contentType": "text/plain",
+          "bodyPreview": "Internal Server Error",
+          "bodyBytes": 21,
+          "verdict": {
+            "ok": false,
+            "reason": "unexpected_status_500"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/canada/pn/rex-pn",
+      "ok": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "ok": true,
+          "status": 500,
+          "finalUrl": "http://127.0.0.1:18081/canada/pn/rex-pn",
+          "durationMs": 90,
+          "contentType": "text/plain",
+          "bodyPreview": "Internal Server Error",
+          "bodyBytes": 21,
+          "verdict": {
+            "ok": false,
+            "reason": "unexpected_status_500"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/canada/np/cnple",
+      "ok": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "ok": true,
+          "status": 500,
+          "finalUrl": "http://127.0.0.1:18081/canada/np/cnple",
+          "durationMs": 58,
+          "contentType": "text/plain",
+          "bodyPreview": "Internal Server Error",
+          "bodyBytes": 21,
+          "verdict": {
+            "ok": false,
+            "reason": "unexpected_status_500"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/flashcards",
+      "ok": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "ok": true,
+          "status": 200,
+          "finalUrl": "http://127.0.0.1:18081/flashcards",
+          "durationMs": 414,
+          "contentType": "text/html; charset=utf-8",
+          "bodyPreview": "<!DOCTYPE html><html lang=\"en\" class=\"__variable_1a5708\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\"/><link rel=\"preload\" as=\"image\" href=\"https://nursenest-images.tor",
+          "bodyBytes": 1586811,
+          "verdict": {
+            "ok": true,
+            "reason": "ok"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/cat",
+      "ok": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "ok": true,
+          "status": 200,
+          "finalUrl": "http://127.0.0.1:18081/cat",
+          "durationMs": 100,
+          "contentType": "text/html; charset=utf-8",
+          "bodyPreview": "<!DOCTYPE html><html lang=\"en\" class=\"__variable_1a5708\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\"/><link rel=\"stylesheet\" href=\"/_next/static/css/a15aadac923fd0cd.c",
+          "bodyBytes": 13655,
+          "verdict": {
+            "ok": true,
+            "reason": "ok"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/practice-tests",
+      "ok": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "ok": true,
+          "status": 200,
+          "finalUrl": "http://127.0.0.1:18081/practice-tests",
+          "durationMs": 75,
+          "contentType": "text/html; charset=utf-8",
+          "bodyPreview": "<!DOCTYPE html><html lang=\"en\" class=\"__variable_1a5708\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\"/><link rel=\"stylesheet\" href=\"/_next/static/css/a15aadac923fd0cd.c",
+          "bodyBytes": 13688,
+          "verdict": {
+            "ok": true,
+            "reason": "ok"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/lessons",
+      "ok": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "ok": true,
+          "status": 500,
+          "finalUrl": "http://127.0.0.1:18081/lessons",
+          "durationMs": 41,
+          "contentType": "text/plain",
+          "bodyPreview": "Internal Server Error",
+          "bodyBytes": 21,
+          "verdict": {
+            "ok": false,
+            "reason": "unexpected_status_500"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/readyz",
+      "ok": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "ok": true,
+          "status": 200,
+          "finalUrl": "http://127.0.0.1:18081/readyz",
+          "durationMs": 21,
+          "contentType": "text/plain; charset=utf-8",
+          "bodyPreview": "ready",
+          "bodyBytes": 5,
+          "verdict": {
+            "ok": true,
+            "reason": "ok"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/healthz",
+      "ok": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "ok": true,
+          "status": 200,
+          "finalUrl": "http://127.0.0.1:18081/healthz",
+          "durationMs": 18,
+          "contentType": "text/plain; charset=utf-8",
+          "bodyPreview": "ok",
+          "bodyBytes": 2,
+          "verdict": {
+            "ok": true,
+            "reason": "ok"
+          }
+        }
+      ]
+    }
+  ]
+}

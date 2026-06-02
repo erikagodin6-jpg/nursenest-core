@@ -1,0 +1,119 @@
+/**
+ * Homepage feature visibility pass — Phase 2 narrative surfacing.
+ * Scoped to homepage marketing root hooks. Semantic tokens only.
+ * See docs/governance/homepage-feature-visibility-audit.md
+ */
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility] {
+  --nn-home-capability-gap: clamp(0.65rem, 1.2vw, 0.85rem);
+}
+
+/* ── Platform capability band (slim editorial — not a full premium section) ─ */
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+  .nn-home-platform-capability-band {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(2.25rem, 4.5vw, 3.25rem);
+  background: color-mix(in srgb, var(--semantic-panel-cool) 14%, transparent);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+  .nn-home-platform-capability-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--semantic-border-soft) 10%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 64px 100%;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 92%);
+  opacity: 0.45;
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+  .nn-home-platform-capability-band > .nn-section-shell {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+  .nn-home-capability-grid {
+  gap: var(--nn-home-capability-gap);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+  .nn-home-capability-chip {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--capability-tone, var(--semantic-brand)) 14%);
+  background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-surface-elevated));
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--capability-tone, var(--semantic-brand)) 5%, transparent);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+    .nn-home-capability-chip:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--capability-tone, var(--semantic-brand)) 28%, var(--semantic-border-soft));
+    box-shadow:
+      0 1px 0 color-mix(in srgb, var(--capability-tone, var(--semantic-brand)) 8%, transparent),
+      0 16px 36px -28px color-mix(in srgb, var(--capability-tone, var(--semantic-brand)) 14%, transparent);
+  }
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+  .nn-home-capability-chip__icon {
+  border-color: color-mix(in srgb, var(--capability-tone, var(--semantic-brand)) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--capability-tone, var(--semantic-brand)) 10%, var(--semantic-surface));
+  color: var(--capability-tone, var(--semantic-brand));
+}
+
+/* ── Readiness intelligence callout ───────────────────────────────────────── */
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+  .nn-home-readiness-intelligence {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 68%, var(--semantic-info) 16%);
+  background: color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--semantic-surface));
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+  .nn-home-readiness-intelligence__item {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 65%, transparent);
+  background: color-mix(in srgb, var(--semantic-surface-elevated) 88%, transparent);
+}
+
+/* ── Midnight parity ──────────────────────────────────────────────────────── */
+
+html[data-theme="midnight"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+  .nn-home-platform-capability-band {
+  background: color-mix(in srgb, var(--semantic-panel-cool) 20%, var(--semantic-surface));
+}
+
+html[data-theme="midnight"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+  .nn-home-capability-chip {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 48%, var(--capability-tone, var(--semantic-info)) 16%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+    .nn-home-capability-chip:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-feature-visibility]
+    .nn-home-capability-chip {
+    min-height: 44px;
+  }
+}

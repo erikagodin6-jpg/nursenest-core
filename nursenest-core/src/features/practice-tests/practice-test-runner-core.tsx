@@ -1,0 +1,4630 @@
+"use client";
+
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
+import {
+  ExamProgressBar,
+  ExamSessionShell,
+  ExamSessionTopBar,
+  ExamTimerReadout,
+  type LearnerExamShellMode,
+} from "@/components/exam/exam-session-shell";
+import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
+import { difficultyBandLabel } from "@/lib/questions/difficulty-label";
+import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
+import type {
+  CatSelectionAppliedMeta,
+  CatStudyFeedbackPayload,
+  PracticeTestConfigJson,
+  PracticeTestPathwayClientShell,
+  PracticeTestResultsJson,
+} from "@/lib/practice-tests/types";
+import { CatLiveTransparencyStrip } from "@/components/student/cat-live-transparency-strip";
+import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
+import { PracticeExamProgressHeader } from "@/components/student/practice-exam/practice-exam-progress-header";
+import { QuestionBankPeerPerformancePanel } from "@/components/student/question-bank-peer-performance-panel";
+import { PracticeExamRemediationLinks } from "@/components/student/practice-exam/practice-exam-remediation-links";
+import { PracticeExamRationalePanel } from "@/components/student/practice-exam/practice-exam-rationale-panel";
+import { PracticeExamRationaleMobileDock } from "@/components/student/practice-exam/practice-exam-rationale-mobile-dock";
+import type { PracticeRationaleFullPanelStatus } from "@/components/study/practice-rationale-full-panel";
+import type { PracticeRationaleFullPanelCopy } from "@/components/study/practice-rationale-full-panel.types";
+import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
+import type { QuestionBankPeerStatsClient } from "@/lib/questions/question-bank-client-types";
+import { PracticeTestResultsView } from "@/features/practice-tests/practice-test-results-view";
+import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
+import {
+  assertCatExamPhaseTransition,
+  catExamCanChangeAnswer,
+  catExamCanLockAnswer,
+  catExamCanRequestCatAdvance,
+  catExamCatAdvanceResponseIsStale,
+  catExamFooterPrimaryBusy,
+  catExamOptionsInteractionLocked,
+  type CatExamUiPhase,
+} from "@/lib/practice-tests/cat-exam-ui-state";
+import {
+  assertCatAdvanceResponseShape,
+  buildCatAdvancePatchBody,
+} from "@/lib/practice-tests/cat-advance-contract";
+import {
+  assessPracticeTestSessionHydrateContract,
+  hydratePayloadHasBlockingSessionContractError,
+} from "@/lib/practice-tests/practice-session-contract";
+import { resolveLinearEngineRunnerUiKind } from "@/lib/practice-tests/linear-runner-session-mode";
+import {
+  normalizePracticeQuestionType,
+  resolvePracticeQuestionInteractionProfile,
+  resolvePracticeQuestionLayoutMode,
+  type PracticeQuestionType,
+} from "@/lib/practice-tests/practice-question-rendering-engine";
+import { resolveTierPedagogyProfile } from "@/lib/nursing-tiers/tier-pedagogy-profile";
+import { PracticeSessionLayout } from "@/components/study/practice-session-layout";
+import {
+  PracticeTestBowtieChoicesInstruction,
+  PracticeTestCatAdaptiveExamFooter,
+  PracticeTestCatStudyRationaleAside,
+  PracticeTestClinicalFigure,
+  PracticeTestFlagForReviewButton,
+  PracticeTestMcqChoicesInstruction,
+  PracticeTestMcqRadiogroupOptions,
+  PracticeTestQuestionMediaBlock,
+  PracticeTestTimedSessionAlert,
+  PracticeTestTimedSessionAlertCompact,
+} from "@/components/student/practice-test-runner/practice-test-runner-board-parts";
+import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
+import { resolvePracticeTestRunCopy } from "@/lib/practice-tests/practice-test-run-i18n-fallbacks";
+import { splitPromptLeadingImage } from "@/components/flashcards/flashcard-study-question-stack";
+import {
+  computePracticeMcqOptionRowState,
+  mcqAnswerSelectsCanonical,
+} from "@/lib/practice-tests/practice-mcq-selection";
+import { PracticeTestPerItemRationale } from "@/components/study/practice-test-per-item-rationale";
+import { EcgVideoQuestionMedia } from "@/components/study/ecg-video-question-media";
+import { shouldShowLinearPerItemRationale } from "@/lib/practice-tests/practice-test-linear-inline-rationale";
+import {
+  ConfidenceSelector,
+  type ConfidenceLevel,
+} from "@/components/study/confidence-selector";
+import {
+  QuestionCard,
+  AnswerOptionRow,
+} from "@/components/study/cat-question-card";
+import type { AnswerOptionState } from "@/components/study/cat-question-card";
+import type { StudySettings } from "@/lib/learner/study-settings";
+import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
+import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
+import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
+import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
+import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
+import {
+  captureClientOrchestratedAnalytics,
+  governClientTelemetryCapture,
+} from "@/lib/educational-cognition/client-telemetry-governance";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { captureClientException } from "@/lib/runtime/client-observability";
+import { PracticeTestRunPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
+import { QuestionBookmarkButton } from "@/components/bookmarks/question-bookmark-button";
+import { ShowSimilarQuestions } from "@/components/questions/show-similar-questions";
+import { MissedQuestionReflection } from "@/components/mistakes/missed-question-reflection";
+import { TeachMeThisPanel } from "@/components/teach-me-this/teach-me-this-panel";
+import type { PracticeAdaptivePostMissPayload } from "@/components/student/practice-adaptive-post-miss-panel";
+import { LearnerStudyCard } from "@/components/learner-ui/learner-study-card";
+import {
+  buildExamOptionDisplayOrder,
+  shouldDisableOptionShuffleMcq,
+} from "@/lib/practice-tests/exam-option-display-order";
+import {
+  coerceBowtieDraftAnswer,
+  isBowtieAnswerComplete,
+  tryNormalizeBowtiePayload,
+} from "@/lib/questions/bowtie-adapter";
+import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
+import {
+  logPracticeRunnerUnsupportedQuestionDev,
+  logPracticeRunnerUnsupportedQuestionProd,
+  logUnknownCatalogQuestionTypeDev,
+  practiceRunnerNeedsUnsupportedFallback,
+} from "@/lib/questions/practice-runner-question-support";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Flag,
+  LayoutGrid,
+  Send,
+  Shield,
+} from "lucide-react";
+
+const PracticeRationaleFullPanel = dynamic(
+  () =>
+    import("@/components/study/practice-rationale-full-panel").then((m) => ({
+      default: m.PracticeRationaleFullPanel,
+    })),
+  { ssr: false },
+);
+const PracticeAdaptivePostMissPanel = dynamic(
+  () =>
+    import("@/components/student/practice-adaptive-post-miss-panel").then(
+      (m) => ({ default: m.PracticeAdaptivePostMissPanel }),
+    ),
+  { ssr: false },
+);
+const BowtieQuestionRenderer = dynamic(
+  () =>
+    import("@/components/exams/questions/bowtie-question-renderer").then(
+      (m) => ({ default: m.BowtieQuestionRenderer }),
+    ),
+  { ssr: false },
+);
+
+const PRACTICE_RESUME_STORAGE_KEY = "nursenest.practiceTests.resume.v1";
+
+type QRow = {
+  id: string;
+  stem: string;
+  questionType: string;
+  options: unknown;
+  displayOptions?: string[] | null;
+  tags?: string[] | null;
+  topic?: string | null;
+  subtopic?: string | null;
+  difficulty?: number | null;
+  exam?: string | null;
+  questionFormat?: string | null;
+  exhibitData?: unknown;
+  images?: unknown;
+};
+
+function parseOptions(raw: unknown): string[] {
+  if (Array.isArray(raw)) return raw.map((x) => String(x));
+  return [];
+}
+
+function clearStoredPracticeResume(testId: string) {
+  try {
+    const raw = window.localStorage.getItem(PRACTICE_RESUME_STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw) as { href?: unknown };
+    const href = typeof parsed.href === "string" ? parsed.href : "";
+    if (href.startsWith(`/app/practice-tests/${encodeURIComponent(testId)}`)) {
+      window.localStorage.removeItem(PRACTICE_RESUME_STORAGE_KEY);
+    }
+  } catch {
+    /* Local resume continuity is best-effort only. */
+  }
+}
+
+function pruneQuestionCache(
+  cache: Record<string, QRow>,
+  questionIds: string[],
+  centerIndex: number,
+): Record<string, QRow> {
+  if (Object.keys(cache).length <= MAX_PRACTICE_QUESTION_CACHE) return cache;
+  const half = Math.floor(MAX_PRACTICE_QUESTION_CACHE / 2);
+  const lo = Math.max(0, centerIndex - half);
+  const hi = Math.min(questionIds.length - 1, centerIndex + half);
+  const keep = new Set<string>();
+  for (let i = lo; i <= hi; i++) {
+    const id = questionIds[i];
+    if (id && cache[id]) keep.add(id);
+  }
+  const trimmed: Record<string, QRow> = {};
+  for (const id of keep) trimmed[id] = cache[id]!;
+  return trimmed;
+}
+
+type ExamChromeVariant = "nclex" | "rex" | "np" | "default";
+
+function examChromeVariantFromSurface(
+  pathway: PracticeTestPathwayClientShell | null,
+): ExamChromeVariant {
+  if (!pathway) return "default";
+  if (pathway.roleTrack === "np") return "np";
+  if (pathway.examCode === "rex-pn") return "rex";
+  if (pathway.examCode.startsWith("nclex")) return "nclex";
+  return "default";
+}
+
+const MAX_PRACTICE_QUESTION_CACHE = 32;
+
+const MCQ_OPTION_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
+type PracticeExamToolState = {
+  flagged: Record<string, boolean>;
+  confidence: Record<string, ConfidenceLevel>;
+  crossedOut: Record<string, boolean>;
+  notesOpen?: boolean;
+  updatedAt?: string;
+};
+
+function emptyPracticeExamToolState(): PracticeExamToolState {
+  return { flagged: {}, confidence: {}, crossedOut: {} };
+}
+
+function parsePracticeExamToolState(raw: unknown): PracticeExamToolState {
+  const empty = emptyPracticeExamToolState();
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return empty;
+  const source = raw as Record<string, unknown>;
+  const tools =
+    source.examTools &&
+    typeof source.examTools === "object" &&
+    !Array.isArray(source.examTools)
+      ? (source.examTools as Record<string, unknown>)
+      : source;
+  const readBooleanRecord = (value: unknown) => {
+    const out: Record<string, boolean> = {};
+    if (!value || typeof value !== "object" || Array.isArray(value)) return out;
+    for (const [key, flag] of Object.entries(
+      value as Record<string, unknown>,
+    )) {
+      if (
+        typeof key === "string" &&
+        key.length > 0 &&
+        typeof flag === "boolean"
+      )
+        out[key] = flag;
+    }
+    return out;
+  };
+  const confidence: Record<string, ConfidenceLevel> = {};
+  const rawConfidence = tools.confidence;
+  if (
+    rawConfidence &&
+    typeof rawConfidence === "object" &&
+    !Array.isArray(rawConfidence)
+  ) {
+    for (const [key, level] of Object.entries(
+      rawConfidence as Record<string, unknown>,
+    )) {
+      if (level === "low" || level === "medium" || level === "high")
+        confidence[key] = level;
+    }
+  }
+  return {
+    flagged: readBooleanRecord(tools.flagged),
+    confidence,
+    crossedOut: readBooleanRecord(tools.crossedOut),
+    notesOpen:
+      typeof tools.notesOpen === "boolean" ? tools.notesOpen : undefined,
+    updatedAt:
+      typeof tools.updatedAt === "string" ? tools.updatedAt : undefined,
+  };
+}
+
+export function PracticeTestRunnerCore({
+  testId,
+  userId,
+  userLabel,
+  protectionFlags,
+  studySettings,
+  isEntitled = true,
+  initialPathwaySurface = null,
+  adaptiveLearningEnabled = false,
+}: {
+  testId: string;
+  userId: string;
+  userLabel: string;
+  protectionFlags: PremiumProtectionFlags;
+  studySettings: StudySettings;
+  /**
+   * Whether this user has an active premium subscription.
+   * Controls gating of Adaptive Study Plan, Smart Review, and Confidence Analytics.
+   * Defaults to `true` so existing call-sites without entitlement wiring remain
+   * fully functional — wire `false` for free/trial accounts at the page level.
+   */
+  isEntitled?: boolean;
+  /** Server snapshot from stored test config so chrome can render before hydrate returns pathwaySurface. */
+  initialPathwaySurface?: PracticeTestPathwayClientShell | null;
+  /** Server env `ADAPTIVE_LEARNING_ENABLED` — gates optional post-miss study wiring (linear practice only). */
+  adaptiveLearningEnabled?: boolean;
+}) {
+  const router = useRouter();
+  const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
+  const { t } = useMarketingI18n();
+  const tx = useCallback(
+    (
+      key: string,
+      fallback: string,
+      params?: Record<string, string | number | undefined>,
+    ) => {
+      const resolved = t(key, params);
+      return resolvePracticeTestRunCopy(resolved, key, fallback, params);
+    },
+    [t],
+  );
+  const [error, setError] = useState<string | null>(null);
+  const [questionIds, setQuestionIds] = useState<string[]>([]);
+  const questionIdsRef = useRef<string[]>([]);
+  const [questionCache, setQuestionCache] = useState<Record<string, QRow>>({});
+  const [qLoading, setQLoading] = useState(false);
+  const cacheRef = useRef<Record<string, QRow>>({});
+  cacheRef.current = questionCache;
+  const [answers, setAnswers] = useState<Record<string, unknown>>({});
+  const [idx, setIdx] = useState(0);
+  const [status, setStatus] = useState<string>("IN_PROGRESS");
+  const [results, setResults] = useState<PracticeTestResultsJson | null>(null);
+  const [timedMode, setTimedMode] = useState(false);
+  const [timeLimitSec, setTimeLimitSec] = useState<number | null>(null);
+  const [remainingSec, setRemainingSec] = useState<number | null>(null);
+  const [sessionStartMs, setSessionStartMs] = useState<number | null>(null);
+  const [savedElapsedMs, setSavedElapsedMs] = useState<number | null>(null);
+  const [testConfig, setTestConfig] = useState<PracticeTestConfigJson | null>(
+    null,
+  );
+  const [pathwaySurface, setPathwaySurface] =
+    useState<PracticeTestPathwayClientShell | null>(
+      () => initialPathwaySurface ?? null,
+    );
+
+  useEffect(() => {
+    if (status === "COMPLETED" || status === "ABANDONED") {
+      clearStoredPracticeResume(testId);
+    }
+  }, [status, testId]);
+  const [catMode, setCatMode] = useState(false);
+  const [adaptiveTheta, setAdaptiveTheta] = useState<number | null>(null);
+  const [adaptiveSe, setAdaptiveSe] = useState<number | null>(null);
+  const [adaptiveDifficultyHistory, setAdaptiveDifficultyHistory] = useState<
+    number[]
+  >([]);
+  const [catLiveTransparency, setCatLiveTransparency] = useState(false);
+  /**
+   * CAT exam (test) mode UI phase — explicit submit → lock → single `cat_advance` per transition.
+   * Study mode ignores this; server contract is unchanged (`action: "cat_advance"`).
+   */
+  const [catExamUiPhase, setCatExamUiPhase] =
+    useState<CatExamUiPhase>("answering");
+  const catExamUiPhaseRef = useRef<CatExamUiPhase>("answering");
+  const catExamAdvanceButtonRef = useRef<HTMLButtonElement | null>(null);
+  /** When true, after the next item loads we move focus to the first option (keyboard-driven flow). */
+  const catExamKeyboardAdvanceRef = useRef(false);
+  /** Dedupes rapid Enter / Space activation (OS key-repeat). */
+  const catExamPrimaryActionGateMsRef = useRef(0);
+  const [saving, setSaving] = useState(false);
+
+  const activePathwayId =
+    testConfig?.pathwayId ??
+    pathwaySurface?.id ??
+    initialPathwaySurface?.id ??
+    null;
+  const activePathwayDefinition = useMemo(
+    () => (activePathwayId ? getExamPathwayById(activePathwayId) : undefined),
+    [activePathwayId],
+  );
+  const tierPedagogyProfile = useMemo(
+    () =>
+      resolveTierPedagogyProfile({
+        roleTrack:
+          pathwaySurface?.roleTrack ??
+          initialPathwaySurface?.roleTrack ??
+          activePathwayDefinition?.roleTrack,
+        stripeTier: activePathwayDefinition?.stripeTier,
+      }),
+    [
+      activePathwayDefinition?.roleTrack,
+      activePathwayDefinition?.stripeTier,
+      initialPathwaySurface?.roleTrack,
+      pathwaySurface?.roleTrack,
+    ],
+  );
+  const pathwaySurfaceId = pathwaySurface?.id ?? null;
+  const initialPathwaySurfaceId = initialPathwaySurface?.id ?? null;
+  const pathwayCountryByPathwayId = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const id of [pathwaySurfaceId, initialPathwaySurfaceId]) {
+      if (!id) continue;
+      const pathway = getExamPathwayById(id);
+      if (pathway) map[id] = String(pathway.countryCode);
+    }
+    return map;
+  }, [pathwaySurfaceId, initialPathwaySurfaceId]);
+  const fallbackMeasurementSystem = useMemo(
+    () =>
+      resolveMeasurementSystemForLearnerPathway(
+        activePathwayId,
+        pathwayCountryByPathwayId,
+      ),
+    [activePathwayId, pathwayCountryByPathwayId],
+  );
+  const { measurementSystem } = useMeasurementPreference(
+    fallbackMeasurementSystem,
+    null,
+    { locked: true },
+  );
+  const resolveMeasureText = useCallback(
+    (text: string) =>
+      resolveMeasurementTokens(text, measurementSystem, {
+        pathwayId: activePathwayId,
+      }),
+    [activePathwayId, measurementSystem],
+  );
+  const examUnitsToggle = (
+    <ExamMeasurementUnitToggle
+      fallbackSystem={fallbackMeasurementSystem}
+      syncToProfile={Boolean(userId)}
+      disabled={saving || qLoading}
+      locked
+    />
+  );
+  const [teachingReviewItems, setTeachingReviewItems] = useState<
+    PracticeTestTeachingItem[] | null
+  >(null);
+  const [teachingReviewLoading, setTeachingReviewLoading] = useState(false);
+  /** Bumps when user retries a failed per-question fetch (effect deps exclude full cache). */
+  const [questionFetchNonce, setQuestionFetchNonce] = useState(0);
+  /** Session-local only — helps pacing habits; not sent to the server. */
+  const [flagged, setFlagged] = useState<Record<string, boolean>>({});
+  const [crossedOut, setCrossedOut] = useState<Record<string, boolean>>({});
+  /** Dismisses the “pool widened vs your filters” notice for this tab only; resets when `testId` changes. */
+  const [dismissedPoolRelaxBanner, setDismissedPoolRelaxBanner] =
+    useState(false);
+  /** Linear exam engine: server-persisted committed items (`adaptiveState.linearEngine`). */
+  const [linearCommittedIds, setLinearCommittedIds] = useState<string[]>([]);
+  /** Practice-mode per-question feedback after commit (not fully restored on reload). */
+  const [linearPracticeFeedback, setLinearPracticeFeedback] = useState<
+    Record<
+      string,
+      {
+        isCorrect: boolean;
+        topic?: string | null;
+        rationale: string | null;
+        correctKeys: string[];
+        correctAnswerExplanation?: string | null;
+        distractorRationalesMap?: Record<string, string> | null;
+        keyTakeaway?: string | null;
+        relatedLessons?: { title: string; href: string }[];
+        clinicalPearlDisplay?: string | null;
+        referenceSource?: string | null;
+        peerStats?: QuestionBankPeerStatsClient | null;
+      }
+    >
+  >({});
+  const [practiceAdaptivePostMiss, setPracticeAdaptivePostMiss] = useState<{
+    questionId: string;
+    payload: PracticeAdaptivePostMissPayload;
+  } | null>(null);
+  /** CAT Study Mode: rationale for the current item after scoring, before the next adaptive pick. */
+  const [catStudyFeedback, setCatStudyFeedback] =
+    useState<CatStudyFeedbackPayload | null>(null);
+  /** CAT Study Mode: last item explanation before switching to the results layout. */
+  const [catFinalStudyFeedback, setCatFinalStudyFeedback] =
+    useState<CatStudyFeedbackPayload | null>(null);
+  /** Confidence ratings per question: Map<questionId, ConfidenceLevel>. Client-only, not persisted. */
+  const [confidence, setConfidence] = useState<Record<string, ConfidenceLevel>>(
+    {},
+  );
+  const autoSubmitRef = useRef(false);
+  /** Ensures timed auto-submit only fires after a real countdown (avoids mount-time `remainingSec === 0` completing CAT). */
+  const timedCountdownEverPositiveRef = useRef(false);
+  /**
+   * Timed CAT hydrated with 0s remaining — never auto-finalize from the countdown effect; show in-flow recovery instead of results.
+   */
+  const [catTimerHydrateRecovery, setCatTimerHydrateRecovery] = useState(false);
+  const submitInFlightRef = useRef(false);
+  const catAdvanceInFlightRef = useRef(false);
+  const catAdvanceLatestRef = useRef<() => Promise<void>>(async () => {});
+  const setAnswerForCurrentRef = useRef<(next: unknown) => void>(() => {});
+  const linearCommitInFlightRef = useRef(false);
+  const abandonInFlightRef = useRef(false);
+  const navInFlightRef = useRef(false);
+  const catExamNavigatorDialogRef = useRef<HTMLDialogElement>(null);
+  const catExamNavigatorTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const persistInFlightRef = useRef(false);
+  const questionPrefetchInFlightRef = useRef<Set<number>>(new Set());
+  const pendingPersistRef = useRef<{
+    answers: Record<string, unknown>;
+    cursorIndex: number;
+    examTools: PracticeExamToolState;
+  } | null>(null);
+  const answersRef = useRef<Record<string, unknown>>({});
+  const examToolsRef = useRef<PracticeExamToolState>(
+    emptyPracticeExamToolState(),
+  );
+  const idxRef = useRef(0);
+  const confidenceTrackingEnabled = studySettings.enableConfidenceTracking;
+  const adaptivePlanEnabled = studySettings.enableAdaptivePlan;
+
+  useEffect(() => {
+    answersRef.current = answers;
+  }, [answers]);
+  useEffect(() => {
+    examToolsRef.current = {
+      flagged,
+      confidence,
+      crossedOut,
+      notesOpen: examToolsRef.current.notesOpen,
+      updatedAt: examToolsRef.current.updatedAt,
+    };
+  }, [flagged, confidence, crossedOut]);
+  useEffect(() => {
+    idxRef.current = idx;
+  }, [idx]);
+
+  useEffect(() => {
+    questionIdsRef.current = questionIds;
+  }, [questionIds]);
+
+  const runnerMountedRef = useRef(true);
+  useEffect(() => {
+    runnerMountedRef.current = true;
+    return () => {
+      runnerMountedRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    catExamUiPhaseRef.current = catExamUiPhase;
+  }, [catExamUiPhase]);
+
+  const debugEventCapRef = useRef(0);
+  const logSessionEvent = useCallback(
+    (event: string, detail?: Record<string, unknown>) => {
+      const pathwayId = testConfig?.pathwayId ?? activePathwayId;
+      const governed = governClientTelemetryCapture({
+        pathwayId,
+        event,
+        catSessionActive: catMode,
+        sessionKind: catMode
+          ? "cat"
+          : testConfig?.linearDeliveryMode
+            ? "loft_simulation"
+            : null,
+      });
+      if (process.env.NODE_ENV === "development") {
+        if (debugEventCapRef.current < 48) {
+          debugEventCapRef.current += 1;
+          console.debug("[practice-test-runner]", governed.normalizedEvent, {
+            testId,
+            violation: governed.violationCode,
+            ...(detail ?? {}),
+          });
+        }
+      }
+    },
+    [
+      testId,
+      testConfig?.pathwayId,
+      testConfig?.linearDeliveryMode,
+      activePathwayId,
+      catMode,
+    ],
+  );
+
+  const load = useCallback(async () => {
+    setPhase("loading");
+    setError(null);
+    autoSubmitRef.current = false;
+    timedCountdownEverPositiveRef.current = false;
+    setCatTimerHydrateRecovery(false);
+    try {
+      const res = await fetchWithRetry(
+        `/api/practice-tests/${testId}?hydrate=minimal`,
+        { method: "GET", credentials: "include", cache: "no-store" },
+        {
+          attempts: 3,
+          baseDelayMs: 500,
+          timeoutMs: 45_000,
+        },
+      );
+      const data = (await res.json()) as {
+        error?: string;
+        questionIds?: string[];
+        questions?: QRow[];
+        answers?: Record<string, unknown>;
+        cursorIndex?: number;
+        status?: string;
+        results?: PracticeTestResultsJson | null;
+        timedMode?: boolean;
+        timeLimitSec?: number | null;
+        elapsedMs?: number | null;
+        startedAt?: string;
+        config?: PracticeTestConfigJson;
+        pathwaySurface?: PracticeTestPathwayClientShell | null;
+        catMode?: boolean;
+        adaptiveState?: unknown;
+        sessionContractError?: { code: string; message: string };
+      };
+      if (hydratePayloadHasBlockingSessionContractError(data)) {
+        const e = data.sessionContractError!;
+        logSessionEvent("session_contract_error", { code: e.code });
+        setError(e.message.trim());
+        setPhase("error");
+        return;
+      }
+      if (!res.ok) throw new Error(data.error ?? "Could not load test.");
+      const ids =
+        Array.isArray(data.questionIds) && data.questionIds.length > 0
+          ? normalizePracticeTestQuestionIds(data.questionIds)
+          : normalizePracticeTestQuestionIds(
+              (data.questions ?? []).map((q) => q.id),
+            );
+      setQuestionIds(ids);
+      const hydrateInv = assessPracticeTestSessionHydrateContract({
+        catMode: Boolean(data.catMode),
+        status: data.status ?? "IN_PROGRESS",
+        questionIds: ids,
+        adaptiveState: data.adaptiveState,
+        config: data.config ?? null,
+        cursorIndex:
+          typeof data.cursorIndex === "number" ? data.cursorIndex : 0,
+        results: data.results,
+      });
+      if (!hydrateInv.ok) {
+        logSessionEvent("cat_hydrate_invariant_block", {
+          code: hydrateInv.violation.code,
+        });
+        setError(hydrateInv.violation.message);
+        setPhase("error");
+        return;
+      }
+      if ((data.questions?.length ?? 0) > 0) {
+        const seed: Record<string, QRow> = {};
+        for (const q of data.questions!) seed[q.id] = q;
+        setQuestionCache(seed);
+      } else {
+        setQuestionCache({});
+      }
+      setAnswers((data.answers ?? {}) as Record<string, unknown>);
+      setIdx(typeof data.cursorIndex === "number" ? data.cursorIndex : 0);
+      const nextStatus = data.status ?? "IN_PROGRESS";
+      setStatus(nextStatus);
+      const nextCat = Boolean(data.catMode);
+      setResults(
+        nextCat && nextStatus === "IN_PROGRESS"
+          ? null
+          : ((data.results ?? null) as PracticeTestResultsJson | null),
+      );
+      setTimedMode(Boolean(data.timedMode));
+      setTimeLimitSec(data.timeLimitSec ?? null);
+      setSavedElapsedMs(
+        typeof data.elapsedMs === "number" ? data.elapsedMs : null,
+      );
+      setSessionStartMs(
+        data.startedAt ? new Date(data.startedAt).getTime() : Date.now(),
+      );
+      const nextCfg = data.config ?? null;
+      setTestConfig(nextCfg);
+      setPathwaySurface((prev) => {
+        if (data.pathwaySurface) return data.pathwaySurface;
+        const pid = nextCfg?.pathwayId?.trim();
+        if (pid && prev?.id === pid) return prev;
+        if (pid && initialPathwaySurface?.id === pid)
+          return initialPathwaySurface;
+        return null;
+      });
+      setCatMode(Boolean(data.catMode));
+      setTeachingReviewItems(null);
+      const ast = data.adaptiveState;
+      const astObj =
+        ast && typeof ast === "object" && !Array.isArray(ast)
+          ? (ast as Record<string, unknown>)
+          : null;
+      const hydratedTools = parsePracticeExamToolState(astObj);
+      setAdaptiveTheta(typeof astObj?.theta === "number" ? astObj.theta : null);
+      setAdaptiveSe(typeof astObj?.se === "number" ? astObj.se : null);
+      const dhRaw = astObj?.difficultyHistory;
+      const dhParsed = Array.isArray(dhRaw)
+        ? dhRaw.filter(
+            (x): x is number => typeof x === "number" && Number.isFinite(x),
+          )
+        : [];
+      setAdaptiveDifficultyHistory(dhParsed);
+      setLinearCommittedIds(getLinearCommittedQuestionIds(ast));
+      setLinearPracticeFeedback({});
+      setFlagged(hydratedTools.flagged);
+      setConfidence(hydratedTools.confidence);
+      setCrossedOut(hydratedTools.crossedOut);
+      examToolsRef.current = hydratedTools;
+      setCatFinalStudyFeedback(null);
+      /** Mid-session rationale fetch is only for guided adaptive ("practice" session type), not licensing CAT. */
+      const catStudyAwaiting =
+        Boolean(data.catMode) &&
+        (data.config?.catAdaptiveSessionType ?? "cat") === "practice" &&
+        astObj?.catStudyAwaitingContinue === true;
+      if (catStudyAwaiting && data.status === "IN_PROGRESS") {
+        void (async () => {
+          try {
+            const fr = await fetchWithRetry(
+              `/api/practice-tests/${testId}/cat-study-review`,
+              { method: "GET", credentials: "include", cache: "no-store" },
+              {
+                attempts: 2,
+                timeoutMs: 20_000,
+              },
+            );
+            const fd = (await fr.json()) as {
+              studyFeedback?: CatStudyFeedbackPayload;
+              error?: string;
+            };
+            if (fr.ok && fd.studyFeedback)
+              setCatStudyFeedback(fd.studyFeedback);
+          } catch {
+            /* ignore — user can retry via reload */
+          }
+        })();
+      } else {
+        setCatStudyFeedback(null);
+      }
+      if (
+        data.status === "IN_PROGRESS" &&
+        data.timedMode &&
+        data.timeLimitSec
+      ) {
+        const usedSec =
+          data.elapsedMs != null ? Math.floor(data.elapsedMs / 1000) : 0;
+        const serverRemaining = Math.max(0, data.timeLimitSec - usedSec);
+        if (data.catMode && serverRemaining === 0) {
+          logSessionEvent("cat_timer_zero_on_hydrate", {
+            timeLimitSec: data.timeLimitSec,
+            elapsedMs: data.elapsedMs ?? null,
+          });
+          setCatTimerHydrateRecovery(true);
+        }
+        setRemainingSec((prev) => {
+          if (prev == null) return serverRemaining;
+          // Never increase remaining time on refresh/reload due to stale network snapshots.
+          return Math.min(prev, serverRemaining);
+        });
+      } else {
+        setRemainingSec(null);
+      }
+      setPhase("ready");
+    } catch (e) {
+      captureClientException("practice_test_hydrate", e, { testId });
+      logDedupedClientDiagnostic(
+        "practice_runner",
+        "hydrate_failed",
+        String(testId),
+        {
+          testId,
+          phase: "error",
+          surface: "hydrate",
+        },
+      );
+      const message = e instanceof Error ? e.message : "Error";
+      setError(message);
+      setPhase("error");
+    }
+  }, [testId, initialPathwaySurface]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  useEffect(() => {
+    setPathwaySurface(initialPathwaySurface ?? null);
+  }, [testId, initialPathwaySurface]);
+
+  useEffect(() => {
+    if (phase !== "ready" || status !== "IN_PROGRESS") return;
+    const id = questionIds[idx];
+    if (!id || cacheRef.current[id]) return;
+
+    const ac = new AbortController();
+    setQLoading(true);
+    void (async () => {
+      try {
+        const res = await fetchWithRetry(
+          `/api/practice-tests/${testId}/question?index=${idx}`,
+          {
+            method: "GET",
+            signal: ac.signal,
+            credentials: "include",
+            cache: "no-store",
+          },
+          {
+            attempts: 2,
+            baseDelayMs: 400,
+            timeoutMs: 25_000,
+          },
+        );
+        const payload = (await res.json()) as {
+          question?: QRow;
+          error?: string;
+        };
+        if (!res.ok) {
+          if (!ac.signal.aborted)
+            setError(payload.error ?? "Could not load question.");
+          return;
+        }
+        if (payload.question && !ac.signal.aborted) {
+          const q = payload.question;
+          setQuestionCache((c) => {
+            const next = { ...c, [q.id]: q };
+            return pruneQuestionCache(next, questionIds, idx);
+          });
+        }
+      } catch {
+        if (!ac.signal.aborted) {
+          const message = "Could not load question.";
+          setError(message);
+        }
+      } finally {
+        if (!ac.signal.aborted) setQLoading(false);
+      }
+    })();
+
+    return () => ac.abort();
+  }, [phase, status, testId, idx, questionIds, questionFetchNonce]);
+
+  const prefetchQuestionAtIndex = useCallback(
+    (targetIndex: number) => {
+      const id = questionIds[targetIndex];
+      if (
+        !id ||
+        cacheRef.current[id] ||
+        questionPrefetchInFlightRef.current.has(targetIndex)
+      )
+        return;
+      questionPrefetchInFlightRef.current.add(targetIndex);
+      void fetchWithRetry(
+        `/api/practice-tests/${testId}/question?index=${targetIndex}`,
+        { method: "GET", credentials: "include", cache: "no-store" },
+        {
+          attempts: 1,
+          timeoutMs: 8_000,
+        },
+      )
+        .then((res) => (res.ok ? res.json() : null))
+        .then((payload: { question?: QRow } | null) => {
+          if (!payload?.question || !runnerMountedRef.current) return;
+          setQuestionCache((current) => {
+            const next = {
+              ...current,
+              [payload.question!.id]: payload.question!,
+            };
+            return pruneQuestionCache(
+              next,
+              questionIdsRef.current,
+              idxRef.current,
+            );
+          });
+        })
+        .catch(() => {
+          /* Speculative only; the foreground loader owns visible errors. */
+        })
+        .finally(() => {
+          questionPrefetchInFlightRef.current.delete(targetIndex);
+        });
+    },
+    [testId, questionIds],
+  );
+
+  useEffect(() => {
+    if (phase !== "ready" || status !== "IN_PROGRESS" || qLoading) return;
+    prefetchQuestionAtIndex(idx + 1);
+    prefetchQuestionAtIndex(idx + 2);
+  }, [idx, phase, prefetchQuestionAtIndex, qLoading, status]);
+
+  useEffect(() => {
+    if (phase !== "ready" || !timedMode || status !== "IN_PROGRESS") return;
+    const t = window.setInterval(() => {
+      setRemainingSec((r) => {
+        if (r == null || r <= 0) return 0;
+        if (r > 0) timedCountdownEverPositiveRef.current = true;
+        return r - 1;
+      });
+    }, 1000);
+    return () => window.clearInterval(t);
+  }, [phase, timedMode, status]);
+
+  /** Reduce accidental navigation away during adaptive or timed runs (legacy mock-exam checkpoint intent, browser-native). */
+  useEffect(() => {
+    if (status !== "IN_PROGRESS" || phase !== "ready") return;
+    if (!catMode && !timedMode) return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [status, phase, catMode, timedMode]);
+
+  const submitTest = useCallback(
+    async (fromTimer = false) => {
+      if (submitInFlightRef.current) return;
+      if (fromTimer && autoSubmitRef.current) return;
+      if (fromTimer) autoSubmitRef.current = true;
+      submitInFlightRef.current = true;
+      logSessionEvent("submit_start", {
+        fromTimer,
+        idx: idxRef.current,
+        total: questionIds.length,
+      });
+      setSaving(true);
+      try {
+        const cfg = testConfig;
+        if (cfg?.selectionMode === "cat" && !fromTimer) {
+          submitInFlightRef.current = false;
+          setSaving(false);
+          return;
+        }
+        const linear =
+          cfg && cfg.selectionMode !== "cat" && cfg.linearDeliveryMode;
+        if (linear && questionIds.length > 0) {
+          const missing = questionIds.filter(
+            (id) => !linearCommittedIds.includes(id),
+          );
+          if (missing.length > 0) {
+            if (fromTimer) autoSubmitRef.current = false;
+            setSaving(false);
+            setError(
+              `Submit all questions first (${missing.length} remaining).`,
+            );
+            return;
+          }
+        }
+        if (
+          cfg?.selectionMode === "cat" &&
+          (cfg.catAdaptiveSessionType ?? "cat") === "cat"
+        ) {
+          const ids = questionIdsRef.current;
+          const ans = answersRef.current;
+          const answeredForComplete = ids.filter(
+            (qid) => ans[qid] !== undefined,
+          ).length;
+          if (answeredForComplete < 2) {
+            if (fromTimer) autoSubmitRef.current = false;
+            setSaving(false);
+            setError(
+              tx(
+                "learner.practiceTests.run.catCompleteNotTerminalClient",
+                "This adaptive session cannot be finalized yet — answer at least two items, or continue from the CAT controls.",
+              ),
+            );
+            return;
+          }
+        }
+        const elapsedMs =
+          sessionStartMs != null
+            ? Math.max(0, Date.now() - sessionStartMs)
+            : undefined;
+        const res = await fetch(`/api/practice-tests/${testId}`, {
+          method: "PATCH",
+          credentials: "include",
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "complete",
+            answers: answersRef.current,
+            cursorIndex: idxRef.current,
+            examTools: examToolsRef.current,
+            ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+          }),
+        });
+        const data = (await res.json()) as {
+          results?: PracticeTestResultsJson;
+          error?: string;
+        };
+        if (!res.ok) throw new Error(data.error ?? "Could not submit.");
+        setResults(data.results ?? null);
+        setStatus("COMPLETED");
+        setSavedElapsedMs(elapsedMs ?? null);
+        if (fromTimer) setRemainingSec(0);
+        logSessionEvent("submit_success", {
+          fromTimer,
+          elapsedMs: elapsedMs ?? null,
+        });
+        void captureClientOrchestratedAnalytics(
+          testConfig?.pathwayId ?? activePathwayId,
+          PH.learnerPracticeTestSessionCompleted,
+          {
+            test_id: testId,
+            delivery: catMode ? "cat" : "linear",
+            from_timer: fromTimer,
+            source_surface: "practice_test_runner",
+          },
+          { catSessionActive: catMode },
+        );
+      } catch (e) {
+        if (fromTimer) autoSubmitRef.current = false;
+        setError(e instanceof Error ? e.message : "Submit failed");
+        logSessionEvent("submit_failed", {
+          fromTimer,
+          message: e instanceof Error ? e.message : "Submit failed",
+        });
+      } finally {
+        submitInFlightRef.current = false;
+        setSaving(false);
+      }
+    },
+    [
+      sessionStartMs,
+      testId,
+      testConfig,
+      questionIds,
+      linearCommittedIds,
+      logSessionEvent,
+      activePathwayId,
+      catMode,
+    ],
+  );
+
+  useEffect(() => {
+    if (remainingSec !== 0 || status !== "IN_PROGRESS" || !timedMode) return;
+    if (!timedCountdownEverPositiveRef.current) return;
+    void submitTest(true);
+  }, [remainingSec, status, timedMode, submitTest]);
+
+  const qid = questionIds[idx];
+  const current = qid ? questionCache[qid] : undefined;
+  const total = questionIds.length;
+  const examName =
+    pathwaySurface?.shortName ??
+    (typeof current?.exam === "string" && current.exam.trim().length > 0
+      ? current.exam.trim()
+      : tx("learner.practiceTests.run.defaultExamName", "Practice Exam"));
+  const chromeVariant = examChromeVariantFromSurface(pathwaySurface);
+  const chromeClass = `nn-exam-variant--${chromeVariant}`;
+  const guidedPracticeCat = Boolean(
+    catMode && (testConfig?.catAdaptiveSessionType ?? "cat") === "practice",
+  );
+  /**
+   * Study feedback during CAT — guided fixed-length runs and continuous review (`catExamFeedbackMode: "study"`).
+   * Licensing CAT / exam simulation stays exam-like (no per-item rationale mid-session).
+   */
+  const catFeedbackStudy = Boolean(
+    catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study",
+  );
+  const continuousAdaptivePractice = Boolean(
+    testConfig?.studyLaunchPayload?.unlimited === true ||
+    (catFeedbackStudy &&
+      (testConfig?.catAdaptiveSessionType ?? "cat") === "cat" &&
+      testConfig?.catPresentationMode === "practice"),
+  );
+  /** Licensing-style CAT: single-column exam shell; submit → lock → next; phase machine matches `catAdvance`. */
+  const isExamStyle = catMode && !catFeedbackStudy;
+
+  const answeredQuestionCount = useMemo(
+    () => questionIds.filter((qid) => answers[qid] !== undefined).length,
+    [questionIds, answers],
+  );
+
+  const finalizePracticeSessionEarly = useCallback(async () => {
+    if (submitInFlightRef.current || status !== "IN_PROGRESS") return;
+    if (answeredQuestionCount < 1) {
+      setError(
+        tx(
+          "learner.practiceTests.run.endSessionNeedsAnswer",
+          "Answer at least one question before ending the session.",
+        ),
+      );
+      return;
+    }
+    const ok = window.confirm(
+      tx(
+        "learner.practiceTests.run.endSessionConfirm",
+        "End this practice session and view your summary? Progress is saved — you can start another session anytime from Practice Tests.",
+      ),
+    );
+    if (!ok) return;
+    submitInFlightRef.current = true;
+    setSaving(true);
+    logSessionEvent("end_session_early", {
+      answered: answeredQuestionCount,
+      total: questionIds.length,
+    });
+    try {
+      const elapsedMs =
+        sessionStartMs != null
+          ? Math.max(0, Date.now() - sessionStartMs)
+          : undefined;
+      const res = await fetch(`/api/practice-tests/${testId}`, {
+        method: "PATCH",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "complete",
+          answers: answersRef.current,
+          cursorIndex: idxRef.current,
+          examTools: examToolsRef.current,
+          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+        }),
+      });
+      const data = (await res.json()) as {
+        results?: PracticeTestResultsJson;
+        error?: string;
+      };
+      if (!res.ok) throw new Error(data.error ?? "Could not end session.");
+      setResults(data.results ?? null);
+      setStatus("COMPLETED");
+      setSavedElapsedMs(elapsedMs ?? null);
+      void captureClientOrchestratedAnalytics(
+        testConfig?.pathwayId ?? activePathwayId,
+        PH.learnerPracticeTestSessionCompleted,
+        {
+          test_id: testId,
+          delivery: catMode ? "cat" : "linear",
+          from_timer: false,
+          ended_early: true,
+          continuous_practice: continuousAdaptivePractice,
+          source_surface: "practice_test_runner",
+        },
+        { catSessionActive: catMode },
+      );
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not end session.");
+    } finally {
+      submitInFlightRef.current = false;
+      setSaving(false);
+    }
+  }, [
+    answeredQuestionCount,
+    status,
+    sessionStartMs,
+    testId,
+    questionIds.length,
+    logSessionEvent,
+    testConfig?.pathwayId,
+    activePathwayId,
+    catMode,
+    continuousAdaptivePractice,
+    tx,
+  ]);
+
+  const showEndPracticeSessionControl = Boolean(
+    status === "IN_PROGRESS" && (catFeedbackStudy || guidedPracticeCat),
+  );
+  const catExamLeakWarnedRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (isExamStyle) {
+      catExamLeakWarnedRef.current = null;
+      return;
+    }
+    if (!catMode || status !== "IN_PROGRESS" || !current) return;
+    const leak =
+      document.querySelector(".nn-cat-question-card--exam-stack") ??
+      document.querySelector(".nn-cat-session.nn-cat-session--exam-single");
+    if (!leak) {
+      catExamLeakWarnedRef.current = null;
+      return;
+    }
+    const sig = `${leak.tagName}:${leak.className}`;
+    if (catExamLeakWarnedRef.current === sig) return;
+    catExamLeakWarnedRef.current = sig;
+    console.warn(
+      "[CAT UI] Exam-only layout classes present while isExamStyle=false (possible mode leakage).",
+      leak,
+    );
+    /* Re-run when question changes; avoid `current` object identity to prevent noisy effect churn. */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExamStyle, catMode, status, current?.id]);
+
+  const catStudyLocked =
+    catFeedbackStudy &&
+    Boolean(
+      catStudyFeedback && current && catStudyFeedback.questionId === current.id,
+    );
+  const optsCanonical = useMemo(
+    () => (current ? parseOptions(current.options) : []),
+    [current],
+  );
+  const optsDisplay = useMemo(() => {
+    if (!current) return [];
+    const d = current.displayOptions;
+    if (Array.isArray(d) && d.length === optsCanonical.length)
+      return d.map((x) => String(x));
+    return optsCanonical;
+  }, [current, optsCanonical]);
+
+  const isSata = Boolean(
+    current &&
+    typeof current.questionType === "string" &&
+    (current.questionType.toUpperCase() === "SATA" ||
+      current.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY"),
+  );
+  const bowtiePayload = useMemo(
+    () =>
+      current
+        ? tryNormalizeBowtiePayload(
+            current.questionType,
+            current.stem ? resolveMeasureText(current.stem) : current.stem,
+            current.options,
+          )
+        : null,
+    [current],
+  );
+  const isBowtie = Boolean(bowtiePayload);
+  const practiceQuestionType = useMemo<PracticeQuestionType>(
+    () => normalizePracticeQuestionType(current?.questionType, isBowtie),
+    [current?.questionType, isBowtie],
+  );
+  const practiceQuestionInteractionProfile = useMemo(
+    () => resolvePracticeQuestionInteractionProfile(practiceQuestionType),
+    [practiceQuestionType],
+  );
+  const raw = current ? answers[current.id] : undefined;
+
+  const needsUnsupportedQuestionUi = useMemo(
+    () =>
+      Boolean(
+        current &&
+        practiceRunnerNeedsUnsupportedFallback(
+          current.questionType,
+          current.options,
+          optsCanonical.length,
+          isBowtie,
+        ),
+      ),
+    [current, optsCanonical.length, isBowtie],
+  );
+
+  useEffect(() => {
+    if (!current || !needsUnsupportedQuestionUi) return;
+    logPracticeRunnerUnsupportedQuestionDev(
+      current.id,
+      current.questionType,
+      "unsupported_payload_shape",
+    );
+    logPracticeRunnerUnsupportedQuestionProd(current.id, current.questionType);
+  }, [current, needsUnsupportedQuestionUi]);
+
+  useEffect(() => {
+    if (!current || needsUnsupportedQuestionUi || isBowtie) return;
+    logUnknownCatalogQuestionTypeDev(
+      current.id,
+      current.questionType,
+      optsCanonical.length,
+    );
+  }, [current, needsUnsupportedQuestionUi, isBowtie, optsCanonical.length]);
+
+  useEffect(() => {
+    if (!current || !catStudyFeedback) return;
+    if (catStudyFeedback.questionId !== current.id) {
+      setCatStudyFeedback(null);
+    }
+  }, [current, catStudyFeedback]);
+
+  useEffect(() => {
+    if (!catMode || !catFeedbackStudy) {
+      /* CAT exam (test) mode: UI phases are advanced only via lock / cat_advance / completion — not qid. */
+      return;
+    }
+    catExamUiPhaseRef.current = "answering";
+    setCatExamUiPhase("answering");
+  }, [qid, catMode, catFeedbackStudy]);
+
+  useEffect(() => {
+    const examStyle = catMode && !catFeedbackStudy;
+    if (!examStyle || status !== "IN_PROGRESS") return;
+    const onLeave = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onLeave);
+    return () => window.removeEventListener("beforeunload", onLeave);
+  }, [catMode, catFeedbackStudy, status]);
+
+  const linearDelivery = testConfig?.linearDeliveryMode;
+  const linearRationaleVisibility =
+    testConfig?.linearRationaleVisibility ??
+    (linearDelivery === "exam" ? "end_of_exam" : "after_each");
+  const isLinearEngine = Boolean(!catMode && linearDelivery);
+  const linearAllowReviewNavigation =
+    testConfig?.linearAllowReviewNavigation === true;
+  const linearIsExamShell = isLinearEngine && linearDelivery === "exam";
+  /**
+   * Timed linear mock only — reuse CAT-style minimal board chrome (progress density, option strip).
+   * Tutor / practice delivery uses {@link PracticeExamProgressHeader} + split rationale instead.
+   */
+  const linearCatShellPresentation = linearIsExamShell;
+  /** Desktop/tablet split: question left, rationale right (mobile stacks). */
+  const linearPracticeSplitReview =
+    isLinearEngine &&
+    linearDelivery === "practice" &&
+    linearRationaleVisibility === "after_each";
+  /** Linear practice exams (tutor / study-forward) — visually distinct from licensing CAT shells. */
+  const linearPracticeExamConvergence = Boolean(
+    isLinearEngine && linearDelivery === "practice",
+  );
+  const practiceQuestionLayoutMode = resolvePracticeQuestionLayoutMode({
+    splitRationale: Boolean(
+      linearPracticeSplitReview || guidedPracticeCat || catFeedbackStudy,
+    ),
+    examStyle: Boolean(isExamStyle || linearCatShellPresentation),
+  });
+  /** Visual mode for `ExamSessionShell` — one shell, token-driven surfaces (not layout forks). */
+  const learnerExamShellMode = useMemo((): LearnerExamShellMode => {
+    if (status !== "IN_PROGRESS") return "review";
+    if (linearPracticeSplitReview) return "practice";
+    if (catMode || linearCatShellPresentation) return "cat";
+    return "practice";
+  }, [status, linearPracticeSplitReview, catMode, linearCatShellPresentation]);
+  const linearEngineUiKind = resolveLinearEngineRunnerUiKind({
+    catMode,
+    linearDeliveryMode: linearDelivery,
+    linearAllowReviewNavigation,
+  });
+  const committedSet = useMemo(
+    () => new Set(linearCommittedIds),
+    [linearCommittedIds],
+  );
+  const currentCommitted = Boolean(current && committedSet.has(current.id));
+  const linearFeedback = current
+    ? linearPracticeFeedback[current.id]
+    : undefined;
+  const committedCount = linearCommittedIds.length;
+
+  const qTags = useMemo(() => {
+    const t = current?.tags;
+    return Array.isArray(t) ? t : [];
+  }, [current?.tags]);
+
+  const allowMcqOptionShuffle =
+    !Boolean(testConfig?.disableOptionShuffle) &&
+    !isSata &&
+    !isBowtie &&
+    (catFeedbackStudy ||
+      isExamStyle ||
+      (!catMode && testConfig?.linearDeliveryMode === "exam"));
+
+  const optsOrderCanonical = useMemo(() => {
+    if (optsCanonical.length <= 1) return optsCanonical;
+    if (!allowMcqOptionShuffle) return optsCanonical;
+    const texts = optsCanonical.map((k, i) => String(optsDisplay[i] ?? k));
+    if (
+      shouldDisableOptionShuffleMcq({
+        questionType: current?.questionType,
+        tags: qTags,
+        optionTexts: texts,
+      })
+    ) {
+      return optsCanonical;
+    }
+    const sessionKey = testConfig?.sessionPickSalt ?? testId;
+    return buildExamOptionDisplayOrder({
+      sessionKey,
+      questionId: current?.id ?? "",
+      canonicalKeys: optsCanonical,
+    });
+  }, [
+    allowMcqOptionShuffle,
+    optsCanonical,
+    optsDisplay,
+    current?.id,
+    current?.questionType,
+    testId,
+    testConfig?.sessionPickSalt,
+    testConfig?.disableOptionShuffle,
+    qTags,
+  ]);
+
+  const optsOrderDisplay = useMemo(() => {
+    const mapCanonToDisplay = new Map(
+      optsCanonical.map((k, i) => [k, optsDisplay[i] ?? k]),
+    );
+    return optsOrderCanonical.map((k) => mapCanonToDisplay.get(k) ?? k);
+  }, [optsCanonical, optsDisplay, optsOrderCanonical]);
+
+  const optsOrderDisplayResolved = useMemo(
+    () => optsOrderDisplay.map((t) => resolveMeasureText(t)),
+    [optsOrderDisplay, resolveMeasureText],
+  );
+
+  const hasMeaningfulAnswer = (qid: string): boolean => {
+    const v = answersRef.current[qid];
+    if (v === undefined || v === null) return false;
+    if (isBowtieAnswerComplete(v)) return true;
+    if (typeof v === "string") return v.trim().length > 0;
+    if (Array.isArray(v)) return v.length > 0;
+    return true;
+  };
+
+  const lockCatExamAnswer = useCallback(() => {
+    if (!isExamStyle || !current) return;
+    if (
+      !catExamCanLockAnswer(
+        catExamUiPhaseRef.current,
+        hasMeaningfulAnswer(current.id),
+      )
+    )
+      return;
+    const from = catExamUiPhaseRef.current;
+    try {
+      assertCatExamPhaseTransition(from, "submitted_locked");
+    } catch (e) {
+      logSessionEvent("cat_exam_phase_transition_rejected", {
+        phase_from: from,
+        phase_to: "submitted_locked",
+        reason: "lock_answer",
+        message: e instanceof Error ? e.message : String(e),
+      });
+      return;
+    }
+    catExamUiPhaseRef.current = "submitted_locked";
+    setCatExamUiPhase("submitted_locked");
+    logSessionEvent("cat_exam_phase_transition", {
+      phase_from: from,
+      phase_to: "submitted_locked",
+      reason: "lock_answer",
+    });
+    queueMicrotask(() => {
+      catExamAdvanceButtonRef.current?.focus();
+    });
+  }, [isExamStyle, current, logSessionEvent]);
+
+  const setConfidenceForQuestion = useCallback(
+    (qid: string, level: ConfidenceLevel) => {
+      const next = { ...confidence, [qid]: level };
+      setConfidence(next);
+      examToolsRef.current = {
+        ...examToolsRef.current,
+        confidence: next,
+        updatedAt: new Date().toISOString(),
+      };
+      void persistSave(answersRef.current, idxRef.current);
+    },
+    // persistSave reads from refs internally — stable behavior across re-renders
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [confidence],
+  );
+
+  const toggleFlagForQuestion = useCallback(
+    (qid: string) => {
+      const next = { ...flagged, [qid]: !flagged[qid] };
+      setFlagged(next);
+      examToolsRef.current = {
+        ...examToolsRef.current,
+        flagged: next,
+        updatedAt: new Date().toISOString(),
+      };
+      void persistSave(answersRef.current, idxRef.current);
+    },
+    // persistSave reads from refs internally — stable behavior across re-renders
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [flagged],
+  );
+
+  async function persistSave(
+    nextAnswers: Record<string, unknown>,
+    nextIdx: number,
+  ) {
+    pendingPersistRef.current = {
+      answers: nextAnswers,
+      cursorIndex: nextIdx,
+      examTools: {
+        ...examToolsRef.current,
+        updatedAt: new Date().toISOString(),
+      },
+    };
+    if (persistInFlightRef.current) return;
+    persistInFlightRef.current = true;
+    setSaving(true);
+    try {
+      while (pendingPersistRef.current) {
+        const payload = pendingPersistRef.current;
+        pendingPersistRef.current = null;
+        const elapsedMs =
+          sessionStartMs != null
+            ? Math.max(0, Date.now() - sessionStartMs)
+            : undefined;
+        const res = await fetch(`/api/practice-tests/${testId}`, {
+          method: "PATCH",
+          credentials: "include",
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "save",
+            answers: payload.answers,
+            cursorIndex: payload.cursorIndex,
+            examTools: payload.examTools,
+            ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+          }),
+        });
+        if (!res.ok) {
+          let message = "Could not save progress.";
+          try {
+            const data = (await res.json()) as { error?: string };
+            if (data?.error) message = data.error;
+          } catch {
+            // Keep default fallback if response body is unavailable.
+          }
+          throw new Error(message);
+        }
+      }
+      if (error) setError(null);
+    } catch (e) {
+      const message =
+        e instanceof Error ? e.message : "Could not save progress.";
+      setError(message);
+    } finally {
+      persistInFlightRef.current = false;
+      setSaving(false);
+    }
+  }
+
+  async function abandon() {
+    if (abandonInFlightRef.current || submitInFlightRef.current) return;
+    if (
+      !window.confirm(
+        "Abandon this test? Progress is saved but marked abandoned.",
+      )
+    )
+      return;
+    abandonInFlightRef.current = true;
+    logSessionEvent("navigation_abandon", { idx, total });
+    setSaving(true);
+    try {
+      const elapsedMs =
+        sessionStartMs != null
+          ? Math.max(0, Date.now() - sessionStartMs)
+          : undefined;
+      await fetch(`/api/practice-tests/${testId}`, {
+        method: "PATCH",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "abandon",
+          answers,
+          cursorIndex: idx,
+          examTools: examToolsRef.current,
+          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+        }),
+      });
+      clearStoredPracticeResume(testId);
+      router.replace("/app/practice-tests");
+    } finally {
+      abandonInFlightRef.current = false;
+      setSaving(false);
+    }
+  }
+
+  function setAnswerForCurrent(next: unknown) {
+    if (!current) return;
+    if (
+      submitInFlightRef.current ||
+      catAdvanceInFlightRef.current ||
+      linearCommitInFlightRef.current
+    )
+      return;
+    if (
+      catMode &&
+      isExamStyle &&
+      !catExamCanChangeAnswer(catExamUiPhaseRef.current)
+    ) {
+      return;
+    }
+    if (isLinearEngine && committedSet.has(current.id)) return;
+    const nextAnswers = { ...answersRef.current, [current.id]: next };
+    answersRef.current = nextAnswers;
+    setAnswers(nextAnswers);
+    void persistSave(nextAnswers, idx);
+  }
+
+  setAnswerForCurrentRef.current = setAnswerForCurrent;
+
+  async function submitLinearCommit() {
+    if (linearCommitInFlightRef.current || submitInFlightRef.current) return;
+    if (!current || !isLinearEngine || currentCommitted) return;
+    if (!hasMeaningfulAnswer(current.id)) return;
+    linearCommitInFlightRef.current = true;
+    logSessionEvent("submit_linear_commit_start", {
+      idx,
+      questionId: current.id,
+    });
+    setSaving(true);
+    try {
+      const elapsedMs =
+        sessionStartMs != null
+          ? Math.max(0, Date.now() - sessionStartMs)
+          : undefined;
+      const res = await fetch(`/api/practice-tests/${testId}`, {
+        method: "PATCH",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "linear_commit",
+          questionId: current.id,
+          answers: answersRef.current,
+          cursorIndex: idx,
+          examTools: examToolsRef.current,
+          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+        }),
+      });
+      const data = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        committedQuestionIds?: string[];
+        feedback?: {
+          isCorrect: boolean;
+          topic?: string | null;
+          rationale: string | null;
+          correctKeys: string[];
+          correctAnswerExplanation?: string | null;
+          distractorRationalesMap?: Record<string, string> | null;
+          keyTakeaway?: string | null;
+          relatedLessons?: { title: string; href: string }[];
+          clinicalPearlDisplay?: string | null;
+          referenceSource?: string | null;
+          peerStats?: QuestionBankPeerStatsClient | null;
+        };
+      };
+      if (!res.ok) throw new Error(data.error ?? "Could not submit answer.");
+      if (Array.isArray(data.committedQuestionIds)) {
+        setLinearCommittedIds(data.committedQuestionIds);
+      }
+      if (data.feedback && linearRationaleVisibility === "after_each") {
+        setLinearPracticeFeedback((prev) => ({
+          ...prev,
+          [current.id]: {
+            isCorrect: data.feedback!.isCorrect,
+            topic: data.feedback!.topic ?? null,
+            rationale: data.feedback!.rationale,
+            correctKeys: data.feedback!.correctKeys ?? [],
+            correctAnswerExplanation:
+              data.feedback!.correctAnswerExplanation ?? null,
+            distractorRationalesMap:
+              data.feedback!.distractorRationalesMap ?? null,
+            keyTakeaway: data.feedback!.keyTakeaway ?? null,
+            relatedLessons: data.feedback!.relatedLessons ?? [],
+            clinicalPearlDisplay: data.feedback!.clinicalPearlDisplay ?? null,
+            referenceSource: data.feedback!.referenceSource ?? null,
+            peerStats: data.feedback!.peerStats ?? null,
+          },
+        }));
+      }
+      if (data.feedback?.isCorrect) {
+        setPracticeAdaptivePostMiss((p) =>
+          p?.questionId === current.id ? null : p,
+        );
+      } else {
+        const pathwayId = testConfig?.pathwayId ?? pathwaySurface?.id ?? "";
+        const topicRaw =
+          [current.topic, current.subtopic].find(
+            (x) => typeof x === "string" && String(x).trim().length > 1,
+          ) ?? null;
+        if (
+          adaptiveLearningEnabled &&
+          isEntitled &&
+          !catMode &&
+          pathwayId &&
+          data.feedback &&
+          linearRationaleVisibility === "after_each"
+        ) {
+          const qidAtCommit = current.id;
+          const idxAtCommit = idx;
+          void (async () => {
+            try {
+              const ar = await fetch("/api/learner/adaptive-post-miss", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  pathwayId,
+                  missedTopicKey:
+                    typeof topicRaw === "string" ? topicRaw : null,
+                }),
+              });
+              const payload =
+                (await ar.json()) as PracticeAdaptivePostMissPayload & {
+                  locked?: boolean;
+                  code?: string;
+                };
+              if (!runnerMountedRef.current) return;
+              if (
+                idxRef.current !== idxAtCommit ||
+                questionIdsRef.current[idxAtCommit] !== qidAtCommit
+              )
+                return;
+              if (ar.ok && payload && !payload.locked) {
+                setPracticeAdaptivePostMiss({
+                  questionId: qidAtCommit,
+                  payload,
+                });
+              }
+            } catch {
+              /* optional wiring — ignore */
+            }
+          })();
+        }
+      }
+      logSessionEvent("submit_linear_commit_success", {
+        idx,
+        questionId: current.id,
+      });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Submit failed");
+      logSessionEvent("submit_linear_commit_failed", {
+        idx,
+        questionId: current.id,
+        message: e instanceof Error ? e.message : "Submit failed",
+      });
+    } finally {
+      linearCommitInFlightRef.current = false;
+      setSaving(false);
+    }
+  }
+
+  async function catAdvance() {
+    if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
+    if (!current || !hasMeaningfulAnswer(current.id)) return;
+
+    const feedbackStudy =
+      catMode && (testConfig?.catAdaptiveSessionType ?? "cat") === "practice";
+    const examStyle = catMode && !feedbackStudy;
+    if (examStyle && !catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) {
+      return;
+    }
+
+    const advanceQuestionId = current.id;
+    const advanceIdx = idx;
+
+    catAdvanceInFlightRef.current = true;
+    if (examStyle) {
+      const fromPhase = catExamUiPhaseRef.current;
+      try {
+        assertCatExamPhaseTransition(fromPhase, "advancing");
+      } catch (e) {
+        logSessionEvent("cat_exam_phase_transition_rejected", {
+          phase_from: fromPhase,
+          phase_to: "advancing",
+          reason: "cat_advance_start",
+          message: e instanceof Error ? e.message : String(e),
+        });
+        catAdvanceInFlightRef.current = false;
+        return;
+      }
+      catExamUiPhaseRef.current = "advancing";
+      setCatExamUiPhase("advancing");
+      logSessionEvent("cat_exam_phase_transition", {
+        phase_from: fromPhase,
+        phase_to: "advancing",
+        reason: "cat_advance_start",
+      });
+    }
+    logSessionEvent("submit_cat_advance_start", {
+      idx,
+      questionId: advanceQuestionId,
+    });
+    setSaving(true);
+    try {
+      const elapsedMs =
+        sessionStartMs != null
+          ? Math.max(0, Date.now() - sessionStartMs)
+          : undefined;
+      const patchBody = buildCatAdvancePatchBody({
+        testId,
+        answers: answersRef.current,
+        cursorIndex: advanceIdx,
+        examQuestionId: advanceQuestionId,
+        ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+      });
+      const patchBodyWithTools = {
+        ...patchBody,
+        examTools: examToolsRef.current,
+      };
+      const res = await fetch(`/api/practice-tests/${testId}`, {
+        method: "PATCH",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patchBodyWithTools),
+      });
+      let data: {
+        results?: PracticeTestResultsJson;
+        error?: string;
+        code?: string;
+        recoveryAction?: string;
+        recoveryHref?: string;
+        catAdvanced?: boolean;
+        catCompleted?: boolean;
+        catStudyReveal?: boolean;
+        studyFeedback?: CatStudyFeedbackPayload | null;
+      };
+      try {
+        data = (await res.json()) as typeof data;
+      } catch {
+        throw new Error("Could not read the server response for this step.");
+      }
+      if (!res.ok) {
+        // If the server returned a structured recovery hint, surface it so the
+        // runner can offer "switch to practice mode" rather than a raw error banner.
+        if (data.code === "cat_advance_failed" && data.recoveryHref) {
+          logSessionEvent("cat_advance_server_error_with_recovery", {
+            code: data.code,
+            recoveryAction: data.recoveryAction ?? null,
+          });
+          setError(
+            tx(
+              "learner.practiceTests.run.catAdvanceRecovery",
+              "This adaptive session encountered a problem. You can continue studying from your practice test history.",
+            ),
+          );
+          return; // Don't rethrow — render error state with recovery link
+        }
+        throw new Error(data.error ?? "Could not advance.");
+      }
+      assertCatAdvanceResponseShape(data);
+      if (
+        catExamCatAdvanceResponseIsStale({
+          advanceIdx,
+          advanceQuestionId,
+          currentIdx: idxRef.current,
+          currentQuestionId: questionIdsRef.current[idxRef.current],
+        })
+      ) {
+        logSessionEvent("submit_cat_advance_stale_ignored", {
+          advanceIdx,
+          advanceQuestionId,
+        });
+        if (examStyle) {
+          const fromPhase = catExamUiPhaseRef.current;
+          try {
+            assertCatExamPhaseTransition(fromPhase, "submitted_locked");
+          } catch (e) {
+            logSessionEvent("cat_exam_phase_transition_rejected", {
+              phase_from: fromPhase,
+              phase_to: "submitted_locked",
+              reason: "cat_advance_stale_rollback",
+              message: e instanceof Error ? e.message : String(e),
+            });
+          }
+          catExamUiPhaseRef.current = "submitted_locked";
+          setCatExamUiPhase("submitted_locked");
+          logSessionEvent("cat_exam_phase_transition", {
+            phase_from: fromPhase,
+            phase_to: "submitted_locked",
+            reason: "cat_advance_stale_rollback",
+          });
+        }
+        return;
+      }
+      if (!runnerMountedRef.current) return;
+      if (data.catStudyReveal) {
+        await load();
+        if (!runnerMountedRef.current) return;
+        logSessionEvent("submit_cat_advance_reveal", {
+          idx: advanceIdx,
+          questionId: advanceQuestionId,
+        });
+        return;
+      }
+      if (data.catCompleted && data.results) {
+        if (!runnerMountedRef.current) return;
+        if (examStyle) {
+          const fromPhase = catExamUiPhaseRef.current;
+          try {
+            assertCatExamPhaseTransition(fromPhase, "completed");
+          } catch (e) {
+            logSessionEvent("cat_exam_phase_transition_rejected", {
+              phase_from: fromPhase,
+              phase_to: "completed",
+              reason: "cat_completed",
+              message: e instanceof Error ? e.message : String(e),
+            });
+          }
+          catExamUiPhaseRef.current = "completed";
+          setCatExamUiPhase("completed");
+          logSessionEvent("cat_exam_phase_transition", {
+            phase_from: fromPhase,
+            phase_to: "completed",
+            reason: "cat_completed",
+          });
+        }
+        setSavedElapsedMs(elapsedMs ?? null);
+        setResults(data.results);
+        if (data.studyFeedback && catFeedbackStudy) {
+          setCatFinalStudyFeedback(data.studyFeedback);
+        }
+        setStatus("COMPLETED");
+        logSessionEvent("submit_cat_advance_completed", {
+          idx: advanceIdx,
+          questionId: advanceQuestionId,
+        });
+        return;
+      }
+      if (data.catAdvanced) {
+        setCatStudyFeedback(null);
+        await load();
+        if (!runnerMountedRef.current) return;
+        if (examStyle) {
+          const fromPhase = catExamUiPhaseRef.current;
+          try {
+            assertCatExamPhaseTransition(fromPhase, "answering");
+          } catch (e) {
+            logSessionEvent("cat_exam_phase_transition_forced", {
+              phase_from: fromPhase,
+              phase_to: "answering",
+              reason: "cat_advanced_ok",
+              message: e instanceof Error ? e.message : String(e),
+            });
+          }
+          catExamUiPhaseRef.current = "answering";
+          setCatExamUiPhase("answering");
+          logSessionEvent("cat_exam_phase_transition", {
+            phase_from: fromPhase,
+            phase_to: "answering",
+            reason: "cat_advanced_ok",
+          });
+        }
+        logSessionEvent("submit_cat_advance_next", {
+          idx: advanceIdx,
+          questionId: advanceQuestionId,
+        });
+        return;
+      }
+      throw new Error(
+        tx(
+          "learner.practiceTests.run.catAdvanceUnexpectedResponse",
+          "The server did not return the next exam step. Try again or reload the session.",
+        ),
+      );
+    } catch (e) {
+      if (examStyle) {
+        const fromPhase = catExamUiPhaseRef.current;
+        try {
+          assertCatExamPhaseTransition(fromPhase, "submitted_locked");
+        } catch (err) {
+          logSessionEvent("cat_exam_phase_transition_rejected", {
+            phase_from: fromPhase,
+            phase_to: "submitted_locked",
+            reason: "cat_advance_error_rollback",
+            message: err instanceof Error ? err.message : String(err),
+          });
+        }
+        catExamUiPhaseRef.current = "submitted_locked";
+        setCatExamUiPhase("submitted_locked");
+        logSessionEvent("cat_exam_phase_transition", {
+          phase_from: fromPhase,
+          phase_to: "submitted_locked",
+          reason: "cat_advance_error_rollback",
+        });
+      }
+      setError(e instanceof Error ? e.message : "Advance failed");
+      logSessionEvent("submit_cat_advance_failed", {
+        idx: advanceIdx,
+        questionId: advanceQuestionId,
+        message: e instanceof Error ? e.message : "Advance failed",
+      });
+    } finally {
+      catAdvanceInFlightRef.current = false;
+      setSaving(false);
+    }
+  }
+
+  catAdvanceLatestRef.current = catAdvance;
+
+  async function goNext() {
+    if (
+      saving ||
+      navInFlightRef.current ||
+      submitInFlightRef.current ||
+      catAdvanceInFlightRef.current
+    )
+      return;
+    if (catMode) {
+      if (guidedPracticeCat) {
+        await catAdvance();
+        return;
+      }
+      if (!catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
+      await catAdvance();
+      return;
+    }
+    if (isLinearEngine && qid && !committedSet.has(qid)) return;
+    if (idx >= total - 1) return;
+    navInFlightRef.current = true;
+    logSessionEvent("navigation_next", { from: idx, to: idx + 1 });
+    const nextIdx = idx + 1;
+    setIdx(nextIdx);
+    try {
+      await persistSave(answersRef.current, nextIdx);
+    } finally {
+      navInFlightRef.current = false;
+    }
+  }
+
+  async function goPrev() {
+    if (
+      saving ||
+      navInFlightRef.current ||
+      submitInFlightRef.current ||
+      catAdvanceInFlightRef.current
+    )
+      return;
+    if (catMode) return;
+    if (isLinearEngine) {
+      if (!linearAllowReviewNavigation || linearIsExamShell) return;
+      if (idx <= 0) return;
+      const prevId = questionIds[idx - 1];
+      if (!prevId || !committedSet.has(prevId)) return;
+      navInFlightRef.current = true;
+      logSessionEvent("navigation_prev", { from: idx, to: idx - 1 });
+      const nextIdx = idx - 1;
+      setIdx(nextIdx);
+      try {
+        await persistSave(answersRef.current, nextIdx);
+      } finally {
+        navInFlightRef.current = false;
+      }
+      return;
+    }
+    if (idx <= 0) return;
+    navInFlightRef.current = true;
+    logSessionEvent("navigation_prev", { from: idx, to: idx - 1 });
+    const nextIdx = idx - 1;
+    setIdx(nextIdx);
+    try {
+      await persistSave(answersRef.current, nextIdx);
+    } finally {
+      navInFlightRef.current = false;
+    }
+  }
+
+  /** CAT exam mode: keyboard shortcuts (letters / digits, Enter); deduped against double-fire. */
+  useEffect(() => {
+    if (
+      !isExamStyle ||
+      !catMode ||
+      status !== "IN_PROGRESS" ||
+      phase !== "ready" ||
+      !current ||
+      catTimerHydrateRecovery
+    ) {
+      return;
+    }
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target?.closest?.("dialog[open]") ||
+        target?.closest?.('[role="dialog"]')
+      )
+        return;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      const root = target?.closest?.("[data-cat-exam-root]");
+      if (e.key === " " && root) {
+        const interactive = target?.closest?.(
+          "button,label.nn-cat-opt,a[href],[role='menuitem']",
+        );
+        if (!interactive) e.preventDefault();
+      }
+      const gate = () => {
+        if (e.repeat) return false;
+        const now = Date.now();
+        if (now - catExamPrimaryActionGateMsRef.current < 420) return false;
+        catExamPrimaryActionGateMsRef.current = now;
+        return true;
+      };
+      const letterIndex = (() => {
+        if (optsOrderCanonical.length === 0) return null;
+        const k = e.key.length === 1 ? e.key.toUpperCase() : "";
+        if (!k || k < "A" || k > "Z") return null;
+        const i = k.charCodeAt(0) - "A".charCodeAt(0);
+        return i >= 0 && i < optsOrderCanonical.length ? i : null;
+      })();
+      const digitIndex = (() => {
+        if (optsOrderCanonical.length === 0) return null;
+        const d = e.key;
+        if (d < "1" || d > "9") return null;
+        const i = Number.parseInt(d, 10) - 1;
+        return i >= 0 && i < optsOrderCanonical.length ? i : null;
+      })();
+      if (letterIndex != null || digitIndex != null) {
+        if (!catExamCanChangeAnswer(catExamUiPhaseRef.current)) return;
+        if (saving || qLoading || catAdvanceInFlightRef.current) return;
+        const i = letterIndex ?? digitIndex!;
+        const canonical = optsOrderCanonical[i];
+        if (!canonical) return;
+        if (isSata) {
+          const prior = answersRef.current[current.id];
+          const prev = Array.isArray(prior) ? [...prior] : [];
+          const has = prev.includes(canonical);
+          setAnswerForCurrentRef.current(
+            has ? prev.filter((x) => x !== canonical) : [...prev, canonical],
+          );
+        } else {
+          setAnswerForCurrentRef.current(canonical);
+        }
+        e.preventDefault();
+        return;
+      }
+      if (e.key !== "Enter") return;
+      if (e.repeat) {
+        e.preventDefault();
+        return;
+      }
+      if (!gate()) {
+        e.preventDefault();
+        return;
+      }
+      const phaseNow = catExamUiPhaseRef.current;
+      if (phaseNow === "answering") {
+        if (!hasMeaningfulAnswer(current.id)) return;
+        if (saving || qLoading || catAdvanceInFlightRef.current) return;
+        lockCatExamAnswer();
+        e.preventDefault();
+        return;
+      }
+      if (phaseNow === "submitted_locked") {
+        if (saving || qLoading || catAdvanceInFlightRef.current) return;
+        catExamKeyboardAdvanceRef.current = true;
+        void catAdvanceLatestRef.current();
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => window.removeEventListener("keydown", onKeyDown, true);
+  }, [
+    isExamStyle,
+    catMode,
+    status,
+    phase,
+    current,
+    current?.id,
+    optsOrderCanonical,
+    isSata,
+    saving,
+    qLoading,
+    lockCatExamAnswer,
+    catTimerHydrateRecovery,
+  ]);
+
+  useEffect(() => {
+    if (!isExamStyle || !catExamKeyboardAdvanceRef.current) return;
+    catExamKeyboardAdvanceRef.current = false;
+    queueMicrotask(() => {
+      const wrap = document.querySelector("[data-cat-exam-root]");
+      const btn = wrap?.querySelector(
+        "button.nn-cat-opt",
+      ) as HTMLButtonElement | null;
+      btn?.focus();
+    });
+  }, [qid, isExamStyle]);
+
+  useEffect(() => {
+    if (!isExamStyle) return;
+    const el = document.getElementById("nn-cat-exam-scroll-region");
+    if (el) el.scrollTop = 0;
+  }, [qid, isExamStyle]);
+
+  useEffect(() => {
+    setDismissedPoolRelaxBanner(false);
+  }, [testId]);
+
+  function catPoolRelaxNoticeCopy(meta: CatSelectionAppliedMeta): string {
+    if (meta.selectionStrictness === "broad") {
+      return tx(
+        "learner.practiceTests.run.poolRelaxBroad",
+        "Topic or focus filters were widened so enough pathway-eligible questions could be included in this session.",
+      );
+    }
+    return tx(
+      "learner.practiceTests.run.poolRelaxSoft",
+      "Your adaptive focus was adjusted slightly so the engine could build a full session from eligible questions.",
+    );
+  }
+
+  /** Inline recovery when PATCH save / CAT advance / linear commit fails but the item is still visible (legacy exam-fallbacks recovery intent). */
+  const sessionRecoverable =
+    phase === "ready" &&
+    status === "IN_PROGRESS" &&
+    Boolean(current) &&
+    Boolean(error) &&
+    !qLoading;
+  const sessionRecoveryBanner = sessionRecoverable ? (
+    <div role="alert">
+      <LearnerStudyCard className="mb-4 border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--lv-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--lv-bg-surface))] text-sm text-[var(--semantic-text-primary)] shadow-sm">
+        <p className="font-semibold text-[var(--semantic-text-primary)]">
+          {tx(
+            "learner.practiceTests.run.sessionIssueTitle",
+            "We could not sync that step",
+          )}
+        </p>
+        <p className="mt-1 text-[var(--semantic-text-secondary)]">{error}</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button
+            type="button"
+            className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
+            onClick={() => {
+              setError(null);
+              void load();
+            }}
+          >
+            {tx("learner.practiceTests.run.sessionTryAgain", "Try again")}
+          </button>
+          <button
+            type="button"
+            className="rounded-full border border-transparent px-4 py-2 text-xs font-semibold text-[var(--semantic-text-muted)] underline-offset-2 hover:underline"
+            onClick={() => setError(null)}
+          >
+            {tx("learner.practiceTests.run.sessionDismiss", "Dismiss")}
+          </button>
+        </div>
+      </LearnerStudyCard>
+    </div>
+  ) : null;
+
+  const appliedSelMeta = testConfig?.catSelectionAppliedMeta;
+  const showCatPoolRelaxBanner =
+    catMode &&
+    phase === "ready" &&
+    status === "IN_PROGRESS" &&
+    appliedSelMeta &&
+    appliedSelMeta.selectionStrictness !== "exact" &&
+    !dismissedPoolRelaxBanner;
+  const catPoolRelaxBanner = showCatPoolRelaxBanner ? (
+    <div role="status" className="mb-3">
+      <LearnerStudyCard className="border-[color-mix(in_srgb,var(--semantic-info)_32%,var(--lv-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_28%,var(--lv-bg-surface))] text-sm text-[var(--semantic-text-primary)] shadow-sm">
+        <p className="font-semibold text-[var(--semantic-text-primary)]">
+          {tx(
+            "learner.practiceTests.run.poolRelaxTitle",
+            "How this session was built",
+          )}
+        </p>
+        <p className="mt-1 text-[var(--semantic-text-secondary)]">
+          {catPoolRelaxNoticeCopy(appliedSelMeta!)}
+        </p>
+        <div className="mt-3">
+          <button
+            type="button"
+            className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
+            onClick={() => setDismissedPoolRelaxBanner(true)}
+          >
+            {tx("learner.practiceTests.run.poolRelaxDismiss", "Got it")}
+          </button>
+        </div>
+      </LearnerStudyCard>
+    </div>
+  ) : null;
+
+  if (phase === "loading") {
+    return <PracticeTestRunPageSkeleton />;
+  }
+  if (phase === "error") {
+    return (
+      <div className="nn-card space-y-4 p-6 text-sm text-muted-foreground">
+        <p className="font-medium text-foreground">
+          {tx(
+            "learner.practiceTests.run.loadFailedTitle",
+            "Could not load this practice test",
+          )}
+        </p>
+        <p>{error ?? tx("learner.practiceTests.run.error", "Error")}</p>
+        <p className="text-xs text-[var(--semantic-text-secondary)]">
+          {tx(
+            "learner.practiceTests.run.loadFailedHint",
+            "Check your connection and try again. If you were already in progress, your session may still be on the server.",
+          )}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
+            onClick={() => void load()}
+          >
+            {tx("learner.practiceTests.run.retryLoad", "Retry")}
+          </button>
+          <Link
+            className="inline-flex items-center font-medium text-primary underline"
+            href="/app/practice-tests"
+          >
+            {tx("learner.practiceTests.run.backToBank", "Back to test bank")}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  async function loadTeachingReview() {
+    setTeachingReviewLoading(true);
+    try {
+      const res = await fetchWithRetry(
+        `/api/practice-tests/${testId}?teachingReview=1`,
+        { method: "GET", credentials: "include", cache: "no-store" },
+        {
+          attempts: 2,
+          timeoutMs: 30_000,
+        },
+      );
+      const data = (await res.json()) as {
+        teachingReview?: { items: PracticeTestTeachingItem[] };
+        error?: string;
+      };
+      if (!res.ok) {
+        setError(data.error ?? "Could not load teaching review.");
+        return;
+      }
+      setTeachingReviewItems(data.teachingReview?.items ?? []);
+    } catch {
+      setError("Could not load teaching review.");
+    } finally {
+      setTeachingReviewLoading(false);
+    }
+  }
+
+  if (status === "COMPLETED" && results) {
+    return (
+      <PracticeTestResultsView
+        activePathwayId={activePathwayId}
+        adaptivePlanEnabled={adaptivePlanEnabled}
+        catFinalStudyFeedback={catFinalStudyFeedback}
+        catMode={catMode}
+        confidence={confidence}
+        confidenceTrackingEnabled={confidenceTrackingEnabled}
+        isEntitled={isEntitled}
+        isLinearEngine={isLinearEngine}
+        linearPracticeFeedback={linearPracticeFeedback}
+        onClearCatFinalStudyFeedback={() => setCatFinalStudyFeedback(null)}
+        onOpenTeachingReview={
+          teachingReviewItems === null
+            ? () => void loadTeachingReview()
+            : undefined
+        }
+        protectionFlags={protectionFlags}
+        questionCache={questionCache}
+        questionIds={questionIds}
+        results={results}
+        savedElapsedMs={savedElapsedMs}
+        teachingReviewItems={teachingReviewItems}
+        teachingReviewLoading={teachingReviewLoading}
+        testConfig={testConfig}
+        testId={testId}
+        timeLimitSec={timeLimitSec}
+        timedMode={timedMode}
+        tx={tx}
+        userId={userId}
+        userLabel={userLabel}
+      />
+    );
+  }
+
+  if (status === "ABANDONED") {
+    return (
+      <p className="text-sm text-muted-foreground">
+        {tx("learner.practiceTests.run.abandoned", "This test was abandoned.")}{" "}
+        <Link
+          className="font-medium text-primary underline"
+          href="/app/practice-tests"
+        >
+          {tx("learner.practiceTests.run.backToBank", "Back to test bank")}
+        </Link>
+      </p>
+    );
+  }
+
+  if (
+    phase === "ready" &&
+    status === "IN_PROGRESS" &&
+    questionIds.length === 0
+  ) {
+    return (
+      <div className="nn-card space-y-3 p-6 text-sm">
+        <p className="font-medium text-foreground">
+          {tx(
+            "learner.practiceTests.run.noQuestionsTitle",
+            "No questions in this practice test.",
+          )}
+        </p>
+        <p className="text-muted-foreground">
+          {tx(
+            "learner.practiceTests.run.noQuestionsBody",
+            "The pool may have been empty for your filters and tier, or the test was saved in an incomplete state. Start a new adaptive (CAT) or linear test from the list. Broaden topics or difficulty if you see this again.",
+          )}
+        </p>
+        <Link
+          className="inline-block font-semibold text-primary underline"
+          href="/app/practice-tests"
+        >
+          {tx(
+            "learner.practiceTests.run.backToPracticeTests",
+            "Back to Practice Tests",
+          )}
+        </Link>
+      </div>
+    );
+  }
+
+  if (status !== "IN_PROGRESS") {
+    return (
+      <p className="text-sm text-muted-foreground">
+        {tx(
+          "learner.practiceTests.run.notInProgress",
+          "This test is not in progress.",
+        )}{" "}
+        <Link
+          className="font-medium text-primary underline"
+          href="/app/practice-tests"
+        >
+          {tx("learner.practiceTests.run.back", "Back")}
+        </Link>
+      </p>
+    );
+  }
+
+  const expectingQuestion =
+    phase === "ready" && status === "IN_PROGRESS" && Boolean(questionIds[idx]);
+
+  if (!current && expectingQuestion) {
+    if (error && !qLoading) {
+      return (
+        <div className="nn-card space-y-3 p-6 text-sm text-muted-foreground">
+          <p className="font-medium text-foreground">
+            {tx(
+              "learner.practiceTests.run.loadQuestionFailed",
+              "Could not load this question.",
+            )}
+          </p>
+          <p>{error}</p>
+          <div className="flex flex-wrap gap-2 pt-1">
+            <button
+              type="button"
+              className="rounded-full border border-border px-4 py-2 text-sm font-semibold"
+              onClick={() => {
+                setError(null);
+                setQuestionCache((c) => {
+                  const id = questionIds[idx];
+                  if (!id) return c;
+                  const { [id]: removedQuestion, ...rest } = c;
+                  void removedQuestion;
+                  return rest;
+                });
+                setQuestionFetchNonce((n) => n + 1);
+              }}
+            >
+              {tx("learner.practiceTests.run.retryItem", "Retry this item")}
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-border px-4 py-2 text-sm font-semibold"
+              onClick={() => void load()}
+            >
+              {tx("learner.practiceTests.run.reloadTest", "Reload test")}
+            </button>
+            <Link
+              className="inline-flex items-center font-medium text-primary underline"
+              href="/app/practice-tests"
+            >
+              {tx("learner.practiceTests.run.back", "Back")}
+            </Link>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className="space-y-4" aria-busy="true">
+        <ExamSessionShell
+          neutralPalette
+          immersive
+          examMode={learnerExamShellMode}
+          className="overflow-hidden shadow-md"
+        >
+          <ExamSessionTopBar
+            left={
+              <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                {tx("learner.practiceTests.run.item", "Item")} {idx + 1}{" "}
+                {tx("learner.practiceTests.run.of", "of")} {total}
+              </p>
+            }
+            center={
+              <span className="nn-marketing-caption text-[var(--theme-muted-text)]">
+                {tx("learner.practiceTests.run.loading", "Loading")}
+              </span>
+            }
+            right={
+              <div className="flex flex-wrap items-center justify-end gap-2">
+                {examUnitsToggle}
+                <ExamSessionThemeTrigger />
+                <ExamTimerReadout
+                  remainingSec={timedMode ? remainingSec : null}
+                />
+              </div>
+            }
+          />
+          {total > 0 ? (
+            <ExamProgressBar current={idx + 1} total={total} />
+          ) : null}
+          <div className="nn-question-session min-h-[18rem] space-y-4">
+            <div className="h-4 w-[75%] animate-pulse rounded-md bg-muted/60" />
+            <div className="h-4 w-full animate-pulse rounded-md bg-muted/60" />
+            <div className="h-4 w-[83%] animate-pulse rounded-md bg-muted/60" />
+            <div className="mt-4 space-y-3">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-12 animate-pulse rounded-xl bg-muted/40"
+                />
+              ))}
+            </div>
+            <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">
+              {tx(
+                "learner.practiceTests.run.loadingQuestion",
+                "Loading question...",
+              )}
+            </p>
+          </div>
+        </ExamSessionShell>
+      </div>
+    );
+  }
+
+  if (!current) {
+    return (
+      <div className="nn-card space-y-3 p-6 text-sm text-muted-foreground">
+        <p>
+          {tx(
+            "learner.practiceTests.run.displayItemFailed",
+            "Could not display this item.",
+          )}
+        </p>
+        <button
+          type="button"
+          className="rounded-full border border-border px-4 py-2 text-sm font-semibold"
+          onClick={() => void load()}
+        >
+          {tx("learner.practiceTests.run.retry", "Retry")}
+        </button>
+        <Link
+          className="ml-2 font-medium text-primary underline"
+          href="/app/practice-tests"
+        >
+          {tx("learner.practiceTests.run.back", "Back")}
+        </Link>
+      </div>
+    );
+  }
+
+  // Derived layout / display values
+  /** Surface mode names only — avoid “Adaptive”/“Practice” wording overlap across CAT vs linear. */
+  const modeLabel = catMode
+    ? guidedPracticeCat
+      ? tx("learner.practiceTests.run.practiceTestModeLabel", "Practice Test")
+      : tx("learner.practiceTests.run.adaptiveTestModeLabel", "Adaptive Test")
+    : linearEngineUiKind === "linear_exam"
+      ? tx("learner.practiceTests.run.linearExamModeLabel", "Linear exam")
+      : linearEngineUiKind === "linear_tutor_review_nav"
+        ? tx(
+            "learner.practiceTests.run.linearTutorReviewNavModeLabel",
+            "Linear tutor · review navigation",
+          )
+        : linearEngineUiKind === "linear_tutor"
+          ? tx("learner.practiceTests.run.linearTutorModeLabel", "Linear tutor")
+          : tx(
+              "learner.practiceTests.run.practiceTestModeLabel",
+              "Practice Test",
+            );
+  const controlsBusy = saving || qLoading;
+
+  const sessionPct =
+    total > 0 ? Math.min(100, Math.max(0, ((idx + 1) / total) * 100)) : 0;
+
+  const optionDisplayMap = Object.fromEntries(
+    optsOrderCanonical.map((k, i) => [k, optsOrderDisplayResolved[i] ?? k]),
+  );
+  const linearInlineOptionTeachingMap = (() => {
+    if (
+      !linearPracticeSplitReview ||
+      !currentCommitted ||
+      !linearFeedback?.distractorRationalesMap
+    ) {
+      return null;
+    }
+
+    const correctSet = new Set(linearFeedback.correctKeys);
+    const selectedWrongEntries = optsOrderCanonical.flatMap((canonical) => {
+      if (
+        correctSet.has(canonical) ||
+        !mcqAnswerSelectsCanonical(raw, canonical)
+      )
+        return [];
+      const teaching =
+        linearFeedback.distractorRationalesMap?.[canonical]?.trim();
+      return teaching ? ([[canonical, teaching]] as const) : [];
+    });
+
+    return selectedWrongEntries.length > 0
+      ? Object.fromEntries(selectedWrongEntries)
+      : null;
+  })();
+
+  /** Shared empty state for CAT / linear / legacy MCQ lists (same copy + surfaces). */
+  const mcqNoChoicesFallback = (
+    <p className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-muted)]">
+      {tx(
+        "learner.practiceTests.run.noAnswerChoices",
+        "No answer choices were returned for this item. Use Retry, reload the test, or contact support if this persists.",
+      )}
+    </p>
+  );
+
+  /** Matrix / cloze / structured JSON items — runner does not mis-render as MCQ; fail loudly in dev (see logger). */
+  const runnerUnsupportedQuestionFallback = (
+    <div
+      role="alert"
+      className="rounded-md border border-[color-mix(in_srgb,var(--semantic-warning)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-panel-muted))] px-4 py-3 text-sm text-[var(--semantic-text-primary)]"
+    >
+      {tx(
+        "learner.practiceTests.run.unsupportedQuestionFormat",
+        "This item uses a specialized question format that cannot be answered in this session yet. End the test and report the issue, or contact support.",
+      )}
+    </div>
+  );
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // CAT MODE — study: split + rationale. Test (exam): single column, submit→lock→next, adaptive progress.
+  // Server: `cat_advance` still scores and selects the next item in one PATCH (no separate commit endpoint).
+  // ══════════════════════════════════════════════════════════════════════════
+  if (catMode) {
+    // Determine option state per canonical key for CAT (no correct/incorrect during test mode)
+    function catOptState(canonical: string): AnswerOptionState {
+      const isSelected = mcqAnswerSelectsCanonical(raw, canonical);
+      if (
+        catFeedbackStudy &&
+        catStudyFeedback &&
+        catStudyFeedback.questionId === current?.id
+      ) {
+        const ck = new Set(catStudyFeedback.correctKeys);
+        if (ck.has(canonical)) return "correct";
+        if (isSelected) return "incorrect";
+        return "dim";
+      }
+      if (isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)) {
+        if (isSelected) return "selected";
+        return "dim";
+      }
+      return isSelected ? "selected" : "default";
+    }
+
+    const optLocked = catStudyLocked;
+    const optionsInteractionLocked =
+      optLocked ||
+      Boolean(isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase));
+
+    const formatCatOptionText = (i: number, canonical: string) => {
+      const rawT = optsOrderDisplayResolved[i] ?? canonical;
+      return isExamStyle ? stripRedundantMcqLetterPrefix(rawT) : rawT;
+    };
+
+    // Build CAT-specific option rows using AnswerOptionRow
+    const catOptions = needsUnsupportedQuestionUi ? (
+      runnerUnsupportedQuestionFallback
+    ) : isBowtie && bowtiePayload ? (
+      <BowtieQuestionRenderer
+        payload={bowtiePayload}
+        value={raw}
+        showScenarioBanner={false}
+        disabled={optionsInteractionLocked}
+        onChange={(next) => setAnswerForCurrent(next)}
+        reveal={
+          catFeedbackStudy &&
+          catStudyFeedback &&
+          catStudyFeedback.questionId === current?.id
+            ? (() => {
+                const ck = catStudyFeedback.correctKeys;
+                if (ck.length < 3) return null;
+                return {
+                  correct: {
+                    correctIds: [ck[0]!, ck[1]!, ck[2]!] as [
+                      string,
+                      string,
+                      string,
+                    ],
+                  },
+                  selectedIds: coerceBowtieDraftAnswer(raw),
+                };
+              })()
+            : null
+        }
+      />
+    ) : optsCanonical.length === 0 ? (
+      mcqNoChoicesFallback
+    ) : isSata ? (
+      <ul
+        className="nn-cat-opt-list"
+        role="group"
+        aria-label={
+          isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)
+            ? tx(
+                "learner.practiceTests.run.answerChoicesSataLockedAria",
+                "Answer choices (select all that apply) — response submitted; use Submit answer when ready",
+              )
+            : tx(
+                "learner.practiceTests.run.answerChoicesSataAria",
+                "Answer choices (select all that apply)",
+              )
+        }
+      >
+        {optsCanonical.map((canonical, i) => {
+          const selected = mcqAnswerSelectsCanonical(raw, canonical);
+          return (
+            <li key={canonical}>
+              <AnswerOptionRow
+                letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
+                text={formatCatOptionText(i, canonical)}
+                state={catOptState(canonical)}
+                disabled={optionsInteractionLocked}
+                isCheckbox
+                checked={selected}
+                onChange={(checked) => {
+                  const prior = answersRef.current[current.id];
+                  const prev = Array.isArray(prior) ? [...prior] : [];
+                  setAnswerForCurrent(
+                    checked
+                      ? [...prev, canonical]
+                      : prev.filter((x) => x !== canonical),
+                  );
+                }}
+              />
+            </li>
+          );
+        })}
+      </ul>
+    ) : (
+      <ul
+        className="nn-cat-opt-list"
+        role="radiogroup"
+        aria-label={
+          isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)
+            ? tx(
+                "learner.practiceTests.run.answerChoicesLockedAria",
+                "Answer choices — response submitted; use Submit answer when ready",
+              )
+            : tx(
+                "learner.practiceTests.run.answerChoicesAria",
+                "Answer choices",
+              )
+        }
+      >
+        {optsOrderCanonical.map((canonical, i) => (
+          <li key={canonical}>
+            <AnswerOptionRow
+              letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
+              text={formatCatOptionText(i, canonical)}
+              state={catOptState(canonical)}
+              disabled={optionsInteractionLocked}
+              onClick={() => setAnswerForCurrent(canonical)}
+            />
+          </li>
+        ))}
+      </ul>
+    );
+
+    // Right panel mode: "locked" for test mode, "feedback" when study feedback available
+    const rationalePanelMode =
+      catFeedbackStudy &&
+      catStudyFeedback &&
+      catStudyFeedback.questionId === current?.id
+        ? "feedback"
+        : catFeedbackStudy
+          ? "waiting"
+          : "locked";
+
+    const catMaxQ = testConfig?.catMaxQuestions ?? null;
+    const examPrimaryBusy = catExamFooterPrimaryBusy(
+      catExamUiPhase,
+      controlsBusy,
+    );
+    const catExamAdvancePrimaryLabel =
+      catExamUiPhase === "advancing" || saving
+        ? tx("learner.practiceTests.run.working", "Working...")
+        : tx("learner.practiceTests.run.nextItem", "Next");
+
+    const catExamFooterProgressLabel = (() => {
+      if (!isExamStyle) return "";
+      if (catTimerHydrateRecovery) {
+        return tx(
+          "learner.practiceTests.run.catExamFooterTimerHydrateBlocked",
+          "Timer shows no time left on load — we are not auto-ending the exam until you confirm with a retry.",
+        );
+      }
+      if (catExamUiPhase === "advancing" || catExamUiPhase === "completed") {
+        return tx(
+          "learner.practiceTests.run.catExamFooterPleaseWait",
+          "Please wait…",
+        );
+      }
+      if (catExamUiPhase === "submitted_locked") {
+        return tx(
+          "learner.practiceTests.run.catExamFooterLockedReady",
+          "Answer locked. Use Next item when you are ready to continue.",
+        );
+      }
+      if (hasMeaningfulAnswer(current.id)) {
+        return tx(
+          "learner.practiceTests.run.catExamFooterSelectedSubmit",
+          "Answer selected — tap Submit to lock your choice.",
+        );
+      }
+      return tx(
+        "learner.practiceTests.run.catExamFooterNoSelection",
+        "No answer selected for this item yet.",
+      );
+    })();
+
+    const showCatExamStrictBadge =
+      testConfig?.catPresentationMode === "exam_simulation";
+    const catExamCategoryLine =
+      [current.topic, current.subtopic]
+        .find((s) => typeof s === "string" && s.trim().length > 0)
+        ?.trim() ??
+      (
+        qTags.find((t) => typeof t === "string" && t.trim().length > 0) as
+          | string
+          | undefined
+      )?.trim() ??
+      null;
+
+    return (
+      <ProtectedPremiumContent
+        userLabel={userLabel}
+        flags={protectionFlags}
+        telemetrySurface="practice_test"
+      >
+        <PracticeSessionLayout
+          className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}
+          data-nn-pedagogy-tier={tierPedagogyProfile.tier}
+          data-nn-practice-question-layout={practiceQuestionLayoutMode}
+          data-nn-practice-question-type={practiceQuestionType}
+          {...(isExamStyle
+            ? {
+                "data-cat-exam-root": true,
+                "data-nn-cat-premium-convergence": "",
+                "data-nn-cat-exam-ui-phase": catExamUiPhase,
+              }
+            : {})}
+        >
+          <ExamSessionShell
+            neutralPalette
+            immersive
+            examMode={learnerExamShellMode}
+            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none${isExamStyle ? " nn-cat-exam-chrome nn-cat-exam-chrome--premium nn-cat-adaptive-exam-session nn-cat-premium-convergence" : ""}`}
+          >
+            {isExamStyle ? (
+              <>
+                <header className="nn-cat-exam-board-top nn-cat-exam-board-top--adaptive nn-exam-session-topbar flex shrink-0 items-center justify-between gap-2 border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 sm:gap-3 sm:px-4 sm:py-2">
+                  <p className="nn-cat-exam-board-top__progress nn-cat-exam-board-top__progress--adaptive nn-marketing-body-sm m-0 text-xs font-semibold leading-snug text-[var(--semantic-text-secondary)] sm:text-sm">
+                    <span className="tabular-nums text-[var(--semantic-text-primary)]">
+                      {tx("learner.practiceTests.run.question", "Question")}{" "}
+                      {idx + 1}
+                    </span>
+                    <span className="mx-1.5 font-medium text-[var(--semantic-text-muted)]">
+                      ·
+                    </span>
+                    <span className="font-medium">
+                      {tx(
+                        "learner.practiceTests.run.adaptiveSessionShort",
+                        "Adaptive Test",
+                      )}
+                    </span>
+                  </p>
+                  <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+                    {showCatExamStrictBadge ? (
+                      <span
+                        className="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--semantic-danger)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-[var(--semantic-danger)]"
+                        title={tx(
+                          "learner.practiceTests.run.catExamStrictHint",
+                          "Exam rules: no review of prior items after submit; timed session may end automatically.",
+                        )}
+                      >
+                        <Shield
+                          className="h-3 w-3 shrink-0 opacity-90"
+                          aria-hidden
+                        />
+                        {tx(
+                          "learner.practiceTests.run.catExamStrictBadge",
+                          "Strict",
+                        )}
+                      </span>
+                    ) : null}
+                    {adaptiveSe != null &&
+                    Number.isFinite(adaptiveSe) &&
+                    adaptiveDifficultyHistory.length >= 2 ? (
+                      <span
+                        className="hidden max-w-[11rem] truncate rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-3)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_12%,var(--semantic-surface))] px-2 py-0.5 text-[10px] font-semibold uppercase leading-tight tracking-wide text-[var(--semantic-text-secondary)] sm:inline-flex sm:items-center"
+                        title={tx(
+                          "learner.practiceTests.run.catExamAdaptivePrecisionHint",
+                          "The adaptive engine is refining your ability estimate as you progress. This is not a pass/fail prediction.",
+                        )}
+                      >
+                        {tx(
+                          "learner.practiceTests.run.catExamAdaptivePrecisionShort",
+                          "Estimate updating",
+                        )}
+                      </span>
+                    ) : null}
+                    {examUnitsToggle}
+                    <ExamSessionThemeTrigger variant="pill" />
+                    <ExamTimerReadout
+                      remainingSec={timedMode ? remainingSec : null}
+                    />
+                    <button
+                      type="button"
+                      ref={catExamNavigatorTriggerRef}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_42%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_58%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_55%,transparent)]"
+                      onClick={() =>
+                        catExamNavigatorDialogRef.current?.showModal()
+                      }
+                    >
+                      <LayoutGrid
+                        className="h-3.5 w-3.5 shrink-0 opacity-80"
+                        aria-hidden
+                      />
+                      {tx("learner.practiceTests.run.navigator", "Navigator")}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={examPrimaryBusy}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_42%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_58%,var(--semantic-surface))] disabled:opacity-40"
+                      onClick={() => void abandon()}
+                    >
+                      <Send
+                        className="h-3.5 w-3.5 shrink-0 opacity-80"
+                        aria-hidden
+                      />
+                      {tx("learner.practiceTests.run.endExam", "End")}
+                    </button>
+                  </div>
+                </header>
+                <ExamProgressBar
+                  className="nn-exam-progress--cat-exam-adaptive nn-cat-exam-board-progress shrink-0"
+                  current={idx + 1}
+                  total={Math.max(total, 1)}
+                  variant="adaptive_item"
+                  adaptiveMaxItems={catMaxQ}
+                  sessionLabel={tx(
+                    "learner.practiceTests.run.adaptiveSessionShort",
+                    "Adaptive Test",
+                  )}
+                />
+                {sessionRecoveryBanner}
+                {catPoolRelaxBanner}
+                <div
+                  className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
+                >
+                  <div className="nn-cat-exam-content-well nn-cat-exam-col mx-auto flex min-h-0 w-full max-w-[48.75rem] flex-1 flex-col overflow-hidden">
+                    {catTimerHydrateRecovery ? (
+                      <div
+                        role="alert"
+                        className="nn-cat-question-card m-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] p-5 text-sm text-[var(--semantic-text-primary)] sm:m-4 sm:p-6"
+                      >
+                        <p className="m-0 font-semibold text-[var(--semantic-text-primary)]">
+                          {tx(
+                            "learner.practiceTests.run.catTimerHydrateTitle",
+                            "Timed session needs a safe reload",
+                          )}
+                        </p>
+                        <p className="mt-2 text-[var(--semantic-text-secondary)]">
+                          {tx(
+                            "learner.practiceTests.run.catTimerHydrateBody",
+                            "The server reports no remaining time while this attempt is still in progress. We will not auto-submit or show results from this snapshot. Retry the load so elapsed time can sync, or end the exam if you are finished.",
+                          )}
+                        </p>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
+                            onClick={() => {
+                              setCatTimerHydrateRecovery(false);
+                              void load();
+                            }}
+                          >
+                            {tx("learner.practiceTests.run.retryLoad", "Retry")}
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <QuestionCard
+                        stem={
+                          current.stem ? resolveMeasureText(current.stem) : ""
+                        }
+                        topic={null}
+                        subtopic={null}
+                        difficultyLabel={null}
+                        examStackedLayout
+                        examDetachedFooter
+                        examStemScrollPartition
+                        examCategoryLabel={catExamCategoryLine}
+                        examHeaderRightSlot={
+                          <div className="flex items-center gap-2">
+                            <QuestionBookmarkButton
+                              compact
+                              defaultBookmarked={Boolean(flagged[current.id])}
+                              sourceType="cat_exam"
+                              sourceId={current.id}
+                              title={
+                                current.topic?.trim()
+                                  ? `${current.topic} CAT question`
+                                  : "CAT exam question"
+                              }
+                              topic={current.topic ?? current.subtopic ?? null}
+                              difficulty={
+                                current.difficulty != null
+                                  ? difficultyBandLabel(current.difficulty)
+                                  : null
+                              }
+                              pathwayId={activePathwayId}
+                            />
+                            <PracticeTestFlagForReviewButton
+                              flagged={Boolean(flagged[current.id])}
+                              disabled={examPrimaryBusy}
+                              titleFlagged={tx(
+                                "learner.practiceTests.run.unflagForReview",
+                                "Remove flag",
+                              )}
+                              titleUnflagged={tx(
+                                "learner.practiceTests.run.flagForReview",
+                                "Flag for review",
+                              )}
+                              srFlagged={tx(
+                                "learner.practiceTests.run.flagged",
+                                "Flagged",
+                              )}
+                              srUnflagged={tx(
+                                "learner.practiceTests.run.flag",
+                                "Flag",
+                              )}
+                              onToggle={() => toggleFlagForQuestion(current.id)}
+                            />
+                          </div>
+                        }
+                        examLayoutMeasureKey={`${current.id}:${optsOrderCanonical.join("|")}`}
+                      >
+                        <p
+                          className="sr-only"
+                          aria-live="polite"
+                          aria-atomic="true"
+                        >
+                          {catExamUiPhase === "submitted_locked"
+                            ? tx(
+                                "learner.practiceTests.run.catExamLockedLive",
+                                "Answer submitted. Your selection is locked until you go to the next item.",
+                              )
+                            : catExamUiPhase === "advancing"
+                              ? tx(
+                                  "learner.practiceTests.run.catExamAdvancingLive",
+                                  "Saving your response…",
+                                )
+                              : catExamUiPhase === "completed"
+                                ? tx(
+                                    "learner.practiceTests.run.catExamCompletedLive",
+                                    "Exam complete. Preparing your results.",
+                                  )
+                                : "\u00a0"}
+                        </p>
+                        <EcgVideoQuestionMedia
+                          exhibitData={current.exhibitData}
+                          images={current.images}
+                          mode="cat"
+                          phase="pre_submit"
+                        />
+                        {timedMode && timeLimitSec != null ? (
+                          <PracticeTestTimedSessionAlertCompact
+                            message={tx(
+                              "learner.practiceTests.run.timedAutoEnd",
+                              "Timed session: the exam may end automatically when time expires.",
+                            )}
+                          />
+                        ) : null}
+
+                        {!isBowtie ? (
+                          <PracticeTestMcqChoicesInstruction
+                            isSata={Boolean(isSata)}
+                            selectAllLabel={tx(
+                              "learner.practiceTests.run.selectAllThatApply",
+                              "Select all that apply",
+                            )}
+                            selectBestLabel={tx(
+                              "learner.practiceTests.run.selectBestAnswer",
+                              "Select the best answer",
+                            )}
+                          />
+                        ) : (
+                          <PracticeTestBowtieChoicesInstruction
+                            instruction={tx(
+                              "learner.practiceTests.run.bowtieInstruction",
+                              "Assign one option to each row.",
+                            )}
+                          />
+                        )}
+
+                        {catOptions}
+                      </QuestionCard>
+                    )}
+                  </div>
+                  <PracticeTestCatAdaptiveExamFooter>
+                    <button
+                      type="button"
+                      disabled
+                      className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-muted)] opacity-50 sm:min-h-0 sm:px-2 sm:py-1.5"
+                      title={tx(
+                        "learner.practiceTests.run.catExamNoPrevious",
+                        "Previous item is not available during this exam.",
+                      )}
+                    >
+                      <ChevronLeft className="h-4 w-4" aria-hidden />
+                      {tx("learner.practiceTests.run.previous", "Previous")}
+                    </button>
+                    <p className="m-0 text-center text-xs font-medium text-[var(--semantic-text-muted)] sm:text-sm">
+                      {catExamFooterProgressLabel}
+                    </p>
+                    <div className="min-w-0 shrink text-right sm:min-w-[5.5rem] sm:shrink-0">
+                      {catExamUiPhase === "answering" ? (
+                        <button
+                          type="button"
+                          data-nn-qa-cat-exam-submit-answer
+                          disabled={
+                            examPrimaryBusy ||
+                            catTimerHydrateRecovery ||
+                            !hasMeaningfulAnswer(current.id)
+                          }
+                          className="inline-flex min-h-11 items-center justify-center gap-1 rounded-full bg-[var(--role-cta)] px-4 py-2.5 text-xs font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_8px_var(--role-cta-shadow)] transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-2"
+                          onClick={lockCatExamAnswer}
+                        >
+                          {tx(
+                            "learner.practiceTests.run.submit",
+                            "Submit answer",
+                          )}
+                          <ChevronRight
+                            className="h-4 w-4 opacity-80"
+                            aria-hidden
+                          />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          ref={catExamAdvanceButtonRef}
+                          data-nn-qa-cat-exam-advance
+                          data-nn-qa-cat-exam-advance-intent="server_driven"
+                          aria-busy={catExamUiPhase === "advancing"}
+                          disabled={
+                            examPrimaryBusy ||
+                            catTimerHydrateRecovery ||
+                            catExamUiPhase !== "submitted_locked" ||
+                            !hasMeaningfulAnswer(current.id)
+                          }
+                          className="inline-flex min-h-11 items-center justify-center gap-1 rounded-full bg-[var(--role-cta)] px-4 py-2.5 text-xs font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_8px_var(--role-cta-shadow)] transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-2"
+                          onClick={() => {
+                            if (
+                              !catExamCanRequestCatAdvance(
+                                catExamUiPhaseRef.current,
+                              )
+                            )
+                              return;
+                            if (
+                              catAdvanceInFlightRef.current ||
+                              submitInFlightRef.current
+                            )
+                              return;
+                            void catAdvance();
+                          }}
+                        >
+                          {catExamAdvancePrimaryLabel}
+                          <ChevronRight
+                            className="h-4 w-4 opacity-80"
+                            aria-hidden
+                          />
+                        </button>
+                      )}
+                    </div>
+                  </PracticeTestCatAdaptiveExamFooter>
+                </div>
+                <dialog
+                  ref={catExamNavigatorDialogRef}
+                  aria-labelledby="nn-cat-exam-navigator-title"
+                  aria-describedby="nn-cat-exam-navigator-status-hint"
+                  className="nn-cat-exam-navigator-dialog w-[min(22rem,calc(100vw-2rem))] rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-0 text-[var(--semantic-text-primary)] shadow-lg backdrop:bg-black/20"
+                  onClose={() => {
+                    catExamNavigatorTriggerRef.current?.focus();
+                  }}
+                >
+                  <div className="border-b border-[var(--semantic-border-soft)] px-4 py-3">
+                    <p
+                      id="nn-cat-exam-navigator-title"
+                      className="m-0 text-sm font-semibold"
+                    >
+                      {tx(
+                        "learner.practiceTests.run.navigatorTitle",
+                        "Session outline",
+                      )}
+                    </p>
+                    <p
+                      id="nn-cat-exam-navigator-status-hint"
+                      className="mt-1 text-xs text-[var(--semantic-text-muted)]"
+                    >
+                      {tx(
+                        "learner.practiceTests.run.navigatorSubtitleStatusOnly",
+                        "Status only: items delivered in this run (most recent last). You cannot jump or open items from this list during this exam.",
+                      )}
+                    </p>
+                  </div>
+                  <ol
+                    className="max-h-[min(50vh,20rem)] list-none space-y-0 overflow-y-auto p-2 text-sm"
+                    role="list"
+                  >
+                    {questionIds.map((id, i) => (
+                      <li key={`${id}:${i}`}>
+                        <span
+                          className={`block rounded-md px-3 py-2 ${
+                            i === idx
+                              ? "bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] font-semibold"
+                              : ""
+                          }`}
+                        >
+                          {tx(
+                            "learner.practiceTests.run.navigatorItem",
+                            "Item {n}",
+                            { n: String(i + 1) },
+                          )}
+                          {i === idx
+                            ? ` · ${tx("learner.practiceTests.run.navigatorCurrent", "current")}`
+                            : ""}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                  <div className="border-t border-[var(--semantic-border-soft)] p-2">
+                    <button
+                      type="button"
+                      className="w-full rounded-md bg-[color-mix(in_srgb,var(--semantic-text-primary)_6%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_55%,transparent)]"
+                      onClick={() => catExamNavigatorDialogRef.current?.close()}
+                    >
+                      {tx("learner.practiceTests.run.close", "Close")}
+                    </button>
+                  </div>
+                </dialog>
+              </>
+            ) : (
+              <>
+                <ExamSessionTopBar
+                  className=""
+                  left={
+                    <div className="space-y-1">
+                      <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                        {tx("learner.practiceTests.run.question", "Question")}{" "}
+                        {idx + 1} {tx("learner.practiceTests.run.of", "of")}{" "}
+                        {total}
+                      </p>
+                      {examName ? (
+                        <p className="line-clamp-2 nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]">
+                          {examName}
+                        </p>
+                      ) : null}
+                    </div>
+                  }
+                  center={
+                    <span className="nn-marketing-caption max-w-[min(100%,22rem)] text-center font-semibold leading-snug text-[var(--semantic-text-muted)]">
+                      {modeLabel}
+                      <span className="mt-0.5 block text-[11px] font-semibold tabular-nums text-[var(--semantic-text-muted)]">
+                        {Math.round(sessionPct)}%{" "}
+                        {tx("learner.practiceTests.run.complete", "complete")}
+                      </span>
+                    </span>
+                  }
+                  right={
+                    <div className="flex flex-wrap items-center justify-end gap-2">
+                      {showEndPracticeSessionControl ? (
+                        <button
+                          type="button"
+                          data-testid="end-practice-session-btn"
+                          disabled={controlsBusy}
+                          className={
+                            continuousAdaptivePractice
+                              ? "inline-flex min-h-10 items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))] px-3 py-2 text-xs font-bold text-[var(--semantic-text-primary)] shadow-sm transition hover:opacity-95 disabled:opacity-40"
+                              : "inline-flex min-h-10 items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-3 py-2 text-xs font-semibold text-[var(--semantic-text-secondary)] transition hover:bg-[var(--semantic-panel-muted)] disabled:opacity-40"
+                          }
+                          onClick={() => void finalizePracticeSessionEarly()}
+                        >
+                          {tx("session.end", "End session")}
+                        </button>
+                      ) : null}
+                      {examUnitsToggle}
+                      <ExamSessionThemeTrigger variant="pill" />
+                      <ExamTimerReadout
+                        remainingSec={timedMode ? remainingSec : null}
+                      />
+                    </div>
+                  }
+                />
+                <ExamProgressBar current={idx + 1} total={total} />
+                {continuousAdaptivePractice ? (
+                  <p className="mx-3 mb-0 mt-1 text-xs text-[var(--semantic-text-muted)] sm:mx-4">
+                    {tx(
+                      "learner.practiceTests.run.continuousPracticeHint",
+                      "Continuous review — adaptive items until you end the session. Progress saves automatically.",
+                    )}
+                  </p>
+                ) : null}
+                {sessionRecoveryBanner}
+                {catPoolRelaxBanner}
+                <div className={`nn-cat-session min-h-0 flex-1 ${chromeClass}`}>
+                  <div className="nn-question-session nn-question-session--split !px-0 sm:!px-0">
+                    <div className="nn-question-session-primary min-h-0 overflow-x-auto overflow-y-auto">
+                      <div className="min-h-0 min-w-0">
+                        <QuestionCard
+                          stem={
+                            current.stem ? resolveMeasureText(current.stem) : ""
+                          }
+                          topic={current.topic}
+                          subtopic={current.subtopic}
+                          difficultyLabel={
+                            current.difficulty != null
+                              ? difficultyBandLabel(current.difficulty)
+                              : null
+                          }
+                          examStackedLayout={false}
+                        >
+                          {(catLiveTransparency ||
+                            adaptiveDifficultyHistory.length > 0) && (
+                            <div className="mb-5">
+                              <CatLiveTransparencyStrip
+                                difficultyTail={adaptiveDifficultyHistory}
+                                theta={adaptiveTheta}
+                                se={adaptiveSe}
+                                show={catLiveTransparency}
+                                onToggle={setCatLiveTransparency}
+                              />
+                            </div>
+                          )}
+                          <EcgVideoQuestionMedia
+                            exhibitData={current.exhibitData}
+                            images={current.images}
+                            mode={isExamStyle ? "cat" : "practice"}
+                            phase={
+                              catStudyFeedback ? "post_submit" : "pre_submit"
+                            }
+                          />
+                          {!isBowtie ? (
+                            <PracticeTestMcqChoicesInstruction
+                              isSata={Boolean(isSata)}
+                              selectAllLabel={tx(
+                                "learner.practiceTests.run.selectAllThatApply",
+                                "Select all that apply",
+                              )}
+                              selectBestLabel={tx(
+                                "learner.practiceTests.run.selectBestAnswer",
+                                "Select the best answer",
+                              )}
+                            />
+                          ) : (
+                            <PracticeTestBowtieChoicesInstruction
+                              instruction={tx(
+                                "learner.practiceTests.run.bowtieInstruction",
+                                "Assign one option to each row.",
+                              )}
+                            />
+                          )}
+                          {catOptions}
+                          {confidenceTrackingEnabled &&
+                          hasMeaningfulAnswer(current.id) ? (
+                            <div className="mt-4">
+                              <ConfidenceSelector
+                                questionId={current.id}
+                                value={confidence[current.id] ?? null}
+                                neutral
+                                onChange={setConfidenceForQuestion}
+                              />
+                            </div>
+                          ) : null}
+                        </QuestionCard>
+                      </div>
+                    </div>
+                    <PracticeTestCatStudyRationaleAside
+                      rationalePanelMode={rationalePanelMode}
+                      catStudyFeedback={catStudyFeedback}
+                      optionKeys={optsOrderCanonical}
+                      optionTexts={optsOrderDisplayResolved}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+          </ExamSessionShell>
+        </PracticeSessionLayout>
+      </ProtectedPremiumContent>
+    );
+  }
+
+  /**
+   * Legacy linear sessions (no `linearDeliveryMode` on stored config): free navigation with the same
+   * CAT exam board shell as linear engine runs (`QuestionCard` + detached footer).
+   *
+   * **Deprecation / migration:** Older rows omit `linearDeliveryMode`, `linearAllowReviewNavigation`,
+   * and linear-engine committed state in `adaptiveState`. Inferring exam vs tutor or review rules at
+   * read time risks wrong rationale exposure or navigation, so this branch remains until sessions are
+   * backfilled or naturally aged out; new launches should always persist the linear engine contract.
+   */
+  if (!catMode && !isLinearEngine) {
+    function legacyCatOptState(canonical: string): AnswerOptionState {
+      return computePracticeMcqOptionRowState({
+        answer: raw,
+        canonical,
+        linearEngineActive: false,
+        currentCommitted: false,
+        rationaleVisibility: linearRationaleVisibility,
+        feedback: null,
+      }) as AnswerOptionState;
+    }
+
+    const legacyCatOptions =
+      isBowtie && bowtiePayload ? (
+        <BowtieQuestionRenderer
+          payload={bowtiePayload}
+          value={raw}
+          showScenarioBanner={false}
+          disabled={false}
+          onChange={(next) => setAnswerForCurrent(next)}
+          reveal={null}
+        />
+      ) : optsCanonical.length === 0 ? (
+        mcqNoChoicesFallback
+      ) : isSata ? (
+        <ul
+          className="nn-cat-opt-list"
+          role="group"
+          aria-label={tx(
+            "learner.practiceTests.run.answerChoicesSataAria",
+            "Answer choices (select all that apply)",
+          )}
+        >
+          {optsCanonical.map((canonical, i) => {
+            const selected = mcqAnswerSelectsCanonical(raw, canonical);
+            return (
+              <li key={canonical}>
+                <AnswerOptionRow
+                  letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
+                  text={optsOrderDisplayResolved[i] ?? canonical}
+                  state={legacyCatOptState(canonical)}
+                  disabled={false}
+                  isCheckbox
+                  checked={selected}
+                  onChange={(checked) => {
+                    const prior = answersRef.current[current.id];
+                    const prev = Array.isArray(prior) ? [...prior] : [];
+                    setAnswerForCurrent(
+                      checked
+                        ? [...prev, canonical]
+                        : prev.filter((x) => x !== canonical),
+                    );
+                  }}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <PracticeTestMcqRadiogroupOptions
+          canonicalKeys={optsOrderCanonical}
+          displayTexts={optsOrderDisplayResolved}
+          rowState={legacyCatOptState}
+          disabled={false}
+          ariaLabel={tx(
+            "learner.practiceTests.run.answerChoicesAria",
+            "Answer choices",
+          )}
+          onSelectCanonical={(canonical) => setAnswerForCurrent(canonical)}
+        />
+      );
+
+    const legacyStemTrimmed =
+      typeof current.stem === "string" && current.stem.trim().length > 0
+        ? resolveMeasureText(current.stem.trim())
+        : "";
+    const legacyStemSplit = legacyStemTrimmed
+      ? splitPromptLeadingImage(legacyStemTrimmed)
+      : null;
+    const legacyClinicalSrc =
+      legacyStemSplit?.imageHtml && legacyStemSplit.imageHtml.trim().length > 0
+        ? legacyStemSplit.imageHtml.trim()
+        : null;
+    const legacyStemUnavailable = tx(
+      "learner.practiceTests.run.questionUnavailable",
+      "Question text is unavailable. Try reloading this item.",
+    );
+    const legacyStemForCard =
+      legacyStemSplit && legacyStemSplit.remainingPrompt.trim().length > 0
+        ? legacyStemSplit.remainingPrompt
+        : legacyStemTrimmed
+          ? legacyStemTrimmed
+          : legacyStemUnavailable;
+    const legacyExamCategoryLine =
+      [current.topic, current.subtopic]
+        .find((s) => typeof s === "string" && s.trim().length > 0)
+        ?.trim() ??
+      (
+        qTags.find((t) => typeof t === "string" && t.trim().length > 0) as
+          | string
+          | undefined
+      )?.trim() ??
+      null;
+    const legacyExamFlagSlot = (
+      <div className="flex items-center gap-2">
+        <QuestionBookmarkButton
+          compact
+          defaultBookmarked={Boolean(flagged[current.id])}
+          sourceType={catMode ? "cat_exam" : "practice_question"}
+          sourceId={current.id}
+          title={
+            current.topic?.trim()
+              ? `${current.topic} question`
+              : "Practice exam question"
+          }
+          topic={current.topic ?? current.subtopic ?? null}
+          difficulty={
+            current.difficulty != null
+              ? difficultyBandLabel(current.difficulty)
+              : null
+          }
+          pathwayId={activePathwayId}
+        />
+        <PracticeTestFlagForReviewButton
+          flagged={Boolean(flagged[current.id])}
+          disabled={controlsBusy}
+          titleFlagged={tx(
+            "learner.practiceTests.run.unflagForReview",
+            "Remove flag",
+          )}
+          titleUnflagged={tx(
+            "learner.practiceTests.run.flagForReview",
+            "Flag for review",
+          )}
+          srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
+          srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
+          onToggle={() => toggleFlagForQuestion(current.id)}
+        />
+      </div>
+    );
+    const legacyQuestionCardInner = (
+      <>
+        {legacyClinicalSrc ? (
+          <PracticeTestClinicalFigure src={legacyClinicalSrc} />
+        ) : null}
+        <PracticeTestQuestionMediaBlock
+          exhibitData={current.exhibitData}
+          images={current.images}
+          mode={isExamStyle ? "cat" : "practice"}
+          phase="pre_submit"
+        />
+        {timedMode && timeLimitSec != null ? (
+          <PracticeTestTimedSessionAlert
+            message={tx(
+              "learner.practiceTests.run.timedAutoEnd",
+              "Timed session: the exam may end automatically when time expires.",
+            )}
+          />
+        ) : null}
+        {!isBowtie ? (
+          <PracticeTestMcqChoicesInstruction
+            isSata={Boolean(isSata)}
+            selectAllLabel={tx(
+              "learner.practiceTests.run.selectAllThatApply",
+              "Select all that apply",
+            )}
+            selectBestLabel={tx(
+              "learner.practiceTests.run.selectBestAnswer",
+              "Select the best answer",
+            )}
+          />
+        ) : (
+          <PracticeTestBowtieChoicesInstruction
+            instruction={tx(
+              "learner.practiceTests.run.bowtieInstruction",
+              "Assign one option to each row.",
+            )}
+          />
+        )}
+        {legacyCatOptions}
+        {confidenceTrackingEnabled ? (
+          <div className="mt-4">
+            <ConfidenceSelector
+              questionId={current.id}
+              value={confidence[current.id] ?? null}
+              onChange={setConfidenceForQuestion}
+            />
+          </div>
+        ) : (
+          <div className="mt-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+            {tx(
+              "learner.practiceTests.run.confidenceTrackingOff",
+              "Confidence tracking is off in your study settings for this session.",
+            )}
+          </div>
+        )}
+      </>
+    );
+    const legacyBoardFooter = (
+      <footer className="nn-cat-exam-board-footer flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]">
+        <div className="mx-auto flex w-full max-w-[48.75rem] items-center justify-between gap-3 px-3 py-2.5 sm:px-4">
+          <button
+            type="button"
+            disabled={controlsBusy || idx === 0}
+            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] disabled:opacity-40 sm:min-h-0 sm:px-2 sm:py-1.5"
+            onClick={() => void goPrev()}
+          >
+            <ChevronLeft className="h-4 w-4" aria-hidden />
+            {tx("learner.practiceTests.run.previous", "Previous")}
+          </button>
+          <p className="m-0 text-center text-xs font-medium tabular-nums text-[var(--semantic-text-muted)] sm:text-sm">
+            {tx("learner.practiceTests.run.question", "Question")} {idx + 1}{" "}
+            {tx("learner.practiceTests.run.of", "of")} {total}
+          </p>
+          <div className="min-w-0 shrink text-right sm:min-w-[5.5rem] sm:shrink-0">
+            {idx < total - 1 ? (
+              <button
+                type="button"
+                disabled={controlsBusy}
+                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
+                onClick={() => void goNext()}
+              >
+                {tx(
+                  "learner.practiceTests.run.nextQuestionPractice",
+                  "Next Question",
+                )}
+                <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
+              </button>
+            ) : (
+              <button
+                type="button"
+                disabled={controlsBusy}
+                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
+                onClick={() => void submitTest()}
+              >
+                {saving
+                  ? tx("learner.practiceTests.run.submitting", "Submitting...")
+                  : tx("learner.practiceTests.run.finish", "Finish")}
+                <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
+              </button>
+            )}
+          </div>
+        </div>
+      </footer>
+    );
+
+    return (
+      <ProtectedPremiumContent
+        userLabel={userLabel}
+        flags={protectionFlags}
+        telemetrySurface="practice_test"
+      >
+        <PracticeSessionLayout
+          className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}
+          data-nn-pedagogy-tier={tierPedagogyProfile.tier}
+          data-nn-practice-question-layout={practiceQuestionLayoutMode}
+          data-nn-practice-question-type={practiceQuestionType}
+        >
+          <ExamSessionShell
+            neutralPalette
+            immersive
+            examMode={learnerExamShellMode}
+            className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome"
+          >
+            <header className="nn-cat-exam-board-top flex min-h-[3.5rem] shrink-0 items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] px-3 py-2 sm:px-4">
+              <p className="nn-cat-exam-board-top__progress m-0 text-sm font-semibold leading-snug text-[var(--semantic-text-secondary)]">
+                {`${tx("learner.practiceTests.run.question", "Question")} ${idx + 1} ${tx("learner.practiceTests.run.of", "of")} ${total}`}
+              </p>
+              <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+                <ExamSessionThemeTrigger variant="pill" />
+                <ExamTimerReadout
+                  remainingSec={timedMode ? remainingSec : null}
+                />
+                <button
+                  type="button"
+                  disabled={controlsBusy}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
+                  onClick={() => void abandon()}
+                >
+                  <Send
+                    className="h-3.5 w-3.5 shrink-0 opacity-80"
+                    aria-hidden
+                  />
+                  {tx("learner.practiceTests.run.endExam", "End")}
+                </button>
+              </div>
+            </header>
+            <ExamProgressBar
+              className="nn-cat-exam-board-progress shrink-0"
+              current={idx + 1}
+              total={Math.max(total, 1)}
+              sessionLabel={modeLabel}
+            />
+            {sessionRecoveryBanner}
+            <div
+              className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
+            >
+              <div className="nn-cat-exam-content-well nn-cat-exam-col mx-auto flex min-h-0 w-full max-w-[48.75rem] flex-1 flex-col overflow-hidden">
+                <QuestionCard
+                  stem={legacyStemForCard}
+                  topic={null}
+                  subtopic={null}
+                  difficultyLabel={null}
+                  examStackedLayout
+                  examDetachedFooter
+                  examCategoryLabel={legacyExamCategoryLine}
+                  examHeaderRightSlot={legacyExamFlagSlot}
+                  examLayoutMeasureKey={`${current.id}:${optsOrderCanonical.join("|")}`}
+                >
+                  {legacyQuestionCardInner}
+                </QuestionCard>
+              </div>
+              {legacyBoardFooter}
+            </div>
+          </ExamSessionShell>
+        </PracticeSessionLayout>
+      </ProtectedPremiumContent>
+    );
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // LINEAR PRACTICE / EXAM — same CAT exam board shell; tutor mode shows per-item rationale
+  // inline below options (scroll region) instead of a split right column.
+  // ══════════════════════════════════════════════════════════════════════════
+
+  function linearOptState(canonical: string): AnswerOptionState {
+    return computePracticeMcqOptionRowState({
+      answer: raw,
+      canonical,
+      linearEngineActive: isLinearEngine,
+      currentCommitted,
+      rationaleVisibility: linearRationaleVisibility,
+      feedback: linearFeedback ?? null,
+    }) as AnswerOptionState;
+  }
+
+  const optIsLocked = isLinearEngine && currentCommitted;
+  const optionsInteractionLocked = optIsLocked;
+
+  const linearExamCategoryLine =
+    [current.topic, current.subtopic]
+      .find((s) => typeof s === "string" && s.trim().length > 0)
+      ?.trim() ??
+    (
+      qTags.find((t) => typeof t === "string" && t.trim().length > 0) as
+        | string
+        | undefined
+    )?.trim() ??
+    null;
+
+  const formatLinearOptionText = (i: number, canonical: string) => {
+    const rawT = optsOrderDisplay[i] ?? canonical;
+    return linearCatShellPresentation
+      ? stripRedundantMcqLetterPrefix(rawT)
+      : rawT;
+  };
+
+  const linearCatOptions = needsUnsupportedQuestionUi ? (
+    runnerUnsupportedQuestionFallback
+  ) : isBowtie && bowtiePayload ? (
+    <BowtieQuestionRenderer
+      payload={bowtiePayload}
+      value={raw}
+      showScenarioBanner={false}
+      disabled={optionsInteractionLocked}
+      onChange={(next) => setAnswerForCurrent(next)}
+      reveal={
+        linearFeedback && currentCommitted
+          ? (() => {
+              const ck = linearFeedback.correctKeys;
+              if (ck.length < 3) return null;
+              return {
+                correct: {
+                  correctIds: [ck[0]!, ck[1]!, ck[2]!] as [
+                    string,
+                    string,
+                    string,
+                  ],
+                },
+                selectedIds: coerceBowtieDraftAnswer(raw),
+              };
+            })()
+          : null
+      }
+    />
+  ) : optsCanonical.length === 0 ? (
+    mcqNoChoicesFallback
+  ) : isSata ? (
+    <ul
+      className="nn-cat-opt-list"
+      role="group"
+      aria-label={tx(
+        "learner.practiceTests.run.answerChoicesSataAria",
+        "Answer choices (select all that apply)",
+      )}
+    >
+      {optsCanonical.map((canonical, i) => {
+        const selected = mcqAnswerSelectsCanonical(raw, canonical);
+        const rowText = linearCatShellPresentation
+          ? stripRedundantMcqLetterPrefix(optsDisplay[i] ?? canonical)
+          : (optsDisplay[i] ?? canonical);
+        return (
+          <li key={canonical}>
+            <AnswerOptionRow
+              letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
+              text={rowText}
+              state={linearOptState(canonical)}
+              disabled={optionsInteractionLocked}
+              isCheckbox
+              checked={selected}
+              onChange={(checked) => {
+                const prior = answersRef.current[current.id];
+                const prev = Array.isArray(prior) ? [...prior] : [];
+                setAnswerForCurrent(
+                  checked
+                    ? [...prev, canonical]
+                    : prev.filter((x) => x !== canonical),
+                );
+              }}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  ) : (
+    <PracticeTestMcqRadiogroupOptions
+      canonicalKeys={optsOrderCanonical}
+      displayTexts={optsOrderCanonical.map((canonical, i) =>
+        formatLinearOptionText(i, canonical),
+      )}
+      rowState={linearOptState}
+      disabled={optionsInteractionLocked}
+      ariaLabel={tx(
+        "learner.practiceTests.run.answerChoicesAria",
+        "Answer choices",
+      )}
+      onSelectCanonical={(canonical) => setAnswerForCurrent(canonical)}
+      optionTeachingMap={linearInlineOptionTeachingMap}
+      showOptionTeaching={Boolean(linearInlineOptionTeachingMap)}
+      teachingLabel={tx(
+        "learner.practiceTests.run.rationaleWhyNotShort",
+        "Why not",
+      )}
+    />
+  );
+
+  const rationaleFullStatus: PracticeRationaleFullPanelStatus =
+    isLinearEngine &&
+    linearRationaleVisibility === "after_each" &&
+    currentCommitted &&
+    linearFeedback
+      ? linearFeedback.isCorrect
+        ? "correct"
+        : "incorrect"
+      : isLinearEngine &&
+          linearRationaleVisibility === "end_of_exam" &&
+          currentCommitted
+        ? "exam_locked"
+        : "waiting";
+
+  const canLinearReviewPrev =
+    linearAllowReviewNavigation &&
+    !linearIsExamShell &&
+    idx > 0 &&
+    Boolean(questionIds[idx - 1] && committedSet.has(questionIds[idx - 1]!));
+
+  const linearAdvancePrimaryLabel = controlsBusy
+    ? tx("learner.practiceTests.run.working", "Working...")
+    : tx("learner.practiceTests.run.linearFooterRevealNext", "Next item");
+  const linearFooterSubmitLabel = tx(
+    "learner.practiceTests.run.linearFooterSubmitAnswer",
+    "Submit answer",
+  );
+  const linearFooterFinishLabel = tx(
+    "learner.practiceTests.run.linearFooterFinishTest",
+    "Finish test",
+  );
+
+  const linearRemediationCopy = {
+    title: tx(
+      "learner.practiceTests.run.remediationCardTitle",
+      "Strengthen weak areas",
+    ),
+    topicLabel: tx(
+      "learner.practiceTests.run.remediationTopicLabel",
+      "Focus topic",
+    ),
+    flashcardsCta: tx(
+      "learner.practiceTests.run.remediationFlashcardsCta",
+      "Open flashcards hub",
+    ),
+    topicDrillCta: tx(
+      "learner.practiceTests.run.remediationTopicDrillCta",
+      "Drill questions on this topic",
+    ),
+    weakFlashcardsCta: tx(
+      "learner.practiceTests.run.remediationWeakFlashcardsCta",
+      "Weak-area flashcards",
+    ),
+  };
+
+  const linearRationalePanelCopy: PracticeRationaleFullPanelCopy = {
+    panelTitle: tx(
+      "learner.practiceTests.run.rationaleReviewHeading",
+      "Rationale & Review",
+    ),
+    waitingPrimary: tx(
+      "learner.practiceTests.run.rationaleWaitingPrimary",
+      "Review appears after you answer.",
+    ),
+    waitingSecondary: tx(
+      "learner.practiceTests.run.rationaleWaitingSecondary",
+      "Submit your response to see the correct answer, teaching rationale, distractor review, and optional references. Prioritize airway, breathing, and circulation when choosing the most urgent option.",
+    ),
+    lockedTitle: tx(
+      "learner.practiceTests.run.rationaleLockedTitle",
+      "Answer Locked",
+    ),
+    lockedBody: tx(
+      "learner.practiceTests.run.rationaleLockedBody",
+      "Your answer is submitted. Explanations and correct keys are revealed when you finish the full exam.",
+    ),
+    correctAnswer: tx(
+      "learner.practiceTests.run.rationaleCorrectAnswer",
+      "Correct Answer",
+    ),
+    whyCorrect: tx(
+      "learner.practiceTests.run.rationaleWhyCorrect",
+      "Why This Is Correct",
+    ),
+    whyOthersIncorrect: tx(
+      "learner.practiceTests.run.rationaleWhyOthersIncorrect",
+      "Why The Other Options Are Incorrect",
+    ),
+    clinicalPearl: tx(
+      "learner.practiceTests.run.rationaleClinicalPearl",
+      "Clinical Pearl",
+    ),
+    keyTakeawayHeading: tx(
+      "learner.practiceTests.run.rationaleKeyTakeawayHeading",
+      "Key Takeaway",
+    ),
+    referencesSource: tx(
+      "learner.practiceTests.run.rationaleReferencesSource",
+      "References / Source",
+    ),
+    relatedLessonsSection: tx(
+      "learner.practiceTests.run.rationaleRelatedLessonsSection",
+      "Related Lessons",
+    ),
+    missingDistractorFallback: tx(
+      "learner.practiceTests.run.rationaleMissingDistractorFallback",
+      "This choice may look plausible, but the stem does not provide the assessment finding, clinical threshold, or timing cue needed to support it over the correct answer.",
+    ),
+  };
+
+  const linearQuestionStem =
+    typeof current.stem === "string" && current.stem.trim().length > 0
+      ? resolveMeasureText(current.stem)
+      : tx(
+          "learner.practiceTests.run.questionUnavailable",
+          "Question text is unavailable. Try reloading this item.",
+        );
+
+  const rawStemTrimmed =
+    typeof current.stem === "string" && current.stem.trim().length > 0
+      ? resolveMeasureText(current.stem.trim())
+      : "";
+  const linearStemClinicalSplit = rawStemTrimmed
+    ? splitPromptLeadingImage(rawStemTrimmed)
+    : null;
+  const stemBodyForLinearCard =
+    linearStemClinicalSplit &&
+    linearStemClinicalSplit.remainingPrompt.trim().length > 0
+      ? linearStemClinicalSplit.remainingPrompt
+      : linearQuestionStem;
+  const clinicalImageSrcLinear =
+    linearStemClinicalSplit?.imageHtml &&
+    linearStemClinicalSplit.imageHtml.trim().length > 0
+      ? linearStemClinicalSplit.imageHtml.trim()
+      : null;
+  const showLinearPerItemRationale = linearPracticeSplitReview
+    ? false
+    : shouldShowLinearPerItemRationale({
+        isLinearEngine,
+        linearDeliveryMode: linearDelivery,
+        linearRationaleVisibility,
+        currentCommitted,
+        linearFeedbackForCurrent: linearFeedback,
+      });
+
+  const linearQuestionCardInner = (
+    <>
+      {clinicalImageSrcLinear ? (
+        <PracticeTestClinicalFigure src={clinicalImageSrcLinear} />
+      ) : null}
+      <PracticeTestQuestionMediaBlock
+        exhibitData={current.exhibitData}
+        images={current.images}
+        mode={linearIsExamShell ? "cat" : "practice"}
+        phase={showLinearPerItemRationale ? "post_submit" : "pre_submit"}
+      />
+      {timedMode && timeLimitSec != null ? (
+        <PracticeTestTimedSessionAlert
+          message={tx(
+            "learner.practiceTests.run.timedAutoEnd",
+            "Timed session: the exam may end automatically when time expires.",
+          )}
+        />
+      ) : null}
+      {!isBowtie ? (
+        <PracticeTestMcqChoicesInstruction
+          isSata={Boolean(isSata)}
+          selectAllLabel={tx(
+            "learner.practiceTests.run.selectAllThatApply",
+            "Select all that apply",
+          )}
+          selectBestLabel={tx(
+            "learner.practiceTests.run.selectBestAnswer",
+            "Select the best answer",
+          )}
+        />
+      ) : (
+        <PracticeTestBowtieChoicesInstruction
+          instruction={tx(
+            "learner.practiceTests.run.bowtieInstruction",
+            "Assign one option to each row.",
+          )}
+        />
+      )}
+      {linearCatOptions}
+      {linearFeedback?.peerStats ? (
+        <div className="mt-3">
+          <QuestionBankPeerPerformancePanel
+            peerStats={linearFeedback.peerStats}
+            optionCanonicals={optsOrderCanonical}
+            optionDisplays={optsOrderDisplayResolved}
+          />
+        </div>
+      ) : null}
+      {showLinearPerItemRationale && currentCommitted && linearFeedback ? (
+        <ShowSimilarQuestions
+          context={{
+            sourceType: catMode ? "cat_exam" : "practice_question",
+            sourceId: current.id,
+            topic: linearFeedback.topic ?? current.topic ?? null,
+            subtopic: current.subtopic ?? null,
+            clinicalConcept:
+              current.subtopic ?? linearFeedback.topic ?? current.topic ?? null,
+            pathwayId: testConfig?.pathwayId ?? pathwaySurface?.id ?? null,
+            currentCorrect: linearFeedback.isCorrect,
+            previouslyMissed: !linearFeedback.isCorrect,
+            weakArea: !linearFeedback.isCorrect,
+            lowConfidence: confidenceTrackingEnabled
+              ? confidence[current.id] === "low"
+              : null,
+          }}
+          compact
+        />
+      ) : null}
+      {confidenceTrackingEnabled ? (
+        <div className="mt-4">
+          <ConfidenceSelector
+            questionId={current.id}
+            value={confidence[current.id] ?? null}
+            neutral={linearCatShellPresentation}
+            onChange={setConfidenceForQuestion}
+          />
+        </div>
+      ) : (
+        <div className="mt-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+          {tx(
+            "learner.practiceTests.run.confidenceTrackingOff",
+            "Confidence tracking is off in your study settings for this session.",
+          )}
+        </div>
+      )}
+      {showLinearPerItemRationale ? (
+        <PracticeTestPerItemRationale
+          status={rationaleFullStatus}
+          correctKeys={linearFeedback?.correctKeys}
+          optionDisplayMap={optionDisplayMap}
+          allOptionKeys={optsOrderCanonical}
+          correctAnswerExplanation={linearFeedback?.correctAnswerExplanation}
+          rationale={linearFeedback?.rationale}
+          distractorRationalesMap={linearFeedback?.distractorRationalesMap}
+          keyTakeaway={linearFeedback?.keyTakeaway}
+          relatedLessons={linearFeedback?.relatedLessons ?? []}
+          confidenceLevel={
+            confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null
+          }
+          showDistractorFallback={Boolean(
+            currentCommitted &&
+            rationaleFullStatus !== "waiting" &&
+            rationaleFullStatus !== null,
+          )}
+          copy={linearRationalePanelCopy}
+        />
+      ) : null}
+    </>
+  );
+
+  const linearExamFlagSlot = (
+    <div className="flex items-center gap-2">
+      <QuestionBookmarkButton
+        compact
+        defaultBookmarked={Boolean(flagged[current.id])}
+        sourceType={catMode ? "cat_exam" : "practice_question"}
+        sourceId={current.id}
+        title={
+          current.topic?.trim()
+            ? `${current.topic} question`
+            : "Practice exam question"
+        }
+        topic={current.topic ?? current.subtopic ?? null}
+        difficulty={
+          current.difficulty != null
+            ? difficultyBandLabel(current.difficulty)
+            : null
+        }
+        pathwayId={activePathwayId}
+      />
+      <PracticeTestFlagForReviewButton
+        flagged={Boolean(flagged[current.id])}
+        disabled={controlsBusy}
+        titleFlagged={tx(
+          "learner.practiceTests.run.unflagForReview",
+          "Remove flag",
+        )}
+        titleUnflagged={tx(
+          "learner.practiceTests.run.flagForReview",
+          "Flag for review",
+        )}
+        srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
+        srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
+        onToggle={() => toggleFlagForQuestion(current.id)}
+      />
+    </div>
+  );
+
+  const linearPrimaryTutorLayout = Boolean(linearPracticeSplitReview);
+  const linearExamQuestionCard = linearPrimaryTutorLayout ? (
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+      <div className="flex shrink-0 justify-end pb-1 pt-0.5">
+        {linearExamFlagSlot}
+      </div>
+      <div className="min-h-0 flex-1 overflow-hidden">
+        <QuestionCard
+          stem={stemBodyForLinearCard}
+          topic={current.topic}
+          subtopic={current.subtopic}
+          difficultyLabel={
+            current.difficulty != null
+              ? difficultyBandLabel(current.difficulty)
+              : null
+          }
+          examStackedLayout={false}
+          examDetachedFooter={false}
+          examStemScrollPartition={false}
+          examCategoryLabel={null}
+          examHeaderRightSlot={undefined}
+          examLayoutMeasureKey={`${current.id}:${optsOrderCanonical.join("|")}`}
+        >
+          {linearQuestionCardInner}
+        </QuestionCard>
+      </div>
+    </div>
+  ) : (
+    <QuestionCard
+      stem={stemBodyForLinearCard}
+      topic={null}
+      subtopic={null}
+      difficultyLabel={null}
+      examStackedLayout
+      examDetachedFooter
+      examStemScrollPartition={
+        linearCatShellPresentation && !clinicalImageSrcLinear
+      }
+      examCategoryLabel={linearExamCategoryLine}
+      examHeaderRightSlot={linearExamFlagSlot}
+      examLayoutMeasureKey={`${current.id}:${optsOrderCanonical.join("|")}`}
+    >
+      {linearQuestionCardInner}
+    </QuestionCard>
+  );
+
+  const linearBoardFooter = (
+    <footer
+      className={`nn-cat-exam-board-footer nn-premium-practice-exam-footer flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]${linearCatShellPresentation ? " nn-cat-exam-board-footer--adaptive" : ""}`}
+    >
+      <div className="mx-auto flex w-full max-w-[48.75rem] items-center justify-between gap-3 px-3 py-2.5 sm:px-4">
+        <button
+          type="button"
+          disabled={
+            controlsBusy || linearCatShellPresentation || !canLinearReviewPrev
+          }
+          className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] disabled:opacity-40 sm:min-h-0 sm:px-2 sm:py-1.5"
+          title={
+            linearCatShellPresentation
+              ? tx(
+                  "learner.practiceTests.run.catExamNoPrevious",
+                  "Previous item is not available during this exam.",
+                )
+              : !linearAllowReviewNavigation
+                ? tx(
+                    "learner.practiceTests.run.linearReviewNavOff",
+                    "Turn on review navigation for this test to revisit earlier items.",
+                  )
+                : undefined
+          }
+          onClick={() => void goPrev()}
+        >
+          <ChevronLeft className="h-4 w-4" aria-hidden />
+          {tx("learner.practiceTests.run.previous", "Previous")}
+        </button>
+        <p className="m-0 text-center text-xs font-medium tabular-nums text-[var(--semantic-text-muted)] sm:text-sm">
+          {tx(
+            "learner.practiceTests.run.catExamAnsweredProgress",
+            "{answered} of {total} answered",
+            {
+              answered: String(Math.min(committedCount, total)),
+              total: String(Math.max(total, 1)),
+            },
+          )}
+        </p>
+        <div className="min-w-0 shrink text-right sm:min-w-[5.5rem] sm:shrink-0">
+          {!currentCommitted ? (
+            <button
+              type="button"
+              disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
+              className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
+              onClick={() => void submitLinearCommit()}
+            >
+              {saving
+                ? tx("learner.practiceTests.run.submitting", "Submitting...")
+                : linearFooterSubmitLabel}
+              <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
+            </button>
+          ) : idx < total - 1 ? (
+            <button
+              type="button"
+              disabled={controlsBusy}
+              className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
+              onClick={() => void goNext()}
+            >
+              {linearAdvancePrimaryLabel}
+              <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
+            </button>
+          ) : (
+            <button
+              type="button"
+              disabled={controlsBusy}
+              className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
+              onClick={() => void submitTest()}
+            >
+              {saving
+                ? tx("learner.practiceTests.run.submitting", "Submitting...")
+                : linearFooterFinishLabel}
+              <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
+            </button>
+          )}
+        </div>
+      </div>
+    </footer>
+  );
+
+  return (
+    <ProtectedPremiumContent
+      userLabel={userLabel}
+      flags={protectionFlags}
+      telemetrySurface="practice_test"
+    >
+      <PracticeSessionLayout
+        className={`flex min-h-0 flex-1 flex-col ${chromeClass}${linearPracticeSplitReview ? " nn-practice-exam-runner--rationale-dock" : ""}${linearPracticeExamConvergence ? " nn-practice-exam-convergence-layout" : ""}`}
+        {...(linearCatShellPresentation ? { "data-cat-exam-root": true } : {})}
+        {...(linearPracticeExamConvergence
+          ? { "data-nn-practice-exam-convergence": "" }
+          : {})}
+        data-nn-pedagogy-tier={tierPedagogyProfile.tier}
+        data-nn-practice-question-layout={practiceQuestionLayoutMode}
+        data-nn-practice-question-type={practiceQuestionType}
+        data-nn-practice-scoring-rule={
+          practiceQuestionInteractionProfile.scoringRule
+        }
+        data-nn-practice-partial-credit={
+          practiceQuestionInteractionProfile.partialCredit ? "" : undefined
+        }
+        data-nn-practice-structured-payload={
+          practiceQuestionInteractionProfile.requiresStructuredPayload
+            ? ""
+            : undefined
+        }
+      >
+        <ExamSessionShell
+          neutralPalette
+          immersive
+          examMode={learnerExamShellMode}
+          className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome nn-cat-exam-chrome--premium${linearCatShellPresentation ? " nn-cat-adaptive-exam-session" : ""}${linearPracticeSplitReview ? " nn-practice-exam-runner" : ""}${linearPracticeExamConvergence ? " nn-practice-exam-convergence" : ""}${linearPracticeSplitReview ? " nn-practice-exam-convergence--tutor-split" : ""}`}
+        >
+          {linearPracticeSplitReview ? (
+            <>
+              <PracticeExamProgressHeader
+                questionIndexOneBased={idx + 1}
+                total={Math.max(total, 1)}
+                progressLead={
+                  <>
+                    {tx("learner.practiceTests.run.question", "Question")}{" "}
+                    <span className="tabular-nums">{idx + 1}</span>{" "}
+                    {tx("learner.practiceTests.run.of", "of")}{" "}
+                    <span className="tabular-nums">{Math.max(total, 1)}</span>
+                  </>
+                }
+                sessionProgressAriaLabel={tx(
+                  "learner.practiceTests.run.sessionProgressMeterAria",
+                  "Question {{current}} of {{total}}, {{pct}} percent through this session",
+                  {
+                    current: String(idx + 1),
+                    total: String(Math.max(total, 1)),
+                    pct: String(
+                      Math.round(
+                        (Math.min(idx + 1, Math.max(total, 1)) /
+                          Math.max(total, 1)) *
+                          100,
+                      ),
+                    ),
+                  },
+                )}
+                sessionBadge={
+                  <span className="inline-flex max-w-full items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-3)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--semantic-surface))] px-2.5 py-0.5 text-[11px] font-bold uppercase leading-snug tracking-wide text-[var(--semantic-text-secondary)]">
+                    {modeLabel}
+                  </span>
+                }
+                toolbar={
+                  <div className="flex flex-wrap items-center justify-end gap-2">
+                    <ExamSessionThemeTrigger variant="pill" />
+                    <ExamTimerReadout
+                      remainingSec={timedMode ? remainingSec : null}
+                    />
+                    {showEndPracticeSessionControl ? (
+                      <button
+                        type="button"
+                        data-testid="end-practice-session-btn"
+                        disabled={controlsBusy}
+                        className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] px-3 py-2 text-xs font-bold text-[var(--semantic-text-primary)] shadow-sm transition hover:opacity-95 disabled:opacity-40"
+                        onClick={() => void finalizePracticeSessionEarly()}
+                      >
+                        {tx("session.end", "End session")}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={controlsBusy}
+                        className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
+                        onClick={() => void abandon()}
+                      >
+                        <Send
+                          className="h-3.5 w-3.5 shrink-0 opacity-80"
+                          aria-hidden
+                        />
+                        {tx("learner.practiceTests.run.endExam", "End")}
+                      </button>
+                    )}
+                  </div>
+                }
+              />
+              {sessionRecoveryBanner}
+              <div
+                className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
+              >
+                <div className="nn-practice-exam-split nn-practice-exam-split--premium mx-auto flex min-h-0 w-full min-w-0 max-w-full flex-1 flex-col gap-4 px-2 pb-1 pt-1 lg:flex-row lg:items-stretch lg:gap-5 lg:px-4 lg:pb-2">
+                  <div className="nn-practice-exam-split__primary flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+                    {linearExamQuestionCard}
+                  </div>
+                  <PracticeExamRationaleMobileDock
+                    openLabel={tx(
+                      "learner.practiceTests.run.rationaleOpenMobile",
+                      "Rationale",
+                    )}
+                    sheetTitle={tx(
+                      "learner.practiceTests.run.rationaleReviewHeading",
+                      "Rationale & Review",
+                    )}
+                  >
+                    <PracticeExamRationalePanel
+                      ariaLabel={tx(
+                        "learner.practiceTests.run.rationaleColumnAria",
+                        "Rationale and review",
+                      )}
+                    >
+                      <PracticeRationaleFullPanel
+                        status={rationaleFullStatus}
+                        correctKeys={linearFeedback?.correctKeys}
+                        optionDisplayMap={optionDisplayMap}
+                        allOptionKeys={optsOrderCanonical}
+                        correctAnswerExplanation={
+                          linearFeedback?.correctAnswerExplanation
+                        }
+                        rationale={linearFeedback?.rationale}
+                        distractorRationalesMap={
+                          linearFeedback?.distractorRationalesMap
+                        }
+                        keyTakeaway={linearFeedback?.keyTakeaway}
+                        relatedLessons={linearFeedback?.relatedLessons ?? []}
+                        confidenceLevel={
+                          confidenceTrackingEnabled
+                            ? (confidence[current.id] ?? null)
+                            : null
+                        }
+                        clinicalPearlDisplay={
+                          linearFeedback?.clinicalPearlDisplay ?? null
+                        }
+                        referenceSource={
+                          linearFeedback?.referenceSource ?? null
+                        }
+                        showDistractorFallback={Boolean(
+                          currentCommitted &&
+                          rationaleFullStatus !== "waiting" &&
+                          rationaleFullStatus !== null,
+                        )}
+                        copy={linearRationalePanelCopy}
+                      />
+                      <PracticeExamRemediationLinks
+                        pathwayId={
+                          testConfig?.pathwayId ?? pathwaySurface?.id ?? null
+                        }
+                        topicLabel={linearFeedback?.topic ?? current.topic}
+                        visible={Boolean(currentCommitted && linearFeedback)}
+                        copy={linearRemediationCopy}
+                      />
+                      {currentCommitted && linearFeedback ? (
+                        <div className="mt-3">
+                          <ShowSimilarQuestions
+                            context={{
+                              sourceType: catMode
+                                ? "cat_exam"
+                                : "practice_question",
+                              sourceId: current.id,
+                              topic:
+                                linearFeedback.topic ?? current.topic ?? null,
+                              subtopic: current.subtopic ?? null,
+                              clinicalConcept:
+                                current.subtopic ??
+                                linearFeedback.topic ??
+                                current.topic ??
+                                null,
+                              pathwayId:
+                                testConfig?.pathwayId ??
+                                pathwaySurface?.id ??
+                                null,
+                              currentCorrect: linearFeedback.isCorrect,
+                              previouslyMissed: !linearFeedback.isCorrect,
+                              weakArea: !linearFeedback.isCorrect,
+                              lowConfidence: confidenceTrackingEnabled
+                                ? confidence[current.id] === "low"
+                                : null,
+                            }}
+                            compact
+                          />
+                          <div className="mt-3">
+                            <TeachMeThisPanel
+                              topic={
+                                linearFeedback.topic ?? current.topic ?? null
+                              }
+                              subtopic={current.subtopic ?? null}
+                              questionStem={current.stem}
+                              correctAnswer={linearFeedback.correctKeys
+                                ?.map((key) => optionDisplayMap[key] ?? key)
+                                .join(", ")}
+                              rationale={
+                                linearFeedback.correctAnswerExplanation ??
+                                linearFeedback.rationale ??
+                                null
+                              }
+                              clinicalPearl={
+                                linearFeedback.clinicalPearlDisplay ?? null
+                              }
+                              examTip={linearFeedback.keyTakeaway ?? null}
+                              lessonHref={
+                                linearFeedback.relatedLessons?.[0]?.href ?? null
+                              }
+                              lessonTitle={
+                                linearFeedback.relatedLessons?.[0]?.title ??
+                                null
+                              }
+                              triggerReason={
+                                !linearFeedback.isCorrect
+                                  ? "incorrect"
+                                  : confidenceTrackingEnabled &&
+                                      confidence[current.id] === "low"
+                                    ? "low_confidence"
+                                    : "request"
+                              }
+                              compact
+                            />
+                          </div>
+                          {!linearFeedback.isCorrect ? (
+                            <div className="mt-3">
+                              <MissedQuestionReflection
+                                questionId={current.id}
+                                questionText={current.stem}
+                                topic={
+                                  linearFeedback.topic ?? current.topic ?? null
+                                }
+                                pathwayId={
+                                  testConfig?.pathwayId ??
+                                  pathwaySurface?.id ??
+                                  null
+                                }
+                                sourceType={
+                                  catMode ? "cat_exam" : "practice_question"
+                                }
+                                questionType={current.questionType ?? null}
+                                compact
+                              />
+                            </div>
+                          ) : null}
+                        </div>
+                      ) : null}
+                      {practiceAdaptivePostMiss?.questionId === current.id ? (
+                        <PracticeAdaptivePostMissPanel
+                          payload={practiceAdaptivePostMiss.payload}
+                          testConfig={testConfig}
+                          pathwaySurface={pathwaySurface}
+                          tx={(key, fallback) => tx(key, fallback)}
+                        />
+                      ) : null}
+                    </PracticeExamRationalePanel>
+                  </PracticeExamRationaleMobileDock>
+                </div>
+                {linearBoardFooter}
+              </div>
+            </>
+          ) : (
+            <>
+              <header
+                className={`nn-cat-exam-board-top flex shrink-0 items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] px-3 py-2 sm:px-4${linearCatShellPresentation ? " nn-cat-exam-board-top--adaptive py-1.5 sm:py-2" : " min-h-[3.5rem]"}`}
+              >
+                <p className="nn-cat-exam-board-top__progress m-0 text-sm font-semibold leading-snug text-[var(--semantic-text-secondary)]">
+                  {linearCatShellPresentation
+                    ? tx(
+                        "learner.practiceTests.run.linearTimedItemLead",
+                        "Timed practice item",
+                      )
+                    : `${tx("learner.practiceTests.run.question", "Question")} ${idx + 1} ${tx("learner.practiceTests.run.of", "of")} ${total}`}
+                </p>
+                <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+                  <ExamSessionThemeTrigger variant="pill" />
+                  <ExamTimerReadout
+                    remainingSec={timedMode ? remainingSec : null}
+                  />
+                  <button
+                    type="button"
+                    disabled={controlsBusy}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
+                    onClick={() => void abandon()}
+                  >
+                    <Send
+                      className="h-3.5 w-3.5 shrink-0 opacity-80"
+                      aria-hidden
+                    />
+                    {tx("learner.practiceTests.run.endExam", "End")}
+                  </button>
+                </div>
+              </header>
+              <ExamProgressBar
+                className={`nn-cat-exam-board-progress shrink-0${linearCatShellPresentation ? " nn-exam-progress--cat-exam-adaptive" : ""}`}
+                current={idx + 1}
+                total={Math.max(total, 1)}
+                variant={
+                  linearCatShellPresentation ? "adaptive_item" : "fixed_session"
+                }
+                adaptiveMaxItems={linearCatShellPresentation ? null : undefined}
+                sessionLabel={modeLabel}
+              />
+              {sessionRecoveryBanner}
+              <div
+                className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
+              >
+                <div className="nn-cat-exam-content-well nn-cat-exam-col mx-auto flex min-h-0 w-full max-w-[48.75rem] flex-1 flex-col overflow-hidden">
+                  {linearExamQuestionCard}
+                </div>
+                {linearBoardFooter}
+              </div>
+            </>
+          )}
+        </ExamSessionShell>
+      </PracticeSessionLayout>
+    </ProtectedPremiumContent>
+  );
+}

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="mint-blossom">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RN Lesson Detail — Reading v2 · Mint Blossom (Design mockup)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#e8f4ef;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+
+/* Mint Blossom — production tokens from theme-palettes.css (mint-forward airy shell) */
+[data-theme="mint-blossom"]{
+  --page-bg:#fafdfc;
+  --surf:#fffefe;
+  --panel:#fffdf8;
+  --border:color-mix(in srgb,#b7efd1 24%,#fff9fb);
+  --border-soft:color-mix(in srgb,#b7efd1 14%,#ffffff);
+  --txt:#3a3142;
+  --muted:#554d5e;
+  --body:#4a4453;
+  --brand:#ff8fb8;
+  --brand-mint:#b7efd1;
+  --brand-sky:#5eb8f0;
+  --hub-accent:#6ec9a0;
+  --progress-track:color-mix(in srgb,#ffb7d5 12%,#ffffff);
+  --progress-fill:linear-gradient(90deg,#ffb7d5 0%,#b7efd1 55%,#bfe7ff 100%);
+  --lsc-info:#5eb8f0;--lsc-info-soft:color-mix(in srgb,#bfe7ff 22%,#ffffff);
+  --lsc-concept:#c9a0e8;--lsc-concept-soft:color-mix(in srgb,#e8d4ff 18%,#ffffff);
+  --lsc-warning:#6ec9a0;--lsc-warning-soft:color-mix(in srgb,#b7efd1 20%,#ffffff);
+  --lsc-action:#5eb87a;--lsc-action-soft:color-mix(in srgb,#d9f8e7 22%,#ffffff);
+  --lsc-danger:#ff8fb8;--lsc-danger-soft:color-mix(in srgb,#ffc7de 18%,#ffffff);
+  --lsc-review:#e8c45a;--lsc-review-soft:color-mix(in srgb,#fff6cc 22%,#ffffff);
+  --pearl:#5eb8f0;--pearl-bg:color-mix(in srgb,#a9d8ff 14%,#ffffff);
+  --pearl-mint:#6ec9a0;--pearl-mint-bg:color-mix(in srgb,#d9f8e7 18%,#ffffff);
+  --chip-bg:color-mix(in srgb,#fff9fb 88%,#ffffff);
+  --shadow-soft:0 12px 40px -32px color-mix(in srgb,#b7efd1 35%,transparent);
+}
+
+.g-bar{
+  background:linear-gradient(90deg,#3a3142 0%,#4a5568 100%);
+  color:#d9f8e7;
+  padding:10px 20px;
+  font-size:11px;
+  font-weight:600;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.g-bar strong{color:#fffefe;font-size:13px;font-weight:700}
+.g-bar a{color:#bfe7ff;font-size:11px}
+.frames{padding:28px;display:flex;flex-direction:column;gap:40px;align-items:center}
+.frame-label{text-align:center;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4a5d5a;margin-bottom:12px;max-width:92%;line-height:1.5}
+
+.mock{background:var(--page-bg);color:var(--txt);overflow:hidden;position:relative}
+.mock.desktop{width:1440px}
+.mock.mobile{width:390px}
+
+.site-nav{
+  height:52px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;
+  background:color-mix(in srgb,#d9f8e7 10%,color-mix(in srgb,#fff9fb 58%,#ffffff));
+  border-bottom:1px solid var(--border-soft);
+}
+.site-nav b{font-size:14px;font-weight:700;color:var(--brand)}
+.site-nav span{font-size:12px;color:var(--muted);font-weight:500}
+
+.shell{width:100%;max-width:1380px;margin:0 auto;padding:0 28px 48px}
+
+.lesson-header{padding:36px 0 28px;border-bottom:1px solid var(--border-soft)}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--hub-accent)}
+.lesson-header h1{
+  font-size:clamp(28px,3.2vw,38px);
+  font-weight:600;
+  letter-spacing:-.04em;
+  line-height:1.08;
+  margin-top:10px;
+  max-width:22ch;
+}
+.deck{font-size:15px;color:var(--body);line-height:1.72;margin-top:12px;max-width:42rem;font-weight:400}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.chip{
+  height:32px;padding:0 12px;border-radius:999px;
+  border:1px solid color-mix(in srgb,#ffb7d5 22%,var(--border));
+  background:var(--chip-bg);
+  font-size:11px;font-weight:500;color:var(--muted);
+  display:inline-flex;align-items:center;
+}
+
+.lesson-progress{
+  grid-column:1 / -1;
+  grid-row:1;
+  margin-bottom:20px;
+  padding:16px 20px;
+  border:1px solid var(--border-soft);
+  border-radius:14px;
+  background:var(--surf);
+  box-shadow:var(--shadow-soft);
+}
+.lesson-progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.lesson-progress-top span{font-size:12px;font-weight:500;color:var(--muted)}
+.lesson-progress-top b{color:var(--txt);font-weight:600}
+.lesson-progress .progress-bar{height:8px;margin-top:0;border-radius:99px;background:var(--progress-track);overflow:hidden}
+.lesson-progress .progress-bar i{display:block;height:100%;width:57%;border-radius:inherit;background:var(--progress-fill)}
+
+.viewport{margin-top:0}
+.viewport-canvas{
+  --col-left:min(15rem,240px);
+  --col-gap:22px;
+  display:grid;width:100%;align-items:start;
+  column-gap:var(--col-gap);row-gap:0;
+}
+.viewport.open{grid-template-columns:var(--col-left) minmax(0,1fr)}
+.viewport.collapsed{--col-left:52px;column-gap:14px}
+.viewport.collapsed .rail-panel,.viewport.collapsed .side-stack{display:none}
+
+.side-col--left{grid-column:1;grid-row:2;align-self:start}
+.side-col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.rail-panel--sticky{position:sticky;top:16px;z-index:2}
+
+.reading-stack{
+  grid-column:2;grid-row:2;
+  display:flex;flex-direction:column;gap:18px;min-width:0;
+}
+.reading-stack .sec-card{width:100%}
+.viewport.open .reading-stack .sec-card--under-left,
+.viewport.open .reading-stack .sec-card--full{
+  width:calc(100% + var(--col-left) + var(--col-gap));
+  margin-left:calc(-1 * (var(--col-left) + var(--col-gap)));
+}
+
+.rail-panel{
+  border:1px solid var(--border-soft);
+  border-radius:12px;
+  background:var(--surf);
+  padding:12px 13px;
+  box-shadow:none;
+}
+.rail-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.rail-item{
+  display:flex;gap:8px;padding:8px 10px;border-radius:9px;
+  font-size:11.5px;font-weight:500;color:var(--muted);
+  text-decoration:none;line-height:1.35;
+}
+.rail-item.on{background:color-mix(in srgb,#b7efd1 16%,#ffffff);color:var(--txt)}
+.rail-dot{width:7px;height:7px;border-radius:50%;margin-top:4px;flex-shrink:0;background:var(--border-soft)}
+.rail-item.on .rail-dot{background:var(--brand-mint)}
+.collapse-btn{
+  width:38px;height:38px;border-radius:10px;
+  border:1px solid var(--border-soft);background:var(--surf);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);margin-bottom:6px;
+}
+
+.side-stack{display:flex;flex-direction:column;gap:10px}
+.side-stack-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mini-box{border-radius:11px;padding:11px 12px;border:1px solid;font-size:11.5px;line-height:1.55;background:var(--surf)}
+.mini-box b{display:block;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.mini-box p{color:var(--muted);margin:0;font-weight:400}
+.mini-box--pearl{border-color:color-mix(in srgb,#a9d8ff 35%,var(--border-soft));background:var(--pearl-bg)}
+.mini-box--pearl b{color:var(--pearl)}
+.mini-box--mint{border-color:color-mix(in srgb,#b7efd1 40%,var(--border-soft));background:var(--pearl-mint-bg)}
+.mini-box--mint b{color:var(--pearl-mint)}
+
+.clinical-image{
+  margin:8px 0 4px;
+  max-width:min(44rem,100%);
+  border-radius:18px;
+  border:1px solid var(--border-soft);
+  background:color-mix(in srgb,#fff9fb 40%,#ffffff);
+  padding:18px 20px 16px;
+  box-shadow:var(--shadow-soft);
+}
+.clinical-image .label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.clinical-image .frame{
+  border-radius:14px;
+  border:1px solid color-mix(in srgb,#b7efd1 20%,transparent);
+  background:linear-gradient(145deg,color-mix(in srgb,#d9f8e7 30%,#fff) 0%,#fff 55%);
+  min-height:200px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-size:13px;font-weight:500;
+}
+
+.sec-card{
+  width:100%;min-width:0;border-radius:16px;
+  border:1px solid color-mix(in srgb,var(--lsc) 18%,var(--border-soft));
+  background:color-mix(in srgb,var(--lsc-soft) 55%,var(--surf));
+  padding:clamp(26px,2.5vw,36px);
+  box-shadow:none;
+}
+.sec-eyebrow{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--lsc);margin-bottom:8px}
+.sec-card h2{
+  font-size:clamp(20px,1.8vw,24px);
+  font-weight:600;
+  letter-spacing:-.03em;
+  line-height:1.2;
+  margin-bottom:14px;
+}
+.sec-prose{font-size:16px;line-height:1.72;color:var(--body);font-weight:400;max-width:54rem}
+.sec-prose p+p{margin-top:14px}
+.sec-prose ul{margin:14px 0 0 20px}
+.sec-prose li{margin-bottom:8px}
+.sec-prose em{font-style:normal;font-size:13px;color:var(--brand-sky);font-weight:500}
+
+.compare-strip{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  padding:0 20px 8px;font-size:11px;color:#4a5d5a;
+}
+.compare-strip a{color:#0d7aaa}
+
+.mobile .site-nav{padding:0 16px}
+.mobile .shell{padding:0 16px 32px}
+.mobile .viewport-canvas{display:block}
+.mobile .lesson-progress{margin-bottom:16px}
+.mobile .side-col{display:none}
+.mobile .reading-stack{display:flex;flex-direction:column;gap:16px}
+.mobile .reading-stack .sec-card{width:100% !important;margin-left:0 !important}
+.mobile .mobile-toc{display:flex;margin-bottom:12px}
+.mobile-toc-btn{
+  min-height:48px;padding:0 16px;border-radius:999px;
+  border:1px solid var(--border-soft);background:var(--surf);
+  font-size:13px;font-weight:600;
+  display:inline-flex;align-items:center;gap:8px;
+  color:var(--txt);
+}
+.mobile .lesson-header h1{font-size:26px}
+.mobile .sec-card{padding:22px 18px}
+.mobile .page-footer-stack{
+  display:flex;flex-direction:column;gap:12px;
+  margin-top:22px;padding-top:18px;
+  border-top:1px solid var(--border-soft);
+}
+.mobile .sec-prose{font-size:15px}
+.mobile.drawer .drawer-overlay{position:absolute;inset:0;background:rgba(58,49,66,.28);z-index:50}
+.mobile.drawer .drawer-panel{
+  position:absolute;left:0;top:0;bottom:0;
+  width:min(280px,88vw);background:var(--surf);z-index:51;padding:20px;
+  border-right:1px solid var(--border-soft);
+}
+</style>
+</head>
+<body>
+
+<div class="g-bar">
+  <span>Reading workspace v2.7 · Mint Blossom — design mockup (not production)</span>
+  <strong>Mint Blossom</strong>
+  <a href="rn-lesson-detail-reading-v2-design.html">Compare Ocean mockup →</a>
+</div>
+
+<p class="compare-strip">
+  Open this file locally:
+  <code>lesson-mockups/rn-lesson-detail-reading-v2-mint-blossom.html</code>
+  · Tokens aligned to <code>theme-palettes.css</code> <code>html[data-theme="mint-blossom"]</code>
+</p>
+
+<div class="frames">
+
+<div>
+  <div class="frame-label">Desktop · Mint-forward page · airy cards · blossom progress · left rail + pearls</div>
+  <div class="mock desktop" id="desktop-open">
+    <header class="site-nav"><b>NurseNest</b><span>Lessons · Practice · Progress</span></header>
+    <div class="shell">
+      <header class="lesson-header">
+        <div class="eyebrow">Med-Surg · NCLEX-RN</div>
+        <h1>Pulmonary Embolism</h1>
+        <p class="deck">Recognize urgent blood pressure patterns, organize assessment findings, and connect clinical cues to safe nursing priorities.</p>
+        <div class="meta">
+          <span class="chip">18 min</span>
+          <span class="chip">72% complete</span>
+          <span class="chip">High yield</span>
+        </div>
+      </header>
+
+      <div class="viewport open viewport-canvas">
+        <div class="lesson-progress">
+          <div class="lesson-progress-top">
+            <span>Lesson progress</span>
+            <span><b>4</b> of 7 sections · <b>57%</b></span>
+          </div>
+          <div class="progress-bar"><i></i></div>
+        </div>
+
+        <div class="side-col side-col--left">
+          <button type="button" class="collapse-btn" title="Collapse">◀</button>
+          <div class="rail-panel rail-panel--sticky">
+            <div class="rail-label">Contents</div>
+            <a class="rail-item on" href="#"><span class="rail-dot"></span>Introduction</a>
+            <a class="rail-item" href="#"><span class="rail-dot"></span>Pathophysiology</a>
+            <a class="rail-item" href="#"><span class="rail-dot"></span>Signs &amp; Symptoms</a>
+            <a class="rail-item" href="#"><span class="rail-dot"></span>Assessment</a>
+            <a class="rail-item" href="#"><span class="rail-dot"></span>Nursing Interventions</a>
+            <a class="rail-item" href="#"><span class="rail-dot"></span>Safety</a>
+            <a class="rail-item" href="#"><span class="rail-dot"></span>NCLEX Pearls</a>
+          </div>
+          <div class="side-stack">
+            <div class="side-stack-label">Clinical Pearls</div>
+            <div class="mini-box mini-box--mint">
+              <b>Pearl</b>
+              <p>Sudden dyspnea with clear lung sounds — think PE before wheezes.</p>
+            </div>
+            <div class="mini-box mini-box--pearl">
+              <b>Pearl</b>
+              <p>Tachycardia may be the earliest compensatory sign.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reading-stack">
+          <div class="clinical-image" aria-hidden="true">
+            <div class="label">Clinical image</div>
+            <div class="frame">Matched lesson image (when inventory has pulmonary-embolism.webp)</div>
+          </div>
+          <article class="sec-card" style="--lsc:var(--lsc-info);--lsc-soft:var(--lsc-info-soft)">
+            <div class="sec-eyebrow">Introduction</div>
+            <h2>Clinical Overview</h2>
+            <div class="sec-prose"><p>Pulmonary embolism (PE) occurs when a thrombus obstructs pulmonary arterial circulation. Calm mint shell, soft pink accents, readable plum ink — not dense dashboard grey.</p></div>
+          </article>
+          <article class="sec-card" style="--lsc:var(--lsc-concept);--lsc-soft:var(--lsc-concept-soft)">
+            <div class="sec-eyebrow">Pathophysiology</div>
+            <h2>Mechanism</h2>
+            <div class="sec-prose"><p>Obstruction increases right ventricular afterload. Hypoxemia results from ventilation-perfusion mismatch.</p><ul><li>Thrombus formation in deep veins</li><li>Embolization to pulmonary arteries</li><li>Inflammatory cascade</li></ul></div>
+          </article>
+          <article class="sec-card" style="--lsc:var(--lsc-warning);--lsc-soft:var(--lsc-warning-soft)">
+            <div class="sec-eyebrow">Signs &amp; Symptoms</div>
+            <h2>Presentation</h2>
+            <div class="sec-prose"><p>Sudden dyspnea, pleuritic chest pain, tachypnea, and tachycardia are hallmark findings.</p></div>
+          </article>
+          <article class="sec-card sec-card--under-left" style="--lsc:var(--lsc-action);--lsc-soft:var(--lsc-action-soft)">
+            <div class="sec-eyebrow">Nursing Interventions</div>
+            <h2>Priority Actions</h2>
+            <div class="sec-prose"><p>Maintain oxygenation, establish IV access, prepare for anticoagulation per protocol, and monitor for deterioration.</p><p><em>From here down, cards expand under the left Clinical Pearls column — no empty gutter.</em></p></div>
+          </article>
+          <article class="sec-card sec-card--under-left" style="--lsc:var(--lsc-danger);--lsc-soft:var(--lsc-danger-soft)">
+            <div class="sec-eyebrow">Safety Considerations</div>
+            <h2>Red Flags</h2>
+            <div class="sec-prose"><p>Assess bleeding risk if anticoagulation is initiated.</p></div>
+          </article>
+          <article class="sec-card sec-card--full" style="--lsc:var(--lsc-review);--lsc-soft:var(--lsc-review-soft)">
+            <div class="sec-eyebrow">NCLEX Pearls</div>
+            <h2>Exam Focus</h2>
+            <div class="sec-prose"><p>Sudden dyspnea + clear lung sounds + risk factors = think PE first.</p></div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="frame-label">Desktop · Collapsed left rail — full-width reading</div>
+  <div class="mock desktop" id="desktop-collapsed">
+    <header class="site-nav"><b>NurseNest</b><span>Lessons · Practice</span></header>
+    <div class="shell">
+      <header class="lesson-header" style="padding-bottom:20px">
+        <div class="eyebrow">Med-Surg</div>
+        <h1 style="font-size:32px">Pulmonary Embolism</h1>
+      </header>
+      <div class="viewport collapsed open viewport-canvas">
+        <div class="lesson-progress">
+          <div class="lesson-progress-top"><span>Lesson progress</span><span><b>4</b> of 7 · <b>57%</b></span></div>
+          <div class="progress-bar"><i></i></div>
+        </div>
+        <div class="side-col side-col--left">
+          <button type="button" class="collapse-btn">▶</button>
+        </div>
+        <div class="reading-stack">
+          <article class="sec-card" style="--lsc:var(--lsc-action);--lsc-soft:var(--lsc-action-soft)">
+            <div class="sec-eyebrow">Nursing Interventions</div>
+            <h2>Priority Actions</h2>
+            <div class="sec-prose"><p>Maximum reading width when the left rail collapses — still mint-blossom bright, no violet mud.</p></div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="frame-label">Mobile · Calm stack · pearls at bottom</div>
+  <div class="mock mobile" id="mobile-full">
+    <header class="site-nav"><b>NN</b><span>Menu</span></header>
+    <div class="shell">
+      <header class="lesson-header">
+        <div class="eyebrow">Med-Surg</div>
+        <h1>Pulmonary Embolism</h1>
+        <div class="meta"><span class="chip">18 min</span><span class="chip">72%</span></div>
+      </header>
+      <div class="lesson-progress" style="margin-bottom:16px">
+        <div class="lesson-progress-top"><span>Lesson progress</span><span><b>4</b> of 7 · <b>57%</b></span></div>
+        <div class="progress-bar"><i></i></div>
+      </div>
+      <div class="mobile-toc">
+        <button type="button" class="mobile-toc-btn">☰ Lesson contents</button>
+      </div>
+      <div class="reading-stack">
+        <article class="sec-card" style="--lsc:var(--lsc-info);--lsc-soft:var(--lsc-info-soft)">
+          <div class="sec-eyebrow">Introduction</div>
+          <h2>Clinical Overview</h2>
+          <div class="sec-prose"><p>Full-width airy reading on mobile — generous margins and touch spacing.</p></div>
+        </article>
+        <article class="sec-card" style="--lsc:var(--lsc-warning);--lsc-soft:var(--lsc-warning-soft)">
+          <div class="sec-eyebrow">Signs &amp; Symptoms</div>
+          <h2>Presentation</h2>
+          <div class="sec-prose"><p>Flat pastel cards, no heavy shadows.</p></div>
+        </article>
+        <div class="page-footer-stack">
+          <div class="side-stack">
+            <div class="side-stack-label">Clinical Pearls</div>
+            <div class="mini-box mini-box--mint"><b>Pearl</b><p>Clear lung sounds do not rule out PE.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

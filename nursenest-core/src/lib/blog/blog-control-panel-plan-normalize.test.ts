@@ -1,0 +1,244 @@
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import {
+  BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA,
+  normalizeBlogEditorialPlanCandidate,
+  normalizePlanString,
+  safeParseBlogControlPanelPlan,
+} from "@/lib/blog/blog-control-panel-plan-normalize";
+
+function minimalValidPlan() {
+  return {
+    titleOptions: ["Primary long title for nursing blog", "Secondary long title for nursing blog"],
+    recommendedSlug: "primary-long-title-for-nursing-blog",
+    metaTitle: "Meta title here at least three chars",
+    metaDescription: "m".repeat(22),
+    outline: [
+      { h2: "First section title", bullets: ["bullet one text here"] },
+      { h2: "Second section title" },
+      { h2: "Third section title" },
+    ],
+  };
+}
+
+describe("normalizePlanString", () => {
+  it("passes through strings", () => {
+    assert.equal(normalizePlanString("hello", "t"), "hello");
+  });
+
+  it("joins string[] with comma-space for scalar-like paths", () => {
+    assert.equal(normalizePlanString(["a", "b"], "metaTitle"), "a, b");
+  });
+
+  it("joins string[] with newline for metaDescription path", () => {
+    assert.equal(normalizePlanString(["line a", "line b"], "metaDescription"), "line a\nline b");
+  });
+
+  it("converts null and undefined to empty string", () => {
+    assert.equal(normalizePlanString(null, "x"), "");
+    assert.equal(normalizePlanString(undefined, "x"), "");
+  });
+
+  it("converts number and boolean", () => {
+    assert.equal(normalizePlanString(42, "n"), "42");
+    assert.equal(normalizePlanString(false, "b"), "false");
+  });
+
+  it("throws for plain object", () => {
+    assert.throws(() => normalizePlanString({ a: 1 }, "bad"), /Refusing to coerce plain object/);
+  });
+});
+
+describe("safeParseBlogControlPanelPlan", () => {
+  it("accepts valid string-only plan", () => {
+    const r = safeParseBlogControlPanelPlan(minimalValidPlan());
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.ok(r.data.metaDescription.length >= 20);
+    }
+  });
+
+  it("coerces string[] on metaDescription then validates", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      metaDescription: ["First paragraph of meta text xx", "Second paragraph of meta text yy"],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.ok(r.data.metaDescription.includes("\n"));
+    }
+  });
+
+  it("fails with normalizeError when object is used for a string scalar", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      metaTitle: { not: "a string" },
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, false);
+    if (!r.success) {
+      assert.ok(r.normalizeError?.includes("metaTitle"));
+    }
+  });
+
+  it("coerces short number metaTitle then repairs from titleOptions when too short", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      metaTitle: 1,
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.ok(r.data.metaTitle.length >= 3);
+    }
+  });
+
+  it("coerces h3 from a single string to one-element array", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      outline: [
+        { h2: "First section title", h3: "single h3 string value" },
+        { h2: "Second section title" },
+        { h2: "Third section title" },
+      ],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.deepEqual(r.data.outline[0]?.h3, ["single h3 string value"]);
+    }
+  });
+
+  it("B: empty imagePlacements array gets one fallback item", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.ok(r.data.imagePlacements.length >= 1);
+      assert.ok((r.data.imagePlacements[0]?.promptIdea ?? "").length >= 10);
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  it("A: missing imagePlacements key does not fail validation", () => {
+    const r = safeParseBlogControlPanelPlan(minimalValidPlan());
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.ok(r.data.imagePlacements.length >= 1);
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  const goodRow = {
+    section: "Clinical foundations",
+    altIdea: "Nurse educator reviewing care plan with student",
+  };
+
+  it("C: undefined promptIdea gets fallback", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [{ ...goodRow, promptIdea: undefined }],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  it("D: empty string promptIdea gets fallback", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [{ ...goodRow, promptIdea: "" }],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  it("E: promptIdea shorter than 10 characters gets fallback", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [{ ...goodRow, promptIdea: "short" }],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  it("invalid_type promptIdea (object) gets fallback without throwing", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [{ ...goodRow, promptIdea: { nested: "bad" } }],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  it("F: valid promptIdea is preserved", () => {
+    const promptIdea =
+      "Detailed clinical nursing illustration of nurse performing head-to-toe assessment in med-surg unit";
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [{ ...goodRow, promptIdea }],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, promptIdea);
+    }
+  });
+
+  it("G: retry-style planSnapshot parse uses normalization with job context", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [{ ...goodRow, promptIdea: null }],
+    };
+    const r = safeParseBlogControlPanelPlan(raw, { jobId: "job-retry-test", title: "Sepsis recognition" });
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  it("H: batch-style parse uses same normalization with batch id context", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [],
+    };
+    const r = safeParseBlogControlPanelPlan(raw, { jobId: "batch-campaign-chunk-3", title: "IV therapy basics" });
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.ok(r.data.imagePlacements.length >= 1);
+    }
+  });
+
+  it("coerces recommendedInternalLinks from a single object to array", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      recommendedInternalLinks: {
+        targetType: "flashcards_hub",
+        suggestedPath: "/flashcards",
+        anchorText: "Flashcards",
+        reason: "Review",
+      },
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.recommendedInternalLinks.length, 1);
+      assert.equal(r.data.recommendedInternalLinks[0]?.targetType, "flashcards_hub");
+    }
+  });
+});

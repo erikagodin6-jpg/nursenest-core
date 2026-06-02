@@ -1,0 +1,48 @@
+/* ==========================================================================
+   src/app/styles/marketing/index.css
+   NurseNest Premium Marketing Design System — barrel import
+
+   Import order is load-order significant.
+   Cascade depends on this exact sequence — do not reorder.
+
+   Section ownership:
+     hero.css                 — homepage hero panel, stat tiles, ECG strip
+     header-nav.css           — marketing header glass, nav v4, dark unified
+     header-single-line.css   — desktop nav containment / anti-wrap guards
+     pagespeed-cls-hotfix.css — reserved geometry + PSI stabilization
+     theme-overrides.css      — Blossom/Midnight/Aurora/Ocean colour overrides
+     hub-system.css           — pre-nursing, lessons, hub cards, auth
+     pathway-reading.css      — lesson reading rail, tier-hub hero bands
+     hub-tiers.css            — NP/RN/PN hubs, pricing/paywall, tools+FAQ
+     content-surfaces.css     — lesson detail, analytics, blog
+     footer-seo.css           — footer glass, NCLEX commercial landing
+
+   To add new CSS for a marketing surface, append to the appropriate
+   section file. If a new surface does not fit an existing section,
+   add a new file here and document its ownership boundary.
+   ========================================================================== */
+
+@import "./hero.css";
+@import "./header-nav.css";
+@import "./header-single-line.css";
+@import "./pagespeed-cls-hotfix.css";
+@import "./theme-overrides.css";
+@import "./hub-system.css";
+@import "./pathway-reading.css";
+@import "./hub-tiers.css";
+@import "./blossom-multicolor.css";
+@import "./blossom-mint-polish.css";
+@import "./auth-tokens.css";
+@import "./auth-mint-blossom.css";
+@import "./auth-ocean-premium.css";
+@import "./auth-midnight-premium.css";
+@import "./auth-branding-revamp.css";
+@import "./homepage-branding-revamp.css";
+@import "./homepage-premium-polish-pass.css";
+@import "./homepage-feature-visibility-pass.css";
+@import "./content-surfaces.css";
+@import "./lesson-readability-hotfix.css";
+@import "./lesson-clinical-compact.css";
+@import "./footer-seo.css";
+@import "./readability-theme-hotfix.css";
+@import "./mobile-cls-hotfix.css";

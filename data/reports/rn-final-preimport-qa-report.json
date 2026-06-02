@@ -1,0 +1,238 @@
+{
+  "generatedAt": "2026-04-10T22:21:18.891Z",
+  "sourceOfTruth": {
+    "blueprint": "data/blueprints/rn-content-blueprint.json",
+    "phases": [
+      "data/materialized/rn-phase1-pilot-content.json",
+      "data/materialized/rn-phase2-content.json",
+      "data/materialized/rn-phase3-content.json",
+      "data/materialized/rn-phase4-content.json",
+      "data/materialized/rn-phase5-content.json"
+    ],
+    "totals": "data/reports/rn-full-program-totals.json"
+  },
+  "checks": {
+    "crossPhaseDuplicateStemHashAudit": {
+      "totalQuestionsScanned": 5235,
+      "duplicateStemHashCount": 0,
+      "duplicateFindings": []
+    },
+    "questionToLessonTopicSlugReferentialIntegrity": {
+      "failuresCount": 0,
+      "failures": []
+    },
+    "stagingDryRunImportSimulation": {
+      "mode": "dry-run-no-write",
+      "lessonsWouldInsert": 274,
+      "questionsWouldInsert": 5235,
+      "lessonUniqueIds": 274,
+      "questionUniqueIds": 5235,
+      "conflicts": {
+        "duplicateLessonIdCount": 0,
+        "duplicateQuestionIdCount": 0,
+        "duplicateStemHashCount": 0
+      }
+    },
+    "countReconciliation": {
+      "target": {
+        "topics": 187,
+        "lessons": 274,
+        "questions": 5235,
+        "uniqueTopicSlugs": 187
+      },
+      "actual": {
+        "topics": 187,
+        "lessons": 274,
+        "questions": 5235,
+        "uniqueTopicSlugs": 187
+      },
+      "matches": {
+        "topics": true,
+        "lessons": true,
+        "questions": true,
+        "uniqueTopicSlugs": true
+      }
+    },
+    "ngnSpotReviewSampler": {
+      "requested": 20,
+      "delivered": 20,
+      "availableByType": {
+        "Bowtie": 392,
+        "Matrix": 197,
+        "Trend": 51,
+        "SATA": 1442,
+        "Priority": 706
+      },
+      "sample": [
+        {
+          "questionId": "preoperative-assessment-q-024",
+          "phase": "Phase 3",
+          "topicSlug": "preoperative-assessment",
+          "questionType": "Bowtie",
+          "stemPreview": "(PREOPERATIVE-ASSESSMENT Q024) In a Adult Health / Med-Surg scenario, which nursing action is the best next step for preoperative assessment",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "sickle-cell-disease-q-016",
+          "phase": "Phase 3",
+          "topicSlug": "sickle-cell-disease",
+          "questionType": "Bowtie",
+          "stemPreview": "(SICKLE-CELL-DISEASE Q016) In a Hematology / Oncology scenario, which nursing action is the best next step for sickle cell disease: crisis t",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "clinical-deterioration-rapid-response-q-024",
+          "phase": "Phase 2",
+          "topicSlug": "clinical-deterioration-rapid-response",
+          "questionType": "Bowtie",
+          "stemPreview": "(CLINICAL-DETERIORATION-RAPID-RESPONSE Q024) In a Prioritization scenario, which nursing action is the best next step for recognizing clinic",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "addisons-disease-q-008",
+          "phase": "Phase 3",
+          "topicSlug": "addisons-disease",
+          "questionType": "Bowtie",
+          "stemPreview": "(ADDISONS-DISEASE Q008) In a Endocrine scenario, which nursing action is the best next step for addison's disease and adrenal crisis: recogn",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "standard-precautions-ppe-q-016",
+          "phase": "Phase 1 pilot",
+          "topicSlug": "standard-precautions-ppe",
+          "questionType": "Matrix",
+          "stemPreview": "(STANDARD-PRECAUTIONS-PPE Q016) A nurse is caring for a client in Precautions. Which action is the best next step for standard precautions a",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "multiple-patient-prioritization-q-012",
+          "phase": "Phase 2",
+          "topicSlug": "multiple-patient-prioritization",
+          "questionType": "Matrix",
+          "stemPreview": "(MULTIPLE-PATIENT-PRIORITIZATION Q012) In a Prioritization scenario, which nursing action is the best next step for multiple patient assignm",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "multiple-patient-prioritization-q-004",
+          "phase": "Phase 2",
+          "topicSlug": "multiple-patient-prioritization",
+          "questionType": "Matrix",
+          "stemPreview": "(MULTIPLE-PATIENT-PRIORITIZATION Q004) In a Prioritization scenario, which nursing action is the best next step for multiple patient assignm",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "psychotropic-medications-q-023",
+          "phase": "Phase 2",
+          "topicSlug": "psychotropic-medications",
+          "questionType": "Matrix",
+          "stemPreview": "(PSYCHOTROPIC-MEDICATIONS Q023) In a Pharmacology scenario, which nursing action is the best next step for psychotropic medications: antipsy",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "traumatic-brain-injury-q-016",
+          "phase": "Phase 3",
+          "topicSlug": "traumatic-brain-injury",
+          "questionType": "Trend",
+          "stemPreview": "(TRAUMATIC-BRAIN-INJURY Q016) In a Neuro scenario, which nursing action is the best next step for traumatic brain injury: classification, mo",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "heart-failure-types-q-040",
+          "phase": "Phase 3",
+          "topicSlug": "heart-failure-types",
+          "questionType": "Trend",
+          "stemPreview": "(HEART-FAILURE-TYPES Q040) In a Cardiac scenario, which nursing action is the best next step for heart failure: hfref vs hfpef, compensatory",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "sepsis-management-q-040",
+          "phase": "Phase 3",
+          "topicSlug": "sepsis-management",
+          "questionType": "Trend",
+          "stemPreview": "(SEPSIS-MANAGEMENT Q040) In a Adult Health / Med-Surg scenario, which nursing action is the best next step for sepsis and septic shock recog",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "clinical-deterioration-rapid-response-q-020",
+          "phase": "Phase 2",
+          "topicSlug": "clinical-deterioration-rapid-response",
+          "questionType": "Trend",
+          "stemPreview": "(CLINICAL-DETERIORATION-RAPID-RESPONSE Q020) In a Prioritization scenario, which nursing action is the best next step for recognizing clinic",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "newborn-assessment-q-002",
+          "phase": "Phase 4",
+          "topicSlug": "newborn-assessment",
+          "questionType": "SATA",
+          "stemPreview": "(NEWBORN-ASSESSMENT Q002) In a Maternal Newborn scenario, which nursing action is the best next step for newborn assessment: apgar, physical",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "insulin-administration-q-002",
+          "phase": "Phase 2",
+          "topicSlug": "insulin-administration",
+          "questionType": "SATA",
+          "stemPreview": "(INSULIN-ADMINISTRATION Q002) In a Pharmacology scenario, which nursing action is the best next step for insulin types, onset/peak/duration,",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "antibiotic-classes-q-035",
+          "phase": "Phase 2",
+          "topicSlug": "antibiotic-classes",
+          "questionType": "SATA",
+          "stemPreview": "(ANTIBIOTIC-CLASSES Q035) In a Pharmacology scenario, which nursing action is the best next step for antibiotic classes, mechanisms, and nur",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "congenital-heart-defects-q-030",
+          "phase": "Phase 4",
+          "topicSlug": "congenital-heart-defects",
+          "questionType": "SATA",
+          "stemPreview": "(CONGENITAL-HEART-DEFECTS Q030) In a Pediatrics scenario, which nursing action is the best next step for congenital heart defects: acyanotic",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "child-abuse-recognition-q-006",
+          "phase": "Phase 4",
+          "topicSlug": "child-abuse-recognition",
+          "questionType": "Priority",
+          "stemPreview": "(CHILD-ABUSE-RECOGNITION Q006) In a Pediatrics scenario, which nursing action is the best next step for child abuse recognition and mandator",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "pediatric-type1-diabetes-q-024",
+          "phase": "Phase 4",
+          "topicSlug": "pediatric-type1-diabetes",
+          "questionType": "Priority",
+          "stemPreview": "(PEDIATRIC-TYPE1-DIABETES Q024) In a Pediatrics scenario, which nursing action is the best next step for type 1 diabetes in children and ado",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "mechanical-ventilation-q-023",
+          "phase": "Phase 5",
+          "topicSlug": "mechanical-ventilation",
+          "questionType": "Priority",
+          "stemPreview": "(MECHANICAL-VENTILATION Q023) In an emergency/critical care scenario, which nursing action is the best next step for mechanical ventilation:",
+          "hasPathwayTags": true
+        },
+        {
+          "questionId": "cesarean-section-care-q-003",
+          "phase": "Phase 4",
+          "topicSlug": "cesarean-section-care",
+          "questionType": "Priority",
+          "stemPreview": "(CESAREAN-SECTION-CARE Q003) In a Maternal Newborn scenario, which nursing action is the best next step for cesarean section: indications, p",
+          "hasPathwayTags": true
+        }
+      ]
+    },
+    "miPeBoundaryAssertions": {
+      "acuteMiFirst60Only": true,
+      "myocardialPostAcute": true,
+      "dvtOnlyCardiac": true,
+      "peAcuteRespOnly": true
+    }
+  },
+  "blockersBeforeProductionImport": [],
+  "status": "PASS"
+}

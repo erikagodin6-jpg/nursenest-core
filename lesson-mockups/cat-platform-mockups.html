@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NurseNest CAT Platform — 15 Authenticated Mockups</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;background:#1e293b}
+button,input,select{font-family:inherit}svg{display:block;flex-shrink:0}
+
+/* Chrome */
+.chrome{background:#0f172a;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;border-bottom:1px solid #1e293b}
+.chrome-title{font-size:11px;font-weight:700;color:#e2e8f0;letter-spacing:.06em;text-transform:uppercase}
+.chrome-note{font-size:10px;color:#475569}
+.tabs{background:#161f2e;padding:0 24px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;position:sticky;top:44px;z-index:299;padding-top:8px}
+.tabs::-webkit-scrollbar{display:none}
+.tsep{width:1px;height:16px;background:#334155;margin:0 6px 8px;align-self:center}
+.tab{padding:6px 13px 8px;font-size:10.5px;font-weight:500;color:#64748b;border-radius:5px 5px 0 0;cursor:pointer;white-space:nowrap;font-family:inherit;background:transparent;border:none;transition:.1s}
+.tab:hover{color:#94a3b8}
+.tab.on{color:#0f172a;background:white;font-weight:700}
+
+/* Frames */
+.frame{display:none;width:1440px;min-height:900px;overflow:hidden;background:white;position:relative}
+.frame.mobile-frame{width:390px;height:844px}
+.frame.on{display:block}
+</style>
+</head>
+<body>
+<div class="chrome">
+  <span class="chrome-title">NurseNest · CAT Platform — 15 Authenticated UI Mockups</span>
+  <span class="chrome-note">Ocean · Blossom · Midnight · Mobile · NGN — Production-grade design system</span>
+</div>
+<div class="tabs">
+  <button class="tab on" onclick="show(0)">1 · Ocean Landing</button>
+  <button class="tab" onclick="show(1)">2 · Ocean MCQ Exam</button>
+  <button class="tab" onclick="show(2)">3 · Ocean NGN Case Study</button>
+  <button class="tab" onclick="show(3)">4 · Ocean NGN Bowtie</button>
+  <button class="tab" onclick="show(4)">5 · Ocean Results</button>
+  <div class="tsep"></div>
+  <button class="tab" onclick="show(5)">6 · Mobile Question</button>
+  <button class="tab" onclick="show(6)">7 · Mobile Landing</button>
+  <button class="tab" onclick="show(7)">8 · Mobile Results</button>
+  <div class="tsep"></div>
+  <button class="tab" onclick="show(8)">9 · Blossom Landing</button>
+  <button class="tab" onclick="show(9)">10 · Blossom MCQ</button>
+  <button class="tab" onclick="show(10)">11 · Blossom Results</button>
+  <div class="tsep"></div>
+  <button class="tab" onclick="show(11)">12 · Midnight Landing</button>
+  <button class="tab" onclick="show(12)">13 · Midnight MCQ</button>
+  <button class="tab" onclick="show(13)">14 · Midnight Results</button>
+  <div class="tsep"></div>
+  <button class="tab" onclick="show(14)">15 · NGN Matrix</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 1 · Ocean · CAT Pre-Exam Command Center
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame on" id="f0">
+<style>
+#f0{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif}
+#f0 .nav{height:56px;background:#0d7aaa;display:flex;align-items:center;padding:0 32px;gap:0;position:relative}
+#f0 .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+#f0 .nav-mark{width:28px;height:28px}
+#f0 .nav-wordmark{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.02em}
+#f0 .nav-wordmark span{color:rgba(255,255,255,.7)}
+#f0 .nav-links{display:flex;align-items:center;gap:1px;margin-left:32px}
+#f0 .nav-link{font-size:13px;font-weight:500;color:rgba(255,255,255,.75);padding:7px 12px;border-radius:7px;text-decoration:none}
+#f0 .nav-link:hover{color:#fff;background:rgba(255,255,255,.1)}
+#f0 .nav-link.active{color:#fff;background:rgba(255,255,255,.15);font-weight:600}
+#f0 .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+#f0 .nav-notif{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer}
+#f0 .nav-avatar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);border-radius:10px;padding:4px 12px 4px 6px;cursor:pointer}
+#f0 .nav-avatar-ring{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#0d7aaa}
+#f0 .nav-avatar-name{font-size:12.5px;font-weight:600;color:#fff}
+#f0 .nav-tier{font-size:10px;font-weight:700;color:#0d7aaa;background:#fff;padding:2px 7px;border-radius:99px;letter-spacing:.03em}
+
+#f0 .ctx{height:38px;background:#fff;border-bottom:1px solid #d9f3fa;display:flex;align-items:center;padding:0 32px;gap:16px}
+#f0 .ctx-label{font-size:11.5px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:6px}
+#f0 .ctx-sep{width:1px;height:14px;background:#d0e8f5}
+#f0 .ctx-item{font-size:11.5px;color:#647894;display:flex;align-items:center;gap:5px}
+#f0 .ctx-pill{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:99px}
+#f0 .pill-ready{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+#f0 .pill-adaptive{background:#e6f7fd;color:#0d7aaa;border:1px solid #b8dff7}
+
+#f0 .main{display:grid;grid-template-columns:1fr 420px;gap:0;height:calc(900px - 56px - 38px);overflow:hidden}
+#f0 .launch-col{padding:28px 24px 28px 32px;display:flex;flex-direction:column;gap:16px;overflow:hidden}
+#f0 .analytics-col{padding:28px 32px 28px 8px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+
+/* Launch card */
+#f0 .launch-card{background:#fff;border:1px solid #d0e8f5;border-radius:20px;padding:28px;box-shadow:0 1px 0 rgba(15,23,42,.04),0 12px 36px -16px rgba(6,88,140,.10);flex:1;display:flex;flex-direction:column;gap:20px;position:relative;overflow:hidden}
+#f0 .launch-card::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(600px 300px at 80% -10%,rgba(26,174,224,.06),transparent 60%),radial-gradient(400px 250px at -5% 100%,rgba(13,148,136,.05),transparent 55%)}
+
+#f0 .lc-header{display:flex;align-items:center;justify-content:space-between}
+#f0 .lc-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#647894}
+#f0 .lc-badge{font-size:10.5px;font-weight:600;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:3px 10px;border-radius:99px;display:flex;align-items:center;gap:4px}
+
+#f0 .lc-score-row{display:flex;align-items:center;gap:28px}
+#f0 .score-ring-wrap{flex-shrink:0}
+#f0 .lc-score-detail{flex:1}
+#f0 .lc-score-headline{font-size:28px;font-weight:800;color:#0f172a;letter-spacing:-.03em;line-height:1}
+#f0 .lc-score-sub{font-size:13.5px;color:#455569;margin-top:4px;line-height:1.5}
+#f0 .lc-pass-pill{display:inline-flex;align-items:center;gap:5px;background:#f0fdf4;border:1.5px solid #bbf7d0;color:#166534;font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:99px;margin-top:8px}
+#f0 .lc-stats{display:flex;gap:10px}
+#f0 .lc-stat{background:#f3f8fc;border:1px solid #d0e8f5;border-radius:10px;padding:10px 14px;flex:1}
+#f0 .lc-stat-n{font-size:17px;font-weight:800;color:#0f172a;letter-spacing:-.02em}
+#f0 .lc-stat-l{font-size:10.5px;color:#647894;margin-top:2px;font-weight:500}
+
+/* Waveform chart area */
+#f0 .lc-chart{background:#f8fcff;border:1px solid #d0e8f5;border-radius:14px;padding:14px 16px}
+#f0 .lc-chart-label{font-size:10.5px;font-weight:600;color:#647894;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+
+#f0 .lc-pacing{background:linear-gradient(135deg,rgba(13,122,170,.06),rgba(13,148,136,.04));border:1px solid #d0e8f5;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+#f0 .lc-pacing-ico{width:36px;height:36px;background:#e6f7fd;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#f0 .lc-pacing-t{font-size:13.5px;font-weight:600;color:#0f172a}
+#f0 .lc-pacing-s{font-size:12px;color:#647894;margin-top:2px}
+
+#f0 .lc-btns{display:flex;flex-direction:column;gap:8px;margin-top:auto}
+#f0 .btn-launch{background:#0d7aaa;color:#fff;font-size:15px;font-weight:700;padding:14px 24px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px -4px rgba(13,122,170,.4)}
+#f0 .btn-resume{background:transparent;color:#0d7aaa;font-size:13.5px;font-weight:600;padding:10px 24px;border-radius:10px;border:1.5px solid #b8dff7;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+
+/* Analytics cards */
+#f0 .ac{background:#fff;border:1px solid #d0e8f5;border-radius:16px;padding:16px 18px;box-shadow:0 1px 0 rgba(15,23,42,.03),0 6px 20px -10px rgba(6,88,140,.07)}
+#f0 .ac-title{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#647894;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+#f0 .ac-title span{font-size:10px;font-weight:500;text-transform:none;letter-spacing:0;color:#1aaee0}
+#f0 .domain-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+#f0 .domain-row:last-child{margin-bottom:0}
+#f0 .domain-name{font-size:12px;font-weight:500;color:#455569;width:130px;flex-shrink:0}
+#f0 .domain-bar-wrap{flex:1;height:6px;background:#eef4fa;border-radius:99px;overflow:hidden}
+#f0 .domain-bar{height:100%;border-radius:99px}
+#f0 .domain-pct{font-size:11.5px;font-weight:700;color:#0f172a;width:34px;text-align:right;flex-shrink:0}
+#f0 .bar-warn{background:#f97316}
+#f0 .bar-ok{background:#1aaee0}
+#f0 .bar-good{background:#16a34a}
+#f0 .bar-mid{background:#d97706}
+#f0 .ngn-row{display:flex;align-items:center;gap:10px}
+#f0 .ngn-ring{width:52px;height:52px;flex-shrink:0}
+#f0 .ngn-detail{flex:1}
+#f0 .ngn-n{font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-.02em}
+#f0 .ngn-l{font-size:11.5px;color:#647894}
+#f0 .ngn-pill{font-size:10.5px;font-weight:600;background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:2px 8px;border-radius:99px;margin-top:4px;display:inline-block}
+</style>
+
+<!-- Nav -->
+<nav class="nav">
+  <a class="nav-logo">
+    <svg class="nav-mark" viewBox="0 0 28 28">
+      <path d="M5 24 C5 17 10.5 12 14 12 S23 17 23 24 Z" fill="rgba(255,255,255,0.9)"/>
+      <path d="M8 24 C8 19.5 10.8 16 14 16 S20 19.5 20 24 Z" fill="#0d7aaa"/>
+    </svg>
+    <span class="nav-wordmark">Nurse<span>Nest</span></span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link">Dashboard</a>
+    <a class="nav-link">Flashcards</a>
+    <a class="nav-link">Practice</a>
+    <a class="nav-link active">CAT Exam</a>
+    <a class="nav-link">Modules</a>
+    <a class="nav-link">CNPLE</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-notif">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </div>
+    <div class="nav-avatar">
+      <div class="nav-avatar-ring">JM</div>
+      <span class="nav-avatar-name">Jasmeen M.</span>
+      <span class="nav-tier">PRO</span>
+    </div>
+  </div>
+</nav>
+
+<!-- Context strip -->
+<div class="ctx">
+  <div class="ctx-label">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0d7aaa" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    NCLEX-RN CAT Exam
+  </div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item"><span class="ctx-pill pill-adaptive">⚡ Adaptive Testing</span></div>
+  <div class="ctx-item"><span class="ctx-pill pill-ready">✓ Ready</span></div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item">Last attempt: May 14 · 82% · 75 questions</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item">Est. 75–145 questions · ~90 min</div>
+  <div style="margin-left:auto;font-size:11px;color:#1aaee0;font-weight:600;cursor:pointer">View History ↗</div>
+</div>
+
+<!-- Main -->
+<div class="main">
+  <!-- Launch column -->
+  <div class="launch-col">
+    <div class="launch-card">
+      <div class="lc-header">
+        <div class="lc-title">Adaptive Readiness Intelligence</div>
+        <div class="lc-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Adaptive · Session 4
+        </div>
+      </div>
+
+      <div class="lc-score-row">
+        <div class="score-ring-wrap">
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="44" fill="none" stroke="#eef4fa" stroke-width="9"/>
+            <circle cx="55" cy="55" r="44" fill="none" stroke="#1aaee0" stroke-width="9" stroke-linecap="round"
+              stroke-dasharray="276.5" stroke-dashoffset="66" transform="rotate(-90 55 55)"/>
+            <text x="55" y="51" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="26" font-weight="800" fill="#0f172a">78</text>
+            <text x="55" y="66" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" font-weight="600" fill="#647894">READINESS</text>
+          </svg>
+        </div>
+        <div class="lc-score-detail">
+          <div class="lc-score-headline">Likely to Pass</div>
+          <div class="lc-score-sub">Your adaptive score places you in the<br><strong style="color:#0d7aaa">high-confidence passing range</strong> for NCLEX-RN.</div>
+          <div class="lc-pass-pill">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Passing Probability: High (78–88%)
+          </div>
+        </div>
+      </div>
+
+      <div class="lc-stats">
+        <div class="lc-stat"><div class="lc-stat-n">847</div><div class="lc-stat-l">Questions answered</div></div>
+        <div class="lc-stat"><div class="lc-stat-n">62%</div><div class="lc-stat-l">Correct average</div></div>
+        <div class="lc-stat"><div class="lc-stat-n">3.2×</div><div class="lc-stat-l">Sessions / week</div></div>
+        <div class="lc-stat"><div class="lc-stat-n" style="color:#16a34a">↑6%</div><div class="lc-stat-l">This week</div></div>
+      </div>
+
+      <div class="lc-chart">
+        <div class="lc-chart-label">Adaptive Difficulty Curve — Last 5 Sessions</div>
+        <svg width="100%" height="62" viewBox="0 0 540 62" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="waveGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1aaee0" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#1aaee0" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0 50 L90 44 L180 38 L270 32 L360 28 L450 22 L540 18 L540 62 L0 62Z" fill="url(#waveGrad)"/>
+          <path d="M0 50 L90 44 L180 38 L270 32 L360 28 L450 22 L540 18" fill="none" stroke="#1aaee0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="0" cy="50" r="4" fill="#1aaee0"/>
+          <circle cx="90" cy="44" r="4" fill="#1aaee0"/>
+          <circle cx="180" cy="38" r="4" fill="#1aaee0"/>
+          <circle cx="270" cy="32" r="4" fill="#1aaee0"/>
+          <circle cx="360" cy="28" r="4" fill="#1aaee0"/>
+          <circle cx="450" cy="22" r="4" fill="#1aaee0"/>
+          <circle cx="540" cy="18" r="5" fill="#0d7aaa"/>
+          <text x="0" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 2</text>
+          <text x="78" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 6</text>
+          <text x="166" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 9</text>
+          <text x="256" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 12</text>
+          <text x="346" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 14</text>
+          <text x="436" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 16</text>
+          <text x="506" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#0d7aaa" font-weight="700">Today</text>
+        </svg>
+      </div>
+
+      <div class="lc-pacing">
+        <div class="lc-pacing-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d7aaa" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="lc-pacing-t">Recommended: 75-question CAT today</div>
+          <div class="lc-pacing-s">Based on your 3.2 sessions/week cadence and readiness trajectory — optimal timing.</div>
+        </div>
+      </div>
+
+      <div class="lc-btns">
+        <button class="btn-launch">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Launch CAT Exam
+        </button>
+        <button class="btn-resume">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Resume last session — May 16 · Q 47 of 75
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analytics column -->
+  <div class="analytics-col">
+    <div class="ac">
+      <div class="ac-title">Weak Systems <span>Study these first ↗</span></div>
+      <div class="domain-row"><div class="domain-name">Cardiovascular</div><div class="domain-bar-wrap"><div class="domain-bar bar-warn" style="width:62%"></div></div><div class="domain-pct" style="color:#f97316">62%</div></div>
+      <div class="domain-row"><div class="domain-name">Respiratory</div><div class="domain-bar-wrap"><div class="domain-bar bar-warn" style="width:58%"></div></div><div class="domain-pct" style="color:#f97316">58%</div></div>
+      <div class="domain-row"><div class="domain-name">Renal / Fluids</div><div class="domain-bar-wrap"><div class="domain-bar bar-mid" style="width:64%"></div></div><div class="domain-pct" style="color:#d97706">64%</div></div>
+    </div>
+
+    <div class="ac">
+      <div class="ac-title">Your Strengths <span>On track ✓</span></div>
+      <div class="domain-row"><div class="domain-name">Psych / Mental Health</div><div class="domain-bar-wrap"><div class="domain-bar bar-good" style="width:91%"></div></div><div class="domain-pct" style="color:#16a34a">91%</div></div>
+      <div class="domain-row"><div class="domain-name">Pharmacology</div><div class="domain-bar-wrap"><div class="domain-bar bar-good" style="width:88%"></div></div><div class="domain-pct" style="color:#16a34a">88%</div></div>
+      <div class="domain-row"><div class="domain-name">OB / Newborn Care</div><div class="domain-bar-wrap"><div class="domain-bar bar-good" style="width:83%"></div></div><div class="domain-pct" style="color:#16a34a">83%</div></div>
+    </div>
+
+    <div class="ac">
+      <div class="ac-title">NGN Readiness</div>
+      <div class="ngn-row">
+        <svg class="ngn-ring" viewBox="0 0 52 52">
+          <circle cx="26" cy="26" r="20" fill="none" stroke="#eef4fa" stroke-width="7"/>
+          <circle cx="26" cy="26" r="20" fill="none" stroke="#d97706" stroke-width="7" stroke-linecap="round" stroke-dasharray="125.6" stroke-dashoffset="75" transform="rotate(-90 26 26)"/>
+          <text x="26" y="31" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="800" fill="#0f172a">42%</text>
+        </svg>
+        <div class="ngn-detail">
+          <div class="ngn-n">NGN Focus Needed</div>
+          <div class="ngn-l">Next-Generation Nursing questions scored below your NCLEX average</div>
+          <div class="ngn-pill">⚠ Prioritize NGN practice</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ac">
+      <div class="ac-title">Recent CAT Trend <span style="color:#16a34a">↑ Improving</span></div>
+      <svg width="100%" height="48" viewBox="0 0 330 48">
+        <polyline points="0,40 66,34 132,30 198,24 264,18 330,14" fill="none" stroke="#1aaee0" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="0" cy="40" r="3" fill="#1aaee0"/>
+        <circle cx="66" cy="34" r="3" fill="#1aaee0"/>
+        <circle cx="132" cy="30" r="3" fill="#1aaee0"/>
+        <circle cx="198" cy="24" r="3" fill="#1aaee0"/>
+        <circle cx="264" cy="18" r="3" fill="#1aaee0"/>
+        <circle cx="330" cy="14" r="4" fill="#0d7aaa"/>
+        <text x="310" y="10" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#16a34a">+6%</text>
+      </svg>
+      <div style="font-size:11.5px;color:#647894;margin-top:6px">Scores: 62% → 68% → 72% → 74% → 76% → 78%</div>
+    </div>
+
+    <div class="ac" style="background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border-color:#bbf7d0">
+      <div class="ac-title" style="color:#15803d">Confidence Stability</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:22px;font-weight:800;color:#16a34a">Stable ↑</div>
+        <div style="font-size:12px;color:#455569;flex:1">Your answer pattern shows consistent improvement across all sessions. Low variance in response time.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 2 · Ocean · Active CAT Exam — Standard MCQ
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f1">
+<style>
+#f1{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif}
+#f1 .exam-header{height:52px;background:#fff;border-bottom:1.5px solid #d9f3fa;display:flex;align-items:center;padding:0 24px;gap:0;box-shadow:0 2px 12px -6px rgba(6,88,140,.1);position:relative;z-index:10}
+#f1 .eh-left{display:flex;align-items:center;gap:10px;min-width:220px}
+#f1 .eh-logo{font-size:14px;font-weight:800;color:#0d7aaa;letter-spacing:-.01em}
+#f1 .eh-mode{font-size:10.5px;font-weight:700;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:3px 9px;border-radius:99px;letter-spacing:.03em}
+#f1 .eh-pulse{width:7px;height:7px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.2);animation:none}
+#f1 .eh-center{flex:1;display:flex;align-items:center;justify-content:center;gap:14px}
+#f1 .eh-qnum{font-size:12.5px;font-weight:700;color:#0f172a}
+#f1 .eh-progress-wrap{width:180px;height:6px;background:#eef4fa;border-radius:99px;overflow:hidden}
+#f1 .eh-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#1aaee0,#0d9488);width:30.6%}
+#f1 .eh-qlabel{font-size:11px;color:#647894;font-weight:500}
+#f1 .eh-adaptive{font-size:10.5px;font-weight:600;color:#0d7aaa;background:#e6f7fd;padding:2px 8px;border-radius:6px;display:flex;align-items:center;gap:3px}
+#f1 .eh-right{display:flex;align-items:center;gap:6px;min-width:220px;justify-content:flex-end}
+#f1 .eh-timer{font-size:14px;font-weight:700;color:#0f172a;font-variant-numeric:tabular-nums;letter-spacing:.03em;background:#f3f8fc;border:1px solid #d0e8f5;padding:5px 12px;border-radius:8px}
+#f1 .eh-btn{width:34px;height:34px;border-radius:8px;background:#f3f8fc;border:1px solid #d0e8f5;display:flex;align-items:center;justify-content:center;cursor:pointer}
+
+#f1 .q-area{max-width:740px;margin:0 auto;padding:32px 24px;height:calc(900px - 52px);overflow:hidden;display:flex;flex-direction:column;gap:20px}
+#f1 .q-meta{display:flex;align-items:center;gap:8px}
+#f1 .q-badge{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:3px 10px;border-radius:99px}
+#f1 .q-diff{display:flex;gap:2px;align-items:center}
+#f1 .q-diff-dot{width:8px;height:8px;border-radius:2px}
+#f1 .q-card{background:#fff;border:1.5px solid #d0e8f5;border-radius:18px;padding:26px 28px;box-shadow:0 1px 0 rgba(15,23,42,.03),0 8px 28px -12px rgba(6,88,140,.08)}
+#f1 .q-stem{font-size:15px;line-height:1.7;color:#0f172a;font-weight:400}
+#f1 .q-stem strong{font-weight:700}
+#f1 .q-opts{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+#f1 .q-opt{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:1.5px solid #d0e8f5;border-radius:12px;cursor:pointer;transition:.1s;background:#fff}
+#f1 .q-opt:hover{border-color:#1aaee0;background:#f8fcff}
+#f1 .q-opt.selected{border-color:#0d7aaa;background:#e6f7fd;box-shadow:0 0 0 3px rgba(26,174,224,.12)}
+#f1 .q-opt-letter{width:24px;height:24px;border-radius:6px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#647894;flex-shrink:0;margin-top:1px}
+#f1 .q-opt.selected .q-opt-letter{background:#0d7aaa;color:#fff}
+#f1 .q-opt-text{font-size:13.5px;color:#455569;line-height:1.55;flex:1}
+#f1 .q-opt.selected .q-opt-text{color:#0f172a;font-weight:500}
+
+#f1 .q-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:16px;border-top:1px solid #eef4fa}
+#f1 .q-flag{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:#647894;cursor:pointer;padding:8px 12px;border-radius:8px}
+#f1 .q-flag:hover{background:#f3f8fc;color:#455569}
+#f1 .q-nav-btns{display:flex;gap:8px}
+#f1 .btn-prev{font-size:13px;font-weight:600;color:#647894;background:#f3f8fc;border:1px solid #d0e8f5;padding:9px 18px;border-radius:10px;cursor:pointer}
+#f1 .btn-submit{font-size:13px;font-weight:700;color:#fff;background:#0d7aaa;padding:9px 22px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 2px 10px -3px rgba(13,122,170,.4)}
+
+#f1 .utility-rail{position:absolute;right:0;top:52px;width:52px;height:calc(900px - 52px);background:#fff;border-left:1px solid #d0e8f5;display:flex;flex-direction:column;align-items:center;padding-top:16px;gap:4px}
+#f1 .ur-btn{width:36px;height:36px;border-radius:9px;background:#f3f8fc;border:1px solid #eef4fa;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#f1 .ur-btn:hover{background:#e6f7fd;border-color:#b8dff7}
+#f1 .ur-sep{width:24px;height:1px;background:#eef4fa;margin:4px 0}
+</style>
+
+<div class="exam-header">
+  <div class="eh-left">
+    <span class="eh-logo">NurseNest</span>
+    <span class="eh-mode">CAT Exam</span>
+    <div class="eh-pulse"></div>
+  </div>
+  <div class="eh-center">
+    <span class="eh-qnum">Question 23</span>
+    <div class="eh-progress-wrap"><div class="eh-progress-fill"></div></div>
+    <span class="eh-qlabel">of 75</span>
+    <span class="eh-adaptive">⚡ Adaptive ↕</span>
+  </div>
+  <div class="eh-right">
+    <div class="eh-timer">00:42:15</div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M9 11H4l9-9 9 9h-5v8a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-8z"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
+  </div>
+</div>
+
+<div style="position:relative;height:848px;overflow:hidden">
+  <div class="q-area">
+    <div class="q-meta">
+      <span class="q-badge">Cardiovascular &amp; Oxygenation</span>
+      <div class="q-diff">
+        <div class="q-diff-dot" style="background:#e11d48"></div>
+        <div class="q-diff-dot" style="background:#e11d48"></div>
+        <div class="q-diff-dot" style="background:#e11d48"></div>
+        <div class="q-diff-dot" style="background:#e11d48"></div>
+        <div class="q-diff-dot" style="background:#eef4fa"></div>
+      </div>
+      <span style="font-size:11px;color:#647894;font-weight:500">Hard · Adaptive priority</span>
+    </div>
+
+    <div class="q-card">
+      <div class="q-stem">
+        A <strong>68-year-old client</strong> is admitted with an acute heart failure exacerbation. Assessment reveals: HR 104 bpm, BP 158/92 mmHg, RR 22/min, SpO₂ 92% on room air, bilateral crackles to mid-lung fields, 2+ pitting edema bilateral lower extremities, and jugular venous distension. Current medications include lisinopril 10 mg daily and metoprolol 25 mg bid. The provider has been contacted. <strong>Which action should the nurse implement FIRST?</strong>
+      </div>
+      <div class="q-opts">
+        <div class="q-opt">
+          <div class="q-opt-letter">A</div>
+          <div class="q-opt-text">Administer furosemide 40 mg IV as ordered to relieve acute fluid overload symptoms</div>
+        </div>
+        <div class="q-opt selected">
+          <div class="q-opt-letter">B</div>
+          <div class="q-opt-text">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</div>
+        </div>
+        <div class="q-opt">
+          <div class="q-opt-letter">C</div>
+          <div class="q-opt-text">Obtain a 12-lead ECG and document the cardiac rhythm for provider review</div>
+        </div>
+        <div class="q-opt">
+          <div class="q-opt-letter">D</div>
+          <div class="q-opt-text">Increase IV fluid rate to 125 mL/hr to maintain adequate cardiac preload and perfusion pressure</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-bottom">
+      <div class="q-flag">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        Flag for review
+      </div>
+      <div style="font-size:11.5px;color:#94a3b8">← A–D to select · Enter to confirm</div>
+      <div class="q-nav-btns">
+        <button class="btn-prev">← Previous</button>
+        <button class="btn-submit">Submit Answer →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="utility-rail">
+    <div class="ur-btn" title="Calculator"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
+    <div class="ur-btn" title="Highlight"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+    <div class="ur-btn" title="Strikeout"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><path d="M16 6H8c-1.1 0-2 .9-2 2s.9 2 2 2h8c1.1 0 2 .9 2 2s-.9 2-2 2H8"/></svg></div>
+    <div class="ur-sep"></div>
+    <div class="ur-btn" title="Notes"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+    <div class="ur-btn" title="Lab Values"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/><path d="M8 16v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-5"/></svg></div>
+    <div class="ur-sep"></div>
+    <div class="ur-btn" title="Progress Navigator"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 3 · Ocean · NGN Case Study + Exhibit Tabs
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f2">
+<style>
+#f2{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif}
+#f2 .exam-header{height:52px;background:#fff;border-bottom:1.5px solid #d9f3fa;display:flex;align-items:center;padding:0 24px;gap:0;box-shadow:0 2px 12px -6px rgba(6,88,140,.1)}
+#f2 .eh-left{display:flex;align-items:center;gap:10px;min-width:240px}
+#f2 .eh-logo{font-size:14px;font-weight:800;color:#0d7aaa}
+#f2 .eh-mode{font-size:10.5px;font-weight:700;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:3px 9px;border-radius:99px}
+#f2 .eh-ngn{font-size:10.5px;font-weight:700;color:#7c3aed;background:#f5f0fe;border:1px solid #ddd6fe;padding:3px 9px;border-radius:99px}
+#f2 .eh-center{flex:1;display:flex;align-items:center;justify-content:center;gap:12px}
+#f2 .eh-case{font-size:12.5px;font-weight:700;color:#0f172a}
+#f2 .eh-case-prog{display:flex;gap:4px;align-items:center}
+#f2 .cp-dot{width:8px;height:8px;border-radius:50%}
+#f2 .cp-dot.done{background:#16a34a}
+#f2 .cp-dot.active{background:#0d7aaa}
+#f2 .cp-dot.todo{background:#d0e8f5}
+#f2 .eh-right{display:flex;align-items:center;gap:6px;min-width:220px;justify-content:flex-end}
+#f2 .eh-timer{font-size:14px;font-weight:700;color:#0f172a;font-variant-numeric:tabular-nums;background:#f3f8fc;border:1px solid #d0e8f5;padding:5px 12px;border-radius:8px}
+#f2 .eh-btn{width:34px;height:34px;border-radius:8px;background:#f3f8fc;border:1px solid #d0e8f5;display:flex;align-items:center;justify-content:center}
+
+#f2 .case-scenario{background:#fff;border-bottom:1px solid #d0e8f5;padding:10px 24px;font-size:12.5px;color:#455569;display:flex;align-items:center;gap:12px}
+#f2 .case-scenario strong{color:#0f172a}
+#f2 .case-chip{font-size:10.5px;font-weight:600;background:#f5f0fe;border:1px solid #ddd6fe;color:#7c3aed;padding:2px 9px;border-radius:99px}
+
+#f2 .main{display:grid;grid-template-columns:420px 1fr;height:calc(900px - 52px - 40px);overflow:hidden}
+
+#f2 .exhibit-panel{background:#fff;border-right:1.5px solid #d0e8f5;display:flex;flex-direction:column}
+#f2 .ep-header{padding:14px 18px 0;border-bottom:1px solid #eef4fa}
+#f2 .ep-title{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#647894;margin-bottom:10px}
+#f2 .ep-tabs{display:flex;gap:2px}
+#f2 .ep-tab{padding:7px 13px;font-size:12px;font-weight:500;color:#647894;border-radius:8px 8px 0 0;cursor:pointer;border:1px solid transparent;border-bottom:none;background:transparent}
+#f2 .ep-tab:hover{background:#f8fcff}
+#f2 .ep-tab.active{background:#fff;color:#0d7aaa;font-weight:600;border-color:#d0e8f5;border-bottom-color:#fff;position:relative;z-index:1;margin-bottom:-1px}
+#f2 .ep-tab .new-badge{width:6px;height:6px;border-radius:50%;background:#e11d48;display:inline-block;margin-left:4px;vertical-align:middle}
+
+#f2 .ep-content{flex:1;padding:16px 18px;overflow:auto}
+#f2 .ep-section{margin-bottom:16px}
+#f2 .ep-section-title{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #eef4fa}
+#f2 .lab-row{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:6px;font-size:12.5px}
+#f2 .lab-row:hover{background:#f8fcff}
+#f2 .lab-name{color:#455569;font-weight:500}
+#f2 .lab-val{font-weight:700;color:#0f172a;font-variant-numeric:tabular-nums}
+#f2 .lab-ref{font-size:10.5px;color:#94a3b8;margin-left:6px}
+#f2 .lab-flag{font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:6px}
+#f2 .flag-low{background:#fff1f2;color:#e11d48}
+#f2 .flag-high{background:#fffbeb;color:#d97706}
+#f2 .flag-crit{background:#fee2e2;color:#dc2626;font-size:9px}
+
+#f2 .q-panel{display:flex;flex-direction:column;padding:24px 28px;gap:16px}
+#f2 .qp-type{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#7c3aed;background:#f5f0fe;border:1px solid #ddd6fe;padding:3px 10px;border-radius:99px;display:inline-flex;align-items:center;gap:5px;align-self:flex-start}
+#f2 .qp-num{font-size:11px;font-weight:600;color:#647894;margin-bottom:4px}
+#f2 .qp-stem{font-size:14.5px;line-height:1.65;color:#0f172a;font-weight:400}
+#f2 .qp-stem strong{font-weight:700}
+#f2 .qp-instruction{font-size:12px;color:#7c3aed;font-weight:600;font-style:italic;margin-top:4px}
+#f2 .sata-opts{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+#f2 .sata-opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:1.5px solid #d0e8f5;border-radius:10px;cursor:pointer;background:#fff}
+#f2 .sata-opt.checked{border-color:#0d7aaa;background:#e6f7fd}
+#f2 .sata-check{width:18px;height:18px;border-radius:4px;border:1.5px solid #b8d9ef;background:#fff;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center}
+#f2 .sata-opt.checked .sata-check{background:#0d7aaa;border-color:#0d7aaa}
+#f2 .sata-text{font-size:13px;color:#455569;line-height:1.5}
+#f2 .sata-opt.checked .sata-text{color:#0f172a;font-weight:500}
+#f2 .qp-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:16px;border-top:1px solid #eef4fa}
+#f2 .btn-next-case{font-size:13px;font-weight:700;color:#fff;background:#0d7aaa;padding:9px 22px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 2px 10px -3px rgba(13,122,170,.35)}
+</style>
+
+<div class="exam-header">
+  <div class="eh-left">
+    <span class="eh-logo">NurseNest</span>
+    <span class="eh-mode">CAT Exam</span>
+    <span class="eh-ngn">NGN Case Study</span>
+  </div>
+  <div class="eh-center">
+    <span class="eh-case">Mrs. Park, 71F · Respiratory</span>
+    <div class="eh-case-prog">
+      <div class="cp-dot done"></div><div class="cp-dot done"></div><div class="cp-dot active"></div><div class="cp-dot todo"></div><div class="cp-dot todo"></div><div class="cp-dot todo"></div>
+    </div>
+    <span style="font-size:11.5px;color:#647894">Q 3 of 6</span>
+  </div>
+  <div class="eh-right">
+    <div class="eh-timer">01:12:44</div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></div>
+  </div>
+</div>
+
+<div class="case-scenario">
+  <span><strong>Mrs. Helena Park</strong>, 71-year-old female, admitted to the med-surg unit with 3-day history of progressive dyspnea, productive cough, and fever. PMH: COPD (GOLD Stage II), HTN, Type 2 DM. Current vitals: T 38.7°C, HR 92, BP 142/88, RR 24, SpO₂ 89% on 2L NC.</span>
+  <span class="case-chip">Active Case · 6 Questions</span>
+</div>
+
+<div class="main">
+  <div class="exhibit-panel">
+    <div class="ep-header">
+      <div class="ep-title">Exhibit Panel</div>
+      <div class="ep-tabs">
+        <div class="ep-tab">H&amp;P</div>
+        <div class="ep-tab">Vital Signs</div>
+        <div class="ep-tab active">Lab Results<span class="new-badge"></span></div>
+        <div class="ep-tab">Imaging</div>
+        <div class="ep-tab">Medications</div>
+      </div>
+    </div>
+    <div class="ep-content">
+      <div class="ep-section">
+        <div class="ep-section-title">Complete Blood Count</div>
+        <div class="lab-row"><span class="lab-name">WBC</span><span><span class="lab-val">14.2</span><span class="lab-ref">4.5–11.0 ×10³/µL</span></span><span class="lab-flag flag-high">↑ HIGH</span></div>
+        <div class="lab-row"><span class="lab-name">Hemoglobin</span><span><span class="lab-val">10.8</span><span class="lab-ref">12.0–16.0 g/dL</span></span><span class="lab-flag flag-low">↓ LOW</span></div>
+        <div class="lab-row"><span class="lab-name">Hematocrit</span><span><span class="lab-val">32%</span><span class="lab-ref">36–46%</span></span><span class="lab-flag flag-low">↓ LOW</span></div>
+        <div class="lab-row"><span class="lab-name">Platelets</span><span><span class="lab-val">218</span><span class="lab-ref">150–400 ×10³/µL</span></span></div>
+        <div class="lab-row"><span class="lab-name">Neutrophils</span><span><span class="lab-val">88%</span><span class="lab-ref">50–70%</span></span><span class="lab-flag flag-high">↑ HIGH</span></div>
+      </div>
+      <div class="ep-section">
+        <div class="ep-section-title">Basic Metabolic Panel</div>
+        <div class="lab-row"><span class="lab-name">Sodium</span><span><span class="lab-val">136</span><span class="lab-ref">136–145 mEq/L</span></span></div>
+        <div class="lab-row"><span class="lab-name">Potassium</span><span><span class="lab-val">3.1</span><span class="lab-ref">3.5–5.0 mEq/L</span></span><span class="lab-flag flag-crit">⚠ CRIT LOW</span></div>
+        <div class="lab-row"><span class="lab-name">BUN</span><span><span class="lab-val">28</span><span class="lab-ref">7–20 mg/dL</span></span><span class="lab-flag flag-high">↑ HIGH</span></div>
+        <div class="lab-row"><span class="lab-name">Creatinine</span><span><span class="lab-val">1.4</span><span class="lab-ref">0.6–1.2 mg/dL</span></span><span class="lab-flag flag-high">↑ HIGH</span></div>
+        <div class="lab-row"><span class="lab-name">Glucose</span><span><span class="lab-val">188</span><span class="lab-ref">70–100 mg/dL</span></span><span class="lab-flag flag-high">↑ HIGH</span></div>
+      </div>
+      <div class="ep-section">
+        <div class="ep-section-title">Arterial Blood Gas</div>
+        <div class="lab-row"><span class="lab-name">pH</span><span><span class="lab-val">7.32</span><span class="lab-ref">7.35–7.45</span></span><span class="lab-flag flag-low">↓ LOW</span></div>
+        <div class="lab-row"><span class="lab-name">PaCO₂</span><span><span class="lab-val">52</span><span class="lab-ref">35–45 mmHg</span></span><span class="lab-flag flag-high">↑ HIGH</span></div>
+        <div class="lab-row"><span class="lab-name">PaO₂</span><span><span class="lab-val">58</span><span class="lab-ref">80–100 mmHg</span></span><span class="lab-flag flag-crit">⚠ CRIT LOW</span></div>
+        <div class="lab-row"><span class="lab-name">HCO₃⁻</span><span><span class="lab-val">26</span><span class="lab-ref">22–26 mEq/L</span></span></div>
+        <div class="lab-row"><span class="lab-name">SaO₂</span><span><span class="lab-val">89%</span><span class="lab-ref">95–100%</span></span><span class="lab-flag flag-crit">⚠ CRIT LOW</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-panel">
+    <div>
+      <span class="qp-type">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        SATA — Select All That Apply
+      </span>
+    </div>
+    <div>
+      <div class="qp-num">Question 3 of 6 · NGN Case Study</div>
+      <div class="qp-stem">Based on <strong>Mrs. Park's laboratory results and clinical presentation</strong>, which findings require <strong>priority nursing intervention</strong>? Select all that apply.</div>
+      <div class="qp-instruction">Select all correct responses. There is no partial credit.</div>
+    </div>
+    <div class="sata-opts">
+      <div class="sata-opt checked">
+        <div class="sata-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="sata-text">Critically low PaO₂ of 58 mmHg indicating respiratory failure requiring immediate oxygen titration</div>
+      </div>
+      <div class="sata-opt checked">
+        <div class="sata-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="sata-text">Critical hypokalemia (K⁺ 3.1 mEq/L) with risk of cardiac dysrhythmia requiring immediate notification</div>
+      </div>
+      <div class="sata-opt">
+        <div class="sata-check"></div>
+        <div class="sata-text">Elevated WBC count of 14.2 indicating systemic infection requiring blood culture collection</div>
+      </div>
+      <div class="sata-opt">
+        <div class="sata-check"></div>
+        <div class="sata-text">Mildly elevated BUN/Creatinine suggesting dehydration requiring increased IV fluid rate</div>
+      </div>
+      <div class="sata-opt">
+        <div class="sata-check"></div>
+        <div class="sata-text">Hemoglobin of 10.8 g/dL indicating anemia requiring urgent packed red blood cell transfusion</div>
+      </div>
+    </div>
+    <div class="qp-bottom">
+      <span style="font-size:11.5px;color:#647894">2 selected · Select all that apply</span>
+      <div style="display:flex;gap:8px">
+        <button style="font-size:13px;font-weight:600;color:#647894;background:#f3f8fc;border:1px solid #d0e8f5;padding:9px 18px;border-radius:10px;cursor:pointer">← Previous</button>
+        <button class="btn-next-case">Next Question →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 4 · Ocean · NGN Bowtie Question
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f3">
+<style>
+#f3{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif}
+#f3 .exam-header{height:52px;background:#fff;border-bottom:1.5px solid #d9f3fa;display:flex;align-items:center;padding:0 24px;gap:0;box-shadow:0 2px 12px -6px rgba(6,88,140,.1)}
+#f3 .eh-left{display:flex;align-items:center;gap:10px;min-width:280px}
+#f3 .eh-logo{font-size:14px;font-weight:800;color:#0d7aaa}
+#f3 .eh-mode{font-size:10.5px;font-weight:700;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:3px 9px;border-radius:99px}
+#f3 .eh-ngn{font-size:10.5px;font-weight:700;color:#7c3aed;background:#f5f0fe;border:1px solid #ddd6fe;padding:3px 9px;border-radius:99px}
+#f3 .eh-bowtie{font-size:10.5px;font-weight:700;color:#0d9488;background:#f0fdfa;border:1px solid #99f6e4;padding:3px 9px;border-radius:99px}
+#f3 .eh-center{flex:1;display:flex;align-items:center;justify-content:center;gap:12px}
+#f3 .eh-right{display:flex;align-items:center;gap:6px;min-width:240px;justify-content:flex-end}
+#f3 .eh-timer{font-size:14px;font-weight:700;color:#0f172a;font-variant-numeric:tabular-nums;background:#f3f8fc;border:1px solid #d0e8f5;padding:5px 12px;border-radius:8px}
+#f3 .eh-btn{width:34px;height:34px;border-radius:8px;background:#f3f8fc;border:1px solid #d0e8f5;display:flex;align-items:center;justify-content:center}
+
+#f3 .content{padding:24px 32px;height:calc(900px - 52px);overflow:hidden;display:flex;flex-direction:column;gap:16px}
+#f3 .bt-header{text-align:center}
+#f3 .bt-type{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0d9488;background:#f0fdfa;border:1px solid #99f6e4;padding:3px 12px;border-radius:99px;display:inline-block;margin-bottom:8px}
+#f3 .bt-title{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:4px}
+#f3 .bt-instruction{font-size:13px;color:#647894}
+
+#f3 .bowtie{display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:start;flex:1}
+#f3 .bt-col{display:flex;flex-direction:column;gap:10px}
+#f3 .bt-col-title{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:7px 14px;border-radius:8px;text-align:center;margin-bottom:4px}
+#f3 .bt-col-title.actions{background:#e6f7fd;color:#0d7aaa}
+#f3 .bt-col-title.params{background:#f0fdfa;color:#0d9488}
+
+#f3 .bt-select{background:#fff;border:1.5px solid #d0e8f5;border-radius:12px;padding:12px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#455569;transition:.1s;position:relative}
+#f3 .bt-select:hover{border-color:#1aaee0}
+#f3 .bt-select.filled{border-color:#0d7aaa;background:#e6f7fd;color:#0f172a;font-weight:500}
+#f3 .bt-select.filled.teal{border-color:#0d9488;background:#f0fdfa}
+#f3 .bt-arrow-left{display:flex;align-items:center;justify-content:flex-end;margin-top:20px}
+#f3 .bt-arrow-right{display:flex;align-items:center;justify-content:flex-start;margin-top:20px}
+
+#f3 .bt-center{display:flex;flex-direction:column;align-items:center;gap:0}
+#f3 .bt-scenario-card{background:#fff;border:2px solid #d0e8f5;border-radius:20px;padding:20px;box-shadow:0 4px 20px -8px rgba(6,88,140,.12);width:280px;text-align:center}
+#f3 .bt-scenario-label{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#647894;margin-bottom:10px}
+#f3 .bt-patient-avatar{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#e6f7fd,#d9f3fa);border:2px solid #b8dff7;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:20px;font-weight:800;color:#0d7aaa}
+#f3 .bt-patient-name{font-size:14px;font-weight:700;color:#0f172a}
+#f3 .bt-patient-meta{font-size:11.5px;color:#647894;margin-top:2px}
+#f3 .bt-divider{height:1px;background:#eef4fa;margin:10px 0}
+#f3 .bt-condition{font-size:12px;color:#455569;line-height:1.55;text-align:left}
+#f3 .bt-condition strong{color:#0f172a;font-weight:600}
+#f3 .bt-vitals{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:center}
+#f3 .bt-vital{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:99px;background:#f3f8fc;border:1px solid #d0e8f5;color:#455569}
+#f3 .bt-vital.warn{background:#fff1f2;border-color:#fca5a5;color:#dc2626}
+
+#f3 .bt-arrows-row{display:flex;align-items:center;gap:0;width:100%;padding:0 12px}
+#f3 .bt-arrow{flex:1;height:2px;background:linear-gradient(90deg,#d0e8f5,#1aaee0)}
+#f3 .bt-arrow.right-arr{background:linear-gradient(90deg,#1aaee0,#d0e8f5)}
+#f3 .arrowhead{width:8px;height:8px;border-top:2px solid #1aaee0;border-right:2px solid #1aaee0;transform:rotate(45deg);flex-shrink:0}
+#f3 .arrowhead.left{transform:rotate(-135deg)}
+
+#f3 .bt-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid #eef4fa}
+</style>
+
+<div class="exam-header">
+  <div class="eh-left">
+    <span class="eh-logo">NurseNest</span>
+    <span class="eh-mode">CAT Exam</span>
+    <span class="eh-ngn">NGN</span>
+    <span class="eh-bowtie">Bowtie</span>
+  </div>
+  <div class="eh-center">
+    <span style="font-size:12.5px;font-weight:700;color:#0f172a">Question 31</span>
+    <div style="width:160px;height:6px;background:#eef4fa;border-radius:99px;overflow:hidden"><div style="width:41.3%;height:100%;background:linear-gradient(90deg,#1aaee0,#0d9488);border-radius:99px"></div></div>
+    <span style="font-size:11px;color:#647894">of 75</span>
+  </div>
+  <div class="eh-right">
+    <div class="eh-timer">01:04:22</div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="bt-header">
+    <div class="bt-type">NGN · Bowtie Question Format</div>
+    <div class="bt-title">For each column, select the most appropriate nursing actions and parameters to monitor.</div>
+    <div class="bt-instruction">Select <strong>2 actions</strong> on the left and <strong>2 parameters</strong> on the right for this client's condition.</div>
+  </div>
+
+  <div class="bowtie">
+    <!-- Left: Actions -->
+    <div class="bt-col">
+      <div class="bt-col-title actions">Actions to Take</div>
+      <div class="bt-select filled">
+        <span>Elevate head of bed to 30–45°</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0d7aaa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="bt-select filled">
+        <span>Administer IV furosemide as ordered</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0d7aaa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div style="height:1px;background:#eef4fa;margin:4px 0"></div>
+      <div style="font-size:10.5px;font-weight:600;color:#647894;margin-bottom:4px;padding-left:2px">Additional options:</div>
+      <div class="bt-select">
+        <span style="color:#94a3b8">Administer 500 mL NS bolus</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b8d9ef" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="bt-select">
+        <span style="color:#94a3b8">Place client in Trendelenburg position</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b8d9ef" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="bt-select">
+        <span style="color:#94a3b8">Restrict fluid intake to 500 mL/day</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b8d9ef" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <!-- Center: Client condition -->
+    <div class="bt-center">
+      <div style="height:60px;display:flex;align-items:center">
+        <div style="display:flex;align-items:center;gap:8px;width:100%">
+          <div style="flex:1;height:2px;background:linear-gradient(90deg,rgba(208,232,245,0),#1aaee0)"></div>
+          <div style="width:10px;height:10px;border-top:2px solid #1aaee0;border-right:2px solid #1aaee0;transform:rotate(45deg)"></div>
+        </div>
+      </div>
+      <div class="bt-scenario-card">
+        <div class="bt-scenario-label">Client Condition</div>
+        <div class="bt-patient-avatar">RC</div>
+        <div class="bt-patient-name">Mr. Robert Chen</div>
+        <div class="bt-patient-meta">82M · CVICU · Post-op Day 2</div>
+        <div class="bt-divider"></div>
+        <div class="bt-condition">
+          <strong>Diagnosis:</strong> Acute decompensated heart failure following CABG. Fluid overload with bilateral pulmonary edema. SpO₂ trending down from 95% → 90%.
+        </div>
+        <div class="bt-vitals">
+          <span class="bt-vital warn">HR 112 ↑</span>
+          <span class="bt-vital warn">BP 160/98 ↑</span>
+          <span class="bt-vital warn">SpO₂ 90% ↓</span>
+          <span class="bt-vital">RR 22</span>
+          <span class="bt-vital warn">Wt +3.2 kg ↑</span>
+        </div>
+      </div>
+      <div style="height:60px;display:flex;align-items:center">
+        <div style="display:flex;align-items:center;gap:8px;width:100%">
+          <div style="width:10px;height:10px;border-top:2px solid #0d9488;border-left:2px solid #0d9488;transform:rotate(-45deg)"></div>
+          <div style="flex:1;height:2px;background:linear-gradient(90deg,#0d9488,rgba(208,232,245,0))"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Parameters -->
+    <div class="bt-col">
+      <div class="bt-col-title params">Parameters to Monitor</div>
+      <div class="bt-select filled teal">
+        <span>Urinary output hourly (goal &gt;30 mL/hr)</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="bt-select filled teal">
+        <span>SpO₂ and lung auscultation q2h</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div style="height:1px;background:#eef4fa;margin:4px 0"></div>
+      <div style="font-size:10.5px;font-weight:600;color:#647894;margin-bottom:4px;padding-left:2px">Additional options:</div>
+      <div class="bt-select">
+        <span style="color:#94a3b8">Blood glucose every 6 hours</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b8d9ef" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="bt-select">
+        <span style="color:#94a3b8">Daily weight at the same time each morning</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b8d9ef" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="bt-select">
+        <span style="color:#94a3b8">Serum potassium after each diuretic dose</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b8d9ef" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="bt-bottom">
+    <span style="font-size:11.5px;color:#647894">Both columns must be complete to submit</span>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div style="font-size:11.5px;color:#16a34a;font-weight:600;background:#f0fdf4;border:1px solid #bbf7d0;padding:4px 12px;border-radius:8px">✓ 2/2 Actions · ✓ 2/2 Parameters</div>
+      <button style="font-size:13px;font-weight:600;color:#647894;background:#f3f8fc;border:1px solid #d0e8f5;padding:9px 18px;border-radius:10px;cursor:pointer">← Previous</button>
+      <button style="font-size:13px;font-weight:700;color:#fff;background:#0d7aaa;padding:9px 22px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 2px 10px -3px rgba(13,122,170,.35)">Submit Answer →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 5 · Ocean · Post-Exam Results & Analytics
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f4">
+<style>
+#f4{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif}
+#f4 .nav{height:56px;background:#0d7aaa;display:flex;align-items:center;padding:0 32px;gap:0}
+#f4 .nav-logo{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.02em}
+#f4 .nav-links{display:flex;align-items:center;gap:1px;margin-left:32px}
+#f4 .nav-link{font-size:13px;font-weight:500;color:rgba(255,255,255,.75);padding:7px 12px;border-radius:7px}
+#f4 .nav-link.active{color:#fff;background:rgba(255,255,255,.15);font-weight:600}
+#f4 .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+#f4 .nav-avatar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);border-radius:10px;padding:4px 12px 4px 6px}
+#f4 .nav-avatar-ring{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#0d7aaa}
+#f4 .nav-avatar-name{font-size:12.5px;font-weight:600;color:#fff}
+#f4 .nav-tier{font-size:10px;font-weight:700;color:#0d7aaa;background:#fff;padding:2px 7px;border-radius:99px}
+
+#f4 .results-hero{background:linear-gradient(135deg,#0a3d5c 0%,#0d7aaa 45%,#1aaee0 100%);padding:36px 40px;display:flex;align-items:center;justify-content:space-between}
+#f4 .rh-left{}
+#f4 .rh-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px}
+#f4 .rh-title{font-size:36px;font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1.05;margin-bottom:6px}
+#f4 .rh-meta{font-size:13px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:12px}
+#f4 .rh-meta-sep{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.3)}
+#f4 .rh-right{display:flex;align-items:center;gap:16px}
+#f4 .rh-badge{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.25);border-radius:16px;padding:14px 20px;text-align:center;backdrop-filter:blur(8px)}
+#f4 .rh-badge-n{font-size:32px;font-weight:800;color:#fff;letter-spacing:-.03em}
+#f4 .rh-badge-l{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px;font-weight:500}
+#f4 .rh-pass{background:#16a34a;border:1.5px solid #22c55e;border-radius:12px;padding:14px 20px;text-align:center}
+#f4 .rh-pass-t{font-size:14px;font-weight:800;color:#fff}
+#f4 .rh-pass-s{font-size:11px;color:rgba(255,255,255,.8);margin-top:3px}
+#f4 .rh-improvement{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:12px 18px;text-align:center}
+#f4 .rh-imp-n{font-size:24px;font-weight:800;color:#4ade80}
+#f4 .rh-imp-l{font-size:10.5px;color:rgba(255,255,255,.65);margin-top:2px}
+
+#f4 .main{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:24px 32px;gap:20px;height:calc(900px - 56px - 108px);overflow:hidden}
+#f4 .rc{background:#fff;border:1px solid #d0e8f5;border-radius:18px;padding:20px 22px;box-shadow:0 1px 0 rgba(15,23,42,.03),0 8px 24px -12px rgba(6,88,140,.08)}
+#f4 .rc-title{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#647894;margin-bottom:14px}
+#f4 .domain-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+#f4 .domain-name{font-size:12px;font-weight:500;color:#455569;width:140px;flex-shrink:0}
+#f4 .domain-bar-wrap{flex:1;height:7px;background:#eef4fa;border-radius:99px;overflow:hidden}
+#f4 .domain-bar{height:100%;border-radius:99px}
+#f4 .domain-pct{font-size:11.5px;font-weight:700;width:34px;text-align:right;flex-shrink:0}
+#f4 .trend-up{color:#16a34a}
+#f4 .trend-down{color:#e11d48}
+#f4 .trend-same{color:#647894}
+</style>
+<nav class="nav">
+  <span class="nav-logo">NurseNest</span>
+  <div class="nav-links">
+    <a class="nav-link">Dashboard</a><a class="nav-link">Flashcards</a><a class="nav-link">Practice</a>
+    <a class="nav-link active">CAT Exam</a><a class="nav-link">Modules</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-avatar">
+      <div class="nav-avatar-ring">JM</div>
+      <span class="nav-avatar-name">Jasmeen M.</span>
+      <span class="nav-tier">PRO</span>
+    </div>
+  </div>
+</nav>
+<div class="results-hero">
+  <div class="rh-left">
+    <div class="rh-label">CAT Exam · Session 4 Complete · May 17, 2026</div>
+    <div class="rh-title">NCLEX Readiness: 78%</div>
+    <div class="rh-meta">
+      <span>75 Questions</span><div class="rh-meta-sep"></div>
+      <span>42 min 18 sec</span><div class="rh-meta-sep"></div>
+      <span>Avg 33 sec/question</span><div class="rh-meta-sep"></div>
+      <span>8 flagged</span>
+    </div>
+  </div>
+  <div class="rh-right">
+    <div class="rh-improvement">
+      <div class="rh-imp-n">+6%</div>
+      <div class="rh-imp-l">vs last session</div>
+    </div>
+    <div class="rh-pass">
+      <div class="rh-pass-t">✓ Likely Pass</div>
+      <div class="rh-pass-s">Confidence: High</div>
+    </div>
+    <div class="rh-badge">
+      <div class="rh-badge-n">78</div>
+      <div class="rh-badge-l">Readiness Score</div>
+    </div>
+  </div>
+</div>
+<div class="main">
+  <!-- Left: Domain breakdown + NGN -->
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="rc">
+      <div class="rc-title">Domain Performance</div>
+      <div class="domain-row"><div class="domain-name">Cardiovascular</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:62%;background:#f97316"></div></div><div class="domain-pct trend-down">62%</div></div>
+      <div class="domain-row"><div class="domain-name">Respiratory</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:58%;background:#ef4444"></div></div><div class="domain-pct trend-down">58%</div></div>
+      <div class="domain-row"><div class="domain-name">Renal / Fluids</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:64%;background:#f97316"></div></div><div class="domain-pct trend-down">64%</div></div>
+      <div class="domain-row"><div class="domain-name">Neuro / Sensory</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:71%;background:#1aaee0"></div></div><div class="domain-pct" style="color:#0d7aaa">71%</div></div>
+      <div class="domain-row"><div class="domain-name">Musculoskeletal</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:76%;background:#1aaee0"></div></div><div class="domain-pct" style="color:#0d7aaa">76%</div></div>
+      <div class="domain-row"><div class="domain-name">GI / Nutrition</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:79%;background:#16a34a"></div></div><div class="domain-pct trend-up">79%</div></div>
+      <div class="domain-row"><div class="domain-name">Pharmacology</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:88%;background:#16a34a"></div></div><div class="domain-pct trend-up">88%</div></div>
+      <div class="domain-row"><div class="domain-name">Psych / Mental Health</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:91%;background:#16a34a"></div></div><div class="domain-pct trend-up">91%</div></div>
+    </div>
+    <div class="rc" style="background:linear-gradient(135deg,#f5f0fe,#ede9fe);border-color:#ddd6fe">
+      <div class="rc-title" style="color:#7c3aed">NGN Performance</div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <svg width="72" height="72" viewBox="0 0 72 72">
+          <circle cx="36" cy="36" r="28" fill="none" stroke="#ede9fe" stroke-width="8"/>
+          <circle cx="36" cy="36" r="28" fill="none" stroke="#7c3aed" stroke-width="8" stroke-linecap="round" stroke-dasharray="175.9" stroke-dashoffset="105" transform="rotate(-90 36 36)"/>
+          <text x="36" y="41" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="16" font-weight="800" fill="#0f172a">40%</text>
+        </svg>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#0f172a">2 of 5 NGN correct</div>
+          <div style="font-size:12px;color:#647894;margin-top:3px">Bowtie: 0/1 · SATA: 1/2 · Matrix: 1/2</div>
+          <div style="font-size:11px;font-weight:600;color:#7c3aed;background:#ede9fe;border:1px solid #ddd6fe;padding:3px 10px;border-radius:99px;display:inline-block;margin-top:6px">Prioritize NGN practice →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Right: Difficulty curve + pacing -->
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="rc">
+      <div class="rc-title">Adaptive Difficulty Progression</div>
+      <svg width="100%" height="120" viewBox="0 0 520 120">
+        <defs>
+          <linearGradient id="diffGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1aaee0" stop-opacity=".15"/>
+            <stop offset="100%" stop-color="#1aaee0" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- Grid lines -->
+        <line x1="0" y1="96" x2="520" y2="96" stroke="#eef4fa" stroke-width="1"/>
+        <line x1="0" y1="72" x2="520" y2="72" stroke="#eef4fa" stroke-width="1"/>
+        <line x1="0" y1="48" x2="520" y2="48" stroke="#eef4fa" stroke-width="1"/>
+        <line x1="0" y1="24" x2="520" y2="24" stroke="#eef4fa" stroke-width="1"/>
+        <text x="4" y="99" font-family="DM Sans,sans-serif" font-size="8" fill="#b8d9ef">Easy</text>
+        <text x="4" y="75" font-family="DM Sans,sans-serif" font-size="8" fill="#b8d9ef">Med</text>
+        <text x="4" y="51" font-family="DM Sans,sans-serif" font-size="8" fill="#b8d9ef">Hard</text>
+        <text x="4" y="27" font-family="DM Sans,sans-serif" font-size="8" fill="#b8d9ef">V.Hard</text>
+        <!-- Difficulty line -->
+        <path d="M30,90 L60,84 L90,80 L120,76 L150,80 L180,68 L210,60 L240,52 L270,48 L300,44 L330,50 L360,38 L390,34 L420,30 L450,36 L480,28 L520,24 L520,110 L30,110Z" fill="url(#diffGrad)"/>
+        <path d="M30,90 L60,84 L90,80 L120,76 L150,80 L180,68 L210,60 L240,52 L270,48 L300,44 L330,50 L360,38 L390,34 L420,30 L450,36 L480,28 L520,24" fill="none" stroke="#1aaee0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="30" y="112" font-family="DM Sans,sans-serif" font-size="7.5" fill="#94a3b8">Q1</text>
+        <text x="183" y="112" font-family="DM Sans,sans-serif" font-size="7.5" fill="#94a3b8">Q25</text>
+        <text x="343" y="112" font-family="DM Sans,sans-serif" font-size="7.5" fill="#94a3b8">Q50</text>
+        <text x="493" y="112" font-family="DM Sans,sans-serif" font-size="7.5" fill="#0d7aaa" font-weight="700">Q75</text>
+      </svg>
+      <div style="font-size:11.5px;color:#455569;margin-top:4px">Your adaptive engine escalated to <strong>Very Hard</strong> difficulty by Q50 — indicating strong performance. Final difficulty: 4.2/5.</div>
+    </div>
+    <div class="rc">
+      <div class="rc-title">Pacing Analysis</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <div style="background:#f3f8fc;border:1px solid #d0e8f5;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:20px;font-weight:800;color:#0f172a">33s</div>
+          <div style="font-size:10.5px;color:#647894;margin-top:2px">Avg per question</div>
+        </div>
+        <div style="background:#f3f8fc;border:1px solid #d0e8f5;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:20px;font-weight:800;color:#d97706">8</div>
+          <div style="font-size:10.5px;color:#647894;margin-top:2px">Questions flagged</div>
+        </div>
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:20px;font-weight:800;color:#16a34a">87%</div>
+          <div style="font-size:10.5px;color:#647894;margin-top:2px">First-answer accuracy</div>
+        </div>
+      </div>
+    </div>
+    <div class="rc">
+      <div class="rc-title">Session Comparison</div>
+      <svg width="100%" height="60" viewBox="0 0 440 60">
+        <polyline points="0,52 88,46 176,40 264,32 352,22 440,14" fill="none" stroke="#d0e8f5" stroke-width="2" stroke-dasharray="4 3"/>
+        <polyline points="0,50 88,44 176,38 264,30 352,20 440,14" fill="none" stroke="#1aaee0" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="0" cy="50" r="3.5" fill="#1aaee0"/><circle cx="88" cy="44" r="3.5" fill="#1aaee0"/><circle cx="176" cy="38" r="3.5" fill="#1aaee0"/><circle cx="264" cy="30" r="3.5" fill="#1aaee0"/><circle cx="352" cy="20" r="3.5" fill="#1aaee0"/><circle cx="440" cy="14" r="4.5" fill="#0d7aaa"/>
+        <text x="0" y="58" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 2</text>
+        <text x="64" y="58" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">62%</text>
+        <text x="148" y="58" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">68%</text>
+        <text x="236" y="58" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">72%</text>
+        <text x="320" y="58" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">76%</text>
+        <text x="412" y="58" font-family="DM Sans,sans-serif" font-size="8" fill="#0d7aaa" font-weight="700">78%</text>
+      </svg>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button style="flex:1;font-size:12.5px;font-weight:600;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:9px 12px;border-radius:10px;cursor:pointer">Review Session</button>
+        <button style="flex:1;font-size:12.5px;font-weight:700;color:#fff;background:#0d7aaa;padding:9px 12px;border-radius:10px;cursor:pointer;box-shadow:0 2px 8px -2px rgba(13,122,170,.35)">Launch New CAT →</button>
+        <button style="flex:1;font-size:12.5px;font-weight:600;color:#455569;background:#f3f8fc;border:1px solid #d0e8f5;padding:9px 12px;border-radius:10px;cursor:pointer">Study Weak Areas</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 6 · Ocean Mobile · Active Question (390×844)
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame mobile-frame" id="f5">
+<style>
+#f5{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif;width:390px;height:844px;overflow:hidden;position:relative}
+#f5 .mh{height:48px;background:#fff;border-bottom:1px solid #d0e8f5;display:flex;align-items:center;padding:0 16px;gap:8px;box-shadow:0 1px 8px -3px rgba(6,88,140,.08);position:sticky;top:0;z-index:10}
+#f5 .mh-logo{font-size:13px;font-weight:800;color:#0d7aaa}
+#f5 .mh-mode{font-size:9.5px;font-weight:700;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:2px 7px;border-radius:99px}
+#f5 .mh-center{flex:1;display:flex;align-items:center;justify-content:center;gap:6px}
+#f5 .mh-q{font-size:12px;font-weight:700;color:#0f172a}
+#f5 .mh-prog{width:80px;height:4px;background:#eef4fa;border-radius:99px;overflow:hidden}
+#f5 .mh-prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#1aaee0,#0d9488);width:30.6%}
+#f5 .mh-right{display:flex;align-items:center;gap:6px}
+#f5 .mh-timer{font-size:12px;font-weight:700;color:#0f172a;font-variant-numeric:tabular-nums}
+#f5 .mh-btn{width:30px;height:30px;border-radius:7px;background:#f3f8fc;border:1px solid #d0e8f5;display:flex;align-items:center;justify-content:center}
+
+#f5 .scroll-area{height:calc(844px - 48px - 120px);overflow:hidden;padding:16px}
+#f5 .m-meta{display:flex;align-items:center;gap:6px;margin-bottom:12px}
+#f5 .m-badge{font-size:9.5px;font-weight:700;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:2px 8px;border-radius:99px}
+#f5 .m-card{background:#fff;border:1.5px solid #d0e8f5;border-radius:16px;padding:18px;box-shadow:0 1px 0 rgba(15,23,42,.03),0 6px 20px -8px rgba(6,88,140,.08);margin-bottom:14px}
+#f5 .m-stem{font-size:14px;line-height:1.65;color:#0f172a}
+#f5 .m-stem strong{font-weight:700}
+
+#f5 .m-opts-scroll{overflow:hidden}
+#f5 .m-opt{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1.5px solid #d0e8f5;border-radius:12px;margin-bottom:8px;background:#fff}
+#f5 .m-opt.selected{border-color:#0d7aaa;background:#e6f7fd}
+#f5 .m-opt-l{width:22px;height:22px;border-radius:6px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#647894;flex-shrink:0}
+#f5 .m-opt.selected .m-opt-l{background:#0d7aaa;color:#fff}
+#f5 .m-opt-t{font-size:13px;color:#455569;line-height:1.5}
+#f5 .m-opt.selected .m-opt-t{color:#0f172a;font-weight:500}
+
+#f5 .m-bottom{position:absolute;bottom:0;left:0;right:0;height:120px;background:#fff;border-top:1px solid #d0e8f5;padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+#f5 .m-bottom-row{display:flex;gap:8px}
+#f5 .m-btn-flag{flex:1;font-size:12.5px;font-weight:600;color:#647894;background:#f3f8fc;border:1px solid #d0e8f5;padding:10px;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:5px}
+#f5 .m-btn-submit{flex:2;font-size:13px;font-weight:700;color:#fff;background:#0d7aaa;border:none;padding:10px;border-radius:10px;box-shadow:0 2px 10px -3px rgba(13,122,170,.4);display:flex;align-items:center;justify-content:center;gap:5px}
+#f5 .m-safe-area{height:env(safe-area-inset-bottom,16px);background:#fff}
+</style>
+<div class="mh">
+  <span class="mh-logo">NurseNest</span>
+  <span class="mh-mode">CAT</span>
+  <div class="mh-center">
+    <span class="mh-q">Q23</span>
+    <div class="mh-prog"><div class="mh-prog-fill"></div></div>
+    <span style="font-size:10px;color:#94a3b8">of 75</span>
+  </div>
+  <div class="mh-right">
+    <span class="mh-timer">42:15</span>
+    <div class="mh-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></div>
+  </div>
+</div>
+
+<div class="scroll-area">
+  <div class="m-meta">
+    <span class="m-badge">Cardiovascular</span>
+    <span style="font-size:9.5px;color:#e11d48;font-weight:600">★★★★ Hard</span>
+    <span style="font-size:9.5px;color:#647894">⚡ Adaptive</span>
+  </div>
+  <div class="m-card">
+    <div class="m-stem">A <strong>68-year-old client</strong> admitted with acute heart failure exacerbation has HR 104, BP 158/92, SpO₂ 92%, and bilateral crackles. <strong>Which action should the nurse take FIRST?</strong></div>
+  </div>
+  <div class="m-opts-scroll">
+    <div class="m-opt">
+      <div class="m-opt-l">A</div>
+      <div class="m-opt-t">Administer furosemide 40 mg IV stat</div>
+    </div>
+    <div class="m-opt selected">
+      <div class="m-opt-l">B</div>
+      <div class="m-opt-t">Position in high-Fowler's and apply supplemental oxygen</div>
+    </div>
+    <div class="m-opt">
+      <div class="m-opt-l">C</div>
+      <div class="m-opt-t">Obtain 12-lead ECG and notify provider</div>
+    </div>
+    <div class="m-opt">
+      <div class="m-opt-l">D</div>
+      <div class="m-opt-t">Increase IV fluid rate for cardiac preload</div>
+    </div>
+  </div>
+</div>
+
+<div class="m-bottom">
+  <div class="m-bottom-row">
+    <button class="m-btn-flag">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+      Flag
+    </button>
+    <button class="m-btn-submit">Submit Answer →</button>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px">
+    <button style="font-size:11.5px;font-weight:600;color:#647894;background:none;border:none;cursor:pointer">← Previous</button>
+    <div style="display:flex;gap:3px">
+      <div style="width:5px;height:5px;border-radius:50%;background:#16a34a"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#1aaee0"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#d0e8f5"></div>
+    </div>
+    <span style="font-size:11.5px;color:#647894">Tools ↑</span>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 7 · Ocean Mobile · CAT Landing (390×844)
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame mobile-frame" id="f6">
+<style>
+#f6{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif;width:390px;height:844px;overflow:hidden;position:relative}
+#f6 .mh{height:52px;background:#0d7aaa;display:flex;align-items:center;padding:0 16px;gap:10px}
+#f6 .mh-logo{font-size:15px;font-weight:800;color:#fff;letter-spacing:-.01em}
+#f6 .mh-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+#f6 .mh-avatar{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#0d7aaa}
+
+#f6 .content{height:calc(844px - 52px);overflow:hidden;padding:16px}
+#f6 .m-ctx{background:#fff;border:1px solid #d0e8f5;border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+#f6 .m-ctx-label{font-size:11.5px;font-weight:700;color:#0f172a}
+#f6 .m-ctx-sep{width:1px;height:12px;background:#d0e8f5}
+#f6 .m-ctx-pill{font-size:10px;font-weight:600;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;padding:2px 8px;border-radius:99px}
+
+#f6 .m-launch-card{background:#fff;border:1px solid #d0e8f5;border-radius:18px;padding:20px;box-shadow:0 1px 0 rgba(15,23,42,.03),0 8px 24px -12px rgba(6,88,140,.09);margin-bottom:12px}
+#f6 .mlc-top{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+#f6 .mlc-ring{flex-shrink:0}
+#f6 .mlc-detail{}
+#f6 .mlc-score{font-size:26px;font-weight:800;color:#0f172a;letter-spacing:-.03em;line-height:1}
+#f6 .mlc-label{font-size:12px;color:#647894;margin-top:3px}
+#f6 .mlc-pass{font-size:11px;font-weight:700;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;padding:3px 10px;border-radius:99px;display:inline-block;margin-top:5px}
+#f6 .mlc-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+#f6 .mlc-stat{background:#f3f8fc;border:1px solid #d0e8f5;border-radius:10px;padding:10px 12px}
+#f6 .mlc-stat-n{font-size:16px;font-weight:800;color:#0f172a}
+#f6 .mlc-stat-l{font-size:10.5px;color:#647894;margin-top:1px}
+#f6 .m-btn-launch{width:100%;background:#0d7aaa;color:#fff;font-size:14.5px;font-weight:700;padding:14px;border-radius:12px;border:none;cursor:pointer;box-shadow:0 4px 14px -4px rgba(13,122,170,.4);margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px}
+#f6 .m-btn-resume{width:100%;background:transparent;color:#0d7aaa;font-size:13px;font-weight:600;padding:11px;border-radius:10px;border:1.5px solid #b8dff7;cursor:pointer}
+
+#f6 .m-mini-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#f6 .m-mini{background:#fff;border:1px solid #d0e8f5;border-radius:14px;padding:14px}
+#f6 .m-mini-title{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#647894;margin-bottom:10px}
+#f6 .m-mini-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:11.5px}
+#f6 .m-mini-bar{flex:1;height:5px;background:#eef4fa;border-radius:99px;overflow:hidden}
+#f6 .m-mini-fill{height:100%;border-radius:99px}
+</style>
+<div class="mh">
+  <span class="mh-logo">NurseNest</span>
+  <div class="mh-right">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    <div class="mh-avatar">JM</div>
+  </div>
+</div>
+<div class="content">
+  <div class="m-ctx">
+    <span class="m-ctx-label">⚡ NCLEX-RN CAT</span>
+    <div class="m-ctx-sep"></div>
+    <span class="m-ctx-pill">✓ Ready</span>
+    <span style="font-size:10.5px;color:#647894;margin-left:auto">Est. 90 min</span>
+  </div>
+  <div class="m-launch-card">
+    <div class="mlc-top">
+      <svg class="mlc-ring" width="80" height="80" viewBox="0 0 80 80">
+        <circle cx="40" cy="40" r="32" fill="none" stroke="#eef4fa" stroke-width="7"/>
+        <circle cx="40" cy="40" r="32" fill="none" stroke="#1aaee0" stroke-width="7" stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="48" transform="rotate(-90 40 40)"/>
+        <text x="40" y="37" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="19" font-weight="800" fill="#0f172a">78</text>
+        <text x="40" y="50" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8" font-weight="600" fill="#647894">READY</text>
+      </svg>
+      <div class="mlc-detail">
+        <div class="mlc-score">Likely Pass</div>
+        <div class="mlc-label">Passing probability: High</div>
+        <div class="mlc-pass">✓ 78–88% confidence</div>
+      </div>
+    </div>
+    <div class="mlc-stats">
+      <div class="mlc-stat"><div class="mlc-stat-n">847</div><div class="mlc-stat-l">Questions done</div></div>
+      <div class="mlc-stat"><div class="mlc-stat-n" style="color:#16a34a">↑6%</div><div class="mlc-stat-l">This week</div></div>
+      <div class="mlc-stat"><div class="mlc-stat-n">62%</div><div class="mlc-stat-l">Correct avg</div></div>
+      <div class="mlc-stat"><div class="mlc-stat-n">3.2×</div><div class="mlc-stat-l">Sessions/week</div></div>
+    </div>
+    <button class="m-btn-launch">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Launch CAT Exam
+    </button>
+    <button class="m-btn-resume">Resume last session — Q47 of 75</button>
+  </div>
+  <div class="m-mini-cards">
+    <div class="m-mini">
+      <div class="m-mini-title">Weak Areas</div>
+      <div class="m-mini-row"><span style="width:60px;font-size:11px;color:#455569">Cardio</span><div class="m-mini-bar"><div class="m-mini-fill" style="width:62%;background:#f97316"></div></div><span style="font-size:11px;color:#f97316;font-weight:700;margin-left:4px">62%</span></div>
+      <div class="m-mini-row"><span style="width:60px;font-size:11px;color:#455569">Resp</span><div class="m-mini-bar"><div class="m-mini-fill" style="width:58%;background:#ef4444"></div></div><span style="font-size:11px;color:#ef4444;font-weight:700;margin-left:4px">58%</span></div>
+    </div>
+    <div class="m-mini">
+      <div class="m-mini-title">Strengths</div>
+      <div class="m-mini-row"><span style="width:60px;font-size:11px;color:#455569">Psych</span><div class="m-mini-bar"><div class="m-mini-fill" style="width:91%;background:#16a34a"></div></div><span style="font-size:11px;color:#16a34a;font-weight:700;margin-left:4px">91%</span></div>
+      <div class="m-mini-row"><span style="width:60px;font-size:11px;color:#455569">Pharm</span><div class="m-mini-bar"><div class="m-mini-fill" style="width:88%;background:#16a34a"></div></div><span style="font-size:11px;color:#16a34a;font-weight:700;margin-left:4px">88%</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 8 · Ocean Mobile · Post-Exam Results (390×844)
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame mobile-frame" id="f7">
+<style>
+#f7{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif;width:390px;height:844px;overflow:hidden}
+#f7 .mh{height:52px;background:#0d7aaa;display:flex;align-items:center;padding:0 16px;gap:10px}
+#f7 .mh-logo{font-size:15px;font-weight:800;color:#fff}
+#f7 .mh-back{margin-right:4px}
+#f7 .results-hero{background:linear-gradient(135deg,#0a3d5c,#1aaee0);padding:24px 16px;text-align:center}
+#f7 .rh-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px}
+#f7 .rh-score{font-size:48px;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1}
+#f7 .rh-sub{font-size:15px;color:rgba(255,255,255,.8);margin-top:4px}
+#f7 .rh-badges{display:flex;gap:8px;justify-content:center;margin-top:12px}
+#f7 .rh-b{padding:5px 14px;border-radius:99px;font-size:11px;font-weight:700}
+#f7 .rh-b.green{background:#16a34a;color:#fff}
+#f7 .rh-b.glass{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff}
+#f7 .content{padding:14px;display:flex;flex-direction:column;gap:12px;height:calc(844px - 52px - 140px);overflow:hidden}
+#f7 .mc{background:#fff;border:1px solid #d0e8f5;border-radius:16px;padding:14px 16px;box-shadow:0 1px 0 rgba(15,23,42,.03),0 6px 18px -8px rgba(6,88,140,.08)}
+#f7 .mc-title{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#647894;margin-bottom:10px}
+#f7 .mdr{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:11.5px}
+#f7 .mdb{flex:1;height:5px;background:#eef4fa;border-radius:99px;overflow:hidden}
+#f7 .mdf{height:100%;border-radius:99px}
+#f7 .action-row{display:flex;gap:8px}
+#f7 .m-action{flex:1;font-size:11.5px;font-weight:600;padding:10px 8px;border-radius:10px;border:none;cursor:pointer;text-align:center}
+</style>
+<div class="mh">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+  <span class="mh-logo">CAT Results</span>
+</div>
+<div class="results-hero">
+  <div class="rh-label">Session 4 · 75 Questions · May 17, 2026</div>
+  <div class="rh-score">78%</div>
+  <div class="rh-sub">NCLEX Readiness Score</div>
+  <div class="rh-badges">
+    <span class="rh-b green">✓ Likely Pass</span>
+    <span class="rh-b glass">+6% vs last</span>
+    <span class="rh-b glass">42:18</span>
+  </div>
+</div>
+<div class="content">
+  <div class="mc">
+    <div class="mc-title">Domain Breakdown</div>
+    <div class="mdr"><span style="width:80px;color:#455569">Cardio</span><div class="mdb"><div class="mdf" style="width:62%;background:#f97316"></div></div><span style="font-size:11px;color:#f97316;font-weight:700;margin-left:4px">62%</span></div>
+    <div class="mdr"><span style="width:80px;color:#455569">Respiratory</span><div class="mdb"><div class="mdf" style="width:58%;background:#ef4444"></div></div><span style="font-size:11px;color:#ef4444;font-weight:700;margin-left:4px">58%</span></div>
+    <div class="mdr"><span style="width:80px;color:#455569">Pharm</span><div class="mdb"><div class="mdf" style="width:88%;background:#16a34a"></div></div><span style="font-size:11px;color:#16a34a;font-weight:700;margin-left:4px">88%</span></div>
+    <div class="mdr"><span style="width:80px;color:#455569">Psych</span><div class="mdb"><div class="mdf" style="width:91%;background:#16a34a"></div></div><span style="font-size:11px;color:#16a34a;font-weight:700;margin-left:4px">91%</span></div>
+  </div>
+  <div class="mc" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0">
+    <div style="text-align:center;padding:4px">
+      <div style="font-size:22px;font-weight:800;color:#0f172a">33s</div>
+      <div style="font-size:10px;color:#647894">Avg pace</div>
+    </div>
+    <div style="text-align:center;padding:4px;border-left:1px solid #eef4fa;border-right:1px solid #eef4fa">
+      <div style="font-size:22px;font-weight:800;color:#7c3aed">40%</div>
+      <div style="font-size:10px;color:#647894">NGN score</div>
+    </div>
+    <div style="text-align:center;padding:4px">
+      <div style="font-size:22px;font-weight:800;color:#16a34a">87%</div>
+      <div style="font-size:10px;color:#647894">1st-answer acc.</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="m-action" style="background:#e6f7fd;color:#0d7aaa">Review Session</button>
+    <button class="m-action" style="background:#0d7aaa;color:#fff;box-shadow:0 2px 8px -2px rgba(13,122,170,.35)">New CAT →</button>
+    <button class="m-action" style="background:#f3f8fc;color:#455569;border:1px solid #d0e8f5">Study Weak</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 9 · Blossom · CAT Pre-Exam Landing
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f8">
+<style>
+#f8{background:#fef4fb;font-family:'DM Sans',system-ui,sans-serif}
+#f8 .nav{height:56px;background:#d948a8;display:flex;align-items:center;padding:0 32px;gap:0}
+#f8 .nav-logo{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.02em}
+#f8 .nav-links{display:flex;align-items:center;gap:1px;margin-left:32px}
+#f8 .nav-link{font-size:13px;font-weight:500;color:rgba(255,255,255,.75);padding:7px 12px;border-radius:7px}
+#f8 .nav-link.active{color:#fff;background:rgba(255,255,255,.18);font-weight:600}
+#f8 .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+#f8 .nav-avatar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.18);border-radius:10px;padding:4px 12px 4px 6px}
+#f8 .nav-avatar-ring{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#d948a8}
+#f8 .nav-avatar-name{font-size:12.5px;font-weight:600;color:#fff}
+#f8 .nav-tier{font-size:10px;font-weight:700;color:#d948a8;background:#fff;padding:2px 7px;border-radius:99px}
+
+#f8 .ctx{height:38px;background:#fff;border-bottom:1px solid #f1dff0;display:flex;align-items:center;padding:0 32px;gap:16px}
+#f8 .ctx-label{font-size:11.5px;font-weight:700;color:#10182f;display:flex;align-items:center;gap:6px}
+#f8 .ctx-sep{width:1px;height:14px;background:#f1dff0}
+#f8 .ctx-item{font-size:11.5px;color:#7a6b84}
+#f8 .pill-ready{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:99px}
+#f8 .pill-bl{background:#fef4fb;color:#d948a8;border:1px solid #e8c8e2;font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:99px}
+
+#f8 .main{display:grid;grid-template-columns:1fr 420px;height:calc(900px - 56px - 38px);overflow:hidden}
+#f8 .launch-col{padding:28px 24px 28px 32px;display:flex;flex-direction:column;gap:16px}
+#f8 .analytics-col{padding:28px 32px 28px 8px;display:flex;flex-direction:column;gap:12px}
+
+#f8 .launch-card{background:#fff;border:1px solid #f1dff0;border-radius:20px;padding:28px;box-shadow:0 1px 0 rgba(16,24,47,.04),0 12px 36px -16px rgba(180,60,160,.09);flex:1;display:flex;flex-direction:column;gap:20px;position:relative;overflow:hidden}
+#f8 .launch-card::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(560px 260px at 80% -8%,rgba(217,72,168,.07),transparent 55%),radial-gradient(350px 200px at -5% 100%,rgba(147,87,242,.05),transparent 50%)}
+
+#f8 .lc-header{display:flex;align-items:center;justify-content:space-between}
+#f8 .lc-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7a6b84}
+#f8 .lc-badge{font-size:10.5px;font-weight:600;color:#d948a8;background:#fef4fb;border:1px solid #e8c8e2;padding:3px 10px;border-radius:99px}
+
+#f8 .lc-score-row{display:flex;align-items:center;gap:28px}
+#f8 .lc-score-detail{}
+#f8 .lc-score-headline{font-size:28px;font-weight:800;color:#10182f;letter-spacing:-.03em;line-height:1}
+#f8 .lc-score-sub{font-size:13.5px;color:#455569;margin-top:4px;line-height:1.5}
+#f8 .lc-pass-pill{display:inline-flex;align-items:center;gap:5px;background:#f0fdf4;border:1.5px solid #bbf7d0;color:#166534;font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:99px;margin-top:8px}
+
+#f8 .lc-stats{display:flex;gap:10px}
+#f8 .lc-stat{background:#fef4fb;border:1px solid #f1dff0;border-radius:10px;padding:10px 14px;flex:1}
+#f8 .lc-stat-n{font-size:17px;font-weight:800;color:#10182f}
+#f8 .lc-stat-l{font-size:10.5px;color:#7a6b84;margin-top:2px}
+
+#f8 .lc-chart{background:#fff8fd;border:1px solid #f1dff0;border-radius:14px;padding:14px 16px}
+#f8 .lc-chart-label{font-size:10.5px;font-weight:600;color:#7a6b84;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+
+#f8 .lc-pacing{background:linear-gradient(135deg,rgba(217,72,168,.05),rgba(147,87,242,.04));border:1px solid #f1dff0;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+#f8 .lc-pacing-ico{width:36px;height:36px;background:#fef4fb;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid #e8c8e2}
+
+#f8 .btn-launch{background:#d948a8;color:#fff;font-size:15px;font-weight:700;padding:14px 24px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px -4px rgba(217,72,168,.4)}
+#f8 .btn-resume{background:transparent;color:#d948a8;font-size:13.5px;font-weight:600;padding:10px 24px;border-radius:10px;border:1.5px solid #e8c8e2;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+
+#f8 .ac{background:#fff;border:1px solid #f1dff0;border-radius:16px;padding:16px 18px;box-shadow:0 1px 0 rgba(16,24,47,.03),0 6px 20px -10px rgba(180,60,160,.06)}
+#f8 .ac-title{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#7a6b84;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+#f8 .ac-title span{font-size:10px;font-weight:500;text-transform:none;letter-spacing:0;color:#d948a8}
+#f8 .domain-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+#f8 .domain-name{font-size:12px;font-weight:500;color:#455569;width:130px;flex-shrink:0}
+#f8 .domain-bar-wrap{flex:1;height:6px;background:#fef4fb;border-radius:99px;overflow:hidden}
+#f8 .domain-bar{height:100%;border-radius:99px}
+#f8 .domain-pct{font-size:11.5px;font-weight:700;color:#10182f;width:34px;text-align:right}
+</style>
+<nav class="nav">
+  <a style="display:flex;align-items:center;gap:8px;text-decoration:none">
+    <svg width="26" height="26" viewBox="0 0 28 28"><path d="M5 24 C5 17 10.5 12 14 12 S23 17 23 24 Z" fill="rgba(255,255,255,0.9)"/><path d="M8 24 C8 19.5 10.8 16 14 16 S20 19.5 20 24 Z" fill="#d948a8"/></svg>
+    <span class="nav-logo">NurseNest</span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link">Dashboard</a><a class="nav-link">Flashcards</a><a class="nav-link">Practice</a>
+    <a class="nav-link active">CAT Exam</a><a class="nav-link">Modules</a><a class="nav-link">CNPLE</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-avatar"><div class="nav-avatar-ring">JM</div><span class="nav-avatar-name">Jasmeen M.</span><span class="nav-tier">PRO</span></div>
+  </div>
+</nav>
+<div class="ctx">
+  <div class="ctx-label">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#d948a8" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    NCLEX-RN CAT Exam
+  </div>
+  <div class="ctx-sep"></div>
+  <span class="pill-bl">⚡ Adaptive</span>
+  <span class="pill-ready">✓ Ready</span>
+  <div class="ctx-sep"></div>
+  <span class="ctx-item">Last: May 14 · 82% · 75Q</span>
+  <div class="ctx-sep"></div>
+  <span class="ctx-item">Est. ~90 min</span>
+  <div style="margin-left:auto;font-size:11px;color:#d948a8;font-weight:600;cursor:pointer">View History ↗</div>
+</div>
+<div class="main">
+  <div class="launch-col">
+    <div class="launch-card">
+      <div class="lc-header">
+        <div class="lc-title">Adaptive Readiness Intelligence</div>
+        <div class="lc-badge">Session 4 · Adaptive</div>
+      </div>
+      <div class="lc-score-row">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#fef4fb" stroke-width="9"/>
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#d948a8" stroke-width="9" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="66" transform="rotate(-90 55 55)"/>
+          <text x="55" y="51" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="26" font-weight="800" fill="#10182f">78</text>
+          <text x="55" y="66" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" font-weight="600" fill="#7a6b84">READINESS</text>
+        </svg>
+        <div class="lc-score-detail">
+          <div class="lc-score-headline">Likely to Pass</div>
+          <div class="lc-score-sub">Your adaptive score places you in the<br><strong style="color:#d948a8">high-confidence passing range</strong> for NCLEX-RN.</div>
+          <div class="lc-pass-pill">✓ Passing Probability: High (78–88%)</div>
+        </div>
+      </div>
+      <div class="lc-stats">
+        <div class="lc-stat"><div class="lc-stat-n">847</div><div class="lc-stat-l">Questions done</div></div>
+        <div class="lc-stat"><div class="lc-stat-n">62%</div><div class="lc-stat-l">Correct avg</div></div>
+        <div class="lc-stat"><div class="lc-stat-n">3.2×</div><div class="lc-stat-l">Sessions/wk</div></div>
+        <div class="lc-stat"><div class="lc-stat-n" style="color:#16a34a">↑6%</div><div class="lc-stat-l">This week</div></div>
+      </div>
+      <div class="lc-chart">
+        <div class="lc-chart-label">Adaptive Difficulty Curve — Last 5 Sessions</div>
+        <svg width="100%" height="56" viewBox="0 0 540 56" preserveAspectRatio="none">
+          <defs><linearGradient id="blGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d948a8" stop-opacity=".15"/><stop offset="100%" stop-color="#d948a8" stop-opacity="0"/></linearGradient></defs>
+          <path d="M0 46 L90 40 L180 34 L270 28 L360 24 L450 18 L540 14 L540 56 L0 56Z" fill="url(#blGrad)"/>
+          <path d="M0 46 L90 40 L180 34 L270 28 L360 24 L450 18 L540 14" fill="none" stroke="#d948a8" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="0" cy="46" r="4" fill="#d948a8"/><circle cx="90" cy="40" r="4" fill="#d948a8"/><circle cx="180" cy="34" r="4" fill="#d948a8"/><circle cx="270" cy="28" r="4" fill="#d948a8"/><circle cx="360" cy="24" r="4" fill="#d948a8"/><circle cx="450" cy="18" r="4" fill="#d948a8"/><circle cx="540" cy="14" r="5" fill="#b3359a"/>
+        </svg>
+      </div>
+      <div class="lc-pacing">
+        <div class="lc-pacing-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d948a8" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div>
+          <div style="font-size:13.5px;font-weight:600;color:#10182f">Recommended: 75-question CAT today</div>
+          <div style="font-size:12px;color:#7a6b84;margin-top:2px">Optimal timing based on your 3.2 sessions/week cadence.</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:auto">
+        <button class="btn-launch">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Launch CAT Exam
+        </button>
+        <button class="btn-resume">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Resume last session — May 16 · Q47 of 75
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-col">
+    <div class="ac">
+      <div class="ac-title">Weak Systems <span>Study these first ↗</span></div>
+      <div class="domain-row"><div class="domain-name">Cardiovascular</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:62%;background:#f97316"></div></div><div class="domain-pct" style="color:#f97316">62%</div></div>
+      <div class="domain-row"><div class="domain-name">Respiratory</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:58%;background:#ef4444"></div></div><div class="domain-pct" style="color:#ef4444">58%</div></div>
+      <div class="domain-row"><div class="domain-name">Renal / Fluids</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:64%;background:#d97706"></div></div><div class="domain-pct" style="color:#d97706">64%</div></div>
+    </div>
+    <div class="ac">
+      <div class="ac-title">Your Strengths <span style="color:#16a34a">On track ✓</span></div>
+      <div class="domain-row"><div class="domain-name">Psych / Mental Health</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:91%;background:#16a34a"></div></div><div class="domain-pct" style="color:#16a34a">91%</div></div>
+      <div class="domain-row"><div class="domain-name">Pharmacology</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:88%;background:#16a34a"></div></div><div class="domain-pct" style="color:#16a34a">88%</div></div>
+      <div class="domain-row"><div class="domain-name">OB / Newborn</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:83%;background:#16a34a"></div></div><div class="domain-pct" style="color:#16a34a">83%</div></div>
+    </div>
+    <div class="ac">
+      <div class="ac-title">NGN Readiness</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <svg width="52" height="52" viewBox="0 0 52 52"><circle cx="26" cy="26" r="20" fill="none" stroke="#fef4fb" stroke-width="7"/><circle cx="26" cy="26" r="20" fill="none" stroke="#d97706" stroke-width="7" stroke-linecap="round" stroke-dasharray="125.6" stroke-dashoffset="75" transform="rotate(-90 26 26)"/><text x="26" y="31" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="800" fill="#10182f">42%</text></svg>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#10182f">Focus Needed</div>
+          <div style="font-size:11.5px;color:#7a6b84">Below your NCLEX average</div>
+          <div style="font-size:10.5px;font-weight:600;color:#d948a8;background:#fef4fb;border:1px solid #e8c8e2;padding:2px 8px;border-radius:99px;display:inline-block;margin-top:4px">⚠ Prioritize NGN practice</div>
+        </div>
+      </div>
+    </div>
+    <div class="ac">
+      <div class="ac-title">Recent CAT Trend <span style="color:#16a34a">↑ Improving</span></div>
+      <svg width="100%" height="44" viewBox="0 0 330 44">
+        <polyline points="0,38 66,32 132,26 198,20 264,14 330,10" fill="none" stroke="#d948a8" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="0" cy="38" r="3" fill="#d948a8"/><circle cx="66" cy="32" r="3" fill="#d948a8"/><circle cx="132" cy="26" r="3" fill="#d948a8"/><circle cx="198" cy="20" r="3" fill="#d948a8"/><circle cx="264" cy="14" r="3" fill="#d948a8"/><circle cx="330" cy="10" r="4" fill="#b3359a"/>
+        <text x="306" y="6" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#16a34a">+6%</text>
+      </svg>
+    </div>
+    <div class="ac" style="background:linear-gradient(135deg,#fef4fb,#f9eef8);border-color:#e8c8e2">
+      <div class="ac-title" style="color:#d948a8">Confidence Stability</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:20px;font-weight:800;color:#d948a8">Stable ↑</div>
+        <div style="font-size:12px;color:#455569;flex:1">Consistent improvement. Low variance in response time across all recent sessions.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 10 · Blossom · Active MCQ Exam
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f9">
+<style>
+#f9{background:#fef4fb;font-family:'DM Sans',system-ui,sans-serif}
+#f9 .exam-header{height:52px;background:#fff;border-bottom:1.5px solid #f1dff0;display:flex;align-items:center;padding:0 24px;gap:0;box-shadow:0 2px 12px -6px rgba(180,60,160,.08)}
+#f9 .eh-left{display:flex;align-items:center;gap:10px;min-width:220px}
+#f9 .eh-logo{font-size:14px;font-weight:800;color:#d948a8}
+#f9 .eh-mode{font-size:10.5px;font-weight:700;color:#d948a8;background:#fef4fb;border:1px solid #e8c8e2;padding:3px 9px;border-radius:99px}
+#f9 .eh-pulse{width:7px;height:7px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.2)}
+#f9 .eh-center{flex:1;display:flex;align-items:center;justify-content:center;gap:14px}
+#f9 .eh-qnum{font-size:12.5px;font-weight:700;color:#10182f}
+#f9 .eh-progress-wrap{width:180px;height:6px;background:#fef4fb;border-radius:99px;overflow:hidden}
+#f9 .eh-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#d948a8,#9357f2);width:30.6%}
+#f9 .eh-right{display:flex;align-items:center;gap:6px;min-width:220px;justify-content:flex-end}
+#f9 .eh-timer{font-size:14px;font-weight:700;color:#10182f;font-variant-numeric:tabular-nums;background:#fef4fb;border:1px solid #f1dff0;padding:5px 12px;border-radius:8px}
+#f9 .eh-btn{width:34px;height:34px;border-radius:8px;background:#fef4fb;border:1px solid #f1dff0;display:flex;align-items:center;justify-content:center}
+
+#f9 .q-area{max-width:740px;margin:0 auto;padding:32px 24px;height:calc(900px - 52px);overflow:hidden;display:flex;flex-direction:column;gap:20px}
+#f9 .q-meta{display:flex;align-items:center;gap:8px}
+#f9 .q-badge{font-size:10.5px;font-weight:700;color:#d948a8;background:#fef4fb;border:1px solid #e8c8e2;padding:3px 10px;border-radius:99px}
+#f9 .q-card{background:#fff;border:1.5px solid #f1dff0;border-radius:18px;padding:26px 28px;box-shadow:0 1px 0 rgba(16,24,47,.03),0 8px 28px -12px rgba(180,60,160,.07)}
+#f9 .q-stem{font-size:15px;line-height:1.7;color:#10182f}
+#f9 .q-stem strong{font-weight:700}
+#f9 .q-opts{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+#f9 .q-opt{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:1.5px solid #f1dff0;border-radius:12px;cursor:pointer;background:#fff}
+#f9 .q-opt:hover{border-color:#d948a8;background:#fff8fd}
+#f9 .q-opt.selected{border-color:#d948a8;background:#fef4fb;box-shadow:0 0 0 3px rgba(217,72,168,.1)}
+#f9 .q-opt-letter{width:24px;height:24px;border-radius:6px;background:#f9f0f7;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#7a6b84;flex-shrink:0;margin-top:1px}
+#f9 .q-opt.selected .q-opt-letter{background:#d948a8;color:#fff}
+#f9 .q-opt-text{font-size:13.5px;color:#455569;line-height:1.55;flex:1}
+#f9 .q-opt.selected .q-opt-text{color:#10182f;font-weight:500}
+#f9 .q-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:16px;border-top:1px solid #fef4fb}
+#f9 .q-flag{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#7a6b84;cursor:pointer;padding:8px 12px;border-radius:8px}
+#f9 .btn-prev{font-size:13px;font-weight:600;color:#7a6b84;background:#fef4fb;border:1px solid #f1dff0;padding:9px 18px;border-radius:10px}
+#f9 .btn-submit{font-size:13px;font-weight:700;color:#fff;background:#d948a8;padding:9px 22px;border-radius:10px;display:flex;align-items:center;gap:6px;box-shadow:0 2px 10px -3px rgba(217,72,168,.4)}
+#f9 .utility-rail{position:absolute;right:0;top:52px;width:52px;height:calc(900px - 52px);background:#fff;border-left:1px solid #f1dff0;display:flex;flex-direction:column;align-items:center;padding-top:16px;gap:4px}
+#f9 .ur-btn{width:36px;height:36px;border-radius:9px;background:#fef4fb;border:1px solid #f9eef8;display:flex;align-items:center;justify-content:center}
+#f9 .ur-sep{width:24px;height:1px;background:#f1dff0;margin:4px 0}
+</style>
+<div class="exam-header">
+  <div class="eh-left">
+    <span class="eh-logo">NurseNest</span>
+    <span class="eh-mode">CAT Exam</span>
+    <div class="eh-pulse"></div>
+  </div>
+  <div class="eh-center">
+    <span class="eh-qnum">Question 23</span>
+    <div class="eh-progress-wrap"><div class="eh-progress-fill"></div></div>
+    <span style="font-size:11px;color:#7a6b84">of 75</span>
+    <span style="font-size:10.5px;font-weight:600;color:#d948a8;background:#fef4fb;padding:2px 8px;border-radius:6px;border:1px solid #e8c8e2">⚡ Adaptive</span>
+  </div>
+  <div class="eh-right">
+    <div class="eh-timer">00:42:15</div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7a6b84" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7a6b84" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7a6b84" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></div>
+  </div>
+</div>
+<div style="position:relative;height:848px;overflow:hidden">
+  <div class="q-area">
+    <div class="q-meta">
+      <span class="q-badge">Cardiovascular &amp; Oxygenation</span>
+      <div style="display:flex;gap:2px"><div style="width:8px;height:8px;border-radius:2px;background:#d948a8"></div><div style="width:8px;height:8px;border-radius:2px;background:#d948a8"></div><div style="width:8px;height:8px;border-radius:2px;background:#d948a8"></div><div style="width:8px;height:8px;border-radius:2px;background:#d948a8"></div><div style="width:8px;height:8px;border-radius:2px;background:#fef4fb"></div></div>
+      <span style="font-size:11px;color:#7a6b84">Hard · Adaptive priority</span>
+    </div>
+    <div class="q-card">
+      <div class="q-stem">A <strong>68-year-old client</strong> is admitted with an acute heart failure exacerbation. Assessment reveals: HR 104 bpm, BP 158/92 mmHg, RR 22/min, SpO₂ 92% on room air, bilateral crackles to mid-lung fields, and jugular venous distension. <strong>Which action should the nurse implement FIRST?</strong></div>
+      <div class="q-opts">
+        <div class="q-opt"><div class="q-opt-letter">A</div><div class="q-opt-text">Administer furosemide 40 mg IV as ordered to relieve acute fluid overload</div></div>
+        <div class="q-opt selected"><div class="q-opt-letter">B</div><div class="q-opt-text">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min</div></div>
+        <div class="q-opt"><div class="q-opt-letter">C</div><div class="q-opt-text">Obtain a 12-lead ECG and document the cardiac rhythm for provider review</div></div>
+        <div class="q-opt"><div class="q-opt-letter">D</div><div class="q-opt-text">Increase IV fluid rate to 125 mL/hr to maintain adequate cardiac preload</div></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="q-flag"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Flag</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-prev">← Previous</button>
+        <button class="btn-submit">Submit Answer →</button>
+      </div>
+    </div>
+  </div>
+  <div class="utility-rail">
+    <div class="ur-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7a6b84" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/></svg></div>
+    <div class="ur-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7a6b84" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+    <div class="ur-sep"></div>
+    <div class="ur-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7a6b84" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></div>
+    <div class="ur-sep"></div>
+    <div class="ur-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7a6b84" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 11 · Blossom · Post-Exam Results
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f10">
+<style>
+#f10{background:#fef4fb;font-family:'DM Sans',system-ui,sans-serif}
+#f10 .nav{height:56px;background:#d948a8;display:flex;align-items:center;padding:0 32px}
+#f10 .nav-logo{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.02em}
+#f10 .nav-links{display:flex;align-items:center;gap:1px;margin-left:32px}
+#f10 .nav-link{font-size:13px;font-weight:500;color:rgba(255,255,255,.75);padding:7px 12px;border-radius:7px}
+#f10 .nav-link.active{color:#fff;background:rgba(255,255,255,.18);font-weight:600}
+#f10 .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+#f10 .nav-avatar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.18);border-radius:10px;padding:4px 12px 4px 6px}
+#f10 .nav-avatar-ring{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#d948a8}
+#f10 .nav-avatar-name{font-size:12.5px;font-weight:600;color:#fff}
+#f10 .nav-tier{font-size:10px;font-weight:700;color:#d948a8;background:#fff;padding:2px 7px;border-radius:99px}
+
+#f10 .results-hero{background:linear-gradient(135deg,#6b1250 0%,#d948a8 55%,#9357f2 100%);padding:36px 40px;display:flex;align-items:center;justify-content:space-between}
+#f10 .rh-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px}
+#f10 .rh-title{font-size:36px;font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1.05;margin-bottom:6px}
+#f10 .rh-meta{font-size:13px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:12px}
+#f10 .rh-right{display:flex;align-items:center;gap:16px}
+#f10 .rh-badge{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.25);border-radius:16px;padding:14px 20px;text-align:center;backdrop-filter:blur(8px)}
+#f10 .rh-badge-n{font-size:32px;font-weight:800;color:#fff;letter-spacing:-.03em}
+#f10 .rh-badge-l{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px}
+#f10 .rh-pass{background:#16a34a;border:1.5px solid #22c55e;border-radius:12px;padding:14px 20px;text-align:center}
+#f10 .rh-pass-t{font-size:14px;font-weight:800;color:#fff}
+#f10 .rh-pass-s{font-size:11px;color:rgba(255,255,255,.8);margin-top:3px}
+#f10 .rh-improvement{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:12px 18px;text-align:center}
+#f10 .rh-imp-n{font-size:24px;font-weight:800;color:#4ade80}
+#f10 .rh-imp-l{font-size:10.5px;color:rgba(255,255,255,.65);margin-top:2px}
+
+#f10 .main{display:grid;grid-template-columns:1fr 1fr;padding:24px 32px;gap:20px;height:calc(900px - 56px - 108px);overflow:hidden}
+#f10 .rc{background:#fff;border:1px solid #f1dff0;border-radius:18px;padding:20px 22px;box-shadow:0 1px 0 rgba(16,24,47,.03),0 8px 24px -12px rgba(180,60,160,.07)}
+#f10 .rc-title{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#7a6b84;margin-bottom:14px}
+#f10 .domain-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+#f10 .domain-name{font-size:12px;font-weight:500;color:#455569;width:140px;flex-shrink:0}
+#f10 .domain-bar-wrap{flex:1;height:7px;background:#fef4fb;border-radius:99px;overflow:hidden}
+#f10 .domain-bar{height:100%;border-radius:99px}
+#f10 .domain-pct{font-size:11.5px;font-weight:700;width:34px;text-align:right}
+</style>
+<nav class="nav">
+  <span class="nav-logo">NurseNest</span>
+  <div class="nav-links"><a class="nav-link">Dashboard</a><a class="nav-link">Flashcards</a><a class="nav-link">Practice</a><a class="nav-link active">CAT Exam</a><a class="nav-link">Modules</a></div>
+  <div class="nav-right"><div class="nav-avatar"><div class="nav-avatar-ring">JM</div><span class="nav-avatar-name">Jasmeen M.</span><span class="nav-tier">PRO</span></div></div>
+</nav>
+<div class="results-hero">
+  <div class="rh-left">
+    <div class="rh-label">CAT Exam · Session 4 Complete · May 17, 2026</div>
+    <div class="rh-title">NCLEX Readiness: 78%</div>
+    <div class="rh-meta"><span>75 Questions</span><span style="width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.3);display:inline-block"></span><span>42 min 18 sec</span><span style="width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.3);display:inline-block"></span><span>8 flagged</span></div>
+  </div>
+  <div class="rh-right">
+    <div class="rh-improvement"><div class="rh-imp-n">+6%</div><div class="rh-imp-l">vs last session</div></div>
+    <div class="rh-pass"><div class="rh-pass-t">✓ Likely Pass</div><div class="rh-pass-s">Confidence: High</div></div>
+    <div class="rh-badge"><div class="rh-badge-n">78</div><div class="rh-badge-l">Readiness Score</div></div>
+  </div>
+</div>
+<div class="main">
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="rc">
+      <div class="rc-title">Domain Performance</div>
+      <div class="domain-row"><div class="domain-name">Cardiovascular</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:62%;background:#f97316"></div></div><div class="domain-pct" style="color:#f97316">62%</div></div>
+      <div class="domain-row"><div class="domain-name">Respiratory</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:58%;background:#ef4444"></div></div><div class="domain-pct" style="color:#ef4444">58%</div></div>
+      <div class="domain-row"><div class="domain-name">Renal / Fluids</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:64%;background:#f97316"></div></div><div class="domain-pct" style="color:#f97316">64%</div></div>
+      <div class="domain-row"><div class="domain-name">Neuro / Sensory</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:71%;background:#d948a8"></div></div><div class="domain-pct" style="color:#d948a8">71%</div></div>
+      <div class="domain-row"><div class="domain-name">GI / Nutrition</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:79%;background:#9357f2"></div></div><div class="domain-pct" style="color:#9357f2">79%</div></div>
+      <div class="domain-row"><div class="domain-name">Pharmacology</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:88%;background:#16a34a"></div></div><div class="domain-pct" style="color:#16a34a">88%</div></div>
+      <div class="domain-row"><div class="domain-name">Psych / Mental Health</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:91%;background:#16a34a"></div></div><div class="domain-pct" style="color:#16a34a">91%</div></div>
+    </div>
+    <div class="rc" style="background:linear-gradient(135deg,#fef4fb,#f9eef8);border-color:#e8c8e2">
+      <div class="rc-title" style="color:#d948a8">NGN Performance</div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="23" fill="none" stroke="#f9eef8" stroke-width="7"/><circle cx="30" cy="30" r="23" fill="none" stroke="#d948a8" stroke-width="7" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="87" transform="rotate(-90 30 30)"/><text x="30" y="35" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="14" font-weight="800" fill="#10182f">40%</text></svg>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#10182f">2 of 5 NGN correct</div>
+          <div style="font-size:11.5px;color:#7a6b84">Focus area for improvement</div>
+          <div style="font-size:10.5px;font-weight:600;color:#d948a8;background:#fef4fb;border:1px solid #e8c8e2;padding:3px 10px;border-radius:99px;display:inline-block;margin-top:6px">Practice NGN →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="rc">
+      <div class="rc-title">Adaptive Difficulty Progression</div>
+      <svg width="100%" height="110" viewBox="0 0 520 110">
+        <line x1="0" y1="88" x2="520" y2="88" stroke="#fef4fb" stroke-width="1"/><line x1="0" y1="66" x2="520" y2="66" stroke="#fef4fb" stroke-width="1"/><line x1="0" y1="44" x2="520" y2="44" stroke="#fef4fb" stroke-width="1"/><line x1="0" y1="22" x2="520" y2="22" stroke="#fef4fb" stroke-width="1"/>
+        <defs><linearGradient id="blDiffGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d948a8" stop-opacity=".12"/><stop offset="100%" stop-color="#d948a8" stop-opacity="0"/></linearGradient></defs>
+        <path d="M30,84 L80,78 L130,72 L180,66 L230,70 L280,58 L330,50 L380,42 L430,36 L480,30 L520,24 L520,100 L30,100Z" fill="url(#blDiffGrad)"/>
+        <path d="M30,84 L80,78 L130,72 L180,66 L230,70 L280,58 L330,50 L380,42 L430,36 L480,30 L520,24" fill="none" stroke="#d948a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div style="font-size:11.5px;color:#455569;margin-top:4px">Difficulty escalated to <strong>Very Hard</strong> by Q50. Final difficulty: 4.2/5.</div>
+    </div>
+    <div class="rc">
+      <div class="rc-title">Session Comparison</div>
+      <svg width="100%" height="52" viewBox="0 0 440 52">
+        <polyline points="0,46 88,40 176,34 264,26 352,18 440,12" fill="none" stroke="#d948a8" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="0" cy="46" r="3.5" fill="#d948a8"/><circle cx="88" cy="40" r="3.5" fill="#d948a8"/><circle cx="176" cy="34" r="3.5" fill="#d948a8"/><circle cx="264" cy="26" r="3.5" fill="#d948a8"/><circle cx="352" cy="18" r="3.5" fill="#d948a8"/><circle cx="440" cy="12" r="4.5" fill="#b3359a"/>
+        <text x="410" y="8" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#16a34a">+6%</text>
+      </svg>
+      <div style="font-size:11px;color:#7a6b84;margin-top:4px">62% → 68% → 72% → 74% → 76% → <strong style="color:#d948a8">78%</strong></div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button style="flex:1;font-size:12px;font-weight:600;color:#d948a8;background:#fef4fb;border:1px solid #e8c8e2;padding:9px;border-radius:10px;cursor:pointer">Review Session</button>
+        <button style="flex:1;font-size:12px;font-weight:700;color:#fff;background:#d948a8;padding:9px;border-radius:10px;cursor:pointer;box-shadow:0 2px 8px -2px rgba(217,72,168,.35)">New CAT →</button>
+        <button style="flex:1;font-size:12px;font-weight:600;color:#455569;background:#fef4fb;border:1px solid #f1dff0;padding:9px;border-radius:10px;cursor:pointer">Study Weak</button>
+      </div>
+    </div>
+    <div class="rc" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0">
+      <div style="text-align:center;padding:12px 6px"><div style="font-size:26px;font-weight:800;color:#10182f">33s</div><div style="font-size:10.5px;color:#7a6b84">Avg pace</div></div>
+      <div style="text-align:center;padding:12px 6px;border-left:1px solid #f1dff0;border-right:1px solid #f1dff0"><div style="font-size:26px;font-weight:800;color:#9357f2">8</div><div style="font-size:10.5px;color:#7a6b84">Flagged</div></div>
+      <div style="text-align:center;padding:12px 6px"><div style="font-size:26px;font-weight:800;color:#16a34a">87%</div><div style="font-size:10.5px;color:#7a6b84">1st accuracy</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 12 · Midnight · CAT Pre-Exam Landing
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f11">
+<style>
+#f11{background:#07111f;font-family:'DM Sans',system-ui,sans-serif}
+#f11 .nav{height:56px;background:#0b1220;border-bottom:1px solid #314466;display:flex;align-items:center;padding:0 32px}
+#f11 .nav-logo{font-size:16px;font-weight:800;color:#e5edf7;letter-spacing:-.02em}
+#f11 .nav-links{display:flex;align-items:center;gap:1px;margin-left:32px}
+#f11 .nav-link{font-size:13px;font-weight:500;color:#b7c4d6;padding:7px 12px;border-radius:7px}
+#f11 .nav-link.active{color:#fff;background:rgba(56,189,248,.18);font-weight:600}
+#f11 .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+#f11 .nav-avatar{display:flex;align-items:center;gap:8px;background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:4px 12px 4px 6px}
+#f11 .nav-avatar-ring{width:28px;height:28px;border-radius:7px;background:#38bdf8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#07111f}
+#f11 .nav-avatar-name{font-size:12.5px;font-weight:600;color:#e5edf7}
+#f11 .nav-tier{font-size:10px;font-weight:700;color:#07111f;background:#38bdf8;padding:2px 7px;border-radius:99px}
+
+#f11 .ctx{height:38px;background:#0b1220;border-bottom:1px solid #223050;display:flex;align-items:center;padding:0 32px;gap:16px}
+#f11 .ctx-label{font-size:11.5px;font-weight:700;color:#e5edf7;display:flex;align-items:center;gap:6px}
+#f11 .ctx-sep{width:1px;height:14px;background:#314466}
+#f11 .ctx-item{font-size:11.5px;color:#b7c4d6}
+#f11 .pill-ready{background:rgba(52,211,153,.12);color:#34d399;border:1px solid rgba(52,211,153,.25);font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:99px}
+#f11 .pill-mn{background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.2);font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:99px}
+
+#f11 .main{display:grid;grid-template-columns:1fr 420px;height:calc(900px - 56px - 38px);overflow:hidden}
+#f11 .launch-col{padding:28px 24px 28px 32px;display:flex;flex-direction:column;gap:16px}
+#f11 .analytics-col{padding:28px 32px 28px 8px;display:flex;flex-direction:column;gap:12px}
+
+#f11 .launch-card{background:#111827;border:1px solid #314466;border-radius:20px;padding:28px;box-shadow:0 2px 0 rgba(0,0,0,.3),0 16px 48px -24px rgba(0,0,0,.5);flex:1;display:flex;flex-direction:column;gap:20px;position:relative;overflow:hidden}
+#f11 .launch-card::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(600px 280px at 80% -10%,rgba(56,189,248,.08),transparent 55%),radial-gradient(350px 200px at -5% 100%,rgba(96,165,250,.06),transparent 50%)}
+
+#f11 .lc-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#647894}
+#f11 .lc-badge{font-size:10.5px;font-weight:600;color:#38bdf8;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.2);padding:3px 10px;border-radius:99px}
+#f11 .lc-score-headline{font-size:28px;font-weight:800;color:#ffffff;letter-spacing:-.03em;line-height:1}
+#f11 .lc-score-sub{font-size:13.5px;color:#b7c4d6;margin-top:4px;line-height:1.5}
+#f11 .lc-pass-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(52,211,153,.12);border:1.5px solid rgba(52,211,153,.25);color:#34d399;font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:99px;margin-top:8px}
+
+#f11 .lc-stat{background:#1a2435;border:1px solid #314466;border-radius:10px;padding:10px 14px;flex:1}
+#f11 .lc-stat-n{font-size:17px;font-weight:800;color:#ffffff}
+#f11 .lc-stat-l{font-size:10.5px;color:#647894;margin-top:2px}
+
+#f11 .lc-chart{background:#0f1c2e;border:1px solid #314466;border-radius:14px;padding:14px 16px}
+#f11 .lc-chart-label{font-size:10.5px;font-weight:600;color:#647894;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+
+#f11 .lc-pacing{background:rgba(56,189,248,.06);border:1px solid #314466;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+#f11 .lc-pacing-ico{width:36px;height:36px;background:rgba(56,189,248,.12);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(56,189,248,.18)}
+
+#f11 .btn-launch{background:#38bdf8;color:#07111f;font-size:15px;font-weight:700;padding:14px 24px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px -4px rgba(56,189,248,.4)}
+#f11 .btn-resume{background:transparent;color:#38bdf8;font-size:13.5px;font-weight:600;padding:10px 24px;border-radius:10px;border:1.5px solid #314466;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+
+#f11 .ac{background:#111827;border:1px solid #314466;border-radius:16px;padding:16px 18px;box-shadow:0 2px 0 rgba(0,0,0,.2),0 8px 24px -12px rgba(0,0,0,.4)}
+#f11 .ac-title{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#647894;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+#f11 .ac-title span{font-size:10px;font-weight:500;text-transform:none;letter-spacing:0;color:#38bdf8}
+#f11 .domain-name{font-size:12px;font-weight:500;color:#b7c4d6;width:130px;flex-shrink:0}
+#f11 .domain-bar-wrap{flex:1;height:6px;background:#1a2435;border-radius:99px;overflow:hidden}
+#f11 .domain-pct{font-size:11.5px;font-weight:700;color:#e5edf7;width:34px;text-align:right}
+</style>
+<nav class="nav">
+  <span class="nav-logo">NurseNest</span>
+  <div class="nav-links"><a class="nav-link">Dashboard</a><a class="nav-link">Flashcards</a><a class="nav-link">Practice</a><a class="nav-link active">CAT Exam</a><a class="nav-link">Modules</a><a class="nav-link">CNPLE</a></div>
+  <div class="nav-right"><div class="nav-avatar"><div class="nav-avatar-ring">JM</div><span class="nav-avatar-name">Jasmeen M.</span><span class="nav-tier">PRO</span></div></div>
+</nav>
+<div class="ctx">
+  <div class="ctx-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>NCLEX-RN CAT Exam</div>
+  <div class="ctx-sep"></div><span class="pill-mn">⚡ Adaptive</span><span class="pill-ready">✓ Ready</span>
+  <div class="ctx-sep"></div><span class="ctx-item">Last: May 14 · 82%</span>
+  <div class="ctx-sep"></div><span class="ctx-item">Est. ~90 min</span>
+  <div style="margin-left:auto;font-size:11px;color:#38bdf8;font-weight:600;cursor:pointer">View History ↗</div>
+</div>
+<div class="main">
+  <div class="launch-col">
+    <div class="launch-card">
+      <div style="display:flex;align-items:center;justify-content:space-between"><span class="lc-title">Adaptive Readiness Intelligence</span><span class="lc-badge">Session 4 · Adaptive</span></div>
+      <div style="display:flex;align-items:center;gap:28px">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#1a2435" stroke-width="9"/>
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#38bdf8" stroke-width="9" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="66" transform="rotate(-90 55 55)"/>
+          <text x="55" y="51" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="26" font-weight="800" fill="#ffffff">78</text>
+          <text x="55" y="66" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" font-weight="600" fill="#647894">READINESS</text>
+        </svg>
+        <div>
+          <div class="lc-score-headline">Likely to Pass</div>
+          <div class="lc-score-sub">Your adaptive score is in the<br><strong style="color:#38bdf8">high-confidence passing range</strong> for NCLEX-RN.</div>
+          <div class="lc-pass-pill">✓ Passing Probability: High (78–88%)</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <div class="lc-stat"><div class="lc-stat-n">847</div><div class="lc-stat-l">Questions done</div></div>
+        <div class="lc-stat"><div class="lc-stat-n">62%</div><div class="lc-stat-l">Correct avg</div></div>
+        <div class="lc-stat"><div class="lc-stat-n">3.2×</div><div class="lc-stat-l">Sessions/wk</div></div>
+        <div class="lc-stat"><div class="lc-stat-n" style="color:#34d399">↑6%</div><div class="lc-stat-l">This week</div></div>
+      </div>
+      <div class="lc-chart">
+        <div class="lc-chart-label">Adaptive Difficulty Curve — Last 5 Sessions</div>
+        <svg width="100%" height="56" viewBox="0 0 540 56" preserveAspectRatio="none">
+          <defs><linearGradient id="mnGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#38bdf8" stop-opacity=".18"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/></linearGradient></defs>
+          <path d="M0 46 L90 40 L180 34 L270 28 L360 24 L450 18 L540 14 L540 56 L0 56Z" fill="url(#mnGrad)"/>
+          <path d="M0 46 L90 40 L180 34 L270 28 L360 24 L450 18 L540 14" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="0" cy="46" r="4" fill="#38bdf8"/><circle cx="90" cy="40" r="4" fill="#38bdf8"/><circle cx="180" cy="34" r="4" fill="#38bdf8"/><circle cx="270" cy="28" r="4" fill="#38bdf8"/><circle cx="360" cy="24" r="4" fill="#38bdf8"/><circle cx="450" cy="18" r="4" fill="#38bdf8"/><circle cx="540" cy="14" r="5" fill="#0ea5e9"/>
+        </svg>
+      </div>
+      <div class="lc-pacing">
+        <div class="lc-pacing-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div>
+          <div style="font-size:13.5px;font-weight:600;color:#ffffff">Recommended: 75-question CAT today</div>
+          <div style="font-size:12px;color:#647894;margin-top:2px">Optimal timing based on your 3.2 sessions/week cadence.</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:auto">
+        <button class="btn-launch"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Launch CAT Exam</button>
+        <button class="btn-resume"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume last session — May 16 · Q47 of 75</button>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-col">
+    <div class="ac">
+      <div class="ac-title">Weak Systems <span>Study these first ↗</span></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><div class="domain-name">Cardiovascular</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:62%;background:#f97316"></div></div><div class="domain-pct" style="color:#f97316">62%</div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><div class="domain-name">Respiratory</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:58%;background:#ef4444"></div></div><div class="domain-pct" style="color:#ef4444">58%</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="domain-name">Renal / Fluids</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:64%;background:#fbbf24"></div></div><div class="domain-pct" style="color:#fbbf24">64%</div></div>
+    </div>
+    <div class="ac">
+      <div class="ac-title">Your Strengths <span style="color:#34d399">On track ✓</span></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><div class="domain-name">Psych / Mental Health</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:91%;background:#34d399"></div></div><div class="domain-pct" style="color:#34d399">91%</div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><div class="domain-name">Pharmacology</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:88%;background:#34d399"></div></div><div class="domain-pct" style="color:#34d399">88%</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="domain-name">OB / Newborn</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:83%;background:#34d399"></div></div><div class="domain-pct" style="color:#34d399">83%</div></div>
+    </div>
+    <div class="ac">
+      <div class="ac-title">NGN Readiness</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <svg width="52" height="52" viewBox="0 0 52 52"><circle cx="26" cy="26" r="20" fill="none" stroke="#1a2435" stroke-width="7"/><circle cx="26" cy="26" r="20" fill="none" stroke="#fbbf24" stroke-width="7" stroke-linecap="round" stroke-dasharray="125.6" stroke-dashoffset="75" transform="rotate(-90 26 26)"/><text x="26" y="31" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="800" fill="#ffffff">42%</text></svg>
+        <div><div style="font-size:14px;font-weight:700;color:#ffffff">Focus Needed</div><div style="font-size:11.5px;color:#647894">Below NCLEX average</div><div style="font-size:10.5px;font-weight:600;color:#fbbf24;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);padding:2px 8px;border-radius:99px;display:inline-block;margin-top:4px">⚠ Prioritize NGN</div></div>
+      </div>
+    </div>
+    <div class="ac">
+      <div class="ac-title">Recent CAT Trend <span style="color:#34d399">↑ Improving</span></div>
+      <svg width="100%" height="44" viewBox="0 0 330 44">
+        <polyline points="0,38 66,32 132,26 198,20 264,14 330,10" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="0" cy="38" r="3" fill="#38bdf8"/><circle cx="66" cy="32" r="3" fill="#38bdf8"/><circle cx="132" cy="26" r="3" fill="#38bdf8"/><circle cx="198" cy="20" r="3" fill="#38bdf8"/><circle cx="264" cy="14" r="3" fill="#38bdf8"/><circle cx="330" cy="10" r="4" fill="#0ea5e9"/>
+        <text x="304" y="6" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#34d399">+6%</text>
+      </svg>
+    </div>
+    <div class="ac" style="background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.2)">
+      <div class="ac-title" style="color:#34d399">Confidence Stability</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:20px;font-weight:800;color:#34d399">Stable ↑</div>
+        <div style="font-size:12px;color:#b7c4d6;flex:1">Consistent improvement. Low variance in response time across sessions.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 13 · Midnight · Active MCQ Exam
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f12">
+<style>
+#f12{background:#07111f;font-family:'DM Sans',system-ui,sans-serif}
+#f12 .exam-header{height:52px;background:#0b1220;border-bottom:1.5px solid #314466;display:flex;align-items:center;padding:0 24px;gap:0;box-shadow:0 2px 16px -6px rgba(0,0,0,.4)}
+#f12 .eh-left{display:flex;align-items:center;gap:10px;min-width:220px}
+#f12 .eh-logo{font-size:14px;font-weight:800;color:#e5edf7}
+#f12 .eh-mode{font-size:10.5px;font-weight:700;color:#38bdf8;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.2);padding:3px 9px;border-radius:99px}
+#f12 .eh-pulse{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 0 3px rgba(52,211,153,.2)}
+#f12 .eh-center{flex:1;display:flex;align-items:center;justify-content:center;gap:14px}
+#f12 .eh-qnum{font-size:12.5px;font-weight:700;color:#ffffff}
+#f12 .eh-progress-wrap{width:180px;height:6px;background:#1a2435;border-radius:99px;overflow:hidden}
+#f12 .eh-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#38bdf8,#60a5fa);width:30.6%}
+#f12 .eh-right{display:flex;align-items:center;gap:6px;min-width:220px;justify-content:flex-end}
+#f12 .eh-timer{font-size:14px;font-weight:700;color:#e5edf7;font-variant-numeric:tabular-nums;background:#111827;border:1px solid #314466;padding:5px 12px;border-radius:8px}
+#f12 .eh-btn{width:34px;height:34px;border-radius:8px;background:#111827;border:1px solid #314466;display:flex;align-items:center;justify-content:center}
+
+#f12 .q-area{max-width:740px;margin:0 auto;padding:32px 24px;height:calc(900px - 52px);overflow:hidden;display:flex;flex-direction:column;gap:20px}
+#f12 .q-badge{font-size:10.5px;font-weight:700;color:#38bdf8;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.2);padding:3px 10px;border-radius:99px}
+#f12 .q-card{background:#111827;border:1.5px solid #314466;border-radius:18px;padding:26px 28px;box-shadow:0 2px 0 rgba(0,0,0,.2),0 8px 28px -12px rgba(0,0,0,.4)}
+#f12 .q-stem{font-size:15px;line-height:1.7;color:#e5edf7}
+#f12 .q-stem strong{font-weight:700;color:#ffffff}
+#f12 .q-opts{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+#f12 .q-opt{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:1.5px solid #314466;border-radius:12px;cursor:pointer;background:#111827}
+#f12 .q-opt:hover{border-color:#38bdf8;background:#0f1c2e}
+#f12 .q-opt.selected{border-color:#38bdf8;background:rgba(56,189,248,.1);box-shadow:0 0 0 3px rgba(56,189,248,.12)}
+#f12 .q-opt-letter{width:24px;height:24px;border-radius:6px;background:#1a2435;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#647894;flex-shrink:0;margin-top:1px}
+#f12 .q-opt.selected .q-opt-letter{background:#38bdf8;color:#07111f}
+#f12 .q-opt-text{font-size:13.5px;color:#b7c4d6;line-height:1.55;flex:1}
+#f12 .q-opt.selected .q-opt-text{color:#ffffff;font-weight:500}
+#f12 .q-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:16px;border-top:1px solid #1a2435}
+#f12 .q-flag{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#647894;cursor:pointer;padding:8px 12px;border-radius:8px}
+#f12 .btn-prev{font-size:13px;font-weight:600;color:#b7c4d6;background:#111827;border:1px solid #314466;padding:9px 18px;border-radius:10px}
+#f12 .btn-submit{font-size:13px;font-weight:700;color:#07111f;background:#38bdf8;padding:9px 22px;border-radius:10px;display:flex;align-items:center;gap:6px;box-shadow:0 2px 12px -3px rgba(56,189,248,.4)}
+#f12 .utility-rail{position:absolute;right:0;top:52px;width:52px;height:calc(900px - 52px);background:#0b1220;border-left:1px solid #314466;display:flex;flex-direction:column;align-items:center;padding-top:16px;gap:4px}
+#f12 .ur-btn{width:36px;height:36px;border-radius:9px;background:#111827;border:1px solid #223050;display:flex;align-items:center;justify-content:center}
+#f12 .ur-sep{width:24px;height:1px;background:#223050;margin:4px 0}
+</style>
+<div class="exam-header">
+  <div class="eh-left"><span class="eh-logo">NurseNest</span><span class="eh-mode">CAT Exam</span><div class="eh-pulse"></div></div>
+  <div class="eh-center">
+    <span class="eh-qnum">Question 23</span>
+    <div class="eh-progress-wrap"><div class="eh-progress-fill"></div></div>
+    <span style="font-size:11px;color:#647894">of 75</span>
+    <span style="font-size:10.5px;font-weight:600;color:#38bdf8;background:rgba(56,189,248,.12);padding:2px 8px;border-radius:6px;border:1px solid rgba(56,189,248,.2)">⚡ Adaptive</span>
+  </div>
+  <div class="eh-right">
+    <div class="eh-timer">00:42:15</div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></div>
+  </div>
+</div>
+<div style="position:relative;height:848px;overflow:hidden">
+  <div class="q-area">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="q-badge">Cardiovascular &amp; Oxygenation</span>
+      <div style="display:flex;gap:2px"><div style="width:8px;height:8px;border-radius:2px;background:#38bdf8"></div><div style="width:8px;height:8px;border-radius:2px;background:#38bdf8"></div><div style="width:8px;height:8px;border-radius:2px;background:#38bdf8"></div><div style="width:8px;height:8px;border-radius:2px;background:#38bdf8"></div><div style="width:8px;height:8px;border-radius:2px;background:#1a2435"></div></div>
+      <span style="font-size:11px;color:#647894">Hard · Adaptive priority</span>
+    </div>
+    <div class="q-card">
+      <div class="q-stem">A <strong>68-year-old client</strong> is admitted with an acute heart failure exacerbation. Assessment reveals: HR 104 bpm, BP 158/92 mmHg, RR 22/min, SpO₂ 92% on room air, bilateral crackles to mid-lung fields, and jugular venous distension. <strong>Which action should the nurse implement FIRST?</strong></div>
+      <div class="q-opts">
+        <div class="q-opt"><div class="q-opt-letter">A</div><div class="q-opt-text">Administer furosemide 40 mg IV as ordered to relieve acute fluid overload</div></div>
+        <div class="q-opt selected"><div class="q-opt-letter">B</div><div class="q-opt-text">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min</div></div>
+        <div class="q-opt"><div class="q-opt-letter">C</div><div class="q-opt-text">Obtain a 12-lead ECG and document the cardiac rhythm for provider review</div></div>
+        <div class="q-opt"><div class="q-opt-letter">D</div><div class="q-opt-text">Increase IV fluid rate to 125 mL/hr to maintain adequate cardiac preload</div></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="q-flag"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Flag</div>
+      <div style="display:flex;gap:8px"><button class="btn-prev">← Previous</button><button class="btn-submit">Submit Answer →</button></div>
+    </div>
+  </div>
+  <div class="utility-rail">
+    <div class="ur-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/></svg></div>
+    <div class="ur-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+    <div class="ur-sep"></div>
+    <div class="ur-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></div>
+    <div class="ur-sep"></div>
+    <div class="ur-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 14 · Midnight · Post-Exam Results
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f13">
+<style>
+#f13{background:#07111f;font-family:'DM Sans',system-ui,sans-serif}
+#f13 .nav{height:56px;background:#0b1220;border-bottom:1px solid #314466;display:flex;align-items:center;padding:0 32px}
+#f13 .nav-logo{font-size:16px;font-weight:800;color:#e5edf7}
+#f13 .nav-links{display:flex;align-items:center;gap:1px;margin-left:32px}
+#f13 .nav-link{font-size:13px;font-weight:500;color:#b7c4d6;padding:7px 12px;border-radius:7px}
+#f13 .nav-link.active{color:#fff;background:rgba(56,189,248,.18);font-weight:600}
+#f13 .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+#f13 .nav-avatar{display:flex;align-items:center;gap:8px;background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:4px 12px 4px 6px}
+#f13 .nav-avatar-ring{width:28px;height:28px;border-radius:7px;background:#38bdf8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#07111f}
+#f13 .nav-avatar-name{font-size:12.5px;font-weight:600;color:#e5edf7}
+#f13 .nav-tier{font-size:10px;font-weight:700;color:#07111f;background:#38bdf8;padding:2px 7px;border-radius:99px}
+
+#f13 .results-hero{background:linear-gradient(135deg,#030b16 0%,#071628 35%,#0f2a4a 70%,#1a3a5c 100%);border-bottom:1px solid #314466;padding:36px 40px;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden}
+#f13 .results-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(600px 300px at 70% 50%,rgba(56,189,248,.12),transparent 60%)}
+#f13 .rh-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:6px}
+#f13 .rh-title{font-size:36px;font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1.05;margin-bottom:6px}
+#f13 .rh-meta{font-size:13px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:12px}
+#f13 .rh-right{display:flex;align-items:center;gap:16px;position:relative}
+#f13 .rh-badge{background:rgba(56,189,248,.12);border:1.5px solid rgba(56,189,248,.25);border-radius:16px;padding:14px 20px;text-align:center;backdrop-filter:blur(8px)}
+#f13 .rh-badge-n{font-size:32px;font-weight:800;color:#38bdf8;letter-spacing:-.03em}
+#f13 .rh-badge-l{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px}
+#f13 .rh-pass{background:#14532d;border:1.5px solid #34d399;border-radius:12px;padding:14px 20px;text-align:center}
+#f13 .rh-pass-t{font-size:14px;font-weight:800;color:#34d399}
+#f13 .rh-pass-s{font-size:11px;color:rgba(52,211,153,.7);margin-top:3px}
+#f13 .rh-improvement{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);border-radius:12px;padding:12px 18px;text-align:center}
+#f13 .rh-imp-n{font-size:24px;font-weight:800;color:#4ade80}
+#f13 .rh-imp-l{font-size:10.5px;color:rgba(255,255,255,.45);margin-top:2px}
+
+#f13 .main{display:grid;grid-template-columns:1fr 1fr;padding:24px 32px;gap:20px;height:calc(900px - 56px - 108px);overflow:hidden}
+#f13 .rc{background:#111827;border:1px solid #314466;border-radius:18px;padding:20px 22px;box-shadow:0 2px 0 rgba(0,0,0,.2),0 8px 24px -12px rgba(0,0,0,.4)}
+#f13 .rc-title{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#647894;margin-bottom:14px}
+#f13 .domain-name{font-size:12px;font-weight:500;color:#b7c4d6;width:140px;flex-shrink:0}
+#f13 .domain-bar-wrap{flex:1;height:7px;background:#1a2435;border-radius:99px;overflow:hidden}
+#f13 .domain-pct{font-size:11.5px;font-weight:700;width:34px;text-align:right}
+</style>
+<nav class="nav">
+  <span class="nav-logo">NurseNest</span>
+  <div class="nav-links"><a class="nav-link">Dashboard</a><a class="nav-link">Flashcards</a><a class="nav-link">Practice</a><a class="nav-link active">CAT Exam</a><a class="nav-link">Modules</a></div>
+  <div class="nav-right"><div class="nav-avatar"><div class="nav-avatar-ring">JM</div><span class="nav-avatar-name">Jasmeen M.</span><span class="nav-tier">PRO</span></div></div>
+</nav>
+<div class="results-hero">
+  <div class="rh-left">
+    <div class="rh-label">CAT Exam · Session 4 Complete · May 17, 2026</div>
+    <div class="rh-title">NCLEX Readiness: 78%</div>
+    <div class="rh-meta"><span>75 Questions</span><span style="width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.25);display:inline-block"></span><span>42 min 18 sec</span><span style="width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.25);display:inline-block"></span><span>8 flagged</span></div>
+  </div>
+  <div class="rh-right">
+    <div class="rh-improvement"><div class="rh-imp-n">+6%</div><div class="rh-imp-l">vs last session</div></div>
+    <div class="rh-pass"><div class="rh-pass-t">✓ Likely Pass</div><div class="rh-pass-s">Confidence: High</div></div>
+    <div class="rh-badge"><div class="rh-badge-n">78</div><div class="rh-badge-l">Readiness Score</div></div>
+  </div>
+</div>
+<div class="main">
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="rc">
+      <div class="rc-title">Domain Performance</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="domain-name">Cardiovascular</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:62%;background:#f97316"></div></div><div class="domain-pct" style="color:#f97316">62%</div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="domain-name">Respiratory</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:58%;background:#ef4444"></div></div><div class="domain-pct" style="color:#ef4444">58%</div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="domain-name">Renal / Fluids</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:64%;background:#fbbf24"></div></div><div class="domain-pct" style="color:#fbbf24">64%</div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="domain-name">Neuro / Sensory</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:71%;background:#38bdf8"></div></div><div class="domain-pct" style="color:#38bdf8">71%</div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="domain-name">GI / Nutrition</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:79%;background:#60a5fa"></div></div><div class="domain-pct" style="color:#60a5fa">79%</div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="domain-name">Pharmacology</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:88%;background:#34d399"></div></div><div class="domain-pct" style="color:#34d399">88%</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="domain-name">Psych / Mental Health</div><div class="domain-bar-wrap"><div style="height:100%;border-radius:99px;width:91%;background:#34d399"></div></div><div class="domain-pct" style="color:#34d399">91%</div></div>
+    </div>
+    <div class="rc" style="background:rgba(251,191,36,.06);border-color:rgba(251,191,36,.2)">
+      <div class="rc-title" style="color:#fbbf24">NGN Performance</div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="23" fill="none" stroke="#1a2435" stroke-width="7"/><circle cx="30" cy="30" r="23" fill="none" stroke="#fbbf24" stroke-width="7" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="87" transform="rotate(-90 30 30)"/><text x="30" y="35" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="14" font-weight="800" fill="#ffffff">40%</text></svg>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#ffffff">2 of 5 NGN correct</div>
+          <div style="font-size:11.5px;color:#647894">Focus area for improvement</div>
+          <div style="font-size:10.5px;font-weight:600;color:#fbbf24;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);padding:3px 10px;border-radius:99px;display:inline-block;margin-top:6px">Practice NGN →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="rc">
+      <div class="rc-title">Adaptive Difficulty Progression</div>
+      <svg width="100%" height="110" viewBox="0 0 520 110">
+        <line x1="0" y1="88" x2="520" y2="88" stroke="#1a2435" stroke-width="1"/><line x1="0" y1="66" x2="520" y2="66" stroke="#1a2435" stroke-width="1"/><line x1="0" y1="44" x2="520" y2="44" stroke="#1a2435" stroke-width="1"/><line x1="0" y1="22" x2="520" y2="22" stroke="#1a2435" stroke-width="1"/>
+        <defs><linearGradient id="mnDiffGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#38bdf8" stop-opacity=".14"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/></linearGradient></defs>
+        <path d="M30,84 L80,78 L130,72 L180,66 L230,70 L280,58 L330,50 L380,42 L430,36 L480,30 L520,24 L520,100 L30,100Z" fill="url(#mnDiffGrad)"/>
+        <path d="M30,84 L80,78 L130,72 L180,66 L230,70 L280,58 L330,50 L380,42 L430,36 L480,30 L520,24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div style="font-size:11.5px;color:#b7c4d6;margin-top:4px">Escalated to <strong style="color:#ffffff">Very Hard</strong> by Q50. Final difficulty: 4.2/5.</div>
+    </div>
+    <div class="rc">
+      <div class="rc-title">Session Comparison</div>
+      <svg width="100%" height="52" viewBox="0 0 440 52">
+        <polyline points="0,46 88,40 176,34 264,26 352,18 440,12" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="0" cy="46" r="3.5" fill="#38bdf8"/><circle cx="88" cy="40" r="3.5" fill="#38bdf8"/><circle cx="176" cy="34" r="3.5" fill="#38bdf8"/><circle cx="264" cy="26" r="3.5" fill="#38bdf8"/><circle cx="352" cy="18" r="3.5" fill="#38bdf8"/><circle cx="440" cy="12" r="4.5" fill="#0ea5e9"/>
+        <text x="410" y="8" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#34d399">+6%</text>
+      </svg>
+      <div style="font-size:11px;color:#647894;margin-top:4px">62% → 68% → 72% → 74% → 76% → <strong style="color:#38bdf8">78%</strong></div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button style="flex:1;font-size:12px;font-weight:600;color:#38bdf8;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);padding:9px;border-radius:10px;cursor:pointer">Review</button>
+        <button style="flex:1;font-size:12px;font-weight:700;color:#07111f;background:#38bdf8;padding:9px;border-radius:10px;cursor:pointer;box-shadow:0 2px 10px -3px rgba(56,189,248,.4)">New CAT →</button>
+        <button style="flex:1;font-size:12px;font-weight:600;color:#b7c4d6;background:#111827;border:1px solid #314466;padding:9px;border-radius:10px;cursor:pointer">Study Weak</button>
+      </div>
+    </div>
+    <div class="rc" style="display:grid;grid-template-columns:1fr 1fr 1fr">
+      <div style="text-align:center;padding:12px 4px"><div style="font-size:26px;font-weight:800;color:#ffffff">33s</div><div style="font-size:10.5px;color:#647894">Avg pace</div></div>
+      <div style="text-align:center;padding:12px 4px;border-left:1px solid #314466;border-right:1px solid #314466"><div style="font-size:26px;font-weight:800;color:#fbbf24">8</div><div style="font-size:10.5px;color:#647894">Flagged</div></div>
+      <div style="text-align:center;padding:12px 4px"><div style="font-size:26px;font-weight:800;color:#34d399">87%</div><div style="font-size:10.5px;color:#647894">1st accuracy</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 15 · Ocean · NGN Matrix / Grid Question
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f14">
+<style>
+#f14{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif}
+#f14 .exam-header{height:52px;background:#fff;border-bottom:1.5px solid #d9f3fa;display:flex;align-items:center;padding:0 24px;gap:0;box-shadow:0 2px 12px -6px rgba(6,88,140,.1)}
+#f14 .eh-left{display:flex;align-items:center;gap:10px;min-width:280px}
+#f14 .eh-logo{font-size:14px;font-weight:800;color:#0d7aaa}
+#f14 .eh-mode{font-size:10.5px;font-weight:700;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:3px 9px;border-radius:99px}
+#f14 .eh-ngn{font-size:10.5px;font-weight:700;color:#7c3aed;background:#f5f0fe;border:1px solid #ddd6fe;padding:3px 9px;border-radius:99px}
+#f14 .eh-matrix{font-size:10.5px;font-weight:700;color:#0d9488;background:#f0fdfa;border:1px solid #99f6e4;padding:3px 9px;border-radius:99px}
+#f14 .eh-center{flex:1;display:flex;align-items:center;justify-content:center;gap:12px}
+#f14 .eh-right{display:flex;align-items:center;gap:6px;min-width:240px;justify-content:flex-end}
+#f14 .eh-timer{font-size:14px;font-weight:700;color:#0f172a;font-variant-numeric:tabular-nums;background:#f3f8fc;border:1px solid #d0e8f5;padding:5px 12px;border-radius:8px}
+#f14 .eh-btn{width:34px;height:34px;border-radius:8px;background:#f3f8fc;border:1px solid #d0e8f5;display:flex;align-items:center;justify-content:center}
+
+#f14 .content{padding:24px 40px;height:calc(900px - 52px);overflow:hidden;display:flex;flex-direction:column;gap:18px;max-width:1000px;margin:0 auto;width:100%}
+
+#f14 .ngn-header{display:flex;align-items:center;gap:10px}
+#f14 .ngn-type{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#0d9488;background:#f0fdfa;border:1px solid #99f6e4;padding:3px 10px;border-radius:99px}
+#f14 .ngn-qnum{font-size:11px;font-weight:600;color:#647894}
+
+#f14 .q-card{background:#fff;border:1.5px solid #d0e8f5;border-radius:18px;padding:22px 26px;box-shadow:0 1px 0 rgba(15,23,42,.03),0 8px 28px -12px rgba(6,88,140,.08)}
+#f14 .q-stem{font-size:14.5px;line-height:1.65;color:#0f172a}
+#f14 .q-stem strong{font-weight:700}
+#f14 .q-instruction{font-size:12px;color:#0d9488;font-weight:600;font-style:italic;margin-top:6px}
+
+#f14 .matrix-wrap{background:#fff;border:1.5px solid #d0e8f5;border-radius:18px;overflow:hidden;box-shadow:0 1px 0 rgba(15,23,42,.03),0 8px 28px -12px rgba(6,88,140,.08)}
+#f14 .matrix-table{width:100%;border-collapse:collapse}
+#f14 .matrix-table th{padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#647894;background:#f8fcff;border-bottom:1.5px solid #d0e8f5;text-align:center}
+#f14 .matrix-table th:first-child{text-align:left;width:40%}
+#f14 .matrix-table td{padding:0;border-bottom:1px solid #eef4fa;vertical-align:middle}
+#f14 .matrix-table tr:last-child td{border-bottom:none}
+#f14 .matrix-table tr:hover td{background:#f8fcff}
+#f14 .matrix-action{padding:12px 16px;font-size:13px;color:#0f172a;line-height:1.45;font-weight:500}
+#f14 .matrix-cell{padding:10px;text-align:center}
+#f14 .m-radio{width:20px;height:20px;border-radius:50%;border:2px solid #d0e8f5;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:.1s}
+#f14 .m-radio:hover{border-color:#1aaee0}
+#f14 .m-radio.selected{border-color:#0d7aaa;background:#0d7aaa}
+#f14 .m-radio.selected::after{content:'';width:7px;height:7px;border-radius:50%;background:#fff}
+#f14 .m-radio.x-sel{border-color:#e11d48;background:#fff1f2}
+#f14 .m-radio.check-sel{border-color:#16a34a;background:#f0fdf4}
+#f14 .col-indicated{background:rgba(13,122,170,.04)}
+#f14 .col-contraindicited{background:rgba(225,29,72,.03)}
+#f14 .col-noeffect{background:rgba(100,116,148,.03)}
+
+#f14 .q-bottom{display:flex;align-items:center;justify-content:space-between}
+#f14 .matrix-legend{display:flex;align-items:center;gap:14px}
+#f14 .leg-item{display:flex;align-items:center;gap:5px;font-size:11.5px;color:#647894}
+#f14 .leg-dot{width:10px;height:10px;border-radius:50%}
+</style>
+
+<div class="exam-header">
+  <div class="eh-left">
+    <span class="eh-logo">NurseNest</span>
+    <span class="eh-mode">CAT Exam</span>
+    <span class="eh-ngn">NGN</span>
+    <span class="eh-matrix">Matrix</span>
+  </div>
+  <div class="eh-center">
+    <span style="font-size:12.5px;font-weight:700;color:#0f172a">Question 47</span>
+    <div style="width:160px;height:6px;background:#eef4fa;border-radius:99px;overflow:hidden"><div style="width:62.6%;height:100%;background:linear-gradient(90deg,#1aaee0,#0d9488);border-radius:99px"></div></div>
+    <span style="font-size:11px;color:#647894">of 75</span>
+  </div>
+  <div class="eh-right">
+    <div class="eh-timer">00:28:04</div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="ngn-header">
+    <span class="ngn-type">NGN · Matrix / Grid</span>
+    <span class="ngn-qnum">Question 47 · Pharmacology &amp; Medication Safety</span>
+  </div>
+
+  <div class="q-card">
+    <div class="q-stem">A nurse is caring for <strong>Mr. Torres, a 58-year-old client</strong> admitted with hypertensive urgency (BP 196/114). The provider has ordered the following medications. For each medication listed, click to indicate whether the action is <strong>Indicated</strong>, <strong>Contraindicated</strong>, or has <strong>No Effect</strong> on the client's current condition.</div>
+    <div class="q-instruction">Select one response in each row. You must answer all rows to submit.</div>
+  </div>
+
+  <div class="matrix-wrap">
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th>Medication / Action</th>
+          <th class="col-indicated">Indicated</th>
+          <th class="col-contraindicited">Contraindicated</th>
+          <th class="col-noeffect">No Effect on BP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="matrix-action">Labetalol 20 mg IV push over 2 min<div style="font-size:11.5px;color:#647894;font-weight:400;margin-top:2px">Alpha &amp; beta blocker · Fast-acting antihypertensive</div></div></td>
+          <td class="matrix-cell col-indicated"><div class="m-radio selected"></div></td>
+          <td class="matrix-cell col-contraindicited"><div class="m-radio"></div></td>
+          <td class="matrix-cell col-noeffect"><div class="m-radio"></div></td>
+        </tr>
+        <tr>
+          <td><div class="matrix-action">Furosemide 40 mg IV<div style="font-size:11.5px;color:#647894;font-weight:400;margin-top:2px">Loop diuretic · Reduces preload and volume overload</div></div></td>
+          <td class="matrix-cell col-indicated"><div class="m-radio"></div></td>
+          <td class="matrix-cell col-contraindicited"><div class="m-radio"></div></td>
+          <td class="matrix-cell col-noeffect"><div class="m-radio selected"></div></td>
+        </tr>
+        <tr>
+          <td><div class="matrix-action">Morphine 4 mg IV PRN<div style="font-size:11.5px;color:#647894;font-weight:400;margin-top:2px">Opioid analgesic · Respiratory depression risk</div></div></td>
+          <td class="matrix-cell col-indicated"><div class="m-radio"></div></td>
+          <td class="matrix-cell col-contraindicited"><div class="m-radio selected" style="border-color:#e11d48;background:#fee2e2"></div></td>
+          <td class="matrix-cell col-noeffect"><div class="m-radio"></div></td>
+        </tr>
+        <tr>
+          <td><div class="matrix-action">Nicardipine 5 mg/hr IV infusion<div style="font-size:11.5px;color:#647894;font-weight:400;margin-top:2px">Calcium channel blocker · Titrated antihypertensive</div></div></td>
+          <td class="matrix-cell col-indicated"><div class="m-radio selected"></div></td>
+          <td class="matrix-cell col-contraindicited"><div class="m-radio"></div></td>
+          <td class="matrix-cell col-noeffect"><div class="m-radio"></div></td>
+        </tr>
+        <tr>
+          <td><div class="matrix-action">0.9% Normal Saline 500 mL bolus<div style="font-size:11.5px;color:#647894;font-weight:400;margin-top:2px">IV fluid · Volume expansion</div></div></td>
+          <td class="matrix-cell col-indicated"><div class="m-radio"></div></td>
+          <td class="matrix-cell col-contraindicited"><div class="m-radio selected" style="border-color:#e11d48;background:#fee2e2"></div></td>
+          <td class="matrix-cell col-noeffect"><div class="m-radio"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="q-bottom">
+    <div class="matrix-legend">
+      <div class="leg-item"><div class="leg-dot" style="background:#0d7aaa"></div>Indicated (selected)</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#e11d48;opacity:.7"></div>Contraindicated (selected)</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#d0e8f5"></div>Unselected</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <span style="font-size:11.5px;color:#647894;background:#f0fdf4;border:1px solid #bbf7d0;padding:6px 12px;border-radius:8px;font-weight:600">✓ 5/5 rows answered</span>
+      <button style="font-size:13px;font-weight:600;color:#647894;background:#f3f8fc;border:1px solid #d0e8f5;padding:9px 18px;border-radius:10px;cursor:pointer">← Previous</button>
+      <button style="font-size:13px;font-weight:700;color:#fff;background:#0d7aaa;padding:9px 22px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 2px 10px -3px rgba(13,122,170,.35)">Submit Answer →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const frames = document.querySelectorAll('.frame');
+const tabs = document.querySelectorAll('.tab');
+function show(i) {
+  frames.forEach((f,j)=>{f.classList.toggle('on',j===i)});
+  tabs.forEach((t,j)=>{t.classList.toggle('on',j===i)});
+  window.scrollTo({top:0,behavior:'instant'});
+}
+(function(){const p=new URLSearchParams(location.search).get('frame');if(p!==null){const n=parseInt(p,10);if(!isNaN(n))show(n);}})();
+</script>
+</body>
+</html>

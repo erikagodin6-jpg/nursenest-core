@@ -1,0 +1,173 @@
+import "server-only";
+
+import type { PrismaClient } from "@prisma/client";
+import { PracticeQuestionAnswerMode } from "@prisma/client";
+
+/** Server flag — default on; set QUESTION_PEER_ANALYTICS_ENABLED=false to disable recording/return. */
+export function isQuestionPeerAnalyticsEnabled(): boolean {
+  const v = process.env.QUESTION_PEER_ANALYTICS_ENABLED?.trim().toLowerCase();
+  if (!v) return true;
+  return v === "true" || v === "1" || v === "yes";
+}
+
+export const QUESTION_PEER_ANALYTICS_MIN_SAMPLE = 50;
+
+const INSUFFICIENT_MSG =
+  "Answer analytics will appear once enough learners have completed this question.";
+
+export type QuestionPeerStatsPayload = {
+  totalAttempts: number;
+  correctPercentage: number | null;
+  averageResponseTimeMs: number | null;
+  optionPercentages: Record<string, number> | null;
+  selectedOptionKeys: string[];
+  correctOptionKeys: string[];
+  insufficientSample: boolean;
+  insufficientSampleMessage: string | null;
+};
+
+export function parseGradeAttemptMode(raw: unknown): PracticeQuestionAnswerMode {
+  if (raw === "cat" || raw === "quiz" || raw === "remediation" || raw === "practice") {
+    return raw;
+  }
+  return PracticeQuestionAnswerMode.practice;
+}
+
+function selectedKeysFromAnswer(questionType: string, answer: unknown): string[] {
+  const t = questionType.toUpperCase();
+  if (t === "SATA" || t === "SELECT_ALL_THAT_APPLY") {
+    if (!Array.isArray(answer)) return [];
+    return answer.map((x) => String(x)).filter(Boolean);
+  }
+  if (answer == null) return [];
+  const s = String(answer).trim();
+  return s ? [s] : [];
+}
+
+/** Stable, non-PII blob for attempt row (SATA: joined unit-separator). */
+export function persistSelectedOptionKey(keys: string[]): string {
+  const sorted = [...keys].map((k) => k.trim()).filter(Boolean).sort();
+  const s = sorted.join("\u001f");
+  return s.length > 12_000 ? s.slice(0, 12_000) : s || "(none)";
+}
+
+function roundPct(n: number): number {
+  return Math.round(n * 10) / 10;
+}
+
+/**
+ * Persists one attempt + bumps aggregates, then returns aggregate-only peer stats for the grading response.
+ * CAT mode skips recording and returns null (no mid-adaptive leakage via this path).
+ */
+export async function recordQuestionPeerAnalyticsAndBuildPayload(
+  prisma: PrismaClient,
+  params: {
+    userId: string;
+    questionId: string;
+    questionType: string;
+    pathwayId: string | null;
+    answer: unknown;
+    isCorrect: boolean;
+    correctKeys: string[];
+    attemptMode: PracticeQuestionAnswerMode;
+    responseTimeMs?: number | null;
+  },
+): Promise<QuestionPeerStatsPayload | null> {
+  if (!isQuestionPeerAnalyticsEnabled()) return null;
+  if (params.attemptMode === PracticeQuestionAnswerMode.cat) return null;
+
+  const selectedKeys = selectedKeysFromAnswer(params.questionType, params.answer);
+  const selectedPersist = persistSelectedOptionKey(selectedKeys);
+  const bumpKeys = selectedKeys.length > 0 ? [...new Set(selectedKeys)] : ["(none)"];
+  const responseTimeMs =
+    typeof params.responseTimeMs === "number" && Number.isFinite(params.responseTimeMs) && params.responseTimeMs >= 0
+      ? Math.min(Math.round(params.responseTimeMs), 30 * 60 * 1000)
+      : null;
+
+  const payload = await prisma.$transaction(async (tx) => {
+    await tx.examQuestionPracticeAnswerAttempt.create({
+      data: {
+        userId: params.userId,
+        questionId: params.questionId,
+        selectedOptionKey: selectedPersist,
+        isCorrect: params.isCorrect,
+        responseTimeMs,
+        mode: params.attemptMode,
+        pathwayId: params.pathwayId,
+      },
+    });
+
+    for (const key of bumpKeys) {
+      await tx.examQuestionAnswerOptionAggregate.upsert({
+        where: {
+          questionId_optionKey: { questionId: params.questionId, optionKey: key },
+        },
+        create: {
+          questionId: params.questionId,
+          optionKey: key,
+          selectionCount: 1,
+        },
+        update: { selectionCount: { increment: 1 } },
+      });
+    }
+
+    await tx.examQuestionPerformanceAggregate.upsert({
+      where: { questionId: params.questionId },
+      create: {
+        questionId: params.questionId,
+        totalAttempts: 1,
+        correctAttempts: params.isCorrect ? 1 : 0,
+        responseTimeTotalMs: responseTimeMs ?? 0,
+        responseTimeSamples: responseTimeMs == null ? 0 : 1,
+      },
+      update: {
+        totalAttempts: { increment: 1 },
+        ...(params.isCorrect ? { correctAttempts: { increment: 1 } } : {}),
+        ...(responseTimeMs == null
+          ? {}
+          : {
+              responseTimeTotalMs: { increment: responseTimeMs },
+              responseTimeSamples: { increment: 1 },
+            }),
+      },
+    });
+
+    const perf = await tx.examQuestionPerformanceAggregate.findUnique({
+      where: { questionId: params.questionId },
+    });
+    const optionRows = await tx.examQuestionAnswerOptionAggregate.findMany({
+      where: { questionId: params.questionId },
+    });
+
+    const total = perf?.totalAttempts ?? 0;
+    const insufficient = total < QUESTION_PEER_ANALYTICS_MIN_SAMPLE;
+    const correctPct =
+      !insufficient && total > 0 && perf
+        ? roundPct((100 * perf.correctAttempts) / total)
+        : null;
+    const averageResponseTimeMs =
+      !insufficient && perf && perf.responseTimeSamples > 0
+        ? Math.round(perf.responseTimeTotalMs / perf.responseTimeSamples)
+        : null;
+
+    const optionPercentages: Record<string, number> = {};
+    for (const row of optionRows) {
+      optionPercentages[row.optionKey] =
+        total > 0 ? roundPct((100 * row.selectionCount) / total) : 0;
+    }
+
+    const out: QuestionPeerStatsPayload = {
+      totalAttempts: total,
+      correctPercentage: insufficient ? null : correctPct,
+      averageResponseTimeMs,
+      optionPercentages: insufficient ? null : optionPercentages,
+      selectedOptionKeys: selectedKeys,
+      correctOptionKeys: [...params.correctKeys],
+      insufficientSample: insufficient,
+      insufficientSampleMessage: insufficient ? INSUFFICIENT_MSG : null,
+    };
+    return out;
+  });
+
+  return payload;
+}

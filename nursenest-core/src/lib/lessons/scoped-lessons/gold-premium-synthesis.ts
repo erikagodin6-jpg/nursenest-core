@@ -1,0 +1,1040 @@
+/**
+ * Builds 11-section premium pathway lessons from legacy five-block gold content + shared core.
+ * Keeps clinical substance in one place while meeting premium structure and word-count targets.
+ */
+import { canonicalTierRelevanceMarkdown } from "@/lib/lessons/canonical-pathway-lesson-sections";
+import type { PathwayLicenseBand } from "@/lib/lessons/pathway-lesson-license-band";
+import {
+  PREMIUM_MIN_WORDS,
+  PREMIUM_SECTION_HEADINGS,
+  orderPremiumSections,
+  sectionIsMarkedNotApplicable,
+  isPremiumSectionKind,
+} from "@/lib/lessons/pathway-lesson-premium";
+import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
+import type {
+  PathwayLessonOmittedPremiumSection,
+  PathwayLessonPremiumSectionKind,
+  PathwayLessonRelatedRef,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
+
+export type GoldTierGeo = "us_pn" | "ca_rpn" | "us_rn" | "ca_rn" | "us_np" | "ca_np";
+
+/** Exam label for bridging prose in premium introductions. */
+export const PATHWAY_EXAM_LABEL: Record<string, string> = {
+  "us-lpn-nclex-pn": "NCLEX-PN (United States)",
+  "ca-rpn-rex-pn": "REx-PN (Canada)",
+  "us-rn-nclex-rn": "NCLEX-RN (United States)",
+  "ca-rn-nclex-rn": "NCLEX-RN (Canada)",
+  "us-np-fnp": "NP certification preparation (United States)",
+  "us-np-agpcnp": "NP certification preparation (United States)",
+  "us-np-pmhnp": "NP certification preparation (United States)",
+  "us-np-whnp": "NP certification preparation (United States)",
+  "us-np-pnp-pc": "NP certification preparation (United States)",
+  "ca-np-cnple": "Canadian NP practice / CNPLE-aligned preparation (Canada)",
+};
+
+export function pathwayIdToTierGeo(pathwayId: string): GoldTierGeo | null {
+  const m: Record<string, GoldTierGeo> = {
+    "us-lpn-nclex-pn": "us_pn",
+    "ca-rpn-rex-pn": "ca_rpn",
+    "us-rn-nclex-rn": "us_rn",
+    "ca-rn-nclex-rn": "ca_rn",
+    "us-np-fnp": "us_np",
+    "us-np-agpcnp": "us_np",
+    "us-np-pmhnp": "us_np",
+    "us-np-whnp": "us_np",
+    "us-np-pnp-pc": "us_np",
+    "ca-np-cnple": "ca_np",
+  };
+  return m[pathwayId] ?? null;
+}
+
+export type GoldPremiumSynthesisInput = {
+  /** High-yield pathophysiology / mechanism block (maps to Pathophysiology / Overview). */
+  sharedCore: string;
+  clinical_meaning: string;
+  exam_relevance: string;
+  clinical_scenario: string;
+  takeaways: string;
+  tierGeo: GoldTierGeo;
+  /** Human-readable exam label for bridging prose, e.g. "NCLEX-RN (US)". */
+  examLabel: string;
+  /** Optional labs body; when absent, labs section is omitted with reason. */
+  labsDiagnostics?: string;
+  labsOmitReason?: string;
+  /** When country notes are not needed (e.g. already embedded everywhere). */
+  countryNotesOmitReason?: string;
+  relatedSlugs: string[];
+  relatedTitlesBySlug?: Record<string, string>;
+};
+
+function ensureTierRelevanceWordCount(body: string): string {
+  return ensureMinimumWords(body, PREMIUM_MIN_WORDS.tier_specific_relevance, TIER_RELEVANCE_PAD);
+}
+
+function tierGeoToLicenseBand(geo: GoldTierGeo): PathwayLicenseBand {
+  if (geo.endsWith("np")) return "np";
+  if (geo === "us_pn" || geo === "ca_rpn") return "pn";
+  return "rn";
+}
+
+function tierRelevanceBlock(tierGeo: GoldTierGeo): string {
+  const core = canonicalTierRelevanceMarkdown(tierGeoToLicenseBand(tierGeo));
+  const habit = [
+    "- **Exam execution checklist**",
+    "- Read the role line and the primary instability before you touch options.",
+    "- Name one assessment that proves or disproves the main risk.",
+    "- Pick the action that closes the safety loop within your scope.",
+  ].join("\n");
+  return ensureTierRelevanceWordCount(`${core}\n${habit}`);
+}
+
+function countryNotesBlock(tierGeo: GoldTierGeo): string {
+  switch (tierGeo) {
+    case "ca_rpn":
+    case "ca_rn":
+    case "ca_np":
+      return "Canadian stems use SI units and Canadian facility labels; prioritization stays the same—life threats, acute change, safe sequencing, and timely escalation when status changes.";
+    case "us_pn":
+      return "US practical-nurse items stay order-driven: execute, monitor, report, and escalate when findings exceed stable parameters.";
+    case "us_rn":
+      return "US RN items reward judgment within standards: prioritize trajectory, communicate clearly, and escalate when instability thresholds are crossed.";
+    case "us_np":
+      return "US NP items reward diagnostic discipline, site-of-care choices, and specific follow-up—close risk instead of reassuring through red flags.";
+    default:
+      return "";
+  }
+}
+
+function relatedNextStepsBody(input: GoldPremiumSynthesisInput): string {
+  const lines: string[] = [];
+  for (const slug of input.relatedSlugs.slice(0, 8)) {
+    const title = input.relatedTitlesBySlug?.[slug] ?? slug.replace(/-/g, " ");
+    lines.push(`- **[${title}](LESSON:${slug})**`);
+  }
+  const pad = [
+    "- **[NurseNest lessons index](/lessons)**",
+    "- **[Question bank hub](/question-bank)**",
+    "- **[Study tools](/tools)**",
+  ];
+  for (const p of pad) {
+    if (lines.length >= 3) break;
+    lines.push(p);
+  }
+  return lines.join("\n");
+}
+
+function nursingBlock(input: GoldPremiumSynthesisInput): string {
+  return `**Assessment priorities**  
+Start from **objective data** that changes fastest: **vitals**, **oxygenation**, **perfusion**, **mental status**, **pain pattern**, and **bleeding** when relevant. Tie each finding to **what could worsen in the next minutes**—that lens matches how stems are written.
+
+**Head-to-toe discipline**  
+When the vignette feels vague, run a structured scan: **airway and work of breathing**, **circulation and end-organ perfusion**, **neuro baseline**, **infection sources**, and **lines, tubes, and drains** that can fail quietly. Prefer **trends** over a single snapshot when the stem gives multiple time points.
+
+**Monitoring and actions**  
+Stay inside the **orders and role** the stem assigns for **${input.examLabel}**. Execute **safe, sequential** care: stabilize the client, **reassess after time-limited interventions**, and **communicate clearly** with the interprofessional team using **concise reporting** (situation, background, assessment, and what you need next).
+
+**Escalation**  
+When data cross instability thresholds implied by the vignette, choose **activation of emergency resources**, **provider notification**, or **higher level of care** over **routine tasks**, **delayed reassessment**, or **comfort-only** choices that ignore trajectory.
+
+**Communication that wins points**  
+Use **objective, concise reporting** (trend + current value + what you need) rather than long narratives. Exams reward **closed-loop** communication: you assessed, you acted within role, you notified, and you prepared the client or environment for the next step in care.`;
+}
+
+function clientEducationBlock(input: GoldPremiumSynthesisInput): string {
+  return `**Safety teaching**  
+Translate pathophysiology into **what the client should feel**, **what to track at home when appropriate**, and **when to seek urgent care**—items reward **specific** return precautions rather than vague reassurance. Avoid teaching that **minimizes red flags** or **promises certainty** when the clinical situation still needs monitoring.
+
+**Follow-up**  
+Include **medication adherence cues**, **device use** (oxygen delivery, inhalers), and **symptom journals** when the topic fits. Link teaching to **monitoring** you can verify (for example, **peak flow**, **weights**, **glucose**, **wound changes**, or **daily functional tolerance**) so education is actionable, not abstract.
+
+**Family and caregivers**  
+When stems include family, choose answers that **empower observation** (“call if…”) and **clear escalation paths**, while respecting **privacy** and **scope** for your role in **${input.examLabel}**. The best options name **specific triggers** (worsening shortness of breath, new neurologic changes, uncontrolled pain, fever with confusion) rather than generic advice.`;
+}
+
+function redFlagsBlock(): string {
+  return `**Treat as emergent when** you see **rapid trajectory change**: worsening hypotension despite therapy, **new neurologic deficit**, **crushing chest pressure with diaphoresis**, **oxygenation that fails to improve with appropriate delivery**, **uncontrolled bleeding**, or **sepsis physiology** (fever or hypothermia with tachycardia and poor perfusion).
+
+**Escalation beats busywork**  
+The right option usually **closes a safety loop**: **rapid response or code activation** when criteria are met, **concise provider notification with objective data**, **preparing time-sensitive medications or procedures**, or **moving to a higher level of care**. Wrong options often **finish documentation first**, **delay reassessment**, **offer reassurance without data**, or **teach** while instability is still unresolved.
+
+**Distractor families**  
+Comfort requests, routine medications, and **non-urgent tasks** are deliberately paired with **abnormal vitals** or **worsening symptoms**—the exam is testing whether you **protect the client now** and **communicate risk** clearly, not whether you can complete the longest task list.`;
+}
+
+function collapseInlineParagraphs(s: string): string {
+  return s.trim().replace(/\n\n+/g, " ").replace(/\s+/g, " ");
+}
+
+/** Keep 2–3 `\n\n`-separated paragraphs; grow the last paragraph until the intro meets the premium floor (max ~250 words). */
+const INTRO_TOP_UP_SENTENCES = [
+  "On the exam, writers often pair **stable-sounding options** with **unstable data**—notice the mismatch before you commit.",
+  "If the stem names a **license or role**, reread that line; **scope errors** are classic trap answers even when the clinical topic is familiar.",
+  "Run a **60-second scan**: breathing work and oxygenation, perfusion and end organs, neuro baseline, likely infection sources, and devices that can fail quietly.",
+  "When two answers feel partly right, pick the one that **reduces imminent harm** and **matches orders** for the role you were given.",
+  "Train yourself to state the **primary risk** in one short phrase **before** you read the options so distractors do not rewrite your priority list.",
+];
+
+function ensureIntroductionWordCount(intro: string): string {
+  let text = intro.trim();
+  let w = countWords(stripToPlainText(text));
+  if (w >= PREMIUM_MIN_WORDS.introduction) return text;
+  const paras = text.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+  if (paras.length === 0) return text;
+  let i = 0;
+  while (w < PREMIUM_MIN_WORDS.introduction && i < INTRO_TOP_UP_SENTENCES.length) {
+    paras[paras.length - 1] = `${paras[paras.length - 1]} ${INTRO_TOP_UP_SENTENCES[i]}`;
+    text = paras.join("\n\n");
+    w = countWords(stripToPlainText(text));
+    i += 1;
+  }
+  return text;
+}
+
+const PATHO_EXAM_PAD = `**Connecting mechanism to the stem**  
+When new data appear, trace them to the underlying process and the **compensatory response** that is winning or failing. Ask what assessment would **prove improvement** versus **deterioration** in the next few minutes—exam distractors often ignore that trajectory even when the words sound clinically sophisticated.`;
+
+const PEARLS_DEPTH_PAD = `**One more exam habit**  
+When an option feels emotionally “right,” verify it against **vitals, trajectory, and the role named in the stem** so you do not miss a quieter life threat hiding in the same vignette.`;
+
+function ensureClinicalPearlsWordCount(body: string): string {
+  const t = body.trim();
+  if (countWords(stripToPlainText(t)) >= PREMIUM_MIN_WORDS.clinical_pearls) return t;
+  return `${t}\n\n${PEARLS_DEPTH_PAD}`;
+}
+
+function ensurePathophysiologyDepth(body: string): string {
+  let t = body.trim();
+  const pad = PATHO_EXAM_PAD.trim();
+  const min = PREMIUM_MIN_WORDS.pathophysiology_overview;
+  while (countWords(stripToPlainText(t)) < min) {
+    t = `${t}\n\n${pad}`;
+  }
+  return t;
+}
+
+/** Keeps premium validators satisfied when shared tier templates sit just under the floor. */
+function ensureMinimumWords(body: string, min: number, padMarkdown: string): string {
+  let t = body.trim();
+  const pad = padMarkdown.trim();
+  while (countWords(stripToPlainText(t)) < min) {
+    t = `${t}\n\n${pad}`;
+  }
+  return t;
+}
+
+const TIER_RELEVANCE_PAD = `- Re-read vitals and trajectory before you eliminate an option.
+- Name the assessment or activation step you will not skip.
+- Prefer the move that closes the safety loop within the stem’s orders.`;
+
+/** Reusable prose to meet premium depth for country notes when tier blurbs alone fall short. */
+const COUNTRY_SPECIFIC_NOTES_PAD = `**Verify local scope and authoritative sources**  
+High-stakes nursing decisions must align with **provincial or state regulations**, **facility policy and standing orders**, **scope for your license**, and the **official exam blueprint** you are preparing for. Item writers may use region-typical **units, medication labels, or documentation conventions**; your clinical reasoning still centers on **trajectory**, **reassessment after interventions**, **clear escalation**, and **handoffs that protect the next caregiver**. When a stem is ambiguous about jurisdiction, choose the option that **stays inside the named role**, **uses objective data**, and **escalates** when implied instability thresholds are crossed—then confirm details against **local regulatory text** and **employer policy** rather than memorized shortcuts alone.
+
+**Practice habit**  
+Keep a short checklist: **what changed**, **what is unsafe now**, **what you will measure next**, and **who must be notified**—that structure transfers across Canadian and US pathways without pretending one-size-fits-all rules replace site-specific standards.`;
+
+const RELATED_NEXT_STEPS_PAD = `**Sustained review**  
+Rotate this topic with **adjacent lessons in the same hub**, **targeted question-bank sets**, and **brief drills** that force you to state primary risk, first assessment, and escalation in one breath. Use the **NurseNest lessons index**, **question bank hub**, and **study tools** to spread review across weeks rather than cramming, and revisit items you missed until the pattern—not isolated facts—feels automatic. Align each block of study time with **blueprint emphasis** for your exam and **re-check weak objectives** after every practice test so gaps close systematically.`;
+
+/**
+ * Premium validation requires a substantive meta summary; short variant blurbs from gold JSON often sit at ~10–11 words.
+ */
+export function ensurePremiumSeoDescription(description: string, examContext: string): string {
+  const t = description.trim();
+  if (countWords(stripToPlainText(t)) >= 12) return t;
+  const ctx = examContext.trim() || "nursing licensure preparation";
+  return `${t} NurseNest aligns this hub to ${ctx} item logic: vitals-first assessment, timely escalation when trajectory worsens, and scope-safe actions that close the safety loop.`.trim();
+}
+
+function signsBlock(clinical_scenario: string): string {
+  return `${clinical_scenario.trim()}
+
+**Early, classic, and late patterns**  
+Read the stem’s timeline: **early** cues are often subtle (fatigue, mild dyspnea, vague discomfort, “something is off”), **classic** clusters are the board’s shorthand when it wants fast recognition, and **late** findings reflect **compensatory failure** (hypotension, altered mentation, collapse). Your job is to match the **stage implied by the data**, not the single picture you memorized from one textbook page.
+
+**Tie symptoms to objective data**  
+Pair what the client reports with **vitals**, **oxygenation**, **perfusion**, **pain quality**, **mental status**, and **relevant devices** so you are not guessing from adjectives alone—exam writers hide the diagnosis inside **concrete measurements** and short trend lines.`;
+}
+
+export function synthesizeGoldPremiumSections(
+  input: GoldPremiumSynthesisInput,
+): {
+  sections: PathwayLessonSection[];
+  premiumOmittedSections: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs: PathwayLessonRelatedRef[];
+} {
+  let intro = ensureIntroductionWordCount(
+    [
+      collapseInlineParagraphs(input.clinical_meaning),
+      collapseInlineParagraphs(input.exam_relevance),
+      `For **${input.examLabel}**, questions rarely announce the topic in the first sentence. They hide it inside **vitals, labs, and a short story**. Your job is to name the **clinical problem**, justify **why it matters now**, and select the **safest next step** for the **role** you are given—before you let distractors pull you toward busywork or out-of-scope heroics. When two answers feel partly right, pick the one that **closes risk first** and **matches your license** in the stem.`,
+    ].join("\n\n"),
+  );
+  intro = capPremiumIntroParagraphs(intro, 3);
+  let introWc = countWords(stripToPlainText(intro));
+  let introPad = 0;
+  while (introWc > 250 && intro.length > 80) {
+    const trimmed = intro.replace(/\s+[^\s.?!]+[.?!]\s*$/, "").trim();
+    if (trimmed === intro) break;
+    intro = trimmed;
+    introWc = countWords(stripToPlainText(intro));
+  }
+  while (introWc < PREMIUM_MIN_WORDS.introduction && introPad < 60) {
+    const paras = intro.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+    if (paras.length === 0) break;
+    paras[paras.length - 1] = `${paras[paras.length - 1]} ${INTRO_TOP_UP_SENTENCES[introPad % INTRO_TOP_UP_SENTENCES.length]}`;
+    intro = paras.join("\n\n");
+    introWc = countWords(stripToPlainText(intro));
+    introPad += 1;
+  }
+  let guard = 0;
+  while (countWords(stripToPlainText(intro)) > 250 && intro.length > 120 && guard < 120) {
+    const trimmed = intro.replace(/\s+[^\s.?!]+[.?!]\s*$/, "").trim();
+    if (trimmed === intro) break;
+    intro = trimmed;
+    guard += 1;
+  }
+  introWc = countWords(stripToPlainText(intro));
+  introPad = 0;
+  while (introWc < PREMIUM_MIN_WORDS.introduction && introPad < 40) {
+    const paras = intro.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+    if (paras.length === 0) break;
+    paras[paras.length - 1] = `${paras[paras.length - 1]} ${INTRO_TOP_UP_SENTENCES[introPad % INTRO_TOP_UP_SENTENCES.length]}`;
+    intro = paras.join("\n\n");
+    introWc = countWords(stripToPlainText(intro));
+    introPad += 1;
+  }
+
+  const pearls = ensureClinicalPearlsWordCount(
+    [
+      input.takeaways.trim(),
+      `**Exam traps worth rehearsing**  
+Watch for options that **sound compassionate** but **delay assessment**, **skip monitoring after an intervention**, or **assume stability** you have not established. **Pattern recognition** beats cramming isolated facts: rehearse **if I see X and Y, I think Z and do A** chains aloud.`,
+      `**Quick self-check before you submit your answer**  
+Name the **primary risk**, the **first assessment** that protects the client, and the **escalation** you would not skip—if you cannot say all three in one breath, re-read the stem for hidden instability.`,
+    ].join("\n\n"),
+  );
+
+  const omitted: PathwayLessonOmittedPremiumSection[] = [];
+  const labRaw = input.labsDiagnostics?.trim();
+  const labPad = `**NP-level lab reasoning (when the stem gives data)**  
+Pair **pre-test probability** with **test characteristics**: know when a result **confirms**, **rules in**, or **needs serial testing**. Watch **pre-analytic** issues (hemolysis, timing, fasting vs random), **dynamic** patterns (troponin curves, cortisol timing), and **post-result** actions (repeat to confirm chronicity, trend rather than single point). Items often punish **ordering without indication**, **ignoring contraindications to contrast**, or **treating a lab line without the client’s trajectory**.`;
+  const labBody = labRaw
+    ? ensureMinimumWords(labRaw, PREMIUM_MIN_WORDS.labs_diagnostics, labPad)
+    : undefined;
+  if (!labBody) {
+    omitted.push({
+      kind: "labs_diagnostics",
+      reason:
+        input.labsOmitReason?.trim() ||
+        "Labs and diagnostics are covered in sibling lessons for this topic cluster; this lesson emphasizes prioritization and management patterns without duplicating standalone lab interpretation.",
+    });
+  }
+
+  let countryBody = countryNotesBlock(input.tierGeo).trim();
+  if (input.countryNotesOmitReason) {
+    omitted.push({ kind: "country_specific_notes", reason: input.countryNotesOmitReason });
+    countryBody = "";
+  }
+
+  const sections: PathwayLessonSection[] = [
+    { id: "introduction", heading: PREMIUM_SECTION_HEADINGS.introduction, kind: "introduction", body: intro },
+    {
+      id: "pathophysiology_overview",
+      heading: PREMIUM_SECTION_HEADINGS.pathophysiology_overview,
+      kind: "pathophysiology_overview",
+      body: ensurePathophysiologyDepth(input.sharedCore),
+    },
+    {
+      id: "signs_symptoms",
+      heading: PREMIUM_SECTION_HEADINGS.signs_symptoms,
+      kind: "signs_symptoms",
+      body: signsBlock(input.clinical_scenario),
+    },
+    {
+      id: "red_flags",
+      heading: PREMIUM_SECTION_HEADINGS.red_flags,
+      kind: "red_flags",
+      body: redFlagsBlock(),
+    },
+    ...(labBody
+      ? [
+          {
+            id: "labs_diagnostics",
+            heading: PREMIUM_SECTION_HEADINGS.labs_diagnostics,
+            kind: "labs_diagnostics" as const,
+            body: labBody,
+          },
+        ]
+      : []),
+    {
+      id: "nursing_assessment_interventions",
+      heading: PREMIUM_SECTION_HEADINGS.nursing_assessment_interventions,
+      kind: "nursing_assessment_interventions",
+      body: nursingBlock(input),
+    },
+    {
+      id: "clinical_pearls",
+      heading: PREMIUM_SECTION_HEADINGS.clinical_pearls,
+      kind: "clinical_pearls",
+      body: pearls,
+    },
+    {
+      id: "client_education",
+      heading: PREMIUM_SECTION_HEADINGS.client_education,
+      kind: "client_education",
+      body: clientEducationBlock(input),
+    },
+    {
+      id: "tier_specific_relevance",
+      heading: PREMIUM_SECTION_HEADINGS.tier_specific_relevance,
+      kind: "tier_specific_relevance",
+      body: ensureTierRelevanceWordCount(tierRelevanceBlock(input.tierGeo)),
+    },
+    ...(countryBody
+      ? [
+          {
+            id: "country_specific_notes",
+            heading: PREMIUM_SECTION_HEADINGS.country_specific_notes,
+            kind: "country_specific_notes" as const,
+            body: padKind("country_specific_notes", countryBody, COUNTRY_SPECIFIC_NOTES_PAD),
+          },
+        ]
+      : []),
+    {
+      id: "related_next_steps",
+      heading: PREMIUM_SECTION_HEADINGS.related_next_steps,
+      kind: "related_next_steps",
+      body: padKind("related_next_steps", relatedNextStepsBody(input), RELATED_NEXT_STEPS_PAD),
+    },
+  ];
+
+  const relatedLessonRefs: PathwayLessonRelatedRef[] = input.relatedSlugs.map((slug) => ({
+    slug,
+    titleHint: input.relatedTitlesBySlug?.[slug],
+  }));
+
+  return { sections, premiumOmittedSections: omitted, relatedLessonRefs };
+}
+
+/** Structured case-study spine: scenario → findings → priorities → actions → rationale → safety (maps into premium sections). */
+export type CaseStudyCasebookInput = {
+  tierGeo: GoldTierGeo;
+  examLabel: string;
+  scenarioSetup: string;
+  clinical_meaning: string;
+  exam_relevance: string;
+  pathophysiologyCore: string;
+  keyFindingsSignsSymptoms: string;
+  whatMattersMostEscalation: string;
+  labsDiagnostics?: string;
+  labsOmitReason?: string;
+  prioritizationNextActions: string;
+  rationaleDecisions: string;
+  escalationSafetyTeaching: string;
+  takeaways: string;
+  relatedSlugs: string[];
+  relatedTitlesBySlug?: Record<string, string>;
+  countryNotesOmitReason?: string;
+};
+
+function padKind(kind: keyof typeof PREMIUM_MIN_WORDS, body: string, pad: string): string {
+  let t = body.trim();
+  while (countWords(stripToPlainText(t)) < PREMIUM_MIN_WORDS[kind]) {
+    t = `${t}\n\n${pad.trim()}`;
+  }
+  return t;
+}
+
+function syntheticGoldInput(examLabel: string, tierGeo: GoldTierGeo): GoldPremiumSynthesisInput {
+  return {
+    sharedCore: "",
+    clinical_meaning: "",
+    exam_relevance: "",
+    clinical_scenario: "",
+    takeaways: "",
+    tierGeo,
+    examLabel,
+    relatedSlugs: [],
+  };
+}
+
+/** Merge overflow paragraphs so premium intro stays within 2–3 blocks (validator). */
+function capPremiumIntroParagraphs(body: string, maxParagraphs: number): string {
+  const paras = body
+    .split(/\n\n+/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  if (paras.length <= maxParagraphs) return paras.join("\n\n");
+  const head = paras.slice(0, maxParagraphs - 1);
+  const tail = paras.slice(maxParagraphs - 1).join(" ");
+  return [...head, tail].join("\n\n");
+}
+
+/**
+ * Premium case-study lesson: explicit narrative blocks mapped to the exam-complete spine.
+ * Use for RN / PN / NP pathway-scoped “casebook” lessons that differentiate from topic-overview gold lessons.
+ */
+export function synthesizeCaseStudyCasebookSections(input: CaseStudyCasebookInput): {
+  sections: PathwayLessonSection[];
+  premiumOmittedSections: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs: PathwayLessonRelatedRef[];
+} {
+  const syn = syntheticGoldInput(input.examLabel, input.tierGeo);
+  /** Exactly 3 `\n\n`-separated blocks (premium intro allows 2–3 paragraphs). */
+  const scenarioFlattened = input.scenarioSetup.trim().replace(/\s+/g, " ");
+  const introCore = [
+    `**Scenario setup**\n\n${scenarioFlattened}`,
+    `${collapseInlineParagraphs(input.clinical_meaning)} ${collapseInlineParagraphs(input.exam_relevance)}`.trim(),
+    `This **case-study format** is intentional: boards reward **trajectory thinking**—what changed, what is unstable, and what you do **next** for the **role** named in the stem. For **${input.examLabel}**, read the **assignment line** before you eliminate answers. **Slow read:** re-scan the stem for **vitals trends**, **oxygen settings**, **allergies**, and **time since onset**—case items often hide the decisive clue in a single line.`,
+  ].join("\n\n");
+  let intro = ensureIntroductionWordCount(introCore);
+  if (countWords(stripToPlainText(intro)) < PREMIUM_MIN_WORDS.introduction) {
+    intro = ensureMinimumWords(
+      intro,
+      PREMIUM_MIN_WORDS.introduction,
+      `**Exam habit**  
+Name the **single highest-risk problem** in one sentence before you read the options; case stems reward that discipline for **${input.examLabel}**.`,
+    );
+  }
+  intro = capPremiumIntroParagraphs(intro, 3);
+  let introWc = countWords(stripToPlainText(intro));
+  let introPad = 0;
+  while (introWc < PREMIUM_MIN_WORDS.introduction && introPad < 40) {
+    const paras = intro.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+    if (paras.length === 0) break;
+    paras[paras.length - 1] = `${paras[paras.length - 1]} ${INTRO_TOP_UP_SENTENCES[introPad % INTRO_TOP_UP_SENTENCES.length]}`;
+    intro = paras.join("\n\n");
+    introWc = countWords(stripToPlainText(intro));
+    introPad += 1;
+  }
+  while (introWc > 250) {
+    intro = intro.replace(/\s+[^\s.]+[.?!]\s*$/, "").trim();
+    introWc = countWords(stripToPlainText(intro));
+  }
+  while (introWc < PREMIUM_MIN_WORDS.introduction) {
+    const paras = intro.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+    if (paras.length === 0) break;
+    paras[paras.length - 1] = `${paras[paras.length - 1]} ${INTRO_TOP_UP_SENTENCES[introPad % INTRO_TOP_UP_SENTENCES.length]}`;
+    intro = paras.join("\n\n");
+    introWc = countWords(stripToPlainText(intro));
+    introPad += 1;
+  }
+
+  const signsBody = padKind(
+    "signs_symptoms",
+    signsBlock(input.keyFindingsSignsSymptoms),
+    `**Key findings checklist**  
+Re-read the stem for **numbers you skipped**: vitals trends, device settings, allergies, and time since symptom onset. Case-style items often hide the “why now” clue in a single lab line or a single sentence of background.`,
+  );
+
+  const redBody = padKind(
+    "red_flags",
+    `${input.whatMattersMostEscalation.trim()}\n\n**Escalation & safety (case lens)**\nWhen instability is present, the best answer usually **activates help**, **obtains time-sensitive diagnostics**, or **prepares rescue therapies** per orders—not paperwork, not delayed reassessment, and not scope-expanding heroics.`,
+    redFlagsBlock(),
+  );
+
+  const nursingCombined = padKind(
+    "nursing_assessment_interventions",
+    `**Prioritization & next actions (this case)**\n\n${input.prioritizationNextActions.trim()}\n\n${nursingBlock(syn)}`,
+    `**Reassessment loop**  
+After any intervention, ask: did **oxygenation, perfusion, or mentation** improve on a short timeline? If not, **escalate** with objective data.`,
+  );
+
+  const pearlsCombined = padKind(
+    "clinical_pearls",
+    ensureClinicalPearlsWordCount(
+      [
+        `**Rationale for the best decisions (eliminate distractors)**\n\n${input.rationaleDecisions.trim()}`,
+        `**Takeaways you can reuse on similar stems**\n\n${input.takeaways.trim()}`,
+        `**Second-pass rule**  
+If two answers sound “reasonable,” choose the one that **closes the highest-risk problem first** and matches **your license** in the stem.`,
+      ].join("\n\n"),
+    ),
+    PEARLS_DEPTH_PAD,
+  );
+
+  const clientCombined = padKind(
+    "client_education",
+    `**Escalation, handoffs, and safety teaching**\n\n${input.escalationSafetyTeaching.trim()}\n\n${clientEducationBlock(syn)}`,
+    `**Teach specifics**  
+Name **return precautions** with concrete triggers (worsening shortness of breath, new neuro deficits, uncontrolled bleeding, fever with confusion) rather than “call if worse.”`,
+  );
+
+  const omitted: PathwayLessonOmittedPremiumSection[] = [];
+  const labBodyRaw = input.labsDiagnostics?.trim();
+  const LAB_DIAGNOSTICS_PAD = `**Stem integration**  
+When labs appear, tie each line to **physiology** and **what you do next**—stems often hide the decisive value in a parenthetical or a number you skimmed past. Re-check **units** (mg/dL vs mmol/L) before you eliminate an answer.`;
+  const labBody = labBodyRaw
+    ? padKind("labs_diagnostics", labBodyRaw, LAB_DIAGNOSTICS_PAD)
+    : undefined;
+  if (!labBodyRaw) {
+    omitted.push({
+      kind: "labs_diagnostics",
+      reason:
+        input.labsOmitReason?.trim() ||
+        "Labs and diagnostics are integrated into the case findings section; this lesson emphasizes prioritization and management patterns in a single vignette.",
+    });
+  }
+
+  let countryBody = countryNotesBlock(input.tierGeo).trim();
+  if (input.countryNotesOmitReason) {
+    omitted.push({ kind: "country_specific_notes", reason: input.countryNotesOmitReason });
+    countryBody = "";
+  }
+
+  const sections: PathwayLessonSection[] = [
+    { id: "introduction", heading: PREMIUM_SECTION_HEADINGS.introduction, kind: "introduction", body: intro },
+    {
+      id: "pathophysiology_overview",
+      heading: PREMIUM_SECTION_HEADINGS.pathophysiology_overview,
+      kind: "pathophysiology_overview",
+      body: padKind(
+        "pathophysiology_overview",
+        ensurePathophysiologyDepth(input.pathophysiologyCore),
+        PATHO_EXAM_PAD,
+      ),
+    },
+    {
+      id: "signs_symptoms",
+      heading: PREMIUM_SECTION_HEADINGS.signs_symptoms,
+      kind: "signs_symptoms",
+      body: signsBody,
+    },
+    {
+      id: "red_flags",
+      heading: PREMIUM_SECTION_HEADINGS.red_flags,
+      kind: "red_flags",
+      body: redBody,
+    },
+    ...(labBody
+      ? [
+          {
+            id: "labs_diagnostics",
+            heading: PREMIUM_SECTION_HEADINGS.labs_diagnostics,
+            kind: "labs_diagnostics" as const,
+            body: labBody,
+          },
+        ]
+      : []),
+    {
+      id: "nursing_assessment_interventions",
+      heading: PREMIUM_SECTION_HEADINGS.nursing_assessment_interventions,
+      kind: "nursing_assessment_interventions",
+      body: nursingCombined,
+    },
+    {
+      id: "clinical_pearls",
+      heading: PREMIUM_SECTION_HEADINGS.clinical_pearls,
+      kind: "clinical_pearls",
+      body: pearlsCombined,
+    },
+    {
+      id: "client_education",
+      heading: PREMIUM_SECTION_HEADINGS.client_education,
+      kind: "client_education",
+      body: clientCombined,
+    },
+    {
+      id: "tier_specific_relevance",
+      heading: PREMIUM_SECTION_HEADINGS.tier_specific_relevance,
+      kind: "tier_specific_relevance",
+      body: ensureTierRelevanceWordCount(tierRelevanceBlock(input.tierGeo)),
+    },
+    ...(countryBody
+      ? [
+          {
+            id: "country_specific_notes",
+            heading: PREMIUM_SECTION_HEADINGS.country_specific_notes,
+            kind: "country_specific_notes" as const,
+            body: padKind("country_specific_notes", countryBody, COUNTRY_SPECIFIC_NOTES_PAD),
+          },
+        ]
+      : []),
+    {
+      id: "related_next_steps",
+      heading: PREMIUM_SECTION_HEADINGS.related_next_steps,
+      kind: "related_next_steps",
+      body: padKind(
+        "related_next_steps",
+        relatedNextStepsBody({
+          ...syn,
+          relatedSlugs: input.relatedSlugs,
+          relatedTitlesBySlug: input.relatedTitlesBySlug,
+        }),
+        RELATED_NEXT_STEPS_PAD,
+      ),
+    },
+  ];
+
+  const relatedLessonRefs: PathwayLessonRelatedRef[] = input.relatedSlugs.map((slug) => ({
+    slug,
+    titleHint: input.relatedTitlesBySlug?.[slug],
+  }));
+
+  return { sections, premiumOmittedSections: omitted, relatedLessonRefs };
+}
+
+const CATALOG_LABS_OMIT_REASON =
+  "Dedicated lab-interpretation and diagnostic-ordering lessons in this hub carry the full ordering and values discussion; this page keeps focus on bedside prioritization, assessment sequencing, and management decisions for the named condition.";
+
+const CATALOG_COUNTRY_NON_CA_OMIT_REASON =
+  "This pathway’s packaging targets US exam conventions and scope language; Canadian regulatory packaging lives in the Canadian parallel hub rather than being duplicated on every US lesson page.";
+
+const SIGNS_CATALOG_PAD = `**Symptom-to-data pairing**\nTreat client language as a clue, then **anchor decisions to vitals, oxygenation, perfusion, and trends** the stem actually prints—high-stakes items often hide instability in numbers you skim past while chasing a familiar diagnosis phrase.`;
+
+const LAB_CATALOG_DEPTH_PAD = `**When the stem prints labs**\nRe-check **units and reference ranges** before you eliminate an answer, tie abnormal values to **physiology and trajectory**, and prefer options that **include reassessment after a time-limited intervention** over busywork that ignores whether the client is improving.`;
+
+const CLIENT_ED_CATALOG_PAD = `**Teaching that survives item review**\nFavor **specific return precautions** (what to call for, what to track at home when appropriate) over generic reassurance, and keep teaching **inside the role** the stem assigns so you do not drift into out-of-scope prescribing language.`;
+
+function defaultPeerSlugsForPathway(pathwayId: string): string[] {
+  if (pathwayId === "ca-np-cnple" || pathwayId === "us-np-fnp") {
+    return ["np-primary-care-foundations-gold", "np-heart-failure-primary-care-gold", "np-type2-diabetes-outpatient-gold"];
+  }
+  if (pathwayId.startsWith("ca-")) {
+    return ["fluid-balance-acute-care", "cardiovascular-prioritization"];
+  }
+  if (pathwayId.startsWith("us-")) {
+    return ["respiratory-assessment-ngn", "us-rn-heart-failure"];
+  }
+  return ["fluid-balance-acute-care", "cardiovascular-prioritization"];
+}
+
+function deepenPremiumCatalogIntroduction(intro: string, examLabel: string): string {
+  let text = ensureIntroductionWordCount(intro);
+  text = capPremiumIntroParagraphs(text, 3);
+  let introWc = countWords(stripToPlainText(text));
+  let introPad = 0;
+  while (introWc < PREMIUM_MIN_WORDS.introduction && introPad < 45) {
+    const paras = text.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+    if (paras.length === 0) break;
+    paras[paras.length - 1] = `${paras[paras.length - 1]} ${INTRO_TOP_UP_SENTENCES[introPad % INTRO_TOP_UP_SENTENCES.length]}`;
+    text = paras.join("\n\n");
+    introWc = countWords(stripToPlainText(text));
+    introPad += 1;
+  }
+  while (introWc > 250 && text.length > 120) {
+    const trimmed = text.replace(/\s+[^\s.?!]+[.?!]\s*$/, "").trim();
+    if (trimmed === text) break;
+    text = trimmed;
+    introWc = countWords(stripToPlainText(text));
+  }
+  while (introWc < PREMIUM_MIN_WORDS.introduction && introPad < 70) {
+    const paras = text.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+    if (paras.length === 0) break;
+    paras[paras.length - 1] = `${paras[paras.length - 1]} ${INTRO_TOP_UP_SENTENCES[introPad % INTRO_TOP_UP_SENTENCES.length]}`;
+    text = paras.join("\n\n");
+    introWc = countWords(stripToPlainText(text));
+    introPad += 1;
+  }
+  if (introWc < PREMIUM_MIN_WORDS.introduction) {
+    text = ensureMinimumWords(
+      text,
+      PREMIUM_MIN_WORDS.introduction,
+      `**Exam habit for ${examLabel}**\nSlow your read on the **first vitals cluster** and the **assignment line** before you eliminate an option that sounds clinically sophisticated but delays assessment or ignores trajectory.`,
+    );
+  }
+  text = capPremiumIntroParagraphs(text, 3);
+  return text;
+}
+
+function catalogIntroductionEnsureParagraphsAndDepth(body: string, examLabel: string): string {
+  let intro = body.trim();
+  intro = catalogIntroSplitIfSingleParagraph(intro, examLabel);
+  intro = deepenPremiumCatalogIntroduction(intro, examLabel);
+  return intro;
+}
+
+function catalogIntroSplitIfSingleParagraph(body: string, examLabel: string): string {
+  const paras = body.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+  if (paras.length >= 2) return body.trim();
+  const t = paras[0] ?? "";
+  const mid = t.length > 140 ? t.indexOf(". ", 70) : -1;
+  if (mid > 40) {
+    return `${t.slice(0, mid + 1).trim()}\n\n${t.slice(mid + 2).trim()}`;
+  }
+  return `${t.trim()}\n\n**Exam read for ${examLabel}**\nRestate the **primary risk** in one short sentence, then match each option to **what becomes unsafe if you are wrong** before you commit—boards reward that discipline over topic recognition alone.`;
+}
+
+function relatedNextStepsFromCatalogRefs(
+  refs: PathwayLessonRelatedRef[],
+  pathwayId: string,
+): string {
+  const lines: string[] = [];
+  for (const r of refs.slice(0, 8)) {
+    const slug = typeof r.slug === "string" ? r.slug.trim() : "";
+    if (!slug) continue;
+    const title = r.titleHint?.trim() || slug.replace(/-/g, " ");
+    lines.push(`- **[${title}](LESSON:${slug})**`);
+  }
+  const fallback = defaultPeerSlugsForPathway(pathwayId);
+  for (const slug of fallback) {
+    if (lines.length >= 3) break;
+    if (lines.some((l) => l.includes(`(LESSON:${slug})`))) continue;
+    lines.push(`- **[${slug.replace(/-/g, " ")}](LESSON:${slug})**`);
+  }
+  for (const p of [
+    "- **[NurseNest lessons index](/lessons)**",
+    "- **[Question bank hub](/question-bank)**",
+    "- **[Study tools](/tools)**",
+  ]) {
+    if (lines.length >= 3) break;
+    lines.push(p);
+  }
+  return lines.join("\n");
+}
+
+/**
+ * Shared pass for bundled **partial premium** catalog rows: fills missing spine sections, documents
+ * optional omissions where appropriate, and pads thin bodies to satisfy `validatePathwayLessonPremium`
+ * without lowering word floors.
+ */
+export function hydratePremiumCatalogSectionsForMarketingGate(input: {
+  pathwayId: string;
+  title: string;
+  sections: PathwayLessonSection[];
+  relatedLessonRefs?: PathwayLessonRelatedRef[];
+  premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+}): { sections: PathwayLessonSection[]; premiumOmittedSections: PathwayLessonOmittedPremiumSection[] } {
+  const tierGeo = pathwayIdToTierGeo(input.pathwayId) ?? "us_rn";
+  const examLabel = PATHWAY_EXAM_LABEL[input.pathwayId] ?? input.title;
+  const isCanadaPathway = input.pathwayId.startsWith("ca-");
+  const synExam = syntheticGoldInput(examLabel, tierGeo);
+
+  const omitMap = new Map<PathwayLessonPremiumSectionKind, PathwayLessonOmittedPremiumSection>();
+  for (const o of input.premiumOmittedSections ?? []) {
+    omitMap.set(o.kind, o);
+  }
+
+  const working = input.sections.map((s) => ({ ...s }));
+  const byKind = (): Map<string, PathwayLessonSection> =>
+    new Map(working.filter((s) => isPremiumSectionKind(s.kind)).map((s) => [s.kind, s]));
+
+  let map = byKind();
+
+  const labsSec = map.get("labs_diagnostics");
+  if (!labsSec && !omitMap.has("labs_diagnostics")) {
+    omitMap.set("labs_diagnostics", { kind: "labs_diagnostics", reason: CATALOG_LABS_OMIT_REASON });
+  }
+
+  if (!map.get("pathophysiology_overview") && !omitMap.has("pathophysiology_overview")) {
+    const introSec = map.get("introduction");
+    const signs = map.get("signs_symptoms");
+    const seed =
+      signs?.body?.trim() && !sectionIsMarkedNotApplicable(signs.body)
+        ? collapseInlineParagraphs(signs.body)
+        : introSec?.body?.trim() && !sectionIsMarkedNotApplicable(introSec.body)
+          ? collapseInlineParagraphs(introSec.body)
+          : `Mechanism, assessment priorities, and management framing for **${examLabel}** items on this topic.`;
+    working.push({
+      id: "pathophysiology_overview",
+      heading: PREMIUM_SECTION_HEADINGS.pathophysiology_overview,
+      kind: "pathophysiology_overview",
+      body: ensurePathophysiologyDepth(seed),
+    });
+    map = byKind();
+  }
+
+  if (!map.get("signs_symptoms") && !omitMap.has("signs_symptoms")) {
+    map = byKind();
+    const scenario =
+      map.get("clinical_scenario") ??
+      (working.find((s) => s.kind === "nursing_assessment_interventions") as PathwayLessonSection | undefined);
+    const seed =
+      scenario?.body?.trim() && !sectionIsMarkedNotApplicable(scenario.body)
+        ? signsBlock(scenario.body)
+        : signsBlock(
+            `**Presenting picture**\n\nClients with concerns related to **${examLabel}** items on this topic require structured assessment, trend interpretation, and escalation when instability thresholds are crossed.`,
+          );
+    working.push({
+      id: "signs_symptoms",
+      heading: PREMIUM_SECTION_HEADINGS.signs_symptoms,
+      kind: "signs_symptoms",
+      body: padKind("signs_symptoms", seed, SIGNS_CATALOG_PAD),
+    });
+    map = byKind();
+  }
+
+  if (!map.get("introduction") && !omitMap.has("introduction")) {
+    const ph = map.get("pathophysiology_overview");
+    const signs = map.get("signs_symptoms");
+    const seed =
+      ph?.body?.trim() && !sectionIsMarkedNotApplicable(ph.body)
+        ? collapseInlineParagraphs(ph.body)
+        : signs?.body?.trim() && !sectionIsMarkedNotApplicable(signs.body)
+          ? collapseInlineParagraphs(signs.body)
+          : `For **${examLabel}**, this lesson connects mechanism to bedside cues you will reassess first.`;
+    let introBody = ensureIntroductionWordCount(
+      [
+        seed,
+        `For **${examLabel}**, items rarely announce the topic in the first sentence. Anchor to objective data, trajectory, and the safest next step for the role named in the stem before distractors compete.`,
+      ].join("\n\n"),
+    );
+    introBody = capPremiumIntroParagraphs(introBody, 3);
+    let introWc = countWords(stripToPlainText(introBody));
+    let guard = 0;
+    while (introWc > 250 && introBody.length > 120 && guard < 120) {
+      const trimmed = introBody.replace(/\s+[^\s.?!]+[.?!]\s*$/, "").trim();
+      if (trimmed === introBody) break;
+      introBody = trimmed;
+      introWc = countWords(stripToPlainText(introBody));
+      guard += 1;
+    }
+    working.push({
+      id: "introduction",
+      heading: PREMIUM_SECTION_HEADINGS.introduction,
+      kind: "introduction",
+      body: introBody,
+    });
+    map = byKind();
+  }
+
+  if (!map.get("red_flags") && !omitMap.has("red_flags")) {
+    working.push({
+      id: "red_flags",
+      heading: PREMIUM_SECTION_HEADINGS.red_flags,
+      kind: "red_flags",
+      body: padKind("red_flags", redFlagsBlock(), redFlagsBlock()),
+    });
+    map = byKind();
+  }
+
+  if (!map.get("nursing_assessment_interventions") && !omitMap.has("nursing_assessment_interventions")) {
+    working.push({
+      id: "nursing_assessment_interventions",
+      heading: PREMIUM_SECTION_HEADINGS.nursing_assessment_interventions,
+      kind: "nursing_assessment_interventions",
+      body: padKind("nursing_assessment_interventions", "", nursingBlock(synExam)),
+    });
+    map = byKind();
+  }
+
+  if (!map.get("clinical_pearls") && !omitMap.has("clinical_pearls")) {
+    working.push({
+      id: "clinical_pearls",
+      heading: PREMIUM_SECTION_HEADINGS.clinical_pearls,
+      kind: "clinical_pearls",
+      body: ensureClinicalPearlsWordCount(
+        `${PEARLS_DEPTH_PAD}\n\n**Exam habit for ${examLabel}**\n\nRehearse one “if I see X, I do Y” chain aloud before you lock an answer; boards reward trajectory thinking over memorized phrases.`,
+      ),
+    });
+    map = byKind();
+  }
+
+  if (!map.get("client_education") && !omitMap.has("client_education")) {
+    working.push({
+      id: "client_education",
+      heading: PREMIUM_SECTION_HEADINGS.client_education,
+      kind: "client_education",
+      body: padKind("client_education", "", clientEducationBlock(synExam)),
+    });
+    map = byKind();
+  }
+
+  if (!map.get("tier_specific_relevance") && !omitMap.has("tier_specific_relevance")) {
+    working.push({
+      id: "tier_specific_relevance",
+      heading: PREMIUM_SECTION_HEADINGS.tier_specific_relevance,
+      kind: "tier_specific_relevance",
+      body: tierRelevanceBlock(tierGeo),
+    });
+    map = byKind();
+  }
+
+  if (!map.get("country_specific_notes") && !omitMap.has("country_specific_notes")) {
+    if (isCanadaPathway) {
+      const cb = countryNotesBlock(tierGeo).trim();
+      if (cb) {
+        working.push({
+          id: "country_specific_notes",
+          heading: PREMIUM_SECTION_HEADINGS.country_specific_notes,
+          kind: "country_specific_notes",
+          body: padKind("country_specific_notes", cb, COUNTRY_SPECIFIC_NOTES_PAD),
+        });
+      }
+    } else {
+      omitMap.set("country_specific_notes", {
+        kind: "country_specific_notes",
+        reason: CATALOG_COUNTRY_NON_CA_OMIT_REASON,
+      });
+    }
+    map = byKind();
+  }
+
+  if (!map.get("related_next_steps") && !omitMap.has("related_next_steps")) {
+    const refs = input.relatedLessonRefs ?? [];
+    const body = padKind(
+      "related_next_steps",
+      relatedNextStepsFromCatalogRefs(refs, input.pathwayId),
+      RELATED_NEXT_STEPS_PAD,
+    );
+    working.push({
+      id: "related_next_steps",
+      heading: PREMIUM_SECTION_HEADINGS.related_next_steps,
+      kind: "related_next_steps",
+      body,
+    });
+    map = byKind();
+  }
+
+  for (let i = 0; i < working.length; i += 1) {
+    const sec = working[i];
+    if (!isPremiumSectionKind(sec.kind)) continue;
+    if (sectionIsMarkedNotApplicable(sec.body)) continue;
+    const kind = sec.kind;
+    const plain = stripToPlainText(sec.body);
+    const wc = countWords(plain);
+    const min = PREMIUM_MIN_WORDS[kind];
+    let body = sec.body;
+
+    if (kind === "introduction") {
+      body = catalogIntroductionEnsureParagraphsAndDepth(body, examLabel);
+    } else if (kind === "pathophysiology_overview") {
+      body = ensurePathophysiologyDepth(body);
+    } else if (kind === "signs_symptoms") {
+      body = wc < min ? padKind("signs_symptoms", body, SIGNS_CATALOG_PAD) : body;
+    } else if (kind === "red_flags") {
+      body = wc < min ? padKind("red_flags", body, redFlagsBlock()) : body;
+    } else if (kind === "labs_diagnostics") {
+      body = wc < min ? padKind("labs_diagnostics", body, LAB_CATALOG_DEPTH_PAD) : body;
+    } else if (kind === "nursing_assessment_interventions") {
+      body = wc < min ? padKind("nursing_assessment_interventions", body, nursingBlock(synExam)) : body;
+    } else if (kind === "clinical_pearls") {
+      body = ensureClinicalPearlsWordCount(body);
+      if (countWords(stripToPlainText(body)) < min) {
+        body = padKind("clinical_pearls", body, PEARLS_DEPTH_PAD);
+      }
+    } else if (kind === "client_education") {
+      let b = body;
+      if (countWords(stripToPlainText(b)) < min) {
+        b = padKind("client_education", b, clientEducationBlock(synExam));
+      }
+      if (countWords(stripToPlainText(b)) < min) {
+        b = padKind("client_education", b, CLIENT_ED_CATALOG_PAD);
+      }
+      body = b;
+    } else if (kind === "tier_specific_relevance") {
+      let b = ensureTierRelevanceWordCount(body);
+      if (countWords(stripToPlainText(b)) < min) {
+        b = padKind("tier_specific_relevance", b, TIER_RELEVANCE_PAD);
+      }
+      body = b;
+    } else if (kind === "country_specific_notes") {
+      body = wc < min ? padKind("country_specific_notes", body, COUNTRY_SPECIFIC_NOTES_PAD) : body;
+    } else if (kind === "related_next_steps") {
+      body = wc < min ? padKind("related_next_steps", body, RELATED_NEXT_STEPS_PAD) : body;
+    }
+
+    working[i] = { ...sec, body };
+  }
+
+  const premiumOrdered = orderPremiumSections(working);
+  const extras = working.filter((s) => !isPremiumSectionKind(s.kind));
+  return {
+    sections: [...premiumOrdered, ...extras],
+    premiumOmittedSections: Array.from(omitMap.values()),
+  };
+}

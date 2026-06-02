@@ -1,0 +1,292 @@
+{
+  "version": 1,
+  "packageId": "maternal-newborn-pkg-04",
+  "label": "Pregnancy Assessment — Lessons, Questions & Flashcards",
+  "generatedDate": "2026-06-02",
+  "targetExams": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","PNP-PC","FNP"],
+  "domain": "Maternal Newborn",
+  "subdomain": "Pregnancy Assessment",
+  "lessons": [
+    {
+      "lessonId": "mn-pkg04-L01",
+      "topicSlug": "gravidity-parity",
+      "title": "Gravidity, Parity & GTPAL Notation",
+      "learningObjectives": [
+        "Define gravidity, parity, and all GTPAL components",
+        "Calculate GTPAL from a client's obstetric history",
+        "Apply GTPAL to risk assessment and antepartum planning",
+        "Differentiate between common documentation errors in obstetric notation",
+        "Explain how obstetric history influences current pregnancy management"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Gravidity and parity** are the foundational shorthand for obstetric history documentation. Accurate recording is essential for risk stratification, clinical decision-making, and communication across the healthcare team. GTPAL provides the most complete five-component description of obstetric history."
+        },
+        {
+          "id": "definitions",
+          "heading": "Definitions & GTPAL",
+          "kind": "pathophysiology_overview",
+          "body": "**Gravidity (G):** Total number of times a woman has been pregnant (regardless of outcome). Includes current pregnancy. Each multiple gestation counts as ONE pregnancy.\n\n**Parity (P):** Number of pregnancies carried to ≥20 weeks (regardless of whether the infant was born alive). Twins or triplets from ONE pregnancy count as ONE in parity.\n\n**GTPAL:**\n- **G:** Gravida (total pregnancies, including current)\n- **T:** Term births (≥37 weeks gestation)\n- **P:** Preterm births (20–36+6 weeks gestation)\n- **A:** Abortions (pregnancy losses before 20 weeks — spontaneous OR induced)\n- **L:** Living children currently alive\n\n**Examples:**\n- G3T2P0A1L2: Third pregnancy; 2 term births; 0 preterm; 1 abortion/loss; 2 living children\n- G1T0P0A0L0: First pregnancy, no prior deliveries\n- G4T1P1A2L2: Fourth pregnancy; 1 term, 1 preterm, 2 losses (all before 20 weeks); 2 living\n\n**Common documentation rules:**\n- Multiple gestation (twins): ONE gravida, ONE para (or ONE T or ONE P)\n- Ectopic pregnancy: counts as ONE gravida; does NOT add to parity (did not reach 20 weeks)\n- Miscarriage/SAB: adds to G and A (if <20 weeks); does NOT add to parity\n- A current pregnancy is included in G (but not yet in TPAL until delivery)"
+        },
+        {
+          "id": "clinical_significance",
+          "heading": "Clinical Significance of Obstetric History",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Risk implications of obstetric history:**\n- **Grand multipara (≥5 deliveries):** increased risk for uterine atony (smooth muscle fatigue), placenta previa/accreta, malpresentation, postpartum hemorrhage\n- **Prior preterm birth (P>0):** highest risk factor for subsequent preterm birth; requires cervical length surveillance, progesterone supplementation\n- **Prior cesarean (T or P):** determines VBAC candidacy; classical scar → repeat C-section required\n- **Prior stillbirth (loss at ≥20 weeks):** increases antepartum surveillance in subsequent pregnancies\n- **Recurrent pregnancy loss (≥3 losses):** workup for antiphospholipid syndrome, uterine anomalies, genetic causes, thrombophilia\n\n**Obstetric history at initial prenatal visit:**\n- Document complete GTPAL\n- Identify all prior losses and their gestational ages\n- Document prior surgical deliveries, complications, neonatal outcomes\n- Note any prior C-section type (low transverse vs classical)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- G = all pregnancies (including current). P = pregnancies ≥20 weeks (regardless of outcome)\n- Twins count as ONE gravida, ONE para\n- Ectopic counts in G only (adds to A), NOT to P\n- GTPAL: G-T-P-A-L; A = losses BEFORE 20 weeks; losses ≥20 weeks = stillbirths (count in P)\n- Grand multipara (≥5 deliveries): higher risk for atony, PPH, malpresentation\n- Prior preterm = highest risk factor for recurrent preterm birth"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg04-L02",
+      "topicSlug": "naegele-rule-edd",
+      "title": "Naegele's Rule & Estimated Due Date Calculation",
+      "learningObjectives": [
+        "Apply Naegele's Rule to calculate the estimated due date",
+        "Identify limitations of LMP-based dating",
+        "Explain first-trimester ultrasound dating and when it supersedes LMP",
+        "Calculate gestational age from a known LMP",
+        "Communicate EDD and gestational age to clients clearly"
+      ],
+      "sections": [
+        {
+          "id": "nageles_rule",
+          "heading": "Naegele's Rule",
+          "kind": "pathophysiology_overview",
+          "body": "**Naegele's Rule:**\nEDD = First day of LMP + 9 calendar months + 7 days\n\n**Equivalent:** EDD = LMP + 280 days (40 weeks)\n\n**Example:**\n- LMP = January 15, 2026\n- Add 9 months: October 15, 2026\n- Add 7 days: October 22, 2026 = EDD\n\n**Assumptions:** 28-day cycle with ovulation on day 14. Adjustments needed for:\n- Cycles >28 days (ovulates later → EDD later): add extra days for each week of cycle length >28\n- Cycles <28 days (ovulates earlier → EDD earlier): subtract days\n\n**Gestational age calculation:** weeks + days since first day of LMP\n- Example: LMP May 1; today is July 24 → 12 weeks 3 days\n\n**First trimester ultrasound dating:**\n- Crown-rump length (CRL) measurement at 7–13+6 weeks is the most accurate dating method\n- CRL provides ±5 days accuracy at 8–10 weeks\n- Supersedes LMP if discrepancy: >5 days (before 9 weeks), >7 days (9–15+6 weeks), >10 days (16–21+6 weeks)\n\n**Term vs preterm gestational age definitions:**\n- Early term: 37 0/7 – 38 6/7 weeks\n- Full term: 39 0/7 – 40 6/7 weeks\n- Late term: 41 0/7 – 41 6/7 weeks\n- Post-term: ≥42 0/7 weeks\n- Late preterm: 34 0/7 – 36 6/7 weeks\n- Moderate preterm: 32 0/7 – 33 6/7 weeks\n- Very preterm: <32 0/7 weeks"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Naegele's: LMP + 9 months + 7 days = EDD. Equivalent to LMP + 280 days\n- Assumes 28-day cycle; adjust for longer/shorter cycles\n- First-trimester CRL most accurate → supersedes LMP if discrepancy >5–10 days\n- Term = 37+ weeks; full term = 39–40+6; post-term = 42+\n- Late preterm (34–36+6) = higher neonatal morbidity risk than full term"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg04-L03",
+      "topicSlug": "signs-of-pregnancy",
+      "title": "Signs of Pregnancy: Presumptive, Probable & Positive",
+      "learningObjectives": [
+        "Categorize pregnancy signs into presumptive, probable, and positive categories",
+        "Explain the physiological basis for each sign",
+        "Identify at what gestational age each sign appears",
+        "Distinguish between signs that definitively confirm pregnancy and those that do not",
+        "Apply knowledge of pregnancy signs to client education"
+      ],
+      "sections": [
+        {
+          "id": "presumptive",
+          "heading": "Presumptive Signs (Subjective, Patient-Reported)",
+          "kind": "pathophysiology_overview",
+          "body": "Presumptive signs are subjective — reported by the client. They are consistent with pregnancy but can be caused by other conditions.\n\n**Amenorrhea:** Absence of expected menses; most common presenting complaint. Can result from hormonal imbalance, stress, low body weight, thyroid disease, menopause.\n\n**Nausea and vomiting (morning sickness):** Due to rising hCG levels. Peaks at 8–12 weeks; usually resolves by 14–16 weeks. Can occur anytime of day. GI disease can mimic.\n\n**Breast tenderness and enlargement:** Due to estrogen/progesterone stimulation. Can also occur with PMS, hormonal contraceptive use.\n\n**Urinary frequency:** Pressure of growing uterus on bladder (1st trimester) + later renal changes. UTI also causes frequency.\n\n**Fatigue:** Progesterone, hCG, early increased metabolic demands. Anemia, thyroid disease, depression can cause same.\n\n**Quickening (first fetal movement perception):** 16–20 weeks. Can be confused with bowel gas (first-time mothers).\n\n**Skin changes:** Linea nigra (darkened midline abdominal line), chloasma/melasma (facial pigmentation). Due to elevated MSH. Can occur with OCP use.\n\n**Striae gravidarum:** Stretch marks from skin stretching + cortisol effects. Not specific to pregnancy."
+        },
+        {
+          "id": "probable",
+          "heading": "Probable Signs (Objective, Examiner-Detected)",
+          "kind": "pathophysiology_overview",
+          "body": "Probable signs are objective findings detected by an examiner. More reliable than presumptive but still not diagnostic because other conditions can produce them.\n\n**Uterine enlargement:** Felt on bimanual exam; at 12 weeks, uterus is palpable above pubic symphysis abdominally.\n\n**Goodell's sign:** Cervical softening (4–6 weeks). Due to estrogen-driven vascular changes and glandular hyperplasia.\n\n**Hegar's sign:** Softening/compressibility of lower uterine segment (6–8 weeks).\n\n**Chadwick's sign:** Bluish-purple discoloration of vagina/vulva/cervix from venous engorgement (6–8 weeks).\n\n**Ballottement:** Fetus rebounds when lower uterine segment is tapped by examining finger. Detectable at ~16–18 weeks.\n\n**Positive pregnancy test (serum/urine β-hCG):** hCG is produced by trophoblast; a positive test is classified as probable (not positive) because hCG can be produced by trophoblastic tumors (molar pregnancy, choriocarcinoma) and other rare cancers.\n\n**Braxton Hicks contractions:** Irregular, painless uterine tightenings; begin in 2nd trimester, increase in frequency through 3rd trimester. Not true labor. Can be produced by pelvic pathology."
+        },
+        {
+          "id": "positive",
+          "heading": "Positive Signs (Definitive Proof of Pregnancy)",
+          "kind": "pathophysiology_overview",
+          "body": "Positive signs provide conclusive proof that a fetus is present. They cannot be attributed to other conditions.\n\n**Ultrasound visualization of embryo/fetus:**\n- Gestational sac on TVUS: as early as 4.5–5 weeks\n- Fetal heartbeat on TVUS: as early as 6 weeks\n- Fetal anatomy: well defined by 10–14 weeks\n\n**Auscultation of fetal heart tones (FHTs):**\n- Doppler FHTs: detectable at 10–12 weeks\n- Fetoscope (Pinard stethoscope): detectable at 17–19 weeks\n- Normal FHT: 110–160 bpm\n\n**Fetal movement perceived by examiner (ballottement confirms fetus):**\n- Not to be confused with ballottement under probable signs\n- Palpable fetal parts (Leopold maneuvers at 28+ weeks)\n- Examiner-felt fetal movement: distinctly different from maternal perception\n\n**KEY POINT:** Positive pregnancy TEST (urine or serum β-hCG) = PROBABLE sign, NOT positive. This is a common exam question."
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Presumptive (subjective): amenorrhea, nausea/vomiting, breast tenderness, urinary frequency, quickening, fatigue\n- Probable (objective/examiner): Goodell's, Hegar's, Chadwick's, uterine enlargement, positive pregnancy test, Braxton Hicks\n- Positive (definitive): FHTs by Doppler, ultrasound visualization of fetus, examiner-felt fetal movement\n- Pregnancy TEST = PROBABLE sign (not positive) — testable exam distinction\n- All probable signs can be caused by other conditions; positive signs cannot"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg04-L04",
+      "topicSlug": "prenatal-visits",
+      "title": "Prenatal Visits: Schedule, Components & Risk Assessment",
+      "learningObjectives": [
+        "Describe the recommended prenatal visit schedule for low-risk and high-risk pregnancies",
+        "Identify the components of the initial prenatal visit",
+        "Explain the routine assessments performed at each prenatal visit",
+        "Recognize findings that require immediate intervention",
+        "Apply prenatal visit knowledge to client teaching and anticipatory guidance"
+      ],
+      "sections": [
+        {
+          "id": "visit_schedule",
+          "heading": "Prenatal Visit Schedule",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Standard low-risk schedule:**\n- Every 4 weeks: up to 28 weeks\n- Every 2 weeks: 28–36 weeks\n- Every week: 36–40+ weeks\n- Total: approximately 14–15 visits for uncomplicated pregnancy\n\n**High-risk pregnancies:** More frequent visits based on condition (may be weekly or biweekly from 20 weeks)\n\n**Initial prenatal visit (8–10 weeks):**\n- Complete health history: medical, surgical, obstetric (GTPAL), social, family history\n- Physical exam: BP, weight, height, BMI; thyroid, cardiac, pulmonary, abdominal, pelvic exam\n- Uterine size confirmation; estimated gestational age (correlate LMP with exam/ultrasound)\n- Pap smear if due\n- STI/infection screening\n- Baseline laboratory testing (see antepartum diagnostics package)\n- Genetic counseling referral if indicated\n- EDD confirmation\n- First-trimester dating ultrasound (8–12 weeks)\n\n**Routine visit components at each visit:**\n- Weight (identify excessive or inadequate gain)\n- Blood pressure\n- Urine dipstick: protein (preeclampsia screening), glucose (GDM screening), nitrites/leukocytes (UTI)\n- Fundal height measurement (from 20 weeks)\n- Fetal heart tones (from 10–12 weeks by Doppler)\n- Fetal movement assessment (from 28 weeks)\n- Edema assessment\n- Client concerns/questions\n\n**Key assessment timing:**\n- 10–13+6 weeks: NT scan + NIPT/first-trimester screening\n- 15–20 weeks: Quad screen (maternal serum AFP, hCG, estriol, inhibin A)\n- 18–20 weeks: Anatomy ultrasound (level II)\n- 24–28 weeks: GDM screening (1-hour OGTT)\n- 28 weeks: RhoGAM if Rh-negative\n- 35–37 weeks: GBS swab\n- 36–37 weeks: Group B strep culture, discuss birth plan, review danger signs"
+        },
+        {
+          "id": "danger_signs",
+          "heading": "Danger Signs Requiring Immediate Reporting",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Teach client to report IMMEDIATELY:**\n\n**HELLP/Preeclampsia warning signs:**\n- Sudden severe headache unrelieved by acetaminophen\n- Visual disturbances: blurring, spots, scotomata\n- Epigastric/right upper quadrant pain (liver capsule distension)\n- Sudden rapid weight gain or severe facial/hand edema\n- BP ≥140/90 on two occasions 4 hours apart\n\n**Fetal compromise:**\n- Absence of fetal movement for >2 hours (after 28 weeks)\n- Decreased fetal movement below established pattern\n\n**Preterm labor:**\n- Contractions ≥4/hour before 37 weeks (especially regular, increasing intensity)\n- Pelvic pressure or low backache before 37 weeks\n- Vaginal bleeding (any amount) before 37 weeks\n\n**Obstetric emergency signs:**\n- Heavy vaginal bleeding at any gestational age\n- Sudden gush or trickle of fluid from vagina (SROM)\n- Cord prolapse sensation (feeling cord or mass)\n- Fever >38°C (100.4°F)\n- Severe abdominal pain (constant, not relieved by rest)\n- Signs of DVT: unilateral leg swelling, pain, warmth"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Visit schedule: q4wks to 28w; q2wks to 36w; weekly thereafter\n- Each visit: BP, weight, urine dip, FHT, fundal height (after 20w), edema\n- First visit: complete history, labs, Pap if due, EDD confirmation, ultrasound\n- Key testing windows: NT scan (10–14w), quad screen (15–20w), anatomy scan (18–20w), GDM screen (24–28w), RhoGAM (28w), GBS (35–37w)\n- Danger signs to report immediately: severe headache, visual changes, RUQ pain, bleeding, no fetal movement, contractions before 37w"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg04-L05",
+      "topicSlug": "maternal-weight-gain",
+      "title": "Maternal Weight Gain: IOM Guidelines & Clinical Implications",
+      "learningObjectives": [
+        "Identify IOM recommended weight gain by pre-pregnancy BMI category",
+        "Explain the consequences of inadequate and excessive gestational weight gain",
+        "Apply weight gain guidelines to antepartum counseling",
+        "Recognize the pattern of normal weight gain by trimester",
+        "Identify conditions associated with abnormal weight gain patterns"
+      ],
+      "sections": [
+        {
+          "id": "iom_guidelines",
+          "heading": "IOM Weight Gain Recommendations",
+          "kind": "nursing_assessment_interventions",
+          "body": "**IOM (Institute of Medicine) 2009 Guidelines:**\n\n| Pre-pregnancy BMI | BMI Category | Recommended Total Gain | Recommended Rate 2nd/3rd Trimester |\n|---|---|---|---|\n| <18.5 | Underweight | 28–40 lbs (12.5–18 kg) | ~1 lb/week |\n| 18.5–24.9 | Normal weight | 25–35 lbs (11.5–16 kg) | ~1 lb/week |\n| 25–29.9 | Overweight | 15–25 lbs (7–11.5 kg) | ~0.6 lb/week |\n| ≥30 | Obese | 11–20 lbs (5–9 kg) | ~0.5 lb/week |\n| Twins (normal BMI) | — | 37–54 lbs | — |\n\n**Normal first-trimester gain:** 1–4.5 lbs total (2–2.5 kg)\n**2nd and 3rd trimester:** approximately 1 lb/week for normal BMI\n\n**Components of weight gain at term (approximately 35 lbs total for normal BMI):**\n- Fetus: ~7.5 lbs (3.4 kg)\n- Placenta: ~1.5 lbs (0.7 kg)\n- Amniotic fluid: ~1.8 lbs (0.8 kg)\n- Uterine enlargement: ~2 lbs (0.9 kg)\n- Increased blood volume: ~4 lbs (1.8 kg)\n- Breast tissue: ~0.9 lbs (0.4 kg)\n- Maternal fat stores: ~7 lbs (3.2 kg)\n- Other (extracellular fluid, protein stores): ~3.8 lbs"
+        },
+        {
+          "id": "consequences",
+          "heading": "Consequences of Abnormal Weight Gain",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Inadequate weight gain:**\n- SGA/IUGR (fetal growth restriction)\n- Low birth weight\n- Preterm birth risk\n- Nutritional deficiencies in fetus\n- Impaired cognitive development\n\n**Excessive weight gain:**\n- LGA (macrosomia): shoulder dystocia risk, birth trauma\n- Gestational diabetes risk\n- Hypertensive disorders risk\n- Operative delivery (C-section) risk\n- Postpartum weight retention\n- Childhood obesity in offspring\n\n**Sudden rapid weight gain:**\n- >2 lbs/week in 2nd trimester OR >1 lb/week after 20 weeks\n- May indicate fluid retention from preeclampsia\n- Assess: BP, edema, proteinuria\n\n**Weight loss in 1st trimester:**\n- Up to 2–3 lbs from nausea/vomiting = acceptable\n- Weight loss >5% of pre-pregnancy weight = hyperemesis gravidarum\n\n**Nutritional requirements in pregnancy:**\n- Additional calories: +340 kcal/day (2nd trimester), +450 kcal/day (3rd trimester)\n- Protein: increase from 46g to 71g/day\n- Folic acid: 400–800 mcg/day\n- Iron: 27 mg/day (vs 18 mg non-pregnant)\n- Calcium: 1,000 mg/day\n- Avoid: alcohol, raw fish (sushi), high-mercury fish (shark, swordfish, king mackerel, tilefish), unpasteurized cheeses, raw/undercooked meat and eggs"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Normal weight BMI: 25–35 lbs total weight gain\n- Obese (BMI ≥30): 11–20 lbs; overweight (25–29.9): 15–25 lbs; underweight: 28–40 lbs\n- Pattern: 1–4.5 lbs in 1st trimester; ~1 lb/week in 2nd/3rd trimesters\n- Sudden weight gain (>2 lbs/week) = possible preeclampsia → assess BP, proteinuria, edema\n- Inadequate gain → IUGR, LBW; excessive → macrosomia, GDM, C-section risk\n- Iron increases to 27 mg/day; protein to 71 g/day; folic acid 400–800 mcg/day"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "mn-p04-001",
+      "topicSlug": "gravidity-parity",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "GTPAL-calculation-prior-ectopic-twin",
+      "stem": "A client's obstetric history includes: a spontaneous abortion at 8 weeks, a term delivery of twins 3 years ago (both children living), and an ectopic pregnancy treated with methotrexate at 6 weeks (no living child). She is currently pregnant. What is her GTPAL?",
+      "options": {"A": "G4T1P0A2L2","B": "G3T1P0A2L2","C": "G4T1P1A1L2","D": "G3T2P0A1L2"},
+      "correctAnswer": "A",
+      "rationale": "Count each pregnancy separately: (1) spontaneous abortion at 8 weeks = G1A1; (2) twin delivery at term = G2T1 (twins = ONE parity, ONE term); (3) ectopic at 6 weeks = G3A1 (ectopic is before 20 weeks → counts as A, not T or P); (4) current pregnancy = G4. TPAL: T=1 (twin delivery); P=0; A=2 (SAB + ectopic); L=2 (both twins living). Answer: G4T1P0A2L2.",
+      "incorrectRationales": {"B": "G3 would exclude the current pregnancy. G must include the current pregnancy.", "C": "The ectopic is an abortion (before 20 weeks), not a preterm birth. P should be 0.", "D": "G3 excludes the current pregnancy; twins count as ONE in T (not two)." },
+      "hint": "Count each pregnancy: SAB=1 (G+A), twins=1 (G+T), ectopic=1 (G+A), current=1 (G). Total G=4.",
+      "clinicalPearl": "Ectopic pregnancy goes into G (one pregnancy) and A (loss before 20 weeks). It does NOT add to T or P. Twins count as ONE in parity, not two.",
+      "examStrategy": "GTPAL questions: count each pregnancy as ONE G. Ectopic → A. SAB/TAB → A. Each term delivery → T (even twins). Each preterm → P. Count living children for L.",
+      "keyTakeaway": "GTPAL calculation: each pregnancy = +1 G; outcome determines T/P/A. Ectopic → A. Twins from one delivery = one T."
+    },
+    {
+      "questionId": "mn-p04-002",
+      "topicSlug": "naegele-rule-edd",
+      "difficulty": "easy",
+      "type": "MCQ",
+      "stemAnchor": "naegele-rule-LMP-March-15",
+      "stem": "A client's last menstrual period (LMP) was March 15, 2026. Using Naegele's Rule, what is her estimated due date (EDD)?",
+      "options": {"A": "December 15, 2026","B": "December 22, 2026","C": "January 8, 2027","D": "November 22, 2026"},
+      "correctAnswer": "B",
+      "rationale": "Naegele's Rule: LMP + 9 months + 7 days. March 15 + 9 months = December 15, 2026. December 15 + 7 days = December 22, 2026.",
+      "incorrectRationales": {"A": "December 15 is only 9 months from LMP — forgot to add the 7 days.", "C": "January 8 adds 7 days to January 1 (10 months from March) — incorrect month calculation.", "D": "November 22 is only 8 months + 7 days — incorrect."},
+      "hint": "Naegele's: LMP + 9 months + 7 days. Do it in two steps.",
+      "clinicalPearl": "Alternatively: LMP − 3 months + 7 days = EDD (for previous year). EDD using LMP is an estimate — first trimester ultrasound CRL is more accurate.",
+      "examStrategy": "Naegele's rule is directly testable. Practice a few examples: LMP + 9 months + 7 days. If crossing year boundary, adjust the year.",
+      "keyTakeaway": "Naegele's Rule: LMP + 9 months + 7 days = EDD. (= LMP + 280 days, or 40 weeks)"
+    },
+    {
+      "questionId": "mn-p04-003",
+      "topicSlug": "signs-of-pregnancy",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "pregnancy-test-positive-sign-category",
+      "stem": "A client presents for her first prenatal visit and asks if her positive home pregnancy test means she is definitely pregnant. How should the nurse respond?",
+      "options": {"A": "Yes, a positive pregnancy test is a definitive positive sign of pregnancy confirming a viable fetus","B": "A positive pregnancy test is a probable sign of pregnancy — it strongly suggests pregnancy but can be positive in other conditions such as trophoblastic disease; confirmation requires ultrasound or FHTs","C": "No, a positive home test is only a presumptive sign and should be repeated in 2 weeks","D": "Yes, a positive serum β-hCG is a positive sign; a urine test is only probable"},
+      "correctAnswer": "B",
+      "rationale": "A positive pregnancy test (urine or serum β-hCG) is classified as a probable sign of pregnancy. It is objective and examiner-related but not definitive because hCG can be produced by: hydatidiform mole, choriocarcinoma, germ cell tumors, and very rarely other cancers. A positive sign requires direct evidence of a fetus: FHTs by Doppler, ultrasound visualization of fetal parts or heartbeat, or examiner-felt fetal movement.",
+      "incorrectRationales": {"A": "Pregnancy test = probable, not positive sign. This is the most commonly tested distinction on NCLEX.", "C": "A pregnancy test is probable (objective/examiner), not presumptive (subjective).", "D": "Both serum and urine β-hCG tests are probable signs — neither is a positive sign. The distinction is not based on the testing medium."},
+      "hint": "Pregnancy TEST = PROBABLE sign. This is a classic NCLEX trap.",
+      "clinicalPearl": "Remember: positive signs = only what directly proves a fetus exists. The test detects a hormone produced by the placenta — if there is no fetus (molar pregnancy), the test is still positive.",
+      "examStrategy": "This question is tested repeatedly: positive pregnancy test = PROBABLE sign. Positive signs: FHTs, ultrasound visualization, examiner-felt fetal movement.",
+      "keyTakeaway": "Positive pregnancy test = PROBABLE sign (not positive). Positive signs: FHTs (Doppler), fetal ultrasound, examiner-felt movement."
+    },
+    {
+      "questionId": "mn-p04-004",
+      "topicSlug": "prenatal-visits",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "danger-signs-severe-headache-visual-changes",
+      "stem": "A client at 32 weeks gestation calls the prenatal clinic and reports a sudden severe headache not relieved by acetaminophen, blurred vision, and swelling in her hands and face that started this morning. She reports her BP at home was 158/102. What should the nurse advise?",
+      "options": {"A": "Monitor at home, rest in left lateral position, and call back if symptoms worsen","B": "Come to the hospital immediately for evaluation — these are signs of preeclampsia","C": "Take an extra dose of acetaminophen and increase fluid intake","D": "These are normal late pregnancy symptoms; reassure and schedule a routine follow-up"},
+      "correctAnswer": "B",
+      "rationale": "Severe headache + visual disturbances + facial/hand edema + BP 158/102 = classic signs of severe preeclampsia. This requires immediate evaluation: BP confirmation, urine protein, labs (CBC, LFTs, creatinine, uric acid), and fetal assessment. Severe preeclampsia requires hospitalization and may require delivery. Reassurance or home management is inappropriate and dangerous.",
+      "incorrectRationales": {"A": "Home monitoring of severe preeclampsia signs is not safe — these symptoms require immediate evaluation.", "C": "Acetaminophen and fluids do not address hypertension or the neurological/vascular complications of severe preeclampsia.", "D": "Severe headache, visual disturbances, and BP 158/102 are NOT normal late pregnancy symptoms — this is a medical emergency."},
+      "hint": "Severe headache + visual changes + edema + BP ≥160/110 = severe preeclampsia → immediate evaluation.",
+      "clinicalPearl": "The five classic danger signs of preeclampsia: severe headache, visual disturbances (floaters, scotomata), RUQ/epigastric pain, severe edema (hands/face), elevated BP. ANY ONE of these warrants same-day evaluation.",
+      "examStrategy": "When a pregnant client reports headache + visual changes + elevated BP: always choose immediate evaluation/hospitalization. Never reassure or home manage these warning signs.",
+      "keyTakeaway": "Severe headache + visual changes + edema + BP ≥160/110 in pregnancy = severe preeclampsia emergency → immediate hospital evaluation."
+    },
+    {
+      "questionId": "mn-p04-005",
+      "topicSlug": "maternal-weight-gain",
+      "difficulty": "easy",
+      "type": "MCQ",
+      "stemAnchor": "weight-gain-obese-BMI-IOM-recommendation",
+      "stem": "A client presents for her first prenatal visit with a pre-pregnancy BMI of 32. She asks how much weight she should gain during pregnancy. Which response is correct according to IOM guidelines?",
+      "options": {"A": "25–35 pounds","B": "28–40 pounds","C": "11–20 pounds","D": "15–25 pounds"},
+      "correctAnswer": "C",
+      "rationale": "IOM 2009 guidelines by pre-pregnancy BMI: BMI ≥30 (obese) = 11–20 lbs recommended total weight gain. This reduced recommendation accounts for existing fat stores and aims to reduce complications (GDM, macrosomia, C-section) while ensuring fetal growth.",
+      "incorrectRationales": {"A": "25–35 lbs is for normal BMI (18.5–24.9). This client has BMI 32 (obese) and should gain less.", "B": "28–40 lbs is for underweight (BMI <18.5).", "D": "15–25 lbs is for overweight (BMI 25–29.9). This client's BMI of 32 is obese (≥30), so the recommendation is lower."},
+      "hint": "IOM by BMI: Underweight: 28–40. Normal: 25–35. Overweight: 15–25. Obese: 11–20.",
+      "clinicalPearl": "Even with obese BMI, weight loss is not recommended during pregnancy (can cause fetal growth restriction and ketosis). The 11–20 lb gain is to support fetal growth while limiting maternal health risks.",
+      "examStrategy": "Memorize IOM weight gain categories by BMI. This is directly tested: the four BMI categories (underweight, normal, overweight, obese) and their corresponding gain ranges.",
+      "keyTakeaway": "IOM weight gain: Obese (BMI ≥30) = 11–20 lbs. Normal weight = 25–35 lbs. Overweight = 15–25 lbs. Underweight = 28–40 lbs."
+    },
+    {
+      "questionId": "mn-p04-006",
+      "topicSlug": "gravidity-parity",
+      "difficulty": "easy",
+      "type": "MCQ",
+      "stemAnchor": "grand-multipara-risk-factors-atony",
+      "stem": "A nurse is caring for a G6P5 client who is at 39 weeks gestation in active labor. Which complication should the nurse most anticipate during the immediate postpartum period?",
+      "options": {"A": "Uterine rupture during labor","B": "Placenta accreta","C": "Postpartum hemorrhage from uterine atony","D": "Precipitous delivery with cervical laceration"},
+      "correctAnswer": "C",
+      "rationale": "Grand multiparity (≥5 deliveries) is a significant risk factor for uterine atony (failure to contract after delivery) because the myometrium has undergone repeated distension and the smooth muscle fibers are less responsive. Uterine atony is the #1 cause of postpartum hemorrhage. The nurse should be prepared to assess the fundus frequently, have oxytocin readily available, and monitor for excessive bleeding.",
+      "incorrectRationales": {"A": "Uterine rupture is more associated with prior uterine surgery (C-section scar), not multiparity alone.", "B": "Placenta accreta is primarily associated with prior C-section or uterine surgery creating endometrial defects — multiparity is a minor risk factor.", "D": "Precipitous delivery is a risk with multiparity, but the most significant postpartum complication is PPH from atony."},
+      "hint": "Grand multipara = myometrium 'fatigued' → poor contraction = atony = PPH risk.",
+      "clinicalPearl": "For grand multiparas, have an IV line established before delivery, oxytocin ready, and perform frequent fundal assessments immediately postpartum (q15 min × 1 hour at minimum).",
+      "examStrategy": "Grand multipara postpartum risk = uterine atony + PPH. This connection is a standard NCLEX item.",
+      "keyTakeaway": "Grand multipara (≥5 deliveries): highest risk for uterine atony → postpartum hemorrhage. Monitor fundus closely; have oxytocin available."
+    }
+  ],
+  "flashcards": [
+    {"id":"mn-fc-p04-001","front":"What does GTPAL stand for?","back":"G = Gravida (total pregnancies including current). T = Term births (≥37 weeks). P = Preterm births (20–36+6 weeks). A = Abortions (losses <20 weeks, spontaneous or induced). L = Living children currently alive.","hint":"G-T-P-A-L. Every letter matters.","explanation":"GTPAL provides a complete picture of obstetric history. Multiple gestation from ONE pregnancy = ONE parity. Ectopic pregnancy counts as A (before 20 weeks), not T or P. The current pregnancy is always included in G.","clinicalPearl":"Stillbirths (fetal death ≥20 weeks) count in T or P (depending on gestational age) but NOT in L (not living). This is a common calculation trap."},
+    {"id":"mn-fc-p04-002","front":"What is Naegele's Rule?","back":"EDD = First day of LMP + 9 months + 7 days (equivalent to LMP + 280 days = 40 weeks). Assumes 28-day cycle with ovulation on day 14.","hint":"Add 9 months then 7 days to LMP.","explanation":"For cycles ≠28 days, adjust: cycles >28 days → EDD is later (add extra days). Cycles <28 days → EDD is earlier (subtract days). First-trimester CRL is more accurate than LMP and supersedes it if discrepancy >5 days at <9 weeks.","clinicalPearl":"EDD = estimate. Only 5% of women deliver exactly on their due date; 80% deliver within 2 weeks of EDD. Post-term surveillance (NST, BPP) starts at 41 weeks."},
+    {"id":"mn-fc-p04-003","front":"What is Goodell's sign?","back":"Cervical softening occurring at 4–6 weeks gestation. The cervix changes from firm (like a nose) to soft (like lips). A probable sign of pregnancy.","hint":"Goodell's = cervix GOES soft. Firm → lip-like.","explanation":"Caused by increased vascularity, edema, and glandular hyperplasia of the cervix under estrogen influence. A probable sign because other conditions causing pelvic vasodilation can also soften the cervix.","clinicalPearl":"Goodell's + Hegar's + Chadwick's = the classic trio of probable signs detected on early pelvic exam. All reflect estrogen-driven vascular changes in the first trimester."},
+    {"id":"mn-fc-p04-004","front":"What category is a positive pregnancy test — presumptive, probable, or positive?","back":"PROBABLE sign. A positive urine or serum β-hCG test is objective (examiner-obtainable) but not definitive, because hCG can be produced by trophoblastic disease (molar pregnancy) or rare tumors.","hint":"Test = PROBABLE. The most common NCLEX trap in pregnancy signs.","explanation":"Positive signs require direct evidence of a viable fetus: Doppler FHTs, ultrasound visualization of fetal cardiac activity or anatomy, or examiner-felt fetal movement. A positive test detects the placental hormone, not the fetus directly.","clinicalPearl":"All three categories tested on exams: Presumptive = patient's subjective symptoms. Probable = objective, examiner-detected, but not definitive. Positive = definitively proves a fetus exists."},
+    {"id":"mn-fc-p04-005","front":"What are the IOM recommended total weight gain ranges by pre-pregnancy BMI?","back":"Underweight (BMI <18.5): 28–40 lbs. Normal (18.5–24.9): 25–35 lbs. Overweight (25–29.9): 15–25 lbs. Obese (≥30): 11–20 lbs. Twins (normal BMI): 37–54 lbs.","hint":"Lower the BMI → gain more. Higher the BMI → gain less.","explanation":"IOM guidelines balance adequate fetal nutrition with maternal health risks. Obese women already have fat stores; excess gain increases GDM, macrosomia, C-section, and postpartum retention risks. Weight loss during pregnancy is not recommended even for obese women.","clinicalPearl":"Weight gain pattern: 1–4.5 lbs in first trimester; approximately 1 lb/week for normal-weight women in 2nd/3rd trimesters. A sudden weight gain of >2 lbs/week in late pregnancy warrants preeclampsia assessment."},
+    {"id":"mn-fc-p04-006","front":"What are the five danger signs requiring immediate reporting in pregnancy?","back":"1. Severe headache not relieved by acetaminophen. 2. Visual disturbances (blurring, floaters, scotomata). 3. Epigastric/RUQ pain. 4. Sudden severe edema (face, hands). 5. Vaginal bleeding or sudden fluid gush.","hint":"Head + Eyes + RUQ + Edema + Bleeding = DANGER in pregnancy.","explanation":"The first four signs (head, vision, RUQ pain, edema) together suggest preeclampsia/HELLP syndrome. Vaginal bleeding could indicate placenta previa, abruption, or other emergencies. Any of these warrants immediate evaluation — never reassurance or home monitoring alone.","clinicalPearl":"Additional danger signs: no fetal movement >2 hours (28+ weeks), regular contractions before 37 weeks (preterm labor), fever >38°C (infection), sudden gush from vagina (SROM). Teach ALL of these at every prenatal visit."},
+    {"id":"mn-fc-p04-007","front":"What is a grand multipara and what are the associated risks?","back":"Grand multipara = woman who has delivered ≥5 viable pregnancies. Associated risks: uterine atony (PPH), placenta previa, placenta accreta spectrum, malpresentation, precipitous labor.","hint":"Grand multipara = ≥5 deliveries. Think: worn-out uterus.","explanation":"The myometrium becomes less contractile with repeated distension. The uterine decidua may be less well-developed, increasing placenta implantation abnormality risk. Multiple parity also causes laxity of the uterine ligaments and soft tissue.","clinicalPearl":"Grand multiparas are at highest risk for uterine atony in the immediate postpartum period. Active management of the third stage (oxytocin upon anterior shoulder delivery, controlled cord traction, uterine massage) is critical in this population."},
+    {"id":"mn-fc-p04-008","front":"What is ballottement and when can it be elicited?","back":"Ballottement: the fetus rebounds when the lower uterine segment is tapped by an examining finger, bouncing away and then floating back. Detectable at approximately 16–18 weeks. Classified as a probable sign of pregnancy.","hint":"Ballottement = the baby bounces back like a ball. ~16–18 weeks.","explanation":"The ballottement reflex reflects the fetus floating in amniotic fluid and being displaced by a quick push upward on the lower uterine segment, then returning to position as the finger releases. If it can be detected by the examiner → probable sign. If the examiner can feel fetal parts → positive sign (palpable parts at 28+ weeks).","clinicalPearl":"Internal ballottement (vaginal exam) is more reliable than external (abdominal). It is less commonly used today with widespread ultrasound availability."},
+    {"id":"mn-fc-p04-009","front":"What is Braxton Hicks contractions?","back":"Irregular, painless uterine tightenings beginning as early as 6 weeks but usually not perceived until 2nd trimester. They become more frequent and sometimes stronger in the 3rd trimester but do not progress to cervical dilation.","hint":"Braxton Hicks = 'practice contractions' — irregular, not progressive, often relieved by walking or hydration.","explanation":"Braxton Hicks contractions reflect the myometrium's preparation for labor. They are classified as a probable sign of pregnancy. Distinguish from true labor: Braxton Hicks are irregular, do not increase in frequency/intensity/duration, and often stop with position change or hydration.","clinicalPearl":"Teaching clients to distinguish Braxton Hicks from true labor: True labor contractions are regular, increasing in intensity/frequency/duration, not relieved by walking, and associated with cervical change. Braxton Hicks are irregular, brief, and do not cause progressive dilation."},
+    {"id":"mn-fc-p04-010","front":"When is the first-trimester dating ultrasound most accurate?","back":"Crown-rump length (CRL) measurement at 7–13+6 weeks provides the most accurate dating (±5–7 days). Accuracy decreases after 14 weeks as biometric parameters (BPD, HC, FL) become more variable. First-trimester CRL supersedes LMP if discrepancy >5 days (<9 weeks) or >7 days (9–14 weeks).","hint":"CRL at 7–14 weeks = most accurate dating. Accuracy decreases after 14 weeks.","explanation":"CRL measures the longest dimension of the embryo/fetus from crown to rump. This linear growth parameter is the most reliable indicator of gestational age in the first trimester. EDD established by first-trimester ultrasound should not be changed later (by anomaly scan at 18–20 weeks) unless there was no first-trimester dating.","clinicalPearl":"First-trimester ultrasound dating is critical for: (1) accurate gestational age for preterm birth management, (2) correct timing of screening tests (NT scan, quad screen), (3) diagnosis of growth restriction later in pregnancy (requires an accurate baseline GA)."},
+    {"id":"mn-fc-p04-011","front":"What are the recommended iron and folic acid requirements during pregnancy?","back":"Iron: 27 mg/day (vs 18 mg non-pregnant). Folic acid: 400–800 mcg/day (vs 400 mcg non-pregnant). Women with prior NTD pregnancy: 4,000 mcg folic acid/day. Iron source: prenatal vitamins + dietary sources (lean red meat, legumes, fortified cereals).","hint":"Pregnancy doubles iron need (18→27 mg) and maintains/increases folate need.","explanation":"Iron requirements increase substantially because of expanding maternal red cell mass, fetal iron storage, and placental needs. Folic acid requirements remain high through neural tube closure (first trimester) and beyond. Calcium (1,000 mg/day) and vitamin D (600 IU/day) are also critical.","clinicalPearl":"Iron absorption is enhanced by vitamin C (ascorbic acid) — teach patients to take iron with orange juice. Iron absorption is inhibited by: calcium (avoid taking with dairy), antacids, tannins (tea, coffee). Iron supplementation causes common side effects: constipation, dark stools, nausea."},
+    {"id":"mn-fc-p04-012","front":"What is the prenatal visit schedule for a low-risk pregnancy?","back":"Every 4 weeks until 28 weeks; every 2 weeks from 28–36 weeks; weekly from 36 weeks until delivery (~14–15 visits total).","hint":"4-week intervals → 2-week intervals → weekly. Progressive acceleration as due date approaches.","explanation":"This standard schedule allows regular monitoring of BP, weight, fundal height, FHTs, and urine while capturing critical testing windows. High-risk pregnancies have more frequent visits (often q2–4 weeks from the start, with weekly visits in the 3rd trimester).","clinicalPearl":"Advanced maternal age (≥35 years) is often managed as higher risk with more frequent prenatal visits, additional genetic testing (NIPT, cell-free DNA), and earlier initiation of antepartum surveillance (NST from 36–37 weeks)."},
+    {"id":"mn-fc-p04-013","front":"What are presumptive signs of pregnancy?","back":"Subjective symptoms reported by the patient: amenorrhea, nausea/vomiting, breast tenderness/enlargement, urinary frequency, fatigue, quickening, skin changes (linea nigra, melasma/chloasma), striae gravidarum.","hint":"Presumptive = patient says it (subjective). Can be caused by other conditions.","explanation":"Each presumptive sign has a non-pregnancy explanation: amenorrhea (anovulation, menopause), nausea (GI disease, anxiety), breast changes (PMS, OCPs), quickening (bowel gas), urinary frequency (UTI). None of these alone or together proves pregnancy.","clinicalPearl":"Quickening as a presumptive sign: first-time mothers often misidentify fetal movement as gas or bowel activity. Experienced mothers recognize it immediately. This is why multigravidas report quickening 2–4 weeks earlier than primigravidas."},
+    {"id":"mn-fc-p04-014","front":"What foods should be avoided during pregnancy?","back":"Alcohol (all amounts), raw/undercooked meat and eggs (Listeria, Salmonella), high-mercury fish (shark, swordfish, king mackerel, tilefish, bigeye tuna), raw shellfish, unpasteurized cheeses and juices, deli meats/hot dogs unless reheated to steaming (Listeria).","hint":"Avoid: alcohol, raw anything, high-mercury fish, unpasteurized products, deli meats (unless hot).","explanation":"Mercury in high amounts causes fetal neurological damage. Low-mercury fish (salmon, tilapia, shrimp, catfish, canned light tuna) are safe in moderation (2–3 servings/week). Listeria can cause miscarriage, stillbirth, and neonatal sepsis — particularly dangerous in pregnancy.","clinicalPearl":"Sushi: raw fish sushi is contraindicated; cooked sushi rolls (California roll, shrimp tempura) are generally safe. Smoked salmon (lox) is considered a listeria risk — avoid. Pasteurized products are generally safe."},
+    {"id":"mn-fc-p04-015","front":"What is quickening and when is it a concern if absent?","back":"Quickening = mother's first perception of fetal movement. Primigravida: 18–20 weeks; multigravida: 16–18 weeks. If not reported by 20 weeks (primigravida) or 18 weeks (multigravida), evaluate with ultrasound.","hint":"Primi: 18–20 weeks. Multi: 16–18 weeks. Later than expected → evaluate.","explanation":"Quickening is classified as a presumptive sign. Delayed perception may indicate: fetal demise, anterior placenta (cushioning effect), maternal perception issues (obesity, anterior placenta), or inaccurate dating. Fetal movement is objectively confirmed with ultrasound.","clinicalPearl":"An anterior placenta (placenta on the front wall of the uterus) cushions fetal kicks, causing later perception of quickening and later/softer kick counts. Reassure clients with anterior placenta that they may feel movements later or more weakly, but normal kick count patterns still apply."}
+  ]
+}

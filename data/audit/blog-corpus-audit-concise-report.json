@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2026-04-15T02:06:23.915Z",
+  "sourceInventoryEntries": 17,
+  "uniqueSlugsEnumerated": 806,
+  "staticVsPrisma": {
+    "staticFullBodiesInRepoFromBlogStaticPosts": 3,
+    "note": "Production `/blog/[slug]` reads Prisma BlogPost; static TS is dev empty-DB index/meta fallback and is not merged into the page body by getPublishedBlogPostBySlug."
+  },
+  "top10RewriteTargets": [
+    {
+      "slug": "clinical-judgment-on-exam-day",
+      "title": "Clinical judgment on exam day: turning cues into safe decisions",
+      "priority": "critical"
+    },
+    {
+      "slug": "pharmacology-without-memorization-chaos",
+      "title": "Pharmacology study that sticks (without memorization chaos)",
+      "priority": "critical"
+    },
+    {
+      "slug": "how-to-pass-nclex-rn-from-the-philippines",
+      "title": null,
+      "priority": "critical"
+    },
+    {
+      "slug": "how-to-pass-nclex-rn-as-nigerian-nurse",
+      "title": null,
+      "priority": "critical"
+    },
+    {
+      "slug": "nclex-rn-preparation-guide-for-indian-nurses",
+      "title": null,
+      "priority": "critical"
+    },
+    {
+      "slug": "how-to-pass-nclex-rn-as-kenyan-nurse",
+      "title": null,
+      "priority": "critical"
+    },
+    {
+      "slug": "nclex-rn-for-uk-nurses-complete-preparation-guide",
+      "title": null,
+      "priority": "critical"
+    },
+    {
+      "slug": "nclex-practice-questions-for-filipino-nurses",
+      "title": null,
+      "priority": "critical"
+    },
+    {
+      "slug": "best-nclex-study-plan-for-indian-nurses-budget",
+      "title": null,
+      "priority": "critical"
+    },
+    {
+      "slug": "best-nclex-study-plan-nigerian-nurses",
+      "title": null,
+      "priority": "critical"
+    }
+  ],
+  "biggestBlockerToLongtailRecovery": "Canonical live URLs and sitemap are DB-driven; large SEO libraries in repo are not indexed until imported/published. Confirm publish pipeline + avoid duplicate URLs across regional and default blog routes."
+}

@@ -1,0 +1,19 @@
+{
+  "overview": "La prévention et le contrôle des infections protègent à la fois les patients et les soignants. Les infections associées aux soins (IAS) sont évitables dans de nombreux cas par l'application rigoureuse des précautions standard et des précautions complémentaires. La chaîne de transmission infectieuse doit être rompue à chaque maillon.",
+  "key_concepts": [
+    "Chaîne de transmission : agent infectieux → réservoir → porte de sortie → mode de transmission → porte d'entrée → hôte réceptif",
+    "Précautions standard : s'appliquent à tout patient, quel que soit son statut infectieux (hygiène des mains, EPI, matériel à usage unique)",
+    "Précautions complémentaires : contact (SARM, C. diff), gouttelettes (grippe, COVID-19), air (tuberculose, rougeole, varicelle)",
+    "Hygiène des mains : 5 moments de l'OMS — avant le contact patient, avant un geste aseptique, après un risque d'exposition, après le contact patient, après contact avec l'environnement du patient",
+    "Niveaux de décontamination : nettoyage → désinfection → stérilisation"
+  ],
+  "nursing_responsibilities": "L'infirmière respecte et fait respecter les précautions adaptées, effectue une hygiène des mains aux 5 moments recommandés, utilise les EPI correctement (mettre et retirer sans contamination), identifie les patients infectés à risque et signale tout cas suspect. Elle éduque les patients et les visiteurs sur les mesures de prévention. Elle participe à la surveillance des infections et au suivi des protocoles institutionnels.",
+  "clinical_pearls": "La friction hydro-alcoolique (SHA) est plus efficace que le savon pour la plupart des agents pathogènes — sauf Clostridium difficile (spores) où le lavage au savon et à l'eau est impératif. L'isolement en chambre individuelle avec pression négative est requis pour les précautions air (tuberculose). Le port de gants ne remplace jamais l'hygiène des mains. Les infections urinaires sur sonde représentent l'IAS la plus fréquente — retirer la sonde dès que possible.",
+  "patient_education": "Enseignez aux patients l'importance du lavage des mains, notamment avant les repas et après les toilettes. Expliquez les mesures d'isolement sans stigmatiser : « Ces précautions protègent à la fois vous et les autres patients. » Encouragez les proches à informer le personnel avant d'entrer si leur état de santé a changé.",
+  "key_takeaways": [
+    "Rompre la chaîne de transmission à n'importe quel maillon empêche la propagation de l'infection",
+    "Les précautions standard s'appliquent à TOUS les patients — ne présumez jamais qu'un patient est « propre »",
+    "C. difficile nécessite savon + eau (pas SHA) — exception importante à mémoriser",
+    "L'hygiène des mains aux 5 moments de l'OMS est l'intervention la plus efficace pour prévenir les IAS"
+  ]
+}

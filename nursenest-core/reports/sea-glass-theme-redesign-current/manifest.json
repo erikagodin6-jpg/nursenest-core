@@ -1,0 +1,117 @@
+{
+  "baseUrl": "http://127.0.0.1:4322",
+  "results": [
+    {
+      "route": "homepage",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4322/",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/homepage-desktop-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "dashboard",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4322/app",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/dashboard-desktop-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "rn-hub",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4322/canada/rn/nclex-rn",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/rn-hub-desktop-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "lessons",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4322/app/lessons",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/lessons-desktop-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "flashcards",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4322/app/flashcards?pathwayId=ca-rn-nclex-rn",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/flashcards-desktop-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "practice-tests",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4322/app/practice-tests",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/practice-tests-desktop-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "cat-exams",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4322/app/cat",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/cat-exams-desktop-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "homepage",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4322/",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/homepage-mobile-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "dashboard",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4322/app",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/dashboard-mobile-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "rn-hub",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4322/canada/rn/nclex-rn",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/rn-hub-mobile-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "lessons",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4322/app/lessons",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/lessons-mobile-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "flashcards",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4322/app/flashcards?pathwayId=ca-rn-nclex-rn",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/flashcards-mobile-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "practice-tests",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4322/app/practice-tests",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/practice-tests-mobile-sea-glass.png",
+      "dataTheme": "sea-glass"
+    },
+    {
+      "route": "cat-exams",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4322/app/cat",
+      "status": 200,
+      "screenshot": "reports/sea-glass-theme-redesign-current/cat-exams-mobile-sea-glass.png",
+      "dataTheme": "sea-glass"
+    }
+  ]
+}

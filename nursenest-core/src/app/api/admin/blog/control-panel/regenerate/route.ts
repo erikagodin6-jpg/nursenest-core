@@ -1,0 +1,103 @@
+import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import { NextResponse } from "next/server";
+import { z } from "zod";
+import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
+import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+import { safeParseBlogControlPanelPlan } from "@/lib/blog/blog-control-panel-plan-normalize";
+import { regenerateControlPanelSection } from "@/lib/blog/blog-control-panel-generation";
+import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-internal-link-verify";
+import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
+
+const sectionSchema = z.enum([
+  "title_options",
+  "meta",
+  "outline",
+  "article_html",
+  "faqs",
+  "internal_links",
+  "apa_sources",
+  "image_placements",
+]);
+
+const bodySchema = z.object({
+  section: sectionSchema,
+  topic: z.string().min(3).max(200),
+  exam: z.string().min(2).max(80),
+  country: z.enum(["US", "CA", "unspecified"]).default("unspecified"),
+  template: z.nativeEnum(BlogPostTemplate),
+  intent: z.nativeEnum(BlogPostIntent),
+  funnelStage: z.nativeEnum(BlogFunnelStage),
+  tone: z.enum(["professional", "supportive", "direct"]).optional(),
+  keywords: z.string().max(500).optional(),
+  currentTitle: z.string().max(220).optional(),
+  currentBody: z.string().max(500_000).optional(),
+  currentPlan: z.unknown().optional(),
+});
+
+export async function POST(req: Request) {
+  const gate = await requireAdmin(req);
+  if (!gate.ok) return gate.response;
+
+  const aiBlock = adminAiGenerationHttpBlock({ pipeline: "blog" });
+  if (aiBlock) return aiBlock;
+
+  const parsed = bodySchema.safeParse(await req.json());
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
+  }
+  const d = parsed.data;
+
+  let currentPlan: BlogControlPanelPlan | undefined;
+  if (d.currentPlan !== undefined) {
+    const pr = safeParseBlogControlPanelPlan(d.currentPlan, { title: d.topic });
+    if (!pr.success) {
+      return NextResponse.json(
+        {
+          error: "Invalid currentPlan",
+          normalizeError: pr.normalizeError,
+          details: pr.zodError?.flatten() ?? { formErrors: [], fieldErrors: {} },
+        },
+        { status: 400 },
+      );
+    }
+    currentPlan = pr.data;
+  }
+
+  if (d.section === "article_html" && !currentPlan) {
+    return NextResponse.json({ error: "currentPlan required for article_html" }, { status: 400 });
+  }
+
+  try {
+    const out = await regenerateControlPanelSection({
+      section: d.section,
+      topic: d.topic,
+      exam: d.exam,
+      country: d.country,
+      template: d.template,
+      intent: d.intent,
+      funnelStage: d.funnelStage,
+      tone: d.tone ?? "professional",
+      keywords: d.keywords,
+      currentPlan,
+      currentBody: d.currentBody,
+      currentTitle: d.currentTitle,
+    });
+    if (out.section === "internal_links") {
+      const verified = normalizePlanSuggestedLessonRows(
+        await annotateBlogInternalLinkRowsWithVerification(
+          normalizePlanSuggestedLessonRows(out.suggestedInternalLessons),
+          d.country,
+        ),
+      );
+      return NextResponse.json({
+        ok: true,
+        result: { ...out, suggestedInternalLessons: verified },
+      });
+    }
+    return NextResponse.json({ ok: true, result: out });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return NextResponse.json({ error: "regeneration_failed", message: msg }, { status: 502 });
+  }
+}

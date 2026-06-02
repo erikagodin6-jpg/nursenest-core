@@ -1,0 +1,290 @@
+{
+  "version": 1,
+  "packageId": "maternal-newborn-pkg-08",
+  "label": "Bleeding During Pregnancy — Lessons, Questions, Flashcards & Emergency Scenarios",
+  "generatedDate": "2026-06-02",
+  "targetExams": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","PNP-PC","FNP"],
+  "domain": "Maternal Newborn",
+  "subdomain": "Bleeding During Pregnancy",
+  "lessons": [
+    {
+      "lessonId": "mn-pkg08-L01",
+      "topicSlug": "types-of-abortion",
+      "title": "Types of Spontaneous Abortion: Clinical Classification",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Spontaneous abortion (miscarriage):** Involuntary pregnancy loss before 20 weeks gestation. Affects ~15–20% of known pregnancies; ~50% of all conceptions. Most common cause: chromosomal abnormality (50–60%). Other causes: uterine anomaly, cervical insufficiency, infection, maternal illness, thrombophilia."
+        },
+        {
+          "id": "types",
+          "heading": "Classification of Spontaneous Abortion",
+          "kind": "pathophysiology_overview",
+          "body": "**Threatened abortion:**\n- Vaginal bleeding (any amount) before 20 weeks\n- Cervix CLOSED, uterus appropriate size\n- Cramping may or may not be present\n- Viable pregnancy on ultrasound (FHTs present)\n- Management: expectant, activity modification, no intercourse, serial β-hCG; reassurance\n- Outcome: 50% continue to term; 50% progress to abortion\n\n**Inevitable abortion:**\n- Vaginal bleeding + cramping + cervix OPEN (dilated)\n- Products of conception may be at cervical os\n- Gestational sac may be intact or partially expelled\n- Management: surgical evacuation (suction curettage) or expectant; no way to stop the process\n\n**Incomplete abortion:**\n- Partial expulsion of products of conception; some POC remain in uterus\n- Cervix OPEN\n- Significant bleeding (from retained tissue preventing uterine contraction)\n- Management: suction curettage or misoprostol to complete evacuation; monitor for infection, hemorrhage\n\n**Complete abortion:**\n- All products of conception expelled from uterus\n- Cervix may be closed or still dilating\n- Bleeding decreasing\n- Management: confirm by ultrasound (empty uterus); expectant if stable; no further intervention needed typically\n\n**Missed abortion (early pregnancy failure/blighted ovum):**\n- Fetal demise without expulsion of POC\n- No fetal heartbeat on ultrasound; uterus may be smaller than dates\n- May have minimal or no bleeding/cramping (asymptomatic)\n- Management: expectant (may wait for natural expulsion), misoprostol (medical management), or surgical (D&C/suction curettage)\n\n**Septic abortion:**\n- Any type of abortion complicated by intrauterine infection\n- Hallmark: fever + uterine tenderness + purulent discharge + history of abortion (spontaneous or induced)\n- Can occur with illegal/unsafe abortion (major global cause of maternal mortality)\n- Management: EMERGENCY — IV broad-spectrum antibiotics (ampicillin + gentamicin + clindamycin or metronidazole) + urgent surgical evacuation\n- Signs of septic shock: hypotension, tachycardia, altered mental status → ICU, blood cultures, aggressive resuscitation"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls: Differentiating Types",
+          "kind": "clinical_pearls",
+          "body": "| Type | Bleeding | Cramping | Cervix | POC in Uterus | FHTs |\n|---|---|---|---|---|---|\n| Threatened | + | ± | Closed | Yes (intact) | Present |\n| Inevitable | ++ | + | OPEN | Yes (partially) | Absent or present |\n| Incomplete | +++ | + | OPEN | Partial | Absent |\n| Complete | Decreasing | Decreasing | Closing | No | Absent |\n| Missed | Minimal/none | Minimal/none | Closed | Yes (dead) | Absent |\n| Septic | ++ | + | ± | ± | ± |\n\n**RhoGAM:** MUST be given to ALL Rh-negative women after any abortion type, including ectopic pregnancy\n\n**Grief counseling:** Pregnancy loss at any gestational age is a significant emotional event — validate feelings, provide resources, allow parents to name the baby if they wish, offer chaplain services"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Threatened: closed cervix + FHTs = pregnancy still viable; 50% will miscarry\n- Inevitable: open cervix + no stopping it\n- Incomplete: some POC retained → bleeding + open cervix → surgical/medical evacuation\n- Missed: no FHT, no expulsion, often asymptomatic\n- Septic: fever + tender uterus + abortion = emergency → IV abx + urgent surgical evacuation\n- All Rh-negative women: RhoGAM after ANY type of abortion"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg08-L02",
+      "topicSlug": "placenta-previa",
+      "title": "Placenta Previa: Assessment, Classification & Emergency Management",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Classification",
+          "kind": "introduction",
+          "body": "**Placenta previa:** Placenta implanted over or adjacent to the internal cervical os. Incidence: 1 in 200–250 pregnancies. Risk increases with prior C-section (scarred lower uterine segment attracts abnormal placentation). The most dangerous type of antepartum hemorrhage because it is painless and can be massive."
+        },
+        {
+          "id": "classification",
+          "heading": "Classification",
+          "kind": "pathophysiology_overview",
+          "body": "**Complete (major) previa:** Placenta completely covers the internal os\n**Partial previa:** Placenta partially covers the internal os\n**Marginal previa:** Placenta edge reaches the margin of the internal os\n**Low-lying placenta:** Placenta within 2 cm of internal os (does not cover it)\n\n**Note:** Many previas diagnosed in 2nd trimester resolve by term as the lower uterine segment develops and the placenta appears to 'migrate' upward (uterine elongation). Repeat ultrasound at 32–34 weeks recommended.\n\n**Risk factors:**\n- Prior uterine surgery: C-section (most important), D&C, myomectomy\n- Advanced maternal age\n- Multiparity (≥4 pregnancies)\n- Multiple gestation\n- Prior placenta previa\n- Smoking (impairs placentation)\n- ART-conceived pregnancies\n\n**Clinical presentation:**\n- **Classic: painless, bright red vaginal bleeding** in the 2nd or 3rd trimester\n- No pain (blood escapes into vagina, not under placenta)\n- Initial bleeding: typically self-limited but recurs; usually more severe with each episode\n- Uterus: soft, non-tender\n- Fetal position: often malpresentation (breech, transverse) — placenta in LUS prevents fetal engagement\n- Fetal status: usually stable unless major hemorrhage"
+        },
+        {
+          "id": "management",
+          "heading": "Management",
+          "kind": "nursing_assessment_interventions",
+          "body": "**CRITICAL NURSING RULE: NO digital vaginal examination with known or suspected placenta previa. EVER.**\n- Digital exam can puncture the placenta → catastrophic hemorrhage → fetal/maternal death\n- Speculum exam only (visual inspection) if needed to confirm bleeding source\n\n**Assessment:**\n- Maternal vital signs, pad count and description\n- Fetal heart rate monitoring\n- IV access × 2 large-bore\n- Type and crossmatch (prepare for massive transfusion)\n- CBC, coagulation studies, BUN/Cr\n- Ultrasound (confirm diagnosis and placental location)\n\n**Management by severity:**\n\n**Stable, no active bleeding:**\n- Hospitalize until bleeding stops\n- Pelvic rest (no intercourse, tampons, digital exams)\n- Monitor FHR\n- Betamethasone if <34 weeks\n- If continued stability: may discharge home with strict precautions after counseling\n- Emergency C-section plan if bleeding recurs\n\n**Active hemorrhage:**\n- IV fluid resuscitation\n- Blood transfusion as needed\n- Continuous FHR monitoring\n- Prepare for EMERGENCY CESAREAN DELIVERY\n- Neonatal resuscitation team present at delivery\n\n**Delivery timing:**\n- Stable complete previa: elective C-section at 36–37 weeks\n- Low-lying/marginal: elective C-section at 36–37 weeks OR vaginal delivery if placental edge >2 cm from os\n\n**Placenta accreta spectrum:** If previa is anterior and overlies prior C-section scar → risk of placenta accreta (invades myometrium). MRI or Doppler US for assessment. Hysterectomy may be required at delivery."
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Placenta previa: PAINLESS bright red bleeding (classic). No digital exam EVER.\n- Risk factors: prior C-section #1, multiparity, AMA, smoking\n- Fetal malpresentation common (placenta blocks LUS)\n- Management: stable = pelvic rest + hospitalization. Active hemorrhage = emergency C-section\n- Delivery: C-section; vaginal only if edge ≥2 cm from os at term\n- Anterior previa over prior C-section scar = accreta risk → prepare for possible hysterectomy"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg08-L03",
+      "topicSlug": "abruptio-placentae",
+      "title": "Abruptio Placentae: Clinical Presentation & Emergency Response",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Classification",
+          "kind": "introduction",
+          "body": "**Abruptio placentae (placental abruption):** Premature separation of the normally implanted placenta from the uterine wall before delivery of the fetus. Occurs in approximately 1% of pregnancies. Carries 10–20% perinatal mortality. Leading cause of third-trimester fetal death.\n\n**Classification:**\n- **Grade 1 (mild):** Minimal bleeding, no maternal/fetal distress, discovered retrospectively by pathology\n- **Grade 2 (moderate):** Uterine tenderness, fetal distress, mild-moderate maternal compromise\n- **Grade 3 (severe):** Massive hemorrhage, uterine tetanic contraction, fetal demise, maternal shock, DIC"
+        },
+        {
+          "id": "presentation",
+          "heading": "Clinical Presentation",
+          "kind": "pathophysiology_overview",
+          "body": "**Classic presentation (contrast with placenta previa):**\n- **Painful, dark red vaginal bleeding** — key differentiator from placenta previa\n- BUT: 20% of abruptions are concealed (blood trapped behind placenta, no external bleeding)\n- Uterine hypertonia/tetanic contractions: uterus is hard, board-like, painful between contractions\n- Uterine tenderness\n- Fetal compromise: non-reassuring FHR (bradycardia, late decelerations, variable decelerations, loss of variability)\n- Concealed abruption: may present with severe abdominal pain, no external bleeding, fetal demise\n\n**Risk factors:**\n- Hypertensive disorders (preeclampsia, chronic HTN) — #1 risk factor\n- Cocaine or methamphetamine use (vasoconstriction → placental ischemia → separation)\n- Prior abruption (10× recurrence risk)\n- Abdominal trauma (MVC, domestic violence, falls)\n- PPROM (loss of AF → uterine size decreases rapidly → placenta cannot accommodate)\n- Smoking: ×2 risk\n- Short umbilical cord\n- Uterine anomalies\n- Thrombophilia\n\n**Complications:**\n- Fetal: hypoxia, stillbirth, preterm birth\n- Maternal: hemorrhagic shock, DIC (disseminated intravascular coagulation — from massive thrombin release from abruption), renal failure, Couvelaire uterus (blood infiltrates myometrium — bluish-purple uterus at C-section)\n- DIC: most feared complication — fibrinogen consumed → coagulopathy → bleeding from all sites"
+        },
+        {
+          "id": "management",
+          "heading": "Emergency Nursing Management",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Immediate assessment:**\n- DO NOT perform digital vaginal exam until placenta previa is excluded by ultrasound\n- Maternal vital signs (BP, HR, RR, SpO2)\n- Fetal heart rate monitoring — continuous\n- Amount and character of bleeding\n- Uterine tone and tenderness\n- Level of consciousness and fetal movement\n\n**Emergency interventions:**\n1. IV access × 2 large-bore immediately\n2. Blood draw: CBC, type and crossmatch, fibrinogen, PT/PTT, BMP, uric acid\n3. Urine output monitoring (Foley catheter)\n4. IV fluid resuscitation; blood products as needed (PRBCs, FFP, platelets, cryoprecipitate for DIC)\n5. Oxygen 8–10 L/min via face mask\n6. Left lateral position\n7. Notify provider immediately\n8. Fetal monitoring — prepare for emergency delivery\n\n**DIC management:**\n- Fibrinogen <150 mg/dL = transfuse cryoprecipitate (source of fibrinogen + factor VIII)\n- Platelet <50,000 = transfuse platelets\n- FFP for coagulation factor replacement\n\n**Delivery:**\n- Stable Grade 1 + preterm: expectant management with monitoring\n- Grade 2 with fetal compromise: emergency delivery (often C-section)\n- Grade 3 (severe): emergency delivery regardless of gestational age; if vaginal delivery imminent → proceed; otherwise C-section\n- Fetal demise from abruption: vaginal delivery preferred if maternal condition allows (no fetal benefit from C-section)"
+        },
+        {
+          "id": "previa_vs_abruption",
+          "heading": "Previa vs Abruption: Comparison Table",
+          "kind": "clinical_pearls",
+          "body": "| Feature | Placenta Previa | Abruptio Placentae |\n|---|---|---|\n| Pain | PAINLESS | PAINFUL (abdominal/uterine) |\n| Blood color | Bright red | Dark red |\n| Uterus | Soft, non-tender | Rigid, hypertonic, tender |\n| FHT | Usually stable | Often non-reassuring |\n| Onset | Gradual | Sudden |\n| Blood source | From placenta pulling away from os | From retroplacental hematoma |\n| Digital exam | ABSOLUTELY CONTRAINDICATED | Can examine after previa excluded |\n| Bleeding type | External | External ± concealed |\n| Delivery | C-section (usually) | Vaginal or C-section (varies) |"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Abruption: PAINFUL dark red bleeding + rigid/tender uterus + fetal distress\n- Risk factors: HTN (#1), cocaine, prior abruption, trauma, PPROM, smoking\n- Concealed abruption: severe pain + no bleeding + fetal demise\n- DIC: most feared complication — fibrinogen <150, coagulopathy → massive transfusion protocol\n- Emergency: 2 IVs + type & cross + blood products + continuous FHR + immediate delivery if severe\n- Fetal demise + abruption: vaginal delivery preferred (no fetal benefit from C-section)"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg08-L04",
+      "topicSlug": "subchorionic-hemorrhage",
+      "title": "Subchorionic Hemorrhage: Assessment & Management",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Subchorionic hemorrhage (SCH):** Bleeding between the chorionic membrane and the uterine wall, creating a hematoma. Most common cause of first-trimester vaginal bleeding. Most SCHs resolve spontaneously. Prognosis depends on size."
+        },
+        {
+          "id": "clinical",
+          "heading": "Clinical Features & Management",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Presentation:**\n- Vaginal bleeding (may be light spotting to moderate)\n- Pain: none to mild cramping\n- Diagnosis: ultrasound shows hypoechoic crescent adjacent to gestational sac\n- May be asymptomatic (incidental ultrasound finding)\n\n**Risk factors:**\n- IVF pregnancies\n- Submucosal fibroids\n- Thrombophilia\n\n**Prognosis:**\n- Small SCH (<25% of GS volume): usually resolves; excellent prognosis\n- Large SCH (>25% of GS or >50 mL): increased risk of miscarriage, preterm labor, PPROM, abruption\n- SCH after 16 weeks: higher risk than first-trimester SCH\n\n**Management:**\n- No proven treatment\n- Pelvic rest (no intercourse — not evidence-based but commonly recommended)\n- Activity restriction (limited evidence)\n- Serial ultrasound to confirm resolution\n- No effective pharmacological intervention\n- Expectant (the clot gradually dissolves and may appear as brown discharge)\n\n**Nursing teaching:**\n- Brown discharge is expected as the clot resolves (degrading blood)\n- Report: bright red bleeding, heavy bleeding, severe cramping, decreased fetal movement\n- Reassurance: most small SCHs resolve completely by second trimester\n- Emotional support: first-trimester bleeding is frightening; validate anxiety"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- SCH: most common cause of first-trimester vaginal bleeding\n- Ultrasound: hypoechoic crescent between chorion and uterine wall\n- Small SCH: excellent prognosis, usually resolves\n- Large SCH: higher miscarriage, PPROM, abruption risk\n- No proven treatment; pelvic rest commonly recommended\n- Brown discharge = clot resolving = normal. Bright red = active bleeding = reassess"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "mn-p08-001",
+      "topicSlug": "placenta-previa",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "placenta-previa-painless-bleeding-no-digital-exam",
+      "stem": "A client at 32 weeks gestation presents to triage with sudden onset bright red vaginal bleeding. She describes no pain. Her abdomen is soft and non-tender. Fetal heart tones are 152 bpm with good variability. What is the priority nursing action?",
+      "options": {"A": "Perform a sterile digital vaginal exam to assess cervical dilation","B": "Establish two large-bore IV lines, apply continuous fetal monitoring, and prepare for ultrasound to confirm placental location before any vaginal examination","C": "Apply a fetal monitor and perform a sterile speculum exam to identify the bleeding source","D": "Prepare the client for immediate emergency cesarean section"},
+      "correctAnswer": "B",
+      "rationale": "Painless bright red vaginal bleeding in the 3rd trimester = placenta previa until proven otherwise. The priority nursing actions are: establish IV access (hemorrhage risk), apply continuous FHR monitoring (fetal wellbeing), and prepare for ultrasound to confirm placental location. A DIGITAL vaginal exam is ABSOLUTELY CONTRAINDICATED in suspected placenta previa — it can puncture the placenta causing catastrophic hemorrhage. A speculum exam (visual only) may be acceptable after placenta previa is excluded, but ultrasound first is safest.",
+      "incorrectRationales": {"A": "Digital vaginal exam with suspected placenta previa = potentially lethal. This is one of the most important NCLEX 'never do' rules.", "C": "Speculum exam is less dangerous than digital exam, but ultrasound to confirm placental location is still the priority before any vaginal examination.", "D": "Emergency C-section is not the first priority when the patient is stable and the fetus is well. IV access + monitoring + ultrasound first."},
+      "hint": "Painless bright red bleeding in 3rd trimester = previa until proven otherwise. NO digital exam. EVER.",
+      "clinicalPearl": "The classic teaching: 'Never do a digital exam on a patient who has not had an ultrasound in this pregnancy' when 3rd trimester bleeding is present. Even if the patient has had prior ultrasounds, the placenta may have not been in a previal position then.",
+      "examStrategy": "Placenta previa questions: identify the painless + bright red + non-tender uterus pattern. Then choose the option that avoids digital exam and prioritizes IV access + FHR monitoring + ultrasound.",
+      "keyTakeaway": "Placenta previa: painless bright red bleeding = NO digital exam. Priority: IV access, FHR monitoring, ultrasound to confirm diagnosis."
+    },
+    {
+      "questionId": "mn-p08-002",
+      "topicSlug": "abruptio-placentae",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "abruption-DIC-fibrinogen-coagulopathy",
+      "stem": "A client at 36 weeks with severe preeclampsia presents with sudden severe abdominal pain and heavy dark vaginal bleeding. The uterus is board-like on palpation. FHT shows prolonged bradycardia at 80 bpm. Lab results: fibrinogen 120 mg/dL, platelets 68,000, PT 21 seconds (normal <14). What complication is occurring and what is the priority?",
+      "options": {"A": "Placenta previa with maternal anemia — transfuse packed red blood cells and monitor","B": "Abruptio placentae complicated by DIC — activate massive transfusion protocol and prepare for emergency delivery","C": "HELLP syndrome — administer corticosteroids and monitor platelet trend","D": "Uterine rupture — proceed to emergency cesarean and discontinue all anticoagulants"},
+      "correctAnswer": "B",
+      "rationale": "This is severe abruptio placentae (painful, rigid uterus, severe bleeding, fetal bradycardia with preeclampsia as the #1 risk factor) complicated by DIC (fibrinogen <150 mg/dL, prolonged PT, thrombocytopenia). DIC in abruption results from massive release of thromboplastin from the retroplacental hematoma into maternal circulation, consuming clotting factors. Treatment: massive transfusion protocol (PRBCs + FFP + cryoprecipitate for fibrinogen + platelets) + emergency delivery (likely C-section with fetal bradycardia) + management of coagulopathy.",
+      "incorrectRationales": {"A": "Placenta previa presents with painless bleeding and soft, non-tender uterus — not this clinical picture. Fibrinogen 120 and elevated PT indicate coagulopathy beyond simple anemia.", "C": "HELLP syndrome can cause DIC but doesn't cause the acute severe abdominal pain + board-like uterus + massive bleeding presentation. This is abruption with DIC, not isolated HELLP.", "D": "Uterine rupture presents with cessation of contractions, sudden abdominal pain, fetal parts palpable outside the uterus, and fetal distress. While DIC can occur, the classic rigid uterus and dark vaginal bleeding point to abruption."},
+      "hint": "Abruption + DIC: fibrinogen <150 + elevated PT + thrombocytopenia. Massive transfusion + emergency delivery.",
+      "clinicalPearl": "DIC in obstetrics: Fibrinogen is the most sensitive marker — normal fibrinogen in pregnancy is 400–600 mg/dL. A value of 120 represents severe consumption. Cryoprecipitate is the fastest way to replace fibrinogen (each unit raises fibrinogen ~10 mg/dL). Give 10 units to target fibrinogen >200 mg/dL.",
+      "examStrategy": "Abruption + coagulopathy: recognize DIC from fibrinogen <150, elevated PT/PTT, low platelets. Treatment = massive transfusion protocol + delivery. Never delay delivery for coagulopathy correction — only delivery stops the thromboplastin release.",
+      "keyTakeaway": "Abruption + DIC: fibrinogen <150 mg/dL, elevated PT, thrombocytopenia → massive transfusion (PRBCs + FFP + cryoprecipitate + platelets) + emergency delivery."
+    },
+    {
+      "questionId": "mn-p08-003",
+      "topicSlug": "types-of-abortion",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "septic-abortion-fever-IV-antibiotics-emergency",
+      "stem": "A client presents to the ED with a 12-week history of amenorrhea, fever of 39.5°C, severe lower abdominal pain, purulent vaginal discharge, and a history of an attempt to self-induce an abortion 3 days ago. She appears ill and her BP is 88/54. What is the priority action?",
+      "options": {"A": "Perform a pelvic exam to determine cervical dilation before starting antibiotics","B": "Establish IV access, draw blood cultures, begin broad-spectrum IV antibiotics, and prepare for emergency uterine evacuation","C": "Administer misoprostol to complete the abortion and then begin oral antibiotics","D": "Obtain an ultrasound before initiating any treatment to confirm diagnosis"},
+      "correctAnswer": "B",
+      "rationale": "Septic abortion is an obstetric emergency. Clinical findings: fever, uterine tenderness, purulent discharge, history of unsafe abortion attempt, and now septic shock (BP 88/54). Priority: IV access, blood cultures (before antibiotics if possible), broad-spectrum IV antibiotics (ampicillin + gentamicin + clindamycin or metronidazole), aggressive IV fluid resuscitation, ICU-level care, and URGENT uterine evacuation (suction curettage). Delay in antibiotic therapy and evacuation increases mortality from endotoxemia and septic shock.",
+      "incorrectRationales": {"A": "Pelvic exam is important but should not delay antibiotic initiation in septic shock. Antibiotics and resuscitation are simultaneous with assessment.", "C": "Misoprostol is used for medical abortion management, not for septic abortion — you need to urgently evacuate the infected uterus surgically. Oral antibiotics are inadequate for septic shock.", "D": "Ultrasound can confirm retained products but should not delay antibiotic therapy and resuscitation in a septic, hemodynamically unstable patient."},
+      "hint": "Septic abortion = emergency: IV antibiotics + resuscitation + urgent surgical evacuation. Septic shock = life-threatening.",
+      "clinicalPearl": "Septic abortion from unsafe abortion procedures is a leading preventable cause of maternal mortality globally. Even with medical legalization, unsafe abortions still occur. The triad: history of attempted abortion + fever + uterine tenderness = septic abortion until proven otherwise.",
+      "examStrategy": "Septic abortion: the answer always prioritizes IV antibiotics + resuscitation + surgical evacuation. Never delay to complete workup when patient is in septic shock.",
+      "keyTakeaway": "Septic abortion: IV broad-spectrum antibiotics + aggressive resuscitation + emergency uterine evacuation. Septic shock = immediately life-threatening."
+    },
+    {
+      "questionId": "mn-p08-004",
+      "topicSlug": "types-of-abortion",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "threatened-abortion-closed-cervix-FHT-present",
+      "stem": "A client at 10 weeks gestation presents with light vaginal spotting that started this morning. She denies cramping. On examination: cervix is closed, uterus is appropriate for dates, and fetal heart tones are confirmed at 168 bpm by Doppler. How should this pregnancy be classified and managed?",
+      "options": {"A": "Inevitable abortion — prepare for surgical evacuation","B": "Threatened abortion — expectant management with activity restriction and pelvic rest; serial β-hCG monitoring","C": "Missed abortion — schedule dilation and curettage","D": "Complete abortion — the bleeding and cramping phase has passed"},
+      "correctAnswer": "B",
+      "rationale": "Threatened abortion: bleeding in 1st trimester + closed cervix + viable pregnancy on Doppler (FHTs present). The pregnancy is still potentially viable. Management is expectant: pelvic rest, modified activity, serial β-hCG to confirm appropriate rise, reassurance. Approximately 50% of threatened abortions continue to term; 50% progress to spontaneous abortion. No intervention changes the outcome.",
+      "incorrectRationales": {"A": "Inevitable abortion requires open cervix + products of conception presenting. This client has a closed cervix and intact pregnancy.", "C": "Missed abortion means no fetal heartbeat with a gestational sac present — this client has confirmed FHTs, ruling out missed abortion.", "D": "Complete abortion means all POC have been expelled — this client still has a viable intrauterine pregnancy."},
+      "hint": "Threatened abortion: bleeding + CLOSED cervix + FHTs present. Expectant management.",
+      "clinicalPearl": "The key differentiator for all abortion types is cervical os status: closed cervix = threatened OR missed (depending on fetal viability). Open cervix = inevitable OR incomplete. No FHTs + closed = missed. No FHTs + open = inevitable or incomplete.",
+      "examStrategy": "Abortion type questions: start with cervical status (open vs closed), then FHT status (present vs absent), then amount of retained tissue. These three data points classify the type.",
+      "keyTakeaway": "Threatened abortion: bleeding + CLOSED cervix + FHTs present → expectant management. 50% continue to term."
+    },
+    {
+      "questionId": "mn-p08-005",
+      "topicSlug": "abruptio-placentae",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "abruption-concealed-no-bleeding-fetal-demise",
+      "stem": "A 34-year-old client at 38 weeks with chronic hypertension presents complaining of sudden severe constant abdominal pain that started 30 minutes ago. She reports no vaginal bleeding. The uterus is extremely hard and tender. Doppler shows no fetal heart tones. Which diagnosis is most likely and what is the appropriate management?",
+      "options": {"A": "Placenta previa — delay digital exam until ultrasound confirms","B": "Concealed abruptio placentae — prepare for delivery; vaginal delivery preferred if maternal status allows","C": "Braxton Hicks contractions — reassure and discharge","D": "Chorioamnionitis — begin IV antibiotics and await labor"},
+      "correctAnswer": "B",
+      "rationale": "Concealed abruption: severe abdominal pain + rigid/tender uterus + NO external bleeding + fetal demise = classic presentation of a large concealed retroplacental hematoma. The blood is trapped behind the placenta and does not escape externally. Chronic hypertension is the #1 risk factor for abruption. Management: IV access, resuscitation, blood products (DIC risk), delivery (vaginal delivery preferred when fetal demise has occurred — no fetal benefit from C-section; C-section reserved for maternal hemodynamic emergency).",
+      "incorrectRationales": {"A": "Placenta previa is painless with bright red external bleeding and a soft, non-tender uterus — the opposite of this presentation.", "C": "Braxton Hicks are irregular, mild, without fetal compromise or absent fetal heart tones. This presentation is an emergency.", "D": "Chorioamnionitis presents with fever, uterine tenderness (not rigidity/tetany), and purulent fluid — not severe constant pain with absent FHTs."},
+      "hint": "Concealed abruption: severe pain + rigid uterus + NO external bleeding + fetal demise. Deliver — vaginal preferred with fetal demise.",
+      "clinicalPearl": "After fetal demise from abruption, vaginal delivery is preferred: C-section is associated with higher maternal morbidity (risk of coagulopathy causing massive hemorrhage in a C-section incision). Vaginal delivery avoids surgical intervention in a coagulopathic patient.",
+      "examStrategy": "Abruption can present WITHOUT external bleeding (concealed). If the uterus is rigid/tetanic + severe constant pain in a hypertensive patient = concealed abruption regardless of visible bleeding.",
+      "keyTakeaway": "Concealed abruption: severe pain + rigid tender uterus + no external bleeding + fetal demise. Vaginal delivery preferred with fetal demise. C-section for maternal hemodynamic emergency only."
+    }
+  ],
+  "emergencyScenarios": [
+    {
+      "scenarioId": "mn-emerg-p08-001",
+      "title": "Emergency Scenario 1: Massive Placenta Previa Hemorrhage",
+      "setup": "G3P2 at 34+2 weeks calls 911 after soaking 4 pads in 30 minutes with bright red painless bleeding. EMS arrives — BP 82/50, HR 134, pale and diaphoretic. Prior ultrasound at 20 weeks: anterior complete placenta previa.",
+      "criticalActions": [
+        "Call for help/code obstetric team immediately",
+        "2 large-bore IVs: 16G or 18G — both antecubital or AC",
+        "Draw blood: type and crossmatch × 4 units PRBCs, CBC, fibrinogen, PT/PTT, BMP",
+        "Begin aggressive IV fluid resuscitation: LR bolus 1–2L",
+        "Activate massive transfusion protocol: O-negative PRBCs if crossmatch not ready",
+        "Continuous maternal and fetal monitoring",
+        "NO DIGITAL VAGINAL EXAM under any circumstances",
+        "Oxygen 10 L/min via non-rebreather mask",
+        "NPO — prepare for emergency cesarean",
+        "Neonatal resuscitation team to OR",
+        "Anesthesia team: rapid sequence intubation + general anesthesia likely needed",
+        "RhoGAM if Rh-negative"
+      ],
+      "keyPoints": "Painless massive bleeding + known previa + hemodynamic instability = emergency C-section. No digital exam. Massive transfusion protocol early."
+    },
+    {
+      "scenarioId": "mn-emerg-p08-002",
+      "title": "Emergency Scenario 2: Grade 3 Abruption with Fetal Demise",
+      "setup": "G2P1 at 36 weeks with severe preeclampsia suddenly develops severe constant abdominal pain and vaginal bleeding. Uterus is board-hard. Doppler shows no fetal heart tones. BP 164/110. Lab: fibrinogen 80 mg/dL, platelets 42,000, PT >30 sec.",
+      "criticalActions": [
+        "2 large-bore IV lines immediately",
+        "Blood cultures + CBC + coagulation panel (fibrinogen, PT/PTT/INR, D-dimer)",
+        "Activate massive transfusion protocol: PRBCs + FFP 1:1 ratio",
+        "Cryoprecipitate 10 units for fibrinogen <150 (target fibrinogen >200 mg/dL)",
+        "Platelet transfusion for platelets <50,000",
+        "Continuous maternal vital sign monitoring; Foley catheter (urine output ≥30 mL/hr target)",
+        "Magnesium sulfate for seizure prophylaxis (preeclampsia)",
+        "IV labetalol or hydralazine for BP ≥160/110",
+        "Plan for vaginal delivery (fetal demise — no benefit from C-section; avoid major surgery with coagulopathy)",
+        "Oxytocin induction if not contracting",
+        "Grievance counseling team notification"
+      ],
+      "keyPoints": "Severe abruption + fetal demise + DIC: correct coagulopathy with massive transfusion while preparing for vaginal delivery. C-section avoided when fetus deceased and patient has DIC."
+    },
+    {
+      "scenarioId": "mn-emerg-p08-003",
+      "title": "Emergency Scenario 3: Threatened Abortion — Emotional Crisis",
+      "setup": "G1P0 at 9 weeks calls crying, saying she is having heavy bleeding and 'passing tissue.' You are the triage nurse who answers the phone.",
+      "criticalActions": [
+        "Remain calm; assess hemodynamic stability (lightheadedness, syncope, extreme pallor)",
+        "If hemodynamically unstable: instruct to call 911 or come by personal vehicle immediately",
+        "If stable: instruct to save any passed tissue in a clean container (for pathology if complete abortion)",
+        "Instruct to come to triage for assessment",
+        "Prepare for: serial β-hCG, pelvic ultrasound, Rh status (RhoGAM if Rh-negative)",
+        "Emotional support on arrival: acknowledge loss, use person's own language for what is happening",
+        "Chaplain/social work referral for grief support if miscarriage confirmed",
+        "Provide written resources for pregnancy loss support groups",
+        "Discuss follow-up plan regardless of outcome: ensure serial β-hCG to zero if complete abortion"
+      ],
+      "keyPoints": "Pregnancy loss requires clinical assessment AND emotional support. Grief is valid at any gestational age. RhoGAM is critical if Rh-negative."
+    }
+  ],
+  "flashcards": [
+    {"id":"mn-fc-p08-001","front":"What are the classic differentiating features of placenta previa versus abruptio placentae?","back":"Previa: PAINLESS bright red bleeding, soft non-tender uterus, stable FHTs, no bleeding without risk factor (prior C-section). Abruption: PAINFUL dark red bleeding, rigid/hard/tender uterus, non-reassuring FHTs, often in hypertension/cocaine use context.","hint":"Previa = painless. Abruption = painful. Uterus: soft vs hard.","explanation":"The pain distinction is the most important clinical differentiator. The pain in abruption comes from blood dissecting between the placenta and myometrium, stretching uterine tissue and triggering uterine irritability/tetany. In previa, blood simply falls out through the cervical os without dissection.","clinicalPearl":"Approximately 20% of abruptions are concealed — blood is trapped behind the placenta with no external bleeding. These patients have severe pain and rigid uterus WITHOUT visible bleeding. Concealed abruption can be more dangerous than external because the degree of hemorrhage is not visible."},
+    {"id":"mn-fc-p08-002","front":"What are the six types of spontaneous abortion and how is each differentiated?","back":"1. Threatened: closed cervix + FHTs present. 2. Inevitable: OPEN cervix + FHTs absent. 3. Incomplete: OPEN cervix + partial POC retained. 4. Complete: closed cervix + empty uterus + no FHTs. 5. Missed: closed cervix + no FHTs (dead embryo not expelled). 6. Septic: any type + fever + infected.","hint":"Differentiator = cervical status (open/closed) + FHT status + POC retained.","explanation":"The clinical management differs significantly: threatened = expectant; inevitable = prepare for complete loss; incomplete = evacuate retained tissue; missed = medical or surgical evacuation; septic = emergency antibiotics + evacuation.","clinicalPearl":"'Missed abortion' is now commonly called 'early pregnancy failure' or 'embryonic/fetal demise' in modern obstetrics to reduce stigmatizing language."},
+    {"id":"mn-fc-p08-003","front":"What is the absolute nursing contraindication with placenta previa?","back":"NEVER perform a digital vaginal examination when placenta previa is known or suspected. A digital exam can puncture the placenta, causing catastrophic hemorrhage and potentially maternal and fetal death. Only sterile speculum exam (visual only) is acceptable after ultrasound excludes previa.","hint":"Placenta previa + digital exam = potential catastrophe. NEVER.",
+"explanation":"This is one of the most critical 'never do' rules in obstetric nursing. The internal cervical os is covered by placental tissue in previa — inserting fingers can rupture a major uterine vessel or tear placental tissue, causing immediate massive hemorrhage.","clinicalPearl":"This rule applies even if previa was diagnosed weeks ago and is thought to have 'resolved.' Until ultrasound at the current visit confirms the placenta is NOT previal, digital exam must not be performed for any patient presenting with 3rd trimester bleeding."},
+    {"id":"mn-fc-p08-004","front":"What causes DIC in abruptio placentae?","back":"Massive retroplacental hematoma releases thromboplastin (tissue factor) from placental and decidual tissue into maternal circulation → activates extrinsic coagulation cascade → widespread microthrombi → consumption of clotting factors → DIC (diffuse bleeding paradoxically from clotting factor depletion).","hint":"Abruption → thromboplastin release → DIC (consume all the clotting factors → can't clot anymore).","explanation":"DIC in abruption is the most feared obstetric complication of abruption. Classic lab findings: fibrinogen <150 (critically low; normal pregnancy is 400–600), elevated PT/PTT, low platelets, elevated D-dimer/FDP. Treatment: address underlying cause (deliver) + massive transfusion.","clinicalPearl":"The 'cure' for DIC in abruption is delivery — removing the placenta eliminates the source of thromboplastin. All blood product transfusions are temporizing measures until the placenta is delivered."},
+    {"id":"mn-fc-p08-005","front":"When is RhoGAM required for pregnancy-related bleeding events?","back":"RhoGAM (anti-D immune globulin) 300 mcg IM is required within 72 hours for ALL Rh-negative women experiencing: any pregnancy loss (ectopic, miscarriage, therapeutic abortion), any antepartum bleeding, 28 weeks prophylaxis, delivery of Rh-positive infant, any trauma, or invasive procedure (amniocentesis, CVS, ECV).","hint":"Rh-negative woman + ANY pregnancy event with possible fetal blood exposure = RhoGAM within 72h.","explanation":"Fetal-maternal hemorrhage (even as little as 0.1 mL of D-positive fetal RBCs) can sensitize an Rh-negative mother, leading to HDFN in subsequent Rh-positive pregnancies. RhoGAM prevents sensitization by clearing fetal D-positive cells before maternal antibody production.",
+"clinicalPearl":"The only exception: Rh-negative woman with a confirmed Rh-negative partner → baby cannot be Rh-positive → RhoGAM not needed. Must be confirmed paternity and confirmed Rh-negative father."},
+    {"id":"mn-fc-p08-006","front":"What is a Couvelaire uterus?","back":"Couvelaire uterus (uteroplacental apoplexy): infiltration of blood into the myometrium from a severe placental abruption, turning the uterus bluish-purple and causing uterine wall rigidity and failure to contract. Discovered at cesarean section. May require hysterectomy if persistent postpartum hemorrhage from atony.","hint":"Couvelaire uterus = blood-soaked myometrium from massive abruption → purple/rigid uterus at C-section.","explanation":"The blood from a massive retroplacental hematoma extravasates through the myometrial muscle fibers, producing a bruised, ecchymotic appearance. The myometrium may not contract effectively (uterine atony) due to blood infiltration between muscle fibers, leading to PPH. B-Lynch suture, uterotonic agents, or hysterectomy may be required.",
+"clinicalPearl":"Couvelaire uterus is a marker of severe abruption. Its presence should prompt immediate involvement of a blood bank (massive transfusion protocol), urology (in case of bladder involvement), and anesthesia for complex surgical management."},
+    {"id":"mn-fc-p08-007","front":"What is the management of a missed abortion?","back":"Three options: (1) Expectant management — wait for natural expulsion (may take weeks, risk of sepsis if prolonged). (2) Medical — misoprostol (prostaglandin) vaginally or buccally to stimulate uterine contractions and expulsion. (3) Surgical — suction curettage (D&C) for definitive rapid evacuation. Patient preference + clinical context determines choice.","hint":"Missed abortion options: Expectant (wait), Medical (misoprostol), Surgical (D&C). All are valid.","explanation":"For first-trimester missed abortion, medical management with misoprostol is ~80% effective in 24–48 hours. Second-trimester missed abortion (after 14 weeks) typically requires dilation and evacuation (D&E) rather than suction curettage. All Rh-negative women need RhoGAM.",
+"clinicalPearl":"Mifepristone (progesterone blocker) plus misoprostol is more effective than misoprostol alone for medical management of missed abortion: mifepristone 200 mg orally 24–48 hours before misoprostol increases complete expulsion rate to ~90%."},
+    {"id":"mn-fc-p08-008","front":"What are the risk factors for placenta previa?","back":"Prior uterine surgery (C-section = most important), grand multiparity (≥4 deliveries), advanced maternal age, multiple gestation, prior placenta previa, smoking, ART-conceived pregnancy (IVF), non-vertex presentation in prior pregnancy.","hint":"Prior C-section = #1 risk. Multiparity, AMA, smoking, multiples all increase risk.","explanation":"Prior C-section scars in the lower uterine segment disrupt normal endometrial blood supply and predispose to abnormal placentation (previa) in subsequent pregnancies. Each additional C-section increases the risk. With 4+ prior C-sections, the previa risk is >10%.",
+"clinicalPearl":"Anterior placenta previa overlying a prior C-section scar = high risk for placenta accreta spectrum (PAS). Doppler ultrasound and MRI are used to assess depth of invasion. Planned delivery at a center capable of managing PAS (hysterectomy team, massive transfusion, interventional radiology) is critical."}
+  ]
+}

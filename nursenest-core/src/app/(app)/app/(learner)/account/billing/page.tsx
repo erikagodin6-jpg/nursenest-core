@@ -1,0 +1,84 @@
+import type { Metadata } from "next";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
+import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
+import { LearnerBillingPageContent } from "@/components/student/learner-billing-page-content";
+import { BillingPortalReturnBanner } from "@/components/student/billing-portal-return-banner";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { loadBillingPagePayload } from "@/lib/learner/load-billing-page-payload";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { BillingSupportEmailNotice } from "@/components/student/billing-support-email-notice";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return safeGenerateMetadata(
+    async () => {
+      const { t } = await getLearnerMarketingBundle();
+      return {
+        title: t("learner.account.billing.metaTitle"),
+        robots: { index: false, follow: false },
+      };
+    },
+    { pathname: "/app/account/billing", routeGroup: "student.learner.account_billing" },
+  );
+}
+
+export default async function AccountBillingPage() {
+  const { t, locale } = await getLearnerMarketingBundle();
+  const session = await getProtectedRouteSession("(student).app.(learner).account.billing");
+  const userId = (session?.user as { id?: string })?.id ?? "";
+  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.billing"));
+  const localeTag = locale.replace(/_/g, "-");
+
+  if (!userId || !isDatabaseUrlConfigured()) {
+    return (
+      <div className="space-y-6">
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
+        <PremiumEmptyState
+          headline={t("learner.account.billing.title")}
+          body="We are checking your learner session."
+          hint="Return to the study hub and try again if this does not refresh."
+          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
+      </div>
+    );
+  }
+
+  const payload = await loadBillingPagePayload(userId);
+  if (!payload) {
+    return (
+      <div className="space-y-6">
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
+        <PremiumEmptyState
+          headline={t("learner.account.billing.title")}
+          body={t("learner.account.loadFailed")}
+          tone="default"
+          primaryCta={{ label: t("learner.account.nav.accountHome"), href: "/app/account", variant: "primary" }}
+          secondaryCtas={[{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
+      <BillingPortalReturnBanner />
+      <div>
+        <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.billing.title")}</h1>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.billing.intro")}</p>
+        <BillingSupportEmailNotice />
+      </div>
+      <LearnerBillingPageContent payload={payload} t={t} localeTag={localeTag} />
+
+      <LearnerAccountCrossLinks variant="billing" t={t} />
+    </div>
+  );
+}

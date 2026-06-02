@@ -1,0 +1,960 @@
+{
+  "version": 1,
+  "description": "Patch: add missing preTest questions to reach COMPLETE threshold (≥2 preTest, ≥3 postTest) for remaining CA-RN lessons",
+  "lessons": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-angina",
+      "preTest": [
+        {
+          "question": "A client with stable angina is prescribed sublingual nitroglycerine (NTG) for chest pain. Which instruction is most important for the nurse to include?",
+          "options": [
+            "Take NTG with a full glass of water and lie down immediately",
+            "Take up to three doses 5 minutes apart; if pain persists after three doses, call 911",
+            "You may take up to six doses before seeking emergency care",
+            "Do not take NTG if your heart rate is below 80 bpm"
+          ],
+          "correct": 1,
+          "rationale": "The correct NTG protocol: sit or lie, take 1 tablet SL, wait 5 minutes; if pain persists take 2nd, wait 5 minutes; if still persists take 3rd, then call 911 (or rapid response in hospital). More than 3 tablets without relief indicates unstable angina or ACS — emergency care is required. There is no HR threshold for NTG; the BP threshold is SBP < 90 mmHg."
+        },
+        {
+          "question": "A nurse is reviewing a client's medications. The client takes sildenafil (Viagra) for pulmonary hypertension. He reports chest pain and asks for nitroglycerine. What is the correct nursing response?",
+          "options": [
+            "Administer nitroglycerine 0.4 mg SL and reassess in 5 minutes",
+            "Withhold nitroglycerine, notify the provider immediately — concurrent use with PDE-5 inhibitors causes severe, potentially fatal hypotension",
+            "Give half the standard nitroglycerine dose since the patient takes sildenafil",
+            "Give nitroglycerine only if the BP is above 100/60 mmHg"
+          ],
+          "correct": 1,
+          "rationale": "PDE-5 inhibitors (sildenafil, tadalafil, vardenafil) and nitrates both cause vasodilation. Combined use causes profound, potentially fatal hypotension — an absolute contraindication. Nitroglycerine is absolutely contraindicated within 24 hours of sildenafil or vardenafil use, and within 48 hours of tadalafil. The nurse must withhold the NTG, notify the provider, and manage the chest pain with alternative measures."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with stable angina is started on isosorbide mononitrate 30 mg daily. She calls the nurse two days later reporting that she had angina at 2 AM. What is the most likely cause?",
+          "options": [
+            "The dose is too low — she needs a higher dose at bedtime",
+            "She is experiencing Prinzmetal angina — she needs a calcium channel blocker",
+            "Long-acting nitrates require a nitrate-free interval; nocturnal angina may occur during the drug-free period — a short-acting NTG SL at bedtime or dose-timing adjustment can help",
+            "This is expected and no intervention is needed"
+          ],
+          "correct": 2,
+          "rationale": "Long-acting nitrates (isosorbide mononitrate, isosorbide dinitrate) require a daily nitrate-free interval of 10–12 hours to prevent tolerance. For once-daily dosing (morning), the drug effect wears off overnight, leaving a 'coverage gap' when vasodilation is absent. Some patients develop angina during this gap. Solutions: adjust timing, add a calcium channel blocker for overnight coverage, or use SL NTG PRN during the gap. This is a predictable pharmacological effect, not treatment failure."
+        },
+        {
+          "question": "A post-PCI client asks when they can stop taking aspirin. The nurse explains:",
+          "options": [
+            "Aspirin can be stopped once the stent is fully healed, usually 2 weeks",
+            "Aspirin is for life in patients with confirmed coronary artery disease — it reduces the risk of platelet aggregation, thrombosis, and future cardiac events",
+            "Aspirin is stopped after 12 months and replaced with a stronger antiplatelet",
+            "Aspirin is only needed if you had a drug-eluting stent, not a bare-metal stent"
+          ],
+          "correct": 1,
+          "rationale": "Aspirin 81 mg daily is prescribed indefinitely for all patients with confirmed CAD (post-MI, post-PCI, stable angina) — it reduces secondary cardiovascular events through irreversible COX-1 inhibition and antiplatelet effect. The P2Y12 inhibitor (e.g., clopidogrel, ticagrelor) is added for 12 months post-DES stenting (dual antiplatelet therapy); aspirin continues lifelong regardless."
+        },
+        {
+          "question": "A nurse is caring for a client with suspected right ventricular MI. The client reports severe chest pain and is hypotensive (BP 78/50). The provider orders nitroglycerine SL 0.4 mg. What should the nurse do?",
+          "options": [
+            "Administer the NTG as ordered — the hypotension is from the pain",
+            "Hold the NTG and notify the provider — nitroglycerine is contraindicated in RV infarction as it reduces preload further and worsens the hemodynamic collapse",
+            "Give half the dose (0.2 mg) since the BP is low",
+            "Give the NTG and simultaneously start IV vasopressors"
+          ],
+          "correct": 1,
+          "rationale": "In right ventricular MI, the RV is failing and depends critically on adequate preload (filling pressure) to pump blood into the pulmonary circulation. Nitroglycerine venodilates → reduces preload → the failing RV cannot fill → cardiac output drops further → hemodynamic collapse. NTG is contraindicated in RV infarction. Treatment is IV fluids to increase preload. The nurse should hold the NTG and notify the provider immediately."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-asthma",
+      "preTest": [
+        {
+          "question": "A child with asthma is brought to the clinic by her parent. The child is speaking in full sentences, has a peak expiratory flow (PEF) of 72% of personal best, and a RR of 20/min. How does the nurse classify this exacerbation?",
+          "options": [
+            "Mild-to-moderate exacerbation — PEF in the yellow zone (50–79%); SABA is indicated",
+            "Severe exacerbation — PEF < 80% requires ICU admission",
+            "No exacerbation — the child is speaking in full sentences and the PEF is acceptable",
+            "Status asthmaticus — emergency bronchodilator therapy and IV steroids are needed"
+          ],
+          "correct": 0,
+          "rationale": "PEF 72% puts this child in the yellow zone (50–79%), indicating a mild-to-moderate exacerbation. She is speaking in full sentences (good sign), not in severe distress, and RR is normal. Yellow zone management: administer SABA (salbutamol) 2–4 puffs q20min × 3 doses and reassess. If PEF improves to green zone (> 80%), continue monitoring. If no improvement or PEF drops to red (< 50%), escalate."
+        },
+        {
+          "question": "A client with asthma asks why their doctor prescribed a corticosteroid inhaler (fluticasone) when they only have symptoms occasionally. The nurse explains:",
+          "options": [
+            "The inhaled corticosteroid is for rescue use — take it only when you are having symptoms",
+            "Inhaled corticosteroids reduce underlying airway inflammation and prevent exacerbations — they must be taken daily as prescribed even when symptom-free",
+            "The corticosteroid replaces the need for a rescue inhaler (salbutamol)",
+            "Inhaled corticosteroids work immediately to stop bronchospasm"
+          ],
+          "correct": 1,
+          "rationale": "Inhaled corticosteroids (ICS) are controllers, not rescuers. They suppress eosinophilic airway inflammation and prevent exacerbations, but take weeks for full effect and do NOT reverse acute bronchospasm. They must be taken daily regardless of symptoms — stopping when asymptomatic is a common education error that leads to uncontrolled inflammation and eventual exacerbation. The SABA (salbutamol) is the rescue inhaler for acute symptoms."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse is reviewing the medication regimen for a client with moderate persistent asthma. The provider has ordered salmeterol (a LABA) without any inhaled corticosteroid. What is the nurse's appropriate action?",
+          "options": [
+            "Administer as ordered — salmeterol is safe for asthma as a standalone bronchodilator",
+            "Contact the provider to clarify — LABAs must not be used as asthma monotherapy due to increased mortality risk",
+            "Substitute a SABA for the LABA — they have the same mechanism",
+            "Hold the medication and document it as a patient refusal"
+          ],
+          "correct": 1,
+          "rationale": "Long-acting beta-2 agonists (LABAs) must NEVER be used as monotherapy in asthma — clinical trials demonstrated increased asthma-related deaths. They are only safe and effective when combined with inhaled corticosteroids. The nurse should contact the provider to clarify and add an ICS or change the prescription. This is a patient safety concern."
+        },
+        {
+          "question": "A client with asthma is prescribed fluticasone inhaler (ICS) and asks why they need to rinse their mouth after each use. The nurse explains:",
+          "options": [
+            "To prevent tooth decay from the propellants in the inhaler",
+            "To remove residual drug from the oropharynx and prevent oral candidiasis (thrush)",
+            "To hydrate the vocal cords and prevent hoarseness",
+            "To remove excess drug and prevent systemic absorption through the mucosa"
+          ],
+          "correct": 1,
+          "rationale": "Inhaled corticosteroids deposit in the oropharynx and can suppress local immune defenses, allowing Candida overgrowth (oral thrush). Rinsing the mouth (and gargling) after each ICS dose removes residual drug from the oral mucosa, preventing candidiasis. Hoarseness is a separate ICS side effect related to local steroid effects on the larynx, not prevented by rinsing."
+        },
+        {
+          "question": "An ABG is obtained from a client in severe status asthmaticus. Results: pH 7.38, PaCO₂ 42 mmHg, PaO₂ 68 mmHg. The nurse recognizes this as:",
+          "options": [
+            "Normal ABG — no action needed",
+            "Respiratory alkalosis from hyperventilation — expected in severe asthma",
+            "Ominous finding — a 'normal' or rising PaCO₂ in severe asthma indicates impending respiratory failure from fatigue",
+            "Metabolic acidosis from lactate production"
+          ],
+          "correct": 2,
+          "rationale": "In an acute asthma attack, the expected compensatory response to hypoxemia is tachypnea → hyperventilation → LOW PaCO₂ and ELEVATED pH (respiratory alkalosis). A 'normal' PaCO₂ (40–45) in a severely dyspneic asthma patient means the patient is exhausted and can no longer hyperventilate enough to keep CO₂ down. This is a pre-failure sign requiring immediate escalation. The PaO₂ of 68 on room air is also significantly hypoxemic."
+        },
+        {
+          "question": "A client uses their salbutamol inhaler more than 3 times per week for symptom control. What does this indicate?",
+          "options": [
+            "Normal asthma management — salbutamol can be used as needed without limits",
+            "The salbutamol canister is nearly empty and needs a refill",
+            "Poor asthma control — frequent rescue inhaler use signals inadequate controller therapy (ICS) and warrants a medication step-up review",
+            "The client has severe asthma and needs hospitalization"
+          ],
+          "correct": 2,
+          "rationale": "Using SABA (salbutamol) more than 2 times per week for symptom control (not including exercise-induced use) is a marker of poorly controlled asthma. Frequent rescue inhaler use indicates that underlying airway inflammation is inadequately suppressed — the ICS dose may need to be increased (stepped up) or an additional controller (LABA, LTRA) added. Salbutamol overuse (> 2 canisters/year) is also associated with increased asthma mortality."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-ards",
+      "preTest": [
+        {
+          "question": "A mechanically ventilated ARDS client has the following ABG: pH 7.26, PaCO₂ 56 mmHg, PaO₂ 68 mmHg on FiO₂ 0.50. The nurse understands that the appropriate response to the elevated PaCO₂ in this context is:",
+          "options": [
+            "Increase the tidal volume to 10 mL/kg ideal body weight to eliminate more CO₂",
+            "Accept permissive hypercapnia — in lung-protective ARDS ventilation, a mildly elevated PaCO₂ and reduced pH are intentionally tolerated to avoid volutrauma from large tidal volumes",
+            "Increase the respiratory rate to 40 breaths/min to compensate for the elevated CO₂",
+            "Discontinue PEEP to reduce airway resistance and improve CO₂ elimination"
+          ],
+          "correct": 1,
+          "rationale": "Permissive hypercapnia is a deliberate strategy in lung-protective ventilation for ARDS. Increasing tidal volumes to normalize PaCO₂ causes volutrauma and barotrauma to the 'baby lung' (remaining functional lung units). A pH > 7.20 is generally tolerated to maintain low tidal volumes (4–8 mL/kg IBW). The current PaO₂ of 68 on FiO₂ 0.50 is within the acceptable range (55–80 mmHg). No changes to ventilator settings are typically warranted without a provider order."
+        },
+        {
+          "question": "An ARDS patient is being turned prone. The nurse's primary concern when repositioning is:",
+          "options": [
+            "The patient will become more hypoxic in the prone position",
+            "Protecting the endotracheal tube, all lines, and IV access from dislodgement during the turn; preventing pressure injuries on new dependent surfaces",
+            "Prone positioning increases the risk of barotrauma",
+            "The prone position requires higher FiO₂ to be effective"
+          ],
+          "correct": 1,
+          "rationale": "Prone positioning requires meticulous preparation: secure all lines, drains, and the ETT before turning; assign a dedicated person to stabilize the airway throughout the turn. Pressure injuries are a known complication — new dependent surfaces (forehead, chin, anterior chest, knees) require prophylactic padding and frequent assessment. Prone positioning typically IMPROVES oxygenation by redistributing atelectasis and improving V/Q matching — FiO₂ requirements often decrease with prone."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A 180 cm patient with severe ARDS is being mechanically ventilated. The ideal body weight is 80 kg. The respiratory therapist sets the tidal volume at 480 mL. Is this correct, and why?",
+          "options": [
+            "No — the tidal volume should be based on actual body weight, not ideal body weight",
+            "Yes — 480 mL is 6 mL/kg of ideal body weight, which follows lung-protective ventilation guidelines",
+            "No — 6 mL/kg of actual body weight is required, and 480 mL may be too low for a heavy patient",
+            "Yes — any TV < 500 mL is considered lung-protective"
+          ],
+          "correct": 1,
+          "rationale": "The ARDSNet protocol specifies 4–8 mL/kg of IDEAL body weight, not actual body weight. For a patient with IBW of 80 kg: 6 mL/kg × 80 kg = 480 mL. Using actual body weight in obese patients would over-distend the functional 'baby lung' regions. The goal is to minimize volutrauma while maintaining oxygenation."
+        },
+        {
+          "question": "An ARDS patient in prone position for 8 hours develops increased redness and skin breakdown over the forehead. What nursing action is the priority?",
+          "options": [
+            "Continue prone positioning — the skin will recover when the patient is repositioned",
+            "Reposition head to a different angle, apply protective dressings, and document; reassess every 2 hours",
+            "Immediately return the patient to supine position and discontinue prone therapy",
+            "Notify the provider that prone positioning should be permanently discontinued"
+          ],
+          "correct": 1,
+          "rationale": "Pressure injuries are a known complication of prone positioning. The correct response is to reposition the head (if the protocol allows head-turning during prone), apply prophylactic foam or hydrocolloid dressings, and reassess frequently — not to permanently discontinue prone therapy (which has mortality benefit). Discontinuation is reserved for hemodynamic instability or unmanageable complications. This is a skin integrity management issue."
+        },
+        {
+          "question": "An ARDS patient on mechanical ventilation has an ABG showing pH 7.26, PaCO₂ 58 mmHg, PaO₂ 72 mmHg on FiO₂ 0.55. What is the nurse's interpretation and appropriate response?",
+          "options": [
+            "The patient is in respiratory failure — increase tidal volume immediately to lower PaCO₂",
+            "This represents permissive hypercapnia — an acceptable trade-off for lung-protective low tidal volumes; no immediate change in ventilator settings is needed without provider order",
+            "Immediately increase FiO₂ to 1.0 — the PaO₂ is dangerously low",
+            "The metabolic acidosis must be corrected with IV bicarbonate before adjusting ventilator"
+          ],
+          "correct": 1,
+          "rationale": "Permissive hypercapnia (elevated PaCO₂, mildly acidic pH) is intentionally tolerated in ARDS to allow low tidal volume ventilation that prevents VILI. A pH > 7.20 is generally acceptable. The PaO₂ of 72 on FiO₂ 0.55 is within the acceptable target (55–80 mmHg). Increasing tidal volumes to fix CO₂ would harm the 'baby lung'. FiO₂ 1.0 is not indicated at a PaO₂ of 72. Provider orders should guide any changes."
+        },
+        {
+          "question": "A client with ARDS has been on lung-protective ventilation for 5 days. The nurse notes the PEEP has been progressively reduced from 18 to 8 cmH₂O over 48 hours and SpO₂ has remained stable at 93–95%. What does this indicate?",
+          "options": [
+            "The PEEP reduction is unsafe — ARDS always requires high PEEP",
+            "This suggests the lungs are improving — as FRC and compliance recover, PEEP can be weaned while maintaining acceptable oxygenation",
+            "The ventilator settings need to be increased — SpO₂ should be > 98%",
+            "The patient should be extubated immediately since PEEP is being reduced"
+          ],
+          "correct": 1,
+          "rationale": "In recovering ARDS, progressive PEEP reduction (weaning) with maintenance of acceptable SpO₂ (88–95%) is a sign of improving lung compliance and resolving alveolar instability. PEEP can be weaned as the lungs recover and require less pressure to remain open. Extubation is a separate clinical decision that involves multiple readiness criteria beyond PEEP level (breathing trial, adequate cough, mental status, secretion management)."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-acid-base-advanced",
+      "preTest": [
+        {
+          "question": "A client presents with severe vomiting × 4 days. ABG: pH 7.54, PaCO₂ 51, HCO₃ 40. Electrolytes: Na 140, K⁺ 2.8, Cl 87. What is the correct interpretation?",
+          "options": [
+            "Respiratory alkalosis — the high pH and low CO₂ confirm hyperventilation",
+            "Partially compensated metabolic alkalosis with hypokalemia — vomiting causes HCl loss, raising HCO₃; the lungs are retaining CO₂ to compensate; hypokalemia co-exists",
+            "Mixed respiratory and metabolic alkalosis from anxiety",
+            "Fully compensated metabolic acidosis — the kidneys have raised the bicarbonate"
+          ],
+          "correct": 1,
+          "rationale": "pH 7.54 = alkalosis. HCO₃ 40 (elevated — same direction as pH = metabolic cause). PaCO₂ 51 (elevated — lungs retaining CO₂ to compensate for metabolic alkalosis = appropriate compensation). pH still alkalotic = partially compensated. K⁺ 2.8 = hypokalemia (alkalosis drives K⁺ into cells; vomiting causes further K⁺ loss). This is vomiting-induced metabolic alkalosis. Treatment: IV NS + KCl replacement."
+        },
+        {
+          "question": "A patient with DKA has an anion gap of 26. After 8 hours of insulin and IV fluid therapy, glucose is 11 mmol/L, pH 7.31, HCO₃ 16, but the anion gap is still elevated at 20. What should the nurse anticipate?",
+          "options": [
+            "Continue insulin infusion and IV fluids — the anion gap is improving but DKA is not yet resolved; DKA is resolved when the gap closes and HCO₃ normalises, not when glucose normalises",
+            "DKA is resolved — glucose is now below 14 mmol/L so all insulin can be stopped",
+            "Switch to subcutaneous insulin immediately since glucose is now acceptable",
+            "Start sodium bicarbonate infusion to rapidly close the anion gap"
+          ],
+          "correct": 0,
+          "rationale": "DKA resolution requires closure of the anion gap (AG < 12) AND normalization of HCO₃ (> 18 mEq/L) — NOT just glucose normalization. An AG of 20 with HCO₃ of 16 means ketone production is still occurring and the acidosis is not fully resolved. The insulin infusion should continue. When glucose reaches 14 mmol/L, D5W is added to the IV fluids (so insulin can continue without causing hypoglycaemia as ketosis clears). The transition to SC insulin happens when the AG is closed and the patient can eat."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with DKA has K⁺ 3.0 mEq/L and glucose 26 mmol/L. The provider orders insulin infusion to begin. What is the nurse's priority action?",
+          "options": [
+            "Begin the insulin infusion as ordered — glucose must be lowered immediately",
+            "Hold insulin and notify the provider — K⁺ 3.0 is below the safe threshold; insulin will drive K⁺ further down, risking fatal hypokalemia",
+            "Administer insulin and simultaneously hang a KCl drip",
+            "Delay all treatment until K⁺ and glucose are both within normal limits"
+          ],
+          "correct": 1,
+          "rationale": "In DKA management, insulin must be held when serum K⁺ < 3.5 mEq/L. Insulin activates the Na-K ATPase pump, driving K⁺ into cells — in a patient with K⁺ 3.0, this can cause fatal hypokalemia (cardiac dysrhythmias). Replace K⁺ first (typically 20–40 mEq/hr IV), recheck K⁺, then start insulin. Giving insulin with a KCl drip simultaneously is insufficient if the K⁺ is already critically low — the nurse must hold insulin and notify the provider."
+        },
+        {
+          "question": "A client presents with suspected methanol ingestion. ABG shows: pH 7.18, PaCO₂ 22, HCO₃ 8. Electrolytes: Na 140, Cl 102, HCO₃ 8. What does the nurse calculate the anion gap to be?",
+          "options": [
+            "AG = 8 (normal — no significant metabolic derangement)",
+            "AG = 30 (high anion gap — consistent with methanol poisoning causing HAGMA)",
+            "AG = 14 (mildly elevated — consistent with mild dehydration)",
+            "The anion gap cannot be calculated from these values"
+          ],
+          "correct": 1,
+          "rationale": "AG = Na – (Cl + HCO₃) = 140 – (102 + 8) = 140 – 110 = 30 mEq/L. Normal AG is 8–12; this AG of 30 is markedly elevated, indicating high anion gap metabolic acidosis (HAGMA). Methanol is metabolized to formic acid, which consumes HCO₃ and elevates the AG. This is a toxicological emergency. Treatment: fomepizole (methanol antidote), aggressive fluid/bicarbonate, dialysis in severe cases."
+        },
+        {
+          "question": "A patient with end-stage COPD has baseline ABGs: pH 7.36, PaCO₂ 62, HCO₃ 36. Today they present with increasing dyspnea and ABGs: pH 7.19, PaCO₂ 88, HCO₃ 36. What does the nurse recognize?",
+          "options": [
+            "Acute decompensation — the pH dropped significantly with acute CO₂ rise while HCO₃ is unchanged; this is acute-on-chronic respiratory acidosis",
+            "The patient is fully compensated — the HCO₃ is elevated to match the CO₂",
+            "The HCO₃ should be corrected with bicarbonate infusion to normalize the pH",
+            "This is a normal variation for this patient — no action needed"
+          ],
+          "correct": 0,
+          "rationale": "Comparing to baseline: pH dropped from 7.36 to 7.19 (significant acute deterioration); PaCO₂ rose from 62 to 88 (acute rise of 26 mmHg); HCO₃ unchanged at 36 (kidneys have not had time to compensate further). This is acute-on-chronic respiratory acidosis — an acute decompensation superimposed on chronic disease. The acute component (CO₂ 88, pH 7.19) requires intervention: identify and treat the acute precipitant (infection, exacerbation), support ventilation (BiPAP or intubation)."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-sodium-imbalance",
+      "preTest": [
+        {
+          "question": "A client with heart failure has the following labs: Na⁺ 128 mEq/L, serum osmolality 265 mOsm/kg, 3+ bilateral pitting oedema, and jugular venous distension. What type of hyponatremia is this?",
+          "options": [
+            "Hypovolemic hyponatremia — the sodium loss exceeds water loss",
+            "Hypervolemic hyponatremia — total body sodium is increased but water is retained disproportionately more; seen in heart failure, cirrhosis, nephrotic syndrome",
+            "Euvolemic hyponatremia — consistent with SIADH",
+            "Pseudohyponatremia — from elevated lipid levels in this cardiac patient"
+          ],
+          "correct": 1,
+          "rationale": "JVD + bilateral pitting oedema + low serum Na with low osmolality = hypervolemic hyponatremia. In heart failure, low cardiac output activates RAAS and ADH → kidney retains both sodium and water, but water retention exceeds sodium retention → dilutional hyponatremia despite total body sodium excess. This is NOT SIADH (which is euvolemic). Treatment: fluid restriction + diuresis + treatment of underlying HF."
+        },
+        {
+          "question": "A post-pituitary surgery client has urine output of 600 mL/hr for 3 consecutive hours with urine specific gravity 1.001 and serum sodium 149 mEq/L. What condition does the nurse suspect and what is the priority action?",
+          "options": [
+            "SIADH — restrict fluids immediately",
+            "Central diabetes insipidus — notify the provider for desmopressin order and begin free water replacement to prevent hypernatraemia",
+            "Normal post-surgical diuresis — no action required",
+            "Psychogenic polydipsia — restrict IV fluids"
+          ],
+          "correct": 1,
+          "rationale": "Massive dilute urine output (600 mL/hr) + low specific gravity (1.001 = unable to concentrate) + rising sodium (149, hypernatraemic) after pituitary surgery = central diabetes insipidus (CDI). Pituitary/hypothalamic surgery damages the ADH-producing mechanism. Without ADH, kidneys cannot concentrate urine → enormous water loss → rapid hypernatraemia. Notify provider for desmopressin IV and simultaneous free water replacement to prevent progression. SIADH is the opposite — concentrated urine + low sodium."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with chronic hyponatremia (Na⁺ 119) is started on 3% NaCl. After 18 hours, Na⁺ is 133 mEq/L (a rise of 14 mEq/L). What is the nurse's priority action?",
+          "options": [
+            "Continue the infusion — the Na⁺ target has been reached",
+            "Stop the 3% NaCl infusion and notify the provider — the correction rate exceeds the safe limit of 8–10 mEq/L per 24h",
+            "Administer a loop diuretic to slow further correction",
+            "Give free water IV to dilute the sodium back down"
+          ],
+          "correct": 1,
+          "rationale": "In chronic hyponatremia, correcting Na⁺ faster than 8–10 mEq/L per 24 hours risks osmotic demyelination syndrome (ODS), a severe neurological injury. A rise of 14 mEq/L in 18 hours exceeds this threshold. The infusion must be stopped and the provider notified immediately. The provider may consider giving free water IV (D5W) to slow the correction."
+        },
+        {
+          "question": "A post-neurosurgical client has urine output of 450 mL/hour for the past 2 hours, urine specific gravity 1.001, and Na⁺ 148 mEq/L. What condition does the nurse suspect?",
+          "options": [
+            "SIADH — postoperative state is a known trigger",
+            "Central diabetes insipidus — pituitary/hypothalamic trauma during surgery impairs ADH secretion",
+            "Psychogenic polydipsia — the patient is drinking excessive water",
+            "Hypervolemia from excessive IV fluids during surgery"
+          ],
+          "correct": 1,
+          "rationale": "Massive dilute urine output (450 mL/hr × 2h), low specific gravity (1.001 = unable to concentrate urine), and rising sodium (148 — hypernatremia) after neurosurgery is the classic presentation of central diabetes insipidus. Neurosurgery can damage the pituitary or hypothalamus → loss of ADH production → kidneys cannot concentrate urine → free water is lost rapidly → hypernatremia. Treatment: desmopressin IV + free water replacement."
+        },
+        {
+          "question": "A client receiving 3% NaCl for severe symptomatic hyponatremia (Na⁺ 112 mEq/L with seizures) has their sodium checked at 4 hours: Na⁺ 120 mEq/L. The provider has set a target of 8 mEq/L correction per 24 hours. What is the nurse's action?",
+          "options": [
+            "Continue 3% NaCl at the same rate — the patient still has dangerously low sodium",
+            "Stop the 3% NaCl infusion and notify the provider — sodium has risen 8 mEq/L in 4 hours, already at the safe 24-hour limit; continuing risks osmotic demyelination syndrome",
+            "Increase the rate to correct sodium more quickly to normal range",
+            "Switch to normal saline to continue correction at a safer rate"
+          ],
+          "correct": 1,
+          "rationale": "The sodium has risen from 112 to 120 mEq/L — a rise of 8 mEq/L — in just 4 hours. The safe correction limit for chronic hyponatremia is 8–10 mEq/L per 24 hours (some guidelines allow up to 1–2 mEq/L/hr for the first 2 hours in active seizures, then slow dramatically). The 24-hour limit has already been reached in 4 hours. Continuing risks osmotic demyelination syndrome (ODS). The nurse must stop the 3% NaCl and notify the provider immediately — free water may be needed to slow correction."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-insulin-hypoglycemia",
+      "preTest": [
+        {
+          "question": "A nurse is preparing to mix regular (clear) and NPH (cloudy) insulin in the same syringe. The ordered dose is regular 8 units and NPH 20 units. What is the correct sequence?",
+          "options": [
+            "Inject air into regular vial, then inject air into NPH vial, draw NPH first, then draw regular",
+            "Inject air into NPH vial (20 units), then inject air into regular vial (8 units), draw regular first, then draw NPH — 'clear before cloudy'",
+            "Draw NPH first (cloudy) to avoid having to reshake the vial after drawing regular",
+            "Mix both insulins in the NPH vial before drawing"
+          ],
+          "correct": 1,
+          "rationale": "'Clear before cloudy' — always draw the clear (regular) insulin first. This prevents contaminating the regular insulin vial with NPH (which contains zinc and protamine that could alter the onset/duration of regular insulin if introduced). Air is injected into the NPH vial first (since you'll draw it last), then air into the regular vial, then draw regular first, then NPH. Never mix glargine or detemir with other insulins."
+        },
+        {
+          "question": "A client with type 1 diabetes develops signs of hypoglycaemia (shakiness, diaphoresis, confusion) at 11 PM. Blood glucose is 2.9 mmol/L. He is alert enough to swallow safely. Which is the correct immediate intervention?",
+          "options": [
+            "Administer glucagon 1 mg IM since glucose is critically low",
+            "Call the provider before treating — a glucose of 2.9 is too low to treat without an order",
+            "Give 15g of fast-acting carbohydrates (e.g., 150 mL juice or 4 glucose tablets), recheck in 15 minutes, and repeat if still < 4.0 mmol/L",
+            "Administer D50W IV push immediately — glucagon is the last resort"
+          ],
+          "correct": 2,
+          "rationale": "For a conscious patient who can swallow safely, the 15-15 rule is appropriate: 15g of fast-acting carbohydrates, recheck in 15 minutes, repeat if still < 4.0 mmol/L. The patient is alert and can swallow, so oral carbohydrates are safe and effective. IV D50W and IM glucagon are reserved for unconscious patients or those who cannot take oral carbohydrates safely. A provider call is not required before treating a hypoglycaemic patient with an established PRN glucose protocol."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-anticoagulants",
+      "preTest": [
+        {
+          "question": "A client on warfarin for atrial fibrillation has an INR of 5.8 (target 2.0–3.0). They have no active bleeding. What nursing intervention is the priority?",
+          "options": [
+            "Hold the next warfarin dose and notify the provider — INR 5.8 is supratherapeutic with significantly elevated bleeding risk",
+            "Administer vitamin K 10 mg IV push immediately",
+            "Continue warfarin as ordered and recheck INR tomorrow",
+            "Give fresh frozen plasma to reverse the anticoagulation"
+          ],
+          "correct": 0,
+          "rationale": "An INR of 5.8 with no active bleeding: hold warfarin and notify the provider. The provider will determine whether oral vitamin K (preferred for asymptomatic supratherapeutic INR) is needed and at what dose, and when to resume warfarin. High-dose IV vitamin K (10 mg) and FFP are reserved for active, life-threatening bleeding — not for asymptomatic supratherapeutic INR. Continuing warfarin at this INR risks serious haemorrhage."
+        },
+        {
+          "question": "A client is prescribed enoxaparin (low molecular weight heparin) for DVT treatment. What lab value is essential to review before administering each dose?",
+          "options": [
+            "INR — to ensure anticoagulation is therapeutic",
+            "aPTT — the primary monitoring parameter for LMWH",
+            "Creatinine/eGFR — LMWH is renally cleared; dose reduction is required in renal impairment to prevent accumulation and bleeding",
+            "Platelet count only — monitor for heparin-induced thrombocytopenia"
+          ],
+          "correct": 2,
+          "rationale": "LMWH (enoxaparin) is primarily cleared by the kidneys. In renal impairment (eGFR < 30 mL/min), LMWH accumulates → excessive anticoagulation → bleeding risk. Dose reduction or switching to unfractionated heparin (which is not renally cleared) is required. INR does not reflect LMWH anticoagulation (INR monitors the extrinsic pathway — warfarin monitoring). aPTT is not reliably used for LMWH monitoring. Platelet monitoring is important for HIT surveillance but is not the primary lab for dosing."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-antibiotics",
+      "preTest": [
+        {
+          "question": "A client has a documented penicillin allergy described as 'anaphylaxis in 2012.' The provider orders ceftriaxone (a cephalosporin) for community-acquired pneumonia. What should the nurse do?",
+          "options": [
+            "Administer ceftriaxone — penicillin and cephalosporins are completely different drug classes with no cross-reactivity",
+            "Administer ceftriaxone — cross-reactivity between penicillins and cephalosporins is < 2% overall; however, given a history of anaphylaxis, the nurse should contact the provider to confirm the order is intentional and clarify whether allergy testing or alternative antibiotics were considered",
+            "Refuse to administer ceftriaxone — any penicillin allergy is an absolute contraindication to all cephalosporins",
+            "Give ceftriaxone and keep epinephrine at the bedside without notifying the provider"
+          ],
+          "correct": 1,
+          "rationale": "Cross-reactivity between penicillins and cephalosporins is low (< 2%) and mainly occurs with shared side chains, not the beta-lactam ring itself. However, a documented anaphylaxis (the most severe hypersensitivity) warrants provider verification before proceeding. The nurse should confirm the order is intentional, ensure the provider is aware of the anaphylaxis history, and have resuscitation equipment available. Simply administering without verification or refusing outright without contacting the provider are both incorrect responses."
+        },
+        {
+          "question": "The nurse is administering gentamicin (an aminoglycoside). Which findings should the nurse report to the provider immediately?",
+          "options": [
+            "Tinnitus and new onset of dizziness after the third dose",
+            "Mild nausea 30 minutes after the infusion",
+            "Pruritus at the IV site",
+            "Serum creatinine 72 µmol/L (unchanged from baseline)"
+          ],
+          "correct": 0,
+          "rationale": "Tinnitus and dizziness are early signs of aminoglycoside ototoxicity — both cochlear (hearing loss, tinnitus) and vestibular (vertigo, ataxia) damage can occur. Ototoxicity from aminoglycosides can be irreversible. These symptoms must be reported immediately to the provider, who may discontinue or adjust the antibiotic. Mild GI effects and unchanged creatinine are not urgent concerns. Pruritus at the IV site may indicate irritation but is not a priority in this context."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-fluid-balance",
+      "preTest": [
+        {
+          "question": "A client post-bowel resection has a urine output of 15 mL/hr over 3 consecutive hours, HR 118 bpm, BP 94/62 mmHg, and reports severe thirst. Which IV fluid is most appropriate to initiate while awaiting the provider order?",
+          "options": [
+            "D5W (5% dextrose in water) — it is the most commonly used IV fluid for all indications",
+            "0.45% NaCl — it hydrates both intracellular and extracellular compartments",
+            "Normal saline (0.9% NaCl) or lactated Ringer's — isotonic fluids for volume expansion in hypovolemia",
+            "3% NaCl — the patient needs aggressive fluid resuscitation"
+          ],
+          "correct": 2,
+          "rationale": "This patient has clear signs of hypovolemia (oliguria, tachycardia, hypotension, thirst). Volume resuscitation requires isotonic IV fluid that stays in the ECF/intravascular compartment — normal saline or lactated Ringer's are correct. D5W distributes as free water after dextrose metabolism and does not expand the intravascular space effectively. 0.45% NaCl is hypotonic and will shift water into cells rather than remaining in the vasculature. 3% NaCl is for severe symptomatic hyponatraemia, not hypovolemia."
+        },
+        {
+          "question": "A client is receiving a blood transfusion. The nurse notes the client develops flushing, urticaria, lower back pain, and dark-coloured urine 30 minutes into the transfusion. What is the priority action?",
+          "options": [
+            "Slow the transfusion rate to 50 mL/hr and administer diphenhydramine",
+            "Stop the transfusion immediately, keep the IV patent with normal saline, notify the provider and blood bank — this presentation suggests an acute haemolytic transfusion reaction",
+            "Continue the transfusion and administer acetaminophen for the flank pain",
+            "Switch to a new bag of blood — the first unit may have been contaminated"
+          ],
+          "correct": 1,
+          "rationale": "Flushing + urticaria + flank/back pain + dark urine (haemoglobinuria from haemolysis) = acute haemolytic transfusion reaction — a medical emergency from ABO-incompatible blood. Immediate actions: STOP the transfusion, keep IV patent with NS (to flush lines and support BP), notify provider and blood bank, send transfusion reaction workup (blood samples + return the blood product). This reaction can cause acute kidney injury, DIC, and death. Never slow or continue the infusion."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-general-nursing-clinical",
+      "preTest": [
+        {
+          "question": "A nurse is preparing to administer digoxin 0.25 mg PO to a client with heart failure. The client's apical pulse is 54 bpm and serum potassium is 3.1 mEq/L. What should the nurse do?",
+          "options": [
+            "Administer the digoxin — the HR is slightly low but the dose is within normal range",
+            "Hold the digoxin, notify the provider of both the HR < 60 bpm and the hypokalemia — both are parameters requiring provider evaluation before administration",
+            "Give half the dose since the HR is low",
+            "Administer the digoxin after repositioning the client to increase HR"
+          ],
+          "correct": 1,
+          "rationale": "Digoxin is held when HR < 60 bpm (adult) — standard parameter. Additionally, hypokalemia (K⁺ 3.1) dramatically increases digoxin toxicity risk by reducing competition at the Na-K ATPase pump, even at therapeutic drug levels. Both findings must be reported to the provider before digoxin is administered. This is a two-parameter hold — addressing only the HR without mentioning the K⁺ would be incomplete and potentially dangerous."
+        },
+        {
+          "question": "A client with a known latex allergy is being admitted for surgery. Which nursing action is most important?",
+          "options": [
+            "Place a latex-free gloves sign on the client's door and note the allergy in the chart",
+            "Ensure the entire care environment is latex-free: latex-free gloves, IV supplies, tourniquets, and equipment throughout the facility for this client; notify all team members verbally and through allergy documentation",
+            "Use latex gloves but powder-free versions since they cause fewer reactions",
+            "Monitor the client for any latex reaction and treat if it occurs"
+          ],
+          "correct": 1,
+          "rationale": "Latex allergy can cause anaphylaxis from exposure to any latex-containing product. The nursing responsibility extends beyond charting: ALL supplies and equipment that could contact the patient must be confirmed latex-free — gloves, IV tubing, tourniquets, blood pressure cuffs, catheters, tape, and surgical supplies. All team members (including anaesthesia, OR, and lab) must be notified. A wristband and door sign are required in addition to verbal communication."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-angina",
+      "preTest": [
+        {
+          "question": "A client with stable angina is prescribed sublingual nitroglycerine (NTG) for chest pain. Which instruction is most important for the nurse to include?",
+          "options": [
+            "Take NTG with a full glass of water and lie down immediately",
+            "Take up to three doses 5 minutes apart; if pain persists after three doses, call 911",
+            "You may take up to six doses before seeking emergency care",
+            "Do not take NTG if your heart rate is below 80 bpm"
+          ],
+          "correct": 1,
+          "rationale": "The correct NTG protocol: sit or lie, take 1 tablet SL, wait 5 minutes; if pain persists take 2nd, wait 5 minutes; if still persists take 3rd, then call 911 (or rapid response in hospital). More than 3 tablets without relief indicates unstable angina or ACS — emergency care is required. There is no HR threshold for NTG; the BP threshold is SBP < 90 mmHg."
+        },
+        {
+          "question": "A nurse is reviewing a client's medications. The client takes sildenafil (Viagra) for pulmonary hypertension. He reports chest pain and asks for nitroglycerine. What is the correct nursing response?",
+          "options": [
+            "Administer nitroglycerine 0.4 mg SL and reassess in 5 minutes",
+            "Withhold nitroglycerine, notify the provider immediately — concurrent use with PDE-5 inhibitors causes severe, potentially fatal hypotension",
+            "Give half the standard nitroglycerine dose since the patient takes sildenafil",
+            "Give nitroglycerine only if the BP is above 100/60 mmHg"
+          ],
+          "correct": 1,
+          "rationale": "PDE-5 inhibitors (sildenafil, tadalafil, vardenafil) and nitrates both cause vasodilation. Combined use causes profound, potentially fatal hypotension — an absolute contraindication. Nitroglycerine is absolutely contraindicated within 24 hours of sildenafil or vardenafil use, and within 48 hours of tadalafil. The nurse must withhold the NTG, notify the provider, and manage the chest pain with alternative measures."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with stable angina is started on isosorbide mononitrate 30 mg daily. She calls the nurse two days later reporting that she had angina at 2 AM. What is the most likely cause?",
+          "options": [
+            "The dose is too low — she needs a higher dose at bedtime",
+            "She is experiencing Prinzmetal angina — she needs a calcium channel blocker",
+            "Long-acting nitrates require a nitrate-free interval; nocturnal angina may occur during the drug-free period — a short-acting NTG SL at bedtime or dose-timing adjustment can help",
+            "This is expected and no intervention is needed"
+          ],
+          "correct": 2,
+          "rationale": "Long-acting nitrates (isosorbide mononitrate, isosorbide dinitrate) require a daily nitrate-free interval of 10–12 hours to prevent tolerance. For once-daily dosing (morning), the drug effect wears off overnight, leaving a 'coverage gap' when vasodilation is absent. Some patients develop angina during this gap. Solutions: adjust timing, add a calcium channel blocker for overnight coverage, or use SL NTG PRN during the gap. This is a predictable pharmacological effect, not treatment failure."
+        },
+        {
+          "question": "A post-PCI client asks when they can stop taking aspirin. The nurse explains:",
+          "options": [
+            "Aspirin can be stopped once the stent is fully healed, usually 2 weeks",
+            "Aspirin is for life in patients with confirmed coronary artery disease — it reduces the risk of platelet aggregation, thrombosis, and future cardiac events",
+            "Aspirin is stopped after 12 months and replaced with a stronger antiplatelet",
+            "Aspirin is only needed if you had a drug-eluting stent, not a bare-metal stent"
+          ],
+          "correct": 1,
+          "rationale": "Aspirin 81 mg daily is prescribed indefinitely for all patients with confirmed CAD (post-MI, post-PCI, stable angina) — it reduces secondary cardiovascular events through irreversible COX-1 inhibition and antiplatelet effect. The P2Y12 inhibitor (e.g., clopidogrel, ticagrelor) is added for 12 months post-DES stenting (dual antiplatelet therapy); aspirin continues lifelong regardless."
+        },
+        {
+          "question": "A nurse is caring for a client with suspected right ventricular MI. The client reports severe chest pain and is hypotensive (BP 78/50). The provider orders nitroglycerine SL 0.4 mg. What should the nurse do?",
+          "options": [
+            "Administer the NTG as ordered — the hypotension is from the pain",
+            "Hold the NTG and notify the provider — nitroglycerine is contraindicated in RV infarction as it reduces preload further and worsens the hemodynamic collapse",
+            "Give half the dose (0.2 mg) since the BP is low",
+            "Give the NTG and simultaneously start IV vasopressors"
+          ],
+          "correct": 1,
+          "rationale": "In right ventricular MI, the RV is failing and depends critically on adequate preload (filling pressure) to pump blood into the pulmonary circulation. Nitroglycerine venodilates → reduces preload → the failing RV cannot fill → cardiac output drops further → hemodynamic collapse. NTG is contraindicated in RV infarction. Treatment is IV fluids to increase preload. The nurse should hold the NTG and notify the provider immediately."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-asthma",
+      "preTest": [
+        {
+          "question": "A child with asthma is brought to the clinic by her parent. The child is speaking in full sentences, has a peak expiratory flow (PEF) of 72% of personal best, and a RR of 20/min. How does the nurse classify this exacerbation?",
+          "options": [
+            "Mild-to-moderate exacerbation — PEF in the yellow zone (50–79%); SABA is indicated",
+            "Severe exacerbation — PEF < 80% requires ICU admission",
+            "No exacerbation — the child is speaking in full sentences and the PEF is acceptable",
+            "Status asthmaticus — emergency bronchodilator therapy and IV steroids are needed"
+          ],
+          "correct": 0,
+          "rationale": "PEF 72% puts this child in the yellow zone (50–79%), indicating a mild-to-moderate exacerbation. She is speaking in full sentences (good sign), not in severe distress, and RR is normal. Yellow zone management: administer SABA (salbutamol) 2–4 puffs q20min × 3 doses and reassess. If PEF improves to green zone (> 80%), continue monitoring. If no improvement or PEF drops to red (< 50%), escalate."
+        },
+        {
+          "question": "A client with asthma asks why their doctor prescribed a corticosteroid inhaler (fluticasone) when they only have symptoms occasionally. The nurse explains:",
+          "options": [
+            "The inhaled corticosteroid is for rescue use — take it only when you are having symptoms",
+            "Inhaled corticosteroids reduce underlying airway inflammation and prevent exacerbations — they must be taken daily as prescribed even when symptom-free",
+            "The corticosteroid replaces the need for a rescue inhaler (salbutamol)",
+            "Inhaled corticosteroids work immediately to stop bronchospasm"
+          ],
+          "correct": 1,
+          "rationale": "Inhaled corticosteroids (ICS) are controllers, not rescuers. They suppress eosinophilic airway inflammation and prevent exacerbations, but take weeks for full effect and do NOT reverse acute bronchospasm. They must be taken daily regardless of symptoms — stopping when asymptomatic is a common education error that leads to uncontrolled inflammation and eventual exacerbation. The SABA (salbutamol) is the rescue inhaler for acute symptoms."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse is reviewing the medication regimen for a client with moderate persistent asthma. The provider has ordered salmeterol (a LABA) without any inhaled corticosteroid. What is the nurse's appropriate action?",
+          "options": [
+            "Administer as ordered — salmeterol is safe for asthma as a standalone bronchodilator",
+            "Contact the provider to clarify — LABAs must not be used as asthma monotherapy due to increased mortality risk",
+            "Substitute a SABA for the LABA — they have the same mechanism",
+            "Hold the medication and document it as a patient refusal"
+          ],
+          "correct": 1,
+          "rationale": "Long-acting beta-2 agonists (LABAs) must NEVER be used as monotherapy in asthma — clinical trials demonstrated increased asthma-related deaths. They are only safe and effective when combined with inhaled corticosteroids. The nurse should contact the provider to clarify and add an ICS or change the prescription. This is a patient safety concern."
+        },
+        {
+          "question": "A client with asthma is prescribed fluticasone inhaler (ICS) and asks why they need to rinse their mouth after each use. The nurse explains:",
+          "options": [
+            "To prevent tooth decay from the propellants in the inhaler",
+            "To remove residual drug from the oropharynx and prevent oral candidiasis (thrush)",
+            "To hydrate the vocal cords and prevent hoarseness",
+            "To remove excess drug and prevent systemic absorption through the mucosa"
+          ],
+          "correct": 1,
+          "rationale": "Inhaled corticosteroids deposit in the oropharynx and can suppress local immune defenses, allowing Candida overgrowth (oral thrush). Rinsing the mouth (and gargling) after each ICS dose removes residual drug from the oral mucosa, preventing candidiasis. Hoarseness is a separate ICS side effect related to local steroid effects on the larynx, not prevented by rinsing."
+        },
+        {
+          "question": "An ABG is obtained from a client in severe status asthmaticus. Results: pH 7.38, PaCO₂ 42 mmHg, PaO₂ 68 mmHg. The nurse recognizes this as:",
+          "options": [
+            "Normal ABG — no action needed",
+            "Respiratory alkalosis from hyperventilation — expected in severe asthma",
+            "Ominous finding — a 'normal' or rising PaCO₂ in severe asthma indicates impending respiratory failure from fatigue",
+            "Metabolic acidosis from lactate production"
+          ],
+          "correct": 2,
+          "rationale": "In an acute asthma attack, the expected compensatory response to hypoxemia is tachypnea → hyperventilation → LOW PaCO₂ and ELEVATED pH (respiratory alkalosis). A 'normal' PaCO₂ (40–45) in a severely dyspneic asthma patient means the patient is exhausted and can no longer hyperventilate enough to keep CO₂ down. This is a pre-failure sign requiring immediate escalation. The PaO₂ of 68 on room air is also significantly hypoxemic."
+        },
+        {
+          "question": "A client uses their salbutamol inhaler more than 3 times per week for symptom control. What does this indicate?",
+          "options": [
+            "Normal asthma management — salbutamol can be used as needed without limits",
+            "The salbutamol canister is nearly empty and needs a refill",
+            "Poor asthma control — frequent rescue inhaler use signals inadequate controller therapy (ICS) and warrants a medication step-up review",
+            "The client has severe asthma and needs hospitalization"
+          ],
+          "correct": 2,
+          "rationale": "Using SABA (salbutamol) more than 2 times per week for symptom control (not including exercise-induced use) is a marker of poorly controlled asthma. Frequent rescue inhaler use indicates that underlying airway inflammation is inadequately suppressed — the ICS dose may need to be increased (stepped up) or an additional controller (LABA, LTRA) added. Salbutamol overuse (> 2 canisters/year) is also associated with increased asthma mortality."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-ards",
+      "preTest": [
+        {
+          "question": "A mechanically ventilated ARDS client has the following ABG: pH 7.26, PaCO₂ 56 mmHg, PaO₂ 68 mmHg on FiO₂ 0.50. The nurse understands that the appropriate response to the elevated PaCO₂ in this context is:",
+          "options": [
+            "Increase the tidal volume to 10 mL/kg ideal body weight to eliminate more CO₂",
+            "Accept permissive hypercapnia — in lung-protective ARDS ventilation, a mildly elevated PaCO₂ and reduced pH are intentionally tolerated to avoid volutrauma from large tidal volumes",
+            "Increase the respiratory rate to 40 breaths/min to compensate for the elevated CO₂",
+            "Discontinue PEEP to reduce airway resistance and improve CO₂ elimination"
+          ],
+          "correct": 1,
+          "rationale": "Permissive hypercapnia is a deliberate strategy in lung-protective ventilation for ARDS. Increasing tidal volumes to normalize PaCO₂ causes volutrauma and barotrauma to the 'baby lung' (remaining functional lung units). A pH > 7.20 is generally tolerated to maintain low tidal volumes (4–8 mL/kg IBW). The current PaO₂ of 68 on FiO₂ 0.50 is within the acceptable range (55–80 mmHg). No changes to ventilator settings are typically warranted without a provider order."
+        },
+        {
+          "question": "An ARDS patient is being turned prone. The nurse's primary concern when repositioning is:",
+          "options": [
+            "The patient will become more hypoxic in the prone position",
+            "Protecting the endotracheal tube, all lines, and IV access from dislodgement during the turn; preventing pressure injuries on new dependent surfaces",
+            "Prone positioning increases the risk of barotrauma",
+            "The prone position requires higher FiO₂ to be effective"
+          ],
+          "correct": 1,
+          "rationale": "Prone positioning requires meticulous preparation: secure all lines, drains, and the ETT before turning; assign a dedicated person to stabilize the airway throughout the turn. Pressure injuries are a known complication — new dependent surfaces (forehead, chin, anterior chest, knees) require prophylactic padding and frequent assessment. Prone positioning typically IMPROVES oxygenation by redistributing atelectasis and improving V/Q matching — FiO₂ requirements often decrease with prone."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A 180 cm patient with severe ARDS is being mechanically ventilated. The ideal body weight is 80 kg. The respiratory therapist sets the tidal volume at 480 mL. Is this correct, and why?",
+          "options": [
+            "No — the tidal volume should be based on actual body weight, not ideal body weight",
+            "Yes — 480 mL is 6 mL/kg of ideal body weight, which follows lung-protective ventilation guidelines",
+            "No — 6 mL/kg of actual body weight is required, and 480 mL may be too low for a heavy patient",
+            "Yes — any TV < 500 mL is considered lung-protective"
+          ],
+          "correct": 1,
+          "rationale": "The ARDSNet protocol specifies 4–8 mL/kg of IDEAL body weight, not actual body weight. For a patient with IBW of 80 kg: 6 mL/kg × 80 kg = 480 mL. Using actual body weight in obese patients would over-distend the functional 'baby lung' regions. The goal is to minimize volutrauma while maintaining oxygenation."
+        },
+        {
+          "question": "An ARDS patient in prone position for 8 hours develops increased redness and skin breakdown over the forehead. What nursing action is the priority?",
+          "options": [
+            "Continue prone positioning — the skin will recover when the patient is repositioned",
+            "Reposition head to a different angle, apply protective dressings, and document; reassess every 2 hours",
+            "Immediately return the patient to supine position and discontinue prone therapy",
+            "Notify the provider that prone positioning should be permanently discontinued"
+          ],
+          "correct": 1,
+          "rationale": "Pressure injuries are a known complication of prone positioning. The correct response is to reposition the head (if the protocol allows head-turning during prone), apply prophylactic foam or hydrocolloid dressings, and reassess frequently — not to permanently discontinue prone therapy (which has mortality benefit). Discontinuation is reserved for hemodynamic instability or unmanageable complications. This is a skin integrity management issue."
+        },
+        {
+          "question": "An ARDS patient on mechanical ventilation has an ABG showing pH 7.26, PaCO₂ 58 mmHg, PaO₂ 72 mmHg on FiO₂ 0.55. What is the nurse's interpretation and appropriate response?",
+          "options": [
+            "The patient is in respiratory failure — increase tidal volume immediately to lower PaCO₂",
+            "This represents permissive hypercapnia — an acceptable trade-off for lung-protective low tidal volumes; no immediate change in ventilator settings is needed without provider order",
+            "Immediately increase FiO₂ to 1.0 — the PaO₂ is dangerously low",
+            "The metabolic acidosis must be corrected with IV bicarbonate before adjusting ventilator"
+          ],
+          "correct": 1,
+          "rationale": "Permissive hypercapnia (elevated PaCO₂, mildly acidic pH) is intentionally tolerated in ARDS to allow low tidal volume ventilation that prevents VILI. A pH > 7.20 is generally acceptable. The PaO₂ of 72 on FiO₂ 0.55 is within the acceptable target (55–80 mmHg). Increasing tidal volumes to fix CO₂ would harm the 'baby lung'. FiO₂ 1.0 is not indicated at a PaO₂ of 72. Provider orders should guide any changes."
+        },
+        {
+          "question": "A client with ARDS has been on lung-protective ventilation for 5 days. The nurse notes the PEEP has been progressively reduced from 18 to 8 cmH₂O over 48 hours and SpO₂ has remained stable at 93–95%. What does this indicate?",
+          "options": [
+            "The PEEP reduction is unsafe — ARDS always requires high PEEP",
+            "This suggests the lungs are improving — as FRC and compliance recover, PEEP can be weaned while maintaining acceptable oxygenation",
+            "The ventilator settings need to be increased — SpO₂ should be > 98%",
+            "The patient should be extubated immediately since PEEP is being reduced"
+          ],
+          "correct": 1,
+          "rationale": "In recovering ARDS, progressive PEEP reduction (weaning) with maintenance of acceptable SpO₂ (88–95%) is a sign of improving lung compliance and resolving alveolar instability. PEEP can be weaned as the lungs recover and require less pressure to remain open. Extubation is a separate clinical decision that involves multiple readiness criteria beyond PEEP level (breathing trial, adequate cough, mental status, secretion management)."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-acid-base-advanced",
+      "preTest": [
+        {
+          "question": "A client presents with severe vomiting × 4 days. ABG: pH 7.54, PaCO₂ 51, HCO₃ 40. Electrolytes: Na 140, K⁺ 2.8, Cl 87. What is the correct interpretation?",
+          "options": [
+            "Respiratory alkalosis — the high pH and low CO₂ confirm hyperventilation",
+            "Partially compensated metabolic alkalosis with hypokalemia — vomiting causes HCl loss, raising HCO₃; the lungs are retaining CO₂ to compensate; hypokalemia co-exists",
+            "Mixed respiratory and metabolic alkalosis from anxiety",
+            "Fully compensated metabolic acidosis — the kidneys have raised the bicarbonate"
+          ],
+          "correct": 1,
+          "rationale": "pH 7.54 = alkalosis. HCO₃ 40 (elevated — same direction as pH = metabolic cause). PaCO₂ 51 (elevated — lungs retaining CO₂ to compensate for metabolic alkalosis = appropriate compensation). pH still alkalotic = partially compensated. K⁺ 2.8 = hypokalemia (alkalosis drives K⁺ into cells; vomiting causes further K⁺ loss). This is vomiting-induced metabolic alkalosis. Treatment: IV NS + KCl replacement."
+        },
+        {
+          "question": "A patient with DKA has an anion gap of 26. After 8 hours of insulin and IV fluid therapy, glucose is 11 mmol/L, pH 7.31, HCO₃ 16, but the anion gap is still elevated at 20. What should the nurse anticipate?",
+          "options": [
+            "Continue insulin infusion and IV fluids — the anion gap is improving but DKA is not yet resolved; DKA is resolved when the gap closes and HCO₃ normalises, not when glucose normalises",
+            "DKA is resolved — glucose is now below 14 mmol/L so all insulin can be stopped",
+            "Switch to subcutaneous insulin immediately since glucose is now acceptable",
+            "Start sodium bicarbonate infusion to rapidly close the anion gap"
+          ],
+          "correct": 0,
+          "rationale": "DKA resolution requires closure of the anion gap (AG < 12) AND normalization of HCO₃ (> 18 mEq/L) — NOT just glucose normalization. An AG of 20 with HCO₃ of 16 means ketone production is still occurring and the acidosis is not fully resolved. The insulin infusion should continue. When glucose reaches 14 mmol/L, D5W is added to the IV fluids (so insulin can continue without causing hypoglycaemia as ketosis clears). The transition to SC insulin happens when the AG is closed and the patient can eat."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with DKA has K⁺ 3.0 mEq/L and glucose 26 mmol/L. The provider orders insulin infusion to begin. What is the nurse's priority action?",
+          "options": [
+            "Begin the insulin infusion as ordered — glucose must be lowered immediately",
+            "Hold insulin and notify the provider — K⁺ 3.0 is below the safe threshold; insulin will drive K⁺ further down, risking fatal hypokalemia",
+            "Administer insulin and simultaneously hang a KCl drip",
+            "Delay all treatment until K⁺ and glucose are both within normal limits"
+          ],
+          "correct": 1,
+          "rationale": "In DKA management, insulin must be held when serum K⁺ < 3.5 mEq/L. Insulin activates the Na-K ATPase pump, driving K⁺ into cells — in a patient with K⁺ 3.0, this can cause fatal hypokalemia (cardiac dysrhythmias). Replace K⁺ first (typically 20–40 mEq/hr IV), recheck K⁺, then start insulin. Giving insulin with a KCl drip simultaneously is insufficient if the K⁺ is already critically low — the nurse must hold insulin and notify the provider."
+        },
+        {
+          "question": "A client presents with suspected methanol ingestion. ABG shows: pH 7.18, PaCO₂ 22, HCO₃ 8. Electrolytes: Na 140, Cl 102, HCO₃ 8. What does the nurse calculate the anion gap to be?",
+          "options": [
+            "AG = 8 (normal — no significant metabolic derangement)",
+            "AG = 30 (high anion gap — consistent with methanol poisoning causing HAGMA)",
+            "AG = 14 (mildly elevated — consistent with mild dehydration)",
+            "The anion gap cannot be calculated from these values"
+          ],
+          "correct": 1,
+          "rationale": "AG = Na – (Cl + HCO₃) = 140 – (102 + 8) = 140 – 110 = 30 mEq/L. Normal AG is 8–12; this AG of 30 is markedly elevated, indicating high anion gap metabolic acidosis (HAGMA). Methanol is metabolized to formic acid, which consumes HCO₃ and elevates the AG. This is a toxicological emergency. Treatment: fomepizole (methanol antidote), aggressive fluid/bicarbonate, dialysis in severe cases."
+        },
+        {
+          "question": "A patient with end-stage COPD has baseline ABGs: pH 7.36, PaCO₂ 62, HCO₃ 36. Today they present with increasing dyspnea and ABGs: pH 7.19, PaCO₂ 88, HCO₃ 36. What does the nurse recognize?",
+          "options": [
+            "Acute decompensation — the pH dropped significantly with acute CO₂ rise while HCO₃ is unchanged; this is acute-on-chronic respiratory acidosis",
+            "The patient is fully compensated — the HCO₃ is elevated to match the CO₂",
+            "The HCO₃ should be corrected with bicarbonate infusion to normalize the pH",
+            "This is a normal variation for this patient — no action needed"
+          ],
+          "correct": 0,
+          "rationale": "Comparing to baseline: pH dropped from 7.36 to 7.19 (significant acute deterioration); PaCO₂ rose from 62 to 88 (acute rise of 26 mmHg); HCO₃ unchanged at 36 (kidneys have not had time to compensate further). This is acute-on-chronic respiratory acidosis — an acute decompensation superimposed on chronic disease. The acute component (CO₂ 88, pH 7.19) requires intervention: identify and treat the acute precipitant (infection, exacerbation), support ventilation (BiPAP or intubation)."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-sodium-imbalance",
+      "preTest": [
+        {
+          "question": "A client with heart failure has the following labs: Na⁺ 128 mEq/L, serum osmolality 265 mOsm/kg, 3+ bilateral pitting oedema, and jugular venous distension. What type of hyponatremia is this?",
+          "options": [
+            "Hypovolemic hyponatremia — the sodium loss exceeds water loss",
+            "Hypervolemic hyponatremia — total body sodium is increased but water is retained disproportionately more; seen in heart failure, cirrhosis, nephrotic syndrome",
+            "Euvolemic hyponatremia — consistent with SIADH",
+            "Pseudohyponatremia — from elevated lipid levels in this cardiac patient"
+          ],
+          "correct": 1,
+          "rationale": "JVD + bilateral pitting oedema + low serum Na with low osmolality = hypervolemic hyponatremia. In heart failure, low cardiac output activates RAAS and ADH → kidney retains both sodium and water, but water retention exceeds sodium retention → dilutional hyponatremia despite total body sodium excess. This is NOT SIADH (which is euvolemic). Treatment: fluid restriction + diuresis + treatment of underlying HF."
+        },
+        {
+          "question": "A post-pituitary surgery client has urine output of 600 mL/hr for 3 consecutive hours with urine specific gravity 1.001 and serum sodium 149 mEq/L. What condition does the nurse suspect and what is the priority action?",
+          "options": [
+            "SIADH — restrict fluids immediately",
+            "Central diabetes insipidus — notify the provider for desmopressin order and begin free water replacement to prevent hypernatraemia",
+            "Normal post-surgical diuresis — no action required",
+            "Psychogenic polydipsia — restrict IV fluids"
+          ],
+          "correct": 1,
+          "rationale": "Massive dilute urine output (600 mL/hr) + low specific gravity (1.001 = unable to concentrate) + rising sodium (149, hypernatraemic) after pituitary surgery = central diabetes insipidus (CDI). Pituitary/hypothalamic surgery damages the ADH-producing mechanism. Without ADH, kidneys cannot concentrate urine → enormous water loss → rapid hypernatraemia. Notify provider for desmopressin IV and simultaneous free water replacement to prevent progression. SIADH is the opposite — concentrated urine + low sodium."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with chronic hyponatremia (Na⁺ 119) is started on 3% NaCl. After 18 hours, Na⁺ is 133 mEq/L (a rise of 14 mEq/L). What is the nurse's priority action?",
+          "options": [
+            "Continue the infusion — the Na⁺ target has been reached",
+            "Stop the 3% NaCl infusion and notify the provider — the correction rate exceeds the safe limit of 8–10 mEq/L per 24h",
+            "Administer a loop diuretic to slow further correction",
+            "Give free water IV to dilute the sodium back down"
+          ],
+          "correct": 1,
+          "rationale": "In chronic hyponatremia, correcting Na⁺ faster than 8–10 mEq/L per 24 hours risks osmotic demyelination syndrome (ODS), a severe neurological injury. A rise of 14 mEq/L in 18 hours exceeds this threshold. The infusion must be stopped and the provider notified immediately. The provider may consider giving free water IV (D5W) to slow the correction."
+        },
+        {
+          "question": "A post-neurosurgical client has urine output of 450 mL/hour for the past 2 hours, urine specific gravity 1.001, and Na⁺ 148 mEq/L. What condition does the nurse suspect?",
+          "options": [
+            "SIADH — postoperative state is a known trigger",
+            "Central diabetes insipidus — pituitary/hypothalamic trauma during surgery impairs ADH secretion",
+            "Psychogenic polydipsia — the patient is drinking excessive water",
+            "Hypervolemia from excessive IV fluids during surgery"
+          ],
+          "correct": 1,
+          "rationale": "Massive dilute urine output (450 mL/hr × 2h), low specific gravity (1.001 = unable to concentrate urine), and rising sodium (148 — hypernatremia) after neurosurgery is the classic presentation of central diabetes insipidus. Neurosurgery can damage the pituitary or hypothalamus → loss of ADH production → kidneys cannot concentrate urine → free water is lost rapidly → hypernatremia. Treatment: desmopressin IV + free water replacement."
+        },
+        {
+          "question": "A client receiving 3% NaCl for severe symptomatic hyponatremia (Na⁺ 112 mEq/L with seizures) has their sodium checked at 4 hours: Na⁺ 120 mEq/L. The provider has set a target of 8 mEq/L correction per 24 hours. What is the nurse's action?",
+          "options": [
+            "Continue 3% NaCl at the same rate — the patient still has dangerously low sodium",
+            "Stop the 3% NaCl infusion and notify the provider — sodium has risen 8 mEq/L in 4 hours, already at the safe 24-hour limit; continuing risks osmotic demyelination syndrome",
+            "Increase the rate to correct sodium more quickly to normal range",
+            "Switch to normal saline to continue correction at a safer rate"
+          ],
+          "correct": 1,
+          "rationale": "The sodium has risen from 112 to 120 mEq/L — a rise of 8 mEq/L — in just 4 hours. The safe correction limit for chronic hyponatremia is 8–10 mEq/L per 24 hours (some guidelines allow up to 1–2 mEq/L/hr for the first 2 hours in active seizures, then slow dramatically). The 24-hour limit has already been reached in 4 hours. Continuing risks osmotic demyelination syndrome (ODS). The nurse must stop the 3% NaCl and notify the provider immediately — free water may be needed to slow correction."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-insulin-hypoglycemia",
+      "preTest": [
+        {
+          "question": "A nurse is preparing to mix regular (clear) and NPH (cloudy) insulin in the same syringe. The ordered dose is regular 8 units and NPH 20 units. What is the correct sequence?",
+          "options": [
+            "Inject air into regular vial, then inject air into NPH vial, draw NPH first, then draw regular",
+            "Inject air into NPH vial (20 units), then inject air into regular vial (8 units), draw regular first, then draw NPH — 'clear before cloudy'",
+            "Draw NPH first (cloudy) to avoid having to reshake the vial after drawing regular",
+            "Mix both insulins in the NPH vial before drawing"
+          ],
+          "correct": 1,
+          "rationale": "'Clear before cloudy' — always draw the clear (regular) insulin first. This prevents contaminating the regular insulin vial with NPH (which contains zinc and protamine that could alter the onset/duration of regular insulin if introduced). Air is injected into the NPH vial first (since you'll draw it last), then air into the regular vial, then draw regular first, then NPH. Never mix glargine or detemir with other insulins."
+        },
+        {
+          "question": "A client with type 1 diabetes develops signs of hypoglycaemia (shakiness, diaphoresis, confusion) at 11 PM. Blood glucose is 2.9 mmol/L. He is alert enough to swallow safely. Which is the correct immediate intervention?",
+          "options": [
+            "Administer glucagon 1 mg IM since glucose is critically low",
+            "Call the provider before treating — a glucose of 2.9 is too low to treat without an order",
+            "Give 15g of fast-acting carbohydrates (e.g., 150 mL juice or 4 glucose tablets), recheck in 15 minutes, and repeat if still < 4.0 mmol/L",
+            "Administer D50W IV push immediately — glucagon is the last resort"
+          ],
+          "correct": 2,
+          "rationale": "For a conscious patient who can swallow safely, the 15-15 rule is appropriate: 15g of fast-acting carbohydrates, recheck in 15 minutes, repeat if still < 4.0 mmol/L. The patient is alert and can swallow, so oral carbohydrates are safe and effective. IV D50W and IM glucagon are reserved for unconscious patients or those who cannot take oral carbohydrates safely. A provider call is not required before treating a hypoglycaemic patient with an established PRN glucose protocol."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-anticoagulants",
+      "preTest": [
+        {
+          "question": "A client on warfarin for atrial fibrillation has an INR of 5.8 (target 2.0–3.0). They have no active bleeding. What nursing intervention is the priority?",
+          "options": [
+            "Hold the next warfarin dose and notify the provider — INR 5.8 is supratherapeutic with significantly elevated bleeding risk",
+            "Administer vitamin K 10 mg IV push immediately",
+            "Continue warfarin as ordered and recheck INR tomorrow",
+            "Give fresh frozen plasma to reverse the anticoagulation"
+          ],
+          "correct": 0,
+          "rationale": "An INR of 5.8 with no active bleeding: hold warfarin and notify the provider. The provider will determine whether oral vitamin K (preferred for asymptomatic supratherapeutic INR) is needed and at what dose, and when to resume warfarin. High-dose IV vitamin K (10 mg) and FFP are reserved for active, life-threatening bleeding — not for asymptomatic supratherapeutic INR. Continuing warfarin at this INR risks serious haemorrhage."
+        },
+        {
+          "question": "A client is prescribed enoxaparin (low molecular weight heparin) for DVT treatment. What lab value is essential to review before administering each dose?",
+          "options": [
+            "INR — to ensure anticoagulation is therapeutic",
+            "aPTT — the primary monitoring parameter for LMWH",
+            "Creatinine/eGFR — LMWH is renally cleared; dose reduction is required in renal impairment to prevent accumulation and bleeding",
+            "Platelet count only — monitor for heparin-induced thrombocytopenia"
+          ],
+          "correct": 2,
+          "rationale": "LMWH (enoxaparin) is primarily cleared by the kidneys. In renal impairment (eGFR < 30 mL/min), LMWH accumulates → excessive anticoagulation → bleeding risk. Dose reduction or switching to unfractionated heparin (which is not renally cleared) is required. INR does not reflect LMWH anticoagulation (INR monitors the extrinsic pathway — warfarin monitoring). aPTT is not reliably used for LMWH monitoring. Platelet monitoring is important for HIT surveillance but is not the primary lab for dosing."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-antibiotics",
+      "preTest": [
+        {
+          "question": "A client has a documented penicillin allergy described as 'anaphylaxis in 2012.' The provider orders ceftriaxone (a cephalosporin) for community-acquired pneumonia. What should the nurse do?",
+          "options": [
+            "Administer ceftriaxone — penicillin and cephalosporins are completely different drug classes with no cross-reactivity",
+            "Administer ceftriaxone — cross-reactivity between penicillins and cephalosporins is < 2% overall; however, given a history of anaphylaxis, the nurse should contact the provider to confirm the order is intentional and clarify whether allergy testing or alternative antibiotics were considered",
+            "Refuse to administer ceftriaxone — any penicillin allergy is an absolute contraindication to all cephalosporins",
+            "Give ceftriaxone and keep epinephrine at the bedside without notifying the provider"
+          ],
+          "correct": 1,
+          "rationale": "Cross-reactivity between penicillins and cephalosporins is low (< 2%) and mainly occurs with shared side chains, not the beta-lactam ring itself. However, a documented anaphylaxis (the most severe hypersensitivity) warrants provider verification before proceeding. The nurse should confirm the order is intentional, ensure the provider is aware of the anaphylaxis history, and have resuscitation equipment available. Simply administering without verification or refusing outright without contacting the provider are both incorrect responses."
+        },
+        {
+          "question": "The nurse is administering gentamicin (an aminoglycoside). Which findings should the nurse report to the provider immediately?",
+          "options": [
+            "Tinnitus and new onset of dizziness after the third dose",
+            "Mild nausea 30 minutes after the infusion",
+            "Pruritus at the IV site",
+            "Serum creatinine 72 µmol/L (unchanged from baseline)"
+          ],
+          "correct": 0,
+          "rationale": "Tinnitus and dizziness are early signs of aminoglycoside ototoxicity — both cochlear (hearing loss, tinnitus) and vestibular (vertigo, ataxia) damage can occur. Ototoxicity from aminoglycosides can be irreversible. These symptoms must be reported immediately to the provider, who may discontinue or adjust the antibiotic. Mild GI effects and unchanged creatinine are not urgent concerns. Pruritus at the IV site may indicate irritation but is not a priority in this context."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-fluid-balance",
+      "preTest": [
+        {
+          "question": "A client post-bowel resection has a urine output of 15 mL/hr over 3 consecutive hours, HR 118 bpm, BP 94/62 mmHg, and reports severe thirst. Which IV fluid is most appropriate to initiate while awaiting the provider order?",
+          "options": [
+            "D5W (5% dextrose in water) — it is the most commonly used IV fluid for all indications",
+            "0.45% NaCl — it hydrates both intracellular and extracellular compartments",
+            "Normal saline (0.9% NaCl) or lactated Ringer's — isotonic fluids for volume expansion in hypovolemia",
+            "3% NaCl — the patient needs aggressive fluid resuscitation"
+          ],
+          "correct": 2,
+          "rationale": "This patient has clear signs of hypovolemia (oliguria, tachycardia, hypotension, thirst). Volume resuscitation requires isotonic IV fluid that stays in the ECF/intravascular compartment — normal saline or lactated Ringer's are correct. D5W distributes as free water after dextrose metabolism and does not expand the intravascular space effectively. 0.45% NaCl is hypotonic and will shift water into cells rather than remaining in the vasculature. 3% NaCl is for severe symptomatic hyponatraemia, not hypovolemia."
+        },
+        {
+          "question": "A client is receiving a blood transfusion. The nurse notes the client develops flushing, urticaria, lower back pain, and dark-coloured urine 30 minutes into the transfusion. What is the priority action?",
+          "options": [
+            "Slow the transfusion rate to 50 mL/hr and administer diphenhydramine",
+            "Stop the transfusion immediately, keep the IV patent with normal saline, notify the provider and blood bank — this presentation suggests an acute haemolytic transfusion reaction",
+            "Continue the transfusion and administer acetaminophen for the flank pain",
+            "Switch to a new bag of blood — the first unit may have been contaminated"
+          ],
+          "correct": 1,
+          "rationale": "Flushing + urticaria + flank/back pain + dark urine (haemoglobinuria from haemolysis) = acute haemolytic transfusion reaction — a medical emergency from ABO-incompatible blood. Immediate actions: STOP the transfusion, keep IV patent with NS (to flush lines and support BP), notify provider and blood bank, send transfusion reaction workup (blood samples + return the blood product). This reaction can cause acute kidney injury, DIC, and death. Never slow or continue the infusion."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-general-nursing-clinical",
+      "preTest": [
+        {
+          "question": "A nurse is preparing to administer digoxin 0.25 mg PO to a client with heart failure. The client's apical pulse is 54 bpm and serum potassium is 3.1 mEq/L. What should the nurse do?",
+          "options": [
+            "Administer the digoxin — the HR is slightly low but the dose is within normal range",
+            "Hold the digoxin, notify the provider of both the HR < 60 bpm and the hypokalemia — both are parameters requiring provider evaluation before administration",
+            "Give half the dose since the HR is low",
+            "Administer the digoxin after repositioning the client to increase HR"
+          ],
+          "correct": 1,
+          "rationale": "Digoxin is held when HR < 60 bpm (adult) — standard parameter. Additionally, hypokalemia (K⁺ 3.1) dramatically increases digoxin toxicity risk by reducing competition at the Na-K ATPase pump, even at therapeutic drug levels. Both findings must be reported to the provider before digoxin is administered. This is a two-parameter hold — addressing only the HR without mentioning the K⁺ would be incomplete and potentially dangerous."
+        },
+        {
+          "question": "A client with a known latex allergy is being admitted for surgery. Which nursing action is most important?",
+          "options": [
+            "Place a latex-free gloves sign on the client's door and note the allergy in the chart",
+            "Ensure the entire care environment is latex-free: latex-free gloves, IV supplies, tourniquets, and equipment throughout the facility for this client; notify all team members verbally and through allergy documentation",
+            "Use latex gloves but powder-free versions since they cause fewer reactions",
+            "Monitor the client for any latex reaction and treat if it occurs"
+          ],
+          "correct": 1,
+          "rationale": "Latex allergy can cause anaphylaxis from exposure to any latex-containing product. The nursing responsibility extends beyond charting: ALL supplies and equipment that could contact the patient must be confirmed latex-free — gloves, IV tubing, tourniquets, blood pressure cuffs, catheters, tape, and surgical supplies. All team members (including anaesthesia, OR, and lab) must be notified. A wristband and door sign are required in addition to verbal communication."
+        }
+      ]
+    }
+  ]
+}

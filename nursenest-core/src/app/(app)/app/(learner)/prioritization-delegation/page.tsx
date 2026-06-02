@@ -1,0 +1,87 @@
+import type { Metadata } from "next";
+import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { PrioritizationDelegationHubClient } from "@/components/prioritization/prioritization-delegation-hub-client";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import { loadLearnerActivityContext } from "@/lib/learner/load-learner-activity-context";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+
+const DEFAULT_PRIORITY_PATHWAY_ID = "ca-rn-nclex-rn";
+
+type PageProps = {
+  searchParams: Promise<{ pathwayId?: string | string[] }>;
+};
+
+export async function generateMetadata(): Promise<Metadata> {
+  return safeGenerateMetadata(
+    async () => ({
+      title: "Prioritization & Delegation | NurseNest",
+      description:
+        "RN prioritization, delegation, escalation, and bedside decision-making scenarios inside the NurseNest learner surface.",
+      robots: { index: false, follow: false },
+    }),
+    { pathname: "/app/prioritization-delegation", routeGroup: "student.learner.prioritization-delegation" },
+  );
+}
+
+function readQueryPathway(raw: string | string[] | undefined): string | null {
+  if (typeof raw === "string" && raw.trim().length > 2) return raw.trim();
+  if (Array.isArray(raw) && typeof raw[0] === "string" && raw[0].trim().length > 2) return raw[0].trim();
+  return null;
+}
+
+export default async function PrioritizationDelegationPage({ searchParams }: PageProps) {
+  const session = await getProtectedRouteSession("(student).app.(learner).prioritization-delegation");
+  const userId = (session?.user as { id?: string })?.id ?? "";
+  const entitlement = await resolveEntitlementForPage(userId);
+
+  if (entitlement === "error") {
+    return (
+      <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+        <div className="nn-card rounded-2xl border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm leading-relaxed text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
+          Prioritization &amp; delegation is temporarily unavailable while we verify your access. Please refresh or try again shortly.
+        </div>
+      </div>
+    );
+  }
+
+  if (!entitlement.hasAccess) {
+    return (
+      <div className="mx-auto w-full max-w-6xl space-y-6 px-4 sm:px-6">
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
+            Prioritization &amp; delegation
+          </h1>
+          <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
+            Bedside decision rounds are part of the premium NurseNest study experience.
+          </p>
+        </div>
+        <SubscriptionPaywall context="dashboard" />
+      </div>
+    );
+  }
+
+  const sp = await searchParams;
+  const requestedPathwayId = readQueryPathway(sp.pathwayId);
+  let pathwayId = requestedPathwayId ?? DEFAULT_PRIORITY_PATHWAY_ID;
+
+  if (userId && isDatabaseUrlConfigured()) {
+    const [compatible, user] = await Promise.all([
+      listPathwaysCompatibleWithSubscription(entitlement).catch(() => []),
+      loadLearnerActivityContext(userId).catch(() => null),
+    ]);
+    const compatibleIds = new Set(compatible.map((pathway) => pathway.id));
+    const learnerPath = user?.learnerPath?.trim();
+    if (requestedPathwayId && compatibleIds.has(requestedPathwayId)) pathwayId = requestedPathwayId;
+    else if (learnerPath && compatibleIds.has(learnerPath)) pathwayId = learnerPath;
+    else if (compatible[0]?.id) pathwayId = compatible[0].id;
+  }
+
+  const pathway = getExamPathwayById(pathwayId);
+  const pathwayDisplayName = pathway?.displayName ?? pathway?.shortName ?? "RN";
+
+  return <PrioritizationDelegationHubClient pathwayId={pathwayId} pathwayDisplayName={pathwayDisplayName} />;
+}

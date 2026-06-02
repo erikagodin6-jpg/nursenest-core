@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "generatedAt": "2026-06-01T00:00:00.000Z",
+  "description": "Static emergency study inventory for read-only continuity when dynamic learning session builders are unavailable.",
+  "inventories": [
+    {
+      "id": "rn-cardiology",
+      "path": "/emergency-study/rn-cardiology.json",
+      "pathways": ["rn", "nclex-rn"],
+      "systems": ["cardiovascular", "cardiology"],
+      "surfaces": ["flashcards", "questions"]
+    },
+    {
+      "id": "rn-respiratory",
+      "path": "/emergency-study/rn-respiratory.json",
+      "pathways": ["rn", "nclex-rn"],
+      "systems": ["respiratory", "oxygenation"],
+      "surfaces": ["flashcards", "questions"]
+    },
+    {
+      "id": "rpn-fundamentals",
+      "path": "/emergency-study/rpn-fundamentals.json",
+      "pathways": ["rpn", "pn", "rex-pn", "nclex-pn"],
+      "systems": ["fundamentals", "safety"],
+      "surfaces": ["flashcards", "questions"]
+    },
+    {
+      "id": "np-primary-care",
+      "path": "/emergency-study/np-primary-care.json",
+      "pathways": ["np", "cnple", "fnp"],
+      "systems": ["primary-care", "assessment"],
+      "surfaces": ["flashcards", "questions"]
+    }
+  ]
+}

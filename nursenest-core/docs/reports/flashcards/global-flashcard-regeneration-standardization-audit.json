@@ -1,0 +1,3686 @@
+{
+  "generatedAt": "2026-05-31T21:25:36.410Z",
+  "sourceNote": "The live `exam_questions` inventory was not audited because the database was unavailable in this environment.\n\nReason:  Invalid `prisma.examQuestion.findMany()` invocation in /root/nursenest-core/nursenest-core/scripts/audit-global-flashcard-regeneration.mts:310:44 307 const limit = Math.max(1, Number.parseInt(process.env.NN_FLASHCARD_REGENERATION_AUDIT_LIMIT ?? \"100000\", 10)); 308 309 try { → 310 const rows = await prisma.examQuestion.findMany( Can't reach database server at `HOST:5432` Please make sure your database server is running at `HOST:5432`.\n\nStatic fallback covers repository-authored RN catalogs, PN CNPLE expansion questions, and CNPLE NP LOFT case steps only.",
+  "report": {
+    "rnFlashcardReadiness": {
+      "totalQuestions": 62,
+      "generatedFlashcards": 0,
+      "blockedSources": 62,
+      "weakFlashcards": 0,
+      "definitionOnlyFlashcards": 0,
+      "missingClinicalApplication": 0,
+      "translationReady": 0,
+      "readinessPercent": 0,
+      "monetizationReadinessPercent": 0
+    },
+    "pnFlashcardReadiness": {
+      "totalQuestions": 75,
+      "generatedFlashcards": 7,
+      "blockedSources": 68,
+      "weakFlashcards": 0,
+      "definitionOnlyFlashcards": 0,
+      "missingClinicalApplication": 0,
+      "translationReady": 7,
+      "readinessPercent": 9.3,
+      "monetizationReadinessPercent": 9.3
+    },
+    "npFlashcardReadiness": {
+      "totalQuestions": 53,
+      "generatedFlashcards": 0,
+      "blockedSources": 53,
+      "weakFlashcards": 0,
+      "definitionOnlyFlashcards": 0,
+      "missingClinicalApplication": 0,
+      "translationReady": 0,
+      "readinessPercent": 0,
+      "monetizationReadinessPercent": 0
+    },
+    "duplicateReductionReport": {
+      "duplicatePairs": 0,
+      "exactDuplicates": 0,
+      "nearDuplicates": 0,
+      "estimatedReductionCount": 0,
+      "estimatedReductionPercent": 0,
+      "findings": []
+    },
+    "results": [
+      {
+        "questionId": "nclex-tier1-falls-call-light",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-hypoglycemia-alert",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-copd-positioning",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-chf-daily-weight",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": false,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Missing or incomplete blueprint mapping.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-pneumonia-cough-deep-breathe",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": false,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Missing or incomplete blueprint mapping.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-postop-incentive-spirometer",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": false,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Missing or incomplete blueprint mapping.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-standard-precautions-blood",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-therapeutic-communication-anxiety",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": false,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Missing or incomplete blueprint mapping.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-anticoagulant-bleeding",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-delegation-vitals",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-fluid-balance-output",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-pain-reassessment",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": false,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Missing or incomplete blueprint mapping.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-hypertension-teaching",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": false,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Missing or incomplete blueprint mapping.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-lab-potassium",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-documentation-objective",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": false,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Missing or incomplete blueprint mapping.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-oxygen-nasal-cannula-safety",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-mobility-cane",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": false,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Missing or incomplete blueprint mapping.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-fever-postop",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-suicide-direct-question",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-maternity-postpartum-fundus",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-peds-dehydration",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-med-admin-allergy",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-expected-unexpected-cast",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-hand-hygiene",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-stroke-swallow",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-renal-fluid-teaching",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": false,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Missing or incomplete blueprint mapping.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier1-discharge-teaching-antibiotics",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": false,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Missing or incomplete blueprint mapping.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-01-sepsis-older-adult",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-02-postop-bleeding",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-03-stroke-last-known-well",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-04-chest-pain-unstable",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-05-respiratory-distress-pneumonia",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-06-hypoglycemia-confused",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-07-hyperglycemia-dka-cues",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-08-heart-failure-fluid-overload",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-09-potassium-loop-diuretic",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-10-delegation-new-confusion",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-11-opioid-sedation",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-12-transfusion-reaction",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-13-postop-pulmonary-embolism",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-14-sodium-confusion",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-15-asthma-worsening",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier2-16-priority-four-clients",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-01-ventilated-high-pressure-alarm",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-02-septic-shock-progression",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-03-norepinephrine-extravasation",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-04-wide-complex-tachycardia-unstable",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-05-postop-hemorrhage-abdominal",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-06-increased-icp-cushing-cues",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-07-dka-insulin-potassium",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-08-ards-worsening-on-high-flow",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-09-transfusion-reaction-shock",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-10-complex-icu-delegation",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-11-pca-opioid-oversedation",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-12-hyperkalemia-telemetry-cues",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-13-stroke-thrombolytic-neuro-change",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-14-cardiogenic-shock-post-mi",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-15-burn-inhalation-deterioration",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-16-massive-pe-deterioration",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-17-acute-liver-failure-bleeding-confusion",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-18-sedation-handoff-instability",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "nclex-tier3-19-aortic-dissection-warning",
+        "pathwayGroup": "RN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-priority-copd-decline",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-sata-copd-decline",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-matrix-copd-decline",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-bowtie-copd-decline",
+        "pathwayGroup": "RPN_PN",
+        "status": "GENERATED_FROM_VALIDATED_CONTENT",
+        "flashcard": {
+          "id": "qflash:cnple-rpn-bowtie-copd-decline",
+          "sourceQuestionId": "cnple-rpn-bowtie-copd-decline",
+          "front": "What is the key clinical judgment for this scenario?\n\nA 72-year-old client with COPD in a medical unit is in a Canadian acute-care medicine unit. The client becomes restless and increasingly short of breath after walking to the bathroom. SpO2 falls from 92% to 85% on ordered low-flow oxygen, RR is 30/min, and accessory muscles are visible. Complete the bow-tie by linking the likely problem, priority action, and best monitoring focus.",
+          "back": "Answer: acute respiratory deterioration\n\nRationale: position high-Fowler's, assess breath sounds and oxygen equipment, stay with the client, and notify the RN/charge nurse or prescriber per policy is correct because the scenario contains new restlessness with falling oxygen saturation and increased work of breathing, which indicates acute respiratory deterioration. COPD exacerbation increases airway resistance and ventilation-perfusion mismatch; restlessness can be an early sign of hypoxemia or hypercapnia. For entry-level Canadian practical nursing items, choose the option that recognizes deterioration, protects immediate safety, communicates through the appropriate chain, and reassesses response. Immediate escalation is needed because mental status change plus falling SpO2 suggests decompensation. acute respiratory deterioration best explains new restlessness with falling oxygen saturation and increased work of breathing. Link cues to problem, action, and monitoring rather than selecting isolated facts.\n\nClinical application: Immediate escalation is needed because mental status change plus falling SpO2 suggests decompensation.",
+          "clinicalPearl": "Bow-tie reasoning supports RPN recognition, safe first action, and timely reporting without drifting into independent diagnosis.",
+          "memoryAnchor": "Treating COPD oxygen targets as a reason to delay escalation when objective distress is worsening.",
+          "examRelevance": "REx-PN / practical-nursing-clinical-judgment / medical-surgical / medical-surgical / Respiratory deterioration / COPD exacerbation and escalation",
+          "commonMistake": "Treating COPD oxygen targets as a reason to delay escalation when objective distress is worsening., delayed-escalation, scope-safe-action",
+          "roleScope": "RPN_PN",
+          "examMapping": "REx-PN / practical-nursing-clinical-judgment / medical-surgical / medical-surgical / Respiratory deterioration / COPD exacerbation and escalation",
+          "countryMapping": "CA",
+          "translationReadiness": {
+            "ready": true,
+            "blockers": []
+          },
+          "contentKey": "question_enriched_flashcard:cnple-rpn-bowtie-copd-decline"
+        },
+        "sourceValidation": {
+          "publicationReady": true,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": true
+        },
+        "issues": []
+      },
+      {
+        "questionId": "cnple-rpn-priority-sepsis-ltc",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-sata-sepsis-ltc",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-matrix-sepsis-ltc",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-bowtie-sepsis-ltc",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-priority-heart-failure-fluid",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-sata-heart-failure-fluid",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-matrix-heart-failure-fluid",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-bowtie-heart-failure-fluid",
+        "pathwayGroup": "RPN_PN",
+        "status": "GENERATED_FROM_VALIDATED_CONTENT",
+        "flashcard": {
+          "id": "qflash:cnple-rpn-bowtie-heart-failure-fluid",
+          "sourceQuestionId": "cnple-rpn-bowtie-heart-failure-fluid",
+          "front": "What is the key clinical judgment for this scenario?\n\nA 68-year-old client with heart failure receiving home-care follow-up is in a Community nursing visit. The client reports waking at night short of breath, has gained 2.2 kg in 3 days, has new ankle edema, and has crackles at both lung bases. Complete the bow-tie by linking the likely problem, priority action, and best monitoring focus.",
+          "back": "Answer: worsening heart failure fluid overload\n\nRationale: assess respiratory status, reinforce sodium/fluid teaching, and notify the care team about possible fluid overload is correct because the scenario contains rapid weight gain with orthopnea, edema, and new crackles, which indicates worsening heart failure fluid overload. Reduced cardiac pumping can activate fluid-retaining neurohormonal responses, causing pulmonary congestion and peripheral edema. For entry-level Canadian practical nursing items, choose the option that recognizes deterioration, protects immediate safety, communicates through the appropriate chain, and reassesses response. Rapid weight gain and orthopnea require timely reporting so therapy can be adjusted. worsening heart failure fluid overload best explains rapid weight gain with orthopnea, edema, and new crackles. Link cues to problem, action, and monitoring rather than selecting isolated facts.\n\nClinical application: Rapid weight gain and orthopnea require timely reporting so therapy can be adjusted.",
+          "clinicalPearl": "Bow-tie reasoning supports RPN recognition, safe first action, and timely reporting without drifting into independent diagnosis.",
+          "memoryAnchor": "Focusing on ankle edema alone while missing the respiratory and weight trend.",
+          "examRelevance": "REx-PN / practical-nursing-clinical-judgment / chronic-disease / chronic-disease / Heart failure / Fluid overload and daily weights",
+          "commonMistake": "Focusing on ankle edema alone while missing the respiratory and weight trend., delayed-escalation, scope-safe-action",
+          "roleScope": "RPN_PN",
+          "examMapping": "REx-PN / practical-nursing-clinical-judgment / chronic-disease / chronic-disease / Heart failure / Fluid overload and daily weights",
+          "countryMapping": "CA",
+          "translationReadiness": {
+            "ready": true,
+            "blockers": []
+          },
+          "contentKey": "question_enriched_flashcard:cnple-rpn-bowtie-heart-failure-fluid"
+        },
+        "sourceValidation": {
+          "publicationReady": true,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": true
+        },
+        "issues": []
+      },
+      {
+        "questionId": "cnple-rpn-priority-stroke-cue",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-sata-stroke-cue",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-matrix-stroke-cue",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-bowtie-stroke-cue",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-priority-postpartum-hemorrhage",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-sata-postpartum-hemorrhage",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-matrix-postpartum-hemorrhage",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-bowtie-postpartum-hemorrhage",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-priority-pediatric-respiratory",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-sata-pediatric-respiratory",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-matrix-pediatric-respiratory",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-bowtie-pediatric-respiratory",
+        "pathwayGroup": "RPN_PN",
+        "status": "GENERATED_FROM_VALIDATED_CONTENT",
+        "flashcard": {
+          "id": "qflash:cnple-rpn-bowtie-pediatric-respiratory",
+          "sourceQuestionId": "cnple-rpn-bowtie-pediatric-respiratory",
+          "front": "What is the key clinical judgment for this scenario?\n\nA 4-year-old in the emergency department with wheezing is in a Emergency department urgent assessment area. The child is quiet, sitting upright, using intercostal retractions, has SpO2 89% on room air, and the wheeze is now faint compared with triage. Complete the bow-tie by linking the likely problem, priority action, and best monitoring focus.",
+          "back": "Answer: impending pediatric respiratory failure\n\nRationale: stay with the child, position for breathing, apply ordered oxygen, and escalate urgently to the RN/provider is correct because the scenario contains quiet child with retractions, hypoxemia, and decreasing wheeze intensity, which indicates impending pediatric respiratory failure. A silent or quiet chest in respiratory distress can mean poor air movement rather than improvement. For entry-level Canadian practical nursing items, choose the option that recognizes deterioration, protects immediate safety, communicates through the appropriate chain, and reassesses response. Children can fatigue quickly; work of breathing and behaviour matter as much as SpO2. impending pediatric respiratory failure best explains quiet child with retractions, hypoxemia, and decreasing wheeze intensity. Link cues to problem, action, and monitoring rather than selecting isolated facts.\n\nClinical application: Children can fatigue quickly; work of breathing and behaviour matter as much as SpO2.",
+          "clinicalPearl": "Bow-tie reasoning supports RPN recognition, safe first action, and timely reporting without drifting into independent diagnosis.",
+          "memoryAnchor": "Interpreting reduced wheeze as improvement without assessing air entry and fatigue.",
+          "examRelevance": "REx-PN / practical-nursing-clinical-judgment / pediatrics / pediatrics / Pediatric respiratory distress / Work of breathing and fatigue",
+          "commonMistake": "Interpreting reduced wheeze as improvement without assessing air entry and fatigue., delayed-escalation, scope-safe-action",
+          "roleScope": "RPN_PN",
+          "examMapping": "REx-PN / practical-nursing-clinical-judgment / pediatrics / pediatrics / Pediatric respiratory distress / Work of breathing and fatigue",
+          "countryMapping": "CA",
+          "translationReadiness": {
+            "ready": true,
+            "blockers": []
+          },
+          "contentKey": "question_enriched_flashcard:cnple-rpn-bowtie-pediatric-respiratory"
+        },
+        "sourceValidation": {
+          "publicationReady": true,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": true
+        },
+        "issues": []
+      },
+      {
+        "questionId": "cnple-rpn-priority-hypoglycemia",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-sata-hypoglycemia",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-matrix-hypoglycemia",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-bowtie-hypoglycemia",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-priority-warfarin-bleeding",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-sata-warfarin-bleeding",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-matrix-warfarin-bleeding",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-bowtie-warfarin-bleeding",
+        "pathwayGroup": "RPN_PN",
+        "status": "GENERATED_FROM_VALIDATED_CONTENT",
+        "flashcard": {
+          "id": "qflash:cnple-rpn-bowtie-warfarin-bleeding",
+          "sourceQuestionId": "cnple-rpn-bowtie-warfarin-bleeding",
+          "front": "What is the key clinical judgment for this scenario?\n\nA 77-year-old client taking warfarin for atrial fibrillation is in a Primary-care clinic phone triage. The client reports black tarry stools, dizziness when standing, and new bruising. The most recent INR yesterday was 4.8. Complete the bow-tie by linking the likely problem, priority action, and best monitoring focus.",
+          "back": "Answer: possible gastrointestinal bleeding with over-anticoagulation\n\nRationale: instruct urgent same-day assessment/emergency evaluation per policy and notify the prescriber/RN immediately is correct because the scenario contains melena symptoms with supratherapeutic INR and dizziness, which indicates possible gastrointestinal bleeding with over-anticoagulation. Warfarin reduces vitamin K-dependent clotting factors; a high INR increases spontaneous and gastrointestinal bleeding risk. For entry-level Canadian practical nursing items, choose the option that recognizes deterioration, protects immediate safety, communicates through the appropriate chain, and reassesses response. Melena plus dizziness is not routine teaching; it requires urgent assessment. possible gastrointestinal bleeding with over-anticoagulation best explains melena symptoms with supratherapeutic INR and dizziness. Link cues to problem, action, and monitoring rather than selecting isolated facts.\n\nClinical application: Melena plus dizziness is not routine teaching; it requires urgent assessment.",
+          "clinicalPearl": "Bow-tie reasoning supports RPN recognition, safe first action, and timely reporting without drifting into independent diagnosis.",
+          "memoryAnchor": "Responding to high INR with diet advice while missing active bleeding cues.",
+          "examRelevance": "REx-PN / practical-nursing-clinical-judgment / pharmacology / pharmacology / Anticoagulant safety / Bleeding risk and INR follow-up",
+          "commonMistake": "Responding to high INR with diet advice while missing active bleeding cues., delayed-escalation, scope-safe-action",
+          "roleScope": "RPN_PN",
+          "examMapping": "REx-PN / practical-nursing-clinical-judgment / pharmacology / pharmacology / Anticoagulant safety / Bleeding risk and INR follow-up",
+          "countryMapping": "CA",
+          "translationReadiness": {
+            "ready": true,
+            "blockers": []
+          },
+          "contentKey": "question_enriched_flashcard:cnple-rpn-bowtie-warfarin-bleeding"
+        },
+        "sourceValidation": {
+          "publicationReady": true,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": true
+        },
+        "issues": []
+      },
+      {
+        "questionId": "cnple-rpn-priority-delirium-dementia",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-sata-delirium-dementia",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-matrix-delirium-dementia",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-bowtie-delirium-dementia",
+        "pathwayGroup": "RPN_PN",
+        "status": "GENERATED_FROM_VALIDATED_CONTENT",
+        "flashcard": {
+          "id": "qflash:cnple-rpn-bowtie-delirium-dementia",
+          "sourceQuestionId": "cnple-rpn-bowtie-delirium-dementia",
+          "front": "What is the key clinical judgment for this scenario?\n\nAn 82-year-old resident with mild dementia is in a Long-term-care evening shift. The resident is suddenly disoriented, picking at sheets, has new urinary incontinence, T 37.9 C, and refuses fluids. Family says this is not baseline. Complete the bow-tie by linking the likely problem, priority action, and best monitoring focus.",
+          "back": "Answer: acute delirium risk\n\nRationale: assess for reversible causes, ensure safety, increase observation, and report acute delirium concern is correct because the scenario contains acute change from baseline with infection/dehydration cues, which indicates acute delirium risk. Delirium reflects acute brain dysfunction often triggered by infection, dehydration, medications, pain, or hypoxia. For entry-level Canadian practical nursing items, choose the option that recognizes deterioration, protects immediate safety, communicates through the appropriate chain, and reassesses response. Delirium is a medical warning sign in older adults, not just a behaviour problem. acute delirium risk best explains acute change from baseline with infection/dehydration cues. Link cues to problem, action, and monitoring rather than selecting isolated facts.\n\nClinical application: Delirium is a medical warning sign in older adults, not just a behaviour problem.",
+          "clinicalPearl": "Bow-tie reasoning supports RPN recognition, safe first action, and timely reporting without drifting into independent diagnosis.",
+          "memoryAnchor": "Normalizing sudden confusion because a dementia diagnosis already exists.",
+          "examRelevance": "REx-PN / practical-nursing-clinical-judgment / mental-health / mental-health / Delirium recognition / Acute confusion in older adults",
+          "commonMistake": "Normalizing sudden confusion because a dementia diagnosis already exists., delayed-escalation, scope-safe-action",
+          "roleScope": "RPN_PN",
+          "examMapping": "REx-PN / practical-nursing-clinical-judgment / mental-health / mental-health / Delirium recognition / Acute confusion in older adults",
+          "countryMapping": "CA",
+          "translationReadiness": {
+            "ready": true,
+            "blockers": []
+          },
+          "contentKey": "question_enriched_flashcard:cnple-rpn-bowtie-delirium-dementia"
+        },
+        "sourceValidation": {
+          "publicationReady": true,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": true
+        },
+        "issues": []
+      },
+      {
+        "questionId": "cnple-rpn-priority-cdiff-ipac",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-sata-cdiff-ipac",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-matrix-cdiff-ipac",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-bowtie-cdiff-ipac",
+        "pathwayGroup": "RPN_PN",
+        "status": "GENERATED_FROM_VALIDATED_CONTENT",
+        "flashcard": {
+          "id": "qflash:cnple-rpn-bowtie-cdiff-ipac",
+          "sourceQuestionId": "cnple-rpn-bowtie-cdiff-ipac",
+          "front": "What is the key clinical judgment for this scenario?\n\nA 64-year-old client after antibiotics for pneumonia is in a Acute-care medical unit. The client has 6 watery stools in 8 hours, abdominal cramping, T 38.0 C, and recent clindamycin exposure. Complete the bow-tie by linking the likely problem, priority action, and best monitoring focus.",
+          "back": "Answer: suspected C. difficile infection\n\nRationale: initiate contact precautions per policy, perform hand hygiene with soap and water, assess hydration, and notify the RN/provider is correct because the scenario contains frequent watery diarrhea with fever after high-risk antibiotic exposure, which indicates suspected C. difficile infection. Antibiotics can disrupt normal gut flora, allowing C. difficile toxin-mediated colitis and dehydration. For entry-level Canadian practical nursing items, choose the option that recognizes deterioration, protects immediate safety, communicates through the appropriate chain, and reassesses response. Early isolation and hydration assessment protect the client and other patients. suspected C. difficile infection best explains frequent watery diarrhea with fever after high-risk antibiotic exposure. Link cues to problem, action, and monitoring rather than selecting isolated facts.\n\nClinical application: Early isolation and hydration assessment protect the client and other patients.",
+          "clinicalPearl": "Bow-tie reasoning supports RPN recognition, safe first action, and timely reporting without drifting into independent diagnosis.",
+          "memoryAnchor": "Assuming all diarrhea is routine medication side effect without IPAC action.",
+          "examRelevance": "REx-PN / practical-nursing-clinical-judgment / infection-control / infection-control / C. difficile infection control / Contact precautions and dehydration risk",
+          "commonMistake": "Assuming all diarrhea is routine medication side effect without IPAC action., delayed-escalation, scope-safe-action",
+          "roleScope": "RPN_PN",
+          "examMapping": "REx-PN / practical-nursing-clinical-judgment / infection-control / infection-control / C. difficile infection control / Contact precautions and dehydration risk",
+          "countryMapping": "CA",
+          "translationReadiness": {
+            "ready": true,
+            "blockers": []
+          },
+          "contentKey": "question_enriched_flashcard:cnple-rpn-bowtie-cdiff-ipac"
+        },
+        "sourceValidation": {
+          "publicationReady": true,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": true
+        },
+        "issues": []
+      },
+      {
+        "questionId": "cnple-rpn-priority-wound-infection",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-sata-wound-infection",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-matrix-wound-infection",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-bowtie-wound-infection",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-priority-ethics-capacity",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-sata-ethics-capacity",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-matrix-ethics-capacity",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-bowtie-ethics-capacity",
+        "pathwayGroup": "RPN_PN",
+        "status": "GENERATED_FROM_VALIDATED_CONTENT",
+        "flashcard": {
+          "id": "qflash:cnple-rpn-bowtie-ethics-capacity",
+          "sourceQuestionId": "cnple-rpn-bowtie-ethics-capacity",
+          "front": "What is the key clinical judgment for this scenario?\n\nA 45-year-old alert client scheduled for a dressing change is in a Community clinic. The client refuses the dressing change, says they understand the infection risk, and asks to speak with the nurse again after lunch. Complete the bow-tie by linking the likely problem, priority action, and best monitoring focus.",
+          "back": "Answer: informed refusal of care\n\nRationale: explore reasons, provide clear information, respect capable refusal, document objectively, and notify the appropriate team member if risk persists is correct because the scenario contains refusal of care requiring capacity-aware communication and documentation, which indicates informed refusal of care. Not applicable; this item tests ethical and legal nursing judgment rather than disease mechanism. For entry-level Canadian practical nursing items, choose the option that recognizes deterioration, protects immediate safety, communicates through the appropriate chain, and reassesses response. Capacity and informed refusal require respectful communication and objective documentation. informed refusal of care best explains refusal of care requiring capacity-aware communication and documentation. Link cues to problem, action, and monitoring rather than selecting isolated facts.\n\nClinical application: Capacity and informed refusal require respectful communication and objective documentation.",
+          "clinicalPearl": "Bow-tie reasoning supports RPN recognition, safe first action, and timely reporting without drifting into independent diagnosis.",
+          "memoryAnchor": "Believing an order overrides a capable client's right to refuse.",
+          "examRelevance": "REx-PN / practical-nursing-clinical-judgment / ethics / ethics / Consent and capacity / Refusal of care",
+          "commonMistake": "Believing an order overrides a capable client's right to refuse., delayed-escalation, scope-safe-action",
+          "roleScope": "RPN_PN",
+          "examMapping": "REx-PN / practical-nursing-clinical-judgment / ethics / ethics / Consent and capacity / Refusal of care",
+          "countryMapping": "CA",
+          "translationReadiness": {
+            "ready": true,
+            "blockers": []
+          },
+          "contentKey": "question_enriched_flashcard:cnple-rpn-bowtie-ethics-capacity"
+        },
+        "sourceValidation": {
+          "publicationReady": true,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": true
+        },
+        "issues": []
+      },
+      {
+        "questionId": "cnple-rpn-ordered-hypoglycemia-response",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-ordered-stroke-response",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-ordered-postpartum-bleeding",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-ordered-cdiff-ipac",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-ordered-warfarin-bleed",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-ordered-wound-infection",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-chart-copd-decline",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-chart-sepsis-ltc",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-chart-heart-failure-fluid",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-chart-stroke-cue",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-chart-postpartum-hemorrhage",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-chart-pediatric-respiratory",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-hotspot-im-injection-site",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-hotspot-pressure-injury-sacrum",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-cloze-insulin-hypoglycemia",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-cloze-documentation",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-extended-matching-respiratory-cues",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-extended-matching-pharm-risk",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-communication-sbar-sepsis",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-communication-therapeutic-panic",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-delegation-ucp-stable-care",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-delegation-assignment-four-clients",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-med-safety-opioid-sedation",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-med-safety-digoxin-apical",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-case-study-sepsis-evolution",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-safety-deterioration-shock",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-rpn-community-home-care-falls",
+        "pathwayGroup": "RPN_PN",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-htn-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-htn-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-htn-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-htn-001:step-3",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-dm-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-dm-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-dm-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-ac-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-ac-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-ac-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-mh-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-mh-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-mh-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-peds-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete correct rationale.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-peds-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-peds-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-wh-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-wh-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-wh-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-geri-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-geri-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-geri-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-chf-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-chf-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-chf-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": true,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-thyroid-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-thyroid-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-thyroid-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-copd-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-copd-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-copd-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-copd-001:step-3",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-oud-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-oud-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-oud-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-cp-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-cp-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-cp-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-prev-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-prev-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-prev-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-skin-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-skin-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-skin-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-pp-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-pp-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-pp-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete clinical pearl.",
+          "Missing or incomplete exam trap.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-prenatal-htn-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": true,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": true,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-prenatal-htn-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-prenatal-htn-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-uti-stewardship-001:step-0",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-uti-stewardship-001:step-1",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      },
+      {
+        "questionId": "cnple-sample-uti-stewardship-001:step-2",
+        "pathwayGroup": "NP",
+        "status": "BLOCKED_SOURCE_NOT_VALIDATED",
+        "sourceValidation": {
+          "publicationReady": false,
+          "flashcardReady": false,
+          "practiceExamReady": false,
+          "catReady": true,
+          "adaptiveLearningReady": false,
+          "monetizationReady": false
+        },
+        "issues": [
+          "Missing or incomplete distractor rationales.",
+          "Missing or incomplete memory anchor.",
+          "Missing or incomplete flashcard output.",
+          "Flashcard was not generated because the source question is not publication-ready and flashcard-ready."
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "overview": "La nutrition est un déterminant majeur de la santé et de la guérison. Les besoins nutritionnels varient selon l'âge, l'état de santé, le niveau d'activité et les pathologies. L'infirmière joue un rôle clé dans l'évaluation nutritionnelle, la détection de la malnutrition et l'éducation thérapeutique.",
+  "key_concepts": [
+    "Macronutriments : glucides (4 kcal/g, source d'énergie principale), protéines (4 kcal/g, réparation tissulaire), lipides (9 kcal/g, hormones et vitamines liposolubles)",
+    "Micronutriments : vitamines hydrosolubles (C, groupe B — non stockées, apport quotidien nécessaire) et liposolubles (A, D, E, K — stockées, risque de toxicité en excès)",
+    "IMC (Indice de Masse Corporelle) : poids (kg) / taille² (m²) — normal : 18,5–24,9 ; surpoids : 25–29,9 ; obésité : ≥ 30",
+    "Malnutrition : déficit ou excès de nutriments affectant la fonction corporelle — détectée par évaluation du risque nutritionnel (MNA, NRS-2002)",
+    "Régimes thérapeutiques : hyposodé (insuffisance cardiaque, HTA), hyperprotéiné (plaies, brûlures), diabétique (contrôle glycémique)"
+  ],
+  "nursing_responsibilities": "L'infirmière évalue l'état nutritionnel (poids, IMC, appétit, capacité à s'alimenter), identifie les patients à risque de malnutrition et fait appel à la diététicienne si nécessaire. Elle surveille la tolérance aux repas et aux suppléments, assiste les patients qui ont des difficultés à s'alimenter, et éduque sur les régimes prescrits. Elle surveille les signes de carences vitaminiques ou minérales (peau, cheveux, muqueuses).",
+  "clinical_pearls": "La vitamine K est un antagoniste de la warfarine — les patients sous anticoagulants doivent maintenir un apport stable en légumes verts (pas nécessairement les éviter). Le magnésium est souvent oublié mais essentiel : son déficit aggrave l'hypokaliémie et l'hypocalcémie. Les patients en post-opératoire, brûlés ou porteurs de plaies chroniques ont des besoins protéiques élevés — jusqu'à 1,5–2 g/kg/jour.",
+  "patient_education": "Adaptez les conseils au régime prescrit. Pour un régime hyposodé : identifier les sources cachées de sel (conserves, charcuterie, fromages). Pour un régime diabétique : comprendre l'index glycémique et l'importance des repas réguliers. Valorisez les changements progressifs plutôt que les restrictions strictes pour favoriser l'observance.",
+  "key_takeaways": [
+    "Les protéines sont essentielles à la cicatrisation et à la réparation tissulaire — les besoins augmentent en cas de maladie ou de blessure",
+    "Les vitamines liposolubles (A, D, E, K) peuvent s'accumuler et devenir toxiques — attention à la supplémentation non contrôlée",
+    "L'évaluation nutritionnelle est une composante de l'évaluation infirmière complète — pas seulement de la diététique",
+    "Les régimes thérapeutiques doivent être compris et acceptés par le patient pour être efficaces"
+  ]
+}

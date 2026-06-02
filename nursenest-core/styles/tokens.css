@@ -1,0 +1,115 @@
+/**
+ * Learner UI design tokens — calm pastel palette (strict hex source of truth).
+ * Tailwind: `bg-lv-bg-base`, `text-lv-text-primary`, `rounded-lv-lg`, `shadow-lv-soft`, …
+ * Dark themes remap the same keys so surfaces stay soft (no pure black).
+ *
+ * Spec parity (names in comments → CSS variable):
+ * --bg-base → --lv-bg-base, --primary-500 → --lv-primary-500, etc.
+ */
+
+:root {
+  --font-ui:
+    var(--font-sans-next),
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  --font-sans: var(--font-ui);
+  /* Warm-cool base: airy, editorial, long-session friendly (not flat gray) */
+  --lv-bg-base: #f6f4f9;
+  --lv-bg-surface: #fffcfe;
+  --lv-bg-surface-alt: #eef1f6;
+
+  --lv-primary-50: #e8f4f4;
+  --lv-primary-100: #d4ecec;
+  --lv-primary-300: #8fd3d3;
+  --lv-primary-500: #4baaaa;
+
+  --lv-secondary-100: #ecf6ef;
+  --lv-secondary-300: #a7d7b8;
+
+  --lv-accent-100: #f3eef9;
+  --lv-accent-300: #c7b8e6;
+
+  --lv-text-primary: #1f2937;
+  --lv-text-secondary: #4b5563;
+
+  --lv-border-soft: #e2e6ee;
+
+  --lv-on-primary: #ffffff;
+  --lv-warning-soft: #fff8ed;
+  --lv-warning-text: #b45309;
+  --lv-warning-border: #f59e0b;
+
+  --lv-radius-sm: 8px;
+  --lv-radius-md: 12px;
+  --lv-radius-lg: 15px;
+
+  --lv-shadow-soft:
+    0 1px 0 rgba(31, 41, 55, 0.035),
+    0 10px 28px -16px rgba(31, 41, 55, 0.065);
+  --lv-shadow-medium:
+    0 1px 0 rgba(31, 41, 55, 0.045),
+    0 14px 36px -18px rgba(31, 41, 55, 0.085);
+
+  --lv-motion: 160ms;
+  --lv-motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/*
+ * Theme-aware bridge: when `[data-theme]` is active, map learner-ds card surfaces
+ * (`--lv-bg-*`, text, borders, shadows) to the global tonal ladder in `globals.css`.
+ *
+ * Without this, `.lv-card` / `LearnerSurfaceCard` keep :root pastels on Midnight, Apex,
+ * Blossom, etc., so marketing pathway hubs look "stuck" while the rest of the shell tracks
+ * the picker. Specificity is (0,1,1); legacy dark overrides below still win where listed.
+ */
+html[data-theme] {
+  --lv-bg-base: var(--page-bg, var(--bg-page));
+  --lv-bg-surface: var(--bg-card);
+  --lv-bg-surface-alt: var(--bg-section-alt);
+  --lv-text-primary: var(--theme-heading-text);
+  --lv-text-secondary: var(--theme-body-text);
+  --lv-border-soft: var(--border-subtle);
+  --lv-shadow-soft: var(--shadow-card);
+  --lv-shadow-medium: var(--shadow-card-hover);
+}
+
+html[data-theme="dark-clinical"],
+html[data-theme="dark-academia"],
+html[data-theme="dark-mode"],
+html[data-theme="midnight-indigo"],
+html[data-theme="deep-twilight"],
+html[data-theme="evergreen-steel"],
+html[data-theme="midnight-ink"],
+html[data-theme="storm-slate"] {
+  --lv-bg-base: #171c20;
+  --lv-bg-surface: #1e252b;
+  --lv-bg-surface-alt: #232b32;
+
+  --lv-primary-50: color-mix(in srgb, var(--lv-primary-500) 12%, var(--lv-bg-surface));
+  --lv-primary-100: color-mix(in srgb, var(--lv-primary-500) 18%, var(--lv-bg-surface));
+  --lv-primary-300: color-mix(in srgb, var(--lv-primary-500) 42%, var(--lv-bg-surface));
+  --lv-primary-500: #5ebdbd;
+
+  --lv-secondary-100: color-mix(in srgb, var(--lv-secondary-300) 14%, var(--lv-bg-surface));
+  --lv-secondary-300: #7fb892;
+
+  --lv-accent-100: color-mix(in srgb, var(--lv-accent-300) 12%, var(--lv-bg-surface));
+  --lv-accent-300: #9d8cc4;
+
+  --lv-text-primary: #e8eef1;
+  --lv-text-secondary: #b5c0c7;
+
+  --lv-border-soft: color-mix(in srgb, var(--lv-text-secondary) 22%, var(--lv-bg-surface));
+
+  --lv-shadow-soft: 0 2px 10px rgba(0, 0, 0, 0.28);
+  --lv-shadow-medium: 0 6px 22px rgba(0, 0, 0, 0.35);
+
+  --lv-warning-soft: color-mix(in srgb, #fbbf24 14%, var(--lv-bg-surface));
+  --lv-warning-text: #fde68a;
+  --lv-warning-border: #fbbf24;
+}

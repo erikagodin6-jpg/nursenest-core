@@ -1,0 +1,5 @@
+http://127.0.0.1:3000/allied/allied-health => Allied Health | NurseNest
+http://127.0.0.1:3000/us/np/fnp => FNP Exam Prep | AANP Practice Exam & Readiness | NurseNest
+http://127.0.0.1:3000/us/new-grad => New Grad nursing | Clinical work areas | NurseNest
+
+Note: http://127.0.0.1:3000/allied-health (marketing occupation chooser) did not complete within 60s in Playwright during this QA run (timeout); curl to the same URL also hung. Pathway hub /allied/allied-health responded normally.

@@ -1,0 +1,321 @@
+{
+  "version": 1,
+  "packageId": "maternal-newborn-pkg-02",
+  "label": "Menstrual Cycle & Conception — Lesson Outlines",
+  "generatedDate": "2026-06-02",
+  "targetExams": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","PNP-PC","FNP"],
+  "domain": "Maternal Newborn",
+  "subdomain": "Menstrual Cycle & Conception",
+  "lessons": [
+    {
+      "lessonId": "mn-pkg02-L01",
+      "topicSlug": "menstrual-cycle-overview",
+      "title": "Menstrual Cycle: Overview, Phases & Hormonal Regulation",
+      "learningObjectives": [
+        "Describe the phases of the normal menstrual cycle and their duration",
+        "Explain the hormonal interactions between the hypothalamus, pituitary, and ovaries",
+        "Calculate cycle phase based on a given calendar day",
+        "Identify normal variations in cycle length and patterns",
+        "Recognize abnormal menstrual patterns requiring evaluation"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **menstrual cycle** is a recurring series of physiological changes occurring in the female reproductive system, averaging 28 days (normal range: 21–35 days). It is regulated by the hypothalamic-pituitary-ovarian (HPO) axis and has two simultaneously occurring cycles: the ovarian cycle (follicular → ovulation → luteal) and the uterine cycle (menstrual → proliferative → secretory). Understanding the menstrual cycle is foundational to antepartum assessment, fertility counseling, and reproductive health nursing across all practice settings."
+        },
+        {
+          "id": "hpo_axis",
+          "heading": "HPO Axis: Hormonal Regulation",
+          "kind": "pathophysiology_overview",
+          "body": "**Hypothalamic-Pituitary-Ovarian (HPO) Axis:**\n\n**Hypothalamus → GnRH (gonadotropin-releasing hormone):**\n- Pulsatile GnRH release from arcuate nucleus\n- Stimulates anterior pituitary to release FSH and LH\n- Pulse frequency and amplitude vary across the cycle\n\n**Anterior pituitary → FSH and LH:**\n- **FSH (follicle-stimulating hormone):** stimulates follicular growth, estrogen production by granulosa cells, inhibin B secretion\n- **LH (luteinizing hormone):** triggers ovulation (LH surge), stimulates androgen production by theca cells (converted to estrogen by aromatase in granulosa), maintains corpus luteum\n\n**Ovarian hormones (feedback loop):**\n- **Early follicular:** Low estrogen → low negative feedback → FSH/LH rise\n- **Late follicular:** High estradiol (from dominant follicle) → initially negative feedback → then POSITIVE feedback at sustained high levels → LH surge (ovulation trigger)\n- **Luteal:** Progesterone + estrogen → strong negative feedback → FSH/LH suppressed → corpus luteum maintainence then decline\n\n**Key principle:** Estrogen at LOW levels = negative feedback (suppresses FSH/LH). Estrogen at HIGH sustained levels = POSITIVE feedback (triggers LH surge). This is why OCP estrogen suppresses ovulation."
+        },
+        {
+          "id": "ovarian_cycle",
+          "heading": "Ovarian Cycle Phases",
+          "kind": "pathophysiology_overview",
+          "body": "**Phase 1: Follicular Phase (Days 1–13)**\n- Begins day 1 of menstruation\n- Rising FSH → cohort of antral follicles recruited\n- One dominant follicle selected (most FSH-sensitive)\n- Dominant follicle produces increasing estradiol → endometrial proliferation\n- End of follicular phase: dominant follicle (Graafian) reaches 18–22 mm → estradiol spike → LH surge triggered\n\n**Phase 2: Ovulation (Day 14 in 28-day cycle)**\n- LH surge (begins ~36 hours before ovulation) → follicle rupture\n- Oocyte + cumulus cells released into pelvic cavity → captured by fimbriae\n- Spinnbarkeit (cervical mucus stretchability) maximal at ovulation: 6–10 cm\n- Cervical os is maximally open and mucus is thin and watery (facilitates sperm entry)\n- Basal body temperature (BBT) drops slightly before ovulation, then RISES 0.2–0.5°C after ovulation\n\n**Phase 3: Luteal Phase (Days 15–28)**\n- Ruptured follicle → corpus luteum (yellow body)\n- Corpus luteum secretes: progesterone (dominant) + some estrogen\n- Progesterone: raises BBT, thickens cervical mucus (blocks sperm), induces secretory endometrium, suppresses further FSH/LH\n- If no fertilization: corpus luteum degenerates (day 23–24) → progesterone/estrogen drop → menstruation\n- If fertilization: trophoblastic hCG rescues corpus luteum until placental shift"
+        },
+        {
+          "id": "uterine_cycle",
+          "heading": "Uterine Cycle Phases",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Phase 1: Menstrual Phase (Days 1–5)**\n- Endometrial functional layer sloughs from progesterone/estrogen withdrawal\n- Normal menstrual parameters:\n  - Duration: 3–7 days\n  - Volume: 30–80 mL per cycle\n  - Color: dark red, may contain small clots\n- Prostaglandins (PGF2α) from endometrium cause uterine cramping (primary dysmenorrhea)\n\n**Phase 2: Proliferative Phase (Days 6–14)**\n- Estrogen from developing follicle drives endometrial regrowth from basal layer\n- Endometrium thickens: 1–2 mm (post-menstrual) → 6–10 mm (pre-ovulatory)\n- Glands elongate; stroma is compact; vascularity increases\n- Concurrent with follicular phase of ovarian cycle\n\n**Phase 3: Secretory Phase (Days 15–28)**\n- Progesterone from corpus luteum: endometrium becomes secretory\n- Glands coiled/corkscrew, lumen filled with glycogen-rich secretions\n- Stroma edematous (soft); thickness 10–14 mm\n- **Implantation window: approximately days 20–24** — maximal receptivity\n- If no implantation: endometrium breaks down → menstruation begins day 1 of next cycle"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Normal cycle length:** 21–35 days. The luteal phase is almost always 14 days (fixed). It's the follicular phase that varies — a woman with a 35-day cycle ovulates on day ~21, not day 14.\n- **BBT charting:** temperature rises 0.2–0.5°C AFTER ovulation (progesterone effect) — confirms ovulation has occurred but cannot predict it. Rise is sustained for >3 days = ovulation likely occurred.\n- **Spinnbarkeit:** cervical mucus stretchability. Maximal (6–10 cm) at ovulation (fertile window). Progesterone post-ovulation makes it thick, cellular, and non-stretchable.\n- **Primary dysmenorrhea:** caused by excess prostaglandins (PGF2α) from anovulatory or ovulatory cycles causing strong myometrial contractions. Treatment: NSAIDs (PG inhibitors), oral contraceptives. No pathological cause.\n- **Amenorrhea definitions:** Primary = no menarche by age 15 or within 5 years of thelarche. Secondary = absence of menses for 3 months (regular cycles) or 6 months (irregular cycles) in a woman who previously had periods."
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Cycle: 21–35 days normal; follicular phase variable; luteal phase always ~14 days\n- HPO axis: GnRH → FSH/LH → estrogen/progesterone → feedback\n- Estrogen low → negative feedback; estrogen high → positive feedback → LH surge → ovulation\n- Ovarian: follicular (days 1–13) → ovulation (day 14) → luteal (days 15–28)\n- Uterine: menstrual → proliferative (estrogen) → secretory (progesterone)\n- Implantation window: days 20–24; BBT rises after ovulation"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg02-L02",
+      "topicSlug": "follicular-phase",
+      "title": "Follicular Phase: Folliculogenesis & Estrogen Effects",
+      "learningObjectives": [
+        "Describe the process of follicular recruitment and dominant follicle selection",
+        "Explain estrogen's systemic effects during the follicular phase",
+        "Identify clinical signs of the follicular phase in fertility assessment",
+        "Recognize conditions that disrupt follicular phase development",
+        "Apply knowledge of follicular phase to fertility counseling"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **follicular phase** begins on day 1 of menstruation and ends with ovulation. It is the most variable portion of the menstrual cycle (12–21 days in a normal cycle). During this phase, FSH recruits and stimulates a cohort of antral follicles, one of which becomes dominant, grows to maturity, and triggers ovulation through maximal estrogen production."
+        },
+        {
+          "id": "folliculogenesis",
+          "heading": "Follicular Development & Selection",
+          "kind": "pathophysiology_overview",
+          "body": "**Intercycle FSH rise:** In the final days of the preceding luteal phase, as corpus luteum degenerates and progesterone/inhibin B fall, FSH rises. This intercycle FSH elevation recruits a cohort of 10–20 antral follicles that grow in parallel.\n\n**Dominant follicle selection:** By day 5–7, one follicle becomes dominant — it is the most FSH-sensitive (most FSH receptor expression). It produces increasing amounts of estradiol and inhibin B, suppressing FSH. Subordinate follicles (less sensitive) cannot sustain growth without higher FSH → undergo atresia.\n\n**Two-cell theory:**\n- LH stimulates theca cells to produce androgens (androstenedione, testosterone)\n- FSH stimulates granulosa cells to convert androgens → estradiol (via aromatase enzyme)\n- This LH/FSH dual stimulation is the basis for gonadotropin stimulation protocols in IVF\n\n**Follicular growth:** Dominant follicle grows 1–2 mm/day during late follicular phase. At 18–22 mm (mature Graafian follicle), produces estradiol peak → positive feedback → LH surge.\n\n**Estrogen effects during follicular phase:**\n- Endometrial proliferation\n- Cervical mucus thinning (sperm-friendly)\n- Vaginal epithelium thickening (cornification)\n- Negative feedback on FSH/LH at low levels → suppresses gonadotropins\n- Positive feedback at sustained high levels → triggers LH surge\n- Stimulates uterine contractility (favorable for sperm transport)"
+        },
+        {
+          "id": "assessment",
+          "heading": "Clinical Assessment",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Fertility monitoring during follicular phase:**\n- **Basal body temperature (BBT):** temperature in the follicular phase is lower (~97.0°F/36.1°C); rises post-ovulation\n- **Cervical mucus:** thin, clear, watery, stretchable (spinnbarkeit >6 cm) at peak fertility (day of ovulation)\n- **LH testing strips:** detect the LH surge 24–36 hours before ovulation — the best timing for timed intercourse or insemination\n- **Transvaginal ultrasound:** follicular tracking (folliculometry) in fertility treatment to monitor follicle size and guide trigger shot timing\n\n**Conditions disrupting follicular phase:**\n- PCOS: multiple follicles grow but none becomes dominant (follicular arrest) → anovulation, amenorrhea, oligo-ovulation\n- Hyperprolactinemia: elevated prolactin suppresses GnRH pulsatility → impaired FSH/LH release\n- Thyroid disease: both hypo- and hyperthyroidism disrupt the HPO axis → menstrual irregularity\n- Hypothalamic amenorrhea: stress, low body weight, excessive exercise → GnRH pulse suppression → FSH/LH deficiency → anovulation"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Follicular phase: day 1–ovulation; most variable in length\n- FSH recruits follicle cohort; dominant follicle selected by day 5–7\n- Two-cell theory: LH → theca (androgens) + FSH → granulosa (aromatase → estradiol)\n- Dominant follicle matures to 18–22 mm → estradiol spike → LH surge → ovulation\n- Estrogen: proliferates endometrium, thins cervical mucus, positively feeds back at high levels\n- LH strips detect surge 24–36h before ovulation — best window for conception timing"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg02-L03",
+      "topicSlug": "ovulation",
+      "title": "Ovulation: Mechanism, Timing & Clinical Significance",
+      "learningObjectives": [
+        "Describe the LH surge and its role in triggering ovulation",
+        "Identify clinical signs and symptoms of ovulation",
+        "Explain the methods used to detect and predict ovulation",
+        "Recognize anovulation and its clinical implications",
+        "Apply ovulation knowledge to family planning counseling"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Ovulation** is the release of a mature oocyte from the dominant Graafian follicle. It occurs approximately 36 hours after the onset of the LH surge (24–36 hours precisely). In a classic 28-day cycle, ovulation occurs on day 14. However, ovulation can occur between days 10–21 in women with cycle lengths of 24–35 days. Ovulation is the critical event that separates the follicular from the luteal phase."
+        },
+        {
+          "id": "mechanism",
+          "heading": "Mechanism of Ovulation",
+          "kind": "pathophysiology_overview",
+          "body": "**LH surge trigger:**\n- Sustained high estradiol (>200 pg/mL for >48–50 hours) from the dominant follicle switches the pituitary response from negative to positive feedback\n- This triggers an acute surge in LH (and secondary FSH surge)\n- LH surge onset → ovulation occurs ~36 hours later\n\n**Follicular rupture process:**\n1. LH activates LH receptors on granulosa and theca cells\n2. Resumes oocyte meiosis (was arrested in prophase I since fetal life)\n3. Activates prostaglandin synthesis → inflammatory-like process in follicle wall\n4. Matrix metalloproteinases digest follicular wall\n5. Follicle stigma (weak point on ovarian surface) ruptures\n6. Oocyte + cumulus oophorus (granulosa cells surrounding oocyte) + follicular fluid released\n7. Fimbriae capture oocyte → enters fallopian tube\n\n**Oocyte status at ovulation:**\n- Secondary oocyte (completed meiosis I, now in metaphase II)\n- Meiosis II will only complete if fertilization occurs\n\n**Signs of ovulation:**\n- Mittelschmerz: mild unilateral pelvic pain lasting minutes to hours (follicular rupture)\n- Slight temperature dip then rise (BBT)\n- LH surge detectable on urine strips\n- Clear, watery, maximally stretchable cervical mucus\n- Slight cervical os opening and softening\n- Blood spotting possible (from follicular rupture into peritoneum)"
+        },
+        {
+          "id": "clinical_content",
+          "heading": "Detecting & Predicting Ovulation",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Methods:**\n1. **Urine LH test strips:** detects LH surge in urine; positive = ovulation expected in 24–36 hours; most practical home-based method\n2. **BBT charting:** temperature shift (0.2–0.5°C rise after ovulation) confirms ovulation occurred; cannot predict it in advance\n3. **Transvaginal ultrasound (folliculometry):** most accurate; documents dominant follicle growth, monitors to 18–22 mm (pre-ovulatory), then confirms post-ovulatory collapse\n4. **Serum progesterone:** mid-luteal (day 21 in 28-day cycle) progesterone >3–5 ng/mL confirms ovulation occurred\n5. **Cervical mucus monitoring (Billings method):** peak mucus day (clearest, most stretchable) correlates with ovulation\n\n**Anovulation:**\n- Failure to ovulate; can be episodic (normal, ~1–2 cycles/year) or chronic\n- Causes: PCOS, hypothalamic dysfunction, hyperprolactinemia, thyroid disease, premature ovarian insufficiency, obesity\n- Signs: irregular cycles, absent or minimal BBT rise, consistently low mid-luteal progesterone\n- Treatment: clomiphene citrate, letrozole (aromatase inhibitor), gonadotropin injections, lifestyle modification (weight loss in PCOS)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- LH surge → ovulation ~36 hours later; oocyte released as secondary oocyte (in metaphase II)\n- Fertilization window: 12–24 hours post-ovulation (egg viability); sperm viable 3–5 days in reproductive tract\n- Mittelschmerz = mid-cycle unilateral pain = ovulation sign\n- LH strip: best predictor (24–36h before). BBT: confirms after. Midluteal P4 >3 ng/mL: confirms occurred\n- Anovulation: PCOS most common cause in reproductive-age women"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg02-L04",
+      "topicSlug": "luteal-phase",
+      "title": "Luteal Phase: Corpus Luteum, Progesterone & Premenstrual Changes",
+      "learningObjectives": [
+        "Describe the formation and function of the corpus luteum",
+        "Explain progesterone's effects on the endometrium and body",
+        "Identify the premenstrual syndrome (PMS/PMDD) and nursing approach",
+        "Recognize luteal phase defect and its impact on fertility",
+        "Explain the hormonal changes preceding menstruation"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **luteal phase** begins at ovulation and lasts approximately 14 days (the most consistent portion of the menstrual cycle). The ruptured follicle undergoes luteinization under LH influence to form the corpus luteum, which becomes the primary source of progesterone during the second half of the cycle. The luteal phase ends either with menstruation (no pregnancy) or corpus luteum rescue by hCG (pregnancy)."
+        },
+        {
+          "id": "corpus_luteum",
+          "heading": "Corpus Luteum Function",
+          "kind": "pathophysiology_overview",
+          "body": "**Corpus luteum formation:**\n- Post-ovulatory follicle undergoes luteinization (LH-driven): granulosa cells → large luteal cells (progesterone producers); theca cells → small luteal cells (androgen + progesterone)\n- Vascularization develops rapidly: corpus luteum becomes highly vascular\n- Produces: progesterone (primary), estradiol (secondary), inhibin A\n\n**Progesterone effects:**\n- Endometrium: secretory transformation (glycogen-rich glands, stromal edema) → implantation-ready\n- Cervical mucus: thick, viscous, cellular (blocks sperm — contraceptive effect)\n- BBT: thermogenic effect → rises 0.2–0.5°C (progesterone acts on hypothalamic thermostat)\n- Myometrium: suppresses uterine contractions (smooth muscle relaxant)\n- Breast: stimulates alveolar development (breast tenderness in luteal phase)\n- CNS: anxiolytic effects; metabolized to allopregnanolone (GABA-A potentiator)\n\n**Corpus luteum lifespan:**\n- Without pregnancy: 14 days → LH withdrawal → luteolysis → corpus albicans\n- With pregnancy: hCG from trophoblast acts as LH analog → corpus luteum rescued → continues progesterone production until 8–10 weeks (luteal-placental shift)"
+        },
+        {
+          "id": "pms_pmdd",
+          "heading": "PMS & PMDD",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Premenstrual syndrome (PMS):**\n- Recurrent luteal phase symptoms that resolve with menses onset\n- Physical: breast tenderness, bloating, headache, fatigue, edema\n- Emotional: irritability, mood swings, anxiety, depression\n- Occurs in 20–40% of reproductive-age women; diagnosis requires impact on functioning\n\n**Premenstrual dysphoric disorder (PMDD):**\n- Severe PMS meeting DSM-5 criteria: ≥5 symptoms (at least 1 mood-related) in final week of luteal phase, resolving in first days of follicular phase; causing significant functional impairment\n- Affects 3–8% of women\n- Pathophysiology: abnormal CNS response to normal hormonal fluctuations (not abnormal hormone levels); allopregnanolone sensitivity\n\n**Nursing management:**\n- SSRIs (sertraline, fluoxetine): first-line for PMDD; can be given continuously or luteal-phase only\n- Oral contraceptives (particularly those with drospirenone — Yaz): FDA-approved for PMDD\n- Lifestyle: aerobic exercise, calcium + vitamin D supplementation, reduced caffeine/sodium/alcohol\n- Symptom diary: document for 2 cycles to confirm luteal timing before diagnosis"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Luteal phase: always ~14 days; corpus luteum produces progesterone → secretory endometrium\n- Progesterone: thick cervical mucus, raised BBT, secretory endometrium, uterine quiescence\n- No pregnancy: corpus luteum degenerates → P4/E2 drop → menstruation\n- Pregnancy: hCG rescues corpus luteum until placental shift at 8–10 weeks\n- PMS: luteal symptoms, resolves with menses. PMDD: severe, DSM-5 criteria → SSRIs first-line\n- Luteal phase defect: corpus luteum produces inadequate progesterone → poor implantation environment → recurrent early pregnancy loss"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg02-L05",
+      "topicSlug": "fertilization",
+      "title": "Fertilization: Mechanism, Timing & Clinical Implications",
+      "learningObjectives": [
+        "Describe the process of sperm capacitation and the acrosome reaction",
+        "Explain the steps of fertilization and polyspermy prevention",
+        "Identify the fertile window and optimal timing for conception",
+        "Recognize clinical implications of fertilization failure",
+        "Apply fertilization knowledge to reproductive health counseling"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Fertilization** is the union of a spermatozoon and a secondary oocyte, typically occurring in the ampulla of the fallopian tube within 12–24 hours of ovulation. Successful fertilization requires viable sperm (which can survive 3–5 days in the female reproductive tract), a viable oocyte (viable 12–24 hours post-ovulation), and an intact pathway from cervix to ampulla."
+        },
+        {
+          "id": "fertilization_steps",
+          "heading": "Steps of Fertilization",
+          "kind": "pathophysiology_overview",
+          "body": "**Step 1: Sperm capacitation**\n- Occurs over 7 hours in the female reproductive tract\n- Cholesterol removed from sperm plasma membrane → increased membrane fluidity\n- Hyperactivated motility (whip-like flagellar movement) allows penetration\n- Enables acrosome reaction\n\n**Step 2: Zona pellucida penetration**\n- Sperm binds ZP3 glycoprotein on zona pellucida\n- Acrosome reaction: release of hydrolytic enzymes (acrosin, hyaluronidase) from sperm head\n- Enzymes digest zona pellucida, allowing sperm to penetrate\n\n**Step 3: Sperm-egg membrane fusion**\n- Sperm head fuses with oocyte plasma membrane\n- Triggers: cortical reaction (granules under oocyte membrane release contents)\n- Zona reaction: cortical granule contents harden the zona pellucida → polyspermy block\n\n**Step 4: Completion of meiosis II**\n- Sperm entry triggers oocyte to complete meiosis II\n- Secondary oocyte → ovum + second polar body\n- Oocyte nucleus becomes female pronucleus; sperm nucleus becomes male pronucleus\n\n**Step 5: Pronuclear fusion (syngamy)**\n- Male + female pronuclei fuse → zygote (46 chromosomes, diploid)\n- Sex determined at fertilization: sperm carrying X → XX (female); Y → XY (male)\n\n**Fertile window:**\n- Oocyte viable: 12–24 hours post-ovulation\n- Sperm viable: 3–5 days in female tract\n- Fertile window: 5 days before ovulation through day of ovulation\n- Highest conception probability: 2 days before ovulation + day of ovulation"
+        },
+        {
+          "id": "clinical_content",
+          "heading": "Clinical Implications",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Conception timing counseling:**\n- Timed intercourse: every 1–2 days during fertile window (days −5 through 0 relative to ovulation)\n- LH surge detection: positive LH strip → intercourse that day and next day\n- Male factor consideration: frequent ejaculation maintains sperm quality; abstinence >5 days reduces motility\n\n**Assisted reproduction:**\n- IUI (intrauterine insemination): sperm deposited directly into uterine cavity at ovulation — bypasses cervical factor\n- IVF (in vitro fertilization): egg retrieved after ovarian stimulation, fertilized in lab, embryo transferred to uterus\n- ICSI (intracytoplasmic sperm injection): single sperm injected into egg — used for severe male factor\n\n**Fertilization failure:**\n- Absent or minimal sperm (azoospermia, severe oligospermia)\n- Sperm that cannot capacitate or undergo acrosome reaction (dysplasia)\n- Zona pellucida defects (egg quality)\n- Tubal factor (fimbriae or ampullary damage prevents egg pickup)\n- Antisperm antibodies (ASA) agglutinating or immobilizing sperm"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Fertilization: in ampulla; occurs within 12–24h of ovulation\n- Fertile window: 5 days before ovulation + day of ovulation; oocyte viable only 12–24h\n- Capacitation → acrosome reaction → ZP penetration → cortical/zona reaction (polyspermy block)\n- Sex determined at fertilization: X sperm → female; Y sperm → male\n- Zygote = 46 chromosomes after pronuclear fusion; meiosis II completes at fertilization"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg02-L06",
+      "topicSlug": "implantation",
+      "title": "Implantation: Process, Timing & Early Pregnancy Establishment",
+      "learningObjectives": [
+        "Describe the stages of pre-implantation embryo development",
+        "Explain the implantation process and endometrial receptivity",
+        "Identify the role of hCG in early pregnancy maintenance",
+        "Recognize conditions that impair implantation",
+        "Apply knowledge to explain early pregnancy testing"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Implantation** is the process by which the blastocyst embeds into the receptive endometrium, occurring approximately 6–10 days after fertilization (days 20–24 of a 28-day cycle — the implantation window). Successful implantation requires a properly developed blastocyst, a receptive endometrium (progesterone-primed), and appropriate molecular dialogue between embryo and endometrium."
+        },
+        {
+          "id": "preimplantation",
+          "heading": "Pre-Implantation Embryo Development",
+          "kind": "pathophysiology_overview",
+          "body": "**Embryo development timeline:**\n- Day 0: Fertilization → zygote (46 chromosomes)\n- Days 1–3: Cleavage divisions → 2-cell → 4-cell → 8-cell (morula stage begins at 16 cells)\n- Day 3–4: Compaction → morula (solid ball of cells) → begins tubal transport to uterus\n- Day 4–5: Blastocyst formation: fluid-filled cavity (blastocoel) develops\n  - **Inner cell mass (ICM/embryoblast):** will form embryo + yolk sac + amnion\n  - **Trophoblast (outer layer):** will form placenta + chorion\n- Day 5: Zona hatching → blastocyst escapes zona pellucida (required for implantation)\n- Day 6–10: Implantation\n\n**Implantation process:**\n1. **Apposition:** blastocyst loosely attaches to endometrial surface (most commonly fundal or posterior wall)\n2. **Adhesion:** tighter attachment via adhesion molecules (integrins, selectins)\n3. **Invasion:** trophoblast cells invade decidua basalis and maternal spiral arteries\n   - **Cytotrophoblast:** inner trophoblast layer; invades maternal tissue\n   - **Syncytiotrophoblast:** outer, multinucleated; produces hCG; invades spiral arteries (establishes uteroplacental circulation)\n\n**hCG production:**\n- Begins with syncytiotrophoblast formation at implantation\n- Detectable in blood 8–10 days post-fertilization; urine 10–14 days post-fertilization\n- Doubles every 48–72 hours in early viable pregnancy\n- Peak ~10,000–100,000 mIU/mL at 8–10 weeks → then declines\n- Function: rescue corpus luteum, suppress maternal immune response, stimulate fetal testosterone (males)"
+        },
+        {
+          "id": "clinical_content",
+          "heading": "Clinical Nursing Applications",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Implantation bleeding:**\n- Light spotting or pink/brown discharge at time of implantation (~day 20–24)\n- Normal finding, self-limited; distinguishable from menstruation by: lighter flow, shorter duration, earlier timing\n- Differentiate from threatened abortion (which occurs after positive pregnancy test with cramping + bleeding)\n\n**Pregnancy testing:**\n- **Urine hCG (home test):** detects as low as 20–25 mIU/mL; positive 10–14 days post-fertilization\n- **Serum β-hCG (quantitative):** detects as low as 5 mIU/mL; most sensitive\n- False negatives: testing too early, dilute urine\n- False positives: ectopic hCG sources (pituitary hCG in menopause), molar pregnancy, some cancers (germ cell tumors, choriocarcinoma)\n\n**Conditions impairing implantation:**\n- Asherman syndrome (intrauterine adhesions)\n- Thin endometrium (<7 mm on ultrasound)\n- Endometrial polyps or fibroids (distorting cavity)\n- Hydrosalpinx (toxic fluid from hydrosalpinx refluxing into uterine cavity)\n- Progesterone deficiency (luteal phase defect)\n- Chromosomal abnormalities in embryo (most common cause of failed implantation/early loss)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Implantation: 6–10 days post-fertilization (days 20–24 of cycle)\n- Blastocyst: ICM (embryo) + trophoblast (placenta); zona hatching required before implantation\n- Syncytiotrophoblast produces hCG → detectable 8–10 days post-fertilization\n- hCG doubles every 48–72h; peaks at 8–10 weeks; rescues corpus luteum\n- False positive hCG: molar pregnancy, germ cell tumors, menopausal pituitary hCG\n- Implantation failure: Asherman's, thin endometrium, polyps, hydrosalpinx, embryonic chromosomal abnormality"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg02-L07",
+      "topicSlug": "early-embryonic-development",
+      "title": "Early Embryonic Development: Germ Layers & Organogenesis",
+      "learningObjectives": [
+        "Describe the formation of the three germ layers and their derivatives",
+        "Explain the critical periods of embryonic development vulnerable to teratogens",
+        "Identify key embryonic structures and their developmental timeline",
+        "Recognize teratogenic exposures and their timing significance",
+        "Apply embryologic knowledge to antepartum counseling"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "After implantation, the embryo undergoes rapid differentiation. The **embryonic period** spans weeks 3–8 post-fertilization (weeks 5–10 gestational age, since GA is counted from LMP). This period is the most critical for organogenesis — when major organ systems form and are most vulnerable to teratogens. The **fetal period** begins at week 9 (post-fertilization) and is characterized by growth and maturation rather than new organ formation."
+        },
+        {
+          "id": "germ_layers",
+          "heading": "Germ Layer Formation & Derivatives",
+          "kind": "pathophysiology_overview",
+          "body": "**Gastrulation (week 3 post-fertilization):** The bilaminar embryonic disc (epiblast + hypoblast) undergoes gastrulation to form the three primary germ layers:\n\n1. **Ectoderm (outer layer):**\n   - Central nervous system (brain, spinal cord — from neuroectoderm)\n   - Peripheral nervous system, neural crest cells (teeth, melanocytes, facial bones)\n   - Epidermis, hair, nails, sweat glands\n   - Lens of eye, cornea, retina\n   - Pituitary gland (anterior from oral ectoderm), mammary glands\n\n2. **Mesoderm (middle layer):**\n   - Heart and cardiovascular system\n   - Skeletal and smooth muscle\n   - Bones, cartilage\n   - Kidneys, gonads, adrenal cortex\n   - Blood cells (from hematopoietic mesoderm)\n   - Connective tissue, dermis\n\n3. **Endoderm (inner layer):**\n   - GI tract lining, liver, pancreas\n   - Respiratory tract lining (lungs, trachea)\n   - Bladder and urethra lining\n   - Thyroid, parathyroid\n   - Thymus\n\n**Critical developmental events:**\n- **Week 3:** Neural tube formation begins (neuroectoderm folds → neural tube); folic acid critical at this point to prevent NTDs (neural tube defects)\n- **Week 4:** Heart begins beating; limb buds appear\n- **Week 6:** Facial features (eyes, ears, nose) begin developing\n- **Week 8:** All major organ systems established; embryo recognizably human"
+        },
+        {
+          "id": "teratogens",
+          "heading": "Teratogens & Critical Periods",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Teratogen:** Any agent that causes structural or functional abnormality in an embryo. Effect depends on: dose, duration, timing (gestational age at exposure), and genetic susceptibility.\n\n**Critical periods by organ:**\n- Heart: weeks 3–7 (most sensitive: weeks 3–5)\n- Brain/neural tube: weeks 3–4 (neural tube closes by day 28)\n- Limbs: weeks 4–7\n- Eyes: weeks 4–8\n- Genitalia: weeks 7–12 (sexual differentiation)\n\n**Common teratogens:**\n- **Alcohol (FASD):** no safe amount in pregnancy; causes microcephaly, facial abnormalities, intellectual disability; teratogenic throughout pregnancy (CNS damage continues in fetal period)\n- **Folic acid deficiency:** NTDs (spina bifida, anencephaly) from failure of neural tube closure at day 28 — supplementation must begin BEFORE conception\n- **Isotretinoin (Accutane):** severe craniofacial, cardiac, CNS teratogen; requires iPLEDGE program (2 contraceptive methods + monthly pregnancy tests)\n- **Thalidomide:** limb reduction defects (phocomelia) from exposure in weeks 4–8\n- **Warfarin:** fetal warfarin syndrome (nasal hypoplasia, stippled epiphyses, CNS abnormalities) from 1st trimester exposure; use heparin instead in pregnancy\n- **ACE inhibitors/ARBs:** renal agenesis, oligohydramnios, skull ossification defects (avoid in 2nd/3rd trimesters)\n- **Rubella:** cataracts, cardiac defects, deafness (if infection occurs in 1st trimester)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Embryonic period: weeks 3–8 post-fertilization (most vulnerable to teratogens)\n- Three germ layers: ectoderm (skin, CNS), mesoderm (muscle, heart, kidney), endoderm (GI, lungs, thyroid)\n- Neural tube closes by day 28 → folic acid supplementation must begin before pregnancy\n- No safe alcohol level in pregnancy. Isotretinoin = absolutely contraindicated.\n- Warfarin → switch to heparin in pregnancy; ACE inhibitors/ARBs → avoid (renal teratogen)\n- Timing matters: same teratogen at different gestational weeks can cause different defects"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg02-L08",
+      "topicSlug": "hormonal-regulation-reproduction",
+      "title": "Hormonal Regulation of Reproduction: HPO Axis & Contraception",
+      "learningObjectives": [
+        "Explain the hypothalamic-pituitary-ovarian axis in detail",
+        "Describe the mechanisms of action of hormonal contraceptives",
+        "Identify how endocrine disorders disrupt the HPO axis",
+        "Apply HPO knowledge to counseling on hormonal contraception",
+        "Recognize contraindications to estrogen-containing contraceptives"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **hypothalamic-pituitary-ovarian (HPO) axis** is the neuroendocrine control system for female reproduction. Understanding this axis is essential for explaining how hormonal contraceptives work, why endocrine disorders cause menstrual irregularities, and how to counsel patients on fertility and contraception."
+        },
+        {
+          "id": "hpo_detail",
+          "heading": "HPO Axis & Hormonal Contraception",
+          "kind": "pathophysiology_overview",
+          "body": "**GnRH pulse physiology:**\n- Pulsatile GnRH (1 pulse/60–90 min in follicular; slower in luteal)\n- Continuous GnRH → desensitizes GnRH receptors → suppresses FSH/LH → used therapeutically (GnRH agonists: leuprolide/Lupron → initial flare then profound suppression — used for endometriosis, uterine fibroids, prostate cancer)\n- GnRH antagonists (ganirelix, cetrorelix): immediate competitive inhibition without flare\n\n**Combined hormonal contraceptives (pill, patch, ring):**\n- Estrogen: suppresses FSH → prevents follicular recruitment/dominant follicle development\n- Progestin: suppresses LH surge → prevents ovulation; thickens cervical mucus; inhibits endometrial development (unfavorable for implantation)\n- Failure rate: 0.3% perfect use, 9% typical use\n\n**Progestin-only methods:**\n- Mini-pill, Depo-Provera, Mirena IUD, implant (nexplanon)\n- Mechanism: primarily cervical mucus thickening; some ovulation suppression\n- Used when estrogen is contraindicated\n\n**Contraindications to estrogen-containing contraceptives (WHO MEC Category 4):**\n- Active VTE or history of DVT/PE\n- Migraine with aura (stroke risk)\n- Breastfeeding <6 weeks postpartum\n- Age ≥35 + smoking ≥15 cigarettes/day\n- Uncontrolled hypertension\n- Ischemic heart disease, history of stroke\n- Systemic lupus erythematosus with antiphospholipid antibodies\n- Liver disease (hepatocellular adenoma, cirrhosis)\n\n**Emergency contraception:**\n- Plan B (levonorgestrel): within 72 hours (effective up to 120h); primarily delays/prevents ovulation\n- ella (ulipristal acetate): within 120 hours; more effective than Plan B\n- Copper IUD: most effective (>99%); within 5 days; prevents fertilization and implantation"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- HPO axis: GnRH (pulsatile) → FSH/LH → estrogen/progesterone → feedback\n- COCs: estrogen suppresses FSH + progestin suppresses LH surge + thickens cervical mucus\n- Estrogen contraindications: VTE history, migraine with aura, breastfeeding <6 weeks, smoking ≥35 years old, uncontrolled HTN\n- GnRH agonists: initial flare then profound suppression (used for endometriosis, fibroids)\n- Emergency contraception: Plan B ≤72h, ella ≤120h, copper IUD ≤5 days (most effective)"
+        }
+      ]
+    }
+  ]
+}

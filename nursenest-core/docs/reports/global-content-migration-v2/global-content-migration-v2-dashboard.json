@@ -1,0 +1,219 @@
+{
+  "generatedAt": "2026-05-31T21:44:18.592Z",
+  "dashboard": {
+    "generatedAt": "2026-05-31T21:44:18.591Z",
+    "canonicalArchitecture": [
+      "Global Core",
+      "Role Supplement",
+      "Country Supplement",
+      "Exam Supplement",
+      "Language Supplement"
+    ],
+    "duplicationThresholdPercent": 80,
+    "totalAudited": 10,
+    "inheritanceRequired": 6,
+    "supplementOnlyMigrations": 0,
+    "blockedMigrations": 4,
+    "separateAssetReviewRequired": 0,
+    "globalCoreTopics": [
+      "Heart Failure",
+      "COPD",
+      "Sepsis",
+      "Shock",
+      "ECG",
+      "ABGs",
+      "Labs",
+      "Pharmacology",
+      "Clinical Assessment"
+    ],
+    "auditRows": [
+      {
+        "contentId": "recovered-global-heart-failure-core",
+        "topic": "Heart Failure",
+        "assetKind": "blog",
+        "inheritedFrom": "recovered_asset",
+        "targetRole": "RN",
+        "targetCountry": null,
+        "targetExam": null,
+        "targetLanguage": null,
+        "sharedContentPercent": 92,
+        "decision": {
+          "status": "INHERITANCE_REQUIRED",
+          "reason": "shared_content_exceeds_threshold",
+          "requiredLayers": [],
+          "duplicationAllowed": false
+        }
+      },
+      {
+        "contentId": "recovered-global-copd-core",
+        "topic": "COPD",
+        "assetKind": "blog",
+        "inheritedFrom": "recovered_asset",
+        "targetRole": "RN",
+        "targetCountry": null,
+        "targetExam": null,
+        "targetLanguage": null,
+        "sharedContentPercent": 92,
+        "decision": {
+          "status": "INHERITANCE_REQUIRED",
+          "reason": "shared_content_exceeds_threshold",
+          "requiredLayers": [],
+          "duplicationAllowed": false
+        }
+      },
+      {
+        "contentId": "recovered-global-sepsis-core",
+        "topic": "Sepsis",
+        "assetKind": "clinical_case",
+        "inheritedFrom": "recovered_asset",
+        "targetRole": "RN",
+        "targetCountry": null,
+        "targetExam": null,
+        "targetLanguage": null,
+        "sharedContentPercent": 92,
+        "decision": {
+          "status": "INHERITANCE_REQUIRED",
+          "reason": "shared_content_exceeds_threshold",
+          "requiredLayers": [],
+          "duplicationAllowed": false
+        }
+      },
+      {
+        "contentId": "recovered-uk-nmc-news2-overlay",
+        "topic": "NEWS2 and Deterioration",
+        "assetKind": "blog",
+        "inheritedFrom": "recovered_asset",
+        "targetRole": "RN",
+        "targetCountry": "United Kingdom",
+        "targetExam": "NMC CBT",
+        "targetLanguage": "en",
+        "sharedContentPercent": 84,
+        "decision": {
+          "status": "INHERITANCE_REQUIRED",
+          "reason": "shared_content_exceeds_threshold",
+          "requiredLayers": [
+            "Language Supplement"
+          ],
+          "duplicationAllowed": false
+        }
+      },
+      {
+        "contentId": "recovered-au-rural-cultural-safety-overlay",
+        "topic": "Rural Healthcare and Cultural Safety",
+        "assetKind": "blog",
+        "inheritedFrom": "recovered_asset",
+        "targetRole": "RN",
+        "targetCountry": "Australia",
+        "targetExam": "NMBA RN / IQNM",
+        "targetLanguage": "en",
+        "sharedContentPercent": 84,
+        "decision": {
+          "status": "INHERITANCE_REQUIRED",
+          "reason": "shared_content_exceeds_threshold",
+          "requiredLayers": [
+            "Language Supplement"
+          ],
+          "duplicationAllowed": false
+        }
+      },
+      {
+        "contentId": "recovered-nz-te-tiriti-overlay",
+        "topic": "Te Tiriti and Cultural Safety",
+        "assetKind": "blog",
+        "inheritedFrom": "recovered_asset",
+        "targetRole": "RN",
+        "targetCountry": "New Zealand",
+        "targetExam": "NCNZ RN",
+        "targetLanguage": "en",
+        "sharedContentPercent": 84,
+        "decision": {
+          "status": "INHERITANCE_REQUIRED",
+          "reason": "shared_content_exceeds_threshold",
+          "requiredLayers": [
+            "Language Supplement"
+          ],
+          "duplicationAllowed": false
+        }
+      },
+      {
+        "contentId": "recovered-us-nclex-ngn-overlay",
+        "topic": "NGN Clinical Judgment",
+        "assetKind": "question",
+        "inheritedFrom": "recovered_asset",
+        "targetRole": "RN",
+        "targetCountry": "United States",
+        "targetExam": "NCLEX-RN",
+        "targetLanguage": "en",
+        "sharedContentPercent": 84,
+        "decision": {
+          "status": "MIGRATION_BLOCKED",
+          "reason": "country_supplement_missing",
+          "requiredLayers": [
+            "Country Supplement",
+            "Language Supplement"
+          ],
+          "duplicationAllowed": false
+        }
+      },
+      {
+        "contentId": "recovered-heart-failure-np-role-overlay",
+        "topic": "Heart Failure",
+        "assetKind": "lesson",
+        "inheritedFrom": "recovered_asset",
+        "targetRole": "NP",
+        "targetCountry": null,
+        "targetExam": "FNP",
+        "targetLanguage": "en",
+        "sharedContentPercent": 92,
+        "decision": {
+          "status": "MIGRATION_BLOCKED",
+          "reason": "exam_supplement_missing",
+          "requiredLayers": [
+            "Exam Supplement",
+            "Language Supplement"
+          ],
+          "duplicationAllowed": false
+        }
+      },
+      {
+        "contentId": "recovered-fr-international-overlay",
+        "topic": "French International Nursing Overlay",
+        "assetKind": "blog",
+        "inheritedFrom": "recovered_asset",
+        "targetRole": "RN",
+        "targetCountry": null,
+        "targetExam": null,
+        "targetLanguage": "fr",
+        "sharedContentPercent": 72,
+        "decision": {
+          "status": "MIGRATION_BLOCKED",
+          "reason": "role_supplement_missing",
+          "requiredLayers": [
+            "Role Supplement"
+          ],
+          "duplicationAllowed": false
+        }
+      },
+      {
+        "contentId": "recovered-es-international-overlay",
+        "topic": "Spanish International Nursing Overlay",
+        "assetKind": "blog",
+        "inheritedFrom": "recovered_asset",
+        "targetRole": "RN",
+        "targetCountry": null,
+        "targetExam": null,
+        "targetLanguage": "es",
+        "sharedContentPercent": 72,
+        "decision": {
+          "status": "MIGRATION_BLOCKED",
+          "reason": "role_supplement_missing",
+          "requiredLayers": [
+            "Role Supplement"
+          ],
+          "duplicationAllowed": false
+        }
+      }
+    ],
+    "governanceRule": "no_new_international_pathway_until_core_role_country_exam_migration_analysis_complete"
+  }
+}

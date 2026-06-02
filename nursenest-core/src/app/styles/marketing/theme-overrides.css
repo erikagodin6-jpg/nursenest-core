@@ -1,0 +1,834 @@
+/* ==========================================================================
+   theme-overrides.css — NurseNest Premium Marketing Design System
+   
+   Ownership: Aurora/Blossom/Midnight/Ocean body and header theme colour overrides
+   
+   Source: extracted from src/app/premium-redesign-2026.css (lines 1213–1636)
+   Import order: preserved — do not reorder imports in styles/marketing/index.css
+   Cascade: rules depend on cascade order across all section files; changes
+            to this file may affect other sections if shared selectors are involved.
+   
+   DO NOT add new rules here that belong to a different section file.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------
+   Phase 5 — Premium homepage body below the hero.
+   Small TSX sections share this token bridge so Aurora, Ocean, Forest,
+   Midnight, and Apex inherit the active theme without one-off palettes.
+   --------------------------------------------------------------------- */
+
+/* Homepage body sections — slightly tighter vertical rhythm (scoped). */
+.nn-home-marketing-root .nn-premium-home-section {
+  padding-block: clamp(
+    2.35rem,
+    4.6vw,
+    calc(var(--nn-rhythm-section-y, 4rem) * 0.9)
+  );
+}
+
+@supports (content-visibility: auto) {
+  .nn-home-marketing-root .nn-premium-home-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto clamp(34rem, 82vw, 54rem);
+  }
+}
+
+@media (max-width: 768px) {
+  @supports (content-visibility: auto) {
+    .nn-home-marketing-root .nn-premium-home-section {
+      contain-intrinsic-size: auto 44rem;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .nn-home-marketing-root .nn-premium-home-section {
+    padding-block: clamp(
+      2rem,
+      5.2vw,
+      calc(var(--nn-rhythm-mobile-section-y, 2.75rem) * 0.95)
+    );
+  }
+}
+
+.nn-home-marketing-root {
+  --nn-premium-tone-brand: var(--semantic-brand, var(--theme-primary, #2563eb));
+  --nn-premium-tone-info: var(--semantic-info, #0284c7);
+  --nn-premium-tone-success: var(--semantic-success, #16a34a);
+  --nn-premium-tone-warning: var(--semantic-warning, #d97706);
+  --nn-premium-tone-accent: var(
+    --semantic-chart-5,
+    var(--theme-accent, #ec4899)
+  );
+  --nn-premium-tone-danger: var(--semantic-danger, #e11d48);
+  --nn-premium-meter-brand: linear-gradient(
+    90deg,
+    var(--semantic-brand, #2563eb),
+    var(--semantic-chart-3, #76b6c4)
+  );
+  --nn-premium-meter-info: linear-gradient(
+    90deg,
+    var(--semantic-info, #0284c7),
+    var(--semantic-brand, #2563eb)
+  );
+  --nn-premium-meter-success: linear-gradient(
+    90deg,
+    var(--semantic-success, #16a34a),
+    var(--semantic-info, #0284c7)
+  );
+  --nn-premium-meter-warning: linear-gradient(
+    90deg,
+    var(--semantic-warning, #d97706),
+    var(--semantic-chart-5, #ec4899)
+  );
+  --nn-premium-meter-danger: linear-gradient(
+    90deg,
+    var(--semantic-danger, #e11d48),
+    var(--semantic-chart-5, #ec4899)
+  );
+}
+
+/* ---------------------------------------------------------------------
+   Aurora / Blossom — full-page clinical canvas + folded sections.
+   Blossom resolves to white-first Cherry Blossom accents.
+   --------------------------------------------------------------------- */
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-home-marketing-root {
+  background-color: var(--theme-page-bg);
+  background-image:
+    radial-gradient(
+      ellipse 130% 92% at -8% -18%,
+      color-mix(in srgb, var(--semantic-chart-5) 19%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 118% 82% at 108% 2%,
+      color-mix(in srgb, var(--semantic-brand) 16%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 105% 76% at 48% 112%,
+      color-mix(in srgb, var(--semantic-chart-2) 15%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 95% 68% at 90% 96%,
+      color-mix(in srgb, var(--semantic-info) 13%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(
+      192deg,
+      color-mix(in srgb, var(--semantic-chart-5) 8%, var(--theme-page-bg)) 0%,
+      var(--theme-page-bg) 38%,
+      color-mix(in srgb, var(--semantic-brand) 7%, var(--theme-page-bg)) 62%,
+      color-mix(in srgb, var(--semantic-chart-2) 6%, var(--theme-page-bg)) 100%
+    );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-home-marketing-rich-hero {
+  --hero-accent-start: #b82762;
+  --hero-accent-middle: #7f55c7;
+  --hero-accent-end: #08725f;
+  --hero-accent-solid-fallback: #8f1f4f;
+  --hero-headline-gradient: linear-gradient(
+    94deg,
+    var(--hero-accent-start) 0%,
+    var(--hero-accent-middle) 46%,
+    var(--hero-accent-end) 100%
+  );
+  --hero-ambient-radial:
+    radial-gradient(
+      120% 90% at 8% 26%,
+      color-mix(in srgb, var(--semantic-chart-5) 20%, transparent) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      102% 76% at 100% 12%,
+      color-mix(in srgb, var(--semantic-brand) 16%, transparent) 0%,
+      transparent 56%
+    ),
+    radial-gradient(
+      92% 70% at 40% 100%,
+      color-mix(in srgb, var(--semantic-chart-2) 14%, transparent) 0%,
+      transparent 60%
+    );
+  background:
+    radial-gradient(
+      820px 440px at 6% 4%,
+      color-mix(in srgb, var(--semantic-chart-5) 26%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      780px 420px at 94% 8%,
+      color-mix(in srgb, var(--semantic-brand) 20%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      740px 400px at 52% 108%,
+      color-mix(in srgb, var(--semantic-chart-2) 19%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      700px 360px at 0% 72%,
+      color-mix(in srgb, var(--semantic-info) 16%, transparent),
+      transparent 56%
+    ),
+    var(--page-bg, var(--theme-page-bg));
+}
+
+html[data-theme="aurora"] .nn-home-marketing-rich-hero {
+  --hero-accent-start: #8b5cf6;
+  --hero-accent-middle: #67e8f9;
+  --hero-accent-end: #24b889;
+  --hero-accent-solid-fallback: #7c3aed;
+  --hero-headline-gradient: linear-gradient(
+    94deg,
+    var(--hero-accent-start) 0%,
+    var(--hero-accent-middle) 48%,
+    var(--hero-accent-end) 100%
+  );
+  --hero-ambient-radial:
+    radial-gradient(
+      120% 90% at 8% 26%,
+      color-mix(in srgb, #8b5cf6 17%, transparent) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      102% 76% at 100% 12%,
+      color-mix(in srgb, #6ee7b7 15%, transparent) 0%,
+      transparent 56%
+    ),
+    radial-gradient(
+      92% 70% at 40% 100%,
+      color-mix(in srgb, #f9a8d4 10%, transparent) 0%,
+      transparent 60%
+    );
+  background:
+    radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, #8b5cf6 18%, transparent), transparent 58%),
+    radial-gradient(780px 420px at 94% 8%, color-mix(in srgb, #6ee7b7 14%, transparent), transparent 56%),
+    radial-gradient(740px 400px at 52% 108%, color-mix(in srgb, #67e8f9 13%, transparent), transparent 56%),
+    radial-gradient(700px 360px at 0% 72%, color-mix(in srgb, #f9a8d4 9%, transparent), transparent 56%),
+    var(--page-bg, var(--theme-page-bg));
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-home-marketing-rich-hero.nn-hero-bridge {
+  background-color: transparent;
+  background-image:
+    radial-gradient(
+      ellipse 130% 90% at 12% -28%,
+      color-mix(in srgb, var(--semantic-chart-5) 17%, transparent),
+      transparent 54%
+    ),
+    radial-gradient(
+      ellipse 108% 80% at 98% -5%,
+      color-mix(in srgb, var(--semantic-brand) 15%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 102% 74% at 48% 118%,
+      color-mix(in srgb, var(--semantic-chart-2) 14%, transparent),
+      transparent 56%
+    ),
+    linear-gradient(
+      176deg,
+      color-mix(in srgb, var(--semantic-chart-5) 9%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-brand) 8%, var(--theme-page-bg)) 44%,
+      color-mix(in srgb, var(--semantic-info) 7%, var(--theme-page-bg)) 100%
+    );
+  background-repeat: no-repeat;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-premium-home-section {
+  background: transparent;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-premium-home-section::before {
+  background:
+    radial-gradient(
+      760px 400px at 0% 0%,
+      color-mix(in srgb, var(--semantic-chart-5) 14%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      740px 380px at 100% 18%,
+      color-mix(in srgb, var(--semantic-brand) 11%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      720px 360px at 100% 22%,
+      color-mix(in srgb, var(--semantic-info) 12%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      700px 340px at 50% 100%,
+      color-mix(in srgb, var(--semantic-chart-2) 11%, transparent),
+      transparent 60%
+    );
+}
+
+html[data-theme="blossom"] .nn-home-marketing-root {
+  background-image:
+    radial-gradient(
+      ellipse 128% 88% at -8% -18%,
+      color-mix(in srgb, #9ec5fe 16%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 118% 82% at 108% 2%,
+      color-mix(in srgb, #a7f3d0 12%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 105% 76% at 48% 112%,
+      color-mix(in srgb, #f8c8dc 7%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 95% 68% at 90% 96%,
+      color-mix(in srgb, #fde68a 6%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(180deg, #f8fafc 0%, #ffffff 42%, color-mix(in srgb, #9ec5fe 7%, #ffffff) 100%);
+}
+
+html[data-theme="mint-blossom"] .nn-home-marketing-root {
+  background-image:
+    radial-gradient(
+      ellipse 128% 88% at -8% -18%,
+      color-mix(in srgb, #9ec5fe 14%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 118% 82% at 108% 2%,
+      color-mix(in srgb, #a7f3d0 14%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 105% 76% at 48% 112%,
+      color-mix(in srgb, #f8c8dc 6%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 95% 68% at 90% 96%,
+      color-mix(in srgb, #fde68a 5%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(180deg, #f8fafc 0%, #ffffff 44%, color-mix(in srgb, #a7f3d0 7%, #ffffff) 100%);
+}
+
+html[data-theme="blossom"] .nn-home-marketing-rich-hero {
+  --blossom-hero-accent-sky: #1d7ed8;
+  --blossom-hero-accent-aqua: #24b98d;
+  --blossom-hero-accent-soft-sky: #67aae9;
+  --hero-accent-start: var(--blossom-hero-accent-sky);
+  --hero-accent-middle: var(--blossom-hero-accent-soft-sky);
+  --hero-accent-end: var(--blossom-hero-accent-aqua);
+  --hero-accent-solid-fallback: var(--blossom-hero-accent-sky);
+  --hero-headline-gradient: linear-gradient(
+    92deg,
+    var(--hero-accent-start) 0%,
+    var(--hero-accent-middle) 48%,
+    var(--hero-accent-end) 100%
+  );
+  --hero-ambient-radial:
+    radial-gradient(
+      122% 90% at 8% 26%,
+      color-mix(in srgb, var(--semantic-chart-1) 24%, transparent) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      102% 76% at 100% 14%,
+      color-mix(in srgb, var(--semantic-chart-3) 20%, transparent) 0%,
+      transparent 56%
+    ),
+    radial-gradient(
+      92% 70% at 38% 100%,
+      color-mix(in srgb, var(--semantic-chart-2) 18%, transparent) 0%,
+      transparent 60%
+    );
+  background:
+    radial-gradient(
+      820px 440px at 6% 4%,
+      color-mix(in srgb, var(--semantic-chart-1) 24%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      780px 420px at 94% 8%,
+      color-mix(in srgb, var(--semantic-chart-3) 22%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      740px 400px at 52% 108%,
+      color-mix(in srgb, var(--semantic-chart-2) 20%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      700px 360px at 0% 72%,
+      color-mix(in srgb, var(--semantic-chart-4) 16%, transparent),
+      transparent 56%
+    ),
+    var(--page-bg, var(--theme-page-bg));
+}
+
+html[data-theme="blossom"] .nn-home-marketing-rich-hero.nn-hero-bridge {
+  background-image:
+    radial-gradient(
+      ellipse 130% 90% at 12% -28%,
+      color-mix(in srgb, var(--semantic-chart-1) 18%, transparent),
+      transparent 54%
+    ),
+    radial-gradient(
+      ellipse 108% 80% at 98% -5%,
+      color-mix(in srgb, var(--semantic-chart-3) 16%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 102% 74% at 48% 118%,
+      color-mix(in srgb, var(--semantic-chart-2) 15%, transparent),
+      transparent 56%
+    ),
+    linear-gradient(
+      176deg,
+      color-mix(in srgb, var(--semantic-chart-1) 9%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-3) 8%, var(--theme-page-bg)) 44%,
+      color-mix(in srgb, var(--semantic-chart-2) 8%, var(--theme-page-bg)) 100%
+    );
+}
+
+html[data-theme="blossom"] .nn-premium-home-section::before {
+  background:
+    radial-gradient(
+      760px 400px at 0% 0%,
+      color-mix(in srgb, var(--semantic-chart-1) 14%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      740px 380px at 100% 18%,
+      color-mix(in srgb, var(--semantic-chart-3) 13%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      720px 360px at 100% 22%,
+      color-mix(in srgb, var(--semantic-chart-2) 12%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      700px 340px at 50% 100%,
+      color-mix(in srgb, var(--semantic-chart-4) 11%, transparent),
+      transparent 60%
+    );
+}
+
+/* Blossom — flat reference header: theme-aware colour only, no main-nav capsule. */
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* =====================================================================
+   === THEME ARCHITECTURE CONTRACT (marketing) — Blossom / Aurora ===
+   Blossom inherits Ocean's `marketing-row4` structure. Rules below are
+   color-only (border-color, background, color). No structural overrides
+   (display / flex-direction / flex-wrap / grid-template* / width* /
+   spacing rhythm / breakpoints / DOM ordering) are permitted. Enforced
+   by tests/contracts/theme-marketing-row4-contract.test.ts. Escape
+   hatch: a CSS block comment whose body starts with
+   `theme-contract:allow <reason>` immediately before a declaration.
+   ===================================================================== */
+/* Blossom / Aurora: marketing-row4 geometry matches Ocean — token-only nav pill colors below. */
+
+/* Aurora / Blossom nav pills — token-driven active and hover color only. */
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link {
+  border-color: transparent;
+  background: transparent;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link:hover {
+  background: transparent;
+  color: color-mix(
+    in srgb,
+    var(--semantic-brand) 80%,
+    var(--nn-header-primary-fg)
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link[aria-current="page"] {
+  border-color: transparent;
+  background: transparent;
+  color: color-mix(
+    in srgb,
+    var(--semantic-brand) 82%,
+    var(--nn-header-primary-fg)
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row
+  .nn-marketing-nav-link {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-brand) 22%,
+    color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft))
+  );
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-5) 8%,
+    color-mix(in srgb, var(--semantic-brand) 7%, var(--nn-header-primary-bg))
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row
+  .nn-marketing-nav-link:hover {
+  background: color-mix(
+    in srgb,
+    var(--semantic-info) 14%,
+    color-mix(in srgb, var(--semantic-chart-5) 8%, var(--nn-header-primary-bg))
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link--primary-text:hover {
+  border-color: transparent;
+  background: transparent;
+  color: color-mix(
+    in srgb,
+    var(--semantic-brand) 80%,
+    var(--nn-header-primary-fg)
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link--primary-text[aria-current="page"] {
+  border: 0;
+  background: transparent;
+  color: color-mix(
+    in srgb,
+    var(--semantic-brand) 82%,
+    var(--nn-header-primary-fg)
+  );
+  font-weight: 500;
+  box-shadow: none;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a,
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-tier-chip {
+  border-color: transparent;
+  border-bottom-color: transparent;
+  background: transparent;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a[data-active],
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-tier-chip[data-active] {
+  border-color: transparent;
+  border-bottom-color: var(--semantic-brand);
+  background: transparent;
+}
+
+html[data-theme="blossom"] .nn-header-brand-lockup {
+  /* Use --theme-primary directly so the wordmark matches the CDN leaf raster.
+     --logo-primary is remapped to near-black by .nn-header-logo-row in row4
+     layout — never use it here. --theme-primary is not touched by that rule. */
+  color: var(--theme-primary);
+}
+
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"],
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-rail {
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-3) 6%,
+    color-mix(in srgb, var(--semantic-chart-1) 5%, var(--nn-header-primary-bg))
+  );
+  border-top-color: color-mix(
+    in srgb,
+    var(--semantic-chart-3) 16%,
+    var(--header-border)
+  );
+}
+
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a,
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-tier-chip {
+  border-color: transparent;
+  border-bottom-color: transparent;
+  background: transparent;
+}
+
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a:hover,
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-tier-chip:hover {
+  border-color: transparent;
+  border-bottom-color: color-mix(in srgb, var(--semantic-brand) 34%, transparent);
+  background: transparent;
+}
+
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a[data-active],
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-tier-chip[data-active] {
+  border-color: transparent;
+  border-bottom-color: var(--semantic-brand);
+  background: transparent;
+}
+
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-utility-theme-row4
+  button {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-chart-3) 22%,
+    var(--semantic-border-soft)
+  );
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-1) 8%,
+    var(--nn-header-primary-bg)
+  );
+  color: var(--theme-heading-text);
+}
+
+/* =====================================================================
+   === THEME ARCHITECTURE CONTRACT (marketing) — Midnight ===
+   Midnight inherits Ocean's `marketing-row4` structure. Rules below are
+   color-only (background, color, border-color, box-shadow). No
+   structural overrides (display / flex-direction / flex-wrap /
+   grid-template* / width* / spacing rhythm / breakpoints / DOM
+   ordering) are permitted. Enforced by
+   tests/contracts/theme-marketing-row4-contract.test.ts. Escape hatch:
+   a CSS block comment whose body starts with `theme-contract:allow
+   <reason>` immediately before a declaration.
+   ===================================================================== */
+/* Midnight + marketing-row4 — same Ocean hierarchy; dark header paper + full-strength ink/sky on controls */
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-bar-a {
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 90%, transparent);
+}
+
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-utility-trigger-row4,
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-utility-theme-row4
+  :where(button) {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-info) 38%,
+    var(--semantic-border-soft)
+  ) !important;
+  background: color-mix(
+    in srgb,
+    var(--semantic-info) 14%,
+    var(--nn-header-primary-bg)
+  ) !important;
+  color: var(--nn-header-primary-fg) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-utility-trigger-row4:hover,
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-utility-theme-row4
+  :where(button:hover) {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-info) 48%,
+    var(--semantic-border-soft)
+  ) !important;
+  background: color-mix(
+    in srgb,
+    var(--semantic-info) 22%,
+    var(--nn-header-primary-bg)
+  ) !important;
+  color: var(--nn-header-primary-fg) !important;
+}
+
+:is(
+    html[data-theme="midnight"],
+    html[data-theme="midnight-indigo"],
+    html[data-theme="midnight-ink"]
+  )
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link--primary-text {
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 94%, transparent);
+}
+
+:is(
+    html[data-theme="midnight"],
+    html[data-theme="midnight-indigo"],
+    html[data-theme="midnight-ink"]
+  )
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link--primary-text:hover {
+  color: var(--nn-header-primary-fg);
+}
+
+:is(
+    html[data-theme="midnight"],
+    html[data-theme="midnight-indigo"],
+    html[data-theme="midnight-ink"]
+  )
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link--primary-text[aria-current="page"] {
+  border: 0;
+  background: transparent;
+  color: var(--nn-header-primary-fg);
+  font-weight: 500;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a,
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-tier-chip {
+  color: var(--nn-header-primary-fg);
+}
+
+.nn-premium-home-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: var(--nn-space-section-gap, var(--nn-rhythm-section-y, 4rem));
+  background: var(--page-bg, #ffffff);
+  min-height: var(--nn-premium-home-section-min, 34rem);
+}
+
+.nn-premium-home-section.border-b,
+.nn-premium-home-section[class*="border-b"] {
+  padding-bottom: max(
+    var(--nn-space-section-gap),
+    var(--nn-space-section-landing)
+  );
+}
+
+.nn-premium-home-section + .nn-premium-home-section {
+  border-top-color: color-mix(in srgb, var(--border-subtle) 64%, transparent);
+}
+
+.nn-premium-home-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(
+      720px 380px at 0% 0%,
+      color-mix(in srgb, var(--nn-premium-tone-brand) 11%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      720px 380px at 100% 20%,
+      color-mix(in srgb, var(--nn-premium-tone-accent) 10%, transparent),
+      transparent 60%
+    );
+}
+
+.nn-premium-home-section--clinical::before,
+.nn-premium-home-section--readiness::before {
+  background:
+    radial-gradient(
+      720px 380px at 8% 12%,
+      color-mix(in srgb, var(--nn-premium-tone-success) 11%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      680px 360px at 100% 90%,
+      color-mix(in srgb, var(--nn-premium-tone-info) 10%, transparent),
+      transparent 60%
+    );
+}
+
+.nn-premium-home-section--ecosystem::before,
+.nn-premium-home-section--cta::before {
+  background:
+    radial-gradient(
+      760px 400px at 4% 0%,
+      color-mix(in srgb, var(--nn-premium-tone-accent) 12%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      760px 400px at 100% 12%,
+      color-mix(in srgb, var(--nn-premium-tone-brand) 12%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      720px 380px at 55% 100%,
+      color-mix(in srgb, var(--nn-premium-tone-success) 10%, transparent),
+      transparent 60%
+    );
+}

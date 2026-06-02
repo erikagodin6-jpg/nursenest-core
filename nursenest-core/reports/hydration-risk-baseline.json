@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "criticalRels": [],
+  "criticalScoreThreshold": 4500,
+  "updatedAt": "2026-05-06T00:00:00.000Z",
+  "note": "No Phase-1B TARGET files currently rank high (score >= 4500). New high-ranked files fail CI until baseline is refreshed with: node scripts/report-hydration-risk-routes.mjs --write-baseline"
+}

@@ -1,0 +1,37 @@
+{
+  "title": "Questions d’entraînement NCLEX-RN | Justifications et suivi des points faibles",
+  "h1": "Questions d’entraînement NCLEX-RN",
+  "description": "Entraînez-vous sur des items de type NCLEX et voyez où vous perdez des points : justifications, catégories des besoins du client et retour sur vos scores pour les candidats RN aux États-Unis et au Canada.",
+  "breadcrumb": {
+    "midLabel": "Préparation NCLEX-RN",
+    "currentLabel": "Questions d’entraînement"
+  },
+  "sections": [
+    {
+      "heading": "En quoi la pratique NCLEX-RN diffère de la simple lecture",
+      "level": 2,
+      "body": [
+        "L’examen valorise le jugement sous contrainte de temps, pas la reconnaissance issue des notes. Les questions vous obligent à vous engager, puis la justification montre si votre règle correspond à celle du conseil.",
+        "NurseNest conserve les items dans votre filière pour que vous n’entraîniez pas du bruit RN si votre autorisation ne le couvre pas."
+      ]
+    },
+    {
+      "heading": "Quand ajouter des leçons et des examens blancs",
+      "level": 2,
+      "body": [
+        "Quand une catégorie reste faible, associez un bloc de leçon sur le même système, puis revenez aux questions en quelques jours.",
+        "Quand la précision se stabilise pendant deux semaines, enchaînez des examens chronométrés pour tester l’endurance, pas seulement les connaissances."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "question": "Ces questions NCLEX-RN sont-elles alignées sur le plan d’examen actuel ?",
+      "answer": "Les items ciblent le jugement clinique et la sécurité, dans l’esprit d’une préparation de type NCLEX. Vérifiez toujours les derniers communiqués de votre organisme de réglementation."
+    },
+    {
+      "question": "Les candidats RN canadiens utilisent-ils la même banque que les candidats américains ?",
+      "answer": "Le contenu est filtré par pays et par filière afin que vous voyiez des items adaptés à votre contexte d’inscription."
+    }
+  ]
+}

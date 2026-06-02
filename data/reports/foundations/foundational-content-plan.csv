@@ -1,0 +1,91 @@
+domain,topicSlug,topicName,contentWeight,targetLessonCountMin,targetLessonCountMax,targetQuestionCountMin,targetQuestionCountMax,recommendedSequenceOrder,status,prerequisiteCount,downstreamCount
+Medical Terminology,prefixes-suffixes-root-words,"Prefixes, Suffixes, and Root Words",heavy,4,5,45,60,1,planned,0,4
+Medical Terminology,body-direction-and-positional-terms,Body Direction and Positional Terms,heavy,4,5,45,60,2,planned,1,2
+Medical Terminology,cardiovascular-respiratory-terminology,Cardiovascular and Respiratory Terminology,heavy,4,5,45,60,3,planned,1,3
+Medical Terminology,gi-urinary-terminology,Gastrointestinal and Urinary Terminology,light,2,3,20,25,4,planned,1,2
+Medical Terminology,musculoskeletal-neuro-terminology,Musculoskeletal and Neurological Terminology,light,2,3,20,25,5,planned,1,2
+Anatomy & Physiology,cell-structure-and-function,Cell Structure and Function,heavy,4,5,45,60,1,planned,0,3
+Anatomy & Physiology,cell-transport-mechanisms,Cell Transport Mechanisms,heavy,4,5,45,60,2,planned,1,1
+Anatomy & Physiology,cell-division-mitosis-meiosis,Cell Division: Mitosis and Meiosis,light,2,3,20,25,3,planned,1,1
+Anatomy & Physiology,four-tissue-types,The Four Tissue Types,heavy,4,5,45,60,4,planned,2,3
+Anatomy & Physiology,skin-structure-and-functions,Skin Structure and Functions,light,2,3,20,25,5,planned,1,1
+Anatomy & Physiology,bone-structure-and-skeleton,Bone Structure and the Skeleton,heavy,4,5,45,60,6,planned,1,1
+Anatomy & Physiology,joints-and-articulations,Joints and Articulations,light,2,3,20,25,7,planned,1,1
+Anatomy & Physiology,muscle-types-and-contraction,Muscle Types and Contraction,heavy,4,5,45,60,8,planned,2,1
+Anatomy & Physiology,neuron-structure-and-nerve-impulses,Neuron Structure and Nerve Impulses,heavy,4,5,45,60,9,planned,1,2
+Anatomy & Physiology,cns-brain-and-spinal-cord,Central Nervous System: Brain and Spinal Cord,heavy,4,5,45,60,10,planned,1,2
+Anatomy & Physiology,autonomic-nervous-system,Autonomic Nervous System,light,2,3,20,25,11,planned,1,1
+Anatomy & Physiology,heart-anatomy-and-cardiac-cycle,Heart Anatomy and the Cardiac Cycle,heavy,4,5,45,60,12,planned,1,3
+Anatomy & Physiology,blood-vessels-and-circulation,Blood Vessels and Circulation,heavy,4,5,45,60,13,planned,1,2
+Anatomy & Physiology,blood-composition-and-functions,Blood Composition and Functions,heavy,4,5,45,60,14,planned,1,1
+Anatomy & Physiology,respiratory-anatomy-and-mechanics,Respiratory Anatomy and Mechanics of Breathing,heavy,4,5,45,60,15,planned,1,2
+Anatomy & Physiology,gi-tract-anatomy-and-digestion,GI Tract: Anatomy and Digestion,heavy,4,5,45,60,16,planned,1,1
+Anatomy & Physiology,kidney-structure-and-urine-formation,Kidney Structure and Urine Formation,heavy,4,5,45,60,17,planned,1,2
+Anatomy & Physiology,endocrine-glands-and-hormones,Major Endocrine Glands and Hormones,heavy,4,5,45,60,18,planned,1,1
+Anatomy & Physiology,male-female-reproductive-anatomy,Male and Female Reproductive Anatomy,light,2,3,20,25,19,planned,1,0
+Anatomy & Physiology,lymphatic-system-and-immunity,Lymphatic System and Immunity Overview,heavy,4,5,45,60,20,planned,1,2
+Anatomy & Physiology,vision-hearing-special-senses,"Vision, Hearing, and Special Senses",light,2,3,20,25,21,planned,1,0
+Dosage Math,fractions-decimals-percentages-healthcare,"Fractions, Decimals, and Percentages in Healthcare",light,2,3,20,25,1,planned,0,2
+Dosage Math,ratio-and-proportion-method,Ratio and Proportion Method,light,2,3,20,25,2,planned,1,2
+Dosage Math,metric-system-and-unit-conversions,Metric System and Unit Conversions,light,2,3,20,25,3,planned,1,2
+Dosage Math,oral-medication-dosage-calculations,Oral Medication Dosage Calculations,heavy,4,5,45,60,4,planned,2,2
+Dosage Math,iv-flow-rate-drip-rate-calculations,IV Flow Rate and Drip Rate Calculations,heavy,4,5,45,60,5,planned,2,1
+Dosage Math,weight-based-dosage-calculations,Weight-Based Dosage Calculations,heavy,4,5,45,60,6,planned,2,1
+Dosage Math,reconstitution-and-concentration-calculations,Reconstitution and Concentration Calculations,heavy,4,5,45,60,7,planned,2,0
+Communication Basics,principles-of-therapeutic-communication,Principles of Therapeutic Communication,heavy,4,5,45,60,1,planned,0,3
+Communication Basics,barriers-to-effective-communication,Barriers to Effective Communication,light,2,3,20,25,2,planned,1,1
+Communication Basics,sbar-communication-framework,SBAR Communication Framework,heavy,4,5,45,60,3,planned,1,2
+Communication Basics,documentation-principles-nursing-notes,Documentation Principles and Nursing Notes,heavy,4,5,45,60,4,planned,1,0
+Communication Basics,patient-teaching-teach-back,Patient Teaching: Principles and Teach-Back Method,light,2,3,20,25,5,planned,1,0
+Communication Basics,interprofessional-collaboration-teamwork,Interprofessional Collaboration and Teamwork,light,2,3,20,25,6,planned,1,0
+Infection Prevention,hand-hygiene-evidence-and-technique,Hand Hygiene: Evidence and Technique,heavy,4,5,45,60,1,planned,0,3
+Infection Prevention,ppe-selection-and-use,Personal Protective Equipment (PPE) Selection and Use,heavy,4,5,45,60,2,planned,1,1
+Infection Prevention,contact-droplet-airborne-precautions,"Contact, Droplet, and Airborne Precautions",heavy,4,5,45,60,3,planned,2,1
+Infection Prevention,medical-surgical-asepsis,Principles of Medical and Surgical Asepsis,heavy,4,5,45,60,4,planned,1,2
+Infection Prevention,hais-cauti-clabsi-vap-ssi,"HAIs: CAUTI, CLABSI, VAP, and SSI Prevention",heavy,4,5,45,60,5,planned,2,0
+Infection Prevention,sterilization-disinfection-cleaning,"Sterilization, Disinfection, and Cleaning Methods",light,2,3,20,25,6,planned,1,0
+Safety,patient-safety-culture-error-prevention,Patient Safety Culture and Error Prevention,heavy,4,5,45,60,1,planned,0,3
+Safety,fall-prevention-and-risk-assessment,Fall Prevention and Risk Assessment,heavy,4,5,45,60,2,planned,1,0
+Safety,safe-patient-handling-body-mechanics,Safe Patient Handling and Body Mechanics,light,2,3,20,25,3,planned,1,0
+Safety,high-alert-medications-safety,High-Alert Medications and Safety Practices,heavy,4,5,45,60,4,planned,2,0
+Safety,recognizing-clinical-deterioration,Recognizing and Responding to Clinical Deterioration,heavy,4,5,45,60,5,planned,2,0
+Safety,fire-safety-hazardous-materials,Fire Safety and Hazardous Materials in Healthcare,light,2,3,20,25,6,planned,1,0
+Microbiology Basics,types-of-microorganisms-overview,Types of Microorganisms: Overview,heavy,4,5,45,60,1,planned,1,3
+Microbiology Basics,bacterial-classification-gram-stain,Bacterial Classification: Gram Stain and Morphology,heavy,4,5,45,60,2,planned,1,1
+Microbiology Basics,bacterial-growth-reproduction-resistance,"Bacterial Growth, Reproduction, and Resistance",heavy,4,5,45,60,3,planned,1,1
+Microbiology Basics,viral-structure-replication-and-disease,"Viral Structure, Replication, and Disease",heavy,4,5,45,60,4,planned,1,1
+Microbiology Basics,chain-of-infection,Chain of Infection,heavy,4,5,45,60,5,planned,2,2
+Chemistry Basics,atoms-elements-periodic-table,"Atoms, Elements, and the Periodic Table",light,2,3,20,25,1,planned,0,2
+Chemistry Basics,chemical-bonds-and-molecular-interactions,Chemical Bonds and Molecular Interactions,light,2,3,20,25,2,planned,1,2
+Chemistry Basics,acids-bases-and-ph,"Acids, Bases, and pH in the Body",heavy,4,5,45,60,3,planned,1,0
+Chemistry Basics,carbohydrates-lipids-proteins,"Carbohydrates, Lipids, and Proteins",heavy,4,5,45,60,4,planned,1,1
+Chemistry Basics,enzymes-and-metabolic-pathways,Enzymes and Metabolic Pathways,heavy,4,5,45,60,5,planned,1,1
+Pharmacology Foundations,drug-absorption-and-distribution,Drug Absorption and Distribution,heavy,4,5,45,60,1,planned,1,1
+Pharmacology Foundations,drug-metabolism-and-excretion,Drug Metabolism and Excretion,heavy,4,5,45,60,2,planned,1,1
+Pharmacology Foundations,drug-receptors-agonists-antagonists,"Drug Receptors, Agonists, and Antagonists",heavy,4,5,45,60,3,planned,1,1
+Pharmacology Foundations,adverse-drug-reactions-and-side-effects,Adverse Drug Reactions and Side Effects,heavy,4,5,45,60,4,planned,1,2
+Pharmacology Foundations,drug-interactions-types-and-implications,Drug Interactions: Types and Clinical Implications,heavy,4,5,45,60,5,planned,1,1
+Pharmacology Foundations,intro-to-major-drug-classifications,Introduction to Major Drug Classifications,heavy,4,5,45,60,6,planned,1,1
+Pharmacology Foundations,rights-of-medication-administration,The Rights of Medication Administration,heavy,4,5,45,60,7,planned,1,1
+Basic Pathophysiology,intro-to-disease-etiology-pathogenesis,Introduction to Disease: Etiology and Pathogenesis,heavy,4,5,45,60,1,planned,1,2
+Basic Pathophysiology,inflammation-acute-and-chronic,Inflammation: Acute and Chronic,heavy,4,5,45,60,2,planned,2,2
+Basic Pathophysiology,wound-healing-and-tissue-repair,Wound Healing and Tissue Repair,heavy,4,5,45,60,3,planned,2,0
+Basic Pathophysiology,hypertension-mechanisms-and-consequences,Hypertension: Mechanisms and Consequences,heavy,4,5,45,60,4,planned,2,0
+Basic Pathophysiology,hypoxia-hypoxemia-respiratory-failure,"Hypoxia, Hypoxemia, and Respiratory Failure",heavy,4,5,45,60,5,planned,1,1
+Basic Pathophysiology,diabetes-mellitus-pathophysiology,Diabetes Mellitus: Pathophysiology Overview,heavy,4,5,45,60,6,planned,2,0
+Basic Pathophysiology,edema-dehydration-fluid-imbalances,"Edema, Dehydration, and Fluid Imbalances",heavy,4,5,45,60,7,planned,1,0
+Basic Pathophysiology,hypersensitivity-reactions-types,Hypersensitivity Reactions: Types I–IV,heavy,4,5,45,60,8,planned,2,0
+Study Skills for Nursing School,active-learning-techniques-nursing,Active Learning Techniques for Nursing Students,light,2,3,20,25,1,planned,0,2
+Study Skills for Nursing School,note-taking-methods-nursing,Note-Taking Methods for Nursing Content,light,2,3,20,25,2,planned,1,0
+Study Skills for Nursing School,nclex-style-question-strategies,NCLEX-Style Question Strategies,heavy,4,5,45,60,3,planned,1,2
+Study Skills for Nursing School,clinical-reasoning-and-priority-setting,Understanding Clinical Reasoning and Priority Setting,heavy,4,5,45,60,4,planned,1,1
+Study Skills for Nursing School,nursing-process-adpie,Nursing Process: ADPIE Framework,heavy,4,5,45,60,5,planned,1,0
+Study Skills for Nursing School,time-management-self-care-nursing-school,Time Management and Self-Care in Nursing School,light,2,3,20,25,6,planned,0,0
+Intro to Health Assessment,health-history-and-chief-complaint,The Health History and Chief Complaint,heavy,4,5,45,60,1,planned,1,2
+Intro to Health Assessment,vital-signs-measurement-interpretation,Vital Signs: Measurement and Interpretation,heavy,4,5,45,60,2,planned,1,3
+Intro to Health Assessment,inspection-palpation-percussion-auscultation,"Inspection, Palpation, Percussion, and Auscultation",heavy,4,5,45,60,3,planned,1,3
+Intro to Health Assessment,head-to-toe-assessment-framework,Head-to-Toe Assessment Framework,heavy,4,5,45,60,4,planned,2,3
+Intro to Health Assessment,cardiovascular-assessment,Cardiovascular Assessment,heavy,4,5,45,60,5,planned,2,0
+Intro to Health Assessment,respiratory-assessment,Respiratory Assessment,heavy,4,5,45,60,6,planned,2,0
+Intro to Health Assessment,neuro-assessment-loc-gcs,Neurological Assessment: Level of Consciousness and Glasgow Coma Scale,heavy,4,5,45,60,7,planned,2,0
+Intro to Health Assessment,pain-assessment-scales-types,"Pain Assessment: Scales, Types, and Documentation",heavy,4,5,45,60,8,planned,1,0

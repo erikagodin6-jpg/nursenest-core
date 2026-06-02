@@ -1,0 +1,200 @@
+{
+  "reportKind": "full_system_gap_analysis",
+  "generatedAt": "2026-04-14T23:59:00.000Z",
+  "executionScope": "baseline_inventory_and_cross_reference",
+  "safeMode": true,
+  "methodology": "Repo scan of nursenest-core Next app routes/APIs, cross-reference to data/audit/*.json and docs/legacy-restoration-map.md. Not a live DB crawl or production traffic analysis. External full-site export may be unavailable; see legacy-vs-current-gap-analysis.json.",
+  "governance": {
+    "primaryProcessDoc": "docs/legacy-restoration-map.md",
+    "rule": "Controlled layers; no monolithic rewrite; batch imports; server-side entitlements preserved."
+  },
+  "systemsInventory": {
+    "lessons": {
+      "currentPaths": [
+        "nursenest-core/src/app/(marketing)/**/lessons/**",
+        "nursenest-core/src/app/api/lessons/**",
+        "nursenest-core/src/lib/lessons/**"
+      ],
+      "auditRefs": [
+        "final-lesson-completeness.json",
+        "lesson-format-parity.json",
+        "lesson-quiz-parity.json",
+        "lesson-render-final.json",
+        "legacy-to-current-lesson-map.json",
+        "legacy-lesson-source-inventory.json"
+      ],
+      "baselineMetricsNote": "See final-system-status.json and final-lesson-completeness.json for last measured completeness; re-run when DB available."
+    },
+    "quizzesAndQuestionBanks": {
+      "currentPaths": [
+        "nursenest-core/src/app/api/questions/**",
+        "nursenest-core/src/app/api/practice-tests/**"
+      ],
+      "auditRefs": [
+        "lesson-quiz-parity.json",
+        "legacy-questions-inventory.json",
+        "legacy-question-duplicates.json",
+        "flashcards-questionbank-post-legacy-merge.json"
+      ]
+    },
+    "catExams": {
+      "currentPaths": [
+        "nursenest-core/src/lib/cat*/**",
+        "nursenest-core/src/app/**/cat/**",
+        "nursenest-core/src/app/api/**/cat*/**"
+      ],
+      "auditRefs": [
+        "cat-exam-parity.json",
+        "legacy-vs-current-cat-comparison.json",
+        "current-cat-source-inventory.json",
+        "legacy-cat-source-inventory.json",
+        "cat-safe-restoration-targets.json",
+        "cat-selective-restoration-plan.json"
+      ]
+    },
+    "blog": {
+      "currentPaths": [
+        "nursenest-core/src/app/**/blog/**",
+        "nursenest-core/src/app/api/blog/**"
+      ],
+      "auditRefs": [
+        "blog-final-verification.json",
+        "legacy-blog-inventory.json"
+      ]
+    },
+    "tools": {
+      "currentPaths": [
+        "nursenest-core/src/app/**/tools/**"
+      ],
+      "auditRefs": [
+        "legacy-tools-calculators-inventory.json"
+      ]
+    },
+    "admin": {
+      "currentPaths": [
+        "nursenest-core/src/app/(admin)/admin/**"
+      ],
+      "surfaceAreas": [
+        "content",
+        "blog",
+        "lessons",
+        "questions",
+        "generation",
+        "inventory",
+        "system-status",
+        "analytics",
+        "subscriptions",
+        "users",
+        "seo",
+        "i18n",
+        "automation-logs",
+        "content-coverage",
+        "content-quality",
+        "premium-protection"
+      ],
+      "auditRefs": [
+        "proposed-implementation-backlog.json"
+      ]
+    },
+    "userProgressAndAnalytics": {
+      "currentPaths": [
+        "nursenest-core/src/app/api/learner/**",
+        "nursenest-core/src/lib/insights/**",
+        "nursenest-core/src/lib/learner/**"
+      ],
+      "auditRefs": [
+        "legacy-dashboard-progress-inventory.json"
+      ]
+    },
+    "stripeEntitlements": {
+      "currentPaths": [
+        "nursenest-core/src/app/api/subscriptions/**",
+        "nursenest-core/src/lib/**/entitlement*.ts"
+      ],
+      "auditRefs": [
+        "entitlement-system-map.json",
+        "entitlement-final-status.json",
+        "stripe-sync-validation.json",
+        "paywall-security.json",
+        "paywall-final-security.json",
+        "paywall-surface-map.json",
+        "paywall-vulnerabilities.json"
+      ]
+    },
+    "i18n": {
+      "docs": [
+        "docs/i18n-architecture.md",
+        "docs/translation-e2e-inventory.md"
+      ],
+      "auditRefs": [
+        "legacy-translations-inventory.json"
+      ]
+    },
+    "legacyImportAutomation": {
+      "paths": [
+        "scripts/**",
+        "data/blog-content/**",
+        "nursenest-core/scripts/**"
+      ],
+      "auditRefs": [
+        "legacy-import-gap-final.json",
+        "legacy-full-restoration-priority-plan.json",
+        "high-value-import-candidates.json"
+      ]
+    },
+    "securityPerformance": {
+      "auditRefs": [
+        "paywall-final-security.json",
+        "unsafe-or-not-recommended-direct-migrations.json"
+      ],
+      "notes": [
+        "Pagination and caps documented in final-system-status.json pagination section.",
+        "RN lesson library safety: avoid full-library loads; see .cursor/rules/rn-lesson-library-safety.mdc"
+      ]
+    }
+  },
+  "gapThemesVsLegacy": [
+    {
+      "id": "external_corpus_unavailable",
+      "severity": "high_for_exact_parity",
+      "detail": "Full byte-level parity vs external export not verifiable when drive/path absent; use in-repo proxies per audit-summary.md."
+    },
+    {
+      "id": "lesson_volume_mapping",
+      "severity": "high_content",
+      "detail": "legacy-vs-current-gap-analysis: large create_missing backlog for lesson IDs; requires batched structured import."
+    },
+    {
+      "id": "cat_ux_resume",
+      "severity": "medium_ux",
+      "detail": "Checkpoint/recovery UX may trail legacy; engine must remain single source of truth."
+    },
+    {
+      "id": "parallel_marketing_stacks",
+      "severity": "medium_maintainability",
+      "detail": "Vite client vs Next marketing coexistence; alignment policy needed."
+    }
+  ],
+  "recommendedNextActions": [
+    "Follow docs/legacy-restoration-map.md layer order; do not skip validation gates.",
+    "Re-run content completeness audits with DATABASE_URL when DB is available.",
+    "Mount or import external legacy export if full diff required; then regenerate migration-opportunities-by-category.json.",
+    "Keep paywall checks server-side; treat paywall-*.json as regression baselines."
+  ],
+  "steps1through11Status": {
+    "note": "This artifact documents baseline only. Implementation of steps 1–11 was not executed in the pass that produced this file.",
+    "deferredWorkstreams": [
+      "lesson_section_completion",
+      "quiz_bank_dedup_and_rationales",
+      "cat_payload_and_resume_hardening",
+      "blog_scheduler_and_import",
+      "tools_portfolio",
+      "admin_dashboard_completion",
+      "learner_analytics_expansion",
+      "paywall_cache_indexing_review",
+      "i18n_overlay_coverage",
+      "performance_budgets_and_isr_review",
+      "e2e_validation_matrix"
+    ]
+  }
+}

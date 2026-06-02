@@ -1,0 +1,2006 @@
+{
+  "generatedAt": "2026-04-14T20:23:48.727Z",
+  "count": 200,
+  "entries": [
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (en 1)",
+      "slug": "en-0001-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-en-1",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0001-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (en 2)",
+      "slug": "en-0002-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-en-2",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0001-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (en 3)",
+      "slug": "en-0003-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-en-3",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0001-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (en 4)",
+      "slug": "en-0004-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-en-4",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0001-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (en 5)",
+      "slug": "en-0005-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-en-5",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0001-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (en 6)",
+      "slug": "en-0006-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-en-6",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0001-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (en 7)",
+      "slug": "en-0007-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-en-7",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0001-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (en 8)",
+      "slug": "en-0008-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-en-8",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0002-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (en 9)",
+      "slug": "en-0009-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-en-9",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0002-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (en 10)",
+      "slug": "en-0010-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-en-10",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0002-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (en 11)",
+      "slug": "en-0011-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-en-11",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0002-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (en 12)",
+      "slug": "en-0012-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-en-12",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0002-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (en 13)",
+      "slug": "en-0013-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-en-13",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0002-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (en 14)",
+      "slug": "en-0014-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-en-14",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0002-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (en 15)",
+      "slug": "en-0015-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-en-15",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0003-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (en 16)",
+      "slug": "en-0016-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-en-16",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0003-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (en 17)",
+      "slug": "en-0017-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-en-17",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0003-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (en 18)",
+      "slug": "en-0018-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-en-18",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0003-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (en 19)",
+      "slug": "en-0019-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-en-19",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0003-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (en 20)",
+      "slug": "en-0020-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-en-20",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0003-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (en 21)",
+      "slug": "en-0021-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-en-21",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0003-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (en 22)",
+      "slug": "en-0022-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-en-22",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0004-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (en 23)",
+      "slug": "en-0023-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-en-23",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0004-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (en 24)",
+      "slug": "en-0024-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-en-24",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0004-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (en 25)",
+      "slug": "en-0025-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-en-25",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0004-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (en 26)",
+      "slug": "en-0026-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-en-26",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0004-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (en 27)",
+      "slug": "en-0027-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-en-27",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0004-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (en 28)",
+      "slug": "en-0028-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-en-28",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0004-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (en 29)",
+      "slug": "en-0029-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-en-29",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0005-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (en 30)",
+      "slug": "en-0030-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-en-30",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0005-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (en 31)",
+      "slug": "en-0031-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-en-31",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0005-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (en 32)",
+      "slug": "en-0032-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-en-32",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0005-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (en 33)",
+      "slug": "en-0033-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-en-33",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0005-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (en 34)",
+      "slug": "en-0034-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-en-34",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0005-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (en 35)",
+      "slug": "en-0035-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-en-35",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0005-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (en 36)",
+      "slug": "en-0036-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-en-36",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0006-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (en 37)",
+      "slug": "en-0037-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-en-37",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0006-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (en 38)",
+      "slug": "en-0038-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-en-38",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0006-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (en 39)",
+      "slug": "en-0039-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-en-39",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0006-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (en 40)",
+      "slug": "en-0040-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-en-40",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0006-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (en 41)",
+      "slug": "en-0041-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-en-41",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0006-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (en 42)",
+      "slug": "en-0042-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-en-42",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0006-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (en 43)",
+      "slug": "en-0043-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-en-43",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0007-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (en 44)",
+      "slug": "en-0044-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-en-44",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0007-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (en 45)",
+      "slug": "en-0045-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-en-45",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0007-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (en 46)",
+      "slug": "en-0046-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-en-46",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0007-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (en 47)",
+      "slug": "en-0047-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-en-47",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0007-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (en 48)",
+      "slug": "en-0048-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-en-48",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0007-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (en 49)",
+      "slug": "en-0049-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-en-49",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0007-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (en 50)",
+      "slug": "en-0050-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-en-50",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0008-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (en 51)",
+      "slug": "en-0051-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-en-51",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0008-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (en 52)",
+      "slug": "en-0052-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-en-52",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0008-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (en 53)",
+      "slug": "en-0053-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-en-53",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0008-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (en 54)",
+      "slug": "en-0054-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-en-54",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0008-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (en 55)",
+      "slug": "en-0055-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-en-55",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0008-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (en 56)",
+      "slug": "en-0056-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-en-56",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0008-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (en 57)",
+      "slug": "en-0057-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-en-57",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0009-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (en 58)",
+      "slug": "en-0058-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-en-58",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0009-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (en 59)",
+      "slug": "en-0059-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-en-59",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0009-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (en 60)",
+      "slug": "en-0060-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-en-60",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0009-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (en 61)",
+      "slug": "en-0061-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-en-61",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0009-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (en 62)",
+      "slug": "en-0062-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-en-62",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0009-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (en 63)",
+      "slug": "en-0063-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-en-63",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0009-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (en 64)",
+      "slug": "en-0064-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-en-64",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0010-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (en 65)",
+      "slug": "en-0065-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-en-65",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0010-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (en 66)",
+      "slug": "en-0066-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-en-66",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0010-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (en 67)",
+      "slug": "en-0067-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-en-67",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0010-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (en 68)",
+      "slug": "en-0068-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-en-68",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0010-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (en 69)",
+      "slug": "en-0069-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-en-69",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0010-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (en 70)",
+      "slug": "en-0070-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-en-70",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "en",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0010-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 1)",
+      "slug": "pt-0071-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-1",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0011-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 2)",
+      "slug": "pt-0072-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-2",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0011-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 3)",
+      "slug": "pt-0073-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-3",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0011-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 4)",
+      "slug": "pt-0074-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-4",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0011-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 5)",
+      "slug": "pt-0075-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-5",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0011-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 6)",
+      "slug": "pt-0076-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-6",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0011-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 7)",
+      "slug": "pt-0077-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-7",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0011-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 8)",
+      "slug": "pt-0078-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-8",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0012-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 9)",
+      "slug": "pt-0079-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-9",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0012-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 10)",
+      "slug": "pt-0080-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-10",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0012-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 11)",
+      "slug": "pt-0081-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-11",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0012-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 12)",
+      "slug": "pt-0082-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-12",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0012-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 13)",
+      "slug": "pt-0083-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-13",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0012-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 14)",
+      "slug": "pt-0084-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-14",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0012-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 15)",
+      "slug": "pt-0085-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-15",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0013-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 16)",
+      "slug": "pt-0086-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-16",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0013-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 17)",
+      "slug": "pt-0087-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-17",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0013-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 18)",
+      "slug": "pt-0088-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-18",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0013-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 19)",
+      "slug": "pt-0089-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-19",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0013-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 20)",
+      "slug": "pt-0090-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-20",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0013-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 21)",
+      "slug": "pt-0091-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-21",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0013-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 22)",
+      "slug": "pt-0092-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-22",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0014-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 23)",
+      "slug": "pt-0093-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-23",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0014-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 24)",
+      "slug": "pt-0094-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-24",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0014-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 25)",
+      "slug": "pt-0095-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-25",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0014-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 26)",
+      "slug": "pt-0096-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-26",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0014-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 27)",
+      "slug": "pt-0097-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-27",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0014-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 28)",
+      "slug": "pt-0098-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-28",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0014-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 29)",
+      "slug": "pt-0099-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-29",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0015-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 30)",
+      "slug": "pt-0100-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-30",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0015-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 31)",
+      "slug": "pt-0101-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-31",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0015-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 32)",
+      "slug": "pt-0102-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-32",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0015-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 33)",
+      "slug": "pt-0103-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-33",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0015-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 34)",
+      "slug": "pt-0104-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-34",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0015-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 35)",
+      "slug": "pt-0105-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-35",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0015-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 36)",
+      "slug": "pt-0106-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-36",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0016-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 37)",
+      "slug": "pt-0107-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-37",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0016-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 38)",
+      "slug": "pt-0108-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-38",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0016-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 39)",
+      "slug": "pt-0109-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-39",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0016-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 40)",
+      "slug": "pt-0110-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-40",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0016-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 41)",
+      "slug": "pt-0111-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-41",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0016-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 42)",
+      "slug": "pt-0112-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-42",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0016-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 43)",
+      "slug": "pt-0113-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-43",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0017-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 44)",
+      "slug": "pt-0114-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-44",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0017-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 45)",
+      "slug": "pt-0115-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-45",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0017-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 46)",
+      "slug": "pt-0116-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-46",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0017-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 47)",
+      "slug": "pt-0117-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-47",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0017-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 48)",
+      "slug": "pt-0118-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-48",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0017-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 49)",
+      "slug": "pt-0119-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-49",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0017-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 50)",
+      "slug": "pt-0120-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-50",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0018-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 51)",
+      "slug": "pt-0121-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-51",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0018-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 52)",
+      "slug": "pt-0122-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-52",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0018-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 53)",
+      "slug": "pt-0123-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-53",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0018-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 54)",
+      "slug": "pt-0124-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-54",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0018-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 55)",
+      "slug": "pt-0125-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-55",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0018-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 56)",
+      "slug": "pt-0126-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-56",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0018-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 57)",
+      "slug": "pt-0127-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-57",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0019-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 58)",
+      "slug": "pt-0128-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-58",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0019-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 59)",
+      "slug": "pt-0129-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-59",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0019-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 60)",
+      "slug": "pt-0130-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-60",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0019-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 61)",
+      "slug": "pt-0131-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-61",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0019-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 62)",
+      "slug": "pt-0132-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-62",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0019-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 63)",
+      "slug": "pt-0133-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-63",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0019-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 64)",
+      "slug": "pt-0134-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-64",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0020-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 65)",
+      "slug": "pt-0135-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-65",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0020-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 66)",
+      "slug": "pt-0136-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-66",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0020-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 67)",
+      "slug": "pt-0137-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-67",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0020-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 68)",
+      "slug": "pt-0138-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-68",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0020-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 69)",
+      "slug": "pt-0139-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-69",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0020-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 70)",
+      "slug": "pt-0140-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-70",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0020-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 71)",
+      "slug": "pt-0141-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-71",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0021-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 72)",
+      "slug": "pt-0142-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-72",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0021-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 73)",
+      "slug": "pt-0143-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-73",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0021-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 74)",
+      "slug": "pt-0144-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-74",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0021-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 75)",
+      "slug": "pt-0145-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-75",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0021-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 76)",
+      "slug": "pt-0146-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-76",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0021-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 77)",
+      "slug": "pt-0147-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-77",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0021-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 78)",
+      "slug": "pt-0148-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-78",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0022-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 79)",
+      "slug": "pt-0149-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-79",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0022-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 80)",
+      "slug": "pt-0150-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-80",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0022-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 81)",
+      "slug": "pt-0151-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-81",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0022-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 82)",
+      "slug": "pt-0152-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-82",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0022-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 83)",
+      "slug": "pt-0153-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-83",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0022-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 84)",
+      "slug": "pt-0154-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-84",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0022-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 85)",
+      "slug": "pt-0155-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-85",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0023-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 86)",
+      "slug": "pt-0156-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-86",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0023-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 87)",
+      "slug": "pt-0157-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-87",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0023-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 88)",
+      "slug": "pt-0158-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-88",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0023-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 89)",
+      "slug": "pt-0159-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-89",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0023-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 90)",
+      "slug": "pt-0160-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-90",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0023-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 91)",
+      "slug": "pt-0161-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-91",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0023-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 92)",
+      "slug": "pt-0162-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-92",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0024-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 93)",
+      "slug": "pt-0163-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-93",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0024-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (pt 94)",
+      "slug": "pt-0164-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-pt-94",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0024-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (pt 95)",
+      "slug": "pt-0165-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-pt-95",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0024-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (pt 96)",
+      "slug": "pt-0166-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-pt-96",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0024-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (pt 97)",
+      "slug": "pt-0167-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-pt-97",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0024-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (pt 98)",
+      "slug": "pt-0168-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-pt-98",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0024-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (pt 99)",
+      "slug": "pt-0169-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-pt-99",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0025-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (pt 100)",
+      "slug": "pt-0170-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-pt-100",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "pt",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0025-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (es 1)",
+      "slug": "es-0171-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-es-1",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0025-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (es 2)",
+      "slug": "es-0172-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-es-2",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0025-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (es 3)",
+      "slug": "es-0173-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-es-3",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0025-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (es 4)",
+      "slug": "es-0174-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-es-4",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0025-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (es 5)",
+      "slug": "es-0175-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-es-5",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0025-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (es 6)",
+      "slug": "es-0176-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-es-6",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0026-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (es 7)",
+      "slug": "es-0177-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-es-7",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0026-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (es 8)",
+      "slug": "es-0178-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-es-8",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0026-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (es 9)",
+      "slug": "es-0179-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-es-9",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0026-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (es 10)",
+      "slug": "es-0180-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-es-10",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0026-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (es 11)",
+      "slug": "es-0181-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-es-11",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0026-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (es 12)",
+      "slug": "es-0182-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-es-12",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0026-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (es 13)",
+      "slug": "es-0183-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-es-13",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0027-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (es 14)",
+      "slug": "es-0184-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-es-14",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0027-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (es 15)",
+      "slug": "es-0185-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-es-15",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "es",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0027-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (fr 1)",
+      "slug": "fr-0186-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-fr-1",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "fr",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0027-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (fr 2)",
+      "slug": "fr-0187-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-fr-2",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "fr",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0027-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (fr 3)",
+      "slug": "fr-0188-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-fr-3",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "fr",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0027-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (fr 4)",
+      "slug": "fr-0189-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-fr-4",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "fr",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0027-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (fr 5)",
+      "slug": "fr-0190-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-fr-5",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "fr",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0028-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (fr 6)",
+      "slug": "fr-0191-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-fr-6",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "fr",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0028-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (fr 7)",
+      "slug": "fr-0192-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-fr-7",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "fr",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0028-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (fr 8)",
+      "slug": "fr-0193-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-fr-8",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "fr",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0028-nursing-jobs-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "portuguese nurses abroad — Portugal nursing (fr 9)",
+      "slug": "fr-0194-portuguese-nurses-abroad-portuguese-nurses-abroad-portugal-nursing-fr-9",
+      "primaryKeyword": "portuguese nurses abroad",
+      "language": "fr",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0028-portuguese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to uk nurse pathway — Portugal nursing (fr 10)",
+      "slug": "fr-0195-portugal-to-uk-nurse-pathway-portugal-to-uk-nurse-pathway-portugal-nursing-fr-10",
+      "primaryKeyword": "portugal to uk nurse pathway",
+      "language": "fr",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0028-portugal-to-uk-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "portugal to germany nurse pathway — Portugal nursing (ar 1)",
+      "slug": "ar-0196-portugal-to-germany-nurse-pathway-portugal-to-germany-nurse-pathway-portugal-nursing-ar-1",
+      "primaryKeyword": "portugal to germany nurse pathway",
+      "language": "ar",
+      "category": "Portugal nursing",
+      "intentType": "transactional",
+      "translationGroupId": "pt-nurse-0028-portugal-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in portugal — Portugal nursing (ar 2)",
+      "slug": "ar-0197-how-to-become-a-nurse-in-portugal-how-to-become-a-nurse-in-portugal-portugal-nursing-ar-2",
+      "primaryKeyword": "how to become a nurse in portugal",
+      "language": "ar",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0029-how-to-become-a-nurse-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration portugal — Portugal nursing (ar 3)",
+      "slug": "ar-0198-nurse-registration-portugal-nurse-registration-portugal-portugal-nursing-ar-3",
+      "primaryKeyword": "nurse registration portugal",
+      "language": "ar",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0029-nurse-registration-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in portugal — Portugal nursing (ar 4)",
+      "slug": "ar-0199-foreign-nurses-in-portugal-foreign-nurses-in-portugal-portugal-nursing-ar-4",
+      "primaryKeyword": "foreign nurses in portugal",
+      "language": "ar",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0029-foreign-nurses-in-portugal",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs portugal — Portugal nursing (ar 5)",
+      "slug": "ar-0200-nursing-jobs-portugal-nursing-jobs-portugal-portugal-nursing-ar-5",
+      "primaryKeyword": "nursing jobs portugal",
+      "language": "ar",
+      "category": "Portugal nursing",
+      "intentType": "informational",
+      "translationGroupId": "pt-nurse-0029-nursing-jobs-portugal",
+      "status": "planned"
+    }
+  ]
+}

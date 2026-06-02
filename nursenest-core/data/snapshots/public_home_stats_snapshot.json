@@ -1,0 +1,32 @@
+{
+  "schema": "public_home_stats_snapshot.v1",
+  "generatedAt": "2026-06-01T22:54:07.229Z",
+  "payload": {
+    "totalLessons": 13040,
+    "pathwayLessonsPublished": 13040,
+    "contentItemsLessonCount": 0,
+    "questionCount": 100203,
+    "totalFlashcards": 31516,
+    "totalDecks": 182,
+    "storeProductCount": 0,
+    "registeredLearners": 66,
+    "clinicalSkillCount": 221,
+    "medicationMathProblemCount": 50,
+    "ecgCaseCount": 29,
+    "labCaseCount": 60,
+    "questionsByTier": {
+      "allied": 43869,
+      "imaging": 1557,
+      "lvn": 3748,
+      "new_grad": 50,
+      "np": 32834,
+      "premium": 160,
+      "pre_nursing": 20,
+      "rn": 12902,
+      "rpn": 4321,
+      "rrt": 742
+    },
+    "scenarioCount": 27375,
+    "topicCategoryCount": 2918
+  }
+}

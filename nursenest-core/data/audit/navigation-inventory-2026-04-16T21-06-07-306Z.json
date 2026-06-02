@@ -1,0 +1,2853 @@
+{
+  "generatedAt": "2026-04-16T21:06:07.307Z",
+  "appRoot": "/root/nursenest-core/nursenest-core",
+  "filesScanned": 2527,
+  "uniqueTargetCount": 133,
+  "uniqueTargets": [
+    "/acceptable-use",
+    "/admin",
+    "/admin/ai/exam-questions",
+    "/admin/ai/exam-questions/batch",
+    "/admin/ai/flashcards",
+    "/admin/ai/review",
+    "/admin/analytics",
+    "/admin/analytics/funnels",
+    "/admin/analytics/product-intelligence",
+    "/admin/analytics/study-performance",
+    "/admin/analytics/subscriptions",
+    "/admin/analytics/users",
+    "/admin/analytics/weak-areas",
+    "/admin/automation-logs",
+    "/admin/blog",
+    "/admin/blog/campaigns",
+    "/admin/blog/control-panel",
+    "/admin/blog/draft-batch",
+    "/admin/blog/generate",
+    "/admin/blog/library",
+    "/admin/blog/scheduler",
+    "/admin/blog/studio",
+    "/admin/blog/topic-batch",
+    "/admin/content",
+    "/admin/content-coverage",
+    "/admin/content-quality",
+    "/admin/country-exam-readiness",
+    "/admin/diagnostics",
+    "/admin/diagnostics/cat-blueprint-sessions",
+    "/admin/diagnostics/theme-qa",
+    "/admin/feedback",
+    "/admin/generation",
+    "/admin/hub/publishing",
+    "/admin/inventory",
+    "/admin/lessons",
+    "/admin/lessons/blueprint-coverage",
+    "/admin/lessons/generate",
+    "/admin/lessons/generate-batch",
+    "/admin/lessons/new",
+    "/admin/media",
+    "/admin/media/screenshots",
+    "/admin/operations",
+    "/admin/pathway-launch-workflow",
+    "/admin/premium-protection",
+    "/admin/product-availability",
+    "/admin/questions",
+    "/admin/questions/import",
+    "/admin/questions/nclex-mapping",
+    "/admin/queue",
+    "/admin/seo",
+    "/admin/subscriptions",
+    "/admin/system-status",
+    "/admin/users",
+    "/allied-health",
+    "/api/admin/diagnostics",
+    "/api/admin/gaps",
+    "/api/admin/lessons",
+    "/api/admin/nclex-client-needs-mapping",
+    "/api/admin/operations-dashboard",
+    "/api/admin/operations-health",
+    "/api/admin/question-bank-coverage",
+    "/api/admin/question-bank-diagnostics",
+    "/api/admin/questions",
+    "/api/admin/system-status",
+    "/app",
+    "/app/account/analytics",
+    "/app/account/billing",
+    "/app/account/focus-areas",
+    "/app/account/mistakes",
+    "/app/account/notes",
+    "/app/account/overview",
+    "/app/account/personal",
+    "/app/account/readiness",
+    "/app/account/report-card",
+    "/app/account/security",
+    "/app/account/study-preferences",
+    "/app/coach",
+    "/app/exam-plan",
+    "/app/exams",
+    "/app/flashcards",
+    "/app/flashcards/weak-areas",
+    "/app/lessons",
+    "/app/onboarding",
+    "/app/plans",
+    "/app/practice",
+    "/app/practice-tests",
+    "/app/practice-tests/cat-insights",
+    "/app/practice-tests/start",
+    "/app/questions",
+    "/app/quick-start",
+    "/app/review",
+    "/app/start-studying",
+    "/app/strategy",
+    "/app/strategy/mixed",
+    "/app/study-plan",
+    "/blog",
+    "/blog/${encodeURIComponent(link.slug)}",
+    "/blog/clinical-judgment-on-exam-day",
+    "/blog/lab-trends-and-acute-kidney-injury",
+    "/blog/pharmacology-without-memorization-chaos",
+    "/blog/tag/uk-nursing",
+    "/canada/rpn/rex-pn",
+    "/contact",
+    "/content-review-policy",
+    "/disclaimer",
+    "/editorial-policy",
+    "/flashcards",
+    "/forgot-password",
+    "/how-it-works",
+    "/lessons",
+    "/login",
+    "/pre-nursing",
+    "/pre-nursing/lessons",
+    "/pre-nursing/lessons/diagnostics",
+    "/pre-nursing/lessons/fluids-electrolytes",
+    "/pre-nursing/lessons/human-factors",
+    "/pre-nursing/lessons/infection-control",
+    "/pre-nursing/lessons/pathophysiology",
+    "/pre-nursing/lessons/pharmacology",
+    "/pre-nursing/lessons/study-strategies",
+    "/pre-nursing/mini-cat",
+    "/pre-nursing/study-plan",
+    "/pricing",
+    "/privacy",
+    "/question-bank",
+    "/refund-policy",
+    "/signup",
+    "/terms",
+    "/tools",
+    "/tools/med-math",
+    "/us/rn/nclex-rn/lessons",
+    "/us/rn/nclex-rn/lessons/acid-base-balance",
+    "/us/rn/nclex-rn/questions"
+  ],
+  "edges": [
+    {
+      "from": "src/app/(admin)/admin/access/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/access/page.tsx",
+      "to": "/admin/operations",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/ai/drafts/questions/[id]/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/ai/exam-questions/batch/page.tsx",
+      "to": "/admin/ai/exam-questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/ai/exam-questions/batch/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/ai/exam-questions/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/ai/exam-questions/page.tsx",
+      "to": "/admin/ai/exam-questions/batch",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/ai/flashcards/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/ai/review/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/content/page.tsx",
+      "to": "/admin/analytics/users",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/content/page.tsx",
+      "to": "/admin/analytics/study-performance",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/content/page.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/content/page.tsx",
+      "to": "/admin/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/content/page.tsx",
+      "to": "/admin/ai/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/content/page.tsx",
+      "to": "/admin/blog/studio",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/content/page.tsx",
+      "to": "/admin/seo",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/funnels/page.tsx",
+      "to": "/admin/analytics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/funnels/page.tsx",
+      "to": "/admin/analytics/users",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/page.tsx",
+      "to": "/admin/inventory",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/page.tsx",
+      "to": "/admin/hub/publishing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/page.tsx",
+      "to": "/admin/operations",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/page.tsx",
+      "to": "/admin/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/page.tsx",
+      "to": "/admin/analytics/users",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/page.tsx",
+      "to": "/admin/analytics/subscriptions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/page.tsx",
+      "to": "/admin/analytics/funnels",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/page.tsx",
+      "to": "/admin/analytics/study-performance",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/page.tsx",
+      "to": "/admin/analytics/product-intelligence",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/page.tsx",
+      "to": "/admin/analytics/weak-areas",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/product-intelligence/page.tsx",
+      "to": "/admin/analytics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/product-intelligence/page.tsx",
+      "to": "/admin/analytics/study-performance",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/product-intelligence/page.tsx",
+      "to": "/admin/analytics/funnels",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/study-performance/page.tsx",
+      "to": "/admin/analytics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/study-performance/page.tsx",
+      "to": "/admin/analytics/users",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/study-performance/page.tsx",
+      "to": "/admin/analytics/product-intelligence",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/subscriptions/page.tsx",
+      "to": "/admin/subscriptions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/subscriptions/page.tsx",
+      "to": "/admin/analytics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/users/page.tsx",
+      "to": "/admin/analytics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/users/page.tsx",
+      "to": "/admin/users",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/weak-areas/page.tsx",
+      "to": "/admin/analytics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/weak-areas/page.tsx",
+      "to": "/admin/analytics/product-intelligence",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/analytics/weak-areas/page.tsx",
+      "to": "/admin/analytics/study-performance",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/automation-logs/page.tsx",
+      "to": "/admin/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/automation-logs/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/campaigns/page.tsx",
+      "to": "/admin/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/control-panel/page.tsx",
+      "to": "/admin/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/control-panel/page.tsx",
+      "to": "/admin/blog/generate",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/draft-batch/page.tsx",
+      "to": "/admin/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/gemini-draft/page.tsx",
+      "to": "/admin/blog/generate",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/generate/page.tsx",
+      "to": "/admin/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/generate/page.tsx",
+      "to": "/admin/blog/studio",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/generate/page.tsx",
+      "to": "/admin/blog/control-panel",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/generate/page.tsx",
+      "to": "/admin/blog/campaigns",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/generate/page.tsx",
+      "to": "/admin/blog/draft-batch",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/library/page.tsx",
+      "to": "/admin/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/library/page.tsx",
+      "to": "/admin/blog/control-panel",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/library/page.tsx",
+      "to": "/admin/blog/scheduler",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/page.tsx",
+      "to": "/admin/blog/library",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/page.tsx",
+      "to": "/admin/blog/control-panel",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/page.tsx",
+      "to": "/admin/blog/generate",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/page.tsx",
+      "to": "/admin/blog/campaigns",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/page.tsx",
+      "to": "/admin/blog/scheduler",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/page.tsx",
+      "to": "/admin/blog/topic-batch",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/page.tsx",
+      "to": "/admin/blog/draft-batch",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/page.tsx",
+      "to": "/admin/automation-logs",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/page.tsx",
+      "to": "/admin/seo",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/scheduler/page.tsx",
+      "to": "/admin/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/studio/page.tsx",
+      "to": "/admin/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/studio/page.tsx",
+      "to": "/admin/blog/control-panel",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/blog/topic-batch/page.tsx",
+      "to": "/admin/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/content/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/content/page.tsx",
+      "to": "/api/admin/question-bank-coverage",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/content/page.tsx",
+      "to": "/api/admin/gaps",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/content/page.tsx",
+      "to": "/api/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/content/page.tsx",
+      "to": "/api/admin/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/content-coverage/page.tsx",
+      "to": "/admin/inventory",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/content-quality/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/country-exam-readiness/page.tsx",
+      "to": "/admin/pathway-launch-workflow",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/country-exam-readiness/page.tsx",
+      "to": "/admin/product-availability",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/country-exam-readiness/page.tsx",
+      "to": "/admin/inventory",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/country-exam-readiness/page.tsx",
+      "to": "/admin/system-status",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/demo-users/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/diagnostics/cat-blueprint-sessions/page.tsx",
+      "to": "/admin/questions/nclex-mapping",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/diagnostics/cat-blueprint-sessions/page.tsx",
+      "to": "/admin/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/diagnostics/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/diagnostics/page.tsx",
+      "to": "/api/admin/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/diagnostics/page.tsx",
+      "to": "/admin/diagnostics/cat-blueprint-sessions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/diagnostics/page.tsx",
+      "to": "/admin/diagnostics/theme-qa",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/diagnostics/page.tsx",
+      "to": "/admin/questions/nclex-mapping",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/diagnostics/theme-qa/page.tsx",
+      "to": "/admin/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/eeat-editorial/page.tsx",
+      "to": "/admin/seo",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/eeat-editorial/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/fraud/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/generation/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/hub/ai/page.tsx",
+      "to": "/admin/automation-logs",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/hub/ai/page.tsx",
+      "to": "/admin/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/hub/publishing/page.tsx",
+      "to": "/admin/inventory",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/i18n/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/inventory/page.tsx",
+      "to": "/admin/analytics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/inventory/page.tsx",
+      "to": "/api/admin/question-bank-coverage",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/inventory/page.tsx",
+      "to": "/admin/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/inventory/page.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/inventory/page.tsx",
+      "to": "/admin/content",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/lessons/blueprint-coverage/page.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/lessons/generate/page.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/lessons/generate/page.tsx",
+      "to": "/admin/lessons/generate-batch",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/lessons/generate/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/lessons/generate-batch/page.tsx",
+      "to": "/admin/lessons/generate",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/lessons/generate-batch/page.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/lessons/generate-batch/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/lessons/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/lessons/page.tsx",
+      "to": "/admin/content",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/lessons/page.tsx",
+      "to": "/admin/lessons/blueprint-coverage",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/media/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/media/page.tsx",
+      "to": "/admin/blog/control-panel",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/media/page.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/media/page.tsx",
+      "to": "/admin/media/screenshots",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/media/screenshots/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/media/screenshots/page.tsx",
+      "to": "/admin/media",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/operations/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/operations/page.tsx",
+      "to": "/admin/automation-logs",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/operations/page.tsx",
+      "to": "/admin/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/page.tsx",
+      "to": "/admin/system-status",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/page.tsx",
+      "to": "/admin/operations",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/pathway-launch-workflow/page.tsx",
+      "to": "/admin/country-exam-readiness",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/pathway-launch-workflow/page.tsx",
+      "to": "/admin/inventory",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/premium-protection/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/premium-protection/page.tsx",
+      "to": "/admin/users",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/product-availability/page.tsx",
+      "to": "/admin/country-exam-readiness",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/product-availability/page.tsx",
+      "to": "/admin/inventory",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/questions/import/page.tsx",
+      "to": "/admin/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/questions/nclex-mapping/page.tsx",
+      "to": "/api/admin/nclex-client-needs-mapping",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/questions/nclex-mapping/page.tsx",
+      "to": "/admin/diagnostics/cat-blueprint-sessions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/questions/nclex-mapping/page.tsx",
+      "to": "/admin/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/questions/page.tsx",
+      "to": "/admin/questions/import",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/questions/page.tsx",
+      "to": "/admin/ai/exam-questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/questions/page.tsx",
+      "to": "/admin/questions/nclex-mapping",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/questions/page.tsx",
+      "to": "/admin/media",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/questions/page.tsx",
+      "to": "/api/admin/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/questions/page.tsx",
+      "to": "/api/admin/question-bank-coverage",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/questions/page.tsx",
+      "to": "/api/admin/question-bank-diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/queue/page.tsx",
+      "to": "/admin/generation",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/queue/page.tsx",
+      "to": "/admin/automation-logs",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/queue/page.tsx",
+      "to": "/admin/operations",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/seo/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/seo/page.tsx",
+      "to": "/admin/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/seo/page.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/subscriptions/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/system-status/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/system-status/page.tsx",
+      "to": "/api/admin/system-status",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/users/[userId]/page.tsx",
+      "to": "/admin/users",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/users/[userId]/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/users/page.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/waitlist/page.tsx",
+      "to": "/admin/users",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(admin)/admin/waitlist/page.tsx",
+      "to": "/admin/product-availability",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/[lessonSlug]/pathway-lesson-detail-page-body.tsx",
+      "to": "/tools",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/[lessonSlug]/pathway-lesson-detail-page-body.tsx",
+      "to": "/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/page.tsx",
+      "to": "/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/pricing/page.tsx",
+      "to": "/signup",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/pricing/page.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/allied/[career]/page.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/allied/[career]/page.tsx",
+      "to": "/allied-health",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/allied-health/[slug]/lessons/[lessonSlug]/page.tsx",
+      "to": "/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/allied-health/[slug]/lessons/[lessonSlug]/page.tsx",
+      "to": "/allied-health",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/allied-health/[slug]/page.tsx",
+      "to": "/allied-health",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/allied-health/[slug]/page.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/allied-health/page.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/allied-health/page.tsx",
+      "to": "/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/blog/[slug]/page.tsx",
+      "to": "/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/blog/tag/[tag]/page.tsx",
+      "to": "/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/exams/philippines/page.tsx",
+      "to": "/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/exams/uk/page.tsx",
+      "to": "/blog/tag/uk-nursing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/exams/uk/page.tsx",
+      "to": "/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/page.tsx",
+      "to": "/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/pre-nursing/lessons/[slug]/page.tsx",
+      "to": "/pre-nursing/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/pre-nursing/lessons/page.tsx",
+      "to": "/pre-nursing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/pre-nursing/lessons/page.tsx",
+      "to": "/pre-nursing/study-plan",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/pre-nursing/mini-cat/page.tsx",
+      "to": "/pre-nursing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/pre-nursing/page.tsx",
+      "to": "/pre-nursing/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/pre-nursing/page.tsx",
+      "to": "/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/pre-nursing/page.tsx",
+      "to": "/question-bank",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/pre-nursing/page.tsx",
+      "to": "/pre-nursing/mini-cat",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/pre-nursing/practice/[slug]/page.tsx",
+      "to": "/pre-nursing/mini-cat",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/pre-nursing/practice/[slug]/page.tsx",
+      "to": "/pre-nursing/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(marketing)/(default)/pre-nursing/study-plan/page.tsx",
+      "to": "/pre-nursing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/focus-areas/page.tsx",
+      "to": "/app/account/readiness",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/focus-areas/page.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/notes/page.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/notes/page.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/overview/page.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/overview/page.tsx",
+      "to": "/app/study-plan",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/overview/page.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/overview/page.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/overview/page.tsx",
+      "to": "/app/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/page.tsx",
+      "to": "/app/account/overview",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/question-bank-performance/page.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/question-bank-performance/page.tsx",
+      "to": "/app/account/report-card",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/review-queue/page.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/review-queue/page.tsx",
+      "to": "/app/practice-tests",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/review-queue/page.tsx",
+      "to": "/app/account/focus-areas",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/account/settings/page.tsx",
+      "to": "/app/account/study-preferences",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/baseline-assessment/page.tsx",
+      "to": "/login",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/coach/page.tsx",
+      "to": "/app/practice",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/error.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/exams/attempts/[id]/page.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/exams/attempts/[id]/page.tsx",
+      "to": "/app/exams",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/exams/attempts/[id]/page.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/exams/layout.tsx",
+      "to": "/login",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/exams/page.tsx",
+      "to": "/app/practice-tests",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/guided/page.tsx",
+      "to": "/app/account/analytics",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/lessons/[id]/error.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/lessons/[id]/page.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/lessons/[id]/page.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/lessons/[id]/page.tsx",
+      "to": "/app/exams",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/lessons/error.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/lessons/page.tsx",
+      "to": "/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/lessons/page.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/onboarding/onboarding-page-client.tsx",
+      "to": "/app/start-studying",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/onboarding/page.tsx",
+      "to": "/login",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/onboarding/page.tsx",
+      "to": "/app/start-studying",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/page.tsx",
+      "to": "/app/onboarding",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/practice-tests/[id]/error.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/practice-tests/[id]/results/page.tsx",
+      "to": "/app/practice-tests",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/practice-tests/cat-insights/page.tsx",
+      "to": "/app/practice-tests",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/practice-tests/page.tsx",
+      "to": "/app/practice-tests/cat-insights",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/profile/page.tsx",
+      "to": "/app/account/overview",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/quick-start/page.tsx",
+      "to": "/app/start-studying",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/quick-start/quick-start-flow-client.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/quick-start/quick-start-flow-client.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/review/page.tsx",
+      "to": "/app/practice",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/review/page.tsx",
+      "to": "/app/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/review/page.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/review/page.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/review/page.tsx",
+      "to": "/app/account/mistakes",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/review/page.tsx",
+      "to": "/login",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/start-studying/page.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/start-studying/page.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/start-studying/page.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/start-studying/page.tsx",
+      "to": "/app/onboarding",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/strategy/[strategyKey]/page.tsx",
+      "to": "/app/strategy",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/study-coach/page.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/(learner)/study-coach/page.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/app/error.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/app/(student)/profile/page.tsx",
+      "to": "/app/account/overview",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-blog-draft-batch-client.tsx",
+      "to": "/admin/blog/control-panel",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-blog-studio-client.tsx",
+      "to": "/admin/blog/control-panel",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-command-center.tsx",
+      "to": "/admin/premium-protection",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-command-center.tsx",
+      "to": "/admin/content-quality",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-command-center.tsx",
+      "to": "/admin/users",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-command-center.tsx",
+      "to": "/admin/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-command-center.tsx",
+      "to": "/admin/content",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-content-coverage-filters.tsx",
+      "to": "/admin/content-coverage",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-dashboard-overview.tsx",
+      "to": "/admin/content",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-dashboard-overview.tsx",
+      "to": "/admin/users",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-dashboard-overview.tsx",
+      "to": "/admin/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-dashboard-overview.tsx",
+      "to": "/admin/system-status",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-dashboard-overview.tsx",
+      "to": "/admin/operations",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-dashboard-overview.tsx",
+      "to": "/admin/questions/import",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-dashboard-overview.tsx",
+      "to": "/admin/ai/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-dashboard-overview.tsx",
+      "to": "/admin/automation-logs",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-dashboard-overview.tsx",
+      "to": "/admin/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-nav-client.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-operations-console.tsx",
+      "to": "/admin/automation-logs",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-operations-console.tsx",
+      "to": "/admin/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-operations-console.tsx",
+      "to": "/admin/analytics",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-operations-console.tsx",
+      "to": "/admin/ai/review",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-operations-console.tsx",
+      "to": "/admin/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-operations-console.tsx",
+      "to": "/admin/blog/scheduler",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-operations-console.tsx",
+      "to": "/admin/subscriptions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-operations-console.tsx",
+      "to": "/admin/analytics/subscriptions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-operations-console.tsx",
+      "to": "/api/admin/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-operations-console.tsx",
+      "to": "/api/admin/operations-health",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-operations-console.tsx",
+      "to": "/api/admin/operations-dashboard",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-question-bulk-import-client.tsx",
+      "to": "/admin/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-shell.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-sidebar-nav.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-workspace-strip-display.tsx",
+      "to": "/admin/blog/scheduler",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-workspace-strip-display.tsx",
+      "to": "/admin/queue",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-workspace-strip-display.tsx",
+      "to": "/admin/generation",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/admin-workspace-strip-display.tsx",
+      "to": "/admin/operations",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/ai/exam-questions-batch-client.tsx",
+      "to": "/admin/ai/exam-questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/ai/exam-questions-tool.tsx",
+      "to": "/admin/ai/exam-questions/batch",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/ai/question-draft-studio-client.tsx",
+      "to": "/admin/ai/exam-questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/ai/question-draft-studio-client.tsx",
+      "to": "/admin/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/analytics/admin-analytics-dashboard.tsx",
+      "to": "/admin/operations",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/analytics/admin-analytics-dashboard.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/analytics/admin-analytics-dashboard.tsx",
+      "to": "/admin/ai/exam-questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/analytics/admin-analytics-dashboard.tsx",
+      "to": "/admin/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/analytics/admin-funnel-analytics-dashboard.tsx",
+      "to": "/admin/operations",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/analytics/admin-product-intelligence-view.tsx",
+      "to": "/admin/analytics/funnels",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/analytics/admin-product-intelligence-view.tsx",
+      "to": "/admin/feedback",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/analytics/admin-study-performance-dashboard.tsx",
+      "to": "/admin/operations",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/analytics/admin-subscription-analytics-dashboard.tsx",
+      "to": "/admin/operations",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/analytics/admin-user-analytics-dashboard.tsx",
+      "to": "/admin/operations",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/analytics/admin-weak-areas-view.tsx",
+      "to": "/admin/analytics/product-intelligence",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/feedback/admin-feedback-inbox-view.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/feedback/admin-feedback-inbox-view.tsx",
+      "to": "/admin/feedback",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/lessons/admin-ai-lesson-generator-client.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/lessons/admin-lesson-batch-generator-client.tsx",
+      "to": "/admin/lessons/generate",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/lessons/admin-lesson-batch-generator-client.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/lessons/admin-lesson-form-client.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/lessons/admin-lessons-library-client.tsx",
+      "to": "/admin/lessons/generate",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/lessons/admin-lessons-library-client.tsx",
+      "to": "/admin/lessons/generate-batch",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/lessons/admin-lessons-library-client.tsx",
+      "to": "/admin/lessons/new",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/lessons/admin-lessons-library-client.tsx",
+      "to": "/admin/content",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/seo/admin-seo-hub-client.tsx",
+      "to": "/admin/blog/control-panel",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/seo/admin-seo-hub-client.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/system-status-dashboard.tsx",
+      "to": "/admin/automation-logs",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/system-status-dashboard.tsx",
+      "to": "/admin/lessons/generate-batch",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/system-status-dashboard.tsx",
+      "to": "/admin/ai/exam-questions/batch",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/system-status-dashboard.tsx",
+      "to": "/admin/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/system-status-dashboard.tsx",
+      "to": "/admin/lessons/generate",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/system-status-dashboard.tsx",
+      "to": "/admin/blog/studio",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/system-status-dashboard.tsx",
+      "to": "/admin/ai/exam-questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/system-status-dashboard.tsx",
+      "to": "/admin/ai/review",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/admin/system-status-dashboard.tsx",
+      "to": "/admin/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/auth/marketing-header-auth.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/auth/trial-blocked-card.tsx",
+      "to": "/login",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/auth/trial-blocked-card.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/exam/exam-session-error-boundary.tsx",
+      "to": "/app/practice-tests",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/exam/learner-exam-chrome.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/exam-pathways/exam-pathway-hub-body.tsx",
+      "to": "/signup",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/exam-pathways/exam-pathway-hub-body.tsx",
+      "to": "/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/exam-pathways/exam-pathway-hub-body.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/exam-pathways/exam-pathway-hub-body.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/exam-pathways/exam-pathway-hub-body.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/exam-pathways/pathway-questions-hub-view.tsx",
+      "to": "/signup",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/flashcards/flashcard-custom-study-client.tsx",
+      "to": "/app/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/flashcards/flashcard-study-client.tsx",
+      "to": "/app/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/flashcards/flashcard-weak-study-client.tsx",
+      "to": "/app/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/flashcards/flashcard-weak-study-client.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/flashcards/flashcards-hub-client.tsx",
+      "to": "/app/flashcards/weak-areas",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/flashcards/flashcards-hub-client.tsx",
+      "to": "/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/flashcards/flashcards-hub-client.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/flashcards/flashcards-hub-client.tsx",
+      "to": "/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/flashcards/flashcards-hub-client.tsx",
+      "to": "/app/review",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/layout/site-footer.tsx",
+      "to": "/contact",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/layout/site-footer.tsx",
+      "to": "/admin",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/layout/site-footer.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/layout/site-footer.tsx",
+      "to": "/app/account/overview",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/layout/site-header.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/layout/site-header.tsx",
+      "to": "/app/account/overview",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/lessons/lesson-notes-drawer.tsx",
+      "to": "/app/account/notes",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/lessons/lesson-page-header.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/lessons/pathway-lesson-actions.tsx",
+      "to": "/login",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/lessons/pathway-lesson-locked-sections-preview.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/lessons/pathway-lesson-preview-banner.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/lessons/pathway-lesson-preview-banner.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/marketing/about-page-client.tsx",
+      "to": "/signup",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/marketing/about-page-client.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/marketing/about-page-client.tsx",
+      "to": "/editorial-policy",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/marketing/about-page-client.tsx",
+      "to": "/content-review-policy",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/marketing/about-page-client.tsx",
+      "to": "/disclaimer",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/marketing/faq-product-screenshots-section.tsx",
+      "to": "/signup",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/marketing/how-it-works-page-client.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/marketing/np-marketing-product-discovery.tsx",
+      "to": "/signup",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/marketing/public-lessons-pathway-sections.tsx",
+      "to": "/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pathway-lessons/fnp-lesson-explorer.tsx",
+      "to": "/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pathway-lessons/fnp-lessons-hub.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pathway-lessons/fnp-lessons-hub.tsx",
+      "to": "/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pathway-lessons/nclex-pn-lessons-hub.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pathway-lessons/nclex-pn-lessons-hub.tsx",
+      "to": "/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pathway-lessons/nclex-rn-lessons-hub.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pathway-lessons/nclex-rn-lessons-hub.tsx",
+      "to": "/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pathway-lessons/pathway-nclex-scalable-lesson-list.tsx",
+      "to": "/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-account-capture.tsx",
+      "to": "/pre-nursing/study-plan",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-account-capture.tsx",
+      "to": "/signup",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-account-capture.tsx",
+      "to": "/login",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-exam-results.tsx",
+      "to": "/pre-nursing/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-landing-client.tsx",
+      "to": "/pre-nursing/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-landing-client.tsx",
+      "to": "/pre-nursing/study-plan",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-landing-client.tsx",
+      "to": "/tools/med-math",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-milestone-strip.tsx",
+      "to": "/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-milestone-strip.tsx",
+      "to": "/pre-nursing/study-plan",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-module-engagement.tsx",
+      "to": "/login",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-module-engagement.tsx",
+      "to": "/pre-nursing/mini-cat",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-module-engagement.tsx",
+      "to": "/pre-nursing/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-module-engagement.tsx",
+      "to": "/pre-nursing/study-plan",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-module-engagement.tsx",
+      "to": "/tools/med-math",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-module-engagement.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-module-engagement.tsx",
+      "to": "/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-next-steps-block.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-next-steps-block.tsx",
+      "to": "/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-study-plan-client.tsx",
+      "to": "/login",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-study-plan-client.tsx",
+      "to": "/signup",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/pre-nursing/pre-nursing-study-plan-client.tsx",
+      "to": "/pre-nursing/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/seo/eeat-content-attribution.tsx",
+      "to": "/editorial-policy",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/seo/eeat-content-attribution.tsx",
+      "to": "/content-review-policy",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/seo/eeat-content-attribution.tsx",
+      "to": "/disclaimer",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/seo/marketing-study-cross-links.tsx",
+      "to": "/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/seo/marketing-study-cross-links.tsx",
+      "to": "/tools",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/seo/marketing-study-cross-links.tsx",
+      "to": "/blog",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/seo/marketing-study-cross-links.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/baseline-assessment-flow.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/baseline-assessment-flow.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/baseline-assessment-flow.tsx",
+      "to": "/app/flashcards/weak-areas",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/baseline-assessment-prompt.tsx",
+      "to": "/app/quick-start",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/cat-ambiguity-pathway-picker.tsx",
+      "to": "/app/practice-tests/start",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/cat-results-coach-panel.tsx",
+      "to": "/app/practice-tests/cat-insights",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/checkout-success-banner.tsx",
+      "to": "/app/account/overview",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/checkout-success-banner.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/dashboard/benchmark-card.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/dashboard/category-breakdown.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/dashboard/exam-countdown-card.tsx",
+      "to": "/app/account/study-preferences",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/dashboard/exam-history.tsx",
+      "to": "/app/exams",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/dashboard/locked-dashboard-overlay.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/dashboard/locked-dashboard-overlay.tsx",
+      "to": "/how-it-works",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/dashboard/readiness-score-card.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/dashboard/weakness-heatmap.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/exam-plan-settings-card.tsx",
+      "to": "/app/study-plan",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/exam-practice-client.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/exam-practice-client.tsx",
+      "to": "/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/freemium-preview-exhausted-surface.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/freemium-question-peek.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-account-shell-header.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-billing-page-content.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-billing-page-content.tsx",
+      "to": "/terms",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-billing-page-content.tsx",
+      "to": "/privacy",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-billing-page-content.tsx",
+      "to": "/refund-policy",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-billing-page-content.tsx",
+      "to": "/acceptable-use",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-billing-page-content.tsx",
+      "to": "/contact",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-daily-momentum-card.tsx",
+      "to": "/app/account/personal",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-daily-momentum-card.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-dashboard-view.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-dashboard-view.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-dashboard-view.tsx",
+      "to": "/app/exams",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-personal-info-form.tsx",
+      "to": "/app/account/study-preferences",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-personal-info-form.tsx",
+      "to": "/app/account/security",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-personal-info-form.tsx",
+      "to": "/contact",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-profile-account-actions.tsx",
+      "to": "/forgot-password",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-profile-account-actions.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-profile-account-actions.tsx",
+      "to": "/terms",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-profile-account-actions.tsx",
+      "to": "/privacy",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-profile-account-actions.tsx",
+      "to": "/refund-policy",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-profile-account-actions.tsx",
+      "to": "/acceptable-use",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-profile-account-actions.tsx",
+      "to": "/contact",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-progress-page-content.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-progress-page-content.tsx",
+      "to": "/app/exams",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-progress-page-content.tsx",
+      "to": "/app/account/report-card",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-progress-page-content.tsx",
+      "to": "/app/account/overview",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-readiness-premium.tsx",
+      "to": "/app/account/report-card",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-report-card-premium.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-report-card-premium.tsx",
+      "to": "/app/exams",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-report-card-premium.tsx",
+      "to": "/app/account/readiness",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-report-card-premium.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-security-hub.tsx",
+      "to": "/forgot-password",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-security-hub.tsx",
+      "to": "/contact",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-student-dashboard.tsx",
+      "to": "/app/account/readiness",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-student-dashboard.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-study-home-durability-minimal.tsx",
+      "to": "/app/account/overview",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-study-home-durability-minimal.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-study-home.tsx",
+      "to": "/app/study-plan",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-study-home.tsx",
+      "to": "/app/account/overview",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-study-settings-hub.tsx",
+      "to": "/app/account/personal",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-study-settings-hub.tsx",
+      "to": "/app/account/billing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-study-settings-hub.tsx",
+      "to": "/app/account/security",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-study-settings-hub.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/learner-unauthenticated-gate.tsx",
+      "to": "/login",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/locked-study-next-preview.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/pathway-cat-session-start-client.tsx",
+      "to": "/app/practice-tests",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/pathway-cat-session-start-client.tsx",
+      "to": "/app/account/billing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/pathway-cat-session-start-client.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/practice-test-results-static.tsx",
+      "to": "/app/practice-tests",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/practice-test-runner-client.tsx",
+      "to": "/app/practice-tests",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/practice-test-runner-client.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/practice-test-runner-client.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/practice-test-study-loop-next.tsx",
+      "to": "/app/account/readiness",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/practice-test-study-loop-next.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/premium-learner-hub.tsx",
+      "to": "/app/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/premium-learner-hub.tsx",
+      "to": "/app/flashcards/weak-areas",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/premium-learner-hub.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/premium-learner-hub.tsx",
+      "to": "/app/exams",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/question-session-study-loop-panel.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/question-session-study-loop-panel.tsx",
+      "to": "/app/account/readiness",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/spaced-review-reminder.tsx",
+      "to": "/app/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/structured-study-path-section.tsx",
+      "to": "/app/study-plan",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/study-planner-shell.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/study-planner-shell.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/subscription-paywall.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/subscription-paywall.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/student/weak-areas-dashboard-client.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/active-study-session.tsx",
+      "to": "/app",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/adaptive-coach-hero.tsx",
+      "to": "/app/practice",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/adaptive-coach-hero.tsx",
+      "to": "/app/review",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/adaptive-coach-hero.tsx",
+      "to": "/app/account/analytics",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/adaptive-engine-hero.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/adaptive-engine-hero.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/adaptive-engine-hero.tsx",
+      "to": "/app/exam-plan",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/analytics-hero.tsx",
+      "to": "/app/practice-tests",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/analytics-hero.tsx",
+      "to": "/app/review",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/analytics-hero.tsx",
+      "to": "/app/account/report-card",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/behind-schedule-alert.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/behind-schedule-alert.tsx",
+      "to": "/app/exam-plan",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/cat-readiness-hero.tsx",
+      "to": "/app/practice-tests",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/cat-upgrade-card.tsx",
+      "to": "/app/plans",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/cat-upgrade-card.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/exam-countdown-hero.tsx",
+      "to": "/app/exam-plan",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/flashcard-deck-card.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/flashcard-deck-card.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/flashcard-review-section.tsx",
+      "to": "/app/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/guided-study-hero.tsx",
+      "to": "/app/review",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/guided-study-stack.tsx",
+      "to": "/app/review",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/my-exam-plan-hero.tsx",
+      "to": "/app/exams",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/premium-exam-plan-upgrade-card.tsx",
+      "to": "/pricing",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/premium-exam-plan-upgrade-card.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/readiness-dimension-tabs.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/readiness-summary-row.tsx",
+      "to": "/app/coach",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/readiness-summary-row.tsx",
+      "to": "/app/account/report-card",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/readiness-trend-panel.tsx",
+      "to": "/app/practice-tests",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/recovery-plan-card.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/recovery-plan-card.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/recovery-plan-card.tsx",
+      "to": "/app/flashcards",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/review-due-now-cards.tsx",
+      "to": "/app/review",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/saved-for-review-section.tsx",
+      "to": "/app/account/notes",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/saved-for-review-section.tsx",
+      "to": "/app/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/saved-rationale-card.tsx",
+      "to": "/app/account/notes",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/strategy-practice-cards.tsx",
+      "to": "/app/strategy/mixed",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/strategy-session-client.tsx",
+      "to": "/app/strategy",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/weak-area-dimensions-tabs.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/weak-areas-impact-section.tsx",
+      "to": "/app/review",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/weak-areas-impact-section.tsx",
+      "to": "/app/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/study/weak-areas-impact-section.tsx",
+      "to": "/app/account/analytics",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/ui/study-card.tsx",
+      "to": "/us/rn/nclex-rn/questions",
+      "kind": "href"
+    },
+    {
+      "from": "src/components/ui/study-card.tsx",
+      "to": "/us/rn/nclex-rn/lessons/acid-base-balance",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/pre-nursing/lessons/study-strategies",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/pre-nursing/lessons/human-factors",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/question-bank",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/pre-nursing/lessons/pathophysiology",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/blog/lab-trends-and-acute-kidney-injury",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/blog/pharmacology-without-memorization-chaos",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/us/rn/nclex-rn/lessons",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/tools",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/pre-nursing/lessons/pharmacology",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/pre-nursing/lessons/fluids-electrolytes",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/pre-nursing/lessons/infection-control",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/blog/clinical-judgment-on-exam-day",
+      "kind": "href"
+    },
+    {
+      "from": "src/content/blog-static-posts.ts",
+      "to": "/pre-nursing/lessons/diagnostics",
+      "kind": "href"
+    },
+    {
+      "from": "src/lib/auth/guards.ts",
+      "to": "/login",
+      "kind": "href"
+    },
+    {
+      "from": "src/lib/auth-middleware.ts",
+      "to": "/login",
+      "kind": "href"
+    },
+    {
+      "from": "src/lib/blog/blog-refresh-existing-posts.ts",
+      "to": "/blog/${encodeURIComponent(link.slug)}",
+      "kind": "href"
+    },
+    {
+      "from": "src/lib/marketing/marketing-route-integrity.test.ts",
+      "to": "/canada/rpn/rex-pn",
+      "kind": "href"
+    }
+  ]
+}

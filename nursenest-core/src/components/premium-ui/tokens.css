@@ -1,0 +1,93 @@
+/* =============================================================
+   premium-ui/tokens.css
+
+   Premium-only design tokens used by the new homepage and nav
+   redesign. Layered ON TOP of existing tokens — does not redefine
+   --theme-* or --semantic-* variables.
+
+   Import this once near the top of `globals.css` (already loaded
+   for the marketing + product surfaces) so these tokens are
+   available wherever premium primitives render.
+
+   All colors resolve through theme variables, so each palette
+   (Aurora / Ocean / Forest / Midnight / Apex) automatically
+   carries through.
+   ============================================================= */
+
+:root {
+  /* ----- Radii (premium curvature scale) ----- */
+  --pui-radius-xs: 0.5rem;     /*  8px */
+  --pui-radius-sm: 0.75rem;    /* 12px */
+  --pui-radius-md: 1rem;       /* 16px */
+  --pui-radius-lg: 1.25rem;    /* 20px */
+  --pui-radius-xl: 1.75rem;    /* 28px */
+  --pui-radius-2xl: 2rem;      /* 32px */
+  --pui-radius-pill: 9999px;
+
+  /* ----- Spacing (section breathing room) ----- */
+  --pui-section-py-mobile: 3rem;
+  --pui-section-py-desktop: 5rem;
+  --pui-section-gap: clamp(2rem, 4vw, 5rem);
+  --pui-container-max: 1280px;
+
+  /* ----- Motion ----- */
+  --pui-motion-fast: 150ms;
+  --pui-motion-base: 240ms;
+  --pui-motion-slow: 420ms;
+  --pui-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --pui-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ----- Shadows / elevation (light theme baseline) ----- */
+  --pui-shadow-1: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --pui-shadow-2: 0 6px 18px rgba(15, 23, 42, 0.08);
+  --pui-shadow-3: 0 20px 60px rgba(15, 23, 42, 0.10);
+  --pui-shadow-4: 0 30px 80px rgba(15, 23, 42, 0.16);
+  --pui-shadow-cta: 0 8px 32px rgba(15, 23, 42, 0.20);
+
+  /* ----- Glass surfaces (resolved from theme background) ----- */
+  --pui-glass-bg:
+    color-mix(in srgb, var(--theme-page-bg, #ffffff) 70%, transparent);
+  --pui-glass-border:
+    color-mix(in srgb, var(--theme-primary, #2563eb) 14%, var(--theme-border, #e5e7eb));
+  --pui-glass-blur: 18px;
+
+  /* ----- Glow ring (subtle brand glow behind hero panels) ----- */
+  --pui-glow-primary:
+    radial-gradient(
+      circle at 30% 20%,
+      color-mix(in srgb, var(--theme-primary, #2563eb) 22%, transparent),
+      transparent 60%
+    );
+
+  /* ----- Premium gradients ----- */
+  --pui-gradient-brand:
+    linear-gradient(
+      135deg,
+      var(--theme-primary, #2563eb),
+      color-mix(in srgb, var(--theme-primary, #2563eb) 60%, var(--theme-accent, #fbbf24))
+    );
+  --pui-gradient-surface:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--theme-primary, #2563eb) 6%, var(--theme-page-bg, #ffffff)),
+      var(--theme-page-bg, #ffffff)
+    );
+  --pui-gradient-cta:
+    linear-gradient(
+      120deg,
+      var(--theme-primary, #2563eb),
+      color-mix(in srgb, var(--theme-primary, #2563eb) 50%, var(--theme-accent, #fbbf24))
+    );
+}
+
+/* Dark themes get deeper shadow tone so elevation still reads. */
+[data-theme="midnight"],
+[data-theme="apex"] {
+  --pui-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --pui-shadow-2: 0 6px 18px rgba(0, 0, 0, 0.40);
+  --pui-shadow-3: 0 20px 60px rgba(0, 0, 0, 0.50);
+  --pui-shadow-4: 0 30px 80px rgba(0, 0, 0, 0.55);
+  --pui-shadow-cta: 0 12px 36px rgba(0, 0, 0, 0.55);
+  --pui-glass-bg:
+    color-mix(in srgb, var(--theme-page-bg, #0b0f1a) 78%, transparent);
+}

@@ -1,0 +1,160 @@
+{
+  "$schema": "nursenest-ui-contract/1.1",
+  "name": "NurseNest UI Contract",
+  "description": "Production-safe UI contract with semantic tokens, deterministic component behavior, and generator-ready structure.",
+  
+  "themeSystem": {
+  "strategy": "CSS variables + Tailwind + CVA",
+  "defaultTheme": "lavender",
+  "switchMechanism": "data-theme attribute on root",
+  "rules": [
+  "All components MUST consume semantic tokens, not raw color tokens",
+  "All themes MUST override the same token set",
+  "No component should hardcode colors"
+  ]
+  },
+  
+  "tokens": {
+  "base": {
+  "primary": "#9d82dd",
+  "primaryForeground": "#ffffff",
+  "background": "#fdfcfa",
+  "textPrimary": "#111827",
+  "textSecondary": "#6b7280",
+  "border": "#e9e2ff",
+  "card": "#ffffff"
+  },
+  
+  ```
+  "semantic": {
+    "buttonPrimaryBg": "var(--theme-primary)",
+    "buttonPrimaryText": "var(--theme-primary-foreground)",
+    "buttonPrimaryBorder": "color-mix(in srgb, var(--theme-primary) 80%, black)",
+  
+    "buttonSecondaryBg": "var(--theme-secondary)",
+    "buttonSecondaryText": "var(--theme-secondary-foreground)",
+  
+    "inputBg": "var(--theme-input-bg)",
+    "inputBorder": "var(--theme-input-border)",
+    "inputFocusRing": "var(--theme-ring)",
+  
+    "cardBg": "var(--theme-card-bg)",
+    "cardBorder": "var(--theme-card-border)",
+  
+    "navBg": "var(--theme-nav-bg)",
+    "navText": "var(--theme-nav-text)"
+  },
+  
+  "states": {
+    "hoverOpacity": 0.92,
+    "activeScale": 0.97,
+    "disabledOpacity": 0.5,
+    "focusRingWidth": "1px"
+  }
+  ```
+  
+  },
+  
+  "components": {
+  "Button": {
+  "variants": {
+  "primary": {
+  "bg": "buttonPrimaryBg",
+  "text": "buttonPrimaryText",
+  "border": "buttonPrimaryBorder"
+  },
+  "secondary": {
+  "bg": "buttonSecondaryBg",
+  "text": "buttonSecondaryText"
+  },
+  "ghost": {
+  "bg": "transparent",
+  "border": "transparent"
+  }
+  },
+  "sizes": {
+  "sm": "32px",
+  "md": "36px",
+  "lg": "40px"
+  },
+  "states": {
+  "hover": "opacity",
+  "active": "scale",
+  "disabled": "opacity"
+  }
+  },
+  
+  ```
+  "Input": {
+    "bg": "inputBg",
+    "border": "inputBorder",
+    "focusRing": "inputFocusRing",
+    "height": "36px"
+  },
+  
+  "Card": {
+    "bg": "cardBg",
+    "border": "cardBorder",
+    "radius": "1rem",
+    "shadow": "card"
+  }
+  ```
+  
+  },
+  
+  "authScreen": {
+  "route": "/login",
+  "layout": "centered-card",
+  "maxWidth": "420px",
+  "structure": {
+  "header": ["icon", "title", "subtitle"],
+  "tabs": ["login", "register"],
+  "fields": {
+  "login": ["username", "password"],
+  "register": ["username", "email", "password", "inviteCode", "referralCode"]
+  },
+  "actions": ["submit"]
+  },
+  "rules": [
+  "All labels must use i18n keys",
+  "All inputs must include icons",
+  "All buttons must be full width",
+  "Referral code can be pre-filled from URL"
+  ]
+  },
+  
+  "themes": {
+  "requiredTokens": [
+  "--theme-primary",
+  "--theme-primary-foreground",
+  "--theme-background",
+  "--theme-border",
+  "--theme-card-bg"
+  ],
+  "available": [
+  "lavender",
+  "mint",
+  "blush",
+  "slate",
+  "midnight",
+  "ocean",
+  "forest",
+  "clinical-light",
+  "dark-clinical"
+  ]
+  },
+  
+  "assets": {
+  "logo": "/brand-logo.gif",
+  "icon": "/logo-icon.gif",
+  "favicon": "/favicon.svg"
+  },
+  
+  "constraints": [
+  "No hardcoded colors in components",
+  "All UI must derive from tokens",
+  "All forms must be accessible",
+  "All layouts must be responsive"
+  ]
+  }
+  

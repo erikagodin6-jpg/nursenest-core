@@ -1,0 +1,4 @@
+url,source,status,canonical,canonicalIssue,issue
+https://nursenest.ca,sitemap-core.xml|sitemap-en.xml,200,,canonical_missing,canonical_missing
+https://nursenest.ca/advanced-hemodynamic-monitoring,sitemap-clinical-modules.xml,200,https://nursenest.ca//advanced-hemodynamic-monitoring/en,canonical_mismatch,canonical_mismatch
+https://nursenest.ca/advanced-labs-interpretation,sitemap-clinical-modules.xml,200,https://nursenest.ca//advanced-labs-interpretation/en,canonical_mismatch,canonical_mismatch

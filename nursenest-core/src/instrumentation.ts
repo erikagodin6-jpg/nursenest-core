@@ -1,0 +1,125 @@
+/**
+ * Server / Edge instrumentation entry.
+ *
+ * Goals:
+ * - Keep this file extremely lightweight (do not pull heavy modules into the build graph)
+ * - Defer ALL heavy imports (Sentry, node instrumentation) behind runtime checks
+ * - Never let instrumentation throw and break boot
+ */
+
+import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
+import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+
+export async function register() {
+  try {
+    const runtime = process.env.NEXT_RUNTIME;
+
+    // -----------------------------
+    // NODE RUNTIME
+    // -----------------------------
+    if (runtime === "nodejs") {
+      try {
+        // Dynamic import keeps `home-perf-diag` → `server-stderr-line` out of the Edge
+        // instrumentation bundle (avoids pulling Node stderr helpers into edge graphs).
+        const { emitNnHomePerfDiagLine, isNnTraceHomePerfTrue, safeProcessPid } = await import(
+          "@/lib/observability/home-perf-diag"
+        );
+        if (isNnTraceHomePerfTrue()) {
+          emitNnHomePerfDiagLine({
+            tag: "nn_home_perf_boot",
+            pid: safeProcessPid(),
+            next_runtime: runtime,
+            pathname: "(boot)",
+            nn_trace_home_perf_env_defined: process.env.NN_TRACE_HOME_PERF !== undefined,
+            nn_trace_home_perf_env_len: process.env.NN_TRACE_HOME_PERF?.length ?? 0,
+            nn_trace_home_perf_literal_true: true,
+          });
+        }
+      } catch {
+        // never block boot on diagnostics
+      }
+
+      // Sentry (deferred)
+      if (isSentryServerRuntimeEnabled()) {
+        try {
+          const mod = await import("./sentry.server.config");
+          await mod.initSentryServerConfig?.();
+        } catch {
+          // swallow — do not break server boot
+        }
+      }
+
+      // Node instrumentation (deferred)
+      try {
+        const mod = await import("@/lib/instrumentation/register-node");
+        if (typeof mod.registerNodeInstrumentation === "function") {
+          await mod.registerNodeInstrumentation();
+        }
+      } catch {
+        // swallow — instrumentation must never crash app
+      }
+
+      // Notification env var validation — surfaces missing vars at boot so the first real
+      // payment doesn't arrive silently. Uses the structured validator for richer output.
+      try {
+        const { validateNotificationEnvVarsOnBoot } = await import(
+          "@/lib/stripe/notification-boot-validator"
+        );
+        validateNotificationEnvVarsOnBoot();
+      } catch {
+        // never block boot
+      }
+    }
+
+    // -----------------------------
+    // EDGE RUNTIME
+    // -----------------------------
+    if (runtime === "edge") {
+      if (isSentryServerRuntimeEnabled()) {
+        try {
+          const mod = await import("./sentry.edge.config");
+          await mod.initSentryEdgeConfig?.();
+        } catch {
+          // swallow — edge must stay resilient
+        }
+      }
+    }
+  } catch {
+    // absolute safety: never let register() crash
+  }
+}
+
+/**
+ * Avoid compile-time Sentry type imports.
+ * Keep args as `unknown[]` so Next does not pull Sentry into the server graph.
+ */
+export async function onRequestError(...args: unknown[]) {
+  try {
+    const err = args[0];
+    const req = args[1] as { url?: string } | undefined;
+
+    const message =
+      err instanceof Error ? err.message : typeof err === "string" ? err : "unknown_error";
+
+    safeServerLog("http", "request_error", {
+      route: typeof req?.url === "string" ? req.url.slice(0, 160) : "unknown",
+      errorName: err instanceof Error ? err.name : "non_error",
+      messageSample: message.slice(0, 200),
+    });
+
+    if (!isSentryServerRuntimeEnabled()) return;
+
+    const Sentry = await importSentryNextjs().catch(() => null);
+    const capture = Sentry?.captureRequestError as
+      | ((error: unknown, request: unknown, ...rest: unknown[]) => unknown | Promise<unknown>)
+      | undefined;
+
+    if (capture) {
+      const [arg0, arg1, ...rest] = args;
+      return capture(arg0, arg1, ...rest);
+    }
+  } catch {
+    // never throw from error handler
+  }
+}

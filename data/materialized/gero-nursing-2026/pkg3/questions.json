@@ -1,0 +1,279 @@
+{
+  "packageId": "pkg3-psychosocial",
+  "title": "Psychosocial Concerns in Older Adults — Question Bank",
+  "generatedDate": "2026-06-02",
+  "questionCount": 300,
+  "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+  "questions": [
+    {
+      "id": "GERO-P3-001",
+      "topicSlug": "elder-abuse",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A home care nurse visits an 82-year-old woman with moderate dementia. During the assessment, the nurse notes the woman has multiple unexplained bruises at various healing stages on her arms and torso. When the nurse asks how she got the bruises, the woman's adult daughter (her caregiver) responds, 'She's just clumsy — she bumps into things.' The woman appears fearful when her daughter is in the room. Which nursing action is the HIGHEST priority?",
+      "options": {
+        "A": "Document the bruises and schedule a follow-up visit in 2 weeks",
+        "B": "Accept the caregiver's explanation — the patient has dementia and falls are expected",
+        "C": "Ask to speak with the patient privately, conduct a comprehensive abuse assessment, and report suspected abuse per mandatory reporting requirements",
+        "D": "Call the daughter in and ask her to explain each bruise individually"
+      },
+      "correctAnswer": "C",
+      "rationale": "Multiple unexplained bruises at various healing stages + fearful affect when caregiver present + caregiver who provides a dismissive explanation = high suspicion for elder physical abuse. The nurse must: (1) interview the patient ALONE (private assessment — the alleged abuser must not be present); (2) conduct a thorough abuse assessment; (3) report to adult protective services per mandatory reporting legislation (applies to all healthcare providers in Canada and the US). Nurses are mandatory reporters of suspected elder abuse — the standard is 'reasonable suspicion,' not confirmed proof.",
+      "distractorRationales": {
+        "A": "Incorrect. A 2-week follow-up is dangerous when abuse is suspected. Mandatory reporting must happen NOW — not after a delay.",
+        "B": "Incorrect. Dementia does not cause bruises at multiple healing stages. Dementia patients are MORE vulnerable to abuse, not less deserving of protection.",
+        "D": "Incorrect. Confronting the alleged abuser in the patient's presence may endanger the patient and contaminate the assessment. The patient must be interviewed alone first."
+      },
+      "hint": "Multiple bruises at different healing stages + fearful patient + dismissive caregiver = ELDER ABUSE until proven otherwise.",
+      "clinicalPearl": "Elder abuse affects approximately 10% of older adults. In patients with dementia, rates are even higher because cognitive impairment reduces their ability to self-protect and report. Nurses are mandatory reporters — report on reasonable suspicion, not proof.",
+      "examStrategy": "Elder abuse scenarios: the correct action is ALWAYS: private assessment + report to adult protective services. Never confront the alleged abuser with the patient present.",
+      "keyTakeaway": "Elder abuse: assess privately, report immediately to APS per mandatory reporting. Multiple healing-stage bruises + fearful patient = abuse until proven otherwise.",
+      "tags": ["elder-abuse", "mandatory-reporting", "physical-abuse", "dementia", "APS"]
+    },
+    {
+      "id": "GERO-P3-002",
+      "topicSlug": "social-isolation",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 79-year-old man is assessed in a community health centre 6 months after his wife of 55 years died. He reports he rarely leaves home, has not seen friends since the funeral, and spends most of his day watching television. He eats only one meal daily, has lost 6 kg, and says he 'sees no point' in going out. He denies suicidal ideation. His daughter is concerned. Which nursing response is MOST appropriate?",
+      "options": {
+        "A": "Explain that social withdrawal after bereavement is normal and will resolve on its own within 1 year",
+        "B": "Conduct a depression screening (GDS or PHQ-9), assess for complicated grief, and connect him with bereavement support and community programs",
+        "C": "Advise his daughter to call more frequently to prevent isolation",
+        "D": "Reassure the patient that many widowers experience this and encourage him to 'push through' the grief"
+      },
+      "correctAnswer": "B",
+      "rationale": "This presentation — persistent social isolation, anorexia with significant weight loss (6 kg), anhedonia, and statements suggesting hopelessness ('no point') at 6 months post-bereavement — exceeds what is expected in normal grief. This clinical picture is consistent with complicated grief (prolonged grief disorder) and/or major depression. The nursing priority is: (1) validated depression screening (GDS or PHQ-9); (2) assess for prolonged grief; (3) connect with community bereavement support, mental health, and social resources. Reassurance and passive monitoring are insufficient.",
+      "distractorRationales": {
+        "A": "Incorrect. Normal grief does NOT typically include 6 kg weight loss, social isolation, anhedonia, and hopelessness at 6 months. These are red flags for depression or complicated grief requiring assessment and intervention.",
+        "C": "Incorrect. While family support is important, the primary intervention must be professional assessment and formal support services. Phone calls from his daughter do not replace professional depression screening and treatment.",
+        "D": "Incorrect. Minimizing grief and advising someone to 'push through' is dismissive and harmful. Depression and complicated grief are clinical conditions requiring professional intervention."
+      },
+      "hint": "6 months post-bereavement + weight loss + isolation + hopelessness = beyond normal grief. What must the nurse assess?",
+      "clinicalPearl": "Normal grief vs. complicated grief: normal grief is time-limited, fluctuating, and does not impair basic self-care. Complicated grief is persistent, intense, maladaptive, and causes functional impairment. Widower syndrome: older men who lose spouses are at particularly high risk of rapid health deterioration and suicide — especially within the first year.",
+      "examStrategy": "Bereavement questions: assess grief severity against expected trajectory. Weight loss + social isolation + hopelessness at 6 months = pathological grief + depression assessment required.",
+      "keyTakeaway": "Complicated grief + depression = screen with GDS/PHQ-9, refer to mental health and bereavement support. Weight loss + isolation + hopelessness = NOT normal grief resolution.",
+      "tags": ["bereavement", "grief", "complicated-grief", "depression", "social-isolation", "widower"]
+    },
+    {
+      "id": "GERO-P3-003",
+      "topicSlug": "elder-abuse",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is completing a home assessment for a 77-year-old woman with mild dementia. Her son, who manages her finances, accompanies her. The nurse notices that the patient appears malnourished (BMI 17.5), her home is cold, and she has no food in the refrigerator. Her son states, 'She doesn't want much food and we use the money from her pension for her medications.' Review of her chart reveals she takes two generic medications totalling $50/month. Her pension is $1,800/month. Which type of elder abuse is MOST likely?",
+      "options": {
+        "A": "Physical abuse — malnutrition represents physical harm",
+        "B": "Emotional abuse — the son is using fear to control her spending",
+        "C": "Financial abuse/exploitation combined with neglect",
+        "D": "Self-neglect — she is choosing not to eat"
+      },
+      "correctAnswer": "C",
+      "rationale": "This scenario describes financial abuse (her pension of $1,800/month is clearly not being used appropriately for her care — medications cost only $50/month) combined with neglect (failure to provide adequate food, warmth, and shelter). The son has control of her finances as a person with mild dementia who may lack capacity to oversee her own financial affairs. Financial abuse is the most common form of elder abuse in Canada. Neglect (failure to provide basic needs) is the most common form of elder abuse overall.",
+      "distractorRationales": {
+        "A": "Incorrect. Physical abuse involves direct physical harm (hitting, restraining). While malnutrition is a form of physical harm, the mechanism here is financial exploitation + neglect.",
+        "B": "Incorrect. Emotional abuse is possible but is not the primary concern. Financial exploitation is the evident primary mechanism.",
+        "D": "Incorrect. Self-neglect can only apply if the person has capacity and is making informed autonomous decisions. A person with dementia who is malnourished in a cold home with adequate pension income and a caregiver son is NOT self-neglecting — she is being neglected and financially exploited."
+      },
+      "hint": "Pension money not being used for care, malnourished patient in a cold home = which type of abuse?",
+      "clinicalPearl": "Financial abuse of older adults is extremely common and underreported — estimated to cost $2.9 billion annually in the US. Warning signs: unpaid bills despite adequate income, missing valuables, caregiver requests for cash, changes to will or power of attorney under suspicious circumstances.",
+      "examStrategy": "Identify the TYPE of elder abuse: Physical (hitting), Emotional (threats, humiliation), Financial (theft, exploitation), Neglect (failure to provide care), Sexual (non-consensual), Abandonment (leaving alone without care).",
+      "keyTakeaway": "Financial abuse + neglect: pension income not applied to care needs = financial exploitation. Report to APS immediately.",
+      "tags": ["elder-abuse", "financial-abuse", "neglect", "dementia", "mandatory-reporting"]
+    },
+    {
+      "id": "GERO-P3-004",
+      "topicSlug": "caregiver-burden",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is conducting a home visit for an 80-year-old man with Alzheimer's disease. His wife, age 76, provides all of his care. During the assessment, the wife begins crying and says, 'I find myself thinking that I wish he would just die so this would be all over. I'm horrible — what kind of wife thinks that?' Which nursing response is MOST therapeutic?",
+      "options": {
+        "A": "'It is normal to feel that way. I would report those thoughts if he showed signs of harm, though.'",
+        "B": "'You must be feeling overwhelmed. Many caregivers experience similar feelings — it doesn't make you a bad person. Can you tell me more about how you've been managing?'",
+        "C": "'Those are normal feelings. Have you thought about placing your husband in a nursing home?'",
+        "D": "'I understand you're stressed. Let me give you a pamphlet about dementia so you can better understand his behavior.'"
+      },
+      "correctAnswer": "B",
+      "rationale": "This caregiver is expressing ambivalent feelings typical of caregiver burnout — exhaustion, grief, and overwhelming burden can generate thoughts that horrify caregivers but are psychologically normal in the context of sustained, unrelieved caregiving stress. The therapeutic response: (1) validates her feelings without alarming her; (2) normalizes the experience without dismissing her distress; (3) opens space for further assessment of burnout severity, depression, and support needs. A calm, compassionate, non-judgmental response is essential. Immediately jumping to reporting concerns or LTC placement is premature.",
+      "distractorRationales": {
+        "A": "Incorrect. Mentioning reporting in this context is unnecessarily alarming and misinterprets the caregiver's statement — she is expressing exhaustion and grief, not a threat of harm. This response would shut down communication.",
+        "C": "Incorrect. While LTC placement may be appropriate eventually, jumping to this suggestion at this vulnerable moment is dismissive of the wife's emotional state and does not address her immediate need to be heard.",
+        "D": "Incorrect. A pamphlet does not address the acute emotional distress. It is dismissive and unhelpful in this moment."
+      },
+      "hint": "What does this caregiver need most in this moment — information, solution, or therapeutic communication?",
+      "clinicalPearl": "Ambivalent feelings (including wishing for the end of caregiving) are reported by up to 50% of dementia caregivers. Normalizing these feelings is therapeutic; pathologizing them increases shame and reduces help-seeking. Assess for depression and burnout, not just the thought content.",
+      "examStrategy": "Caregiver emotional distress: therapeutic communication = validate, normalize, explore. Information-giving and problem-solving come AFTER the emotional response is addressed. Immediately jumping to solutions signals the nurse isn't listening.",
+      "keyTakeaway": "Caregiver burnout often includes ambivalent or disturbing thoughts that horrify caregivers. Validate, normalize without dismissing, and assess for depression and support needs.",
+      "tags": ["caregiver-burden", "therapeutic-communication", "Alzheimer's", "burnout", "depression"]
+    },
+    {
+      "id": "GERO-P3-005",
+      "topicSlug": "social-isolation",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "easy",
+      "stem": "A nurse at a community health centre is assessing risk factors for poor health outcomes in a group of older adults. Which factor is associated with the GREATEST health risk comparable to smoking 15 cigarettes per day?",
+      "options": {
+        "A": "Sedentary lifestyle with <30 minutes of activity per week",
+        "B": "Social isolation and loneliness",
+        "C": "BMI between 25–29.9 (overweight)",
+        "D": "Consuming 1–2 drinks of alcohol daily"
+      },
+      "correctAnswer": "B",
+      "rationale": "Epidemiological research (Holt-Lunstad, 2015) found that social isolation and loneliness are associated with a 26–29% increased risk of premature mortality — an effect size comparable to smoking 15 cigarettes per day and greater than obesity. Social isolation acts through multiple mechanisms: increased inflammation (elevated IL-6, CRP), dysregulated HPA axis, reduced health behaviours, depression, cognitive decline, and reduced access to healthcare support. Social isolation is now recognized as a major public health concern, particularly for older adults.",
+      "distractorRationales": {
+        "A": "Incorrect. Physical inactivity is a significant risk factor, but the evidence base showing comparable risk to social isolation is most established for social isolation and loneliness specifically.",
+        "C": "Incorrect. Overweight BMI 25–29.9 carries modest increased risk but not to the magnitude of social isolation.",
+        "D": "Incorrect. Moderate alcohol consumption (1–2 drinks/day) has been associated in some studies with modest cardiovascular benefit, though this is controversial. It does not carry the mortality risk associated with social isolation."
+      },
+      "hint": "Research shows social isolation carries health risk equivalent to which common health behaviour?",
+      "clinicalPearl": "Social isolation is measurable and addressable. Nursing interventions: facilitating community connections, adult day programs, senior centres, telephone befriending, volunteer programs. Technology interventions (video calls, social media) can supplement but should not replace in-person contact.",
+      "examStrategy": "Social determinants of health questions: social isolation = major independent mortality risk factor. Nursing assessment must routinely screen for social connectedness in all older adults.",
+      "keyTakeaway": "Social isolation = mortality risk equivalent to smoking 15 cigarettes/day. Routinely assess social connectedness in older adults; connect to community resources.",
+      "tags": ["social-isolation", "loneliness", "health-determinants", "mortality-risk", "community-resources"]
+    },
+    {
+      "id": "GERO-P3-006",
+      "topicSlug": "loss-grief",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 68-year-old woman is 4 months into retirement after a 40-year career as a hospital administrator. She tells her family nurse practitioner, 'I feel useless. I'm bored all the time, I'm gaining weight, and my husband and I are getting on each other's nerves for the first time in our marriage.' She denies depressed mood, anhedonia, sleep disturbance, or cognitive changes. Which nursing assessment is MOST appropriate?",
+      "options": {
+        "A": "Screen for depression using the Geriatric Depression Scale",
+        "B": "Assess the transition to retirement using a life transitions framework — this presentation is consistent with role loss and adjustment",
+        "C": "Refer to cardiology for evaluation of the weight gain",
+        "D": "Advise her that retirement adjustment is automatic and she should give it more time"
+      },
+      "correctAnswer": "B",
+      "rationale": "This presentation — boredom, sense of uselessness, weight gain, marital tension — is classic for retirement transition adjustment. Retirement represents a major role loss (professional identity, social structure, purpose, daily routine). At 4 months, this is within the expected adjustment period. She does NOT meet criteria for depression (no depressed mood, no anhedonia, no sleep disturbance). The nursing approach is: assess the retirement transition using a life transitions framework, identify what was valued in her career that is now absent (identity, purpose, social connection, structure), and explore meaningful activities, volunteer opportunities, and social engagement.",
+      "distractorRationales": {
+        "A": "Incorrect. She does not report depressed mood, anhedonia, or other core depression symptoms. Depression screening is appropriate if core criteria are present, but the primary clinical picture here is retirement transition adjustment.",
+        "C": "Incorrect. Weight gain in the context of lifestyle change (reduced activity from stopping work routine) is a transitional issue, not primarily cardiac.",
+        "D": "Incorrect. 'Give it time' is passive and dismissive. The NP/nurse role is to assess the transition, validate the experience, and provide proactive guidance on engagement and role reconstruction."
+      },
+      "hint": "No depression symptoms + retirement context + role loss + boredom = which framework applies?",
+      "clinicalPearl": "Retirement transition is one of the most significant life transitions for older adults. Identity disruption ('I'm just a retired person now') is a primary driver of health decline post-retirement. Helping patients identify new sources of meaning, structure, and social connection is a key nursing intervention.",
+      "examStrategy": "Retirement transition questions: absence of depression criteria is key. When depression criteria are NOT met but adjustment difficulties are present, use life transition framework rather than depression diagnosis.",
+      "keyTakeaway": "Retirement = major role loss → adjustment challenges. In absence of core depression symptoms, use life transitions framework. Help identify new sources of purpose, structure, and social connection.",
+      "tags": ["retirement-transition", "role-loss", "life-transitions", "identity", "psychosocial"]
+    },
+    {
+      "id": "GERO-P3-007",
+      "topicSlug": "elder-abuse",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is assessing an 80-year-old man in the emergency department. His adult son brought him in for 'confusion.' During the assessment, the nurse suspects elder abuse. Which findings support this concern? SELECT ALL THAT APPLY.",
+      "options": {
+        "A": "Multiple bruises at different stages of healing in protected areas (inner arms, torso)",
+        "B": "Patient becomes anxious and avoids eye contact when his son enters the room",
+        "C": "A single bruise on his forearm consistent with his reported fall",
+        "D": "He appears malnourished and is wearing the same unwashed clothing reported at a visit 2 weeks ago",
+        "E": "He discloses that his son 'takes most of his money'",
+        "F": "His son answers all questions directed to the patient and does not allow private assessment time"
+      },
+      "correctAnswer": ["A", "B", "D", "E", "F"],
+      "rationale": "A (CORRECT): Multiple bruises at varying healing stages in protected locations (inner arms, torso — areas not typically injured in falls) = high suspicion for physical abuse. B (CORRECT): Behavioral indicators — anxiety, avoidance of eye contact with caregiver — are classic signs of fear-based relationship. D (CORRECT): Malnutrition + unchanged clothing = neglect. E (CORRECT): Direct disclosure of financial exploitation by caregiver. F (CORRECT): Caregiver preventing private assessment is a major red flag — abusers often do this to control the narrative and prevent disclosure.",
+      "distractorRationales": {
+        "C": "Incorrect. A single bruise consistent with a reported fall in an older adult is expected and not inherently suspicious. Context, location, pattern, and explanation consistency determine whether it warrants concern."
+      },
+      "hint": "Which findings could indicate physical abuse, emotional abuse, neglect, and financial abuse? One finding is NOT suspicious.",
+      "clinicalPearl": "Preventing private assessment is one of the most reliable red flags for elder abuse by a caregiver. Insist on private assessment time: 'It is our hospital policy to speak with all patients alone for part of the assessment.' Document the caregiver's response to this request.",
+      "examStrategy": "Elder abuse SATA: look for: multiple injuries different ages, behavioral fear, malnutrition/poor hygiene (neglect), financial disclosures, caregiver control of communication. Single injury consistent with explanation = NOT immediately suspicious.",
+      "keyTakeaway": "Elder abuse indicators: multi-stage bruising, fearful behavior, malnutrition/neglect signs, financial disclosures, caregiver blocking private assessment. One single injury consistent with explanation is not inherently suspicious.",
+      "tags": ["elder-abuse", "abuse-indicators", "neglect", "financial-abuse", "SATA", "mandatory-reporting"]
+    },
+    {
+      "id": "GERO-P3-008",
+      "topicSlug": "quality-of-life",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 91-year-old man with advanced heart failure (EF 20%), moderate dementia, and recurrent hospitalizations is brought to his regular appointment by his daughter. The daughter states, 'He keeps going back to the hospital — we need to find something that keeps him out.' When the nurse asks the patient what matters most to him, he says, 'I just want to be at home. I don't want any more hospitals.' His advance directive specifies no CPR but does not address hospitalization. Which nursing approach BEST reflects quality-of-life-focused care?",
+      "options": {
+        "A": "Refer for advanced heart failure management including possible LVAD evaluation",
+        "B": "Recommend monthly cardiology visits and enhanced medication titration",
+        "C": "Initiate a goals-of-care conversation focused on the patient's stated wish to be at home, with discussion of palliative care/hospice as an option that honours his goals",
+        "D": "Inform the daughter that hospitalizations are medically necessary and cannot be avoided with his disease burden"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient has clearly stated his priority: 'I just want to be at home. I don't want any more hospitals.' This is a direct statement of What Matters. For a 91-year-old with advanced heart failure (EF 20%), moderate dementia, and recurrent hospitalizations, the trajectory is toward end-of-life. A palliative care or hospice approach — which can maintain him at home, manage symptoms without hospitalization, and honour his stated goals — is the most quality-of-life-focused option. Goals of care conversation should include: his current quality of life, prognosis, what he values, and what tradeoffs he is willing to make.",
+      "distractorRationales": {
+        "A": "Incorrect. LVAD evaluation is an aggressive life-prolonging intervention for a 91-year-old with moderate dementia who has stated he wants to avoid hospitals. This is goal-discordant care.",
+        "B": "Incorrect. Enhanced medication titration and monthly cardiology are disease-management approaches that do not address his primary goal (staying home) and are likely to lead to continued hospitalizations.",
+        "D": "Incorrect. Palliative care can effectively manage heart failure symptoms at home — hospitalizations are not always inevitable and can be reduced with proactive palliative management. This response is both inaccurate and dismissive."
+      },
+      "hint": "Patient stated goal = stay home, no hospitals. Which approach honours this?",
+      "clinicalPearl": "Palliative/hospice care for advanced heart failure often INCREASES quality of life and may even modestly prolong life compared to aggressive hospital-based management. Many families are unaware of this option and benefit enormously from the conversation.",
+      "examStrategy": "Quality-of-life questions: ALWAYS prioritize the patient's stated goals. When 'What Matters' conflicts with aggressive treatment, patient goals win — this is patient-centred care. Advanced NP/CNPLE exams test understanding of palliative care as a quality-of-life option.",
+      "keyTakeaway": "Patient's stated goal = guide care decisions. Advanced disease + stated goal to stay home = discuss palliative/hospice. Goal-concordant care = quality-of-life centred care.",
+      "tags": ["quality-of-life", "palliative-care", "goals-of-care", "heart-failure", "advance-directives", "NP"]
+    },
+    {
+      "id": "GERO-P3-009",
+      "topicSlug": "community-supports",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 78-year-old woman lives alone and has been referred to home care nursing following discharge from hospital after a hip fracture. During the assessment, she reports she cannot prepare meals (IADL loss), leaves home only to go to medical appointments, has lost her driver's licence, and relies on her daughter for grocery shopping. Her daughter lives 45 minutes away and works full-time. Which community resource would MOST directly address her nutrition and social isolation risks?",
+      "options": {
+        "A": "Cognitive behavioural therapy for adjustment to disability",
+        "B": "Meals on Wheels program and transportation assistance",
+        "C": "Adult day hospital for post-operative rehabilitation",
+        "D": "Memory clinic referral for cognitive screening"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient has two urgent unmet needs: (1) nutrition — she cannot prepare meals and her daughter lives far away; (2) social isolation — she only leaves home for medical appointments. Meals on Wheels directly addresses the nutrition deficit (delivers hot or cold meals to homebound older adults) while also providing daily human contact and wellness checks. Transportation assistance addresses the access barrier. These are concrete, immediately available community resources that match her identified needs.",
+      "distractorRationales": {
+        "A": "Incorrect. While CBT may be appropriate for depression or adjustment difficulties, there is no evidence in the scenario of significant psychological distress. The immediate unmet needs are nutritional and social.",
+        "C": "Incorrect. Adult day hospital is focused on rehabilitation — her fracture is healed. Adult day PROGRAM (social/activity program) would address isolation, but is not the same as adult day hospital.",
+        "D": "Incorrect. There is no evidence of cognitive impairment in this scenario. Memory clinic referral is not supported."
+      },
+      "hint": "What community resources directly address inability to prepare food + social isolation in a homebound older adult?",
+      "clinicalPearl": "Meals on Wheels programs provide more than nutrition — they provide daily check-ins, social contact, and early identification of health changes (the driver reports if a client doesn't answer the door). They are cost-effective health interventions that prevent hospitalizations.",
+      "examStrategy": "Community resource matching: identify the specific unmet need (nutrition, transportation, social, ADL help) and match to available programs. Meals on Wheels = nutrition + daily contact. Transportation = access barrier.",
+      "keyTakeaway": "Meals on Wheels + transportation assistance = most direct community intervention for homebound older adult with nutritional deficit and social isolation.",
+      "tags": ["community-resources", "social-isolation", "nutrition", "meals-on-wheels", "homebound"]
+    },
+    {
+      "id": "GERO-P3-010",
+      "topicSlug": "financial-vulnerability",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse practitioner is concerned about a 74-year-old male patient who has been missing medication refills, has several unpaid medical bills, and mentions he sometimes skips meals to save money. He lives alone on a fixed pension. During the assessment he appears embarrassed. Which nursing approach is MOST appropriate?",
+      "options": {
+        "A": "Refer immediately to social work for full financial assessment",
+        "B": "Address financial concerns directly but compassionately using validated screening tools, assess for medication non-adherence due to cost, and connect with available assistance programs",
+        "C": "Reduce his medication regimen to cut costs without physician consultation",
+        "D": "Advise him to discuss finances with his family members"
+      },
+      "correctAnswer": "B",
+      "rationale": "Financial vulnerability in older adults is common and significantly affects health outcomes through medication non-adherence, food insecurity, and deferred healthcare. The nursing approach: (1) raise the topic directly but compassionately — many older adults are ashamed to disclose financial hardship; (2) use validated tools (e.g., the 'Are you having difficulty paying for food, medications, or utilities?' question); (3) specifically assess cost-related medication non-adherence; (4) connect with available assistance programs (pharmaceutical assistance programs, food banks, provincial/state drug benefit programs, GIS/supplement programs). Social work referral may follow.",
+      "distractorRationales": {
+        "A": "Incorrect. Social work referral is appropriate as a step, but the nurse's FIRST role is direct assessment. Referring without nursing assessment first is avoidant.",
+        "C": "Incorrect. Nurses do not independently reduce medication regimens without physician/NP order. This is outside nursing scope and potentially dangerous.",
+        "D": "Incorrect. Family discussion may be helpful but is not within the nurse's scope to direct without assessing his wishes and privacy preferences first."
+      },
+      "hint": "Financial hardship affecting medications and food = assess directly, compassionately, and connect to resources.",
+      "clinicalPearl": "Cost-related medication non-adherence is extremely common in older adults on fixed incomes. Studies show 25–30% of older adults skip doses to save money. Asking directly and non-judgmentally is the most effective way to identify this.",
+      "examStrategy": "Financial vulnerability: assess directly, non-judgmentally. Connect to pharmaceutical assistance, food programs, social work. This is a social determinants of health domain that nursing must address.",
+      "keyTakeaway": "Financial vulnerability → medication non-adherence + food insecurity. Assess directly and compassionately; connect to pharmaceutical assistance programs, food supports, and social work.",
+      "tags": ["financial-vulnerability", "medication-adherence", "social-determinants", "poverty", "fixed-income"]
+    }
+  ]
+}

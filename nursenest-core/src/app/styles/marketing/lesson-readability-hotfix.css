@@ -1,0 +1,1373 @@
+/* =====================================================================
+   lesson-readability-hotfix.css
+   Public pathway lesson detail readability pass.
+
+   Goal: stop lesson pages from reading like a tall narrow card stack. Keep
+   the contents and study utilities rails, but make the teaching body feel like
+   a readable clinical lesson with sane line length, spacing, and section rhythm.
+   ===================================================================== */
+
+.nn-premium-lesson-detail-shell {
+  --nn-lesson-reader-max: 78ch;
+  --nn-lesson-reader-wide: 92ch;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-layout--triple {
+  width: 100%;
+  align-items: start;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-main {
+  width: 100%;
+  max-width: min(100%, var(--nn-lesson-reader-wide));
+  margin-inline: auto;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-main > * {
+  min-width: 0;
+}
+
+.nn-premium-lesson-detail-shell .nn-premium-lesson-article.nn-lesson-article-grid {
+  display: block;
+  max-width: var(--nn-lesson-reader-max);
+  margin-inline: auto;
+}
+
+.nn-premium-lesson-detail-shell .nn-premium-lesson-article.nn-lesson-article-grid > * + * {
+  margin-top: clamp(1rem, 2vw, 1.35rem);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card {
+  max-width: 100%;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card > div,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-content.nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-callout,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .lv-lesson-sparse-panel,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-exam-focus-inline {
+  width: 100%;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--editorial {
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, var(--semantic-brand) 14%);
+  background: transparent;
+  box-shadow: none;
+  padding: clamp(1rem, 2vw, 1.35rem) 0 clamp(1.15rem, 2.2vw, 1.55rem);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--editorial:hover {
+  border-bottom-color: color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  box-shadow: none;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--callout,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card:not(.nn-lesson-section-card--editorial) {
+  border-radius: 1rem;
+  padding: clamp(1rem, 2vw, 1.25rem);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-heading {
+  max-width: min(100%, 75ch);
+  font-size: clamp(1.15rem, 0.72vw + 1rem, 1.42rem);
+  line-height: 1.25;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-prose {
+  max-width: var(--nn-lesson-reader-max);
+  font-size: clamp(0.96rem, 0.18vw + 0.92rem, 1.03rem);
+  line-height: 1.72;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-content.nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-prose {
+  max-width: min(100%, 75ch);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-exam-focus-inline__body .nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-callout__body,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .lv-lesson-sparse-panel {
+  max-width: 100%;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-exam-focus-inline__card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(p, li) {
+  line-height: 1.72;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(ul, ol) {
+  margin-top: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(li + li) {
+  margin-top: 0.38rem;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-chip,
+.nn-premium-lesson-detail-shell .nn-lesson-section-eyebrow {
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 1280px) {
+  .nn-premium-lesson-detail-shell .nn-lesson-layout--triple {
+    grid-template-columns:
+      minmax(12.5rem, 14rem)
+      minmax(0, 1fr)
+      minmax(14rem, 16.5rem);
+    gap: clamp(1.25rem, 1.8vw, 2rem);
+  }
+
+  .nn-premium-lesson-detail-shell .nn-lesson-study-rail-aside,
+  .nn-premium-lesson-detail-shell .nn-lesson-section-nav {
+    max-width: 17rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .nn-premium-lesson-detail-shell .nn-premium-lesson-article.nn-lesson-article-grid {
+    max-width: 100%;
+  }
+
+  .nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--editorial {
+    padding-inline: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Premium lesson reading architecture v2 — no sidebars, no dashboard rails.
+   --------------------------------------------------------------------- */
+
+.nn-premium-lesson-detail-shell {
+  --nn-lesson-reader-max: 88ch;
+  --nn-lesson-reader-wide: 112ch;
+  --nn-rn-lesson-canvas-wide: min(100%, 87.5rem);
+  --nn-lesson-reading-surface: var(--semantic-surface);
+  --nn-lesson-reading-soft: color-mix(in srgb, var(--semantic-panel-warm) 16%, var(--semantic-surface));
+  --nn-lesson-reading-glass: color-mix(in srgb, var(--semantic-surface) 82%, transparent);
+  --nn-lesson-reading-border: color-mix(in srgb, var(--semantic-border-soft) 86%, var(--semantic-brand) 14%);
+  --nn-lesson-reading-shadow: 0 22px 58px -46px color-mix(in srgb, var(--semantic-text-primary) 24%, transparent);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 {
+  --nn-lesson-reader-max: 96ch;
+  --nn-lesson-reader-wide: var(--nn-rn-lesson-canvas-wide);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom {
+  border-radius: 0;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-panel-warm) 10%, var(--theme-page-bg)) 0%,
+      var(--theme-page-bg) 48%,
+      color-mix(in srgb, var(--semantic-panel-muted) 10%, var(--theme-page-bg)) 100%
+    );
+  box-shadow: none;
+}
+
+.nn-premium-lesson-detail-shell .nn-premium-learner-lesson-hero,
+.nn-premium-lesson-detail-shell .nn-premium-pathway-lesson-header {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: clamp(2.7rem, 5vw, 4.9rem) 0 clamp(2.1rem, 4vw, 3.2rem);
+}
+
+.nn-premium-lesson-detail-shell .nn-premium-learner-lesson-hero::before,
+.nn-premium-lesson-detail-shell .nn-premium-pathway-lesson-header::after {
+  content: none;
+}
+
+.nn-lesson-hero-eyebrow {
+  margin: 0;
+  color: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-text-secondary));
+  font-size: clamp(0.68rem, 0.2vw + 0.64rem, 0.78rem);
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.nn-lesson-hero-title,
+.nn-premium-lesson-detail-shell .nn-lesson-page-title {
+  max-width: min(100%, 18ch);
+  font-size: clamp(2.8rem, 5.4vw, 4.9rem);
+  line-height: 0.97;
+  letter-spacing: -0.055em;
+  font-weight: 800;
+}
+
+.nn-lesson-hero-deck {
+  max-width: min(100%, 62rem);
+  color: var(--semantic-text-secondary);
+  font-size: clamp(1.05rem, 0.5vw + 0.95rem, 1.32rem);
+  line-height: 1.72;
+}
+
+.nn-lesson-hero-meta,
+.nn-individual-lesson-study-meta {
+  gap: 0.65rem;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-header-action-layout {
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-header-actions {
+  width: min(100%, 25rem);
+  align-self: stretch;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-header-actions > .mb-2,
+.nn-premium-lesson-detail-shell .nn-lesson-header-sequence-nav {
+  margin-bottom: 0 !important;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-header-sequence-nav {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-header-actions .nn-lesson-reading-progress-strip {
+  width: 100%;
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+  border-radius: 0.65rem;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-header-actions .nn-lesson-reading-progress-strip__top {
+  margin-bottom: 0.35rem;
+  font-size: 0.72rem;
+}
+
+@media (min-width: 1024px) {
+  .nn-premium-lesson-detail-shell .nn-lesson-header-action-layout {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .nn-premium-lesson-detail-shell .nn-lesson-header-actions {
+    align-items: stretch;
+    width: min(25rem, 34vw);
+  }
+}
+
+.nn-lesson-hero-chip,
+.nn-individual-lesson-study-meta > span {
+  min-height: 2.125rem;
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-surface) 84%, var(--theme-page-bg));
+  padding: 0.42rem 0.8rem;
+  color: var(--semantic-text-secondary);
+  font-size: 0.76rem;
+  font-weight: 720;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 52%, transparent);
+}
+
+.nn-lesson-hero-progress {
+  display: inline-flex;
+  align-items: center;
+  width: 8.75rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-border-soft) 75%, transparent);
+  overflow: hidden;
+}
+
+.nn-lesson-hero-progress > span {
+  width: 68%;
+  height: 100%;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-text-secondary));
+}
+
+.nn-lesson-layout--premium-reading {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+}
+
+.nn-lesson-layout--premium-reading .nn-lesson-main {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+}
+
+.nn-lesson-section-nav-shell {
+  position: sticky;
+  top: 0;
+  z-index: 32;
+  margin-inline: auto;
+  padding: 0.85rem 0 1.35rem;
+  background: linear-gradient(180deg, var(--theme-page-bg) 62%, color-mix(in srgb, var(--theme-page-bg) 82%, transparent));
+  backdrop-filter: blur(18px);
+}
+
+.nn-lesson-section-nav.nn-lesson-section-nav--horizontal {
+  display: flex;
+  width: max-content;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.55rem;
+  overflow-x: auto;
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 999px;
+  background: var(--nn-lesson-reading-glass);
+  padding: 0.42rem;
+  box-shadow: var(--nn-lesson-reading-shadow);
+  scrollbar-width: none;
+}
+
+.nn-lesson-section-nav.nn-lesson-section-nav--horizontal::-webkit-scrollbar {
+  display: none;
+}
+
+.nn-lesson-section-nav__mobile-label {
+  display: none;
+}
+
+.nn-lesson-horizontal-nav__list {
+  display: flex;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nn-lesson-section-nav--horizontal .nn-lesson-nav-item {
+  min-height: 2.34rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 0.48rem 0.78rem;
+  color: var(--semantic-text-secondary);
+  font-size: 0.78rem;
+  font-weight: 760;
+  text-decoration: none;
+  transition: background-color 140ms ease, color 140ms ease, box-shadow 140ms ease;
+}
+
+.nn-lesson-section-nav--horizontal .nn-lesson-nav-item[data-active="true"] {
+  color: var(--semantic-text-primary);
+  background: var(--semantic-surface);
+  box-shadow: 0 9px 24px -18px color-mix(in srgb, var(--semantic-text-primary) 26%, transparent);
+}
+
+.nn-lesson-section-nav--horizontal .nn-lesson-nav-dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-brand) 52%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-nav--horizontal .nn-lesson-nav-item[data-active="true"] .nn-lesson-nav-dot {
+  background: var(--semantic-brand);
+}
+
+.nn-lesson-section-nav--horizontal .nn-lesson-nav-copy {
+  min-width: 0;
+}
+
+.nn-lesson-section-nav--horizontal .nn-lesson-nav-label {
+  display: block;
+  max-width: 15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nn-premium-lesson-detail-shell .nn-premium-lesson-article,
+.nn-premium-lesson-detail-shell .nn-premium-lesson-reading-flow {
+  display: block;
+  max-width: var(--nn-lesson-reader-wide);
+  margin-inline: auto;
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-lesson-layout--premium-reading,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-lesson-main,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-premium-lesson-article,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-premium-lesson-reading-flow {
+  width: 100%;
+  max-width: var(--nn-rn-lesson-canvas-wide);
+  margin-inline: auto;
+}
+
+.nn-premium-lesson-detail-shell .nn-premium-lesson-article > * + * {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card {
+  scroll-margin-top: 6.5rem;
+}
+
+.nn-premium-lesson-detail-shell
+  .nn-lesson-layout--premium-reading
+  .nn-lesson-section-card.nn-lesson-section-card--editorial {
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 22%, var(--nn-lesson-reading-border));
+  border-left: 4px solid color-mix(in srgb, var(--lsc-color) 72%, var(--nn-lesson-reading-border));
+  border-radius: 1.35rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--lsc-color) 8%, transparent), transparent 40%),
+    color-mix(in srgb, var(--lsc-soft) 26%, var(--nn-lesson-reading-surface) 74%);
+  padding: clamp(1.9rem, 3vw, 3rem);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 72%, transparent),
+    0 18px 48px color-mix(in srgb, var(--lsc-color) 6%, transparent);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-lesson-section-card {
+  width: 100%;
+  max-width: none;
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn
+  .nn-lesson-section-card.nn-lesson-section-card--editorial {
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 22%, var(--nn-lesson-reading-border));
+  border-left: 4px solid color-mix(in srgb, var(--lsc-color) 72%, var(--nn-lesson-reading-border));
+  border-radius: 1.35rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--lsc-color) 8%, transparent), transparent 40%),
+    color-mix(in srgb, var(--lsc-soft) 26%, var(--nn-lesson-reading-surface) 74%);
+  padding: clamp(1.9rem, 3vw, 3rem);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 72%, transparent),
+    0 18px 48px color-mix(in srgb, var(--lsc-color) 6%, transparent);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn
+  .nn-lesson-section-card.nn-lesson-section-card--callout,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn
+  .nn-lesson-section-card:not(.nn-lesson-section-card--editorial) {
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 28%, var(--nn-lesson-reading-border));
+  border-left: 4px solid color-mix(in srgb, var(--lsc-color) 78%, var(--nn-lesson-reading-border));
+  border-radius: 1.35rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--lsc-color) 12%, transparent), transparent 42%),
+    color-mix(in srgb, var(--lsc-soft) 34%, var(--nn-lesson-reading-surface) 66%);
+  padding: clamp(1.9rem, 3vw, 3rem);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 72%, transparent),
+    0 18px 48px color-mix(in srgb, var(--lsc-color) 8%, transparent);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-lesson-content.nn-lesson-prose,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-lesson-prose {
+  max-width: 96ch;
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-lesson-layout--premium-reading,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-lesson-main,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-premium-lesson-article,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-premium-lesson-reading-flow {
+  width: 100%;
+  max-width: var(--nn-rn-lesson-canvas-wide);
+  margin-inline: auto;
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-lesson-section-card {
+  width: 100%;
+  max-width: none;
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 18%, var(--nn-lesson-reading-border));
+  border-left: 1px solid color-mix(in srgb, var(--lsc-color) 18%, var(--nn-lesson-reading-border));
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--lsc-soft) 14%, var(--semantic-surface) 86%);
+  box-shadow: none;
+  padding: clamp(1.5rem, 2.4vw, 2.125rem);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2
+  .nn-lesson-section-card.nn-lesson-section-card--editorial,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2
+  .nn-lesson-section-card.nn-lesson-section-card--callout,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2
+  .nn-lesson-section-card:not(.nn-lesson-section-card--editorial) {
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 18%, var(--nn-lesson-reading-border));
+  border-left: 1px solid color-mix(in srgb, var(--lsc-color) 18%, var(--nn-lesson-reading-border));
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--lsc-soft) 14%, var(--semantic-surface) 86%);
+  box-shadow: none;
+  padding: clamp(1.5rem, 2.4vw, 2.125rem);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-lesson-content.nn-lesson-prose,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-lesson-prose {
+  max-width: min(54rem, 100%);
+  font-weight: 400;
+  line-height: 1.68;
+  letter-spacing: -0.01em;
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-lesson-hero-title,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-lesson-page-title {
+  max-width: min(100%, 22ch);
+  font-size: clamp(2.15rem, 4vw, 3.35rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-lesson-hero-eyebrow {
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-lesson-hero-deck {
+  max-width: min(100%, 42rem);
+  font-size: clamp(1rem, 0.35vw + 0.92rem, 1.2rem);
+  line-height: 1.72;
+  font-weight: 400;
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-lesson-section-heading {
+  max-width: min(100%, 28ch);
+  font-size: clamp(1.35rem, 1.2vw + 1rem, 1.85rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2
+  .nn-lesson-section-card
+  .nn-lesson-section-heading {
+  max-width: min(100%, 75ch);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-premium-lesson-article > * + * {
+  margin-top: 0;
+}
+
+.nn-premium-lesson-detail-shell
+  .nn-lesson-layout--premium-reading
+  .nn-lesson-section-card.nn-lesson-section-card--callout,
+.nn-premium-lesson-detail-shell
+  .nn-lesson-layout--premium-reading
+  .nn-lesson-section-card:not(.nn-lesson-section-card--editorial) {
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 28%, var(--nn-lesson-reading-border));
+  border-left: 4px solid color-mix(in srgb, var(--lsc-color) 78%, var(--nn-lesson-reading-border));
+  border-radius: 1.35rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--lsc-color) 12%, transparent), transparent 42%),
+    color-mix(in srgb, var(--lsc-soft) 34%, var(--nn-lesson-reading-surface) 66%);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 72%, transparent),
+    0 18px 48px color-mix(in srgb, var(--lsc-color) 8%, transparent);
+  padding: clamp(1.9rem, 3vw, 3rem);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-heading {
+  max-width: min(100%, 75ch);
+  font-size: clamp(1.75rem, 1.65vw + 1.15rem, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-prose {
+  max-width: var(--nn-lesson-reader-max);
+  color: var(--semantic-text-secondary);
+  font-size: clamp(1.02rem, 0.3vw + 0.96rem, 1.16rem);
+  line-height: 1.84;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-content.nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-prose {
+  max-width: min(100%, 75ch);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(p, li) {
+  line-height: 1.84;
+}
+
+.nn-lesson-clinical-workflow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 1.45rem 0 1.6rem;
+  overflow: hidden;
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 1rem;
+  background: var(--nn-lesson-reading-surface);
+}
+
+.nn-lesson-clinical-workflow > span {
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  border-inline-start: 1px solid var(--nn-lesson-reading-border);
+  padding: 0 1rem;
+  color: var(--semantic-text-primary);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.nn-lesson-clinical-workflow > span:first-child {
+  border-inline-start: 0;
+  background: var(--nn-lesson-reading-soft);
+}
+
+.nn-lesson-retention-review-zone {
+  margin-top: clamp(4.5rem, 8vw, 7rem);
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 1.65rem;
+  background: color-mix(in srgb, var(--semantic-panel-warm) 12%, var(--semantic-surface));
+  padding: clamp(1.6rem, 4vw, 3.1rem);
+  box-shadow: var(--nn-lesson-reading-shadow);
+}
+
+.nn-lesson-retention-review-zone__head {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  align-items: flex-start;
+  margin-bottom: clamp(1.35rem, 3vw, 2.2rem);
+}
+
+.nn-lesson-retention-review-zone__intro {
+  max-width: 44rem;
+}
+
+.nn-lesson-retention-review-zone__tagline {
+  max-width: 28rem;
+}
+
+.nn-lesson-retention-review-zone__head h2 {
+  margin: 0;
+  color: var(--semantic-text-primary);
+  font-size: clamp(1.8rem, 2.4vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+}
+
+.nn-lesson-retention-review-zone__intro p:last-child {
+  margin-top: 0.85rem;
+  color: var(--semantic-text-secondary);
+  font-size: clamp(0.98rem, 0.25vw + 0.92rem, 1.08rem);
+  line-height: 1.7;
+}
+
+.nn-lesson-retention-review-zone__sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.nn-lesson-retention-review-zone .nn-lesson-section-card {
+  margin: 0;
+  min-height: 100%;
+  padding: 1.25rem;
+  border-radius: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .nn-lesson-retention-review-zone__head {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .nn-lesson-retention-review-zone__intro {
+    flex: 1 1 60%;
+  }
+
+  .nn-lesson-retention-review-zone__tagline {
+    flex: 0 1 40%;
+    padding-top: 0.15rem;
+  }
+}
+
+.nn-lesson-retention-review-zone .nn-lesson-quick-summary {
+  margin-top: 1rem;
+  border-radius: 1rem;
+  box-shadow: none;
+}
+
+.nn-lesson-retention-review-zone .nn-lesson-hy-memory,
+.nn-lesson-retention-review-zone .nn-lesson-hy-takeaways,
+.nn-lesson-retention-review-zone .nn-lesson-hy-traps {
+  margin-top: 1rem;
+}
+
+.nn-lesson-sticky-review-dock {
+  position: fixed;
+  left: 50%;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  z-index: 48;
+  display: flex;
+  width: min(44rem, calc(100vw - 2rem));
+  transform: translate3d(-50%, 1rem, 0);
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 999px;
+  background: var(--nn-lesson-reading-glass);
+  padding: 0.5rem 0.55rem 0.5rem 1.1rem;
+  color: var(--semantic-text-primary);
+  box-shadow: 0 22px 48px -26px color-mix(in srgb, var(--semantic-text-primary) 34%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  backdrop-filter: blur(18px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.nn-lesson-sticky-review-dock[data-visible="true"] {
+  transform: translate3d(-50%, 0, 0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nn-lesson-sticky-review-dock__text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.08rem;
+}
+
+.nn-lesson-sticky-review-dock__text strong {
+  font-size: 0.82rem;
+}
+
+.nn-lesson-sticky-review-dock__text span {
+  color: var(--semantic-text-secondary);
+  font-size: 0.74rem;
+}
+
+.nn-lesson-sticky-review-dock a {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--semantic-brand);
+  padding: 0 1rem;
+  color: var(--text-on-dark);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+@media (max-width: 767px) {
+  .nn-premium-lesson-detail-shell {
+    --nn-lesson-reader-max: 100%;
+    --nn-lesson-reader-wide: 100%;
+  }
+
+  .nn-lesson-section-nav-shell {
+    margin-inline: -0.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+  }
+
+  .nn-lesson-section-nav.nn-lesson-section-nav--horizontal {
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .nn-lesson-section-nav__mobile-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding-inline: 0.55rem 0.2rem;
+    color: var(--semantic-text-secondary);
+    font-size: 0.75rem;
+    font-weight: 760;
+    white-space: nowrap;
+  }
+
+  .nn-premium-lesson-detail-shell .nn-premium-learner-lesson-hero,
+  .nn-premium-lesson-detail-shell .nn-premium-pathway-lesson-header {
+    padding-top: 2.2rem;
+  }
+
+  .nn-lesson-retention-review-zone__head,
+  .nn-lesson-retention-review-zone__sections {
+    grid-template-columns: 1fr;
+  }
+
+  .nn-lesson-clinical-workflow {
+    grid-template-columns: 1fr;
+  }
+
+  .nn-lesson-clinical-workflow > span {
+    border-inline-start: 0;
+    border-top: 1px solid var(--nn-lesson-reading-border);
+  }
+
+  .nn-lesson-clinical-workflow > span:first-child {
+    border-top: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Reading viewport — dominant center column, constrained side rails.
+   --------------------------------------------------------------------- */
+
+.nn-lesson-reading-viewport {
+  display: grid;
+  width: 100%;
+  max-width: min(100%, var(--nn-rn-lesson-canvas-wide, var(--nn-lesson-reader-wide)));
+  margin-inline: auto;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 0;
+}
+
+.nn-lesson-reading-viewport__surface {
+  min-width: 0;
+  width: 100%;
+}
+
+.nn-lesson-reading-viewport__surface .nn-lesson-main,
+.nn-lesson-reading-viewport__surface .nn-premium-lesson-article,
+.nn-lesson-reading-viewport__surface .nn-premium-lesson-reading-flow {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+}
+
+.nn-lesson-reading-viewport__left,
+.nn-lesson-reading-viewport__right {
+  display: none;
+}
+
+.nn-lesson-reading-viewport__mobile-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  grid-column: 1 / -1;
+  margin-bottom: 0.35rem;
+}
+
+.nn-lesson-reading-viewport__mobile-toc {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  gap: 0.55rem;
+  align-self: flex-start;
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 999px;
+  background: var(--nn-lesson-reading-glass);
+  padding: 0.55rem 1rem;
+  color: var(--semantic-text-primary);
+  font-size: 0.82rem;
+  font-weight: 760;
+}
+
+.nn-lesson-reading-viewport__mobile-bar .nn-lesson-section-nav-shell {
+  position: static;
+  padding: 0;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+@media (min-width: 1024px) {
+  .nn-lesson-reading-viewport {
+    /* Reading column grows first; side rails cap at 240px / 220px */
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) minmax(0, 13.75rem);
+    gap: clamp(1rem, 1.5vw, 2rem);
+  }
+
+  .nn-lesson-reading-viewport[data-left-collapsed="true"] {
+    grid-template-columns: 3.25rem minmax(0, 1fr) minmax(0, 13.75rem);
+  }
+
+  .nn-lesson-reading-viewport[data-right-collapsed="true"] {
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) 3.25rem;
+  }
+
+  .nn-lesson-reading-viewport[data-left-collapsed="true"][data-right-collapsed="true"] {
+    grid-template-columns: 3.25rem minmax(0, 1fr) 3.25rem;
+  }
+
+  .nn-lesson-reading-viewport__mobile-bar {
+    display: none;
+  }
+
+  .nn-lesson-reading-viewport__left,
+  .nn-lesson-reading-viewport__right {
+    display: block;
+    position: sticky;
+    top: 1rem;
+    max-height: calc(100dvh - 2rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  .nn-lesson-reading-viewport__left {
+    max-width: 15rem; /* 240px */
+    width: 100%;
+  }
+
+  .nn-lesson-reading-viewport__right {
+    max-width: 13.75rem; /* 220px */
+    width: 100%;
+  }
+
+  .nn-lesson-reading-viewport__surface {
+    max-width: none;
+    min-width: 0;
+  }
+}
+
+.nn-lesson-reading-viewport__left-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nn-lesson-reading-viewport__collapse {
+  display: inline-flex;
+  min-height: 2.5rem;
+  min-width: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 0.75rem;
+  background: var(--nn-lesson-reading-surface);
+  color: var(--semantic-text-secondary);
+}
+
+.nn-lesson-section-nav.nn-lesson-section-nav--rail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 1rem;
+  background: var(--nn-lesson-reading-glass);
+  padding: 0.75rem;
+  box-shadow: var(--nn-lesson-reading-shadow);
+}
+
+.nn-lesson-section-nav__rail-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--semantic-text-secondary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nn-lesson-rail-nav__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nn-lesson-section-nav--rail .nn-lesson-nav-item {
+  min-height: 2.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  border-radius: 0.65rem;
+  padding: 0.45rem 0.5rem;
+  color: var(--semantic-text-secondary);
+  font-size: 0.78rem;
+  font-weight: 720;
+  line-height: 1.35;
+  text-decoration: none;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.nn-lesson-section-nav--rail .nn-lesson-nav-item[data-active="true"] {
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-lesson-section-nav--rail .nn-lesson-nav-label {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nn-lesson-rail-nav__list--dots {
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.nn-lesson-nav-item--dot-only {
+  min-height: 2.5rem;
+  min-width: 2.5rem;
+  justify-content: center;
+  padding: 0;
+}
+
+.nn-lesson-progress-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 1rem;
+  background: var(--nn-lesson-reading-glass);
+  padding: 0.75rem;
+  box-shadow: var(--nn-lesson-reading-shadow);
+}
+
+.nn-lesson-progress-rail__head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.nn-lesson-progress-rail__toggle {
+  display: inline-flex;
+  min-height: 2.5rem;
+  min-width: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 0.65rem;
+  background: var(--nn-lesson-reading-surface);
+  color: var(--semantic-text-secondary);
+}
+
+.nn-lesson-progress-rail__label {
+  flex: 1;
+  color: var(--semantic-text-secondary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nn-lesson-progress-rail__pct {
+  color: var(--semantic-text-primary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.nn-lesson-progress-rail__track {
+  position: relative;
+  width: 0.35rem;
+  height: 3.5rem;
+  margin-inline: auto;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-border-soft) 75%, transparent);
+  overflow: hidden;
+}
+
+.nn-lesson-progress-rail__track > span {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-text-secondary));
+}
+
+.nn-lesson-progress-rail__track--collapsed {
+  height: 5rem;
+}
+
+.nn-lesson-progress-rail__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: min(52vh, 28rem);
+  overflow: auto;
+}
+
+.nn-lesson-progress-rail__item {
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 0.55rem;
+  padding: 0.35rem 0.4rem;
+  color: var(--semantic-text-secondary);
+  font-size: 0.72rem;
+  font-weight: 720;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+.nn-lesson-progress-rail__item[data-active="true"] {
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-lesson-progress-rail__item-label {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nn-lesson-reading-viewport__drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+}
+
+.nn-lesson-reading-viewport__drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: color-mix(in srgb, var(--semantic-text-primary) 28%, transparent);
+}
+
+.nn-lesson-reading-viewport__drawer-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(18rem, 88vw);
+  max-width: 15rem;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-block: auto 0;
+  max-height: min(78dvh, 32rem);
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 0 1.25rem 0 0;
+  background: var(--semantic-surface);
+  padding: 1rem;
+  box-shadow: var(--nn-lesson-reading-shadow);
+  overflow: auto;
+}
+
+.nn-lesson-reading-viewport__drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: var(--semantic-text-primary);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.nn-lesson-reading-viewport__drawer-close {
+  display: inline-flex;
+  min-height: 3rem;
+  min-width: 3rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 0.75rem;
+  background: transparent;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-lesson-reading-viewport__drawer .nn-lesson-section-nav--rail {
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+@media (max-width: 1023px) {
+  .nn-lesson-reading-viewport__mobile-bar .nn-lesson-section-nav-shell {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-lesson-sticky-review-dock,
+  .nn-lesson-section-nav--horizontal .nn-lesson-nav-item,
+  .nn-lesson-section-nav--rail .nn-lesson-nav-item,
+  .nn-lesson-progress-rail__item {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   RN v2.7 reading workspace — left rail + pearls, full-width progress strip.
+   --------------------------------------------------------------------- */
+
+.nn-lesson-page-shell--reading-v2 .nn-lesson-reading-shell--blossom {
+  background: color-mix(in srgb, var(--theme-page-bg) 94%, #ffffff);
+  --nn-lesson-reading-border: color-mix(in srgb, var(--semantic-border-soft) 72%, #ffffff);
+  --nn-lesson-reading-shadow: 0 12px 40px -36px color-mix(in srgb, var(--semantic-brand) 18%, transparent);
+}
+
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip {
+  grid-column: 1 / -1;
+  margin-bottom: 0.4rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 0.5rem;
+  background: var(--semantic-surface);
+}
+
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__top b {
+  color: var(--semantic-text-primary);
+}
+
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__bar {
+  height: 0.375rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-border-soft));
+  overflow: hidden;
+}
+
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__bar > span,
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  transform-origin: left center;
+  will-change: transform;
+  background: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-text-secondary));
+  transition: transform 140ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__bar > span,
+  .nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__fill {
+    transition: none;
+  }
+}
+
+.nn-lesson-clinical-pearls-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.nn-lesson-clinical-pearls-rail__label {
+  font-size: 0.5625rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-lesson-clinical-pearls-rail__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nn-lesson-clinical-pearls-rail__box {
+  border-radius: 0.625rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface));
+  padding: 1rem 1.125rem;
+  font-size: 0.71875rem;
+  line-height: 1.5;
+}
+
+.nn-lesson-clinical-pearls-rail__box b {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--semantic-brand) 82%, var(--semantic-text-secondary));
+}
+
+.nn-lesson-clinical-pearls-rail__box p {
+  margin: 0;
+  color: var(--semantic-text-secondary);
+}
+
+@media (min-width: 1024px) {
+  .nn-lesson-reading-viewport[data-layout="rn-v2"] {
+    grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr);
+    column-gap: clamp(1rem, 1.25vw, 1.25rem);
+  }
+
+  .nn-lesson-reading-viewport[data-layout="rn-v2"][data-left-collapsed="true"] {
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+  }
+
+  .nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-viewport__right {
+    display: none !important;
+  }
+
+  .nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-viewport__left-inner {
+    gap: 1rem;
+  }
+
+  .nn-lesson-reading-viewport[data-layout="rn-v2"][data-left-collapsed="true"]
+    .nn-lesson-clinical-pearls-rail,
+  .nn-lesson-reading-viewport[data-layout="rn-v2"][data-left-collapsed="true"]
+    .nn-lesson-section-nav--rail {
+    display: none;
+  }
+
+  .nn-lesson-page-shell--reading-v2 .nn-lesson-reading-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.125rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .nn-lesson-page-shell--reading-v2 .nn-lesson-reading-stack .nn-lesson-section-card {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .nn-lesson-page-shell--reading-v2
+    .nn-lesson-reading-stack
+    .nn-lesson-section-card.nn-lesson-section-card--under-left {
+    width: calc(100% + min(15rem, 240px) + clamp(1rem, 1.25vw, 1.25rem));
+    margin-left: calc(-1 * (min(15rem, 240px) + clamp(1rem, 1.25vw, 1.25rem)));
+  }
+
+  .nn-lesson-page-shell--reading-v2
+    .nn-lesson-reading-viewport[data-layout="rn-v2"][data-left-collapsed="true"]
+    .nn-lesson-section-card--under-left {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+.nn-lesson-page-shell--reading-v2 .nn-premium-lesson-article > * + * {
+  margin-top: 0;
+}
+
+.nn-lesson-page-shell--reading-v2 .nn-lesson-clinical-image-card {
+  --lesson-media-surface: color-mix(in srgb, var(--semantic-panel-warm) 12%, var(--semantic-surface));
+  --lesson-media-frame: color-mix(in srgb, var(--semantic-surface) 96%, #ffffff);
+  --lesson-media-border: color-mix(in srgb, var(--semantic-border-soft) 55%, #ffffff);
+  --lesson-media-caption-surface: color-mix(in srgb, var(--semantic-panel-muted) 8%, var(--semantic-surface));
+  box-shadow: 0 10px 36px -28px color-mix(in srgb, var(--semantic-brand) 22%, transparent) !important;
+}
+
+.nn-lesson-page-shell--reading-v2 .nn-lesson-clinical-pearls-rail__box {
+  border-color: color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 4%, var(--semantic-surface));
+}
+
+.nn-lesson-page-shell--reading-v2 .nn-lesson-section-nav--rail .nn-lesson-nav-item {
+  font-weight: 500;
+}
