@@ -32,6 +32,7 @@ function buildNavSections(pathwayId: string | null): NavSection[] {
         { label: "ECG Interpretation", href: "/app/ecg", icon: <IconEcg />, tooltip: "ECG Interpretation" },
         { label: "Lab Interpretation", href: "/app/labs", icon: <IconLabs />, tooltip: "Lab Interpretation" },
         { label: "Clinical Skills", href: "/app/clinical-skills", icon: <IconClinicalSkills />, tooltip: "Clinical Skills" },
+        { label: "Clinical Media", href: "/app/clinical-media-library", icon: <IconClinicalSkills />, tooltip: "Clinical Media" },
       ],
     },
     {

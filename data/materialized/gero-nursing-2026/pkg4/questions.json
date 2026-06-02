@@ -1,0 +1,293 @@
+{
+  "packageId": "pkg4-mental-health",
+  "title": "Mental Health in Older Adults — Question Bank",
+  "generatedDate": "2026-06-02",
+  "questionCount": 600,
+  "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+  "questions": [
+    {
+      "id": "GERO-P4-001",
+      "topicSlug": "delirium",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A nurse is caring for four older adults on the medical unit. Which patient should the nurse assess FIRST?",
+      "options": {
+        "A": "An 82-year-old woman with dementia who is agitated and pulling at her hospital gown — the family says this is her 'usual' behavior",
+        "B": "A 77-year-old man who was alert and oriented at 0800 but is now confused, has pulled out his IV, and keeps calling for 'Maria' — his wife who died 3 years ago",
+        "C": "A 74-year-old woman who is oriented ×3 but reports mild confusion 'because hospitals confuse her'",
+        "D": "A 68-year-old man who is sleeping comfortably after his pain medication"
+      },
+      "correctAnswer": "B",
+      "rationale": "Patient B is exhibiting acute-onset confusion with a clear change from baseline (was alert at 0800), disorganized thinking (calling for deceased wife), and is agitated enough to have removed his IV. This is the classic hyperactive delirium presentation — acute onset, fluctuating course, attention disturbance, disorganized cognition. Acute-onset confusion with change from baseline is a medical emergency requiring IMMEDIATE nursing assessment and physician notification. Patient A's behavior is described as 'usual' (baseline dementia behavior) — this requires monitoring but is not the immediate priority. Patients C and D have minimal or stable presentations.",
+      "distractorRationales": {
+        "A": "Incorrect. Patient A's agitation is described as her 'usual behavior' — baseline. While worth monitoring, the family has confirmed this is not a change from baseline. Patient B has an ACUTE change from baseline, which is always higher priority.",
+        "C": "Incorrect. This patient is oriented ×3 and her self-reported 'confusion' is described as environmental/contextual — not acute disorientation. She is stable.",
+        "D": "Incorrect. Sleeping after pain medication is expected and not concerning unless respiratory depression is occurring (which is not described)."
+      },
+      "hint": "Priority = acute change from baseline. Which patient represents the most ACUTE new change?",
+      "clinicalPearl": "Delirium must always be distinguished from baseline dementia behavior. The KEY differentiator: ACUTE ONSET and FLUCTUATING COURSE. A dementia patient who suddenly becomes MORE confused or behaviorally different from their baseline has delirium until proven otherwise — even if they always have some baseline behavioral disturbance.",
+      "examStrategy": "'Who to see first' questions: acute cognitive change from known baseline = highest priority. Baseline confusion in a dementia patient = lower priority. Stable/expected findings = lowest priority.",
+      "keyTakeaway": "ACUTE onset confusion from known baseline = delirium = medical emergency = assess FIRST. Baseline dementia behavior = monitor but not the immediate priority.",
+      "tags": ["delirium", "prioritization", "acute-onset", "baseline-change", "hyperactive-delirium"]
+    },
+    {
+      "id": "GERO-P4-002",
+      "topicSlug": "delirium-vs-dementia",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "Matrix",
+      "difficulty": "moderate",
+      "stem": "A nurse is assessing two patients on the medical unit. Patient A is an 80-year-old woman who has been gradually forgetting names and recent events over 3 years and now requires assistance with ADLs. Patient B is a 75-year-old man who was fully oriented this morning but is now highly confused, agitated, and does not recognize his daughter. He was admitted yesterday for a UTI. Match each characteristic to the correct patient.",
+      "characteristics": [
+        "Acute onset within hours to days",
+        "Gradual onset over months to years",
+        "Fluctuating level of consciousness",
+        "Stable cognitive impairment (not worse day to day)",
+        "Always has an underlying medical cause",
+        "Memory loss affects new learning",
+        "Treat the underlying cause as primary intervention",
+        "Manage with cognitive stimulation and safety"
+      ],
+      "options": {
+        "A": "Patient A — Dementia",
+        "B": "Patient B — Delirium",
+        "C": "Both patients"
+      },
+      "correctAnswer": {
+        "Acute onset within hours to days": "B",
+        "Gradual onset over months to years": "A",
+        "Fluctuating level of consciousness": "B",
+        "Stable cognitive impairment (not worse day to day)": "A",
+        "Always has an underlying medical cause": "B",
+        "Memory loss affects new learning": "C",
+        "Treat the underlying cause as primary intervention": "B",
+        "Manage with cognitive stimulation and safety": "A"
+      },
+      "rationale": "Delirium vs dementia is the most important clinical distinction in gerontological nursing. Delirium: ACUTE onset, fluctuating, reversible with cause treatment. Dementia: gradual onset, stable course (not worse hour to hour), progressive but not acute. Both can impair new learning. Delirium always has an underlying cause (infection, medications, metabolic, pain, urinary retention) that must be found and treated.",
+      "hint": "Key distinction: ONSET (acute = delirium, gradual = dementia) + COURSE (fluctuating = delirium, stable = dementia).",
+      "clinicalPearl": "Delirium superimposed on dementia is extremely common — dementia is the #1 risk factor for delirium. When a dementia patient suddenly gets MUCH worse, this is delirium until proven otherwise. Always search for the trigger.",
+      "examStrategy": "Delirium vs dementia table is HIGH-YIELD on every nursing exam. Memorize: Onset (hours-days vs months-years), Course (fluctuating vs stable), Cause (always identifiable in delirium vs multifactorial progressive in dementia), Treatment (find and treat the cause vs manage symptoms).",
+      "keyTakeaway": "Delirium: acute, fluctuating, reversible, has treatable cause. Dementia: gradual, stable (day-to-day), progressive, no acute reversible cause.",
+      "tags": ["delirium", "dementia", "delirium-vs-dementia", "acute-vs-gradual", "matrix", "cognitive-assessment"]
+    },
+    {
+      "id": "GERO-P4-003",
+      "topicSlug": "delirium",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "SATA",
+      "difficulty": "moderate",
+      "stem": "A nurse is using the Confusion Assessment Method (CAM) to assess a 78-year-old woman admitted with a hip fracture. Which CAM features, if present, would indicate delirium? SELECT ALL THAT APPLY.",
+      "options": {
+        "A": "Acute change in mental status from baseline",
+        "B": "Fluctuating mental status during the day",
+        "C": "Inattention (difficulty focusing or following conversation)",
+        "D": "Gradual onset of memory loss over the past 2 years",
+        "E": "Disorganized thinking (illogical reasoning, rambling speech)",
+        "F": "Altered level of consciousness (not alert and fully oriented)"
+      },
+      "correctAnswer": ["A", "B", "C", "E"],
+      "rationale": "The CAM (Confusion Assessment Method) diagnoses delirium when FEATURES 1 AND 2 ARE PRESENT, PLUS EITHER FEATURE 3 OR 4:\n• Feature 1: ACUTE ONSET and FLUCTUATING COURSE (A+B)\n• Feature 2: INATTENTION (C)\n• Feature 3: DISORGANIZED THINKING (E)\n• Feature 4: ALTERED LEVEL OF CONSCIOUSNESS\n\nCAM-positive (delirium) = Feature 1 + Feature 2 + (Feature 3 OR Feature 4).\n\nGradual memory loss over 2 years (D) is characteristic of dementia, not delirium. Altered level of consciousness (F) is Feature 4 — an ADDITIONAL supporting feature, not required for CAM diagnosis.",
+      "distractorRationales": {
+        "D": "INCORRECT. Gradual onset of memory loss over years is dementia, not delirium. Delirium is ACUTE (hours to days), not gradual.",
+        "F": "The CAM uses altered level of consciousness as Feature 4 (additional supporting criterion). It is not one of the three core features."
+      },
+      "hint": "CAM diagnosis: acute/fluctuating + inattention + disorganized thinking = delirium. Gradual onset = NOT delirium.",
+      "clinicalPearl": "The CAM takes 5 minutes to administer and has 94% sensitivity and 89% specificity for delirium when used correctly by trained nurses. Use it twice daily in all high-risk hospitalized older adults.",
+      "examStrategy": "CAM features SATA: Features 1 (acute/fluctuating), 2 (inattention), 3 (disorganized thinking) are the core. Feature 4 (altered consciousness) is additional. Gradual onset = dementia = NOT CAM-positive.",
+      "keyTakeaway": "CAM delirium diagnosis: acute + fluctuating + inattention + disorganized thinking (all four features in the SATA context). Gradual onset is dementia, not delirium.",
+      "tags": ["CAM", "confusion-assessment-method", "delirium-diagnosis", "delirium-features", "SATA"]
+    },
+    {
+      "id": "GERO-P4-004",
+      "topicSlug": "depression-older-adults",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A 74-year-old man tells his family nurse practitioner, 'I'm fine — getting old means feeling lousy sometimes.' He has had low energy for 6 months, has stopped playing golf (his lifelong hobby), sleeps 12 hours/day, has poor appetite, and reports feeling like a burden to his family. He denies suicidal ideation. His GDS-15 score is 10/15. Which statement BEST guides the nurse's next step?",
+      "options": {
+        "A": "Agree with the patient — low energy and sleep changes are normal parts of aging",
+        "B": "GDS score of 10/15 suggests significant depression — assess further and initiate management including psychiatric referral or antidepressant discussion",
+        "C": "Refer the patient for cardiac workup — fatigue and sleep changes may indicate an underlying cardiac cause",
+        "D": "Schedule a follow-up in 3 months to see if symptoms resolve on their own"
+      },
+      "correctAnswer": "B",
+      "rationale": "A GDS-15 score of ≥5 is a positive screen for depression. A score of 10/15 indicates SIGNIFICANT depression. The patient also presents with: anhedonia (stopped playing golf — his passion), hypersomnia (12 hours sleep), poor appetite, and feelings of being a burden — all core depression criteria. Depression is NOT a normal part of aging and is highly treatable. The nurse must assess further for suicidal ideation (the patient says he denies it — but a thorough suicide risk assessment is needed), discuss treatment options (therapy, antidepressants), and arrange appropriate follow-up or referral. Feeling like a burden is a suicide risk factor even when active ideation is denied.",
+      "distractorRationales": {
+        "A": "Incorrect. Low energy, hypersomnia, anhedonia, and poor appetite are NOT normal aging changes — these are depression symptoms. Normalizing depression is one of the most harmful forms of ageism.",
+        "C": "Incorrect. While cardiac workup may be appropriate for fatigue evaluation, the clinical picture here is clearly driven by depression (anhedonia, hypersomnia, GDS 10/15) — cardiac workup should occur as part of comprehensive assessment but does not replace depression management.",
+        "D": "Incorrect. 'Wait and see' for 3 months with a GDS of 10/15, significant anhedonia, and feelings of burden is dangerous. Depression at this level requires active management, not passive monitoring."
+      },
+      "hint": "GDS ≥5 = screen positive. GDS 10/15 = significant depression. What must the nurse do next?",
+      "clinicalPearl": "Feeling like a burden is a major suicide risk factor in older adults — it predicts suicide attempts even without expressed ideation. Always assess this specifically. Older men are the highest-risk group for suicide: white men >85 have the highest suicide rate of any demographic in North America.",
+      "examStrategy": "GDS screening: ≥5 = positive (screen for depression); ≥10 = significant depression (action required). Depression in older adults: always treatable, never normal aging. Feeling like a burden = suicide risk assessment needed.",
+      "keyTakeaway": "GDS 10/15 = significant depression. Anhedonia + hypersomnia + feeling like burden = active management needed now. Depression is NOT normal aging. Feeling like burden = assess suicide risk.",
+      "tags": ["depression", "GDS", "geriatric-depression-scale", "older-adults", "anhedonia", "suicide-risk"]
+    },
+    {
+      "id": "GERO-P4-005",
+      "topicSlug": "depression-vs-dementia",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A nurse practitioner is evaluating an 80-year-old woman referred for 'memory problems.' Her daughter reports that over the past 3 months, the patient has become increasingly withdrawn, sleeps much of the day, has lost 5 kg, frequently says 'I don't know' when asked questions, and appears sad and uncaring. Her MoCA score is 19/30, but the patient reports, 'I can't remember anything.' Testing shows she performed inconsistently — sometimes giving correct answers, other times responding 'I don't know' even when she seemed to know the answer. Physical exam and labs are unremarkable. Which diagnosis should the nurse practitioner consider FIRST?",
+      "options": {
+        "A": "Alzheimer's disease — the MoCA of 19 confirms significant cognitive impairment",
+        "B": "Vascular dementia — the stepwise decline supports this diagnosis",
+        "C": "Depression presenting as pseudodementia — cognitive complaints with depressed mood suggest depression as the primary diagnosis",
+        "D": "Mild cognitive impairment — MoCA of 19 with preserved function"
+      },
+      "correctAnswer": "C",
+      "rationale": "This presentation is classic for PSEUDODEMENTIA — cognitive impairment caused by depression rather than a primary neurodegenerative disease. Key distinguishing features: (1) Subacute onset (3 months) in context of depressive symptoms (withdrawal, hypersomnia, weight loss, sad affect); (2) 'I don't know' responses — depressed patients frequently say 'I don't know' even for answers they know (motivational deficit), while patients with dementia confabulate or guess; (3) Inconsistent testing performance; (4) Distress about cognitive symptoms (paradoxically, Alzheimer's patients often lack insight into their deficits; depressed patients are hyperaware of them). Treatment priority: treat the depression first — if cognitive function improves markedly with antidepressant, the diagnosis of pseudodementia is confirmed.",
+      "distractorRationales": {
+        "A": "Incorrect. While MoCA of 19 is below cutoff, the clinical features strongly suggest depression as the etiology. Alzheimer's does not typically manifest this rapidly with intact function otherwise, and the depression symptoms predate and parallel the cognitive complaints.",
+        "B": "Incorrect. Vascular dementia has risk factors (hypertension, diabetes, AF, prior strokes), imaging evidence of vascular disease, and usually stepwise functional losses correlated with vascular events. None of these are described.",
+        "D": "Incorrect. MoCA of 19 is well below the MCI range. MCI requires preserved daily function — this patient has lost 5 kg and has significant social withdrawal suggesting functional impact."
+      },
+      "hint": "Depression presenting as cognitive impairment: key clues are 'I don't know' answers, depressed mood, inconsistent performance, recent subacute onset.",
+      "clinicalPearl": "The 'I don't know' sign: In depression, patients say 'I don't know' or 'I can't remember' even for items they clearly do know. In dementia, patients guess, confabulate, or circle back with wrong answers. This behavioral difference on testing is clinically valuable.",
+      "examStrategy": "Pseudodementia vs dementia on advanced exams: look for depression symptoms predating/accompanying cognitive complaints, 'I don't know' answers, motivation deficit, intact performance when coaxed. The key test: treat depression → significant cognitive improvement = pseudodementia.",
+      "keyTakeaway": "Pseudodementia (depression presenting as cognitive impairment): depression symptoms + 'I don't know' responses + inconsistent performance + recent onset. Treat depression first; cognitive symptoms often resolve.",
+      "tags": ["pseudodementia", "depression-dementia-distinction", "depression", "MoCA", "NP", "CNPLE"]
+    },
+    {
+      "id": "GERO-P4-006",
+      "topicSlug": "alzheimers-disease",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is caring for an 81-year-old woman with moderate Alzheimer's disease in a long-term care facility. During the morning shift, the resident becomes agitated, repeatedly trying to leave through the exit door, saying, 'I need to pick up my children from school.' Her youngest child is 54 years old. Which is the MOST appropriate nursing response?",
+      "options": {
+        "A": "Firmly remind her that her children are adults and she does not need to pick them up",
+        "B": "Redirect her by entering her reality: 'I called the school and they said the children won't be out for a few hours — could we go have some tea while we wait?'",
+        "C": "Administer lorazepam 0.5 mg PRN as ordered to reduce her agitation",
+        "D": "Apply a wrist alarm and restrict her to the common room for safety"
+      },
+      "correctAnswer": "B",
+      "rationale": "In dementia care, the therapeutic approach to behavioural disturbance (BPSD) is: (1) try non-pharmacological interventions first; (2) use validation therapy / therapeutic redirection rather than reality orientation when the patient is in a different reality. Confronting her with the logical reality ('your children are adults') will increase agitation and distress — her brain is working in a different time and confrontation causes distress without benefit. The best response: acknowledge her reality ('I called the school'), address the emotional need (feeling responsible, purposeful), and redirect to a familiar comfort activity (tea). This is person-centred dementia care.",
+      "distractorRationales": {
+        "A": "Incorrect. Reality confrontation in moderate-to-severe dementia is not therapeutic. The patient cannot update her reality — she will only become more distressed. Logical correction worsens agitation in Alzheimer's.",
+        "C": "Incorrect. Benzodiazepines (lorazepam) are Beers Criteria PIMs in older adults and are NOT first-line for BPSD. Non-pharmacological approaches must be tried first. Lorazepam increases fall risk, worsens cognitive function, and can cause paradoxical agitation in older adults with dementia.",
+        "D": "Incorrect. Restriction is a form of physical restraint in function if it causes distress and involuntary containment. It does not address the behavioral trigger and may escalate agitation."
+      },
+      "hint": "In dementia, don't confront — redirect. Enter the patient's reality and redirect with compassion.",
+      "clinicalPearl": "Validation therapy: accept and acknowledge the emotional truth of the person's experience, even when the specific content is not factual. 'You want to take care of your children — you're a wonderful mother.' This addresses the FEELING, not the content.",
+      "examStrategy": "BPSD management: non-pharmacological first. Therapeutic redirection + validation > reality confrontation + benzodiazepines. Lorazepam in dementia = wrong answer (Beers, fall risk, worsens cognition).",
+      "keyTakeaway": "BPSD: non-pharmacological first — validate and redirect into patient's reality. Never confront delusions/confabulations logically. Benzodiazepines are contraindicated first-line.",
+      "tags": ["BPSD", "Alzheimer's", "therapeutic-redirection", "validation-therapy", "dementia-care", "LTC"]
+    },
+    {
+      "id": "GERO-P4-007",
+      "topicSlug": "suicide-risk",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 78-year-old man, recently widowed and recently diagnosed with moderate Parkinson's disease, attends an appointment. When asked how he is doing, he says, 'I've had a good life. I've started giving things away to my kids — family heirlooms, his grandfather's watch. I've been thinking about what comes next.' He scores 11/15 on the GDS. He denies active suicidal ideation but says, 'I've got some pills at home that I've saved up, just in case.' Which nursing response is MOST urgent?",
+      "options": {
+        "A": "Validate his desire to plan ahead and acknowledge that end-of-life preparation is normal",
+        "B": "Assess suicide risk immediately using direct questioning, implement a safety plan, involve his support network, and arrange for safe medication storage or removal",
+        "C": "Refer to bereavement counselling and schedule a follow-up in 3 months",
+        "D": "Start an antidepressant immediately and reassess in 6 weeks"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient has multiple serious suicide risk factors converging: (1) Older widowed man (highest demographic risk for suicide); (2) New serious medical diagnosis (Parkinson's — a major suicide risk factor: loss of independence, disfigurement, progressive disability); (3) Giving away possessions (classic behavioral suicide warning sign); (4) GDS 11/15 (significant depression); (5) Stockpiled medication 'just in case' (passive suicidal ideation with means). Despite denying 'active suicidal ideation,' the behavioral picture is highly concerning. Priority: direct, compassionate suicide risk assessment; safety planning; means restriction (safe storage of the stockpiled medications — remove from home immediately); involve support network; arrange urgent mental health follow-up.",
+      "distractorRationales": {
+        "A": "Incorrect. Giving away possessions in this context is NOT end-of-life preparation — it is a behavioral suicide warning sign. 'Planning ahead' framing would miss a life-threatening clinical presentation.",
+        "C": "Incorrect. 3-month follow-up is dangerous for a patient with this risk profile. This presentation requires same-day urgent intervention.",
+        "D": "Incorrect. Antidepressants are appropriate but are not the IMMEDIATE priority. Means restriction (the stockpiled medications) and safety planning must happen before or alongside pharmacological treatment."
+      },
+      "hint": "Giving away possessions + stockpiled medications + widowed + Parkinson's diagnosis + GDS 11 = what is the priority?",
+      "clinicalPearl": "The classic suicide triad in older men: (1) recent major loss (widowhood); (2) new serious medical diagnosis; (3) behavioral signs (giving possessions away, 'wrapping up affairs'). White men >75 have the highest suicide completion rate in North America. Never dismiss stockpiling medications as 'just in case.'",
+      "examStrategy": "Suicide assessment in older adults: take behavioral warning signs (giving possessions away, stockpiling medications, farewell visits) as seriously as verbal ideation. Means restriction is a priority intervention alongside safety planning.",
+      "keyTakeaway": "Older widowed man + Parkinson's diagnosis + giving possessions + stockpiled medications = HIGH suicide risk. Immediate assessment + means restriction + safety plan + urgent mental health. Giving possessions away = suicide warning sign.",
+      "tags": ["suicide-risk", "older-adult-suicide", "widowhood", "Parkinson's", "means-restriction", "NP", "CNPLE"]
+    },
+    {
+      "id": "GERO-P4-008",
+      "topicSlug": "cognitive-screening",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse in a memory clinic administers the Mini-Cog to a 76-year-old woman. The patient recalls 1 of 3 words and draws an incomplete clock with the hands incorrectly placed. Which interpretation of the Mini-Cog result is MOST accurate?",
+      "options": {
+        "A": "The Mini-Cog is negative — she recalled some words and attempted the clock drawing",
+        "B": "The Mini-Cog is positive for cognitive impairment — further evaluation is indicated",
+        "C": "The clock drawing alone is sufficient to diagnose dementia",
+        "D": "She needs to repeat the test in 6 months before any action is taken"
+      },
+      "correctAnswer": "B",
+      "rationale": "The Mini-Cog scoring is: 0–2 = positive screen (concern for cognitive impairment); 3–5 = negative screen. Scoring: 1 point per recalled word (maximum 3), plus 2 additional points for a NORMAL clock drawing. This patient recalled 1 word (1 point) and drew an abnormal clock (0 points) = total score 1/5. Mini-Cog score of 1 = POSITIVE screen for cognitive impairment. A positive screen requires further evaluation (full neuropsychological assessment, MoCA, medical workup including reversible causes).",
+      "distractorRationales": {
+        "A": "Incorrect. Partial credit does not equal a negative screen. The Mini-Cog uses specific cutoffs. Score of 1 = positive screen regardless of partial effort.",
+        "C": "Incorrect. The clock drawing alone cannot diagnose dementia — it is a screening component. Diagnosis requires comprehensive evaluation including history, functional assessment, and neuropsychological testing.",
+        "D": "Incorrect. A positive Mini-Cog screen requires timely further evaluation, not a 6-month delay. Reversible causes of cognitive impairment must be assessed promptly."
+      },
+      "hint": "Mini-Cog: 0–2 = positive (concern). 3–5 = negative. Score this patient: 1 word + abnormal clock = ?",
+      "clinicalPearl": "Mini-Cog is a 3-minute screening tool ideal for busy clinical settings. It screens for both recall (3-word recall) and executive function (clock drawing). It has 99% sensitivity for dementia when 0 words recalled; 68% sensitivity with 1–2 words recalled but abnormal clock.",
+      "examStrategy": "Mini-Cog scoring: 1 point per recalled word (0–3) + 2 points for normal clock (total 5). Score ≤2 = positive. This is a quick clinical calculation commonly tested.",
+      "keyTakeaway": "Mini-Cog: score 0–2 = positive screen for cognitive impairment → further evaluation required. Score 3–5 = negative. This patient's score of 1 = positive screen.",
+      "tags": ["Mini-Cog", "cognitive-screening", "dementia-screening", "clock-drawing", "word-recall"]
+    },
+    {
+      "id": "GERO-P4-009",
+      "topicSlug": "capacity-assessment",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 79-year-old woman with moderate dementia (MMSE 18/30) is refusing surgical repair of a hip fracture. She says, 'I know I broke my hip. I know I need surgery. But I've seen what happened to my sister after her surgery — she never walked again. I'd rather stay in bed and manage with pain medicine.' Her daughter insists she be taken to surgery immediately. Which ethical principle MOST guides the nursing approach?",
+      "options": {
+        "A": "Beneficence — surgery is in her best interest and must proceed",
+        "B": "Justice — all patients with hip fractures should receive the same standard of care",
+        "C": "Autonomy — if she has decision-making capacity for this specific decision, her informed refusal must be respected",
+        "D": "Non-maleficence — refusing surgery will cause harm, so surgery must proceed"
+      },
+      "correctAnswer": "C",
+      "rationale": "Decision-making capacity is decision-specific, not global. A patient with moderate dementia may retain capacity for some decisions but not others. The four elements of decision-making capacity are: (1) Understanding the information; (2) Appreciating how the information applies to her situation; (3) Reasoning (using the information to make a decision); (4) Communicating a clear and consistent choice. This patient demonstrates all four elements: she understands she broke her hip and needs surgery, she appreciates the risk based on her sister's experience, she reasons about the tradeoff, and she communicates a clear and consistent refusal. Dementia alone does NOT remove capacity — capacity must be formally assessed for each specific decision. If she has capacity, her informed refusal MUST be respected.",
+      "distractorRationales": {
+        "A": "Incorrect. Beneficence supports acting in the patient's best interest, but when a capacitated patient refuses treatment, respect for autonomy overrides beneficence. These principles must be balanced — autonomy typically prevails when capacity is demonstrated.",
+        "B": "Incorrect. Justice relates to equitable distribution of resources — not to overriding patient refusal.",
+        "D": "Incorrect. Non-maleficence means avoiding harm. Surgery also carries risk of harm. A balanced assessment of risks and benefits — guided by the capacitated patient's values — is required, not overriding refusal."
+      },
+      "hint": "Does this patient demonstrate the 4 elements of decision-making capacity? If yes, what ethical principle applies?",
+      "clinicalPearl": "The four elements of decision-making capacity (not competence — a legal term): (1) Understanding; (2) Appreciation; (3) Reasoning; (4) Communication. Dementia diagnosis ≠ incapacity. Always assess decision-specific capacity, not global capacity based on diagnosis.",
+      "examStrategy": "Capacity questions: identify whether the patient meets all 4 capacity criteria for THIS decision. If yes → autonomy wins. Refusal by a capacitated patient must be respected regardless of medical opinion. Dementia diagnosis alone does not remove capacity.",
+      "keyTakeaway": "Decision-making capacity is decision-specific. Dementia alone does not remove capacity. The 4 elements: understanding, appreciation, reasoning, communication. Capacitated refusal of treatment must be respected — autonomy overrides beneficence.",
+      "tags": ["capacity-assessment", "autonomy", "dementia", "informed-refusal", "ethics", "NP", "CNPLE"]
+    },
+    {
+      "id": "GERO-P4-010",
+      "topicSlug": "anxiety-older-adults",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "An 80-year-old woman reports excessive worry about her health, her family, and 'everything.' She cannot control the worry, has difficulty sleeping, and reports physical symptoms including muscle tension and frequent headaches. Symptoms have been present for 7 months. She takes lorazepam 0.5 mg nightly (prescribed 4 years ago). Which nursing intervention should be PRIORITIZED?",
+      "options": {
+        "A": "Increase the lorazepam dose to better control her anxiety symptoms",
+        "B": "Assess for benzodiazepine dependence and work with the prescriber to taper lorazepam; recommend cognitive-behavioural therapy (CBT) as first-line anxiety treatment",
+        "C": "Reassure her that anxiety is common in older adults and she will feel better in time",
+        "D": "Start an SSRI immediately and discontinue the lorazepam abruptly"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient meets criteria for generalized anxiety disorder (GAD) — excessive, uncontrollable worry affecting multiple life domains for >6 months. She has been on lorazepam for 4 years — a concerning pattern. Long-term benzodiazepine use in older adults is: (1) associated with tolerance (reduced efficacy over time), (2) dependence, (3) significant adverse effects (falls, cognitive impairment, confusion, paradoxical agitation). The priority is: assess for dependence, arrange supervised gradual taper (abrupt discontinuation causes withdrawal seizures), and initiate evidence-based GAD treatment: CBT (most effective), SSRI/SNRI (sertraline, escitalopram, venlafaxine — safer than benzodiazepines).",
+      "distractorRationales": {
+        "A": "Incorrect. Increasing benzodiazepine dose in a patient who has been on them for 4 years will likely worsen dependence without improving anxiety (tolerance). Escalation is the wrong direction.",
+        "C": "Incorrect. Reassurance without intervention for a 7-month GAD presentation is inadequate. GAD requires treatment — it does not resolve on its own.",
+        "D": "Incorrect. Abrupt lorazepam discontinuation after 4 years can cause life-threatening benzodiazepine withdrawal (seizures, hallucinations). Gradual tapering under medical supervision is essential."
+      },
+      "hint": "4 years on lorazepam + anxiety = what are the two priority concerns?",
+      "clinicalPearl": "Benzodiazepine dependence in older adults is a hidden epidemic. Many older adults were started on benzodiazepines decades ago when prescribing guidelines were less strict. They often cannot sleep or function without them — but the medication is causing more harm than good. Supervised taper + CBT is the evidence-based approach.",
+      "examStrategy": "Anxiety + long-term benzodiazepine use in older adults: priority = assess dependence + plan gradual taper + CBT. Never increase dose; never abruptly stop. First-line anxiety treatment: CBT + SSRI/SNRI (not benzodiazepines).",
+      "keyTakeaway": "Long-term benzodiazepine in older adult with GAD: assess dependence, plan supervised gradual taper, initiate CBT and/or SSRI. Never increase dose; never abrupt discontinuation (seizure risk).",
+      "tags": ["anxiety", "GAD", "benzodiazepine-dependence", "lorazepam", "CBT", "SSRI", "older-adults"]
+    }
+  ]
+}

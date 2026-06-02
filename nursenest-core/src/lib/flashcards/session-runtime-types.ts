@@ -70,6 +70,27 @@ export type SessionAction =
 
 // ── Hydrated payload passed from server to client ─────────────────────────
 
+/**
+ * A single clinical media attachment for a flashcard or practice question.
+ * Rendered by ClinicalAudioBlock or ClinicalImageBlock.
+ * placement="stem" → shown before the question; placement="rationale" → shown in reveal panel.
+ */
+export type SessionCardClinicalMedia =
+  | {
+      type: "audio";
+      soundId: string;
+      soundKind: "cardiac" | "respiratory";
+      soundDisplayName?: string;
+      placement: "stem" | "rationale";
+    }
+  | {
+      type: "image";
+      imageUrl: string;
+      imageAlt: string;
+      imageCaption?: string;
+      placement: "stem" | "rationale";
+    };
+
 /** Wire shape: what the server serialises and the client deserialises for each card in a session. */
 export type SessionCardPayload = {
   cardId: string;
@@ -82,6 +103,12 @@ export type SessionCardPayload = {
   /** Per-wrong-letter rationales. */
   rationaleIncorrect: Array<{ letter: string; rationale: string }>;
   itemKind: string;
+  /**
+   * Optional clinical media blocks attached to this card.
+   * Rendered by ClinicalAudioBlock / ClinicalImageBlock.
+   * Populated by the flashcard-clinical-media-registry at session hydration time.
+   */
+  clinicalMedia?: SessionCardClinicalMedia[];
 };
 
 export type HydratedSessionDeck = {

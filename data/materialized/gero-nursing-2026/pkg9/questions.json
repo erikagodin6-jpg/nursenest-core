@@ -1,0 +1,90 @@
+{
+  "packageId": "pkg9-functional",
+  "title": "Functional Assessment in Older Adults — Question Bank",
+  "generatedDate": "2026-06-02",
+  "questionCount": 250,
+  "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+  "questions": [
+    {
+      "id": "GERO-P9-001",
+      "topicSlug": "ADL-IADL-assessment",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is assessing a 75-year-old man being discharged from hospital following a total knee replacement. He can dress himself, bathe with minor assistance (lower legs), and eat independently. He cannot walk to the mailbox, cannot drive, and cannot shop for groceries. He lives alone. His daughter lives 30 minutes away and can visit twice weekly. Which discharge planning concern is HIGHEST priority?",
+      "options": {
+        "A": "His minor need for bathing assistance — arrange daily personal care support",
+        "B": "His inability to access food (shopping) and community (transportation) — IADL deficits that directly threaten safe independent living",
+        "C": "Arrange physiotherapy for knee rehabilitation",
+        "D": "Ensure he has follow-up with his orthopedic surgeon in 6 weeks"
+      },
+      "correctAnswer": "B",
+      "rationale": "The HIGHEST priority discharge concern is his inability to access food and community — critical IADLs that directly threaten safe independent living. A man who cannot grocery shop, cannot drive, and lives alone will run out of food within days of discharge. IADL deficits (especially food access) are more immediately threatening to survival than minor ADL assistance needs. Discharge planning must address: grocery delivery service, Meals on Wheels, family meal support during the interim, transportation assistance for appointments. Minor bathing assistance can be addressed with grab bars, shower chair, and scheduled personal support worker.",
+      "distractorRationales": {
+        "A": "Incorrect. Minor bathing assistance (lower legs only) is a lower priority than food security. He is functionally capable of most ADLs.",
+        "C": "Incorrect. Physiotherapy is essential for recovery but is a scheduled service. Food access is an immediate, daily need without which he cannot safely function at home.",
+        "D": "Incorrect. Orthopedic follow-up is important for recovery but scheduled 6 weeks away. Food insecurity is immediate."
+      },
+      "hint": "Which IADL deficit directly threatens his survival and safe return home?",
+      "clinicalPearl": "IADL deficits after hospitalization are often the limiting factor for safe discharge. A patient who is functionally 'mostly independent' but cannot access food, medications, or transportation cannot safely live alone. Discharge planning must address ALL IADLs, not just ADLs.",
+      "examStrategy": "Discharge planning priority: identify IADL deficits that directly impact safety. Food access + transportation + medication management = highest priority IADL gaps. ADL assistance = important but secondary to survival needs.",
+      "keyTakeaway": "Food access and transportation IADL deficits = highest discharge priority for a man living alone post-operatively. IADL gaps are more immediately dangerous than minor ADL assistance needs.",
+      "tags": ["IADL", "discharge-planning", "food-security", "community-resources", "functional-assessment"]
+    },
+    {
+      "id": "GERO-P9-002",
+      "topicSlug": "nutrition-screening",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse completes a Mini Nutritional Assessment (MNA) for an 83-year-old woman in a long-term care facility. The patient has lost 4 kg in the past 3 months, eats only 1–2 meals per day, has poor mobility, and has mild dementia. Her MNA score is 10/30. Which conclusion is MOST accurate?",
+      "options": {
+        "A": "MNA score of 10 is within normal limits for a woman her age",
+        "B": "MNA score of 10 indicates malnutrition — comprehensive nutritional assessment and intervention are required",
+        "C": "The low MNA score is expected given her dementia — no nutritional intervention is needed",
+        "D": "Only dietitian referral is needed — nursing has no further role in nutritional management"
+      },
+      "correctAnswer": "B",
+      "rationale": "MNA scoring: 24–30 = normal nutritional status; 17–23.5 = at risk of malnutrition; <17 = malnutrition. A score of 10 clearly indicates MALNUTRITION. In an older adult with weight loss (4 kg in 3 months = >5% body weight loss — significant), reduced intake, poor mobility, and dementia, malnutrition has serious clinical consequences: impaired wound healing, increased infection risk, worsened pressure injury risk, accelerated functional decline, and worsened cognitive function. Nursing interventions: dietitian referral, oral nutritional supplementation, food preference assessment, assisted feeding if needed, appetite stimulant discussion with physician.",
+      "distractorRationales": {
+        "A": "Incorrect. MNA <17 = malnutrition. Score 10 is severely low, not normal.",
+        "C": "Incorrect. Dementia does not justify accepting malnutrition as inevitable. Malnutrition worsens dementia prognosis, increases infection risk, and accelerates death. Nutritional intervention is beneficial and appropriate.",
+        "D": "Incorrect. Nursing has a major ongoing role in nutritional management: assistance at mealtimes, food preference accommodation, oral hygiene before meals, supplemental snacks, monitoring intake and weight. Dietitian referral is the first step, not the only step."
+      },
+      "hint": "MNA <17 = malnutrition. What is the nursing response?",
+      "clinicalPearl": "The SNAP mnemonic for dementia nutrition: Small portions, Nutritional supplements, Assisted eating, Preferred foods. Persons with dementia often forget they haven't eaten, have difficulty managing utensils, or have swallowing difficulties — all requiring active nursing intervention at mealtimes.",
+      "examStrategy": "MNA scoring: 24–30 = normal; 17–23.5 = at risk; <17 = malnutrition. Score 10 = clear malnutrition. This is a quantitative calculation question requiring knowledge of the scoring cutoffs.",
+      "keyTakeaway": "MNA <17 = malnutrition. Score 10 = significant malnutrition requiring: dietitian referral, oral nutritional supplements, assistance at mealtimes, weight monitoring, appetite stimulant consideration.",
+      "tags": ["MNA", "nutrition-screening", "malnutrition", "dementia", "LTC", "dietary-assessment"]
+    },
+    {
+      "id": "GERO-P9-003",
+      "topicSlug": "functional-independence",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is caring for a 76-year-old man in a long-term care facility following a stroke 3 weeks ago. He has left-sided hemiplegia. The morning nursing assistant says, 'It's just easier for me to dress him and feed him than to wait for him to try.' Which nursing response BEST supports this patient's functional recovery?",
+      "options": {
+        "A": "Agree — efficiency is important in busy LTC settings to ensure all residents receive care on time",
+        "B": "Explain that restorative care principles require supporting residents in doing as much as they safely can themselves — doing FOR patients when they can do WITH assistance accelerates functional decline",
+        "C": "Inform the nursing assistant that she is violating the patient's rights",
+        "D": "Document the concern and raise it at the next care conference"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is a restorative care vs custodial care teaching moment. Restorative care philosophy: support the patient in performing activities to the MAXIMUM of their safe capability, even if it takes longer and requires prompting/facilitation. Evidence is clear: passive care (doing everything for the patient) accelerates functional decline, deconditioning, depression, and dependence. The nursing assistant needs education about why restorative care is the standard, and the nurse must actively model and enforce restorative practice.",
+      "distractorRationales": {
+        "A": "Incorrect. Efficiency at the expense of patient rehabilitation outcomes is not appropriate. Residents' functional recovery and independence are the priority over time-saving.",
+        "C": "Incorrect. While patient dignity and rights are relevant, the immediate response should be educational rather than accusatory — the nursing assistant likely doesn't understand restorative care principles.",
+        "D": "Incorrect. Documenting for the next care conference delays correction of a current practice that is actively harming the patient's recovery. Immediate education and correction is needed."
+      },
+      "hint": "What is the difference between custodial care (doing for) and restorative care (doing with)?",
+      "clinicalPearl": "Each task a patient completes themselves — even if slower, less perfect, or requiring verbal prompting — is therapeutic. Neuroplasticity research shows that repetitive task practice after stroke is the foundation of motor recovery. Nursing assistants who 'do everything' for stroke patients are inadvertently preventing recovery.",
+      "examStrategy": "Restorative care questions: the correct answer always promotes patient participation in their own care. 'Faster to do it myself' is always the wrong approach in restorative care contexts.",
+      "keyTakeaway": "Restorative care: support participation in activities to the maximum safe capacity. Custodial care (doing everything for patients) accelerates decline. This is a patient safety and quality-of-care issue.",
+      "tags": ["restorative-care", "functional-independence", "stroke-rehabilitation", "LTC", "nursing-assistant-education"]
+    }
+  ]
+}

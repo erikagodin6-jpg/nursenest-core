@@ -14,6 +14,19 @@ function isLikelyCuid(id: string): boolean {
   return /^c[a-z0-9]{8,}$/i.test(id);
 }
 
+function formatDateTime(value: string | null): string {
+  return value ? new Date(value).toLocaleString() : "—";
+}
+
+function DiagnosticRow({ label, value }: { label: string; value: string | null }) {
+  return (
+    <div className="flex justify-between gap-4">
+      <dt className="text-muted-foreground">{label}</dt>
+      <dd className="max-w-[65%] break-words text-right font-mono text-xs">{value ?? "—"}</dd>
+    </div>
+  );
+}
+
 export default async function AdminUserSupportDetailPage({ params }: { params: Promise<{ userId: string }> }) {
   await requireAdmin();
   const { userId } = await params;
@@ -72,6 +85,85 @@ export default async function AdminUserSupportDetailPage({ params }: { params: P
       </ul>
 
       <AdminAdaptiveLearnerOverview data={adaptiveSummary} />
+
+      <section className="mt-8 nn-card p-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Revenue diagnostics</p>
+            <h2 className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">Billing, entitlement, and feature access</h2>
+          </div>
+          <span className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-muted-foreground">
+            Admin only · read-only
+          </span>
+        </div>
+
+        <div className="mt-5 grid gap-4 lg:grid-cols-3">
+          <div className="rounded-xl border border-border/70 p-4">
+            <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Subscription</h3>
+            <dl className="mt-3 space-y-2 text-sm">
+              <DiagnosticRow label="Status" value={d.revenueDiagnostics.subscription.status} />
+              <DiagnosticRow label="Plan" value={d.revenueDiagnostics.subscription.plan} />
+              <DiagnosticRow label="Interval" value={d.revenueDiagnostics.subscription.billingInterval} />
+              <DiagnosticRow label="Renewal" value={formatDateTime(d.revenueDiagnostics.subscription.renewalDate)} />
+              <DiagnosticRow label="Trial end" value={formatDateTime(d.revenueDiagnostics.subscription.trialEndDate)} />
+            </dl>
+          </div>
+
+          <div className="rounded-xl border border-border/70 p-4">
+            <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Stripe</h3>
+            <dl className="mt-3 space-y-2 text-sm">
+              <DiagnosticRow label="Customer ID" value={d.revenueDiagnostics.stripe.customerId} />
+              <DiagnosticRow label="Subscription ID" value={d.revenueDiagnostics.stripe.subscriptionId} />
+              <DiagnosticRow label="Last webhook" value={d.revenueDiagnostics.stripe.lastWebhookReceived} />
+              <DiagnosticRow label="Last entitlement sync" value={formatDateTime(d.revenueDiagnostics.stripe.lastSuccessfulEntitlementSync)} />
+            </dl>
+          </div>
+
+          <div className="rounded-xl border border-border/70 p-4">
+            <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Notifications</h3>
+            <dl className="mt-3 space-y-2 text-sm">
+              <DiagnosticRow label="Subscription email" value={d.revenueDiagnostics.notifications.lastSubscriptionEmail} />
+              <DiagnosticRow label="Admin notification" value={d.revenueDiagnostics.notifications.lastAdminNotification} />
+              <DiagnosticRow label="SMS notification" value={d.revenueDiagnostics.notifications.lastSmsNotification} />
+              <DiagnosticRow
+                label="Providers"
+                value={`email=${d.revenueDiagnostics.notifications.notificationProvidersConfigured.email ? "configured" : "missing"} · sms=${d.revenueDiagnostics.notifications.notificationProvidersConfigured.sms ? "configured" : "missing"}`}
+              />
+            </dl>
+          </div>
+        </div>
+
+        <div className="mt-5 overflow-x-auto">
+          <table className="w-full min-w-[760px] border-collapse text-left text-sm">
+            <thead>
+              <tr className="border-b border-border text-xs uppercase text-muted-foreground">
+                <th className="py-2 pr-3">Feature</th>
+                <th className="py-2 pr-3">Access</th>
+                <th className="py-2">Responsible rule</th>
+              </tr>
+            </thead>
+            <tbody>
+              {d.revenueDiagnostics.featureMatrix.map((row) => (
+                <tr key={row.feature} className="border-b border-border/60">
+                  <td className="py-2 pr-3 font-medium">{row.feature}</td>
+                  <td className="py-2 pr-3">
+                    <span
+                      className={
+                        row.status === "ALLOWED"
+                          ? "rounded-full bg-emerald-500/10 px-2 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-200"
+                          : "rounded-full bg-rose-500/10 px-2 py-1 text-xs font-semibold text-rose-700 dark:text-rose-200"
+                      }
+                    >
+                      {row.status}
+                    </span>
+                  </td>
+                  <td className="py-2 text-xs text-muted-foreground">{row.rule}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       <AdminUserProtectionPanel userId={u.id} evidence={d.activityEvidence} />
 

@@ -1,0 +1,420 @@
+{
+  "version": 1,
+  "packageId": "maternal-newborn-pkg-03",
+  "label": "Fetal Development — Lessons, Questions & Flashcards",
+  "generatedDate": "2026-06-02",
+  "targetExams": ["REx-PN","NCLEX-PN","NCLEX-RN","CNPLE","PNP-PC","FNP"],
+  "domain": "Maternal Newborn",
+  "subdomain": "Fetal Development",
+  "lessons": [
+    {
+      "lessonId": "mn-pkg03-L01",
+      "topicSlug": "fetal-environment",
+      "title": "The Fetal Environment: Amniotic Cavity, Fluid & Membranes",
+      "learningObjectives": [
+        "Describe the amniotic sac and its components",
+        "Explain amniotic fluid production, composition, and turnover",
+        "Identify normal versus abnormal amniotic fluid volume",
+        "Recognize clinical conditions associated with amniotic fluid abnormalities",
+        "Apply knowledge of amniotic fluid assessment to antepartum care"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **fetal environment** consists of the amniotic cavity, amniotic fluid, amniotic membranes (amnion + chorion), and the umbilical cord. This enclosed, fluid-filled space protects the fetus from physical trauma, allows fetal movement and musculoskeletal development, maintains temperature stability, prevents cord compression, and supports lung development through breathing movements."
+        },
+        {
+          "id": "amniotic_fluid",
+          "heading": "Amniotic Fluid: Production & Volume",
+          "kind": "pathophysiology_overview",
+          "body": "**Sources of amniotic fluid:**\n- Early pregnancy (<20 weeks): primarily transudation from maternal serum through fetal membranes and fetal skin (fetal skin is not yet keratinized)\n- After 20 weeks: primarily fetal urine (dominant source — ~800–1,000 mL/day at term)\n- Also contributed by: respiratory secretions (~200 mL/day), oral secretions, skin secretions\n\n**Amniotic fluid clearance:**\n- Fetal swallowing: ~500–1,000 mL/day\n- Fetal respiratory absorption: ~200 mL/day\n- Intramembranous absorption: fluid is absorbed across amnion directly into fetal vasculature\n\n**Normal amniotic fluid volume (AFV):**\n- 10 weeks: ~30 mL\n- 16 weeks: ~175 mL\n- 28 weeks: ~750 mL\n- 36–37 weeks: ~1,000 mL (peak)\n- Term: 700–800 mL (declines in post-term)\n\n**Composition:** 98% water; solutes include electrolytes, glucose, amino acids, enzymes, hormones, waste products (creatinine, urea), and shed fetal cells\n\n**Meconium staining:** amniotic fluid turns green-brown when fetus passes meconium (intestinal contents); normal in post-term pregnancies (>41 weeks), indicates possible fetal stress if earlier; assess for Meconium Aspiration Syndrome (MAS) risk in neonate"
+        },
+        {
+          "id": "afv_abnormalities",
+          "heading": "Amniotic Fluid Abnormalities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Oligohydramnios (AFI <5 cm or MVP <2 cm):**\n- Causes: renal agenesis (Potter sequence), obstructive uropathy, IUGR (reduced fetal renal blood flow), PPROM, post-term pregnancy\n- Consequences: pulmonary hypoplasia (lungs need fluid for development), limb contractures, Potter facies (flat nasal bridge, low-set ears), increased cord compression risk\n- Diagnosis: AFI (Amniotic Fluid Index) <5 cm or single deepest pocket (SDP) <2 cm on ultrasound\n- Nursing: continuous fetal monitoring (cord compression → variable decelerations), assess for PPROM, hydration\n\n**Polyhydramnios (AFI >24 cm or MVP >8 cm):**\n- Causes: Fetal causes: esophageal atresia, duodenal atresia (inability to swallow), neural tube defects, multiple gestation, hydrops fetalis\n- Maternal causes: gestational diabetes (fetal hyperglycemia → fetal polyuria)\n- Consequences: maternal dyspnea, preterm labor, fetal malpresentation, cord prolapse at membrane rupture, placental abruption\n- Nursing: monitor respiratory status, fetal position, contraction pattern; prepare for potential cord prolapse management"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Fetal urine = primary AF source after 20 weeks**: anything reducing fetal renal blood flow (IUGR) or eliminating kidneys (renal agenesis) → oligohydramnios\n- **Fetal swallowing = primary clearance mechanism**: anything preventing swallowing (esophageal atresia, neurologic abnormality) → polyhydramnios\n- **AFI measurement**: sum of deepest vertical pocket in each of 4 uterine quadrants (with transducer perpendicular to floor, without cord)\n- **Variable decelerations** in labor are the classic sign of cord compression from oligohydramnios → amnioinfusion (saline through intrauterine pressure catheter) treats this\n- **Meconium-stained fluid** (thick, pea-soup consistency) at delivery → NICU team present; suction appropriately; monitor for MAS"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- AF sources: fetal urine (>20 wks dominant) + respiratory/skin secretions. Cleared by fetal swallowing\n- Normal AFI: ~750 mL at 28 weeks; peaks ~1,000 mL at 36–37 weeks\n- Oligohydramnios (AFI <5): renal causes + IUGR + PPROM → cord compression, pulmonary hypoplasia\n- Polyhydramnios (AFI >24): swallowing impairment (esophageal atresia, NTDs) + GDM + multiple gestation\n- Meconium-stained fluid: assess for fetal distress; thick meconium → MAS risk in neonate"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg03-L02",
+      "topicSlug": "placental-function",
+      "title": "The Placenta: Development, Structure & Functions",
+      "learningObjectives": [
+        "Describe placental development from trophoblast invasion to mature organ",
+        "Explain the functions of the placenta in fetal support",
+        "Identify placental hormones and their effects",
+        "Recognize conditions affecting placental function",
+        "Apply knowledge of placental function to antepartum nursing assessment"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "The **placenta** is a transient organ of fetal and maternal origin, weighing approximately 500 g (1/6 of fetal weight) at term. It performs the functions of lung, kidney, liver, gastrointestinal tract, and endocrine organ for the fetus. Placental function underpins fetal survival, growth, and development throughout pregnancy."
+        },
+        {
+          "id": "development",
+          "heading": "Placental Development",
+          "kind": "pathophysiology_overview",
+          "body": "**Stages of placental development:**\n1. **Week 2:** Trophoblast invasion → syncytiotrophoblast erodes decidua basalis, forming lacunae (spaces filled with maternal blood)\n2. **Week 3:** Primary villi form (cytotrophoblast cores surrounded by syncytiotrophoblast)\n3. **Week 4:** Secondary villi (mesenchyme invades primary villi)\n4. **Week 5+:** Tertiary villi (fetal blood vessels develop) — gas exchange begins\n5. **Week 10+:** Mature placenta with definitive structure\n\n**Placental structure:**\n- **Fetal surface (chorionic plate):** smooth, shiny, covered by amnion; umbilical cord inserts centrally\n- **Maternal surface (basal plate):** rough, lobulated, composed of 15–30 cotyledons (placental lobes)\n- **Intervillous space:** maternal blood bathes chorionic villi — site of exchange\n- **Chorionic villi:** finger-like projections of fetal tissue into maternal blood; covered by syncytiotrophoblast; contain fetal capillaries\n\n**The placental barrier** (layers between maternal and fetal blood):\n- Syncytiotrophoblast → cytotrophoblast (early) → fetal connective tissue → fetal capillary endothelium\n- This barrier is selectively permeable and thins progressively during pregnancy to enhance gas exchange\n\n**Placental functions (MNEMONIC: NOURISH):**\n- **N**utrition: glucose (primary fetal fuel), amino acids, fatty acids, vitamins, minerals transferred by active/passive transport\n- **O**xygen: O2 diffuses from maternal blood (high pO2) to fetal blood (low pO2); fetal hemoglobin has higher O2 affinity\n- **U**rea/waste: CO2, urea, bilirubin transferred from fetus to maternal circulation\n- **R**esistance (immune): IgG transferred by active transport (Fc receptors); confers passive immunity to fetus\n- **I**mmune protection: maternal IgG crosses placenta (from 16 weeks; peak transfer in 3rd trimester)\n- **S**teroid production: progesterone (from 8–10 weeks), estrogens (estriol from fetal adrenal + placenta)\n- **H**CG, HPL, relaxin, other hormones produced by syncytiotrophoblast"
+        },
+        {
+          "id": "placental_hormones",
+          "heading": "Placental Hormones",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Human Chorionic Gonadotropin (hCG):**\n- Produced by syncytiotrophoblast from implantation\n- Peak: 8–10 weeks → declines; used for pregnancy testing; elevated in molar pregnancy, multiples; subnormal in ectopic/non-viable IUP\n\n**Human Placental Lactogen (HPL/hCS):**\n- Produced by syncytiotrophoblast; levels rise continuously throughout pregnancy, correlating with placental mass\n- Function: increases maternal insulin resistance (makes glucose available for fetus); stimulates breast development\n- Significance: drives gestational diabetes — HPL is why GDM typically manifests in 2nd/3rd trimester when HPL levels are highest\n\n**Progesterone:**\n- After luteal-placental shift at 8–10 weeks, placenta produces all needed progesterone\n- Maintains uterine quiescence, cervical mucus plug, mammary development\n\n**Estrogens (estriol E3 dominant in pregnancy):**\n- Produced jointly by fetal adrenal (DHEAS) → placental aromatase → estriol\n- Fetal-placental unit: requires both fetal and placental contribution\n- Maternal serum estriol is a component of quad screen; low unconjugated estriol suggests fetal adrenal compromise or chromosomal abnormality (trisomy 18, Smith-Lemli-Opitz)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Placenta: fetal (trophoblast) + maternal (decidua basalis) origin; 500 g at term; 15–30 cotyledons\n- Functions: gas/nutrient exchange, waste removal, IgG transfer, hormone production\n- HPL: causes maternal insulin resistance → GDM risk; levels rise with placental mass\n- hCG: peaks 8–10 weeks; elevated in molar pregnancy; used in pregnancy testing and quad screen\n- Estriol (E3): requires fetal adrenal + placental cooperation (fetal-placental unit)\n- Placental barrier thins with gestation → improves gas exchange efficiency"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg03-L03",
+      "topicSlug": "umbilical-cord",
+      "title": "The Umbilical Cord: Structure, Variations & Clinical Significance",
+      "learningObjectives": [
+        "Describe the normal umbilical cord structure and vessel composition",
+        "Identify umbilical cord abnormalities and their clinical implications",
+        "Recognize cord complications during labor and delivery",
+        "Apply nursing interventions for cord emergencies",
+        "Explain umbilical cord care in the newborn period"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview & Normal Structure",
+          "kind": "introduction",
+          "body": "The **umbilical cord** connects the fetus to the placenta, measuring approximately 50–60 cm in length and 1–2 cm in diameter at term. It contains three vessels: **two umbilical arteries** (carry deoxygenated blood and waste from fetus to placenta) and **one umbilical vein** (carries oxygenated, nutrient-rich blood from placenta to fetus). The vessels are embedded in **Wharton's jelly** (gelatinous connective tissue) which cushions and protects them. Covered by amnion."
+        },
+        {
+          "id": "cord_structure",
+          "heading": "Cord Structure & Variations",
+          "kind": "pathophysiology_overview",
+          "body": "**Normal cord:** 2 arteries + 1 vein; Wharton's jelly; amnion covering; helical coiling (protected from compression).\n\n**Two-vessel cord (Single umbilical artery — SUA):**\n- Only 1 artery + 1 vein (missing one umbilical artery)\n- Incidence: 1% of singletons\n- Associated with: congenital anomalies (cardiac, renal, chromosomal) in 20–30% of cases with structural anomalies on ultrasound\n- Isolated SUA (no other anomalies): associated with small for gestational age, but generally good outcome\n- Management: detailed anatomy ultrasound, fetal echocardiogram, consider karyotype if other anomalies present\n\n**Cord insertion:**\n- **Velamentous insertion:** umbilical vessels run unprotected (without Wharton's jelly) through the membranes before reaching the placenta; risk of vessel rupture (vasa previa if over the cervical os)\n- **Marginal insertion (battledore placenta):** cord inserts at placental edge; generally benign but associated with IUGR\n- **Central insertion:** normal; vessels protected by Wharton's jelly to placental edge\n\n**Vasa previa:**\n- Velamentous vessels cross over the internal cervical os ahead of the presenting fetal part\n- OBSTETRIC EMERGENCY: rupture of membranes → vessel rupture → fetal exsanguination within minutes\n- Diagnosis: transvaginal color Doppler ultrasound; confirmed antepartum in ~60% of cases\n- Signs: painless vaginal bleeding at time of SROM, fetal bradycardia\n- Apt test: mixes blood with sodium hydroxide; fetal hemoglobin (HbF) stays pink (resistant to denaturation); maternal hemoglobin turns brown\n- Management: delivery by elective C-section at 35–37 weeks before labor and ROM"
+        },
+        {
+          "id": "cord_complications",
+          "heading": "Cord Complications During Labor",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Umbilical cord prolapse:**\n- Cord descends below the presenting fetal part through the cervix AFTER rupture of membranes\n- **Incidence:** 1:200–1:600 deliveries; higher with malpresentation (breech, transverse), high station, polyhydramnios, prematurity, multiparity, SUA\n- **Diagnosis:** palpating cord in vagina or seeing cord at introitus; sudden severe variable or prolonged deceleration after ROM\n- **Nursing emergency response:**\n  1. CALL FOR HELP immediately\n  2. Elevate presenting part manually (DO NOT REMOVE HAND until surgical delivery)\n  3. Position: knee-chest or Trendelenburg to reduce pressure\n  4. Keep cord warm and moist (wrap in warm saline-soaked gauze if exteriorized)\n  5. Administer oxygen 8–10 L/min via face mask\n  6. Prepare for emergency C-section\n  7. DO NOT push cord back (can cause spasm and further compromise)\n\n**True knots:**\n- Rare; form when fetus moves through a loop of cord\n- Risk: long cords, increased fetal movement, polyhydramnios\n- Can tighten during labor → fetal hypoxia; associated with fetal death if tight\n\n**Nuchal cord:**\n- Cord around fetal neck; present in 20–30% of deliveries\n- Usually resolves with delivery (slip over head or double somersault maneuver)\n- Single loose nuchal cord: usually benign; tight or multiple loops → FHR decelerations in labor"
+        },
+        {
+          "id": "newborn_cord_care",
+          "heading": "Newborn Umbilical Cord Care",
+          "kind": "client_education",
+          "body": "**Normal cord appearance and care:**\n- Cord is clamped and cut immediately or after delayed cord clamping (30–60 sec for term; up to 60 sec for preterm)\n- Delayed cord clamping (DCC) for 30–60 seconds: increases neonatal iron stores, reduces anemia, benefits premature infants\n- Normal cord: yellow-green, gelatinous; dries and darkens; falls off in 7–21 days\n- Dry care: keep dry, fold diaper below cord, sponge bathe until cord falls off\n- Report to provider: periumbilical redness, warmth, swelling, foul odor, purulent discharge (omphalitis)\n\n**Omphalitis:**\n- Infection of umbilical stump in newborn\n- Signs: erythema spreading from cord base, warmth, swelling, foul odor, discharge\n- Risk factors: prolonged rupture of membranes, maternal GBS, premature delivery\n- Treatment: IV antibiotics; risk of necrotizing fasciitis and sepsis if untreated\n- Nursing: monitor temperature, feed tolerance, spreading erythema borders (draw with pen to track progression)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Normal cord: 2 arteries (deoxygenated blood TO placenta) + 1 vein (oxygenated blood FROM placenta) + Wharton's jelly\n- Single umbilical artery (SUA): associated with congenital anomalies — detailed anatomy scan + fetal echo\n- Vasa previa: velamentous vessels over cervical os → vessel rupture at ROM → fetal exsanguination emergency → elective C-section 35–37 weeks\n- Cord prolapse: elevate presenting part + knee-chest/Trendelenburg + O2 + emergency C-section; KEEP HAND IN until delivery\n- Nuchal cord (20–30% of deliveries): usually benign; tight/multiple loops → FHR decelerations\n- DCC 30–60 sec: increases neonatal iron stores"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg03-L04",
+      "topicSlug": "fetal-growth-by-trimester",
+      "title": "Fetal Growth by Trimester: Development Milestones",
+      "learningObjectives": [
+        "Identify major developmental milestones by trimester and gestational week",
+        "Explain the viability threshold and its clinical significance",
+        "Recognize fetal growth abnormalities (SGA, LGA, IUGR)",
+        "Apply gestational age knowledge to antepartum counseling",
+        "Identify when each organ system becomes functional"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "Fetal development is organized into three trimesters: **First trimester** (weeks 1–12): organogenesis and initial growth; **Second trimester** (weeks 13–27): rapid growth, organ maturation, fetal movement; **Third trimester** (weeks 28–40+): weight gain, organ system maturation, preparation for extrauterine life. Understanding developmental milestones is critical for interpreting fetal surveillance, counseling about viability, and identifying growth concerns."
+        },
+        {
+          "id": "first_trimester",
+          "heading": "First Trimester Milestones (Weeks 1–12)",
+          "kind": "pathophysiology_overview",
+          "body": "**Week 3:** Gastrulation; primitive streak; notochord formation; neural tube begins\n**Week 4:** Heart begins beating; limb buds appear; neural tube closure begins; CRL ~4 mm\n**Week 5:** Brain vesicles (prosencephalon, mesencephalon, rhombencephalon) form; eye and ear placodes appear\n**Week 6:** Face formation; fingers beginning; intestines in umbilical cord (physiological herniation — normal); neural tube fully closed by day 28 (week 6)\n**Week 7:** Liver, pancreas, lung buds forming; external genitalia undifferentiated\n**Week 8:** All major organ systems established; looks human; CRL ~30 mm; embryo → fetus at end of 8 weeks\n**Week 9–10:** Intestines retract into abdomen; gonads differentiating\n**Week 11–12:** Fetal urine begins; thyroid producing hormones; CRL ~60–65 mm; all major structures present\n\n**By 12 weeks:**\n- Weight: ~14 g; CRL: 6 cm\n- NT (nuchal translucency) scan: week 11–13+6 (Down syndrome screening)\n- Fetal heartbeat: detectable by vaginal ultrasound at 6 weeks"
+        },
+        {
+          "id": "second_trimester",
+          "heading": "Second Trimester Milestones (Weeks 13–27)",
+          "kind": "pathophysiology_overview",
+          "body": "**Week 14:** Sex determinable by ultrasound; fetal movements begin (not felt yet)\n**Week 16:** Fine hair (lanugo) appearing; meconium forming in bowel; 4 chambers of heart visible\n**Week 18–20:** Quickening (mother feels fetal movement): primigravida: 18–20 weeks; multigravida: 16–18 weeks\n**Week 20:** Anatomy scan (anomaly scan); vernix caseosa begins forming; fundus at umbilicus\n**Week 22–23:** Age of viability threshold (lower limit of viability); 22–23 weeks periviable\n**Week 24:** Viability: surfactant production begins (type II pneumocytes); survival with NICU care ~40–50% at 24 weeks\n**Week 25–27:** Lungs continue maturation; fetal subcutaneous fat beginning to accumulate; eyelids fuse then reopen (~26 weeks)\n\n**Weight at end of 2nd trimester (27 weeks):** ~1,100 g (2.5 lbs)"
+        },
+        {
+          "id": "third_trimester",
+          "heading": "Third Trimester Milestones (Weeks 28–40+)",
+          "kind": "pathophysiology_overview",
+          "body": "**Week 28:** Fetal breathing movements present; fetal kick counts begin; weekly NST begins for high-risk pregnancies; weight ~1,000 g\n**Week 32:** Lanugo decreasing; subcutaneous fat increasing; lecithin:sphingomyelin (L:S) ratio >2:1 (lung maturity); weight ~1,700 g\n**Week 34:** Most organ systems mature enough for survival with minimal NICU support; late preterm\n**Week 35–36:** Lung maturity generally achieved (most cases); brain myelination continues (continues for years); PNS maturation; weight ~2,500 g\n**Week 37:** Term begins; all systems fully prepared for extrauterine life in most cases\n**Week 40:** Expected due date; weight ~3,200–3,400 g (7–7.5 lbs average)\n**Week 42+:** Post-term; placental aging; oligohydramnios risk; meconium-stained fluid risk; fetal surveillance intensified\n\n**Pulmonary surfactant:**\n- Produced by type II pneumocytes from ~20 weeks; sufficient production for viability by ~24 weeks\n- Mature lungs: L:S ratio ≥2:1; PG (phosphatidylglycerol) present\n- Betamethasone (corticosteroids) 12 mg × 2 doses 24 hours apart: accelerates lung maturation, reduces RDS, IVH; given if delivery anticipated between 24–34+6 weeks"
+        },
+        {
+          "id": "fetal_growth",
+          "heading": "Fetal Growth: SGA, AGA, LGA",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Growth classification (by birth weight percentile for gestational age):**\n- **AGA (appropriate for gestational age):** 10th–90th percentile\n- **SGA (small for gestational age):** <10th percentile\n  - Causes: IUGR (placental insufficiency, genetic), maternal malnutrition, smoking, infections, chromosomal anomalies\n  - Complications: hypoglycemia, hypothermia, polycythemia, meconium aspiration, NEC\n- **LGA (large for gestational age):** >90th percentile\n  - Causes: GDM, maternal obesity, post-term, constitutional (large parents)\n  - Complications: shoulder dystocia, birth trauma (brachial plexus injury, clavicle fracture), hypoglycemia, operative delivery\n\n**IUGR (intrauterine growth restriction):**\n- Symmetric IUGR: proportionate head, body, and limbs small; generally from early insult (chromosomal, infections); worse prognosis\n- Asymmetric IUGR: head relatively spared (brain-sparing effect), body/abdomen small; from late placental insufficiency; better prognosis\n- Brain-sparing: fetus preferentially redirects blood flow to brain, heart, adrenals → reduced abdominal circumference growth first"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Week 4: heart beating; week 8: all organs established\n- Quickening: primigravida 18–20 weeks; multigravida 16–18 weeks\n- Viability threshold: 22–24 weeks (periviable: 22–23; viable with NICU: 24+)\n- Lung maturity: surfactant adequate by ~32–34 weeks; L:S ≥2:1; betamethasone accelerates maturation\n- SGA <10th percentile; LGA >90th percentile; asymmetric IUGR = brain-sparing = placental cause\n- Term = 37 weeks; post-term = 42+ weeks"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg03-L05",
+      "topicSlug": "fetal-circulation",
+      "title": "Fetal Circulation: Shunts, Adaptations & Neonatal Transition",
+      "learningObjectives": [
+        "Trace the pathway of fetal blood circulation",
+        "Identify the three fetal shunts and their functions",
+        "Explain the transition from fetal to neonatal circulation at birth",
+        "Recognize conditions associated with persistent fetal circulation",
+        "Apply knowledge of fetal circulation to assess neonatal transitional status"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Fetal circulation** differs dramatically from neonatal circulation because: (1) the lungs are non-functional as gas exchangers (placenta performs this role), (2) the liver receives partly oxygenated blood from the placenta, and (3) three unique shunts divert blood away from the lungs and liver. At birth, these shunts close as the lungs expand and vascular resistances shift."
+        },
+        {
+          "id": "shunts",
+          "heading": "The Three Fetal Shunts",
+          "kind": "pathophysiology_overview",
+          "body": "**Pathway of oxygenated blood from placenta to fetus:**\nPlacenta → Umbilical vein → Ductus venosus → IVC → Right atrium → Foramen ovale (→ left atrium → left ventricle → aorta → body)\n\nOR: Right atrium → Right ventricle → Pulmonary artery → Ductus arteriosus (→ aorta)\n\n**The Three Shunts:**\n\n1. **Ductus venosus:**\n- Location: liver\n- Connects: umbilical vein → inferior vena cava (bypasses liver sinusoids)\n- Function: allows oxygenated blood from placenta to reach systemic circulation quickly; ~50% of umbilical vein blood bypasses liver\n- Closure: functional closure within hours of birth (when umbilical blood flow stops); anatomical closure (ligamentum venosum): weeks to months\n\n2. **Foramen ovale:**\n- Location: interatrial septum\n- Structure: flap-like opening with a valve\n- Function: allows blood from right atrium to flow directly into left atrium, bypassing the lungs\n- Reason: fetal pulmonary vascular resistance (PVR) is HIGH (lungs not inflated with air → hypoxia → pulmonary arterioles constricted) → blood is directed away from lungs\n- Functional closure: at birth, when left atrial pressure exceeds right atrial pressure (first breath expands lungs, drops PVR, increases pulmonary blood flow to left atrium)\n- Anatomical closure (fossa ovalis): within months to years; may persist as PFO in 25% of adults\n\n3. **Ductus arteriosus:**\n- Location: between main pulmonary artery and aorta (near aortic arch)\n- Function: allows blood from right ventricle/pulmonary artery to bypass the lungs → enters descending aorta\n- Reason: high PVR diverts 90% of right ventricular output away from lungs via DA\n- Maintained by: low pO2 (fetal hypoxia) and prostaglandin E2 (PGE2)\n- Functional closure: within 12–24 hours of birth (from rising pO2 and falling PGE2 after placental separation)\n- Anatomical closure (ligamentum arteriosum): within days to weeks\n\n**PDA (Patent Ductus Arteriosus):** failure of DA to close; more common in premature infants (less mature PGE2 response). Treatment: indomethacin (PG synthesis inhibitor), ibuprofen, or surgical ligation"
+        },
+        {
+          "id": "neonatal_transition",
+          "heading": "Neonatal Circulatory Transition at Birth",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Trigger: First breath**\n1. Lungs expand with air → alveoli fill\n2. Pulmonary vascular resistance (PVR) drops dramatically (from vascular expansion + oxygen exposure)\n3. Pulmonary blood flow increases → more blood returning to left atrium → left atrial pressure rises\n4. Foramen ovale closes (flap pushed against septum by left-sided pressure)\n5. Rising pO2 → ductus arteriosus constricts and closes\n6. Umbilical vessels constricted (Wharton's jelly compression at birth)\n7. Ductus venosus closes (no umbilical venous flow)\n\n**Persistent Pulmonary Hypertension of the Newborn (PPHN):**\n- Failure of PVR to fall → fetal circulation pattern persists\n- Blood continues to flow through patent foramen ovale and ductus arteriosus (right to left)\n- Causes: meconium aspiration, sepsis, congenital diaphragmatic hernia, asphyxia\n- Signs: severe hypoxemia unresponsive to supplemental oxygen; pre-ductal (right hand) SpO2 significantly higher than post-ductal (lower limb) SpO2\n- Treatment: iNO (inhaled nitric oxide), high-frequency oscillatory ventilation, ECMO in refractory cases"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Oxygenated blood from placenta enters via umbilical vein → ductus venosus (bypasses liver) → IVC → right atrium → foramen ovale (bypasses lungs) → left heart → aorta\n- Ductus arteriosus: pulmonary artery → aorta (bypasses lungs); maintained by low pO2 and PGE2\n- Three shunts: ductus venosus (liver bypass), foramen ovale (lung bypass), ductus arteriosus (lung bypass)\n- At birth: first breath → PVR drops → foramen ovale closes; rising pO2 → DA closes\n- PDA in premature infants: indomethacin (inhibits PGE2) promotes closure\n- PPHN: PVR fails to drop → right-to-left shunting → severe hypoxemia → iNO treatment"
+        }
+      ]
+    },
+    {
+      "lessonId": "mn-pkg03-L06",
+      "topicSlug": "fetal-growth-assessment",
+      "title": "Fetal Growth Assessment: BPP, NST & Kick Counts",
+      "learningObjectives": [
+        "Explain the rationale for fetal surveillance",
+        "Describe each component of the biophysical profile",
+        "Interpret BPP scores",
+        "Explain non-stress test interpretation",
+        "Teach patients how to perform kick counts"
+      ],
+      "sections": [
+        {
+          "id": "nst",
+          "heading": "Non-Stress Test (NST)",
+          "kind": "nursing_assessment_interventions",
+          "body": "**NST: External fetal monitoring to assess fetal wellbeing**\n\n**Definition:** External electronic fetal monitoring to observe FHR accelerations associated with fetal movement (reflects intact CNS/autonomic function)\n\n**Reactive (normal) NST:**\n- ≥2 accelerations in 20 minutes (up to 40 minutes with sleep state stimulation)\n- Acceleration criteria: peak ≥15 bpm above baseline for ≥15 seconds (at ≥32 weeks)\n- At <32 weeks: ≥10 bpm for ≥10 seconds (immature pattern acceptable)\n\n**Non-reactive NST:**\n- Fewer than 2 adequate accelerations in 40 minutes\n- Can be due to: fetal sleep cycle (normal — stimulate with vibroacoustic stimulator/VAS), medications (narcotics, magnesium), or true fetal compromise\n- Response to non-reactive NST: vibroacoustic stimulation (VAS) → if reactive after VAS = reassuring; if still non-reactive → proceed to BPP\n\n**Indications for NST:** high-risk pregnancies (GDM, hypertension, IUGR, post-term, decreased fetal movement, multiple gestation)"
+        },
+        {
+          "id": "bpp",
+          "heading": "Biophysical Profile (BPP)",
+          "kind": "nursing_assessment_interventions",
+          "body": "**BPP: 5-component assessment of fetal wellbeing (30-minute window)**\n\n| Component | Normal (2 pts each) | Abnormal (0 pts) |\n|---|---|---|\n| NST | Reactive (≥2 accelerations) | Non-reactive |\n| Fetal breathing | ≥1 episode ≥30 sec | None or <30 sec |\n| Fetal movement | ≥3 body/limb movements | <3 movements |\n| Fetal tone | ≥1 extension + flexion | None; limb extension without return |\n| AFI | ≥1 pocket >2 cm | No adequate pocket |\n\n**Score interpretation:**\n- 8–10/10: normal → continue routine surveillance\n- 6/10: equivocal → repeat in 24 hours or deliver if ≥37 weeks\n- 4/10 or less: abnormal → deliver (consider maturity)\n- 0–2/10: immediate delivery indicated regardless of gestational age\n\n**Modified BPP:** NST + AFI only (faster, first-line test at most centers; full BPP if non-reactive NST or low AFI)"
+        },
+        {
+          "id": "kick_counts",
+          "heading": "Kick Counts (Fetal Movement Counting)",
+          "kind": "client_education",
+          "body": "**Cardiff method (count to 10):**\n- Starting at 28 weeks, client counts fetal movements during active period\n- Normal: 10 movements in ≤2 hours\n- Abnormal: <10 movements in 2 hours or significant decrease from usual pattern\n\n**Daily fetal movement assessment:**\n- Peak fetal activity: after meals, evening\n- Teaching: lie in left lateral position (maximizes placental blood flow) after a meal; count movements\n- Report immediately: no movement for >2 hours during normal active period, or significant decrease from client's established pattern\n\n**Significance:** Decreased fetal movement can precede fetal death by 12–24+ hours; reporting and assessment can prevent stillbirth\n\n**Nursing response to decreased fetal movement:**\n- Obtain NST immediately\n- If NST reactive: reassure but maintain follow-up\n- If NST non-reactive: proceed to BPP or contraction stress test\n- If concerning fetal status: expedite delivery"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Reactive NST: ≥2 accelerations (≥15 bpm × ≥15 sec) in 20–40 min (at ≥32 weeks)\n- Non-reactive NST → vibroacoustic stimulation → if still non-reactive → BPP\n- BPP: 5 components (NST, breathing, movement, tone, AFI); 2 pts each; max 10\n- BPP 8–10 = normal; 6 = equivocal (repeat 24h); ≤4 = deliver\n- Kick counts: 10 movements in ≤2 hours (Cardiff); report <10 in 2h or decreased pattern\n- Modified BPP: NST + AFI (faster, first-line)"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "mn-p03-001",
+      "topicSlug": "fetal-environment",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "oligohydramnios-AFI-5-cord-compression-labor",
+      "stem": "A client at 38 weeks gestation is being monitored during labor with an amniotic fluid index (AFI) of 4 cm. The fetal monitor shows repetitive variable decelerations with each contraction. What is the priority nursing intervention?",
+      "options": {"A": "Administer oxygen via nasal cannula at 2 L/min","B": "Prepare for amnioinfusion through an intrauterine pressure catheter","C": "Immediately schedule for cesarean delivery","D": "Increase oxytocin rate to shorten labor duration"},
+      "correctAnswer": "B",
+      "rationale": "AFI of 4 cm = oligohydramnios (normal ≥5 cm). In labor, reduced amniotic fluid means less cushioning for the umbilical cord → cord compression → variable decelerations. Amnioinfusion (saline infused through an IUPC) restores fluid volume, reducing cord compression and variable decelerations. Oxygen via face mask (not nasal cannula at 2L) would be a secondary measure. C-section is not the first intervention for cord compression — conservative measures are tried first.",
+      "incorrectRationales": {"A": "Nasal cannula at 2 L is inadequate; if oxygen is needed, 8–10 L/min via face mask is the appropriate rate. But amnioinfusion addresses the cause directly.", "C": "Cesarean is not the first-line treatment for variable decelerations from oligohydramnios — amnioinfusion should be tried first.", "D": "Increasing oxytocin worsens cord compression by increasing contraction frequency and intensity."},
+      "hint": "Oligohydramnios + variable decelerations = cord compression. Amnioinfusion restores cushioning.",
+      "clinicalPearl": "Amnioinfusion does NOT correct the cause of oligohydramnios — it only addresses the cord compression complication during labor. The underlying cause (IUGR, PPROM) still needs management.",
+      "examStrategy": "Variable decelerations = cord compression. Oligohydramnios context + variable decels = amnioinfusion.",
+      "keyTakeaway": "Oligohydramnios + variable decelerations in labor → amnioinfusion to reduce cord compression."
+    },
+    {
+      "questionId": "mn-p03-002",
+      "topicSlug": "fetal-circulation",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "ductus-arteriosus-closure-indomethacin-preterm",
+      "stem": "A premature infant born at 29 weeks gestation is noted to have a continuous 'machine-like' murmur, bounding peripheral pulses, and increased respiratory support requirements at 72 hours of life. Echocardiogram confirms a patent ductus arteriosus. Which medication is used to promote pharmacological closure?",
+      "options": {"A": "Prostaglandin E1 (alprostadil)","B": "Indomethacin or ibuprofen (COX inhibitors)","C": "Digoxin","D": "Nitric oxide"},
+      "correctAnswer": "B",
+      "rationale": "The ductus arteriosus is kept patent by prostaglandin E2 (PGE2). Pharmacological closure of the PDA in premature infants uses indomethacin or ibuprofen — both inhibit cyclooxygenase (COX), reducing prostaglandin synthesis → ductus arteriosus constricts and closes. Effectiveness is highest in infants <34 weeks who have more immature prostaglandin responses.",
+      "incorrectRationales": {"A": "Prostaglandin E1 (alprostadil) is used to KEEP the ductus arteriosus OPEN in cyanotic congenital heart defects (where ductal patency is essential for systemic or pulmonary blood flow — not to close it).", "C": "Digoxin is used for heart failure and arrhythmia — it does not affect ductal tone.", "D": "Nitric oxide is used for PPHN to reduce pulmonary vascular resistance — not to close the ductus arteriosus."},
+      "hint": "PDA maintained by PGE2. Block PGE2 (COX inhibitors) → DA closes.",
+      "clinicalPearl": "PGE1 (prostaglandin E1) is given to keep the ductus OPEN in ductal-dependent congenital heart lesions (e.g., pulmonary atresia, hypoplastic left heart syndrome). The mnemonic: PGE1 = OPEN (keep duct alive). Indomethacin = CLOSE (kill the duct for PDA).",
+      "examStrategy": "PDA closure: indomethacin/ibuprofen (COX inhibitors reduce PGE2). PDA kept open: PGE1 (alprostadil). These are opposite-action drugs — a common exam trap.",
+      "keyTakeaway": "PDA in premature infant: close with indomethacin or ibuprofen (COX inhibitors block PGE2). PGE1 (alprostadil) keeps the DA open — used in cyanotic CHD."
+    },
+    {
+      "questionId": "mn-p03-003",
+      "topicSlug": "umbilical-cord",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "cord-prolapse-nursing-response-priority",
+      "stem": "During a vaginal exam on a client at 34 weeks gestation with PPROM, the nurse palpates the umbilical cord descending below the fetal head in the vagina. The fetal heart rate drops to 80 bpm. What is the correct sequence of nursing actions?",
+      "options": {"A": "1) Notify provider 2) Elevate presenting part 3) Position knee-chest 4) Prepare for C-section","B": "1) Elevate presenting part manually 2) Call for help 3) Knee-chest/Trendelenburg 4) O2 via face mask 5) Prepare for emergency C-section","C": "1) Attempt to push cord back into uterus 2) Call provider 3) Prepare operating room","D": "1) Position supine with legs elevated 2) Notify provider 3) Administer oxygen 4) Begin pushing to deliver quickly"},
+      "correctAnswer": "B",
+      "rationale": "Cord prolapse priority sequence: (1) Elevate the presenting part manually with fingers in the vagina to reduce cord compression — DO NOT REMOVE HAND until the baby is delivered; (2) Call for help simultaneously; (3) Position: knee-chest or Trendelenburg (gravity assists in relieving pressure); (4) Oxygen 8–10 L/min via face mask; (5) Prepare for emergency C-section. The hand elevating the presenting part must stay in place until the baby is delivered by C-section.",
+      "incorrectRationales": {"A": "Notifying the provider before elevating the presenting part wastes critical seconds — elevating the presenting part is the first physical intervention.", "C": "Pushing the cord back is CONTRAINDICATED — it can cause vessel spasm and worsen compromise.", "D": "Supine with legs elevated does not adequately relieve cord pressure; attempting rapid vaginal delivery with an unfavorable cervix would cause additional trauma."},
+      "hint": "Cord prolapse: FIRST action = elevate presenting part (hand stays in). Call for help. Knee-chest. O2. C-section.",
+      "clinicalPearl": "While the nurse maintains the presenting part elevation, IV access should be established, typed and crossmatched, and the patient moved to the OR — all while the nurse's hand remains in the vagina maintaining pressure. This is a true team emergency.",
+      "examStrategy": "For cord prolapse, the sequence is: elevate presenting part (FIRST) → call for help → position → O2 → C-section. Never: push cord back, give oxygen first, call provider first.",
+      "keyTakeaway": "Cord prolapse: elevate presenting part FIRST (hand stays in until delivery), knee-chest/Trendelenburg, O2, emergency C-section. Never push cord back."
+    },
+    {
+      "questionId": "mn-p03-004",
+      "topicSlug": "fetal-growth-by-trimester",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "betamethasone-indication-24-34-weeks-lung-maturity",
+      "stem": "A client at 30 weeks gestation presents with threatened preterm labor. The provider orders betamethasone 12 mg IM × 2 doses 24 hours apart. The client asks what this medication is for. Which explanation is most accurate?",
+      "options": {"A": "Betamethasone stops labor contractions and prevents preterm delivery","B": "Betamethasone accelerates fetal lung maturity by stimulating surfactant production, reducing the risk of respiratory distress syndrome if the baby is born prematurely","C": "Betamethasone prevents Group B Streptococcus infection in the premature infant","D": "Betamethasone is given to all pregnant clients after 24 weeks as routine prophylaxis"},
+      "correctAnswer": "B",
+      "rationale": "Antenatal corticosteroids (betamethasone) are given between 24–34+6 weeks when preterm delivery is anticipated within 7 days. They cross the placenta and stimulate type II pneumocyte maturation → accelerated surfactant production → reduced risk of respiratory distress syndrome (RDS), intraventricular hemorrhage (IVH), and necrotizing enterocolitis (NEC) in premature infants. They do NOT stop contractions.",
+      "incorrectRationales": {"A": "Betamethasone does not inhibit contractions — tocolytics (nifedipine, indomethacin, terbutaline, magnesium sulfate) are used to temporarily suppress labor.", "C": "GBS prevention is achieved with IV penicillin G during labor — corticosteroids do not provide antimicrobial coverage.", "D": "Betamethasone is NOT routine prophylaxis — it is given only when preterm delivery is anticipated between 24–34+6 weeks."},
+      "hint": "Betamethasone = fetal lung maturity accelerator (surfactant). Given 24–34+6 weeks when preterm delivery anticipated.",
+      "clinicalPearl": "Betamethasone benefits (reduces RDS, IVH, NEC) are maximized when delivery occurs 24 hours to 7 days after the second dose. A rescue course (one additional course) can be considered if >14 days have elapsed since the initial course and delivery is still anticipated.",
+      "examStrategy": "When a preterm labor scenario asks about betamethasone/corticosteroids: the answer is fetal lung maturity (surfactant). Not tocolysis. Not infection prevention.",
+      "keyTakeaway": "Betamethasone (antenatal corticosteroids): accelerates fetal surfactant production → reduces RDS, IVH, NEC in premature infants. Given 24–34+6 weeks. Does not stop labor."
+    },
+    {
+      "questionId": "mn-p03-005",
+      "topicSlug": "fetal-growth-assessment",
+      "difficulty": "hard",
+      "type": "MCQ",
+      "stemAnchor": "BPP-score-4-deliver",
+      "stem": "A client at 38 weeks gestation with gestational diabetes has a biophysical profile (BPP). Results: NST = non-reactive; fetal breathing = absent; fetal movement = 2 movements; fetal tone = 1 extension-flexion present; AFI = 3 cm. What is the BPP score and what action is indicated?",
+      "options": {"A": "BPP 4/10; equivocal — repeat in 24 hours","B": "BPP 2/10; delivery is indicated immediately","C": "BPP 6/10; observe and repeat if non-reactive NST persists","D": "BPP 8/10; reactive NST not required for overall score calculation"},
+      "correctAnswer": "B",
+      "rationale": "Scoring: NST non-reactive = 0; breathing absent = 0; movement 2 (not ≥3) = 0; tone present (1 extension-flexion) = 2; AFI 3 cm (<1 pocket >2 cm) = 0. Total = 2/10. BPP ≤4 indicates significant fetal compromise and delivery is indicated regardless of gestational age. At 38 weeks, delivery is appropriate. The AFI of 3 cm (oligohydramnios) alone also warrants delivery at term.",
+      "incorrectRationales": {"A": "BPP 4 requires delivery or close monitoring depending on gestational age, but this score is 2 (not 4). A score of 2 requires immediate delivery.", "C": "BPP 6/10 scoring is incorrect — the correct score is 2/10.", "D": "NST IS a component (2 points) of the BPP; the NST is non-reactive here = 0 points."},
+      "hint": "BPP: 2 pts each for 5 components. Add them up: NST(0) + breathing(0) + movement(0) + tone(2) + AFI(0) = 2/10. Score ≤4 = deliver.",
+      "clinicalPearl": "BPP components reflect CNS maturation order. Tone is the last to disappear with fetal compromise (most primitive). Breathing and movement are lost earlier. NST (most sensitive to acute hypoxia) is first to become non-reactive.",
+      "examStrategy": "Practice BPP scoring from clinical descriptions. Know each component's normal criteria (2 pts) and the score interpretations: 8–10 = normal; 6 = equivocal; ≤4 = deliver.",
+      "keyTakeaway": "BPP scoring: add 2 pts per component if normal criteria met. Score 2/10 = immediate delivery. Score 4/10 = deliver at term or if mature. Score 6/10 = equivocal, repeat 24h."
+    },
+    {
+      "questionId": "mn-p03-006",
+      "topicSlug": "placental-function",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "HPL-insulin-resistance-gestational-diabetes",
+      "stem": "A client at 28 weeks gestation with gestational diabetes asks why her blood sugar was normal in her first trimester but has become elevated now. Which explanation is most accurate?",
+      "options": {"A": "First-trimester stress causes temporary insulin hypersensitivity that resolves in the second trimester","B": "Human placental lactogen (HPL) levels rise progressively throughout pregnancy, causing increasing insulin resistance that makes glucose available for the growing fetus","C": "The baby's pancreas starts producing insulin in the second trimester, competing with maternal insulin signaling","D": "Progesterone levels fall in the second trimester, which reduces insulin sensitivity"},
+      "correctAnswer": "B",
+      "rationale": "HPL (human placental lactogen/hCS) is produced by the syncytiotrophoblast in amounts proportional to placental mass. As the placenta grows, HPL levels rise progressively. HPL promotes maternal lipolysis and insulin resistance, diverting glucose to the fetus (a diabetogenic effect). This explains why GDM typically manifests in the 2nd–3rd trimester when HPL levels are highest, even if first-trimester glucose is normal.",
+      "incorrectRationales": {"A": "There is no 'stress-induced insulin hypersensitivity' in the first trimester — this is not physiologically accurate.", "C": "The fetal pancreas does produce insulin, but this insulin stays in fetal circulation and does not affect maternal glucose metabolism directly.", "D": "Progesterone levels rise throughout pregnancy (not fall). Progesterone also has some anti-insulin effects, but HPL is the primary driver of insulin resistance."},
+      "hint": "HPL = rises with placental mass = causes maternal insulin resistance = explains why GDM is a 2nd/3rd trimester problem.",
+      "clinicalPearl": "Women with pre-existing type 1 or type 2 diabetes need significantly increased insulin doses in the 2nd and 3rd trimesters due to HPL-driven insulin resistance. Insulin requirements often double or triple. After delivery, HPL disappears and insulin needs drop dramatically within 24 hours.",
+      "examStrategy": "When asked why GDM manifests in the 2nd trimester: answer = HPL (human placental lactogen) causes insulin resistance as placental mass grows.",
+      "keyTakeaway": "HPL rises with placental mass → increasing maternal insulin resistance → glucose available for fetus → GDM manifests in 2nd–3rd trimester."
+    },
+    {
+      "questionId": "mn-p03-007",
+      "topicSlug": "fetal-circulation",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "foramen-ovale-function-fetal-circulation",
+      "stem": "A nursing student asks why fetal blood bypasses the lungs through the foramen ovale instead of circulating through the pulmonary vasculature. Which explanation is most accurate?",
+      "options": {"A": "The foramen ovale redirects blood because the fetal heart is too weak to pump against pulmonary resistance","B": "Fetal pulmonary vascular resistance is high because the lungs are filled with fluid and not fully expanded with air, causing hypoxic pulmonary vasoconstriction that diverts blood away from the lungs","C": "The foramen ovale is present only in premature fetuses; term fetuses circulate blood through the lungs normally","D": "The placenta requires high cardiac output to the fetus, and bypassing the lungs reduces cardiac workload"},
+      "correctAnswer": "B",
+      "rationale": "In fetal life, the lungs are filled with fluid (not air) and are not performing gas exchange. The relative hypoxia of the fluid-filled lung causes hypoxic pulmonary vasoconstriction, maintaining high pulmonary vascular resistance (PVR). High PVR means blood entering the right heart prefers to take the path of least resistance — through the foramen ovale (right atrium → left atrium) rather than into the high-resistance pulmonary vasculature. This is a physiologically adaptive mechanism since the lungs don't need significant blood flow before birth.",
+      "incorrectRationales": {"A": "The fetal heart pumps very effectively at its gestational stage. The issue is vascular resistance in the lungs, not cardiac weakness.", "C": "The foramen ovale is present and functional in ALL fetuses throughout normal gestation, not just premature ones.", "D": "The bypassing mechanism is driven by resistance differences, not a cardiac workload conservation strategy."},
+      "hint": "High PVR (fluid-filled unexpanded lungs) → blood takes easy path: foramen ovale bypasses the lungs.",
+      "clinicalPearl": "At birth, the first breath expands the lungs with air and oxygen → hypoxic vasoconstriction reverses → PVR drops → pulmonary blood flow increases dramatically → left atrial pressure rises → foramen ovale pushes closed.",
+      "examStrategy": "Foramen ovale function = lung bypass because of high fetal PVR. This is the most testable fetal circulation concept. Connect it to the transition at birth when PVR drops with first breath.",
+      "keyTakeaway": "Foramen ovale bypasses lungs because fetal PVR is HIGH (fluid-filled lungs → hypoxic vasoconstriction). At birth: first breath → PVR drops → FO closes."
+    },
+    {
+      "questionId": "mn-p03-008",
+      "topicSlug": "fetal-environment",
+      "difficulty": "moderate",
+      "type": "MCQ",
+      "stemAnchor": "polyhydramnios-esophageal-atresia-swallowing",
+      "stem": "At the 20-week anatomy ultrasound, a client is found to have AFI of 28 cm. The ultrasound also shows absence of the gastric bubble in the fetus. Which fetal anomaly is most likely causing these findings?",
+      "options": {"A": "Renal agenesis","B": "Esophageal atresia","C": "Neural tube defect (spina bifida)","D": "Congenital diaphragmatic hernia"},
+      "correctAnswer": "B",
+      "rationale": "AFI of 28 cm = polyhydramnios (normal ≤24 cm). The absent gastric bubble = no amniotic fluid reaching the stomach = impaired fetal swallowing. Esophageal atresia (absence or obstruction of the esophagus) prevents amniotic fluid from being swallowed and reaching the stomach, leading to polyhydramnios (fluid accumulates because it cannot be cleared by swallowing). The absent stomach bubble is a hallmark sign.",
+      "incorrectRationales": {"A": "Renal agenesis causes oligohydramnios (not polyhydramnios) because there is no fetal urine production to supply amniotic fluid.", "C": "NTDs may cause polyhydramnios (if swallowing is neurologically impaired), but absent gastric bubble is more specific to esophageal atresia.", "D": "Congenital diaphragmatic hernia causes bowel loops in the thorax and may cause polyhydramnios but is identified by mediastinal shift and bowel in chest, not absent stomach bubble per se."},
+      "hint": "Polyhydramnios + absent stomach bubble = esophageal atresia (can't swallow to clear fluid).",
+      "clinicalPearl": "Esophageal atresia is often associated with other anomalies (VACTERL association: Vertebral, Anal, Cardiac, Tracheo-Esophageal, Renal, Limb defects). Cardiac evaluation is essential when EA is diagnosed.",
+      "examStrategy": "Absent gastric bubble on fetal US = fluid not reaching stomach = swallowing problem = esophageal atresia. Polyhydramnios confirms (fluid not cleared). Oligohydramnios = kidney/urine problem.",
+      "keyTakeaway": "Polyhydramnios + absent gastric bubble = esophageal atresia (fetus cannot swallow AF to clear it)."
+    }
+  ],
+  "flashcards": [
+    {"id":"mn-fc-p03-001","front":"What are the three fetal shunts and what do they bypass?","back":"1. Ductus venosus: bypasses liver (umbilical vein → IVC). 2. Foramen ovale: bypasses lungs (RA → LA). 3. Ductus arteriosus: bypasses lungs (pulmonary artery → aorta).","hint":"DV bypasses liver. FO and DA both bypass lungs.","explanation":"All three shunts direct blood away from structures that are non-functional in fetal life: the liver receives only half the umbilical venous blood (sufficient), and the lungs receive only 10% of cardiac output (enough to sustain the lungs but not for gas exchange). At birth, all three close as the lungs expand and vascular resistances shift.","clinicalPearl":"Closure sequence at birth: foramen ovale closes first (seconds, from pressure equalization); ductus arteriosus closes within hours (oxygen-mediated); ductus venosus closes within hours (loss of umbilical flow). Anatomical closure of all three takes weeks to months."},
+    {"id":"mn-fc-p03-002","front":"What is the normal amniotic fluid index (AFI) range and what do low/high values indicate?","back":"Normal AFI: 5–24 cm (single deepest pocket >2 cm). Oligohydramnios: AFI <5 cm (renal problems, IUGR, PPROM). Polyhydramnios: AFI >24 cm (swallowing impairment, GDM, multiples).","hint":"5–24 = normal. <5 = oligo (kidney). >24 = poly (swallowing).","explanation":"AFI is measured by summing the deepest vertical pocket of amniotic fluid in each of 4 uterine quadrants. The single deepest pocket (SDP) >2 cm is the alternate assessment. Oligohydramnios is associated with cord compression, fetal growth restriction, and pulmonary hypoplasia (if early/prolonged).","clinicalPearl":"Post-term pregnancy (≥42 weeks): progressive oligohydramnios from placental aging and reduced fetal renal blood flow. This is one reason post-term pregnancies are monitored closely and induced."},
+    {"id":"mn-fc-p03-003","front":"What is the role of the ductus venosus?","back":"The ductus venosus connects the umbilical vein to the inferior vena cava, bypassing the liver sinusoids. It allows ~50% of oxygenated blood from the placenta to reach the systemic circulation quickly without hepatic processing.","hint":"Ductus venosus = shortcut: umbilical vein → IVC, bypassing liver.","explanation":"Without the ductus venosus, all placental blood would have to filter through the liver before reaching the systemic circulation, reducing the efficiency of fetal oxygenation. After birth, when umbilical venous flow stops, the ductus venosus closes and becomes the ligamentum venosum.","clinicalPearl":"Doppler assessment of ductus venosus flow waveform is an advanced fetal surveillance tool — absent or reversed a-wave in the DV waveform suggests severe fetal compromise (right heart failure from IUGR or cardiac abnormality)."},
+    {"id":"mn-fc-p03-004","front":"What is vasa previa and why is it an emergency?","back":"Vasa previa: unprotected fetal blood vessels (velamentous cord insertion) crossing the internal cervical os. When membranes rupture, the vessels rupture → fetal exsanguination within minutes. Treatment: elective C-section at 35–37 weeks.","hint":"Vasa previa = baby's blood vessels over cervical opening = fatal hemorrhage at membrane rupture.","explanation":"Fetal blood volume is only ~80–85 mL/kg. Rupture of vasa previa vessels causes rapid fetal exsanguination. Diagnosis by antenatal transvaginal color Doppler ultrasound. If undiagnosed and ROM occurs: sudden fetal bradycardia + vaginal bleeding. Apt test (fetal HbF stays pink with NaOH) can confirm fetal origin of blood.","clinicalPearl":"The Apt test: mix vaginal blood with NaOH. Fetal HbF (resistant to alkali denaturation) = stays pink/red. Maternal HbA (susceptible) = turns brown. This rapidly confirms fetal blood in the vaginal vault."},
+    {"id":"mn-fc-p03-005","front":"What are the components of a biophysical profile (BPP)?","back":"5 components, 2 points each (max 10): 1. NST (reactive). 2. Fetal breathing (≥1 episode ≥30 sec). 3. Fetal movement (≥3 body movements). 4. Fetal tone (≥1 extension-flexion). 5. Amniotic fluid index (≥1 pocket >2 cm).","hint":"BPP: NST + Breathing + Moving + Tone + AFI. 2 pts each = 10 max.","explanation":"BPP assesses both acute (NST, breathing, movement, tone — reflect CNS/autonomic function) and chronic (AFI — reflects placental function and fetal renal perfusion) markers of fetal wellbeing. Score 8–10 = normal; 6 = equivocal (repeat); ≤4 = deliver.","clinicalPearl":"The order in which BPP components are lost during progressive hypoxia reflects CNS maturation order (last acquired = first lost): NST (most sensitive, lost first with acute hypoxia) → movement → breathing → tone (most primitive, lost last)."},
+    {"id":"mn-fc-p03-006","front":"What causes oligohydramnios vs polyhydramnios?","back":"Oligohydramnios (AFI <5): decreased fluid production (renal agenesis, bilateral obstructive uropathy, severe IUGR) or increased loss (PPROM). Polyhydramnios (AFI >24): decreased clearance (esophageal atresia, NTDs, neuromuscular disease) or increased production (maternal GDM, multiple gestation, fetal macrosomia).","hint":"Oligo: kidney/PPROM. Poly: can't swallow (GI/neuro) or makes too much (GDM).","explanation":"Understanding the mechanism is clinically critical: oligohydramnios causes cord compression (variable decelerations), pulmonary hypoplasia (if early/prolonged), and restricts fetal movement. Polyhydramnios causes maternal discomfort, preterm labor, fetal malpresentation, and cord prolapse risk at ROM.","clinicalPearl":"Acute polyhydramnios (rapid accumulation over days) suggests fetal hydrops or acute onset of GDM; requires urgent evaluation. Chronic (gradual) polyhydramnios is more commonly from structural anomalies."},
+    {"id":"mn-fc-p03-007","front":"What is surfactant and why is it important for premature infants?","back":"Pulmonary surfactant: phospholipid mixture (mainly dipalmitoylphosphatidylcholine/lecithin + phosphatidylglycerol/PG) produced by type II pneumocytes. Reduces alveolar surface tension → prevents alveolar collapse at end-expiration. Insufficient surfactant → respiratory distress syndrome (RDS).","hint":"Surfactant = alveolar soap that keeps air sacs open. No surfactant = alveoli collapse = RDS.","explanation":"Surfactant production begins at ~20 weeks but is insufficient for viability until ~24–26 weeks. Mature levels are typically achieved by 35–37 weeks. Betamethasone accelerates type II pneumocyte maturation. Exogenous surfactant (poractant alfa/Curosurf, beractant/Survanta) is given to premature infants intratracheally for RDS treatment.","clinicalPearl":"L:S ratio (lecithin:sphingomyelin ratio) from amniotic fluid: ≥2:1 = lung maturity. Phosphatidylglycerol (PG) presence: additional marker of maturity (especially reliable in diabetic patients where L:S can be falsely elevated)."},
+    {"id":"mn-fc-p03-008","front":"What is quickening and when is it expected?","back":"Quickening = first perception of fetal movement by the mother. Primigravida: typically 18–20 weeks (doesn't recognize the sensation earlier). Multigravida: 16–18 weeks (recognizes the sensation sooner from prior experience).","hint":"Multi feels earlier (16–18 weeks). Primi feels later (18–20 weeks). Experience teaches recognition.","explanation":"Quickening is a presumptive sign of pregnancy. The fetus actually begins moving at ~8–10 weeks but movements are too weak to be perceived. Mothers who have been pregnant before recognize the fluttery sensation earlier because they know what to expect.","clinicalPearl":"If a client reports no movement at 22 weeks (primigravida) or 20 weeks (multigravida), assessment is warranted. Lack of quickening may indicate fetal demise or placenta anterior (cushioning effect reduces perception)."},
+    {"id":"mn-fc-p03-009","front":"What is the viability threshold in obstetrics?","back":"Viability = gestational age at which survival with NICU support is possible. Lower threshold: 22–23 weeks (periviable, ~10–20% survival). Established viability: 24 weeks (~40–50% survival). By 28 weeks: ~85–90% survival.","hint":"22–23 weeks = periviable. 24 weeks = viable (with NICU). 28 weeks = good prognosis.","explanation":"Below 22 weeks: resuscitation is generally not offered (very rare survivability with significant disability). 22–23 weeks: periviable — shared decision-making with parents about resuscitation. 24 weeks and beyond: resuscitation is standard. Survival rates improve dramatically with each week of gestation.","clinicalPearl":"Survival rates by week (with maximal NICU support): 22w: ~10–15%; 23w: ~25–40%; 24w: ~50%; 25w: ~60–65%; 26w: ~70%; 28w: ~85%; 34w: ~99%."},
+    {"id":"mn-fc-p03-010","front":"What is PPHN (persistent pulmonary hypertension of the newborn)?","back":"PPHN: failure of pulmonary vascular resistance (PVR) to fall after birth → right-to-left shunting through foramen ovale and ductus arteriosus → severe hypoxemia. Causes: meconium aspiration, sepsis, CDH, asphyxia. Treatment: inhaled nitric oxide (iNO), HFOV, ECMO.","hint":"PPHN = lungs resist blood flow after birth → fetal circulation pattern persists → hypoxemia.","explanation":"Pre-ductal (right hand/ear) SpO2 is higher than post-ductal (lower limbs) in PPHN — right-to-left shunting through DA → deoxygenated blood in lower half of body. This difference (>10%) is diagnostic. PPHN management escalates: supplemental O2 → surfactant if RDS → iNO → HFOV → ECMO.","clinicalPearl":"iNO (inhaled nitric oxide) selectively dilates pulmonary vasculature because it is locally delivered (inhaled), reducing PVR without systemic hypotension. It is the most specific vasodilator for PPHN."},
+    {"id":"mn-fc-p03-011","front":"What is the Apt test used for?","back":"Apt test: differentiates fetal blood from maternal blood in vaginal hemorrhage. Mix blood with sodium hydroxide (NaOH): fetal HbF (alkali-resistant) stays pink/red. Maternal HbA (alkali-sensitive) turns brown. Confirms fetal origin of bleeding (e.g., vasa previa rupture).","hint":"Apt test: pink = fetal (HbF stable). Brown = maternal (HbA degrades). Used when vasa previa suspected.","explanation":"The Apt test is critical in the diagnosis of vasa previa vessel rupture. A positive result (fetal blood in vaginal vault + fetal bradycardia at time of ROM) is an obstetric emergency requiring immediate delivery by the most expeditious route.","clinicalPearl":"The Apt test can be performed bedside with NaOH (1% KOH solution). It is simple, rapid, and cheap. In modern practice, it may be supplemented by point-of-care fetal hemoglobin testing strips."},
+    {"id":"mn-fc-p03-012","front":"What is the Cardiff Count-to-Ten kick count method?","back":"Starting at 28 weeks, the client counts fetal movements during an active period. Normal: 10 movements in ≤2 hours. Abnormal: <10 movements in 2 hours OR significant decrease from patient's baseline pattern. Report any concerning reduction to provider.","hint":"Cardiff: 10 movements in 2 hours = normal. <10 in 2 hours or decreased from usual = call provider.","explanation":"Fetal movement counting is a simple, free, non-invasive method of fetal surveillance. It relies on the principle that decreased fetal movement can precede fetal death by up to 24–48 hours. Reporting decreased movement allows early intervention (NST, BPP, delivery).","clinicalPearl":"The most important kick count teaching point: the PATTERN is as important as the number. A fetus that normally moves 30+ times in 2 hours moving only 10 times warrants evaluation, even though 10 is technically 'normal.'"},
+    {"id":"mn-fc-p03-013","front":"What is the ductus arteriosus and what keeps it open in fetal life?","back":"The ductus arteriosus connects the main pulmonary artery to the descending aorta, allowing right ventricular output to bypass the high-resistance pulmonary circulation. Maintained by: prostaglandin E2 (PGE2) and relative fetal hypoxia (low pO2).","hint":"DA = pulmonary artery → aorta. Kept open by PGE2 and low O2. Closes when O2 rises at birth.","explanation":"In fetal life, 90% of right ventricular output goes through the DA. After birth, rising pO2 causes vasoconstriction and rising cAMP, while falling PGE2 (placenta removed) allows ductal smooth muscle to constrict. Functional closure within 12–24 hours; anatomical closure (ligamentum arteriosum) in days to weeks.","clinicalPearl":"Indomethacin (and ibuprofen) inhibit COX → reduce PGE2 → promote DA closure. PGE1 (alprostadil) stimulates prostaglandin receptors → keeps DA open. Used in ductal-dependent congenital heart lesions (pulmonary atresia, hypoplastic left heart) to maintain systemic or pulmonary blood flow."},
+    {"id":"mn-fc-p03-014","front":"What is symmetric vs asymmetric IUGR?","back":"Symmetric IUGR: all fetal parameters (HC, AC, FL) proportionately small → early insult (chromosomal, severe infection, extreme malnutrition). Asymmetric IUGR: head/brain relatively spared, abdominal circumference small (liver glycogen depleted) → late placental insufficiency → brain-sparing.","hint":"Symmetric = everything small (early cause). Asymmetric = head spared, belly small (late placental cause, brain-sparing).","explanation":"Brain-sparing in asymmetric IUGR: fetal cardiovascular redistribution shunts blood preferentially to brain, heart, and adrenals at the expense of liver, kidneys, and bowel → small abdominal circumference (liver) + oligohydramnios (reduced urine) + abnormal umbilical artery Doppler (high resistance). Asymmetric IUGR generally has better prognosis than symmetric.","clinicalPearl":"The earliest Doppler change in placental insufficiency is increased umbilical artery resistance (elevated S/D ratio). Progressive: absent end-diastolic flow (AEDF) → reversed end-diastolic flow (REDF) → fetal compromise → delivery."},
+    {"id":"mn-fc-p03-015","front":"What is the function of Wharton's jelly in the umbilical cord?","back":"Wharton's jelly: gelatinous connective tissue (primarily hyaluronic acid) that surrounds and protects the umbilical vessels from compression, kinking, and trauma. Also cushions the cord.","hint":"Wharton's jelly = the protective jelly around cord vessels.","explanation":"The helical coiling of the umbilical cord (approximately 1 coil per 5 cm) also distributes stretch forces, reducing tension and compression. Decreased coiling (hypocoiled cord) is associated with fetal growth restriction and adverse outcomes. The umbilical cord swells/constricts in response to cold (Wharton's jelly expands) and warmth.","clinicalPearl":"Umbilical cord cysts (identified on ultrasound) are common in the 1st trimester and usually resolve. Persistent cysts or complex cysts → associated with chromosomal anomalies and omphalocele — warrant karyotyping."},
+    {"id":"mn-fc-p03-016","front":"When does the fetal heart begin beating and when is it detectable on ultrasound?","back":"Fetal heart begins contracting at approximately week 4–5 post-fertilization (week 6–7 gestational age). Detectable by transvaginal ultrasound (TVUS) at approximately 6 weeks gestational age (cardiac activity visible as flickering in the embryo pole).","hint":"Heart starts at week 6 GA. Detectable on TVUS at ~6 weeks GA.","explanation":"By 6 weeks GA, fetal heart rate on TVUS is typically 90–110 bpm (slower than later rates). By 7 weeks: 120–160 bpm. The absence of cardiac activity at 6 weeks with a CRL ≥7 mm is diagnostic of embryonic demise (blighted ovum or missed abortion).","clinicalPearl":"The rule for diagnosing failed pregnancy: CRL ≥7 mm with no heartbeat on TVUS = confirmed embryonic demise (no need for repeat). CRL <7 mm without heartbeat = inconclusive — repeat in 1 week."},
+    {"id":"mn-fc-p03-017","front":"What is the biophysical profile modified (mBPP)?","back":"Modified BPP = NST + Amniotic Fluid Index (AFI) only. Normal: reactive NST + AFI ≥5 cm. Abnormal if either is abnormal → proceed to full BPP. Faster and simpler than full BPP; commonly used as first-line surveillance.","hint":"Modified BPP = NST + AFI only. 2-component screen; full BPP if either abnormal.","explanation":"The mBPP captures both acute (NST reflects CNS/autonomic tone) and chronic (AFI reflects placental reserve and fetal renal perfusion) components. It takes 20–30 minutes versus 30 minutes for a full BPP, making it more practical for routine surveillance.","clinicalPearl":"In high-risk OB practices, the mBPP is done twice weekly (or weekly depending on indication). Full BPP is reserved for non-reactive NST or low AFI on mBPP."},
+    {"id":"mn-fc-p03-018","front":"What is meconium aspiration syndrome (MAS)?","back":"MAS: aspiration of meconium-stained amniotic fluid before, during, or after birth → chemical pneumonitis, airway obstruction, surfactant inactivation, PPHN. Risk highest with thick 'pea-soup' meconium in post-term or stressed fetuses.","hint":"Thick meconium + breathing = MAS. Chemical pneumonitis + PPHN = serious neonatal emergency.","explanation":"Meconium is the fetal intestinal contents (bile, swallowed amniotic fluid cells, intestinal secretions). Its presence in amniotic fluid reflects vagal stimulation from hypoxia or maturational (normal in post-term). Thick meconium + gasping fetus = high MAS risk. Management: presence of NICU team at delivery; neonatal intubation if infant is depressed/not vigorous; surfactant; iNO if PPHN develops.","clinicalPearl":"Current NRP (Neonatal Resuscitation Program) guidelines: routine intrapartum or post-delivery suctioning of vigorous infants with meconium-stained fluid is NOT recommended (insufficient evidence of benefit and may delay resuscitation). Intubation and suctioning is indicated for non-vigorous infants (depressed, poor tone, weak respiratory effort)."},
+    {"id":"mn-fc-p03-019","front":"What is a non-reactive NST and what is the next step?","back":"Non-reactive NST: fewer than 2 adequate accelerations (≥15 bpm × ≥15 sec) in 40 minutes. Next step: vibroacoustic stimulation (VAS). If reactive after VAS = reassuring. If still non-reactive → full BPP. If BPP ≤4 → delivery.","hint":"Non-reactive NST → VAS → if still non-reactive → BPP → if BPP ≤4 → deliver.","explanation":"Fetal sleep cycles (20–40 min of reduced activity) are the most common cause of non-reactive NST. VAS (buzzer applied to maternal abdomen) awakens the fetus — if the fetus is neurologically intact, it will respond with accelerations. Failure to respond to VAS suggests true compromise or prematurity (<32 weeks).","clinicalPearl":"At <32 weeks gestational age, the acceleration threshold is ≥10 bpm × ≥10 seconds (immature) rather than 15×15. Applying 37-week criteria to a 28-week fetus will produce many false-positive non-reactive NSTs."},
+    {"id":"mn-fc-p03-020","front":"What is the foramen ovale and what happens to it at birth?","back":"The foramen ovale: flap-like opening in the interatrial septum allowing blood to flow from right atrium to left atrium (bypassing lungs) in fetal life. At birth: rising LA pressure (from increased pulmonary blood flow after first breath) pushes the flap closed → functional closure.","hint":"FO = flap valve in atrial septum. Opens R→L in fetal life. Closes when LA pressure rises at birth.","explanation":"The foramen ovale has a one-way valve mechanism: fetal blood flows from the high-pressure right side to the lower-pressure left side (high PVR keeps right side pressure relatively elevated). After birth, PVR drops, pulmonary blood flow increases, LA pressure rises above RA pressure, and the flap presses against the septum, functionally closing the foramen.","clinicalPearl":"Patent foramen ovale (PFO): the flap fails to permanently seal in ~25% of adults. Usually asymptomatic, but PFO is associated with paradoxical embolism (venous clot crossing to arterial circulation → stroke), especially in younger adults with cryptogenic stroke."},
+    {"id":"mn-fc-p03-021","front":"What is the role of human chorionic gonadotropin (hCG) in pregnancy?","back":"hCG: produced by syncytiotrophoblast from implantation. Rescues corpus luteum → continued progesterone production. Doubles every 48–72h in early viable IUP. Peaks at 8–10 weeks (10,000–100,000 mIU/mL), then declines. Also used for pregnancy testing and quad screen.","hint":"hCG = corpus luteum rescue signal. Doubles every 48–72h. Peaks 8–10 weeks.","explanation":"hCG structure is similar to LH (same alpha subunit; different beta subunit). This is why hCG pregnancy tests use β-hCG antibodies. hCG also stimulates thyroid (contributes to 1st trimester hyperthyroidism/hyperemesis gravidarum), stimulates fetal testosterone production (males), and may contribute to nausea via CNS receptors.","clinicalPearl":"Gestational trophoblastic disease (molar pregnancy, choriocarcinoma) produces extremely high hCG levels (often >100,000 mIU/mL). After molar evacuation, serial β-hCG monitoring (weekly) is done to ensure complete remission. Any plateau or rise signals persistent GTD requiring treatment."},
+    {"id":"mn-fc-p03-022","front":"What are the placental functions using the NOURISH mnemonic?","back":"N: Nutrition (glucose, amino acids). O: Oxygen (diffusion). U: Urea/waste removal. R: Resistance transfer (passive immunity via IgG). I: Immune modulation. S: Steroid production (progesterone, estrogens). H: Hormones (hCG, HPL, relaxin).","hint":"NOURISH: Nutrition, Oxygen, Urea, Resistance, Immunity, Steroids, Hormones.","explanation":"The placenta is a complete organ system. It performs gas exchange (O2/CO2), nutritional delivery (glucose by facilitated diffusion; amino acids by active transport), waste removal (CO2, urea, bilirubin), immune transfer (IgG), endocrine function (hCG, HPL, progesterone, estrogens), and immune tolerance (preventing maternal rejection of fetal antigens).","clinicalPearl":"The placenta does NOT transfer IgM (too large) — neonatal IgM levels at birth reflect fetal infection (TORCH). Maternal IgG transfer is maximal in the 3rd trimester — premature infants have less maternal IgG and are more susceptible to infection."},
+    {"id":"mn-fc-p03-023","front":"What is the significance of fetal breathing movements (FBM) in BPP?","back":"Fetal breathing movements (FBM) = rhythmic chest wall movements detected by ultrasound. In BPP: ≥1 episode lasting ≥30 seconds = 2 points. FBM develop the respiratory muscles and lungs for extrauterine life, and maintain amniotic fluid volume in the lungs.","hint":"FBM in BPP: ≥30 second episode = 2 points. Absence suggests fetal compromise or sleep state.","explanation":"FBM are present from ~8 weeks but become more regular after 20 weeks. They are reduced by hypoxia, acidosis, and certain medications (narcotics, magnesium). Glucose meal (maternal) increases FBM — which is why BPP is sometimes done after the mother eats. FBM distend the lung with amniotic fluid, stimulating alveolar growth.","clinicalPearl":"Absence of FBM is one of the BPP parameters most sensitive to fetal hypoxia (second only to NST changes). Even a single brief episode of FBM within 30 minutes scores full points."},
+    {"id":"mn-fc-p03-024","front":"What is congenital diaphragmatic hernia (CDH) and how does it affect fetal development?","back":"CDH: congenital defect in the diaphragm allowing abdominal organs (bowel, stomach, liver) to herniate into the thoracic cavity → lung compression → pulmonary hypoplasia → PPHN. Diagnosed on fetal ultrasound: bowel loops in thorax, mediastinal shift, small/absent stomach bubble in abdomen.","hint":"CDH = abdominal organs in chest → lung compression → pulmonary hypoplasia → PPHN at birth.","explanation":"CDH is a severe fetal anomaly with high mortality from PPHN and pulmonary hypoplasia. Fetal interventions (tracheal balloon occlusion/FETO in select cases) aim to stimulate lung growth by trapping lung fluid. At birth: surgical repair after stabilization; PPHN managed with iNO, HFOV, ECMO.","clinicalPearl":"'Stomach bubble absent from abdomen + mediastinal shift' = CDH on fetal US. Left-sided CDH (L:R = 8:2) is more common. Polyhydramnios may develop (bowel in thorax may impair swallowing if esophagus compressed)."},
+    {"id":"mn-fc-p03-025","front":"What is the single umbilical artery (SUA) and what workup is needed?","back":"SUA = only 1 umbilical artery (normally 2). Incidence ~1% of singletons. If isolated SUA (no other ultrasound anomalies): monitor for SGA, growth restriction. If SUA with other anomalies: detailed anatomy scan, fetal echocardiogram, consider karyotype.","hint":"SUA = 1 artery + 1 vein. Isolated = monitor growth. With anomalies = full workup.","explanation":"Normal cord = 2 arteries + 1 vein. A two-vessel cord (SUA) is associated with: VACTERL anomalies, chromosomal abnormalities (trisomy 13, 18), renal anomalies, cardiac defects. When identified, anatomy survey plus fetal echo is performed. Isolated SUA has a generally favorable prognosis with appropriate monitoring.","clinicalPearl":"The mnemonic 'AVA' helps recall normal cord composition: Artery-Vein-Artery. Two arteries on the outside, vein in the middle on cross-section. On ultrasound, cutting across the cord in transverse view shows 3 circles."}
+  ]
+}

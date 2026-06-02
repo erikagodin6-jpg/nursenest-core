@@ -28,6 +28,8 @@ import {
 import type { ExamMicroQuestionPayload, SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
 import type { AdaptiveCaseSimulation } from "@/lib/questions/adaptive-case-simulation";
+import type { SessionCardClinicalMedia } from "@/lib/flashcards/session-runtime-types";
+import { ClinicalAudioBlock } from "@/components/clinical-media/clinical-audio-block";
 import type { QuestionBookmarkPayload } from "@/lib/bookmarks/question-bookmarks";
 import type { SimilarQuestionContext } from "@/lib/questions/similar-question-links";
 
@@ -156,6 +158,7 @@ export function FlashcardStudyQuestionStack({
   examMicroQuestion = null,
   itemKindCaption = null,
   clinicalImageUrl = null,
+  clinicalMedia,
   adaptiveCaseSimulation = null,
   prompt,
   answer,
@@ -186,6 +189,8 @@ export function FlashcardStudyQuestionStack({
   examMicroQuestion?: ExamMicroQuestionPayload | SataQuestionPayload | null;
   itemKindCaption?: string | null;
   clinicalImageUrl?: string | null;
+  /** Clinical audio/image blocks from the shared media registry. Rendered in stem or rationale panel. */
+  clinicalMedia?: SessionCardClinicalMedia[];
   adaptiveCaseSimulation?: AdaptiveCaseSimulation | null;
   prompt: string;
   answer: string;
@@ -378,6 +383,20 @@ export function FlashcardStudyQuestionStack({
               {adaptiveCaseSimulation ? (
                 <AdaptiveCaseSimulationPanel simulation={adaptiveCaseSimulation} />
               ) : null}
+
+              {clinicalMedia?.filter((m) => m.placement === "stem").map((block, idx) =>
+                block.type === "audio" ? (
+                  <ClinicalAudioBlock
+                    key={`stem-audio-${idx}`}
+                    soundId={block.soundId}
+                    kind={block.soundKind}
+                    displayName={block.soundDisplayName}
+                    showSignificance
+                    compact
+                    className="mt-4"
+                  />
+                ) : null,
+              )}
 
               {exam ? (
                 <div className="relative z-[1] mt-6">
@@ -689,6 +708,19 @@ export function FlashcardStudyQuestionStack({
                         />
                       </div>
                     ) : null}
+                    {clinicalMedia?.filter((m) => m.placement === "rationale").map((block, idx) =>
+                      block.type === "audio" ? (
+                        <div key={`rat-audio-${idx}`} className="mb-3" data-nn-flashcard-media="audio">
+                          <ClinicalAudioBlock
+                            soundId={block.soundId}
+                            kind={block.soundKind}
+                            displayName={block.soundDisplayName}
+                            showSignificance
+                            compact
+                          />
+                        </div>
+                      ) : null,
+                    )}
                     <FlashcardStudyRevealPanels
                       exam={exam}
                       answer={answer}

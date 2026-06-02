@@ -1,0 +1,546 @@
+{
+  "version": 1,
+  "generatedAt": "2026-06-02",
+  "source": "pediatric-nursing-sprint-package2-section2b",
+  "section": "Growth and Development",
+  "pathways": {
+    "ca-rpn-rex-pn": [
+      {
+        "slug": "developmental-milestones-birth-12-months",
+        "title": "Developmental Milestones: Birth to 12 Months",
+        "topic": "Growth and Development",
+        "topicSlug": "growth-and-development",
+        "bodySystem": "Child health",
+        "previewSectionCount": 1,
+        "seoTitle": "Developmental Milestones Birth to 12 Months | REx-PN Pediatric Nursing | NurseNest",
+        "seoDescription": "REx-PN lesson: Infant developmental milestones birth to 12 months — motor, language, social, cognitive milestones, and red flags for nursing practice.",
+        "exams": ["REX_PN"],
+        "countries": ["CA"],
+        "priority": "high",
+        "audienceTiers": ["RPN"],
+        "examBlueprintDomain": "Child and Family Health",
+        "examBlueprintCompetency": "Identifies expected developmental milestones for infants birth to 12 months and recognizes red flags requiring referral",
+        "studyTakeaways": [
+          "Social smile is a critical milestone — it must be present by 3 months; absence warrants urgent assessment.",
+          "Head lag (when pulled to sit) should be completely GONE by 4 months; presence after 4 months is abnormal.",
+          "Object permanence begins at 9 months — infants understand that objects continue to exist when hidden.",
+          "Any loss of a previously acquired skill at ANY age is always a red flag requiring immediate referral, regardless of other milestone progress."
+        ],
+        "studyCommonTraps": [
+          "Reassuring parents that delayed milestones will 'catch up' — watchful waiting is inappropriate for clear developmental delays.",
+          "Missing that head lag at 4 months is abnormal — many candidates think head lag is normal beyond infancy.",
+          "Confusing stranger anxiety (normal at 6-9 months) with social delay — stranger anxiety indicates normal attachment development."
+        ],
+        "memoryAnchor": "2-4-6-9-12: Social smile (2m), Head control (4m), Transfers (6m), Pincer emerging/object permanence (9m), Words/walks (12m).",
+        "sections": [
+          {
+            "id": "learning-objectives",
+            "kind": "learning_objectives",
+            "heading": "Learning objectives",
+            "body": "After completing this lesson, you will be able to:\n- State the key developmental milestones in the motor, language, cognitive, and social-emotional domains at 2, 4, 6, 9, and 12 months\n- Identify developmental red flags in infants that require immediate referral\n- Explain the significance of key milestones (social smile, head control, object permanence, stranger anxiety) to parents\n- Distinguish normal developmental variations from true developmental delays\n- Recognize primitive reflexes that should disappear by specific ages and understand their clinical significance\n- Apply developmental milestone knowledge to clinical nursing decisions about assessment approach and parent teaching"
+          },
+          {
+            "id": "introduction",
+            "kind": "introduction",
+            "heading": "Overview and exam relevance",
+            "body": "The first year of life is the most rapid period of physical and neurological development in the human lifespan. Understanding the expected milestone trajectory from birth through 12 months is foundational to pediatric nursing practice — it informs assessment approaches, allows early identification of developmental delays, and provides the basis for family anticipatory guidance.\n\nFor the REx-PN examination, developmental milestones appear in clinical scenarios requiring the candidate to determine whether a finding is normal or concerning, whether reassurance or referral is appropriate, and how developmental stage should guide nursing care. Examiners frequently present borderline scenarios that test precise knowledge of milestone timing and red flags."
+          },
+          {
+            "id": "core-content",
+            "kind": "core_content",
+            "heading": "Core clinical content",
+            "body": "**2 months:**\n- Motor: lifts head 45° in prone; when pulled to sit, head lags (normal at 2 months)\n- Social: SOCIAL SMILE (definitive milestone — must be present by 3 months); beginning to track face and voice\n- Language: cooing (vowel sounds); startles to sound\n- Cognitive: beginning to recognize caregiver's face\n\n**4 months:**\n- Motor: lifts head 90° in prone; NO head lag when pulled to sit (head control complete by 4 months); rolls front-to-back; reaches for objects\n- Social: laughs aloud; recognizes parents; engages in reciprocal social interaction\n- Language: babbling begins (repetitive consonant-vowel: ba-ba, da-da — undifferentiated); responds to voice by turning head\n- Cognitive: tracks objects 180°; shows interest in environment\n\n**6 months:**\n- Motor: sits with support; bears weight on legs when held standing; transfers objects hand-to-hand; rakes small objects with all fingers\n- Social: STRANGER ANXIETY beginning (normal — indicates healthy attachment); recognizes strangers vs familiar people\n- Language: babbling continues (more complex); laughs; squeals; begins to understand intonation\n- Cognitive: object permanence beginning (may look for partially hidden object); shows beginning cause-and-effect understanding\n\n**9 months:**\n- Motor: sits unsupported; pulls to stand; begins cruising (moving along furniture); PINCER GRASP emerging (crude — uses side of index finger + thumb)\n- Social: strong stranger anxiety; protest at separation from caregiver; waves bye-bye; plays social games (pat-a-cake, peek-a-boo)\n- Language: mama/dada nonspecifically (says sounds but not as labels); jabbers; begins to follow simple commands with gesture ('come here' + hand gesture)\n- Cognitive: OBJECT PERMANENCE established — searches for completely hidden objects; understands that objects continue to exist when out of sight\n\n**12 months:**\n- Motor: walks independently (range 9-15 months; mean 12 months); PINCER GRASP complete (fine — index finger tip + thumb tip); puts objects in container\n- Social: shows preferences; plays near other children (parallel play beginning); may be clingy with primary caregiver\n- Language: 1-3 meaningful words (mama/dada specifically — as labels for caregiver); follows simple commands without gesture; points to request objects\n- Cognitive: imitates actions; uses objects functionally (drinks from cup)\n\n**Primitive reflexes — expected disappearance:**\n- Moro (startle): extends arms then flexes in response to sudden movement/sound; present at birth; disappears by 4-6 months\n- Rooting: turns head toward stimulus on cheek; present at birth; disappears when awake at 3-4 months (persists during sleep until 7-8 months)\n- Palmar grasp: curls fingers around object placed in palm; present at birth; disappears by 3-6 months\n- Stepping reflex: stepping movements when held upright with feet touching surface; disappears by 1-2 months\n- Babinski: great toe extends and other toes fan when sole is stroked; NORMAL plantar extension up to 2 years (pathological in adults = UMN lesion)\n- Persistence of primitive reflexes beyond expected age = abnormal (suggests neurological dysfunction)\n\n**Developmental RED FLAGS in the first year:**\n- No social smile by 3 months\n- Head lag still present at 4 months\n- No babbling by 6 months\n- No stranger anxiety or no response to name by 9 months\n- Not sitting unsupported by 9 months\n- No single meaningful words by 12 months\n- No pointing by 12 months\n- Any loss of previously acquired skill at any age"
+          },
+          {
+            "id": "nursing-assessment",
+            "kind": "nursing_assessment",
+            "heading": "Nursing assessment",
+            "body": "**History:**\n- Ask parents: 'What new things has your baby started doing since your last visit?'\n- Prenatal history: complications, infections (TORCH), substance exposure, prematurity (use corrected age until 24 months for preterm infants)\n- Perinatal history: APGAR scores, need for resuscitation, birth trauma\n- Feeding: breast vs formula, frequency, amount, swallowing coordination\n- Parent concern: 'Do you have any concerns about your baby's development?'\n\n**Physical assessment relevant to development:**\n- Head circumference: measure and plot at every visit; microcephaly or macrocephaly warrants referral\n- Fontanel: anterior closes 9-18 months; bulging = increased ICP; sunken = dehydration\n- Muscle tone: assess for hypertonia (stiff, arching) or hypotonia (floppy); observe posture in prone and supine\n- Head lag: place infant supine, grasp wrists, pull to sit — head should maintain alignment with trunk by 4 months\n- Visual tracking: hold object 20-30cm from face, move slowly — should track 180° by 4 months\n- Hearing response: startle to sudden sound; turn toward voice by 4 months; respond to name by 9 months\n\n**Corrected age for premature infants:**\nFor infants born premature (<37 weeks), use corrected age (chronological age minus weeks of prematurity) for developmental assessment until 24 months corrected age. Example: a 9-month-old born at 32 weeks (8 weeks early) has a corrected age of 7 months — assess milestones for 7 months."
+          },
+          {
+            "id": "nursing-interventions",
+            "kind": "nursing_interventions",
+            "heading": "Nursing interventions",
+            "body": "**Promote optimal development:**\n- Advocate for tummy time: minimum 30 minutes/day when awake and supervised from birth; prevents positional plagiocephaly and builds neck and shoulder strength\n- Support breastfeeding: associated with modest improvements in cognitive outcomes and provides natural interaction and stimulation\n- Encourage serve-and-return interaction: responding to infant cues builds attachment and neural pathways for language and social development\n- Reading aloud from birth: exposure to language patterns, vocabulary, and prosody builds language architecture even before comprehension\n- Limit screen time: no screen time <18 months except video calls\n\n**When development is delayed:**\n- If a red flag is identified: refer promptly — do NOT reassure to wait and see past 12 months\n- Connect family with Early Intervention services (available from birth in Canada; free for families of children with developmental delay)\n- Provide community resources: public health nurse home visits, drop-in centres, parent-child programs\n- Follow up after referral to confirm the family has connected with services\n\n**Hospitalization considerations:**\n- Maintain consistent caregivers (primary nursing assignment)\n- Encourage parental presence and participation in all care\n- Minimize environmental disruptions (cluster care, maintain day/night cycle)\n- Use developmentally appropriate play and stimulation even during illness\n- For infants with stranger anxiety: approach slowly, avoid direct eye contact initially, begin with parent present"
+          },
+          {
+            "id": "parent-teaching",
+            "kind": "parent_teaching",
+            "heading": "Parent and family teaching",
+            "body": "**Key teaching points for parents of infants:**\n\n'Talking to your baby, making eye contact, and responding when they try to communicate is the most powerful thing you can do for their brain development — even before they have words.'\n\n'Tummy time every day helps your baby develop the strength needed to roll over, sit, and eventually walk. Aim for 30 minutes spread throughout the day whenever baby is awake and you are watching.'\n\n'Your baby's babbling is not just noise — it is practice for language. When you respond to babbling as if your baby said something meaningful, you are teaching them that communication works.'\n\n'Stranger anxiety when your baby cries at unfamiliar people is a good sign — it means your baby has formed a strong bond with you and knows the difference between familiar and unfamiliar people.'\n\n**Anticipatory guidance by age:**\n- 0-2 months: safe sleep, tummy time when awake, feeding cues, talking and singing\n- 4 months: introduce textures and varied sounds; begin reading daily; practice sitting with support\n- 6 months: discuss introduction of solid foods (6 months recommended); baby-proofing for crawling; cup introduction\n- 9 months: discuss object permanence (good time for peek-a-boo); begin table foods; gate installation; cabinet locks\n- 12 months: discuss transition from formula to cow's milk; weaning from bottle; walking safety\n\n**When to call the provider:**\n- Baby is not reaching milestones listed above by expected ages\n- Parent is concerned about development at any time\n- Any loss of a skill the baby previously had"
+          },
+          {
+            "id": "safety-considerations",
+            "kind": "safety_considerations",
+            "heading": "Safety considerations and red flags",
+            "body": "**Age-specific safety priorities:**\n- 0-6 months: safe sleep (back, firm flat surface, alone, room-sharing); never sleeping in car seat outside vehicle (airway compromise); prevent scalds; falls from elevated surfaces\n- 6-9 months: crawling safety — install stair gates (hardware-mounted at top, pressure-mounted at bottom), outlet covers, cabinet locks; pool/water fencing if applicable\n- 9-12 months: pulling to stand — anchor tall furniture; remove accessible poisoning hazards (toddler-proofing begins now); supervision near water\n- Car seat: rear-facing from birth until age 2 or maximum weight/height for seat\n\n**Developmental red flags requiring IMMEDIATE action:**\n- No social smile by 3 months → urgent assessment\n- No babbling by 9 months → hearing evaluation and developmental assessment\n- Not sitting by 9 months → developmental assessment\n- No words by 12 months → hearing evaluation and developmental assessment\n- No pointing by 12 months → autism spectrum screening\n- Any regression or loss of skill → urgent referral\n\n**Primitive reflex persistence — safety implication:**\nPersistence of the Moro reflex beyond 6 months can indicate neurological dysfunction. Persistence of the palmar grasp beyond 6 months interferes with voluntary reaching and object manipulation. Abnormal reflex persistence should trigger referral for neurological assessment."
+          },
+          {
+            "id": "documentation",
+            "kind": "documentation",
+            "heading": "Documentation",
+            "body": "**Well-child visit documentation:**\n- Growth parameters: weight (kg), length (cm, recumbent), head circumference (cm) with percentiles\n- Developmental milestones achieved: list specifically by domain (e.g., 'Gross motor: rolling front-to-back, sits with support; Fine motor: transfers hand-to-hand; Language: babbling; Social: stranger anxiety present; Cognitive: object permanence beginning')\n- Milestone concerns: document specific missing milestone and age\n- Parent concerns: record verbatim\n- Primitive reflex presence or absence when assessed\n- Corrected age used for premature infants: document both chronological and corrected age\n- Anticipatory guidance provided and parent response\n- Referrals: date, reason, service referred to, follow-up plan\n\n**For hospitalized infants:**\n- Document developmental status at admission using pre-admission caregiver report as baseline\n- Note any regression during admission with identified stressor\n- Document parent presence and participation in care\n- Record developmental concerns identified during admission and actions taken"
+          },
+          {
+            "id": "clinical-pearls",
+            "kind": "clinical_pearls",
+            "heading": "Clinical pearls and exam tips",
+            "body": "**Pearl 1:** Social smile by 3 months is a high-stakes exam milestone. If a scenario states a 4-month-old does not smile socially, this is a red flag — not a variation. Respond with referral, not reassurance.\n\n**Pearl 2:** Head lag at 4 months = abnormal. Head lag is normal at 2 months, expected to resolve by 4 months. Any head lag after 4 months indicates possible neurological dysfunction and requires assessment.\n\n**Pearl 3:** Stranger anxiety at 6-9 months = NORMAL healthy attachment. Do not interpret this as pathological or as social delay. Parents should be reassured and nursing care adapted (keep parent close, approach slowly).\n\n**Pearl 4:** Object permanence (9 months) explains why peek-a-boo is so exciting — before object permanence, the object is 'gone' when hidden. After it develops, the child knows the object still exists and anticipates its reappearance.\n\n**Pearl 5:** Walking range is 9-15 months; if not walking by 18 months, refer. Do not tell parents to 'wait and see' past 15-18 months.\n\n**Exam trap:** Corrected age. If a scenario mentions a 12-month-old born at 30 weeks gestation (10 weeks early), the corrected age is approximately 7.5 months. Assess milestones for 7.5 months, not 12 months. Failure to use corrected age leads to false-positive developmental delay identification."
+          }
+        ],
+        "preTest": [
+          {
+            "question": "A nurse is assessing a 4-month-old infant. When the nurse pulls the infant to sitting, the head lags behind the trunk. How should the nurse interpret this finding?",
+            "options": [
+              "This is normal at 4 months — head control typically develops between 4 and 6 months",
+              "This is an abnormal finding — head lag should be absent by 4 months and requires assessment",
+              "This is only concerning if the infant is also not rolling",
+              "Reassure the parent and reassess at 6 months"
+            ],
+            "correct": 1,
+            "rationale": "Head control (absence of head lag when pulled to sit) should be complete by 4 months. Head lag is normal at 2 months when neck muscles are developing, but persistence at 4 months indicates possible hypotonia or neurological dysfunction. This finding requires documentation, referral for developmental assessment, and should NOT be dismissed as a variation.",
+            "distractorRationales": {
+              "A": "Head control is expected to be complete BY 4 months, not between 4-6 months. Head lag at 4 months is abnormal.",
+              "C": "Head lag at 4 months is independently concerning regardless of other motor milestones. It does not require an additional deficit to be a red flag.",
+              "D": "Waiting until 6 months to reassess head lag that should be resolved at 4 months is an inappropriate delay in assessment."
+            }
+          },
+          {
+            "question": "A parent tells the nurse their 7-month-old infant cries every time an unfamiliar person approaches, including grandparents the baby sees monthly. What is the most appropriate nursing response?",
+            "options": [
+              "Refer the infant for social development assessment — the child should be comfortable with familiar extended family by 7 months",
+              "Reassure the parent that stranger anxiety typically peaks at 6-9 months and is a sign of healthy attachment development",
+              "Advise the parent to expose the infant to more unfamiliar people to reduce the anxiety",
+              "Ask about the child's home environment, as social isolation may be causing the anxiety"
+            ],
+            "correct": 1,
+            "rationale": "Stranger anxiety, typically beginning at 6 months and peaking at 8-12 months, is a normal and expected developmental milestone. It indicates the infant has formed a secure attachment with the primary caregiver and can now distinguish familiar from unfamiliar people. Even grandparents seen monthly are 'strangers' to the infant in this developmental period. This is not pathological — it is evidence of healthy development.",
+            "distractorRationales": {
+              "A": "Stranger anxiety IS the expected developmental response at 7 months — referring for social development assessment is inappropriate for this normal developmental phenomenon.",
+              "C": "Increasing exposure may help long-term familiarity but is not the priority nursing response. Normalizing the behaviour for the parent is the immediate priority.",
+              "D": "Stranger anxiety is a developmental phenomenon related to attachment maturation, not social isolation. Without other concerning findings, assuming social isolation as a cause is inappropriate."
+            }
+          },
+          {
+            "question": "Which milestone is MOST expected for a typically developing 9-month-old infant?",
+            "options": [
+              "Walking independently",
+              "Speaking 5-10 meaningful words",
+              "Searching for a completely hidden toy",
+              "Drawing with a crayon"
+            ],
+            "correct": 2,
+            "rationale": "Object permanence — the understanding that objects continue to exist when hidden from view — develops at approximately 8-12 months. By 9 months, most infants will search for a toy that has been completely hidden under a cloth. This is a key cognitive milestone for this age group.",
+            "distractorRationales": {
+              "A": "Independent walking typically develops at 12-15 months (range 9-18 months). Most 9-month-olds pull to stand and cruise but do not yet walk independently.",
+              "B": "5-10 meaningful words is expected at 12-18 months. At 9 months, infants are using mama/dada nonspecifically and first meaningful words are emerging around 12 months.",
+              "D": "Drawing with a crayon is a fine motor milestone expected around 12-15 months for scribbling and much later for purposeful drawing."
+            }
+          },
+          {
+            "question": "A 12-month-old is admitted for pneumonia. Before admission, the child walked independently and said 3 words. During admission, the child refuses to walk and has not spoken any words for 2 days. The parents are concerned. What is the priority nursing response?",
+            "options": [
+              "Refer for urgent developmental assessment — loss of walking and language are red flags",
+              "Reassure parents that this is expected regression during illness and will resolve once the child is well",
+              "Report the skill loss immediately to the RN and document as a potential red flag requiring follow-up after recovery",
+              "Advise parents to encourage walking and talking during the admission to prevent regression"
+            ],
+            "correct": 1,
+            "rationale": "This presentation is most consistent with regression during acute illness — a normal, expected temporary return to earlier behaviours under the significant stress of serious illness and hospitalization. The child previously demonstrated these skills. Reassuring parents appropriately, while monitoring for recovery of skills as the child improves, is the correct approach. If skills fail to return after full clinical recovery, referral would be warranted.",
+            "distractorRationales": {
+              "A": "Urgent developmental referral is appropriate for the LOSS of previously acquired skills that does not recover — but in the context of acute pneumonia, this represents expected regression, not developmental delay.",
+              "C": "While documentation is important, characterizing this as a definitive 'red flag' during acute serious illness may cause unnecessary parental anxiety about a normal regression response.",
+              "D": "Encouraging a sick child to walk and talk to prevent regression is not an evidence-based intervention and may be inappropriate when the child is unwell. Regression resolves with recovery."
+            }
+          },
+          {
+            "question": "An 8-month-old infant is born at 32 weeks gestation. The parents are concerned that the baby is not sitting unsupported. Which response is most appropriate?",
+            "options": [
+              "Agree that sitting unsupported should occur by 6 months and refer for developmental assessment",
+              "Calculate corrected age: the infant's corrected age is 4 months, and sitting is expected at 6 months corrected — reassure and reassess",
+              "Reassure that all 8-month-olds develop at different rates and recheck at 12 months",
+              "Initiate physiotherapy referral since premature infants always require motor therapy"
+            ],
+            "correct": 1,
+            "rationale": "For premature infants, corrected age (chronological age minus weeks of prematurity) is used for developmental assessment until 24 months corrected age. This infant was born at 32 weeks — 8 weeks (2 months) early. Chronological age 8 months minus 2 months prematurity = corrected age 6 months. Sitting unsupported is expected at approximately 6 months corrected age. This infant is right on target when corrected age is applied.",
+            "distractorRationales": {
+              "A": "Referring based on chronological age without accounting for prematurity would result in inappropriate over-referral. Corrected age must be used.",
+              "C": "Using 'different rates' to justify waiting until 12 months without assessing corrected age is incorrect — corrected age calculation is the appropriate tool here.",
+              "D": "Premature infants do not all require physiotherapy — they require developmental monitoring using corrected age, and physiotherapy when specific motor deficits are identified."
+            }
+          },
+          {
+            "question": "Which primitive reflex is NORMAL and EXPECTED in a 3-month-old infant?",
+            "options": [
+              "Moro reflex",
+              "Palmar grasp reflex",
+              "Babinski reflex",
+              "All of the above"
+            ],
+            "correct": 3,
+            "rationale": "All three reflexes are normal and expected at 3 months. The Moro (startle) reflex is present from birth and disappears by 4-6 months. The palmar grasp is present from birth and disappears by 3-6 months. The Babinski reflex (plantar extension with fanning of toes when sole is stroked) is NORMAL up to 2 years of age, unlike in adults where it indicates upper motor neuron pathology.",
+            "distractorRationales": {
+              "A": "While the Moro reflex is correct, this is not the most complete answer.",
+              "B": "While the palmar grasp is correct, this is not the most complete answer.",
+              "C": "While the Babinski is correct, this is not the most complete answer. All three are present and expected at 3 months."
+            }
+          },
+          {
+            "question": "A nurse assesses a 6-month-old and notes the infant cannot yet transfer objects from one hand to the other. Which interpretation is correct?",
+            "options": [
+              "This is an expected finding — hand-to-hand transfer develops at 9-10 months",
+              "This is at the borderline — hand-to-hand transfer is an expected 6-month milestone and its absence warrants monitoring and screening",
+              "This is a significant delay requiring immediate referral to neurology",
+              "This finding is only concerning if accompanied by a language delay"
+            ],
+            "correct": 1,
+            "rationale": "Hand-to-hand transfer of objects is an expected milestone at approximately 6 months. A 6-month-old who cannot yet transfer objects is at the border of expected development. The nurse should screen using a validated developmental tool and monitor closely, with referral if the skill does not emerge soon or if other milestones are also delayed.",
+            "distractorRationales": {
+              "A": "Hand-to-hand transfer is expected at 6 months, not 9-10 months. Stating it is expected later in error delays appropriate surveillance.",
+              "C": "While referral may become necessary, 'immediate neurology referral' is a disproportionate response for a single borderline milestone in an otherwise developing infant.",
+              "D": "Developmental delays can occur in isolation in a single domain. A fine motor delay does not require co-occurring language delay to be significant."
+            }
+          },
+          {
+            "question": "What is the expected social milestone for a 4-month-old infant?",
+            "options": [
+              "Stranger anxiety",
+              "Social smile and reciprocal vocalization",
+              "Playing peek-a-boo and waving bye-bye",
+              "Object permanence"
+            ],
+            "correct": 1,
+            "rationale": "By 4 months, the social smile (first appearing at 2 months) is well-established, and infants engage in reciprocal social vocalization — responding to a caregiver's voice with vocalization, turn-taking in 'conversation.' This is one of the earliest and most important social-emotional milestones.",
+            "distractorRationales": {
+              "A": "Stranger anxiety typically begins at 6 months and peaks at 8-12 months — it is not present at 4 months.",
+              "C": "Playing peek-a-boo and waving bye-bye are 9-12 month milestones, associated with object permanence and imitative play.",
+              "D": "Object permanence (understanding objects continue to exist when hidden) develops at approximately 8-12 months, not at 4 months."
+            }
+          },
+          {
+            "question": "A parent reports their 5-month-old does not respond to their voice or startle to loud sounds. What is the priority nursing action?",
+            "options": [
+              "Reassure the parent that hearing responses develop variably in the first year",
+              "Ask if the family has a history of hearing loss and recheck at 9 months",
+              "Refer urgently for hearing evaluation — auditory response should be present from birth",
+              "Screen for autism spectrum disorder using the M-CHAT"
+            ],
+            "correct": 2,
+            "rationale": "Newborns startle to loud sounds from birth, and infants should be responding to voice by 4 months. A 5-month-old who shows no response to sound has a significant hearing concern that requires urgent audiological evaluation. Early identification of hearing loss is critical — the critical period for language development means delays in identification and intervention have lasting consequences. Universal newborn hearing screening should have been completed, but follow-up evaluation is warranted.",
+            "distractorRationales": {
+              "A": "Auditory responses are present from birth — they do not 'develop' in the first year in the sense that absent responses at 5 months is not a variation, it is a red flag.",
+              "B": "Family history provides useful information but does not change the need for urgent referral when an infant is not responding to sound. Delaying to 9 months is inappropriate.",
+              "D": "M-CHAT screens for autism spectrum disorder and is administered at 16-30 months. It is not the appropriate tool for suspected hearing loss."
+            }
+          },
+          {
+            "question": "Which milestone should be present in a typically developing 12-month-old?",
+            "options": [
+              "Saying 10-20 words with meaning",
+              "Running without falling",
+              "Walking independently or taking first independent steps",
+              "Drawing circles and simple shapes"
+            ],
+            "correct": 2,
+            "rationale": "Independent walking typically begins at 12 months (range 9-15 months). By 12 months, most infants are either walking independently or taking their first independent steps. If not walking by 15 months, closer monitoring is warranted; referral if not walking by 18 months.",
+            "distractorRationales": {
+              "A": "10-20 words is the expected milestone at 18 months. At 12 months, 1-3 meaningful words is expected.",
+              "B": "Running is expected by approximately 18-24 months — not at 12 months, when independent walking is just beginning.",
+              "D": "Drawing circles and simple shapes is a preschool milestone (3-4 years). At 12 months, the fine motor expectation is pincer grasp completion and scribbling beginning."
+            }
+          }
+        ],
+        "postTest": [
+          {
+            "question": "A nurse is teaching a parent about tummy time. Which statement by the parent indicates correct understanding?",
+            "options": [
+              "I should do tummy time only once a day for 2-3 minutes starting at 2 months",
+              "I should place my baby on their tummy for at least 30 minutes total per day when awake and supervised, starting from birth",
+              "Tummy time is only needed until my baby can roll over on their own",
+              "I should avoid tummy time if my baby cries, as it means they dislike it and it is harmful"
+            ],
+            "correct": 1,
+            "rationale": "Tummy time should begin from birth and accumulate to a minimum of 30 minutes per day when the infant is awake and supervised. It prevents positional plagiocephaly, builds neck and shoulder strength needed for rolling and sitting, and is associated with earlier gross motor development. If the infant cries initially, start with brief periods and gradually increase duration as the baby adapts.",
+            "distractorRationales": {
+              "A": "Once a day for 2-3 minutes is insufficient. Tummy time should be spread throughout the day and accumulate to 30+ minutes.",
+              "C": "Tummy time benefits continue well beyond the rolling stage — it supports trunk strength, shoulder development, and overall motor development throughout infancy.",
+              "D": "Infant crying during tummy time is common initially and does not indicate harm. Start with brief periods and increase gradually. Abandoning tummy time due to crying deprives the infant of important developmental stimulation."
+            }
+          },
+          {
+            "question": "A 10-month-old infant is admitted. The nurse uses a 12-month developmental milestone checklist to assess the infant. The nurse documents the infant 'does not yet walk independently' and flags this as a developmental delay. What error has the nurse made?",
+            "options": [
+              "No error — independent walking is expected by 10 months",
+              "The nurse used the wrong age-based milestone list — independent walking is expected by 12-15 months and a 10-month-old not walking is entirely within normal range",
+              "The nurse should have waited until after the acute illness resolved to assess development",
+              "The nurse should have used corrected age since all infants under 2 years require corrected age calculation"
+            ],
+            "correct": 1,
+            "rationale": "Independent walking is expected at 12-15 months (range 9-18 months). A 10-month-old who is not yet walking independently is well within the normal developmental range. The nurse made an error by comparing the infant to inappropriate milestone expectations (12-month milestones applied to a 10-month-old) and incorrectly flagging this as a delay.",
+            "distractorRationales": {
+              "A": "Independent walking at 10 months would be EARLY, not expected. The normal range is 9-18 months, and most infants walk around 12-15 months.",
+              "C": "While assessing development during acute illness has limitations, the error here was using an inappropriate age milestone list — not the timing of assessment.",
+              "D": "Corrected age is for premature infants only, not all infants under 2 years. The scenario does not indicate prematurity."
+            }
+          },
+          {
+            "question": "Which statement best describes the significance of the pincer grasp milestone?",
+            "options": [
+              "It indicates the infant can hold a crayon and draw, which is a key readiness skill for learning",
+              "It represents the maturation of fine motor control from proximal (arm) to distal (fingertip), allowing precise manipulation of small objects — a choking hazard risk",
+              "It indicates full neurological maturation and means the Moro reflex should now disappear",
+              "It is a social milestone indicating the infant understands cooperative play"
+            ],
+            "correct": 1,
+            "rationale": "The pincer grasp (complete index fingertip + thumb tip at approximately 9-12 months) represents the maturation of fine motor control from the large proximal muscles to the small distal muscles of the hand — the proximodistal principle in action. Clinically, the ability to pick up small objects (finger foods, small toys) creates a significant choking hazard — parents must be counselled about keeping small objects away from the infant.",
+            "distractorRationales": {
+              "A": "Drawing with a crayon develops much later (12-15 months for scribbling; purposeful drawing is a preschool skill). Pincer grasp enables picking up small objects, not drawing.",
+              "C": "Pincer grasp development has no direct relationship to Moro reflex disappearance, which occurs at 4-6 months — well before pincer grasp completes at 9-12 months.",
+              "D": "Pincer grasp is a fine motor milestone, not a social milestone. Cooperative play does not develop until preschool age."
+            }
+          },
+          {
+            "question": "A 6-month-old girl was born at 28 weeks gestation. The nurse assesses that she does not yet babble. Is this a developmental concern?",
+            "options": [
+              "Yes — babbling should be present at 6 months regardless of gestational history",
+              "No — at 28 weeks prematurity, the corrected age is approximately 2 months, and babbling is expected at 4-6 months corrected age",
+              "Uncertain — prematurity does not affect language development so corrected age is not applicable for language",
+              "Yes — language milestones are never adjusted for prematurity"
+            ],
+            "correct": 1,
+            "rationale": "For premature infants, corrected age is used for all developmental domains until 24 months corrected age, including language. This infant was born at 28 weeks — 12 weeks (approximately 3 months) early. Corrected age = 6 months (chronological) - 3 months (prematurity) = approximately 3 months corrected age. Babbling is expected at 4-6 months corrected age. This infant's language development is within expected range for corrected age.",
+            "distractorRationales": {
+              "A": "Applying chronological age without corrected age correction for a premature infant would result in inappropriate referrals. Corrected age must be used.",
+              "C": "Corrected age applies to ALL developmental domains including language for premature infants — language is not exempt.",
+              "D": "Language milestones ARE adjusted for prematurity using corrected age, just like motor and cognitive milestones."
+            }
+          },
+          {
+            "question": "A nurse is performing a 9-month well-child visit. The parent reports the child waves bye-bye, plays peek-a-boo, and searches for dropped toys. Which cognitive concept do these behaviours demonstrate?",
+            "options": [
+              "Stranger anxiety",
+              "Object permanence",
+              "Conservation",
+              "Symbolic thinking"
+            ],
+            "correct": 1,
+            "rationale": "Searching for dropped or hidden toys demonstrates object permanence — the cognitive understanding that objects continue to exist when they are no longer visible. Object permanence develops at approximately 8-12 months. Peek-a-boo is both an expression and reinforcement of object permanence development. This is a key cognitive milestone of the first year.",
+            "distractorRationales": {
+              "A": "Stranger anxiety is a social-emotional milestone (beginning at 6-9 months) related to attachment, not to object permanence. The infant waving bye-bye demonstrates social skill, not anxiety.",
+              "C": "Conservation is a Piagetian milestone of the concrete operational stage (approximately 7 years) — the understanding that quantity remains the same despite changes in appearance.",
+              "D": "Symbolic thinking begins in the preoperational stage (approximately 2-7 years), when children use language and pretend play as symbols. This is beyond 9-month-old cognitive capacity."
+            }
+          },
+          {
+            "question": "A parent of a 3-month-old infant asks when to expect the first words. What is the most accurate anticipatory guidance?",
+            "options": [
+              "First meaningful words are expected around 6-8 months",
+              "First meaningful words (mama/dada specifically) are expected around 12 months, with the range being 10-14 months",
+              "Infants typically speak in 2-word phrases by 12 months",
+              "Language development is so variable that no specific timing guidance can be given"
+            ],
+            "correct": 1,
+            "rationale": "First meaningful words (mama and dada used specifically to refer to caregivers) are expected at approximately 12 months, with a normal range of approximately 10-14 months. Before meaningful words, infants go through stages of cooing (2 months), babbling (4-6 months), jargon (8-10 months), and mama/dada nonspecifically (9 months) before using words with meaning.",
+            "distractorRationales": {
+              "A": "At 6-8 months, infants are babbling (consonant-vowel combinations) — these are not yet meaningful words as they are not consistently used to refer to specific people or objects.",
+              "C": "2-word phrases are expected at approximately 24 months (range 18-24 months), not at 12 months.",
+              "D": "Language development has well-established milestone ranges — providing accurate anticipatory guidance about language development is an essential nursing role and language milestones ARE specific enough to guide parents."
+            }
+          },
+          {
+            "question": "A 12-month-old is being seen for a well-child visit. The nurse documents that the infant is cruising along furniture and taking 1-2 independent steps. What is the most accurate developmental interpretation?",
+            "options": [
+              "This represents a motor delay — the infant should be walking well by 12 months",
+              "This is within the normal developmental range — independent walking can occur anywhere from 9-18 months",
+              "This requires referral since most infants walk independently by 10-11 months",
+              "This is advanced for age — most infants do not begin cruising until 15-18 months"
+            ],
+            "correct": 1,
+            "rationale": "Independent walking develops anywhere from 9-18 months, with the average being approximately 12-13 months. Cruising along furniture and taking first independent steps at 12 months is entirely within the normal range. The nurse should reassure parents and continue monitoring progress.",
+            "distractorRationales": {
+              "A": "'Walking well' (steady, smooth gait) develops after initial independent steps — usually by 14-15 months. Taking 1-2 independent steps at 12 months is normal and not delayed.",
+              "C": "Most infants do NOT walk independently by 10-11 months — this is early. The mean age is approximately 12-13 months with a normal range extending to 18 months.",
+              "D": "Cruising begins at approximately 9-12 months and is NOT advanced at 12 months — it is within the expected range."
+            }
+          },
+          {
+            "question": "Which behaviour is MOST expected for a 9-month-old during a nursing assessment?",
+            "options": [
+              "Smiling when any adult approaches",
+              "Crying and turning toward the caregiver when the nurse approaches",
+              "Following the nurse's instructions to 'open your mouth'",
+              "Playing cooperatively with another child in the waiting room"
+            ],
+            "correct": 1,
+            "rationale": "At 9 months, stranger anxiety peaks — the infant recognizes the difference between familiar caregivers and unfamiliar people (including nurses) and protests the approach of strangers by crying and seeking comfort from the caregiver. This is a positive developmental sign and should prompt the nurse to adapt their approach (work near the parent, approach slowly, avoid direct staring).",
+            "distractorRationales": {
+              "A": "Smiling indiscriminately at any approaching adult is more characteristic of early infancy (2-4 months) before stranger anxiety develops. By 9 months, most infants clearly differentiate strangers.",
+              "C": "Following verbal instructions ('open your mouth') without gestural cues requires language comprehension that develops at approximately 12+ months. 9-month-olds follow commands with gestural cues only.",
+              "D": "Cooperative play does not develop until approximately 5+ years. 9-month-olds engage in solitary or onlooker play — they do not yet play cooperatively with other children."
+            }
+          },
+          {
+            "question": "A parent asks whether they should be concerned that their 11-month-old was not crawling and went directly to pulling to stand. How should the nurse respond?",
+            "options": [
+              "Refer for developmental assessment — all infants must crawl before pulling to stand",
+              "Reassure the parent — skipping crawling and progressing directly to pulling to stand and walking is a recognized normal variation",
+              "Schedule a 3-month follow-up since skipping crawling suggests possible motor delay",
+              "Advise the parent to encourage crawling since it is important for brain development"
+            ],
+            "correct": 1,
+            "rationale": "Not all children crawl before walking — a significant minority (estimated 10-15%) skip crawling entirely and progress directly from sitting to pulling to stand and then walking. This is a recognized normal developmental variation and is not associated with developmental delay or neurological problems. If the child is otherwise meeting milestones, reassurance is appropriate.",
+            "distractorRationales": {
+              "A": "Crawling is NOT a required developmental step — the development is sequential in the sense that trunk control precedes walking, but crawling specifically is not obligatory.",
+              "C": "Skipping crawling is not a risk factor for motor delay. If other milestones are met and the child is progressing to standing and walking, a 3-month follow-up is not warranted for this specific concern.",
+              "D": "While crawling has some benefits for bilateral coordination, the claim that it is critical for brain development is overstated. There is no evidence that children who skip crawling have poorer developmental outcomes."
+            }
+          },
+          {
+            "question": "A nurse is educating a new parent about when to expect their newborn to develop a social smile. Which response is correct?",
+            "options": [
+              "Social smile typically appears between 1 and 2 months and should be consistently present by 3 months",
+              "Social smile typically appears between 4 and 6 months once the infant can recognize faces reliably",
+              "Social smiling is present from birth as a reflexive response to stimulation",
+              "Social smile develops at 6-8 months when the infant develops a preference for familiar faces"
+            ],
+            "correct": 0,
+            "rationale": "The social smile (a smile in response to social interaction — caregiver's face, voice, and touch) typically first appears at 4-8 weeks (1-2 months) and is consistently present by 3 months. This is a critical early social-emotional milestone. Absence of social smile by 3 months is a developmental red flag requiring assessment.",
+            "distractorRationales": {
+              "B": "The social smile appears at 1-2 months, not 4-6 months. By 4-6 months, infants are laughing aloud and engaging in complex reciprocal social interaction.",
+              "C": "Newborn smiling IS present from birth, but it is primarily reflexive (related to gas, REM sleep) — NOT social. The true social smile (a deliberate response to social interaction) appears at 1-2 months.",
+              "D": "Social smiling (1-2 months) precedes strong face preference discrimination. Facial familiarity recognition and stranger anxiety develop later at 4-9 months."
+            }
+          }
+        ],
+        "flashcards": [
+          {
+            "id": "dev-milestones-birth-12m-fc-01",
+            "front": "What developmental milestones are expected at 2 months?",
+            "back": "Motor: lifts head 45° in prone; head lag present (normal at 2m)\nSocial: SOCIAL SMILE (must be present by 3 months)\nLanguage: cooing (vowel sounds); startles to sound\nCognitive: beginning to track face; recognizes caregiver voice",
+            "clinicalPearl": "If a 4-month-old does not have a social smile, this is a developmental red flag — do not reassure, refer.",
+            "memoryAnchor": "2 months = first SMILE. The social smile is the landmark of 2 months."
+          },
+          {
+            "id": "dev-milestones-birth-12m-fc-02",
+            "front": "What is head lag and when is it abnormal?",
+            "back": "Head lag = when an infant is pulled from supine to sitting position, the head falls backward behind the trunk rather than staying aligned.\nNORMAL at 2 months (neck muscles still developing)\nABNORMAL at 4 months or beyond — indicates hypotonia or neurological dysfunction\nAssessment: grasp infant's wrists and pull slowly to sit; observe head position",
+            "clinicalPearl": "Head lag = normal at 2 months, abnormal at 4 months. This is a common exam question — know both the normal and the red flag age.",
+            "memoryAnchor": "4 months = head control COMPLETE. Head lag at 4 months = refer."
+          },
+          {
+            "id": "dev-milestones-birth-12m-fc-03",
+            "front": "What is object permanence and at what age does it develop?",
+            "back": "Object permanence = the understanding that objects continue to exist when they are no longer visible. Develops at approximately 8-12 months. Before this, 'out of sight, out of mind.' After: infant searches for completely hidden objects.\nClinical significance: explains why peek-a-boo is exciting at 9 months (but not at 4 months).",
+            "clinicalPearl": "Object permanence also explains why separation anxiety peaks at 8-12 months — the infant now KNOWS the caregiver exists even when absent, which makes the absence distressing.",
+            "memoryAnchor": "9 months = object permanence = hide-and-SEEK ability develops."
+          },
+          {
+            "id": "dev-milestones-birth-12m-fc-04",
+            "front": "What is the normal range for independent walking and when should referral be considered?",
+            "back": "Normal range: 9-18 months\nMean: approximately 12-13 months\nClinical guidance:\n- Not walking by 15 months: closer monitoring, screening\n- Not walking by 18 months: REFER for developmental assessment\nNote: some children skip crawling and go directly to pulling to stand and walking — this is a normal variation",
+            "clinicalPearl": "The exam often tries to trick you with 'the 15-month-old is not walking yet.' This is within normal range — refer only at 18 months.",
+            "memoryAnchor": "Walk by 9-18, mean 12. Refer if no walking by 18 months."
+          },
+          {
+            "id": "dev-milestones-birth-12m-fc-05",
+            "front": "What primitive reflexes are present at birth and when should they disappear?",
+            "back": "Moro (startle): birth → 4-6 months\nRooting: birth → 3-4 months awake; 7-8 months asleep\nPalmar grasp: birth → 3-6 months\nStepping: birth → 1-2 months\nBabinski: birth → 24 months (normal in infants; pathological in adults = UMN)\nPersistence beyond expected age = neurological concern → refer",
+            "clinicalPearl": "The Babinski reflex (plantar extension + toe fanning) is NORMAL in infants up to 2 years. The same finding in an adult indicates upper motor neuron pathology. Know both contexts.",
+            "memoryAnchor": "MRPSB: Moro (4-6m), Rooting (3-4m), Palmar (3-6m), Stepping (1-2m), Babinski (24m)."
+          },
+          {
+            "id": "dev-milestones-birth-12m-fc-06",
+            "front": "What is stranger anxiety and what does its presence indicate?",
+            "back": "Stranger anxiety = infant protests (cries, turns away, reaches for caregiver) when approached by an unfamiliar person.\nOnset: approximately 6 months\nPeak: 8-12 months\nIndicates: HEALTHY attachment development — infant distinguishes familiar from unfamiliar people\nNursing implication: approach slowly, avoid direct staring, work near caregiver, do not exclude parent from care",
+            "clinicalPearl": "An infant who shows NO stranger anxiety by 9 months when other children the same age do show it may indicate a social-emotional concern worth monitoring — not always, but worth noting if other factors are present.",
+            "memoryAnchor": "Stranger anxiety at 6-9 months = HEALTHY, not a problem. Adapt care approach."
+          },
+          {
+            "id": "dev-milestones-birth-12m-fc-07",
+            "front": "How is corrected age calculated for premature infants and until what age is it used?",
+            "back": "Corrected age = Chronological age (months) - Weeks of prematurity / 4.33\nUsed until: 24 months corrected age\nApplies to: ALL developmental domains including motor, language, cognitive, and social-emotional\nExample: 9-month-old born at 32 weeks (8 weeks early) = corrected age approximately 7 months → assess against 7-month milestones\nDO NOT use corrected age for: immunization schedule (use chronological age except Hepatitis B <2 kg)",
+            "clinicalPearl": "Immunizations use CHRONOLOGICAL age; developmental milestones use CORRECTED age for premature infants. This is a classic exam distinction.",
+            "memoryAnchor": "Development = corrected age. Immunizations = chronological age. Two different clocks for premature infants."
+          },
+          {
+            "id": "dev-milestones-birth-12m-fc-08",
+            "front": "What language milestones are expected at 6 months, 9 months, and 12 months?",
+            "back": "6 months: babbling (consonant-vowel: ba-ba, da-da — UNDIFFERENTIATED, not yet meaningful)\n9 months: mama/dada nonspecifically (sounds made but not used as labels); jabbers; follows simple 1-step commands WITH gestural cue\n12 months: mama/dada SPECIFICALLY (used as labels for specific caregivers); 1-3 meaningful words; follows commands WITHOUT gesture; points to communicate",
+            "clinicalPearl": "The distinction between mama/dada nonspecifically (9 months) vs specifically (12 months) is a high-yield exam point. Mama/dada nonspecific = babbling; mama/dada specific = first meaningful words.",
+            "memoryAnchor": "6m = babbling, 9m = nonspecific sounds, 12m = SPECIFIC meaningful words. Specificity increases with age."
+          },
+          {
+            "id": "dev-milestones-birth-12m-fc-09",
+            "front": "What are the developmental RED FLAGS in infants birth to 12 months?",
+            "back": "No social smile by 3 months\nHead lag present at 4 months\nNo babbling by 6 months\nNo stranger anxiety or no response to name by 9 months\nNot sitting unsupported by 9 months\nNo single meaningful words by 12 months (or 16 months)\nNo pointing by 12 months\nAny loss of previously acquired skill at ANY age\nAction: refer for hearing evaluation + developmental assessment",
+            "clinicalPearl": "LOSS of any skill = always refer immediately. The exam will tempt you to 'wait and see' for skill loss during stressors — but skill loss is never a wait-and-see situation without thorough assessment first.",
+            "memoryAnchor": "No smile (3m), No head control (4m), No babble (6m), No words (12m), No pointing (12m), Skill LOSS (any age) = REFER."
+          },
+          {
+            "id": "dev-milestones-birth-12m-fc-10",
+            "front": "Describe the development of the pincer grasp from 6-12 months.",
+            "back": "6 months: raking grasp — uses all fingers together to rake objects toward palm\n9 months: CRUDE pincer grasp — uses radial side of index finger + thumb (side-to-side)\n12 months: FINE pincer grasp — uses fingertip of index finger + thumb tip (tip-to-tip, precise)\nClinical significance: fine pincer enables picking up small objects → CHOKING HAZARD. Counsel parents at 9-12 months about keeping small objects out of reach.",
+            "clinicalPearl": "Emerging pincer grasp = increasing choking hazard. The developmental milestone creates a new safety risk that nurses must address with parents at the 9 and 12 month visits.",
+            "memoryAnchor": "Rake (6m) → Crude pincer (9m) → FINE pincer (12m). Fine = choking risk counselling needed."
+          }
+        ],
+        "imagePlaceholders": [
+          {
+            "id": "dev-milestones-birth-12m-img-01",
+            "alt": "Timeline chart of developmental milestones birth to 12 months by domain",
+            "caption": "Developmental milestones by domain from birth to 12 months — motor, language, cognitive, and social-emotional",
+            "kind": "chart",
+            "suggestedContent": "Horizontal timeline from 0-12 months with four rows (motor, language, cognitive, social-emotional). Key milestones plotted as icons/labels at the appropriate age: social smile (2m), head control (4m), transfers objects (6m), pincer/object permanence (9m), first words/walking (12m). Red flag markers at key ages.",
+            "placement": "after section: core-content"
+          },
+          {
+            "id": "dev-milestones-birth-12m-img-02",
+            "alt": "Illustration of crude pincer grasp vs fine pincer grasp",
+            "caption": "Development of pincer grasp: crude pincer at 9 months (radial side of index + thumb) and fine pincer at 12 months (fingertip precision)",
+            "kind": "illustration",
+            "suggestedContent": "Side-by-side comparison of hand positions: crude pincer (lateral index finger and thumb, broader contact) vs fine pincer (index fingertip and thumb tip, precise contact with small object). Labels identifying the developmental age and clinical significance.",
+            "placement": "after section: nursing-assessment"
+          }
+        ],
+        "documentationConsiderations": [
+          "Record developmental milestones specifically by domain (gross motor, fine motor, language, cognitive, social-emotional) — not as 'development normal' without specifics",
+          "For premature infants, always document both chronological age and corrected age used for developmental assessment",
+          "Record parent concerns verbatim using quotation marks",
+          "Document screening tool administered (name, version, score, interpretation, action taken) separately from surveillance observation notes",
+          "Anticipatory guidance provided: list specific topics, parent response, written materials given"
+        ],
+        "references": [
+          "Hockenberry, M. J., Rodgers, C. C., & Wilson, D. (2022). Wong's Nursing Care of Infants and Children (12th ed.). Elsevier.",
+          "Canadian Paediatric Society. (2023). Developmental milestones: Birth to 12 months. CPS Practice Point.",
+          "Centers for Disease Control and Prevention. (2022). Developmental milestones. Learn the Signs. Act Early."
+        ],
+        "relatedLessons": [
+          "principles-of-growth-and-development",
+          "developmental-milestones-toddler",
+          "pediatric-assessment-principles",
+          "pediatric-pain-assessment-tools"
+        ],
+        "linked_flashcard_prompts": [
+          "What developmental milestones are expected at 2 months?",
+          "What is head lag and when is it abnormal?",
+          "What is object permanence and at what age does it develop?",
+          "What is the normal range for independent walking and when should referral be considered?",
+          "What primitive reflexes are present at birth and when should they disappear?",
+          "What is stranger anxiety and what does its presence indicate?",
+          "How is corrected age calculated for premature infants and until what age is it used?",
+          "What language milestones are expected at 6 months, 9 months, and 12 months?",
+          "What are the developmental RED FLAGS in infants birth to 12 months?",
+          "Describe the development of the pincer grasp from 6-12 months."
+        ],
+        "examMeta": [
+          {
+            "exam": "REX_PN",
+            "domain": "Child and Family Health",
+            "competency": "Identifies expected developmental milestones for infants birth to 12 months and recognizes red flags requiring referral"
+          }
+        ],
+        "premiumOmittedSections": []
+      }
+    ]
+  }
+}

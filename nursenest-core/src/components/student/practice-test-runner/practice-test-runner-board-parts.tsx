@@ -9,6 +9,8 @@ import { AnswerOptionRow } from "@/components/study/cat-question-card";
 import { RationalePanel, type RationalePanelMode } from "@/components/study/cat-rationale-panel";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 import { parseRationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
+import { ClinicalAudioBlock } from "@/components/clinical-media/clinical-audio-block";
+import { parseClinicalAudioExhibit } from "@/lib/questions/clinical-audio-exhibit";
 
 const MCQ_OPTION_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
@@ -176,8 +178,33 @@ export function PracticeTestQuestionMediaBlock({
     caption: image.caption,
     title: image.kind ? image.kind.replace(/_/g, " ") : "Clinical Image",
   }));
+
+  const audioExhibit = parseClinicalAudioExhibit(exhibitData);
+  const showAudioInStem = audioExhibit?.placement === "stem" || audioExhibit?.placement === "post_stem";
+  const showAudioInRationale = audioExhibit?.placement === "rationale" && phase === "post_submit";
+
   return (
     <>
+      {audioExhibit && (showAudioInStem || showAudioInRationale) && (
+        <div className="mb-4 space-y-2" data-nn-question-media="clinical-audio">
+          <ClinicalAudioBlock
+            soundId={audioExhibit.soundId}
+            kind={audioExhibit.soundKind}
+            displayName={audioExhibit.displayName}
+            showSignificance={audioExhibit.showSignificance}
+            showAuscultationSite={audioExhibit.showAuscultationSite}
+          />
+          {audioExhibit.secondary && (
+            <ClinicalAudioBlock
+              soundId={audioExhibit.secondary.soundId}
+              kind={audioExhibit.secondary.soundKind}
+              displayName={audioExhibit.secondary.displayName}
+              showSignificance={audioExhibit.showSignificance}
+              showAuscultationSite={audioExhibit.showAuscultationSite}
+            />
+          )}
+        </div>
+      )}
       <EcgVideoQuestionMedia
         exhibitData={exhibitData}
         images={images}

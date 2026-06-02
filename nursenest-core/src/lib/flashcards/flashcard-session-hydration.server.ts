@@ -12,6 +12,7 @@ import type {
   SessionCardPayload,
   SessionRuntime,
 } from "./session-runtime-types";
+import { getFlashcardClinicalMedia } from "./flashcard-clinical-media-registry";
 
 export async function hydrateFlashcardSession(
   sessionId: string,
@@ -107,6 +108,7 @@ export async function hydrateFlashcardSession(
       .filter((o) => !o.isCorrect && o.rationale)
       .map((o) => ({ letter: o.optionKey, rationale: o.rationale! }));
 
+    const clinicalMedia = getFlashcardClinicalMedia(c.id);
     return {
       cardId: c.id,
       positionInDeck: c.positionInDeck,
@@ -116,6 +118,7 @@ export async function hydrateFlashcardSession(
       rationaleCorrect: c.rationaleCorrect!,
       rationaleIncorrect: incorrectRationales,
       itemKind: c.examItemKind ?? "RECALL",
+      ...(clinicalMedia ? { clinicalMedia } : {}),
     };
   });
 

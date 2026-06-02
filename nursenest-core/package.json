@@ -343,7 +343,7 @@
     "validate:marketing-production-surface": "node scripts/validate-marketing-production-surface.mjs",
     "verify:production-reliability-workflow": "node ../scripts/ci/assert-production-reliability-workflow-guard.mjs",
     "guard:build-scripts": "node ../scripts/guard-no-top-level-await-in-cjs-build-scripts.mjs",
-    "ci:verify": "npm run db:generate && npm run typecheck && npm run content:source-of-truth:check && npm run guard:build-scripts && npm run build",
+    "ci:verify": "npm run db:generate && npm run typecheck && npm run content:source-of-truth:check && npm run verify:architecture-contracts && npm run guard:build-scripts && npm run build",
     "audit:internal-links": "npx tsx ../scripts/audit-internal-links.ts",
     "audit:footer-links": "npx tsx scripts/audit-footer-links.mts",
     "audit:international-rn": "npx tsx ../scripts/audit-international-rn-country-sites.ts",
@@ -541,7 +541,8 @@
     "test:e2e:performance-budget": "npx playwright test tests/e2e/performance/performance-budget-comprehensive.spec.ts --config playwright.production-critical.config.ts",
     "test:e2e:revenue": "npx playwright test tests/e2e/revenue/subscription-purchase-flow.spec.ts tests/e2e/revenue/subscription-persistence.spec.ts --config playwright.production-critical.config.ts",
     "audit:nightly": "npx tsx scripts/nightly-production-audit.ts",
-    "verify:no-middleware": "node --import tsx --test src/middleware-ban.contract.test.ts"
+    "verify:no-middleware": "node --import tsx --test src/middleware-ban.contract.test.ts",
+    "verify:architecture-contracts": "npx tsx scripts/verify-architecture-contracts.mts"
   },
   "dependencies": {
     "@auth/core": "0.37.2",

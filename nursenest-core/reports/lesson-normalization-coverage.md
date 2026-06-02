@@ -1,6 +1,6 @@
 # Lesson Normalization Coverage
 
-Generated at: 2026-06-01T23:22:22.822Z
+Generated at: 2026-06-02T02:01:54.898Z
 
 ## Pathway Coverage
 
@@ -48,15 +48,15 @@ Exclusions:
 
 ### `ca-rn-nclex-rn`
 
-- Raw lessons: 800
-- Normalized lessons: 800
-- Renderable lessons: 800
+- Raw lessons: 805
+- Normalized lessons: 805
+- Renderable lessons: 805
 - Excluded lessons: 0
-- Raw to renderable ratio: 800/800 (100%)
+- Raw to renderable ratio: 805/805 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /canada/rn/nclex-rn/lessons/{lessonSlug}
-- Sample public lesson path: /canada/rn/nclex-rn/lessons/exam-strat-abcs-nclex-rn
+- Sample public lesson path: /canada/rn/nclex-rn/lessons/erikson-autonomy-shame-doubt-nclex-rn-ca
 - Force publish mode: off
 
 Force-published lessons: None
@@ -69,12 +69,12 @@ Exclusions:
 
 ### `ca-rpn-rex-pn`
 
-- Raw lessons: 482
-- Normalized lessons: 482
-- Renderable lessons: 414
+- Raw lessons: 487
+- Normalized lessons: 487
+- Renderable lessons: 419
 - Excluded lessons: 68
-- Raw to renderable ratio: 414/482 (86%)
-- Unexpected exclusions: 68 (14.1% of raw)
+- Raw to renderable ratio: 419/487 (86%)
+- Unexpected exclusions: 68 (14.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /canada/pn/rex-pn/lessons/{lessonSlug}
 - Sample public lesson path: /canada/pn/rex-pn/lessons/rpn-anticoagulant-safety-teaching
@@ -178,15 +178,15 @@ Exclusions:
 
 ### `us-lpn-nclex-pn`
 
-- Raw lessons: 160
-- Normalized lessons: 160
-- Renderable lessons: 96
+- Raw lessons: 175
+- Normalized lessons: 175
+- Renderable lessons: 111
 - Excluded lessons: 64
-- Raw to renderable ratio: 96/160 (60%)
+- Raw to renderable ratio: 111/175 (63%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /us/pn/nclex-pn/lessons/{lessonSlug}
-- Sample public lesson path: /us/pn/nclex-pn/lessons/clinical-casebook-acs-chest-pain-gold
+- Sample public lesson path: /us/pn/nclex-pn/lessons/erikson-autonomy-shame-doubt-nclex-pn
 - Force publish mode: off
 
 Force-published lessons: None
@@ -362,15 +362,15 @@ Exclusions:
 
 ### `us-rn-nclex-rn`
 
-- Raw lessons: 801
-- Normalized lessons: 801
-- Renderable lessons: 801
+- Raw lessons: 806
+- Normalized lessons: 806
+- Renderable lessons: 806
 - Excluded lessons: 0
-- Raw to renderable ratio: 801/801 (100%)
+- Raw to renderable ratio: 806/806 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /us/rn/nclex-rn/lessons/{lessonSlug}
-- Sample public lesson path: /us/rn/nclex-rn/lessons/exam-strat-abcs-nclex-rn
+- Sample public lesson path: /us/rn/nclex-rn/lessons/erikson-autonomy-shame-doubt-nclex-rn-us
 - Force publish mode: off
 
 Force-published lessons: None

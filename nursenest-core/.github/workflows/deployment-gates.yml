@@ -136,6 +136,9 @@ jobs:
         # AI-assisted commits have re-added middleware.ts 6 times.
         # See: docs/reports/middleware-regeneration-root-cause.md
 
+      - name: Verify architecture contracts
+        run: npm run verify:architecture-contracts
+
   smoke-tests:
     name: Production Smoke Tests
     runs-on: ubuntu-latest

@@ -1,0 +1,41 @@
+[
+  {
+    "id": "GERO-FC-P8-001",
+    "packageId": "pkg8-falls",
+    "front": "What are the intrinsic and extrinsic risk factors for falls in older adults?",
+    "back": "INTRINSIC (patient-specific):\n• Gait and balance disorders\n• Muscle weakness (sarcopenia)\n• Orthostatic hypotension\n• Visual impairment\n• Cognitive impairment\n• History of falls (strongest predictor)\n• Medications (polypharmacy, fall-risk drugs)\n• Urinary urgency / incontinence\n• Foot problems\n\nEXTRINSIC (environmental):\n• Loose rugs, wet floors\n• Poor lighting\n• Clutter in pathways\n• Inappropriate footwear\n• Unsuitable furniture heights\n• Missing grab bars\n• Bed in high position",
+    "hint": "Intrinsic = patient factors. Extrinsic = environmental factors. Both must be assessed.",
+    "explanation": "Most falls result from INTERACTION between intrinsic and extrinsic factors. An older adult with mild gait imbalance (intrinsic) who wears slippers on a wet bathroom floor (extrinsic) falls. Addressing both is essential for prevention. Post-fall assessment must assess both domains.",
+    "clinicalPearl": "Prior fall history is the single strongest predictor of future falls. Any older adult who has fallen once in the past year is at HIGH risk of falling again. 'Have you fallen in the past year?' should be asked at every encounter with an older adult.",
+    "tier": "RPN",
+    "topicKey": "fall-risk-assessment",
+    "categorySlug": "falls-safety",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P8-002",
+    "packageId": "pkg8-falls",
+    "front": "Which 10 medication classes increase fall risk in older adults?",
+    "back": "High-risk fall medications (SADNESS + BTC):\nS — Sedatives/hypnotics (benzodiazepines, zolpidem)\nA — Antihypertensives (orthostatic hypotension)\nD — Diuretics (volume depletion, orthostasis)\nN — Narcotic/opioid analgesics (sedation, balance)\nE — Epilepsy drugs (sedation, ataxia)\nS — SSRIs/antidepressants (dizziness, hyponatremia)\nS — (second S)\nB — Beta-blockers (blunt heart rate response)\nT — Tricyclic antidepressants (anticholinergic + orthostasis)\nC — Calcium channel blockers (vasodilation, orthostasis)\n\n+ Alpha-blockers (tamsulosin) — significant orthostasis",
+    "hint": "SADNESS + BTC. Medications causing sedation or orthostatic hypotension = fall risk.",
+    "explanation": "The most important medication class for fall risk in older adults: antihypertensives + diuretics (orthostasis). These are extremely common in older adults. Post-fall medication review must specifically evaluate all medications contributing to orthostasis and sedation. Polypharmacy with multiple fall-risk classes multiplies risk.",
+    "clinicalPearl": "Tamsulosin (Flomax) for BPH is a significant but frequently missed fall-risk medication. Older men on tamsulosin for prostate symptoms have a 2–3× increased fall risk from orthostatic hypotension. Always include it in medication fall-risk reviews.",
+    "tier": "RPN",
+    "topicKey": "fall-risk-assessment",
+    "categorySlug": "falls-safety",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P8-003",
+    "packageId": "pkg8-falls",
+    "front": "What is the appropriate technique for using a cane? Which hand? Which side on stairs?",
+    "back": "CANE SIDE: Hold in the hand OPPOSITE the weak/injured leg\n(Contralateral use — creates 3-point gait pattern)\n\nCANE HEIGHT: Top of cane at wrist level when arm hangs naturally at side (≈15–30° elbow flexion when using)\n\nSTAIRS MNEMONIC — 'Up with the good, down with the bad':\n\nGoing UP: Good leg FIRST → weak leg → cane\nGoing DOWN: Cane FIRST → weak leg → good leg\n\n(The strong leg always bears weight on the most demanding transition)",
+    "hint": "Cane = contralateral. Stairs up = good first. Stairs down = bad first.",
+    "explanation": "The contralateral placement creates a 3-point base that closely mimics normal gait — each time the weak leg steps, the cane moves forward simultaneously, providing a wide support base. The stairs mnemonic works because: going UP, the strong leg drives upward (leading); going DOWN, the cane and weak leg go first so the strong leg is always in a position to rescue balance.",
+    "clinicalPearl": "If a patient consistently uses the cane incorrectly (ipsilateral — same side as weak leg), they are not getting the stability benefit and are at higher fall risk. Observe and correct cane technique at every home care and clinic visit.",
+    "tier": "RPN",
+    "topicKey": "assistive-devices",
+    "categorySlug": "falls-safety",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  }
+]

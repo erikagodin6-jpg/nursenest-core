@@ -9,6 +9,7 @@ import {
   pathwayAllowsCatAdaptiveStart,
   subscriptionCoversPathwayBase,
 } from "@/lib/exam-pathways/pathway-entitlements-policy";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   assertCatAdaptiveEngineAllowed,
   assertCatEngineAllowedForPathwayId,
@@ -340,8 +341,6 @@ export async function createCatPracticeTestPayload(
     }
   | { ok: false; message: string; code?: string }
 > {
-  const { getExamPathwayById } =
-    await import("@/lib/exam-pathways/exam-product-registry");
   const sim = presentationMode === "exam_simulation";
   const requestedPathwayId = input.pathwayId?.trim() || null;
   let pathway: ExamPathwayDefinition | null = null;

@@ -28,6 +28,7 @@ export function generateStaticParams() {
     "rex-pn": "",
     "respiratory-therapy": "",
     "ca-rn": "",
+    "us-rn": "",
   };
   return listAuthorityClusterPages()
     .filter((page) => clusters.includes(page.cluster as AuthorityClusterKey) && page.slug !== "overview")

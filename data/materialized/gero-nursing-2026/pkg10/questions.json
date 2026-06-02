@@ -1,0 +1,293 @@
+{
+  "packageId": "pkg10-prioritization",
+  "title": "Gerontological Nursing — Prioritization & Clinical Judgment Question Bank",
+  "generatedDate": "2026-06-02",
+  "questionCount": 750,
+  "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+  "questionSubtypes": {
+    "prioritization": 500,
+    "delegation": 250
+  },
+  "questions": [
+    {
+      "id": "GERO-P10-001",
+      "subtype": "prioritization",
+      "topicSlug": "delirium-prioritization",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "Priority",
+      "difficulty": "hard",
+      "stem": "A nurse is responsible for four patients on the medical unit. Which patient should the nurse assess FIRST?",
+      "options": {
+        "A": "An 81-year-old woman with dementia who is agitated and calling out — the nursing assistant reports this is typical behavior",
+        "B": "A 77-year-old man post-appendectomy Day 2 who reports pain 4/10 and is awaiting his morning pain medication",
+        "C": "An 82-year-old woman, previously alert and oriented, who the night nurse reported as 'suddenly confused and pulling at her catheter' 20 minutes ago",
+        "D": "A 69-year-old man with COPD who has SpO2 of 93% on his prescribed 2 L/min O2 and is comfortable"
+      },
+      "correctAnswer": "C",
+      "rationale": "Patient C has SUDDEN ONSET confusion — acute change from established baseline (previously alert and oriented). This is DELIRIUM until proven otherwise. Delirium is a medical emergency in older adults: it is associated with high mortality, permanent cognitive decline, longer hospital stays, and often indicates an underlying acute precipitant (infection, medication toxicity, urinary retention, metabolic disturbance, pain). The 'suddenly confused' presentation requires immediate nursing assessment. Patient A's agitation is reported as typical (baseline), Patient B has stable pain, and Patient D has an acceptable SpO2 on prescribed O2.",
+      "distractorRationales": {
+        "A": "Incorrect. The nursing assistant specifically reports this is her 'typical behavior' — baseline for her known dementia. Baseline behavior requires monitoring but is NOT an acute change requiring priority assessment.",
+        "B": "Incorrect. Post-operative pain of 4/10 awaiting morning medication is stable and expected. This is lower priority than an acute cognitive change.",
+        "D": "Incorrect. SpO2 93% on 2 L/min O2 for a COPD patient is within the appropriate target range (88–92%) or just above. The patient is comfortable and this appears to be his baseline."
+      },
+      "hint": "Acute onset = highest priority. Which patient represents the most urgent ACUTE CHANGE from established baseline?",
+      "clinicalPearl": "Delirium mnemonic THINK: Toxic medications, Hypoxemia, Infection, Non-pharmacological factors (constipation, pain, urinary retention, sensory deprivation), K+ and other metabolic causes. Address ALL possible precipitants simultaneously.",
+      "examStrategy": "Prioritization: ACUTE change from baseline ALWAYS takes priority over baseline behavior, stable post-operative status, or values within acceptable ranges. Ask: 'Which patient has changed most acutely from their last known state?'",
+      "keyTakeaway": "ACUTE onset confusion from known baseline = assess FIRST. Delirium is a medical emergency. Baseline behavior = lower priority. Stable post-operative findings = lower priority.",
+      "tags": ["prioritization", "delirium", "acute-change", "who-to-see-first", "baseline-assessment"]
+    },
+    {
+      "id": "GERO-P10-002",
+      "subtype": "prioritization",
+      "topicSlug": "infection-prioritization",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "Priority",
+      "difficulty": "hard",
+      "stem": "A nurse is caring for four older adults in a long-term care facility. Which finding requires the MOST urgent nursing action?",
+      "options": {
+        "A": "A 79-year-old man with type 2 diabetes whose blood glucose is 8.1 mmol/L (146 mg/dL) at lunch",
+        "B": "An 85-year-old woman with Alzheimer's disease who has suddenly become more confused and agitated than her baseline and has not eaten her breakfast — a change from her usual behavior",
+        "C": "A 72-year-old woman requesting her scheduled oral pain medication for chronic back pain — pain is 5/10",
+        "D": "An 80-year-old man who completed physiotherapy and is 'tired and wants to rest'"
+      },
+      "correctAnswer": "B",
+      "rationale": "Patient B — suddenly MORE confused than baseline AND not eating breakfast — represents an ACUTE CHANGE FROM BASELINE in a patient with known dementia. In LTC, even small changes from an Alzheimer's patient's established behavioral baseline are significant. This picture is consistent with early delirium from an acute precipitant (UTI, aspiration pneumonia, constipation, medication change). The nurse must assess IMMEDIATELY: vital signs (even subtle VS changes), behavioral change timeline, last bowel movement, recent medication changes, urinalysis — because infection is the most common trigger.",
+      "distractorRationales": {
+        "A": "Incorrect. Blood glucose 8.1 mmol/L (146 mg/dL) in a T2DM patient is mildly elevated but not acutely dangerous. This requires monitoring and appropriate management but is not a crisis.",
+        "C": "Incorrect. Scheduled oral pain medication for 5/10 chronic back pain is expected and important but can be addressed once the urgent assessment is completed.",
+        "D": "Incorrect. Fatigue after physiotherapy in an older adult is expected and appropriate. Rest is appropriate."
+      },
+      "hint": "In LTC, which finding represents an ACUTE CHANGE from known baseline that could indicate infection or delirium?",
+      "clinicalPearl": "In LTC, nursing assistants who report 'she's not acting like herself today' are providing the most important clinical data of the shift. Acute behavioral changes from baseline are the signature presentation of infection in older adults with dementia.",
+      "examStrategy": "LTC prioritization: ACUTE BEHAVIORAL CHANGE from established baseline = highest priority, even if vital signs appear relatively normal. In dementia patients, behavioral change IS the fever equivalent.",
+      "keyTakeaway": "Acute behavioral change from established baseline in dementia patient = assess FIRST. This is the LTC equivalent of a fever in a patient with infection.",
+      "tags": ["prioritization", "LTC", "behavioral-change", "infection", "dementia-baseline", "acute-change"]
+    },
+    {
+      "id": "GERO-P10-003",
+      "subtype": "delegation",
+      "topicSlug": "delegation-LTC",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "Delegation",
+      "difficulty": "moderate",
+      "stem": "A nurse in a long-term care facility is planning care for a group of residents. Which task is SAFE to delegate to an unregulated care aide (nursing assistant)?",
+      "options": {
+        "A": "Administering oral medications to a resident with mild cognitive impairment",
+        "B": "Assessing a new pressure injury on a resident's sacrum and determining its staging",
+        "C": "Assisting an ambulatory resident with his morning bath and reporting any skin changes noted",
+        "D": "Completing the admission assessment for a new resident transferred from acute care"
+      },
+      "correctAnswer": "C",
+      "rationale": "Assisting a stable, ambulatory resident with personal hygiene (bath) is within the scope of an unregulated care aide (UCA/nursing assistant). This is routine personal care that does not require clinical assessment or judgment. The nurse must provide the care aide with specific instructions on what to observe and report (skin changes, behavioral changes, pain responses). Reporting observations back to the nurse is appropriate. Medication administration (A), pressure injury assessment and staging (B), and admission assessments (D) all require regulated nursing scope.",
+      "distractorRationales": {
+        "A": "Incorrect. Medication administration to ANY resident requires regulated nursing scope. UCAs cannot administer medications in most jurisdictions. The cognitive impairment increases the complexity further.",
+        "B": "Incorrect. Pressure injury assessment, staging, and wound care planning require clinical nursing judgment and regulated scope. A UCA can observe and report but cannot assess and stage.",
+        "D": "Incorrect. Admission assessment is a nursing clinical assessment requiring regulated scope — it includes medication reconciliation, functional assessment, skin assessment, and care planning."
+      },
+      "hint": "Which task is routine personal care vs which requires clinical nursing assessment or judgment?",
+      "clinicalPearl": "Delegation principle: can delegate routine, predictable tasks to UCAs with clear instructions and supervision. Cannot delegate: assessment, care planning, medication administration, IV management, wound assessment. The nurse retains ACCOUNTABILITY for all delegated tasks.",
+      "examStrategy": "Delegation questions: delegate stable, routine, predictable tasks to UCAs. Never delegate: assessment, medications, IV care, unstable patients, tasks requiring nursing judgment. The nurse is always accountable.",
+      "keyTakeaway": "Delegate to UCA: routine personal care (bathing, feeding stable residents, ambulation with stable patients, vital signs). Never delegate: medication administration, wound assessment, admission assessment, care planning.",
+      "tags": ["delegation", "UCA", "nursing-assistant", "LTC", "scope-of-practice", "personal-care"]
+    },
+    {
+      "id": "GERO-P10-004",
+      "subtype": "prioritization",
+      "topicSlug": "medication-prioritization",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "Priority",
+      "difficulty": "hard",
+      "stem": "A nurse receives morning report for four older adult patients on the medical unit. Which finding requires the nurse's PRIORITY assessment?",
+      "options": {
+        "A": "A 74-year-old woman who received her first dose of lisinopril last evening and is reporting mild dizziness when standing this morning",
+        "B": "An 80-year-old man with heart failure who gained 1.2 kg overnight (his daily weights show a 2.8 kg gain over 3 days)",
+        "C": "A 77-year-old woman post-knee replacement Day 3 who reports incisional pain 3/10 managed with scheduled acetaminophen",
+        "D": "A 68-year-old man with a history of COPD whose SpO2 is 94% on 2 L nasal cannula (his baseline)"
+      },
+      "correctAnswer": "B",
+      "rationale": "Patient B — a heart failure patient with a 2.8 kg weight gain over 3 days (significant fluid retention) — is showing decompensating heart failure. This requires immediate assessment: vital signs (for increasing dyspnoea, orthopnoea, elevated HR), lung sounds (crackles, increasing respiratory work), JVD, lower extremity oedema, and prompt physician notification. Acute heart failure decompensation in older adults carries high mortality. The 1.2 kg overnight gain is itself concerning, but the 3-day cumulative gain of 2.8 kg indicates worsening fluid overload requiring urgent management. Patient A's dizziness is expected from lisinopril and requires safety assessment (orthostatic BP) but is not immediately life-threatening. Patients C and D are stable.",
+      "distractorRationales": {
+        "A": "Incorrect. Mild dizziness after first lisinopril dose is an expected first-dose effect from vasodilation. Assess orthostatic BP and instruct on slow position changes. Important but not the priority emergency.",
+        "C": "Incorrect. Incisional pain 3/10 managed with scheduled acetaminophen is stable and expected post-operatively Day 3.",
+        "D": "Incorrect. SpO2 94% on 2 L is his BASELINE. This is within acceptable range for a COPD patient and is unchanged from his known baseline."
+      },
+      "hint": "Which patient is showing signs of acute clinical deterioration? Weight gain in heart failure = what?",
+      "clinicalPearl": "Weight monitoring is the most sensitive early indicator of fluid retention in heart failure. Alert threshold: >1 kg/day gain or >2 kg/week gain → contact prescriber immediately. Daily weights must be measured at the same time each morning (after voiding, before eating, in the same clothing) for accuracy.",
+      "examStrategy": "Heart failure weight gain prioritization: 2.8 kg gain over 3 days = decompensating heart failure = priority assessment. Compare to: expected medication side effect (dizziness from antihypertensive), stable post-op pain, and baseline SpO2.",
+      "keyTakeaway": "Heart failure: 2+ kg weight gain over 3 days = decompensation = priority. Notify physician. Daily weights are essential — 1 kg/day or 2 kg/week threshold.",
+      "tags": ["prioritization", "heart-failure", "fluid-retention", "weight-gain", "decompensation", "daily-weights"]
+    },
+    {
+      "id": "GERO-P10-005",
+      "subtype": "delegation",
+      "topicSlug": "delegation-acute-care",
+      "examTargets": ["NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "Delegation",
+      "difficulty": "moderate",
+      "stem": "An RN is caring for a 79-year-old woman with delirium and a 77-year-old man who is 1 day post-hip fracture repair. The ward is busy. Which task should the RN DELEGATE to the LPN/RPN?",
+      "options": {
+        "A": "Assessing the delirious patient's cognitive status using the CAM and identifying the delirium trigger",
+        "B": "Administering the stable post-hip replacement patient's scheduled oral medications",
+        "C": "Developing the post-hip replacement patient's discharge care plan",
+        "D": "Evaluating the effectiveness of the delirium management plan"
+      },
+      "correctAnswer": "B",
+      "rationale": "Administering scheduled oral medications to a stable post-operative patient is within RPN/LPN scope. The post-hip replacement patient on Day 1 is considered a stable patient — his medications are scheduled and non-complex. This is an appropriate delegation to a regulated practical nurse. Options A (cognitive assessment to identify delirium trigger), C (care plan development), and D (plan evaluation) all require RN-level assessment and clinical judgment.",
+      "distractorRationales": {
+        "A": "Incorrect. CAM assessment and identification of delirium triggers requires clinical assessment and judgment — RN scope. Delirium management is a high-complexity nursing role.",
+        "C": "Incorrect. Discharge care plan development requires comprehensive nursing assessment and care coordination — RN scope.",
+        "D": "Incorrect. Evaluating the effectiveness of a care plan intervention requires clinical judgment and assessment — RN scope."
+      },
+      "hint": "What is within RPN/LPN scope? Routine stable patient care vs complex assessment and planning.",
+      "clinicalPearl": "Delegation hierarchy: RN can delegate to RPN/LPN and UCA. RPN/LPN can delegate to UCA. RN retains accountability for all delegated tasks. Always consider: patient stability, task complexity, and the delegatee's competency.",
+      "examStrategy": "RN to RPN/LPN delegation: routine stable medication administration, wound care for stable wounds, stable patient monitoring. RN retains: assessment, care planning, unstable patients, complex interventions.",
+      "keyTakeaway": "Delegate to RPN/LPN: scheduled medication administration to stable post-operative patients. Retain: complex assessment (delirium assessment), care plan development, evaluation of plan effectiveness.",
+      "tags": ["delegation", "RPN-scope", "LPN-scope", "RN-delegation", "medication-administration", "stable-patient"]
+    },
+    {
+      "id": "GERO-P10-006",
+      "subtype": "prioritization",
+      "topicSlug": "elder-abuse-prioritization",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "Priority",
+      "difficulty": "moderate",
+      "stem": "A home care nurse is on a caseload visit and receives three urgent messages simultaneously. Which should the nurse respond to FIRST?",
+      "options": {
+        "A": "An 82-year-old woman's daughter calls to report her mother's blood pressure was 148/88 mmHg this morning — higher than her usual 132/76",
+        "B": "An 80-year-old man with dementia calls and sounds scared — saying someone is 'hurting him and taking his money'",
+        "C": "A 75-year-old woman's home care aide calls to report the client ate only half her lunch today",
+        "D": "A 77-year-old man's family member calls to report he is 'a bit less active than usual' today"
+      },
+      "correctAnswer": "B",
+      "rationale": "A man with dementia reporting that someone is 'hurting him and taking his money' is disclosing ELDER ABUSE — both physical abuse and financial exploitation. Despite his dementia, this disclosure must be taken seriously — immediate assessment and adult protective services involvement are required. This is an urgent safety concern. The other findings (mildly elevated BP, reduced lunch intake, less active) represent gradual or minor changes requiring monitoring but not emergency response.",
+      "distractorRationales": {
+        "A": "Incorrect. A BP of 148/88 represents a modest elevation from baseline (16/12 mmHg above usual). This requires follow-up but is not immediately dangerous and can be assessed after addressing the abuse disclosure.",
+        "C": "Incorrect. Eating half her lunch is a nutritional observation that requires monitoring and follow-up but does not represent an immediate safety emergency.",
+        "D": "Incorrect. Being 'a bit less active' represents a mild change that requires monitoring. It is not an immediate priority over a disclosed abuse situation."
+      },
+      "hint": "Which message describes an immediate safety emergency requiring urgent intervention?",
+      "clinicalPearl": "Elder abuse disclosures by individuals with dementia must be taken seriously. Cognitive impairment does not mean a person cannot perceive or report harm — it may mean they have difficulty articulating clearly, but the disclosure itself requires investigation. Dementia is the most common condition associated with elder abuse vulnerability.",
+      "examStrategy": "Priority triage: abuse disclosure = immediate safety emergency = respond FIRST. Mild VS change, reduced intake, reduced activity = concerning but not immediate safety emergencies.",
+      "keyTakeaway": "Elder abuse disclosure (hurting + taking money) = immediate priority response = assess patient safety + contact APS. BP elevation and minor behavioral changes = monitor and follow-up.",
+      "tags": ["elder-abuse", "prioritization", "dementia", "physical-abuse", "financial-abuse", "urgent-response"]
+    },
+    {
+      "id": "GERO-P10-007",
+      "subtype": "prioritization",
+      "topicSlug": "falls-prioritization",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "Priority",
+      "difficulty": "moderate",
+      "stem": "A nurse working a night shift in an LTC facility receives a call from a nursing assistant who found an 84-year-old woman with osteoporosis on the floor beside her bed. The resident is alert but crying and cannot get up. Which is the FIRST nursing action?",
+      "options": {
+        "A": "Help the resident back to bed immediately to prevent further injury on the cold floor",
+        "B": "Call the physician to report the fall before assessing the patient",
+        "C": "Assess the resident for injuries before attempting to move her — especially assess for hip, spine, and head injury",
+        "D": "Ask the resident what happened and if she is in pain"
+      },
+      "correctAnswer": "C",
+      "rationale": "NEVER move a patient after a fall without first assessing for injury. In an 84-year-old with osteoporosis, a fall could have caused: (1) hip fracture (most dangerous) — moving with an unstable hip fracture can cause vascular injury and worsening; (2) vertebral compression fracture — moving without assessing could cause spinal cord injury; (3) head injury — even a mild fall can cause intracranial bleeding in older adults (especially those on anticoagulants). Assess first: pain on palpation (hips, spine, head), ability to move extremities, neurological status, skin and limb position, vital signs — THEN move with appropriate support if no fracture suspected, or maintain position and call for lift/stretcher if fracture suspected.",
+      "distractorRationales": {
+        "A": "Incorrect. Moving the patient before assessment could cause catastrophic harm — particularly worsening a hip fracture or causing spinal cord injury with an unstable vertebral fracture.",
+        "B": "Incorrect. Physician notification is required but comes AFTER assessment. You need clinical data before calling. Assessment is always the first step.",
+        "D": "Incorrect. Asking about pain is part of assessment but is not the FIRST action — the nurse must physically assess for injuries before anything else, not just ask."
+      },
+      "hint": "Before moving ANY patient after a fall: what must always happen first?",
+      "clinicalPearl": "Post-fall protocol: NEVER move before assessing. Check: hip/femur (shortening and external rotation = hip fracture), spine (new pain at any level), head (LOC, confusion, nausea), extremities (neurovascular assessment), vital signs. If fracture suspected: maintain position, call for stretcher/lift, notify physician and family.",
+      "examStrategy": "Post-fall FIRST action: ASSESS for injuries before moving. Moving without assessment = catastrophic harm risk. This principle appears in every patient safety curriculum.",
+      "keyTakeaway": "After a fall: ASSESS FIRST — do not move until injuries assessed. Check: hip (short/externally rotated), spine (pain), head (LOC). Moving an unstable hip fracture = vascular injury risk.",
+      "tags": ["falls", "post-fall-assessment", "hip-fracture", "osteoporosis", "patient-safety", "never-move-before-assess"]
+    },
+    {
+      "id": "GERO-P10-008",
+      "subtype": "delegation",
+      "topicSlug": "delegation-pain",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "Delegation",
+      "difficulty": "moderate",
+      "stem": "A nurse in a long-term care facility is planning care for four residents. Which task is appropriate to delegate to the nursing assistant (UCA)?",
+      "options": {
+        "A": "Assessing pain in a non-verbal resident with dementia using the PAINAD scale",
+        "B": "Administering oral acetaminophen to a resident with stable chronic back pain",
+        "C": "Providing a back massage and repositioning comfort measures to a resident who reported pain 2/10 before her scheduled analgesic was given",
+        "D": "Evaluating whether the resident's pain management plan is effective after analgesic administration"
+      },
+      "correctAnswer": "C",
+      "rationale": "Non-pharmacological comfort measures (back massage, repositioning) are within nursing assistant scope for a stable resident. The nurse has assessed the resident, determined pain is mild (2/10), and the analgesic is scheduled. While waiting for the medication to be administered, the nursing assistant can provide comfort measures. This is routine, stable, non-complex care within UCA scope. Options A (PAINAD assessment — clinical assessment), B (medication administration — regulated scope), and D (evaluation of treatment effectiveness — clinical judgment) are all beyond UCA scope.",
+      "distractorRationales": {
+        "A": "Incorrect. PAINAD assessment requires clinical judgment to observe and interpret behavioral pain indicators — this is nursing scope. UCAs can observe and report to the nurse; the nurse interprets.",
+        "B": "Incorrect. Medication administration requires regulated nursing scope in most jurisdictions.",
+        "D": "Incorrect. Evaluating treatment effectiveness requires clinical assessment and judgment — RN/RPN scope."
+      },
+      "hint": "Which task is routine comfort care vs. requires clinical assessment or medication administration?",
+      "clinicalPearl": "Non-pharmacological pain measures (positioning, massage, heat, cold, distraction, music) can be delegated to UCAs for STABLE residents with low pain scores. The nurse must assess first and provide specific instructions for what to do and what to report.",
+      "examStrategy": "Delegation for pain management: UCAs can provide non-pharmacological comfort measures for stable patients. Nurses retain: pain assessment (PAINAD, NRS), medication administration, and evaluation of pain treatment effectiveness.",
+      "keyTakeaway": "Delegate non-pharmacological comfort measures (back massage, repositioning) to UCAs for stable residents. Retain: pain assessment, medication administration, treatment effectiveness evaluation.",
+      "tags": ["delegation", "pain-management", "non-pharmacological", "UCA", "scope-of-practice", "LTC"]
+    },
+    {
+      "id": "GERO-P10-009",
+      "subtype": "prioritization",
+      "topicSlug": "polypharmacy-prioritization",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP"],
+      "tier": ["RN", "NP"],
+      "type": "Priority",
+      "difficulty": "hard",
+      "stem": "A nurse practitioner reviews medication lists for four patients during a medication safety audit at a community clinic. Which patient requires the MOST urgent medication review and intervention?",
+      "options": {
+        "A": "An 82-year-old woman taking 8 medications including amlodipine, metformin, atorvastatin, aspirin 81 mg, calcium, vitamin D, omeprazole, and sertraline 50 mg",
+        "B": "A 79-year-old man taking 12 medications including meperidine (Demerol) 50 mg TID, amitriptyline 75 mg at bedtime, promethazine PRN, and two benzodiazepines",
+        "C": "A 75-year-old woman with 5 medications including lisinopril, furosemide, metoprolol, potassium, and digoxin",
+        "D": "An 80-year-old man taking 7 medications including insulin glargine, metformin, losartan, bisoprolol, rosuvastatin, aspirin, and omeprazole"
+      },
+      "correctAnswer": "B",
+      "rationale": "Patient B has an extremely high-risk medication combination: (1) Meperidine (Demerol) — CONTRAINDICATED in older adults (Beers Criteria) due to normeperidine accumulation causing neurotoxicity (tremors, seizures); (2) Amitriptyline 75 mg — high anticholinergic burden (Beers Criteria PIM); (3) Promethazine — strong anticholinergic and dopamine antagonist (Beers Criteria PIM); (4) Two benzodiazepines — compound sedation and fall risk. This patient is at immediate risk for: falls, delirium, anticholinergic toxidrome, and meperidine neurotoxicity. This requires URGENT medication deprescribing review. Patient A's medications are all appropriate; Patients C and D have medications requiring routine monitoring but no immediate safety emergency.",
+      "distractorRationales": {
+        "A": "Incorrect. All 8 medications are appropriate for an older adult. Sertraline, aspirin, calcium, vitamin D, amlodipine, metformin, atorvastatin, and omeprazole are all acceptable in older adults without Beers Criteria concerns in this context.",
+        "C": "Incorrect. The digoxin + furosemide combination requires potassium monitoring and digoxin levels but represents standard heart failure management. Monitoring-intensive but not immediately unsafe.",
+        "D": "Incorrect. All 7 medications are appropriate for an older adult diabetic with hypertension."
+      },
+      "hint": "Which patient list contains Beers Criteria contraindicated medications creating an immediate safety crisis?",
+      "clinicalPearl": "Meperidine + amitriptyline + promethazine + two benzodiazepines = a patient who is sedated, anticholinergic, confused, and at extreme risk of a fatal fall. This is a polypharmacy emergency requiring same-day medication review and intervention.",
+      "examStrategy": "Polypharmacy prioritization: identify Beers Criteria medications (especially contraindicated ones: meperidine, amitriptyline, promethazine, benzodiazepines) vs appropriate but monitoring-intensive regimens. Beers contraindicated = urgent review.",
+      "keyTakeaway": "Beers Criteria PIMs (meperidine, amitriptyline, benzodiazepines, promethazine) in combination = polypharmacy emergency requiring urgent deprescribing. Prioritize patients with contraindicated medications over those with appropriate but complex regimens.",
+      "tags": ["polypharmacy", "Beers-criteria", "meperidine", "amitriptyline", "deprescribing", "prioritization", "NP"]
+    },
+    {
+      "id": "GERO-P10-010",
+      "subtype": "prioritization",
+      "topicSlug": "functional-decline-prioritization",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "Priority",
+      "difficulty": "moderate",
+      "stem": "A nurse receives morning reports from the night shift. Which observation requires PRIORITY nursing action?",
+      "options": {
+        "A": "An 81-year-old woman with mild dementia who has been waking at 0500 for the past week and having difficulty returning to sleep",
+        "B": "A 78-year-old man who has been in hospital for 4 days and has only been out of bed once since admission — for 20 minutes yesterday",
+        "C": "A 75-year-old woman post-fracture repair Day 7 who is eating 75% of her meals and reports appetite is improving",
+        "D": "An 83-year-old man with stable COPD who reports he prefers to rest in the morning"
+      },
+      "correctAnswer": "B",
+      "rationale": "An 80-year-old man who has been in hospital for 4 days and has only been out of bed for 20 minutes in 4 days is developing hospital-associated deconditioning (HAD). This is a preventable and serious complication: immobility for even 2–4 days can cause: (1) significant muscle loss (HAD); (2) orthostatic hypotension; (3) thromboembolism risk (DVT/PE); (4) pressure injuries; (5) constipation; (6) delirium risk. 4 days of near-complete bed rest in an older adult is a patient safety concern requiring IMMEDIATE nursing intervention: early mobilization, physical therapy consult, daily ambulation plan.",
+      "distractorRationales": {
+        "A": "Incorrect. Early morning waking in a patient with mild dementia may represent normal sleep aging changes or circadian disruption. This requires assessment and a non-pharmacological sleep plan but is not the immediate priority.",
+        "C": "Incorrect. Eating 75% of meals with improving appetite on Day 7 post-fracture is a POSITIVE sign — this patient is improving and does not require priority intervention.",
+        "D": "Incorrect. An COPD patient preferring to rest in the morning is stable. While early mobilization is important, this is a stated preference of a stable patient — not a urgent intervention priority compared to 4 days of immobility."
+      },
+      "hint": "Which patient is at ACTIVE risk from a developing, preventable complication?",
+      "clinicalPearl": "Hospital-associated deconditioning (HAD): 1 week of hospital bed rest causes functional decline equivalent to 10 years of aging in an 80-year-old. Studies show 40% of hospitalized older adults are in bed >80% of the time. Early mobilization (even sitting in chair) reduces HAD dramatically.",
+      "examStrategy": "Immobility prioritization: 4 days nearly complete bed rest = HAD in progress = act NOW. This is a developing preventable complication requiring immediate nursing intervention (early mobilization plan, PT referral). Stable improving patients = lower priority.",
+      "keyTakeaway": "4 days near-complete bed rest = hospital-associated deconditioning in progress. Immediate priority: early mobilization, PT consultation, daily ambulation plan. HAD is preventable but rapidly becomes irreversible.",
+      "tags": ["immobility", "deconditioning", "prioritization", "early-mobilization", "HAD", "hospital-complications"]
+    }
+  ]
+}

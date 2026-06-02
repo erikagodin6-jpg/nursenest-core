@@ -1,0 +1,375 @@
+{
+  "generatedAt": "2026-06-02T01:15:11.169Z",
+  "baseUrl": "http://127.0.0.1:3000",
+  "baseReachable": false,
+  "node": "v20.18.2",
+  "cpuCount": 8,
+  "loadAverage": [
+    9.16,
+    6.45,
+    4.74
+  ],
+  "memory": {
+    "rss": 55767040,
+    "heapTotal": 11657216,
+    "heapUsed": 7335240,
+    "external": 3254996,
+    "arrayBuffers": 65730
+  },
+  "env": [
+    {
+      "key": "DATABASE_URL",
+      "configured": false
+    },
+    {
+      "key": "DIRECT_URL",
+      "configured": false
+    },
+    {
+      "key": "AUTH_SECRET",
+      "configured": false
+    },
+    {
+      "key": "NEXTAUTH_SECRET",
+      "configured": false
+    },
+    {
+      "key": "STRIPE_SECRET_KEY",
+      "configured": false
+    },
+    {
+      "key": "STRIPE_WEBHOOK_SECRET",
+      "configured": false
+    },
+    {
+      "key": "RESEND_API_KEY",
+      "configured": false
+    },
+    {
+      "key": "TWILIO_ACCOUNT_SID",
+      "configured": false
+    },
+    {
+      "key": "SPACES_KEY",
+      "configured": false
+    },
+    {
+      "key": "SPACES_SECRET",
+      "configured": false
+    },
+    {
+      "key": "SPACES_BUCKET",
+      "configured": false
+    }
+  ],
+  "tools": {
+    "k6": false,
+    "playwright": true
+  },
+  "routeBaselines": [
+    {
+      "name": "Homepage",
+      "path": "/",
+      "files": [
+        "src/lib/marketing/load-paywall-home-stats-for-shell.ts",
+        "src/lib/marketing/public-home-stats-payload.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 0,
+        "findManyCallSites": 0,
+        "countCallSites": 0,
+        "groupByCallSites": 0,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 1,
+        "unstableCacheCallSites": 1,
+        "sourceKb": 4
+      },
+      "timing": null
+    },
+    {
+      "name": "Lessons Hub",
+      "path": "/app/lessons",
+      "files": [
+        "src/app/(app)/app/(learner)/lessons/page.tsx",
+        "src/lib/lessons/pathway-lesson-loader.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 29,
+        "findManyCallSites": 9,
+        "countCallSites": 5,
+        "groupByCallSites": 3,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 1,
+        "unstableCacheCallSites": 10,
+        "sourceKb": 127.9
+      },
+      "timing": null
+    },
+    {
+      "name": "Lesson Detail",
+      "path": "/app/lessons/acute-coronary-syndrome",
+      "files": [
+        "src/app/(app)/app/(learner)/lessons/[id]/page.tsx",
+        "src/lib/lessons/load-lesson-detail-user-context.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 6,
+        "findManyCallSites": 0,
+        "countCallSites": 0,
+        "groupByCallSites": 0,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 1,
+        "unstableCacheCallSites": 2,
+        "sourceKb": 56.5
+      },
+      "timing": null
+    },
+    {
+      "name": "Flashcards Launcher",
+      "path": "/app/flashcards",
+      "files": [
+        "src/app/(app)/app/(learner)/flashcards/page.tsx",
+        "src/lib/flashcards/load-flashcards-exam-inventory.server.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 4,
+        "findManyCallSites": 0,
+        "countCallSites": 2,
+        "groupByCallSites": 0,
+        "rawSqlCallSites": 3,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 0,
+        "unstableCacheCallSites": 0,
+        "sourceKb": 40.3
+      },
+      "timing": null
+    },
+    {
+      "name": "Flashcard Session Build",
+      "path": "/api/flashcards/custom-session",
+      "files": [
+        "src/app/api/flashcards/custom-session/route.ts",
+        "src/lib/flashcards/build-flashcard-custom-session.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 6,
+        "findManyCallSites": 6,
+        "countCallSites": 0,
+        "groupByCallSites": 0,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 0,
+        "unstableCacheCallSites": 0,
+        "sourceKb": 90.1
+      },
+      "timing": null
+    },
+    {
+      "name": "Practice Test Launcher",
+      "path": "/app/practice-tests",
+      "files": [
+        "src/app/(app)/app/(learner)/practice-tests/page.tsx",
+        "src/components/student/practice-tests-hub-client.tsx"
+      ],
+      "evidence": {
+        "prismaCallSites": 0,
+        "findManyCallSites": 0,
+        "countCallSites": 0,
+        "groupByCallSites": 0,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 2,
+        "dynamicImportCallSites": 0,
+        "unstableCacheCallSites": 0,
+        "sourceKb": 48.6
+      },
+      "timing": null
+    },
+    {
+      "name": "Practice Test Session Build",
+      "path": "/api/practice-tests",
+      "files": [
+        "src/app/api/practice-tests/route.ts",
+        "src/lib/practice-tests/pick-question-ids.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 6,
+        "findManyCallSites": 4,
+        "countCallSites": 0,
+        "groupByCallSites": 0,
+        "rawSqlCallSites": 1,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 0,
+        "unstableCacheCallSites": 0,
+        "sourceKb": 60.5
+      },
+      "timing": null
+    },
+    {
+      "name": "CAT Launcher",
+      "path": "/app/cat",
+      "files": [
+        "src/app/(app)/app/(learner)/cat/page.tsx",
+        "src/lib/practice-tests/cat-practice-readiness.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 0,
+        "findManyCallSites": 0,
+        "countCallSites": 0,
+        "groupByCallSites": 0,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 0,
+        "unstableCacheCallSites": 0,
+        "sourceKb": 13.1
+      },
+      "timing": null
+    },
+    {
+      "name": "CAT Question Load",
+      "path": "/api/practice-tests/cat-readiness",
+      "files": [
+        "src/app/api/practice-tests/cat-readiness/route.ts",
+        "src/lib/practice-tests/cat-session.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 3,
+        "findManyCallSites": 0,
+        "countCallSites": 0,
+        "groupByCallSites": 0,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 0,
+        "unstableCacheCallSites": 0,
+        "sourceKb": 50.6
+      },
+      "timing": null
+    },
+    {
+      "name": "Blog Hub",
+      "path": "/blog",
+      "files": [
+        "src/app/(marketing)/(default)/blog/page.tsx",
+        "src/lib/blog/safe-blog-queries.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 29,
+        "findManyCallSites": 15,
+        "countCallSites": 7,
+        "groupByCallSites": 1,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 0,
+        "unstableCacheCallSites": 2,
+        "sourceKb": 87.2
+      },
+      "timing": null
+    },
+    {
+      "name": "Blog Article",
+      "path": "/blog/acute-coronary-syndrome-nursing-care",
+      "files": [
+        "src/app/(marketing)/(default)/blog/[slug]/page.tsx",
+        "src/lib/blog/safe-blog-queries.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 29,
+        "findManyCallSites": 15,
+        "countCallSites": 7,
+        "groupByCallSites": 1,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 0,
+        "unstableCacheCallSites": 2,
+        "sourceKb": 89.1
+      },
+      "timing": null
+    },
+    {
+      "name": "Dashboard",
+      "path": "/app",
+      "files": [
+        "src/app/(app)/app/(learner)/page.tsx",
+        "src/lib/learner/load-learner-dashboard.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 9,
+        "findManyCallSites": 3,
+        "countCallSites": 2,
+        "groupByCallSites": 1,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 2,
+        "unstableCacheCallSites": 0,
+        "sourceKb": 67.5
+      },
+      "timing": null
+    },
+    {
+      "name": "Report Cards",
+      "path": "/app/account/progress",
+      "files": [
+        "src/app/(app)/app/(learner)/account/_lib/learner-report-card-route.tsx",
+        "src/lib/learner/load-report-card-data.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 3,
+        "findManyCallSites": 3,
+        "countCallSites": 0,
+        "groupByCallSites": 0,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 1,
+        "unstableCacheCallSites": 0,
+        "sourceKb": 33.9
+      },
+      "timing": null
+    },
+    {
+      "name": "Study Plan",
+      "path": "/app/study-plan",
+      "files": [
+        "src/app/(app)/app/(learner)/study-plan/page.tsx",
+        "src/lib/learner/load-study-planner-context.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 0,
+        "findManyCallSites": 0,
+        "countCallSites": 0,
+        "groupByCallSites": 0,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 0,
+        "unstableCacheCallSites": 0,
+        "sourceKb": 9.7
+      },
+      "timing": null
+    },
+    {
+      "name": "Analytics",
+      "path": "/app/account/analytics",
+      "files": [
+        "src/app/(app)/app/(learner)/account/analytics/page.tsx",
+        "src/lib/study/analytics-load-result.ts"
+      ],
+      "evidence": {
+        "prismaCallSites": 0,
+        "findManyCallSites": 0,
+        "countCallSites": 0,
+        "groupByCallSites": 0,
+        "rawSqlCallSites": 0,
+        "fetchCallSites": 0,
+        "dynamicImportCallSites": 0,
+        "unstableCacheCallSites": 0,
+        "sourceKb": 9.7
+      },
+      "timing": null
+    }
+  ],
+  "loadResults": [],
+  "flashcardStress": null,
+  "catStress": null,
+  "memoryLeak": null
+}

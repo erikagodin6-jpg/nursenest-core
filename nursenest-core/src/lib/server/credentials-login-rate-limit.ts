@@ -7,6 +7,70 @@ type RedisFixedWindowClient = {
 
 type RedisWithDel = RedisFixedWindowClient & { del: (key: string) => Promise<unknown> };
 
+// ─── Process-local fallback limiter ──────────────────────────────────────────
+// Active when Redis is unavailable. Uses fixed-window semantics identical to the
+// Redis path. Bounded to prevent unbounded memory growth under attack traffic.
+//
+// Design constraints:
+//   - MAX_BUCKETS limits total memory regardless of attacker IP diversity
+//   - When at capacity, oldest bucket is evicted (LRU via Map insertion order)
+//   - Fallback limit is 60 % of the Redis limit — deliberately MORE conservative
+//     so an outage does not silently relax protection
+//   - Intentionally NOT shared with the Redis path; the two are independent
+
+const FALLBACK_MAX_BUCKETS = parseEnvPositiveInt(
+  "NN_RL_FALLBACK_MAX_BUCKETS",
+  2_000,
+);
+
+// Ratio applied to the Redis max when computing the fallback ceiling.
+// 0.6 = 60 % of the configured Redis limit. Configurable but capped at 1.0.
+function fallbackLimitRatio(): number {
+  const raw = process.env.NN_RL_FALLBACK_RATIO?.trim();
+  if (!raw) return 0.6;
+  const n = Number.parseFloat(raw);
+  if (!Number.isFinite(n) || n <= 0) return 0.6;
+  return Math.min(1.0, n);
+}
+
+type FallbackBucket = { count: number; resetsAt: number };
+const fallbackStore = new Map<string, FallbackBucket>();
+
+function fallbackEvictOldestIfNeeded(): void {
+  if (fallbackStore.size < FALLBACK_MAX_BUCKETS) return;
+  // Map iterates in insertion order — first key is the oldest
+  const oldest = fallbackStore.keys().next().value as string | undefined;
+  if (oldest !== undefined) fallbackStore.delete(oldest);
+}
+
+function checkFallbackFixedWindow(
+  key: string,
+  windowMs: number,
+  max: number,
+): { ok: boolean; remaining: number } {
+  const now = Date.now();
+  const effectiveMax = Math.max(1, Math.floor(max * fallbackLimitRatio()));
+  const existing = fallbackStore.get(key);
+
+  if (existing && now < existing.resetsAt) {
+    existing.count += 1;
+    const ok = existing.count <= effectiveMax;
+    return { ok, remaining: Math.max(0, effectiveMax - existing.count) };
+  }
+
+  // New or expired window — evict oldest if at cap before inserting
+  if (!existing) fallbackEvictOldestIfNeeded();
+  fallbackStore.set(key, { count: 1, resetsAt: now + windowMs });
+  return { ok: true, remaining: effectiveMax - 1 };
+}
+
+function parseEnvPositiveInt(name: string, fallback: number): number {
+  const raw = process.env[name]?.trim();
+  if (!raw) return fallback;
+  const n = Number.parseInt(raw, 10);
+  return Number.isFinite(n) && n >= 1 ? n : fallback;
+}
+
 function fixedWindowTtlSeconds(windowMs: number): number {
   return Math.max(1, Math.ceil(windowMs / 1000));
 }
@@ -16,13 +80,6 @@ const CREDENTIALS_LOGIN_COMBO_WINDOW_MS = 60_000;
 
 /** Redis key prefix for credentials RL rows — operator / SCAN scripts must stay aligned. */
 export const CREDENTIALS_LOGIN_RATE_LIMIT_KEY_PREFIX = "ratelimit:auth:credentials_login:" as const;
-
-function parseEnvPositiveInt(name: string, fallback: number): number {
-  const raw = process.env[name]?.trim();
-  if (!raw) return fallback;
-  const n = Number.parseInt(raw, 10);
-  return Number.isFinite(n) && n >= 1 ? n : fallback;
-}
 
 function credentialsLoginComboMax(): number {
   if (process.env.NODE_ENV !== "production") {
@@ -136,8 +193,16 @@ export async function checkRedisFixedWindowLimit(
       redis = null;
     }
   }
+
+  // Redis unavailable — engage process-local fallback limiter.
+  // The fallback applies a stricter ceiling (60 % of the Redis max by default)
+  // so protection remains active rather than silently bypassing limits.
   if (!redis) {
-    return { ok: true, remaining: opts.max };
+    safeServerLog("security", "rl_fallback_active", {
+      keyPrefix: key.slice(0, 48),
+      reason: "redis_unavailable",
+    });
+    return checkFallbackFixedWindow(key, opts.windowMs, opts.max);
   }
 
   try {
@@ -153,10 +218,12 @@ export async function checkRedisFixedWindowLimit(
       remaining: Math.max(0, opts.max - safeCount),
     };
   } catch (error) {
-    safeServerLog("security", "redis_fixed_window_fail_open", {
+    // Redis call failed mid-flight — engage fallback rather than failing open.
+    safeServerLog("security", "rl_fallback_active", {
       keyPrefix: key.slice(0, 48),
+      reason: "redis_error",
       detail: error instanceof Error ? error.message.slice(0, 160) : "unknown",
     });
-    return { ok: true, remaining: opts.max };
+    return checkFallbackFixedWindow(key, opts.windowMs, opts.max);
   }
 }

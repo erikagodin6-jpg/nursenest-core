@@ -20,7 +20,8 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { buildMarketingTierHubStrip } from "@/lib/navigation/marketing-tier-hub-strip";
-import { SiteHeader, type SiteHeaderProps, type SiteHeaderPrecomputedNav } from "@/components/layout/site-header";
+import { SiteHeader } from "@/components/layout/site-header";
+import type { SiteHeaderProps, SiteHeaderPrecomputedNav } from "@/features/layout/site-header";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { readOptionalMarketingRegionToggleForCountry } from "@/lib/marketing/read-optional-marketing-region-cookie.server";
 

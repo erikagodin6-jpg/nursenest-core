@@ -1,0 +1,41 @@
+[
+  {
+    "id": "GERO-FC-P5-001",
+    "packageId": "pkg5-pain",
+    "front": "What are the 5 domains of the PAINAD scale and what total score indicates moderate pain?",
+    "back": "PAINAD (Pain Assessment in Advanced Dementia) — 5 domains, 0–2 each (total 0–10):\n\n1. BREATHING — normal / laboured / noisy\n2. NEGATIVE VOCALIZATION — none / occasional moan / repeated moaning/screaming\n3. FACIAL EXPRESSION — smiling/neutral / sad/furrowed / grimacing\n4. BODY LANGUAGE — relaxed / tense / rigid/fists clenched/knees drawn up\n5. CONSOLABILITY — no need / consoled by voice/touch / not consolable\n\nScoring:\n0–2 = No pain / mild pain\n3–5 = MODERATE PAIN\n6–10 = SEVERE PAIN",
+    "hint": "5 PAINAD domains: Breathing, Vocalization, Facial, Body, Consolability. 3–5 = moderate.",
+    "explanation": "The PAINAD is validated for patients with severe dementia who cannot self-report. Assess at REST and during ACTIVITY (pain often only present with movement). Score ≥3 warrants analgesic intervention and reassessment after treatment to evaluate effectiveness.",
+    "clinicalPearl": "Consolability is the most unique domain of PAINAD: a patient who CANNOT be consoled by voice or gentle touch despite attempts is in severe distress. This single indicator is a sensitive signal of significant pain or emotional suffering requiring immediate intervention.",
+    "tier": "RPN",
+    "topicKey": "nonverbal-pain-assessment",
+    "categorySlug": "pain-older-adults",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P5-002",
+    "packageId": "pkg5-pain",
+    "front": "What are the 5 barriers to pain reporting in older adults?",
+    "back": "1. STOICISM: 'I don't want to complain' — generational belief that pain should be endured\n\n2. BURDENING: 'I don't want to bother the nurses' — fear of being labeled 'difficult'\n\n3. FEAR: Fear of addiction to pain medications; fear of further tests\n\n4. COGNITIVE IMPAIRMENT: Cannot accurately describe or rate pain\n\n5. BELIEF: 'Pain is just part of getting old' — ageist belief internalized by patient\n\nNursing response: Assess behaviors; ask about each barrier; normalize reporting; reassure about medications",
+    "hint": "5 barriers: stoicism, burdening, fear, cognitive impairment, belief that pain is normal.",
+    "explanation": "Even when a patient verbalizes 'I'm fine,' behavioral indicators (guarding, facial expression, reduced activity) are valid pain assessment data. Never accept verbal denial alone when behavioral indicators are present. Address each barrier specifically: 'I know sometimes people worry about taking too many medications — can I tell you about safe options?'",
+    "clinicalPearl": "The belief that 'pain is part of getting old' is internalized ageism that causes suffering. Challenge it gently: 'Many people think pain is normal with age, but we have good ways to manage it. You deserve to be comfortable.'",
+    "tier": "RPN",
+    "topicKey": "pain-assessment-older-adults",
+    "categorySlug": "pain-older-adults",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P5-003",
+    "packageId": "pkg5-pain",
+    "front": "What is the WHO analgesic ladder and how is it applied in older adults?",
+    "back": "WHO Analgesic Ladder (3 steps):\nStep 1: Non-opioid ± adjuvant (acetaminophen, NSAIDs, topical)\nStep 2: Mild opioid ± non-opioid (tramadol, codeine — CAUTION in older adults)\nStep 3: Strong opioid ± non-opioid (morphine, oxycodone, hydromorphone)\n\nOlder adult modifications:\n• Step 1 preferred: Acetaminophen up to 3 g/day (not 4 g); topical diclofenac\n• NSAIDs: Caution/avoid (renal, cardiac, GI risk)\n• Step 2: Codeine AVOID (CYP2D6 variability); Tramadol CAUTION (serotonin risk, seizure risk)\n• Step 3: Start 25–50% lower doses; titrate slowly; always add laxative prophylaxis",
+    "hint": "WHO ladder in older adults: prefer acetaminophen + topical; avoid codeine; reduce opioid doses 50%.",
+    "explanation": "Older adults with renal, cardiac, or hepatic impairment require additional modifications. Opioid initiation always requires: low starting dose, slow titration, constipation prophylaxis (laxative ordered simultaneously — opioids without laxative = guaranteed constipation = fecal impaction risk), fall and delirium monitoring.",
+    "clinicalPearl": "Constipation from opioids does NOT resolve with time (unlike sedation and nausea, which typically improve with tolerance). Every opioid prescription in an older adult requires a concurrent laxative. PEG 3350 (MiraLax) or senna are preferred first-line laxatives for opioid-induced constipation.",
+    "tier": "RN",
+    "topicKey": "pharmacologic-pain-management",
+    "categorySlug": "pain-older-adults",
+    "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"]
+  }
+]

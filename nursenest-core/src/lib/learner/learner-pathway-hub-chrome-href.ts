@@ -1,4 +1,5 @@
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
 /**
@@ -9,12 +10,8 @@ export function learnerPathwayHubChromeHref(pathway: ExamPathwayDefinition): str
   return buildExamPathwayPath(pathway);
 }
 
-/**
- * Tier-based hub when DB has no learnerPath yet. Loads pathway rows via dynamic import so the
- * learner shell graph does not statically depend on the full exam product facade.
- */
+/** Tier-based hub when DB has no learnerPath yet. */
 export async function learnerPathwayHubChromeHrefForTierFallback(tier: string): Promise<string | null> {
-  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const t = tier.toUpperCase();
   if (t === "RN") {
     const p = getExamPathwayById("ca-rn-nclex-rn");

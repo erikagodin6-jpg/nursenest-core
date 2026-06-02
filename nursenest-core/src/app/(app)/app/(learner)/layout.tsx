@@ -83,6 +83,8 @@ import { ContinueStudyingCardServer } from "@/components/workspace/continue-stud
 import { ContinueStudyingCardSkeleton } from "@/components/workspace/continue-studying-card";
 import type { ProgramOption } from "@/components/workspace/program-switcher";
 import { resolveNpCertificationPathwayId } from "@/lib/np/np-certification-selection";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { getSessionHubLabel } from "@/lib/learner/session-hub-label";
 import { resolveLearnerRequestPathname } from "@/lib/learner/resolve-learner-request-pathname";
 import { LearnerShellDevDiagnostics } from "@/components/dev/learner-shell-dev-diagnostics";
@@ -273,16 +275,16 @@ const LearnerShellLayout = traceLayout(
   let workspacePrograms: ProgramOption[] = [];
   if (entitlement !== "error" && entitlement.hasAccess) {
     try {
-      const { listPathwaysCompatibleWithSubscription } = await import(
-        "@/lib/exam-pathways/pathway-entitlements"
-      );
       const pathways = await listPathwaysCompatibleWithSubscription(entitlement);
+      const roleShortLabel: Record<string, string> = {
+        rn: "RN", rpn: "RPN", lpn: "LPN", np: "NP", allied: "Allied",
+      };
       workspacePrograms = pathways
         .filter((p) => p.status !== "hidden" && p.status !== "upcoming")
         .map((p) => ({
           id: p.id,
-          label: p.shortLabel ?? p.id,
-          shortLabel: (p.shortLabel ?? p.id).slice(0, 8),
+          label: p.shortName,
+          shortLabel: roleShortLabel[p.roleTrack] ?? p.shortName.slice(0, 5),
         }));
     } catch {
       workspacePrograms = [];
@@ -360,7 +362,6 @@ const LearnerShellLayout = traceLayout(
       : null;
   const effectivePathwayId = selectedNpPathwayId ?? pathwayId;
   if (selectedNpPathwayId) {
-    const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
     const selected = getExamPathwayById(selectedNpPathwayId);
     if (pathwayVisibleForLearnerChrome(selected)) {
       pathwayHubHref = learnerPathwayHubChromeHref(selected);

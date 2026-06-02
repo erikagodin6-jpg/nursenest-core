@@ -1,0 +1,41 @@
+[
+  {
+    "id": "GERO-FC-P3-001",
+    "packageId": "pkg3-psychosocial",
+    "front": "What are the 6 types of elder abuse and which is most common?",
+    "back": "6 Types of Elder Abuse:\n1. PHYSICAL — hitting, slapping, restraining, force-feeding\n2. EMOTIONAL/PSYCHOLOGICAL — threats, humiliation, intimidation, isolation\n3. FINANCIAL — theft, fraud, exploitation of power of attorney\n4. SEXUAL — non-consensual sexual contact\n5. NEGLECT — failure to provide necessary care (most common overall)\n6. ABANDONMENT — desertion by caregiver\n\nMost common: NEGLECT (often unintentional)\nMost under-reported: ALL TYPES\nPrevalence: ~10% of older adults; higher with cognitive impairment\n\nNurses are MANDATORY REPORTERS of suspected abuse",
+    "hint": "6 types: Physical, Emotional, Financial, Sexual, Neglect (most common), Abandonment.",
+    "explanation": "Perpetrators are most commonly: family members (especially adult children), followed by spouses/partners, then formal caregivers. Risk factors for victim: dementia, social isolation, physical dependence. Risk factors for perpetrator: financial stress, substance abuse, mental illness, caregiver burnout. Report on REASONABLE SUSPICION — not confirmed proof.",
+    "clinicalPearl": "Financial abuse is the most rapidly growing type and is often accompanied by neglect. Signs: unpaid bills despite adequate income, missing valuables, new POA changes, caregiver controlling all finances. Always ask patients about finances when the caregiver is not present.",
+    "tier": "RPN",
+    "topicKey": "elder-abuse",
+    "categorySlug": "psychosocial-aging",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P3-002",
+    "packageId": "pkg3-psychosocial",
+    "front": "What distinguishes normal grief from complicated grief (prolonged grief disorder)?",
+    "back": "NORMAL GRIEF:\n• Time-limited (acute grief most intense first 2–6 months)\n• Fluctuating — periods of sadness interspersed with functional times\n• Preservation of basic self-care (eating, hygiene)\n• Gradual return to activities and social engagement\n• Able to think of deceased with bittersweet memories over time\n\nCOMPLICATED GRIEF (Prolonged Grief Disorder):\n• Persistent intense grief >12 months (ICD-11 criteria: 6+ months)\n• Functional impairment in daily life\n• Inability to accept the reality of the loss\n• Prolonged difficulty engaging with life or future plans\n• Significant weight loss, insomnia, social withdrawal\n• Depression symptoms (PHQ-9 ≥10) or suicidal ideation",
+    "hint": "Normal grief: time-limited, fluctuating. Complicated grief: persistent >6–12 months + functional impairment.",
+    "explanation": "Widower syndrome: older men who lose spouses face particularly high risk of complicated grief, rapid health deterioration, and suicide — especially within the first year of bereavement. Referral to bereavement counselling, grief support groups, and mental health services is essential. A positive GDS screen in the context of bereavement always warrants active management.",
+    "clinicalPearl": "Complicated grief responds poorly to standard antidepressants alone. Evidence-based treatment: Complicated Grief Treatment (CGT) — a structured psychotherapy designed for prolonged grief disorder.",
+    "tier": "RPN",
+    "topicKey": "loss-grief",
+    "categorySlug": "psychosocial-aging",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P3-003",
+    "packageId": "pkg3-psychosocial",
+    "front": "What is caregiver burden and what are 3 validated interventions?",
+    "back": "Caregiver Burden: The physical, psychological, social, and financial toll experienced by family caregivers of older adults, particularly those with dementia\n\nPrevalence: 50–75% of dementia caregivers experience clinically significant burden\n\n3 Evidence-Based Interventions:\n1. RESPITE CARE — temporary relief from caregiving (in-home, adult day programs, short-stay LTC)\n2. CAREGIVER SUPPORT GROUPS — peer support, education, practical strategies\n3. PSYCHOEDUCATION PROGRAMS — disease-specific education + skill building (e.g., Alzheimer Society programs)\n\nScreen with: Zarit Burden Interview or similar validated tool",
+    "hint": "3 key interventions: respite care, support groups, psychoeducation.",
+    "explanation": "Nursing role: screen caregivers at every visit; provide validation and emotional support; educate about caregiver burnout as a health risk; connect to community resources proactively (before crisis). Family caregivers who receive support are less likely to request early institutionalization and provide better care.",
+    "clinicalPearl": "The Alzheimer Society runs free and evidence-based psychoeducation and support programs in most Canadian cities. These programs are the most effective single intervention for reducing caregiver burden in dementia caregiving. Connecting families to these resources should be universal.",
+    "tier": "RPN",
+    "topicKey": "caregiver-burden",
+    "categorySlug": "psychosocial-aging",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  }
+]

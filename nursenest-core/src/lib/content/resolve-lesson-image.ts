@@ -33,6 +33,7 @@ import {
   findInventoryObjectKeyForBasename,
   normalizeLessonImageBasename,
   resolveInventoryLessonImageKey,
+  stripPathwayLessonSlugPrefix,
 } from "@/lib/content/lesson-image-inventory-match";
 
 export type LessonImageSource =
@@ -96,6 +97,19 @@ function normalizeToBasename(raw: string): string {
   return raw.trim().toLowerCase();
 }
 
+function normalizeInventoryObjectKey(raw: string): string {
+  return raw.trim().replace(/^\/+/, "");
+}
+
+function inventoryContainsObjectKey(
+  objectKey: string | null | undefined,
+  inventoryKeys: readonly string[],
+): objectKey is string {
+  if (!objectKey) return false;
+  const normalizedObjectKey = normalizeInventoryObjectKey(objectKey);
+  return inventoryKeys.some((key) => normalizeInventoryObjectKey(key) === normalizedObjectKey);
+}
+
 /**
  * Resolve a lesson image URL using safe, deterministic matching.
  * Returns `{ url: null, source: "none" }` when no safe match exists.
@@ -109,9 +123,11 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
     return guardResolution({ url: null, objectKey: null, alt, source: "none" }, alt);
   }
 
+  const inventoryKeys = getInventoryKeys();
+
   // 1. Manual override — always wins.
   const overrideKey = LESSON_IMAGE_OVERRIDES[slug] ?? LESSON_IMAGE_OVERRIDES[query.slug.trim()];
-  if (overrideKey) {
+  if (inventoryContainsObjectKey(overrideKey, inventoryKeys)) {
     return guardResolution(
       {
         url: publicCdnUrlForObjectKey(overrideKey),
@@ -121,6 +137,22 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
       },
       alt,
     );
+  }
+
+  const strippedSlug = stripPathwayLessonSlugPrefix(slug);
+  if (strippedSlug && strippedSlug !== slug) {
+    const strippedOverrideKey = LESSON_IMAGE_OVERRIDES[strippedSlug];
+    if (inventoryContainsObjectKey(strippedOverrideKey, inventoryKeys)) {
+      return guardResolution(
+        {
+          url: publicCdnUrlForObjectKey(strippedOverrideKey),
+          objectKey: strippedOverrideKey,
+          alt,
+          source: "override",
+        },
+        alt,
+      );
+    }
   }
 
   const clinicalIllustration = resolveCardiovascularClinicalIllustration({
@@ -146,7 +178,10 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
     slug,
     topicSlug: query.topicSlug,
   });
-  if (mapSlugMatch?.source === "map_slug") {
+  if (
+    mapSlugMatch?.source === "map_slug" &&
+    inventoryContainsObjectKey(mapSlugMatch.objectKey, inventoryKeys)
+  ) {
     return guardResolution(
       {
         url: publicCdnUrlForObjectKey(mapSlugMatch.objectKey),
@@ -157,8 +192,6 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
       alt,
     );
   }
-
-  const inventoryKeys = getInventoryKeys();
 
   const slugKey = findInventoryObjectKeyForBasename(slug, inventoryKeys);
   if (slugKey) {
@@ -245,7 +278,11 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
     topicSlug: query.topicSlug,
     bodySystem: query.bodySystem,
   });
-  if (mapFuzzyMatch && mapFuzzyMatch.source !== "map_slug") {
+  if (
+    mapFuzzyMatch &&
+    mapFuzzyMatch.source !== "map_slug" &&
+    inventoryContainsObjectKey(mapFuzzyMatch.objectKey, inventoryKeys)
+  ) {
     return guardResolution(
       {
         url: publicCdnUrlForObjectKey(mapFuzzyMatch.objectKey),

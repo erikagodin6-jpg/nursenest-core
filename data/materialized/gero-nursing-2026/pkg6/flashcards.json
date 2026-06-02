@@ -1,0 +1,41 @@
+[
+  {
+    "id": "GERO-FC-P6-001",
+    "packageId": "pkg6-infection",
+    "front": "What are the atypical infection presentations in older adults — what replaces classic signs?",
+    "back": "CLASSIC signs (often ABSENT in older adults):\n• Fever ≥38.5°C\n• Leukocytosis (elevated WBC)\n• Localizing symptoms (dysuria for UTI, cough for pneumonia)\n\nATYPICAL presentations that REPLACE classic signs:\n• ACUTE CONFUSION / DELIRIUM (most common)\n• Functional decline (suddenly not getting up, stopping activities)\n• Anorexia / refusal to eat\n• Falls (new or increased)\n• Hypotension (relative or absolute)\n• Lethargy / hypersomnia\n• Urinary incontinence (new onset)\n\nReason: Immunosenescence + blunted thermoregulatory response + reduced inflammatory signaling",
+    "hint": "Atypical = confusion, falls, anorexia, functional decline. Classic signs often ABSENT in older adults.",
+    "explanation": "The single most important clinical principle: in older adults, ANY acute change from baseline — regardless of whether fever or leukocytosis is present — must be investigated as a possible infection. The threshold for investigation must be LOWER in older adults, not higher.",
+    "clinicalPearl": "A frail 85-year-old with a UTI may have a temperature of 36.9°C (normal by standard criteria) but a temperature of 36.0°C baseline — representing a 0.9°C increase. Combined with new confusion, this IS a significant presentation requiring investigation.",
+    "tier": "RPN",
+    "topicKey": "atypical-infection-presentation",
+    "categorySlug": "infection-aging",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P6-002",
+    "packageId": "pkg6-infection",
+    "front": "What is asymptomatic bacteriuria (ASB) and when should it be treated in older adults?",
+    "back": "ASB: Bacteria present in urine (positive UA/culture) WITHOUT symptoms\n\nIN OLDER ADULTS: ASB prevalence is HIGH:\n• 20–50% of women >80 years have ASB\n• 10–40% of men >80 years have ASB\n\nDO NOT TREAT ASB in:\n• Non-pregnant women (all ages)\n• Men without urological procedure\n• Residents of LTC facilities\n\nWHEN symptoms are present → TREAT:\n• New confusion, falls, anorexia, functional decline + positive UA = SYMPTOMATIC UTI → antibiotics indicated",
+    "hint": "ASB = bacteria in urine, no symptoms = DO NOT TREAT. Symptoms + positive UA = treat.",
+    "explanation": "Overly treating ASB in older adults causes: antibiotic resistance, C. difficile colitis, adverse drug effects, and no clinical benefit. The key question: is there an ACUTE CHANGE from baseline? If YES + positive UA → symptomatic UTI. If NO change in clinical status + positive UA → likely ASB → do not treat.",
+    "clinicalPearl": "Many older adults in LTC have chronic positive urinalyses. A positive UA alone in the absence of acute clinical change does NOT warrant antibiotics. The pressure to treat 'because the UA is positive' is the #1 driver of inappropriate antibiotic use in LTC settings.",
+    "tier": "RPN",
+    "topicKey": "UTI-older-adults",
+    "categorySlug": "infection-aging",
+    "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"]
+  },
+  {
+    "id": "GERO-FC-P6-003",
+    "packageId": "pkg6-infection",
+    "front": "What are the Sepsis-3 criteria and how does sepsis present differently in older adults?",
+    "back": "Sepsis-3: Suspected infection + life-threatening organ dysfunction (SOFA score ≥2)\n\nqSOFA (quick bedside screen): 2 of 3:\n• RR ≥22\n• Altered mentation\n• Systolic BP ≤100\n\nOlder adult differences:\n• Fever often ABSENT (blunted thermoregulation)\n• Tachycardia may be ABSENT (beta-blockers, pacemaker, reduced cardiac reserve)\n• WBC may be NORMAL or LOW (immunosenescence)\n• Lactate ELEVATED even without classic shock signs → most important marker\n• Confusion/delirium often FIRST sign of sepsis",
+    "hint": "Sepsis in older adults: no fever, no leukocytosis, confusion may be the only sign. Lactate is key.",
+    "explanation": "Septic shock definition: vasopressors needed to maintain MAP ≥65 + lactate >2 mmol/L despite adequate resuscitation. In older adults with limited cardiac reserve, 'cryptic shock' (hemodynamically normal appearance but elevated lactate) is dangerous and often missed. Lactate must be drawn in any older adult with suspected sepsis.",
+    "clinicalPearl": "Lactate ≥4 mmol/L in an older adult with suspected infection = septic shock until proven otherwise, REGARDLESS of blood pressure. Some older adults maintain BP through compensatory mechanisms until very late — elevated lactate is an earlier and more sensitive indicator.",
+    "tier": "RN",
+    "topicKey": "sepsis-recognition",
+    "categorySlug": "infection-aging",
+    "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"]
+  }
+]

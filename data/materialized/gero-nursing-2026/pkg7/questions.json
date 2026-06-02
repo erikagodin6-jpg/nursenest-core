@@ -1,0 +1,144 @@
+{
+  "packageId": "pkg7-medications",
+  "title": "Medications & Polypharmacy in Older Adults — Question Bank",
+  "generatedDate": "2026-06-02",
+  "questionCount": 500,
+  "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+  "questions": [
+    {
+      "id": "GERO-P7-001",
+      "topicSlug": "beers-criteria",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is reviewing the medication list for an 84-year-old woman in a long-term care facility. She is taking: metformin 500 mg BID, furosemide 40 mg daily, amlodipine 5 mg daily, diphenhydramine 25 mg nightly for sleep, and lorazepam 0.5 mg PRN for anxiety. Which TWO medications are MOST concerning and should be flagged for prescriber review?",
+      "options": {
+        "A": "Metformin and furosemide",
+        "B": "Diphenhydramine and lorazepam",
+        "C": "Amlodipine and furosemide",
+        "D": "Metformin and amlodipine"
+      },
+      "correctAnswer": "B",
+      "rationale": "Both diphenhydramine (Benadryl) and lorazepam (a benzodiazepine) are specifically listed on the American Geriatrics Society Beers Criteria as POTENTIALLY INAPPROPRIATE MEDICATIONS (PIMs) in older adults. Diphenhydramine is a first-generation antihistamine with strong anticholinergic properties — causes confusion, dry mouth, urinary retention, constipation, increased fall risk, and worsened cognitive function in older adults. Lorazepam (and all benzodiazepines) increase fall risk, cause cognitive impairment, worsen delirium, and are associated with paradoxical agitation in older adults. Both should be flagged for deprescribing review with the prescriber. Metformin, furosemide, and amlodipine are appropriate medications with standard monitoring requirements.",
+      "distractorRationales": {
+        "A": "Incorrect. Metformin is first-line for type 2 diabetes and is appropriate in older adults with adequate renal function (hold if eGFR <30). Furosemide is appropriate for fluid management with monitoring.",
+        "C": "Incorrect. Amlodipine is a calcium channel blocker and appropriate antihypertensive in older adults with good tolerability. Furosemide is appropriate for fluid management.",
+        "D": "Incorrect. Both metformin and amlodipine are appropriate medications for their indications in older adults with monitoring."
+      },
+      "hint": "Which medications are specifically listed on the Beers Criteria as inappropriate in older adults? Think anticholinergics and benzodiazepines.",
+      "clinicalPearl": "Diphenhydramine (Benadryl, Tylenol PM, Advil PM, ZzzQuil) is sold OTC and many older adults use it for sleep. It is one of the most dangerous routine medications in older adults — strongly anticholinergic, increases delirium risk, worsens cognition. Education is essential.",
+      "examStrategy": "Beers Criteria PIMs: memorize the major categories — benzodiazepines, anticholinergics (diphenhydramine, oxybutynin, dicyclomine), first-generation antihistamines, meperidine, NSAIDs (chronic), hypnotics (zolpidem), muscle relaxants (cyclobenzaprine). These appear frequently on NCLEX and REx-PN.",
+      "keyTakeaway": "Beers Criteria: diphenhydramine (anticholinergic) + benzodiazepines (lorazepam) = PIMs in older adults. Both cause: cognitive impairment, falls, confusion. Flag for deprescribing review.",
+      "tags": ["Beers-criteria", "PIMs", "diphenhydramine", "lorazepam", "polypharmacy", "deprescribing"]
+    },
+    {
+      "id": "GERO-P7-002",
+      "topicSlug": "polypharmacy",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "An 82-year-old man takes 12 different medications for multiple chronic conditions. He is admitted with a hip fracture after a fall. The emergency nurse reviews his medications and notes he takes: three antihypertensives, two benzodiazepines (ordered by different physicians), a tricyclic antidepressant (amitriptyline), tamsulosin, oxycodone PRN, and furosemide. Which medication combination is MOST responsible for his fall risk?",
+      "options": {
+        "A": "Furosemide and antihypertensives",
+        "B": "Multiple antihypertensives, benzodiazepines, amitriptyline, and tamsulosin — all contributing to orthostatic hypotension, sedation, and anticholinergic effects",
+        "C": "Oxycodone and benzodiazepines only",
+        "D": "The number of medications (12) is itself the primary fall risk factor"
+      },
+      "correctAnswer": "B",
+      "rationale": "Multiple medications contribute synergistically to fall risk: (1) THREE antihypertensives + tamsulosin (alpha-blocker for BPH) = orthostatic hypotension; (2) TWO benzodiazepines = sedation, impaired balance, impaired reflexes; (3) Amitriptyline (tricyclic antidepressant — Beers Criteria PIM) = strong anticholinergic effects (confusion, urinary retention driving nighttime trips to the bathroom) + orthostatic hypotension; (4) Oxycodone + benzodiazepines = compound respiratory depression + sedation (dangerous combination even in older adults). The COMBINATION of multiple classes is more dangerous than any individual medication.",
+      "distractorRationales": {
+        "A": "Incorrect. Furosemide alone causes volume depletion contributing to orthostasis, but the larger concern is the combination of multiple antihypertensives + tamsulosin + amitriptyline + benzodiazepines.",
+        "C": "Incorrect. Opioid + benzodiazepine is a high-risk combination but is not the full picture. Multiple medication classes contributing to orthostasis, sedation, and anticholinergic effects are the comprehensive answer.",
+        "D": "Incorrect. The number of medications alone does not define fall risk — it is the specific pharmacological effects of those medications. Polypharmacy increases risk, but identifying WHICH medications is the clinical priority."
+      },
+      "hint": "Multiple antihypertensives + alpha-blocker + TCA + two benzodiazepines + opioid = which pharmacological effects converge to cause falls?",
+      "clinicalPearl": "The polypharmacy cascade: a side effect of one medication (e.g., orthostatic hypotension from antihypertensives) leads to a new symptom, which triggers a new prescription (e.g., midodrine for orthostatic hypotension), which has its own side effects. Identifying and stopping the causative medication is better than prescribing to treat the side effect.",
+      "examStrategy": "Polypharmacy + falls: identify each medication class and its contribution to fall risk: antihypertensives + alpha-blockers = orthostasis; benzodiazepines + opioids = sedation; anticholinergics = confusion + urinary retention. Combination > individual risk.",
+      "keyTakeaway": "Polypharmacy fall risk = combination effects of antihypertensives, benzodiazepines, anticholinergics, alpha-blockers, opioids. Comprehensive medication review with deprescribing is essential post-fall.",
+      "tags": ["polypharmacy", "falls", "medication-review", "benzodiazepines", "amitriptyline", "tamsulosin", "orthostatic-hypotension"]
+    },
+    {
+      "id": "GERO-P7-003",
+      "topicSlug": "anticholinergic-burden",
+      "examTargets": ["NCLEX-RN", "CNPLE", "FNP", "AGPCNP"],
+      "tier": ["RN", "NP"],
+      "type": "MCQ",
+      "difficulty": "hard",
+      "stem": "A 77-year-old woman with overactive bladder, depression, seasonal allergies, and insomnia takes: oxybutynin 5 mg TID, paroxetine 20 mg daily, diphenhydramine 25 mg nightly, and amitriptyline 25 mg nightly. She presents with new confusion, dry mouth, constipation, and urinary retention. Which mechanism BEST explains this presentation?",
+      "options": {
+        "A": "Serotonin syndrome — paroxetine interacting with amitriptyline",
+        "B": "Cumulative anticholinergic burden — all four medications have anticholinergic properties, causing additive toxicity",
+        "C": "Dopamine deficiency — paroxetine causing extrapyramidal symptoms",
+        "D": "Benzodiazepine-like effect from diphenhydramine causing respiratory depression"
+      },
+      "correctAnswer": "B",
+      "rationale": "All four medications have significant anticholinergic properties: oxybutynin (muscarinic receptor antagonist — high anticholinergic); paroxetine (SSRI with the highest anticholinergic burden of any SSRI); diphenhydramine (first-generation antihistamine — very high anticholinergic); amitriptyline (TCA — very high anticholinergic). The Anticholinergic Burden (ACB) scale quantifies cumulative anticholinergic load. The classic anticholinergic toxidrome: 'Dry as a bone' (dry mouth, anhidrosis), 'Hot as a hare' (hyperthermia), 'Blind as a bat' (mydriasis, blurred vision), 'Mad as a hatter' (confusion), 'Red as a beet' (flushing), 'Full as a flask' (urinary retention), 'Slow as a sloth' (constipation).",
+      "distractorRationales": {
+        "A": "Incorrect. Serotonin syndrome is possible with paroxetine + amitriptyline (dual serotonergic activity) and presents with: agitation, clonus, tremor, diaphoresis, hyperthermia. The presentation here (dry mouth, constipation, urinary retention, confusion) is anticholinergic toxidrome, not serotonin syndrome.",
+        "C": "Incorrect. Paroxetine does not cause dopamine deficiency directly; however, SSRIs can cause EPS through dopamine-serotonin interactions — this is not the primary mechanism here.",
+        "D": "Incorrect. Diphenhydramine has some CNS depressant effects but primarily causes anticholinergic effects, not a benzodiazepine-like pharmacological profile."
+      },
+      "hint": "RSMB: dry mouth + constipation + urinary retention + confusion = anticholinergic toxidrome. Which medications are anticholinergic?",
+      "clinicalPearl": "The anticholinergic toxidrome mnemonic: 'Dry as a bone, hot as a hare, blind as a bat, mad as a hatter, red as a beet, full as a flask, slow as a sloth.' Each anticholinergic medication adds to the cumulative burden — effects that are mild individually become toxic in combination.",
+      "examStrategy": "Anticholinergic burden: identify medications with anticholinergic properties (oxybutynin, TCAs like amitriptyline, first-gen antihistamines, paroxetine, some antipsychotics). Cumulative toxidrome: dry mouth, constipation, urinary retention, confusion, tachycardia.",
+      "keyTakeaway": "Anticholinergic toxidrome: dry mouth + constipation + urinary retention + confusion from cumulative anticholinergic medications. Oxybutynin + paroxetine + diphenhydramine + amitriptyline = extremely high ACB. Remove offending medications.",
+      "tags": ["anticholinergic-burden", "ACB", "oxybutynin", "diphenhydramine", "amitriptyline", "paroxetine", "toxidrome", "NP"]
+    },
+    {
+      "id": "GERO-P7-004",
+      "topicSlug": "medication-reconciliation",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A nurse is completing a medication reconciliation for an 80-year-old man being admitted from home for elective knee replacement surgery. His home medication list includes: amlodipine 10 mg, metoprolol 25 mg BID, aspirin 81 mg, atorvastatin 40 mg, pantoprazole 40 mg, and ibuprofen 400 mg TID (self-purchased OTC). His pre-admission CBC shows Hgb 98 g/L (anemia). Which medication is MOST important to flag for surgical team review?",
+      "options": {
+        "A": "Amlodipine — calcium channel blockers may affect surgical bleeding",
+        "B": "Ibuprofen — an OTC NSAID causing GI blood loss contributing to anemia and increasing peri-operative bleeding risk",
+        "C": "Aspirin 81 mg — must be stopped 10 days before surgery",
+        "D": "Metoprolol — must be stopped before surgery to allow heart rate increase during anesthesia"
+      },
+      "correctAnswer": "B",
+      "rationale": "Ibuprofen 400 mg TID is an OTC NSAID that the patient self-purchased — it would NOT appear on a physician-generated medication list unless specifically asked about. This medication is causing: (1) GI blood loss (chronic NSAID use → mucosal erosion → GI bleeding → anemia; Hgb 98 suggests significant bleeding); (2) Increased peri-operative bleeding risk through platelet inhibition. This is a critical medication reconciliation finding — the only way this would be identified is through comprehensive medication reconciliation including OTC medications, supplements, and herbal products. Additionally, aspirin should be reviewed by the surgical team (most protocols continue 81 mg through surgery; high-dose aspirin is held), but ibuprofen is the most dangerous and likely undisclosed finding.",
+      "distractorRationales": {
+        "A": "Incorrect. Amlodipine is a vasodilator and does not significantly affect surgical bleeding. It is typically continued peri-operatively.",
+        "C": "Incorrect. Aspirin 81 mg (low-dose) peri-operative management depends on the specific surgical indication — most guidelines continue 81 mg through surgery for cardiovascular indications. High-dose aspirin is held. This is the prescriber's decision, not the nurse's primary medication reconciliation concern.",
+        "D": "Incorrect. Metoprolol should typically be CONTINUED peri-operatively (stopping beta-blockers acutely before surgery increases risk of rebound hypertension and tachycardia)."
+      },
+      "hint": "Which medication was self-purchased OTC and not on the physician's list? What are its surgical complications?",
+      "clinicalPearl": "OTC medications (NSAIDs, diphenhydramine, supplements like fish oil, garlic, ginkgo, ginseng, vitamin E) are commonly missed in medication reconciliation because patients don't consider them 'medications.' Always specifically ask: 'Do you take anything over the counter? Any vitamins, supplements, or herbal products?'",
+      "examStrategy": "Medication reconciliation questions: the key finding is almost always an OTC medication, supplement, or herbal product that was NOT on the physician's medication list. NSAIDs OTC = GI bleeding risk + peri-operative bleeding + renal risk.",
+      "keyTakeaway": "Medication reconciliation must include OTC medications, supplements, and herbal products. OTC NSAIDs are frequently the hidden culprit causing anemia, GI bleeding, and peri-operative bleeding risk.",
+      "tags": ["medication-reconciliation", "OTC-medications", "NSAIDs", "peri-operative", "anemia", "polypharmacy"]
+    },
+    {
+      "id": "GERO-P7-005",
+      "topicSlug": "medication-adherence",
+      "examTargets": ["REx-PN", "NCLEX-PN", "NCLEX-RN", "CNPLE"],
+      "tier": ["RPN", "RN"],
+      "type": "MCQ",
+      "difficulty": "moderate",
+      "stem": "A home care nurse visits an 81-year-old woman with hypertension, heart failure, and osteoarthritis. During the medication assessment, the nurse counts her medication bottles and finds she has twice as many pills left as expected — indicating she is taking her medications approximately half the time. When asked, she says 'I forget sometimes, and some of them make me feel dizzy.' Which combination of nursing interventions is MOST likely to improve her adherence?",
+      "options": {
+        "A": "Explain the consequences of non-adherence firmly so she understands the risk",
+        "B": "Contact the physician to report non-adherence and request a medication blister pack",
+        "C": "Assess adherence barriers comprehensively (cognitive, financial, side effects), simplify the regimen, address side effects (dizziness = orthostatic — manage), provide a pill organizer or blister pack, and schedule follow-up",
+        "D": "Advise her to set phone alarms to remind herself to take each medication"
+      },
+      "correctAnswer": "C",
+      "rationale": "Medication non-adherence in older adults is multifactorial. This patient identifies TWO barriers: (1) forgetting (cognitive load — too many medications to remember) and (2) side effect (dizziness = likely orthostatic hypotension from antihypertensives/diuretics). A comprehensive approach addresses: (1) assess ALL barriers (also: cost, visual impairment, dexterity, pill size, complex schedule); (2) simplify regimen (reduce doses/day with prescriber, eliminate unnecessary medications); (3) address specific side effects (orthostatic dizziness = medication timing, slow position changes, hydration); (4) pill organizer or blister pack for memory issues; (5) follow-up to assess effectiveness.",
+      "distractorRationales": {
+        "A": "Incorrect. Fear-based education ('you'll have a stroke if you don't take your pills') is rarely effective and damages the therapeutic relationship. It does not address the actual barriers.",
+        "B": "Incorrect. Blister packs are helpful for memory issues but do not address the side effect (dizziness) that is also driving non-adherence. Incomplete response.",
+        "D": "Incorrect. Phone alarms address only forgetting — and only for patients who can reliably use their phone. They do not address dizziness (a barrier the patient identified). Also, an 81-year-old may have digital literacy barriers."
+      },
+      "hint": "Two identified barriers: forgetting + dizziness. What approach addresses BOTH?",
+      "clinicalPearl": "Non-adherence is almost always multifactorial in older adults. The most common barriers: complexity (too many medications, complex schedules), cost, side effects, cognitive impairment (forgetting), sensory impairment (cannot read labels), dexterity (cannot open childproof caps), and beliefs (don't feel sick so don't need medications).",
+      "examStrategy": "Medication adherence questions: assess barriers first, then tailor interventions. One intervention for a multi-barrier problem is insufficient. Comprehensive assessment → targeted intervention matching each barrier.",
+      "keyTakeaway": "Medication non-adherence: assess ALL barriers (cognitive, financial, side effects, physical, beliefs). Address each: blister pack + dose simplification + side effect management. Single interventions are insufficient for multi-barrier non-adherence.",
+      "tags": ["medication-adherence", "non-adherence", "barriers", "polypharmacy", "pill-organizer", "side-effects"]
+    }
+  ]
+}

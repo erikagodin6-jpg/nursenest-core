@@ -77,12 +77,25 @@ async function getTcpClient(): Promise<import("redis").RedisClientType | null> {
   }
 }
 
+// ─── Health state ─────────────────────────────────────────────────────────────
+
+type ContentCacheHealthState = "unchecked" | "unavailable" | "reachable" | "unreachable";
+let contentCacheHealth: ContentCacheHealthState = "unchecked";
+
+/** Returns the last-known connectivity state of the content cache layer. */
+export function getContentCacheHealthState(): ContentCacheHealthState {
+  return contentCacheHealth;
+}
+
 // ─── Public interface ─────────────────────────────────────────────────────────
 
 /** True when either Upstash or TCP Redis is configured. */
 export function isCacheConfigured(): boolean {
   const hasUpstash = Boolean(process.env.UPSTASH_REDIS_REST_URL?.trim());
   const hasTcp = Boolean(process.env.REDIS_URL?.trim());
+  if (!hasUpstash && !hasTcp && contentCacheHealth === "unchecked") {
+    contentCacheHealth = "unavailable";
+  }
   return hasUpstash || hasTcp;
 }
 
@@ -104,9 +117,11 @@ export async function cacheGet<T>(key: string): Promise<T | null> {
       if (client) raw = await client.get(key);
     }
 
+    contentCacheHealth = "reachable";
     if (!raw) return null;
     return JSON.parse(raw) as T;
   } catch {
+    contentCacheHealth = "unreachable";
     return null;
   }
 }
@@ -128,7 +143,9 @@ export async function cacheSet<T>(key: string, value: T, ttlSeconds: number): Pr
       const client = await getTcpClient();
       if (client) await client.setEx(key, ttlSeconds, serialized);
     }
+    contentCacheHealth = "reachable";
   } catch {
+    contentCacheHealth = "unreachable";
     // Cache errors are silenced — primary path must not be affected.
   }
 }

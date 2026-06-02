@@ -1067,7 +1067,7 @@ export function FlashcardsHubClient({
                     aria-label={`${active ? "Remove" : "Add"} ${system.label}${countLabel ? `, ${countLabel}` : ""}`}
                     data-selected={active}
                     data-accent={accentIndex}
-                    className="nn-flashcards-system-card-v2 group flex h-[10.75rem] min-h-[10.75rem] flex-col justify-between rounded-[1.25rem] border-2 p-4 text-left text-sm font-semibold focus-visible:outline-none"
+                    className="nn-flashcards-system-card-v2 group flex h-[10.75rem] min-h-[10.75rem] min-w-[6.75rem] flex-col justify-between rounded-[1.25rem] border-2 p-4 text-left text-sm font-semibold focus-visible:outline-none"
                     data-nn-e2e-flashcards-system-card={system.id}
                     onClick={() => {
                       setSelectedCanonicalIds((current) => {
